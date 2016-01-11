@@ -45,11 +45,55 @@
     <Compile Include="AbstractInterviewExpressionState.cs" />
     <Compile Include="ConditionalState.cs" />
     <Compile Include="ConversionHelper.cs" />
+    <Compile Include="Documents\AbstractQuestion.cs" />
+    <Compile Include="Documents\Answer.cs" />
+    <Compile Include="Documents\CompositeException.cs" />
+    <Compile Include="Documents\Constants.cs" />
+    <Compile Include="Documents\FixedRosterTitle.cs" />
+    <Compile Include="Documents\GeoPosition.cs" />
+    <Compile Include="Documents\Group.cs" />
+    <Compile Include="Documents\IComposite.cs" />
+    <Compile Include="Documents\IConditional.cs" />
+    <Compile Include="Documents\IGroup.cs" />
+    <Compile Include="Documents\Image.cs" />
+    <Compile Include="Documents\IQuestion.cs" />
+    <Compile Include="Documents\IQuestionnaireDocument.cs" />
+    <Compile Include="Documents\IStaticText.cs" />
+    <Compile Include="Documents\IView.cs" />
+    <Compile Include="Documents\LookupTable.cs" />
+    <Compile Include="Documents\Macro.cs" />
+    <Compile Include="Documents\Option.cs" />
+    <Compile Include="Documents\Order.cs" />
+    <Compile Include="Documents\QuestionData.cs" />
+    <Compile Include="Documents\QuestionIdAndVariableName.cs" />
+    <Compile Include="Documents\QuestionnaireDocument.cs" />
+    <Compile Include="Documents\QuestionScope.cs" />
+    <Compile Include="Documents\QuestionType.cs" />
+    <Compile Include="Documents\Question\DateTimeQuestion.cs" />
+    <Compile Include="Documents\Question\GpsCoordinateQuestion.cs" />
+    <Compile Include="Documents\Question\IMultimediaQuestion.cs" />
+    <Compile Include="Documents\Question\IMultyOptionsQuestion.cs" />
+    <Compile Include="Documents\Question\INumericQuestion.cs" />
+    <Compile Include="Documents\Question\IQRBarcodeQuestion.cs" />
+    <Compile Include="Documents\Question\ITextListQuestion.cs" />
+    <Compile Include="Documents\Question\MultimediaQuestion.cs" />
+    <Compile Include="Documents\Question\MultyOptionsQuestion.cs" />
+    <Compile Include="Documents\Question\NumericQuestion.cs" />
+    <Compile Include="Documents\Question\QRBarcodeQuestion.cs" />
+    <Compile Include="Documents\Question\SingleQuestion.cs" />
+    <Compile Include="Documents\Question\TextListQuestion.cs" />
+    <Compile Include="Documents\Question\TextQuestion.cs" />
+    <Compile Include="Documents\RosterSizeSourceType.cs" />
+    <Compile Include="Documents\ShareType.cs" />
+    <Compile Include="Documents\StaticText.cs" />
+    <Compile Include="Documents\UserLight.cs" />
+    <Compile Include="Documents\UserRoles.cs" />
     <Compile Include="IInterviewExpressionStateUpgrader.cs" />
     <Compile Include="IInterviewProperties.cs" />
     <Compile Include="InterviewExpressionStateExtensions.cs" />
     <Compile Include="InterviewExpressionStateUpgrader.cs" />
     <Compile Include="InterviewProperties.cs" />
+    <Compile Include="IReadSideRepositoryEntity.cs" />
     <Compile Include="QuestionnaireVersion.cs" />
     <Compile Include="RosterVector.cs" />
     <Compile Include="V2\CustomFunctions\AbstractConditionalLevelInstanceFunctions.cs" />
@@ -127,4 +171,3 @@
   </Target>
   -->
 </Project>
-

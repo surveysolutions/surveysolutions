@@ -16,7 +16,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
-using WB.Core.SharedKernels.SurveySolutions.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {

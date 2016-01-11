@@ -4,18 +4,13 @@ using System.IO;
 using System.Linq;
 using System.ServiceModel;
 
-using Main.Core.Documents;
-
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.SurveySolutions;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Designer.Resources;
 using WB.UI.Designer.WebServices.Questionnaire;
-using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.WebServices

@@ -1,5 +1,6 @@
 using System;
 
+// ReSharper disable once CheckNamespace
 namespace WB.Core.SharedKernels.SurveySolutions.Api.Designer
 {
     public class QuestionnaireListItem

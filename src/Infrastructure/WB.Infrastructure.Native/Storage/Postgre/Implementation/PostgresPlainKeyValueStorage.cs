@@ -12,8 +12,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     {
         private readonly PostgresPlainStorageSettings connectionSettings;
 
-        public PostgresPlainKeyValueStorage(IPlainSessionProvider plainSessionProvider, PostgresPlainStorageSettings connectionSettings, ILogger logger)
-            : base(connectionSettings.ConnectionString, logger)
+        public PostgresPlainKeyValueStorage(IPlainSessionProvider plainSessionProvider, PostgresPlainStorageSettings connectionSettings, ILogger logger, ISerializer serializer)
+            : base(connectionSettings.ConnectionString, logger, serializer)
         {
             this.connectionSettings = connectionSettings;
         }

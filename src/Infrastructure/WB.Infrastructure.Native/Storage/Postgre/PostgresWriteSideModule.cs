@@ -1,6 +1,7 @@
 ﻿using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Storage.EventStore;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
@@ -24,7 +25,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         private IStreamableEventStore GetEventStore()
         {
-            return new PostgresEventStore(this.eventStoreSettings, this.Kernel.Get<IEventTypeResolver>());
+            return new PostgresEventStore(this.eventStoreSettings, this.Kernel.Get<IEventTypeResolver>(), this.Kernel.Get<ISerializer>());
         }
 
         class NullIEventStoreApiService : IEventStoreApiService

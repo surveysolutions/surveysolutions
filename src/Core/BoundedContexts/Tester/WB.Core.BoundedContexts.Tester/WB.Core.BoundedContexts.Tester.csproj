@@ -152,14 +152,6 @@
       <Project>{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}</Project>
       <Name>WB.Core.SharedKernels.Enumerator</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
-      <Project>{b73e686b-a06b-4fd5-9baf-b321a0d33dbd}</Project>
-      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
-      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
-      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
@@ -167,12 +159,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\Infrastructure\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
-      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
-      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\TesterUIResources.es-ES.resx" />
@@ -207,4 +193,3 @@
   </Target>
   -->
 </Project>
-

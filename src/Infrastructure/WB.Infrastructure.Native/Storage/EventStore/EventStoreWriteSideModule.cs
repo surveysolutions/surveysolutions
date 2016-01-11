@@ -31,7 +31,7 @@ namespace WB.Infrastructure.Native.Storage.EventStore
 
         private IStreamableEventStore GetEventStore()
         {
-            return new WriteSideEventStore(new EventStoreConnectionProvider(this.settings), this.Kernel.Get<ILogger>(), this.settings, this.Kernel.Get<IEventTypeResolver>());
+            return new WriteSideEventStore(new EventStoreConnectionProvider(this.settings), this.Kernel.Get<ILogger>(), this.settings, this.Kernel.Get<IEventTypeResolver>(), this.Kernel.Get<ISerializer>());
         }
     }
 }

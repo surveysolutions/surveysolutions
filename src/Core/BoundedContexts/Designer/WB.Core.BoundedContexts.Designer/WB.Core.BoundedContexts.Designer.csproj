@@ -304,6 +304,7 @@
       <DependentUpon>SharedTemplateV5.tt</DependentUpon>
     </Compile>
     <Compile Include="Implementation\Services\DesignerEngineVersionService.cs" />
+    <Compile Include="Implementation\Services\JsonSerializerSettingsFactory.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableContent.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableContentFile.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableRow.cs" />
@@ -585,10 +586,6 @@
     <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
       <Project>{553b4fc2-5fc7-4256-b14d-82758d64a3bd}</Project>
       <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
-      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
-      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -8,9 +8,8 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 
 namespace WB.Tests.Unit
 {

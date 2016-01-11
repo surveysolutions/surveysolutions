@@ -69,6 +69,10 @@
     <Compile Include="Implementation\RestException.cs" />
     <Compile Include="Implementation\RestExceptionType.cs" />
     <Compile Include="Implementation\Services\RestService.cs" />
+    <Compile Include="Implementation\Services\SubstitutionService.cs" />
+    <Compile Include="Implementation\ServiceVariables\ServiceColumns.cs" />
+    <Compile Include="Implementation\ServiceVariables\ServiceVariable.cs" />
+    <Compile Include="Implementation\ServiceVariables\ServiceVariableType.cs" />
     <Compile Include="Implementation\TopologicalSorter.cs" />
     <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponent.cs" />
     <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponentList.cs" />
@@ -90,6 +94,7 @@
     </Compile>
     <Compile Include="QueryableExtensions.cs" />
     <Compile Include="RosterVectorUtils.cs" />
+    <Compile Include="Services\IJsonSerializerSettingsFactory.cs" />
     <Compile Include="Services\ISerializer.cs" />
     <Compile Include="Services\ILogger.cs" />
     <Compile Include="Services\INetworkService.cs" />
@@ -98,6 +103,7 @@
     <Compile Include="Services\IRestServicePointManager.cs" />
     <Compile Include="Services\IRestServiceSettings.cs" />
     <Compile Include="Services\IStringCompressor.cs" />
+    <Compile Include="Services\ISubstitutionService.cs" />
     <Compile Include="Services\JsonUtilsSettings.cs" />
     <Compile Include="Services\TypeSerializationSettings.cs" />
     <Compile Include="StringExtensions.cs" />
@@ -173,4 +179,3 @@
   </Target>
   -->
 </Project>
-

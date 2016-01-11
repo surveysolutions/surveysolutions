@@ -31,7 +31,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             throw new NotImplementedException();
         }
 
+        public T Deserialize<T>(string payload, TypeSerializationSettings settings)
+        {
+            throw new NotImplementedException();
+        }
+
         public T Deserialize<T>(byte[] payload)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object Deserialize(string payload, Type type,TypeSerializationSettings settings)
         {
             throw new NotImplementedException();
         }
