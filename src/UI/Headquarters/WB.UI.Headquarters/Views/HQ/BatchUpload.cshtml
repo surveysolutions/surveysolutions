@@ -7,7 +7,6 @@
     ViewBag.Title = "Index";
 }
 <div class="row-fluid">
-    <div class="row">
         <div>
             <h3>@string.Format("{0}: (ver. {1}) {2}", BatchUpload.UploadSample, Model.QuestionnaireVersion, Model.QuestionnaireTitle)</h3>
             <div>
@@ -60,7 +59,6 @@
                 }
             </div>
         </div>
-    </div>
 
     <h3>@BatchUpload.AdvancedMode</h3>
     <div>
@@ -84,23 +82,5 @@
             </div>
                 <input type="submit" class="btn btn-primary" name="Submit" value="@BatchUpload.Upload" />
         }
-    </div>
-
-    <div class="container" data-bind="visible: !canImportInterviews()" style="display: none;">
-        <div class="jumbotron">
-            <h2 data-bind="text: status.questionnaireTitle"></h2>
-            <p>Import interviews is in progress, please wait until current operation is finished</p>
-            <p data-bind="visible: status.totalInterviewsCount() > 0">
-                <b><span data-bind="text: status.createdInterviewsCount"></span></b> of <b><span data-bind="text: status.totalInterviewsCount"></span></b> interviews created
-            </p>
-            <p data-bind="visible: status.createdInterviewsCount() > 0">
-                <b><span data-bind="text: status.elapsedTime"></span></b> of <b><span data-bind="text: status.estimatedTime"></span></b> time spent
-            </p>
-            <p>
-                <a data-bind="if: status.hasErrors, attr: { href: $invalidInterviewsByLastImportUrl }">
-                    <i class="glyphicon glyphicon-download-alt"></i> Download invalid interviews
-                </a>
-            </p>
-        </div>
     </div>
 </div>
