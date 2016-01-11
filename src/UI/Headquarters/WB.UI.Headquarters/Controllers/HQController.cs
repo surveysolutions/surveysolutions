@@ -145,7 +145,8 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!this.ModelState.IsValid)
             {
-                return this.View("BatchUpload", model);
+                return this.RedirectToAction("BatchUpload",
+                    new {id = model.QuestionnaireId, version = model.QuestionnaireVersion});
             }
 
             if (User.Identity.IsObserver())
@@ -177,7 +178,8 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!this.ModelState.IsValid)
             {
-                return this.View("BatchUpload", model);
+                return this.RedirectToAction("BatchUpload",
+                    new { id = model.QuestionnaireId, version = model.QuestionnaireVersion });
             }
 
             if (User.Identity.IsObserver())
