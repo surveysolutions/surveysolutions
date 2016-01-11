@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{AD7E0C01-7CD9-46FD-9DD7-3BC8A5C10ECF}"
 	ProjectSection(SolutionItems) = preProject
@@ -20,6 +20,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Designer", "Designer", "{805098EC-6BA3-43EB-9A2F-9640E641E2F9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Designer", "UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj", "{3464F3AE-094C-4DEC-8725-59506328E597}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B46F5753-42B4-45F0-98A6-A16C5ECEE9C7} = {B46F5753-42B4-45F0-98A6-A16C5ECEE9C7}
+		{6AC3A080-CECA-4974-9CA1-C239695ED8F8} = {6AC3A080-CECA-4974-9CA1-C239695ED8F8}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "[Shared]", "[Shared]", "{4810E77C-357A-48F8-BEF7-1D0A5C3423E9}"
 EndProject
@@ -76,6 +80,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Headquarters", "Headquarters", "{DE679FBB-7B6D-4D2D-AB21-FE90B5BC1928}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Headquarters", "UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj", "{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B46F5753-42B4-45F0-98A6-A16C5ECEE9C7} = {B46F5753-42B4-45F0-98A6-A16C5ECEE9C7}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SurveyManagement", "SurveyManagement", "{D2127B1E-4E7B-40D9-AED6-765E394C51B4}"
 EndProject
@@ -84,6 +91,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Supervisor", "Supervisor", "{8F9EEF80-094E-433D-9398-19AAE71C81FF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Supervisor", "UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj", "{41E11B34-5BEB-48E6-B9B0-2DEA05CFA7FB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B46F5753-42B4-45F0-98A6-A16C5ECEE9C7} = {B46F5753-42B4-45F0-98A6-A16C5ECEE9C7}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.SurveyManagement.Web", "Core\SharedKernels\SurveyManagement\SurveyManagement.Web\WB.Core.SharedKernels.SurveyManagement.Web.csproj", "{E96A3629-18F6-4B7C-9920-FC9A1B3892C1}"
 EndProject
