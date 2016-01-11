@@ -49,10 +49,10 @@ using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Supervisor;
-using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.Core.Synchronization;
 using WB.Core.Synchronization.EventHandler;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement
 {

@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Main.Core.Entities.Composite;
-using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
-using WB.Core.SharedKernels.SurveySolutions.Services;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 
 // ReSharper disable once CheckNamespace
 namespace Main.Core.Entities.SubEntities

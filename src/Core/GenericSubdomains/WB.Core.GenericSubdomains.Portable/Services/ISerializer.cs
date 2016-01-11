@@ -11,6 +11,10 @@ namespace WB.Core.GenericSubdomains.Portable.Services
         void SerializeToStream(object value, Type type, Stream stream);
         T Deserialize<T>(string payload);
         T Deserialize<T>(byte[] payload);
+        T Deserialize<T>(string payload, TypeSerializationSettings typeSerializationSettings);
+
+        object Deserialize(string payload, Type type, TypeSerializationSettings typeSerializationSettings);
+
         object DeserializeFromStream(Stream stream, Type type);
     }
 }

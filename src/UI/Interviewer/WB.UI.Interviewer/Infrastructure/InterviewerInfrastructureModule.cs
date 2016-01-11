@@ -63,13 +63,19 @@ namespace WB.UI.Interviewer.Infrastructure
 
             this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
             this.Bind<IProtobufSerializer>().To<ProtobufSerializer>();
-            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(new Dictionary<string, string>()
-            {
+            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(
+                new JsonSerializerSettingsFactory(
+                    new Dictionary<string, string>()
+                    {
+                        { "Main.Core", "WB.Core.SharedKernels.DataCollection.Portable" }
+                    }) ,
+                
+                new Dictionary<string, string>()
                 {
-                    "WB.UI.Capi",
-                    "WB.Core.BoundedContexts.Interviewer"
-                }
-            }));
+                    {
+                        "WB.UI.Capi", "WB.Core.BoundedContexts.Interviewer"
+                    }
+                }));
             this.Bind<IStringCompressor>().To<JsonCompressor>();
         }
 

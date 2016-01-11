@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using WB.Core.SharedKernels.SurveySolutions.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 
-namespace WB.Core.SharedKernels.SurveySolutions.Implementation.Services
+namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 {
     public class SubstitutionService : ISubstitutionService
     {

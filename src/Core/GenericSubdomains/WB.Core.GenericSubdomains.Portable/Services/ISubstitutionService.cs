@@ -1,4 +1,4 @@
-namespace WB.Core.SharedKernels.SurveySolutions.Services
+namespace WB.Core.GenericSubdomains.Portable.Services
 {
     public interface ISubstitutionService
     {

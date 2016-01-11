@@ -1,4 +1,5 @@
-﻿using Main.Core.Documents;
+﻿using System.Collections.Generic;
+using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
 using Sqo;
@@ -57,7 +58,14 @@ namespace WB.UI.Tester.Infrastructure
             this.Bind<IRestService>().To<RestService>();
 
             this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
-            this.Bind<ISerializer>().To<NewtonJsonSerializer>();
+
+            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(
+                new JsonSerializerSettingsFactory(
+                    new Dictionary<string, string>()
+                    {
+                        { "Main.Core", "WB.Core.SharedKernels.DataCollection.Portable" }
+                    })));
+
             this.Bind<IStringCompressor>().To<JsonCompressor>();
 
             this.Bind<IDesignerApiService>().To<DesignerApiService>().InSingletonScope();

@@ -11,8 +11,8 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
