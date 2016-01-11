@@ -5,11 +5,15 @@ namespace WB.Infrastructure.Native.Logging
 {
     public class NLogLoggingModule : NinjectModule
     {
-        public NLogLoggingModule(){}
-
         public override void Load()
         {
-            this.Bind<ILogger>().To<NLogLogger>();
+            this.Bind<ILogger>().ToMethod(context =>
+            {
+                var typeForLogger = context.Request.Target != null
+                                    ? context.Request.Target.Member.DeclaringType
+                                    : context.Request.Service;
+                return new NLogLogger(typeForLogger);
+            });
         }
     }
 }
