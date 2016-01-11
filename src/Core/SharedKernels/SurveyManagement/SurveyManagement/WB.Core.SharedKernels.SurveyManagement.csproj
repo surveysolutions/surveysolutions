@@ -130,7 +130,6 @@
     <Compile Include="Services\Export\ITabularFormatExportService.cs" />
     <Compile Include="Services\ISynchronizationLogViewFactory.cs" />
     <Compile Include="Services\Preloading\IInterviewImportDataParsingService.cs" />
-    <Compile Include="SurveyManagementDataCollectionSharedKernelModule.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="EventHandler\MapReportDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewStatusTimeSpanDenormalizer.cs" />
