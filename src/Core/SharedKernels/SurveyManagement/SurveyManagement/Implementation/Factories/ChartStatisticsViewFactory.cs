@@ -103,7 +103,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
         private static string FormatDate(DateTime x)
         {
-            return x.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+            return x.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
         }
     }
 }
