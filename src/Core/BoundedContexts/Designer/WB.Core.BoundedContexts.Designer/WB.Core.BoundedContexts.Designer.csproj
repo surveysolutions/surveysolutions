@@ -208,6 +208,7 @@
     <Compile Include="Events\Questionnaire\Macros\MacroDeleted.cs" />
     <Compile Include="Events\Questionnaire\Macros\MacroUpdated.cs" />
     <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
+    <Compile Include="Implementation\Services\CachedQuestionnaireDocument.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\CodeGenerationSettings.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\DefaultDynamicCompilerSettings.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\DynamicCompilerSettingsProvider.cs" />
