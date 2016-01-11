@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
                 cancellationToken.ThrowIfCancellationRequested();
                 interviewIdsToExport.AddRange(ids);
-                this.logger.Info($"Received {interviewIdsToExport.Count:n0} interview interview ids.");
+                this.logger.Debug($"Received {interviewIdsToExport.Count:n0} interview interview ids.");
             }
 
             this.logger.Info($"Starting export of {interviewIdsToExport.Count:n0} interviews. Took {idsWatch.Elapsed:c} to receive list of ids.");
@@ -210,7 +210,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                    });
 
                 batchWatch.Stop();
-                this.logger.Info(string.Format("Exported {0:N0} in {3:c} interviews out of {1:N0} for questionnaire {2}",
+                this.logger.Debug(string.Format("Exported {0:N0} in {3:c} interviews out of {1:N0} for questionnaire {2}",
                     totalInterviewsProcessed,
                     interviewIdsToExport.Count,
                     new QuestionnaireIdentity(questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version),

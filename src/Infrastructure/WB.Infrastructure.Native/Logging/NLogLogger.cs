@@ -13,6 +13,11 @@ namespace WB.Infrastructure.Native.Logging
             this.logger = LogManager.GetLogger("");
         }
 
+        public NLogLogger(Type type)
+        {
+            this.logger = LogManager.GetLogger(type.FullName);
+        }
+
         public void Debug(string message, Exception exception = null)
         {
             this.logger.Debug(exception, message);
@@ -22,7 +27,6 @@ namespace WB.Infrastructure.Native.Logging
         {
             this.logger.Info(exception, message);
         }
-
 
         public void Warn(string message, Exception exception = null)
         {
