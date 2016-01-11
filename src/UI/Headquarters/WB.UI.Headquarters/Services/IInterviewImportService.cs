@@ -7,7 +7,7 @@ namespace WB.UI.Headquarters.Services
     public interface IInterviewImportService
     {
         InterviewImportStatus Status { get; }
-        void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, string sampleId, Guid? supervisorId, Guid headquartersId);
-        InterviewImportFileDescription GetDescriptionByFileWithInterviews(QuestionnaireIdentity questionnaireIdentity, string sampleId);
+        void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, Guid? supervisorId, Guid headquartersId);
+        bool HasResponsibleColumn(string sampleId);
     }
 }

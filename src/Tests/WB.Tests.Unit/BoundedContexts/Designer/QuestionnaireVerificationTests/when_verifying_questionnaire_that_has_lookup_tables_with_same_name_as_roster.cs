@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 
         Establish context = () =>
         {
-            questionnaire = Create.QuestionnaireDocument(questionId, 
+            questionnaire = Create.QuestionnaireDocument(Guid.NewGuid(), 
                 Create.TextQuestion(questionId: questionId, variable: "variable"),
                 Create.Roster(variable: "var", rosterId: rosterId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles));
             questionnaire.LookupTables.Add(table1Id, Create.LookupTable("var"));

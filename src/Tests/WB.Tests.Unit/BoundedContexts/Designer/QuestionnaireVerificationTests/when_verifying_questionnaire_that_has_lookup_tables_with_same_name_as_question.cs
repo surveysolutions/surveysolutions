@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                 .Setup(x => x.GetLookupTableContent(Moq.It.IsAny<Guid>(), Moq.It.IsAny<Guid>()))
                 .Returns(lookupTableContent);
 
-            questionnaire = Create.QuestionnaireDocument(questionId, Create.TextQuestion(questionId: questionId, variable: "var"));
+            questionnaire = Create.QuestionnaireDocument(Guid.NewGuid(), Create.TextQuestion(questionId: questionId, variable: "var"));
             questionnaire.LookupTables.Add(table1Id, Create.LookupTable("var"));
 
             verifier = CreateQuestionnaireVerifier(lookupTableService: lookupTableServiceMock.Object);

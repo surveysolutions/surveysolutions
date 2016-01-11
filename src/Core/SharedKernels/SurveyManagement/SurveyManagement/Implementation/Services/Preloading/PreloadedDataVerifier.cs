@@ -794,7 +794,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     {
                         yield return
                             new PreloadedDataVerificationError("PL0025",
-                                PreloadingVerificationMessages.PL0025_SupervisorNameIsEmpty,
+                                PreloadingVerificationMessages.PL0025_ResponsibleNameIsEmpty,
                                 new PreloadedDataVerificationReference(supervisorNameIndex, y,
                                     PreloadedDataVerificationReferenceType.Cell,
                                     "",
@@ -809,7 +809,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
                         yield return
                             new PreloadedDataVerificationError("PL0026",
-                                PreloadingVerificationMessages.PL0026_SupervisorWasNotFound,
+                                PreloadingVerificationMessages.PL0026_ResponsibleWasNotFound,
                                 new PreloadedDataVerificationReference(supervisorNameIndex, y,
                                     PreloadedDataVerificationReferenceType.Cell,
                                     "",
@@ -820,7 +820,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     {
                         yield return
                             new PreloadedDataVerificationError("PL0027",
-                                PreloadingVerificationMessages.PL0027_SupervisorIsLocked,
+                                PreloadingVerificationMessages.PL0027_ResponsibleIsLocked,
                                 new PreloadedDataVerificationReference(supervisorNameIndex, y,
                                     PreloadedDataVerificationReferenceType.Cell,
                                     "",

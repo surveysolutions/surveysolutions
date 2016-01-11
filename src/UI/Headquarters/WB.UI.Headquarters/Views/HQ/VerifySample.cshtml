@@ -15,6 +15,8 @@
             var $importInterviewsStatusUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewsApi", action = "GetImportInterviewsStatus"})';
             var $importInterviewsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewsApi", action = "ImportInterviews"})';
             var $responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
+
+            var $processUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "HQ", action = "VerifySample" })';
             var model = new Supervisor.VM.ImportInterviews('@Model.Id', '@Model.QuestionnaireId', @Model.Version, $importInterviewsStatusUrl, $importInterviewsUrl, $responsiblesUrl);
 
             model.load();
@@ -110,13 +112,16 @@
     {
         <div class="well form-center">
             <div class="form-horizontal">
-                <div data-bind="visible: canImportInterviews">
+                <div>
                     <fieldset>
-                        <legend>
+                        <legend data-bind="visible: canImportInterviews">
                             Data is valid
                         </legend>
+                        <legend data-bind="visible: isRunningProcessExists">
+                            Import interviews is in progress. Wait until running operation is finished.
+                        </legend>
                     </fieldset>
-                    <div class="form-group">
+                    <div class="form-group" data-bind="visible: canImportInterviews">
                         <div class="col-sm-offset-4 col-sm-8">
                             <button class="btn btn-large btn-primary" type="submit" data-bind="click: importInterviews">
                                 Create sample from this data
@@ -131,7 +136,7 @@
                 </fieldset>
                 <fieldset data-bind="visible: importCompletedWithError">
                     <legend style="color: red;">
-                        Sample import is completed with erros
+                        Sample import is completed with errors
                     </legend>
                 </fieldset>
                 <ul class="list-group" data-bind="if: isNeedShowStatusPanel()">

@@ -126,11 +126,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 ? this.Options.Where(x => x.Selected.HasValue).OrderBy(x => x.AnswerCheckedOrder).ToList() 
                 : this.Options.Where(x => x.Selected.HasValue).ToList();
 
+            var interview = this.interviewRepository.Get(interviewIdAsString);
+
             int countYesSelectedOptions = allSelectedOptions.Count(o => o.YesSelected);
 
             if (this.maxAllowedAnswers.HasValue && countYesSelectedOptions > this.maxAllowedAnswers)
             {
-                var interview = this.interviewRepository.Get(interviewIdAsString);
                 var answerModel = interview.GetYesNoAnswer(Identity);
                 var answeredYesNoOption = answerModel.Answers.FirstOrDefault(yn => yn.OptionValue == changedModel.Value);
                 changedModel.Selected = answeredYesNoOption?.Yes;
@@ -139,17 +140,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (this.isRosterSizeQuestion && (!changedModel.Selected.HasValue || !changedModel.Selected.Value))
             {
-                var interview = this.interviewRepository.Get(interviewIdAsString);
                 var answerModel = interview.GetYesNoAnswer(Identity);
-                
+
                 var backendYesAnswersCount = answerModel?.Answers?.Count(a => a.Yes) ?? 0;
                 var UIYesAnswersCount = this.Options.Count(o => o.YesSelected);
 
                 if (backendYesAnswersCount > UIYesAnswersCount)
                 {
                     var amountOfRostersToRemove = 1;
-                    var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage,
-                        amountOfRostersToRemove);
+                    var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
                     if (!(await this.userInteraction.ConfirmAsync(message)))
                     {
                         changedModel.Selected = true;
@@ -158,10 +157,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
             }
 
-            var selectedValues = allSelectedOptions.Where(x => x.AnswerCheckedOrder.HasValue && x.Value != changedModel.Value).OrderBy(x => x.AnswerCheckedOrder.Value)
-                .Union(allSelectedOptions.Where(x => !x.AnswerCheckedOrder.HasValue || x.Value == changedModel.Value))
-                .Select(x => new AnsweredYesNoOption(x.Value, x.Selected.Value))
-                .ToArray();
+            YesNoAnswer actualAnswerModel = interview.GetYesNoAnswer(this.Identity);
+
+            var selectedValuesWithoutJustChanged = actualAnswerModel.Answers?.Except(x => x.OptionValue == changedModel.Value) ?? Enumerable.Empty<AnsweredYesNoOption>();
+
+            var selectedValuesWithJustChanged
+                = changedModel.Selected.HasValue
+                    ? selectedValuesWithoutJustChanged.Union(new AnsweredYesNoOption(changedModel.Value, changedModel.Selected.Value).ToEnumerable()).ToArray()
+                    : selectedValuesWithoutJustChanged.ToArray();
 
             var command = new AnswerYesNoQuestion(
                 this.interviewId,
@@ -169,7 +172,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.Identity.Id,
                 this.Identity.RosterVector,
                 DateTime.UtcNow,
-                selectedValues);
+                selectedValuesWithJustChanged);
 
             try
             {
