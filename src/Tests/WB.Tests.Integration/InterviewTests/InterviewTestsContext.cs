@@ -107,7 +107,10 @@ namespace WB.Tests.Integration.InterviewTests
 
         protected static Interview SetupInterview(string questionnaireString, object[] events, IInterviewExpressionState precompiledState)
         {
-            var json = new NewtonJsonSerializer();
+            var json = new NewtonJsonSerializer(new JsonSerializerSettingsFactory(new Dictionary<string, string>()
+                    {
+                        { "Main.Core", "WB.Core.SharedKernels.DataCollection.Portable" }
+                    }));
             var questionnaireDocument = json.Deserialize<QuestionnaireDocument>(questionnaireString);
             return SetupInterview(questionnaireDocument, events);
         }

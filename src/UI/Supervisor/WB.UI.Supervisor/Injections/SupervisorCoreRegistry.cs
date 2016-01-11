@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Shared.Web.Filters;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 
 namespace WB.UI.Supervisor.Injections
 {
@@ -201,7 +202,14 @@ namespace WB.UI.Supervisor.Injections
             RegisterViewFactories();
 
             this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
-            this.Bind<ISerializer>().To<NewtonJsonSerializer>();
+
+            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(
+                new JsonSerializerSettingsFactory(
+                    new Dictionary<string, string>()
+                    {
+                        { "Main.Core", "WB.Core.SharedKernels.DataCollection.Portable" }
+                    })));
+
             this.Bind<IStringCompressor>().To<JsonCompressor>();
         }
     }

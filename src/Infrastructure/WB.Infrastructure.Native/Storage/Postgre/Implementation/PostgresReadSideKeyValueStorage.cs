@@ -14,8 +14,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private readonly ISessionProvider sessionProvider;
 
         public PostgresReadSideKeyValueStorage([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider, 
-            PostgreConnectionSettings connectionSettings, ILogger logger)
-            : base(connectionSettings.ConnectionString, logger)
+            PostgreConnectionSettings connectionSettings, ILogger logger, ISerializer serializer)
+            : base(connectionSettings.ConnectionString, logger, serializer)
         {
             this.sessionProvider = sessionProvider;
 

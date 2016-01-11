@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.GenericSubdomains.Portable.Implementation
@@ -14,61 +10,32 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
     {
         private readonly JsonUtilsSettings jsonUtilsSettings;
         private readonly JsonSerializer jsonSerializer;
-
-        private readonly Dictionary<TypeSerializationSettings, JsonSerializerSettings>
-            jsonSerializerSettingsByTypeNameHandling;
+        private IJsonSerializerSettingsFactory jsonSerializerSettingsFactory;
 
         private Dictionary<string, string> assemblyReplacementMapping = new Dictionary<string, string>();
 
-        public NewtonJsonSerializer() : this(new Dictionary<string, string>()) { }
+        public NewtonJsonSerializer(IJsonSerializerSettingsFactory jsonSerializerSettingsFactory) 
+            : this(jsonSerializerSettingsFactory, new Dictionary<string, string>()) { }
 
-        public NewtonJsonSerializer(Dictionary<string, string> assemblyReplacementMapping)
-            : this(new JsonUtilsSettings() { TypeNameHandling = TypeSerializationSettings.ObjectsOnly }, assemblyReplacementMapping)
+        public NewtonJsonSerializer(IJsonSerializerSettingsFactory jsonSerializerSettingsFactory, Dictionary<string, string> assemblyReplacementMapping)
+            : this(jsonSerializerSettingsFactory, new JsonUtilsSettings() { TypeNameHandling = TypeSerializationSettings.ObjectsOnly }, assemblyReplacementMapping)
         {
         }
 
-        public NewtonJsonSerializer(JsonUtilsSettings jsonUtilsSettings) : this(jsonUtilsSettings, new Dictionary<string, string>()) { }
+        public NewtonJsonSerializer(IJsonSerializerSettingsFactory jsonSerializerSettingsFactory, JsonUtilsSettings jsonUtilsSettings) 
+            : this(jsonSerializerSettingsFactory, jsonUtilsSettings, new Dictionary<string, string>()) { }
 
-        public NewtonJsonSerializer(JsonUtilsSettings jsonUtilsSettings,
+        public NewtonJsonSerializer(
+            IJsonSerializerSettingsFactory jsonSerializerSettingsFactory,
+            JsonUtilsSettings jsonUtilsSettings,
             Dictionary<string, string> assemblyReplacementMapping)
         {
             this.assemblyReplacementMapping = assemblyReplacementMapping;
-
+            this.jsonSerializerSettingsFactory = jsonSerializerSettingsFactory;
             this.jsonUtilsSettings = jsonUtilsSettings;
-
-            jsonSerializerSettingsByTypeNameHandling =
-               new Dictionary<TypeSerializationSettings, JsonSerializerSettings>()
-                {
-                    {
-                        TypeSerializationSettings.AllTypes, new JsonSerializerSettings
-                        {
-                            TypeNameHandling = TypeNameHandling.All,
-                            NullValueHandling = NullValueHandling.Ignore,
-                            FloatParseHandling = FloatParseHandling.Decimal
-                        }
-                    },
-                    {
-                        TypeSerializationSettings.ObjectsOnly, new JsonSerializerSettings
-                        {
-                            TypeNameHandling = TypeNameHandling.Objects,
-                            NullValueHandling = NullValueHandling.Ignore,
-                            FloatParseHandling = FloatParseHandling.Decimal,
-                            Formatting = Formatting.None
-                        }
-                    },
-                    {
-                        TypeSerializationSettings.None, new JsonSerializerSettings
-                        {
-                            TypeNameHandling = TypeNameHandling.None,
-                            NullValueHandling = NullValueHandling.Ignore,
-                            FloatParseHandling = FloatParseHandling.Decimal,
-                            Formatting = Formatting.None                        }
-                    }
-                };
-
+            
             this.jsonSerializer =
-                JsonSerializer.Create(
-                    this.jsonSerializerSettingsByTypeNameHandling[this.jsonUtilsSettings.TypeNameHandling]);
+                JsonSerializer.Create(jsonSerializerSettingsFactory.GetJsonSerializerSettings(this.jsonUtilsSettings.TypeNameHandling));
         }
 
         public string Serialize(object item)
@@ -78,8 +45,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
 
         public string Serialize(object item, TypeSerializationSettings typeSerializationSettings)
         {
-            return JsonConvert.SerializeObject(item, Formatting.None,
-                this.jsonSerializerSettingsByTypeNameHandling[typeSerializationSettings]);
+            return JsonConvert.SerializeObject(item, jsonSerializerSettingsFactory.GetJsonSerializerSettings(typeSerializationSettings));
         }
 
         public byte[] SerializeToByteArray(object payload)
@@ -92,9 +58,19 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
 
         public T Deserialize<T>(string payload)
         {
+            return this.Deserialize<T>(payload, TypeSerializationSettings.ObjectsOnly);
+        }
+
+        public T Deserialize<T>(string payload, TypeSerializationSettings settings)
+        {
             var appliedReplacementPayload = ApplyAssemblyReplacementMapping(payload);
             return JsonConvert.DeserializeObject<T>(appliedReplacementPayload,
-                this.jsonSerializerSettingsByTypeNameHandling[TypeSerializationSettings.ObjectsOnly]);
+                jsonSerializerSettingsFactory.GetJsonSerializerSettings(TypeSerializationSettings.ObjectsOnly));
+        }
+
+        public object Deserialize(string payload, Type type, TypeSerializationSettings settings)
+        {
+            return JsonConvert.DeserializeObject(payload, type, jsonSerializerSettingsFactory.GetJsonSerializerSettings(settings));
         }
 
         public T Deserialize<T>(byte[] payload)
@@ -112,7 +88,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
                 throw new JsonDeserializationException(ex.Message, ex);
             }
         }
-
+        
         public object DeserializeFromStream(Stream stream, Type type)
         {
             using (var sr = new StreamReader(stream))
@@ -141,6 +117,5 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             return replaceOldAssemblyNames;
 
         }
-        
     }
 }

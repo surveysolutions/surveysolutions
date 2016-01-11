@@ -2,17 +2,12 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Common.Logging;
 using Dapper;
 using NHibernate;
-using NHibernate.Engine;
-using NHibernate.Metadata;
-using NHibernate.Persister.Entity;
 using Ninject;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.GenericSubdomains.Portable;
@@ -26,8 +21,8 @@ using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
-using WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 {

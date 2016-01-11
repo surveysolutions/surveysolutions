@@ -43,6 +43,16 @@ namespace WB.UI.Interviewer.Implementations.Services
             throw new NotImplementedException();
         }
 
+        public T Deserialize<T>(string payload, TypeSerializationSettings settings)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object Deserialize(string payload, Type type, TypeSerializationSettings settings)
+        {
+            throw new NotImplementedException();
+        }
+
         public T Deserialize<T>(byte[] payload)
         {
             return (T) this.DeserializeFromStream(new MemoryStream(payload), typeof (T));

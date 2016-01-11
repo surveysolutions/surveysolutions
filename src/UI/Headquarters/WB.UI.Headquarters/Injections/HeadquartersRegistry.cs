@@ -24,6 +24,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Headquarters.Views;
 using WB.UI.Shared.Web.Filters;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 
 namespace WB.UI.Headquarters.Injections
 {
@@ -206,7 +207,15 @@ namespace WB.UI.Headquarters.Injections
 
             this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
             this.Bind<IProtobufSerializer>().To<ProtobufSerializer>();
-            this.Bind<ISerializer>().To<NewtonJsonSerializer>();
+
+            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(
+                new JsonSerializerSettingsFactory(
+                    new Dictionary<string, string>()
+                    {
+                        { "Main.Core", "WB.Core.SharedKernels.DataCollection.Portable" }
+                    }
+                    )));
+
             this.Bind<IStringCompressor>().To<JsonCompressor>();
             this.Bind<IRestServiceSettings>().To<DesignerQuestionnaireApiRestServiceSettings>().InSingletonScope();
 

@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 {

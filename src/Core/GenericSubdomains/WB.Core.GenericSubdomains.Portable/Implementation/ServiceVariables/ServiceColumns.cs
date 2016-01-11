@@ -1,4 +1,4 @@
-﻿namespace WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables
+﻿namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
 {
     public static class ServiceColumns
     {

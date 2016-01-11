@@ -6,9 +6,10 @@ using System.Reflection;
 using System.Threading;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 using Npgsql;
 using NpgsqlTypes;
+using WB.Core.GenericSubdomains.Portable.Services;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
@@ -20,15 +21,18 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private static long lastUsedGlobalSequence = -1;
         private static readonly object lockObject = new object();
         private readonly IEventTypeResolver eventTypeResolver;
+        private readonly ISerializer serializer;
+
         private static int BatchSize = 4096;
 
       
 
         public PostgresEventStore(PostgreConnectionSettings connectionSettings, 
-            IEventTypeResolver eventTypeResolver)
+            IEventTypeResolver eventTypeResolver, ISerializer serializer)
         {
             this.connectionSettings = connectionSettings;
             this.eventTypeResolver = eventTypeResolver;
+            this.serializer = serializer;
         }
 
         public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)
@@ -114,8 +118,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 {
                     foreach (var @event in eventStream)
                     {
-                        var eventString = JsonConvert.SerializeObject(@event.Payload, Formatting.Indented,
-                            EventSerializerSettings.JsonSerializerSettings);
+                        var eventString = this.serializer.Serialize(@event.Payload, TypeSerializationSettings.Event);
                         var nextSequnce = this.GetNextSequnce();
 
                         writer.StartRow();
@@ -272,7 +275,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
             string eventType = (string) npgsqlDataReader["eventtype"];
             var resolvedEventType = this.eventTypeResolver.ResolveType(eventType);
-            IEvent typedEvent = JsonConvert.DeserializeObject(value, resolvedEventType, EventSerializerSettings.JsonSerializerSettings) as IEvent;
+            IEvent typedEvent = this.serializer.Deserialize(value, resolvedEventType, TypeSerializationSettings.Event) as IEvent;
+                
 
             var origin = npgsqlDataReader["origin"];
 

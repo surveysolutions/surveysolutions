@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.BoundedContexts.Supervisor.Users.Implementation
 {

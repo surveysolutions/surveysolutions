@@ -8,6 +8,8 @@ using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Exceptions;
 using WB.UI.Shared.Web.Membership;
 using IRecipientNotifier = WB.UI.Designer.Code.IRecipientNotifier;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using System.Collections.Generic;
 
 namespace WB.UI.Designer
 {
@@ -22,7 +24,14 @@ namespace WB.UI.Designer
             this.BindFilter<CustomHandleErrorFilter>(FilterScope.Global, 0).InSingletonScope();
             this.BindFilter<CustomAuthorizeFilter>(FilterScope.Controller, 0).WhenControllerHas<CustomAuthorizeAttribute>().InSingletonScope();
             this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
-            this.Bind<ISerializer>().To<NewtonJsonSerializer>();
+
+            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(
+                new JsonSerializerSettingsFactory(
+                    new Dictionary<string, string>()
+                    {
+                        { "Main.Core", "WB.Core.SharedKernels.DataCollection.Portable" }
+                    })));
+
             this.Bind<IStringCompressor>().To<JsonCompressor>().InSingletonScope();
             this.Bind<IMembershipHelper>().ToConstant(new MembershipHelper()).InSingletonScope();
             this.Bind<IMembershipWebUser>()

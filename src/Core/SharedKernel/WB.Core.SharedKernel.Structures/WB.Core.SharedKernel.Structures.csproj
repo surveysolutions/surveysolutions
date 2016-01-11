@@ -41,12 +41,14 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <ProjectReference Include="..\..\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
-      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
-      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
+    <ProjectReference Include="..\..\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
+      <Project>{553b4fc2-5fc7-4256-b14d-82758d64a3bd}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\Designer\Questionnaire.cs" />
+    <Compile Include="Api\Designer\QuestionnaireListItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Synchronization\Designer\DownloadQuestionnaireRequest.cs" />
     <Compile Include="Synchronization\Designer\QuestionnaireListItem.cs" />
@@ -106,4 +108,3 @@
   </Target>
   -->
 </Project>
-

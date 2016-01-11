@@ -119,8 +119,6 @@ using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandTransformation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
-using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
@@ -135,6 +133,7 @@ using QuestionnaireDeleted = WB.Core.SharedKernels.DataCollection.Events.Questio
 using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion;
 using QuestionnaireView = WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireView;
 using SynchronizationStatus = WB.Core.BoundedContexts.Supervisor.Synchronization.SynchronizationStatus;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 
 namespace WB.Tests.Unit
 {
