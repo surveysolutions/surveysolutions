@@ -4,6 +4,9 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -22,33 +25,30 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.RosterTitleSubstitutio
             rosterTitle = "rosterValue";
 
             var interview = Mock.Of<IStatefulInterview>(x => 
-                x.FindRosterByOrDeeperRosterLevel(Moq.It.IsAny<Guid>(), Moq.It.IsAny<RosterVector>()) == 
-                    new InterviewRoster { Title = rosterTitle });
+                x.QuestionnaireIdentity == questionnaireIdentity &&
+                x.FindRosterByOrDeeperRosterLevel(Moq.It.IsAny<Guid>(), Moq.It.IsAny<RosterVector>()) == new InterviewRoster { Title = rosterTitle });
 
-            var questionnaire = new QuestionnaireModel { 
-                QuestionsNearestRosterIdMap = new Dictionary<Guid, Guid?>
-                {
-                    {questionid,  Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")}
-                } 
-            };
+            var questionnaire = Mock.Of<IQuestionnaire>(_
+                => _.GetRostersFromTopToSpecifiedQuestion(questionid) == new [] { Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB") });
 
-            var questionnaireStorageStub = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
-            questionnaireStorageStub.SetReturnsDefault(questionnaire);
+            var questionnaireStorageStub = Mock.Of<IPlainQuestionnaireRepository>(_
+                => _.GetHistoricalQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version) == questionnaire);
 
             var interviewRepositoryStub = new Mock<IStatefulInterviewRepository>();
             interviewRepositoryStub.SetReturnsDefault(interview);
 
-            service = new RosterTitleSubstitutionService(questionnaireStorageStub.Object, interviewRepositoryStub.Object, Create.SubstitutionService());
+            service = new RosterTitleSubstitutionService(questionnaireStorageStub, interviewRepositoryStub.Object, Create.SubstitutionService());
         };
 
         Because of = () => substitutedValue = service.Substitute("something %rostertitle%", new Identity(questionid, new decimal[]{1}), "interviewId");
 
-        It should_replace_roster_title_with_value = () => substitutedValue.ShouldEqual(string.Format("something {0}", rosterTitle));
+        It should_replace_roster_title_with_value = () => substitutedValue.ShouldEqual($"something {rosterTitle}");
 
         static IRosterTitleSubstitutionService service;
         static string rosterTitle;
         static string substitutedValue;
         static Guid questionid;
+        private static QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"), 7);
     }
 }
 
