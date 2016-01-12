@@ -303,6 +303,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public string GetCustomValidationExpression(Guid questionId) => this.GetQuestionOrThrow(questionId).ValidationExpression;
 
+        public ReadOnlyCollection<Guid> GetPrefilledQuestions()
+            => this
+                .QuestionnaireDocument
+                .Find<IQuestion>(question => question.Featured)
+                .Select(question => question.PublicKey)
+                .ToReadOnlyCollection();
+
         public IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId) => this.GetAllParentGroupsForQuestionStartingFromBottom(questionId);
 
         public ReadOnlyCollection<Guid> GetParentsStartingFromTop(Guid entityId)

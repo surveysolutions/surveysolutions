@@ -8,9 +8,7 @@ using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -28,7 +26,6 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsView
 
         public static PrefilledQuestionsViewModel CreatePrefilledQuestionsViewModel(
             IInterviewViewModelFactory interviewViewModelFactory = null,
-            IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
             IViewModelNavigationService viewModelNavigationService = null,
             ILogger logger = null)
@@ -36,7 +33,6 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsView
             return new PrefilledQuestionsViewModel(
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
                 Mock.Of<IPlainQuestionnaireRepository>(),
-                plainQuestionnaireRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
                 logger ?? Mock.Of<ILogger>());
