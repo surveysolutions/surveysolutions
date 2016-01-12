@@ -41,7 +41,7 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<IInterviewerQuestionnaireFactory>().To<InterviewerQuestionnaireFactory>();
             this.Bind<IInterviewerInterviewFactory>().To<InterviewerInterviewFactory>();
 
-            this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepository>();
+            this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepositoryWithCache>();
             this.Bind<IPlainInterviewFileStorage>().To<InterviewerPlainInterviewFileStorage>();
 
             this.Bind<IEventStore>().To<SiaqodbEventStorage>();

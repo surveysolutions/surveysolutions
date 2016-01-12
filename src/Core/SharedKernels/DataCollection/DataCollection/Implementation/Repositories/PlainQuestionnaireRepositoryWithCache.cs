@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> repository;
         private readonly ConcurrentDictionary<string, QuestionnaireDocument> cache = new ConcurrentDictionary<string, QuestionnaireDocument>();
-
+        
         public PlainQuestionnaireRepositoryWithCache(IPlainKeyValueStorage<QuestionnaireDocument> repository)
         {
             this.repository = repository;
@@ -31,6 +31,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                 return null;
 
             return new PlainQuestionnaire(questionnaireDocument, version);
+        }
+
+        public IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity)
+        {
+            return this.GetHistoricalQuestionnaire(identity.QuestionnaireId, identity.Version);
         }
 
         public void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
