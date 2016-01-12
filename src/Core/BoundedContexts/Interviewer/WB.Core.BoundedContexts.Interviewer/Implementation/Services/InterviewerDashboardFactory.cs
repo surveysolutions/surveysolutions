@@ -27,12 +27,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.interviewViewModelFactory = interviewViewModelFactory;
         }
 
-        public Task<DashboardInformation> GetInterviewerDashboardAsync(Guid interviewerId)
-        {
-            return Task.Run(() => this.GetInterviewerDashboard(interviewerId));
-        }
-
-        private DashboardInformation GetInterviewerDashboard(Guid interviewerId)
+        public DashboardInformation GetInterviewerDashboard(Guid interviewerId)
         {
             var censusQuestionnaires = this.GetCensusQuestionnaires();
             var interviews = this.GetInterivewsByInterviewerId(interviewerId);

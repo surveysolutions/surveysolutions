@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
         {
-            var queryable = this.Storage.Cast<TEntity>().AsQueryable();
+            var queryable = this.Storage.Query<TEntity>().AsQueryable();
             var result = query.Invoke(queryable);
             return result;
         }
