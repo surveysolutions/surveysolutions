@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
+using WB.Core.BoundedContexts.Headquarters.Ddi;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -26,13 +27,16 @@ namespace WB.UI.Headquarters.API
         private readonly IDataExportStatusReader dataExportStatusReader;
         private readonly IDataExportProcessesService dataExportProcessesService;
 
+        private readonly IDdiMetadataAccessor ddiMetadataAccessor;
+
         public DataExportApiController(
             IFileSystemAccessor fileSystemAccessor,
             IDataExportStatusReader dataExportStatusReader,
             IDataExportProcessesService dataExportProcessesService, 
             IParaDataAccessor paraDataAccessor,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
-            ILogger logger)
+            ILogger logger, 
+            IDdiMetadataAccessor ddiMetadataAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportStatusReader = dataExportStatusReader;
@@ -40,6 +44,7 @@ namespace WB.UI.Headquarters.API
             this.paraDataAccessor = paraDataAccessor;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
             this.logger = logger;
+            this.ddiMetadataAccessor = ddiMetadataAccessor;
         }
 
         [HttpGet]
@@ -77,7 +82,7 @@ namespace WB.UI.Headquarters.API
         {
             return
                 CreateHttpResponseMessageWithFileContent(
-                    this.filebasedExportedDataAccessor.GetFilePathToExportedDDIMetadata(new QuestionnaireIdentity(id,
+                    this.ddiMetadataAccessor.GetFilePathToDDIMetadata(new QuestionnaireIdentity(id,
                         version)));
         }
 
