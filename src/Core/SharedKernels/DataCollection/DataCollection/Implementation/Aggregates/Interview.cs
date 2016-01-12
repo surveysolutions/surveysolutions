@@ -749,10 +749,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
         }
 
-        public void CreateInterviewOnClient(Guid questionnaireId, long questionnaireVersion, Guid supervisorId, DateTime answersTime, Guid userId)
+        public void CreateInterviewOnClient(QuestionnaireIdentity questionnaireIdentity, Guid supervisorId, DateTime answersTime, Guid userId)
         {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireId, questionnaireVersion);
-            this.SetQuestionnaireProperties(questionnaireId, questionnaire.Version);
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
+            this.SetQuestionnaireProperties(questionnaireIdentity.QuestionnaireId, questionnaire.Version);
 
             InterviewChangeStructures interviewChangeStructures = new InterviewChangeStructures();
 
@@ -763,7 +763,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 fixedRosterCalculationDatas);
 
             //apply events
-            this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireId, questionnaire.Version));
+            this.ApplyEvent(new InterviewOnClientCreated(userId, questionnaireIdentity.QuestionnaireId, questionnaire.Version));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Created, comment: null));
 
             this.ApplyInterviewChanges(interviewChangeStructures.Changes);
