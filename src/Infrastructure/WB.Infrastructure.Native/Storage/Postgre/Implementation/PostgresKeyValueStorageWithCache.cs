@@ -38,8 +38,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             lock (lockObject)
             {
-                memoryCache.Remove(id);
                 base.Remove(id);
+                memoryCache.Remove(id);
             }
         }
 
@@ -47,8 +47,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             lock (lockObject)
             {
-                memoryCache.Set(id, view, DateTimeOffset.Now.AddSeconds(10));
                 base.Store(view, id);
+                memoryCache.Set(id, view, DateTimeOffset.Now.AddSeconds(10));
             }
         }
 
@@ -56,8 +56,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             lock (lockObject)
             {
-                bulk.ForEach(i => memoryCache.Remove(i.Item2));
                 base.BulkStore(bulk);
+                bulk.ForEach(i => memoryCache.Remove(i.Item2));
             }
         }
 
@@ -65,9 +65,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             lock (lockObject)
             {
+                base.Clear();
                 memoryCache.Dispose();
                 memoryCache = new MemoryCache(typeof(TEntity).Name + " K/V memory cache");
-                base.Clear();
             }
         }
 
