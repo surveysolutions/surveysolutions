@@ -1,25 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using ddidotnet;
 using Machine.Specifications;
-using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities.Question;
 using Moq;
-using StatData.Core;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using System.IO;
-using System.Reflection;
-using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
+using WB.Core.BoundedContexts.Headquarters.Ddi;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.MetadataExportServiceTests
@@ -72,7 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
 
             metaDescriptionFactory.Setup(x => x.CreateMetaDescription()).Returns(metadataWriter.Object);
 
-            metadataExportService = CreateMetadataExportService(
+            ddiMetadataFactory = CreateMetadataExportService(
                 questionnaireDocument: questionnaire,
                 metaDescriptionFactory: metaDescriptionFactory.Object,
                 questionnaireLabelFactory: questionnaireLabelFactoryMock.Object);
@@ -81,7 +69,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
         Because of = () =>
         {
             filePath =
-                metadataExportService.CreateAndGetDDIMetadataFileForQuestionnaire(questionnaireId,
+                ddiMetadataFactory.CreateDDIMetadataFileForQuestionnaireInFolder(questionnaireId,
                     questionnaireVersion, "");
         };
 
@@ -118,11 +106,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
         It should_add_variable_r2 = () =>
             metadataWriter.Verify(x =>x.AddDdiVariableToFile(Moq.It.IsAny<DdiDataFile>(), "r1", DdiDataType.DynString, "lbl", null, null,null));
 
-        private static MetadataExportService metadataExportService;
+        private static DdiMetadataFactory ddiMetadataFactory;
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static long questionnaireVersion = 3;
         private static string filePath;
         private static Mock<IMetadataWriter> metadataWriter;
-        private static DatasetMeta meta = new DatasetMeta(new IDatasetVariable[] {new DatasetVariable("a")});
     }
 }

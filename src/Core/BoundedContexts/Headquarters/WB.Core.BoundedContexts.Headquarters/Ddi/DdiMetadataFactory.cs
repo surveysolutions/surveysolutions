@@ -14,9 +14,9 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
+namespace WB.Core.BoundedContexts.Headquarters.Ddi
 {
-    internal class MetadataExportService : IMetadataExportService
+    internal class DdiMetadataFactory : IDdiMetadataFactory
     {
         private readonly ITransactionManagerProvider transactionManager;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly IMetaDescriptionFactory metaDescriptionFactory;
 
         private readonly IQuestionnaireLabelFactory questionnaireLabelFactory;
-        public MetadataExportService(
+        public DdiMetadataFactory(
             IFileSystemAccessor fileSystemAccessor,
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter,
             ITransactionManagerProvider transactionManager,
@@ -46,10 +46,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.questionnaireLabelFactory = questionnaireLabelFactory;
         }
 
-        public string CreateAndGetDDIMetadataFileForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string basePath)
+        public string CreateDDIMetadataFileForQuestionnaireInFolder(Guid questionnaireId, long questionnaireVersion, string basePath)
         {
-            QuestionnaireDocumentVersioned bigTemplateObject = GetQuestionnaireDocument(questionnaireId, questionnaireVersion);
-            QuestionnaireExportStructure questionnaireExportStructure = GetQuestionnaireExportStructure(questionnaireId, questionnaireVersion);
+            QuestionnaireDocumentVersioned bigTemplateObject = this.GetQuestionnaireDocument(questionnaireId, questionnaireVersion);
+            QuestionnaireExportStructure questionnaireExportStructure = this.GetQuestionnaireExportStructure(questionnaireId, questionnaireVersion);
 
             if (questionnaireExportStructure == null || bigTemplateObject == null)
             {
@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 IMetadataWriter metadataWriter = this.metaDescriptionFactory.CreateMetaDescription();
 
                 var questionnaireLabelsForAllLevels =
-                    questionnaireLabelFactory.CreateLabelsForQuestionnaire(questionnaireExportStructure);
+                    this.questionnaireLabelFactory.CreateLabelsForQuestionnaire(questionnaireExportStructure);
 
                 metadataWriter.SetMetadataTitle(bigTemplateObject.Questionnaire.Title);
 
@@ -80,8 +80,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                                 continue;
 
                             var variable = metadataWriter.AddDdiVariableToFile(hhDataFile, variableLabel.VariableName,
-                                GetDdiDataType(questionItem.QuestionType), variableLabel.Label, questionItem.Instructions,
-                                questionItem.QuestionText, GetDdiVariableScale(questionItem.QuestionType));
+                                this.GetDdiDataType(questionItem.QuestionType), variableLabel.Label, questionItem.Instructions,
+                                questionItem.QuestionText, this.GetDdiVariableScale(questionItem.QuestionType));
 
                             foreach (VariableValueLabel variableValueLabel in variableLabel.VariableValueLabels)
                             {
