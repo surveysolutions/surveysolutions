@@ -49,6 +49,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
         It should_return_first_row_with_0_5_in_Average = () =>
            result.Items.First().Average.ShouldEqual(0.5);
 
+        It should_return_total_row_with_1_interview_at_first_period_and_zero_interviews_at_second = () =>
+            result.TotalRow.QuantityByPeriod.ShouldEqual(new long[] { 1, 0 });
+
+        It should_return_total_row_with_1_in_Total = () =>
+            result.TotalRow.Total.ShouldEqual(1);
+
+        It should_return_total_row_with_0_5_in_Average = () =>
+            result.TotalRow.Average.ShouldEqual(0.5);
+
         private static QuantityReportFactory quantityReportFactory;
         private static QuantityByInterviewersReportInputModel input;
         private static QuantityByResponsibleReportView result;
