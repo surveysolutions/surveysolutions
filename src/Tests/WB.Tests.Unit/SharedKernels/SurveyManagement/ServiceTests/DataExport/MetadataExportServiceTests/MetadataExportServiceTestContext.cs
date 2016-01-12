@@ -10,6 +10,7 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.Ddi;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -23,10 +24,10 @@ using It = Moq.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.MetadataExportServiceTests
 {
-    [Subject(typeof (MetadataExportService))]
+    [Subject(typeof (DdiMetadataFactory))]
     internal class MetadataExportServiceTestContext
     {
-        protected static MetadataExportService CreateMetadataExportService(
+        protected static DdiMetadataFactory CreateMetadataExportService(
             QuestionnaireDocument questionnaireDocument,
             IMetaDescriptionFactory metaDescriptionFactory = null,
             IQuestionnaireLabelFactory questionnaireLabelFactory=null)
@@ -34,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();
             fileSystemAccessor.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>())).Returns<string, string>(Path.Combine);
 
-            return new MetadataExportService(
+            return new DdiMetadataFactory(
                 fileSystemAccessor.Object,
                 Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
                     It.IsAny<string>()) == new QuestionnaireExportStructure()),

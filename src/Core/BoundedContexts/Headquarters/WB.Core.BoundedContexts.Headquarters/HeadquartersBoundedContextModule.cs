@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
+using WB.Core.BoundedContexts.Headquarters.Ddi;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires;
@@ -72,7 +73,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<InterviewDataExportSettings>().ToConstant(this.interviewDataExportSettings);
             this.Bind<ExportSettings>().ToConstant(this.exportSettings);
             this.Bind<IFilebasedExportedDataAccessor>().To<FilebasedExportedDataAccessor>();
-            this.Bind<IMetadataExportService>().To<MetadataExportService>();
+
+            this.Bind<IDdiMetadataAccessor>().To<DdiMetadataAccessor>();
+            this.Bind<IDdiMetadataFactory>().To<DdiMetadataFactory>();
             this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
             this.Bind<IDataExportProcessesService>().To<DataExportProcessesService>().InSingletonScope();
             this.Bind<IDataExporter>().To<DataExporter>().InSingletonScope();
