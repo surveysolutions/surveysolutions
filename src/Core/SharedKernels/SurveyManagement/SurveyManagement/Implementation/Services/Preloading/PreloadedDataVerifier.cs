@@ -843,18 +843,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         private Tuple<bool, bool> GetUserStateAndUpdateCache(Dictionary<string, Tuple<bool, bool>> supervisorCache, string name, bool acceptInterviewers)
         {
-            if (supervisorCache.ContainsKey(name))
-                return supervisorCache[name];
+            var userNameLowerCase = name.ToLower();
+            if (supervisorCache.ContainsKey(userNameLowerCase))
+                return supervisorCache[userNameLowerCase];
             
-            var user = userViewFactory.Load(new UserViewInputModel(UserName: name, UserEmail: null));
+            var user = userViewFactory.Load(new UserViewInputModel(UserName: userNameLowerCase, UserEmail: null));
             if (user == null || user.IsArchived)
             {
-                supervisorCache.Add(name, null);
+                supervisorCache.Add(userNameLowerCase, null);
                 return null;
             }
             
             var item = new Tuple<bool, bool>(user.IsLockedByHQ, user.IsSupervisor() || (acceptInterviewers && user.Roles.Any(role => role == UserRoles.Operator)));
-            supervisorCache.Add(name, item);
+            supervisorCache.Add(userNameLowerCase, item);
             return item;
         }
     }
