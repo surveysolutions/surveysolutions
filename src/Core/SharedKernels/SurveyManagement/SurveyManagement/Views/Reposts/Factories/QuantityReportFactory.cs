@@ -2,18 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using Main.Core.Entities.SubEntities;
-using NHibernate;
-using NHibernate.Criterion;
-using NHibernate.Linq;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
@@ -91,7 +81,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                     interviewsForUser.Any() ? interviewsForUser.First().UserName : "", interviewsForUser.Count());
             }).ToArray();
 
-            return new QuantityByResponsibleReportView(rows, dateTimeRanges, usersCount);
+            var quantityTotalRow =
+                CreateQuantityTotalRow(
+                    allInterviewsInStatus.Select(interviewInStatus => interviewInStatus.Timestamp.Date).ToArray(),
+                    dateTimeRanges);
+            return new QuantityByResponsibleReportView(rows, quantityTotalRow, dateTimeRanges, usersCount);
+        }
+
+        private QuantityTotalRow CreateQuantityTotalRow(DateTime[] statusChangeDates, DateTimeRange[] dateTimeRanges)
+        {
+            var quantityByPeriod = new List<long>();
+
+            foreach (var dateTimeRange in dateTimeRanges)
+            {
+                var count =
+                    statusChangeDates.Count(
+                        d => d >= dateTimeRange.From && d< dateTimeRange.To);
+                quantityByPeriod.Add(count);
+            }
+
+            return new QuantityTotalRow(quantityByPeriod.ToArray(), statusChangeDates.Count());
         }
 
         private IQueryable<InterviewCommentedStatus> QueryInterviewStatuses(

@@ -7,9 +7,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views
     {
         public QuantityByResponsibleReportView(
             QuantityByResponsibleReportRow[] items,
+            QuantityTotalRow totalRow,
             DateTimeRange[] dateTimeRanges, int totalCount)
         {
             Items = items;
+            TotalRow = totalRow;
             DateTimeRanges = dateTimeRanges;
             TotalCount = totalCount;
         }
@@ -17,6 +19,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views
         public int TotalCount { get; set; }
 
         public IEnumerable<QuantityByResponsibleReportRow> Items { get; set; }
+
+        public QuantityTotalRow TotalRow { get; set; }
 
         public DateTimeRange[] DateTimeRanges { get; private set; }
     }
