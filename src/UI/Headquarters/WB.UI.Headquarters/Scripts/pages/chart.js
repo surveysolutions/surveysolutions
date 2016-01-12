@@ -144,7 +144,8 @@
                         renderer: $.jqplot.DateAxisRenderer,
                         min: self.Stats.Lines[0][0][0],
                         max: self.Stats.Lines[0][self.Stats.Lines[0].length - 1][0],
-                        drawMajorGridlines: false
+                        drawMajorGridlines: false,
+                        tickOptions: { formatString: '%F' }
                     },
                     yaxis: {
                         min: 0
