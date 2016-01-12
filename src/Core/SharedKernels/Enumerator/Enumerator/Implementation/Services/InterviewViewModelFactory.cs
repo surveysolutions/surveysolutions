@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cirrious.CrossCore;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -17,7 +19,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     internal class InterviewViewModelFactory : IInterviewViewModelFactory
     {
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
         private readonly Dictionary<Type, Func<IInterviewEntityViewModel>> EntityTypeToViewModelMap =
@@ -49,31 +52,31 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         }
 
         public InterviewViewModelFactory(
-            IPlainKeyValueStorage<QuestionnaireModel> plainQuestionnaireRepository,
+            IPlainQuestionnaireRepository questionnaireRepository,
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository,
             IStatefulInterviewRepository interviewRepository)
         {
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireRepository = questionnaireRepository;
+            this.questionnaireModelRepository = questionnaireModelRepository;
             this.interviewRepository = interviewRepository;
         }
 
         public IEnumerable<IInterviewEntityViewModel> GetEntities(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
-            if (groupIdentity == null) throw new ArgumentNullException("groupIdentity");
+            if (groupIdentity == null) throw new ArgumentNullException(nameof(groupIdentity));
+
             return this.GenerateViewModels(interviewId, groupIdentity, navigationState);
         }
 
-        public IEnumerable<IInterviewEntityViewModel> GetPrefilledQuestions(string interviewId)
-        {
-            return this.GetPrefilledQuestionsImpl(interviewId);
-        }
+        public IEnumerable<IInterviewEntityViewModel> GetPrefilledQuestions(string interviewId) => this.GetPrefilledQuestionsImpl(interviewId);
 
         private IEnumerable<IInterviewEntityViewModel> GenerateViewModels(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
+            var questionnaire = this.questionnaireModelRepository.GetById(interview.QuestionnaireId);
 
             if (!questionnaire.GroupsWithFirstLevelChildrenAsReferences.ContainsKey(groupIdentity.Id))
-                throw new KeyNotFoundException(string.Format("Group with id : {0} don't found", groupIdentity));
+                throw new KeyNotFoundException($"Group with id {groupIdentity.Id.FormatGuid()} don't found");
 
             var referencesOfQuestionnaireEntities = questionnaire.GroupsWithFirstLevelChildrenAsReferences[groupIdentity.Id].Children;
 
@@ -90,15 +93,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private IEnumerable<IInterviewEntityViewModel> GetPrefilledQuestionsImpl(string interviewId)
         {
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.plainQuestionnaireRepository.GetById(interview.QuestionnaireId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            var questionnaireModel = this.questionnaireModelRepository.GetById(interview.QuestionnaireId);
 
-            return questionnaire.PrefilledQuestionsIds.Select(
-                question => this.CreateInterviewEntityViewModel(
-                    entityId: question.Id,
-                    rosterVector: new decimal[0],
-                    entityModelType: question.ModelType,
-                    interviewId: interviewId,
-                    navigationState: null));
+            return questionnaire
+                .GetPrefilledQuestions()
+                .Select(questionId =>
+                    this.CreateInterviewEntityViewModel(
+                        entityId: questionId,
+                        rosterVector: RosterVector.Empty,
+                        entityModelType: questionnaireModel.Questions[questionId].GetType(),
+                        interviewId: interviewId,
+                        navigationState: null));
         }
 
         private IInterviewEntityViewModel CreateInterviewEntityViewModel(
