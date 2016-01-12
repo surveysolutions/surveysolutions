@@ -40,10 +40,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             questionnaireModel.Questions = questions.ToDictionary(x => x.PublicKey, x => CreateQuestionModel(x, questionnaireDocument, questionIdToRosterLevelDepth));
             questionnaireModel.EntityReferences = entities.Select(x => new QuestionnaireReferenceModel { Id = x.PublicKey, ModelType = x.GetType() }).ToList();
-            questionnaireModel.PrefilledQuestionsIds = questions.Where(x => x.Featured)
-                .Select(x => questionnaireModel.Questions[x.PublicKey])
-                .Select(x => new QuestionnaireReferenceModel { Id = x.Id, ModelType = x.GetType() })
-                .ToList();
 
             questionnaireModel.GroupsWithFirstLevelChildrenAsReferences = groups.ToDictionary(x => x.PublicKey,
                 x => CreateGroupModelWithoutNestedChildren(x, questionnaireModel.Questions));

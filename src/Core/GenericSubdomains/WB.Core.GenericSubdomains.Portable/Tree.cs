@@ -12,17 +12,18 @@ namespace WB.Core.GenericSubdomains.Portable
 
         public static IEnumerable<T> TreeToEnumerable<T>(this IEnumerable<T> tree, Func<T, IEnumerable<T>> getChildren)
         {
-            var itemsStack = new Stack<T>(tree);
+            var itemsQueue = new Queue<T>(tree);
 
-            while (itemsStack.Count > 0)
+            while (itemsQueue.Count > 0)
             {
-                var currentItem = itemsStack.Pop();
+                var currentItem = itemsQueue.Dequeue();
 
-                yield return currentItem;
                 foreach (T childItem in getChildren(currentItem))
                 {
-                    itemsStack.Push(childItem);
+                    itemsQueue.Enqueue(childItem);
                 }
+
+                yield return currentItem;
             }
         }
 

@@ -64,6 +64,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string GetCustomValidationExpression(Guid questionId);
 
+        ReadOnlyCollection<Guid> GetPrefilledQuestions();
+
         IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId);
 
         ReadOnlyCollection<Guid> GetParentsStartingFromTop(Guid entityId);

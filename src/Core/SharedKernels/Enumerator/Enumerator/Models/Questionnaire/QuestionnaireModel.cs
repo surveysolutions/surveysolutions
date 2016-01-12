@@ -13,8 +13,6 @@ namespace WB.Core.SharedKernels.Enumerator.Models.Questionnaire
 
         public List<QuestionnaireReferenceModel> EntityReferences { get; set; }
 
-        public List<QuestionnaireReferenceModel> PrefilledQuestionsIds { get; set; }
-
         public Dictionary<string, BaseQuestionModel> QuestionsByVariableNames { get; set; }
 
         public List<GroupsHierarchyModel> GroupsHierarchy { get; set; }

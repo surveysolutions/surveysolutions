@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -65,12 +66,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (questionnaire == null) throw new Exception("questionnaire is null. QuestionnaireId: " + interview.QuestionnaireId);
 
             this.QuestionnaireTitle = questionnaire.Title;
-            this.PrefilledQuestions = questionnaireModel.PrefilledQuestionsIds
-                .Select(referenceToQuestion => new SideBarPrefillQuestion
+            this.PrefilledQuestions = questionnaire
+                .GetPrefilledQuestions()
+                .Select(questionId => new SideBarPrefillQuestion
                 {
-                    Question = questionnaireModel.Questions[referenceToQuestion.Id].Title,
-                    Answer = this.GetAnswer(interview, questionnaireModel, referenceToQuestion),
-                    StatsInvisible = referenceToQuestion.ModelType == typeof(GpsCoordinatesQuestionModel)
+                    Question = questionnaireModel.Questions[questionId].Title,
+                    Answer = this.GetAnswer(interview, questionnaireModel, new QuestionnaireReferenceModel { Id = questionId, ModelType = questionnaireModel.Questions[questionId].GetType() }),
+                    StatsInvisible = questionnaire.GetQuestionType(questionId) == QuestionType.GpsCoordinates,
                 })
                 .ToList();
 

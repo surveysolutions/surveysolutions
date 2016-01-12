@@ -173,16 +173,14 @@ namespace Main.Core.Documents
         }
 
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
-        {
-            return this.Children.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
-                    this.Children.SelectMany(q => q.Find(condition)));
-        }
+            => this
+                .TreeToEnumerable<IComposite>(composite => composite.Children)
+                .Where(child => child is T)
+                .Cast<T>()
+                .Where(condition.Invoke);
 
         public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
-        {
-            return this.Children.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault()
-                   ?? this.Children.SelectMany(q => q.Find(condition)).FirstOrDefault();
-        }
+            => this.Find(condition).FirstOrDefault();
 
         public void ReplaceEntity(IComposite oldEntity, IComposite newEntity)
         {
