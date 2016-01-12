@@ -176,7 +176,6 @@
     <Compile Include="Storage\EventStore\Implementation\WriteSideEventStore.cs" />
     <Compile Include="Storage\Postgre\Implementation\PostgresKeyValueStorageWithCache.cs" />
     <Compile Include="Threading\IsolatedThreadExtensions.cs" />
-    <Compile Include="Storage\Postgre\Implementation\PostgreReadSideRepositoryWithCache.cs" />
     <Compile Include="Storage\Postgre\Implementation\PostgresEventStore.cs" />
     <Compile Include="Storage\Postgre\Implementation\RebuildReadSideCqrsPostgresTransactionManagerWithSessions.cs" />
     <Compile Include="Storage\Postgre\NhExtensions\PostgreSQL91Dialect.cs" />
