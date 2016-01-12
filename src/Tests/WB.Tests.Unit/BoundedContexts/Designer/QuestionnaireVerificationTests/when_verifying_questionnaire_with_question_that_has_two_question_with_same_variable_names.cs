@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                 .References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.Question);
 
         It should_return_error_reference_with_id_of_secondQuestion = () =>
-            resultErrors.Single().References.ElementAt(0).Id.ShouldEqual(firstQuestionId);
+            resultErrors.Single().References.ElementAt(0).Id.ShouldEqual(secondQuestionId);
 
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
