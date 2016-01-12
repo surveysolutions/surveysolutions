@@ -55,8 +55,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private async Task RefreshDashboardAsync()
         {
-            this.DashboardInformation = await this.dashboardFactory.GetInterviewerDashboardAsync(
-                this.principal.CurrentUserIdentity.UserId);
+            this.DashboardInformation = await Task.Run(() => this.dashboardFactory.GetInterviewerDashboard(
+                this.principal.CurrentUserIdentity.UserId));
 
             if ((CurrentDashboardStatus == DashboardInterviewStatus.Completed && this.CompletedInterviewsCount == 0)
                 || (CurrentDashboardStatus == DashboardInterviewStatus.InProgress && this.StartedInterviewsCount == 0)
