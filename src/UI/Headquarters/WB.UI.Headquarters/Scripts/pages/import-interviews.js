@@ -46,7 +46,7 @@
     });
 
     self.importCompleted = ko.computed(function () {
-        return self.isStatusLoaded() && interviewImportProcessId === self.status.interviewImportProcessId() && !self.status.isInProgress() && self.status.createdInterviewsCount() === self.status.totalInterviewsCount();
+        return self.isStatusLoaded() && interviewImportProcessId === self.status.interviewImportProcessId() && !self.status.isInProgress() && self.status.createdInterviewsCount() === self.status.totalInterviewsCount() && !self.status.hasErrors();
     });
     self.importCompletedWithError = ko.computed(function () {
         return self.isStatusLoaded() && interviewImportProcessId === self.status.interviewImportProcessId() && !self.status.isInProgress() && self.status.hasErrors();

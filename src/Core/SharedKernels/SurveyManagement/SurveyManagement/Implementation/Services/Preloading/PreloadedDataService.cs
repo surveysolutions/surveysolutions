@@ -460,13 +460,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (string.IsNullOrEmpty(name))
                 return null;
 
-            if (cache.ContainsKey(name))
-                return cache[name];
+            var userNameLowerCase = name.ToLower();
+            if (cache.ContainsKey(userNameLowerCase))
+                return cache[userNameLowerCase];
 
-            var user = GetUserByName(name);//assuming that user exists
-            if (user == null || !user.IsSupervisor()) throw new Exception(string.Format("Supervisor with name '{0}' does not exists", name));
+            var user = GetUserByName(userNameLowerCase);//assuming that user exists
+            if (user == null || !user.IsSupervisor()) throw new Exception($"Supervisor with name '{name}' does not exists");
 
-            cache.Add(name, user.PublicKey);
+            cache.Add(userNameLowerCase, user.PublicKey);
             return user.PublicKey;
         }
 
@@ -475,13 +476,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (string.IsNullOrEmpty(name))
                 return null;
 
-            if (interviewerCache.ContainsKey(name))
-                return interviewerCache[name];
+            var userNameLowerCase = name.ToLower();
+            if (interviewerCache.ContainsKey(userNameLowerCase))
+                return interviewerCache[userNameLowerCase];
 
-            var user = GetUserByName(name);//assuming that user exists
+            var user = GetUserByName(userNameLowerCase);//assuming that user exists
             if (user == null || !user.Roles.Contains(UserRoles.Operator)) return null;
 
-            interviewerCache.Add(name, user);
+            interviewerCache.Add(userNameLowerCase, user);
             return user;
         }
     }

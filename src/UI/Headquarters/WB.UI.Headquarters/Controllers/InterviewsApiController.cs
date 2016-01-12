@@ -149,16 +149,12 @@ namespace WB.UI.Headquarters.Controllers
         public HttpResponseMessage GetInvalidInterviewsByLastImport()
         {
             var interviewImportState = this.interviewImportService.Status.State;
-            var delimiter = interviewImportState.Delimiter;
 
             var sb = new StringBuilder();
-
-            sb.AppendLine(string.Join(delimiter, interviewImportState.Columns));
             
             foreach (var interviewImportError in interviewImportState.Errors)
             {
-                sb.AppendLine(string.Concat(string.Join(delimiter, interviewImportError.RawData), delimiter,
-                    interviewImportError.ErrorMessage));
+                sb.AppendLine(interviewImportError.ErrorMessage);
             }
 
             var invalidInterviewsFileName = "invalid-interviews";
