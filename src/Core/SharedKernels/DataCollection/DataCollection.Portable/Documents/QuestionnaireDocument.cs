@@ -174,7 +174,8 @@ namespace Main.Core.Documents
 
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
             => this
-                .TreeToEnumerable<IComposite>(composite => composite.Children)
+                .Children
+                .TreeToEnumerable(composite => composite.Children)
                 .Where(child => child is T)
                 .Cast<T>()
                 .Where(condition.Invoke);
