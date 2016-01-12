@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; 
 using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
@@ -32,7 +32,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.RosterTitleSubstitutio
                 => _.GetRostersFromTopToSpecifiedQuestion(questionid) == new [] { Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB") });
 
             var questionnaireStorageStub = Mock.Of<IPlainQuestionnaireRepository>(_
-                => _.GetHistoricalQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version) == questionnaire);
+                => _.GetHistoricalQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version) == questionnaire
+                && _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire);
 
             var interviewRepositoryStub = new Mock<IStatefulInterviewRepository>();
             interviewRepositoryStub.SetReturnsDefault(interview);
