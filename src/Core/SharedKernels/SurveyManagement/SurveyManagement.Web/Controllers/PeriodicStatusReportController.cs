@@ -68,6 +68,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 canNavigateToQuantityBySupervisors: this.GlobalInfo.IsAdministrator || this.GlobalInfo.IsHeadquarter,
                 reportName: "Quantity",
                 responsibleColumnName: PeriodicStatusReport.TeamMember,
+                totalRowPresent: true,
                 supervisorId: supervisorId);
 
             model.ReportTypes = quantityReportTypes;
@@ -87,6 +88,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 canNavigateToQuantityByTeamMember: true,
                 canNavigateToQuantityBySupervisors: false,
                 reportName: "Quantity",
+                totalRowPresent: true,
                 responsibleColumnName: PeriodicStatusReport.Team);
 
             model.ReportTypes = quantityReportTypes;
@@ -110,6 +112,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 canNavigateToQuantityBySupervisors: this.GlobalInfo.IsAdministrator || this.GlobalInfo.IsHeadquarter,
                 reportName: "Speed",
                 responsibleColumnName: PeriodicStatusReport.TeamMember,
+                totalRowPresent: false,
                 supervisorId: supervisorId);
 
             model.ReportTypes = speedReportTypes;
@@ -133,7 +136,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 webApiActionName: periodicStatusReportWebApiActionName,
                 canNavigateToQuantityByTeamMember: true,
                 canNavigateToQuantityBySupervisors: false,
-                reportName: "Speed",
+                reportName: "Speed", totalRowPresent: false,
                 responsibleColumnName: PeriodicStatusReport.Team);
 
             model.ReportTypes = speedReportTypes;
@@ -142,7 +145,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         private PeriodicStatusReportModel CreatePeriodicStatusReportModel(PeriodicStatusReportWebApiActionName webApiActionName, PeriodiceReportType reportType,
-            bool canNavigateToQuantityByTeamMember, bool canNavigateToQuantityBySupervisors, string reportName, string responsibleColumnName, Guid? supervisorId = null)
+            bool canNavigateToQuantityByTeamMember, bool canNavigateToQuantityBySupervisors, string reportName, string responsibleColumnName, bool totalRowPresent, Guid? supervisorId = null)
         {
             var allUsersAndQuestionnaires = this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
 
@@ -155,7 +158,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 ReportName = reportName,
                 ResponsibleColumnName = responsibleColumnName,
                 SupervisorId = supervisorId,
-                ReportNameDescription = string.Format(GetReportDescriptionByType(reportType), PeriodicStatusReport.Team.ToLower())
+                ReportNameDescription = string.Format(GetReportDescriptionByType(reportType), PeriodicStatusReport.Team.ToLower()),
+                TotalRowPresent = totalRowPresent
             };
         }
 

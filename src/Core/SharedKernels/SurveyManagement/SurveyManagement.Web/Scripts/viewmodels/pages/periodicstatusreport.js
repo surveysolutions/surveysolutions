@@ -19,6 +19,8 @@
 
     self.DateTimeRanges = ko.observableArray([]);
 
+    self.TotalRow = ko.observableArray(null);
+
     this.QuestionnaireName = ko.observable();
 
     this.ReportTypeName = ko.observable();

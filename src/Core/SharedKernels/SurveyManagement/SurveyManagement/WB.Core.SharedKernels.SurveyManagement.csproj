@@ -384,6 +384,7 @@
     <Compile Include="Views\Reposts\Views\DateTimeRange.cs" />
     <Compile Include="Views\Reposts\Views\QuantityByResponsibleReportRow.cs" />
     <Compile Include="Views\Reposts\Views\QuantityByResponsibleReportView.cs" />
+    <Compile Include="Views\Reposts\Views\QuantityTotalRow.cs" />
     <Compile Include="Views\Reposts\Views\SpeedByResponsibleReportRow.cs" />
     <Compile Include="Views\Reposts\Views\SpeedByResponsibleReportView.cs" />
     <Compile Include="Views\Reposts\Views\TeamsAndStatusesReportLine.cs" />
