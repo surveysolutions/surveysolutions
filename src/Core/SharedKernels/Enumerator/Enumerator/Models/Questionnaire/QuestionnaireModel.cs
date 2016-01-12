@@ -15,7 +15,6 @@ namespace WB.Core.SharedKernels.Enumerator.Models.Questionnaire
 
         public List<GroupsHierarchyModel> GroupsHierarchy { get; set; }
 
-        public Dictionary<Guid, Guid?> QuestionsNearestRosterIdMap { get; set; }
 
         public IntegerNumericQuestionModel GetIntegerNumericQuestion(Guid questionId)
         {
