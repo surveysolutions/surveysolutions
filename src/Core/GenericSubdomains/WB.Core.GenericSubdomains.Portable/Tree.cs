@@ -16,11 +16,16 @@ namespace WB.Core.GenericSubdomains.Portable
 
             while (itemsQueue.Count > 0)
             {
-                var currentItem = itemsQueue.Dequeue();
+                T currentItem = itemsQueue.Dequeue();
 
-                foreach (T childItem in getChildren(currentItem))
+                IEnumerable<T> childItems = getChildren(currentItem);
+
+                if (childItems != null)
                 {
-                    itemsQueue.Enqueue(childItem);
+                    foreach (T childItem in childItems)
+                    {
+                        itemsQueue.Enqueue(childItem);
+                    }
                 }
 
                 yield return currentItem;
