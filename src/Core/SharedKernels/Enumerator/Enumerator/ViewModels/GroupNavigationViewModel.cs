@@ -99,8 +99,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             var interview = this.interviewRepository.Get(interviewId);
             this.questionnaireIdentity = interview.QuestionnaireIdentity;
 
-            var questionnaire = this.questionnaireModelRepository.GetById(interview.QuestionnaireId);
-            if (!questionnaire.GroupsParentIdMap[groupIdentity.Id].HasValue)
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            if (!questionnaire.GetParentGroup(groupIdentity.Id).HasValue)
             {
                 this.SetNextEnabledSection();
             }
