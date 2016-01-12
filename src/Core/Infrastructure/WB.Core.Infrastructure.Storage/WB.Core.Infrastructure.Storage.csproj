@@ -157,7 +157,6 @@
     <Compile Include="EventStore\IEventStoreConnectionProvider.cs" />
     <Compile Include="EventStore\Implementation\WriteSideEventStore.cs" />
     <Compile Include="IsolatedThreadExtensions.cs" />
-    <Compile Include="Postgre\Implementation\PostgreReadSideRepositoryWithCache.cs" />
     <Compile Include="Postgre\Implementation\PostgresEventStore.cs" />
     <Compile Include="Postgre\Implementation\PostgresKeyValueStorageWithCache.cs" />
     <Compile Include="Postgre\Implementation\RebuildReadSideCqrsPostgresTransactionManagerWithSessions.cs" />
