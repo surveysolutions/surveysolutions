@@ -567,6 +567,7 @@
     <Compile Include="Controllers\InstallController.cs" />
     <Compile Include="Controllers\HeadquartersController.cs" />
     <Compile Include="Controllers\TypeExtensions.cs" />
+    <Compile Include="Filters\ApiMaintenanceFilter.cs" />
     <Compile Include="Filters\FormMultipartEncodedMediaTypeFormatter .cs" />
     <Compile Include="Filters\MaintenanceFilter.cs" />
     <Compile Include="Filters\InstallationAttribute.cs" />
