@@ -134,6 +134,7 @@ using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Des
 using QuestionnaireView = WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireView;
 using SynchronizationStatus = WB.Core.BoundedContexts.Supervisor.Synchronization.SynchronizationStatus;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Tests.Unit
 {
@@ -2293,9 +2294,9 @@ namespace WB.Tests.Unit
                 messageHandler ?? Substitute.For<Func<HttpMessageHandler>>(), HeadquartersPullContext());
         }
 
-        public static UserDocument UserDocument(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null, string userName="name")
+        public static UserDocument UserDocument(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null, string userName="name", bool isLockedByHQ = false)
         {
-            var user = new UserDocument() { PublicKey = userId ?? Guid.NewGuid(), IsArchived = isArchived ?? false, UserName = userName };
+            var user = new UserDocument() { PublicKey = userId ?? Guid.NewGuid(), IsArchived = isArchived ?? false, UserName = userName, IsLockedByHQ = isLockedByHQ };
             if (supervisorId.HasValue)
             {
                 user.Roles.Add(UserRoles.Operator);
@@ -2540,6 +2541,13 @@ namespace WB.Tests.Unit
         public static OptionModel OptionModel(string title, decimal value)
         {
             return new OptionModel { Title = title, Value = value };
+        }
+
+        public static TeamViewFactory TeamViewFactory(
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader = null,
+            IQueryableReadSideRepositoryReader<UserDocument> usersReader = null)
+        {
+            return new TeamViewFactory(interviewSummaryReader, usersReader);
         }
     }
 }
