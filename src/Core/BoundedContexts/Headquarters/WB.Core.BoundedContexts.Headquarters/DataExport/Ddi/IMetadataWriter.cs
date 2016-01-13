@@ -1,6 +1,6 @@
 using ddidotnet;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi
 {
     internal interface IMetadataWriter
     {

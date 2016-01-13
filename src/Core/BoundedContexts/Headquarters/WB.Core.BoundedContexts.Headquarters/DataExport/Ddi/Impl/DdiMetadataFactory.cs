@@ -14,7 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
-namespace WB.Core.BoundedContexts.Headquarters.Ddi
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
 {
     internal class DdiMetadataFactory : IDdiMetadataFactory
     {

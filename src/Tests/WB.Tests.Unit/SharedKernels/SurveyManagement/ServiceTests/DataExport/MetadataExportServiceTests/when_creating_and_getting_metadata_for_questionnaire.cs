@@ -6,7 +6,8 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.Infrastructure.FileSystem;
 using System.IO;
-using WB.Core.BoundedContexts.Headquarters.Ddi;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using It = Machine.Specifications.It;
 
