@@ -21,8 +21,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportTests
             questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             gpsVariableName = "gps";
 
-            var interviews = new TestInMemoryWriter<InterviewSummary>();
-            interviews.Store(Create.InterviewSummary(interviewId, questionnaireId), interviewId);
+            var interviews = new TestInMemoryWriter<InterviewReferences>();
+            interviews.Store(Create.InterviewReferences(questionnaireId: questionnaireId, questionnaireVersion: 1), interviewId);
 
             mapPoints = new TestInMemoryWriter<MapReportPoint>();
             var pointId = $"{interviewId}-{gpsVariableName}-{Empty.RosterVector}";

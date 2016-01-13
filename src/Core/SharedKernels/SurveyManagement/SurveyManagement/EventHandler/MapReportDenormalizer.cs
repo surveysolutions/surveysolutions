@@ -17,23 +17,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<GeoLocationQuestionAnswered>,
         IEventHandler<AnswersRemoved>
     {
+        private readonly IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage;
         private readonly IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> questionsInfo;
         private readonly IReadSideRepositoryWriter<MapReportPoint> mapItems;
-        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewBriefStorage;
 
         public override object[] Writers => new object[] { this.mapItems };
 
-        public override object[] Readers => new object[] { this.interviewBriefStorage, this.questionsInfo };
+        public override object[] Readers => new object[] { this.interviewReferencesStorage, this.questionsInfo };
 
-        public MapReportDenormalizer(IReadSideRepositoryWriter<InterviewSummary> interviewBriefStorage,
+        public MapReportDenormalizer(
+            IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage,
             IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> questionsInfo, 
             IReadSideRepositoryWriter<MapReportPoint> mapItems)
         {
-            if (interviewBriefStorage == null) throw new ArgumentNullException(nameof(interviewBriefStorage));
+            if (interviewReferencesStorage == null) throw new ArgumentNullException(nameof(interviewReferencesStorage));
             if (questionsInfo == null) throw new ArgumentNullException(nameof(questionsInfo));
             if (mapItems == null) throw new ArgumentNullException(nameof(mapItems));
 
-            this.interviewBriefStorage = interviewBriefStorage;
+            this.interviewReferencesStorage = interviewReferencesStorage;
             this.questionsInfo = questionsInfo;
             this.mapItems = mapItems;
         }
@@ -41,11 +42,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)
         {
             Guid interviewId = evnt.EventSourceId;
-            InterviewSummary interviewSummary = this.interviewBriefStorage.GetById(interviewId);
-            if (interviewSummary == null) return;
+            InterviewReferences interviewReferences = this.interviewReferencesStorage.GetById(interviewId);
+            if (interviewReferences == null) return;
 
             var variableName = this.GetVariableNameForQuestion(evnt.Payload.QuestionId, 
-                new QuestionnaireIdentity(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion));
+                new QuestionnaireIdentity(interviewReferences.QuestionnaireId, interviewReferences.QuestionnaireVersion));
 
             var targetVector = new RosterVector(evnt.Payload.RosterVector).ToString();
             var mapPointKey = GetMapPointKey(interviewId, variableName, targetVector);
@@ -55,8 +56,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             mapReportAnswersCollection.Latitude = evnt.Payload.Latitude;
             mapReportAnswersCollection.Longitude = evnt.Payload.Longitude;
             mapReportAnswersCollection.InterviewId = interviewId;
-            mapReportAnswersCollection.QuestionnaireId = interviewSummary.QuestionnaireId;
-            mapReportAnswersCollection.QuestionnaireVersion = interviewSummary.QuestionnaireVersion;
+            mapReportAnswersCollection.QuestionnaireId = interviewReferences.QuestionnaireId;
+            mapReportAnswersCollection.QuestionnaireVersion = interviewReferences.QuestionnaireVersion;
             mapReportAnswersCollection.Variable = variableName;
             
             this.mapItems.Store(mapReportAnswersCollection, mapPointKey);
@@ -78,11 +79,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private void HandleSingleRemove(Guid interviewId, Guid questionId, decimal[] propagationVector)
         {
-            InterviewSummary interviewSummary = this.interviewBriefStorage.GetById(interviewId);
-            if (interviewSummary == null) return;
+            InterviewReferences interviewReferences = this.interviewReferencesStorage.GetById(interviewId);
+            if (interviewReferences == null) return;
 
             var variableName = this.GetVariableNameForQuestion(questionId,
-                new QuestionnaireIdentity(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion));
+                new QuestionnaireIdentity(interviewReferences.QuestionnaireId, interviewReferences.QuestionnaireVersion));
 
             var targetVector = new RosterVector(propagationVector).ToString();
             var mapPointKey = GetMapPointKey(interviewId, variableName, targetVector);
