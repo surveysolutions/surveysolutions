@@ -31,9 +31,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public List<ConditionMethodAndState> ConditionMethodsSortedByExecutionOrder { get; set; }
 
-        public IEnumerable<TypeAndNameModel> AllParentsQuestionsToTop  { set; get; }
+        public IEnumerable<HierarchyReferenceModel> AllParentsQuestionsToTop  { set; get; }
 
-        public IEnumerable<TypeAndNameModel> AllParentsRostersToTop { set; get; }
+        public IEnumerable<HierarchyReferenceModel> AllParentsRostersToTop { set; get; }
 
         public string ParentTypeName { set; get; }
 

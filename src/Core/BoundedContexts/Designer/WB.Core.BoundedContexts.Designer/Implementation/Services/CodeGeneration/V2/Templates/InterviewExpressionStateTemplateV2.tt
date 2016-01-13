@@ -17,7 +17,7 @@ using System.Text.RegularExpressions;
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
     public class <#=QuestionnaireStructure.ClassName#> : AbstractInterviewExpressionStateV2
-    <#foreach (var additionInterface in QuestionnaireStructure.AdditionInterfaces){#>
+    <#foreach (var additionInterface in QuestionnaireStructure.AdditionalInterfaces){#>
 	 , <#=additionInterface#>
 	<#}#>
 
@@ -118,7 +118,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 			return new <#=QuestionnaireStructure.ClassName#>(this.InterviewScopes, this.SiblingRosters, this.InterviewProperties);
 		}
         
-		<#foreach (var additionInterface in QuestionnaireStructure.AdditionInterfaces){#>
+		<#foreach (var additionInterface in QuestionnaireStructure.AdditionalInterfaces){#>
 	    <#=additionInterface#> <#=additionInterface#>.Clone()
         {
             return Clone () as <#=additionInterface#>;
