@@ -13,11 +13,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
         {
             _jsonSerializer =
                 CreateNewtonJsonUtils(
-                    new JsonSerializerSettingsFactory(
-                        new Dictionary<string, string>()
-                        { 
-                            { "Main.Core", "WB.Core.SharedKernels.DataCollection.Portable" }
-                        }),
+                    new JsonSerializerSettingsFactory(),
                     new Dictionary<string, string>()
                     {
                     {

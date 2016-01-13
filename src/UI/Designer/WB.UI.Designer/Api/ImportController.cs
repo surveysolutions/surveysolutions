@@ -14,7 +14,6 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Resources;

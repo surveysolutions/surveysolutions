@@ -2321,6 +2321,10 @@
       <Project>{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}</Project>
       <Name>WB.Core.SharedKernels.Enumerator</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
+      <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>
+      <Name>WB.Core.SharedKernels.Questionnaire</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\SurveyManagement\SurveyManagement.Web\WB.Core.SharedKernels.SurveyManagement.Web.csproj">
       <Project>{E96A3629-18F6-4B7C-9920-FC9A1B3892C1}</Project>
       <Name>WB.Core.SharedKernels.SurveyManagement.Web</Name>
