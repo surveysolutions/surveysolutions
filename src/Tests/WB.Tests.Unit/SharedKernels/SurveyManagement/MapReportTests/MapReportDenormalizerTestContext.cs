@@ -10,11 +10,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportTests
     [Subject(typeof(MapReportDenormalizer))]
     public abstract class MapReportDenormalizerTestContext
     {
-        protected static MapReportDenormalizer CreateMapReportDenormalizer(IReadSideRepositoryWriter<MapReportPoint> mapPoints = null,
-            IReadSideRepositoryWriter<InterviewSummary> interviews = null,
-               IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> questionsInfos = null)
+        protected static MapReportDenormalizer CreateMapReportDenormalizer(
+            IReadSideRepositoryWriter<MapReportPoint> mapPoints = null,
+            IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage = null,
+            IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> questionsInfos = null)
         {
-            return new MapReportDenormalizer(interviews ?? new TestInMemoryWriter<InterviewSummary>(), 
+            return new MapReportDenormalizer(
+                interviewReferencesStorage ?? new TestInMemoryWriter<InterviewReferences>(), 
                 questionsInfos ?? new TestInMemoryWriter<QuestionnaireQuestionsInfo>(), 
                 mapPoints ?? new TestInMemoryWriter<MapReportPoint>());
         }
