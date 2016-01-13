@@ -150,8 +150,8 @@
                     <!-- ko foreach: TotalRow().@(Model.ReportName + "ByPeriod") -->
                     <td><span data-bind='text: $root.Format@(Model.ReportName)Period($data)'></span></td>
                     <!-- /ko -->
-                    <td><span data-bind="text: TotalRow().Average? $root.Format@(Model.ReportName)Period(TotalRow().Average()):'0'"></span></td>
-                    <td><span data-bind="text: TotalRow().Total? $root.Format@(Model.ReportName)Period(TotalRow().Total()):'0'"></span></td>
+                    <td><span data-bind="text:  Format@(Model.ReportName)Period(getTotalAverage())"></span></td>
+                    <td><span data-bind="text:  Format@(Model.ReportName)Period(getTotalCount())"></span></td>
                 </tr>
             }
             <!-- ko foreach:Items -->
