@@ -64,12 +64,7 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
             this.Bind<IProtobufSerializer>().To<ProtobufSerializer>();
             this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(
-                new JsonSerializerSettingsFactory(
-                    new Dictionary<string, string>()
-                    {
-                        { "Main.Core", "WB.Core.SharedKernels.DataCollection.Portable" }
-                    }) ,
-                
+                new JsonSerializerSettingsFactory(),
                 new Dictionary<string, string>()
                 {
                     {

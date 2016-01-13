@@ -10,13 +10,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
     {
         Establish context = () =>
         {
-            _jsonSerializer = CreateNewtonJsonUtils(
-                new JsonSerializerSettingsFactory(
-                    new Dictionary<string, string>()
-                    {
-                        { "Main.Core", "WB.Core.SharedKernels.DataCollection.Portable" }
-                    })
-                );
+            _jsonSerializer = CreateNewtonJsonUtils(new JsonSerializerSettingsFactory());
         };
 
         Because of = () =>
