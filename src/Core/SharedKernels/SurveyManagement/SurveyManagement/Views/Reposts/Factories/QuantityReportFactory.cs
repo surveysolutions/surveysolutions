@@ -82,25 +82,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             }).ToArray();
 
             var quantityTotalRow =
-                CreateQuantityTotalRow(
-                    allInterviewsInStatus.Select(interviewInStatus => interviewInStatus.Timestamp.Date).ToArray(),
-                    dateTimeRanges);
+                CreateQuantityTotalRow(allUsersQuery, dateTimeRanges);
+
             return new QuantityByResponsibleReportView(rows, quantityTotalRow, dateTimeRanges, usersCount);
         }
 
-        private QuantityTotalRow CreateQuantityTotalRow(DateTime[] statusChangeDates, DateTimeRange[] dateTimeRanges)
+        private QuantityTotalRow CreateQuantityTotalRow(IQueryable<InterviewCommentedStatus> interviews, DateTimeRange[] dateTimeRanges)
         {
+            var allInterviewsInStatus = interviews
+                  .Select(i =>  i.Timestamp.Date)
+                  .ToArray();
+
             var quantityByPeriod = new List<long>();
 
             foreach (var dateTimeRange in dateTimeRanges)
             {
-                var count =
-                    statusChangeDates.Count(
-                        d => d >= dateTimeRange.From && d< dateTimeRange.To);
+                var count = allInterviewsInStatus.Count(d => d >= dateTimeRange.From && d< dateTimeRange.To);
                 quantityByPeriod.Add(count);
             }
 
-            return new QuantityTotalRow(quantityByPeriod.ToArray(), statusChangeDates.Count());
+            return new QuantityTotalRow(quantityByPeriod.ToArray(), allInterviewsInStatus.Length);
         }
 
         private IQueryable<InterviewCommentedStatus> QueryInterviewStatuses(
@@ -133,7 +134,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 statuses: input.InterviewStatuses,
                 selectUser: u => u.InterviewerId.Value,
                 restrictUser: u => u.SupervisorId == input.SupervisorId,
-                userIdSelector: i =>new UserAndTimestamp(){UserId = i.InterviewerId,UserName = i.InterviewerName,Timestamp = i.Timestamp});
+                userIdSelector: i => new UserAndTimestamp(){UserId = i.InterviewerId, UserName = i.InterviewerName, Timestamp = i.Timestamp});
         }
 
         public QuantityByResponsibleReportView Load(QuantityBySupervisorsReportInputModel input)
@@ -149,7 +150,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 statuses:input.InterviewStatuses,
                 selectUser:u => u.SupervisorId.Value,
                 restrictUser:null,
-                userIdSelector:i =>new UserAndTimestamp(){UserId = i.SupervisorId,UserName = i.SupervisorName,Timestamp = i.Timestamp});
+                userIdSelector:i => new UserAndTimestamp(){UserId = i.SupervisorId, UserName = i.SupervisorName, Timestamp = i.Timestamp});
         }
 
         private DateTime AddPeriod(DateTime d, string period, int value)
@@ -163,7 +164,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 case "m":
                     return d.AddMonths(value);
             }
-            throw new ArgumentException(string.Format("period '{0}' can't be recognized", period));
+            throw new ArgumentException($"period '{period}' can't be recognized");
         }
 
         class UserAndTimestamp
