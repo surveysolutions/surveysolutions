@@ -1,8 +1,8 @@
 ﻿namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model
 {
-    public class ExpressionMethodModel
+    public class ConditionDescriptionModel
     {
-        public ExpressionMethodModel(
+        public ConditionDescriptionModel(
             string className, 
             string methodName, 
             string[] namespaces,

@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             var expressionState = new QuestionnaireExpressionStateModel
             {
-                AdditionInterfaces = codeGenerationSettings.AdditionInterfaces,
+                AdditionalInterfaces = codeGenerationSettings.AdditionInterfaces,
                 Namespaces = codeGenerationSettings.Namespaces,
                 Id = questionnaire.PublicKey,
                 ClassName = $"{CodeGenerator.InterviewExpressionStatePrefix}_{Guid.NewGuid().FormatGuid()}",
@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             expressionState.ConditionsPlayOrder = BuildConditionsPlayOrder(expressionState.ConditionalDependencies, expressionState.StructuralDependencies);
 
-            TraverseQuestionnaireAndBuildStructures(questionnaire, expressionState.QuestionnaireLevelModel, expressionState.AllQuestions, expressionState.AllGroups, expressionState.AllRosters);
+            this.TraverseQuestionnaireAndUpdateExpressionStateWithBuiltModels(questionnaire, expressionState);
             
             expressionState.QuestionnaireLevelModel.ConditionMethodsSortedByExecutionOrder = GetConditionMethodsSortedByExecutionOrder(expressionState.QuestionnaireLevelModel.Questions, expressionState.QuestionnaireLevelModel.Groups, null, expressionState.ConditionsPlayOrder);
 
@@ -59,26 +59,26 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 .Select(x => this.BuildRosterScopeTemplateModel(x.Key, x.ToList(), expressionState))
                 .ToDictionary(x => x.TypeName);
 
-            BuildReferencesOnParentRosters(expressionState.RostersGroupedByScope, expressionState.QuestionnaireLevelModel);
+            UpdateReferencesOnParentRosters(expressionState.RostersGroupedByScope, expressionState.QuestionnaireLevelModel);
 
-            BuildReferencesOnParentQuestions(expressionState.RostersGroupedByScope, expressionState.QuestionnaireLevelModel);
+            UpdateReferencesOnParentQuestions(expressionState.RostersGroupedByScope, expressionState.QuestionnaireLevelModel);
 
             expressionState.MethodModels = BuildMethodModels(codeGenerationSettings, expressionState);
 
             return expressionState;
         }
 
-        public static Dictionary<string,ExpressionMethodModel> BuildMethodModels(
+        public static Dictionary<string,ConditionDescriptionModel> BuildMethodModels(
             CodeGenerationSettings codeGenerationSettings, 
             QuestionnaireExpressionStateModel questionnaireTemplate)
         {
-            var methodModels = new Dictionary<string, ExpressionMethodModel>();
+            var methodModels = new Dictionary<string, ConditionDescriptionModel>();
             
             foreach (var question in questionnaireTemplate.AllQuestions)
             {
                 if (!string.IsNullOrWhiteSpace(question.Condition))
                 {
-                    methodModels.Add(ExpressionLocation.QuestionCondition(question.Id).Key, new ExpressionMethodModel(
+                    methodModels.Add(ExpressionLocation.QuestionCondition(question.Id).Key, new ConditionDescriptionModel(
                         question.ParentScopeTypeName,
                         question.ConditionMethodName,
                         codeGenerationSettings.Namespaces,
@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                 if (!string.IsNullOrWhiteSpace(question.Validation))
                 {
-                    methodModels.Add(ExpressionLocation.QuestionValidation(question.Id).Key, new ExpressionMethodModel(
+                    methodModels.Add(ExpressionLocation.QuestionValidation(question.Id).Key, new ConditionDescriptionModel(
                         question.ParentScopeTypeName,
                         question.ValidationMethodName,
                         codeGenerationSettings.Namespaces,
@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             foreach (GroupTemplateModel group in questionnaireTemplate.AllGroups.Where(x => !string.IsNullOrWhiteSpace(x.Condition)))
             {
-                methodModels.Add(ExpressionLocation.GroupCondition(group.Id).Key, new ExpressionMethodModel(
+                methodModels.Add(ExpressionLocation.GroupCondition(group.Id).Key, new ConditionDescriptionModel(
                     group.ParentScopeTypeName,
                     group.ConditionMethodName,
                     codeGenerationSettings.Namespaces,
@@ -113,7 +113,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             foreach (RosterTemplateModel roster in questionnaireTemplate.AllRosters.Where(x => !string.IsNullOrWhiteSpace(x.Conditions)))
             {
                 methodModels.Add(ExpressionLocation.RosterCondition(roster.Id).Key,
-                    new ExpressionMethodModel(
+                    new ConditionDescriptionModel(
                     roster.TypeName,
                     roster.ConditionsMethodName,
                     codeGenerationSettings.Namespaces,
@@ -208,7 +208,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 .ToDictionary(group => @group.PublicKey, group => @group.Children.Select(x => x.PublicKey).ToList());
         }
 
-        public static void BuildReferencesOnParentRosters(
+        public static void UpdateReferencesOnParentRosters(
             Dictionary<string, RosterScopeTemplateModel> rostersGroupedByScope,
             QuestionnaireLevelTemplateModel questionnaireLevelModel)
         {
@@ -219,13 +219,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 var allParentsRostersToTop = parentRosters
                     .SelectMany(x => x.Rosters)
                     .Union(questionnaireLevelModel.Rosters)
-                    .Select(x => new TypeAndNameModel { TypeName = x.TypeName, VariableName = x.VariableName }).ToList();
+                    .Select(x => new HierarchyReferenceModel { TypeName = x.TypeName, VariableName = x.VariableName }).ToList();
 
                 rosterScopeModel.AllParentsRostersToTop = allParentsRostersToTop;
             }
         }
 
-        public static void BuildReferencesOnParentQuestions(
+        public static void UpdateReferencesOnParentQuestions(
            Dictionary<string, RosterScopeTemplateModel> rostersGroupedByScope,
            QuestionnaireLevelTemplateModel questionnaireLevelModel)
         {
@@ -236,7 +236,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 var allParentsQuestionsToTop = parentRosters
                     .SelectMany(x => x.Questions)
                     .Union(questionnaireLevelModel.Questions)
-                    .Select(x => new TypeAndNameModel { TypeName = x.TypeName, VariableName = x.VariableName }).ToList();
+                    .Select(x => new HierarchyReferenceModel { TypeName = x.TypeName, VariableName = x.VariableName }).ToList();
 
                 rosterScopeModel.AllParentsQuestionsToTop = allParentsQuestionsToTop;
             }
@@ -274,16 +274,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
         }
 
-        public void TraverseQuestionnaireAndBuildStructures(QuestionnaireDocument questionnaireDoc,
-            QuestionnaireLevelTemplateModel questionnaireLevelModel,
-            List<QuestionTemplateModel> allQuestions,
-            List<GroupTemplateModel> allGroups,
-            List<RosterTemplateModel> allRosters)
+        public void TraverseQuestionnaireAndUpdateExpressionStateWithBuiltModels(QuestionnaireDocument questionnaireDoc, QuestionnaireExpressionStateModel expressionState)
         {
             var scopesTypeNames = new Dictionary<string, string>();
 
             var rostersToProcess = new Queue<Tuple<IGroup, RosterScopeBaseModel>>();
-            rostersToProcess.Enqueue(new Tuple<IGroup, RosterScopeBaseModel>(questionnaireDoc, questionnaireLevelModel));
+            rostersToProcess.Enqueue(new Tuple<IGroup, RosterScopeBaseModel>(questionnaireDoc, expressionState.QuestionnaireLevelModel));
 
             while (rostersToProcess.Count != 0)
             {
@@ -310,7 +306,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                         currentScope.Questions.Add(question);
 
-                        allQuestions.Add(question);
+                        expressionState.AllQuestions.Add(question);
 
                         continue;
                     }
@@ -326,7 +322,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                         rostersToProcess.Enqueue(new Tuple<IGroup, RosterScopeBaseModel>(childAsGroup, roster));
 
-                        allRosters.Add(roster);
+                        expressionState.AllRosters.Add(roster);
 
                         currentScope.Rosters.Add(roster);
                     }
@@ -336,7 +332,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                         currentScope.Groups.Add(group);
 
-                        allGroups.Add(group);
+                        expressionState.AllGroups.Add(group);
 
                         foreach (IComposite childGroup in childAsGroup.Children)
                         {

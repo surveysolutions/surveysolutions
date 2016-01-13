@@ -23,10 +23,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public Dictionary<Guid, List<Guid>> StructuralDependencies { set; get; }
         public List<Guid> ConditionsPlayOrder { get; set; }
 
-        public string[] AdditionInterfaces { get; set; }
+        public string[] AdditionalInterfaces { get; set; }
         public string[] Namespaces { get; set; }
 
         public List<LookupTableTemplateModel> LookupTables { get; set; }
-        public Dictionary<string, ExpressionMethodModel> MethodModels { get; set; }
+        public Dictionary<string, ConditionDescriptionModel> MethodModels { get; set; }
     }
 }
