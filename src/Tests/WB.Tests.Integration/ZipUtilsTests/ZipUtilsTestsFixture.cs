@@ -37,12 +37,7 @@ namespace WB.Tests.Integration.ZipUtilsTests
 
         private JsonCompressor CreateZipUtils()
         {
-            return new JsonCompressor(new NewtonJsonSerializer(
-                new JsonSerializerSettingsFactory(
-                    new Dictionary<string, string>()
-                    {
-                        { "Main.Core", "WB.Core.SharedKernels.DataCollection.Portable" }
-                    })));
+            return new JsonCompressor(new NewtonJsonSerializer(new JsonSerializerSettingsFactory()));
         }
     }
 }
