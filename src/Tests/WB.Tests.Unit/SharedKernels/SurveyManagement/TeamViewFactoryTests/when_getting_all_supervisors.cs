@@ -8,7 +8,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.TeamViewFactoryTests
 {
-    internal class when_getting_all_active_supervisors
+    internal class when_getting_all_supervisors
     {
         Establish context = () =>
         {
