@@ -214,7 +214,7 @@
     <Compile Include="Implementation\Services\CodeGeneration\DynamicCompilerSettingsProvider.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\ConditionMethodAndState.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\LookupTableTemplateModel.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\TypeAndNameModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\HierarchyReferenceModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\QuestionnaireExpressionStateModelFactory.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\RoslynCompiler.cs" />
     <Compile Include="Events\Users\AccountConfirmed.cs" />
@@ -232,7 +232,7 @@
     <Compile Include="Events\Users\AccountUnlocked.cs" />
     <Compile Include="Events\Users\AccountUpdated.cs" />
     <Compile Include="Events\Users\UserLoggedIn.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\ExpressionMethodModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\ConditionDescriptionModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\ITemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\RoslynExpressionProcessor.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.cs">

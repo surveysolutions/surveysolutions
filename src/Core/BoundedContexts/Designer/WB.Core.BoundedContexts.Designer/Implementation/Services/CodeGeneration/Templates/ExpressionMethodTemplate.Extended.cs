@@ -4,11 +4,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public partial class ExpressionMethodTemplate
     {
-        public ExpressionMethodTemplate(ExpressionMethodModel model)
+        public ExpressionMethodTemplate(ConditionDescriptionModel model)
         {
             Model = model;
         }
 
-        protected ExpressionMethodModel Model { get; set; }
+        protected ConditionDescriptionModel Model { get; set; }
     }
 }

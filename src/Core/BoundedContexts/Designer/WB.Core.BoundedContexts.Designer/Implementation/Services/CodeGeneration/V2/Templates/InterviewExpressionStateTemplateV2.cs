@@ -62,7 +62,7 @@ foreach (var namespaceToInclude in QuestionnaireStructure.Namespaces){
             this.Write(" : AbstractInterviewExpressionStateV2\r\n    ");
             
             #line 20 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
-foreach (var additionInterface in QuestionnaireStructure.AdditionInterfaces){
+foreach (var additionInterface in QuestionnaireStructure.AdditionalInterfaces){
             
             #line default
             #line hidden
@@ -165,7 +165,7 @@ foreach (var additionInterface in QuestionnaireStructure.AdditionInterfaces){
                     "    \r\n\t\t");
             
             #line 121 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.tt"
-foreach (var additionInterface in QuestionnaireStructure.AdditionInterfaces){
+foreach (var additionInterface in QuestionnaireStructure.AdditionalInterfaces){
             
             #line default
             #line hidden
