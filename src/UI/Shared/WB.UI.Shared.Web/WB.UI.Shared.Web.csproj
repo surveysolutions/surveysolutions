@@ -150,6 +150,7 @@
     <Compile Include="Extensions\LinkExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
+    <Compile Include="Filters\AbstractApiMaintenanceFilter.cs" />
     <Compile Include="Filters\AbstractMaintenanceFilter.cs" />
     <Compile Include="Filters\ApiTransactionFilter.cs" />
     <Compile Include="Filters\ApiValidationAntiForgeryTokenVerifier.cs" />
@@ -240,4 +241,3 @@
   </Target>
   -->
 </Project>
-

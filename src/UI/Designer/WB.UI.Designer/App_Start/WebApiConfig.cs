@@ -3,6 +3,7 @@ using System.Web.Http.ExceptionHandling;
 using Elmah.Contrib.WebApi;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.MessageHandlers;
+using WB.UI.Designer.Filters;
 
 namespace WB.UI.Designer
 {
@@ -17,6 +18,8 @@ namespace WB.UI.Designer
 
             if (AppSettings.Instance.IsApiSslVerificationEnabled)
                 config.MessageHandlers.Add(new HttpsVerifier());
+
+            config.Filters.Add(new ApiMaintenanceFilter());
 
             config.MapHttpAttributeRoutes();
 
