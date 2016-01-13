@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
                 .All(x => x.InterviewId == startedInterviewId ||
                           x.InterviewId == completedInterviewId ||
                           x.InterviewId == rejectedInterviewId ||
-                          x.InterviewId == newInterviewId |
+                          x.InterviewId == newInterviewId ||
                           x.InterviewId == restartedInterviewId).ShouldBeTrue();
 
         private static readonly Guid completedInterviewId = Guid.Parse("66666666666666666666666666666666");
