@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net;
-using System.Web.Http;
+using System;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
@@ -15,14 +13,15 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
 {
-    internal class when_getting_Questionaire_but_questionnaire_cant_be_verified : ImportControllerTestContext
+    internal class when_getting_Questionaire_and_questionnaire_has_warnings_only : ImportControllerTestContext
     {
         Establish context = () =>
         {
             request = Create.DownloadQuestionnaireRequest(questionnaireId);
 
             var membershipUserService = Mock.Of<IMembershipUserService>(
-                _ => _.WebUser == Mock.Of<IMembershipWebUser>(u => u.UserId == userId));
+                _ => _.WebUser == Mock.Of<IMembershipWebUser>(
+                    u => u.UserId == userId));
 
             var questionnaireViewFactory = Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(
                 _ => _.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == Create.QuestionnaireView(userId));
@@ -32,31 +31,31 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
 
             var questionnaireVerifier = Mock.Of<IQuestionnaireVerifier>(
                 _ => _.Verify(Moq.It.IsAny<QuestionnaireDocument>()) ==
-                     new[] {Create.QuestionnaireVerificationError(VerificationErrorLevel.General)});
+                     new[] { Create.QuestionnaireVerificationError(VerificationErrorLevel.Warning) });
+
+            string generatedAssembly = "test";
+            var expressionProcessorGenerator = Mock.Of<IExpressionProcessorGenerator>(
+                _ =>
+                    _.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>(),
+                        out generatedAssembly) == Create.GenerationResult(true));
 
             importController = CreateImportController(membershipUserService: membershipUserService,
                 questionnaireViewFactory: questionnaireViewFactory,
                 engineVersionService: expressionsEngineVersionService,
-                questionnaireVerifier: questionnaireVerifier);
+                questionnaireVerifier: questionnaireVerifier,
+                expressionProcessorGenerator: expressionProcessorGenerator);
         };
 
         Because of = () =>
-            exception = Catch.Only<HttpResponseException>(() =>
-                importController.Questionnaire(request));
+            questionnaireCommunicationPackage = importController.Questionnaire(request);
 
-        It should_throw_HttpResponseException = () =>
-            exception.ShouldNotBeNull();
-
-        It should_throw_HttpResponseException_with_StatusCode_PreconditionFailed = () =>
-            exception.Response.StatusCode.ShouldEqual(HttpStatusCode.PreconditionFailed);
-
-        It should_throw_HttpResponseException_with_explanation_in_ReasonPhrase = () =>
-            exception.Response.ReasonPhrase.ToLower().ToSeparateWords().ShouldContain("questionnaire", "errors", "verify");
+        It should_return_not_null_responce = () =>
+            questionnaireCommunicationPackage.ShouldNotBeNull();
 
         private static ImportController importController;
-        private static HttpResponseException exception;
         private static DownloadQuestionnaireRequest request;
         private static Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");
         private static Guid userId = Guid.Parse("33333333333333333333333333333333");
+        private static QuestionnaireCommunicationPackage questionnaireCommunicationPackage;
     }
 }

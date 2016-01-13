@@ -297,6 +297,7 @@
     <Compile Include="Applications\Designer\FiltersTests\MaintenanceFilterTests\when_action_executing_and_read_side_is_outdated.cs" />
     <Compile Include="Applications\Designer\FiltersTests\MaintenanceFilterTests\when_action_executing_and_views_are_being_rebuilt_now.cs" />
     <Compile Include="Applications\Designer\ImportControllerTests\ImportControllerTestContext.cs" />
+    <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_and_questionnaire_has_warnings_only.cs" />
     <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_and_questionnaire_is_valid.cs" />
     <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_and_questionnaire_view_is_absent.cs" />
     <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_and_request_parameter_is_null.cs" />

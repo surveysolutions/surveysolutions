@@ -8,6 +8,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
@@ -108,7 +109,7 @@ namespace WB.UI.Designer.Api
 
             var questionnaireErrors = questionnaireVerifier.Verify(questionnaireView.Source).ToArray();
 
-            if (questionnaireErrors.Any())
+            if (questionnaireErrors.Any(x => x.ErrorLevel!=VerificationErrorLevel.Warning))
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
                 {
