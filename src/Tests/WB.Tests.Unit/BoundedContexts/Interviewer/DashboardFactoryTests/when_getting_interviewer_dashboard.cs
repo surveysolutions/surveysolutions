@@ -5,11 +5,12 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
@@ -18,36 +19,48 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
     {
         Establish context = () =>
         {
-            var questionnaireViewRepository = Mock.Of<IAsyncPlainStorage<QuestionnaireView>>(
-                x => x.Query(Moq.It.IsAny<Func<IQueryable<QuestionnaireView>, List<QuestionnaireView>>>()) == new List<QuestionnaireView>() &&
-                x.GetById(Moq.It.IsAny<string>()) == new QuestionnaireView { Identity = new QuestionnaireIdentity(new Guid(), 1)});
+            var questionnaireViewRepository = new TestAsyncPlainStorage<QuestionnaireView>(new []
+            {
+                new QuestionnaireView { Identity = new QuestionnaireIdentity(new Guid(), 1)}
+            }); 
 
-            var mockOfInterviewsAsyncPlainStorage = new Mock<IAsyncPlainStorage<InterviewView>>();
-            mockOfInterviewsAsyncPlainStorage.Setup(x => x.Query(Moq.It.IsAny<Func<IQueryable<InterviewView>, List<InterviewView>>>()))
-                .Callback<Func<IQueryable<InterviewView>, List<InterviewView>>>((query) => queryByInterviewerId = query)
-                .Returns(emulatedStorageItems);
+            var interviewsAsyncPlainStorage = new TestAsyncPlainStorage<InterviewView>(emulatedStorageItems);
 
             var interviewViewModelFactory = Mock.Of<IInterviewViewModelFactory>(
                     x => x.GetNew<InterviewDashboardItemViewModel>() == 
                     new InterviewDashboardItemViewModel(null, null, null, null, null, null, null, questionnaireViewRepository, null, null));
             
-            interviewerDashboardFactory = CreateInterviewerDashboardFactory(interviewViewRepository: mockOfInterviewsAsyncPlainStorage.Object,
+            interviewerDashboardFactory = CreateInterviewerDashboardFactory(interviewViewRepository: interviewsAsyncPlainStorage,
                 questionnaireViewRepository: questionnaireViewRepository,
                 interviewViewModelFactory: interviewViewModelFactory);
         };
 
         Because of = () =>
-            interviewerDashboardFactory.GetInterviewerDashboard(interviewerId);
-        
-        It should_started_interviews_be_filered_by_specified_interviewer = () =>
-            queryByInterviewerId.Invoke(emulatedStorageItems.AsQueryable()).All(x=>x.ResponsibleId == interviewerId).ShouldBeTrue();
+            dashboardByInterviewer = interviewerDashboardFactory.GetInterviewerDashboard(interviewerId);
 
+        It should_interviews_be_filered_by_specified_interviewer = () =>
+            dashboardByInterviewer.StartedInterviews
+                .Union(dashboardByInterviewer.CompletedInterviews)
+                .Union(dashboardByInterviewer.NewInterviews)
+                .Union(dashboardByInterviewer.RejectedInterviews)
+                .Cast<InterviewDashboardItemViewModel>()
+                .All(x => x.InterviewId == startedInterviewId ||
+                          x.InterviewId == completedInterviewId ||
+                          x.InterviewId == rejectedInterviewId ||
+                          x.InterviewId == newInterviewId |
+                          x.InterviewId == restartedInterviewId).ShouldBeTrue();
+
+        private static readonly Guid completedInterviewId = Guid.Parse("66666666666666666666666666666666");
+        private static readonly Guid rejectedInterviewId = Guid.Parse("55555555555555555555555555555555");
+        private static readonly Guid newInterviewId = Guid.Parse("44444444444444444444444444444444");
+        private static readonly Guid restartedInterviewId = Guid.Parse("33333333333333333333333333333333");
+        private static readonly Guid startedInterviewId = Guid.Parse("22222222222222222222222222222222");
         private static readonly Guid interviewerId = Guid.Parse("11111111111111111111111111111111");
-
         private static readonly List<InterviewView> emulatedStorageItems = new List<InterviewView>
         {
             new InterviewView
             {
+                InterviewId = completedInterviewId,
                 ResponsibleId = interviewerId,
                 Status = InterviewStatus.Completed,
                 AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
@@ -55,6 +68,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
             },
             new InterviewView
             {
+                InterviewId = rejectedInterviewId,
                 ResponsibleId = interviewerId,
                 Status = InterviewStatus.RejectedBySupervisor,
                 AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
@@ -62,6 +76,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
             },
             new InterviewView
             {
+                InterviewId = newInterviewId,
                 ResponsibleId = interviewerId,
                 Status = InterviewStatus.InterviewerAssigned,
                 AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
@@ -69,6 +84,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
             },
             new InterviewView
             {
+                InterviewId = restartedInterviewId,
                 ResponsibleId = interviewerId,
                 Status = InterviewStatus.Restarted,
                 AnswersOnPrefilledQuestions = new InterviewAnswerOnPrefilledQuestionView[0],
@@ -76,6 +92,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
             },
             new InterviewView
             {
+                InterviewId = startedInterviewId,
                 ResponsibleId = interviewerId,
                 Status = InterviewStatus.InterviewerAssigned,
                 StartedDateTime = DateTime.Now,
@@ -120,7 +137,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
                 GpsLocation = new InterviewGpsLocationView()
             }
         };
-        private static Func<IQueryable<InterviewView>, List<InterviewView>> queryByInterviewerId;
+        private static DashboardInformation dashboardByInterviewer;
         private static InterviewerDashboardFactory interviewerDashboardFactory;
     }
 }
