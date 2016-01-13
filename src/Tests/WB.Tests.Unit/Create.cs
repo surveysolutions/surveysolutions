@@ -1790,8 +1790,8 @@ namespace WB.Tests.Unit
             return ToPublishedEvent(new QuestionnaireUpdated() { Title = questionnaireTitle, IsPublic = isPublic }, new Guid(questionnaireId));
         }
 
-        public static QuestionnaireVerificationError QuestionnaireVerificationError()
-            => new QuestionnaireVerificationError("ee", "mm", VerificationErrorLevel.General);
+        public static QuestionnaireVerificationError QuestionnaireVerificationError(VerificationErrorLevel level = VerificationErrorLevel.General)
+            => new QuestionnaireVerificationError("ee", "mm", level);
 
         public static QuestionnaireView QuestionnaireView(Guid? createdBy)
             => Create.QuestionnaireView(new QuestionnaireDocument { CreatedBy = createdBy ?? Guid.NewGuid( )});
