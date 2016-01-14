@@ -7,25 +7,24 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
-    public class InterviewerQuestionnaireFactory : IInterviewerQuestionnaireFactory
+    public class InterviewerQuestionnaireAccessor : IInterviewerQuestionnaireAccessor
     {
         private readonly ISerializer serializer;
         private readonly IQuestionnaireModelBuilder questionnaireModelBuilder;
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
-        private readonly IInterviewerInterviewFactory interviewFactory;
+        private readonly IInterviewerInterviewAccessor interviewFactory;
 
         private readonly IAsyncPlainStorage<QuestionnaireModelView> questionnaireModelViewRepository;
         private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentRepository;
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
 
-        public InterviewerQuestionnaireFactory(
+        public InterviewerQuestionnaireAccessor(
             ISerializer serializer,
             IQuestionnaireModelBuilder questionnaireModelBuilder,
             IAsyncPlainStorage<QuestionnaireModelView> questionnaireModelViewRepository,
@@ -33,7 +32,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentRepository,
             IAsyncPlainStorage<InterviewView> interviewViewRepository,
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor,
-            IInterviewerInterviewFactory interviewFactory)
+            IInterviewerInterviewAccessor interviewFactory)
         {
             this.serializer = serializer;
             this.questionnaireModelBuilder = questionnaireModelBuilder;

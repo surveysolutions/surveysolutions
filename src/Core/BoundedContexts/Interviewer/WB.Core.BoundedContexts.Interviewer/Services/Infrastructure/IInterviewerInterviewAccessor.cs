@@ -4,7 +4,7 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
 {
-    public interface IInterviewerInterviewFactory
+    public interface IInterviewerInterviewAccessor
     {
         Task RemoveInterviewAsync(Guid interviewId);
         Task<string> GetPackageByCompletedInterviewAsync(Guid interviewId);

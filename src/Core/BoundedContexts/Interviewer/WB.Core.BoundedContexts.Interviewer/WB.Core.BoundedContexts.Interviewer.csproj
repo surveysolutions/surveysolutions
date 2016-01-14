@@ -115,8 +115,8 @@
     <Compile Include="Implementation\Services\InterviewerPlainInterviewFileStorage.cs" />
     <Compile Include="Implementation\Services\InterviewerPrincipal.cs" />
     <Compile Include="Implementation\Services\InterviewerQuestionnaireAssemblyFileAccessor.cs" />
-    <Compile Include="Implementation\Services\InterviewerInterviewFactory.cs" />
-    <Compile Include="Implementation\Services\InterviewerQuestionnaireFactory.cs" />
+    <Compile Include="Implementation\Services\InterviewerInterviewAccessor.cs" />
+    <Compile Include="Implementation\Services\InterviewerQuestionnaireAccessor.cs" />
     <Compile Include="Implementation\Services\QuestionnaireKeyValueStorage.cs" />
     <Compile Include="Implementation\Services\QuestionnaireModelKeyValueStorage.cs" />
     <Compile Include="Implementation\Services\SiaqodbEventStorage.cs" />
@@ -148,9 +148,9 @@
     </Compile>
     <Compile Include="Services\IInterviewerDashboardFactory.cs" />
     <Compile Include="Services\IInterviewerSettings.cs" />
-    <Compile Include="Services\Infrastructure\IInterviewerInterviewFactory.cs" />
+    <Compile Include="Services\Infrastructure\IInterviewerInterviewAccessor.cs" />
     <Compile Include="Services\Infrastructure\IInterviewerPrincipal.cs" />
-    <Compile Include="Services\Infrastructure\IInterviewerQuestionnaireFactory.cs" />
+    <Compile Include="Services\Infrastructure\IInterviewerQuestionnaireAccessor.cs" />
     <Compile Include="Services\Infrastructure\IInterviewerUserIdentity.cs" />
     <Compile Include="Services\ISynchronizationService.cs" />
     <Compile Include="Services\ITabletDiagnosticService.cs" />
