@@ -4,7 +4,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
 {
-    public interface IInterviewerQuestionnaireFactory
+    public interface IInterviewerQuestionnaireAccessor
     {
         Task StoreQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireDocument,
             bool census);

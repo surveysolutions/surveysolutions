@@ -23,7 +23,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
-    public class InterviewerInterviewFactory : IInterviewerInterviewFactory
+    public class InterviewerInterviewAccessor : IInterviewerInterviewAccessor
     {
         private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireRepository;
         private readonly IAsyncPlainStorage<EventView> eventRepository;
@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache;
         private readonly ISnapshotStoreWithCache snapshotStoreWithCache;
 
-        public InterviewerInterviewFactory(
+        public InterviewerInterviewAccessor(
             IAsyncPlainStorage<QuestionnaireView> questionnaireRepository,
             IAsyncPlainStorage<EventView> eventRepository,
             IAsyncPlainStorage<InterviewView> interviewViewRepository,

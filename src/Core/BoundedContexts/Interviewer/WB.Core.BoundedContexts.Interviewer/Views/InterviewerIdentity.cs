@@ -7,6 +7,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class InterviewerIdentity : IInterviewerUserIdentity, IPlainStorageEntity
     {
+        public int OID { get; set; }
         public string Name { get;  set; }
         public string Password { get; set; }
         public Guid UserId { get; set; }
