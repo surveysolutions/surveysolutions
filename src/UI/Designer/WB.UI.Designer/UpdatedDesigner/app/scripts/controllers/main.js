@@ -73,15 +73,41 @@ angular.module('designerApp')
             });
 
             $scope.questionnaireId = $state.params.questionnaireId;
+            var ERRORS = "errors";
+            var WARNINGS = "warnings";
 
             $scope.verify = function () {
                 $scope.verificationStatus.errors = [];
                 verificationService.verify($state.params.questionnaireId).success(function (result) {
                     $scope.verificationStatus.errors = result.errors;
+                    $scope.verificationStatus.warnings = result.warnings;
                     $scope.verificationStatus.errorsCount = result.errorsCount;
+                    $scope.verificationStatus.warningsCount = result.warningsCount;
                     $scope.verificationStatus.time = new Date();
-                    $scope.verificationStatus.visible = result.errorsCount > 0;
+                    $scope.verificationStatus.typeOfErrorToBeShown = ERRORS;
+
+                    if (result.errorsCount > 0)
+                        $scope.showVerificationErrors();
+                    else {
+                        $scope.closeVerifications();
+                    }
                 });
+            };
+           
+            $scope.showVerificationErrors = function () {
+                $scope.verificationStatus.typeOfErrorToBeShown = ERRORS;
+                $scope.verificationStatus.messagesToShow = $scope.verificationStatus.errors;
+                $scope.verificationStatus.visible = true;
+            }
+
+            $scope.showVerificationWarnings = function () {
+                $scope.verificationStatus.typeOfErrorToBeShown = WARNINGS;
+                $scope.verificationStatus.messagesToShow = $scope.verificationStatus.warnings;
+                $scope.verificationStatus.visible = true;
+            }
+
+            $scope.closeVerifications = function() {
+                $scope.verificationStatus.visible = false;
             };
 
             $scope.toggleCheatSheet = function () {

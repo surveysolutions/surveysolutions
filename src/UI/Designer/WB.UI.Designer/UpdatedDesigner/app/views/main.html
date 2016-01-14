@@ -19,7 +19,17 @@
                     <input id="verification-btn" type="button" class="btn" value="COMPILE" ng-click="verify()" />
                     <span id="verify-btn" data-toggle="modal" ng-show="verificationStatus.errorsCount" class="error-message ng-hide">
                         <a href="javascript:void(0);"
-                           ng-click="verificationStatus.visible = true"
+                           ng-click="showVerificationErrors()"
+                           ng-pluralize
+                           count="verificationStatus.errorsCount"
+                           when="{'1': '{} error',
+                          '100' : '{}+ errors',
+                          'other': '{} errors'}">
+                        </a>
+                    </span>
+                    <span id="verify-btn" data-toggle="modal" ng-show="verificationStatus.errorsCount" class="error-message ng-hide">
+                        <a href="javascript:void(0);"
+                           ng-click="showVerificationWarnings()"
                            ng-pluralize
                            count="verificationStatus.errorsCount"
                            when="{'1': '{} error',
@@ -192,23 +202,23 @@
                 Compilation: <span ng-pluralize count="verificationStatus.errorsCount"
                                    when="{'1': '{} error found', '100': '{}+ errors found', 'other': '{} errors found'}"></span>
             </h3>
-            <button type="button" class="close" ng-click="verificationStatus.visible = false" aria-hidden="true"> <!--&times;--> </button>
+            <button type="button" class="close" ng-click="closeVerifications()" aria-hidden="true"> <!--&times;--> </button>
         </div>
         <div class="modal-body">
             <perfect-scrollbar class="scroller">
                 <div id="verify-popover-content">
                     <div class="question-list">
-                        <div ng-repeat="error in verificationStatus.errors">
+                        <div ng-repeat="error in verificationStatus.messagesToShow">
                             <div class="error-message"><span class="error-code">[{{error.code}}]:</span>{{error.message}}</div>
                             <ul class="verification-items" ng-class="{singleError: !error.isGroupedMessage}">
                                 <li class="verification-item-container" ng-repeat="reference in error.references" ng-click="navigateTo(reference)">
                                     <a class="verification-item" href="javascript:void(0);">
-                                        <span ng-if="reference.type == 'Question'" class="icon icon-error {{reference.questionType}}"></span>
                                         <span ng-if="reference.type == 'Macro'" class="icon icon-error icon-macro"></span>
                                         <span ng-if="reference.type == 'LookupTable'" class="icon icon-error icon-lookup"></span>
                                         <span ng-if="reference.type == 'StaticText'" class="icon icon-error icon-statictext"></span>
                                         <span class="title">{{reference.title}}</span>
-                                        <span ng-if="reference.type == 'Question' || reference.type == 'Roster' || reference.type == 'Macro'" class="variable" ng-bind="reference.variable">aaaa</span>
+                                        <span ng-if="reference.type == 'Question' || reference.type == 'Roster' || reference.type == 'Macro'" class="type == 'Question'" class="icon icon-error {{reference.questionType}}"></span>
+                                        <span ng-if="reference.variable" ng-bind="reference.variable">aaaa</span>
                                     </a>
                                 </li>
                             </ul>
@@ -219,7 +229,7 @@
         </div>
         <div class="modal-footer">
             <button class="btn btn-link" ng-click="verify()">RECOMPILE</button>
-            <button class="btn btn-link" data-dismiss="modal" ng-click="verificationStatus.visible = false">CLOSE</button>
+            <button class="btn btn-link" data-dismiss="modal" ng-click="closeVerifications()">CLOSE</button>
         </div>
     </div>
 </div>
