@@ -2553,12 +2553,12 @@ namespace WB.Tests.Unit
                 action.Invoke();
             }
         }
-        }
 
         public static TeamViewFactory TeamViewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader = null,
             IQueryableReadSideRepositoryReader<UserDocument> usersReader = null)
         {
             return new TeamViewFactory(interviewSummaryReader, usersReader);
+        }
     }
 }
