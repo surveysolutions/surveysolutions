@@ -290,6 +290,339 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All collected data will be saved as backup file on this device..
+        /// </summary>
+        public static string Diagnostics_Backup_Description {
+            get {
+                return ResourceManager.GetString("Diagnostics_Backup_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup all gathered information.
+        /// </summary>
+        public static string Diagnostics_Backup_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_Backup_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When Saved:.
+        /// </summary>
+        public static string Diagnostics_BackupDate_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BackupDate_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backup file location:.
+        /// </summary>
+        public static string Diagnostics_BackupFileLocation_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BackupFileLocation_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data saved.
+        /// </summary>
+        public static string Diagnostics_BackupReady_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BackupReady_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scope:.
+        /// </summary>
+        public static string Diagnostics_BackupScope_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BackupScope_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;font color=&quot;red&quot;&gt;No internet connection&lt;/font&gt;.
+        /// </summary>
+        public static string Diagnostics_BandwidthTestConnectionAbsent_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BandwidthTestConnectionAbsent_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection is &lt;font color=&quot;red&quot;&gt;not good&lt;/font&gt;.
+        /// </summary>
+        public static string Diagnostics_BandwidthTestConnectionNotOK_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BandwidthTestConnectionNotOK_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection is OK.
+        /// </summary>
+        public static string Diagnostics_BandwidthTestConnectionOK_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BandwidthTestConnectionOK_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;font color=&quot;red&quot;&gt;No connection with our server&lt;/font&gt;.
+        /// </summary>
+        public static string Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connection type:.
+        /// </summary>
+        public static string Diagnostics_BandwidthTestConnectionType_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BandwidthTestConnectionType_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Network name:.
+        /// </summary>
+        public static string Diagnostics_BandwidthTestNetworkName_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BandwidthTestNetworkName_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ping:.
+        /// </summary>
+        public static string Diagnostics_BandwidthTestPing_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_BandwidthTestPing_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We will check for the newer version on HQ server.
+        /// </summary>
+        public static string Diagnostics_CheckVersion_Description {
+            get {
+                return ResourceManager.GetString("Diagnostics_CheckVersion_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version: {0}. Check for a new version.
+        /// </summary>
+        public static string Diagnostics_CheckVersion_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_CheckVersion_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string Diagnostics_Delete {
+            get {
+                return ResourceManager.GetString("Diagnostics_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloading, please wait....
+        /// </summary>
+        public static string Diagnostics_DownloadingPleaseWait {
+            get {
+                return ResourceManager.GetString("Diagnostics_DownloadingPleaseWait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New version exists. Would you like to download and update application?.
+        /// </summary>
+        public static string Diagnostics_NewVersionAvaliable_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_NewVersionAvaliable_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version number:.
+        /// </summary>
+        public static string Diagnostics_NewVersionNumber_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_NewVersionNumber_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string Diagnostics_No {
+            get {
+                return ResourceManager.GetString("Diagnostics_No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By restoring saved data you will replace all current assigments on this device.
+        /// </summary>
+        public static string Diagnostics_Restore_Description {
+            get {
+                return ResourceManager.GetString("Diagnostics_Restore_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RESTORE.
+        /// </summary>
+        public static string Diagnostics_Restore_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_Restore_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saved data found:.
+        /// </summary>
+        public static string Diagnostics_RestoreReady_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_RestoreReady_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send.
+        /// </summary>
+        public static string Diagnostics_Send {
+            get {
+                return ResourceManager.GetString("Diagnostics_Send", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All application and interview data will be collected to a single archive. This can take up to 10 minutes..
+        /// </summary>
+        public static string Diagnostics_Send_Description {
+            get {
+                return ResourceManager.GetString("Diagnostics_Send_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Collect and send to HQ all tablet infromation.
+        /// </summary>
+        public static string Diagnostics_Send_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_Send_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All information below will be shared as plain text. It can be sent by email, google hangouts of any other messaging app.
+        /// </summary>
+        public static string Diagnostics_Share_Description {
+            get {
+                return ResourceManager.GetString("Diagnostics_Share_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Share all technical information.
+        /// </summary>
+        public static string Diagnostics_Share_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_Share_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data archive is ready.
+        /// </summary>
+        public static string Diagnostics_TabletInformationReady_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_TabletInformationReady_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scope:.
+        /// </summary>
+        public static string Diagnostics_TabletInformationScope_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_TabletInformationScope_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When generated:.
+        /// </summary>
+        public static string Diagnostics_TabletInformationWhenGenerated_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_TabletInformationWhenGenerated_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We will test connection with our server and it&apos;s speed.
+        /// </summary>
+        public static string Diagnostics_TestConnection_Description {
+            get {
+                return ResourceManager.GetString("Diagnostics_TestConnection_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test bandwidth to server.
+        /// </summary>
+        public static string Diagnostics_TestConnection_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_TestConnection_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Diagnostics.
+        /// </summary>
+        public static string Diagnostics_Title {
+            get {
+                return ResourceManager.GetString("Diagnostics_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update.
+        /// </summary>
+        public static string Diagnostics_Update {
+            get {
+                return ResourceManager.GetString("Diagnostics_Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have the latest version of application..
+        /// </summary>
+        public static string Diagnostics_YouHaveTheLatestVersionOfApplication {
+            get {
+                return ResourceManager.GetString("Diagnostics_YouHaveTheLatestVersionOfApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronization endpoint &apos;{0}&apos; is different from provided in Settings (&apos;{1}&apos;). Load URL from settings?.
+        /// </summary>
+        public static string FinishInstallation_EndpointDiffers {
+            get {
+                return ResourceManager.GetString("FinishInstallation_EndpointDiffers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No internet access to the Survey Solutions Supervisor website. Check server address and(or) network settings.
         /// </summary>
         public static string HostUnreachable {
@@ -371,6 +704,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Diagnostics.
+        /// </summary>
+        public static string MenuItem_Title_Diagnostics {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Diagnostics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
         public static string MenuItem_Title_Login {
@@ -394,15 +736,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string MenuItem_Title_SignOut {
             get {
                 return ResourceManager.GetString("MenuItem_Title_SignOut", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Troubleshooting.
-        /// </summary>
-        public static string MenuItem_Title_Troubleshooting {
-            get {
-                return ResourceManager.GetString("MenuItem_Title_Troubleshooting", resourceCulture);
             }
         }
         
@@ -560,6 +893,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Share information to...
+        /// </summary>
+        public static string Share_to_Title {
+            get {
+                return ResourceManager.GetString("Share_to_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Synchronization_Cancel {
@@ -713,7 +1055,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronization succesfully completed.
+        ///   Looks up a localized string similar to Synchronization successfully completed.
         /// </summary>
         public static string Synchronization_Success_Title {
             get {
@@ -981,6 +1323,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Troubleshooting_RestoredSuccessfully {
             get {
                 return ResourceManager.GetString("Troubleshooting_RestoredSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Folder &apos;{0}&apos; is empty. Please put the backup you willing to restore in the folder..
+        /// </summary>
+        public static string Troubleshooting_RestoreFolderIsEmpty {
+            get {
+                return ResourceManager.GetString("Troubleshooting_RestoreFolderIsEmpty", resourceCulture);
             }
         }
         

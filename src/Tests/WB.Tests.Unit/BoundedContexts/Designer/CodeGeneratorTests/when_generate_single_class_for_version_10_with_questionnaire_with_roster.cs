@@ -3,7 +3,10 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
 {

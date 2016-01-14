@@ -13,12 +13,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public QuestionnaireLevelTemplateV5 CreateQuestionnaireLevelTemplate()
         {
-            return new QuestionnaireLevelTemplateV5(this.QuestionnaireTemplateStructure.QuestionnaireLevelModel);
+            return new QuestionnaireLevelTemplateV5(
+                this.QuestionnaireTemplateStructure.QuestionnaireLevelModel, 
+                this.QuestionnaireTemplateStructure.LookupTables);
         }
 
         protected RosterScopeTemplateV5 CreateRosterScopeTemplate(RosterScopeTemplateModel rosterGroup)
         {
-            return new RosterScopeTemplateV5(rosterGroup);
+            return new RosterScopeTemplateV5(
+                rosterGroup,
+                this.QuestionnaireTemplateStructure.LookupTables);
         }
     }
 }

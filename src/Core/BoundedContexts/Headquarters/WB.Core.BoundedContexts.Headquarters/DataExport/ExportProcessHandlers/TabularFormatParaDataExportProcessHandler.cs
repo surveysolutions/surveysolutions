@@ -58,6 +58,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         public void ExportData(ParaDataExportProcessDetails dataExportProcessDetails)
         {
+            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+
             var interviewParaDataEventHandler =
                 new InterviewParaDataEventHandler(this.paraDataAccessor, this.interviewSummaryReader, this.userReader,
                     this.questionnaireReader,
@@ -67,6 +69,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 this.TransactionManager.ExecuteInQueryTransaction(
                     () =>
                         this.lastPublishedEventPositionForHandlerStorage.GetById(this.interviewParaDataEventHandlerName));
+
+            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
             EventPosition? eventPosition = null;
             if (interviewDenormalizerProgress != null)
@@ -80,6 +84,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 this.paraDataAccessor.ClearParaData();
             }
 
+            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+
             var eventSlices = this.eventStore.GetEventsAfterPosition(eventPosition);
             long eventCount = this.eventStore.GetEventsCountAfterPosition(eventPosition);
 
@@ -87,6 +93,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             int persistCount = 0;
             foreach (var eventSlice in eventSlices)
             {
+                dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+
                 IEnumerable<CommittedEvent> events = eventSlice;
 
                 this.TransactionManager.ExecuteInQueryTransaction(
@@ -101,14 +109,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
                 if (eventSlice.IsEndOfStream || countOfProcessedEvents > 10000 * persistCount)
                 {
-                    this.PersistResults(dataExportProcessDetails.ProcessId, eventSlice.Position, eventCount, countOfProcessedEvents);
+                    this.PersistResults(dataExportProcessDetails.NaturalId, eventSlice.Position, eventCount, countOfProcessedEvents);
                     persistCount++;
                 }
             }
 
+            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+
             this.paraDataAccessor.ArchiveParaDataExport();
 
-            this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.ProcessId, 100);
+            this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId, 100);
         }
 
         private void PersistResults(string dataExportProcessId, EventPosition eventPosition, long totatEventCount, int countOfProcessedEvents)

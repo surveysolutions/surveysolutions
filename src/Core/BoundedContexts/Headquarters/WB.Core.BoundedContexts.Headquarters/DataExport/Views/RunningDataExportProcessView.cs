@@ -13,6 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         public int Progress { get;  set; }
         public DataExportType Type { get;  set; }
         public DataExportFormat Format { get;  set; }
-        public QuestionnaireIdentity? QuestionnaireIdentity { get; set; }
+        public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
     }
 }

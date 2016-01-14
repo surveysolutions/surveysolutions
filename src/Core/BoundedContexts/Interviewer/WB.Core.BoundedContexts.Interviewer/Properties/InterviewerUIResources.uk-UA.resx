@@ -133,7 +133,8 @@
     <value>Завершено {0}</value>
   </data>
   <data name="Dashboard_CreateInterview" xml:space="preserve">
-    <value>Адреса веб-сайту є неприпустимою. Переконайтеся, що введено правильну URL-адресу</value>
+    <value>Cтворити 
+iнтервью</value>
   </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>Нові {0}</value>
@@ -224,9 +225,6 @@
   </data>
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
     <value>Вийти</value>
-  </data>
-  <data name="MenuItem_Title_Troubleshooting" xml:space="preserve">
-    <value>Виправлення неполадок</value>
   </data>
   <data name="NoNetwork" xml:space="preserve">
     <value>Немає мережи. Перевірте налаштування мережі</value>
@@ -448,5 +446,122 @@
   </data>
   <data name="DashboardItem_AssignedOn" xml:space="preserve">
     <value>Призначено {0}</value>
+  </data>
+  <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
+    <value>Дата і час створення резервної копії:</value>
+  </data>
+  <data name="Diagnostics_BackupFileLocation_Title" xml:space="preserve">
+    <value>Шлях до файлу з резервною копією:</value>
+  </data>
+  <data name="Diagnostics_BackupReady_Title" xml:space="preserve">
+    <value>Дані збережені</value>
+  </data>
+  <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
+    <value>Обсяг:</value>
+  </data>
+  <data name="Diagnostics_Backup_Description" xml:space="preserve">
+    <value>Всі зібрані дані будуть збережені як резервна копія на цьому пристрої.</value>
+  </data>
+  <data name="Diagnostics_Backup_Title" xml:space="preserve">
+    <value>Створити резервну копію зібраної інформації</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;З'єднання з інтернетом відсутнє&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
+    <value>З'єднання &lt;font color="red"&gt;погане&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionOK_Title" xml:space="preserve">
+    <value>З'єднання добре</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;З'єднання з нашим сервером відсутнє&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionType_Title" xml:space="preserve">
+    <value>Тип з'єднання:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestNetworkName_Title" xml:space="preserve">
+    <value>Iм'я мережі:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestPing_Title" xml:space="preserve">
+    <value>Пінг:</value>
+  </data>
+  <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
+    <value>Ми перевіримо наявність нової версії на сервері</value>
+  </data>
+  <data name="Diagnostics_CheckVersion_Title" xml:space="preserve">
+    <value>Версія: {0}. Перевірити наявність нової версії</value>
+  </data>
+  <data name="Diagnostics_Delete" xml:space="preserve">
+    <value>Видалити</value>
+  </data>
+  <data name="Diagnostics_DownloadingPleaseWait" xml:space="preserve">
+    <value>Відбувається завантаження, будь ласка зачекайте...</value>
+  </data>
+  <data name="Diagnostics_NewVersionAvaliable_Title" xml:space="preserve">
+    <value>Існує нова версія. Завантажити і оновити додаток?</value>
+  </data>
+  <data name="Diagnostics_NewVersionNumber_Title" xml:space="preserve">
+    <value>Номер версії:</value>
+  </data>
+  <data name="Diagnostics_No" xml:space="preserve">
+    <value>Ні</value>
+  </data>
+  <data name="Diagnostics_RestoreReady_Title" xml:space="preserve">
+    <value>Знайдені збережені дані:</value>
+  </data>
+  <data name="Diagnostics_Restore_Description" xml:space="preserve">
+    <value>Відновлення збережених даних приведе до заміни всіх існуючих інтерв'ю на вашому пристрої</value>
+  </data>
+  <data name="Diagnostics_Restore_Title" xml:space="preserve">
+    <value>Відновити дані з резервної копії</value>
+  </data>
+  <data name="Diagnostics_Send" xml:space="preserve">
+    <value>Відправити</value>
+  </data>
+  <data name="Diagnostics_Send_Description" xml:space="preserve">
+    <value>Всі зібрані дані та інформація про додаток будуть зібрані в єдиний архів. Операція може зайняти до 10 хвилин.</value>
+  </data>
+  <data name="Diagnostics_Send_Title" xml:space="preserve">
+    <value>Відправити на сервер інформацію про додаток</value>
+  </data>
+  <data name="Diagnostics_Share_Description" xml:space="preserve">
+    <value>Інформація буде зібрана в текстовому вигляді. Вона може бути надіслана електронною поштою, за допомогою додатку Google Hangouts або будь-яким іншим додатком з обміну повідомленнями</value>
+  </data>
+  <data name="Diagnostics_Share_Title" xml:space="preserve">
+    <value>Передати технічну інформацію</value>
+  </data>
+  <data name="Diagnostics_TabletInformationReady_Title" xml:space="preserve">
+    <value>Архів готовий</value>
+  </data>
+  <data name="Diagnostics_TabletInformationScope_Title" xml:space="preserve">
+    <value>Обсяг:</value>
+  </data>
+  <data name="Diagnostics_TabletInformationWhenGenerated_Title" xml:space="preserve">
+    <value>Дата і час створення:</value>
+  </data>
+  <data name="Diagnostics_TestConnection_Description" xml:space="preserve">
+    <value>Перевірка підключення до сервера і його швидкість</value>
+  </data>
+  <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
+    <value>Перевірити швидкість з'єднання з сервером</value>
+  </data>
+  <data name="Diagnostics_Title" xml:space="preserve">
+    <value>Діагностика</value>
+  </data>
+  <data name="Diagnostics_Update" xml:space="preserve">
+    <value>Оновити</value>
+  </data>
+  <data name="Diagnostics_YouHaveTheLatestVersionOfApplication" xml:space="preserve">
+    <value>У вас встановлена остання версія додатку.</value>
+  </data>
+  <data name="MenuItem_Title_Diagnostics" xml:space="preserve">
+    <value>Діагностика</value>
+  </data>
+  <data name="Share_to_Title" xml:space="preserve">
+    <value>Передати технічну інформацію за допомогою..</value>
+  </data>
+  <data name="Troubleshooting_RestoreFolderIsEmpty" xml:space="preserve">
+    <value>Папка '{0}' порожня. Будь ласка, покладіть резервну копію, з якої Вы бажаєте відновитись в цю папку.</value>
   </data>
 </root>

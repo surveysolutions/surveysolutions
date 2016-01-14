@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             if (questionnaire == null)
                 return null;
 
-            var runningProcesses = this.dataExportProcessesService.GetRunningDataExports().Select(CreateRunningDataExportProcessView).ToArray();
+            var runningProcesses = this.dataExportProcessesService.GetRunningExportProcesses().Select(CreateRunningDataExportProcessView).ToArray();
 
             var dataExports =
                 this.supportedDataExports.Select(
@@ -80,14 +80,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 runningDataExportProcesses: runningProcesses);
         }
 
-        private RunningDataExportProcessView CreateRunningDataExportProcessView(IDataExportProcessDetails dataExportProcessDetails)
+        private static RunningDataExportProcessView CreateRunningDataExportProcessView(IDataExportProcessDetails dataExportProcessDetails)
         {
-            var result = new RunningDataExportProcessView()
+            var result = new RunningDataExportProcessView
             {
-                DataExportProcessId = dataExportProcessDetails.ProcessId,
+                DataExportProcessId = dataExportProcessDetails.NaturalId,
                 BeginDate = dataExportProcessDetails.BeginDate,
                 LastUpdateDate = dataExportProcessDetails.LastUpdateDate,
-                DataExportProcessName = dataExportProcessDetails.ProcessName,
+                DataExportProcessName = dataExportProcessDetails.Name,
                 Progress = dataExportProcessDetails.ProgressInPercents,
                 Format = dataExportProcessDetails.Format
             };
@@ -166,8 +166,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 p =>
                     p.Format == dataFormat &&
                     p.Type == dataType &&
-                    (!p.QuestionnaireIdentity.HasValue ||
-                     p.QuestionnaireIdentity.Value.Equals(questionnaireIdentity)));
+                    (p.QuestionnaireIdentity == null ||
+                     p.QuestionnaireIdentity.Equals(questionnaireIdentity)));
         }
 
         private void SetDataExportLastUpdateTimeIfFilePresent(DataExportView dataExportView, string filePath)

@@ -90,9 +90,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return new MvxCommand(async () => await this.RemoteSignInAsync()); }
         }
 
-        public IMvxCommand NavigateToTroubleshootingPageCommand
+        public IMvxCommand NavigateToDiagnosticsPageCommand
         {
-            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<TroubleshootingViewModel>()); }
+            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>()); }
         }
 
         public async void Init()

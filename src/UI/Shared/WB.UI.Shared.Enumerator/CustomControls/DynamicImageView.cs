@@ -4,9 +4,10 @@ using Android.Graphics;
 using Android.Runtime;
 using Android.Util;
 using Android.Widget;
+using Cirrious.CrossCore;
 using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.Binding.Droid.ResourceHelpers;
-using Cirrious.MvvmCross.Plugins.DownloadCache;
+using MvvmCross.Plugins.DownloadCache;
 
 namespace WB.UI.Shared.Enumerator.CustomControls
 {
@@ -18,7 +19,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             : base(context, attrs)
         { 
             this.imageHelper = new MvxDynamicImageHelper<Bitmap>();
-            this.imageHelper.ImageChanged += this.ImageHelperOnImageChanged;
+            this.imageHelper.ImageChanged += ImageHelperOnImageChanged;
             var typedArray = context.ObtainStyledAttributes(attrs, MvxAndroidBindingResource.Instance.ImageViewStylableGroupId);
 
             int numStyles = typedArray.IndexCount;
@@ -53,8 +54,12 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
         private void ImageHelperOnImageChanged(object sender, MvxValueEventArgs<Bitmap> mvxValueEventArgs)
         {
-            this.SetImageBitmap(mvxValueEventArgs.Value);
-            this.Invalidate();
+            var mvxMainThreadDispatcher = Mvx.Resolve<IMvxMainThreadDispatcher>();
+            mvxMainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                this.SetImageBitmap(mvxValueEventArgs.Value);
+                this.Invalidate();
+            });
         }
     }
 }

@@ -93,6 +93,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 .OrderBy(x => x.Name)
                 .ToList();
 
+            questionnaireInfoView.LookupTables = questionnaireDocument
+                .LookupTables
+                .Select(
+                    x =>
+                        new LookupTableView
+                        {
+                            ItemId = x.Key.FormatGuid(),
+                            Name = x.Value.TableName ?? "",
+                            FileName = x.Value.FileName ?? ""
+                        })
+                .OrderBy(x => x.Name)
+                .ToList();
             return questionnaireInfoView;
         }
     }

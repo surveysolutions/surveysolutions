@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.Plugins.Location;
+using MvvmCross.Plugins.Location;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 
 namespace WB.Infrastructure.Shared.Enumerator.Internals

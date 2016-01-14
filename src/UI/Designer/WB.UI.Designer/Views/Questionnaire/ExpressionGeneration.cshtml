@@ -67,27 +67,25 @@ pre.wrap {
 
             $('#getAssembly').click(function() {
                 $('#outputResult').text("sending request...");
-                $('#resultArea').text("");
+                editor.setValue("");
                 downloadURL('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ExpressionGeneration", action = "GetLatestVersionAssembly" })' + '?id=' + $('#questionnaireId').val())
             });
 
             $('#getCompilationResult').click(function () {
-                $('#resultArea').text("");
+                editor.setValue("");
                 performPrettyAjaxRequest($('#outputResult'), {
                     type: 'GET',
                     url: '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ExpressionGeneration", action = "GetCompilationResultForLatestVersion" })',
                     data: { id: $('#questionnaireId').val(), version: $('#version').val() },
                 }, function(response) {
                     var errors = response.responseJSON;
-                    var errorList = $('<ol></ol>');
+                    var errorList = "";
                     $.each(errors, function(i) {
-                        var li = $('<li/>')
-                            .text(errors[i]);
-                        errorList.append(li);
+                        errorList += errors[i] + "\n";
                     });
 
-                    $('#resultArea').text("");
-                    $('#resultArea').append(errorList);
+                    editor.setValue("");
+                    editor.setValue(errorList);
                 });
             });
 

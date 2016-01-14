@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                 {
                     PublicKey = Guid.NewGuid(),
                     IsRoster = true,
-                    RosterFixedTitles = new[] { "a" },
+                    RosterFixedTitles = new[] { "a", "b" },
                     VariableName = "a",
                     RosterSizeSource = RosterSizeSourceType.FixedTitles,
                     Children = new List<IComposite>

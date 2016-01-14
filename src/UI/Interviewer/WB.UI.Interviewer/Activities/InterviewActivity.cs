@@ -3,7 +3,6 @@ using Android.Views;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.Infrastructure.CommandBus;
-using WB.UI.Interviewer.Utils;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator.Activities;
 
@@ -36,8 +35,8 @@ namespace WB.UI.Interviewer.Activities
 
             menu.LocalizeMenuItem(Resource.Id.menu_dashboard, InterviewerUIResources.MenuItem_Title_Dashboard);
             menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
-            menu.LocalizeMenuItem(Resource.Id.menu_troubleshooting, InterviewerUIResources.MenuItem_Title_Troubleshooting);
 
+            menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, InterviewerUIResources.MenuItem_Title_Diagnostics);
             return base.OnCreateOptionsMenu(menu);
         }
 
@@ -50,8 +49,8 @@ namespace WB.UI.Interviewer.Activities
                 case Resource.Id.menu_dashboard:
                     this.ViewModel.NavigateToDashboardCommand.Execute();
                     break;
-                case Resource.Id.menu_troubleshooting:
-                    this.ViewModel.NavigateToTroubleshootingPageCommand.Execute();
+                case Resource.Id.menu_diagnostics:
+                    this.ViewModel.NavigateToDiagnosticsPageCommand.Execute();
                     break;
                 case Resource.Id.menu_signout:
                     this.ViewModel.SignOutCommand.Execute();

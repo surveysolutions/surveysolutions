@@ -59,13 +59,13 @@ namespace WB.UI.Tester
             registry.AddOrOverwrite("PublicBackground", new QuestionnairePublicityBackgroundConverter());
         }
 
-        protected override Assembly[] GetViewModelAssemblies()
+        protected override IEnumerable<Assembly> GetViewModelAssemblies()
         {
             return base.GetViewModelAssemblies().Union(new[]
             {
                 typeof(TesterBoundedContextModule).Assembly,
 
-            }).ToArray();
+            });
         }
 
         private void InitializeLogger(Context applicationContext)

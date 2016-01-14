@@ -55,6 +55,8 @@
     <Compile Include="EventBus\Hybrid\Implementation\HybridEventBus.cs" />
     <Compile Include="EventBus\IAtomicEventHandler.cs" />
     <Compile Include="EventBus\IEventHandler.cs" />
+    <Compile Include="EventBus\IEvent.cs" />
+    <Compile Include="FileSystem\IAsynchronousFileSystemAccessor.cs" />
     <Compile Include="Implementation\Aggregates\AggregateRootRepository.cs" />
     <Compile Include="Implementation\Aggregates\AggregateRootRepositoryWithCache.cs" />
     <Compile Include="CommandBus\Implementation\CommandService.cs" />
@@ -78,7 +80,6 @@
     <Compile Include="Implementation\InMemoryPlainStorageAccessor.cs" />
     <Compile Include="Implementation\StorageStrategy\InMemoryViewWriter.cs" />
     <Compile Include="Implementation\Storage\InMemoryCachedSnapshotStore.cs" />
-    <Compile Include="Implementation\WriteSide\WriteSideCleanerRegistry.cs" />
     <Compile Include="InfrastructureModule.cs" />
     <Compile Include="ITemporaryDataStorage.cs" />
     <Compile Include="EventBus\Lite\ILiteEventHandler.cs" />
@@ -140,6 +141,7 @@
     <Compile Include="Ncqrs\Eventing\Storage\IEventStore.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\IEventTypeResolver.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\InMemoryEventStore.cs" />
+    <Compile Include="Ncqrs\Eventing\Storage\ISnapshotStoreWithCache.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\ISnapshotStore.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\IStreamableEventStore.cs" />
     <Compile Include="Ncqrs\Eventing\Storage\NullSnapshotStore.cs" />
@@ -161,8 +163,6 @@
     <Compile Include="ReadSide\IViewFactory.cs" />
     <Compile Include="ReadSide\ReadSideSettings.cs" />
     <Compile Include="ReadSide\ReadSideVersion.cs" />
-    <Compile Include="ReadSide\Repository\Accessors\IFilterableReadSideRepositoryReader.cs" />
-    <Compile Include="ReadSide\Repository\Accessors\IFilterableReadSideRepositoryWriter.cs" />
     <Compile Include="PlainStorage\IPlainKeyValueStorage.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IQueryableReadSideRepositoryReader.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IPostgresReadSideBootstraper.cs" />
@@ -183,8 +183,7 @@
     <Compile Include="Transactions\ITransactionManagerProvider.cs" />
     <Compile Include="Transactions\ITransactionManagerProviderManager.cs" />
     <Compile Include="Transactions\TransactionManagerExtensions.cs" />
-    <Compile Include="WriteSide\IWriteSideCleaner.cs" />
-    <Compile Include="WriteSide\IWriteSideCleanerRegistry.cs" />
+    <Compile Include="WriteSide\IAggregateRootRepositoryWithCache.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">

@@ -1,6 +1,6 @@
-using Cirrious.MvvmCross.Plugins.Location;
 using ICSharpCode.SharpZipLib;
 using Microsoft.Practices.ServiceLocation;
+using MvvmCross.Plugins.Location;
 using Ninject.Modules;
 using NinjectAdapter;
 using WB.Core.Infrastructure.FileSystem;
@@ -23,6 +23,7 @@ namespace WB.Infrastructure.Shared.Enumerator
             this.Bind<IArchiveUtils>().To<ZipArchiveUtils>();
 
             this.Bind<IFileSystemAccessor>().To<FileSystemService>().InSingletonScope();
+            this.Bind<IAsynchronousFileSystemAccessor>().To<AsynchronousFileSystemAccessor>().InSingletonScope();
             this.Bind<IQRBarcodeScanService>().To<QRBarcodeScanService>();
             this.Bind<IGpsLocationService>().To<GpsLocationService>().InSingletonScope();
             this.Bind<IMvxLocationWatcher>().To<PlayServicesLocationWatcher>();

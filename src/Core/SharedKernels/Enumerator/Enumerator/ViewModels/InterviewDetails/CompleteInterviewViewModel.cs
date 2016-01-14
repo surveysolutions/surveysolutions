@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
+using MvvmCross.Plugins.Messenger;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -85,7 +85,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             await this.CloseInterviewAsync();
         }
 
-        protected async virtual Task CloseInterviewAsync()
+        protected virtual async Task CloseInterviewAsync()
         {
             await this.viewModelNavigationService.NavigateToDashboardAsync();
 

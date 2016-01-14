@@ -47,16 +47,17 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
                     })
                 });
 
-            generator = Create.CodeGenerator();
+            executorTemplateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory();
         };
 
         Because of = () =>
-            templateModel = generator.CreateQuestionnaireExecutorTemplateModel(questionnaire, new CodeGenerationSettings(
+            templateModel = executorTemplateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, new CodeGenerationSettings(
                     additionInterfaces: new string[0],
                     namespaces: new string[0],
                     areRosterServiceVariablesPresent: false,
                     rosterType: "IEnumerable",
-                    abstractConditionalLevelClassName: "AbstractConditionalLevel"), true);
+                    abstractConditionalLevelClassName: "AbstractConditionalLevel",
+                    isLookupTablesFeatureSupported: true), true);
 
         It should_variable_r2n1_be_accesible_for_nested_roster = () =>
             GetRosterScopeByRosterId(r1r1).AllParentsQuestionsToTop.Count(x => x.VariableName == "r2n1").ShouldEqual(1);
@@ -78,7 +79,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
             return templateModel.RostersGroupedByScope.Single(r => r.Value.RostersInScope.Any(x => x.Id == id)).Value;
         }
 
-        private static CodeGenerator generator;
+        private static QuestionnaireExecutorTemplateModelFactory executorTemplateModelFactory;
         private static QuestionnaireExecutorTemplateModel templateModel;
         private static QuestionnaireDocument questionnaire;
         private static readonly Guid r2Id = Guid.Parse("11111111111111111111111111111111");

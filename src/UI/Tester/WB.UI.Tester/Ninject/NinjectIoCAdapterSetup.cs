@@ -21,7 +21,7 @@ namespace WB.UI.Tester.Ninject
         {
             var basePath = Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Personal))
                ? Environment.GetFolderPath(Environment.SpecialFolder.Personal)
-               : Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
+               : AndroidPathUtils.GetPathToExternalDirectory();
 
             return new NinjectMvxIocProvider(
 

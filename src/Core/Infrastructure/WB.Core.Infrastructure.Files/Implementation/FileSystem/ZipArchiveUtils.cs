@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Ionic.Zip;
 using Ionic.Zlib;
 using WB.Core.Infrastructure.FileSystem;
@@ -34,11 +36,21 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             }
         }
 
+        public Task<byte[]> ZipDirectoryToByteArrayAsync(string sourceDirectory, string directoryFilter = null, string fileFilter = null)
+        {
+            return Task.Run(() => ZipDirectoryToByteArray(sourceDirectory, directoryFilter, fileFilter));
+        }
+
+        public byte[] ZipDirectoryToByteArray(string sourceDirectory, string directoryFilter = null, string fileFilter = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public void ZipFiles(IEnumerable<string> files, string archiveFilePath)
         {
             using (var zip = new ZipFile(this.fileSystemAccessor.GetFileName(archiveFilePath)))
             {
-                zip.CompressionLevel = CompressionLevel.BestCompression;
+                zip.CompressionLevel = CompressionLevel.Default;
 
                 zip.AddFiles(files, "");
 
@@ -46,7 +58,7 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             }
         }
 
-        public void Unzip(string archivedFile, string extractToFolder)
+        public void Unzip(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false)
         {
             using (ZipFile decompress = ZipFile.Read(archivedFile))
             {
@@ -54,9 +66,35 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
             }
         }
 
+        public Task UnzipAsync(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false)
+        {
+            return Task.Run(() => Unzip(archivedFile, extractToFolder, ignoreRootDirectory));
+        }
+
+        public IEnumerable<UnzippedFile> UnzipStream(Stream zipStream)
+        {
+            zipStream.Seek(0, SeekOrigin.Begin);
+            
+            foreach (var zipEntry in ZipFile.Read(zipStream).Entries.Where(x => !x.IsDirectory))
+            {
+                var unzippedFileStream = new MemoryStream();
+                zipEntry.Extract(unzippedFileStream);
+                yield return new UnzippedFile
+                {
+                    FileName = zipEntry.FileName,
+                    FileBytes = unzippedFileStream.ToArray()
+                };
+            }
+        }
+
         public bool IsZipFile(string filePath)
         {
             return ZipFile.IsZipFile(filePath);
+        }
+
+        public bool IsZipStream(Stream zipStream)
+        {
+            return ZipFile.IsZipFile(zipStream, false);
         }
 
         public Dictionary<string, long> GetArchivedFileNamesAndSize(string filePath)
@@ -72,6 +110,20 @@ namespace WB.Core.Infrastructure.Files.Implementation.FileSystem
                 }
             }
             return result;
+        }
+
+        public byte[] CompressStringToByteArray(string fileName, string fileContentAsString)
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                using (ZipFile zip = new ZipFile())
+                {
+                    zip.AddEntry(fileName, Encoding.Unicode.GetBytes(fileContentAsString));
+                    zip.Save(memoryStream);
+                }
+
+                return memoryStream.ToArray();
+            }
         }
 
         public string CompressString(string stringToCompress)

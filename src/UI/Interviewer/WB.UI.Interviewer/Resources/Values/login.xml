@@ -5,7 +5,7 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:src">@drawable/login_logo</item>
     <item name="android:layout_width">@dimen/Login_Element_width</item>
-    <item name="android:layout_gravity">center_horizontal</item>
+    <item name="android:layout_gravity">center</item>
   </style>
 
   <style name="Login_ErrorMessage" parent="AppTheme">
@@ -24,16 +24,10 @@
     <item name="android:paddingRight">@dimen/Login_ErrorMessage_Padding</item>
   </style>
 
-  <style name="Login_FormContainer" parent="AppTheme">
-    <item name="android:layout_width">wrap_content</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:gravity">center</item>
-    <item name="android:orientation">vertical</item>
-  </style>
-
   <style name="Login_Editor" parent="AppTheme">
     <item name="android:layout_width">@dimen/Login_Element_width</item>
     <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_gravity">center</item>
     <item name="android:textColor">@color/textedit_color_selector</item>
     <item name="android:textCursorDrawable">@null</item>
   </style>
@@ -54,10 +48,6 @@
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:padding">@dimen/Login_Button_padding</item>
-  </style>
-  
-  <style name="Login_Singin_Button" parent="Login_Button">
-    <item name="android:layout_marginBottom">@dimen/Login_Footer_paddingBottom</item>
   </style>
 
   <style name="Login_Troubleshotting_Button" parent="Login_Button">

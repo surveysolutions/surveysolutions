@@ -28,6 +28,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         QuestionType GetQuestionType(Guid questionId);
 
+        QuestionScope GetQuestionScope(Guid questionId);
+
         AnswerType GetAnswerType(Guid questionId);
 
         bool IsQuestionLinked(Guid questionId);

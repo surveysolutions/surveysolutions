@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
@@ -48,29 +49,29 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         protected override DataExportFormat Format => DataExportFormat.Tabular;
 
-        protected override void ExportAllDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity, string directoryPath, IProgress<int> progress)
+        protected override void ExportAllDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity, string directoryPath, IProgress<int> progress, CancellationToken cancellationToken)
         {
-            this.tabularFormatExportService.ExportInterviewsInTabularFormat(questionnaireIdentity,
-                directoryPath, progress);
+            this.tabularFormatExportService.ExportInterviewsInTabularFormat(questionnaireIdentity, directoryPath, progress, cancellationToken);
 
-            CreateDoFilesForQuestionnaire(questionnaireIdentity, directoryPath);
+            this.CreateDoFilesForQuestionnaire(questionnaireIdentity, directoryPath, cancellationToken);
         }
 
-        protected override void ExportApprovedDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity, string directoryPath, IProgress<int> progress)
+        protected override void ExportApprovedDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity, string directoryPath, IProgress<int> progress, CancellationToken cancellationToken)
         {
-            this.tabularFormatExportService.ExportApprovedInterviewsInTabularFormat(questionnaireIdentity,
-                directoryPath, progress);
+            this.tabularFormatExportService.ExportApprovedInterviewsInTabularFormat(questionnaireIdentity, directoryPath, progress, cancellationToken);
 
-            CreateDoFilesForQuestionnaire(questionnaireIdentity, directoryPath);
+            this.CreateDoFilesForQuestionnaire(questionnaireIdentity, directoryPath, cancellationToken);
         }
 
-        private void CreateDoFilesForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string directoryPath)
+        private void CreateDoFilesForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string directoryPath, CancellationToken cancellationToken)
         {
             this.transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() =>
-                this.environmentContentService.CreateEnvironmentFiles(
-                    this.questionnaireReader.AsVersioned()
-                        .Get(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version),
-                    directoryPath));
+            {
+                var questionnaireExportStructure = this.questionnaireReader.AsVersioned()
+                    .Get(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version);
+
+                this.environmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, directoryPath, cancellationToken);
+            });
         }
     }
 }

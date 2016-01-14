@@ -7,6 +7,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails
     public class ParaDataExportProcessDetails : AbstractDataExportProcessDetails
     {
         public ParaDataExportProcessDetails(DataExportFormat format)
-            : base("Paradata", format) { }
+            : base(format) { }
+
+        public override string NaturalId => $"Paradata${this.Format}";
+
+        public override string Name => "Paradata";
     }
 }

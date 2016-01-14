@@ -8,6 +8,7 @@ using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
@@ -97,9 +98,9 @@ namespace WB.Tests.Unit
         {
             var uniqueEventHandlerMock = new Mock<IEnumerable<TUniqueType>>();
             var eventHandlerMock = uniqueEventHandlerMock.As<IEventHandler>();
-            var eventHandlerAsOldSchool = eventHandlerMock.As<IEventHandler<object>>();
+            var eventHandlerAsOldSchool = eventHandlerMock.As<IEventHandler<IEvent>>();
             eventHandlerAsOldSchool
-                .Setup(_ => _.Handle(It.IsAny<IPublishedEvent<object>>()))
+                .Setup(_ => _.Handle(It.IsAny<IPublishedEvent<IEvent>>()))
                 .Throws<Exception>();
 
             return eventHandlerMock.Object;

@@ -66,6 +66,10 @@
       <HintPath>..\..\..\..\packages\Common.Logging.NLog40.3.3.0\lib\net40\Common.Logging.NLog40.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\CsvHelper.2.13.5.0\lib\net40-client\CsvHelper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Elmah">
       <HintPath>..\..\..\..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
     </Reference>
@@ -288,6 +292,7 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\ko.datepicker.js" />
     <Content Include="Scripts\pages\batch-user-creation.js" />
+    <Content Include="Scripts\pages\import-interviews.js" />
     <Content Include="Scripts\pages\batchupload.js" />
     <Content Include="Scripts\pages\chart.js" />
     <Content Include="Scripts\pages\userpreloading.js" />
@@ -436,7 +441,6 @@
     <Content Include="Views\Supervisor\Create.cshtml" />
     <Content Include="Views\Supervisor\Edit.cshtml" />
     <Content Include="Views\Supervisor\Index.cshtml" />
-    <Content Include="Views\Supervisor\Interviewers.cshtml" />
     <Content Include="Views\Shared\_NoAuthenticationLayout.cshtml" />
     <Content Include="Views\Install\Finish.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -455,7 +459,7 @@
     <Content Include="Views\HQ\SupervisorsAndStatuses.cshtml" />
     <Content Include="Views\HQ\SurveysAndStatuses.cshtml" />
     <Content Include="Views\HQ\TakeNew.cshtml" />
-    <Content Include="Views\HQ\VerifySample.cshtml" />
+    <Content Include="Views\HQ\VerifyPanel.cshtml" />
     <Content Include="Views\ControlPanel\CreateHeadquarters.cshtml" />
     <Content Include="Views\ControlPanel\ResetPrivilegedUserPassword.cshtml" />
     <Content Include="Views\Shared\SupervisorMainMenu.cshtml" />
@@ -477,6 +481,10 @@
     <Content Include="Views\BatchUserUpload\UserCreationProcessDetails.cshtml" />
     <Content Include="Views\BatchUserUpload\UserBatchUploads.cshtml" />
     <Content Include="Views\Shared\_EditorLayout.cshtml" />
+    <Content Include="Views\ApiUser\Create.cshtml" />
+    <Content Include="Views\ApiUser\Edit.cshtml" />
+    <Content Include="Views\ApiUser\Index.cshtml" />
+    <Content Include="Views\HQ\VerifySample.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -548,6 +556,7 @@
     <Compile Include="Controllers\BatchUserUploadController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\DataExportController.cs" />
+    <Compile Include="Controllers\ApiUserController.cs" />
     <Compile Include="Controllers\ObserverController.cs" />
     <Compile Include="Controllers\InterviewsApiController.cs" />
     <Compile Include="Controllers\QuestionnairesApiController.cs" />
@@ -555,6 +564,8 @@
     <Compile Include="Controllers\HQController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
     <Compile Include="Controllers\HeadquartersController.cs" />
+    <Compile Include="Controllers\TypeExtensions.cs" />
+    <Compile Include="Filters\FormMultipartEncodedMediaTypeFormatter .cs" />
     <Compile Include="Filters\MaintenanceFilter.cs" />
     <Compile Include="Filters\InstallationAttribute.cs" />
     <Compile Include="Filters\SupervisorFunctionsEnabledAttribute.cs" />
@@ -564,6 +575,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Implementation\Services\InterviewImportService.cs" />
     <Compile Include="Injections\HeadquartersRegistry.cs" />
     <Compile Include="Models\UserPreloading\AllUserPreloadingProcessesRequest.cs" />
     <Compile Include="Models\UserPreloading\UserPreloadingProcessesView.cs" />
@@ -581,6 +593,13 @@
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="ServiceLocationModule.cs" />
+    <Compile Include="Services\IInterviewImportService.cs" />
+    <Compile Include="Services\InterviewImportColumn.cs" />
+    <Compile Include="Services\InterviewImportError.cs" />
+    <Compile Include="Services\InterviewImportFileDescription.cs" />
+    <Compile Include="Services\InterviewImportPrefilledQuestion.cs" />
+    <Compile Include="Services\InterviewImportState.cs" />
+    <Compile Include="Services\InterviewImportStatus.cs" />
     <Compile Include="Views\DesignerQuestionnaireApiRestServiceSettings.cs" />
   </ItemGroup>
   <ItemGroup>

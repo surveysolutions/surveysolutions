@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
-
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -12,11 +10,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public YesNoQuestionViewModel QuestionViewModel { get; private set; }
         public QuestionStateViewModel<YesNoQuestionAnswered> QuestionState { get; set; }
 
+        private event EventHandler<EventArgs> AnswerChanged; 
+
         public YesNoQuestionOptionViewModel(YesNoQuestionViewModel questionViewModel,
             QuestionStateViewModel<YesNoQuestionAnswered> questionState)
         {
             this.QuestionViewModel = questionViewModel;
             this.QuestionState = questionState;
+            this.AnswerChanged += (o, e) => this.RaiseToggleAnswer();
         }
 
         public decimal Value { get; set; }
@@ -55,7 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     return;
 
                 this.Selected = value;
-                this.RaiseAnswerCommand.Execute();
+                this.OnAnswerChanged();
             }
         }
 
@@ -68,28 +69,30 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     return;
 
                 this.Selected = !value;
-                this.RaiseAnswerCommand.Execute();
+                this.OnAnswerChanged();
             }
         }
 
-        private int? checkedOrder;
+        private int? yesAnswerCheckedOrder;
 
-        public int? CheckedOrder
+        public int? YesAnswerCheckedOrder
         {
-            get { return this.checkedOrder; }
+            get { return this.yesAnswerCheckedOrder; }
             set
             {
-                if (this.checkedOrder == value)
+                if (this.yesAnswerCheckedOrder == value)
                     return;
 
-                this.checkedOrder = value;
+                this.yesAnswerCheckedOrder = value;
                 this.RaisePropertyChanged();
             }
         }
 
-        public IMvxCommand RaiseAnswerCommand
+        public int? AnswerCheckedOrder { get; set; }
+
+        public async void RaiseToggleAnswer()
         {
-            get { return new MvxCommand(async () => await this.QuestionViewModel.ToggleAnswerAsync(this)); }
+            await this.QuestionViewModel.ToggleAnswerAsync(this).ConfigureAwait(false); 
         }
 
         public IMvxCommand RemoveAnswerCommand
@@ -98,9 +101,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 return new MvxCommand(() => {
                     this.Selected = null;
-                    this.RaiseAnswerCommand.Execute();
+                    this.OnAnswerChanged();
                 });
             }
+        }
+
+        protected virtual void OnAnswerChanged()
+        {
+            this.AnswerChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

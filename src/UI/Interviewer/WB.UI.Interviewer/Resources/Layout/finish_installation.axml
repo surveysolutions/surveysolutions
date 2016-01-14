@@ -17,74 +17,75 @@
   </android.support.v7.widget.Toolbar>
   <ProgressBar style="@style/Interview_Question_Progress_Indicator"
             local:MvxBind="ShowProgress IsInProgress" />
-      <ScrollView
-          android:layout_width="match_parent"
-          android:layout_height="0dp"
-          android:layout_weight="1"
-          android:fillViewport="true">
-        <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="vertical"
-          android:gravity="center">
-          <ImageView
-              style="@style/Login_Logo"
-              android:id="@+id/LoginPage_logo" />
-          <TextView
-              style="@style/Login_ErrorMessage"
-              android:id="@+id/LoginPage_error_message"
-              android:layout_below="@+id/LoginPage_logo"
-              android:layout_width="wrap_content"
-              local:MvxBind="Text ErrorMessage; Visible ErrorMessage;"/>
-          <RelativeLayout
-              style="@style/Login_FormContainer"
-              android:gravity="center"
-              android:orientation="vertical"
-              android:layout_gravity="center"
-              android:layout_above="@+id/login_page_screen_bottom">
-            <EditText
-                style="@style/Login_Endpoint_Editor"
-                android:id="@+id/LoginPage_endpoint"
-                android:layout_below="@+id/LoginPage_error_message"
-                android:singleLine="true"
-                android:inputType="textUri|textNoSuggestions"
-                android:imeOptions="actionNext"
-                local:MvxBind="Text Endpoint; Hint Localization('EndpointHint'); BackgroundStyle ValidationStyleBackground(IsEndpointValid);" />
-            <EditText
-                style="@style/Login_Login_Editor"
-                android:layout_below="@+id/LoginPage_endpoint"
-                android:id="@+id/LoginPage_login"
-                android:singleLine="true"
-                android:inputType="textUri"
-                android:imeOptions="actionNext"
-                local:MvxBind="Text UserName; Hint Localization('LoginNameHint'); BackgroundStyle ValidationStyleBackground(IsUserValid);" />
-            <EditText
-                style="@style/Login_Password_Editor"
-                android:id="@+id/LoginPage_password"
-                android:layout_below="@+id/LoginPage_login"
-                android:singleLine="true"
-                android:inputType="textPassword"
-                local:MvxBind="Text Password; Hint Localization('PasswordHint');BackgroundStyle ValidationStyleBackground(IsUserValid);" />
-            <Button
-                style="@style/Login_Singin_Button"
-                android:id="@+id/LoginPage_singin_button"
-                android:layout_below="@+id/LoginPage_password"
-                local:MvxBind="Click SignInCommand; Text Localization('LoginText');" />
-            <Button
-                style="@style/Login_Troubleshotting_Button"
-                android:id="@+id/LoginPage_troubleshooting_button"
-                android:layout_toRightOf="@+id/LoginPage_singin_button"
-                android:layout_below="@+id/LoginPage_password"
-                local:MvxBind="Click NavigateToTroubleshootingPageCommand; Text Localization('Interviewer_Troubleshooting');" />
-          </RelativeLayout>
-        </LinearLayout>
-      </ScrollView>
+  <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"
+      android:fillViewport="true">
     <LinearLayout
-        style="@style/Login_Footer"
-        android:id="@+id/login_page_footer"
-        android:layout_alignParentBottom="true">
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:orientation="vertical"
+      android:gravity="center">
+      <ImageView
+          style="@style/Login_Logo"
+          android:id="@+id/LoginPage_logo" />
       <TextView
-         style="@style/Login_Footer_Message"
-         local:MvxBind="Html Localization('Login_FinishInstallation_Message')" />
+          style="@style/Login_ErrorMessage"
+          android:id="@+id/LoginPage_error_message"
+          android:layout_below="@+id/LoginPage_logo"
+          android:layout_width="wrap_content"
+          local:MvxBind="Text ErrorMessage; Visible ErrorMessage;"/>
+      <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical">
+        <EditText
+          style="@style/Login_Endpoint_Editor"
+          android:id="@+id/LoginPage_endpoint"
+          android:layout_below="@+id/LoginPage_error_message"
+          android:singleLine="true"
+          android:inputType="textUri|textNoSuggestions"
+          android:imeOptions="actionNext"
+          local:MvxBind="Text Endpoint; Hint Localization('EndpointHint'); BackgroundStyle ValidationStyleBackground(IsEndpointValid);" />
+        <EditText
+          style="@style/Login_Login_Editor"
+          android:layout_below="@+id/LoginPage_endpoint"
+          android:id="@+id/LoginPage_login"
+          android:singleLine="true"
+          android:inputType="textUri"
+          android:imeOptions="actionNext"
+          local:MvxBind="Text UserName; Hint Localization('LoginNameHint'); BackgroundStyle ValidationStyleBackground(IsUserValid);" />
+        <EditText
+          style="@style/Login_Password_Editor"
+          android:id="@+id/LoginPage_password"
+          android:layout_below="@+id/LoginPage_login"
+          android:singleLine="true"
+          android:inputType="textPassword"
+          local:MvxBind="Text Password; Hint Localization('PasswordHint');BackgroundStyle ValidationStyleBackground(IsUserValid);" />
+        <LinearLayout android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="left">
+          <Button
+            style="@style/Login_Button"
+            android:id="@+id/LoginPage_singin_button"
+            local:MvxBind="Click SignInCommand; Text Localization('LoginText');" />
+          <Button
+            style="@style/Login_Troubleshotting_Button"
+            android:id="@+id/LoginPage_troubleshooting_button"
+            local:MvxBind="Click NavigateToDiagnosticsPageCommand; Text Localization('Interviewer_Diagnostics');" />
+        </LinearLayout>
+      </LinearLayout>
+
     </LinearLayout>
+  </ScrollView>
+  <LinearLayout
+      style="@style/Login_Footer"
+      android:id="@+id/login_page_footer"
+      android:layout_alignParentBottom="true">
+    <TextView
+       style="@style/Login_Footer_Message"
+       local:MvxBind="Html Localization('Login_FinishInstallation_Message')" />
+  </LinearLayout>
 </LinearLayout>

@@ -1,9 +1,11 @@
 ﻿using System;
 using Ncqrs.Eventing.Storage;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace Main.Core.Events.Questionnaire
 {
-    public class NewQuestionnaireCreated
+    public class NewQuestionnaireCreated : IEvent
     {
         public DateTime CreationDate { get; set; }
 

@@ -1,4 +1,7 @@
+using System;
 using System.Globalization;
+using System.IO;
+using System.Net;
 using Android.App;
 using Android.Content;
 using Cirrious.CrossCore;

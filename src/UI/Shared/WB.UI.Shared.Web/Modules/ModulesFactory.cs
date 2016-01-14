@@ -2,6 +2,7 @@
 using System.Web.Configuration;
 using Ninject.Modules;
 using WB.Core.Infrastructure.Storage.EventStore;
+using WB.Core.Infrastructure.Storage.Postgre;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Settings;
 
@@ -26,6 +27,12 @@ namespace WB.UI.Shared.Web.Modules
                 eventStoreConnectionSettings.UseBson = TryParseBool(WebConfigurationManager.AppSettings["EventStore.UseBson"]).GetValueOrDefault();
 
                 return new EventStoreWriteSideModule(eventStoreConnectionSettings);
+            }
+            else if (storeProvider == StoreProviders.Postgres)
+            {
+                var eventStoreSettings = new PostgreConnectionSettings();
+                eventStoreSettings.ConnectionString = WebConfigurationManager.ConnectionStrings["EventStore"].ConnectionString;
+                return new PostgresWriteSideModule(eventStoreSettings);
             }
 
             return null;

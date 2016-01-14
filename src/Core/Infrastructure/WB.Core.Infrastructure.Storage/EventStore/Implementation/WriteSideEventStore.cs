@@ -23,6 +23,9 @@ using Newtonsoft.Json.Serialization;
 using Nito.AsyncEx;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
@@ -31,22 +34,12 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
     {
         const string CountProjectionName = "AllEventsCountV1";
         const string EventsPrefix = EventsCategory + "-";
+        const string StreamDeletedEventType = "$streamDeleted";
         private const int maxAllowedBatchSize = 4096;
         private readonly IEventTypeResolver eventTypeResolver;
         const string EventsCategory = "WB";
         static readonly Encoding Encoding = Encoding.UTF8;
         static long lastUsedGlobalSequence = -1;
-        
-
-        static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
-        {
-            NullValueHandling = NullValueHandling.Ignore,
-            DefaultValueHandling = DefaultValueHandling.Ignore,
-            MissingMemberHandling = MissingMemberHandling.Ignore,
-            TypeNameHandling = TypeNameHandling.Auto,
-            ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            Converters = new JsonConverter[] { new StringEnumConverter() }
-        };
 
         readonly IEventStoreConnection connection;
         readonly TimeSpan defaultTimeout = TimeSpan.FromSeconds(30);
@@ -124,7 +117,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
                 foreach (var @event in slice.Events)
                 {
-                    if (!IsSystemEvent(@event))
+                    if (!IsSystemEventOrFromDeletedStream(@event))
                         yield return this.ToCommittedEvent(@event);
                 }
             } while (!slice.IsEndOfStream);
@@ -135,6 +128,8 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             var totalCountOfEvents = this.CountOfAllEvents();
             if (!position.HasValue)
                 return totalCountOfEvents;
+
+
 
             var eventSlicesAfter = GetEventsAfterPosition(position);
 
@@ -163,7 +158,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             {
                 slice = this.RunWithDefaultTimeout(this.connection.ReadAllEventsForwardAsync(eventStorePosition, settings.MaxCountToRead, false));
 
-                var eventsInSlice = slice.Events.Where(e => !IsSystemEvent(e)).Select(ToCommittedEvent).ToArray();
+                var eventsInSlice = slice.Events.Where(e => !IsSystemEventOrFromDeletedStream(e)).Select(ToCommittedEvent).ToArray();
 
                 if (shouldLookForLastHandledEvent)
                 {
@@ -198,7 +193,8 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
                 previousSliceEventPosition = new EventPosition(eventStorePosition.CommitPosition,
                     eventStorePosition.PreparePosition,
-                    lastHandledEvent.EventSourceId, lastHandledEvent.EventSequence);
+                    lastHandledEvent.EventSourceId, 
+                    lastHandledEvent.EventSequence);
 
                 yield return
                     new EventSlice(eventsInSlice, previousSliceEventPosition.Value, slice.IsEndOfStream);
@@ -245,9 +241,10 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             return value != null ? value.count : 0;
         }
 
-        static bool IsSystemEvent(ResolvedEvent @event)
+        static bool IsSystemEventOrFromDeletedStream(ResolvedEvent @event)
         {
-            return !@event.Event.EventStreamId.StartsWith(EventsPrefix);
+            return !@event.Event.EventStreamId.StartsWith(EventsPrefix) ||
+                   @event.Event.EventType.Equals(StreamDeletedEventType, StringComparison.InvariantCultureIgnoreCase);
         }
 
         static string GetStreamName(Guid eventSourceId)
@@ -260,17 +257,17 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             try
             {
                 EventMetada metadata;
-                object eventData;
+                IEvent eventData;
 
                 var resolvedEventType = this.eventTypeResolver.ResolveType(resolvedEvent.Event.EventType.ToPascalCase());
                 var meta = Encoding.GetString(resolvedEvent.Event.Metadata);
-                metadata = JsonConvert.DeserializeObject<EventMetada>(meta, JsonSerializerSettings);
+                metadata = JsonConvert.DeserializeObject<EventMetada>(meta, EventSerializerSettings.JsonSerializerSettings);
                 if (resolvedEvent.Event.IsJson)
                 {
                     var value = Encoding.GetString(resolvedEvent.Event.Data);
                     eventData = JsonConvert.DeserializeObject(value,
                         resolvedEventType,
-                        JsonSerializerSettings);
+                        EventSerializerSettings.JsonSerializerSettings) as IEvent;
                 }
                 else
                 {
@@ -278,8 +275,8 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
                     dataStream.Seek(0, SeekOrigin.Begin);
                     BsonReader dataReader = new BsonReader(dataStream);
                     
-                    JsonSerializer serializer = JsonSerializer.Create(JsonSerializerSettings);
-                    eventData = serializer.Deserialize(dataReader, resolvedEventType);
+                    JsonSerializer serializer = JsonSerializer.Create(EventSerializerSettings.JsonSerializerSettings);
+                    eventData = serializer.Deserialize(dataReader, resolvedEventType) as IEvent;
                 }
 
                 var committedEvent = new CommittedEvent(Guid.NewGuid(),
@@ -321,7 +318,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
             }
             else
             {
-                var eventString = JsonConvert.SerializeObject(@event.Payload, Formatting.Indented, JsonSerializerSettings);
+                var eventString = JsonConvert.SerializeObject(@event.Payload, Formatting.Indented, EventSerializerSettings.JsonSerializerSettings);
                 eventDataBytes = Encoding.GetBytes(eventString);
             }
 
@@ -345,7 +342,7 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
         private byte[] SerializeToBson(object data)
         {
-            JsonSerializer serializer = JsonSerializer.Create(JsonSerializerSettings);
+            JsonSerializer serializer = JsonSerializer.Create(EventSerializerSettings.JsonSerializerSettings);
             MemoryStream payloadEventStream = new MemoryStream();
 
             BsonWriter writer = new BsonWriter(payloadEventStream);
@@ -417,10 +414,10 @@ namespace WB.Core.Infrastructure.Storage.EventStore.Implementation
 
                 foreach (var @event in slice.Events)
                 {
-                    if (!IsSystemEvent(@event))
+                    if (!IsSystemEventOrFromDeletedStream(@event))
                     {
                         var meta = Encoding.GetString(@event.Event.Metadata);
-                        var metadata = JsonConvert.DeserializeObject<EventMetada>(meta, JsonSerializerSettings);
+                        var metadata = JsonConvert.DeserializeObject<EventMetada>(meta, EventSerializerSettings.JsonSerializerSettings);
                         lastUsedGlobalSequence = metadata.GlobalSequence;
                         return;
                     }

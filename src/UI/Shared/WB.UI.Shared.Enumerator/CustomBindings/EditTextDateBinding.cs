@@ -1,6 +1,8 @@
 ﻿using System;
 using Android.App;
 using Android.Widget;
+using Cirrious.CrossCore;
+using Cirrious.CrossCore.Droid.Platform;
 using Cirrious.MvvmCross.Binding.Droid.Target;
 using Cirrious.MvvmCross.ViewModels;
 using WB.UI.Shared.Enumerator.CustomControls;
@@ -11,20 +13,14 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
     {
         private IMvxCommand Command;
 
-        protected new EditText Target
-        {
-            get { return (EditText)base.Target; }
-        }
+        protected new EditText Target => (EditText)base.Target;
 
         public EditTextDateBinding(EditText androidControl) : base(androidControl)
         {
             this.Target.Click += this.InputClick;
         }
 
-        public override Type TargetType
-        {
-            get { return typeof(IMvxCommand); }
-        }
+        public override Type TargetType => typeof(IMvxCommand);
 
         private void InputClick(object sender, EventArgs args)
         {
@@ -32,21 +28,20 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (!DateTime.TryParse(this.Target.Text, out parsedDate))
             {
                 parsedDate = DateTime.Now;
-            };
+            }
+
+            IMvxAndroidCurrentTopActivity topActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>();
+            var activity = topActivity.Activity;
 
             var dialog = new DatePickerDialogFragment(this.Target.Context, parsedDate, this.OnDateSet);
-            Activity act = (Activity) this.Target.Context;
-
-            dialog.Show(
-                act.FragmentManager, 
-                "date");
+            dialog.Show(activity.FragmentManager, "date");
         }
 
         private void OnDateSet(object sender, DatePickerDialog.DateSetEventArgs e)
         {
-            if (this.Target != null && this.Command != null)
+            if (this.Target != null)
             {
-                this.Command.Execute(e.Date);
+                this.Command?.Execute(e.Date);
             }
         }
 

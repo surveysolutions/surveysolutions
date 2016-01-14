@@ -10,11 +10,14 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void SetValueToView(TextView textView, bool isSelected)
         {
-            Color textColor = isSelected
-                ? textView.Resources.GetColor(Resource.Color.interview_question_yesno_selected_text)
-                : textView.Resources.GetColor(Resource.Color.interview_question_yesno_not_selected_text);
+            int textColor = isSelected
+                ? Resource.Color.interview_question_yesno_selected_text
+                : Resource.Color.interview_question_yesno_not_selected_text;
 
-            textView.SetTextColor(textColor);
+            if (textView.CurrentTextColor != textColor)
+            {
+                textView.SetTextColor(textView.Resources.GetColor(textColor));
+            }
         }
     }
 }

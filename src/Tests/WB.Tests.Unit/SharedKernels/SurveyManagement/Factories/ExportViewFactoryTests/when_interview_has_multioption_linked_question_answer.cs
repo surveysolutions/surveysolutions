@@ -17,8 +17,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             linkedSourceQuestionId = Guid.NewGuid();
 
             var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
-                Create.Roster(rosterId: Guid.NewGuid(), variable: "row", fixedTitles: new[] { "1", "2" },
-                    children: new[] { Create.TextQuestion(questionId: linkedSourceQuestionId, variable: "varTxt") }),
+                Create.Roster(rosterId: Guid.NewGuid(), 
+                              variable: "row", 
+                              fixedTitles: new[] { "1", "2" },
+                              children: new[] {
+                                  Create.TextQuestion(questionId: linkedSourceQuestionId, variable: "varTxt")
+                              }),
                 Create.MultyOptionsQuestion(id: multyOptionLinkedQuestionId,
                     variable: "mult",
                     linkedToQuestionId: linkedSourceQuestionId));
@@ -34,9 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         It should_put_answers_to_export_in_appropriate_order = () =>
         {
             InterviewDataExportLevelView first = result.Levels.First();
-            var exportedQuestion = first.Records.First().Questions.First();
-            exportedQuestion.QuestionType.ShouldEqual(QuestionType.MultyOption);
-            exportedQuestion.QuestionId.ShouldEqual(multyOptionLinkedQuestionId);
+            var exportedQuestion = first.Records.First().GetQuestions().First();
             exportedQuestion.Answers.Length.ShouldEqual(2);
             exportedQuestion.Answers.SequenceEqual(new[] {"2", ""}).ShouldBeTrue();
         };

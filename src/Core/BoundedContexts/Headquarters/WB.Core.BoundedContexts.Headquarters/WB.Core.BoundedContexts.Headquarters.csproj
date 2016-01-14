@@ -50,6 +50,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\CsvHelper.2.2.2\lib\net40-client\CsvHelper.dll</HintPath>
     </Reference>
+    <Reference Include="Dapper, Version=1.40.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Dapper.1.42\lib\net45\Dapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="ddidotnet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\libs\ddidotnet.dll</HintPath>
@@ -128,6 +132,9 @@
     <Compile Include="DataExport\Accessors\TabFileReaderFactory.cs" />
     <Compile Include="DataExport\Accessors\TabularParaDataAccessor.cs" />
     <Compile Include="DataExport\DataExportDetails\AbstractDataExportProcessDetails.cs" />
+    <Compile Include="DataExport\DataExportDetails\DataExportProcessDetailsExtensions.cs" />
+    <Compile Include="DataExport\Denormalizers\InterviewsExportDenormalizer.cs" />
+    <Compile Include="DataExport\ExportProcessHandlers\TabBasedFormatExportHandler.cs" />
     <Compile Include="DataExport\ExportSettings.cs" />
     <Compile Include="DataExport\Denormalizers\ExportViewFactory.cs" />
     <Compile Include="DataExport\Denormalizers\IExportViewFactory.cs" />

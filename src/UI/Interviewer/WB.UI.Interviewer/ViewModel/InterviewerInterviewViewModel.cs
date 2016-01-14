@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.UI.Interviewer.Activities;
 
 namespace WB.UI.Interviewer.ViewModel
 {
@@ -54,9 +55,9 @@ namespace WB.UI.Interviewer.ViewModel
             get { return this.signOutCommand ?? (this.signOutCommand = new MvxCommand(async () => await this.SignOut())); }
         }
 
-        public IMvxCommand NavigateToTroubleshootingPageCommand
+        public IMvxCommand NavigateToDiagnosticsPageCommand
         {
-            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<TroubleshootingViewModel>()); }
+            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>()); }
         }
 
         private async Task SignOut()

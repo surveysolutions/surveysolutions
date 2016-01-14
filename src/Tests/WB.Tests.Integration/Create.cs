@@ -10,15 +10,19 @@ using Moq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
-
+using NHibernate.Transform;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus.Implementation;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Storage.Postgre;
+using WB.Core.Infrastructure.Storage.Postgre.Implementation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -29,19 +33,23 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
+using WB.Core.SharedKernels.SurveySolutions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Integration
 {
     internal static class Create
     {
         public static CodeGenerator CodeGenerator(
-        IMacrosSubstitutionService macrosSubstitutionService = null,
-        IExpressionProcessor expressionProcessor = null)
+            IMacrosSubstitutionService macrosSubstitutionService = null,
+            IExpressionProcessor expressionProcessor = null,
+            ILookupTableService lookupTableService = null)
         {
             return new CodeGenerator(
                 macrosSubstitutionService ?? DefaultMacrosSubstitutionService(),
-                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>());
+                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
+                lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>());
         }
 
         public static IMacrosSubstitutionService DefaultMacrosSubstitutionService()
@@ -328,9 +336,16 @@ namespace WB.Tests.Integration
             };
         }
 
-        public static Group Roster(Guid? id = null, string title = "Roster X", string variable = null, string enablementCondition = null,
-            string[] fixedTitles = null, IEnumerable<IComposite> children = null, RosterSizeSourceType rosterSizeSourceType = RosterSizeSourceType.FixedTitles,
-            Guid? rosterSizeQuestionId = null, Guid? rosterTitleQuestionId = null)
+        public static Group Roster(Guid? id = null, 
+            string title = "Roster X",
+            string variable = null, 
+            string enablementCondition = null,
+            string[] fixedTitles = null, 
+            IEnumerable<IComposite> children = null, 
+            RosterSizeSourceType rosterSizeSourceType = RosterSizeSourceType.FixedTitles,
+            Guid? rosterSizeQuestionId = null,
+            Guid? rosterTitleQuestionId = null,
+            FixedRosterTitle[] fixedRosterTitles = null)
         {
             Group group = Create.Group(
                 id: id,
@@ -342,7 +357,16 @@ namespace WB.Tests.Integration
             group.IsRoster = true;
             group.RosterSizeSource = rosterSizeSourceType;
             if (rosterSizeSourceType == RosterSizeSourceType.FixedTitles)
-                group.RosterFixedTitles = fixedTitles ?? new[] {"Roster X-1", "Roster X-2", "Roster X-3"};
+            {
+                if (fixedRosterTitles == null)
+                {
+                    group.RosterFixedTitles = fixedTitles ?? new[] { "Roster X-1", "Roster X-2", "Roster X-3" };
+                }
+                else
+                {
+                    group.FixedRosterTitles = fixedRosterTitles;
+                }
+            }
             group.RosterSizeQuestionId = rosterSizeQuestionId;
             group.RosterTitleQuestionId = rosterTitleQuestionId;
 
@@ -455,7 +479,7 @@ namespace WB.Tests.Integration
 
         public static CommittedEvent CommittedEvent(string origin = null, 
             Guid? eventSourceId = null,
-            object payload = null,
+            IEvent payload = null,
             Guid? eventIdentifier = null, 
             int eventSequence = 1)
         {
@@ -467,7 +491,7 @@ namespace WB.Tests.Integration
                 eventSequence,
                 new DateTime(2014, 10, 22),
                 0,
-                payload ?? "some payload");
+                payload ?? Mock.Of<IEvent>());
         }
 
         public static CommittedEventStream CommittedEventStream(Guid eventSourceId, IEnumerable<UncommittedEvent> events)
@@ -502,6 +526,45 @@ namespace WB.Tests.Integration
             };
         }
 
-       
+        public static FixedRosterTitle FixedRosterTitle(decimal value, string title)
+        {
+            return new FixedRosterTitle(value, title);
+        }
+
+        public static LookupTable LookupTable(string tableName)
+        {
+            return new LookupTable
+            {
+                TableName = tableName
+            };
+        }
+
+        public static LookupTableContent LookupTableContent(string[] variableNames, params LookupTableRow[] rows)
+        {
+            return new LookupTableContent
+            {
+                VariableNames = variableNames,
+                Rows = rows
+            };
+        }
+
+        public static LookupTableRow LookupTableRow(long rowcode, decimal?[] values)
+        {
+            return new LookupTableRow
+                   {
+                       RowCode = rowcode,
+                       Variables = values
+            };
+        }
+
+        public static PostgresReadSideKeyValueStorage<TEntity> PostgresReadSideKeyValueStorage<TEntity>(
+            ISessionProvider sessionProvider = null, PostgreConnectionSettings postgreConnectionSettings = null)
+            where TEntity : class, IReadSideRepositoryEntity
+        {
+            return new PostgresReadSideKeyValueStorage<TEntity>(
+                sessionProvider ?? Mock.Of<ISessionProvider>(),
+                postgreConnectionSettings ?? new PostgreConnectionSettings(),
+                Mock.Of<ILogger>());
+        }
     }
 }

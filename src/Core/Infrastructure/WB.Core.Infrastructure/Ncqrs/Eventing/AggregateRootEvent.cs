@@ -1,5 +1,8 @@
 using System;
 using Ncqrs.Eventing;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace Main.Core.Events
 {
@@ -32,7 +35,7 @@ namespace Main.Core.Events
 
         public DateTime EventTimeStamp { get; set; }
 
-        public object Payload { get; set; }
+        public IEvent Payload { get; set; }
         
         public UncommittedEvent CreateUncommitedEvent(int eventSequence, int initialVersionOfEventSource,
                                                       DateTime? eventTimestamp = null)

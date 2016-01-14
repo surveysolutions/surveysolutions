@@ -317,9 +317,6 @@ Anda dapat membuat atau menyunting kuesioner Anda pada Desainer Survey Solutions
   <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
     <value>Jika Anda menautkan kembali ke perangkat ini &lt;br/&gt; semua data pada yang lama akan hilang</value>
   </data>
-  <data name="Interviewer_Troubleshooting" xml:space="preserve">
-    <value>Pemecahan masalah</value>
-  </data>
   <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
     <value>Coba untuk masuk secara online</value>
   </data>

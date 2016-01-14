@@ -5,6 +5,6 @@
       android:id="@+id/menu_settings"
       local:showAsAction="never" />
   <item
-    android:id="@+id/menu_troubleshooting"
-    local:showAsAction="never" />
+  android:id="@+id/menu_diagnostics"
+  local:showAsAction="never" />
 </menu>

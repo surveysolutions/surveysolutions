@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -15,8 +19,6 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
@@ -27,45 +29,34 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICsvWriter csvWriter;
+        private readonly ILogger logger;
 
-        private readonly ITransactionManager transactionManager;
+        private readonly ITransactionManagerProvider transactionManager;
         private readonly CommentsExporter commentsExporter;
         private readonly InterviewActionsExporter interviewActionsExporter;
         private readonly InterviewsExporter interviewsExporter;
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+
         public ReadSideToTabularFormatExportService(IFileSystemAccessor fileSystemAccessor,
-            ICsvWriter csvWriter,
-            InterviewDataExportSettings interviewDataExportSettings,
-            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewActionsDataStorage,
-            IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage, 
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries, 
-            IReadSideKeyValueStorage<InterviewData> interviewDatas, 
-            IExportViewFactory exportViewFactory, 
-            ITransactionManager transactionManager, 
+            ICsvWriter csvWriter, 
+            ILogger logger,
+            ITransactionManagerProvider transactionManager, 
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
+            this.logger = logger;
             this.transactionManager = transactionManager;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
 
-            this.interviewsExporter = new InterviewsExporter(transactionManager, 
-                interviewSummaries, 
-                fileSystemAccessor, 
-                interviewDatas, 
-                exportViewFactory, 
-                csvWriter);
+            this.interviewsExporter = ServiceLocator.Current.GetInstance<InterviewsExporter>();
 
-            this.commentsExporter = new CommentsExporter(interviewDataExportSettings, 
-                fileSystemAccessor, 
-                csvWriter, 
-                interviewCommentariesStorage,
-                transactionManager);
+            this.commentsExporter = ServiceLocator.Current.GetInstance<CommentsExporter>();
 
-            this.interviewActionsExporter = new InterviewActionsExporter(interviewDataExportSettings, fileSystemAccessor, csvWriter, transactionManager, interviewActionsDataStorage);
+            this.interviewActionsExporter = ServiceLocator.Current.GetInstance<InterviewActionsExporter>();
         }
 
-        public void ExportInterviewsInTabularFormat(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress)
+        public void ExportInterviewsInTabularFormat(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
         {
             QuestionnaireExportStructure questionnaireExportStructure = this.BuildQuestionnaireExportStructure(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 
@@ -80,12 +71,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             proggressAggregator.ProgressChanged += (sender, overallProgress) => progress.Report(overallProgress);
 
-            this.interviewsExporter.ExportAll(questionnaireExportStructure, basePath, exportInterviewsProgress);
-            this.commentsExporter.ExportAll(questionnaireExportStructure, basePath, exportCommentsProgress);
-            this.interviewActionsExporter.ExportAll(questionnaireIdentity, basePath, exportInterviewActionsProgress);
+            Stopwatch exportWatch = new Stopwatch();
+            exportWatch.Start(); 
+            Task.WaitAll(new[] {
+                Task.Run(() => this.interviewsExporter.ExportAll(questionnaireExportStructure, basePath, exportInterviewsProgress, cancellationToken), cancellationToken),
+                Task.Run(() => this.commentsExporter.ExportAll(questionnaireExportStructure, basePath, exportCommentsProgress), cancellationToken),
+                Task.Run(() => this.interviewActionsExporter.ExportAll(questionnaireIdentity, basePath, exportInterviewActionsProgress), cancellationToken)
+            }, cancellationToken);
+            exportWatch.Stop();
+
+            this.logger.Info($"Export with all steps (Interviews, Comments, Actions) finished for questionnaire {questionnaireIdentity}. Took {exportWatch.Elapsed:c}");
         }
 
-        public void ExportApprovedInterviewsInTabularFormat(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress)
+        public void ExportApprovedInterviewsInTabularFormat(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
         {
             QuestionnaireExportStructure questionnaireExportStructure = this.BuildQuestionnaireExportStructure(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 
@@ -100,15 +98,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             proggressAggregator.ProgressChanged += (sender, overallProgress) => progress.Report(overallProgress);
 
-            this.interviewsExporter.ExportApproved(questionnaireExportStructure, basePath, exportInterviewsProgress);
+            this.interviewsExporter.ExportApproved(questionnaireExportStructure, basePath, exportInterviewsProgress, cancellationToken);
+            cancellationToken.ThrowIfCancellationRequested();
             this.commentsExporter.ExportApproved(questionnaireExportStructure, basePath, exportCommentsProgress);
+            cancellationToken.ThrowIfCancellationRequested();
             this.interviewActionsExporter.ExportApproved(questionnaireIdentity, basePath, exportInterviewActionsProgress);
         }
 
         public void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath)
         {
             QuestionnaireExportStructure questionnaireExportStructure =
-              this.transactionManager
+              this.transactionManager.GetTransactionManager()
                   .ExecuteInQueryTransaction(
                       () =>
                           this.questionnaireExportStructureStorage.AsVersioned()
@@ -163,7 +163,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private QuestionnaireExportStructure BuildQuestionnaireExportStructure(Guid questionnaireId, long questionnaireVersion)
         {
             QuestionnaireExportStructure questionnaireExportStructure =
-             this.transactionManager
+             this.transactionManager.GetTransactionManager()
                  .ExecuteInQueryTransaction(() =>
                          this.questionnaireExportStructureStorage.AsVersioned()
                              .Get(questionnaireId.FormatGuid(), questionnaireVersion));

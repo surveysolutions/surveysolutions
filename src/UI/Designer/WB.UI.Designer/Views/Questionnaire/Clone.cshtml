@@ -9,7 +9,7 @@
     {
 
         @Html.AntiForgeryToken()
-        <h1>Clone Questionnaire</h1>
+        <h1>Copy Questionnaire</h1>
         if (TempData.ContainsKey(Alerts.ERROR))
         {
             <p class="note has-error">@Html.Raw(@TempData[Alerts.ERROR])</p>
@@ -26,7 +26,7 @@
         </div>
         @Html.HiddenFor(x => x.Id)
         <div class="form-actions">
-            <input type="submit" class="btn btn-success btn-lg" value="Clone"/>
+            <input type="submit" class="btn btn-success btn-lg" value="Copy"/>
             @Html.ActionLink("Cancel", "Index", "Questionnaire", null, new { @class = "btn " })
             @Html.ActionLink("Back to List", "Index", "Questionnaire", null, new { @class = "btn " })
         </div>

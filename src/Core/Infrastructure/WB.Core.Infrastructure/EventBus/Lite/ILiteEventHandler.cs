@@ -2,7 +2,8 @@
 {
     public interface ILiteEventHandler { }
 
-    public interface ILiteEventHandler<TEvent> : ILiteEventHandler
+    public interface ILiteEventHandler<TEvent> : ILiteEventHandler 
+        where TEvent : IEvent
     {
         void Handle(TEvent @event);
     }

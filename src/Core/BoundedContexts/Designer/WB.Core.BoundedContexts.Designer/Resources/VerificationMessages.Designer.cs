@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation condition has syntax error..
+        ///   Looks up a localized string similar to Validation condition has a syntax error..
         /// </summary>
         internal static string WB0002_CustomValidationExpressionHasIncorrectSyntax {
             get {
@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enabling condition has syntax error..
+        ///   Looks up a localized string similar to Enabling condition has a syntax error..
         /// </summary>
         internal static string WB0003_CustomEnablementConditionHasIncorrectSyntax {
             get {
@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation condition references nonexistent question..
+        ///   Looks up a localized string similar to Validation condition references a nonexistent question..
         /// </summary>
         internal static string WB0004_CustomValidationExpressionReferencesNotExistingQuestion {
             get {
@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enabling condition references nonexistent question..
+        ///   Looks up a localized string similar to Enabling condition references a nonexistent question..
         /// </summary>
         internal static string WB0005_CustomEnablementConditionReferencesNotExistingQuestion {
             get {
@@ -151,7 +151,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked question references nonexistent question..
+        ///   Looks up a localized string similar to Linked question references a nonexistent question..
         /// </summary>
         internal static string WB0011_LinkedQuestionReferencesNotExistingQuestion {
             get {
@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked question references question of not supported type..
+        ///   Looks up a localized string similar to Linked question references a question type that is not supported..
         /// </summary>
         internal static string WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType {
             get {
@@ -169,7 +169,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked question references question not under roster..
+        ///   Looks up a localized string similar to Linked question references a question not in a roster..
         /// </summary>
         internal static string WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup {
             get {
@@ -205,7 +205,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with title substitution references nonexistent question..
+        ///   Looks up a localized string similar to Question with title substitution references a nonexistent question..
         /// </summary>
         internal static string WB0017_QuestionWithTitleSubstitutionReferencesNotExistingQuestion {
             get {
@@ -214,7 +214,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with title substitution references question of not supported type..
+        ///   Looks up a localized string similar to Question with title substitution references a question type that is not supported..
         /// </summary>
         internal static string WB0018_QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType {
             get {
@@ -223,7 +223,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with title substitution cannot reference questions from deeper roster level..
+        ///   Looks up a localized string similar to Question with title substitution cannot reference questions from a deeper roster level..
         /// </summary>
         internal static string WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel {
             get {
@@ -242,7 +242,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has options count less than max number of answers..
+        ///   Looks up a localized string similar to Max number of answers is greater than number of question&apos;s options..
         /// </summary>
         internal static string WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount {
             get {
@@ -270,6 +270,33 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lookup table has invalid name..
+        /// </summary>
+        internal static string WB0024_LookupHasInvalidName {
+            get {
+                return ResourceManager.GetString("WB0024_LookupHasInvalidName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lookup table cannot have empty name..
+        /// </summary>
+        internal static string WB0025_LookupHasEmptyName {
+            get {
+                return ResourceManager.GetString("WB0025_LookupHasEmptyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Another Lookup table with the same name already exists..
+        /// </summary>
+        internal static string WB0026_NameForLookupTableIsNotUnique {
+            get {
+                return ResourceManager.GetString("WB0026_NameForLookupTableIsNotUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string WB0027_QuestionnaireHaveAutopropagatedGroups {
@@ -288,11 +315,29 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prefilled questions cannot be inside of roster..
+        ///   Looks up a localized string similar to Lookup table with the same variable name already exists..
+        /// </summary>
+        internal static string WB0029_LookupWithTheSameVariableNameAlreadyExists {
+            get {
+                return ResourceManager.GetString("WB0029_LookupWithTheSameVariableNameAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefilled questions cannot be inside a roster..
         /// </summary>
         internal static string WB0030_PrefilledQuestionCantBeInsideOfRoster {
             get {
                 return ResourceManager.GetString("WB0030_PrefilledQuestionCantBeInsideOfRoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lookup table has invalid column headers.
+        /// </summary>
+        internal static string WB0031_LookupTableHasInvalidHeaders {
+            get {
+                return ResourceManager.GetString("WB0031_LookupTableHasInvalidHeaders", resourceCulture);
             }
         }
         
@@ -343,7 +388,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed set of items roster cannot have empty titles..
+        ///   Looks up a localized string similar to Fixed set of items roster cannot have empty titles or less than two items..
         /// </summary>
         internal static string WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles {
             get {
@@ -397,6 +442,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lookup table has too many columns.
+        /// </summary>
+        internal static string WB0043_LookupTableMoreThan11Columns {
+            get {
+                return ResourceManager.GetString("WB0043_LookupTableMoreThan11Columns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lookup table has too many rows.
+        /// </summary>
+        internal static string WB0044_LookupTableMoreThan5000Rows {
+            get {
+                return ResourceManager.GetString("WB0044_LookupTableMoreThan5000Rows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question has option(s) with empty value..
         /// </summary>
         internal static string WB0045_QuestionHasOptionsWithEmptyValue {
@@ -411,6 +474,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel {
             get {
                 return ResourceManager.GetString("WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lookup table has not unique rowcode values.
+        /// </summary>
+        internal static string WB0047_LookupTableNotUniqueRowcodeValues {
+            get {
+                return ResourceManager.GetString("WB0047_LookupTableNotUniqueRowcodeValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lookup table cannot be empty.
+        /// </summary>
+        internal static string WB0048_LookupHasEmptyContent {
+            get {
+                return ResourceManager.GetString("WB0048_LookupHasEmptyContent", resourceCulture);
             }
         }
         
@@ -438,6 +519,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0051_GroupsCustomConditionExpressionReferencesChildQuestion {
             get {
                 return ResourceManager.GetString("WB0051_GroupsCustomConditionExpressionReferencesChildQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lookup table name cannot be a reserved word..
+        /// </summary>
+        internal static string WB0052_LookupNameIsKeyword {
+            get {
+                return ResourceManager.GetString("WB0052_LookupNameIsKeyword", resourceCulture);
             }
         }
         
@@ -889,6 +979,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0102_QuestionnaireEntitiesShareSameInternalId {
             get {
                 return ResourceManager.GetString("WB0102_QuestionnaireEntitiesShareSameInternalId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters..
+        /// </summary>
+        internal static string WB0200_LargeNumberOfRostersIsCreated {
+            get {
+                return ResourceManager.GetString("WB0200_LargeNumberOfRostersIsCreated", resourceCulture);
             }
         }
     }

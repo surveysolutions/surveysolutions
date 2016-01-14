@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public virtual async Task SendAnswerQuestionCommandAsync(AnswerQuestionCommand answerCommand)
         {
-            await this.ExecuteCommand(answerCommand);
+            await this.ExecuteCommand(answerCommand).ConfigureAwait(false);
         }
 
         public virtual async Task SendRemoveAnswerCommandAsync(RemoveAnswerCommand command)
@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 this.StartInProgressIndicator();
 
-                await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync();
+                await this.userInterfaceStateService.WaitWhileUserInterfaceIsRefreshingAsync().ConfigureAwait(false);
 
                 lock (this.cancellationLockObject)
                 {
@@ -68,7 +68,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 }
 
                 await
-                    this.commandService.ExecuteAsync(answerCommand, cancellationToken: cancellationTokenSource.Token);
+                    this.commandService.ExecuteAsync(answerCommand, cancellationToken: cancellationTokenSource.Token).ConfigureAwait(false);
             }
             catch (OperationCanceledException) {}
             finally

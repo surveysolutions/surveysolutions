@@ -27,7 +27,8 @@
                   android:orientation="vertical"
                   android:gravity="center">
       <ImageView style="@style/Relink_Logo" />
-      <RelativeLayout style="@style/Relink_FormContainer">
+      
+      <LinearLayout style="@style/Relink_FormContainer">
         <TextView style="@style/Relink_RemoteErrorMessage"
                   android:id="@+id/relinkPage_error_message"
                   local:MvxBind="Text ErrorMessage; Visible ErrorMessage;"/>
@@ -39,14 +40,15 @@
                   android:id="@+id/relinkPage_password"
                   android:layout_below="@+id/relinkPage_login"
                   local:MvxBind="Html Localization('Interviewer_RelinkDevice_RelinkMessage')" />
-      </RelativeLayout>
-      <LinearLayout android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-        <Button style="@style/Relink_Button"
-                local:MvxBind="Click RelinkCommand; Text Localization('Interviewer_RelinkDevice_RelinkButtonText');" />
-        <Button style="@style/Relink_Cancel_Button"
-                local:MvxBind="Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');" />
+
+        <LinearLayout android:orientation="horizontal"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content">
+          <Button style="@style/Relink_Button"
+                  local:MvxBind="Click RelinkCommand; Text Localization('Interviewer_RelinkDevice_RelinkButtonText');" />
+          <Button style="@style/Relink_Cancel_Button"
+                  local:MvxBind="Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');" />
+        </LinearLayout>
       </LinearLayout>
     </LinearLayout>
   </ScrollView>

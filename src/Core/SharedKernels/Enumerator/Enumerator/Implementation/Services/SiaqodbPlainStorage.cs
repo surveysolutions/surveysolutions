@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Sqo;
 using Sqo.Transactions;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
@@ -11,45 +13,34 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     public class SiaqodbPlainStorage<TEntity> : IAsyncPlainStorage<TEntity> where TEntity: class, IPlainStorageEntity
     {
         protected readonly ISiaqodb Storage;
+        protected readonly IUserInteractionService UserInteractionService;
+        protected readonly ILogger Logger;
 
-        public SiaqodbPlainStorage(ISiaqodb storage)
+        public SiaqodbPlainStorage(ISiaqodb storage, IUserInteractionService userInteractionService, ILogger logger)
         {
             this.Storage = storage;
+            this.UserInteractionService = userInteractionService;
+            this.Logger = logger;
         }
 
-        public TEntity GetById(string id)
+        public virtual TEntity GetById(string id)
         {
-            return this.Query(entities=>entities.FirstOrDefault(_ => _.Id == id));
+            return this.Query(entities => entities.FirstOrDefault(entity => entity.Id == id));
         }
 
         public async Task RemoveAsync(string id)
         {
-            TEntity entity = this.GetById(id);
+            TEntity entity = await Task.FromResult(this.GetById(id));
 
             await this.RemoveAsync(new[] { entity });
         }
 
-        public async Task RemoveAsync(IEnumerable<TEntity> entities)
+        public virtual async Task RemoveAsync(IEnumerable<TEntity> entities)
         {
-            var isFailedTransaction = false;
-
-            ITransaction transaction = this.Storage.BeginTransaction();
-            try
+            foreach (var entity in entities.Where(entity => entity != null))
             {
-                foreach (var entity in entities)
-                {
-                    await this.Storage.DeleteAsync(entity, transaction);
-                }
-
-                await transaction.CommitAsync();
+                await this.Storage.DeleteAsync(entity);
             }
-            catch
-            {
-                isFailedTransaction = true;
-            }
-
-            if (isFailedTransaction)
-                await transaction.RollbackAsync();
         }
 
         public async Task StoreAsync(TEntity entity)
@@ -57,27 +48,23 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             await this.StoreAsync(new[] { entity });
         }
 
-        public async Task StoreAsync(IEnumerable<TEntity> entities)
+        public virtual async Task StoreAsync(IEnumerable<TEntity> entities)
         {
-            var isFailedTransaction = false;
-
-            ITransaction transaction = this.Storage.BeginTransaction();
             try
             {
-                foreach (var entity in entities)
+                foreach (var entity in entities.Where(entity => entity != null))
                 {
-                    await this.Storage.StoreObjectAsync(entity, transaction);
+                    await this.Storage.StoreObjectAsync(entity);
                 }
-
-                await transaction.CommitAsync();
             }
-            catch
+            catch (Exception ex)
             {
-                isFailedTransaction = true;
+                this.Logger.Fatal(ex.Message, ex);
+                if (ex.Message.IndexOf("Environment mapsize limit reached", StringComparison.OrdinalIgnoreCase) > -1)
+                {
+                    await this.UserInteractionService.AlertAsync("Database is full. Please, send tablet information and contact to Survey Solutions team.", "Critical exception");
+                }
             }
-
-            if(isFailedTransaction)
-                await transaction.RollbackAsync();
         }
 
         public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)

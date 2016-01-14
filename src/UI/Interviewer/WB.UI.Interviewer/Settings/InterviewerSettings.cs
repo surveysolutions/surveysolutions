@@ -1,76 +1,64 @@
 ﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
-using Android.Preferences;
-using Java.Util;
+using PCLStorage;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.UI.Interviewer.SharedPreferences;
+using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.UI.Interviewer.Settings
 {
     internal class InterviewerSettings : IInterviewerSettings
     {
-        protected static ISharedPreferences NewSharedPreferences
+        private readonly IAsyncPlainStorage<ApplicationSettingsView> settingsStorage;
+        private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
+        private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
+        private readonly ISyncProtocolVersionProvider syncProtocolVersionProvider;
+        private readonly IFileSystemAccessor fileSystemAccessor;
+        
+        private readonly string backupFolder;
+        private readonly string restoreFolder;
+
+        public InterviewerSettings(
+            IAsyncPlainStorage<ApplicationSettingsView> settingsStorage, 
+            ISyncProtocolVersionProvider syncProtocolVersionProvider, 
+            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
+            IAsyncPlainStorage<InterviewView> interviewViewRepository, 
+            IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository, 
+            IFileSystemAccessor fileSystemAccessor,
+            string backupFolder, 
+            string restoreFolder)
         {
-            get { return PreferenceManager.GetDefaultSharedPreferences(Application.Context); }
+            this.settingsStorage = settingsStorage;
+            this.syncProtocolVersionProvider = syncProtocolVersionProvider;
+            this.interviewersPlainStorage = interviewersPlainStorage;
+            this.interviewViewRepository = interviewViewRepository;
+            this.questionnaireViewRepository = questionnaireViewRepository;
+            this.fileSystemAccessor = fileSystemAccessor;
+            this.backupFolder = backupFolder;
+            this.restoreFolder = restoreFolder;
         }
 
-        protected static ISharedPreferences OldSharedPreferences
+        private ApplicationSettingsView CurrentSettings => this.settingsStorage.Query(settings => settings.FirstOrDefault()) ?? new ApplicationSettingsView
         {
-            get { return Application.Context.GetSharedPreferences(SettingsNames.AppName, FileCreationMode.Private); }
-        }
+            Id = "settings",
+            Endpoint = string.Empty,
+            HttpResponseTimeoutInSec = Application.Context.Resources.GetInteger(Resource.Integer.HttpResponseTimeout),
+            CommunicationBufferSize = Application.Context.Resources.GetInteger(Resource.Integer.BufferSize),
+            GpsResponseTimeoutInSec = Application.Context.Resources.GetInteger(Resource.Integer.GpsReceiveTimeoutSec)
+        };
 
-        public string Endpoint
-        {
-            get
-            {
-                var endpoint = GetSetting(SettingsNames.Endpoint, string.Empty);
-                return endpoint;
-            }
-        }
-
-        public TimeSpan Timeout
-        {
-            get
-            {
-                var defValue = Application.Context.Resources.GetInteger(Resource.Integer.HttpResponseTimeout);
-                string httpResponseTimeoutSec = GetSetting(SettingsNames.HttpResponseTimeout, defValue.ToString());
-
-                int result;
-                return int.TryParse(httpResponseTimeoutSec, out result)
-                    ? new TimeSpan(0, 0, result)
-                    : new TimeSpan(0, 0, defValue);
-            }
-        }
-
-        public int BufferSize
-        {
-            get
-            {
-                var defValue = Application.Context.Resources.GetInteger(Resource.Integer.BufferSize);
-                string bufferSize = GetSetting(SettingsNames.BufferSize, defValue.ToString());
-
-                int result;
-                return int.TryParse(bufferSize, out result) ? result : defValue;
-            }
-        }
-
-        public bool AcceptUnsignedSslCertificate
-        {
-            get { return false; }
-        }
-
-        public int GpsReceiveTimeoutSec
-        {
-            get
-            {
-                var defValue = Application.Context.Resources.GetInteger(Resource.Integer.GpsReceiveTimeoutSec);
-                string gpsReceiveTimeoutSec = GetSetting(SettingsNames.GpsReceiveTimeoutSec, defValue.ToString());
-
-                int result;
-                return int.TryParse(gpsReceiveTimeoutSec, out result) ? result : defValue;
-            }
-        }
+        public string Endpoint => this.CurrentSettings.Endpoint;
+        public TimeSpan Timeout => new TimeSpan(0, 0, this.CurrentSettings.HttpResponseTimeoutInSec);
+        public int BufferSize => this.CurrentSettings.CommunicationBufferSize;
+        public bool AcceptUnsignedSslCertificate => false;
+        public int GpsReceiveTimeoutSec => this.CurrentSettings.GpsResponseTimeoutInSec;
 
         public string GetDeviceId()
         {
@@ -78,27 +66,29 @@ namespace WB.UI.Interviewer.Settings
                 Android.Provider.Settings.Secure.AndroidId);
         }
 
-        public Guid GetInstallationId()
-        {
-            var installationId = GetSetting(SettingsNames.INSTALLATION);
-            if (string.IsNullOrEmpty(installationId))
-            {
-                installationId = UUID.RandomUUID().ToString();
-                SetSetting(SettingsNames.INSTALLATION, installationId);    
-            }
-            return Guid.Parse(installationId);
-        }
-
-        public Guid? GetClientRegistrationId()
-        {
-            var sClientRegistrationId = GetSetting(SettingsNames.RegistrationKeyName);
-
-            return string.IsNullOrEmpty(sClientRegistrationId) ? (Guid?) null : Guid.Parse(sClientRegistrationId);
-        }
-
         public string GetApplicationVersionName()
         {
             return Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0).VersionName;
+        }
+
+        public string GetDeviceTechnicalInformation()
+        {
+            var interviewIds = string.Join(","+ Environment.NewLine, this.interviewViewRepository.Query(_ => _.Select(i => i.InterviewId)));
+            var questionnaireIds = string.Join(","+ Environment.NewLine, this.questionnaireViewRepository.Query(_ => _.Select(i => i.Identity)));
+
+            return $"Version:{this.GetApplicationVersionName()} {Environment.NewLine}" +
+                   $"SyncProtocolVersion:{this.syncProtocolVersionProvider.GetProtocolVersion()} {Environment.NewLine}" +
+                   $"User:{GetUserInformation()} {Environment.NewLine}" +
+                   $"DeviceId:{this.GetDeviceId()} {Environment.NewLine}" +
+                   $"RAM:{GetRAMInformation()}% {Environment.NewLine}" +
+                   $"DBSize:{GetDataBaseSize()} {Environment.NewLine}" +
+                   $"Endpoint:{this.Endpoint}{Environment.NewLine}" +
+                   $"AcceptUnsignedSslCertificate:{this.AcceptUnsignedSslCertificate} {Environment.NewLine}" +
+                   $"BufferSize:{this.BufferSize} {Environment.NewLine}" +
+                   $"Timeout:{this.Timeout} {Environment.NewLine}" +
+                   $"CurrentDataTime:{DateTime.Now} {Environment.NewLine}" +
+                   $"QuestionnairesList:{questionnaireIds} {Environment.NewLine}" +
+                   $"InterviewsList:{interviewIds}";
         }
 
         public int GetApplicationVersionCode()
@@ -106,45 +96,75 @@ namespace WB.UI.Interviewer.Settings
             return Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, 0).VersionCode;
         }
 
-        public string GetOperatingSystemVersion()
+        public async Task SetEndpointAsync(string endpoint)
         {
-            return global::Android.OS.Build.VERSION.Release;
+            await this.SaveCurrentSettings(settings =>
+            {
+                settings.Endpoint = endpoint;
+            });
         }
 
-        public void SetClientRegistrationId(Guid? clientRegistrationId)
+        public async Task SetHttpResponseTimeoutAsync(int timeout)
         {
-            SetSetting(SettingsNames.RegistrationKeyName,
-                clientRegistrationId.HasValue ? clientRegistrationId.ToString() : string.Empty);
+            await this.SaveCurrentSettings(settings =>
+            {
+                settings.HttpResponseTimeoutInSec = timeout;
+            });
         }
 
-        public void SetSyncAddressPoint(string syncAddressPoint)
+        public async Task SetGpsResponseTimeoutAsync(int timeout)
         {
-            SetSetting(SettingsNames.Endpoint, syncAddressPoint.Trim());
+            await this.SaveCurrentSettings(settings =>
+            {
+                settings.GpsResponseTimeoutInSec = timeout;
+            });
         }
 
-
-        private static string GetSetting(string settingName)
+        public async Task SetCommunicationBufferSize(int bufferSize)
         {
-            return GetSetting(settingName, String.Empty);
+            await this.SaveCurrentSettings(settings =>
+            {
+                settings.CommunicationBufferSize = bufferSize;
+            });
         }
 
-        private static string GetSetting(string settingName, string defaultValue)
+        public string BackupFolder => backupFolder;
+
+        public string RestoreFolder => restoreFolder;
+
+        private async Task SaveCurrentSettings(Action<ApplicationSettingsView> onChanging)
         {
-            var  newPreference = NewSharedPreferences.GetString(settingName, defaultValue);
-            return !string.IsNullOrEmpty(newPreference)
-                ? newPreference
-                : OldSharedPreferences.GetString(settingName, defaultValue);
+            var settings = this.CurrentSettings;
+            onChanging(settings);
+            await this.settingsStorage.StoreAsync(settings);
         }
 
-        private static void SetSetting(string settingName, string settingValue)
+        private string GetUserInformation()
         {
-            ISharedPreferencesEditor newPrefEditor = NewSharedPreferences.Edit();
-            newPrefEditor.PutString(settingName, settingValue);
-            newPrefEditor.Commit();
+            var currentStoredUser = this.interviewersPlainStorage.Query(_ => _.FirstOrDefault());
+            if (currentStoredUser != null)
+            {
+                return $"{currentStoredUser.Name}: {currentStoredUser.Id}";
+            }
+            return "NONE";
+        }
 
-            ISharedPreferencesEditor oldPrefEditor = OldSharedPreferences.Edit();
-            oldPrefEditor.PutString(settingName, settingValue);
-            oldPrefEditor.Commit();
+        private string GetRAMInformation()
+        {
+            ActivityManager activityManager = Application.Context.GetSystemService(Context.ActivityService) as ActivityManager;
+            if (activityManager == null)
+                return "UNKNOWN";
+
+            ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
+            activityManager.GetMemoryInfo(mi);
+            return
+                $"{FileSizeUtils.SizeSuffix(mi.TotalMem)} total, avaliable {(int) (((double) (100*mi.AvailMem))/mi.TotalMem)}";
+        }
+
+        private string GetDataBaseSize()
+        {
+            return
+                FileSizeUtils.SizeSuffix(this.fileSystemAccessor.GetDirectorySize(FileSystem.Current.LocalStorage.Path));
         }
     }
 }
