@@ -172,12 +172,16 @@ namespace Main.Core.Documents
             return null;
         }
 
-        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
+        public IEnumerable<T> Find<T>() where T : class
             => this
                 .Children
                 .TreeToEnumerable(composite => composite.Children)
                 .Where(child => child is T)
-                .Cast<T>()
+                .Cast<T>();
+
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
+            => this
+                .Find<T>()
                 .Where(condition.Invoke);
 
         public T FirstOrDefault<T>(Func<T, bool> condition) where T : class

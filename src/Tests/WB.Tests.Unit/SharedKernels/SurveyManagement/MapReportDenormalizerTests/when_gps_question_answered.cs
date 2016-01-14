@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -10,10 +9,11 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTests
 {
-    class when_gps_question_answered : MapReportDenormalizerTestContext
+    class when_gps_question_answered
     {
         Establish context = () =>
         {
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportTests
             }
             }, new QuestionnaireIdentity(questionnaireId, 1).ToString());
 
-            denormalizer = CreateMapReportDenormalizer(mapPoints, interviews, questionIdToVariable);
+            denormalizer = Create.MapReportDenormalizer(mapPoints, interviews, questionIdToVariable);
             gpsQuestionAnswered = Create.Event.GeoLocationQuestionAnswered(Create.Identity(questionId, Empty.RosterVector), 1, 2).ToPublishedEvent(eventSourceId: interviewId);
         };
 

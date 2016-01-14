@@ -109,18 +109,14 @@ namespace WB.Tests.Unit
                 return new GroupsEnabled(identities);
             }
 
-            public static Identity Identity(Guid id, decimal[] rosterVector)
-            {
-                return new Identity(id, rosterVector);
-            }
-
             public static InterviewCreated InterviewCreated(Guid? questionnaireId = null, long? questionnaireVersion = null)
-            {
-                return new InterviewCreated(
+                => new InterviewCreated(
                     userId: Guid.NewGuid(),
                     questionnaireId: questionnaireId ?? Guid.NewGuid(),
                     questionnaireVersion: questionnaireVersion ?? 7);
-            }
+
+            public static InterviewDeleted InterviewDeleted()
+                => new InterviewDeleted(userId: Guid.NewGuid());
 
             public static IPublishedEvent<InterviewerAssigned> InterviewerAssigned(Guid interviewId, Guid userId, Guid interviewerId)
             {
@@ -128,20 +124,16 @@ namespace WB.Tests.Unit
                         .ToPublishedEvent(eventSourceId: interviewId);
             }
 
-            public static IPublishedEvent<InterviewHardDeleted> InterviewHardDeleted(Guid interviewId, Guid userId)
-            {
-                return new InterviewHardDeleted(userId)
-                        .ToPublishedEvent(eventSourceId: interviewId);
-            }
+            public static InterviewFromPreloadedDataCreated InterviewFromPreloadedDataCreated(Guid? questionnaireId = null, long? questionnaireVersion = null)
+                => new InterviewFromPreloadedDataCreated(
+                    Guid.NewGuid(),
+                    questionnaireId ?? Guid.NewGuid(),
+                    questionnaireVersion ?? 1);
 
-            internal static InterviewHardDeleted InterviewHardDeleted()
-            {
-                return new InterviewHardDeleted(
-                    userId: Guid.NewGuid());
-            }
+            public static InterviewHardDeleted InterviewHardDeleted()
+                => new InterviewHardDeleted(userId: Guid.NewGuid());
 
-            public static InterviewOnClientCreated InterviewOnClientCreated(
-                Guid? questionnaireId = null, long? questionnaireVersion = null)
+            public static InterviewOnClientCreated InterviewOnClientCreated(Guid? questionnaireId = null, long? questionnaireVersion = null)
             {
                 return new InterviewOnClientCreated(
                     Guid.NewGuid(),
@@ -149,24 +141,11 @@ namespace WB.Tests.Unit
                     questionnaireVersion ?? 1);
             }
 
-            public static InterviewFromPreloadedDataCreated InterviewFromPreloadedDataCreated(
-                Guid? questionnaireId = null, long? questionnaireVersion = null)
-            {
-                return new InterviewFromPreloadedDataCreated(
-                    Guid.NewGuid(),
-                    questionnaireId ?? Guid.NewGuid(),
-                    questionnaireVersion ?? 1);
-            }
-
             public static InterviewReceivedByInterviewer InterviewReceivedByInterviewer()
-            {
-                return new InterviewReceivedByInterviewer();
-            }
+                => new InterviewReceivedByInterviewer();
 
             public static InterviewReceivedBySupervisor InterviewReceivedBySupervisor()
-            {
-                return new InterviewReceivedBySupervisor();
-            }
+                => new InterviewReceivedBySupervisor();
 
             public static IPublishedEvent<InterviewStatusChanged> InterviewStatusChanged(
                 Guid interviewId, 
@@ -181,6 +160,32 @@ namespace WB.Tests.Unit
             public static InterviewSynchronized InterviewSynchronized(InterviewSynchronizationDto synchronizationDto)
             {
                 return new InterviewSynchronized(synchronizationDto);
+            }
+
+            public static IPublishedEvent<LookupTableAdded> LookupTableAdded(Guid questionnaireId, Guid entityId)
+            {
+                return new LookupTableAdded
+                {
+                    LookupTableId = entityId
+                }.ToPublishedEvent(eventSourceId: questionnaireId);
+            }
+
+            public static IPublishedEvent<LookupTableDeleted> LookupTableDeleted(Guid questionnaireId, Guid entityId)
+            {
+                return new LookupTableDeleted
+                {
+                    LookupTableId = entityId
+                }.ToPublishedEvent(eventSourceId: questionnaireId);
+            }
+
+            public static IPublishedEvent<LookupTableUpdated> LookupTableUpdated(Guid questionnaireId, Guid entityId, string name, string fileName)
+            {
+                return new LookupTableUpdated
+                {
+                    LookupTableId = entityId,
+                    LookupTableName = name,
+                    LookupTableFileName = fileName
+                }.ToPublishedEvent(eventSourceId: questionnaireId);
             }
 
             public static IPublishedEvent<MacroAdded> MacroAdded(Guid questionnaireId, Guid entityId, Guid? responsibleId = null)
@@ -655,38 +660,21 @@ namespace WB.Tests.Unit
                     answeredOptions: answeredOptions ?? new AnsweredYesNoOption[] {});
             }
 
+            public static class Published
+            {
+                public static IPublishedEvent<InterviewDeleted> InterviewDeleted(Guid? interviewId = null)
+                    => Create.Event.InterviewDeleted().ToPublishedEvent(eventSourceId: interviewId);
+
+                public static IPublishedEvent<InterviewHardDeleted> InterviewHardDeleted(Guid? interviewId = null)
+                    => Create.Event.InterviewHardDeleted().ToPublishedEvent(eventSourceId: interviewId);
+            }
+
             internal static class Designer
             {
                 public static designer::Main.Core.Events.Questionnaire.TemplateImported TemplateImported(QuestionnaireDocument questionnaireDocument)
                 {
                     return new designer::Main.Core.Events.Questionnaire.TemplateImported { Source = questionnaireDocument };
                 }
-            }
-
-            public static IPublishedEvent<LookupTableAdded> LookupTableAdded(Guid questionnaireId, Guid entityId)
-            {
-                return new LookupTableAdded
-                {
-                    LookupTableId = entityId
-                }.ToPublishedEvent(eventSourceId: questionnaireId);
-            }
-
-            public static IPublishedEvent<LookupTableDeleted> LookupTableDeleted(Guid questionnaireId, Guid entityId)
-            {
-                return new LookupTableDeleted
-                {
-                    LookupTableId = entityId
-                }.ToPublishedEvent(eventSourceId: questionnaireId);
-            }
-
-            public static IPublishedEvent<LookupTableUpdated> LookupTableUpdated(Guid questionnaireId, Guid entityId, string name, string fileName)
-            {
-                return new LookupTableUpdated
-                {
-                    LookupTableId = entityId,
-                    LookupTableName = name,
-                    LookupTableFileName = fileName
-                }.ToPublishedEvent(eventSourceId: questionnaireId);
             }
         }
     }

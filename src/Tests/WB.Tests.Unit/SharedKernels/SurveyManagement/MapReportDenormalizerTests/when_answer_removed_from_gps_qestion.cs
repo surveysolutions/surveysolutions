@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Machine.Specifications;
-using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -10,9 +9,9 @@ using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTests
 {
-    class when_answer_removed_from_gps_qestion : MapReportDenormalizerTestContext
+    class when_answer_removed_from_gps_qestion
     {
         Establish context = () =>
         {
@@ -34,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportTests
                 {questionId, gpsVariableName }
             } }, new QuestionnaireIdentity(questionnaireId, 1).ToString());
 
-            denormalizer = CreateMapReportDenormalizer(mapPoints, interviews, questionIdToVariable);
+            denormalizer = Create.MapReportDenormalizer(mapPoints, interviews, questionIdToVariable);
             answersRemoved = Create.Event.AnswersRemoved(Create.Identity(questionId, Empty.RosterVector)).ToPublishedEvent(eventSourceId: interviewId);
         };
 
