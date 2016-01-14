@@ -4,6 +4,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class ApplicationSettingsView : IPlainStorageEntity
     {
+        public int OID { get; set; }
         public string Id { get; set; }
         public string Endpoint { get; set; }
         public int HttpResponseTimeoutInSec { get; set; }

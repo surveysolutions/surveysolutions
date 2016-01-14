@@ -31,8 +31,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly ILogger logger;
         private readonly IPrincipal principal;
         private readonly IMvxMessenger messenger;
-        private readonly IInterviewerQuestionnaireFactory questionnaireFactory;
-        private readonly IInterviewerInterviewFactory interviewFactory;
+        private readonly IInterviewerQuestionnaireAccessor questionnaireFactory;
+        private readonly IInterviewerInterviewAccessor interviewFactory;
 
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
@@ -52,8 +52,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IPasswordHasher passwordHasher,
             IPrincipal principal,
             IMvxMessenger messenger,
-            IInterviewerQuestionnaireFactory questionnaireFactory,
-            IInterviewerInterviewFactory interviewFactory)
+            IInterviewerQuestionnaireAccessor questionnaireFactory,
+            IInterviewerInterviewAccessor interviewFactory)
         {
             this.synchronizationService = synchronizationService;
             this.logger = logger;

@@ -38,8 +38,8 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind(typeof(IAsyncPlainStorage<QuestionnaireModelView>)).To(typeof(SiaqodbPlainStorageWithCache<>)).InSingletonScope();
             this.Bind(typeof(IAsyncPlainStorage<QuestionnaireDocumentView>)).To(typeof(SiaqodbPlainStorageWithCache<>)).InSingletonScope();
             this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SiaqodbPlainStorage<>)).InSingletonScope();
-            this.Bind<IInterviewerQuestionnaireFactory>().To<InterviewerQuestionnaireFactory>();
-            this.Bind<IInterviewerInterviewFactory>().To<InterviewerInterviewFactory>();
+            this.Bind<IInterviewerQuestionnaireAccessor>().To<InterviewerQuestionnaireAccessor>();
+            this.Bind<IInterviewerInterviewAccessor>().To<InterviewerInterviewAccessor>();
 
             this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepositoryWithCache>();
             this.Bind<IPlainInterviewFileStorage>().To<InterviewerPlainInterviewFileStorage>();
