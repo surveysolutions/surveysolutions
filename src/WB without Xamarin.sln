@@ -101,6 +101,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Infrastructure.Native", "Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj", "{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Questionnaire", "Questionnaire", "{84C73772-4C66-43DF-95D6-8CA44DF0DA62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.Questionnaire", "Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj", "{D6616C1D-7C3A-4576-B82B-098721CD4417}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -234,6 +238,12 @@ Global
 		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
 		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6616C1D-7C3A-4576-B82B-098721CD4417}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6616C1D-7C3A-4576-B82B-098721CD4417}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6616C1D-7C3A-4576-B82B-098721CD4417}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6616C1D-7C3A-4576-B82B-098721CD4417}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{D6616C1D-7C3A-4576-B82B-098721CD4417}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6616C1D-7C3A-4576-B82B-098721CD4417}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -278,5 +288,7 @@ Global
 		{572464F5-0EC9-4ABE-9B6D-C74B6E11C782} = {14B7074A-492F-485E-8DEE-F1997AB95D95}
 		{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F} = {572464F5-0EC9-4ABE-9B6D-C74B6E11C782}
 		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF} = {27286D23-04D1-475F-A9AE-E799855896E5}
+		{84C73772-4C66-43DF-95D6-8CA44DF0DA62} = {14B7074A-492F-485E-8DEE-F1997AB95D95}
+		{D6616C1D-7C3A-4576-B82B-098721CD4417} = {84C73772-4C66-43DF-95D6-8CA44DF0DA62}
 	EndGlobalSection
 EndGlobal
