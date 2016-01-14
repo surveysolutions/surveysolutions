@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
         };
 
         Because of = () =>
-            viewModel.Handle(Create.Event.AnswersRemoved(Create.Event.Identity(linkedToQuestionId, answerToRemoveRosterVector)));
+            viewModel.Handle(Create.Event.AnswersRemoved(Create.Identity(linkedToQuestionId, answerToRemoveRosterVector)));
 
         It should_remove_removed_answer_from_options = () =>
             viewModel.Options.Select(option => option.Title).ShouldContainOnly("answer not to remove");
