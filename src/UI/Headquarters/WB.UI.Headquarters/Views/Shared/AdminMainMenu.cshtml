@@ -35,7 +35,7 @@
         </a>
     </li>
 
-    <li class="dropdown @(page == MenuItem.Teams || page == MenuItem.Headquarters ? "active" : "")">
+    <li class="dropdown @(page == MenuItem.Teams || page == MenuItem.Headquarters || page == MenuItem.Interviewers ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
             <i class="glyphicon glyphicon-user"></i> @MainMenu.TeamsAndRoles <b class="caret"></b>
         </a>
@@ -50,9 +50,19 @@
                     @MainMenu.Headquarters
                 </a>
             </li>
+            <li class="@(page == MenuItem.Interviewers ? "active" : "")">
+                <a href="@Url.Action("Index", "Interviewers", new {area = string.Empty})">
+                    @MainMenu.Interviewers
+                </a>
+            </li>
             <li class="@(page == MenuItem.Observers ? "active" : "")">
                 <a href="@Url.Action("Index", "Observer", new {area = string.Empty})">
                     @MainMenu.Observers
+                </a>
+            </li>
+            <li class="@(page == MenuItem.ApiUsers ? "active" : "")">
+                <a href="@Url.Action("Index", "ApiUser", new {area = string.Empty})">
+                    @MainMenu.ApiUsers
                 </a>
             </li>
             <li class="@(page == MenuItem.UserBatchUpload ? "active" : "")">

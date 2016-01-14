@@ -53,7 +53,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
             var allUsers = _.Where(x =>x.IsArchived==input.Archived && x.Roles.Contains(input.Role));
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
-                allUsers = allUsers.Where(x => x.UserName.Contains(input.SearchBy) || x.Email.Contains(input.SearchBy));
+                var searchByToLower = input.SearchBy.ToLower();
+                allUsers = allUsers.Where(x => x.UserName.ToLower().Contains(searchByToLower) || x.Email.ToLower().Contains(searchByToLower));
             }
             return allUsers;
         }

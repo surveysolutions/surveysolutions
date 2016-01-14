@@ -13,6 +13,9 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
@@ -20,7 +23,7 @@ namespace WB.Tests.Integration.CommandServiceTests
     internal class when_executing_constructing_command_and_aggregate_root_does_not_exist_in_repository
     {
         private class Initialize : ICommand { public Guid CommandIdentifier { get; private set; } }
-        private class Initialized {}
+        private class Initialized : IEvent { }
 
         private class Aggregate : AggregateRoot
         {

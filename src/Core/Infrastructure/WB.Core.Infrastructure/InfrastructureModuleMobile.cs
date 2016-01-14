@@ -9,7 +9,6 @@ using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
-using WB.Core.Infrastructure.Implementation.WriteSide;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.WriteSide;
 
@@ -22,8 +21,8 @@ namespace WB.Core.Infrastructure
             registry.BindAsSingleton<IEventTypeResolver, EventTypeResolver>();
             registry.Bind<IClock, DateTimeBasedClock>();
 
-            registry.BindAsSingleton<IAggregateRootRepository, AggregateRootRepositoryWithCache>();
-            registry.BindAsSingleton<IWriteSideCleanerRegistry, WriteSideCleanerRegistry>();
+            registry.BindAsSingleton<IAggregateRootRepositoryWithCache, AggregateRootRepositoryWithCache>();
+            registry.BindToRegisteredInterface<IAggregateRootRepository, IAggregateRootRepositoryWithCache>();
             registry.BindAsSingleton<ICommandService, SequentialCommandService>();
             registry.BindAsSingleton<ILiteEventRegistry, LiteEventRegistry>();
             registry.Bind<ILiteEventBus, LiteEventBus>();

@@ -11,26 +11,30 @@
                 hotkeys.del(saveQuestion);
             }
 
-            if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
-                hotkeys.bindTo($scope)
-                    .add({
-                        combo: saveQuestion,
-                        description: 'Save changes',
-                        allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                        callback: function(event) {
+            
+            hotkeys.bindTo($scope)
+                .add({
+                    combo: saveQuestion,
+                    description: 'Save changes',
+                    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                    callback: function(event) {
+                        if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
                             $scope.saveQuestion();
                             $scope.questionForm.$setPristine();
                             event.preventDefault();
                         }
-                    });
+                    }
+                });
 
-            }
 
             $scope.onKeyPressInOptions = function(keyEvent) {
                 if (keyEvent.which === 13) {
                     keyEvent.preventDefault();
+
+                    var targetDomElement = keyEvent.target ? keyEvent.target : keyEvent.srcElement;
+
                     utilityService.moveFocusAndAddOptionIfNeeded(
-                        event.target ? event.target : event.srcElement,
+                        targetDomElement,
                         ".question-options-editor",
                         ".question-options-editor input.question-option-value-editor",
                         $scope.activeQuestion.options,
@@ -88,6 +92,8 @@
                     $scope.questionForm.$setPristine();
                 }
             };
+
+            $scope.MAX_OPTIONS_COUNT = 200;
 
             var dataBind = function (result) {
                 dictionnaires.allQuestionScopeOptions = result.allQuestionScopeOptions;
@@ -154,7 +160,7 @@
             };
             
             var wasThereOptionsLooseWhileChanginQuestionProperties = function(initialQuestion, actualQuestion) {
-                if (actualQuestion.type != "SingleOption")
+                if (actualQuestion.type !== "SingleOption" || actualQuestion.type !== "MultyOption")
                     return false;
 
                 if ((actualQuestion.wereOptionsTruncated || false) === false)
@@ -213,6 +219,9 @@
             };
 
             $scope.addOption = function () {
+                if ($scope.activeQuestion.optionsCount >= $scope.MAX_OPTIONS_COUNT)
+                    return;
+
                 $scope.activeQuestion.options.push({
                     "value": null,
                     "title": '',
@@ -281,7 +290,7 @@
 
             $scope.removeOption = function (index) {
                 $scope.activeQuestion.options.splice(index, 1);
-                $scope.activeQuestion.optionsCount -= 1;
+                $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
                 $scope.questionForm.$setDirty();
             };
 

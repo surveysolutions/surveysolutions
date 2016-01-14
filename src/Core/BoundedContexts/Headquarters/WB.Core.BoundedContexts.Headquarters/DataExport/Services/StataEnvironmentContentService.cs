@@ -1,9 +1,14 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
+using WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
@@ -17,22 +22,24 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         }
 
 
-        public void CreateEnvironmentFiles(QuestionnaireExportStructure questionnaireExportStructure, string folderPath)
+        public void CreateEnvironmentFiles(QuestionnaireExportStructure questionnaireExportStructure, string folderPath, CancellationToken cancellationToken)
         {
             foreach (var headerStructureForLevel in questionnaireExportStructure.HeaderToLevelMap.Values)
             {
-                this.CreateContentOfAdditionalFile(headerStructureForLevel,
+                cancellationToken.ThrowIfCancellationRequested();
+
+                this.CreateContentOfAdditionalFile(headerStructureForLevel, questionnaireExportStructure,
                     ExportFileSettings.GetContentFileName(headerStructureForLevel.LevelName), folderPath);
             }
         }
 
-        public void CreateContentOfAdditionalFile(HeaderStructureForLevel headerStructureForLevel, string dataFileName, string basePath)
+        private void CreateContentOfAdditionalFile(HeaderStructureForLevel headerStructureForLevel, QuestionnaireExportStructure questionnaireExportStructure, string dataFileName, string basePath)
         {
             var doContent = new StringBuilder();
             
             BuildInsheet(dataFileName, doContent);
 
-            this.BuildLabelsForLevel(headerStructureForLevel, doContent);
+            this.BuildLabelsForLevel(headerStructureForLevel, questionnaireExportStructure, doContent);
 
             var contentFilePath = this.fileSystemAccessor.CombinePath(basePath,
                 this.GetEnvironmentContentFileName(headerStructureForLevel.LevelName));
@@ -42,18 +49,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private string GetEnvironmentContentFileName(string levelName)
         {
-            return string.Format("{0}.{1}", levelName, this.ContentFileNameExtension);
+            return $"{levelName}.{this.ContentFileNameExtension}";
         }
 
-        private string ContentFileNameExtension { get { return "do"; } }
+        private string ContentFileNameExtension => "do";
 
         private static void BuildInsheet(string fileName, StringBuilder doContent)
         {
-            doContent.AppendLine(
-                string.Format("insheet using \"{0}\", tab", fileName));
+            doContent.AppendLine($"insheet using \"{fileName}\", tab");
         }
 
-        protected void BuildLabelsForLevel(HeaderStructureForLevel headerStructureForLevel, StringBuilder doContent)
+        protected void BuildLabelsForLevel(HeaderStructureForLevel headerStructureForLevel, QuestionnaireExportStructure questionnaireExportStructure, StringBuilder doContent)
         {
             foreach (ExportedHeaderItem headerItem in headerStructureForLevel.HeaderItems.Values)
             {
@@ -75,9 +81,24 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                         this.AppendLabelToValuesMatching(doContent, headerItem.ColumnNames[i], labelName);
                     }
 
-                    doContent.AppendLine(
-                        string.Format("label variable {0} `\"{1}\"'", headerItem.ColumnNames[i], this.RemoveNotAllowedChars(headerItem.Titles[i])));
+                    doContent.AppendLine($"label variable {headerItem.ColumnNames[i]} `\"{this.RemoveNotAllowedChars(headerItem.Titles[i])}\"'");
                 }
+            }
+
+            for (int i = 0; i < headerStructureForLevel.LevelScopeVector.Length; i++)
+            {
+                string parentColumnLabel;
+                if (i == 0)
+                {
+                    parentColumnLabel = "InterviewId";
+                }
+                else
+                {
+                    parentColumnLabel = $"Id in \"{questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>(headerStructureForLevel.LevelScopeVector.Take(i))].LevelName}\"";
+                }
+
+                doContent.AppendLine(
+                    $"label variable {ServiceColumns.ParentId}{headerStructureForLevel.LevelScopeVector.Length - i} `\"{parentColumnLabel}\"'");
             }
 
             if (headerStructureForLevel.LevelLabels != null)
@@ -91,7 +112,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private void AppendLabelToValuesMatching(StringBuilder doContent,string columnName, string labelName)
         {
-            doContent.AppendLine(string.Format("label values {0} {1}", columnName, labelName));
+            doContent.AppendLine($"label values {columnName} {labelName}");
         }
 
         private void AppendLabel(StringBuilder doContent, string labelName, IEnumerable<LabelItem> labels)
@@ -104,14 +125,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             foreach (var label in labels)
             {
-                int value;
-                if (int.TryParse(label.Caption, out value) && value < limitValue)
+                decimal value;
+                if (decimal.TryParse(label.Caption, out value) && value < limitValue && (value % 1) == 0)
                 {
-                    localBuilder.AppendFormat("{0} `\"{1}\"' ", label.Caption, this.RemoveNotAllowedChars(label.Title));
+                    localBuilder.Append($"{label.Caption} `\"{this.RemoveNotAllowedChars(label.Title)}\"' ");
                     hasValidValue = true;
                 }
                 else
-                    localBuilder.AppendFormat("/*{0} `\"{1}\"'*/ ", label.Caption, this.RemoveNotAllowedChars(label.Title));
+                    localBuilder.Append($"/*{label.Caption} `\"{this.RemoveNotAllowedChars(label.Title)}\"'*/ ");
             }
 
             doContent.AppendFormat(hasValidValue ? "label define {0} " : "/*label define {0}*/ ", labelName);
@@ -123,7 +144,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         protected string CreateLabelName(string columnName)
         {
-            return string.Format("l{0}", columnName);
+            return $"l{columnName}";
         }
 
         private string RemoveNotAllowedChars(string s)

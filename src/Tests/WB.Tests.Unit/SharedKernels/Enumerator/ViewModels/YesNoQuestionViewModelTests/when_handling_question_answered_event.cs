@@ -58,9 +58,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
         It should_set_checked_order_to_yes_options = () =>
         {
-            viewModel.Options[4].CheckedOrder.ShouldEqual(1);
-            viewModel.Options[1].CheckedOrder.ShouldEqual(null);
-            viewModel.Options[0].CheckedOrder.ShouldEqual(2);
+            viewModel.Options[4].YesAnswerCheckedOrder.ShouldEqual(1);
+            viewModel.Options[1].YesAnswerCheckedOrder.ShouldEqual(null);
+            viewModel.Options[0].YesAnswerCheckedOrder.ShouldEqual(2);
         };
 
         It should_mark_options_as_checked = () => viewModel.Options.Count(x => x.YesSelected).ShouldEqual(2);

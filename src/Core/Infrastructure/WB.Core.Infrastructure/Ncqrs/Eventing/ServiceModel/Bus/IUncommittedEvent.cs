@@ -1,4 +1,6 @@
 ﻿using System;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {
@@ -37,6 +39,6 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         /// <summary>
         /// Gets the event payload.
         /// </summary>
-        object Payload { get; }
+        WB.Core.Infrastructure.EventBus.IEvent Payload { get; }
     }
 }

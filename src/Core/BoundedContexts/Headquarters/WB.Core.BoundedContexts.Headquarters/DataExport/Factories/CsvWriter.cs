@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -25,10 +27,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 
         public void WriteData(string filePath, IEnumerable<string[]> records, string delimiter)
         {
+            if (filePath == null) throw new ArgumentNullException(nameof(filePath));
+            if (records == null) throw new ArgumentNullException(nameof(records));
+            if (delimiter == null) throw new ArgumentNullException(nameof(delimiter));
+
             using (var fileStream = this.fileSystemAccessor.OpenOrCreateFile(filePath, true))
             using (var tabWriter = this.OpenCsvWriter(fileStream, delimiter))
             {
-                foreach (var dataRow in records)
+                foreach (var dataRow in records.Where(x => x != null))
                 {
                     foreach (var cell in dataRow)
                     {

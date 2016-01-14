@@ -28,10 +28,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
         }
 
+
         [Authorize(Roles = "Administrator, Headquarter")]
-        public ActionResult Create(Guid supervisorId)
+        public ActionResult Create(Guid? supervisorId)
         {
-            return this.View(new InterviewerModel() {SupervisorId = supervisorId});
+            if (!supervisorId.HasValue)
+                return this.View(new InterviewerModel() { IsShowSupervisorSelector = true });
+
+            var supervisor = this.GetUserById(supervisorId.Value);
+
+            if (supervisor == null) throw new HttpException(404, string.Empty);
+
+            return this.View(new InterviewerModel() {SupervisorId = supervisorId.Value, SupervisorName = supervisor.UserName});
         }
 
         [HttpPost]
@@ -55,26 +63,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 }
              
                 this.Success("Interviewer was successfully created");
-                return this.Back(model.SupervisorId);
+                return this.Back();
             }
             
             return this.View(model);
         }
 
-        [Authorize(Roles = "Administrator, Supervisor")]
-        public ActionResult Index()
-        {
-            return this.View(this.GlobalInfo.GetCurrentUser().Id);
-        }
-
-        [Authorize(Roles = "Administrator, Supervisor, Headquarter")]
-        public ActionResult Archived(Guid id)
-        {
-            var supervisor = this.GetUserById(id);
-            if (supervisor == null)
-                throw new HttpException(404, string.Empty);
-            return this.View(supervisor);
-        }
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult Edit(Guid id)
@@ -113,22 +107,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 this.UpdateAccount(user: user, editModel: model);
                 
                 this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
-                return this.Back(user.Supervisor.Id);
+                return this.Back();
             }
            
             return this.View(model);
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public ActionResult Back(Guid id)
+        public ActionResult Back()
         {
-            if (!(this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator))
-                return this.RedirectToAction("Index");
-
-            var user = this.GetUserById(id);
-
-            return this.RedirectToAction("Interviewers", "Supervisor",
-                new {id = user.Supervisor == null ? user.PublicKey : user.Supervisor.Id});
+            return this.RedirectToAction("Index", "Interviewers");
         }
     }
 }

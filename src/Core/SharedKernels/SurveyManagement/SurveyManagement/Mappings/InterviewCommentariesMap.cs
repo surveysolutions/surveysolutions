@@ -1,5 +1,6 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
+using WB.Core.Infrastructure.Storage.Postgre.NhExtensions;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Mappings
@@ -43,7 +44,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
                         cmp.Property(x => x.OriginatorUserId);
                         cmp.Property(x => x.OriginatorName);
                         cmp.Property(x => x.OriginatorRole);
-                        cmp.Property(x => x.RosterVector);
+                        cmp.Property(x => x.RosterVector, ptp =>
+                        {
+                            ptp.Type<PostgresSqlArrayType<decimal>>();
+                            ptp.Column(clm => clm.SqlType("numeric[]"));
+                        });
                         cmp.Property(x => x.Roster);
                         cmp.Property(x => x.Timestamp);
                         cmp.Property(x => x.Variable);

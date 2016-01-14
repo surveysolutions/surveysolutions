@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Android.Content;
@@ -14,6 +15,7 @@ using Cirrious.MvvmCross.Binding.Combiners;
 using Cirrious.MvvmCross.Binding.Droid.Views;
 using Cirrious.MvvmCross.Droid.Platform;
 using Cirrious.MvvmCross.Views;
+using MvvmCross.Droid.Support.V7.RecyclerView;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
@@ -109,27 +111,20 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<View>("PaddingLeft", view => new ViewPaddingLeftBinding(view));
             registry.RegisterCustomBindingFactory<View>("Activated", view => new ViewActivatedBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("TextColor", (view) => new TextViewTextColorBinding(view));
+            registry.RegisterCustomBindingFactory<TextView>("UnderlinePressed", (view) => new TextViewUnderlinePressedBinding(view));
 
             base.FillTargetFactories(registry);
         }
 
-        protected override IList<Assembly> AndroidViewAssemblies
-        {
-            get
-            {
-                var toReturn = base.AndroidViewAssemblies;
+        protected override IEnumerable<Assembly> AndroidViewAssemblies => 
+            base.AndroidViewAssemblies.Union(new[] {
+                typeof (FlowLayout).Assembly,
+                typeof (MvxRecyclerView).Assembly,
+                typeof (DrawerLayout).Assembly,
+                typeof (SwitchCompat).Assembly
+            });
 
-                // Add assemblies with other views we use.  When the XML is inflated
-                // MvvmCross knows about the types and won't complain about them.  This
-                // speeds up inflation noticeably.
-                toReturn.Add(typeof(MvxRecyclerView).Assembly);
-                toReturn.Add(typeof(DrawerLayout).Assembly);
-                toReturn.Add(typeof(SwitchCompat).Assembly);
-                return toReturn;
-            }
-        }
-
-        protected override Assembly[] GetViewModelAssemblies()
+        protected override IEnumerable<Assembly> GetViewModelAssemblies()
         {
             return new[]
             {

@@ -171,8 +171,6 @@
     <Compile Include="EventStoreTests\with_in_memory_event_store.cs" />
     <Compile Include="Execute.cs" />
     <Compile Include="FileSystemIOAccessorTests\when_creating_not_existing_folder_and_it_s_parent_folders_also_do_not_exist.cs" />
-    <Compile Include="InterviewStatistics\Create.cs" />
-    <Compile Include="InterviewStatistics\InterviewChartDenormalizerTestContext.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_acreating_interview_with_cascading_questions_in_fixed_roster_and_parent_has_condition.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_reanswering_categorical_parent_cascading_for_the_second_time_with_previous_answer.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_numeric_question_after_answering_single_option_question_and_dependent_cascading_question_has_no_options_for_this_answer_and_it_is_enabled.cs" />
@@ -210,6 +208,7 @@
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_real_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_text_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_condition_uses_two_levels_of_nested_rosters.cs" />
+    <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_inside_roster_with_lookup_table_in_validation.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_invalid_answer_and_all_questions_were_invalid_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_invalid_answer_and_all_questions_were_valid_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_valid_answer_and_all_questions_were_invalid_before_answer.cs" />
@@ -224,10 +223,16 @@
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_all_questions_and_groups_and_rosters_have_empty_enablement_conditions.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_question_has_conditions_referencin_random.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_question_group_and_roster_have_not_empty_enablement_conditions_and_other_question_group_and_roster_have_empty_enablement_conditions.cs" />
+    <Compile Include="InterviewTests\Rosters\when_removing_answer_that_is_source_for_linked_question_in_nested_roster.cs" />
+    <Compile Include="InterviewTests\Rosters\when_removing_answer_that_is_source_for_linked_question_in_other_roster.cs" />
     <Compile Include="InterviewTests\Rosters\when_getting_roster_limit.cs" />
+    <Compile Include="InterviewTests\Rosters\when_removing_answer_that_is_source_for_linked_question_in_other_roster_and_they_in_different_roster_branches.cs" />
+    <Compile Include="InterviewTests\Rosters\when_removing_answer_that_is_source_for_linked_question_in_other_roster_and_they_in_roster.cs" />
     <Compile Include="InterviewTests\Rosters\when_removing_numeric_roster_instance_with_nested_multi_roster.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value_not_correctly.cs" />
     <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value.cs" />
+    <Compile Include="PostgreSQLEventStoreTests\when_stroring_event.cs" />
+    <Compile Include="PostgreSQLEventStoreTests\with_postgres_db.cs" />
     <Compile Include="PostgreSQLTests\when_storing_entity_into_key_value_storage.cs" />
     <Compile Include="PostgreSQLTests\with_postgres_db.cs" />
     <Compile Include="ResourcesTranslationTests\ResourcesTranslationTestsContext.cs" />
@@ -237,10 +242,6 @@
     <Compile Include="SequentialCommandServiceTests\when_executing_3_commands_in_parallel_each_taking_1_second_to_execute.cs" />
     <Compile Include="SequentialCommandServiceTests\when_executing_10_commands_in_parallel_with_small_delays_each_command_taking_half_second_to_execute.cs" />
     <Compile Include="Setup.cs" />
-    <Compile Include="InterviewStatistics\when_chart_statistics_is_empty.cs" />
-    <Compile Include="InterviewStatistics\when_chart_statistics_is_empty_and_6_interviews_created_and_then_deleted_all_together.cs" />
-    <Compile Include="InterviewStatistics\when_chart_statistics_is_empty_and_a_lot_of_events_applying.cs" />
-    <Compile Include="InterviewStatistics\when_chart_statistics_is_in_random_order.cs" />
     <Compile Include="InterviewTests\InterviewTestsContext.cs">
       <SubType>Code</SubType>
     </Compile>

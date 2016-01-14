@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
@@ -15,35 +14,51 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportTests
     {
         Establish context = () =>
         {
+            var questionnaireId = Guid.Parse("11111111111111111111111111111111");
+            long questionnaireVersion = 1;
+            var variableName = "var";
+
             input = Mock.Of<MapReportInputModel>(x
-                => x.Variable == "var"
-                    && x.QuestionnaireId == Guid.Parse("11111111111111111111111111111111")
-                    && x.QuestionnaireVersion == 1);
+                => x.Variable == variableName
+                   && x.QuestionnaireId == questionnaireId
+                   && x.QuestionnaireVersion == questionnaireVersion);
 
-            var answersCollectionMock =
-                Mock.Of<AnswersByVariableCollection>(x => x.Answers == new Dictionary<Guid, Dictionary<string, string>>
-                {
-                    {
-                        interview1Id, new Dictionary<string, string>
-                        {
-                            { "0.5", "11.11;11.11" },
-                            { "1.5", "22;22" },
-                        }
-                    },
-                    {
-                        interview2Id, new Dictionary<string, string>
-                        {
-                            { "#", "5555;66666" }
-                        }
-                    }
+            List<MapReportPoint> points = new List<MapReportPoint>();
+            points.Add(new MapReportPoint("id1")
+            {
+                Latitude = 11.11,
+                Longitude = 11.11,
+                InterviewId = interview1Id,
+                QuestionnaireId = questionnaireId,
+                QuestionnaireVersion = questionnaireVersion,
+                Variable = variableName
+            });
+            points.Add(new MapReportPoint("id2")
+            {
+                Latitude = 22,
+                Longitude = 22,
+                InterviewId = interview1Id,
+                QuestionnaireId = questionnaireId,
+                QuestionnaireVersion = questionnaireVersion,
+                Variable = variableName
+            });
+            points.Add(new MapReportPoint("id3")
+            {
+                Latitude = 5555,
+                Longitude = 66666,
+                InterviewId = interview2Id,
+                QuestionnaireId = questionnaireId,
+                QuestionnaireVersion = questionnaireVersion,
+                Variable = variableName
+            });
 
-                });
+            var repositoryReader = new TestInMemoryWriter<MapReportPoint>();
+            foreach (var mapReportPoint in points)
+            {
+                repositoryReader.Store(mapReportPoint, mapReportPoint.Id);
+            }
 
-            var repositoryReader = new Mock<IReadSideKeyValueStorage<AnswersByVariableCollection>>();
-
-            repositoryReader.Setup(x => x.GetById(repositoryId)).Returns(answersCollectionMock);
-
-            mapReport = CreateMapReport(repositoryReader.Object);
+            mapReport = CreateMapReport(repositoryReader);
         };
 
         Because of = () =>
@@ -64,7 +79,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportTests
         It should_answers_in_second_point_be_specified_value = () =>
             view.Points[1].Answers.ShouldEqual("5555;66666");
 
-        private static string repositoryId = "var-11111111111111111111111111111111-1";
         private static Guid interview1Id = Guid.Parse("11111111111111111111111111111111");
         private static Guid interview2Id = Guid.Parse("22222222222222222222222222222222");
         private static MapReport mapReport;

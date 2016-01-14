@@ -8,6 +8,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
@@ -37,83 +38,62 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             return exportProcess;
         }
 
-        public string AddAllDataExport(Guid questionnaireId, long questionnaireVersion, DataExportFormat exportFormat)
+        public string AddAllDataExport(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat)
         {
-            var questionnaire = questionnaires.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
+            var questionnaireBrowseItem = questionnaires.AsVersioned().Get(questionnaire.QuestionnaireId.FormatGuid(), questionnaire.Version);
+            if (questionnaireBrowseItem == null)
+                throw new ArgumentException($"Questionnaire {questionnaire} wasn't found");
 
-            if (questionnaire == null)
-                throw new ArgumentException($"Questionnaire {questionnaireId.FormatGuid()} with version {questionnaireVersion} wasn't found");
+            var process = new AllDataExportProcessDetails(exportFormat, questionnaire, questionnaireBrowseItem.Title);
 
-            var exportProcess = new AllDataExportProcessDetails(
-                $"(ver. {questionnaireVersion}) {questionnaire.Title}",
-                exportFormat,
-                new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
+            this.EnqueueProcessIfNotYetInQueue(process);
 
-            this.AddDataExportProcessIfPossible(exportProcess, (p) => p.Questionnaire.QuestionnaireId == questionnaireId && p.Questionnaire.Version == questionnaireVersion);
-            return exportProcess.ProcessId;
+            return process.NaturalId;
         }
 
-        public string AddApprovedDataExport(Guid questionnaireId, long questionnaireVersion, DataExportFormat exportFormat)
+        public string AddApprovedDataExport(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat)
         {
-            var questionnaire = questionnaires.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
+            var questionnaireBrowseItem = questionnaires.AsVersioned().Get(questionnaire.QuestionnaireId.FormatGuid(), questionnaire.Version);
+            if (questionnaireBrowseItem == null)
+                throw new ArgumentException($"Questionnaire {questionnaire} wasn't found");
 
-            if (questionnaire == null)
-                throw new ArgumentException($"Questionnaire {questionnaireId.FormatGuid()} with version {questionnaireVersion} wasn't found");
+            var process = new ApprovedDataExportProcessDetails(exportFormat, questionnaire, questionnaireBrowseItem.Title);
 
-            var exportProcess = new ApprovedDataExportProcessDetails(
-                $"(ver. {questionnaireVersion}) {questionnaire.Title}, Approved",
-                exportFormat,
-                new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
+            this.EnqueueProcessIfNotYetInQueue(process);
 
-            this.AddDataExportProcessIfPossible(exportProcess, (p) => p.Questionnaire.QuestionnaireId == questionnaireId && p.Questionnaire.Version == questionnaireVersion);
-            return exportProcess.ProcessId;
+            return process.NaturalId;
         }
 
         public string AddParaDataExport(DataExportFormat exportFormat)
         {
-            var exportProcess = new ParaDataExportProcessDetails(exportFormat);
+            var process = new ParaDataExportProcessDetails(exportFormat);
 
-            this.AddDataExportProcessIfPossible(exportProcess, (p) => true);
-            return exportProcess.ProcessId;
+            this.EnqueueProcessIfNotYetInQueue(process);
+
+            return process.NaturalId;
         }
 
-        private void AddDataExportProcessIfPossible<T>(T exportProcess, Func<T,bool> additionalQuery) where T: IDataExportProcessDetails
+        private void EnqueueProcessIfNotYetInQueue(IDataExportProcessDetails newProcess)
         {
-            var runningOrQueuedDataExportProcessesByTheQuestionnaire =
-                this.processes.Values.OfType<T>().FirstOrDefault(
-                    p =>
-                        (p.Status == DataExportStatus.Queued || p.Status == DataExportStatus.Running) &&
-                        p.Format == exportProcess.Format && additionalQuery(p));
+            if (this.processes.GetOrNull(newProcess.NaturalId)?.IsQueuedOrRunning() ?? false)
+                return;
 
-            if (runningOrQueuedDataExportProcessesByTheQuestionnaire != null)
-            {
-                throw new InvalidOperationException(
-                    $"{runningOrQueuedDataExportProcessesByTheQuestionnaire.Format} export of '{runningOrQueuedDataExportProcessesByTheQuestionnaire.ProcessName}' is runing now");
-            }
-
-            this.processes[exportProcess.ProcessId] = exportProcess;
+            this.processes[newProcess.NaturalId] = newProcess;
         }
 
-        private IDataExportProcessDetails GetDataExportProcess(string processId)
+        public IDataExportProcessDetails[] GetRunningExportProcesses()
         {
-            return this.processes.GetOrNull(processId);
-        }
-
-        public IDataExportProcessDetails[] GetRunningDataExports()
-        {
-            return
-                this.processes.Values.Where(
-                    p =>
-                        (p.Status == DataExportStatus.Queued || p.Status == DataExportStatus.Running))
-                    .OrderBy(p => p.BeginDate)
-                    .ToArray();
+            return this.processes.Values
+                .Where(process => process.IsQueuedOrRunning())
+                .OrderBy(p => p.BeginDate)
+                .ToArray();
         }
 
         public void FinishExportSuccessfully(string processId)
         {
-            var dataExportProcess = this.GetDataExportProcess(processId);
+            var dataExportProcess = this.processes.GetOrNull(processId);
 
-             ThrowIfProcessIsNullOrNotRunningNow(dataExportProcess, processId);
+            ThrowIfProcessIsNullOrNotRunningNow(dataExportProcess, processId);
 
             dataExportProcess.Status=DataExportStatus.Finished;
             dataExportProcess.LastUpdateDate = DateTime.UtcNow;
@@ -122,7 +102,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public void FinishExportWithError(string processId, Exception e)
         {
-            var dataExportProcess = this.GetDataExportProcess(processId);
+            var dataExportProcess = this.processes.GetOrNull(processId);
 
             ThrowIfProcessIsNullOrNotRunningNow(dataExportProcess, processId);
 
@@ -136,7 +116,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 throw new ArgumentException(
                     $"Progress of data export process '{processId}' equals to '{progressInPercents}', but it can't be greater then 100 or less then 0");
 
-            var dataExportProcess = this.GetDataExportProcess(processId);
+            var dataExportProcess = this.processes.GetOrNull(processId);
 
             ThrowIfProcessIsNullOrNotRunningNow(dataExportProcess, processId);
 
@@ -146,18 +126,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public void DeleteDataExport(string processId)
         {
-            this.processes.Remove(processId);
+            this.processes.GetOrNull(processId)?.Cancel();
+
+            this.processes.TryRemove(processId);
         }
 
-        private void ThrowIfProcessIsNullOrNotRunningNow(IDataExportProcessDetails dataExportProcess, string processId)
+        private static void ThrowIfProcessIsNullOrNotRunningNow(IDataExportProcessDetails dataExportProcess, string processId)
         {
             if (dataExportProcess == null)
-                throw new InvalidOperationException($"process with id '{processId}' is absent");
+                throw new InvalidOperationException($"Process with id '{processId}' is absent");
+
             if (dataExportProcess.Status != DataExportStatus.Running)
-            {
                 throw new InvalidOperationException(
-                    $"process with id '{processId}' should be in Running state, but it is in state {dataExportProcess.Status}");
-            }
+                    $"Process '{dataExportProcess.Name}' should be in Running state, but it is in state {dataExportProcess.Status}");
         }
     }
 }

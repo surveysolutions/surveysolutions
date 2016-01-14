@@ -21,7 +21,8 @@
         'perfect_scrollbar',
         'ng-context-menu',
         'ui.ace',
-        'templates'
+        'templates',
+        'ngFileUpload'
     ]);
 
     angular.module('designerApp').config(['$stateProvider', '$urlRouterProvider', '$rootScopeProvider', function ($stateProvider, $urlRouterProvider, $rootScopeProvider) {

@@ -16,28 +16,28 @@ namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests
         Establish context = () =>
         {
             readSideStorageMock = new Mock<IReadSideStorage<ReadSideRepositoryEntity>>();
-            memoryCachedReadSideStore = CreateMemoryCachedReadSideStore(readSideStorageMock.Object);
-            memoryCachedReadSideStore.EnableCache();
+            memoryCachedReadSideStorage = CreateMemoryCachedReadSideStore(readSideStorageMock.Object, cacheSizeInEntities: MaxCountOfCachedEntities);
+            memoryCachedReadSideStorage.EnableCache();
 
             for (int i = 0; i < MaxCountOfCachedEntities - 1; i++)
             {
-                memoryCachedReadSideStore.Store(new ReadSideRepositoryEntity(), id + i);
+                memoryCachedReadSideStorage.Store(new ReadSideRepositoryEntity(), id + i);
             }
-            memoryCachedReadSideStore.Store(null, null_id);
+            memoryCachedReadSideStorage.Store(null, null_id);
         };
         Because of = () =>
-            memoryCachedReadSideStore.DisableCache();
+            memoryCachedReadSideStorage.DisableCache();
 
-        It should_call_Store_of_IReadSideStorage_255_times = () =>
-            readSideStorageMock.Verify(x => x.Store(Moq.It.IsAny<ReadSideRepositoryEntity>(), Moq.It.IsAny<string>()), Times.Exactly(MaxCountOfCachedEntities-1));
+        It should_call_BulkStore_of_IReadSideStorage_once = () =>
+            readSideStorageMock.Verify(x => x.BulkStore(Moq.It.IsAny<List<Tuple<ReadSideRepositoryEntity, string>>>()), Times.Once);
 
         It should_call_Remove_of_IReadSideStorage_once = () =>
           readSideStorageMock.Verify(x => x.Remove(null_id), Times.Once);
 
         It should_return_readable_status = () =>
-            memoryCachedReadSideStore.GetReadableStatus().ShouldEqual("  |  cache disabled  |  cached 0");
+            memoryCachedReadSideStorage.GetReadableStatus().ShouldEqual("  |  cache disabled  |  cached (memory): 0");
 
-        private static MemoryCachedReadSideStore<ReadSideRepositoryEntity> memoryCachedReadSideStore;
+        private static MemoryCachedReadSideStorage<ReadSideRepositoryEntity> memoryCachedReadSideStorage;
         private static Mock<IReadSideStorage<ReadSideRepositoryEntity>> readSideStorageMock;
         private static string id = "id";
         private static string null_id = "null_id";

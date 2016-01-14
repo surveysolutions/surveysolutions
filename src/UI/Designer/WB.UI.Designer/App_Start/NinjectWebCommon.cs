@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
+using System.Web.Hosting;
 using System.Web.Http.Filters;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ncqrs;
@@ -28,6 +29,7 @@ using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.Storage;
 using WB.Core.Infrastructure.Storage.Postgre;
 using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.App_Start;
@@ -36,6 +38,7 @@ using WB.UI.Designer.CommandDeserialization;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Configuration;
+using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
@@ -80,12 +83,24 @@ namespace WB.UI.Designer.App_Start
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
 
             var dynamicCompilerSettings = (IDynamicCompilerSettingsGroup)WebConfigurationManager.GetSection("dynamicCompilerSettingsGroup");
+            string appDataDirectory = HostingEnvironment.MapPath("~/App_Data");
 
-            int postgresCacheSize = WebConfigurationManager.AppSettings["Postgres.CacheSize"].ParseIntOrNull() ?? 1024;
+            var cacheSettings = new ReadSideCacheSettings(
+                enableEsentCache: WebConfigurationManager.AppSettings.GetBool("Esent.Cache.Enabled", @default: true),
+                esentCacheFolder: Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings.GetString("Esent.Cache.Folder", @default: @"Temp\EsentCache")),
+                cacheSizeInEntities: WebConfigurationManager.AppSettings.GetInt("ReadSide.CacheSize", @default: 1024),
+                storeOperationBulkSize: WebConfigurationManager.AppSettings.GetInt("ReadSide.BulkSize", @default: 512));
+
             var mappingAssemblies = new List<Assembly> { typeof(DesignerBoundedContextModule).Assembly };
 
             var readSideSettings = new ReadSideSettings(
                 WebConfigurationManager.AppSettings["ReadSide.Version"].ParseIntOrNull() ?? 0);
+
+            var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
+            {
+                ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
+                MappingAssemblies = new List<Assembly> { typeof(DesignerBoundedContextModule).Assembly}
+            };
 
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
@@ -93,12 +108,11 @@ namespace WB.UI.Designer.App_Start
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(),
-                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, 
-                    postgresCacheSize,
-                    mappingAssemblies),
+                new PostgresKeyValueModule(cacheSettings),
+                new PostgresPlainStorageModule(postgresPlainStorageSettings),
+                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, cacheSettings, mappingAssemblies),
                 new DesignerRegistry(),
                 new DesignerCommandDeserializationModule(),
-                new PostresKeyValueModule(postgresCacheSize),
                 new DesignerBoundedContextModule(dynamicCompilerSettings),
                 new QuestionnaireVerificationModule(),
                 new MembershipModule(),

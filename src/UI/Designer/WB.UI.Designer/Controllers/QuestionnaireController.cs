@@ -40,7 +40,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
-        private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
+        private readonly ILookupTableService lookupTableService;
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
         private readonly ILogger logger;
 
@@ -49,19 +49,18 @@ namespace WB.UI.Designer.Controllers
             IMembershipUserService userHelper,
             IQuestionnaireHelper questionnaireHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
-            IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             ILogger logger,
             IQuestionnaireInfoFactory questionnaireInfoFactory,
-            IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory)
+            IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory, ILookupTableService lookupTableService)
             : base(userHelper)
         {
             this.commandService = commandService;
             this.questionnaireHelper = questionnaireHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
-            this.sharedPersonsViewFactory = sharedPersonsViewFactory;
             this.logger = logger;
             this.questionnaireInfoFactory = questionnaireInfoFactory;
             this.questionnaireChangeHistoryFactory = questionnaireChangeHistoryFactory;
+            this.lookupTableService = lookupTableService;
         }
 
         public ActionResult Clone(Guid id)
@@ -86,9 +85,8 @@ namespace WB.UI.Designer.Controllers
                 try
                 {
                     var questionnaireId = Guid.NewGuid();
-                    this.commandService.Execute(
-                        new CloneQuestionnaireCommand(questionnaireId, model.Title, UserHelper.WebUser.UserId,
-                            model.IsPublic, sourceModel.Source));
+
+                    this.commandService.Execute(new CloneQuestionnaireCommand(questionnaireId, model.Title, UserHelper.WebUser.UserId, model.IsPublic, sourceModel.Source));
 
                     return this.RedirectToAction("Open", "App", new { id = questionnaireId });
                 }
@@ -333,6 +331,12 @@ namespace WB.UI.Designer.Controllers
                 };
             }
             return commandResult;
+        }
+
+        public FileResult ExportLookupTable(Guid id, Guid lookupTableId)
+        {
+            var lookupTableContentFile = this.lookupTableService.GetLookupTableContentFile(id, lookupTableId);
+            return File(lookupTableContentFile.Content, "text/csv", lookupTableContentFile.FileName);
         }
 
         public FileResult ExportOptions()

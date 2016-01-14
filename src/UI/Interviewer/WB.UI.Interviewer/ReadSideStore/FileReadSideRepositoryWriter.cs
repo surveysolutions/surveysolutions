@@ -2,13 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.Backup;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.UI.Interviewer.ReadSideStore
 {
-    public class FileReadSideRepositoryWriter<TEntity> : IReadSideKeyValueStorage<TEntity>, IBackupable
+    public class FileReadSideRepositoryWriter<TEntity> : IReadSideKeyValueStorage<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly ISerializer serializer;
@@ -54,6 +53,14 @@ namespace WB.UI.Interviewer.ReadSideStore
                 this.memcache[id] = this.serializer.Deserialize<TEntity>(File.ReadAllText(filePath));
             }
             return this.memcache[id];
+        }
+
+        public void BulkStore(List<Tuple<TEntity, string>> bulk)
+        {
+            foreach (var tuple in bulk)
+            {
+                Store(tuple.Item1, tuple.Item2);
+            }
         }
 
         public void Remove(string id)

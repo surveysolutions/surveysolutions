@@ -16,19 +16,19 @@ namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests
         Establish context = () =>
         {
             readSideStorageMock = new Mock<IReadSideStorage<ReadSideRepositoryEntity>>();
-            memoryCachedReadSideStore = CreateMemoryCachedReadSideStore(readSideStorageMock.Object);
-            memoryCachedReadSideStore.EnableCache();
+            memoryCachedReadSideStorage = CreateMemoryCachedReadSideStore(readSideStorageMock.Object);
+            memoryCachedReadSideStorage.EnableCache();
         };
         Because of = () =>
-            memoryCachedReadSideStore.Store(view, id);
+            memoryCachedReadSideStorage.Store(view, id);
 
         It should_never_call_Store_of_IReadSideStorage = () =>
             readSideStorageMock.Verify(x => x.Store(view, id), Times.Never);
 
         It should_store_view_in_cache = () =>
-           memoryCachedReadSideStore.GetById(id).ShouldEqual(view);
+           memoryCachedReadSideStorage.GetById(id).ShouldEqual(view);
 
-        private static MemoryCachedReadSideStore<ReadSideRepositoryEntity> memoryCachedReadSideStore;
+        private static MemoryCachedReadSideStorage<ReadSideRepositoryEntity> memoryCachedReadSideStorage;
         private static Mock<IReadSideStorage<ReadSideRepositoryEntity>> readSideStorageMock;
         private static string id = "id_view";
         private static ReadSideRepositoryEntity view = new ReadSideRepositoryEntity();

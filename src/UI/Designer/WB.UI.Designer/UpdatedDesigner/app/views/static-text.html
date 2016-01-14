@@ -15,7 +15,6 @@
         </div>
         <div class="pull-right">
             <button id="edit-static-text-delete-button" ng-show="!questionnaire.isReadOnlyForUser" class="btn btn-lg btn-link" ng-click="deleteStaticText()" unsaved-warning-clear>Delete</button>
-            <button id="edit-static-text-clone-button" ng-show="!questionnaire.isReadOnlyForUser" class="btn btn-lg btn-link" ng-click="cloneStaticText()">Clone</button>
             <ng-include src="'moveToChapterSnippet'" ng-show="!questionnaire.isReadOnlyForUser" />
         </div>
     </div>

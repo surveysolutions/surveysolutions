@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {
@@ -71,6 +72,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         }
 
         public virtual void RegisterHandler<TEvent>(IEventHandler<TEvent> handler)
+            where TEvent: WB.Core.Infrastructure.EventBus.IEvent
         {
             var eventDataType = typeof(TEvent);
             var eventHandlerType = handler.GetType();

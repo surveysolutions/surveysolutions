@@ -78,7 +78,6 @@
     <Compile Include="Aggregates\Tablet.cs" />
     <Compile Include="ClientIdentifier.cs" />
     <Compile Include="Commands\RegisterTabletCommand.cs" />
-    <Compile Include="Documents\ClientDeviceDocument.cs" />
     <Compile Include="Documents\TabletDocument.cs" />
     <Compile Include="EventHandler\TabletDenormalizer.cs" />
     <Compile Include="Events\Sync\ClientDeviceLastSyncItemUpdated.cs" />

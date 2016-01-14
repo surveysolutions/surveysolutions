@@ -13,6 +13,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog
         QuestionnaireAssemblyProcessed,
         GetInterviewPackages,
         GetInterviewPackage,
-        InterviewPackageProcessed
+        InterviewPackageProcessed,
+        GetInterviews,
+        GetInterview,
+        InterviewProcessed,
     }
 }

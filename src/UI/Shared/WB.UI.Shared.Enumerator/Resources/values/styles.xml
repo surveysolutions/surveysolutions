@@ -199,14 +199,8 @@
     <item name="android:background">@drawable/theme_blue_light_btn_default_holo_light</item>
   </style>
 
-
-
-
-
   <!-- application theme -->
-
-  <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-
+  <style name="AppTheme" parent="Theme.AppCompat.Light">
     <item name="windowNoTitle">true</item>
     <item name="windowActionBar">false</item>
     <item name="android:windowBackground">@color/applicationBackground</item>
@@ -214,15 +208,14 @@
     <item name="colorPrimaryDark">@color/darkActionBar</item>
 
     <!-- elements -->
-    <item name="android:checkboxStyle">@style/CheckBoxTheme</item>
-    <item name="android:editTextStyle">@style/EditTextTheme</item>
-    <item name="android:radioButtonStyle">@style/RadioButtonTheme</item>
-    <item name="android:buttonStyle">@style/ButtonAppTheme</item>
-    <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewTheme</item>
-    <item name="android:spinnerStyle">@style/SpinnerTheme</item>
-    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemTheme</item>
-    <item name="android:dropDownListViewStyle">@style/DropDownListViewStyleTheme</item>
-
+    <item name="checkboxStyle">@style/CheckBoxTheme</item>
+    <item name="editTextStyle">@style/EditTextTheme</item>
+    <item name="radioButtonStyle">@style/RadioButtonTheme</item>
+    <item name="buttonStyle">@style/ButtonAppTheme</item>
+    <item name="autoCompleteTextViewStyle">@style/AutoCompleteTextViewTheme</item>
+    <item name="spinnerStyle">@style/SpinnerTheme</item>
+    <item name="spinnerDropDownItemStyle">@style/SpinnerDropDownItemTheme</item>
+    <item name="dropDownListViewStyle">@style/DropDownListViewStyleTheme</item>
   </style>
 
   <style name="GrayAppTheme" parent="AppTheme">

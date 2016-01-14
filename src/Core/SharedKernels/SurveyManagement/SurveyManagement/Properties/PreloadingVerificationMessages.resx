@@ -172,7 +172,7 @@
     <value>Only integer values are allowed.</value>
   </data>
   <data name="PL0019_ExpectedDecimalNotParsed" xml:space="preserve">
-    <value>Categorical question cannot have non-numeric values.</value>
+    <value>Only real values are allowed.</value>
     <comment>Non-numeric value found for categorical question</comment>
   </data>
   <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
@@ -184,14 +184,14 @@
   <data name="PL0024_DataWasNotFound" xml:space="preserve">
     <value>Preloading data was not found</value>
   </data>
-  <data name="PL0025_SupervisorNameIsEmpty" xml:space="preserve">
-    <value>The name of Supervisor was not provided</value>
+  <data name="PL0025_ResponsibleNameIsEmpty" xml:space="preserve">
+    <value>The name of Responsible was not provided</value>
   </data>
-  <data name="PL0026_SupervisorWasNotFound" xml:space="preserve">
-    <value>Provided Supervisor was not found</value>
+  <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+    <value>Provided Responsible was not found</value>
   </data>
-  <data name="PL0027_SupervisorIsLocked" xml:space="preserve">
-    <value>Supervisor is locked</value>
+  <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
+    <value>Responsible is locked</value>
   </data>
   <data name="PL0028_UserIsNotSupervisor" xml:space="preserve">
     <value>Provided User is not Supervisor</value>

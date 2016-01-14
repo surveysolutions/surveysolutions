@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.Infrastructure.FileSystem;
@@ -35,17 +36,23 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         public void ExportData(AllDataExportProcessDetails dataExportProcessDetails)
         {
+            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+
             string folderForDataExport =
               this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(dataExportProcessDetails.Questionnaire), allDataFolder);
 
             this.ClearFolder(folderForDataExport);
 
+            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+
             var exportProgress = new Microsoft.Progress<int>();
 
             exportProgress.ProgressChanged +=
-                (sender, donePercent) => UpdateDataExportProgress(dataExportProcessDetails.ProcessId, donePercent);
+                (sender, donePercent) => UpdateDataExportProgress(dataExportProcessDetails.NaturalId, donePercent);
 
-            this.ExportAllDataIntoDirectory(dataExportProcessDetails.Questionnaire, folderForDataExport, exportProgress);
+            this.ExportAllDataIntoDirectory(dataExportProcessDetails.Questionnaire, folderForDataExport, exportProgress, dataExportProcessDetails.CancellationToken);
+
+            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
             var filesToArchive = this.fileSystemAccessor.GetFilesInDirectory(folderForDataExport);
 
@@ -54,17 +61,23 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         public void ExportData(ApprovedDataExportProcessDetails dataExportProcessDetails)
         {
+            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+
             string folderForDataExport =
               this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(dataExportProcessDetails.Questionnaire), approvedDataFolder);
 
             this.ClearFolder(folderForDataExport);
 
+            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+
             var exportProgress = new Microsoft.Progress<int>();
 
             exportProgress.ProgressChanged +=
-                (sender, donePercent) => UpdateDataExportProgress(dataExportProcessDetails.ProcessId, donePercent);
+                (sender, donePercent) => UpdateDataExportProgress(dataExportProcessDetails.NaturalId, donePercent);
 
-            ExportApprovedDataIntoDirectory(dataExportProcessDetails.Questionnaire, folderForDataExport, exportProgress);
+            this.ExportApprovedDataIntoDirectory(dataExportProcessDetails.Questionnaire, folderForDataExport, exportProgress, dataExportProcessDetails.CancellationToken);
+
+            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
             var filesToArchive = this.fileSystemAccessor.GetFilesInDirectory(folderForDataExport);
 
@@ -73,9 +86,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         protected abstract DataExportFormat Format { get; }
 
-        protected abstract void ExportAllDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity, string directoryPath, IProgress<int> progress);
+        protected abstract void ExportAllDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity, string directoryPath, IProgress<int> progress, CancellationToken cancellationToken);
 
-        protected abstract void ExportApprovedDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity, string directoryPath, IProgress<int> progress);
+        protected abstract void ExportApprovedDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity, string directoryPath, IProgress<int> progress, CancellationToken cancellationToken);
 
         private void UpdateDataExportProgress(string dataExportProcessDetailsId, int progressInPercents)
         {

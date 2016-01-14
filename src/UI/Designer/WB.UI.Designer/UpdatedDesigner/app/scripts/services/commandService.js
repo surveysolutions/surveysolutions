@@ -1,8 +1,8 @@
 ﻿(function() {
     angular.module('designerApp')
         .factory('commandService', [
-            '$http', 'blockUI',
-            function ($http, blockUI) {
+            '$http', 'blockUI', 'Upload',
+            function ($http, blockUI, Upload) {
 
                 var urlBase = '../../api/command';
                 var commandService = {};
@@ -28,6 +28,42 @@
 
                 commandService.execute = function(type, command) {
                     return commandCall(type, command);
+                };
+
+                commandService.updateLookupTable = function (questionnaireId, lookupTable) {
+                    blockUI.start();
+
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "lookupTableId": lookupTable.itemId,
+                        "lookupTableName": lookupTable.name,
+                        "lookupTableFileName": lookupTable.fileName
+                    };
+
+                    return Upload.upload({
+                        url: urlBase + '/UpdateLookupTable',
+                        data: { file: _.isNull(lookupTable.file) ? "" : lookupTable.file, "command": JSON.stringify(command) }
+                    }).success(function () {
+                        blockUI.stop();
+                    }).error(function () {
+                        blockUI.stop();
+                    });
+                };
+
+                commandService.addLookupTable = function (questionnaireId, lookupTable) {
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "lookupTableId": lookupTable.itemId
+                    };
+                    return commandCall("AddLookupTable", command);
+                };
+
+                commandService.deleteLookupTable = function (questionnaireId, itemId) {
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "lookupTableId": itemId
+                    };
+                    return commandCall("DeleteLookupTable", command);
                 };
 
                 commandService.addMacro = function (questionnaireId, macro) {
@@ -56,33 +92,6 @@
                         "macroId": itemId
                     };
                     return commandCall("DeleteMacro", command);
-                };
-
-
-                commandService.cloneQuestion = function(questionnaireId, itemIdToClone, newId) {
-                    return commandCall('CloneQuestionById', {
-                        questionId: itemIdToClone,
-                        targetId: newId,
-                        questionnaireId: questionnaireId
-                    });
-                };
-
-                commandService.cloneStaticText = function (questionnaireId, itemIdToClone, newId) {
-                    return commandCall('CloneStaticText', {
-                        sourceEntityId: itemIdToClone,
-                        entityId: newId,
-                        questionnaireId: questionnaireId
-                    });
-                };
-
-                commandService.cloneGroup = function (questionnaireId, groupIdToClone, targetIndex, newId) {
-
-                    return commandCall('CloneGroup', {
-                        sourceGroupId: groupIdToClone,
-                        targetIndex: targetIndex,
-                        groupId: newId,
-                        questionnaireId: questionnaireId
-                    });
                 };
 
                 commandService.sendUpdateQuestionCommand = function(questionnaireId, question, shouldGetOptionsOnServer) {
@@ -192,7 +201,7 @@
                         "isRoster": true,
                         "rosterSizeQuestionId": null,
                         "rosterSizeSource": "FixedTitles",
-                        "fixedRosterTitles": [{ value:0, title: "Title" }],
+                        "fixedRosterTitles": [{ value: 1, title: "First Title" }, { value:2, title: "Second Title" }],
                         "rosterTitleQuestionId": null,
                         "parentGroupId": parentGroupId,
                         "variableName": group.variableName,

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviews;
@@ -12,16 +10,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 {
     public class ChartStatisticsViewFactory : IChartStatisticsViewFactory
     {
-        private readonly IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate> statisticsReader;
+        private readonly IOldschoolChartStatisticsDataProvider oldschoolChartStatisticsDataProvider;
 
-        public ChartStatisticsViewFactory(IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate> statisticsReader)
+        public ChartStatisticsViewFactory(IOldschoolChartStatisticsDataProvider oldschoolChartStatisticsDataProvider)
         {
-            this.statisticsReader = statisticsReader;
+            this.oldschoolChartStatisticsDataProvider = oldschoolChartStatisticsDataProvider;
         }
 
         public ChartStatisticsView Load(ChartStatisticsInputModel input)
         {
-            StatisticsGroupedByDateAndTemplate collectedStatistics = statisticsReader.GetById(GetStatisticsKey(input.QuestionnaireId, input.QuestionnaireVersion));
+            StatisticsGroupedByDateAndTemplate collectedStatistics = this.oldschoolChartStatisticsDataProvider.GetStatisticsInOldFormat(input.QuestionnaireId, input.QuestionnaireVersion);
 
             if (collectedStatistics == null || collectedStatistics.StatisticsByDate.Count == 0)
                 return new ChartStatisticsView { Lines = new object[0][][] };
@@ -30,7 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             var maxCollectedDate = collectedStatistics.StatisticsByDate.Keys.Max();
 
             var leftEdge = new[] { input.From ?? minCollectedDate.AddDays(-1), input.To ?? minCollectedDate.AddDays(-1) }.Min();
-            var rightEdge = new []{input.From ?? maxCollectedDate, input.To ?? maxCollectedDate}.Max();
+            var rightEdge = new[] { input.From ?? maxCollectedDate, input.To ?? maxCollectedDate }.Max();
 
             return CreateChartStatisticsView(collectedStatistics.StatisticsByDate, leftEdge, rightEdge, minCollectedDate);
         }
@@ -42,7 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
             var startValueToFill = range.LastOrDefault(x => x.Key <= start).Value ?? new QuestionnaireStatisticsForChart();
             var stopValueToFill = range.LastOrDefault(x => x.Key <= stop).Value ?? new QuestionnaireStatisticsForChart();
-            
+
             var currentDate = start.Date;
             Dictionary<DateTime, QuestionnaireStatisticsForChart> selectedRange = new Dictionary<DateTime, QuestionnaireStatisticsForChart>();
 
@@ -53,7 +51,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
             while (currentDate < stop)
             {
-                if(range.ContainsKey(currentDate))
+                if (range.ContainsKey(currentDate))
                     selectedRange.Add(currentDate, range[currentDate]);
                 else if (currentDate == pointToBeSetGraphLooksOk)
                     selectedRange.Add(currentDate, new QuestionnaireStatisticsForChart());
@@ -61,7 +59,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 currentDate = currentDate.AddDays(1);
             }
 
-            if(start != stop)
+            if (start != stop)
                 selectedRange.Add(stop, range.ContainsKey(stop) ? range[stop] : stopValueToFill);
 
             IEnumerable<IEnumerable<Tuple<DateTime, int>>> rangeLines = new[]
@@ -106,13 +104,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
         private static string FormatDate(DateTime x)
         {
             return x.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
-        }
-
-        private string GetStatisticsKey(Guid questionnaireId, long questionnaireVersion)
-        {
-            return String.Format("{0}_{1}$",
-                questionnaireId,
-                questionnaireVersion.ToString().PadLeft(3, '_'));
         }
     }
 }

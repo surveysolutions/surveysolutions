@@ -36,6 +36,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
             {
                 query = x => x.Email.ToLower() == input.UserEmail.ToLower();
             }
+            else if (!string.IsNullOrEmpty(input.DeviceId))
+            {
+                query = x => x.DeviceId == input.DeviceId;
+            }
 
             return
                 this.users.Query(queryable =>

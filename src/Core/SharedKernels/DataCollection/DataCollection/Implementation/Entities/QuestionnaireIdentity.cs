@@ -1,20 +1,20 @@
 using System;
-using System.Linq.Expressions;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
-    public struct QuestionnaireIdentity
+    public class QuestionnaireIdentity
     {
+        public QuestionnaireIdentity() { }
         public QuestionnaireIdentity(Guid questionnaireId, long version)
         {
             this.QuestionnaireId = questionnaireId;
             this.Version = version;
         }
 
-        public long Version;
+        public long Version { get; set; }
 
-        public Guid QuestionnaireId;
+        public Guid QuestionnaireId { get; set; }
 
         public bool Equals(QuestionnaireIdentity other)
         {
@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public override string ToString()
         {
-            return string.Format("{0}${1}", this.QuestionnaireId.FormatGuid(), this.Version);
+            return $"{this.QuestionnaireId.FormatGuid()}${this.Version}";
         }
 
         public override int GetHashCode()
@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             var idParameters = id.Split('$');
             if (idParameters.Length != 2)
-                throw new FormatException(String.Format("id value '{0}' is not in the correct format.", id));
+                throw new FormatException($"id value '{id}' is not in the correct format.");
 
             try
             {
@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
             catch (Exception e)
             {
-                throw new FormatException(String.Format("id value '{0}' is not in the correct format.", id), e);
+                throw new FormatException($"id value '{id}' is not in the correct format.", e);
             }
         }
     }

@@ -5,9 +5,11 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Views.Account;
@@ -26,6 +28,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Services;
+
 using AccountAR = WB.Core.BoundedContexts.Designer.Aggregates.AccountAR;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 
@@ -70,7 +73,8 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IEventHandler>().To<QuestionsAndGroupsCollectionDenormalizer>().InSingletonScope();
             this.Bind<IDesignerEngineVersionService>().To<DesignerEngineVersionService>().InSingletonScope();
             this.Bind<ICodeGenerator>().To<CodeGenerator>();
-
+            this.Bind<ILookupTableService>().To<LookupTableService>();
+            
             this.Kernel.RegisterFactory<QuestionnaireListViewFactory>();
             this.Kernel.RegisterFactory<QuestionnaireViewFactory>();
             this.Kernel.RegisterFactory<ChapterInfoViewFactory>();
@@ -106,13 +110,14 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<AddMacro>(command => command.QuestionnaireId, aggregate => aggregate.AddMacro)
                 .Handles<DeleteMacro>(command => command.QuestionnaireId, aggregate => aggregate.DeleteMacro)
                 .Handles<UpdateMacro>(command => command.QuestionnaireId, aggregate => aggregate.UpdateMacro)
+                 // LookupTable
+                .Handles<AddLookupTable>(command => command.QuestionnaireId, aggregate => aggregate.AddLookupTable)
+                .Handles<UpdateLookupTable>(command => command.QuestionnaireId, aggregate => aggregate.UpdateLookupTable)
+                .Handles<DeleteLookupTable>(command => command.QuestionnaireId, aggregate => aggregate.DeleteLookupTable)
 
                 .Handles<AddGroupCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.AddGroupAndMoveIfNeeded(command.GroupId, command.ResponsibleId, command.Title, command.VariableName, command.RosterSizeQuestionId, command.Description, command.Condition, command.ParentGroupId, command.IsRoster, command.RosterSizeSource, command.FixedRosterTitles, command.RosterTitleQuestionId, command.Index))
                 .Handles<AddSharedPersonToQuestionnaireCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.AddSharedPerson(command.PersonId, command.Email, command.ShareType, command.ResponsibleId))
                 .Handles<AddStaticTextCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.AddStaticTextAndMoveIfNeeded(command.EntityId, command.ParentId, command.Text, command.ResponsibleId, command.Index))                
-                .Handles<CloneGroupCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.CloneGroup(command.GroupId, command.ResponsibleId, command.SourceGroupId, command.TargetIndex))
-                .Handles<CloneQuestionByIdCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.CloneQuestionById(command.QuestionId, command.ResponsibleId, command.TargetId))
-                .Handles<CloneStaticTextCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.CloneStaticText(command.EntityId, command.SourceEntityId, command.ResponsibleId))
                 .Handles<DeleteGroupCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteGroup(command.GroupId, command.ResponsibleId))
                 .Handles<DeleteQuestionnaireCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteQuestionnaire())
                 .Handles<DeleteStaticTextCommand>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteStaticText(command.EntityId, command.ResponsibleId))

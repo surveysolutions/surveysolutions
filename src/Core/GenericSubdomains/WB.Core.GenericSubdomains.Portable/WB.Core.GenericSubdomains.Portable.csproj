@@ -90,7 +90,6 @@
     </Compile>
     <Compile Include="QueryableExtensions.cs" />
     <Compile Include="RosterVectorUtils.cs" />
-    <Compile Include="Services\IInfoFileSupplierRegistry.cs" />
     <Compile Include="Services\ISerializer.cs" />
     <Compile Include="Services\ILogger.cs" />
     <Compile Include="Services\INetworkService.cs" />

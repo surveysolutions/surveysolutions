@@ -59,12 +59,14 @@ internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelIn
 	}
 	
 <#
+	LookupTablesDefenitions(LookupTables);
 	QuestionsStateDefenitions(Model.Questions);
+
 #>
 
 <#
 	foreach (var @roster in Model.Rosters) 
-	{
+    {
 #>
 	public <#=Model.RosterType#><<#=@roster.GeneratedTypeName#>> <#=@roster.VariableName#>
 	{

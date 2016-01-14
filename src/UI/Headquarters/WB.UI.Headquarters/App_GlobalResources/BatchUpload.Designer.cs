@@ -223,6 +223,33 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You must choose a file to upload.
+        /// </summary>
+        internal static string ImportInterviews_ChooseFile {
+            get {
+                return ResourceManager.GetString("ImportInterviews_ChooseFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select.
+        /// </summary>
+        internal static string ImportInterviews_SelectButtonText {
+            get {
+                return ResourceManager.GetString("ImportInterviews_SelectButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select supervisor.
+        /// </summary>
+        internal static string ImportInterviews_SelectSupervisor {
+            get {
+                return ResourceManager.GetString("ImportInterviews_SelectSupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to is in verification process, verified.
         /// </summary>
         internal static string InVerificationProcess {
@@ -273,6 +300,15 @@ namespace Resources {
         internal static string PleaseWait {
             get {
                 return ResourceManager.GetString("PleaseWait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File does not contain required column(s) by prefilled questions: &lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;.
+        /// </summary>
+        internal static string PrefilledQuestionsRequired {
+            get {
+                return ResourceManager.GetString("PrefilledQuestionsRequired", resourceCulture);
             }
         }
         

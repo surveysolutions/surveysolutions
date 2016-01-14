@@ -143,7 +143,12 @@
                 $rootScope.$broadcast("closeMacrosList", {});
             };
 
+
             $scope.$on('openMacrosList', function (scope, params) {
+
+                $rootScope.$broadcast("closeChaptersListRequested", {});
+                $rootScope.$broadcast("closeLookupTablesRequested", {});
+
                 $scope.unfold();
                 if (!_.isUndefined(params) && !_.isUndefined(params.focusOn)) {
                     setTimeout(function () { utilityService.focus("focusMacro" + params.focusOn); }, 500);

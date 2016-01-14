@@ -7166,6 +7166,9 @@ textarea {
 .icon-macro {
   background-position: 0 -388px;
 }
+.icon-lookup {
+  background-position: 0 -413px;
+}
 .icon-error.icon-numeric {
   background-position: -30px 0;
 }
@@ -7201,6 +7204,9 @@ textarea {
 }
 .icon-error.icon-macro {
   background-position: -30px -388px;
+}
+.icon-error.icon-lookup {
+  background-position: -30px -413px;
 }
 .mCSB_container {
   margin-right: 0;
@@ -7788,10 +7794,13 @@ textarea#edit-group-description {
   text-decoration: none;
 }
 #designer-editor.container section#main #left-menu ul li a.left-menu-chapters {
-  background: url(i/chapter-panel-btn.png) 0 19px no-repeat;
+  background: url(i/designer-left-icons.png) 0 0 no-repeat;
 }
 #designer-editor.container section#main #left-menu ul li a.left-menu-macroses {
-  background: url(i/macro-panel-btn.png) center center no-repeat;
+  background: url(i/designer-left-icons.png) 0 -200px no-repeat;
+}
+#designer-editor.container section#main #left-menu ul li a.left-menu-lookupTables {
+  background: url(i/designer-left-icons.png) 0 -250px no-repeat;
 }
 #designer-editor.container section#main #left-menu ul li a:hover {
   background-color: #dbdfe2;
@@ -7812,6 +7821,36 @@ textarea#edit-group-description {
   -o-transition: left 0.4s ease;
   transition: left 0.4s ease;
 }
+#designer-editor.container section#main .left-side-panel .btn[disabled] {
+  color: #7e898f;
+}
+#designer-editor.container section#main .left-side-panel .left-side-panel-content {
+  background: #e5e8ea;
+  height: 100%;
+  position: relative;
+}
+#designer-editor.container section#main .left-side-panel .left-side-panel-content h3 {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #3f3f3f;
+  text-transform: none;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 18px;
+  margin: 18px 24px 20px 18px;
+  color: #7e898f;
+  padding-left: 10px;
+}
+#designer-editor.container section#main .left-side-panel .left-side-panel-content .button-holder {
+  margin: 8px;
+  padding-left: 24px;
+  padding-top: 24px;
+  border-top: 2px solid #dbdfe2;
+}
+#designer-editor.container section#main .left-side-panel .left-side-panel-content .button-holder input,
+#designer-editor.container section#main .left-side-panel .left-side-panel-content .button-holder button,
+#designer-editor.container section#main .left-side-panel .left-side-panel-content .button-holder .btn {
+  background: #e5e8ea;
+}
 #designer-editor.container section#main .left-side-panel .foldback-region {
   position: absolute;
   top: 0;
@@ -7825,6 +7864,9 @@ textarea#edit-group-description {
   background: url(i/left-panel-shadow-small.png) repeat-y;
 }
 #designer-editor.container section#main .left-side-panel.chapters .foldback-region {
+  left: 75%;
+}
+#designer-editor.container section#main .left-side-panel.lookup-tables .foldback-region {
   left: 75%;
 }
 #designer-editor.container section#main .left-side-panel .foldback-button {
@@ -7851,38 +7893,141 @@ textarea#edit-group-description {
 #designer-editor.container section#main .left-side-panel.unfolded .foldback-button {
   display: block;
 }
-#designer-editor.container section#main .left-side-panel .macros-panel,
-#designer-editor.container section#main .left-side-panel .chapter-panel {
+#designer-editor.container section#main .lookup-tables-panel {
+  width: 75%;
+}
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables {
   height: 100%;
-  background: #e5e8ea;
+}
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  padding-right: 30px;
+  padding-left: 20px;
+}
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li {
+  background: #fff;
+  margin-bottom: 7px;
+  padding: 5px 10px 5px 10px;
+  border-bottom-left-radius: 8px;
+  border-top-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-top-right-radius: 8px;
+  border: 2px solid #fff;
+  position: relative;
+  z-index: 10;
+  font-family: "Lucida Console", Monaco, monospace;
+}
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li:hover {
+  border: 2px solid #d9dde0;
+}
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .drop-box {
+  color: #78838a;
+  border: 2px dashed #78838a;
+  height: 30px;
+  text-align: center;
+  line-height: 26px;
+  display: none;
+}
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li.dragover .drop-box {
+  display: block;
+}
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li input,
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li textarea {
+  display: block;
+  border: none;
+  border-color: #fff;
+  box-shadow: none;
+  font-family: Arial, Helvetica, sans-serif;
+  padding-left: 0;
+  padding-right: 0;
+  border-radius: 0;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+}
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li input.table-name {
+  width: 275px;
+  color: #e004c9;
+}
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .form-control[disabled],
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .form-control[readonly],
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li fieldset[disabled] .form-control {
+  background: #fff;
+}
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li input[type="text"][placeholder],
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li textarea[placeholder] {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  text-overflow: ellipsis;
+}
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li input[type="text"]::-moz-placeholder,
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li textarea::-moz-placeholder {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  text-overflow: ellipsis;
+}
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li input[type="text"]:-ms-input-placeholder,
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li textarea:-ms-input-placeholder {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  text-overflow: ellipsis;
+}
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li input[type="text"]::-webkit-input-placeholder,
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li textarea::-webkit-input-placeholder {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  text-overflow: ellipsis;
+}
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .divider {
+  height: 2px;
+  width: 275px;
+  background: #d9dde0;
+}
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li a.delete-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: block;
+  background: url("i/cross-red.png") center center no-repeat;
+  width: 15px;
+  height: 15px;
+  filter: alpha(opacity=30);
+  -webkit-opacity: 0.3;
+  -moz-opacity: 0.3;
+  opacity: 0.3;
+}
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li a.delete-btn:hover {
+  filter: alpha(opacity=100);
+  -webkit-opacity: 1;
+  -moz-opacity: 1;
+  opacity: 1;
+}
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .actions {
+  margin-left: -6px;
+  margin-right: -6px;
   position: relative;
 }
-#designer-editor.container section#main .left-side-panel .macros-panel h3,
-#designer-editor.container section#main .left-side-panel .chapter-panel h3 {
-  font-family: Arial, Helvetica, sans-serif;
-  color: #3f3f3f;
-  text-transform: none;
-  font-weight: normal;
-  font-size: 18px;
-  line-height: 18px;
-  margin: 18px 24px 20px 18px;
-  color: #7e898f;
-  padding-left: 10px;
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .actions button,
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .actions a.btn {
+  background: #fff;
 }
-#designer-editor.container section#main .left-side-panel .macros-panel .button-holder,
-#designer-editor.container section#main .left-side-panel .chapter-panel .button-holder {
-  margin: 8px;
-  padding-left: 24px;
-  padding-top: 24px;
-  border-top: 2px solid #dbdfe2;
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .actions button:hover,
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .actions a.btn:hover {
+  background: #e6e6e6;
 }
-#designer-editor.container section#main .left-side-panel .macros-panel .button-holder input,
-#designer-editor.container section#main .left-side-panel .chapter-panel .button-holder input,
-#designer-editor.container section#main .left-side-panel .macros-panel .button-holder button,
-#designer-editor.container section#main .left-side-panel .chapter-panel .button-holder button,
-#designer-editor.container section#main .left-side-panel .macros-panel .button-holder .btn,
-#designer-editor.container section#main .left-side-panel .chapter-panel .button-holder .btn {
-  background: #e5e8ea;
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .actions .permanent-actions {
+  background: #fff;
+  -webkit-box-shadow: -30px 1px 25px 0px #fff;
+  -moz-box-shadow: -30px 1px 25px 0px #fff;
+  box-shadow: -30px 1px 25px 0px #fff;
+  bottom: 5px;
+  position: absolute;
+  right: 0;
+  padding-left: 5px;
+}
+#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .actions.dirty .permanent-actions {
+  position: static;
 }
 #designer-editor.container section#main .macros-panel {
   width: 85%;

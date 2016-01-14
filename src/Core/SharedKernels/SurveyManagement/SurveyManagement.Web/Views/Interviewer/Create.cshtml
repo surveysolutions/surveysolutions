@@ -1,4 +1,6 @@
 ﻿@using System.Web.Optimization
+@using WB.Core.GenericSubdomains.Portable
+@using WebGrease.Css.Ast
 @model WB.Core.SharedKernels.SurveyManagement.Web.Models.InterviewerModel
 
 @{
@@ -7,27 +9,59 @@
 
 @section scripts
 {
+    @Scripts.Render("~/Scripts/bootstrap3-typeahead.js", "~/Scripts/components/typeahead-extended.js", "~/Scripts/knockout/ko.typeahead.js", "~/Scripts/viewmodels/pages/create-interviewer.js")
     @Scripts.Render("~/validate")
     <script type="text/javascript">
         $('#umbrella').hide();
+
+        var $supervisorsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
+        $(document).ready(function () {
+            var model = new Supervisor.VM.CreateInterviewer($supervisorsUrl);
+            ko.applyBindings(model);
+            model.load();
+        });
     </script>
 }
 <div class="main">
     @Html.Partial("_alerts")
     <div class="page-header">
-        <h2>Create interviewer</h2>
+        <h2>Create interviewer at <a href="@Url.Action("Interviewers", "Supervisor", new { id = Model.SupervisorId})">@(Model.SupervisorName)</a> team</h2>
     </div>
 
 
     <form class="form-horizontal" method="POST">
         @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(x => x.IsShowSupervisorSelector)
+
+
+        @if (Model.IsShowSupervisorSelector)
+        {
+            <div class="form-group">
+                @Html.LabelFor(x => x.SupervisorId, new { @class = "col-sm-2 control-label required" })
+                <div class="col-sm-2">
+                    <div class="input-group">
+                        <input class="form-control" placeholder="Any" data-bind="typeahead: SelectedSupervisor, typeaheadOptions: {source: Supervisors, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text"/>
+                        <span data-bind="spinner: IsSupervisorsLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                        <div class="input-group-btn" data-bind="click: function(){ SelectedSupervisor(undefined); }">
+                            <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                        </div>
+                    </div>
+                    @Html.HiddenFor(x => x.SupervisorId, new { data_bind = "value: SelectedSupervisor() == null ? '': SelectedSupervisor().UserId" })
+                </div>
+                <div class="col-sm-4">
+                    @Html.ValidationMessageFor(x => x.SupervisorId, null, new {@class = "help-block"})
+                </div>
+            </div>
+        }
+
         @{
             this.Html.RenderPartial("UserCreateForm");
         }
         <div class="form-group">
             <div class="col-sm-offset-2">
                 <button type="submit" class="btn btn-primary">Save changes</button>
-                @Html.ActionLink("Cancel", "Back", new { id = Model.SupervisorId }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Cancel", "Back", new {  }, new { @class = "btn btn-default" })
             </div>
         </div>
     </form>

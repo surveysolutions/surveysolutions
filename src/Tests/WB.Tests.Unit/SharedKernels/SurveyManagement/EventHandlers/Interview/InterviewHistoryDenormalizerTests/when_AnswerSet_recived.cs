@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewHistoryDenormalizerTests
 {
@@ -18,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         Establish context = () =>
         {
             interviewHistoryView = CreateInterviewHistoryView(interviewId);
-            answerEvents = new List<object>();
+            answerEvents = new List<IEvent>();
             answerEvents.Add(new TextQuestionAnswered(userId, questionId, new decimal[]{1,2}, DateTime.Now, "hi"));
             answerEvents.Add(new MultipleOptionsQuestionAnswered(userId, questionId, new decimal[0], DateTime.Now, new decimal[] { 1, 2 }));
             answerEvents.Add(new SingleOptionQuestionAnswered(userId, questionId, new decimal[0], DateTime.Now, 1));
@@ -121,6 +124,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static string variableName = "q1";
 
-        private static List<object> answerEvents;
+        private static List<IEvent> answerEvents;
     }
 }

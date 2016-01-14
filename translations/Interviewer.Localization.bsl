@@ -14,6 +14,7 @@
         <locale>id-ID</locale>
         <locale>vi-VN</locale>
         <locale>pt-PT</locale>
+        <locale>zh-CN</locale>
       </locales>
       <items>
         <it rn="Properties\InterviewerUIResources.resx" nm="AccountIsLockedOnServer" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -366,6 +367,258 @@
             <li lc="fr-FR" tx="{0} (v{1})" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_Backup_Description" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="All collected data will be saved as backup file on this device." ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Все собранные данные будут сохранены как резервная копия на этом устройстве." ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Всі зібрані дані будуть збережені як резервна копія на цьому пристрої." ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_Backup_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Backup all gathered information" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Создать резервную копию собранной информации" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Створити резервну копію зібраної інформації" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_BackupDate_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="When Saved:" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Дата и время создания резервной копии:" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Дата і час створення резервної копії:" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_BackupFileLocation_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Backup file location:" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Путь к файлу с резервной копией:" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Шлях до файлу з резервною копією:" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_BackupReady_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Data saved" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Данные сохранены" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Дані збережені" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_BackupScope_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Scope:" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Объем:" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Обсяг:" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_BandwidthTestConnectionAbsent_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="&lt;font color=&quot;red&quot;&gt;No internet connection&lt;/font&gt;" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="&lt;font color=&quot;red&quot;&gt;Соединение с интернетом отсутствует&lt;/font&gt;" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="&lt;font color=&quot;red&quot;&gt;З'єднання з інтернетом відсутнє&lt;/font&gt;" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_BandwidthTestConnectionNotOK_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Connection is &lt;font color=&quot;red&quot;&gt;not good&lt;/font&gt;" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Соединение &lt;font color=&quot;red&quot;&gt;плохое&lt;/font&gt;" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="З'єднання &lt;font color=&quot;red&quot;&gt;погане&lt;/font&gt;" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_BandwidthTestConnectionOK_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Connection is OK" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Соединение хорошее" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="З'єднання добре" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="&lt;font color=&quot;red&quot;&gt;No connection with our server&lt;/font&gt;" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="&lt;font color=&quot;red&quot;&gt;Соединение с нашим сервером отсутствует&lt;/font&gt;" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="&lt;font color=&quot;red&quot;&gt;З'єднання з нашим сервером відсутнє&lt;/font&gt;" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_BandwidthTestConnectionType_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Connection type:" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Тип соединения:" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Тип з'єднання:" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_BandwidthTestNetworkName_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Network name:" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Имя сети:" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Iм'я мережі:" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_BandwidthTestPing_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Ping:" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Пинг:" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Пінг:" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_CheckVersion_Description" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="We will check for the newer version on HQ server" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Мы проверим наличие новой версии на сервере" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Ми перевіримо наявність нової версії на сервері" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_CheckVersion_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Version: {0}. Check for a new version" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Версия: {0}. Проверить наличие новой версии" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Версія: {0}. Перевірити наявність нової версії" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_Delete" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Delete" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Удалить" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Видалити" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_DownloadingPleaseWait" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Downloading, please wait..." ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Происходит загрузка, пожалуйста подождите..." ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Відбувається завантаження, будь ласка зачекайте..." ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_NewVersionAvaliable_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="New version exists. Would you like to download and update application?" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Существует более новая версия. Вы хотите загрузить и обновить приложение?" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Існує нова версія. Завантажити і оновити додаток?" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_NewVersionNumber_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Version number:" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Версия номер:" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Номер версії:" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_No" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="No" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Нет" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Ні" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_Restore_Description" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="By restoring saved data you will replace all current assigments on this device" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Восстановление сохраненных данных приведет к замене всех текущих интервью на вашем устройстве" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Відновлення збережених даних приведе до заміни всіх існуючих інтерв'ю на вашому пристрої" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_Restore_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="RESTORE" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Восстановить данные из резервной копии" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Відновити дані з резервної копії" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_RestoreReady_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Saved data found:" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Сохраненные данные:" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Знайдені збережені дані:" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_Send" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Send" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Отправить" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Відправити" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_Send_Description" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="All application and interview data will be collected to a single archive. This can take up to 10 minutes." ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Все собранные данные и информация о приложении будут собранны в единый архив. Операция может занять до 10 минут." ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Всі зібрані дані та інформація про додаток будуть зібрані в єдиний архів. Операція може зайняти до 10 хвилин." ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_Send_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Collect and send to HQ all tablet infromation" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Собрать и отправить на сервер информацию о приложении" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Відправити на сервер інформацію про додаток" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_Share_Description" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="All information below will be shared as plain text. It can be sent by email, google hangouts of any other messaging app" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Информация будет собрана в текстовом виде. Она может быть отправлена по электроннй почте, при помощи программы Google hangouts или любым другим приложением по обмену сообщениями" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Інформація буде зібрана в текстовому вигляді. Вона може бути надіслана електронною поштою, за допомогою додатку Google Hangouts або будь-яким іншим додатком з обміну повідомленнями" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_Share_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Share all technical information" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Передать техническую информацию" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Передати технічну інформацію" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_TabletInformationReady_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Data archive is ready" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Архив готов" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Архів готовий" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_TabletInformationScope_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Scope:" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Объем:" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Обсяг:" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_TabletInformationWhenGenerated_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="When generated:" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Дата и время создания:" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Дата і час створення:" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_TestConnection_Description" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="We will test connection with our server and it's speed" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Проверка подключения к серверу и его скорость" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Перевірка підключення до сервера і його швидкість" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_TestConnection_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Test bandwidth to server" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Проверить скорость соединения с сервером" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Перевірити швидкість з'єднання з сервером" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Diagnostics" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Диагностика" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Діагностика" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_Update" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Update" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Обновить" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Оновити" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_YouHaveTheLatestVersionOfApplication" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="You have the latest version of application." ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="У вас установлена последняя версия приложения." ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="У вас встановлена остання версія додатку." ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="HostUnreachable" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="No internet access to the Survey Solutions Supervisor website. Check server address and(or) network settings" ts="Translated" qs="ToReview" />
@@ -492,6 +745,13 @@
             <li lc="fr-FR" tx="Tableau de bord" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="MenuItem_Title_Diagnostics" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Diagnostics" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Диагностика" ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Діагностика" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="MenuItem_Title_Login" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Login" ts="Translated" qs="ToReview" />
@@ -532,20 +792,6 @@
             <li lc="pt-PT" tx="Terminar sessão" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="قم بتسجيل الخروج" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Se déconnecter" ts="Translated" qs="AutoTranslated" />
-          </lis>
-        </it>
-        <it rn="Properties\InterviewerUIResources.resx" nm="MenuItem_Title_Troubleshooting" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="Troubleshooting" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Устранение проблем" ts="Translated" qs="ToReview" />
-            <li lc="uk-UA" tx="Виправлення неполадок" ts="Translated" qs="AutoTranslated" />
-            <li lc="es-ES" tx="Resolución de problemas" ts="Translated" qs="ToReview" />
-            <li lc="th-TH" tx="การแก้ไขปัญหา" ts="Translated" qs="ToReview" />
-            <li lc="id-ID" tx="Pemecahan masalah" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Giải đáp thắc mắc" ts="Translated" qs="AutoTranslated" />
-            <li lc="pt-PT" tx="Solução de problemas" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="استكشاف الأخطاء وإصلاحها" ts="Translated" qs="AutoTranslated" />
-            <li lc="fr-FR" tx="Dépannage" ts="Translated" qs="AutoTranslated" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="NoNetwork" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -784,6 +1030,13 @@
             <li lc="pt-PT" tx="Nenhuma conexão com o Survey Solutions Supervisor. Por favor, verifique-se de que o site está disponível." ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا يوجد اتصال &quot;المشرف حلول المسح&quot;. الرجاء التأكد من أن هذا الموقع متاح." ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Aucune connexion avec l'application Supervisor. Veuillez vous assurer que Supervisor est disponible." ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Share_to_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Share information to.." ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Передать техническую информацию при помощи.." ts="Translated" qs="ToReview" />
+            <li lc="uk-UA" tx="Передати технічну інформацію за допомогою.." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Synchronization_Cancel" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" bac="EmbeddedResource" hgt="0" wdt="0">

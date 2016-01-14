@@ -5,7 +5,7 @@
         /// <summary>
         /// This should be used when there are no business logic depending on exception type.
         /// </summary>
-        Undefined,
+        Undefined = 0,
 
         TriggerLinksToNotExistingGroup, 
 
@@ -134,7 +134,7 @@
 
         FilteredComboboxQuestionOptionsMaxLength,
 
-        CategoricalSingleOptionHasMoreThan200Options,
+        CategoricalQuestionHasMoreThan200Options,
 
         CategoricalCascadingOptionsCantContainsEmptyParentValueField,
 
@@ -148,6 +148,16 @@
 
         MacroAlreadyExist,
 
-        MacroContentIsEmpty
+        MacroContentIsEmpty,
+
+        LookupTableAlreadyExist,
+
+        LookupTableIsAbsent,
+
+        EmptyLookupTable,
+
+        VariableNameEndsWithUnderscore,
+
+        VariableNameHasConsecutiveUnderscores
     }
 }

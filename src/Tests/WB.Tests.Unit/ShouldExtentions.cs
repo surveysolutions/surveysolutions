@@ -6,6 +6,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
+using WB.Core.Infrastructure.EventBus;
 using WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStateTests;
 
 namespace WB.Tests.Unit
@@ -53,6 +54,7 @@ namespace WB.Tests.Unit
         }
 
         public static void ShouldContainEvent<TEvent>(this EventContext eventContext, Func<TEvent, bool> condition = null)
+            where TEvent : IEvent
         {
             if (condition == null)
             {
@@ -68,6 +70,7 @@ namespace WB.Tests.Unit
         }
 
         public static void ShouldNotContainEvent<TEvent>(this EventContext eventContext, Func<TEvent, bool> condition = null)
+            where TEvent : IEvent
         {
             if (condition == null)
             {

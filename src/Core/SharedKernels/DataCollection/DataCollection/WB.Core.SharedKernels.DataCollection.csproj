@@ -71,6 +71,7 @@
     <Compile Include="Accessors\QuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Aggregates\IQuestionnaire.cs" />
     <Compile Include="Commands\Interview\AnswerYesNoQuestion.cs" />
+    <Compile Include="Commands\Interview\CreateInterviewByPrefilledQuestions.cs" />
     <Compile Include="Commands\Interview\MarkInterviewAsReceivedByInterviewer.cs" />
     <Compile Include="Commands\Interview\UnapproveByHeadquartersCommand.cs" />
     <Compile Include="Commands\Interview\RemoveAnswerCommand.cs" />
@@ -112,7 +113,6 @@
     <Compile Include="Commands\Interview\CreateInterviewWithPreloadedData.cs" />
     <Compile Include="Commands\Interview\HardDeleteInterview.cs" />
     <Compile Include="Commands\Interview\HqApproveInterviewCommand.cs" />
-    <Compile Include="Commands\Interview\CreateInterviewForTestingCommand.cs" />
     <Compile Include="Commands\Interview\HqRejectInterviewCommand.cs" />
     <Compile Include="Commands\Interview\MarkInterviewAsSentToHeadquarters.cs">
       <SubType>Code</SubType>
@@ -283,7 +283,6 @@
     <Compile Include="Services\IInterviewExpressionStatePrototypeProvider.cs" />
     <Compile Include="Utils\AnswerUtils.cs" />
     <Compile Include="Utils\ConcurrentHashSet.cs" />
-    <Compile Include="Utils\CuncurrentDictionaryExtensions.cs" />
     <Compile Include="Utils\ConcurrentDistinctList.cs" />
     <Compile Include="Utils\LinkedQuestionUtils.cs" />
     <Compile Include="Utils\QuestionnaireHelper.cs" />
@@ -301,19 +300,10 @@
     <Compile Include="Views\Questionnaire\FeaturedQuestionItem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\Questionnaire\IQuestionnaireBrowseViewFactory.cs" />
     <Compile Include="Views\Questionnaire\QuestionDescription.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireBrowseInputModel.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireBrowseItem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\QuestionnaireBrowseView.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireBrowseViewFactory.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireDocumentVersioned.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireItemInputModel.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\QuestionnaireItemViewFactory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Views\Questionnaire\QuestionnaireRosterStructure.cs" />
@@ -321,10 +311,15 @@
     <Compile Include="Views\Questionnaire\RosterScopeType.cs" />
     <Compile Include="Views\Questionnaire\RosterTitleQuestionDescription.cs" />
     <Compile Include="Views\UserDocument.cs" />
+    <Compile Include="WebApi\InterviewAnswerOnPrefilledQuestionApiView.cs" />
+    <Compile Include="WebApi\InterviewDetailsApiView.cs" />
     <Compile Include="WebApi\InterviewApiView.cs" />
+    <Compile Include="WebApi\IdentityApiView.cs" />
     <Compile Include="WebApi\InterviewPackageApiView.cs" />
     <Compile Include="WebApi\QuestionnaireApiView.cs" />
     <Compile Include="WebApi\InterviewerApiView.cs" />
+    <Compile Include="WebApi\RosterApiView.cs" />
+    <Compile Include="WebApi\RosterInstanceApiView.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Caching;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NHibernate.Engine;
@@ -85,7 +87,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     if (featuredQuestion == null)
                         return;
 
-                    var questionnaire = this.questionnaires.AsVersioned().Get(interviewSummary.QuestionnaireId.FormatGuid(), interviewSummary.QuestionnaireVersion);
+                    var questionnaire = this.GetQuestionnaire(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
                     if (questionnaire == null || questionnaire.Questionnaire==null)
                         return;
 
@@ -105,7 +107,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             Guid eventSourceId, DateTime eventTimeStamp, bool wasCreatedOnClient)
         {
             UserDocument responsible = this.users.GetById(userId);
-            var questionnarie = this.questionnaires.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
+            var questionnarie = this.GetQuestionnaire(questionnaireId, questionnaireVersion);
 
             var interviewSummary = new InterviewSummary(questionnarie.Questionnaire)
             {
@@ -121,6 +123,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             };
 
             return interviewSummary;
+        }
+
+        private readonly MemoryCache questionnaireCache = new MemoryCache("QuestionnaireCache");
+
+        private QuestionnaireDocumentVersioned GetQuestionnaire(Guid questionnaireId, long questionnaireVersion)
+        {
+            string key = questionnaireId.ToString() + questionnaireVersion.ToString();
+            if (questionnaireCache.Contains(key))
+                return (QuestionnaireDocumentVersioned)questionnaireCache[key];
+
+            var questionare = this.questionnaires.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
+            questionnaireCache[key] = questionare;
+            return questionare;
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewCreated> @event)

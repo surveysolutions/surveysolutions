@@ -21,6 +21,13 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                     return MvcHtmlString.Create(macrosRecord);
             }
 
+            if (record.TargetType == QuestionnaireItemType.LookupTable)
+            {
+                var lookupTableRecord = GetFormattedHistoricalRecordForLookupTable(record);
+                if (!string.IsNullOrWhiteSpace(lookupTableRecord))
+                    return MvcHtmlString.Create(lookupTableRecord);
+            }
+
             var localizedNameOfItemBeingInAction = GetStringRepresentation(record.TargetType);
 
             var questionnaireItemLinkWithTitle = BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId, record.TargetId, record.TargetParentId,
@@ -43,16 +50,38 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             return MvcHtmlString.Create(mainRecord);
         }
 
+        private static string GetFormattedHistoricalRecordForLookupTable(QuestionnaireChangeHistoricalRecord record)
+        {
+            switch (record.ActionType)
+            {
+                case QuestionnaireActionType.Add:
+                    return QuestionnaireHistoryResources.LookupTable_EmptyTableAdded;
+                case QuestionnaireActionType.Delete:
+                    if (string.IsNullOrEmpty(record.TargetTitle))
+                        return QuestionnaireHistoryResources.LookupTable_EmptyTableDeleted;
+                    return string.Format(QuestionnaireHistoryResources.LookupTable_Deleted, record.TargetTitle);
+                case QuestionnaireActionType.Update:
+                    if (string.IsNullOrEmpty(record.TargetTitle))
+                        return QuestionnaireHistoryResources.LookupTable_EmptyTableUpdated;
+                    return string.Format(QuestionnaireHistoryResources.LookupTable_Updated, record.TargetTitle);
+            }
+            return null;
+        }
+
         private static string GetFormattedHistoricalRecordForMacros(QuestionnaireChangeHistoricalRecord record)
         {
             switch (record.ActionType)
             {
                 case QuestionnaireActionType.Add:
-                    return QuestionnaireHistoryResources.EmptyMacroAdded;
+                    return QuestionnaireHistoryResources.Macro_EmptyMacroAdded;
                 case QuestionnaireActionType.Delete:
-                    return string.Format(QuestionnaireHistoryResources.MacroDeleted, record.TargetTitle);
+                    if (string.IsNullOrEmpty(record.TargetTitle))
+                        return QuestionnaireHistoryResources.Macro_EmptyMacroDeleted;
+                    return string.Format(QuestionnaireHistoryResources.Macro_Deleted, record.TargetTitle);
                 case QuestionnaireActionType.Update:
-                    return string.Format(QuestionnaireHistoryResources.MacroUpdated, record.TargetTitle);
+                    if (string.IsNullOrEmpty(record.TargetTitle))
+                        return QuestionnaireHistoryResources.Macro_EmptyMacroUpdated;
+                    return string.Format(QuestionnaireHistoryResources.Macro_Updated, record.TargetTitle);
             }
             return null;
         }

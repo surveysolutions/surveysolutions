@@ -33,8 +33,8 @@ input::-ms-clear {
 
 .has-error .help-inline {
     color: #a94442;
-    font-size: 85%;
-    line-height: 1.2;
+    /*font-size: 85%;
+    line-height: 1.2;*/
 }
 
 /*

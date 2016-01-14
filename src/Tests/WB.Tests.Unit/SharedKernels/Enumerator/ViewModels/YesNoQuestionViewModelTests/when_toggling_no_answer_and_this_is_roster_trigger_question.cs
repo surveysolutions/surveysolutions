@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -19,6 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
     {
         Establish context = () =>
         {
+            var interviewIdAsString = "hello";
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Identity(questionGuid, Empty.RosterVector);
 
@@ -37,17 +39,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
 
             questionnaireStorage.SetReturnsDefault(questionnaire);
-            interviewRepository.SetReturnsDefault(interview);
+            interviewRepository.Setup(x => x.Get(interviewIdAsString)).Returns(interview);
+
             userInteractionServiceMock = new Mock<IUserInteractionService>();
             viewModel = CreateViewModel(questionnaireStorage: questionnaireStorage.Object,
                 interviewRepository: interviewRepository.Object,
                 userInteractionService: userInteractionServiceMock.Object);
 
-            viewModel.Init("blah", questionId, Create.NavigationState());
+            viewModel.Init(interviewIdAsString, questionId, Create.NavigationState());
             viewModel.Options.Last().Selected = false;
         };
 
-        Because of = async () => await viewModel.ToggleAnswerAsync(viewModel.Options.Last());
+        Because of = () => viewModel.ToggleAnswerAsync(viewModel.Options.Last()).WaitAndUnwrapException();
 
         It should_undo_checked_property_change = () => viewModel.Options.Last().YesSelected.ShouldBeFalse();
 

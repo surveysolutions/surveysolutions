@@ -173,6 +173,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.GetQuestionOrThrow(questionId).QuestionType;
         }
 
+        public QuestionScope GetQuestionScope(Guid questionId)
+        {
+            return this.GetQuestionOrThrow(questionId).QuestionScope;
+        }
+
         public AnswerType GetAnswerType(Guid questionId)
         {
             var questionType = GetQuestionType(questionId);
@@ -652,7 +657,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestion(Guid questionId)
         {
             if (!this.cacheOfRostersAffectedByRosterTitleQuestion.ContainsKey(questionId))
-                this.cacheOfRostersAffectedByRosterTitleQuestion[questionId] = this.GetRostersAffectedByRosterTitleQuestionImpl(questionId);
+            {
+                IEnumerable<Guid> rosters = this.GetRostersAffectedByRosterTitleQuestionImpl(questionId);
+                this.cacheOfRostersAffectedByRosterTitleQuestion.Add(questionId, rosters);
+            }
 
             return this.cacheOfRostersAffectedByRosterTitleQuestion[questionId];
         }

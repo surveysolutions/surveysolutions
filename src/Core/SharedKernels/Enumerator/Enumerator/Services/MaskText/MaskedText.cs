@@ -95,7 +95,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.MaskText
 
             addedString = this.FilterOnlyMaskedChars(addedString, insertPosition);
 
-            int startingPosition = this.maskToRaw[this.NextValidPosition(insertPosition)].GetValueOrDefault(-1);
+            int startingPosition = this.maskToRaw[this.NextValidPosition(insertPosition)].GetValueOrDefault();
             var newString = this.Clear(addedString);
             int count = this.rawText.AddToString(newString, startingPosition, this.maxRawLength);
 
@@ -196,7 +196,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.MaskText
                     return i;
             }
 
-            throw new ArgumentException("Mask contains only the representation char");
+            return 0;
         }
 
         public int FindFirstValidMaskPosition()
@@ -299,6 +299,9 @@ namespace WB.Core.SharedKernels.Enumerator.Services.MaskText
 
         private int LastValidPosition()
         {
+            if (this.rawText.Length == 0)
+                return 0;
+
             if (this.rawText.Length == this.maxRawLength)
                 return this.rawToMask[this.rawText.Length - 1] + 1;
 

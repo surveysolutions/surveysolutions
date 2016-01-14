@@ -8,20 +8,21 @@
             if (hotkeys.get(saveStaticText) !== false) {
                 hotkeys.del(saveStaticText);
             }
-            if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser)
-            {
-                hotkeys.bindTo($scope)
-                    .add({
-                        combo: saveStaticText,
-                        description: 'Save changes',
-                        allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                        callback: function(event) {
+            
+            hotkeys.bindTo($scope)
+                .add({
+                    combo: saveStaticText,
+                    description: 'Save changes',
+                    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                    callback: function(event) {
+                        if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
                             $scope.saveStaticText();
                             $scope.staticTextForm.$setPristine();
                             event.preventDefault();
                         }
-                    });
-            }
+                    }
+                });
+            
             var dataBind = function (result) {
                 $scope.activeStaticText = $scope.activeStaticText || {};
                 $scope.activeStaticText.breadcrumbs = result.breadcrumbs;

@@ -1,8 +1,6 @@
-﻿using System;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using Nito.AsyncEx.Synchronous;
 using NSubstitute;
-using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -21,21 +19,16 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.InterviewDashboar
             statefulInterviewRepository.Get(null).ReturnsForAnyArgs(interview);
 
             navigationServiceMock = Substitute.For<IViewModelNavigationService>();
-            syncPackageRestoreService = Substitute.For<ISyncPackageRestoreService>();
             viewModel = GetViewModel(viewModelNavigationService: navigationServiceMock,
-                interviewRepository: statefulInterviewRepository,
-                packageRestoreService: syncPackageRestoreService);
+                interviewRepository: statefulInterviewRepository);
         };
 
         Because of = () => viewModel.LoadInterview().WaitAndUnwrapException();
 
         It should_open_prefilled_questions_section = () => navigationServiceMock.ReceivedWithAnyArgs().NavigateToPrefilledQuestionsAsync(null);
-        
-        It should_restore_interview_from_sync_package = () => syncPackageRestoreService.ReceivedWithAnyArgs().CheckAndApplySyncPackage(Guid.Empty);
 
         static InterviewDashboardItemViewModel viewModel;
         static IViewModelNavigationService navigationServiceMock;
-        static ISyncPackageRestoreService syncPackageRestoreService;
     }
 }
 

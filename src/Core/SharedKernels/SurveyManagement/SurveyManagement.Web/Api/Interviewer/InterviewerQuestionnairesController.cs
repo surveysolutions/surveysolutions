@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
@@ -14,32 +15,31 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
-    [ApiBasicAuth]
+    [ApiBasicAuth(new[] { UserRoles.Operator })]
     [RoutePrefix("api/interviewer/v1/questionnaires")]
     [ProtobufJsonSerializer]
     public class InterviewerQuestionnairesController : ApiController
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore;
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
-        private readonly IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly ISerializer serializer;
 
         public InterviewerQuestionnairesController(
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore,
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
-            IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemFactory,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             ISerializer serializer)
         {
             this.questionnaireStore = questionnaireStore;
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
-            this.questionnaireBrowseItemFactory = questionnaireBrowseItemFactory;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.serializer = serializer;
         }
@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         [HttpGet]
         [Route("census")]
         [WriteToSyncLog(SynchronizationLogType.GetCensusQuestionnaires)]
-        public List<QuestionnaireIdentity> Census()
+        public HttpResponseMessage Census()
         {
             var query = new QuestionnaireBrowseInputModel()
             {
@@ -58,24 +58,38 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             var censusQuestionnaires = this.questionnaireBrowseViewFactory.Load(query).Items.Where(questionnaire => questionnaire.AllowCensusMode)
                 .Select(questionnaire => new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version)).ToList();
 
-            return censusQuestionnaires;
+            var response = this.Request.CreateResponse(censusQuestionnaires);
+            response.Headers.CacheControl = new CacheControlHeaderValue
+            {
+                NoCache = true
+            };
+            return response;
         }
 
         [HttpGet]
         [Route("{id:guid}/{version:int}")]
         [WriteToSyncLog(SynchronizationLogType.GetQuestionnaire)]
-        public QuestionnaireApiView Get(Guid id, int version)
+        public HttpResponseMessage Get(Guid id, int version)
         {
             var questionnaireDocumentVersioned = this.questionnaireStore.AsVersioned().Get(id.FormatGuid(), version);
 
             if (questionnaireDocumentVersioned == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            return new QuestionnaireApiView()
+            var resultValue = new QuestionnaireApiView
             {
                 QuestionnaireDocument = this.serializer.Serialize(questionnaireDocumentVersioned.Questionnaire),
-                AllowCensus = this.questionnaireBrowseItemFactory.Load(new QuestionnaireItemInputModel(id, version)).AllowCensusMode
+                AllowCensus = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version)).AllowCensusMode
             };
+
+            var response = Request.CreateResponse(resultValue);
+            response.Headers.CacheControl = new CacheControlHeaderValue()
+            {
+                Public = true,
+                MaxAge = TimeSpan.FromDays(10)
+            };
+
+            return response;
         }
 
         [HttpGet]
@@ -92,6 +106,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             };
 
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            response.Headers.CacheControl = new CacheControlHeaderValue
+            {
+                Public = true,
+                MaxAge = TimeSpan.FromDays(10)
+            };
 
             return response;
         }

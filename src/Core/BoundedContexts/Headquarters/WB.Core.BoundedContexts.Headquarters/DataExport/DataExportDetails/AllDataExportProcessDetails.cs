@@ -6,12 +6,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails
 {
     public class AllDataExportProcessDetails : AbstractDataExportProcessDetails
     {
-        public AllDataExportProcessDetails(string processName, DataExportFormat format, QuestionnaireIdentity questionnaire)
-            : base(processName, format)
+        public AllDataExportProcessDetails(DataExportFormat format, QuestionnaireIdentity questionnaire, string questionnaireTitle)
+            : base(format)
         {
             this.Questionnaire = questionnaire;
+            this.QuestionnaireTitle = questionnaireTitle;
         }
 
         public QuestionnaireIdentity Questionnaire { get; }
+        public string QuestionnaireTitle { get; }
+
+        public override string NaturalId => $"All${this.Format}${this.Questionnaire}";
+
+        public override string Name => $"(ver. {this.Questionnaire.Version}) {this.QuestionnaireTitle}";
     }
 }

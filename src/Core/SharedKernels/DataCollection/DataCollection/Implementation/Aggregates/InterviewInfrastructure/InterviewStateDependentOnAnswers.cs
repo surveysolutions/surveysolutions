@@ -23,35 +23,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.getRosterInstanceIds = getRosterInstanceIds;
             }
 
-            public IReadOnlyInterviewStateDependentOnAnswers Amend(Func<Guid, RosterVector, IEnumerable<decimal>> getRosterInstanceIds)
-            {
-                return this.actualState.Amend(getRosterInstanceIds);
-            }
+            public IReadOnlyInterviewStateDependentOnAnswers Amend(Func<Guid, RosterVector, IEnumerable<decimal>> getRosterInstanceIds) => this.actualState.Amend(getRosterInstanceIds);
 
-            public bool IsGroupDisabled(Identity @group)
-            {
-                return this.actualState.IsGroupDisabled(@group);
-            }
+            public bool IsGroupDisabled(Identity @group) => this.actualState.IsGroupDisabled(@group);
 
-            public bool IsQuestionDisabled(Identity question)
-            {
-                return this.actualState.IsQuestionDisabled(question);
-            }
+            public bool IsQuestionDisabled(Identity question) => this.actualState.IsQuestionDisabled(question);
 
-            public bool WasQuestionAnswered(Identity question)
-            {
-                return this.actualState.WasQuestionAnswered(question);
-            }
+            public bool WasQuestionAnswered(Identity question) => this.actualState.WasQuestionAnswered(question);
 
-            public object GetAnswerSupportedInExpressions(Identity question)
-            {
-                return this.actualState.GetAnswerSupportedInExpressions(question);
-            }
+            public object GetAnswerSupportedInExpressions(Identity question) => this.actualState.GetAnswerSupportedInExpressions(question);
 
-            public Tuple<decimal, string>[] GetTextListAnswer(Identity question)
-            {
-                return this.actualState.GetTextListAnswer(question);
-            }
+            public Tuple<decimal, string>[] GetTextListAnswer(Identity question) => this.actualState.GetTextListAnswer(question);
 
             public ReadOnlyCollection<decimal> GetRosterInstanceIds(Guid groupId, RosterVector outerRosterVector)
             {
@@ -60,15 +42,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     : this.actualState.GetRosterInstanceIds(groupId, outerRosterVector);
             }
 
-            public IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedSingleOptionAnswers(IQuestionnaire questionnaire)
-            {
-                return this.actualState.GetAllLinkedSingleOptionAnswers(questionnaire);
-            }
+            public IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedSingleOptionAnswers(IQuestionnaire questionnaire) => this.actualState.GetAllLinkedSingleOptionAnswers(questionnaire);
 
-            public IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedMultipleOptionsAnswers()
-            {
-                return this.actualState.GetAllLinkedMultipleOptionsAnswers();
-            }
+            public IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedMultipleOptionsAnswers() => this.actualState.GetAllLinkedMultipleOptionsAnswers();
         }
 
 
@@ -243,10 +219,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (string questionKey in questions.Select(ConversionHelper.ConvertIdentityToString))
             {
-                this.AnswersSupportedInExpressions.Remove(questionKey);
-                this.LinkedSingleOptionAnswersBuggy.Remove(questionKey);
-                this.LinkedMultipleOptionsAnswers.Remove(questionKey);
-                this.TextListAnswers.Remove(questionKey);
+                this.AnswersSupportedInExpressions.TryRemove(questionKey);
+                this.LinkedSingleOptionAnswersBuggy.TryRemove(questionKey);
+                this.LinkedMultipleOptionsAnswers.TryRemove(questionKey);
+                this.TextListAnswers.TryRemove(questionKey);
                 this.AnsweredQuestions.Remove(questionKey);
                 this.DisabledQuestions.Remove(questionKey);
                 this.ValidAnsweredQuestions.Remove(questionKey);

@@ -3,6 +3,7 @@ using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
+using MvvmCross.Droid.Support.V7.RecyclerView;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Shared.Enumerator.CustomControls;
 
@@ -34,7 +35,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             
             listOfInterviewQuestionsAndGroups.SetLayoutManager(layoutManager);
             listOfInterviewQuestionsAndGroups.HasFixedSize = true;
-            listOfInterviewQuestionsAndGroups.Adapter = new InterviewEntityAdapter(this, (IMvxAndroidBindingContext)this.BindingContext);
+            listOfInterviewQuestionsAndGroups.Adapter = new InterviewEntityAdapter((IMvxAndroidBindingContext)this.BindingContext);
         }
     }
 }

@@ -7,13 +7,18 @@ using Moq;
 using Ncqrs.Eventing;
 using NUnit.Framework;
 using Ncqrs.Spec;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Tests.Unit;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace Ncqrs.Tests.Eventing
 {
     [TestFixture]
     internal class CommittedEventStreamTests
     {
+        internal class DummyEvent : IEvent { }
+
         [SetUp]
         public void SetUp()
         {
@@ -47,7 +52,7 @@ namespace Ncqrs.Tests.Eventing
             var sourceId = Guid.NewGuid();
             var stream = new[]
             {
-                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), sourceId, 1, DateTime.Now, 0, new object())
+                new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), sourceId, 1, DateTime.Now, 0, new DummyEvent())
             };
 
             var sut = new CommittedEventStream(sourceId, stream);
@@ -60,7 +65,7 @@ namespace Ncqrs.Tests.Eventing
         public void Init_should_set_From_and_To_version_information()
         {
             var sourceId = Guid.NewGuid();
-            var eventObjects = new[] { new Object(), new Object(), new Object() };
+            var eventObjects = new[] { new DummyEvent(), new DummyEvent(), new DummyEvent() };
             var committedEvents = Prepare.Events(eventObjects).ForSource(sourceId, 5).ToList();
 
             var sut = new CommittedEventStream(sourceId, committedEvents);
@@ -73,7 +78,7 @@ namespace Ncqrs.Tests.Eventing
         public void When_constructing_it_with_events_but_an_element_is_null_it_should_throw_ArgumentNullException()
         {
             var sourceId = Guid.NewGuid();
-            var eventsWithAnNullElement = new[] { new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), sourceId, 0, DateTime.Now, 0, new object()), null };
+            var eventsWithAnNullElement = new[] { new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), sourceId, 0, DateTime.Now, 0, new DummyEvent()), null };
 
             Action act = () => new CommittedEventStream(sourceId, eventsWithAnNullElement);
 
@@ -84,7 +89,7 @@ namespace Ncqrs.Tests.Eventing
         public void When_constructing_it_with_events_where_one_has_an_incorrect_sequence_it_should_throw_argument_exception()
         {
             var sourceId = Guid.NewGuid();
-            var eventObjects = new[] {new Object(), new Object(), new Object()};
+            var eventObjects = new[] {new DummyEvent(), new DummyEvent(), new DummyEvent()};
             var committedEvents = Prepare.Events(eventObjects).ForSource(sourceId).ToList();
 
             var lastEvent = committedEvents.Last();
@@ -101,7 +106,7 @@ namespace Ncqrs.Tests.Eventing
         public void When_constructing_it_with_events_where_one_has_an_incorrect_event_source_id_it_should_throw_argument_exception()
         {
             var sourceId = Guid.NewGuid();
-            var eventObjects = new[] { new Object(), new Object(), new Object() };
+            var eventObjects = new[] { new DummyEvent(), new DummyEvent(), new DummyEvent() };
             var committedEvents = Prepare.Events(eventObjects).ForSource(sourceId).ToList();
 
             var lastEvent = committedEvents.Last();

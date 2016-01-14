@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using CsvHelper.Configuration;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Remotion.Linq.Parsing.ExpressionTreeVisitors.MemberBindings;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
@@ -241,7 +245,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 var supervisorName = CheckAndGetSupervisorNameForLevel(topLevelRow, supervisorNameIndex);
                 result.Add(new PreloadedDataRecord
                 {
-                    PreloadedDataDto = new PreloadedDataDto(rowId, levels.ToArray()),
+                    PreloadedDataDto = new PreloadedDataDto(levels.ToArray()),
                     SupervisorId = GetSupervisorIdAndUpdateCache(supervisorsCache, supervisorName)
                 });
             }
@@ -253,18 +257,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             var result = new List<PreloadedDataRecord>();
             var supervisorsCache = new Dictionary<string, Guid>();
 
-            var supervisorNameIndex = GetSupervisorNameIndex(sampleDataFile);
+            var interviewersCache = new Dictionary<string, UserDocument>();
+
+            var responsibleNameIndex = GetSupervisorNameIndex(sampleDataFile);
             var topLevelFileName = GetValidFileNameForTopLevelQuestionnaire();
             foreach (var contentRow in sampleDataFile.Content)
             {
                 var answersToFeaturedQuestions = BuildAnswerForLevel(contentRow, sampleDataFile.Header, topLevelFileName);
 
-                var supervisorName = CheckAndGetSupervisorNameForLevel(contentRow, supervisorNameIndex);
+                var responsibleName = CheckAndGetSupervisorNameForLevel(contentRow, responsibleNameIndex);
+                Guid? interviewerId = null;
+                Guid? supervisorId = null;
+                var interviewer = GetInterviewerIdAndUpdateCache(interviewersCache, responsibleName);
+                if (interviewer != null)
+                {
+                    interviewerId = interviewer.PublicKey;
+                    supervisorId = interviewer.Supervisor.Id;
+                }
+                else
+                {
+                    supervisorId = GetSupervisorIdAndUpdateCache(supervisorsCache, responsibleName);
+                }
                 result.Add(
                     new PreloadedDataRecord
                     {
-                        PreloadedDataDto = new PreloadedDataDto(Guid.NewGuid().FormatGuid(), new[] { new PreloadedLevelDto(new decimal[0], answersToFeaturedQuestions)}),
-                        SupervisorId = GetSupervisorIdAndUpdateCache(supervisorsCache, supervisorName)
+                        PreloadedDataDto = new PreloadedDataDto(new[] { new PreloadedLevelDto(new decimal[0], answersToFeaturedQuestions)}),
+                        SupervisorId = supervisorId,
+                        InterviewerId = interviewerId
                     });
             }
             return result.ToArray();
@@ -272,7 +291,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         private int GetSupervisorNameIndex(PreloadedDataByFile dataFile)
         {
-            return dataFile.Header.ToList().FindIndex(header => string.Equals(header, ServiceColumns.SupervisorName, StringComparison.InvariantCultureIgnoreCase));
+            return dataFile.Header.ToList().FindIndex(header => string.Equals(header, ServiceColumns.ResponsibleColumnName, StringComparison.InvariantCultureIgnoreCase));
         }
 
         private string CheckAndGetSupervisorNameForLevel(string[] row, int supervisorNameIndex)
@@ -386,7 +405,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 return null;
 
             var question = this.GetQuestionByVariableName(exportedHeaderItem.VariableName);
-
+            
             return dataParser.BuildAnswerFromStringArray(headerIndexes.ToArray(), question);
         }
 
@@ -445,14 +464,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (string.IsNullOrEmpty(name))
                 return null;
 
-            if (cache.ContainsKey(name))
-                return cache[name];
+            var userNameLowerCase = name.ToLower();
+            if (cache.ContainsKey(userNameLowerCase))
+                return cache[userNameLowerCase];
 
-            var user = GetUserByName(name);//assuming that user exists
-            if (user == null || !user.IsSupervisor()) throw new Exception(string.Format("Supervisor with name '{0}' does not exists", name));
+            var user = GetUserByName(userNameLowerCase);//assuming that user exists
+            if (user == null || !user.IsSupervisor()) throw new Exception($"Supervisor with name '{name}' does not exists");
 
-            cache.Add(name, user.PublicKey);
+            cache.Add(userNameLowerCase, user.PublicKey);
             return user.PublicKey;
+        }
+
+        private UserDocument GetInterviewerIdAndUpdateCache(Dictionary<string, UserDocument> interviewerCache, string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                return null;
+
+            var userNameLowerCase = name.ToLower();
+            if (interviewerCache.ContainsKey(userNameLowerCase))
+                return interviewerCache[userNameLowerCase];
+
+            var user = GetUserByName(userNameLowerCase);//assuming that user exists
+            if (user == null || !user.Roles.Contains(UserRoles.Operator)) return null;
+
+            interviewerCache.Add(userNameLowerCase, user);
+            return user;
         }
     }
 }
