@@ -17,27 +17,32 @@
                 <div class="questionnarie-title-buttons">
                     <span class="text-muted">({{questionnaire.questionsCount}}Q, {{questionnaire.groupsCount}}G, {{questionnaire.rostersCount}}R)</span>
                     <input id="verification-btn" type="button" class="btn" value="COMPILE" ng-click="verify()" />
-                    <span id="verify-btn" data-toggle="modal" ng-show="verificationStatus.errorsCount" class="error-message ng-hide">
+                    <span data-toggle="modal" ng-show="(verificationStatus.warnings.length + verificationStatus.errors.length) > 0" class="error-message ng-hide">
                         <a href="javascript:void(0);"
                            ng-click="showVerificationErrors()"
                            ng-pluralize
-                           count="verificationStatus.errorsCount"
-                           when="{'1': '{} error',
+                           count="verificationStatus.errors.length"
+                           when="{
+                           '0': 'No errors',
+                           '1': '{} error',
                           '100' : '{}+ errors',
                           'other': '{} errors'}">
                         </a>
                     </span>
-                    <span id="verify-btn" data-toggle="modal" ng-show="verificationStatus.errorsCount" class="error-message ng-hide">
+                    <span data-toggle="modal" ng-show="verificationStatus.warnings.length > 0" class="error-message ng-hide">
                         <a href="javascript:void(0);"
                            ng-click="showVerificationWarnings()"
                            ng-pluralize
-                           count="verificationStatus.errorsCount"
-                           when="{'1': '{} error',
-                          '100' : '{}+ errors',
-                          'other': '{} errors'}">
+                           count="verificationStatus.warnings.length"
+                           when="{
+                            '1': '{} warning',
+                            '100' : '{}+ warnings',
+                            'other': '{} warnings'}">
                         </a>
                     </span>
-                    <span class="text-success" ng-show="verificationStatus.errorsCount === 0">OK<em>, saved at <span>{{verificationStatus.time | date:'H:mm'}}</span></em></span>
+                    <span class="text-success" ng-show="(verificationStatus.warnings.length + verificationStatus.errors.length) === 0">OK</span>
+                    
+                    <span class="text-success"><em>saved at <span>{{verificationStatus.time | date:'H:mm'}}</span></em></span>
 
                     <span class="error-message strong" ng-show="questionnaire.isReadOnlyForUser">Read Only</span>
 
@@ -195,12 +200,11 @@
     <div class="questionnaire-tree" ui-view></div>
 </section>
 
-<div id="verification-modal" ng-show="verificationStatus.visible">
+<div id="verification-modal" ng-show="verificationStatus.visible" ng-class="verificationStatus.typeOfMessageToBeShown">
     <div class="modal-content">
         <div class="modal-header">
             <h3 class="modal-title">
-                Compilation: <span ng-pluralize count="verificationStatus.errorsCount"
-                                   when="{'1': '{} error found', '100': '{}+ errors found', 'other': '{} errors found'}"></span>
+                Compilation: <span ng-pluralize count="verificationStatus.messagesToShow.length" when="{'1': '{} {{verificationStatus.typeOfMessageToBeShown}} found', '100': '{}+ errors found', 'other': '{} {{verificationStatus.typeOfMessageToBeShown}}s found'}"></span>
             </h3>
             <button type="button" class="close" ng-click="closeVerifications()" aria-hidden="true"> <!--&times;--> </button>
         </div>
@@ -218,7 +222,7 @@
                                         <span ng-if="reference.type == 'StaticText'" class="icon icon-error icon-statictext"></span>
                                         <span class="title">{{reference.title}}</span>
                                         <span ng-if="reference.type == 'Question' || reference.type == 'Roster' || reference.type == 'Macro'" class="type == 'Question'" class="icon icon-error {{reference.questionType}}"></span>
-                                        <span ng-if="reference.variable" ng-bind="reference.variable">aaaa</span>
+                                        <span ng-if="reference.variable" ng-bind="reference.variable"></span>
                                     </a>
                                 </li>
                             </ul>

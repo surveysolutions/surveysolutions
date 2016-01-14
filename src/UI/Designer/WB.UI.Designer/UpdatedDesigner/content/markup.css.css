@@ -8954,7 +8954,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   bottom: 0;
   position: fixed;
   z-index: 1000;
-  padding: 26px 24px 26px 76px;
+  padding: 20px 24px 20px 24px;
 }
 #verification-modal .modal-content {
   height: 100%;
@@ -8970,9 +8970,8 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   font-family: 'Open Sans Light', sans-serif;
   font-size: 36px;
   font-weight: 300;
-  border-bottom: 2px solid #edeff1;
-  border-top-color: #dd2c2c;
   padding: 0 22px;
+  border-bottom: 2px solid #edeff1;
 }
 #verification-modal .modal-content .modal-header button.close {
   position: absolute;
@@ -9084,6 +9083,19 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
 }
 #verification-modal .modal-content .modal-footer .btn-link {
   padding-left: 0;
+}
+#verification-modal.error .modal-content .modal-header {
+  border-bottom: 2px solid #edeff1;
+  border-top-color: #dd2c2c;
+}
+#verification-modal.error .modal-content .modal-header h3 span {
+  color: #dd2c2c;
+}
+#verification-modal.warning .modal-content .modal-header {
+  border-top-color: #2075bf;
+}
+#verification-modal.warning .modal-content .modal-header h3 span {
+  color: #2075bf;
 }
 #verification-modal.ie9-backdrop {
   right: 0;
