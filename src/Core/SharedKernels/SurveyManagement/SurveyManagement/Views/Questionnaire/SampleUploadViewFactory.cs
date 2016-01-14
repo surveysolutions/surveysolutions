@@ -16,7 +16,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire
         private readonly IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaires;
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
 
-        public SampleUploadViewFactory(IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaires, IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
+        public SampleUploadViewFactory(IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaires,
+            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
         {
             this.questionnaires = questionnaires;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;

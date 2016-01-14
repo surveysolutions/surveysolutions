@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection.Utils
 {
@@ -47,7 +48,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 
         public void Remove(T item)
         {
-            this.dictionary.Remove(item);
+            this.dictionary.TryRemove(item);
         }
 
         public void Add(T item)

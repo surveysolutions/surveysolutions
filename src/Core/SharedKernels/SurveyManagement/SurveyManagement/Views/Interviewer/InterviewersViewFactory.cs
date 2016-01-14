@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
                                     .Skip((input.Page - 1) * input.PageSize)
                                     .Take(input.PageSize)
                                     .ToList()
-                                    .Select(x => new InterviewersItem(x.PublicKey, x.UserName, x.Email, x.CreationDate, x.IsLockedBySupervisor, x.IsLockedByHQ, x.DeviceId));
+                                    .Select(x => new InterviewersItem(x.PublicKey, x.UserName, x.Supervisor?.Name, x.Email, x.CreationDate, x.IsLockedBySupervisor, x.IsLockedByHQ, x.DeviceId));
 
             return new InterviewersView() {Items = items, TotalCount = interviewers.Count()};
         }
@@ -43,30 +43,34 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
             if (viewer == null)
                 return Enumerable.Empty<UserDocument>().AsQueryable();
 
-            if (viewer.IsHq())
-                return this.GetTeamMembersForHeadquarter(input.Archived);
+            if (viewer.IsHq() || viewer.IsAdmin())
+                return this.GetTeamMembersForHeadquarter(input);
 
-            bool isSupervisor = viewer.Roles.Any(role => role == UserRoles.Supervisor);
+            bool isSupervisor = viewer.IsSupervisor();
+            if (isSupervisor && !input.SupervisorName.IsNullOrEmpty() && viewer.UserName != input.SupervisorName)
+                return Enumerable.Empty<UserDocument>().AsQueryable();
+
             if (isSupervisor)
-                return this.GetTeamMembersForSupervisor(viewer.PublicKey, input.SearchBy, input.Archived, input.ShowOnlyNotConnectedToDevice);
+                return this.GetTeamMembersForSupervisor(viewer.PublicKey, input.SearchBy, input.Archived, input.ConnectedToDevice);
 
             throw new ArgumentException(String.Format("Operation is allowed only for ViewerId and Hq users. Current viewer roles are {0}",
                 String.Concat(viewer.Roles)));
         }
 
-        protected IQueryable<UserDocument> GetTeamMembersForSupervisor(Guid supervisorId, string searchBy, bool archived, bool showOnlyNotConnectedToDevice)
+        protected IQueryable<UserDocument> GetTeamMembersForSupervisor(Guid supervisorId, string searchBy, bool archived, bool? connectedToDevice)
         {
             List<UserDocument> userDocuments = this.users.Query(_ =>
             {
                 var all = _.Where(u => u.IsArchived == archived);
                 if (!string.IsNullOrWhiteSpace(searchBy))
                 {
-                    all = all.Where(x => x.UserName.Contains(searchBy) || x.Email.Contains(searchBy));
+                    var searchByToLower = searchBy.ToLower();
+                    all = all.Where(x => x.UserName.ToLower().Contains(searchByToLower) || x.Email.ToLower().Contains(searchByToLower));
                 }
 
-                if (showOnlyNotConnectedToDevice)
+                if (connectedToDevice.HasValue)
                 {
-                    all = all.Where(x => x.DeviceId == null);
+                    all = all.Where(x => (x.DeviceId != null) == connectedToDevice.Value);
                 }
 
                 all = all.Where(user =>
@@ -78,11 +82,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
             return userDocuments.AsQueryable();
         }
 
-        protected IQueryable<UserDocument> GetTeamMembersForHeadquarter(bool archived)
+        protected IQueryable<UserDocument> GetTeamMembersForHeadquarter(InterviewersInputModel input)
         {
-            var result = this.users.Query(_ => _.Where(user => user.IsArchived == archived && user.Roles.Any(role => role == UserRoles.Operator) ||
-                user.Roles.Any(role => role == UserRoles.Supervisor)).ToList()
-                );
+            var result = this.users.Query(_ =>
+            {
+                var all = _.Where(user => user.IsArchived == input.Archived && user.Roles.Any(role => role == UserRoles.Operator));
+
+                if (!string.IsNullOrWhiteSpace(input.SearchBy))
+                {
+                    var searchByToLower = input.SearchBy.ToLower();
+                    all = all.Where(x => x.UserName.ToLower().Contains(searchByToLower) || x.Email.ToLower().Contains(searchByToLower));
+                }
+
+                if (input.ConnectedToDevice.HasValue)
+                {
+                    all = all.Where(user => (user.DeviceId != null) == input.ConnectedToDevice.Value);
+                }
+
+                if (!input.SupervisorName.IsNullOrEmpty())
+                {
+                    all = all.Where(user => user.Supervisor.Name == input.SupervisorName);
+                }
+                
+                return all.ToList();
+            });
             return result.AsQueryable();
         }
     }

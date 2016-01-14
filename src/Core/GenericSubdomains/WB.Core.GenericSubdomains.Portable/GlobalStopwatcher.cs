@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 
 namespace WB.Core.GenericSubdomains.Portable
 {
@@ -27,10 +28,9 @@ namespace WB.Core.GenericSubdomains.Portable
         {
             private readonly Stopwatch stopwatch = new Stopwatch();
 
-            public long ElapsedMilliseconds
-            {
-                get { return this.stopwatch.ElapsedMilliseconds; }
-            }
+            public long ElapsedMilliseconds => this.stopwatch.ElapsedMilliseconds;
+
+            public TimeSpan ElapsedTimeSpan => this.stopwatch.Elapsed;
 
             public int MeasuresCount { get; private set; }
 
@@ -46,30 +46,59 @@ namespace WB.Core.GenericSubdomains.Portable
             }
         }
 
-        private static readonly Dictionary<string, StopwatchWrapper> stopwatches = new Dictionary<string, StopwatchWrapper>();
-
-        public static StopwatchScope Scope(string name)
+        private class StopwatchesCategory
         {
-            return new StopwatchScope(stopwatches.GetOrAdd(name));
+            public Dictionary<string, StopwatchWrapper> Stopwatches { get; } = new Dictionary<string, StopwatchWrapper>();
         }
+
+        private static readonly Dictionary<string, StopwatchesCategory> categories = new Dictionary<string, StopwatchesCategory>();
+
+        public static StopwatchScope Scope(string name) => Scope("$global", name);
+
+        public static StopwatchScope Scope(string category, string name) => new StopwatchScope(GetStopwatch(category, name));
+
+        private static StopwatchWrapper GetStopwatch(string category, string name)
+            => categories.GetOrUpdate(category, () => new StopwatchesCategory()).Stopwatches.GetOrUpdate(name, () => new StopwatchWrapper());
 
         public static void Reset()
         {
-            stopwatches.Clear();
+            categories.Clear();
         }
 
         public static void DumpToDebug()
         {
-            var lines = new List<string>();
+            Debug.WriteLine(GetMeasureDetails());
+        }
 
-            lines.Add("=====   Start of Global Stopwatcher Dump   =====");
-            lines.AddRange(
-                stopwatches
+        public static string GetMeasureDetails()
+        {
+            var detailsBuilder = new StringBuilder();
+
+            detailsBuilder.AppendLine();
+            detailsBuilder.AppendLine("=====   Start of Global Stopwatcher Dump   =====");
+            detailsBuilder.AppendLine();
+
+            foreach (var stopwatchesCategory in categories.OrderBy(category => category.Key))
+            {
+                detailsBuilder.AppendLine($"---     category: {stopwatchesCategory.Key}     ---");
+
+                stopwatchesCategory
+                    .Value
+                    .Stopwatches
                     .OrderByDescending(pair => pair.Value.ElapsedMilliseconds)
-                    .Select((pair, index) => string.Format("{0}. {1}ms, {2} measures - {3}", index + 1, pair.Value.ElapsedMilliseconds, pair.Value.MeasuresCount, pair.Key)));
-            lines.Add("=====    End of Global Stopwatcher Dump    =====");
+                    .Select((pair, index)
+                        => $"{index + 1}. {pair.Value.ElapsedTimeSpan:c}, {pair.Value.MeasuresCount} measures - {pair.Key}")
+                    .ForEach(line
+                        => detailsBuilder.AppendLine(line));
 
-            Debug.WriteLine(string.Join(Environment.NewLine, lines));
+                detailsBuilder.AppendLine("- - - - - - - - - - - - - - - - - - - - -");
+                detailsBuilder.AppendLine();
+            }
+
+            detailsBuilder.AppendLine("=====    End of Global Stopwatcher Dump    =====");
+            detailsBuilder.AppendLine();
+
+            return detailsBuilder.ToString();
         }
     }
 }

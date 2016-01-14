@@ -3,6 +3,8 @@ using Main.Core.Documents;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Views.Account;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Providers.CQRS.Accounts;
 using WB.UI.Designer.Providers.CQRS.Accounts.Events;
@@ -25,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AccountDenormalizerTests
         }
 
         protected static IPublishedEvent<T> ToPublishedEvent<T>(T @event, Guid eventSourceId)
-            where T : class
+            where T : class, IEvent
         {
             return Mock.Of<IPublishedEvent<T>>(publishedEvent
                 => publishedEvent.Payload == @event

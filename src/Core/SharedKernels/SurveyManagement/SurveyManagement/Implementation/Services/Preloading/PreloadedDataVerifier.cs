@@ -69,20 +69,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion, PreloadedDataVerificationReferenceType.Column)(datas,
                         preloadedDataService));
 
-            errors.AddRange(this.ErrorsByQuestionsWasntParsed(datas, preloadedDataService));
-            errors.AddRange(this.ErrorsBySupervisorName(datas, preloadedDataService));
+            if(ShouldVerificationBeContinued(errors))
+                errors.AddRange(this.ErrorsByQuestionsWasntParsed(datas, preloadedDataService));
 
-            errors.AddRange(this.Verifier(this.ErrorsByGpsQuestions, QuestionType.GpsCoordinates)(datas, preloadedDataService));
-            errors.AddRange(this.Verifier(this.ErrorsByNumericQuestions, QuestionType.Numeric)(datas, preloadedDataService));
-            
-            errors.AddRange(this.Verifier(this.ColumnDuplications)(datas, preloadedDataService));
+            if (ShouldVerificationBeContinued(errors))
+                errors.AddRange(this.ErrorsByResposibleName(datas, preloadedDataService, acceptInterviewers: true));
 
-            status.Errors = errors;
+            if (ShouldVerificationBeContinued(errors))
+                errors.AddRange(this.Verifier(this.ErrorsByGpsQuestions, QuestionType.GpsCoordinates)(datas, preloadedDataService));
 
-            var supervisorNameIndex = preloadedDataService.GetColumnIndexByHeaderName(data, ServiceColumns.SupervisorName);
+            if (ShouldVerificationBeContinued(errors))
+                errors.AddRange(this.Verifier(this.ErrorsByNumericQuestions, QuestionType.Numeric)(datas, preloadedDataService));
+
+            if (ShouldVerificationBeContinued(errors))
+                errors.AddRange(this.Verifier(this.ColumnDuplications)(datas, preloadedDataService));
+
+            status.Errors = errors.Count > 100 ? errors.Take(100).ToList() : errors;
+
+            var supervisorNameIndex = preloadedDataService.GetColumnIndexByHeaderName(data, ServiceColumns.ResponsibleColumnName);
             status.WasSupervisorProvided = supervisorNameIndex >= 0;
 
             return status;
+        }
+
+        private bool ShouldVerificationBeContinued(List<PreloadedDataVerificationError> errors)
+        {
+            return errors.Count < 100;
         }
 
         public VerificationStatus VerifyPanel(Guid questionnaireId, long version, PreloadedDataByFile[] data)
@@ -113,7 +125,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
             var topLevel = preloadedDataService.GetTopLevelData(data);
 
-            var supervisorNameIndex = preloadedDataService.GetColumnIndexByHeaderName(topLevel, ServiceColumns.SupervisorName);
+            var supervisorNameIndex = preloadedDataService.GetColumnIndexByHeaderName(topLevel, ServiceColumns.ResponsibleColumnName);
             status.WasSupervisorProvided = supervisorNameIndex >= 0;
 
             return status;
@@ -245,7 +257,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         {
             if (levelExportStructure.LevelScopeVector == null || levelExportStructure.LevelScopeVector.Length == 0)
             {
-                yield return ServiceColumns.SupervisorName;
+                yield return ServiceColumns.ResponsibleColumnName;
             }
             
         }
@@ -407,8 +419,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
             for (int rowIndex = 0; rowIndex < levelData.Content.Length; rowIndex++)
             {
-                var latitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, string.Format("{0}_latitude", gpsExportedQuestion.VariableName));
-                var longitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, string.Format("{0}_longitude", gpsExportedQuestion.VariableName));
+                var latitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, string.Format("{0}__latitude", gpsExportedQuestion.VariableName));
+                var longitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, string.Format("{0}__longitude", gpsExportedQuestion.VariableName));
 
                 var latitude = latitudeColumnIndex < 0
                     ? null
@@ -757,11 +769,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 levelData.FileName);
         }
 
-        private IEnumerable<PreloadedDataVerificationError> ErrorsBySupervisorName(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService)
+        private IEnumerable<PreloadedDataVerificationError> ErrorsBySupervisorName(PreloadedDataByFile[] allLevels,
+            IPreloadedDataService preloadedDataService)
+        {
+            return ErrorsByResposibleName(allLevels, preloadedDataService, false);
+        }
+        private IEnumerable<PreloadedDataVerificationError> ErrorsByResposibleName(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService, bool acceptInterviewers)
         {
             foreach (var levelData in allLevels)
             {
-                var supervisorNameIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, ServiceColumns.SupervisorName);
+                var supervisorNameIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, ServiceColumns.ResponsibleColumnName);
 
                 if (supervisorNameIndex < 0)
                     continue;
@@ -777,7 +794,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     {
                         yield return
                             new PreloadedDataVerificationError("PL0025",
-                                PreloadingVerificationMessages.PL0025_SupervisorNameIsEmpty,
+                                PreloadingVerificationMessages.PL0025_ResponsibleNameIsEmpty,
                                 new PreloadedDataVerificationReference(supervisorNameIndex, y,
                                     PreloadedDataVerificationReferenceType.Cell,
                                     "",
@@ -785,14 +802,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                         continue;
                     }
 
-                    var userState = GetUserStateAndUpdateCache(supervisorCache, name);
+                    var userState = GetUserStateAndUpdateCache(supervisorCache, name, acceptInterviewers);
 
                     if (userState == null)
                     {
 
                         yield return
                             new PreloadedDataVerificationError("PL0026",
-                                PreloadingVerificationMessages.PL0026_SupervisorWasNotFound,
+                                PreloadingVerificationMessages.PL0026_ResponsibleWasNotFound,
                                 new PreloadedDataVerificationReference(supervisorNameIndex, y,
                                     PreloadedDataVerificationReferenceType.Cell,
                                     "",
@@ -803,7 +820,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     {
                         yield return
                             new PreloadedDataVerificationError("PL0027",
-                                PreloadingVerificationMessages.PL0027_SupervisorIsLocked,
+                                PreloadingVerificationMessages.PL0027_ResponsibleIsLocked,
                                 new PreloadedDataVerificationReference(supervisorNameIndex, y,
                                     PreloadedDataVerificationReferenceType.Cell,
                                     "",
@@ -824,20 +841,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             }
         }
 
-        private Tuple<bool, bool> GetUserStateAndUpdateCache(Dictionary<string, Tuple<bool, bool>> supervisorCache, string name)
+        private Tuple<bool, bool> GetUserStateAndUpdateCache(Dictionary<string, Tuple<bool, bool>> supervisorCache, string name, bool acceptInterviewers)
         {
-            if (supervisorCache.ContainsKey(name))
-                return supervisorCache[name];
+            var userNameLowerCase = name.ToLower();
+            if (supervisorCache.ContainsKey(userNameLowerCase))
+                return supervisorCache[userNameLowerCase];
             
-            var user = userViewFactory.Load(new UserViewInputModel(UserName: name, UserEmail: null));
+            var user = userViewFactory.Load(new UserViewInputModel(UserName: userNameLowerCase, UserEmail: null));
             if (user == null || user.IsArchived)
             {
-                supervisorCache.Add(name, null);
+                supervisorCache.Add(userNameLowerCase, null);
                 return null;
             }
             
-            var item = new Tuple<bool, bool>(user.IsLockedByHQ, user.IsSupervisor());
-            supervisorCache.Add(name, item);
+            var item = new Tuple<bool, bool>(user.IsLockedByHQ, user.IsSupervisor() || (acceptInterviewers && user.Roles.Any(role => role == UserRoles.Operator)));
+            supervisorCache.Add(userNameLowerCase, item);
             return item;
         }
     }

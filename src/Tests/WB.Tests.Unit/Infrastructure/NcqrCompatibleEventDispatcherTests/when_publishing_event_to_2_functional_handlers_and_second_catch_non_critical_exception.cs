@@ -7,6 +7,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -17,7 +18,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 {
     internal class when_publishing_event_to_2_functional_handlers_and_second_catch_non_critical_exception : NcqrCompatibleEventDispatcherTestContext
     {
-        private class FunctionalEventHandlerEvent { }
+        private class FunctionalEventHandlerEvent : IEvent { }
 
         private class FunctionalEventHandler :
             AbstractFunctionalEventHandler<IReadSideRepositoryEntity, IReadSideStorage<IReadSideRepositoryEntity>>,

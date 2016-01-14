@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Threading;
 using Machine.Specifications;
 using Moq;
 using StatData.Core;
@@ -25,6 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.T
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();
             fileSystemAccessor.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(true);
             fileSystemAccessor.Setup(x => x.ChangeExtension(Moq.It.IsAny<string>(), Moq.It.IsAny<string>())).Returns(fileNameExported);
+            fileSystemAccessor.Setup(x => x.GetFileNameWithoutExtension(Moq.It.IsAny<string>())).Returns<string>(Path.GetFileNameWithoutExtension);
 
             var tabFileReader = new Mock<ITabFileReader>();
             tabFileReader.Setup(x => x.GetMetaFromTabFile(Moq.It.IsAny<string>())).Returns(meta);
@@ -41,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.T
         };
 
         Because of = () =>
-            filePaths = _tabularDataToExternalStatPackagesTabDataExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId, questionnaireVersion, new[] { fileName }, new Progress<int>());
+            filePaths = _tabularDataToExternalStatPackagesTabDataExportService.CreateAndGetStataDataFilesForQuestionnaire(questionnaireId, questionnaireVersion, new[] { fileName }, new Progress<int>(), CancellationToken.None);
 
         private It should_call_write_to_file = () =>
             datasetWriter.Verify(x => x.WriteToFile(Moq.It.IsAny<string>(), Moq.It.IsAny<IDatasetMeta>(), Moq.It.IsAny<IDataQuery>()), Times.Once());
@@ -50,8 +53,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.T
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static long questionnaireVersion = 3;
         private static string[] filePaths;
-        private static string fileName = "1.tab";
-        private static string fileNameExported = "1.dat";
+        private static string fileName = "main level.tab";
+        private static string fileNameExported = "main level.dat";
         private static Mock<IDatasetWriter> datasetWriter;
 
         private static DatasetMeta meta = new DatasetMeta(new IDatasetVariable[] {new DatasetVariable("a")});

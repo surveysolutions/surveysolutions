@@ -14,17 +14,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.tabletInformationService = tabletInformationService;
         }
 
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public ActionResult Packages()
-        {
-            return this.View(this.tabletInformationService.GetAllTabletInformationPackages());
-        }
-
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult DownloadPackages(string fileName)
         {
             return this.File(this.tabletInformationService.GetFullPathToContentFile(fileName), "application/zip",
                 this.tabletInformationService.GetPackageNameWithoutRegistrationId(fileName));
+        }
+
+        [Authorize(Roles = "Administrator")]
+        public ActionResult PackagesInfo()
+        {
+            return this.View();
         }
     }
 }

@@ -51,9 +51,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return new MvxCommand(async () => await this.ReturnBackAsync(), () => !this.IsInProgress); }
         }
 
-        public IMvxCommand NavigateToTroubleshootingCommand
+        public IMvxCommand NavigateToDiagnosticsPageCommand
         {
-            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<TroubleshootingViewModel>(), () => !this.IsInProgress); }
+            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>(), () => !this.IsInProgress); }
         }
 
         private IMvxCommand relinkCommand;

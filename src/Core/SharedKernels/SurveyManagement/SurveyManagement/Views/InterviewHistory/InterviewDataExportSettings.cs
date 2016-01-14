@@ -13,14 +13,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
             this.EnableInterviewHistory = false;
             this.MaxRecordsCountPerOneExportQuery = 1000;
             this.LimitOfCachedItemsByDenormalizer = 100;
+            this.InterviewsExportParallelTasksLimit = 1;
             this.DirectoryPath = String.Empty;
         }
 
-        public InterviewDataExportSettings(string directoryPath, bool enableInterviewHistory, int maxRecordsCountPerOneExportQuery, int limitOfCachedItemsByDenormalizer)
+        public InterviewDataExportSettings(string directoryPath, 
+            bool enableInterviewHistory, 
+            int maxRecordsCountPerOneExportQuery, 
+            int limitOfCachedItemsByDenormalizer,
+            int interviewsExportParallelTasksLimit)
         {
             this.EnableInterviewHistory = enableInterviewHistory;
             this.MaxRecordsCountPerOneExportQuery = maxRecordsCountPerOneExportQuery;
             this.LimitOfCachedItemsByDenormalizer = limitOfCachedItemsByDenormalizer;
+            this.InterviewsExportParallelTasksLimit = interviewsExportParallelTasksLimit;
             this.DirectoryPath = directoryPath;
         }
 
@@ -29,6 +35,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
         public bool EnableInterviewHistory { get; private set; }
 
         public int MaxRecordsCountPerOneExportQuery { get; private set; }
+
+        public int InterviewsExportParallelTasksLimit { get; private set; }
 
         public string ExportedDataFolderName
         {

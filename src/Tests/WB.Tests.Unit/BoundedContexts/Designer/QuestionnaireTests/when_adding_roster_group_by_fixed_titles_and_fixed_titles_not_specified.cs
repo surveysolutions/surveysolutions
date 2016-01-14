@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message = () =>
-            new[] { "not", "be", "empty" }.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
+            new[] { "list", "contain", "two" }.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
         
         private static Questionnaire questionnaire;
         private static Guid responsibleId;

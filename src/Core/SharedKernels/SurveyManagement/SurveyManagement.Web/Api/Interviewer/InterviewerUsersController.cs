@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
@@ -8,7 +9,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
-    [ApiBasicAuth]
+    [ApiBasicAuth(new[] { UserRoles.Operator })]
     [RoutePrefix("api/interviewer/v1/users")]
     [ProtobufJsonSerializer]
     public class InterviewerUsersController : ApiController

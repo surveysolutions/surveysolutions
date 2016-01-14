@@ -5,7 +5,11 @@ using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Synchronization.Implementation.ImportManager;
+using WB.Tests.Unit.Infrastructure.LiteEventBusTests;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Synchronization
 {
@@ -47,7 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Synchronization
                 for (int j = 0; j < EventsPerArCount; j++)
                 {
                     eventsPerAr[j] = new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), eventSourceId,
-                                                                       j + 1, DateTime.Now, 0, new object());
+                                                                       j + 1, DateTime.Now, 0, Mock.Of<IEvent>());
                 }
                 eventList.AddRange(eventsPerAr);
             }

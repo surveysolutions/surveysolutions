@@ -298,7 +298,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Errors.
+        ///   Looks up a localized string similar to Error(s).
         /// </summary>
         public static string Interview_Complete_Errors {
             get {
@@ -640,6 +640,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Diagnostics.
+        /// </summary>
+        public static string Interviewer_Diagnostics {
+            get {
+                return ResourceManager.GetString("Interviewer_Diagnostics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Interviewer_RelinkDevice_Cancel {
@@ -672,15 +681,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interviewer_RelinkDevice_RelinkMessage {
             get {
                 return ResourceManager.GetString("Interviewer_RelinkDevice_RelinkMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Troubleshooting.
-        /// </summary>
-        public static string Interviewer_Troubleshooting {
-            get {
-                return ResourceManager.GetString("Interviewer_Troubleshooting", resourceCulture);
             }
         }
         

@@ -71,6 +71,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Api User.
+        /// </summary>
+        internal static string ApiUser {
+            get {
+                return ResourceManager.GetString("ApiUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File content is missing for file name {0} interview {1}.
         /// </summary>
         internal static string FileContentIsMissingForFileNameAndInterviewFormat {

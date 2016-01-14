@@ -1,26 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using Humanizer;
 using Newtonsoft.Json;
 using Npgsql;
 using NpgsqlTypes;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
 {
-    internal abstract class PostgresKeyValueStorage<TEntity> where TEntity: class
+    internal abstract class PostgresKeyValueStorage<TEntity> 
+        where TEntity: class
     {
-        private readonly ISessionProvider sessionProvider;
-        private readonly string connectionString;
-        private readonly string tableName = typeof(TEntity).Name.Pluralize();
+        protected readonly string connectionString;
+        protected readonly string tableName = typeof(TEntity).Name.Pluralize();
 
-        public PostgresKeyValueStorage(ISessionProvider sessionProvider, string connectionString)
+        private readonly ILogger logger;
+
+        public PostgresKeyValueStorage(string connectionString, ILogger logger)
         {
-            this.sessionProvider = sessionProvider;
             this.connectionString = connectionString;
+            this.logger = logger;
             EnshureTableExists();
         }
 
-        public TEntity GetById(string id)
+        public virtual TEntity GetById(string id)
         {
             string queryResult;
             using (var command = new NpgsqlCommand())
@@ -45,7 +50,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
         protected abstract object ExecuteScalar(IDbCommand command);
         protected abstract int ExecuteNonQuery(IDbCommand command);
         
-        public void Remove(string id)
+        public virtual void Remove(string id)
         {
             int queryResult;
             using (var command = new NpgsqlCommand())
@@ -65,7 +70,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             }
         }
 
-        public void Store(TEntity view, string id)
+        public virtual void Store(TEntity view, string id)
         {
             object existsResult;
             using (var existsCommand = new NpgsqlCommand())
@@ -112,7 +117,21 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             }
         }
 
-        public void Clear()
+        public virtual void BulkStore(List<Tuple<TEntity, string>> bulk)
+        {
+            try
+            {
+                this.FastBulkStore(bulk);
+            }
+            catch (Exception exception)
+            {
+                this.logger.Warn($"Failed to store bulk of {bulk.Count} entities of type {this.ViewType.Name} using fast way. Switching to slow way.", exception);
+
+                this.SlowBulkStore(bulk);
+            }
+        }
+
+        public virtual void Clear()
         {
             EnshureTableExists();
 
@@ -132,9 +151,41 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             get { return typeof(TEntity); }
         }
 
-        public string GetReadableStatus()
+        public virtual string GetReadableStatus()
         {
-            return "Postgres Key/Value :/";
+            return "Postgres K/V :/";
+        }
+
+        private void FastBulkStore(List<Tuple<TEntity, string>> bulk)
+        {
+            this.EnshureTableExists();
+
+            using (var connection = new NpgsqlConnection(this.connectionString))
+            {
+                connection.Open();
+                using (var writer = connection.BeginBinaryImport($"COPY {this.tableName}(id, value) FROM STDIN BINARY;"))
+                {
+                    foreach (var item in bulk)
+                    {
+                        writer.StartRow();
+                        writer.Write(item.Item2, NpgsqlDbType.Text); // write Id
+
+                        var serializedValue = JsonConvert.SerializeObject(item.Item1, Formatting.None, JsonSerializerSettings);
+                        writer.Write(serializedValue, NpgsqlDbType.Json); // write value
+                    }
+                }
+            }
+        }
+
+        private void SlowBulkStore(List<Tuple<TEntity, string>> bulk)
+        {
+            foreach (var tuple in bulk)
+            {
+                var entity = tuple.Item1;
+                var id = tuple.Item2;
+
+                this.Store(entity, id);
+            }
         }
 
         protected void EnshureTableExists()
@@ -143,7 +194,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             {
                 connection.Open();
                 var command = @"CREATE TABLE IF NOT EXISTS " + this.tableName + @" (
-    id        varchar(70) PRIMARY KEY,
+    id        text PRIMARY KEY,
     value       JSON NOT NULL
 )";
                 using (var sqlCommand = connection.CreateCommand())
@@ -154,7 +205,7 @@ namespace WB.Core.Infrastructure.Storage.Postgre.Implementation
             }
         }
 
-        private static JsonSerializerSettings JsonSerializerSettings
+        protected static JsonSerializerSettings JsonSerializerSettings
         {
             get
             {

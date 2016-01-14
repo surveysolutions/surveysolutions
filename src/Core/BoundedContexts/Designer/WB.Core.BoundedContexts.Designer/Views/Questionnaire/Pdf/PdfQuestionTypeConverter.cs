@@ -43,6 +43,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 case QuestionType.SingleOption: return PdfQuestionType.SingleOption;
                 case QuestionType.Text: return PdfQuestionType.Text;
                 case QuestionType.TextList: return PdfQuestionType.TextList;
+                // there are some legacy questionnaires on solutions that have yes/no question.
+                case QuestionType.YesNo: return PdfQuestionType.YesNo;
                 default:
                     throw new ArgumentException(nameof(questionType));
             }

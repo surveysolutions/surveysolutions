@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.Enumerator.Models.Questionnaire
 
         public Dictionary<Guid, BaseQuestionModel> Questions { get; set; }
 
-        public IEnumerable<QuestionnaireReferenceModel> EntityReferences { get; set; }
+        public List<QuestionnaireReferenceModel> EntityReferences { get; set; }
 
         public Dictionary<Guid, StaticTextModel> StaticTexts { get; set; }
 

@@ -5,7 +5,6 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.UI.Interviewer.Utils;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities
@@ -35,8 +34,8 @@ namespace WB.UI.Interviewer.Activities
             this.MenuInflater.Inflate(Resource.Menu.login, menu);
 
             menu.LocalizeMenuItem(Resource.Id.menu_settings, InterviewerUIResources.MenuItem_Title_Settings);
-            menu.LocalizeMenuItem(Resource.Id.menu_troubleshooting, InterviewerUIResources.MenuItem_Title_Troubleshooting);
 
+            menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, InterviewerUIResources.MenuItem_Title_Diagnostics);
             return base.OnCreateOptionsMenu(menu);
         }
         public override bool OnOptionsItemSelected(IMenuItem item)
@@ -47,9 +46,8 @@ namespace WB.UI.Interviewer.Activities
                     Intent intent = new Intent(this, typeof(PrefsActivity));
                     this.StartActivity(intent);
                     break;
-
-                case Resource.Id.menu_troubleshooting:
-                    this.ViewModel.NavigateToTroubleshootingPageCommand.Execute();
+                case Resource.Id.menu_diagnostics:
+                    this.ViewModel.NavigateToDiagnosticsPageCommand.Execute();
                     break;
             }
             return base.OnOptionsItemSelected(item);

@@ -34,10 +34,10 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireControllerTests
                 userHelper ?? Mock.Of<IMembershipUserService>(),
                 questionnaireHelper ?? Mock.Of<IQuestionnaireHelper>(),
                 questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),
-                sharedPersonsViewFactory ?? Mock.Of<IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons>>(),
                 logger ?? Mock.Of<ILogger>(),
                 questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),
-                Mock.Of<IQuestionnaireChangeHistoryFactory>());
+                Mock.Of<IQuestionnaireChangeHistoryFactory>(),
+                Mock.Of<ILookupTableService>());
         }
 
         protected static void SetControllerContextWithSession(Controller controller, string key, object value)

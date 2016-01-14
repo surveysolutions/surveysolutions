@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -7,25 +8,33 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails
 {
     public abstract class AbstractDataExportProcessDetails : IDataExportProcessDetails
     {
-        protected AbstractDataExportProcessDetails(string processName, DataExportFormat format)
+        private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
+        protected AbstractDataExportProcessDetails(DataExportFormat format)
         {
-            this.ProcessId = Guid.NewGuid().FormatGuid();
             this.BeginDate = DateTime.UtcNow;
             this.LastUpdateDate = DateTime.UtcNow;
             this.Status = DataExportStatus.Queued;
             this.ProgressInPercents = 0;
 
-            this.ProcessName = processName;
             this.Format = format;
         }
 
-        public string ProcessId { get; }
-        public string ProcessName { get; }
+        public abstract string NaturalId { get; }
+        public abstract string Name { get; }
+
         public DataExportFormat Format { get; }
         public DateTime BeginDate { get; }
+
+        public CancellationToken CancellationToken => this.cancellationTokenSource.Token;
 
         public DateTime LastUpdateDate { get; set; }
         public DataExportStatus Status { get; set; }
         public int ProgressInPercents { get; set; }
+
+        public void Cancel()
+        {
+            this.cancellationTokenSource.Cancel();
+        }
     }
 }

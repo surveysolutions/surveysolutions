@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
+using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
 {
-
     class ZipArchiveUtils : IArchiveUtils
     {
         readonly IFileSystemAccessor fileSystemAccessor;
@@ -28,6 +29,22 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
 
             FastZip zip = new FastZip();
             zip.CreateZip(archiveFile, directory, true, string.Empty);
+        }
+
+        public byte[] ZipDirectoryToByteArray(string sourceDirectory, string directoryFilter = null, string fileFilter = null)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                FastZip zip = new FastZip();
+                zip.CreateZip(memoryStream, sourceDirectory, true, fileFilter, directoryFilter);
+
+                return memoryStream.ToArray();
+            }
+        }
+
+        public Task<byte[]> ZipDirectoryToByteArrayAsync(string sourceDirectory, string directoryFilter = null, string fileFilter = null)
+        {
+            return Task.Run(() => ZipDirectoryToByteArray(sourceDirectory, directoryFilter, fileFilter));
         }
 
         public void ZipFiles(IEnumerable<string> files, string archiveFilePath)
@@ -62,12 +79,15 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
         }
 
 
-        public void Unzip(string archivedFile, string extractToFolder)
+        public void Unzip(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false)
         {
-            extractToFolder = Path.Combine(extractToFolder, Path.GetFileNameWithoutExtension(archivedFile));
-            if (!Directory.Exists(extractToFolder))
+            if (!ignoreRootDirectory)
             {
-                Directory.CreateDirectory(extractToFolder);
+                extractToFolder = Path.Combine(extractToFolder, Path.GetFileNameWithoutExtension(archivedFile));
+                if (!Directory.Exists(extractToFolder))
+                {
+                    Directory.CreateDirectory(extractToFolder);
+                }
             }
 
             using (ZipInputStream zipFileStream = new ZipInputStream(File.OpenRead(archivedFile)))
@@ -105,15 +125,71 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
             }
         }
 
+        public Task UnzipAsync(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false)
+        {
+            return Task.Run(() => Unzip(archivedFile, extractToFolder, ignoreRootDirectory));
+        }
+
+        public IEnumerable<UnzippedFile> UnzipStream(Stream zipStream)
+        {
+            zipStream.Seek(0, SeekOrigin.Begin);
+            using (ZipInputStream zipFileStream = new ZipInputStream(zipStream))
+            {
+                ZipEntry zipFileOrDirectory;
+                while ((zipFileOrDirectory = zipFileStream.GetNextEntry()) != null)
+                {
+                    if (!zipFileOrDirectory.IsFile) continue;
+
+                    var unzippedFileStream = new MemoryStream();
+                    zipFileStream.CopyTo(unzippedFileStream);
+                    yield return new UnzippedFile
+                    {
+                        FileName = zipFileOrDirectory.Name,
+                        FileBytes = unzippedFileStream.ToArray()
+                    };
+                }
+            }
+        }
+
         public bool IsZipFile(string filePath)
         {
             var zip = new ZipFile(filePath);
             return zip.TestArchive(true);
         }
 
+        public bool IsZipStream(Stream zipStream)
+        {
+            var zip = new ZipFile(zipStream);
+            return zip.TestArchive(true);
+        }
+
         public Dictionary<string, long> GetArchivedFileNamesAndSize(string filePath)
         {
             return new Dictionary<string, long>();
+        }
+
+
+        public byte[] CompressStringToByteArray(string fileName, string fileContentAsString)
+        {
+            using (MemoryStream outputMemoryStream = new MemoryStream())
+            {
+                using (ZipOutputStream zipStream = new ZipOutputStream(outputMemoryStream))
+                {
+                    zipStream.SetLevel(3);
+
+                    ZipEntry newEntry = new ZipEntry(fileName) { DateTime = DateTime.Now };
+
+                    zipStream.PutNextEntry(newEntry);
+
+                    var inputMemoryStream = new MemoryStream(Encoding.Unicode.GetBytes(fileContentAsString));
+
+                    StreamUtils.Copy(inputMemoryStream, zipStream, new byte[4096]);
+                    zipStream.CloseEntry();
+
+                    zipStream.IsStreamOwner = false;
+                }
+                return outputMemoryStream.ToArray();
+            }
         }
 
         public string CompressString(string stringToCompress)

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
 
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.SharedKernels.DataCollection.Accessors
 {
@@ -50,6 +52,11 @@ namespace WB.Core.SharedKernels.DataCollection.Accessors
             this.fileSystemAccessor.MarkFileAsReadonly(pathToSaveAssembly);
         }
 
+        public Task StoreAssemblyAsync(QuestionnaireIdentity questionnaireIdentity, byte[] assembly)
+        {
+            throw new NotImplementedException();
+        }
+
         public void RemoveAssembly(Guid questionnaireId, long questionnaireVersion)
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
@@ -67,6 +74,11 @@ namespace WB.Core.SharedKernels.DataCollection.Accessors
                 Logger.Error(string.Format("Error on assembly deletion for questionnaire {0} version {1}", questionnaireId, questionnaireVersion));
                 Logger.Error(e.Message, e);
             }
+        }
+
+        public Task RemoveAssemblyAsync(QuestionnaireIdentity questionnaireIdentity)
+        {
+            throw new NotImplementedException();
         }
 
         public string GetAssemblyAsBase64String(Guid questionnaireId, long questionnaireVersion)

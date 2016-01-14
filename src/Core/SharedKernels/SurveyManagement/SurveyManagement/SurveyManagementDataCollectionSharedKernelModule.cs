@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Supervisor;
 using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
@@ -75,13 +76,13 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             CommandRegistry
                 .Setup<Questionnaire>()
-                .ResolvesIdFrom<QuestionnaireCommand>           (command => command.QuestionnaireId)
-                .InitializesWith<ImportFromDesigner>            (aggregate => aggregate.ImportFromDesigner)
-                .InitializesWith<ImportFromDesignerForTester>   (aggregate => aggregate.ImportFromDesignerForTester)
-                .InitializesWith<ImportFromSupervisor>          (aggregate => aggregate.ImportFromSupervisor)
-                .InitializesWith<RegisterPlainQuestionnaire>    (aggregate => aggregate.RegisterPlainQuestionnaire)
-                .Handles<DeleteQuestionnaire>                   (aggregate => aggregate.DeleteQuestionnaire)
-                .Handles<DisableQuestionnaire>                  (aggregate => aggregate.DisableQuestionnaire);
+                .ResolvesIdFrom<QuestionnaireCommand>         (command => command.QuestionnaireId)
+                .InitializesWith<ImportFromDesigner>          (aggregate => aggregate.ImportFromDesigner, config => config.ValidatedBy<QuestionnaireNameValidator>())
+                .InitializesWith<ImportFromDesignerForTester> (aggregate => aggregate.ImportFromDesignerForTester)
+                .InitializesWith<ImportFromSupervisor>        (aggregate => aggregate.ImportFromSupervisor)
+                .InitializesWith<RegisterPlainQuestionnaire>  (aggregate => aggregate.RegisterPlainQuestionnaire)
+                .Handles<DeleteQuestionnaire>                 (aggregate => aggregate.DeleteQuestionnaire)
+                .Handles<DisableQuestionnaire>                (aggregate => aggregate.DisableQuestionnaire);
 
             CommandRegistry
                 .Setup<User>()
@@ -103,10 +104,10 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .InitializesWith<SynchronizeInterviewEventsCommand>(command => command.InterviewId, (command, aggregate) => aggregate.SynchronizeInterviewEvents(command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, command.InterviewStatus, command.SynchronizedEvents, command.CreatedOnClient))
                 .InitializesWith<CreateInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterview(command.QuestionnaireId, command.QuestionnaireVersion, command.SupervisorId, command.AnswersToFeaturedQuestions, command.AnswersTime, command.UserId))
                 .InitializesWith<CreateInterviewCreatedOnClientCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewCreatedOnClient(command.QuestionnaireId, command.QuestionnaireVersion, command.InterviewStatus, command.FeaturedQuestionsMeta, command.IsValid, command.UserId))
-                .InitializesWith<CreateInterviewForTestingCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewForTesting(command.QuestionnaireId, command.AnswersToFeaturedQuestions, command.AnswersTime, command.UserId))
                 .InitializesWith<CreateInterviewOnClientCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewOnClient(command.QuestionnaireId, command.QuestionnaireVersion, command.SupervisorId, command.AnswersTime, command.UserId))
                 .InitializesWith<CreateInterviewWithPreloadedData>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewWithPreloadedData(command.QuestionnaireId, command.Version, command.PreloadedData, command.SupervisorId, command.AnswersTime, command.UserId))
                 .InitializesWith<SynchronizeInterviewFromHeadquarters>(command => command.InterviewId, (command, aggregate) => aggregate.SynchronizeInterviewFromHeadquarters(command.Id, command.UserId, command.SupervisorId, command.InterviewDto, command.SynchronizationTime))
+                .InitializesWith<CreateInterviewByPrefilledQuestions>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewByPrefilledQuestions(command.QuestionnaireIdentity, command.UserId, command.SupervisorId, command.InterviewerId, command.AnswersTime, command.AnswersOnPrefilledQuestions))
                 .Handles<AnswerDateTimeQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerDateTimeQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.Answer))
                 .Handles<AnswerGeoLocationQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerGeoLocationQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.Latitude, command.Longitude, command.Accuracy, command.Altitude, command.Timestamp))
                 .Handles<AnswerMultipleOptionsLinkedQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerMultipleOptionsLinkedQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.SelectedRosterVectors))

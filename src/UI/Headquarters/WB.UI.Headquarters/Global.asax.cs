@@ -95,6 +95,7 @@ namespace WB.UI.Headquarters
             current.UnhandledException += this.CurrentUnhandledException;
             
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            GlobalConfiguration.Configuration.Formatters.Add(new FormMultipartEncodedMediaTypeFormatter());
             //WebApiConfig.Register(GlobalConfiguration.Configuration);
 
             RegisterVirtualPathProvider();

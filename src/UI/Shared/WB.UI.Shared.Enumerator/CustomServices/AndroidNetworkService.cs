@@ -1,8 +1,10 @@
 using System.Linq;
 using Android.Content;
 using Android.Net;
+using Android.Net.Wifi;
+using Android.Telephony;
 using Cirrious.CrossCore.Droid.Platform;
-using Cirrious.MvvmCross.Plugins.Network.Reachability;
+using MvvmCross.Plugins.Network.Reachability;
 using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.UI.Shared.Enumerator.CustomServices
@@ -11,8 +13,9 @@ namespace WB.UI.Shared.Enumerator.CustomServices
     {
         private readonly IMvxAndroidCurrentTopActivity mvxAndroidCurrentTopActivity;
         private readonly IMvxReachability mvxReachability;
+        private readonly string unknown = "UNKNOWN";
 
-        public AndroidNetworkService(IMvxAndroidCurrentTopActivity mvxAndroidCurrentTopActivity, IMvxReachability mvxReachability)
+       public AndroidNetworkService(IMvxAndroidCurrentTopActivity mvxAndroidCurrentTopActivity, IMvxReachability mvxReachability)
         {
             this.mvxAndroidCurrentTopActivity = mvxAndroidCurrentTopActivity;
             this.mvxReachability = mvxReachability;
@@ -29,6 +32,41 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         public bool IsHostReachable(string host)
         {
             return this.mvxReachability.IsHostReachable(host);
+        }
+
+        private NetworkInfo GetNetworkInfo()
+        {
+            ConnectivityManager cm = (ConnectivityManager)this.mvxAndroidCurrentTopActivity.Activity.GetSystemService(Context.ConnectivityService);
+            return cm.ActiveNetworkInfo;
+        }
+
+        public string GetNetworkType()
+        {
+            var network = this.GetNetworkInfo();
+            if (network == null)
+                return unknown;
+
+            return this.GetNetworkInfo().TypeName;
+        }
+
+        public string GetNetworkName()
+        {
+            var network = this.GetNetworkInfo();
+
+            if (network == null)
+                return unknown;
+
+            if (network.Type == ConnectivityType.Wifi)
+            {
+                WifiManager manager = (WifiManager)this.mvxAndroidCurrentTopActivity.Activity.GetSystemService(Context.WifiService);
+                return manager.ConnectionInfo.SSID;
+            }
+            if (network.Type == ConnectivityType.Mobile)
+            {
+                TelephonyManager manager = (TelephonyManager)this.mvxAndroidCurrentTopActivity.Activity.GetSystemService(Context.TelephonyService);
+                return manager.NetworkOperatorName;
+            }
+            return this.GetNetworkInfo().Type.ToString();
         }
     }
 }

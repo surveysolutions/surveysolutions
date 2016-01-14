@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace Ncqrs.Spec
 {
@@ -9,9 +12,9 @@ namespace Ncqrs.Spec
     {
         public class PrepareTheseEvents
         {
-            private readonly IEnumerable<object> _events;
+            private readonly IEnumerable<IEvent> _events;
 
-            public PrepareTheseEvents(IEnumerable<object> events)
+            public PrepareTheseEvents(IEnumerable<IEvent> events)
             {
                 _events = events;
             }
@@ -49,12 +52,12 @@ namespace Ncqrs.Spec
             }
         }
 
-        public static PrepareTheseEvents Events(IEnumerable<object> events)
+        public static PrepareTheseEvents Events(IEnumerable<IEvent> events)
         {
             return new PrepareTheseEvents(events);
         }
 
-        public static PrepareTheseEvents Events(params object[] events)
+        public static PrepareTheseEvents Events(params IEvent[] events)
         {
             return new PrepareTheseEvents(events);
         }

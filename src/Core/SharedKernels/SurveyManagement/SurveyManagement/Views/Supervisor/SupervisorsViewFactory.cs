@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Supervisor
 
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
-                allUsers = allUsers.Where(x => x.UserName.Contains(input.SearchBy) || x.Email.Contains(input.SearchBy));
+                allUsers = allUsers.Where(x => x.UserName.ToLower().Contains(input.SearchBy.ToLower()) || x.Email.ToLower().Contains(input.SearchBy.ToLower()));
             }
 
             var supervisors = allUsers.Select(ud => new SupervisorUserDocument()

@@ -1,8 +1,10 @@
 using Main.Core.Documents;
 using System;
+using System.Linq;
 using System.Web.Security;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Extensions;
@@ -14,12 +16,15 @@ namespace WB.UI.Designer.Code.Implementation
     {
         private readonly IMembershipUserService userHelper;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
+        private readonly IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersons;
 
         public CommandInflater(IMembershipUserService userHelper,
-            IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader)
+            IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
+            IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersons)
         {
             this.userHelper = userHelper;
             this.questionnaireDocumentReader = questionnaireDocumentReader;
+            this.sharedPersons = sharedPersons;
         }
 
         public void PrepareDeserializedCommandForExecution(ICommand command)
@@ -57,7 +62,11 @@ namespace WB.UI.Designer.Code.Implementation
                 throw new CommandInflaitingException(CommandInflatingExceptionType.EntityNotFound, "Source questionnaire was not found and might be deleted.");
             }
 
-            if (!questionnaire.IsPublic && (questionnaire.CreatedBy != this.userHelper.WebUser.UserId && !questionnaire.SharedPersons.Contains(this.userHelper.WebUser.UserId)))
+            if (questionnaire.IsPublic || questionnaire.CreatedBy == this.userHelper.WebUser.UserId)
+                return questionnaire;
+
+            var sharedPersons = this.sharedPersons.GetById(id);
+            if (sharedPersons == null || !sharedPersons.SharedPersons.Any(x => x.Id == this.userHelper.WebUser.UserId))
             {
                 throw new CommandInflaitingException(CommandInflatingExceptionType.Forbidden, "You don't have permissions to access the source questionnaire");
             }

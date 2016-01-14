@@ -131,22 +131,5 @@ namespace WB.UI.Headquarters.Controllers
             this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
             return this.RedirectToAction("Index");
         }
-
-        [Authorize(Roles = "Administrator, Headquarter")]
-        public ActionResult Interviewers(InterviewersFilter filter)
-        {
-            var supervisor = this.GetUserById(filter.Id);
-            if (supervisor == null)
-                throw new HttpException(404, string.Empty);
-
-            InterviewersModel pageModel = new InterviewersModel()
-            {
-                SupervisorId = supervisor.PublicKey,
-                UserName = supervisor.UserName,
-                ShowOnlyNotConnectedToDevice = filter.ShowOnlyNotConnectedToDevice
-            };
-
-            return this.View(pageModel);
-        }
     }
 }

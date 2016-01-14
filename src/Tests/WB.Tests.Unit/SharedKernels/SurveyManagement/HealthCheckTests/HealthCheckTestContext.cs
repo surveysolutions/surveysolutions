@@ -11,14 +11,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
         protected static HealthCheckService CreateHealthCheckService(
             IAtomicHealthCheck<EventStoreHealthCheckResult> eventStoreHealthCheck,
             IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult> numberOfUnhandledPackagesChecker,
-            IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult> numberOfSyncPackagesWithBigSizeChecker,
             IAtomicHealthCheck<FolderPermissionCheckResult> folderPermissionChecker,
             IAtomicHealthCheck<ReadSideHealthCheckResult> readSideHealthCheckResult)
         {
             return new HealthCheckService(
                 eventStoreHealthCheck ?? Mock.Of<IAtomicHealthCheck<EventStoreHealthCheckResult>>(),
                 numberOfUnhandledPackagesChecker ?? Mock.Of<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>(),
-                numberOfSyncPackagesWithBigSizeChecker ?? Mock.Of<IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>>(),
                 folderPermissionChecker ?? Mock.Of<IAtomicHealthCheck<FolderPermissionCheckResult>>(),
                 readSideHealthCheckResult ?? Mock.Of<IAtomicHealthCheck<ReadSideHealthCheckResult>>());
         }

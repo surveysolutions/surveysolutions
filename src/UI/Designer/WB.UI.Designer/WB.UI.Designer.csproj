@@ -284,7 +284,9 @@
     <Compile Include="Implementation\Services\AuthenticationService.cs" />
     <Compile Include="Implementation\Services\RecaptchaService.cs" />
     <Compile Include="Models\IEmailNotification.cs" />
+    <Compile Include="Models\QuestionnaireDocumentWithLookUpTables.cs" />
     <Compile Include="Models\SharingNotificationModel.cs" />
+    <Compile Include="Models\VerificationReferenceEnriched.cs" />
     <Compile Include="Resources\ErrorMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -357,8 +359,7 @@
     <Compile Include="Models\JsonSuccessResult.cs" />
     <Compile Include="Models\RebuildReadSideInputViewModel.cs" />
     <Compile Include="Models\RebuildReadSideType.cs" />
-    <Compile Include="Models\VerificationError.cs" />
-    <Compile Include="Models\VerificationErrors.cs" />
+    <Compile Include="Models\VerificationMessage.cs" />
     <Compile Include="Models\VerificationResult.cs" />
     <Compile Include="Models\PasswordModel.cs" />
     <Compile Include="Models\QuestionnairePublicListViewModel.cs" />
@@ -454,6 +455,7 @@
     <Content Include="Scripts\viewmodels\pages\login.js" />
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
     <Content Include="Scripts\viewmodels\designer.framework.js" />
+    <Content Include="UpdatedDesigner\app\scripts\controllers\lookupTables.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\macros.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\leftMenu.js" />
     <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.min.css">
@@ -471,8 +473,10 @@
     <Content Include="UpdatedDesigner\content\designer-start\designer-start.min.css">
       <DependentUpon>designer-start.css</DependentUpon>
     </Content>
+    <Content Include="UpdatedDesigner\content\i\designer-left-icons.png" />
     <Content Include="UpdatedDesigner\content\i\left-panel-shadow-small.png" />
     <Content Include="UpdatedDesigner\content\i\macro-panel-btn.png" />
+    <Content Include="UpdatedDesigner\vendor\angular-ui-tree\protractor.conf.js" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="UpdatedDesigner\vendor\bootstrap\dist\fonts\glyphicons-halflings-regular.ttf" />
@@ -954,6 +958,16 @@
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\protractor.conf.js" />
     <Content Include="UpdatedDesigner\vendor\ng-context-menu\README.md" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\FileAPI.flash.swf" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\FileAPI.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\FileAPI.min.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\ng-file-upload-all.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\ng-file-upload-all.min.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\ng-file-upload-shim.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\ng-file-upload-shim.min.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\ng-file-upload.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\ng-file-upload.min.js" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\package.js" />
     <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\bower.json" />
     <Content Include="UpdatedDesigner\vendor\perfect-scrollbar\examples\azusa.jpg" />
@@ -1220,6 +1234,11 @@
     <Content Include="Views\SystemMailer\OwnerShareNotification.cshtml" />
     <Content Include="Views\SystemMailer\OwnerStopShareNotification.cshtml" />
     <Content Include="Views\Maintenance\ReadSideIsOutdated.cshtml" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\.versions" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\LICENSE" />
+    <Content Include="UpdatedDesigner\vendor\ng-file-upload\README.md" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

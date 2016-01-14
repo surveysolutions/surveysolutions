@@ -31,9 +31,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
                 },
             });
 
-            var statsStorage = Mock.Of<IReadSideKeyValueStorage<StatisticsGroupedByDateAndTemplate>>(_
-                => _.GetById(Moq.It.IsAny<string>()) == statistics);
-
             input = new ChartStatisticsInputModel
             {
                 CurrentDate = new DateTime(2014, 8, 22),
@@ -43,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
                 To = new DateTime(2014, 8, 22),
             };
 
-            chartStatisticsViewFactory = CreateChartStatisticsViewFactory(statsStorage);
+            chartStatisticsViewFactory = CreateChartStatisticsViewFactory(statistics: statistics);
         };
 
         Because of = () => view = chartStatisticsViewFactory.Load(input);

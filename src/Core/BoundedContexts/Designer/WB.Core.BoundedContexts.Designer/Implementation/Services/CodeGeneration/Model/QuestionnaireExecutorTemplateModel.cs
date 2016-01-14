@@ -26,6 +26,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string[] Namespaces { get; set; }
         public bool ShouldGenerateUpdateRosterTitleMethods { get; set; }
 
+        public List<LookupTableTemplateModel> LookupTables { get; set; }
+
         public List<Tuple<string, string>> GetOrderedListByConditionDependency(List<QuestionTemplateModel> questions,
             List<GroupTemplateModel> groups, List<RosterTemplateModel> rosters = null)
         {

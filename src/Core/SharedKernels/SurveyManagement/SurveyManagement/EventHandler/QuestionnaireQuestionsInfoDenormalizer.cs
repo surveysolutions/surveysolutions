@@ -7,18 +7,22 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class QuestionnaireQuestionsInfoDenormalizer : BaseDenormalizer, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, IEventHandler<QuestionnaireDeleted>
+    public class QuestionnaireQuestionsInfoDenormalizer : BaseDenormalizer, 
+        IEventHandler<TemplateImported>, 
+        IEventHandler<PlainQuestionnaireRegistered>, 
+        IEventHandler<QuestionnaireDeleted>
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> questionnaires;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
-        public QuestionnaireQuestionsInfoDenormalizer(IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> questionnaires, IPlainQuestionnaireRepository plainQuestionnaireRepository)
+        public QuestionnaireQuestionsInfoDenormalizer(IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> questionnaires, 
+            IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.questionnaires = questionnaires;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
@@ -26,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public override object[] Writers
         {
-            get { return new[] { questionnaires }; }
+            get { return new[] { this.questionnaires }; }
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
@@ -55,12 +59,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     questionnaireDocument.Find<IQuestion>(question => true).ToDictionary(x => x.PublicKey, x => x.StataExportCaption)
             };
 
-            this.questionnaires.Store(map, RepositoryKeysHelper.GetVersionedKey(id, version));
+            this.questionnaires.Store(map, new QuestionnaireIdentity(id, version).ToString());
         }
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
         {
-            this.questionnaires.Remove(RepositoryKeysHelper.GetVersionedKey(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion));
+            this.questionnaires.Remove(new QuestionnaireIdentity(evnt.EventSourceId, evnt.Payload.QuestionnaireVersion).ToString());
         }
     }
 }

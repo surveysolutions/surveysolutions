@@ -231,9 +231,6 @@ untuk instruksi lebih lanjut</value>
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
     <value>Keluar</value>
   </data>
-  <data name="MenuItem_Title_Troubleshooting" xml:space="preserve">
-    <value>Pemecahan masalah</value>
-  </data>
   <data name="NoNetwork" xml:space="preserve">
     <value>Tidak ada jaringan. Periksa pengaturan jaringan Anda</value>
   </data>

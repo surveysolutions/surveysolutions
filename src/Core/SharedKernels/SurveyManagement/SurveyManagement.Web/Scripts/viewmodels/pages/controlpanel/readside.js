@@ -47,6 +47,7 @@
     self.totalEvents = ko.observable('-');
     self.processedEvents = ko.observable('-');
     self.failedEvents = ko.observable('-');
+    self.progress = ko.observable('-');
     self.speed = ko.observable('-');
     self.timeSpent = ko.observable('-');
     self.estimatedTime = ko.observable('-');
@@ -76,7 +77,8 @@
     };
 
     self.updateStatus = function() {
-        self.SendRequest(self.updateRebuildStatusApiUrl, {}, function(data) {
+        _.delay(self.updateStatus, 3000);
+        self.SendRequest(self.updateRebuildStatusApiUrl, {}, function (data) {
             self.isRebuildRunning(data.IsRebuildRunning);
 
             self.readSideApplicationVersion(data.ReadSideApplicationVersion);
@@ -90,6 +92,7 @@
             self.totalEvents(data.EventPublishingDetails.TotalEvents);
             self.processedEvents(data.EventPublishingDetails.ProcessedEvents);
             self.failedEvents(data.EventPublishingDetails.FailedEvents);
+            self.progress(data.EventPublishingDetails.ProgressInPercents.toFixed(2));
             self.speed(data.EventPublishingDetails.Speed);
             self.timeSpent(moment.duration(data.EventPublishingDetails.TimeSpent).format("HH:mm:ss", {trim: false}));
             self.estimatedTime(moment.duration(data.EventPublishingDetails.EstimatedTime).format("HH:mm:ss", { trim: false }));
@@ -98,8 +101,6 @@
             self.reloadDenormalizerStatistics(data.ReadSideDenormalizerStatistics);
             self.reloadErrorsList(self.rebuildErrors, data.RebuildErrors);
             self.reloadErrorsList(self.warningEventHandlerErrors, data.WarningEventHandlerErrors);
-
-            _.delay(self.updateStatus, 3000);
         }, true, true);
     };
 

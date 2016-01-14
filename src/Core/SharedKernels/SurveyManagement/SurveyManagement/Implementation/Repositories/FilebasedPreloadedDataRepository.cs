@@ -55,10 +55,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
 
         public PreloadedContentMetaData GetPreloadedDataMetaInformationForSampleData(string id)
         {
-            var filesInDirectory = GetFiles(id);
+            var filesInDirectory = this.GetFiles(id).ToArray();
+        
             var csvFilesInDirectory = filesInDirectory.Where(file => this.permittedFileExtensions.Contains(this.fileSystemAccessor.GetFileExtension(file))).ToArray();
             if (csvFilesInDirectory.Length == 0)
+            {
+                var zipFilesInDirectory = filesInDirectory.Where(archiveUtils.IsZipFile).ToArray();
+                if (zipFilesInDirectory.Length > 0)
+                {
+                    return new PreloadedContentMetaData(id,
+                        fileSystemAccessor.GetFileName(zipFilesInDirectory[0]),
+                        archiveUtils.GetArchivedFileNamesAndSize(zipFilesInDirectory[0])
+                            .Select(
+                                file =>
+                                    new PreloadedFileMetaData(file.Key, file.Value,
+                                        this.permittedFileExtensions.Contains(
+                                            this.fileSystemAccessor.GetFileExtension(file.Key))))
+                            .ToArray(), PreloadedContentType.Sample);
+                }
                 return null;
+            }
 
             var csvFile = csvFilesInDirectory[0];
             var csvFileName = fileSystemAccessor.GetFileName(csvFile);
@@ -91,11 +107,60 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
 
         public PreloadedDataByFile GetPreloadedDataOfSample(string id)
         {
-            var filesInDirectory = GetFiles(id);
+            var filesInDirectory = this.GetFiles(id).ToArray();
             var csvFilesInDirectory = filesInDirectory.Where(file => this.permittedFileExtensions.Contains(this.fileSystemAccessor.GetFileExtension(file))).ToArray();
             if (csvFilesInDirectory.Length != 0)
             {
                 return this.GetPreloadedDataFromFile(id, csvFilesInDirectory[0]);
+            }
+            
+            var filesInZipArchive= this.TryToGetPreloadedDataFromZipArchive(filesInDirectory, id, fileSystemAccessor.CombinePath(path, id));
+            if (filesInZipArchive.Length==1)
+                return filesInZipArchive[0];
+            return null;
+        }
+
+
+        public byte[] GetBytesOfSampleData(string id)
+        {
+            var filesInDirectory = this.GetFiles(id).ToArray();
+            var csvFilesInDirectory = filesInDirectory.Where(file => this.permittedFileExtensions.Contains(this.fileSystemAccessor.GetFileExtension(file))).ToArray();
+            if (csvFilesInDirectory.Length != 0)
+            {
+                return this.fileSystemAccessor.ReadAllBytes(csvFilesInDirectory[0]);
+            }
+
+            var zipFilesInDirectory = filesInDirectory.Where(archiveUtils.IsZipFile).ToArray();
+            if (zipFilesInDirectory.Length > 0)
+            {
+                var archivePath = zipFilesInDirectory[0];
+                var currentFolderPath = fileSystemAccessor.CombinePath(path, id);
+                var unzippedDirectoryPath = fileSystemAccessor.CombinePath(currentFolderPath, UnzippedFoldername);
+
+                if (!fileSystemAccessor.IsDirectoryExists(unzippedDirectoryPath))
+                {
+                    try
+                    {
+                        archiveUtils.Unzip(archivePath, unzippedDirectoryPath);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error(e.Message, e);
+                        return null;
+                    }
+                }
+
+                var unzippedFiles =
+                    fileSystemAccessor.GetFilesInDirectory(unzippedDirectoryPath)
+                        .Where(
+                            filename =>
+                                this.permittedFileExtensions.Contains(this.fileSystemAccessor.GetFileExtension(filename)))
+                        .ToArray();
+
+                if (unzippedFiles.Length != 0)
+                {
+                    return this.fileSystemAccessor.ReadAllBytes(unzippedFiles[0]);
+                }
             }
             return null;
         }

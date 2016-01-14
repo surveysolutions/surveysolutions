@@ -13,6 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
         public void Execute(IJobExecutionContext context)
         {
             ThreadMarkerManager.MarkCurrentThreadAsIsolated();
+            ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
             try
             {
                 ServiceLocator.Current.GetInstance<IDataExporter>().RunPendingExport();
@@ -24,6 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
             finally
             {
                 ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
+                ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
             }
         }
     }

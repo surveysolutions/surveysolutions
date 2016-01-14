@@ -307,7 +307,7 @@ for further instructions</value>
     <value>{0} completed interviews uploaded</value>
   </data>
   <data name="Synchronization_Success_Title" xml:space="preserve">
-    <value>Synchronization succesfully completed</value>
+    <value>Synchronization successfully completed</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
     <value>completed assignments</value>
@@ -419,9 +419,6 @@ Please enter your updated password. If doing so does not resolve the problem, pl
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
     <value>Sign out</value>
   </data>
-  <data name="MenuItem_Title_Troubleshooting" xml:space="preserve">
-    <value>Troubleshooting</value>
-  </data>
   <data name="Troubleshooting_Old_AreYouSureYouWantToRestore" xml:space="preserve">
     <value>All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}</value>
   </data>
@@ -451,5 +448,125 @@ Please enter your updated password. If doing so does not resolve the problem, pl
   </data>
   <data name="DashboardItem_AssignedOn" xml:space="preserve">
     <value>Assigned on {0}</value>
+  </data>
+  <data name="Diagnostics_Backup_Description" xml:space="preserve">
+    <value>All collected data will be saved as backup file on this device.</value>
+  </data>
+  <data name="Diagnostics_Backup_Title" xml:space="preserve">
+    <value>Backup all gathered information</value>
+  </data>
+  <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
+    <value>We will check for the newer version on HQ server</value>
+  </data>
+  <data name="Diagnostics_CheckVersion_Title" xml:space="preserve">
+    <value>Version: {0}. Check for a new version</value>
+  </data>
+  <data name="Diagnostics_Restore_Description" xml:space="preserve">
+    <value>By restoring saved data you will replace all current assigments on this device</value>
+  </data>
+  <data name="Diagnostics_Restore_Title" xml:space="preserve">
+    <value>RESTORE</value>
+  </data>
+  <data name="Diagnostics_Send_Description" xml:space="preserve">
+    <value>All application and interview data will be collected to a single archive. This can take up to 10 minutes.</value>
+  </data>
+  <data name="Diagnostics_Send_Title" xml:space="preserve">
+    <value>Collect and send to HQ all tablet infromation</value>
+  </data>
+  <data name="Diagnostics_Share_Description" xml:space="preserve">
+    <value>All information below will be shared as plain text. It can be sent by email, google hangouts of any other messaging app</value>
+  </data>
+  <data name="Diagnostics_Share_Title" xml:space="preserve">
+    <value>Share all technical information</value>
+  </data>
+  <data name="Diagnostics_Title" xml:space="preserve">
+    <value>Diagnostics</value>
+  </data>
+  <data name="MenuItem_Title_Diagnostics" xml:space="preserve">
+    <value>Diagnostics</value>
+  </data>
+  <data name="Share_to_Title" xml:space="preserve">
+    <value>Share information to..</value>
+  </data>
+  <data name="Diagnostics_TestConnection_Description" xml:space="preserve">
+    <value>We will test connection with our server and it's speed</value>
+  </data>
+  <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
+    <value>Test bandwidth to server</value>
+  </data>
+  <data name="Diagnostics_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Diagnostics_Send" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="Diagnostics_TabletInformationReady_Title" xml:space="preserve">
+    <value>Data archive is ready</value>
+  </data>
+  <data name="Diagnostics_TabletInformationScope_Title" xml:space="preserve">
+    <value>Scope:</value>
+  </data>
+  <data name="Diagnostics_TabletInformationWhenGenerated_Title" xml:space="preserve">
+    <value>When generated:</value>
+  </data>
+  <data name="Diagnostics_DownloadingPleaseWait" xml:space="preserve">
+    <value>Downloading, please wait...</value>
+  </data>
+  <data name="Diagnostics_NewVersionAvaliable_Title" xml:space="preserve">
+    <value>New version exists. Would you like to download and update application?</value>
+  </data>
+  <data name="Diagnostics_NewVersionNumber_Title" xml:space="preserve">
+    <value>Version number:</value>
+  </data>
+  <data name="Diagnostics_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Diagnostics_Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="Diagnostics_YouHaveTheLatestVersionOfApplication" xml:space="preserve">
+    <value>You have the latest version of application.</value>
+  </data>
+  <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
+    <value>When Saved:</value>
+  </data>
+  <data name="Diagnostics_BackupFileLocation_Title" xml:space="preserve">
+    <value>Backup file location:</value>
+  </data>
+  <data name="Diagnostics_BackupReady_Title" xml:space="preserve">
+    <value>Data saved</value>
+  </data>
+  <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
+    <value>Scope:</value>
+  </data>
+  <data name="Diagnostics_RestoreReady_Title" xml:space="preserve">
+    <value>Saved data found:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionOK_Title" xml:space="preserve">
+    <value>Connection is OK</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionType_Title" xml:space="preserve">
+    <value>Connection type:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestPing_Title" xml:space="preserve">
+    <value>Ping:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestNetworkName_Title" xml:space="preserve">
+    <value>Network name:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;No internet connection&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
+    <value>Connection is &lt;font color="red"&gt;not good&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;No connection with our server&lt;/font&gt;</value>
+  </data>
+  <data name="Troubleshooting_RestoreFolderIsEmpty" xml:space="preserve">
+    <value>Folder '{0}' is empty. Please put the backup you willing to restore in the folder.</value>
+  </data>
+  <data name="FinishInstallation_EndpointDiffers" xml:space="preserve">
+    <value>Synchronization endpoint '{0}' is different from provided in Settings ('{1}'). Load URL from settings?</value>
   </data>
 </root>

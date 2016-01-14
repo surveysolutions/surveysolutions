@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.Plugins.Messenger;
 using Cirrious.MvvmCross.ViewModels;
+using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
@@ -55,15 +55,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private async Task RefreshDashboardAsync()
         {
-            this.DashboardInformation = await this.dashboardFactory.GetDashboardItemsAsync(
+            this.DashboardInformation = await this.dashboardFactory.GetInterviewerDashboardAsync(
                 this.principal.CurrentUserIdentity.UserId);
 
             if ((CurrentDashboardStatus == DashboardInterviewStatus.Completed && this.CompletedInterviewsCount == 0)
-                || (CurrentDashboardStatus == DashboardInterviewStatus.InProgress && this.StartedInterviewsCount == 0))
+                || (CurrentDashboardStatus == DashboardInterviewStatus.InProgress && this.StartedInterviewsCount == 0)
+                || (CurrentDashboardStatus == DashboardInterviewStatus.Rejected && this.RejectedInterviewsCount == 0))
             {
                 this.CurrentDashboardStatus = DashboardInterviewStatus.New;
             }
-
 
             this.RefreshTab();
 
@@ -251,15 +251,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             get { return new MvxCommand(async () => await this.SignOutAsync()); }
         }
 
-        public IMvxCommand NavigateToTroubleshootingPageCommand
+        public IMvxCommand NavigateToDiagnosticsPageCommand
         {
-            get { return new MvxCommand(async () => await this.NavigateToTroubleshootingAsync()); }
+            get { return new MvxCommand(async () => await this.NavigateToDiagnosticsAsync()); }
         }
 
-        private async Task NavigateToTroubleshootingAsync()
+        private async Task NavigateToDiagnosticsAsync()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            await this.viewModelNavigationService.NavigateToAsync<TroubleshootingViewModel>();
+            await this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>();
         }
 
         private async Task SignOutAsync()

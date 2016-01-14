@@ -1,6 +1,4 @@
 using Cirrious.MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
-using WB.UI.Interviewer.ViewModel;
 
 namespace WB.UI.Interviewer
 {
@@ -8,7 +6,8 @@ namespace WB.UI.Interviewer
     {
         public override void Initialize()
         {
-            this.RegisterAppStart<DashboardViewModel>();
+            //fix for Thai calendar (KP-6403)
+            var thai = new System.Globalization.ThaiBuddhistCalendar();
         }
     }
 }

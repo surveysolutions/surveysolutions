@@ -129,4 +129,17 @@ void RosterCollectionsDefenitions(string rosterType, List<RosterTemplateModel> r
 <#+
 	}
 }
+
+void LookupTablesDefenitions(List<LookupTableTemplateModel> lookupTables)
+{
+	foreach (var table in lookupTables) 
+	{
+#>
+	public static Dictionary<decimal, <#= table.TypeName#>> <#= table.TableName #> 
+	{
+		get { return LookupTables.<#= table.TableName #>; }
+	}
+<#+
+	}
+}
 #>

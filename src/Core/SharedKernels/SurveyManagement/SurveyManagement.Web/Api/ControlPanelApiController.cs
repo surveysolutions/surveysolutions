@@ -98,6 +98,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpPost]
+        [NoTransaction]
         public void StopReadSideRebuilding()
         {
             this.readSideAdministrationService.StopAllViewsRebuilding();

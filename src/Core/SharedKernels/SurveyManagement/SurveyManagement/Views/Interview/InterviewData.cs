@@ -17,5 +17,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public bool WasCompleted { get; set; }
         public Guid? SupervisorId { get; set; }
         public bool CreatedOnClient { get; set; }
+        public bool ReceivedByInterviewer { get; set; }
     }
 }

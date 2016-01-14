@@ -126,7 +126,14 @@
                                     }
                                     if (entity is InterviewQuestionView)
                                     {
-                                        @Html.Partial("QuestionPartialView", entity as InterviewQuestionView, new ViewDataDictionary{{ "InterviewId", Model.InterviewDetails.PublicKey}})
+                                        if (Model.InterviewDetails.ReceivedByInterviewer)
+                                        {
+                                            @Html.Partial("DetailsReadOnlyQuestionPartialView", entity as InterviewQuestionView)
+                                        }
+                                        else
+                                        {
+                                            @Html.Partial("DetailsQuestionPartialView", entity as InterviewQuestionView, new ViewDataDictionary { { "InterviewId", Model.InterviewDetails.PublicKey } })
+                                        }
                                     }
                                 }
                             </tbody>

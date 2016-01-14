@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             rosterTitleQuestionId = Guid.Parse("22222222222222222222222222222222");
             rosterTitleQuestionAnswer = "a";
-            preloadedDataDto = new PreloadedDataDto("id",
+            preloadedDataDto = new PreloadedDataDto(
                 new[]
                 {
                     new PreloadedLevelDto(new decimal[0],

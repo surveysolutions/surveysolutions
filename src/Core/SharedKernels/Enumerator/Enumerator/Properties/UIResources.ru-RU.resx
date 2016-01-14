@@ -356,9 +356,6 @@
   <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
     <value>Попробуйте войти онлайн</value>
   </data>
-  <data name="Interviewer_Troubleshooting" xml:space="preserve">
-    <value>Устранение неполадок</value>
-  </data>
   <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
     <value>Если вы перепревяжетесь к этому устройству, то все данные собранные на других устройствах будут удалены</value>
   </data>
@@ -382,5 +379,8 @@
   </data>
   <data name="Interview_ParentGroup_ButtonText" xml:space="preserve">
     <value>На уровень выше</value>
+  </data>
+  <data name="Interviewer_Diagnostics" xml:space="preserve">
+    <value>Диагностика</value>
   </data>
 </root>
