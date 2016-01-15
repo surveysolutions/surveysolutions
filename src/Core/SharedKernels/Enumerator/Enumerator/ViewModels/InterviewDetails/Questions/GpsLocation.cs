@@ -2,9 +2,9 @@
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class GeoLocation
+    public class GpsLocation
     {
-        public GeoLocation(double accuracy, double altitude, double latitude, double longitude, DateTimeOffset timestamp)
+        public GpsLocation(double accuracy, double altitude, double latitude, double longitude, DateTimeOffset timestamp)
         {
             this.Accuracy = accuracy;
             this.Altitude = altitude;
