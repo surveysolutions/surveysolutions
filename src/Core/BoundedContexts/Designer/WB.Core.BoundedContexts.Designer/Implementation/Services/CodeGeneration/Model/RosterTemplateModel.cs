@@ -19,8 +19,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string VariableName { set; get; }
         public string ParentScopeTypeName { get; set; }
 
-        public string StateName => CodeGenerator.PrivateFieldsPrefix + VariableName + "_state";
-        public string IdName => CodeGenerator.PrivateFieldsPrefix + VariableName + "_id";
-        public string ConditionsMethodName => "IsEnabled_" + VariableName;
+        public string StateName => CodeGenerator.PrivateFieldsPrefix + VariableName + CodeGenerator.StateSuffix;
+        public string IdName => CodeGenerator.PrivateFieldsPrefix + VariableName + CodeGenerator.IdSuffix;
+        public string ConditionsMethodName => CodeGenerator.EnablementPrefix + VariableName;
     }
 }
