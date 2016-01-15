@@ -383,4 +383,10 @@
   <data name="Interviewer_Diagnostics" xml:space="preserve">
     <value>Диагностика</value>
   </data>
+  <data name="Prefs_GpsDesiredAccuracySubTitle" xml:space="preserve">
+    <value>{0:N0} метров</value>
+  </data>
+  <data name="Prefs_GpsDesiredAccuracyTitle" xml:space="preserve">
+    <value>Желаемая точность GPS вопроса</value>
+  </data>
 </root>
