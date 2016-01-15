@@ -7,7 +7,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.QuestionnaireAssemb
 {
     internal class QuestionnaireAssemblyFileAccessorTestsContext
     {
-        public InterviewerQuestionnaireAssemblyFileAccessor QuestionnaireAssemblyFileAccessor(IFileSystemAccessor fileSystemAccessor = null,
+        public static InterviewerQuestionnaireAssemblyFileAccessor CreateQuestionnaireAssemblyFileAccessor(IFileSystemAccessor fileSystemAccessor = null,
             IAsynchronousFileSystemAccessor asyncFileSystemAccessor = null, ILogger logger = null, string pathToAssembliesDirectory = null)
         {
             return new InterviewerQuestionnaireAssemblyFileAccessor(
