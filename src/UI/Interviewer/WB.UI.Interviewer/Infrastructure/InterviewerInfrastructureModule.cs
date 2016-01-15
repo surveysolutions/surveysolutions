@@ -32,14 +32,22 @@ namespace WB.UI.Interviewer.Infrastructure
     {
         public override void Load()
         {
-            this.InitilaizeSiaqodb();
+         //   this.InitilaizeSiaqodb();
 
-            this.Bind<IPlainKeyValueStorage<QuestionnaireModel>>().To<QuestionnaireModelKeyValueStorage>().InSingletonScope();
-            this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>().To<QuestionnaireKeyValueStorage>().InSingletonScope();
+            this.Bind<IPlainKeyValueStorage<QuestionnaireModel>>()
+                .To<QuestionnaireModelKeyValueStorage>()
+                .InSingletonScope();
+            this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>()
+                .To<QuestionnaireKeyValueStorage>()
+                .InSingletonScope();
 
-            this.Bind(typeof(IAsyncPlainStorage<QuestionnaireModelView>)).To(typeof(SiaqodbPlainStorageWithCache<>)).InSingletonScope();
-            this.Bind(typeof(IAsyncPlainStorage<QuestionnaireDocumentView>)).To(typeof(SiaqodbPlainStorageWithCache<>)).InSingletonScope();
-            this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SiaqodbPlainStorage<>)).InSingletonScope();
+     /*       this.Bind(typeof (IAsyncPlainStorage<QuestionnaireModelView>))
+                .To(typeof (SiaqodbPlainStorageWithCache<>))
+                .InSingletonScope();
+            this.Bind(typeof (IAsyncPlainStorage<QuestionnaireDocumentView>))
+                .To(typeof (SiaqodbPlainStorageWithCache<>))
+                .InSingletonScope();
+            this.Bind(typeof (IAsyncPlainStorage<>)).To(typeof (SiaqodbPlainStorage<>)).InSingletonScope();*/
             this.Bind<IInterviewerQuestionnaireFactory>().To<InterviewerQuestionnaireFactory>();
             this.Bind<IInterviewerInterviewFactory>().To<InterviewerInterviewFactory>();
 
@@ -49,19 +57,29 @@ namespace WB.UI.Interviewer.Infrastructure
 
             this.Bind<IEventStore>().To<SiaqodbEventStorage>();
 
-            //this.Bind<ISQLitePlatform>().To<SQLitePlatformAndroid>();
-            //this.Bind<SqliteSettings>().ToConstant(
-            //    new SqliteSettings()
-            //    {
-            //        PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")
-            //    });
-            //this.Bind(typeof (IAsyncPlainStorage<>)).To(typeof (SqlitePlainStorage<>)).InSingletonScope();
+            this.Bind<ISQLitePlatform>().To<SQLitePlatformAndroid>();
+            this.Bind<SqliteSettings>().ToConstant(
+                new SqliteSettings()
+                {
+                    PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")
+                });
+
+
+            this.Bind(typeof(IAsyncPlainStorage<QuestionnaireModelView>))
+          .To(typeof(SqlitePlainStorageWithCache<>))
+          .InSingletonScope();
+            this.Bind(typeof(IAsyncPlainStorage<QuestionnaireDocumentView>))
+                .To(typeof(SqlitePlainStorageWithCache<>))
+                .InSingletonScope();
+            this.Bind(typeof (IAsyncPlainStorage<>)).To(typeof (SqlitePlainStorage<>)).InSingletonScope();
 
             this.Bind<InterviewerPrincipal>().To<InterviewerPrincipal>().InSingletonScope();
             this.Bind<IPrincipal>().ToMethod<IPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
-            this.Bind<IInterviewerPrincipal>().ToMethod<IInterviewerPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
-            
-            this.Bind<ILogger>().ToConstant(new FileLogger(AndroidPathUtils.GetPathToFileInLocalSubDirectory("logs", "errors.log")));
+            this.Bind<IInterviewerPrincipal>()
+                .ToMethod<IInterviewerPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
+
+            this.Bind<ILogger>()
+                .ToConstant(new FileLogger(AndroidPathUtils.GetPathToFileInLocalSubDirectory("logs", "errors.log")));
 
             this.Bind<IBackupRestoreService>()
                 .To<BackupRestoreService>()

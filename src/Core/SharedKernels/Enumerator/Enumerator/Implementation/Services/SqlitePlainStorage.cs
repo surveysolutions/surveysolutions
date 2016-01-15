@@ -16,12 +16,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     {
         private readonly SQLiteAsyncConnection asyncStorage;
         private readonly SQLiteConnectionWithLock storage;
-        private readonly ILogger logger;
+        protected readonly ILogger logger;
 
         public SqlitePlainStorage(ISQLitePlatform sqLitePlatform, ILogger logger,
             IAsynchronousFileSystemAccessor fileSystemAccessor, ISerializer serializer, SqliteSettings settings)
         {
-            var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, nameof(TEntity));
+            var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, "data.mdb");
             this.storage = new SQLiteConnectionWithLock(sqLitePlatform,
                 new SQLiteConnectionString(pathToDatabase, true, new BlobSerializerDelegate(
                     serializer.SerializeToByteArray,
@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.storage.CreateIndex<TEntity>(entity => entity.Id);
         }
 
-        public TEntity GetById(string id)
+        public virtual TEntity GetById(string id)
         {
             TEntity entity = null;
             this.storage.RunInTransaction(() => entity = this.storage.Find<TEntity>(x => x.Id == id));
@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             await this.RemoveAsync(new[] { entity });
         }
 
-        public async Task RemoveAsync(IEnumerable<TEntity> entities)
+        public virtual async Task RemoveAsync(IEnumerable<TEntity> entities)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             await this.StoreAsync(new[] { entity });
         }
 
-        public async Task StoreAsync(IEnumerable<TEntity> entities)
+        public virtual async Task StoreAsync(IEnumerable<TEntity> entities)
         {
             try
             {
