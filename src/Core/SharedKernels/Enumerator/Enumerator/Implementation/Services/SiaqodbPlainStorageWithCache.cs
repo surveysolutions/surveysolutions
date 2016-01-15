@@ -11,12 +11,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class SiaqodbPlainStorageWithCache<TEntity> : SiaqodbPlainStorage<TEntity> where TEntity: class, IPlainStorageEntity
     {
-        readonly Dictionary<string, TEntity> memoryStorage = new Dictionary<string, TEntity>();
+        private readonly Dictionary<string, TEntity> memoryStorage = new Dictionary<string, TEntity>();
 
         public SiaqodbPlainStorageWithCache(ISiaqodb storage, IUserInteractionService userInteractionService, ILogger logger)
-            : base(storage, userInteractionService, logger)
-        {
-        }
+            : base(storage, userInteractionService, logger) {}
 
         public override TEntity GetById(string id)
         {
@@ -31,42 +29,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public override async Task RemoveAsync(IEnumerable<TEntity> entities)
         {
-            var entitiesToRemove = entities.Where(entity => entity != null).ToList();
+            await base.RemoveAsync(entities);
 
-            foreach (var entity in entitiesToRemove)
-            {
-                await this.Storage.DeleteAsync(entity);
-            }
-            this.RemoveFromMemory(entitiesToRemove);
+            this.RemoveFromMemory(entities);
         }
 
         public override async Task StoreAsync(IEnumerable<TEntity> entities)
         {
-            try
-            {
-                foreach (var entity in entities.Where(entity => entity != null))
-                {
-                    await this.Storage.StoreObjectAsync(entity);
-                    this.StoreToMemory(entity);
-                }
-            }
-            catch (Exception ex)
-            {
-                this.Logger.Fatal(ex.Message, ex);
-                if (ex.Message.IndexOf("Environment mapsize limit reached", StringComparison.OrdinalIgnoreCase) > -1)
-                {
-                    await this.UserInteractionService.AlertAsync("Database is full. Please, send tablet information and contact to Survey Solutions team.", "Critical exception");
-                }
-            }
-        }
+            await base.StoreAsync(entities);
 
-        private void StoreToMemory(TEntity entity)
-        {
-            if (!this.memoryStorage.ContainsKey(entity.Id))
-            {
-                this.memoryStorage.Add(entity.Id, entity);
-            }
-            else
+            foreach (var entity in entities.Where(entity => entity != null))
             {
                 this.memoryStorage[entity.Id] = entity;
             }
@@ -74,10 +46,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         private void RemoveFromMemory(IEnumerable<TEntity> entities)
         {
-            foreach (var entity in entities)
+            foreach (var entity in entities.Where(entity => entity != null))
             {
                 if (this.memoryStorage.ContainsKey(entity.Id))
+                {
                     this.memoryStorage.Remove(entity.Id);
+                }
             }
         }
     }
