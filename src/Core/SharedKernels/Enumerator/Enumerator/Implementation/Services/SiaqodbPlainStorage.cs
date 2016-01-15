@@ -74,7 +74,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 this.Logger.Fatal(ex.Message, ex);
                 if (ex.Message.IndexOf("Environment mapsize limit reached", StringComparison.OrdinalIgnoreCase) > -1)
                 {
-                    await this.UserInteractionService.AlertAsync("Database is full. Please, send tablet information and contact to Survey Solutions team.", "Critical exception");
+                    await this.UserInteractionService.AlertAsync("Database is full. Please, restart application to increase database size", "Critical exception");
                 }
                 transaction.Rollback();
             }

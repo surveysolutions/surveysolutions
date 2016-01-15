@@ -92,8 +92,9 @@ namespace WB.UI.Interviewer.Infrastructure
             SiaqodbConfigurator.PropertyUseField("Id", "_id", typeof (IPlainStorageEntity));
             SiaqodbConfigurator.EncryptedDatabase = true;
             SiaqodbConfigurator.SetEncryptionPassword("q=5+yaQqS0K!rWaw8FmLuRDWj8XpwI04Yr4MhtULYmD3zX+W+g");
+            SiaqodbConfigurator.AutoGrowthSize = 256*1024*1024;
             
-            this.Bind<ISiaqodb>().ToConstant(new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")));
+            this.Bind<ISiaqodb>().ToConstant(new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data"), 512*1024*1024));
         }
     }
 }
