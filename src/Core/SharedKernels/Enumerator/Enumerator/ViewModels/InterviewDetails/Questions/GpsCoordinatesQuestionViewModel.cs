@@ -33,8 +33,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set { this.isInProgress = value; this.RaisePropertyChanged(); }
         }
 
-        private GeoLocation answer;
-        public GeoLocation Answer
+        private GpsLocation answer;
+        public GpsLocation Answer
         {
             get { return this.answer; }
             set { this.answer = value; this.RaisePropertyChanged(); }
@@ -134,7 +134,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var answerModel = interview.GetGpsCoordinatesAnswer(entityIdentity);
             if (answerModel.IsAnswered)
             {
-                this.Answer = new GeoLocation(answerModel.Accuracy.GetValueOrDefault(),
+                this.Answer = new GpsLocation(answerModel.Accuracy.GetValueOrDefault(),
                     answerModel.Altitude.GetValueOrDefault(),
                     answerModel.Latitude.GetValueOrDefault(),
                     answerModel.Longitude.GetValueOrDefault(),
@@ -174,7 +174,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private async Task SetGeoLocationAnswerAsync(GeoLocation location)
+        private async Task SetGeoLocationAnswerAsync(GpsLocation location)
         {
             if (location == null)
             {
@@ -198,6 +198,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
+
                 this.Answer = location;
             }
             catch (InterviewException ex)

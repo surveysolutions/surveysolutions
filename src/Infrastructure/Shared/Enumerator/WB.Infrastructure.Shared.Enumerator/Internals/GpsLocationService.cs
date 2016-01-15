@@ -16,11 +16,11 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
             this.Geolocator = geolocator;
         }
 
-        public async Task<GeoLocation> GetLocation(CancellationToken cancellationToken)
+        public async Task<GpsLocation> GetLocation(CancellationToken cancellationToken)
         {
             var position = await this.Geolocator.GetPositionAsync(token: cancellationToken)
                                                 .ConfigureAwait(false);
-            return new GeoLocation(position.Accuracy, position.Altitude, position.Latitude, position.Longitude, position.Timestamp);
+            return new GpsLocation(position.Accuracy, position.Altitude, position.Latitude, position.Longitude, position.Timestamp);
         }
     }
 }
