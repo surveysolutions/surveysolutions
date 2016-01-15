@@ -1,4 +1,5 @@
 using System;
+using SQLite.Net.Attributes;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
@@ -6,6 +7,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class InterviewView : IPlainStorageEntity
     {
+        [PrimaryKey, AutoIncrement]
         public int OID { get; set; }
         public string Id { get; set; }
         public Guid InterviewId { get; set; }
