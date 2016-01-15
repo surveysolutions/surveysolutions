@@ -91,17 +91,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
         {
-            ITransaction transaction = this.BeginTransactionRespectingDBSize();
-            try
-            {
-                var queryable = this.storage.Cast<TEntity>().AsQueryable();
-                var result = query.Invoke(queryable);
-                return result;
-            }
-            finally
-            {
-                transaction.Rollback();
-            }
+            var queryable = this.storage.Cast<TEntity>().AsQueryable();
+            var result = query.Invoke(queryable);
+            return result;
         }
 
         private ITransaction BeginTransactionRespectingDBSize()
