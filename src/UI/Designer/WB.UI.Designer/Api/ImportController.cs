@@ -134,7 +134,7 @@ namespace WB.UI.Designer.Api
                     Diagnostics =
                         new List<GenerationDiagnostic>()
                         {
-                            new GenerationDiagnostic("Common verifier error", "Error", "unknown",
+                            new GenerationDiagnostic("Common verifier error", "unknown",
                                 GenerationDiagnosticSeverity.Error)
                         }
                 };
