@@ -48,12 +48,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 this.Items.Remove(item);
             }
 
-            this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
+            this.OnPropertyChanged(new PropertyChangedEventArgs(CountString));
+            this.OnPropertyChanged(new PropertyChangedEventArgs(IndexerName));
+            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
+
+        public void Reset(IEnumerable<T> content)
+        {
+            if (content == null) throw new ArgumentNullException(nameof(content));
+            this.CheckReentrancy();
+
+            this.Items.Clear();
+            foreach (var item in content)
             {
-                this.OnPropertyChanged(new PropertyChangedEventArgs(CountString));
-                this.OnPropertyChanged(new PropertyChangedEventArgs(IndexerName));
-                this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-            });
+                this.Items.Add(item);
+            }
+
+            this.OnPropertyChanged(new PropertyChangedEventArgs(CountString));
+            this.OnPropertyChanged(new PropertyChangedEventArgs(IndexerName));
+            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         public void NotifyItemChanged(int itemIndex)
