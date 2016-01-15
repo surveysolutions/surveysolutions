@@ -3,6 +3,7 @@
   <EditTextPreference android:key="HttpResponseTimeout" android:numeric="integer" android:defaultValue="@integer/HttpResponseTimeout"/>
 
   <EditTextPreference android:key="GpsReceiveTimeoutSec" android:numeric="integer" android:defaultValue="@integer/GpsReceiveTimeoutSec"/>
+  <EditTextPreference android:key="GpsDesiredAccuracy" android:numeric="integer" android:defaultValue="@integer/GpsDesiredAccuracy"/>
   
   <Preference android:key="version" />
 

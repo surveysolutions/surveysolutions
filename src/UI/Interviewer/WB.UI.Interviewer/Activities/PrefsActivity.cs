@@ -5,6 +5,7 @@ using Android.Preferences;
 using Cirrious.CrossCore;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Interviewer.SharedPreferences;
 
 namespace WB.UI.Interviewer.Activities
@@ -31,7 +32,17 @@ namespace WB.UI.Interviewer.Activities
             this.SetPreferenceTitleAndSummary("version", InterviewerUIResources.Prefs_ApplicationVersionTitle, interviewerSettings.GetApplicationVersionName());
             this.SetPreferenceTitleAndSummary("deviceid", InterviewerUIResources.Prefs_DeviceIdTitle, interviewerSettings.GetDeviceId());
 
-            
+            this.FindPreference(SettingsNames.GpsDesiredAccuracy).PreferenceChange += async (sender, e) =>
+            {
+                double newValue;
+                if (double.TryParse(e.NewValue.ToString(), out newValue))
+                {
+                    await interviewerSettings.SetGpsDesiredAccuracy(newValue);
+                }
+
+                this.UpdateSettings();
+            };
+
             this.FindPreference(SettingsNames.Endpoint).PreferenceChange += async (sender, e) =>
             {
                 await interviewerSettings.SetEndpointAsync(e.NewValue.ToString());
@@ -71,6 +82,9 @@ namespace WB.UI.Interviewer.Activities
                 InterviewerUIResources.Prefs_GpsReceiveTimeoutSecTitle,
                 InterviewerUIResources.Prefs_GpsReceiveTimeoutSecSummary,
                 interviewerSettings.GpsReceiveTimeoutSec.ToString());
+
+            this.SetPreferenceTitleAndSummary(SettingsNames.GpsDesiredAccuracy, UIResources.Prefs_GpsDesiredAccuracyTitle,
+                string.Format(UIResources.Prefs_GpsDesiredAccuracySubTitle, interviewerSettings.GpsDesiredAccuracy));
         }
 
         private static int ParseIntegerSettingsValue(object settingsValue, int defaultValue)
