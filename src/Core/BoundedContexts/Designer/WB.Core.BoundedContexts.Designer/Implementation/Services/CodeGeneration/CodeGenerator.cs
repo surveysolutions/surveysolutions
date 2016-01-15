@@ -16,7 +16,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public const string PrivateFieldsPrefix = "@__";
         public const string QuestionnaireTypeName = "QuestionnaireTopLevel";
         public const string QuestionnaireScope = "@__questionnaire_scope";
-        
+        public const string EnablementPrefix = "IsEnabled_";
+        public const string ValidationPrefix = "IsValid_";
+        public const string IdSuffix = "_id";
+        public const string StateSuffix = "_state";
+
         private readonly QuestionnaireExpressionStateModelFactory expressionStateModelFactory;
 
         public CodeGenerator(
