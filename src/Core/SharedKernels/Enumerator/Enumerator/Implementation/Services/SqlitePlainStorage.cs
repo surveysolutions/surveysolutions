@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public async Task RemoveAsync(string id)
         {
-            TEntity entity = await Task.FromResult(this.GetById(id));
+            TEntity entity = this.GetById(id);
 
             await this.RemoveAsync(new[] { entity });
         }

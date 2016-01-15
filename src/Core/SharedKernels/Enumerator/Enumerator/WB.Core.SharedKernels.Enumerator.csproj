@@ -89,7 +89,6 @@
     <Compile Include="Implementation\Services\IGpsLocationService.cs" />
     <Compile Include="Implementation\Services\InterviewViewModelFactory.cs" />
     <Compile Include="Implementation\Services\QuestionnaireModelBuilder.cs" />
-    <Compile Include="Implementation\Services\SiaqodbPlainStorageWithCache.cs" />
     <Compile Include="Implementation\Services\SiaqodbPlainStorage.cs" />
     <Compile Include="Implementation\Services\SiaqodbSerializer.cs" />
     <Compile Include="Implementation\Services\SqlitePlainStorage.cs" />
