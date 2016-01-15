@@ -12,15 +12,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class SiaqodbPlainStorage<TEntity> : IAsyncPlainStorage<TEntity> where TEntity: class, IPlainStorageEntity
     {
-        protected readonly ISiaqodb Storage;
-        protected readonly IUserInteractionService UserInteractionService;
-        protected readonly ILogger Logger;
+        private readonly ISiaqodb storage;
+        private readonly IUserInteractionService userInteractionService;
+        private readonly ILogger logger;
 
         public SiaqodbPlainStorage(ISiaqodb storage, IUserInteractionService userInteractionService, ILogger logger)
         {
-            this.Storage = storage;
-            this.UserInteractionService = userInteractionService;
-            this.Logger = logger;
+            this.storage = storage;
+            this.userInteractionService = userInteractionService;
+            this.logger = logger;
         }
 
         public virtual TEntity GetById(string id)
@@ -37,18 +37,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public virtual async Task RemoveAsync(IEnumerable<TEntity> entities)
         {
-            ITransaction transaction = Storage.BeginTransaction();
+            ITransaction transaction = this.storage.BeginTransaction();
             try
             {
                 foreach (var entity in entities.Where(entity => entity != null))
                 {
-                    await this.Storage.DeleteAsync(entity, transaction);
+                    await this.storage.DeleteAsync(entity, transaction);
                 }
                 transaction.Commit();
             }
             catch (Exception ex)
             {
-                this.Logger.Fatal(ex.Message, ex);
+                this.logger.Fatal(ex.Message, ex);
                 transaction.Rollback();
             }
         }
@@ -60,21 +60,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public virtual async Task StoreAsync(IEnumerable<TEntity> entities)
         {
-            ITransaction transaction = Storage.BeginTransaction();
+            ITransaction transaction = this.storage.BeginTransaction();
             try
             {
                 foreach (var entity in entities.Where(entity => entity != null))
                 {
-                    await this.Storage.StoreObjectAsync(entity, transaction);
+                    await this.storage.StoreObjectAsync(entity, transaction);
                 }
                 transaction.Commit();
             }
             catch (Exception ex)
             {
-                this.Logger.Fatal(ex.Message, ex);
+                this.logger.Fatal(ex.Message, ex);
                 if (ex.Message.IndexOf("Environment mapsize limit reached", StringComparison.OrdinalIgnoreCase) > -1)
                 {
-                    await this.UserInteractionService.AlertAsync("Database is full. Please, restart application to increase database size", "Critical exception");
+                    await this.userInteractionService.AlertAsync("Database is full. Please, restart application to increase database size", "Critical exception");
                 }
                 transaction.Rollback();
             }
@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
         {
-            var queryable = this.Storage.Cast<TEntity>().AsQueryable();
+            var queryable = this.storage.Cast<TEntity>().AsQueryable();
             var result = query.Invoke(queryable);
             return result;
         }
