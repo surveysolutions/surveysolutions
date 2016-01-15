@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     {
         private readonly Dictionary<string, TEntity> memoryStorage = new Dictionary<string, TEntity>();
 
-        public SiaqodbPlainStorageWithCache(ISiaqodb storage, IUserInteractionService userInteractionService, ILogger logger)
+        public SiaqodbPlainStorageWithCache(Siaqodb storage, IUserInteractionService userInteractionService, ILogger logger)
             : base(storage, userInteractionService, logger) {}
 
         public override TEntity GetById(string id)
