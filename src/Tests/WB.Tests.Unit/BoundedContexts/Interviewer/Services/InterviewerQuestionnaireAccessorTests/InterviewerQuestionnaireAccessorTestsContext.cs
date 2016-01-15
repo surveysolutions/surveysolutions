@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
 {
     internal class InterviewerQuestionnaireAccessorTestsContext
     {
-        public InterviewerQuestionnaireAccessor CreateInterviewerQuestionnaireAccessor(
+        public static InterviewerQuestionnaireAccessor CreateInterviewerQuestionnaireAccessor(
             ISerializer serializer = null,
             IQuestionnaireModelBuilder questionnaireModelBuilder = null,
             IAsyncPlainStorage<QuestionnaireModelView> questionnaireModelViewRepository = null,

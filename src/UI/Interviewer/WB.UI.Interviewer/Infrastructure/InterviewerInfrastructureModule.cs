@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Principal;
 using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
 using Ninject;
@@ -23,6 +24,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Interviewer.Infrastructure.Logging;
+using IPrincipal = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IPrincipal;
 
 namespace WB.UI.Interviewer.Infrastructure
 {
@@ -58,8 +60,9 @@ namespace WB.UI.Interviewer.Infrastructure
                 .WithConstructorArgument("crashFilePath", AndroidPathUtils.GetPathToCrashFile());
 
             this.Bind<IQuestionnaireAssemblyFileAccessor>().ToConstructor(
-                kernel => new InterviewerQuestionnaireAssemblyFileAccessor(kernel.Inject<IFileSystemAccessor>(),
-                    AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies")));
+                kernel => new InterviewerQuestionnaireAssemblyFileAccessor(kernel.Inject<IFileSystemAccessor>(), 
+                kernel.Inject<IAsynchronousFileSystemAccessor>(), kernel.Inject<ILogger>(), 
+                AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies")));
 
             this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
             this.Bind<IProtobufSerializer>().To<ProtobufSerializer>();
