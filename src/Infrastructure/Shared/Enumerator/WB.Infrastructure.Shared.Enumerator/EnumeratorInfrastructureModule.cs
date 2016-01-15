@@ -1,3 +1,5 @@
+using Geolocator.Plugin;
+using Geolocator.Plugin.Abstractions;
 using ICSharpCode.SharpZipLib;
 using Microsoft.Practices.ServiceLocation;
 using MvvmCross.Plugins.Location;
@@ -27,6 +29,7 @@ namespace WB.Infrastructure.Shared.Enumerator
             this.Bind<IQRBarcodeScanService>().To<QRBarcodeScanService>();
             this.Bind<IGpsLocationService>().To<GpsLocationService>().InSingletonScope();
             this.Bind<IMvxLocationWatcher>().To<PlayServicesLocationWatcher>();
+            this.Bind<IGeolocator>().ToMethod(context => CrossGeolocator.Current);
         }
     }
 }
