@@ -5,6 +5,8 @@ using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
 using Sqo;
+using SQLite.Net.Interop;
+using SQLite.Net.Platform.XamarinAndroid;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
@@ -46,6 +48,14 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<IPlainInterviewFileStorage>().To<InterviewerPlainInterviewFileStorage>();
 
             this.Bind<IEventStore>().To<SiaqodbEventStorage>();
+
+            //this.Bind<ISQLitePlatform>().To<SQLitePlatformAndroid>();
+            //this.Bind<SqliteSettings>().ToConstant(
+            //    new SqliteSettings()
+            //    {
+            //        PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")
+            //    });
+            //this.Bind(typeof (IAsyncPlainStorage<>)).To(typeof (SqlitePlainStorage<>)).InSingletonScope();
 
             this.Bind<InterviewerPrincipal>().To<InterviewerPrincipal>().InSingletonScope();
             this.Bind<IPrincipal>().ToMethod<IPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
