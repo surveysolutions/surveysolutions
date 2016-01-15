@@ -60,6 +60,14 @@
       <HintPath>..\..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.4.0.0-beta7\lib\MonoAndroid\Cirrious.MvvmCross.Localization.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Geolocator.Plugin, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Xam.Plugin.Geolocator.1.1.1\lib\MonoAndroid10\Geolocator.Plugin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Geolocator.Plugin.Abstractions, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Xam.Plugin.Geolocator.1.1.1\lib\MonoAndroid10\Geolocator.Plugin.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="GooglePlayServicesLib">
       <HintPath>..\..\..\..\..\packages\Xamarin.GooglePlayServices.22.0.0.2\lib\MonoAndroid41\GooglePlayServicesLib.dll</HintPath>
     </Reference>
@@ -198,4 +206,3 @@
   </Target>
   -->
 </Project>
-
