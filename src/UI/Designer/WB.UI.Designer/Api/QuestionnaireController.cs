@@ -161,9 +161,7 @@ namespace WB.UI.Designer.Api
             return new VerificationResult
             {
                 Errors = errors,
-                ErrorsCount = verificationErrors.Length,
-                Warnings = warnings,
-                WarningsCount = verificationWarnings.Length
+                Warnings = warnings
             };
         }
 
