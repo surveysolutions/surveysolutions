@@ -84,14 +84,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Mono.Android" />
-    <Reference Include="MvvmCross.Plugins.Location, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Location.4.0.0-beta7\lib\MonoAndroid\MvvmCross.Plugins.Location.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="MvvmCross.Plugins.Location.Droid, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Location.4.0.0-beta7\lib\MonoAndroid\MvvmCross.Plugins.Location.Droid.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="MWBarcodeScanner, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\libs\android\MWBarcodeScanner.dll</HintPath>
@@ -144,7 +136,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AndroidPathUtils.cs" />
-    <Compile Include="Bootstrap\LocationPluginBootstrap.cs" />
     <Compile Include="Internals\FileSystem\AndroidDirectoryInfo.cs" />
     <Compile Include="Internals\FileSystem\AndroidFileInfo.cs" />
     <Compile Include="Internals\FileSystem\AndroidFileSystem.cs" />

@@ -107,10 +107,6 @@
       <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MvvmCross.Plugins.Location, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Location.4.0.0-beta7\lib\portable-win+net45+wp8+win8+wpa81\MvvmCross.Plugins.Location.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="MvvmCross.Plugins.Messenger, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Messenger.4.0.0-beta7\lib\portable-win+net45+wp8+win8+wpa81\MvvmCross.Plugins.Messenger.dll</HintPath>
       <Private>True</Private>
