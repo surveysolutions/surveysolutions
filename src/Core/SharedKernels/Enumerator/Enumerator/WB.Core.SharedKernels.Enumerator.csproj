@@ -93,6 +93,7 @@
     <Compile Include="Implementation\Services\SiaqodbPlainStorage.cs" />
     <Compile Include="Implementation\Services\SiaqodbSerializer.cs" />
     <Compile Include="Implementation\Services\SqlitePlainStorage.cs" />
+    <Compile Include="Implementation\Services\SqlitePlainStorageWithCache.cs" />
     <Compile Include="Implementation\Services\SqliteSettings.cs" />
     <Compile Include="Models\Questionnaire\QuestionnaireModel.cs" />
     <Compile Include="Models\Questionnaire\Questions\YesNoQuestionModel.cs" />
