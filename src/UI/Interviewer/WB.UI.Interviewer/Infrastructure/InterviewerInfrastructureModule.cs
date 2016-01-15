@@ -93,7 +93,7 @@ namespace WB.UI.Interviewer.Infrastructure
             SiaqodbConfigurator.EncryptedDatabase = true;
             SiaqodbConfigurator.SetEncryptionPassword("q=5+yaQqS0K!rWaw8FmLuRDWj8XpwI04Yr4MhtULYmD3zX+W+g");
             
-            this.Bind<ISiaqodb>().ToConstant(new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data"), 512 * 1024 * 1024));
+            this.Bind<ISiaqodb>().ToConstant(new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")));
         }
     }
 }

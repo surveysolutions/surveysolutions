@@ -9,5 +9,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public int HttpResponseTimeoutInSec { get; set; }
         public int GpsResponseTimeoutInSec { get; set; }
         public int CommunicationBufferSize { get; set; }
+        public double? GpsDesiredAccuracy { get; set; }
     }
 }

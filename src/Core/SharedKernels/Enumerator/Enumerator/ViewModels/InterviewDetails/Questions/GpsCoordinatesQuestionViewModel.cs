@@ -75,7 +75,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.QuestionState.Validity.ProcessException(ex);
             }
 
-            if (this.AnswerRemoved != null) this.AnswerRemoved.Invoke(this, EventArgs.Empty);
+            this.AnswerRemoved?.Invoke(this, EventArgs.Empty);
         }
 
         private readonly Guid userId;
@@ -92,6 +92,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public QuestionStateViewModel<GeoLocationQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
+
         public GpsCoordinatesQuestionViewModel(
             IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
@@ -149,7 +150,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
                 cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(this.settings.GpsReceiveTimeoutSec));
-                var mvxGeoLocation = await this.locationService.GetLocation(cancellationTokenSource.Token);
+                var mvxGeoLocation = await this.locationService.GetLocation(cancellationTokenSource.Token, this.settings.GpsDesiredAccuracy);
                 await this.SetGeoLocationAnswerAsync(mvxGeoLocation);
             }
             catch (OperationCanceledException)
