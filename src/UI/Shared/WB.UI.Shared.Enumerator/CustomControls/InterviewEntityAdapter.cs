@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using Android.Content;
+using Android.OS;
 using Android.Views;
+using Cirrious.CrossCore;
+using Cirrious.CrossCore.Exceptions;
 using Cirrious.MvvmCross.Binding.Droid.BindingContext;
 using Java.Lang;
 using MvvmCross.Droid.Support.V7.RecyclerView;
@@ -18,7 +21,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 {
     public class InterviewEntityAdapter : MvxRecyclerAdapter
     {
-        private static readonly ConcurrentDictionary<Type, bool> hasEnablementViewModel = new ConcurrentDictionary<Type, bool>(); 
+        private static readonly ConcurrentDictionary<Type, bool> hasEnablementViewModel = new ConcurrentDictionary<Type, bool>();
         private const int UnknownViewType = -1;
 
         private static readonly Dictionary<Type, int> EntityTemplates = new Dictionary<Type, int>
@@ -74,8 +77,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                     return Resource.Layout.interview_disabled_group;
                 }
             }
-            
-            return EntityTemplates.ContainsKey(typeOfViewModel) 
+
+            return EntityTemplates.ContainsKey(typeOfViewModel)
                 ? EntityTemplates[typeOfViewModel]
                 : EntityTemplates.ContainsKey(typeOfViewModel.BaseType) ? EntityTemplates[typeOfViewModel.BaseType] : UnknownViewType;
         }
@@ -94,13 +97,12 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 var enablementModel = item.QuestionState.Enablement;
                 return (EnablementViewModel)enablementModel;
             }
-                
+
             return null;
         }
 
         protected override View InflateViewForHolder(ViewGroup parent, int viewType, IMvxAndroidBindingContext bindingContext)
         {
-            
             return viewType != UnknownViewType
                 ? bindingContext.BindingInflate(viewType, parent, false)
                 : this.CreateEmptyView(parent.Context);
@@ -113,11 +115,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
         protected override void OnItemsSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            try
-            {
-                base.NotifyDataSetChanged(e);
-            }
-            catch (IllegalStateException) { }
+            new Handler(Looper.MainLooper).Post(() => this.NotifyDataSetChanged(e));
         }
     }
 }
