@@ -5,6 +5,7 @@ using Android.OS;
 using Android.Preferences;
 using Cirrious.CrossCore;
 using WB.Core.BoundedContexts.Tester.Properties;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Tester.Infrastructure.Internals.Settings;
 
 namespace WB.UI.Tester.Activities
@@ -35,6 +36,9 @@ namespace WB.UI.Tester.Activities
             this.SetPreferenceTitleAndSummary("dev_settings_category", TesterUIResources.Prefs_ConnectionSettings, string.Empty);
             this.SetPreferenceTitleAndSummary("DesignerEndpointV11", TesterUIResources.Prefs_DesignerEndPointTitle, settings.Endpoint);
             this.SetPreferenceTitleAndSummary("AcceptUnsignedSslCertificate", TesterUIResources.Prefs_AcceptUnsignedTitle, TesterUIResources.Prefs_AcceptUnsignedSummary);
+
+            this.SetPreferenceTitleAndSummary("GpsDesiredAccuracy", UIResources.Prefs_GpsDesiredAccuracyTitle, 
+                string.Format(UIResources.Prefs_GpsDesiredAccuracySubTitle, settings.GpsDesiredAccuracy));
 
             this.PreferenceScreen.RemovePreference(this.devSettingsCategory);
           

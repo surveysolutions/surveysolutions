@@ -16,8 +16,9 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
             this.Geolocator = geolocator;
         }
 
-        public async Task<GpsLocation> GetLocation(CancellationToken cancellationToken)
+        public async Task<GpsLocation> GetLocation(CancellationToken cancellationToken, double desiredAccuracy)
         {
+            this.Geolocator.DesiredAccuracy = desiredAccuracy;
             var position = await this.Geolocator.GetPositionAsync(token: cancellationToken)
                                                 .ConfigureAwait(false);
             return new GpsLocation(position.Accuracy, position.Altitude, position.Latitude, position.Longitude, position.Timestamp);

@@ -13,7 +13,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         Task SetHttpResponseTimeoutAsync(int timeout);
         Task SetGpsResponseTimeoutAsync(int timeout);
         Task SetCommunicationBufferSize(int bufferSize);
-        
+        Task SetGpsDesiredAccuracy(double value);
+
         string BackupFolder { get; }
         string RestoreFolder { get; }
     }
