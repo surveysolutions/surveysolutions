@@ -53,9 +53,6 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
         It should_returned_errors_contains_specified_errors_count = () =>
             result.Errors.Sum(error => error.References.Count).ShouldEqual(QuestionnaireController.MaxVerificationErrors);
 
-        It should_return_original_errors_count_before_grouping_in_result = () =>
-           result.ErrorsCount.ShouldEqual(QuestionnaireController.MaxVerificationErrors);
-
         private static QuestionnaireDocument questionnaireDocument; 
         private static Mock<IQuestionnaireVerifier> verifierMock ;
         private static QuestionnaireVerificationError[] verificationErrors;

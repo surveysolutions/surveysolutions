@@ -5,8 +5,8 @@ angular.module('designerApp')
             $(document).on('click', "a[href='javascript:void(0);']", function (e) { e.preventDefault(); }); // remove when we will stop support of IE 9 KP-6076
 
             $scope.verificationStatus = {
-                errorsCount: null,
-                errors: [],
+                errors: null,
+                warnings: null,
                 visible: false,
                 time: new Date()
             };
@@ -77,7 +77,9 @@ angular.module('designerApp')
             var WARNING = "warning";
 
             $scope.verify = function () {
-                $scope.verificationStatus.errors = [];
+                $scope.verificationStatus.errors = null;
+                $scope.verificationStatus.warnings = null;
+
                 verificationService.verify($state.params.questionnaireId).success(function (result) {
                     $scope.verificationStatus.errors = result.errors;
                     $scope.verificationStatus.warnings = result.warnings;
