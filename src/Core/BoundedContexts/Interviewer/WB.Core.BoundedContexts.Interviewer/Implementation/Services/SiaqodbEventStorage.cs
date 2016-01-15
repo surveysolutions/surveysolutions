@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             var events = this.eventRepository.Query(
                 eventViews => eventViews.Where(
-                    eventView => eventView.EventSourceId == id && eventView.OID >= minVersion && eventView.OID <= maxVersion)
+                    eventView => eventView.EventSourceId == id && eventView.EventSequence >= minVersion && eventView.EventSequence <= maxVersion)
                     .ToList());
             
             return new CommittedEventStream(id, events.Select(ToCommitedEvent));
