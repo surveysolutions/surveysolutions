@@ -80,4 +80,5 @@
   <item android:drawable="@drawable/splash_76" android:duration="34" />
   <item android:drawable="@drawable/splash_77" android:duration="34" />
   <item android:drawable="@drawable/splash_78" android:duration="34" />
+  <item android:drawable="@drawable/splash_79" android:duration="34" />
 </animation-list>
