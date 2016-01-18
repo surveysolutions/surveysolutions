@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Interviewer.Infrastructure.Logging;
+using WB.UI.Shared.Enumerator.CustomServices;
 
 namespace WB.UI.Interviewer.Infrastructure
 {

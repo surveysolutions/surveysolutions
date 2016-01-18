@@ -4,12 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Sqo;
 using Sqo.Transactions;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
-namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
+namespace WB.UI.Shared.Enumerator.CustomServices
 {
     public class SiaqodbPlainStorage<TEntity> : IAsyncPlainStorage<TEntity> where TEntity: class, IPlainStorageEntity
     {
@@ -27,14 +26,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public virtual TEntity GetById(string id)
         {
-            return this.Query(entities => entities.SingleOrDefault(entity => entity.Id == id));
+            return Query<TEntity>(entities => entities.SingleOrDefault(entity => entity.Id == id));
         }
 
         public async Task RemoveAsync(string id)
         {
             TEntity entity = this.GetById(id);
 
-            await this.RemoveAsync(new[] { entity });
+            await this.RemoveAsync((IEnumerable<TEntity>) new[] { entity });
         }
 
         public virtual async Task RemoveAsync(IEnumerable<TEntity> entities)
@@ -58,7 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public async Task StoreAsync(TEntity entity)
         {
-            await this.StoreAsync(new[] { entity });
+            await this.StoreAsync((IEnumerable<TEntity>) new[] { entity });
         }
 
         public virtual async Task StoreAsync(IEnumerable<TEntity> entities)

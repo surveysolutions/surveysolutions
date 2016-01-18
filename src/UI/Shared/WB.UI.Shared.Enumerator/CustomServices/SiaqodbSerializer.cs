@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
@@ -6,7 +6,7 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Sqo;
 
-namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
+namespace WB.UI.Shared.Enumerator.CustomServices
 {
     public class SiaqodbSerializer : IDocumentSerializer
     {
