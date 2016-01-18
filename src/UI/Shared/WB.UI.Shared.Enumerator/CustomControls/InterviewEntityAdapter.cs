@@ -117,7 +117,10 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
         protected override void OnItemsSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            new Handler(Looper.MainLooper).Post(() => this.NotifyDataSetChanged(e));
+            using (var handler = new Handler(Looper.MainLooper))
+            {
+                handler.Post(() => this.NotifyDataSetChanged(e));
+            }
         }
 
         public override void OnViewDetachedFromWindow(Object holder)
