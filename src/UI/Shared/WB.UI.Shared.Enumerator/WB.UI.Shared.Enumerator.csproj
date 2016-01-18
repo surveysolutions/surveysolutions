@@ -159,6 +159,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Portable.Ninject.3.3.1\lib\monoandroid\Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="Siaqodb, Version=5.5.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Siaqodb.5.5.0.1\lib\MonoAndroid\Siaqodb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SiaqodbPortable, Version=5.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Siaqodb.5.5.0.1\lib\MonoAndroid\SiaqodbPortable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Globalization" />
@@ -261,6 +269,9 @@
     <Compile Include="CustomControls\MaxHeightLinearLayout.cs" />
     <Compile Include="CustomServices\AndroidNetworkService.cs" />
     <Compile Include="CustomServices\ExternalAppLauncher.cs" />
+    <Compile Include="CustomServices\SiaqodbPlainStorage.cs" />
+    <Compile Include="CustomServices\SiaqodbPlainStorageWithCache.cs" />
+    <Compile Include="CustomServices\SiaqodbSerializer.cs" />
     <Compile Include="CustomServices\UserInteractionService.cs" />
     <Compile Include="CustomServices\UserInterfaceStateService.cs" />
     <Compile Include="EnumeratorUIModule.cs" />
