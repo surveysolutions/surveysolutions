@@ -34,6 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         private readonly IUserWebViewFactory userInfoViewFactory;
         private readonly IUserViewFactory userViewFactory;
+        private readonly IAndroidPackageReader androidPackageReader;
 
         private string ResponseInterviewerFileName = "interviewer.apk";
         private string CapiFileName = "wbcapi.apk";
@@ -50,7 +51,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             ITabletInformationService tabletInformationService,
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue, 
             IUserWebViewFactory userInfoViewFactory,
-            IUserViewFactory userViewFactory)
+            IUserViewFactory userViewFactory,
+            IAndroidPackageReader androidPackageReader)
             : base(commandService, globalInfo, logger)
         {
 
@@ -62,6 +64,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.userInfoViewFactory = userInfoViewFactory;
             this.syncVersionProvider = syncVersionProvider;
             this.userViewFactory = userViewFactory;
+            this.androidPackageReader = androidPackageReader;
         }
 
         [HttpGet]
@@ -140,11 +143,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [AllowAnonymous]
         public bool CheckNewVersion(int versionCode)
         {
-            string targetToSearchCapi = fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(pathToSearchVersions), CapiFileName);
+            string pathToInterviewerApp =
+                this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(pathToSearchVersions), CapiFileName);
 
-            int? supervisorRevisionNumber = versionProvider.GetApplicationBuildNumber();
-
-            return fileSystemAccessor.IsFileExists(targetToSearchCapi) && supervisorRevisionNumber.HasValue && (supervisorRevisionNumber.Value > versionCode);
+            int? interviewerApkVersion = !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
+                ? null
+                : this.androidPackageReader.Read(pathToInterviewerApp).Version;
+            
+            return interviewerApkVersion.HasValue && (interviewerApkVersion.Value > versionCode);
         }
 
         [HttpPost]
