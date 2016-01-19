@@ -25,7 +25,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
     public class InterviewerSyncController : BaseApiController
     { 
-        private readonly ISupportedVersionProvider versionProvider;
         private readonly ISyncProtocolVersionProvider syncVersionProvider;
         private readonly IPlainInterviewFileStorage plainFileRepository;
         private readonly IFileSystemAccessor fileSystemAccessor; 
@@ -44,7 +43,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public InterviewerSyncController(ICommandService commandService,
             IGlobalInfoProvider globalInfo,
             ILogger logger,
-            ISupportedVersionProvider versionProvider,
             IPlainInterviewFileStorage plainFileRepository,
             IFileSystemAccessor fileSystemAccessor,
             ISyncProtocolVersionProvider syncVersionProvider,
@@ -57,7 +55,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
 
             this.plainFileRepository = plainFileRepository;
-            this.versionProvider = versionProvider;
             this.fileSystemAccessor = fileSystemAccessor;
             this.tabletInformationService = tabletInformationService;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
