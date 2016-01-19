@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 
 namespace WB.UI.Headquarters.API
@@ -72,8 +73,8 @@ namespace WB.UI.Headquarters.API
         {
             return
                 CreateHttpResponseMessageWithFileContent(
-                    this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedData(
-                        new QuestionnaireIdentity(id, version), format));
+                    this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
+                        new QuestionnaireIdentity(id, version), format, InterviewStatus.ApprovedByHeadquarters));
         }
 
         [HttpGet]
@@ -105,29 +106,12 @@ namespace WB.UI.Headquarters.API
         [HttpPost]
         [ObserverNotAllowedApi]
         public HttpResponseMessage RequestUpdate(Guid questionnaireId, long questionnaireVersion,
-            DataExportFormat format)
+            DataExportFormat format,
+            InterviewStatus? status)
         {
             try
             {
-                this.dataExportProcessesService.AddAllDataExport(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), format);
-            }
-            catch (Exception e)
-            {
-                return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
-            }
-
-            return Request.CreateResponse(true);
-        }
-
-
-        [HttpPost]
-        [ObserverNotAllowedApi]
-        public HttpResponseMessage RequestUpdateOfApproved(Guid questionnaireId, long questionnaireVersion,
-            DataExportFormat format)
-        {
-            try
-            {
-                this.dataExportProcessesService.AddApprovedDataExport(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), format);
+                this.dataExportProcessesService.AddDataExport(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), format, status);
             }
             catch (Exception e)
             {
@@ -154,10 +138,11 @@ namespace WB.UI.Headquarters.API
         }
 
         public DataExportStatusView ExportedDataReferencesForQuestionnaire(Guid questionnaireId,
-            long questionnaireVersion)
+            long questionnaireVersion,
+            InterviewStatus? status)
         {
-            return this.dataExportStatusReader.GetDataExportStatusForQuestionnaire(
-                new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
+            var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
+            return this.dataExportStatusReader.GetDataExportStatusForQuestionnaire(questionnaireIdentity, status);
         }
 
         private HttpResponseMessage CreateHttpResponseMessageWithFileContent(string filePath)

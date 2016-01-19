@@ -2,6 +2,7 @@
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
@@ -9,9 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
     {
         IDataExportProcessDetails GetAndStartOldestUnprocessedDataExport();
 
-        string AddAllDataExport(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat);
-
-        string AddApprovedDataExport(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat);
+        string AddDataExport(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat, InterviewStatus? status = null);
 
         string AddParaDataExport(DataExportFormat exportFormat);
 

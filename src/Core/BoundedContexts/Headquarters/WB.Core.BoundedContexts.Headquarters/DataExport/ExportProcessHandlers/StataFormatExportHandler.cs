@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using IFilebasedExportedDataAccessor = WB.Core.BoundedContexts.Headquarters.DataExport.Accessors.IFilebasedExportedDataAccessor;
@@ -24,20 +25,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         protected override DataExportFormat Format => DataExportFormat.STATA;
 
-        protected override void ExportAllDataIntoDirectory(
-            QuestionnaireIdentity questionnaireIdentity, string directoryPath, IProgress<int> progress, CancellationToken cancellationToken)
+        protected override void ExportDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity, InterviewStatus? status, string directoryPath, IProgress<int> progress, CancellationToken cancellationToken)
         {
-            var tabFiles = this.CreateAllTabularDataFiles(questionnaireIdentity, directoryPath, progress, cancellationToken);
-
-            this.CreateStataDataFilesFromTabularDataFiles(questionnaireIdentity, tabFiles, progress, cancellationToken);
-
-            this.DeleteTabularDataFiles(tabFiles, cancellationToken);
-        }
-
-        protected override void ExportApprovedDataIntoDirectory(
-            QuestionnaireIdentity questionnaireIdentity, string directoryPath, IProgress<int> progress, CancellationToken cancellationToken)
-        {
-            var tabFiles = this.CreateApprovedTabularDataFiles(questionnaireIdentity, directoryPath, progress, cancellationToken);
+            var tabFiles = this.CreateAllTabularDataFiles(questionnaireIdentity, status, directoryPath, progress, cancellationToken);
 
             this.CreateStataDataFilesFromTabularDataFiles(questionnaireIdentity, tabFiles, progress, cancellationToken);
 
