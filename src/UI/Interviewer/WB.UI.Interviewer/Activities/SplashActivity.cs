@@ -111,11 +111,7 @@ namespace WB.UI.Interviewer.Activities
         {
             var interviewersRepository = Mvx.Resolve<IAsyncPlainStorage<InterviewerIdentity>>();
 
-            SiaqodbConfigurator.EncryptedDatabase = false;
-            var oldInterviewersRepository = new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("database"));
-            var oldInterviewer = await oldInterviewersRepository.Query<InterviewerIdentity>().FirstOrDefaultAsync();
-            SiaqodbConfigurator.EncryptedDatabase = true;
-            SiaqodbConfigurator.SetEncryptionPassword("q=5+yaQqS0K!rWaw8FmLuRDWj8XpwI04Yr4MhtULYmD3zX+W+g");
+            var oldInterviewer = await GetInterviewerIdentityFromOldDatabase();
             if (oldInterviewer != null)
             {
                 await interviewersRepository.StoreAsync(oldInterviewer);
@@ -138,6 +134,23 @@ namespace WB.UI.Interviewer.Activities
                     });
                 }
             }
+        }
+
+        private static async Task<InterviewerIdentity> GetInterviewerIdentityFromOldDatabase()
+        {
+            InterviewerIdentity oldInterviewer;
+
+            SiaqodbConfigurator.EncryptedDatabase = false;
+
+            using (var oldInterviewersRepository = new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("database")))
+            {
+                oldInterviewer = await oldInterviewersRepository.Query<InterviewerIdentity>().FirstOrDefaultAsync();
+            }
+
+            SiaqodbConfigurator.EncryptedDatabase = true;
+            SiaqodbConfigurator.SetEncryptionPassword("q=5+yaQqS0K!rWaw8FmLuRDWj8XpwI04Yr4MhtULYmD3zX+W+g");
+
+            return oldInterviewer;
         }
 
         private async Task RestoreInterviewsAsync()

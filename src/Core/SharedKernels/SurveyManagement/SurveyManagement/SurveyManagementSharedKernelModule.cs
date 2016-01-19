@@ -59,9 +59,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
     public class SurveyManagementSharedKernelModule : NinjectModule
     {
         private readonly string currentFolderPath;
-        private readonly Func<bool> isDebug;
         private readonly InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings;
-        private readonly Version applicationBuildVersion;
         private readonly bool isSupervisorFunctionsEnabled;
         private readonly int? interviewLimitCount;
         private readonly ReadSideSettings readSideSettings;
@@ -69,7 +67,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
         private readonly string questionnaireAssembliesDirectoryName;
 
         public SurveyManagementSharedKernelModule(string currentFolderPath,
-            Func<bool> isDebug, Version applicationBuildVersion,
             InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings,
             ReadSideSettings readSideSettings,
             bool isSupervisorFunctionsEnabled,
@@ -78,9 +75,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             string questionnaireAssembliesFolder = "QuestionnaireAssemblies")
         {
             this.currentFolderPath = currentFolderPath;
-            this.isDebug = isDebug;
             this.interviewDetailsDataLoaderSettings = interviewDetailsDataLoaderSettings;
-            this.applicationBuildVersion = applicationBuildVersion;
             this.readSideSettings = readSideSettings;
             this.isSupervisorFunctionsEnabled = isSupervisorFunctionsEnabled;
             this.interviewLimitCount = interviewLimitCount;
@@ -171,6 +166,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<ISampleImportService>().To<SampleImportService>();
             this.Bind<Func<ISampleImportService>>().ToMethod(context => () => context.Kernel.Get<ISampleImportService>());
+
+            this.Bind<IAndroidPackageReader>().To<AndroidPackageReader>();
            
             //commented because auto registered somewhere 
             //this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
@@ -192,8 +189,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<IMapReport>().To<MapReport>();
 
             this.Unbind<ISupportedVersionProvider>();
-            this.Bind<ISupportedVersionProvider>()
-                .ToConstant(new SupportedVersionProvider(this.isDebug, this.applicationBuildVersion));
+            this.Bind<ISupportedVersionProvider>().To<SupportedVersionProvider>();
 
             this.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
 

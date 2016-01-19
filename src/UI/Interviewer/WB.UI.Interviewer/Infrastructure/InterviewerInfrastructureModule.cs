@@ -24,6 +24,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Interviewer.Infrastructure.Logging;
+using WB.UI.Shared.Enumerator.CustomServices;
 using IPrincipal = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IPrincipal;
 
 namespace WB.UI.Interviewer.Infrastructure
@@ -105,7 +106,7 @@ namespace WB.UI.Interviewer.Infrastructure
             SiaqodbConfigurator.SetEncryptionPassword("q=5+yaQqS0K!rWaw8FmLuRDWj8XpwI04Yr4MhtULYmD3zX+W+g");
             SiaqodbConfigurator.AutoGrowthSize = 256*1024*1024;
             
-            this.Bind<ISiaqodb>().ToConstant(new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data"), 512*1024*1024));
+            this.Bind<Siaqodb>().ToConstant(new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")));
         }
     }
 }
