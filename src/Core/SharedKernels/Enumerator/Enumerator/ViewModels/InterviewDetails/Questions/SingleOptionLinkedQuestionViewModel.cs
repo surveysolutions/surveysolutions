@@ -216,6 +216,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     option.Selected = false;
                 }
+                this.QuestionState.IsAnswered = false;
             }
             RemoveOptionIfQuestionIsSourceofTheLink(@event.QuestionId, @event.RosterVector);
         }

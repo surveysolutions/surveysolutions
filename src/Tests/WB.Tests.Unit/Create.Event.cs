@@ -75,6 +75,11 @@ namespace WB.Tests.Unit
                 return new AnswersRemoved(questions);
             }
 
+            public static AnswerRemoved AnswerRemoved(Identity question)
+            {
+                return new AnswerRemoved(Guid.NewGuid(), question.Id, question.RosterVector, DateTime.Now);
+            }
+
             public static ExpressionsMigratedToCSharp ExpressionsMigratedToCSharpEvent()
             {
                 return new ExpressionsMigratedToCSharp();

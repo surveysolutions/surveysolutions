@@ -2261,6 +2261,15 @@ namespace WB.Tests.Unit
                     DateTime.Now, "tttt"));
         }
 
+        public static LinkedSingleOptionQuestionModel LinkedSingleOptionQuestionModel(Guid? questionId, Guid  linkedToQuestionId)
+        {
+            return new LinkedSingleOptionQuestionModel
+            {
+                Id = questionId ?? Guid.NewGuid(),
+                LinkedToQuestionId = linkedToQuestionId
+            };
+        }
+
         public static TextQuestionModel TextQuestionModel(Guid? questionId)
         {
             return new TextQuestionModel
