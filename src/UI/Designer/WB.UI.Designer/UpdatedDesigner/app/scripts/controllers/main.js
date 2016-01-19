@@ -86,7 +86,7 @@ angular.module('designerApp')
                     $scope.verificationStatus.time = new Date();
                     $scope.verificationStatus.typeOfMessageToBeShown = ERROR;
 
-                    if (result.errorsCount > 0)
+                    if ($scope.verificationStatus.errors.length > 0)
                         $scope.showVerificationErrors();
                     else {
                         $scope.closeVerifications();
