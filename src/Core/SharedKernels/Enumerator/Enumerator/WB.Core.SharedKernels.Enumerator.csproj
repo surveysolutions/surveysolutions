@@ -92,8 +92,6 @@
     <Compile Include="Implementation\Services\InterviewViewModelFactory.cs" />
     <Compile Include="Implementation\Services\JsonSerializerSettingsFactory.cs" />
     <Compile Include="Implementation\Services\QuestionnaireModelBuilder.cs" />
-    <Compile Include="Implementation\Services\SiaqodbPlainStorage.cs" />
-    <Compile Include="Implementation\Services\SiaqodbSerializer.cs" />
     <Compile Include="Implementation\Services\SqlitePlainStorage.cs" />
     <Compile Include="Implementation\Services\SqlitePlainStorageWithCache.cs" />
     <Compile Include="Implementation\Services\SqliteSettings.cs" />
