@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.CustomServices;
+using WB.UI.Tester.CustomServices;
 using WB.UI.Tester.Infrastructure.Internals;
 using WB.UI.Tester.Infrastructure.Internals.Log;
 using WB.UI.Tester.Infrastructure.Internals.Rest;

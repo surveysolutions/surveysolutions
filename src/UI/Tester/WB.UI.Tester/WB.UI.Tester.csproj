@@ -312,6 +312,7 @@
     <Compile Include="Bootstrap\UserInteractionPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="Converters\QuestionnairePublicityBackgroundConverter.cs" />
+    <Compile Include="CustomServices\SiaqodbPlainStorage.cs" />
     <Compile Include="Infrastructure\Internals\Rest\RestServicePointManager.cs" />
     <Compile Include="Infrastructure\Internals\Security\TesterPrincipal.cs" />
     <Compile Include="Infrastructure\Internals\Security\TesterUserIdentity.cs" />
