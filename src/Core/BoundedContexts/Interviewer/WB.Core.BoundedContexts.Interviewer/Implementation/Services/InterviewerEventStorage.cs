@@ -9,12 +9,12 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
-    public class SiaqodbEventStorage : IEventStore
+    public class InterviewerEventStorage : IEventStore
     {
         private readonly IAsyncPlainStorage<EventView> eventRepository;
         private readonly ISerializer serializer;
 
-        public SiaqodbEventStorage(IAsyncPlainStorage<EventView> eventRepository, ISerializer serializer)
+        public InterviewerEventStorage(IAsyncPlainStorage<EventView> eventRepository, ISerializer serializer)
         {
             this.eventRepository = eventRepository;
             this.serializer = serializer;
