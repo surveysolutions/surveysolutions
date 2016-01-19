@@ -1,20 +1,23 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Sqo;
+using SQLite.Net.Interop;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    public class SiaqodbPlainStorageWithCache<TEntity> : SiaqodbPlainStorage<TEntity> where TEntity: class, IPlainStorageEntity
+    public class SqlitePlainStorageWithCache<TEntity> : SqlitePlainStorage<TEntity> where TEntity : class, IPlainStorageEntity
     {
         readonly Dictionary<string, TEntity> memoryStorage = new Dictionary<string, TEntity>();
 
-        public SiaqodbPlainStorageWithCache(ISiaqodb storage, IUserInteractionService userInteractionService, ILogger logger)
-            : base(storage, userInteractionService, logger)
+        public SqlitePlainStorageWithCache(ISQLitePlatform sqLitePlatform, ILogger logger,
+            IAsynchronousFileSystemAccessor fileSystemAccessor, ISerializer serializer, SqliteSettings settings)
+            : base(sqLitePlatform, logger, fileSystemAccessor, serializer, settings)
         {
         }
 
@@ -32,11 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public override async Task RemoveAsync(IEnumerable<TEntity> entities)
         {
             var entitiesToRemove = entities.Where(entity => entity != null).ToList();
-
-            foreach (var entity in entitiesToRemove)
-            {
-                await this.Storage.DeleteAsync(entity);
-            }
+            await base.RemoveAsync(entitiesToRemove);
             this.RemoveFromMemory(entitiesToRemove);
         }
 
@@ -44,19 +43,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             try
             {
+                await base.StoreAsync(entities);
                 foreach (var entity in entities.Where(entity => entity != null))
                 {
-                    await this.Storage.StoreObjectAsync(entity);
                     this.StoreToMemory(entity);
                 }
             }
             catch (Exception ex)
             {
-                this.Logger.Fatal(ex.Message, ex);
-                if (ex.Message.IndexOf("Environment mapsize limit reached", StringComparison.OrdinalIgnoreCase) > -1)
-                {
-                    await this.UserInteractionService.AlertAsync("Database is full. Please, send tablet information and contact to Survey Solutions team.", "Critical exception");
-                }
+                this.logger.Fatal(ex.Message, ex);
             }
         }
 
@@ -80,5 +75,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     this.memoryStorage.Remove(entity.Id);
             }
         }
+
     }
 }

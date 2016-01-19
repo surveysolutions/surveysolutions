@@ -37,9 +37,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public virtual async Task RemoveAsync(IEnumerable<TEntity> entities)
         {
-            foreach (var entity in entities.Where(entity => entity != null))
+            ITransaction transaction = Storage.BeginTransaction();
+            try
             {
-                await this.Storage.DeleteAsync(entity);
+                foreach (var entity in entities.Where(entity => entity != null))
+                {
+                    await this.Storage.DeleteAsync(entity, transaction);
+                }
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                this.Logger.Fatal(ex.Message, ex);
+                transaction.Rollback();
             }
         }
 
@@ -50,20 +60,23 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public virtual async Task StoreAsync(IEnumerable<TEntity> entities)
         {
+            ITransaction transaction = Storage.BeginTransaction();
             try
             {
                 foreach (var entity in entities.Where(entity => entity != null))
                 {
-                    await this.Storage.StoreObjectAsync(entity);
+                    await this.Storage.StoreObjectAsync(entity, transaction);
                 }
+                transaction.Commit();
             }
             catch (Exception ex)
             {
                 this.Logger.Fatal(ex.Message, ex);
                 if (ex.Message.IndexOf("Environment mapsize limit reached", StringComparison.OrdinalIgnoreCase) > -1)
                 {
-                    await this.UserInteractionService.AlertAsync("Database is full. Please, send tablet information and contact to Survey Solutions team.", "Critical exception");
+                    await this.UserInteractionService.AlertAsync("Database is full. Please, restart application to increase database size", "Critical exception");
                 }
+                transaction.Rollback();
             }
         }
 
