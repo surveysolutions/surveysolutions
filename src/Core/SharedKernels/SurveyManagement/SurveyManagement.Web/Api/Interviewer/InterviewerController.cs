@@ -24,20 +24,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         private const string PHYSICALPATHTOAPPLICATION = "~/Client/";
 
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly ISupportedVersionProvider versionProvider;
         private readonly ITabletInformationService tabletInformationService;
         private readonly IUserViewFactory userViewFactory;
         private readonly IAndroidPackageReader androidPackageReader;
 
         public InterviewerController(
             IFileSystemAccessor fileSystemAccessor,
-            ISupportedVersionProvider versionProvider,
             ITabletInformationService tabletInformationService,
             IUserViewFactory userViewFactory,
             IAndroidPackageReader androidPackageReader)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-            this.versionProvider = versionProvider;
             this.tabletInformationService = tabletInformationService;
             this.userViewFactory = userViewFactory;
             this.androidPackageReader = androidPackageReader;
