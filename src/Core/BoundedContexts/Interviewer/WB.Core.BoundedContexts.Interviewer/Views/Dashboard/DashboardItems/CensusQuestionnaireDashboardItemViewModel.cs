@@ -44,8 +44,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.questionnaireIdentity = questionnaire.Identity;
             this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, questionnaire.Title, questionnaire.Identity.Version);
 
-            var countInterviewsFromCurrentQuestionnare = this.interviewViewRepository.Query(
-                interviews => interviews.Count(interview => interview.QuestionnaireId == questionnaire.Id));
+            var countInterviewsFromCurrentQuestionnare = this.interviewViewRepository.Count(interview => interview.QuestionnaireId == questionnaire.Id);
 
             this.Comment = InterviewerUIResources.DashboardItem_CensusModeComment.FormatString(countInterviewsFromCurrentQuestionnare);
         }
