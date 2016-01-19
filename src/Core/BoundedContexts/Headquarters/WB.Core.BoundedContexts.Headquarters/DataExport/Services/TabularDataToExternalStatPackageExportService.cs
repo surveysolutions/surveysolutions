@@ -63,7 +63,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, DataExportFormat.SPSS, tabularDataFiles, progress, cancellationToken);
         }
 
-
         private string[] CreateAndGetExportDataFiles(Guid questionnaireId, long questionnaireVersion, DataExportFormat format, string[] dataFiles, IProgress<int> progress, CancellationToken cancellationToken)
         {
             string currentDataInfo = string.Empty;

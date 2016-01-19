@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
@@ -55,7 +56,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.interviewActionsExporter = ServiceLocator.Current.GetInstance<InterviewActionsExporter>();
         }
 
-        public void ExportInterviewsInTabularFormat(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
+        public void ExportInterviewsInTabularFormat(QuestionnaireIdentity questionnaireIdentity,
+            InterviewStatus? status, 
+            string basePath, 
+            IProgress<int> progress, 
+            CancellationToken cancellationToken)
         {
             QuestionnaireExportStructure questionnaireExportStructure = this.BuildQuestionnaireExportStructure(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 
@@ -73,35 +78,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             Stopwatch exportWatch = new Stopwatch();
             exportWatch.Start(); 
             Task.WaitAll(new[] {
-                Task.Run(() => this.interviewsExporter.ExportAll(questionnaireExportStructure, basePath, exportInterviewsProgress, cancellationToken), cancellationToken),
-                Task.Run(() => this.commentsExporter.ExportAll(questionnaireExportStructure, basePath, exportCommentsProgress), cancellationToken),
-                Task.Run(() => this.interviewActionsExporter.ExportAll(questionnaireIdentity, basePath, exportInterviewActionsProgress), cancellationToken)
+                Task.Run(() => this.interviewsExporter.Export(questionnaireExportStructure, status, basePath, exportInterviewsProgress, cancellationToken), cancellationToken),
+                Task.Run(() => this.commentsExporter.Export(questionnaireExportStructure, basePath, exportCommentsProgress), cancellationToken),
+                Task.Run(() => this.interviewActionsExporter.Export(questionnaireIdentity, basePath, exportInterviewActionsProgress), cancellationToken)
             }, cancellationToken);
             exportWatch.Stop();
 
             this.logger.Info($"Export with all steps (Interviews, Comments, Actions) finished for questionnaire {questionnaireIdentity}. Took {exportWatch.Elapsed:c}");
-        }
-
-        public void ExportApprovedInterviewsInTabularFormat(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
-        {
-            QuestionnaireExportStructure questionnaireExportStructure = this.BuildQuestionnaireExportStructure(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
-
-            var exportInterviewsProgress = new Progress<int>();
-            var exportCommentsProgress = new Progress<int>();
-            var exportInterviewActionsProgress = new Progress<int>();
-
-            ProggressAggregator proggressAggregator = new ProggressAggregator();
-            proggressAggregator.Add(exportInterviewsProgress, 0.8);
-            proggressAggregator.Add(exportCommentsProgress, 0.1);
-            proggressAggregator.Add(exportInterviewActionsProgress, 0.1);
-
-            proggressAggregator.ProgressChanged += (sender, overallProgress) => progress.Report(overallProgress);
-
-            this.interviewsExporter.ExportApproved(questionnaireExportStructure, basePath, exportInterviewsProgress, cancellationToken);
-            cancellationToken.ThrowIfCancellationRequested();
-            this.commentsExporter.ExportApproved(questionnaireExportStructure, basePath, exportCommentsProgress);
-            cancellationToken.ThrowIfCancellationRequested();
-            this.interviewActionsExporter.ExportApproved(questionnaireIdentity, basePath, exportInterviewActionsProgress);
         }
 
         public void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath)

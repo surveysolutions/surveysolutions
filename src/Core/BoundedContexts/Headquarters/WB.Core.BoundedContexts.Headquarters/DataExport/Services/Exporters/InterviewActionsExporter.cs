@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             this.interviewStatuses = interviewStatuses;
         }
 
-        public void ExportAll(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress)
+        public void Export(QuestionnaireIdentity questionnaireIdentity, string basePath, IProgress<int> progress)
         {
             Expression<Func<InterviewStatuses, bool>> whereClauseForAction =
             interviewWithStatusHistory =>
