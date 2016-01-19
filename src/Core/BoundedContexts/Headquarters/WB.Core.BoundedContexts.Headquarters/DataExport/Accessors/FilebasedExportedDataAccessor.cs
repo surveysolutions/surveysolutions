@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
-using WB.Core.GenericSubdomains.Portable.Services;
+﻿using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
@@ -24,16 +23,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
                 fileSystemAccessor.CreateDirectory(this.pathToExportedData);
         }
 
-        public string GetArchiveFilePathForExportedData(QuestionnaireIdentity questionnaireId, DataExportFormat format)
+        public string GetArchiveFilePathForExportedData(QuestionnaireIdentity questionnaireId, DataExportFormat format, InterviewStatus? status = null)
         {
-            var archiveName = $"{questionnaireId.QuestionnaireId}_{questionnaireId.Version}_{format}_All.zip";
+            var statusSuffix = status != null ? status.ToString() : "All";
 
-            return this.fileSystemAccessor.CombinePath(this.pathToExportedData, archiveName);
-        }
+            var archiveName = $"{questionnaireId.QuestionnaireId}_{questionnaireId.Version}_{format}_{statusSuffix}.zip";
 
-        public string GetArchiveFilePathForExportedApprovedData(QuestionnaireIdentity questionnaireId, DataExportFormat format)
-        {
-            var archiveName = $"{questionnaireId.QuestionnaireId}_{questionnaireId.Version}_{format}_App.zip";
             return this.fileSystemAccessor.CombinePath(this.pathToExportedData, archiveName);
         }
     }

@@ -31,16 +31,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.serviceLocator = serviceLocator;
 
             this.RegisterExporter<ParaDataExportProcessDetails, TabularFormatParaDataExportProcessHandler>(DataExportFormat.Tabular);
-            this.RegisterExporter<AllDataExportProcessDetails, TabularFormatDataExportHandler>(DataExportFormat.Tabular);
-            this.RegisterExporter<ApprovedDataExportProcessDetails, TabularFormatDataExportHandler>(DataExportFormat.Tabular);
+            this.RegisterExporter<DataExportProcessDetails, TabularFormatDataExportHandler>(DataExportFormat.Tabular);
 
-            this.RegisterExporter<AllDataExportProcessDetails, StataFormatExportHandler>(DataExportFormat.STATA);
-            this.RegisterExporter<ApprovedDataExportProcessDetails, StataFormatExportHandler>(DataExportFormat.STATA);
+            this.RegisterExporter<DataExportProcessDetails, StataFormatExportHandler>(DataExportFormat.STATA);
+            this.RegisterExporter<DataExportProcessDetails, SpssFormatExportHandler>(DataExportFormat.SPSS);
 
-            this.RegisterExporter<AllDataExportProcessDetails, SpssFormatExportHandler>(DataExportFormat.SPSS);
-            this.RegisterExporter<ApprovedDataExportProcessDetails, SpssFormatExportHandler>(DataExportFormat.SPSS);
-
-            this.RegisterExporter<AllDataExportProcessDetails, BinaryFormatDataExportHandler>(DataExportFormat.Binary);
+            this.RegisterExporter<DataExportProcessDetails, BinaryFormatDataExportHandler>(DataExportFormat.Binary);
         }
 
         public void RunPendingExport()

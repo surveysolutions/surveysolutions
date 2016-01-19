@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using IFilebasedExportedDataAccessor = WB.Core.BoundedContexts.Headquarters.DataExport.Accessors.IFilebasedExportedDataAccessor;
@@ -32,14 +33,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             Tuple.Create(DataExportType.ParaData, DataExportFormat.Tabular),
 
             Tuple.Create(DataExportType.Data, DataExportFormat.Tabular),
-            Tuple.Create(DataExportType.ApprovedData, DataExportFormat.Tabular),
-
             Tuple.Create(DataExportType.Data, DataExportFormat.STATA),
-            Tuple.Create(DataExportType.ApprovedData, DataExportFormat.STATA),
-
             Tuple.Create(DataExportType.Data, DataExportFormat.SPSS),
-            Tuple.Create(DataExportType.ApprovedData, DataExportFormat.SPSS),
-
             Tuple.Create(DataExportType.Data, DataExportFormat.Binary),
         };
 
@@ -57,7 +52,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             this.questionnaireReader = questionnaireReader;
         }
 
-        public DataExportStatusView GetDataExportStatusForQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
+        public DataExportStatusView GetDataExportStatusForQuestionnaire(QuestionnaireIdentity questionnaireIdentity,
+            InterviewStatus? status = null)
         {
             var questionnaire = this.questionnaireReader.AsVersioned()
                 .Get(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version);
@@ -70,8 +66,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             var dataExports =
                 this.supportedDataExports.Select(
                     supportedDataExport =>
-                        this.CreateDataExportView(supportedDataExport.Item1, supportedDataExport.Item2, questionnaireIdentity,
-                            questionnaire, runningProcesses)).ToArray();
+                        this.CreateDataExportView(supportedDataExport.Item1, supportedDataExport.Item2, status, questionnaireIdentity, questionnaire, runningProcesses)).ToArray();
 
             return new DataExportStatusView(
                 questionnaireId: questionnaireIdentity.QuestionnaireId,
@@ -96,33 +91,29 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             {
                 result.Type = DataExportType.ParaData;
             }
-            else if (dataExportProcessDetails is AllDataExportProcessDetails)
+            else if (dataExportProcessDetails is DataExportProcessDetails)
             {
                 result.Type = DataExportType.Data;
-                result.QuestionnaireIdentity = ((AllDataExportProcessDetails) dataExportProcessDetails).Questionnaire;
-            }
-            else if (dataExportProcessDetails is ApprovedDataExportProcessDetails)
-            {
-                result.Type = DataExportType.ApprovedData;
-                result.QuestionnaireIdentity = ((ApprovedDataExportProcessDetails) dataExportProcessDetails).Questionnaire;
+                var exportProcessDetails = (DataExportProcessDetails) dataExportProcessDetails;
+                result.QuestionnaireIdentity = exportProcessDetails.Questionnaire;
+                result.InterviewStatus = exportProcessDetails.InterviewStatus;
             }
             return result;
         }
 
-        private DataExportView CreateDataExportView(
-            DataExportType dataType,
+        private DataExportView CreateDataExportView(DataExportType dataType,
             DataExportFormat dataFormat,
+            InterviewStatus? interviewStatus, 
             QuestionnaireIdentity questionnaireIdentity,
             QuestionnaireExportStructure questionnaire,
             RunningDataExportProcessView[] runningProcess)
         {
             DataExportView dataExportView = null;
-            dataExportView = new DataExportView()
+            dataExportView = new DataExportView
             {
                 DataExportFormat = dataFormat,
                 DataExportType = dataType,
-                CanRefreshBeRequested =
-                    CanRefreshBeRequested(dataType, dataFormat, questionnaireIdentity, questionnaire, runningProcess)
+                CanRefreshBeRequested = CanRefreshBeRequested(dataType, dataFormat, interviewStatus, questionnaireIdentity, questionnaire, runningProcess)
             };
 
             string path = string.Empty;
@@ -133,24 +124,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                         questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
                     break;
                 case DataExportType.Data:
-                    path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(questionnaireIdentity,
-                        dataFormat);
-                    break;
-                case DataExportType.ApprovedData:
-                    path =
-                        this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedData(
-                            questionnaireIdentity, dataFormat);
+                    path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(questionnaireIdentity, dataFormat, interviewStatus);
                     break;
             }
             SetDataExportLastUpdateTimeIfFilePresent(dataExportView, path);
             return dataExportView;
         }
 
-        private bool CanRefreshBeRequested(
-            DataExportType dataType,
-            DataExportFormat dataFormat,
-            QuestionnaireIdentity questionnaireIdentity,
-            QuestionnaireExportStructure questionnaire,
+        private bool CanRefreshBeRequested(DataExportType dataType, 
+            DataExportFormat dataFormat, 
+            InterviewStatus? interviewStatus, 
+            QuestionnaireIdentity questionnaireIdentity, 
+            QuestionnaireExportStructure questionnaire, 
             RunningDataExportProcessView[] runningProcess)
         {
             if (dataFormat == DataExportFormat.Binary)
@@ -166,8 +151,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 p =>
                     p.Format == dataFormat &&
                     p.Type == dataType &&
-                    (p.QuestionnaireIdentity == null ||
-                     p.QuestionnaireIdentity.Equals(questionnaireIdentity)));
+                    p.InterviewStatus == interviewStatus &&
+                    (p.QuestionnaireIdentity == null || p.QuestionnaireIdentity.Equals(questionnaireIdentity)));
         }
 
         private void SetDataExportLastUpdateTimeIfFilePresent(DataExportView dataExportView, string filePath)

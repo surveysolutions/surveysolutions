@@ -59,38 +59,33 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             this.sessionFactory = sessionFactory;
         }
 
-        public virtual void ExportAll(QuestionnaireExportStructure questionnaireExportStructure, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
+        public virtual void Export(QuestionnaireExportStructure questionnaireExportStructure, InterviewStatus? status, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version);
             this.logger.Info($"Export all interviews for questionnaire {questionnaireIdentity} started");
 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            Expression<Func<InterviewSummary, bool>> expression = x => x.QuestionnaireId == questionnaireExportStructure.QuestionnaireId &&
-                                         x.QuestionnaireVersion == questionnaireExportStructure.Version &&
-                                         !x.IsDeleted;
+
+            Expression<Func<InterviewSummary, bool>> expression ;
+            if (status.HasValue)
+            {
+                InterviewStatus requiredStatus = status.Value;
+                expression = x => x.QuestionnaireId == questionnaireExportStructure.QuestionnaireId &&
+                                  x.QuestionnaireVersion == questionnaireExportStructure.Version &&
+                                  !x.IsDeleted &&
+                                  x.Status == requiredStatus;
+            }
+            else
+            {
+                expression = x => x.QuestionnaireId == questionnaireExportStructure.QuestionnaireId &&
+                                  x.QuestionnaireVersion == questionnaireExportStructure.Version &&
+                                  !x.IsDeleted;
+            }
 
             this.Export(questionnaireExportStructure, basePath, progress, cancellationToken, expression);
             stopwatch.Stop();
-            this.logger.Info($"Export all interviews for questionnaire {questionnaireIdentity} finised. Took {stopwatch.Elapsed:c} to complete");
-        }
-
-        public virtual  void ExportApproved(QuestionnaireExportStructure questionnaireExportStructure, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
-        {
-            var questionnaireIdentity = new QuestionnaireIdentity(questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version);
-
-            Expression<Func<InterviewSummary, bool>> expression = x => x.QuestionnaireId == questionnaireExportStructure.QuestionnaireId && 
-                                         x.QuestionnaireVersion == questionnaireExportStructure.Version &&
-                                         !x.IsDeleted &&
-                                         x.Status == InterviewStatus.ApprovedByHeadquarters;
-
-            this.logger.Info($"Export approved interviews data for questionnaire {questionnaireIdentity} started");
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-            this.Export(questionnaireExportStructure, basePath, progress, cancellationToken, expression);
-            stopwatch.Stop();
-
-            this.logger.Info($"Export approved interviews data for questionnaire {questionnaireIdentity} finised. Took {stopwatch.Elapsed:c} to complete");
+            this.logger.Info($"Export of {status} interviews for questionnaire {questionnaireIdentity} finised. Took {stopwatch.Elapsed:c} to complete");
         }
 
         private void Export(QuestionnaireExportStructure questionnaireExportStructure, string basePath, IProgress<int> progress, CancellationToken cancellationToken,

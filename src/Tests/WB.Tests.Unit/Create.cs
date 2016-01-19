@@ -146,9 +146,9 @@ namespace WB.Tests.Unit
             return new AccountDocument() { UserName = userName };
         }
 
-        public static AllDataExportProcessDetails AllDataExportProcess(QuestionnaireIdentity questionnaireIdentity = null)
+        public static DataExportProcessDetails AllDataExportProcess(QuestionnaireIdentity questionnaireIdentity = null)
         {
-            return new AllDataExportProcessDetails(
+            return new DataExportProcessDetails(
                 DataExportFormat.Tabular,
                 questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1),
                 "some questionnaire");
@@ -187,14 +187,6 @@ namespace WB.Tests.Unit
         public static IAnswerToStringService AnswerToStringService()
         {
             return new AnswerToStringService();
-        }
-
-        public static ApprovedDataExportProcessDetails ApprovedDataExportProcess(QuestionnaireIdentity questionnaireIdentity = null)
-        {
-            return new ApprovedDataExportProcessDetails(
-                DataExportFormat.Tabular,
-                questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1),
-                "some questionnaire");
         }
 
         public static ArchiveUserCommad ArchiveUserCommad(Guid userId)
