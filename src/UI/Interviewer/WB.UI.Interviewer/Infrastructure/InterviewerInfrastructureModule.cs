@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Principal;
 using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
 using Sqo;
+using SQLite.Net.Interop;
+using SQLite.Net.Platform.XamarinAndroid;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
@@ -19,7 +20,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Interviewer.Implementations.Services;
@@ -32,21 +32,29 @@ namespace WB.UI.Interviewer.Infrastructure
     {
         public override void Load()
         {
-            this.InitilaizeSiaqodb();
+         //   this.InitilaizeSiaqodb();
 
             this.Bind<IPlainKeyValueStorage<QuestionnaireModel>>().To<QuestionnaireModelKeyValueStorage>().InSingletonScope();
             this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>().To<QuestionnaireKeyValueStorage>().InSingletonScope();
 
-            this.Bind(typeof(IAsyncPlainStorage<QuestionnaireModelView>)).To(typeof(SiaqodbPlainStorageWithCache<>)).InSingletonScope();
-            this.Bind(typeof(IAsyncPlainStorage<QuestionnaireDocumentView>)).To(typeof(SiaqodbPlainStorageWithCache<>)).InSingletonScope();
-            this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SiaqodbPlainStorage<>)).InSingletonScope();
-            this.Bind<IInterviewerQuestionnaireAccessor>().To<InterviewerQuestionnaireAccessor>();
+            //this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SiaqodbPlainStorage<>)).InSingletonScope();
+
+ 			this.Bind<IInterviewerQuestionnaireAccessor>().To<InterviewerQuestionnaireAccessor>();
             this.Bind<IInterviewerInterviewAccessor>().To<InterviewerInterviewAccessor>();
+
 
             this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepositoryWithCache>();
             this.Bind<IPlainInterviewFileStorage>().To<InterviewerPlainInterviewFileStorage>();
 
             this.Bind<IEventStore>().To<SiaqodbEventStorage>();
+
+            this.Bind<ISQLitePlatform>().To<SQLitePlatformAndroid>();
+            this.Bind<SqliteSettings>().ToConstant(
+                new SqliteSettings()
+                {
+                    PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")
+                });
+            this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SqlitePlainStorage<>)).InSingletonScope();
 
             this.Bind<InterviewerPrincipal>().To<InterviewerPrincipal>().InSingletonScope();
             this.Bind<IPrincipal>().ToMethod<IPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
@@ -95,8 +103,9 @@ namespace WB.UI.Interviewer.Infrastructure
             SiaqodbConfigurator.PropertyUseField("Id", "_id", typeof (IPlainStorageEntity));
             SiaqodbConfigurator.EncryptedDatabase = true;
             SiaqodbConfigurator.SetEncryptionPassword("q=5+yaQqS0K!rWaw8FmLuRDWj8XpwI04Yr4MhtULYmD3zX+W+g");
+            SiaqodbConfigurator.AutoGrowthSize = 256*1024*1024;
             
-            this.Bind<ISiaqodb>().ToConstant(new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")));
+            this.Bind<ISiaqodb>().ToConstant(new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data"), 512*1024*1024));
         }
     }
 }

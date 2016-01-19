@@ -7,6 +7,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public class QuestionnaireKeyValueStorage : IPlainKeyValueStorage<QuestionnaireDocument>
     {
+        private QuestionnaireDocumentView currentQuestionnaireDocument;
         private readonly IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository;
         public QuestionnaireKeyValueStorage(IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository)
         {
@@ -15,8 +16,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public QuestionnaireDocument GetById(string id)
         {
-            var questionnaireDocumntView = this.questionnaireDocumentViewRepository.GetById(id);
-            return questionnaireDocumntView?.Document;
+            if (this.currentQuestionnaireDocument?.Id != id)
+                this.currentQuestionnaireDocument = this.questionnaireDocumentViewRepository.GetById(id);
+
+            return this.currentQuestionnaireDocument?.Document;
         }
 
         public void Remove(string id)
