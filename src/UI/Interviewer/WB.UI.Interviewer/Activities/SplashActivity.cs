@@ -16,6 +16,7 @@ using Cirrious.MvvmCross.Plugins.Sqlite;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using PCLStorage;
+using Sqo;
 //using Sqo;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.ViewModel.Dashboard;
