@@ -16,7 +16,7 @@ using Cirrious.MvvmCross.Plugins.Sqlite;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using PCLStorage;
-using Sqo;
+//using Sqo;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.ViewModel.Dashboard;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -146,9 +146,6 @@ namespace WB.UI.Interviewer.Activities
             {
                 oldInterviewer = await oldInterviewersRepository.Query<InterviewerIdentity>().FirstOrDefaultAsync();
             }
-
-            SiaqodbConfigurator.EncryptedDatabase = true;
-            SiaqodbConfigurator.SetEncryptionPassword("q=5+yaQqS0K!rWaw8FmLuRDWj8XpwI04Yr4MhtULYmD3zX+W+g");
 
             return oldInterviewer;
         }
