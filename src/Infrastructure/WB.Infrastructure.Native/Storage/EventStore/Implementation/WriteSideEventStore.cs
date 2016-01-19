@@ -14,7 +14,6 @@ using EventStore.ClientAPI.SystemData;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Bson;
 using Nito.AsyncEx;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.GenericSubdomains.Portable;
@@ -256,26 +255,12 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
                 EventMetada metadata;
                 IEvent eventData;
 
-                var resolvedEventType = this.eventTypeResolver.ResolveType(resolvedEvent.Event.EventType.ToPascalCase());
-                var meta = Encoding.GetString(resolvedEvent.Event.Metadata);
-                metadata = this.serializer.Deserialize<EventMetada>(meta, TypeSerializationSettings.Event);
-                if (resolvedEvent.Event.IsJson)
-                {
-                    var value = Encoding.GetString(resolvedEvent.Event.Data);
-                    eventData = this.serializer.Deserialize(value,
-                        resolvedEventType,
-                        TypeSerializationSettings.Event) as IEvent;
-                }
-                else
-                {
-                    var dataStream = new MemoryStream(resolvedEvent.Event.Data);
-                    dataStream.Seek(0, SeekOrigin.Begin);
-                    BsonReader dataReader = new BsonReader(dataStream);
-                    
-                    JsonSerializer serializer = JsonSerializer.Create(EventSerializerSettings.JsonSerializerSettings);
-                    eventData = serializer.Deserialize(dataReader, resolvedEventType) as IEvent;
-                }
+                Type resolvedEventType = this.eventTypeResolver.ResolveType(resolvedEvent.Event.EventType.ToPascalCase());
 
+                metadata = this.serializer.Deserialize(resolvedEvent.Event.Metadata, typeof(EventMetada), TypeSerializationSettings.Event, SerializationType.Json) as EventMetada;
+                
+                eventData = this.serializer.Deserialize(resolvedEvent.Event.Data, resolvedEventType, TypeSerializationSettings.Event, resolvedEvent.Event.IsJson ? SerializationType.Json : SerializationType.Bson) as IEvent;
+                
                 var committedEvent = new CommittedEvent(Guid.NewGuid(),
                     metadata.Origin,
                     resolvedEvent.Event.EventId,
@@ -297,7 +282,6 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
         private Tuple<EventData, CommittedEvent> BuildEventData(UncommittedEvent @event, Guid commitId)
         {
             var globalSequence = this.GetNextSequnce();
-            byte[] eventDataBytes;
 
             var eventMetada = new EventMetada
             {
@@ -307,18 +291,14 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
                 GlobalSequence = globalSequence
             };
 
-            var metaData = this.serializer.Serialize(eventMetada);
-            var eventMetadataBytes = Encoding.GetBytes(metaData);
-            if (this.settings.UseBson)
-            {
-                eventDataBytes = this.SerializeToBson(@event.Payload);
-            }
-            else
-            {
-                var eventString = this.serializer.Serialize(@event.Payload, TypeSerializationSettings.Event);
-                eventDataBytes = Encoding.GetBytes(eventString);
-            }
+            var eventMetadataBytes = this.serializer.SerializeToByteArray(eventMetada, 
+                TypeSerializationSettings.Event, 
+                SerializationType.Json);
 
+            var eventDataBytes = this.serializer.SerializeToByteArray(@event.Payload, 
+                    TypeSerializationSettings.Event,
+                    this.settings.UseBson ? SerializationType.Bson : SerializationType.Json);
+            
             var eventData = new EventData(@event.EventIdentifier,
                 @event.Payload.GetType().Name.ToCamelCase(),
                 !this.settings.UseBson,
@@ -335,16 +315,6 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
                                           @event.Payload);
 
             return Tuple.Create(eventData, committedEvent);
-        }
-
-        private byte[] SerializeToBson(object data)
-        {
-            JsonSerializer serializer = JsonSerializer.Create(EventSerializerSettings.JsonSerializerSettings);
-            MemoryStream payloadEventStream = new MemoryStream();
-
-            BsonWriter writer = new BsonWriter(payloadEventStream);
-            serializer.Serialize(writer, data);
-            return payloadEventStream.ToArray();
         }
 
         private TResult RunWithDefaultTimeout<TResult>(Task<TResult> readTask)
