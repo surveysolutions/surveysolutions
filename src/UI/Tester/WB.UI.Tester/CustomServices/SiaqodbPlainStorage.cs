@@ -8,7 +8,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
-namespace WB.UI.Shared.Enumerator.CustomServices
+namespace WB.UI.Tester.CustomServices
 {
     public class SiaqodbPlainStorage<TEntity> : IAsyncPlainStorage<TEntity> where TEntity: class, IPlainStorageEntity
     {
@@ -26,7 +26,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         public virtual TEntity GetById(string id)
         {
-            return Query<TEntity>(entities => entities.SingleOrDefault(entity => entity.Id == id));
+            return this.Query<TEntity>(entities => entities.SingleOrDefault(entity => entity.Id == id));
         }
 
         public async Task RemoveAsync(string id)

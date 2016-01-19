@@ -4,7 +4,6 @@ using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
-using Sqo;
 using SQLite.Net.Interop;
 using SQLite.Net.Platform.XamarinAndroid;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
@@ -33,12 +32,8 @@ namespace WB.UI.Interviewer.Infrastructure
     {
         public override void Load()
         {
-         //   this.InitilaizeSiaqodb();
-
             this.Bind<IPlainKeyValueStorage<QuestionnaireModel>>().To<QuestionnaireModelKeyValueStorage>().InSingletonScope();
             this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>().To<QuestionnaireKeyValueStorage>().InSingletonScope();
-
-            //this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SiaqodbPlainStorage<>)).InSingletonScope();
 
  			this.Bind<IInterviewerQuestionnaireAccessor>().To<InterviewerQuestionnaireAccessor>();
             this.Bind<IInterviewerInterviewAccessor>().To<InterviewerInterviewAccessor>();
@@ -47,7 +42,7 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepositoryWithCache>();
             this.Bind<IPlainInterviewFileStorage>().To<InterviewerPlainInterviewFileStorage>();
 
-            this.Bind<IEventStore>().To<SiaqodbEventStorage>();
+            this.Bind<IEventStore>().To<InterviewerEventStorage>();
 
             this.Bind<ISQLitePlatform>().To<SQLitePlatformAndroid>();
             this.Bind<SqliteSettings>().ToConstant(
@@ -84,29 +79,6 @@ namespace WB.UI.Interviewer.Infrastructure
                     }
                 }));
             this.Bind<IStringCompressor>().To<JsonCompressor>();
-        }
-
-        private void InitilaizeSiaqodb()
-        {
-            this.Bind<IDocumentSerializer>().To<SiaqodbSerializer>();
-
-            SiaqodbConfigurator.SetLicense(
-                @"yrwPAibl/TwJ+pR5aBOoYieO0MbZ1HnEKEAwjcoqtdrUJVtXxorrxKZumV+Z48/Ffjj58P5pGVlYZ0G1EoPg0w==");
-            SiaqodbConfigurator.SetDocumentSerializer(this.Kernel.Get<IDocumentSerializer>());
-            SiaqodbConfigurator.AddDocument("Document", typeof (QuestionnaireDocumentView));
-            SiaqodbConfigurator.AddDocument("Model", typeof (QuestionnaireModelView));
-            SiaqodbConfigurator.AddText("JsonEvent", typeof (EventView));
-            SiaqodbConfigurator.AddText("Title", typeof (QuestionnaireView));
-            SiaqodbConfigurator.AddText("LastInterviewerOrSupervisorComment", typeof (InterviewView));
-            SiaqodbConfigurator.AddText("QuestionText", typeof (InterviewAnswerOnPrefilledQuestionView));
-            SiaqodbConfigurator.AddText("Answer", typeof (InterviewAnswerOnPrefilledQuestionView));
-            SiaqodbConfigurator.SpecifyStoredDateTimeKind(DateTimeKind.Utc);
-            SiaqodbConfigurator.PropertyUseField("Id", "_id", typeof (IPlainStorageEntity));
-            SiaqodbConfigurator.EncryptedDatabase = true;
-            SiaqodbConfigurator.SetEncryptionPassword("q=5+yaQqS0K!rWaw8FmLuRDWj8XpwI04Yr4MhtULYmD3zX+W+g");
-            SiaqodbConfigurator.AutoGrowthSize = 256*1024*1024;
-            
-            this.Bind<Siaqodb>().ToConstant(new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")));
         }
     }
 }
