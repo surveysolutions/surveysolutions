@@ -58,6 +58,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             return ProtoBuf.Serializer.NonGeneric.Deserialize(type, stream);
         }
 
+        public byte[] SerializeToByteArray(object item, TypeSerializationSettings typeSerializationSettings, SerializationType serializationType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object Deserialize(byte[] payload, Type objectType, TypeSerializationSettings typeSerializationSettings, SerializationType serializationType)
+        {
+            throw new NotImplementedException();
+        }
+
         private static class SerializerBuilder
         {
             private const BindingFlags Flags = BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;

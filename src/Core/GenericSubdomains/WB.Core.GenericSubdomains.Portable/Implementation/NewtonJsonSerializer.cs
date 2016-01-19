@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable.Services;
+using Newtonsoft.Json.Bson;
 
 namespace WB.Core.GenericSubdomains.Portable.Implementation
 {
     public class NewtonJsonSerializer : ISerializer
     {
         private readonly JsonUtilsSettings jsonUtilsSettings;
-        private readonly JsonSerializer jsonSerializer;
         private IJsonSerializerSettingsFactory jsonSerializerSettingsFactory;
-
         private Dictionary<string, string> assemblyReplacementMapping = new Dictionary<string, string>();
+
+        //assuming it injected not in global scope but pet thread
+        private Dictionary<TypeSerializationSettings, JsonSerializer> JsonSerializerCache = new Dictionary<TypeSerializationSettings, JsonSerializer>();
 
         public NewtonJsonSerializer(IJsonSerializerSettingsFactory jsonSerializerSettingsFactory) 
             : this(jsonSerializerSettingsFactory, new Dictionary<string, string>()) { }
@@ -33,39 +35,73 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             this.assemblyReplacementMapping = assemblyReplacementMapping;
             this.jsonSerializerSettingsFactory = jsonSerializerSettingsFactory;
             this.jsonUtilsSettings = jsonUtilsSettings;
-            
-            this.jsonSerializer =
-                JsonSerializer.Create(jsonSerializerSettingsFactory.GetJsonSerializerSettings(this.jsonUtilsSettings.TypeNameHandling));
+        }
+
+        private JsonSerializer GetSerializer(TypeSerializationSettings settings)
+        {
+            JsonSerializer serializer;
+
+            if (!this.JsonSerializerCache.TryGetValue(settings, out serializer))
+            {
+                serializer = JsonSerializer.Create(jsonSerializerSettingsFactory.GetJsonSerializerSettings(settings));
+                this.JsonSerializerCache[settings] = serializer;
+            }
+
+            return serializer;
         }
 
         public string Serialize(object item)
         {
-            return this.Serialize(item, this.jsonUtilsSettings.TypeNameHandling);
+            return JsonConvert.SerializeObject(item);
+
+            //this.SerializeToByteArray(SerializeToByteArray);
         }
 
         public string Serialize(object item, TypeSerializationSettings typeSerializationSettings)
         {
             return JsonConvert.SerializeObject(item, jsonSerializerSettingsFactory.GetJsonSerializerSettings(typeSerializationSettings));
         }
+        
+        public byte[] SerializeToByteArray(object item, TypeSerializationSettings typeSerializationSettings, SerializationType serializationType = SerializationType.Json)
+        {
+            var serializer = this.GetSerializer(typeSerializationSettings);
+
+            var output = new MemoryStream();
+
+            if(serializationType == SerializationType.Bson)
+                serializer.Serialize(new BsonWriter(output), item);
+            else
+            {
+                using (var sw = new StreamWriter(output))
+                {
+                    serializer.Serialize(new JsonTextWriter(sw), item);
+                }
+                //sw.Flush();
+            }
+                
+            return output.ToArray();
+        }
 
         public byte[] SerializeToByteArray(object payload)
         {
             var output = new MemoryStream();
             using (var writer = new StreamWriter(output))
-                this.jsonSerializer.Serialize(writer, payload);
+            {
+                this.GetSerializer(this.jsonUtilsSettings.TypeNameHandling).Serialize(writer, payload);
+            }
             return output.ToArray();
         }
 
         public T Deserialize<T>(string payload)
         {
-            return this.Deserialize<T>(payload, TypeSerializationSettings.ObjectsOnly);
+            return this.Deserialize<T>(payload, this.jsonUtilsSettings.TypeNameHandling);
         }
 
         public T Deserialize<T>(string payload, TypeSerializationSettings settings)
         {
             var appliedReplacementPayload = ApplyAssemblyReplacementMapping(payload);
-            return JsonConvert.DeserializeObject<T>(appliedReplacementPayload,
-                jsonSerializerSettingsFactory.GetJsonSerializerSettings(TypeSerializationSettings.ObjectsOnly));
+
+            return JsonConvert.DeserializeObject<T>(appliedReplacementPayload, jsonSerializerSettingsFactory.GetJsonSerializerSettings(settings));
         }
 
         public object Deserialize(string payload, Type type, TypeSerializationSettings settings)
@@ -80,7 +116,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
                 var input = new MemoryStream(payload);
                 using (var reader = new StreamReader(input))
                 {
-                    return this.jsonSerializer.Deserialize<T>(new JsonTextReader(reader));
+                    return this.GetSerializer(this.jsonUtilsSettings.TypeNameHandling).Deserialize<T>(new JsonTextReader(reader));
                 }
             }
             catch (JsonReaderException ex)
@@ -88,13 +124,33 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
                 throw new JsonDeserializationException(ex.Message, ex);
             }
         }
-        
+
+        public object Deserialize(byte[] payload, Type objectType, TypeSerializationSettings typeSerializationSettings, SerializationType serializationType = SerializationType.Json)
+        {
+            var serializer = JsonSerializer.Create(this.jsonSerializerSettingsFactory.GetJsonSerializerSettings(typeSerializationSettings));
+
+            using (MemoryStream ms = new MemoryStream(payload))
+            {
+                if (serializationType == SerializationType.Bson)
+                {
+                    return serializer.Deserialize(new BsonReader(ms), objectType);
+                }
+                else
+                {
+                    using (var sr = new StreamReader(ms))
+                    {
+                        return serializer.Deserialize(new JsonTextReader(sr), objectType);
+                    }
+                }
+            }
+        }
+
         public object DeserializeFromStream(Stream stream, Type type)
         {
             using (var sr = new StreamReader(stream))
             using (var jsonTextReader = new JsonTextReader(sr))
             {
-                return this.jsonSerializer.Deserialize(jsonTextReader, type);
+                return this.GetSerializer(this.jsonUtilsSettings.TypeNameHandling).Deserialize(jsonTextReader, type);
             }
         }
 
@@ -103,7 +159,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             using (var writer = new StreamWriter(stream))
             using (var jsonWriter = new JsonTextWriter(writer))
             {
-                this.jsonSerializer.Serialize(jsonWriter, value, type);
+                this.GetSerializer(this.jsonUtilsSettings.TypeNameHandling).Serialize(jsonWriter, value, type);
             }
         }
 
