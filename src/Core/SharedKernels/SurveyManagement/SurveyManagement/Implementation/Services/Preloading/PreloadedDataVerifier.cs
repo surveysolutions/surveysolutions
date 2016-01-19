@@ -830,7 +830,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     {
                         yield return
                             new PreloadedDataVerificationError("PL0028",
-                                PreloadingVerificationMessages.PL0028_UserIsNotSupervisor,
+                                PreloadingVerificationMessages.PL0028_UserIsNotSupervisorOrInterviewer,
                                 new PreloadedDataVerificationReference(supervisorNameIndex, y,
                                     PreloadedDataVerificationReferenceType.Cell,
                                     "",

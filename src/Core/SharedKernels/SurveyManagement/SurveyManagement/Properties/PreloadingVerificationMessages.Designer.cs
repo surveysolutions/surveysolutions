@@ -286,11 +286,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provided User is not Supervisor.
+        ///   Looks up a localized string similar to Provided User is not Supervisor or Interviewer.
         /// </summary>
-        internal static string PL0028_UserIsNotSupervisor {
+        internal static string PL0028_UserIsNotSupervisorOrInterviewer {
             get {
-                return ResourceManager.GetString("PL0028_UserIsNotSupervisor", resourceCulture);
+                return ResourceManager.GetString("PL0028_UserIsNotSupervisorOrInterviewer", resourceCulture);
             }
         }
         
@@ -331,7 +331,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Longitude  must be greater then -180° and less then 180°..
+        ///   Looks up a localized string similar to Longitude must be greater than -180° and less than 180°..
         /// </summary>
         internal static string PL0033_LongitudeMustBeGeaterThenN180AndLessThen180 {
             get {
