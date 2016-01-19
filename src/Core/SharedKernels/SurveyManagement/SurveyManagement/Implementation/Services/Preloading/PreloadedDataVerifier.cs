@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         {
             VerificationStatus status = new VerificationStatus(); 
 
-            if (data == null)
+            if (data?.Content == null || data.Content.Length == 0)
             {
                 status.Errors = new[] { new PreloadedDataVerificationError("PL0024", PreloadingVerificationMessages.PL0024_DataWasNotFound) };
                 return status;
