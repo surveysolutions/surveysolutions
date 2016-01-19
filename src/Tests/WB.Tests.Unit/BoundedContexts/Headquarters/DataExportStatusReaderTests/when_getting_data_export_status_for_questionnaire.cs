@@ -52,11 +52,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExportStatusReaderTests
 
         It should_export_para_data_in_tabular_format = () => ShouldExportDataTypeInFormat(DataExportType.ParaData, DataExportFormat.Tabular);
 
-        It should_return_8_data_exports =() => result.DataExports.Length.ShouldEqual(8);
+        It should_return_5_data_exports =() => result.DataExports.Length.ShouldEqual(5);
 
         It should_export_data_in_tabular_stata_spss_and_binary_formats = () => ShouldExportDataTypeInFormat(DataExportType.Data, DataExportFormat.Tabular, DataExportFormat.STATA, DataExportFormat.SPSS, DataExportFormat.Binary);
-
-        It should_export_approved_data_in_tabular_stata_and_spss_formats = () => ShouldExportDataTypeInFormat(DataExportType.Data, DataExportFormat.Tabular, DataExportFormat.STATA, DataExportFormat.SPSS);
 
         It should_CanRefreshBeRequested_be_false_for_data_tabular_export = () => DataExportView(DataExportType.Data, DataExportFormat.Tabular).CanRefreshBeRequested.ShouldBeFalse();
 
@@ -77,7 +75,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExportStatusReaderTests
         private static Mock<IDataExportProcessesService> dataExportProcessesService =
             new Mock<IDataExportProcessesService>();
 
-        private static Mock<IFileSystemAccessor> fileSystemAccessorMock=new Mock<IFileSystemAccessor>();
+        private static Mock<IFileSystemAccessor> fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
 
         private static Mock<IFilebasedExportedDataAccessor> filebasedExportedDataAccessor = new Mock<IFilebasedExportedDataAccessor>();
 
