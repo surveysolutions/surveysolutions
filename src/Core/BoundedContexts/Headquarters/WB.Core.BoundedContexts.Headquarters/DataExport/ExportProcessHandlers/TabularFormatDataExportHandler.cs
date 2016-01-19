@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -39,8 +40,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             ITabularFormatExportService tabularFormatExportService,
             IEnvironmentContentService environmentContentService, 
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
-            IDataExportProcessesService dataExportProcessesService
-            ) : base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService)
+            IDataExportProcessesService dataExportProcessesService,
+            ILogger logger
+            ) : base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, logger)
         {
             this.questionnaireReader = questionnaireReader;
             this.transactionManagerProvider = transactionManagerProvider;

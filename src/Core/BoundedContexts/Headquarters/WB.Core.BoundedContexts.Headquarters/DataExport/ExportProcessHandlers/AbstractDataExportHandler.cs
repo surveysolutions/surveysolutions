@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -18,18 +21,21 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IDataExportProcessesService dataExportProcessesService;
+        private readonly ILogger logger;
 
         protected AbstractDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
             IArchiveUtils archiveUtils, 
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             InterviewDataExportSettings interviewDataExportSettings, 
-            IDataExportProcessesService dataExportProcessesService)
+            IDataExportProcessesService dataExportProcessesService,
+            ILogger logger)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.dataExportProcessesService = dataExportProcessesService;
+            this.logger = logger;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
         }
 
@@ -91,9 +97,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         {
             if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
             {
+                this.logger.Info($"{archiveFilePath} existed, deleting");
                 this.fileSystemAccessor.DeleteFile(archiveFilePath);
             }
+
+            this.logger.Debug($"Starting creation of {Path.GetFileName(archiveFilePath)} archive");
+            Stopwatch watch = Stopwatch.StartNew();
             this.archiveUtils.ZipFiles(filesToArchive, archiveFilePath);
+            watch.Stop();
+            this.logger.Info($"Done creation {Path.GetFileName(archiveFilePath)} archive. Spent: {watch.Elapsed:g}");
         }
 
         private void ClearFolder(string folderName)
