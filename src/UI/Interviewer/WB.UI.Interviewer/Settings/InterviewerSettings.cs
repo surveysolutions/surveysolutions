@@ -7,6 +7,7 @@ using PCLStorage;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -45,7 +46,7 @@ namespace WB.UI.Interviewer.Settings
             this.restoreFolder = restoreFolder;
         }
 
-        private ApplicationSettingsView CurrentSettings => this.settingsStorage.Query(settings => settings.FirstOrDefault()) ?? new ApplicationSettingsView
+        private ApplicationSettingsView CurrentSettings => this.settingsStorage.FirstOrDefault() ?? new ApplicationSettingsView
         {
             Id = "settings",
             Endpoint = string.Empty,
@@ -75,8 +76,8 @@ namespace WB.UI.Interviewer.Settings
 
         public string GetDeviceTechnicalInformation()
         {
-            var interviewIds = string.Join(","+ Environment.NewLine, this.interviewViewRepository.Query(_ => _.Select(i => i.InterviewId)));
-            var questionnaireIds = string.Join(","+ Environment.NewLine, this.questionnaireViewRepository.Query(_ => _.Select(i => i.Identity)));
+            var interviewIds = string.Join(","+ Environment.NewLine, this.interviewViewRepository.LoadAll().Select(i => i.InterviewId));
+            var questionnaireIds = string.Join(","+ Environment.NewLine, this.questionnaireViewRepository.LoadAll().Select(i => i.Identity));
 
             return $"Version:{this.GetApplicationVersionName()} {Environment.NewLine}" +
                    $"SyncProtocolVersion:{this.syncProtocolVersionProvider.GetProtocolVersion()} {Environment.NewLine}" +
@@ -151,7 +152,7 @@ namespace WB.UI.Interviewer.Settings
 
         private string GetUserInformation()
         {
-            var currentStoredUser = this.interviewersPlainStorage.Query(_ => _.FirstOrDefault());
+            var currentStoredUser = this.interviewersPlainStorage.FirstOrDefault();
             if (currentStoredUser != null)
             {
                 return $"{currentStoredUser.Name}: {currentStoredUser.Id}";
