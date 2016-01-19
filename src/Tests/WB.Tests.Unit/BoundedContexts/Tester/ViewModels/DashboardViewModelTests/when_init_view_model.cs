@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
@@ -9,6 +10,7 @@ using Moq;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using It = Machine.Specifications.It;
@@ -23,9 +25,9 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 _.GetQuestionnairesAsync(false, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(MyQuestionnaires) &&
                 _.GetQuestionnairesAsync(true, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(PublicQuestionnaires));
 
-            var storageAccessor = new Mock<IAsyncPlainStorage<QuestionnaireListItem>>();
-            storageAccessor.Setup(
-                x => x.Query(Moq.It.IsAny<Func<IQueryable<QuestionnaireListItem>, List<QuestionnaireListItem>>>()))
+            var storageAccessorMock = new Mock<IAsyncPlainStorage<QuestionnaireListItem>>();
+            storageAccessorMock
+                .Setup(x => x.Where(Moq.It.IsAny<Expression<Func<QuestionnaireListItem, bool>>>()))
                 .Returns(
                     new List<QuestionnaireListItem>
                     {
@@ -34,10 +36,10 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                         new QuestionnaireListItem { IsPublic = true },
                         new QuestionnaireListItem { IsPublic = true },
                         new QuestionnaireListItem { IsPublic = true }
-                    });
+                    }.ToReadOnlyCollection());
 
             viewModel = CreateDashboardViewModel(designerApiService: designerApiService,
-                questionnaireListStorage: storageAccessor.Object);
+                questionnaireListStorage: storageAccessorMock.Object);
         };
 
         Because of = () => viewModel.Init();

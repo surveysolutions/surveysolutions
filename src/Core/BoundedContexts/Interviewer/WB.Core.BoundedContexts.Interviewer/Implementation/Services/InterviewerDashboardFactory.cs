@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private IEnumerable<CensusQuestionnaireDashboardItemViewModel> GetCensusQuestionnaires()
         {
             var censusQuestionnireViews =
-                this.questionnaireViewRepository.Query(questionnaires => questionnaires.Where(questionnaire => questionnaire.Census).ToList());
+                this.questionnaireViewRepository.Where(questionnaire => questionnaire.Census);
 
             // show census mode for new tab
             foreach (var censusQuestionnireView in censusQuestionnireViews)
@@ -52,8 +52,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         private IEnumerable<InterviewDashboardItemViewModel> GetInterivewsByInterviewerId(Guid interviewerId)
         {
-            var interviewViews = this.interviewViewRepository.Query(interviews =>
-                interviews.Where(interview => interview.ResponsibleId == interviewerId).ToList());
+            var interviewViews = this.interviewViewRepository.Where(interview => interview.ResponsibleId == interviewerId);
 
             foreach (var interviewView in interviewViews)
             {
