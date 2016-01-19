@@ -4,6 +4,7 @@ using Microsoft;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -17,8 +18,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
     {
         private readonly ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService;
 
-        public StataFormatExportHandler(IFileSystemAccessor fileSystemAccessor, IArchiveUtils archiveUtils, IFilebasedExportedDataAccessor filebasedExportedDataAccessor, InterviewDataExportSettings interviewDataExportSettings, IDataExportProcessesService dataExportProcessesService, ITabularFormatExportService tabularFormatExportService, ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService)
-            : base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, tabularFormatExportService)
+        public StataFormatExportHandler(IFileSystemAccessor fileSystemAccessor, 
+            IArchiveUtils archiveUtils, 
+            IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
+            InterviewDataExportSettings interviewDataExportSettings, 
+            IDataExportProcessesService dataExportProcessesService, 
+            ITabularFormatExportService tabularFormatExportService, 
+            ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService,
+            ILogger logger)
+            : base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, tabularFormatExportService, logger)
         {
             this.tabularDataToExternalStatPackageExportService = tabularDataToExternalStatPackageExportService;
         }
@@ -27,7 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         protected override void ExportDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity, InterviewStatus? status, string directoryPath, IProgress<int> progress, CancellationToken cancellationToken)
         {
-            var tabFiles = this.CreateAllTabularDataFiles(questionnaireIdentity, status, directoryPath, progress, cancellationToken);
+            var tabFiles = this.CreateTabularDataFiles(questionnaireIdentity, status, directoryPath, progress, cancellationToken);
 
             this.CreateStataDataFilesFromTabularDataFiles(questionnaireIdentity, tabFiles, progress, cancellationToken);
 
