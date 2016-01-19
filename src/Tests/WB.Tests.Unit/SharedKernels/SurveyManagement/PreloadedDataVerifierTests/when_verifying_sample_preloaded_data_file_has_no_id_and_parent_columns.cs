@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         Because of =
             () =>
                 result =
-                    preloadedDataVerifier.VerifySample(questionnaireId, 1, CreatePreloadedDataByFile(new string[0], null, QuestionnaireCsvFileName) );
+                    preloadedDataVerifier.VerifySample(questionnaireId, 1, CreatePreloadedDataByFile(new string[0], new string[][] { new string[0] }, QuestionnaireCsvFileName) );
 
         It should_result_has_no_errors = () =>
            result.Errors.ShouldBeEmpty();
