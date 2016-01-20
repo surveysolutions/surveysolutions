@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
 {
     internal class InterviewerInterviewAccessorTestsContext
     {
-        public InterviewerInterviewAccessor CreateInterviewerInterviewAccessor(
+        public static InterviewerInterviewAccessor CreateInterviewerInterviewAccessor(
             IAsyncPlainStorage<QuestionnaireView> questionnaireRepository = null,
             IAsyncPlainStorage<EventView> eventRepository = null,
             IAsyncPlainStorage<InterviewView> interviewViewRepository = null,
