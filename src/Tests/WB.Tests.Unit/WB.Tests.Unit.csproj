@@ -789,7 +789,6 @@
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionsInfoDenormalizerTests\when_template_imported_event_recived_with_version_set.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\CommentsExporterTests\when_getting_data_files_for_questionnaire_and_exported_cell_contains_new_line_symbol.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\InterviewActionsExporterTests\InterviewActionsExporterTestsContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\InterviewActionsExporterTests\when_exporting_approved_interviews.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\CommentsExporterTests\CommentsExporterTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\ReadSideToTabularFormatExportServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\MetadataExportServiceTests\MetadataExportServiceTestContext.cs" />
