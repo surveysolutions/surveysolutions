@@ -10,6 +10,8 @@ using WB.UI.Shared.Web.Membership;
 using IRecipientNotifier = WB.UI.Designer.Code.IRecipientNotifier;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using System.Collections.Generic;
+using WB.Infrastructure.Security;
+using WB.Infrastructure.Shared.Enumerator.Internals.Security;
 
 namespace WB.UI.Designer
 {
@@ -28,6 +30,7 @@ namespace WB.UI.Designer
             this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(new JsonSerializerSettingsFactory()));
 
             this.Bind<IStringCompressor>().To<JsonCompressor>().InSingletonScope();
+            this.Bind<ICypherManager>().To<DefaultCypherManager>();
             this.Bind<IMembershipHelper>().ToConstant(new MembershipHelper()).InSingletonScope();
             this.Bind<IMembershipWebUser>()
                 .ToConstructor(x => new MembershipWebUser(x.Inject<IMembershipHelper>()))

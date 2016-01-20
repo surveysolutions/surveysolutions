@@ -488,6 +488,7 @@
     <Content Include="Views\ApiUser\Edit.cshtml" />
     <Content Include="Views\ApiUser\Index.cshtml" />
     <Content Include="Views\HQ\VerifySample.cshtml" />
+    <Content Include="Views\Settings\DataEncryption.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -534,6 +535,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MainMenu.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Settings.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\UserPreloadingConfigurationSection.cs" />
     <Compile Include="Code\IdentityManager.cs" />
     <Compile Include="Code\IIdentityManager.cs" />
@@ -567,6 +573,7 @@
     <Compile Include="Controllers\HQController.cs" />
     <Compile Include="Controllers\InstallController.cs" />
     <Compile Include="Controllers\HeadquartersController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TypeExtensions.cs" />
     <Compile Include="Filters\ApiMaintenanceFilter.cs" />
     <Compile Include="Filters\FormMultipartEncodedMediaTypeFormatter .cs" />
@@ -697,6 +704,11 @@
     <Content Include="App_GlobalResources\Interviews.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Interviews.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Settings.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
     <EmbeddedResource Include="Resources\ErrorMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>

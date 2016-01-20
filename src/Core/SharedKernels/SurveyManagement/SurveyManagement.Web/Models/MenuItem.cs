@@ -21,6 +21,7 @@
         DataExport = 16,
         SpeedOfCompletingInterviews = 17,
         UserBatchUpload = 18,
-        ApiUsers = 19
+        ApiUsers = 19,
+        Settings = 20
     }
 }

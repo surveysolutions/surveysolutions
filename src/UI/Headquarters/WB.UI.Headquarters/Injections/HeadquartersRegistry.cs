@@ -25,6 +25,8 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Headquarters.Views;
 using WB.UI.Shared.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
+using WB.Infrastructure.Security;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 
 namespace WB.UI.Headquarters.Injections
 {
@@ -214,6 +216,8 @@ namespace WB.UI.Headquarters.Injections
             this.Bind<IRestServiceSettings>().To<DesignerQuestionnaireApiRestServiceSettings>().InSingletonScope();
 
             this.Bind<IRestService>().To<RestService>().WithConstructorArgument("networkService", _ => null).WithConstructorArgument("restServicePointManager", _=> null);
+
+            this.Bind<ICypherManager>().To<CypherManager>();
         }
     }
 }
