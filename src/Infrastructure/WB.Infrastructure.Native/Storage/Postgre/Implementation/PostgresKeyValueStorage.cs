@@ -31,7 +31,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             string queryResult;
             using (var command = new NpgsqlCommand())
             {
-                string commandText = string.Format("SELECT value FROM {0} WHERE id = :id", this.tableName);
+                string commandText = $"SELECT value FROM {this.tableName} WHERE id = :id";
 
                 command.CommandText = commandText;
                 var parameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) { Value = id };
@@ -56,7 +56,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             int queryResult;
             using (var command = new NpgsqlCommand())
             {
-                command.CommandText = string.Format("DELETE FROM {0} WHERE id = :id", this.tableName);
+                command.CommandText = $"DELETE FROM {this.tableName} WHERE id = :id";
                 var parameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) { Value = id };
                 command.Parameters.Add(parameter);
 
@@ -65,43 +65,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             if (queryResult > 1)
             {
                 throw new Exception(
-                    string.Format(
-                        "Unexpected row count of deleted records. Expected to delete 1 row, but affected {0} number of rows",
-                        queryResult));
+                    $"Unexpected row count of deleted records. Expected to delete 1 row, but affected {queryResult} number of rows");
             }
         }
 
         public virtual void Store(TEntity view, string id)
         {
-            object existsResult;
-            using (var existsCommand = new NpgsqlCommand())
-            {
-                existsCommand.CommandText = string.Format("SELECT 1 FROM {0} WHERE id = :id LIMIT 1", this.tableName);
-
-                var idParameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) { Value = id };
-
-                existsCommand.Parameters.Add(idParameter);
-
-                existsResult = this.ExecuteScalar(existsCommand);
-            }
-
-            var existing = existsResult != null;
-
-            string commandText;
-            if (existing)
-            {
-                commandText = string.Format("UPDATE {0} SET value = :value WHERE id = :id", this.tableName);
-            }
-            else
-            {
-                commandText = string.Format("INSERT INTO {0} VALUES(:id, :value)", this.tableName);
-            }
-
-
-            int queryResult;
             using (var upsertCommand = new NpgsqlCommand())
             {
-                upsertCommand.CommandText = commandText;
+                upsertCommand.CommandText = $"INSERT INTO {this.tableName} VALUES(:id, :value) ON CONFLICT (id) DO UPDATE SET value = :value";
 
                 var parameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) { Value = id };
                 string serializedValue = this.serializer.Serialize(view, TypeSerializationSettings.Auto);
@@ -110,11 +82,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 upsertCommand.Parameters.Add(parameter);
                 upsertCommand.Parameters.Add(valueParameter);
 
-                queryResult = this.ExecuteNonQuery(upsertCommand);
-            }
-            if (queryResult > 1)
-            {
-                throw new Exception(string.Format("Unexpected row count of deleted records. Expected to delete not more than 1 row, but affected {0} number of rows", queryResult));
+                var queryResult = this.ExecuteNonQuery(upsertCommand);
+
+                if (queryResult > 1)
+                {
+                    throw new Exception(
+                        $"Unexpected row count of deleted records. Expected to delete not more than 1 row, but affected {queryResult} number of rows");
+                }
             }
         }
 
@@ -138,24 +112,16 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
             using (var command = new NpgsqlCommand())
             {
-                command.CommandText = string.Format("DELETE FROM {0}", this.tableName);
+                command.CommandText = $"DELETE FROM {this.tableName}";
                 this.ExecuteNonQuery(command);
             }
         }
 
-        public void Dispose()
-        {
-        }
+        public void Dispose() {}
 
-        public Type ViewType
-        {
-            get { return typeof(TEntity); }
-        }
+        public Type ViewType => typeof(TEntity);
 
-        public virtual string GetReadableStatus()
-        {
-            return "Postgres K/V :/";
-        }
+        public virtual string GetReadableStatus() => "Postgres K/V :/";
 
         private void FastBulkStore(List<Tuple<TEntity, string>> bulk)
         {
