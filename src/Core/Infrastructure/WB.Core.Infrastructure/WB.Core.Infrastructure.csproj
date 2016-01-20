@@ -61,6 +61,7 @@
     <Compile Include="Implementation\Aggregates\AggregateRootRepositoryWithCache.cs" />
     <Compile Include="CommandBus\Implementation\CommandService.cs" />
     <Compile Include="CommandBus\Implementation\SequentialCommandService.cs" />
+    <Compile Include="Implementation\Security\DefaultCypherManager.cs" />
     <Compile Include="Implementation\InMemoryKeyValueStorage.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideDenormalizerStatistic.cs" />
     <Compile Include="Implementation\ReadSide\ReadSideEventHandlerDescription.cs" />
@@ -178,6 +179,8 @@
     <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryWriter.cs" />
     <Compile Include="ReadSide\Repository\Accessors\ReadSideStorageVersionedWrapper.cs" />
     <Compile Include="InfrastructureModuleMobile.cs" />
+    <Compile Include="Security\ICypherManager.cs" />
+    <Compile Include="Security\Setting.cs" />
     <Compile Include="Transactions\ITransactionManager.cs" />
     <Compile Include="Transactions\ITransactionManagerProvider.cs" />
     <Compile Include="Transactions\ITransactionManagerProviderManager.cs" />

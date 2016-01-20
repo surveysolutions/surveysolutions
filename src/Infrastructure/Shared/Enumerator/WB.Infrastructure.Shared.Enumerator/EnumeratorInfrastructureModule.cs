@@ -27,6 +27,7 @@ namespace WB.Infrastructure.Shared.Enumerator
             this.Bind<IQRBarcodeScanService>().To<QRBarcodeScanService>();
             this.Bind<IGpsLocationService>().To<GpsLocationService>().InSingletonScope();
             this.Bind<IGeolocator>().ToMethod(context => CrossGeolocator.Current);
+
         }
     }
 }
