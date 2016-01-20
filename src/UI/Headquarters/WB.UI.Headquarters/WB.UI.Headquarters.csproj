@@ -294,7 +294,7 @@
     <Content Include="Scripts\dateRangePicker\daterangepicker.js" />
     <Content Include="Scripts\ko.datepicker.js" />
     <Content Include="Scripts\pages\batch-user-creation.js" />
-    <EmbeddedResource Include="Scripts\pages\exportdata.js" />
+    <Content Include="Scripts\pages\exportdata.js" />
     <Content Include="Scripts\pages\import-interviews.js" />
     <Content Include="Scripts\pages\batchupload.js" />
     <Content Include="Scripts\pages\chart.js" />
