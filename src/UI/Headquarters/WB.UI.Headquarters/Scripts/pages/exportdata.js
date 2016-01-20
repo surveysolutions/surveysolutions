@@ -93,18 +93,6 @@
         }
     };
 
-    //self.requestApprovedDataUpdate = function(format) {
-    //    var questionnaireId = self.selectedTemplateId();
-    //    var questionnaireVersion = self.selectedTemplate().version;
-    //    return function() {
-    //        self.sendWebRequest(self.UpdateApprovedDataUrl + "?questionnaireId=" + questionnaireId + "&questionnaireVersion=" + questionnaireVersion + "&format=" + format,
-    //            [],
-    //            function(data) {
-    //                self.updateDataExportInfo();
-    //            });
-    //    }
-    //};
-
     self.sendWebRequest = function (url, args, onSuccess) {
         var requestHeaders = {};
         requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
@@ -175,7 +163,7 @@
         return self.exportFromats[runningExport.Format()];
     }
     self.formatDate=function(date) {
-        return moment(date).format("MM/DD/YYYY HH:mm:ss");
+        return moment(date).format("YYYY-MM-DD HH:mm:ss");
     }
 
     self.updateDataExportInfo(true);
