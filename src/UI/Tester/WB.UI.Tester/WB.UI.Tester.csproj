@@ -122,6 +122,14 @@
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.ResourceLoader.3.5.1\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.ResourceLoader.Droid.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Sqlite, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Sqlite.4.0.0-alpha3\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Sqlite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Sqlite.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.Plugin.Sqlite.4.0.0-alpha3\lib\MonoAndroid\Cirrious.MvvmCross.Plugins.Sqlite.Droid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Flurl">
       <HintPath>..\..\..\..\packages\Flurl.1.0.9\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.dll</HintPath>
     </Reference>
@@ -246,12 +254,12 @@
     <Reference Include="PCLStorage.Abstractions">
       <HintPath>..\..\..\..\packages\PCLStorage.1.0.2\lib\monoandroid\PCLStorage.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Siaqodb, Version=5.5.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Siaqodb.5.5.0.1\lib\MonoAndroid\Siaqodb.dll</HintPath>
+    <Reference Include="SQLite.Net, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\SQLite.Net.Core-PCL.3.1.1\lib\portable-win8+net45+wp8+wpa81+MonoAndroid1+MonoTouch1\SQLite.Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SiaqodbPortable, Version=5.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Siaqodb.5.5.0.1\lib\MonoAndroid\SiaqodbPortable.dll</HintPath>
+    <Reference Include="SQLite.Net.Platform.XamarinAndroid, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\SQLite.Net-PCL.3.1.1\lib\MonoAndroid\SQLite.Net.Platform.XamarinAndroid.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -309,10 +317,10 @@
     <Compile Include="Bootstrap\PictureChooserPluginBootstrap.cs" />
     <Compile Include="Bootstrap\ResourceLoaderPluginBootstrap.cs" />
     <Compile Include="Bootstrap\SettingsPluginBootstrap.cs" />
+    <Compile Include="Bootstrap\SqlitePluginBootstrap.cs" />
     <Compile Include="Bootstrap\UserInteractionPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="Converters\QuestionnairePublicityBackgroundConverter.cs" />
-    <Compile Include="CustomServices\SiaqodbPlainStorage.cs" />
     <Compile Include="Infrastructure\Internals\Rest\RestServicePointManager.cs" />
     <Compile Include="Infrastructure\Internals\Security\TesterPrincipal.cs" />
     <Compile Include="Infrastructure\Internals\Security\TesterUserIdentity.cs" />
