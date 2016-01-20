@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
 
         public string GetArchiveFilePathForExportedData(QuestionnaireIdentity questionnaireId, DataExportFormat format, InterviewStatus? status = null)
         {
-            var statusSuffix = status != null ? status.ToString() : "All";
+            var statusSuffix = status != null && format != DataExportFormat.Binary ? status.ToString() : "All";
 
             var archiveName = $"{questionnaireId.QuestionnaireId}_{questionnaireId.Version}_{format}_{statusSuffix}.zip";
 

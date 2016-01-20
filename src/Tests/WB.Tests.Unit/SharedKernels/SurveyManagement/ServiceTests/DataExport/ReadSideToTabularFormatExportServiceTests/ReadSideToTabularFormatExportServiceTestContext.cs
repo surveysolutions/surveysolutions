@@ -38,8 +38,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
                 Mock.Of<ILogger>(),
                 Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
-                    It.IsAny<string>()) == questionnaireExportStructure)
-                );
+                    It.IsAny<string>()) == questionnaireExportStructure),
+                new TestInMemoryWriter<InterviewSummary>());
         }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)
