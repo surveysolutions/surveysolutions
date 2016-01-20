@@ -71,9 +71,25 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public virtual void Store(TEntity view, string id)
         {
+            bool entityExists;
+            using (var existsCommand = new NpgsqlCommand())
+            {
+                existsCommand.CommandText = $"SELECT 1 FROM {this.tableName} WHERE id = :id LIMIT 1";
+
+                var idParameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) { Value = id };
+
+                existsCommand.Parameters.Add(idParameter);
+
+                object existsResult = this.ExecuteScalar(existsCommand);
+
+                entityExists = existsResult != null;
+            }
+
             using (var upsertCommand = new NpgsqlCommand())
             {
-                upsertCommand.CommandText = $"INSERT INTO {this.tableName} VALUES(:id, :value) ON CONFLICT (id) DO UPDATE SET value = :value";
+                upsertCommand.CommandText = entityExists
+                    ? $"UPDATE {this.tableName} SET value = :value WHERE id = :id"
+                    : $"INSERT INTO {this.tableName} VALUES(:id, :value)";
 
                 var parameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) { Value = id };
                 string serializedValue = this.serializer.Serialize(view, TypeSerializationSettings.Auto);
