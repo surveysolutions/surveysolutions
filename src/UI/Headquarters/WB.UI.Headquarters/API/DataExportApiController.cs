@@ -69,16 +69,6 @@ namespace WB.UI.Headquarters.API
 
         [HttpGet]
         [ObserverNotAllowedApi]
-        public HttpResponseMessage ApprovedData(Guid id, long version, DataExportFormat format)
-        {
-            return
-                CreateHttpResponseMessageWithFileContent(
-                    this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
-                        new QuestionnaireIdentity(id, version), format, InterviewStatus.ApprovedByHeadquarters));
-        }
-
-        [HttpGet]
-        [ObserverNotAllowedApi]
         public HttpResponseMessage DDIMetadata(Guid id, long version)
         {
             return
