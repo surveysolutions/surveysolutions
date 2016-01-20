@@ -13,7 +13,7 @@ namespace WB.Tests.Integration.Versions
         {
             designerEngineVersionService = new DesignerEngineVersionService();
             testerExpressionsEngineVersionService = new TesterExpressionsEngineVersionService();
-            hqSupportedVersionProvider = new SupportedVersionProvider(() => false, new Version());
+            hqSupportedVersionProvider = new SupportedVersionProvider();
         };
 
         Because of = () =>

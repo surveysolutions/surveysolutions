@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web.Hosting;
 using System.Web.Http;
 using WB.Core.Infrastructure.FileSystem;
@@ -22,20 +24,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         private const string PHYSICALPATHTOAPPLICATION = "~/Client/";
 
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly ISupportedVersionProvider versionProvider;
         private readonly ITabletInformationService tabletInformationService;
         private readonly IUserViewFactory userViewFactory;
+        private readonly IAndroidPackageReader androidPackageReader;
 
         public InterviewerController(
             IFileSystemAccessor fileSystemAccessor,
-            ISupportedVersionProvider versionProvider,
             ITabletInformationService tabletInformationService,
-            IUserViewFactory userViewFactory)
+            IUserViewFactory userViewFactory,
+            IAndroidPackageReader androidPackageReader)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-            this.versionProvider = versionProvider;
             this.tabletInformationService = tabletInformationService;
             this.userViewFactory = userViewFactory;
+            this.androidPackageReader = androidPackageReader;
         }
         
         [HttpGet] 
@@ -65,7 +67,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         [Route("latestversion")]
         public int? GetLatestVersion()
         {
-            return this.versionProvider.GetApplicationBuildNumber();
+            string pathToInterviewerApp =
+                this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION),
+                    PHYSICALAPPLICATIONFILENAME);
+
+            return !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
+                ? null
+                : this.androidPackageReader.Read(pathToInterviewerApp).Version;
         }
 
         [HttpPost]
