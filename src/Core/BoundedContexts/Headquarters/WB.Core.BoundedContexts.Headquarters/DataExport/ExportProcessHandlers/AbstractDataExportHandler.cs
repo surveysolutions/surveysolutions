@@ -1,45 +1,52 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
-    abstract class AbstractDataExportHandler : IExportProcessHandler<AllDataExportProcessDetails>, IExportProcessHandler<ApprovedDataExportProcessDetails>
+    abstract class AbstractDataExportHandler : IExportProcessHandler<DataExportProcessDetails>
     {
         protected readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IDataExportProcessesService dataExportProcessesService;
-        private const string allDataFolder = "AllData";
-        private const string approvedDataFolder = "ApprovedData";
+        private readonly ILogger logger;
 
         protected AbstractDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
             IArchiveUtils archiveUtils, 
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             InterviewDataExportSettings interviewDataExportSettings, 
-            IDataExportProcessesService dataExportProcessesService)
+            IDataExportProcessesService dataExportProcessesService,
+            ILogger logger)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.dataExportProcessesService = dataExportProcessesService;
+            this.logger = logger;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
         }
 
-        public void ExportData(AllDataExportProcessDetails dataExportProcessDetails)
+        public void ExportData(DataExportProcessDetails dataExportProcessDetails)
         {
             dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
-            string folderForDataExport =
-              this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(dataExportProcessDetails.Questionnaire), allDataFolder);
+            var folderPathOfDataByQuestionnaire = this.GetFolderPathOfDataByQuestionnaire(dataExportProcessDetails.Questionnaire);
+
+            string outputFolderByStatus = dataExportProcessDetails.InterviewStatus?.ToString() ?? "All";
+            string folderForDataExport = this.fileSystemAccessor.CombinePath(folderPathOfDataByQuestionnaire, outputFolderByStatus);
 
             this.ClearFolder(folderForDataExport);
 
@@ -50,45 +57,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             exportProgress.ProgressChanged +=
                 (sender, donePercent) => UpdateDataExportProgress(dataExportProcessDetails.NaturalId, donePercent);
 
-            this.ExportAllDataIntoDirectory(dataExportProcessDetails.Questionnaire, folderForDataExport, exportProgress, dataExportProcessDetails.CancellationToken);
+            this.ExportDataIntoDirectory(dataExportProcessDetails.Questionnaire, dataExportProcessDetails.InterviewStatus, folderForDataExport, exportProgress, dataExportProcessDetails.CancellationToken);
 
             dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
             var filesToArchive = this.fileSystemAccessor.GetFilesInDirectory(folderForDataExport);
 
-            RecreateExportArchive(filesToArchive, this.GetArchiveNameForAllData(dataExportProcessDetails.Questionnaire));
-        }
-
-        public void ExportData(ApprovedDataExportProcessDetails dataExportProcessDetails)
-        {
-            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
-
-            string folderForDataExport =
-              this.fileSystemAccessor.CombinePath(GetFolderPathOfDataByQuestionnaire(dataExportProcessDetails.Questionnaire), approvedDataFolder);
-
-            this.ClearFolder(folderForDataExport);
-
-            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
-
-            var exportProgress = new Microsoft.Progress<int>();
-
-            exportProgress.ProgressChanged +=
-                (sender, donePercent) => UpdateDataExportProgress(dataExportProcessDetails.NaturalId, donePercent);
-
-            this.ExportApprovedDataIntoDirectory(dataExportProcessDetails.Questionnaire, folderForDataExport, exportProgress, dataExportProcessDetails.CancellationToken);
-
-            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
-
-            var filesToArchive = this.fileSystemAccessor.GetFilesInDirectory(folderForDataExport);
-
-            RecreateExportArchive(filesToArchive, GetArchiveNameForApprovedData(dataExportProcessDetails.Questionnaire));
+            RecreateExportArchive(filesToArchive, this.GetArchiveNameForData(dataExportProcessDetails.Questionnaire, dataExportProcessDetails.InterviewStatus));
         }
 
         protected abstract DataExportFormat Format { get; }
 
-        protected abstract void ExportAllDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity, string directoryPath, IProgress<int> progress, CancellationToken cancellationToken);
-
-        protected abstract void ExportApprovedDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity, string directoryPath, IProgress<int> progress, CancellationToken cancellationToken);
+        protected abstract void ExportDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity, InterviewStatus? status, string directoryPath, IProgress<int> progress, CancellationToken cancellationToken);
 
         private void UpdateDataExportProgress(string dataExportProcessDetailsId, int progressInPercents)
         {
@@ -96,16 +76,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 progressInPercents);
         }
 
-        private string GetArchiveNameForApprovedData(QuestionnaireIdentity questionnaireIdentity)
+        private string GetArchiveNameForData(QuestionnaireIdentity questionnaireIdentity, InterviewStatus? interviewStatus)
         {
-            return this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedData(
-                questionnaireIdentity, Format);
-        }
-
-        private string GetArchiveNameForAllData(QuestionnaireIdentity questionnaireIdentity)
-        {
-            return this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
-                questionnaireIdentity, Format);
+            return this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(questionnaireIdentity, Format, interviewStatus);
         }
 
         private string GetFolderPathOfDataByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
@@ -124,9 +97,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         {
             if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
             {
+                this.logger.Info($"{archiveFilePath} existed, deleting");
                 this.fileSystemAccessor.DeleteFile(archiveFilePath);
             }
+
+            this.logger.Debug($"Starting creation of {Path.GetFileName(archiveFilePath)} archive");
+            Stopwatch watch = Stopwatch.StartNew();
             this.archiveUtils.ZipFiles(filesToArchive, archiveFilePath);
+            watch.Stop();
+            this.logger.Info($"Done creation {Path.GetFileName(archiveFilePath)} archive. Spent: {watch.Elapsed:g}");
         }
 
         private void ClearFolder(string folderName)

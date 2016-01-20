@@ -162,8 +162,7 @@
     <Compile Include="DataExport\Jobs\ExportJobScheduler.cs" />
     <Compile Include="DataExport\Mapping\LastPublishedEventPositionForHandlerMap.cs" />
     <Compile Include="DataExport\ExportProcessHandlers\IExportProcessHandler.cs" />
-    <Compile Include="DataExport\DataExportDetails\AllDataExportProcessDetails.cs" />
-    <Compile Include="DataExport\DataExportDetails\ApprovedDataExportProcessDetails.cs" />
+    <Compile Include="DataExport\DataExportDetails\DataExportProcessDetails.cs" />
     <Compile Include="DataExport\DataExportDetails\IDataExportProcessDetails.cs" />
     <Compile Include="DataExport\DataExportDetails\ParaDataExportProcessDetails.cs" />
     <Compile Include="DataExport\Services\Exporters\CommentsExporter.cs" />

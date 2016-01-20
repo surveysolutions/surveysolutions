@@ -3,6 +3,7 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -27,7 +28,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.SpssFormatExportHandlerTest
                 filebasedExportedDataAccessor ?? Mock.Of<IFilebasedExportedDataAccessor>(),
                 tabularDataToExternalStatPackageExportService ??
                 Mock.Of<ITabularDataToExternalStatPackageExportService>(),
-                Mock.Of<IDataExportProcessesService>());
+                Mock.Of<IDataExportProcessesService>(),
+                Mock.Of<ILogger>());
         }
     }
 }
