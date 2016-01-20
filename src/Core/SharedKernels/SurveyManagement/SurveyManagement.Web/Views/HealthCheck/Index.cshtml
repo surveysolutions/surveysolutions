@@ -26,11 +26,6 @@
                                 Number of unhandled packages
                                 <p data-bind="html:numberOfUnhandledPackagesError"></p>
                             </li>
-                            <li class="list-group-item" data-bind="css: {'has-warning': numberOfSyncPackagesWithBigSize() > 0, 'has-error': numberOfSyncPackagesWithBigSize() == 'Error' }">
-                                <span class="badge" data-bind="text:numberOfSyncPackagesWithBigSize"></span>
-                                Number of sync packages with size more then 2Mb
-                                <p data-bind="html:numberOfSyncPackagesWithBigSizeError"></p>
-                            </li>
                             <li class="list-group-item" data-bind="css: {'has-error': deniedFolders().length > 0 }">
                                 <span class="badge" data-bind="text:deniedFoldersStatus"></span>
                                 Permissions on write in App_Data folder

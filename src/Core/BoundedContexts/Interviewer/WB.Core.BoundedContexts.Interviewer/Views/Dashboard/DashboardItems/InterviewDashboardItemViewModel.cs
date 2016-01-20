@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private readonly IExternalAppLauncher externalAppLauncher;
         private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
-        private readonly IInterviewerInterviewFactory interviewerInterviewFactory;
+        private readonly IInterviewerInterviewAccessor interviewerInterviewFactory;
 
         public string QuestionnaireName { get; private set; }
         public Guid InterviewId { get; private set; }
@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             IExternalAppLauncher externalAppLauncher,
             IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IAsyncPlainStorage<InterviewView> interviewViewRepository,
-            IInterviewerInterviewFactory interviewFactory)
+            IInterviewerInterviewAccessor interviewFactory)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.userInteractionService = userInteractionService;

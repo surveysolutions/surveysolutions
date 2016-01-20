@@ -51,7 +51,8 @@ namespace WB.UI.Interviewer.Settings
             Endpoint = string.Empty,
             HttpResponseTimeoutInSec = Application.Context.Resources.GetInteger(Resource.Integer.HttpResponseTimeout),
             CommunicationBufferSize = Application.Context.Resources.GetInteger(Resource.Integer.BufferSize),
-            GpsResponseTimeoutInSec = Application.Context.Resources.GetInteger(Resource.Integer.GpsReceiveTimeoutSec)
+            GpsResponseTimeoutInSec = Application.Context.Resources.GetInteger(Resource.Integer.GpsReceiveTimeoutSec),
+            GpsDesiredAccuracy = Application.Context.Resources.GetInteger(Resource.Integer.GpsDesiredAccuracy)
         };
 
         public string Endpoint => this.CurrentSettings.Endpoint;
@@ -59,6 +60,7 @@ namespace WB.UI.Interviewer.Settings
         public int BufferSize => this.CurrentSettings.CommunicationBufferSize;
         public bool AcceptUnsignedSslCertificate => false;
         public int GpsReceiveTimeoutSec => this.CurrentSettings.GpsResponseTimeoutInSec;
+        public double GpsDesiredAccuracy => this.CurrentSettings.GpsDesiredAccuracy.GetValueOrDefault((double)Application.Context.Resources.GetInteger(Resource.Integer.GpsDesiredAccuracy));
 
         public string GetDeviceId()
         {
@@ -117,6 +119,14 @@ namespace WB.UI.Interviewer.Settings
             await this.SaveCurrentSettings(settings =>
             {
                 settings.GpsResponseTimeoutInSec = timeout;
+            });
+        }
+
+        public async Task SetGpsDesiredAccuracy(double value)
+        {
+            await this.SaveCurrentSettings(settings =>
+            {
+                settings.GpsDesiredAccuracy = value;
             });
         }
 

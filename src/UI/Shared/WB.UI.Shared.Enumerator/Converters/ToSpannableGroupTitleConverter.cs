@@ -7,7 +7,7 @@ using Android.Widget;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Converters;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
-using WB.Core.SharedKernels.SurveySolutions.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.UI.Shared.Enumerator.Converters
 {

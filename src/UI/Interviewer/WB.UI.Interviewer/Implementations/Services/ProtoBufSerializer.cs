@@ -43,6 +43,16 @@ namespace WB.UI.Interviewer.Implementations.Services
             throw new NotImplementedException();
         }
 
+        public T Deserialize<T>(string payload, TypeSerializationSettings settings)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object Deserialize(string payload, Type type, TypeSerializationSettings settings)
+        {
+            throw new NotImplementedException();
+        }
+
         public T Deserialize<T>(byte[] payload)
         {
             return (T) this.DeserializeFromStream(new MemoryStream(payload), typeof (T));
@@ -52,6 +62,16 @@ namespace WB.UI.Interviewer.Implementations.Services
         {
             SerializerBuilder.Build(type);
             return ProtoBuf.Serializer.NonGeneric.Deserialize(type, stream);
+        }
+
+        public byte[] SerializeToByteArray(object item, TypeSerializationSettings typeSerializationSettings, SerializationType serializationType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object Deserialize(byte[] payload, Type objectType, TypeSerializationSettings typeSerializationSettings, SerializationType serializationType)
+        {
+            throw new NotImplementedException();
         }
 
         private static class SerializerBuilder

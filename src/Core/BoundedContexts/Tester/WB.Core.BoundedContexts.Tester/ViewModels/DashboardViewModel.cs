@@ -333,8 +333,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     await this.commandService.ExecuteAsync(new CreateInterviewOnClientCommand(
                         interviewId: interviewId,
                         userId: this.principal.CurrentUserIdentity.UserId,
-                        questionnaireId: questionnaireIdentity.QuestionnaireId,
-                        questionnaireVersion: questionnaireIdentity.Version,
+                        questionnaireIdentity: questionnaireIdentity,
                         answersTime: DateTime.UtcNow,
                         supervisorId: Guid.NewGuid()));
 

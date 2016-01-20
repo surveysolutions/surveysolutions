@@ -18,10 +18,70 @@ namespace WB.Core.BoundedContexts.Designer.Services
         {
         }
 
+        public static ExpressionLocation LookupTables()
+        {
+            return new ExpressionLocation
+            {
+                ItemType = ExpressionLocationItemType.LookupTable,
+                ExpressionType = ExpressionLocationType.General,
+                Id = Guid.Empty
+            };
+        }
+
+        public static ExpressionLocation Questionnaire(Guid questionnaireId)
+        {
+            return new ExpressionLocation
+            {
+                ItemType = ExpressionLocationItemType.Questionnaire,
+                ExpressionType = ExpressionLocationType.General,
+                Id = questionnaireId
+            };
+        }
+
+        public static ExpressionLocation GroupCondition(Guid groupId)
+        {
+            return new  ExpressionLocation
+            {
+                ItemType = ExpressionLocationItemType.Group,
+                ExpressionType = ExpressionLocationType.Condition,
+                Id = groupId
+            };
+        }
+
+        public static ExpressionLocation QuestionValidation(Guid questionId)
+        {
+            return new ExpressionLocation
+            {
+                ItemType = ExpressionLocationItemType.Question,
+                ExpressionType = ExpressionLocationType.Validation,
+                Id = questionId
+            };
+        }
+
+        public static ExpressionLocation QuestionCondition(Guid questionId)
+        {
+            return new ExpressionLocation
+            {
+                ItemType = ExpressionLocationItemType.Question,
+                ExpressionType = ExpressionLocationType.Condition,
+                Id = questionId
+            };
+        }
+
+        public static ExpressionLocation RosterCondition(Guid rosterId)
+        {
+            return new ExpressionLocation
+            {
+                ItemType = ExpressionLocationItemType.Roster,
+                ExpressionType = ExpressionLocationType.Condition,
+                Id = rosterId
+            };
+        }
+
         public ExpressionLocation(ExpressionLocationItemType itemType = ExpressionLocationItemType.Question, ExpressionLocationType expressionType = ExpressionLocationType.General, Guid? id = null)
         {
             this.ItemType = itemType;
-            this.ExpressionType = this.ExpressionType;
+            this.ExpressionType = expressionType;
             this.Id = id ?? Guid.Empty;
         }
 
@@ -43,5 +103,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         {
             return String.Format("{0}:{1}:{2}", ItemType, ExpressionType, Id);
         }
+
+        public string Key => this.ToString();
     }
 }

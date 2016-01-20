@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.InterviewDashboar
                 Substitute.For<IExternalAppLauncher>(),
                 Substitute.For<IAsyncPlainStorage<QuestionnaireView>>(),
                 Substitute.For<IAsyncPlainStorage<InterviewView>>(),
-                Substitute.For<IInterviewerInterviewFactory>());
+                Substitute.For<IInterviewerInterviewAccessor>());
         }
     }
 }

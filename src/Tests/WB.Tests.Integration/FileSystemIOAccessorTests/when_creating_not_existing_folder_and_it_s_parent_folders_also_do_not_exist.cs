@@ -1,6 +1,6 @@
 using System;
 using Machine.Specifications;
-using WB.Core.Infrastructure.Files.Implementation.FileSystem;
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
 namespace WB.Tests.Integration.FileSystemIOAccessorTests
 {

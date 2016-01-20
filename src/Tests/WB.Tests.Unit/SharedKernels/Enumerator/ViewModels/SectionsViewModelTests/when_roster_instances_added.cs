@@ -68,8 +68,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
                 Id = sectionId
             };
 
-            questionnaire.GroupsParentIdMap = new Dictionary<Guid, Guid?> {{ rosterId, sectionId }};
-
             interview = Substitute.For<IStatefulInterview>();
             sectionIdentity = new Identity(sectionId, Empty.RosterVector);
             addedInstanceIdentity = new Identity(rosterId, new[] {3m});

@@ -12,8 +12,6 @@ using Ninject.Extensions.Conventions.BindingGenerators;
 using Ninject.Modules;
 using Ninject.Syntax;
 using WB.Core.BoundedContexts.Headquarters;
-using WB.Core.GenericSubdomains.Native;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -26,6 +24,9 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Headquarters.Views;
 using WB.UI.Shared.Web.Filters;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
+using WB.Infrastructure.Security;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 
 namespace WB.UI.Headquarters.Injections
 {
@@ -208,11 +209,15 @@ namespace WB.UI.Headquarters.Injections
 
             this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
             this.Bind<IProtobufSerializer>().To<ProtobufSerializer>();
-            this.Bind<ISerializer>().To<NewtonJsonSerializer>();
+
+            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(new JsonSerializerSettingsFactory()));
+
             this.Bind<IStringCompressor>().To<JsonCompressor>();
             this.Bind<IRestServiceSettings>().To<DesignerQuestionnaireApiRestServiceSettings>().InSingletonScope();
 
             this.Bind<IRestService>().To<RestService>().WithConstructorArgument("networkService", _ => null).WithConstructorArgument("restServicePointManager", _=> null);
+
+            this.Bind<ICypherManager>().To<CypherManager>();
         }
     }
 }

@@ -42,7 +42,7 @@
                 </div>
             }
             <div>
-                @using (Html.BeginForm("SampleBatchUpload", "HQ", new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                @using (Html.BeginForm("SampleBatchUpload", "HQ", new { questionnaireId = Model.QuestionnaireId, version = Model.QuestionnaireVersion }, FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
                     @Html.AntiForgeryToken()
 

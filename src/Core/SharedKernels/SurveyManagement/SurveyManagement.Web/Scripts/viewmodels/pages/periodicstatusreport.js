@@ -19,12 +19,22 @@
 
     self.DateTimeRanges = ko.observableArray([]);
 
+    self.TotalRow = ko.observableArray(null);
+
     this.QuestionnaireName = ko.observable();
 
     this.ReportTypeName = ko.observable();
 
     self.GetPeriodName = function (period) {
         return moment(period.From()).format(dateFormat);
+    };
+
+    self.getTotalAverage = function () {
+        return self.TotalRow().Average ? self.TotalRow().Average() : 0;
+    };
+
+    self.getTotalCount = function () {
+        return self.TotalRow().Total ? self.TotalRow().Total() : 0;
     };
 
     self.FormatSpeedPeriod = function(data) {

@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     {
         protected static Interview CreateInterview(Guid? interviewId = null, Guid? userId = null, Guid? questionnaireId = null,
             Dictionary<Guid, object> answersToFeaturedQuestions = null, DateTime? answersTime = null, Guid? supervisorId = null,
-            IQuestionnaireRepository questionnaireRepository = null, 
+            IPlainQuestionnaireRepository questionnaireRepository = null, 
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
             var interview = Create.Interview(
@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 wasCompleted ?? false);
         }
 
-        protected static IQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire = null)
+        protected static IPlainQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire = null)
         {
             return Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
         }

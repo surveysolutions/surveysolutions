@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -20,7 +21,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IViewModelNavigationService viewModelNavigationService;
 
         public InterviewViewModel(IPrincipal principal,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
+            IPlainQuestionnaireRepository questionnaireRepository,
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
             SideBarSectionsViewModel sectionsViewModel,
@@ -31,7 +33,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IViewModelNavigationService viewModelNavigationService,
             GroupStateViewModel groupState,
             InterviewStateViewModel interviewState)
-            : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
+            : base(questionnaireRepository, questionnaireModelRepository, interviewRepository, answerToStringService, sectionsViewModel,
                 breadCrumbsViewModel, stageViewModel, navigationState, answerNotifier, groupState, interviewState)
         {
             this.principal = principal;

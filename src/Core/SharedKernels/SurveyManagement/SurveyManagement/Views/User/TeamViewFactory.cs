@@ -38,10 +38,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
             };
         }
 
-        public UsersView GetAllSupervisors(int pageSize, string searchBy)
+        public UsersView GetAllSupervisors(int pageSize, string searchBy, bool showLocked = false)
         {
             var queryBySupervisorName = new Func<IQueryable<UserDocument>, IOrderedQueryable<UserDocument>>((users) =>
-                ApplyFilterBySupervisors(searchBy: searchBy, users: users)
+                ApplyFilterBySupervisors(searchBy: searchBy, users: users, showLocked: showLocked)
                     .OrderBy(user => user.UserName));
 
             return new UsersView()
@@ -122,9 +122,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
             return responsiblesFromInterviews;
         }
 
-        private static IQueryable<UserDocument> ApplyFilterBySupervisors(string searchBy, IQueryable<UserDocument> users)
+        private static IQueryable<UserDocument> ApplyFilterBySupervisors(string searchBy, IQueryable<UserDocument> users, bool showLocked = false)
         {
-            users = users.Where(user => !user.IsArchived && !user.IsLockedByHQ)
+            users = users.Where(user => !user.IsArchived)
+                         .Where(user => showLocked || !user.IsLockedByHQ)
                          .Where(user => (user.Roles.Any(role => role == UserRoles.Supervisor)));
 
             users = ApplyFilterByUserName(searchBy, users);

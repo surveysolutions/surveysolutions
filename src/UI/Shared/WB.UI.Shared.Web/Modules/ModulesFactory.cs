@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Web.Configuration;
 using Ninject.Modules;
-using WB.Core.Infrastructure.Storage.EventStore;
-using WB.Core.Infrastructure.Storage.Postgre;
+using WB.Infrastructure.Native.Storage.EventStore;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Settings;
 

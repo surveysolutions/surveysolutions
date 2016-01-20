@@ -16,7 +16,6 @@ using Cirrious.MvvmCross.Plugins.Sqlite;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using PCLStorage;
-using Sqo;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.ViewModel.Dashboard;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -37,6 +36,11 @@ using WB.UI.Interviewer.SharedPreferences;
 using WB.UI.Interviewer.ViewModel.Dashboard;
 using WB.UI.Interviewer.ViewModel.Login;
 using Environment = System.Environment;
+
+#warning we must keep "Sqo" namespace on siaqodb as long as at least one 5.1.0-5.3.* version exist
+#warning do not remove "Sqo" namespace
+#warning if after all the warning you intend to remove the namespace anyway, please remove NuGet packages SiaqoDB and SiaqoDbProtable also
+using Sqo;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -140,15 +144,14 @@ namespace WB.UI.Interviewer.Activities
         {
             InterviewerIdentity oldInterviewer;
 
+            #warning we must keep this code as long as at least one 5.1.0-5.3.* version exist
+            #warning do not remove this code
             SiaqodbConfigurator.EncryptedDatabase = false;
 
             using (var oldInterviewersRepository = new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("database")))
             {
                 oldInterviewer = await oldInterviewersRepository.Query<InterviewerIdentity>().FirstOrDefaultAsync();
             }
-
-            SiaqodbConfigurator.EncryptedDatabase = true;
-            SiaqodbConfigurator.SetEncryptionPassword("q=5+yaQqS0K!rWaw8FmLuRDWj8XpwI04Yr4MhtULYmD3zX+W+g");
 
             return oldInterviewer;
         }

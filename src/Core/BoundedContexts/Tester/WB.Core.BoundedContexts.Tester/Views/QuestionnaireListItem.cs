@@ -5,6 +5,7 @@ namespace WB.Core.BoundedContexts.Tester.Views
 {
     public class QuestionnaireListItem : IPlainStorageEntity
     {
+        public int OID { get; set; }
         public string Id { get; set; }
         public string Title { get; set; }
         public DateTime LastEntryDate { get; set; }

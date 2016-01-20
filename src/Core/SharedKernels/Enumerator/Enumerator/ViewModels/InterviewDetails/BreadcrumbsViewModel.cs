@@ -8,29 +8,34 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class BreadCrumbsViewModel : MvxNotifyPropertyChanged, 
         ILiteEventHandler<RosterInstancesTitleChanged>,IDisposable
     {
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly ISubstitutionService substitutionService;
         private NavigationState navigationState;
         private string interviewId;
 
-        public BreadCrumbsViewModel(IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
+        public BreadCrumbsViewModel(
+            IPlainQuestionnaireRepository questionnaireRepository,
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository,
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry,
             ISubstitutionService substitutionService)
         {
             this.questionnaireRepository = questionnaireRepository;
+            this.questionnaireModelRepository = questionnaireModelRepository;
             this.interviewRepository = interviewRepository;
             this.eventRegistry = eventRegistry;
             this.substitutionService = substitutionService;
@@ -50,7 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Handle(RosterInstancesTitleChanged @event)
         {
             var interview = this.interviewRepository.Get(this.interviewId);
-            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
+            var questionnaire = this.questionnaireModelRepository.GetById(interview.QuestionnaireId);
 
             foreach (var changedRosterInstance in @event.ChangedInstances)
             {
@@ -88,21 +93,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private void BuildBreadCrumbs(Identity newGroupIdentity)
         {
             var interview = this.interviewRepository.Get(this.interviewId);
-            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
+            var questionnaireModel = this.questionnaireModelRepository.GetById(interview.QuestionnaireId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
-            List<GroupReferenceModel> parentItems = questionnaire.Parents[newGroupIdentity.Id];
+            ReadOnlyCollection<Guid> parentIds = questionnaire.GetParentsStartingFromTop(newGroupIdentity.Id);
 
             var breadCrumbs = new List<BreadCrumbItemViewModel>();
             int metRosters = 0;
-            foreach (var reference in parentItems)
+            foreach (Guid parentId in parentIds)
             {
-                var groupTitle = questionnaire.GroupsWithFirstLevelChildrenAsReferences[reference.Id].Title;
+                var groupTitle = questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[parentId].Title;
 
-                if (reference.IsRoster)
+                if (questionnaire.IsRosterGroup(parentId))
                 {
                     metRosters++;
-                    var itemRosterVector = newGroupIdentity.RosterVector.Take(metRosters).ToArray();
-                    var itemIdentity = new Identity(reference.Id, itemRosterVector);
+                    var itemRosterVector = newGroupIdentity.RosterVector.Shrink(metRosters);
+                    var itemIdentity = new Identity(parentId, itemRosterVector);
 
                     var rosterInstance = interview.GetRoster(itemIdentity);
                         
@@ -115,7 +121,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 }
                 else
                 {
-                    var itemId = new Identity(reference.Id, newGroupIdentity.RosterVector.Take(metRosters).ToArray());
+                    var itemId = new Identity(parentId, newGroupIdentity.RosterVector.Shrink(metRosters));
                     breadCrumbs.Add(new BreadCrumbItemViewModel(this.navigationState)
                     {
                         ItemId = itemId,

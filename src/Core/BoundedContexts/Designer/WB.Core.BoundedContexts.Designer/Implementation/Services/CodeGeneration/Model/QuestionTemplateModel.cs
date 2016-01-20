@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 
-using Main.Core.Entities.SubEntities;
-
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model
 {
     public class QuestionTemplateModel : ITemplateModel
@@ -10,22 +8,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public Guid Id { set; get; }
         public string VariableName { set; get; }
         
-        public string Conditions { set; get; }
-        public string Validations { set; get; }
+        public string Condition { set; get; }
+        public string Validation { set; get; }
 
-        public QuestionType QuestionType { set; get; }
+        public string TypeName { set; get; }
 
-        public string GeneratedIdName { set; get; }
-        public string GeneratedTypeName { set; get; }
-        public string GeneratedMemberName { set; get; }
-        public string GeneratedStateName { set; get; }
+        public string ConditionMethodName => CodeGenerator.EnablementPrefix + this.VariableName;
 
-        public string RosterScopeName { set; get; }
-
-        public string GeneratedValidationsMethodName { set; get; }
-        public string GeneratedConditionsMethodName { set; get; }
+        public string ValidationMethodName => CodeGenerator.ValidationPrefix + VariableName;
+        public string MemberName => CodeGenerator.PrivateFieldsPrefix + VariableName;
+        public string StateName => CodeGenerator.PrivateFieldsPrefix + VariableName + CodeGenerator.StateSuffix;
+        public string IdName => CodeGenerator.PrivateFieldsPrefix + VariableName + CodeGenerator.IdSuffix;
 
         public bool IsMultiOptionYesNoQuestion { get; set; }
         public List<string> AllMultioptionYesNoCodes { get; set; }
+
+        public string RosterScopeName { set; get; }
+        public string ParentScopeTypeName { get; set; }
     }
 }

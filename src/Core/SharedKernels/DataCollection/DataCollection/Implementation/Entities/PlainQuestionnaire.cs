@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
-using WB.Core.SharedKernels.SurveySolutions.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
@@ -52,18 +52,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildEntities = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildInterviewerQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfUnderlyingInterviewerQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
+        private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfParentsStartingFromTop = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
 
 
+        internal QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
 
-        internal QuestionnaireDocument QuestionnaireDocument
-        {
-            get { return this.innerDocument; }
-        }
-
-        public Guid? ResponsibleId
-        {
-            get { return this.responsibleId; }
-        }
+        public Guid? ResponsibleId => this.responsibleId;
 
         private Dictionary<Guid, IComposite> EntityCache
         {
@@ -113,7 +107,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private Dictionary<string, HashSet<Guid>> CacheOfSubstitutionReferencedQuestions
         {
-            get {
+            get
+            {
                 return this.cacheOfSubstitutionReferencedQuestions ??
                        (this.cacheOfSubstitutionReferencedQuestions = this.GetAllSubstitutionReferences());
             }
@@ -131,12 +126,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         public PlainQuestionnaire(QuestionnaireDocument document, long version)
-            : this(document, () => version, null)
-        { }
+            : this(document, () => version, null) {}
 
         public PlainQuestionnaire(QuestionnaireDocument document, long version, Guid? responsibleId)
-            : this(document, () => version, responsibleId)
-        { }
+            : this(document, () => version, responsibleId) {}
 
         public PlainQuestionnaire(QuestionnaireDocument document, Func<long> getVersion,
             Dictionary<Guid, IGroup> groupCache, Dictionary<Guid, IQuestion> questionCache, Guid? responsibleId)
@@ -146,37 +139,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             this.questionCache = questionCache;
         }
 
-        public long Version { get { return this.getVersion(); } }
+        public long Version => this.getVersion();
+
+        public string Title => this.innerDocument.Title;
 
         public void InitializeQuestionnaireDocument()
         {
             InitializeQuestionnaireDocument(this.innerDocument);
         }
 
-        public IQuestion GetQuestionByStataCaption(string stataCaption)
-        {
-            return GetQuestionByStataCaption(this.QuestionCache, stataCaption);
-        }
+        public IQuestion GetQuestionByStataCaption(string stataCaption) => GetQuestionByStataCaption(this.QuestionCache, stataCaption);
 
-        public bool HasQuestion(Guid questionId)
-        {
-            return this.GetQuestion(questionId) != null;
-        }
+        public bool HasQuestion(Guid questionId) => this.GetQuestion(questionId) != null;
 
-        public bool HasGroup(Guid groupId)
-        {
-            return this.GetGroup(groupId) != null;
-        }
+        public bool HasGroup(Guid groupId) => this.GetGroup(groupId) != null;
 
-        public QuestionType GetQuestionType(Guid questionId)
-        {
-            return this.GetQuestionOrThrow(questionId).QuestionType;
-        }
+        public QuestionType GetQuestionType(Guid questionId) => this.GetQuestionOrThrow(questionId).QuestionType;
 
-        public QuestionScope GetQuestionScope(Guid questionId)
-        {
-            return this.GetQuestionOrThrow(questionId).QuestionScope;
-        }
+        public QuestionScope GetQuestionScope(Guid questionId) => this.GetQuestionOrThrow(questionId).QuestionScope;
 
         public AnswerType GetAnswerType(Guid questionId)
         {
@@ -220,33 +200,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     return AnswerType.FileName;
             }
 
-            throw new ArgumentException(string.Format("Question of unknown type was found. Question id: {0}", questionId));
+            throw new ArgumentException($"Question of unknown type was found. Question id: {questionId}");
         }
 
-        public bool IsQuestionLinked(Guid questionId)
-        {
-            return this.GetQuestionOrThrow(questionId).LinkedToQuestionId.HasValue;
-        }
+        public bool IsQuestionLinked(Guid questionId) => this.GetQuestionOrThrow(questionId).LinkedToQuestionId.HasValue;
 
-        public string GetQuestionTitle(Guid questionId)
-        {
-            return this.GetQuestionOrThrow(questionId).QuestionText;
-        }
+        public string GetQuestionTitle(Guid questionId) => this.GetQuestionOrThrow(questionId).QuestionText;
 
-        public string GetQuestionVariableName(Guid questionId)
-        {
-            return this.GetQuestionOrThrow(questionId).StataExportCaption;
-        }
+        public string GetQuestionVariableName(Guid questionId) => this.GetQuestionOrThrow(questionId).StataExportCaption;
 
-        public string GetGroupTitle(Guid groupId)
-        {
-            return this.GetGroupOrThrow(groupId).Title;
-        }
+        public string GetGroupTitle(Guid groupId) => this.GetGroupOrThrow(groupId).Title;
 
-        public Guid? GetCascadingQuestionParentId(Guid questionId)
-        {
-            return this.GetQuestionOrThrow(questionId).CascadeFromQuestionId;
-        }
+        public string GetStaticText(Guid staticTextId) => this.GetStaticTextOrThrow(staticTextId).Text;
+
+        public Guid? GetCascadingQuestionParentId(Guid questionId) => this.GetQuestionOrThrow(questionId).CascadeFromQuestionId;
 
         public IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId)
         {
@@ -256,9 +223,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
 
             if (questionTypeDoesNotSupportAnswerOptions)
-                throw new QuestionnaireException(string.Format(
-                    "Cannot return answer options for question with id '{0}' because it's type {1} does not support answer options.",
-                    questionId, question.QuestionType));
+                throw new QuestionnaireException(
+                    $"Cannot return answer options for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
 
             return question.Answers.Select(answer => ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToList();
         }
@@ -271,9 +237,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
 
             if (questionTypeDoesNotSupportAnswerOptions)
-                throw new QuestionnaireException(string.Format(
-                    "Cannot return answer option title for question with id '{0}' because it's type {1} does not support answer options.",
-                    questionId, question.QuestionType));
+                throw new QuestionnaireException(
+                    $"Cannot return answer option title for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
 
             return question
                 .Answers
@@ -289,9 +254,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
 
             if (questionTypeDoesNotSupportAnswerOptions)
-                throw new QuestionnaireException(string.Format(
-                    "Cannot return answer option title for question with id '{0}' because it's type {1} does not support answer options.",
-                    questionId, question.QuestionType));
+                throw new QuestionnaireException(
+                    $"Cannot return answer option title for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
 
             var stringParentAnswer = question
                 .Answers
@@ -301,9 +265,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             decimal parsedValue;
 
             if (!decimal.TryParse(stringParentAnswer, NumberStyles.Number, CultureInfo.InvariantCulture, out parsedValue))
-                throw new QuestionnaireException(string.Format(
-                    "Cannot parse parent answer option value '{0}' as decimal. Question id: '{1}'.",
-                    stringParentAnswer, questionId));
+                throw new QuestionnaireException(
+                    $"Cannot parse parent answer option value '{stringParentAnswer}' as decimal. Question id: '{questionId}'.");
 
             return parsedValue;
         }
@@ -314,17 +277,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             bool questionTypeDoesNotSupportMaxSelectedAnswerOptions = question.QuestionType != QuestionType.MultyOption;
 
             if (questionTypeDoesNotSupportMaxSelectedAnswerOptions || !(question is IMultyOptionsQuestion))
-                throw new QuestionnaireException(string.Format(
-                    "Cannot return maximum for selected answers for question with id '{0}' because it's type {1} does not support that parameter.",
-                    questionId, question.QuestionType));
+                throw new QuestionnaireException(
+                    $"Cannot return maximum for selected answers for question with id '{questionId}' because it's type {question.QuestionType} does not support that parameter.");
 
             return ((IMultyOptionsQuestion)question).MaxAllowedAnswers;
         }
 
-        public int GetMaxRosterRowCount()
-        {
-            return Constants.MaxRosterRowCount;
-        }
+        public int GetMaxRosterRowCount() => Constants.MaxRosterRowCount;
 
         public bool IsCustomValidationDefined(Guid questionId)
         {
@@ -333,10 +292,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return IsExpressionDefined(validationExpression);
         }
 
-        public bool IsQuestion(Guid entityId)
-        {
-            return this.GetQuestion(entityId) != null;
-        }
+        public bool IsQuestion(Guid entityId) => this.HasQuestion(entityId);
 
         public bool IsInterviewierQuestion(Guid questionId)
         {
@@ -345,22 +301,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return question != null && question.QuestionScope == QuestionScope.Interviewer && !question.Featured;
         }
 
-        public string GetCustomValidationExpression(Guid questionId)
-        {
-            IQuestion question = this.GetQuestionOrThrow(questionId);
+        public string GetCustomValidationExpression(Guid questionId) => this.GetQuestionOrThrow(questionId).ValidationExpression;
 
-            return question.ValidationExpression;
-        }
+        public ReadOnlyCollection<Guid> GetPrefilledQuestions()
+            => this
+                .QuestionnaireDocument
+                .Find<IQuestion>(question => question.Featured)
+                .Select(question => question.PublicKey)
+                .ToReadOnlyCollection();
 
-        public IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId)
-        {
-            return this.GetAllParentGroupsForQuestionStartingFromBottom(questionId);
-        }
+        public IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId) => this.GetAllParentGroupsForQuestionStartingFromBottom(questionId);
 
-        public IEnumerable<Guid> GetAllParentGroupsForEntity(Guid entityId)
-        {
-            return this.GetAllParentGroupsForEntityStartingFromBottom(entityId);
-        }
+        public ReadOnlyCollection<Guid> GetParentsStartingFromTop(Guid entityId)
+            => this.cacheOfParentsStartingFromTop.GetOrUpdate(entityId, ()
+                => this
+                    .GetAllParentGroupsForEntityStartingFromBottom(entityId)
+                    .Reverse()
+                    .ToReadOnlyCollection());
 
         public Guid? GetParentGroup(Guid groupOrQuestionId)
         {
@@ -407,11 +364,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IQuestion question = this.GetQuestionOrThrow(questionId);
             this.ThrowIfQuestionDoesNotSupportRoster(question.PublicKey);
 
-            var listQuestion = question as ITextListQuestion;
-            if (listQuestion != null)
-                return listQuestion.MaxAnswerCount;
-
-            return null;
+            return (question as ITextListQuestion)?.MaxAnswerCount;
         }
 
         public IEnumerable<Guid> GetRostersFromTopToSpecifiedQuestion(Guid questionId)
@@ -453,12 +406,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     .Select(x => x.PublicKey)
                     .ToList();
             }
+
             return this
                 .GetAllGroups()
-                .Where(
-                    x =>
-                        x.IsRoster && x.RosterSizeSource == RosterSizeSourceType.FixedTitles &&
-                            this.GetRosterLevelForGroup(x.PublicKey) == 1)
+                .Where(x
+                    => x.IsRoster
+                    && x.RosterSizeSource == RosterSizeSourceType.FixedTitles
+                    && this.GetRosterLevelForGroup(x.PublicKey) == 1)
                 .Select(x => x.PublicKey)
                 .ToList();
         }
@@ -484,7 +438,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             this.ThrowIfEntityDoesNotExist(entityId);
 
-            return this.GetRosterLevelForEntity(entityId, this.GetAllParentGroupsForEntity, this.IsRosterGroup);
+            return this.GetRosterLevelForEntity(entityId, this.GetAllParentGroupsForEntityStartingFromBottom, this.IsRosterGroup);
         }
 
         public int GetRosterLevelForGroup(Guid groupId)
@@ -507,12 +461,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         public IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId)
-        {
-            if (!this.cacheOfUnderlyingQuestions.ContainsKey(groupId))
-                this.cacheOfUnderlyingQuestions[groupId] = this.GetAllUnderlyingQuestionsImpl(groupId);
-
-            return this.cacheOfUnderlyingQuestions[groupId];
-        }
+            => this.cacheOfUnderlyingQuestions.GetOrUpdate(groupId, this.GetAllUnderlyingQuestionsImpl);
 
         public ReadOnlyCollection<Guid> GetAllUnderlyingInterviewerQuestions(Guid groupId)
         {
@@ -544,30 +493,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             if (!this.cacheOfChildEntities.ContainsKey(groupId))
             {
-                this.cacheOfChildEntities[groupId] = new ReadOnlyCollection<Guid>(
+                this.cacheOfChildEntities[groupId] =
                     this.GetGroupOrThrow(groupId)
                         .Children
                         .Select(entity => entity.PublicKey)
-                        .ToList());
+                        .ToReadOnlyCollection();
             }
 
             return this.cacheOfChildEntities[groupId];
         }
 
         public ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId)
-        {
-            if (!this.cacheOfChildInterviewerQuestions.ContainsKey(groupId))
-            {
-                this.cacheOfChildInterviewerQuestions[groupId] =
-                    this.GetGroupOrThrow(groupId)
-                        .Children.OfType<IQuestion>()
-                        .Where(question => !question.Featured && question.QuestionScope == QuestionScope.Interviewer)
-                        .Select(question => question.PublicKey)
-                        .ToReadOnlyCollection();
-            }
-
-            return this.cacheOfChildInterviewerQuestions[groupId];
-        }
+            => this.cacheOfChildInterviewerQuestions.GetOrUpdate(groupId, ()
+                => this
+                    .GetGroupOrThrow(groupId)
+                    .Children.OfType<IQuestion>()
+                    .Where(question => !question.Featured && question.QuestionScope == QuestionScope.Interviewer)
+                    .Select(question => question.PublicKey)
+                    .ToReadOnlyCollection());
 
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
         {
@@ -649,10 +592,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return group.FixedRosterTitles;
         }
 
-        public bool DoesQuestionSpecifyRosterTitle(Guid questionId)
-        {
-            return this.GetRostersAffectedByRosterTitleQuestion(questionId).Any();
-        }
+        public bool DoesQuestionSpecifyRosterTitle(Guid questionId) => this.GetRostersAffectedByRosterTitleQuestion(questionId).Any();
 
         public IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestion(Guid questionId)
         {
@@ -822,10 +762,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
-        public IEnumerable<Guid> GetAllSections()
-        {
-            return SectionCache;
-        }
+        public IEnumerable<Guid> GetAllSections() => this.SectionCache;
 
         private IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestionImpl(Guid questionId)
         {
@@ -848,34 +785,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         private IEnumerable<Guid> GetAllUnderlyingQuestionsImpl(Guid groupId)
-        {
-            return this
+            => this
                 .GetGroupOrThrow(groupId)
                 .Find<IQuestion>(_ => true)
                 .Select(question => question.PublicKey)
                 .ToList();
-        }
 
         private IEnumerable<Guid> GetAllUnderlyingGroupsAndRostersImpl(Guid groupId)
-        {
-            return this
+            => this
                 .GetGroupOrThrow(groupId)
                 .Children
                 .Where(child => child is Group).Cast<Group>()
                 .Select(group => group.PublicKey)
                 .ToList();
-        }
 
         private IEnumerable<Guid> GetAllUnderlyingGroupsImpl(Guid groupId)
-        {
-            return this
+            => this
                 .GetGroupOrThrow(groupId)
                 .Children
                 .Where(child => child is Group).Cast<Group>()
                 .Where(group => !group.IsRoster)
                 .Select(group => group.PublicKey)
                 .ToList();
-        }
 
         private IEnumerable<Guid> GetAllUnderlyingRostersImpl(Guid groupId)
         {
@@ -888,15 +819,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .ToList();
         }
 
-        private IEnumerable<IGroup> GetAllGroups()
-        {
-            return this.GroupCache.Values;
-        }
+        private IEnumerable<IGroup> GetAllGroups() => this.GroupCache.Values;
 
-        private IEnumerable<IQuestion> GetAllQuestions()
-        {
-            return this.QuestionCache.Values;
-        }
+        private IEnumerable<IQuestion> GetAllQuestions() => this.QuestionCache.Values;
 
         private int GetRosterLevelForQuestion(Guid questionId, Func<Guid, IEnumerable<Guid>> getAllParentGroupsForQuestion,
             Func<Guid, bool> isRosterGroup)
@@ -935,15 +860,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private IEnumerable<IGroup> GetSpecifiedGroupAndAllItsParentGroupsStartingFromBottom(IGroup group, QuestionnaireDocument document)
         {
-            var parentGroups = new List<IGroup>();
-
             while (group != document)
             {
-                parentGroups.Add(group);
+                yield return group;
                 group = (IGroup)group.GetParent();
             }
-
-            return parentGroups;
         }
 
         private static decimal ParseAnswerOptionValueOrThrow(string value, Guid questionId)
@@ -970,10 +891,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return parsedValue;
         }
 
-        private static bool IsExpressionDefined(string expression)
-        {
-            return !string.IsNullOrWhiteSpace(expression);
-        }
+        private static bool IsExpressionDefined(string expression) => !string.IsNullOrWhiteSpace(expression);
 
         private bool DoesQuestionSupportRoster(Guid questionId)
         {
@@ -989,10 +907,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 || question.QuestionType == QuestionType.TextList;
         }
 
-        private static bool IsRosterGroup(IGroup group)
-        {
-            return group.IsRoster;
-        }
+        private static bool IsRosterGroup(IGroup group) => @group.IsRoster;
 
         private Guid GetRosterSource(Guid rosterId)
         {
@@ -1004,12 +919,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private void ThrowIfQuestionDoesNotSupportRoster(Guid questionId)
         {
             if (!this.DoesQuestionSupportRoster(questionId))
-                throw new QuestionnaireException(string.Format("Question with id '{0}' is not a roster size question.", questionId));
-        }
-
-        private void ThrowIfGroupDoesNotExist(Guid groupId, string customExceptionMessage = null)
-        {
-            this.GetGroupOrThrow(groupId, customExceptionMessage);
+                throw new QuestionnaireException($"Question with id '{questionId}' is not a roster size question.");
         }
 
         private IComposite GetGroupOrQuestionOrThrow(Guid groupOrQuestionId)
@@ -1017,7 +927,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             var groupOrQuestion = (IComposite)this.GetGroup(groupOrQuestionId) ?? this.GetQuestion(groupOrQuestionId);
 
             if (groupOrQuestion == null)
-                throw new QuestionnaireException(string.Format("Group or question with id '{0}' is not found.", groupOrQuestionId));
+                throw new QuestionnaireException($"Group or question with id '{groupOrQuestionId}' is not found.");
 
             return groupOrQuestion;
         }
@@ -1029,40 +939,34 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (group == null && groupId == innerDocument.PublicKey) group = this.innerDocument;
 
             if (group == null)
-                throw new QuestionnaireException(customExceptionMessage ?? string.Format("Group with id '{0}' is not found.", groupId));
+                throw new QuestionnaireException(customExceptionMessage ?? $"Group with id '{groupId}' is not found.");
 
             return group;
         }
 
-        private IGroup GetGroup(Guid groupId)
+        private IGroup GetGroup(Guid groupId) => GetGroup(this.GroupCache, groupId.FormatGuid());
+
+        private IStaticText GetStaticTextOrThrow(Guid staticTextId)
         {
-            return GetGroup(this.GroupCache, groupId.FormatGuid());
+            IStaticText staticText = this.GetStaticTextImpl(staticTextId);
+
+            if (staticText == null)
+                throw new QuestionnaireException($"Static text with id '{staticTextId.FormatGuid()}' is not found.");
+
+            return staticText;
         }
 
-        private void ThrowIfQuestionDoesNotExist(Guid questionId)
-        {
-            this.GetQuestionOrThrow(questionId);
-        }
+        private void ThrowIfQuestionDoesNotExist(Guid questionId) => this.GetQuestionOrThrow(questionId);
 
-        private void ThrowIfEntityDoesNotExist(Guid entityId)
-        {
-            this.GetEntityOrThrow(entityId);
-        }
+        private void ThrowIfEntityDoesNotExist(Guid entityId) => this.GetEntityOrThrow(entityId);
 
-        private IQuestion GetQuestionOrThrow(Guid questionId)
-        {
-            return GetQuestionOrThrow(this.QuestionCache, questionId);
-        }
+        private IQuestion GetQuestionOrThrow(Guid questionId) => GetQuestionOrThrow(this.QuestionCache, questionId);
 
-        private IComposite GetEntityOrThrow(Guid entityId)
-        {
-            return GetEntityOrThrow(this.EntityCache, entityId);
-        }
+        private IComposite GetEntityOrThrow(Guid entityId) => GetEntityOrThrow(this.EntityCache, entityId);
 
-        private IQuestion GetQuestion(Guid questionId)
-        {
-            return GetQuestion(this.QuestionCache, questionId);
-        }
+        private IQuestion GetQuestion(Guid questionId) => GetQuestion(this.QuestionCache, questionId);
+
+        private IStaticText GetStaticTextImpl(Guid staticTextId) => GetEntity(this.EntityCache, staticTextId) as IStaticText;
 
         private static string FormatQuestionForException(IQuestion question)
         {
@@ -1082,7 +986,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IQuestion question = GetQuestion(questions, questionId);
 
             if (question == null)
-                throw new QuestionnaireException(string.Format("Question with id '{0}' is not found.", questionId));
+                throw new QuestionnaireException($"Question with id '{questionId}' is not found.");
 
             return question;
         }
@@ -1092,31 +996,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IComposite entity = GetEntity(entities, entityId);
 
             if (entity == null)
-                throw new QuestionnaireException(string.Format("Entity with id '{0}' is not found.", entityId));
+                throw new QuestionnaireException($"Entity with id '{entityId}' is not found.");
 
             return entity;
         }
 
-        private static IQuestion GetQuestion(Dictionary<Guid, IQuestion> questions, Guid questionId)
-        {
-            return questions.ContainsKey(questionId)
-                ? questions[questionId]
-                : null;
-        }
+        private static IQuestion GetQuestion(Dictionary<Guid, IQuestion> questions, Guid questionId) => questions.GetOrNull(questionId);
 
-        private static IComposite GetEntity(Dictionary<Guid, IComposite> entities, Guid entityId)
-        {
-            return entities.ContainsKey(entityId)
-                ? entities[entityId]
-                : null;
-        }
+        private static IComposite GetEntity(Dictionary<Guid, IComposite> entities, Guid entityId) => entities.GetOrNull(entityId);
 
-        private static IGroup GetGroup(Dictionary<string, IGroup> groups, string groupId)
-        {
-            return groups.ContainsKey(groupId)
-                ? groups[groupId]
-                : null;
-        }
+        private static IGroup GetGroup(Dictionary<string, IGroup> groups, string groupId) => groups.GetOrNull(groupId);
 
         private static IQuestion GetQuestionByStataCaption(Dictionary<Guid, IQuestion> questions, string identifier)
         {
