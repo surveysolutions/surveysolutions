@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Templates;
@@ -13,80 +12,63 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     internal class CodeGenerator : ICodeGenerator
     {
-        private readonly QuestionnaireExecutorTemplateModelFactory executorTemplateModelFactory;
+        public const string InterviewExpressionStatePrefix = "InterviewExpressionState";
+        public const string PrivateFieldsPrefix = "@__";
+        public const string QuestionnaireTypeName = "QuestionnaireTopLevel";
+        public const string QuestionnaireScope = "@__questionnaire_scope";
+        public const string EnablementPrefix = "IsEnabled_";
+        public const string ValidationPrefix = "IsValid_";
+        public const string IdSuffix = "_id";
+        public const string StateSuffix = "_state";
+
+        private readonly QuestionnaireExpressionStateModelFactory expressionStateModelFactory;
 
         public CodeGenerator(
             IMacrosSubstitutionService macrosSubstitutionService, 
             IExpressionProcessor expressionProcessor,
             ILookupTableService lookupTableService)
         {
-            executorTemplateModelFactory = new QuestionnaireExecutorTemplateModelFactory(
+            this.expressionStateModelFactory = new QuestionnaireExpressionStateModelFactory(
                 macrosSubstitutionService, 
                 expressionProcessor, 
                 lookupTableService);
         }
-
-        private static string GenerateExpressionStateBody(QuestionnaireExecutorTemplateModel questionnaireTemplateStructure, Version targetVersion)
-        {
-            if (targetVersion.Major < 10)
-            {
-                return new InterviewExpressionStateTemplate(questionnaireTemplateStructure).TransformText();
-            }
-            else if (targetVersion.Major < 11)
-            {
-                return new InterviewExpressionStateTemplateV2(questionnaireTemplateStructure).TransformText();
-            }
-            else
-            {
-                return new InterviewExpressionStateTemplateV5(questionnaireTemplateStructure).TransformText();
-            }
-        }
-
+        
         public Dictionary<string, string> Generate(QuestionnaireDocument questionnaire, Version targetVersion)
         {
-            CodeGenerationSettings codeGenerationSettings = CreateCodeGenerationSettingsBasedOnEngineVersion(targetVersion);
+            CodeGenerationSettings codeGenerationSettings = this.CreateCodeGenerationSettingsBasedOnEngineVersion(targetVersion);
 
-            QuestionnaireExecutorTemplateModel questionnaireTemplateStructure = this.executorTemplateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, codeGenerationSettings, false);
+            QuestionnaireExpressionStateModel expressionStateModel = this.expressionStateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, codeGenerationSettings);
 
-            var transformText = GenerateExpressionStateBody(questionnaireTemplateStructure, targetVersion);
+            var transformText = codeGenerationSettings.ExpressionStateBodyGenerator(expressionStateModel);
 
-            var generatedClasses = new Dictionary<string, string>();
-            generatedClasses.Add(new ExpressionLocation
+            var generatedClasses = new Dictionary<string, string>
             {
-                ItemType = ExpressionLocationItemType.Questionnaire,
-                ExpressionType = ExpressionLocationType.General,
-                Id = questionnaire.PublicKey
-            }.ToString(), transformText);
+                { ExpressionLocation.Questionnaire(questionnaire.PublicKey).Key, transformText }
+            };
 
             if (codeGenerationSettings.IsLookupTablesFeatureSupported)
             {
-                GenerateLookupTableClasses(questionnaireTemplateStructure.LookupTables, generatedClasses);
+                var lookupTablesTemplate = new LookupTablesTemplateV5(expressionStateModel.LookupTables);
+                generatedClasses.Add(ExpressionLocation.LookupTables().Key, lookupTablesTemplate.TransformText());
             }
 
-            //generating partial classes
-            GenerateQuestionnaireLevelExpressionClasses(questionnaireTemplateStructure, generatedClasses);
-            GenerateRostersPartialClasses(questionnaireTemplateStructure, generatedClasses);
-
+            foreach (var expressionMethodModel in expressionStateModel.MethodModels)
+            {
+                var methodTemplate = new ExpressionMethodTemplate(expressionMethodModel.Value);
+                generatedClasses.Add(expressionMethodModel.Key, methodTemplate.TransformText());
+            }
+            
             return generatedClasses;
-        }
-
-        private void GenerateLookupTableClasses(
-            List<LookupTableTemplateModel> lookupTables, 
-            Dictionary<string, string> generatedClasses)
-        {
-            var lookupTablesTemplate = new LookupTablesTemplateV5(lookupTables);
-            var fileName = new ExpressionLocation(ExpressionLocationItemType.LookupTable).ToString();
-            generatedClasses.Add(fileName, lookupTablesTemplate.TransformText());
         }
 
         private CodeGenerationSettings CreateCodeGenerationSettingsBasedOnEngineVersion(Version version)
         {
             if (version.Major <= 8)
-                throw new VersionNotFoundException(string.Format("version '{0}' is not found", version));
+                throw new VersionNotFoundException($"version '{version}' is not found");
             
             if (version.Major == 9)
                 return new CodeGenerationSettings(
-                    abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV3",
                     additionInterfaces: new[] { "IInterviewExpressionStateV2" },
                     namespaces: new[]
                     {
@@ -94,13 +76,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
                         "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions"
                     },
-                    areRosterServiceVariablesPresent: true,
-                    rosterType: "RosterRowList",
-                    isLookupTablesFeatureSupported: false);
+                    isLookupTablesFeatureSupported: false)
+                {
+                    ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplate(expressionStateModel).TransformText()
+                };
 
             if (version.Major == 10)
                 return new CodeGenerationSettings(
-                    abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV4",
                     additionInterfaces: new[] { "IInterviewExpressionStateV2", "IInterviewExpressionStateV4" },
                     namespaces: new[]
                     {
@@ -110,11 +92,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         "WB.Core.SharedKernels.DataCollection.V4",
                         "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions"
                     },
-                    areRosterServiceVariablesPresent: true,
-                    rosterType: "RosterRowList",
-                    isLookupTablesFeatureSupported: false);
+                    isLookupTablesFeatureSupported: false)
+                {
+                    ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV2(expressionStateModel).TransformText()
+                };
             return new CodeGenerationSettings(
-                   abstractConditionalLevelClassName: "AbstractConditionalLevelInstanceV5",
                    additionInterfaces: new[] { "IInterviewExpressionStateV5" },
                    namespaces: new[]
                    {
@@ -126,185 +108,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         "WB.Core.SharedKernels.DataCollection.V5",
                         "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
                    },
-                   areRosterServiceVariablesPresent: true,
-                   rosterType: "RosterRowList",
-                   isLookupTablesFeatureSupported: true);
-        }
-
-        private static void GenerateRostersPartialClasses(
-            QuestionnaireExecutorTemplateModel questionnaireTemplateStructure,
-            Dictionary<string, string> generatedClasses)
-        {
-            foreach (var groupedRosters in questionnaireTemplateStructure.RostersGroupedByScope)
+                   isLookupTablesFeatureSupported: true)
             {
-                foreach (QuestionTemplateModel questionTemplateModel in groupedRosters.Value.RostersInScope.SelectMany(roster => roster.Questions))
-                {
-                    if (!string.IsNullOrWhiteSpace(questionTemplateModel.Conditions))
-                    {
-                        var expressionMethodModel = new ExpressionMethodModel(
-                            groupedRosters.Key,
-                            questionTemplateModel.GeneratedConditionsMethodName,
-                            questionnaireTemplateStructure.Namespaces, 
-                            questionTemplateModel.Conditions,
-                            false,
-                            questionTemplateModel.VariableName);
-
-                        var methodTemplate =
-                            new ExpressionMethodTemplate(expressionMethodModel);
-
-                        generatedClasses.Add(new ExpressionLocation
-                            {
-                                ItemType = ExpressionLocationItemType.Question,
-                                ExpressionType = ExpressionLocationType.Condition,
-                                Id = questionTemplateModel.Id
-                            }.ToString(), methodTemplate.TransformText());
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(questionTemplateModel.Validations))
-                    {
-                        var expressionMethodModel = new ExpressionMethodModel(
-                          groupedRosters.Key,
-                          questionTemplateModel.GeneratedValidationsMethodName,
-                          questionnaireTemplateStructure.Namespaces, 
-                          questionTemplateModel.Validations,
-                          true,
-                          questionTemplateModel.VariableName);
-
-                        var methodTemplate =
-                            new ExpressionMethodTemplate(expressionMethodModel);
-
-                        generatedClasses.Add(new ExpressionLocation
-                        {
-                            ItemType = ExpressionLocationItemType.Question,
-                            ExpressionType = ExpressionLocationType.Validation,
-                            Id = questionTemplateModel.Id
-                        }.ToString(), methodTemplate.TransformText());
-                    }
-                }
-
-                foreach (GroupTemplateModel groupTemplateModel in groupedRosters.Value.RostersInScope.SelectMany(roster => roster.Groups))
-                {
-                    if (!string.IsNullOrWhiteSpace(groupTemplateModel.Conditions))
-                    {
-                        var expressionMethodModel = new ExpressionMethodModel(
-                            groupedRosters.Key,
-                            groupTemplateModel.GeneratedConditionsMethodName,
-                            questionnaireTemplateStructure.Namespaces, 
-                            groupTemplateModel.Conditions,
-                            false,
-                            groupTemplateModel.VariableName);
-
-                        var methodTemplate =
-                            new ExpressionMethodTemplate(expressionMethodModel);
-
-                        generatedClasses.Add(new ExpressionLocation
-                            {
-                                ItemType = ExpressionLocationItemType.Group,
-                                ExpressionType = ExpressionLocationType.Condition,
-                                Id = groupTemplateModel.Id
-                            }.ToString(), methodTemplate.TransformText());
-                    }
-                }
-
-                foreach (RosterTemplateModel rosterTemplateModel in groupedRosters.Value.RostersInScope)
-                {
-                    if (!string.IsNullOrWhiteSpace(rosterTemplateModel.Conditions))
-                    {
-                        var expressionMethodModel = new ExpressionMethodModel(
-                          groupedRosters.Key,
-                          rosterTemplateModel.GeneratedConditionsMethodName,
-                          questionnaireTemplateStructure.Namespaces, 
-                          rosterTemplateModel.Conditions,
-                          false,
-                          rosterTemplateModel.VariableName);
-
-                        var methodTemplate = new ExpressionMethodTemplate(expressionMethodModel);
-
-                        generatedClasses.Add(
-                            new ExpressionLocation
-                            {
-                                ItemType = ExpressionLocationItemType.Roster,
-                                ExpressionType = ExpressionLocationType.Condition,
-                                Id = rosterTemplateModel.Id
-                            }.ToString(), methodTemplate.TransformText());
-                    }
-                }
-            }
-        }
-
-        private static void GenerateQuestionnaireLevelExpressionClasses(
-            QuestionnaireExecutorTemplateModel questionnaireTemplateStructure, 
-            Dictionary<string, string> generatedClasses)
-        {
-            foreach (QuestionTemplateModel questionTemplateModel in questionnaireTemplateStructure.QuestionnaireLevelModel.Questions)
-            {
-                if (!string.IsNullOrWhiteSpace(questionTemplateModel.Conditions))
-                {
-                    var expressionMethodModel = new ExpressionMethodModel(
-                         questionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedTypeName,
-                         questionTemplateModel.GeneratedConditionsMethodName,
-                         questionnaireTemplateStructure.Namespaces, 
-                         questionTemplateModel.Conditions,
-                         false,
-                         questionTemplateModel.VariableName);
-
-                    var methodTemplate = new ExpressionMethodTemplate(expressionMethodModel);
-
-                    generatedClasses.Add(
-                        new ExpressionLocation
-                        {
-                            ItemType = ExpressionLocationItemType.Question,
-                            ExpressionType = ExpressionLocationType.Condition,
-                            Id = questionTemplateModel.Id
-                        }.ToString(), methodTemplate.TransformText());
-                }
-
-                if (!string.IsNullOrWhiteSpace(questionTemplateModel.Validations))
-                {
-                    var expressionMethodModel = new ExpressionMethodModel(
-                        questionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedTypeName,
-                        questionTemplateModel.GeneratedValidationsMethodName,
-                        questionnaireTemplateStructure.Namespaces, 
-                        questionTemplateModel.Validations,
-                        true,
-                        questionTemplateModel.VariableName);
-
-                    var methodTemplate =
-                        new ExpressionMethodTemplate(expressionMethodModel);
-
-                    generatedClasses.Add(
-                        new ExpressionLocation
-                        {
-                            ItemType = ExpressionLocationItemType.Question,
-                            ExpressionType = ExpressionLocationType.Validation,
-                            Id = questionTemplateModel.Id
-                        }.ToString(), methodTemplate.TransformText());
-                }
-            }
-
-            foreach (GroupTemplateModel groupTemplateModel in questionnaireTemplateStructure.QuestionnaireLevelModel.Groups)
-            {
-                if (!string.IsNullOrWhiteSpace(groupTemplateModel.Conditions))
-                {
-                    var expressionMethodModel = new ExpressionMethodModel(
-                        questionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedTypeName,
-                        groupTemplateModel.GeneratedConditionsMethodName,
-                        questionnaireTemplateStructure.Namespaces, 
-                        groupTemplateModel.Conditions,
-                        false,
-                        groupTemplateModel.VariableName);
-
-                    var methodTemplate = new ExpressionMethodTemplate(expressionMethodModel);
-
-                    generatedClasses.Add(
-                        new ExpressionLocation
-                        {
-                            ItemType = ExpressionLocationItemType.Group,
-                            ExpressionType = ExpressionLocationType.Condition,
-                            Id = groupTemplateModel.Id
-                        }.ToString(), methodTemplate.TransformText());
-                }
-            }
+                ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV5(expressionStateModel).TransformText()
+            };
         }
     }
 }

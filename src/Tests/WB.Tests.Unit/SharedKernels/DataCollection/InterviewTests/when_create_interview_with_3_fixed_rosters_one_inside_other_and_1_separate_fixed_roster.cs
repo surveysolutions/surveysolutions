@@ -88,6 +88,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         private static EventContext eventContext;
         private static Guid questionnaireId;
-        private static IQuestionnaireRepository questionnaireRepository;
+        private static IPlainQuestionnaireRepository questionnaireRepository;
     }
 }

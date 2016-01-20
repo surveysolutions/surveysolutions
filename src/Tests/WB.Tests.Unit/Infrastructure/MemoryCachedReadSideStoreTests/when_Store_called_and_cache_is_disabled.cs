@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Storage.Memory.Implementation;
+using WB.Infrastructure.Native.Storage.Memory.Implementation;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests

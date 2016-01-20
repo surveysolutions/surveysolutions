@@ -775,6 +775,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0:N0} meters.
+        /// </summary>
+        public static string Prefs_GpsDesiredAccuracySubTitle {
+            get {
+                return ResourceManager.GetString("Prefs_GpsDesiredAccuracySubTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Desired accuracy of GPS questions.
+        /// </summary>
+        public static string Prefs_GpsDesiredAccuracyTitle {
+            get {
+                return ResourceManager.GetString("Prefs_GpsDesiredAccuracyTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tap to enter decimal.
         /// </summary>
         public static string RealQuestion_Hint {

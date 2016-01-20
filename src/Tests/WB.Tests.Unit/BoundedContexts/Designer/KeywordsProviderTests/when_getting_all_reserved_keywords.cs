@@ -2,7 +2,7 @@
 using System.Linq;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.KeywordsProviderTests
 {

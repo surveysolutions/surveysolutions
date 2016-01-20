@@ -7,6 +7,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
@@ -38,27 +39,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             return exportProcess;
         }
 
-        public string AddAllDataExport(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat)
+        public string AddDataExport(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat, InterviewStatus? status)
         {
             var questionnaireBrowseItem = questionnaires.AsVersioned().Get(questionnaire.QuestionnaireId.FormatGuid(), questionnaire.Version);
             if (questionnaireBrowseItem == null)
                 throw new ArgumentException($"Questionnaire {questionnaire} wasn't found");
 
-            var process = new AllDataExportProcessDetails(exportFormat, questionnaire, questionnaireBrowseItem.Title);
-
-            this.EnqueueProcessIfNotYetInQueue(process);
-
-            return process.NaturalId;
-        }
-
-        public string AddApprovedDataExport(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat)
-        {
-            var questionnaireBrowseItem = questionnaires.AsVersioned().Get(questionnaire.QuestionnaireId.FormatGuid(), questionnaire.Version);
-            if (questionnaireBrowseItem == null)
-                throw new ArgumentException($"Questionnaire {questionnaire} wasn't found");
-
-            var process = new ApprovedDataExportProcessDetails(exportFormat, questionnaire, questionnaireBrowseItem.Title);
-
+            var process = new DataExportProcessDetails(exportFormat, questionnaire, questionnaireBrowseItem.Title)
+            {
+                InterviewStatus = status
+            };
             this.EnqueueProcessIfNotYetInQueue(process);
 
             return process.NaturalId;

@@ -31,8 +31,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         private static bool IsIdentifierToken(SyntaxNodeOrToken nodeOrToken)
         {
             return nodeOrToken.IsToken
-                && nodeOrToken.CSharpKind() == SyntaxKind.IdentifierToken
-                && nodeOrToken.Parent.CSharpKind() == SyntaxKind.IdentifierName;
+                && nodeOrToken.Kind() == SyntaxKind.IdentifierToken
+                && nodeOrToken.Parent.Kind() == SyntaxKind.IdentifierName;
         }
 
         private static bool IsFunction(SyntaxNodeOrToken identifierToken)
@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             IEnumerable<string> lambdaParameters = lambdaNode
                 .ChildNodesAndTokens()
-                .Where(nodeOrToken => nodeOrToken.IsNode && nodeOrToken.CSharpKind() == SyntaxKind.Parameter)
+                .Where(nodeOrToken => nodeOrToken.IsNode && nodeOrToken.Kind() == SyntaxKind.Parameter)
                 .Select(parameterNode => parameterNode.ToString());
 
             return lambdaParameters.Contains(identifierToken.ToString());
@@ -123,7 +123,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 .ChildNodesAndTokens()
                 .First()
                 .ChildNodesAndTokens()
-                .Where(nodeOrToken => nodeOrToken.IsNode && nodeOrToken.CSharpKind() == SyntaxKind.Parameter)
+                .Where(nodeOrToken => nodeOrToken.IsNode && nodeOrToken.Kind() == SyntaxKind.Parameter)
                 .Select(parameterNode => parameterNode.ToString());
 
             return lambdaParameters.Contains(identifierToken.ToString());

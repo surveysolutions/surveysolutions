@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview.Apply(Create.Event.TextQuestionAnswered(questionId, new[] { 2m }, "2"));
         }
 
-        protected static IQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire = null)
+        protected static IPlainQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire = null)
         {
             return Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
         }

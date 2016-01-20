@@ -45,10 +45,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
         Because of = () => view = chartStatisticsViewFactory.Load(input);
 
         It should_have_from_be_equal_to_formated_date_from_input = () => 
-            view.From.ShouldEqual(input.To.Value.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture));
+            view.From.ShouldEqual(input.To.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
 
         It should_have_to_be_equal_to_formated_date_to_input = () => 
-            view.To.ShouldEqual(input.From.Value.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture));
+            view.To.ShouldEqual(input.From.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
 
         It should_have_7_lines = () => 
             view.Lines.Length.ShouldEqual(0);
@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
             view.Lines.ShouldEachConformTo(line => line.Length == 1);
 
         It should_each_line_has_record_equal_to_from_date = () => 
-            view.Lines.ShouldEachConformTo(line => line[0][0].ToString() == baseDate.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture));
+            view.Lines.ShouldEachConformTo(line => line[0][0].ToString() == baseDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
 
         private static ChartStatisticsViewFactory chartStatisticsViewFactory;
         private static ChartStatisticsInputModel input;

@@ -1,0 +1,63 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Machine.Specifications;
+using Moq;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using It = Machine.Specifications.It;
+
+namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestionnaireAccessorTests
+{
+    internal class when_remove_questionnaire : InterviewerQuestionnaireAccessorTestsContext
+    {
+        Establish context = () =>
+        {
+            var interviewsAsyncPlainStorage =
+                Mock.Of<IAsyncPlainStorage<InterviewView>>(x =>
+                    x.Query(Moq.It.IsAny<Func<IQueryable<InterviewView>, List<Guid>>>()) ==
+                    new List<Guid>
+                    {
+                        Guid.Parse("22222222222222222222222222222222"),
+                        Guid.Parse("33333333333333333333333333333333"),
+                    });
+            interviewerQuestionnaireAccessor = CreateInterviewerQuestionnaireAccessor(
+                questionnaireModelViewRepository: mockOfQuestionnaireModelViewRepository.Object,
+                questionnaireViewRepository: mockOfQuestionnaireViewRepository.Object,
+                questionnaireDocumentRepository: mockOfQuestionnaireDocumentRepository.Object,
+                questionnaireAssemblyFileAccessor: mockOfQuestionnaireAssemblyFileAccessor.Object,
+                interviewViewRepository: interviewsAsyncPlainStorage,
+                interviewFactory: mockOfInterviewAccessor.Object);
+        };
+
+        Because of = async () =>
+            await interviewerQuestionnaireAccessor.RemoveQuestionnaireAsync(questionnaireIdentity);
+
+        It should_remove_questionnaire_document_view_from_plain_storage = () =>
+            mockOfQuestionnaireDocumentRepository.Verify(x => x.RemoveAsync(questionnaireIdentity.ToString()), Times.Once);
+
+        It should_remove_questionnaire_model_view_from_plain_storage = () =>
+            mockOfQuestionnaireModelViewRepository.Verify(x => x.RemoveAsync(questionnaireIdentity.ToString()), Times.Once);
+
+        It should_remove_questionnaire_view_from_plain_storage = () =>
+            mockOfQuestionnaireViewRepository.Verify(x => x.RemoveAsync(questionnaireIdentity.ToString()), Times.Once);
+
+        It should_remove_questionnaire_assembly_from_file_storage = () =>
+            mockOfQuestionnaireAssemblyFileAccessor.Verify(x => x.RemoveAssemblyAsync(questionnaireIdentity), Times.Once);
+
+        It should_remove_interviews_by_questionnaire_from_plain_storage = () =>
+            mockOfInterviewAccessor.Verify(x => x.RemoveInterviewAsync(Moq.It.IsAny<Guid>()), Times.Exactly(2));
+
+        private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1);
+        private static readonly Mock<IAsyncPlainStorage<QuestionnaireDocumentView>> mockOfQuestionnaireDocumentRepository = new Mock<IAsyncPlainStorage<QuestionnaireDocumentView>>();
+        private static readonly Mock<IAsyncPlainStorage<QuestionnaireModelView>> mockOfQuestionnaireModelViewRepository = new Mock<IAsyncPlainStorage<QuestionnaireModelView>>();
+        private static readonly Mock<IAsyncPlainStorage<QuestionnaireView>> mockOfQuestionnaireViewRepository = new Mock<IAsyncPlainStorage<QuestionnaireView>>();
+        private static readonly Mock<IQuestionnaireAssemblyFileAccessor> mockOfQuestionnaireAssemblyFileAccessor = new Mock<IQuestionnaireAssemblyFileAccessor>();
+        private static readonly Mock<IInterviewerInterviewAccessor> mockOfInterviewAccessor = new Mock<IInterviewerInterviewAccessor>();
+        private static InterviewerQuestionnaireAccessor interviewerQuestionnaireAccessor;
+    }
+}

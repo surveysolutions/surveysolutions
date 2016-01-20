@@ -1,20 +1,25 @@
-﻿using WB.Core.Infrastructure.PlainStorage;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     internal class RosterTitleSubstitutionService : IRosterTitleSubstitutionService
     {
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage;
+        private readonly IPlainQuestionnaireRepository questionnaireStorage;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ISubstitutionService substitutionService;
 
-        public RosterTitleSubstitutionService(IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage,
+        public RosterTitleSubstitutionService(
+            IPlainQuestionnaireRepository questionnaireStorage,
             IStatefulInterviewRepository interviewRepository,
             ISubstitutionService substitutionService)
         {
@@ -26,11 +31,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public string Substitute(string questionTitle, Identity questionIdentity, string interviewId)
         {
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireStorage.GetById(interview.QuestionnaireId);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity);
 
-            var nearestRosterId  = questionnaire.QuestionsNearestRosterIdMap[questionIdentity.Id];
+            Guid nearestRosterId = questionnaire.GetRostersFromTopToSpecifiedQuestion(questionIdentity.Id).Last();
 
-            InterviewRoster roster = interview.FindRosterByOrDeeperRosterLevel(nearestRosterId.Value, questionIdentity.RosterVector);
+            InterviewRoster roster = interview.FindRosterByOrDeeperRosterLevel(nearestRosterId, questionIdentity.RosterVector);
 
             var replaceTo = string.IsNullOrEmpty(roster.Title) ? this.substitutionService.DefaultSubstitutionText : roster.Title;
             var result = this.substitutionService.ReplaceSubstitutionVariable(questionTitle, this.substitutionService.RosterTitleSubstitutionReference, replaceTo);

@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 && _.GetFixedRosterGroups(null) == new Guid[] { fixedRosterGroup }
                 && _.GetFixedRosterTitles(fixedRosterGroup) == new FixedRosterTitle[0]);
 
-            var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
+            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
                 => repository.GetHistoricalQuestionnaire(questionnaireId,1) == questionaire);
 
             eventContext = new EventContext();

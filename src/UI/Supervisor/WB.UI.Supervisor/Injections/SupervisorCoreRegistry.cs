@@ -11,7 +11,6 @@ using Ninject.Extensions.Conventions;
 using Ninject.Extensions.Conventions.BindingGenerators;
 using Ninject.Modules;
 using Ninject.Syntax;
-using WB.Core.GenericSubdomains.Native;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
@@ -21,6 +20,9 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Shared.Web.Filters;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
+using WB.Infrastructure.Security;
+using WB.Infrastructure.Shared.Enumerator.Internals.Security;
 
 namespace WB.UI.Supervisor.Injections
 {
@@ -202,8 +204,12 @@ namespace WB.UI.Supervisor.Injections
             RegisterViewFactories();
 
             this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
-            this.Bind<ISerializer>().To<NewtonJsonSerializer>();
+
+            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(new JsonSerializerSettingsFactory()));
+
             this.Bind<IStringCompressor>().To<JsonCompressor>();
+
+            this.Bind<ICypherManager>().To<DefaultCypherManager>();
         }
     }
 }

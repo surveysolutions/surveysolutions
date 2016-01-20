@@ -6,6 +6,7 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
@@ -23,18 +24,19 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             responsibleSupervisorId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA00");
             questionnaireVersion = 18;
 
+            questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
+
             var questionaire = Mock.Of<IQuestionnaire>(_
                 => _.Version == questionnaireVersion);
 
-            var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
-                => repository.GetQuestionnaire(questionnaireId) == questionaire &&
-                repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion) == questionaire);
+            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
+                => repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion) == questionaire);
 
             interview = Create.Interview(questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>
-            interview.CreateInterviewOnClient(questionnaireId, questionnaireVersion, responsibleSupervisorId, DateTime.Now, userId);
+            interview.CreateInterviewOnClient(questionnaireIdentity, responsibleSupervisorId, DateTime.Now, userId);
 
         It should_raise_InterviewCreated_event = () =>
             eventContext.ShouldContainEvent<InterviewOnClientCreated>();
@@ -59,5 +61,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid userId;
         private static Guid responsibleSupervisorId;
         private static Interview interview;
+        private static QuestionnaireIdentity questionnaireIdentity;
     }
 }

@@ -19,12 +19,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExportStatusReaderTests
         {
             dataExportProcessesService.Setup(x => x.GetRunningExportProcesses())
                 .Returns(new IDataExportProcessDetails[]
-                {Create.ParaDataExportProcess(), Create.AllDataExportProcess(questionnaireIdentity: questionnaireIdentity), Create.ApprovedDataExportProcess()});
+                {Create.ParaDataExportProcess(), Create.AllDataExportProcess(questionnaireIdentity: questionnaireIdentity), Create.AllDataExportProcess()});
 
             var tabularDataExportFilePath = "tabularDataExportFilePath";
 
             filebasedExportedDataAccessor.Setup(
-                x => x.GetArchiveFilePathForExportedData(questionnaireIdentity, DataExportFormat.Tabular))
+                x => x.GetArchiveFilePathForExportedData(questionnaireIdentity, DataExportFormat.Tabular, null))
                 .Returns(tabularDataExportFilePath);
             fileSystemAccessorMock.Setup(x => x.IsFileExists(tabularDataExportFilePath)).Returns(true);
 
@@ -46,17 +46,15 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExportStatusReaderTests
 
         It should_second_running_process_QuestionnaireIdentity_be_equal_to_questionnaireIdentity = () => result.RunningDataExportProcesses[1].QuestionnaireIdentity.ShouldEqual(questionnaireIdentity);
 
-        It should_third_running_process_be_of_type_Data = () => result.RunningDataExportProcesses[2].Type.ShouldEqual(DataExportType.ApprovedData);
+        It should_third_running_process_be_of_type_Data = () => result.RunningDataExportProcesses[2].Type.ShouldEqual(DataExportType.Data);
 
         It should_third_running_process_QuestionnaireIdentity_be_not_equal_to_questionnaireIdentity = () => result.RunningDataExportProcesses[2].QuestionnaireIdentity.ShouldNotEqual(questionnaireIdentity);
 
         It should_export_para_data_in_tabular_format = () => ShouldExportDataTypeInFormat(DataExportType.ParaData, DataExportFormat.Tabular);
 
-        It should_return_8_data_exports =() => result.DataExports.Length.ShouldEqual(8);
+        It should_return_5_data_exports =() => result.DataExports.Length.ShouldEqual(5);
 
         It should_export_data_in_tabular_stata_spss_and_binary_formats = () => ShouldExportDataTypeInFormat(DataExportType.Data, DataExportFormat.Tabular, DataExportFormat.STATA, DataExportFormat.SPSS, DataExportFormat.Binary);
-
-        It should_export_approved_data_in_tabular_stata_and_spss_formats = () => ShouldExportDataTypeInFormat(DataExportType.ApprovedData, DataExportFormat.Tabular, DataExportFormat.STATA, DataExportFormat.SPSS);
 
         It should_CanRefreshBeRequested_be_false_for_data_tabular_export = () => DataExportView(DataExportType.Data, DataExportFormat.Tabular).CanRefreshBeRequested.ShouldBeFalse();
 
@@ -77,7 +75,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.DataExportStatusReaderTests
         private static Mock<IDataExportProcessesService> dataExportProcessesService =
             new Mock<IDataExportProcessesService>();
 
-        private static Mock<IFileSystemAccessor> fileSystemAccessorMock=new Mock<IFileSystemAccessor>();
+        private static Mock<IFileSystemAccessor> fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
 
         private static Mock<IFilebasedExportedDataAccessor> filebasedExportedDataAccessor = new Mock<IFilebasedExportedDataAccessor>();
 
