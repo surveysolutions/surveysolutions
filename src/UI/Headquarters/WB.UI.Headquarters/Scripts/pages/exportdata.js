@@ -28,6 +28,10 @@
         return self.selectedTemplate() && self.selectedTemplate().title;
     });
 
+    self.selectedStatus.subscribe(function() {
+        self.updateDataExportInfo(false);
+    });
+
     self.updateDataExportInfo = function (runRecursively) {
         if (self.selectedTemplate() == null) {
             _.delay(function () {
