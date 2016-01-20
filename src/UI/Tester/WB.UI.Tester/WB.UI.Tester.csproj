@@ -251,12 +251,12 @@
     <Reference Include="PCLStorage.Abstractions">
       <HintPath>..\..\..\..\packages\PCLStorage.1.0.2\lib\monoandroid\PCLStorage.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Siaqodb, Version=5.0.0.7, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Siaqodb.5.0.0.7\lib\MonoAndroid\Siaqodb.dll</HintPath>
+    <Reference Include="Siaqodb, Version=5.5.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Siaqodb.5.5.0.1\lib\MonoAndroid\Siaqodb.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SiaqodbPortable, Version=4.0.2.27, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Siaqodb.5.0.0.7\lib\MonoAndroid\SiaqodbPortable.dll</HintPath>
+    <Reference Include="SiaqodbPortable, Version=5.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Siaqodb.5.5.0.1\lib\MonoAndroid\SiaqodbPortable.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

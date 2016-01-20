@@ -89,9 +89,6 @@
     <Compile Include="Implementation\Services\IGpsLocationService.cs" />
     <Compile Include="Implementation\Services\InterviewViewModelFactory.cs" />
     <Compile Include="Implementation\Services\QuestionnaireModelBuilder.cs" />
-    <Compile Include="Implementation\Services\SiaqodbPlainStorageWithCache.cs" />
-    <Compile Include="Implementation\Services\SiaqodbPlainStorage.cs" />
-    <Compile Include="Implementation\Services\SiaqodbSerializer.cs" />
     <Compile Include="Models\Questionnaire\QuestionnaireModel.cs" />
     <Compile Include="Models\Questionnaire\Questions\YesNoQuestionModel.cs" />
     <Compile Include="Properties\UIResources.id-ID.Designer.cs">
@@ -261,10 +258,6 @@
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\..\..\..\..\packages\Portable.Ninject.3.3.1\lib\portable-net4+sl5+wp8+win8+wpa81+monotouch+monoandroid+Xamarin.iOS\Ninject.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="SiaqodbPortable, Version=4.0.2.27, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Siaqodb.5.0.0.7\lib\portable-net45+win+wpa81\SiaqodbPortable.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.Extensions">
