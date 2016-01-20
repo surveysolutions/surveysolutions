@@ -2,6 +2,7 @@ using System;
 
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Shared.Web.Configuration;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.Views
 {
@@ -22,7 +23,7 @@ namespace WB.UI.Headquarters.Views
 
         public TimeSpan Timeout
         {
-            get { return new TimeSpan(0, 0, 0, 30); }
+            get { return new TimeSpan(0, 0, 0, configurationManager.AppSettings["RestTimeout"].ToIntOrDefault(30)); }
             set { throw new NotImplementedException(); }
         }
 
