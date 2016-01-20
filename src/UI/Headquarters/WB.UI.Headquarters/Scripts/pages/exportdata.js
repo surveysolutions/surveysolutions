@@ -1,4 +1,4 @@
-﻿Supervisor.VM.ExportData = function (templates, $dataUrl, $historyUrl, $exportFromats, $deleteDataExportProcessUrl, $updateDataUrl, $updateApprovedDataUrl) {
+﻿Supervisor.VM.ExportData = function (templates, statuses, $dataUrl, $historyUrl, $exportFromats, $deleteDataExportProcessUrl, $updateDataUrl) {
     Supervisor.VM.ExportData.superclass.constructor.apply(this, arguments);
 
     var self = this;
@@ -6,14 +6,15 @@
     self.HistoryUrl = $historyUrl;
     self.DeleteDataExportProcessUrl = $deleteDataExportProcessUrl;
     self.UpdateDataUrl = $updateDataUrl;
-    self.UpdateApprovedDataUrl = $updateApprovedDataUrl;
     self.Templates = templates;
+    self.Statuses = statuses;
 
     self.DataExports = ko.observableArray([]);
     self.RunningDataExportProcesses = ko.observableArray([]);
     self.exportFromats = $exportFromats;
 
     self.selectedTemplate = ko.observable();
+    self.selectedStatus = ko.observable();
 
     self.selectedTemplateId = ko.computed(function () {
         return self.selectedTemplate() && self.selectedTemplate().id;
@@ -27,6 +28,10 @@
         return self.selectedTemplate() && self.selectedTemplate().title;
     });
 
+    self.selectedStatus.subscribe(function() {
+        self.updateDataExportInfo(false);
+    });
+
     self.updateDataExportInfo = function (runRecursively) {
         if (self.selectedTemplate() == null) {
             _.delay(function () {
@@ -36,7 +41,9 @@
         }
         var questionnaireId = self.selectedTemplateId();
         var questionnaireVersion = self.selectedTemplate().version;
-        self.sendWebRequest(self.Url + "?questionnaireId=" + questionnaireId + "&questionnaireVersion=" + questionnaireVersion, {}, function (data) {
+        var status = self.selectedStatus().status;
+
+        self.sendWebRequest(self.Url + "?questionnaireId=" + questionnaireId + "&questionnaireVersion=" + questionnaireVersion + "&status=" + status, {}, function (data) {
             ko.mapping.fromJS(data, self.mappingOptions, self);
             if (runRecursively===true) {
                 _.delay(function () {
@@ -79,22 +86,12 @@
     self.requestDataUpdate = function(format) {
         var questionnaireId = self.selectedTemplateId();
         var questionnaireVersion = self.selectedTemplate().version;
+        var status = self.selectedStatus().status;
+
         return function() {
-            self.sendWebRequest(self.UpdateDataUrl + "?questionnaireId=" + questionnaireId + "&questionnaireVersion=" + questionnaireVersion + "&format=" + format,
+            self.sendWebRequest(self.UpdateDataUrl + "?questionnaireId=" + questionnaireId + "&questionnaireVersion=" + questionnaireVersion + "&format=" + format + "&status=" + status,
                 [],
                 function (data) {
-                    self.updateDataExportInfo();
-                });
-        }
-    };
-
-    self.requestApprovedDataUpdate = function(format) {
-        var questionnaireId = self.selectedTemplateId();
-        var questionnaireVersion = self.selectedTemplate().version;
-        return function() {
-            self.sendWebRequest(self.UpdateApprovedDataUrl + "?questionnaireId=" + questionnaireId + "&questionnaireVersion=" + questionnaireVersion + "&format=" + format,
-                [],
-                function(data) {
                     self.updateDataExportInfo();
                 });
         }
@@ -170,7 +167,7 @@
         return self.exportFromats[runningExport.Format()];
     }
     self.formatDate=function(date) {
-        return moment(date).format("MM/DD/YYYY HH:mm:ss");
+        return moment(date).format("YYYY-MM-DD HH:mm:ss");
     }
 
     self.updateDataExportInfo(true);
