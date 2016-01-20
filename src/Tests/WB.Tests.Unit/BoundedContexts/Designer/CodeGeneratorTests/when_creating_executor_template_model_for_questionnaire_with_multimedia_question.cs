@@ -41,17 +41,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
                     },
                 });
 
-            executorTemplateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory();
+            expressionStateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory();
         };
 
         Because of = () =>
-            templateModel = executorTemplateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, new CodeGenerationSettings(
-                    additionInterfaces: new string[0],
-                    namespaces: new string[0],
-                    areRosterServiceVariablesPresent: false,
-                    rosterType: "IEnumerable",
-                    abstractConditionalLevelClassName: "AbstractConditionalLevel",
-                    isLookupTablesFeatureSupported: true), true);
+            templateModel = expressionStateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings());
 
         It should_generate_model_for_multimedia_question = () =>
             GetQuestion(multimediaId).ShouldNotBeNull();
@@ -80,8 +74,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
             return templateModel.AllQuestions.Single(x => x.Id == id);
         }
 
-        private static QuestionnaireExecutorTemplateModelFactory executorTemplateModelFactory;
-        private static QuestionnaireExecutorTemplateModel templateModel;
+        private static QuestionnaireExpressionStateModelFactory expressionStateModelFactory;
+        private static QuestionnaireExpressionStateModel templateModel;
         private static QuestionnaireDocument questionnaire;
         private static readonly Guid chapterId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid multimediaId = Guid.Parse("22222222222222222222222222222222");

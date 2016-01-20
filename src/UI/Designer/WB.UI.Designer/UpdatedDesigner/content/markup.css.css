@@ -7722,16 +7722,36 @@ textarea#edit-group-description {
   font-size: 14px;
   color: #b9c3ca;
 }
-#designer-editor.container section#header > .header-line > .questionnarie-title > .title span.error-message {
+#designer-editor.container section#header > .header-line > .questionnarie-title > .title span.error-message,
+#designer-editor.container section#header > .header-line > .questionnarie-title > .title span.warning-message {
+  font-weight: bold;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
   margin-left: 5px;
-  font-family: Georgia, serif;
-  font-size: 14px;
-  font-style: italic;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+#designer-editor.container section#header > .header-line > .questionnarie-title > .title span.error-message > a,
+#designer-editor.container section#header > .header-line > .questionnarie-title > .title span.warning-message > a {
+  text-decoration: none;
+}
+#designer-editor.container section#header > .header-line > .questionnarie-title > .title span.error-message {
   color: #e58e96;
 }
 #designer-editor.container section#header > .header-line > .questionnarie-title > .title span.error-message > a {
-  text-decoration: underline;
   color: #d20426;
+}
+#designer-editor.container section#header > .header-line > .questionnarie-title > .title span.error-message.no-errors {
+  color: #b9c3ca;
+}
+#designer-editor.container section#header > .header-line > .questionnarie-title > .title span.error-message.no-errors > a {
+  color: #b9c3ca;
+}
+#designer-editor.container section#header > .header-line > .questionnarie-title > .title span.warning-message {
+  color: #2a81cb;
+}
+#designer-editor.container section#header > .header-line > .questionnarie-title > .title span.warning-message > a {
+  color: #2a81cb;
 }
 #designer-editor.container section#header > .header-line > .questionnarie-title > .title span.text-success {
   margin-left: 5px;
@@ -8954,7 +8974,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   bottom: 0;
   position: fixed;
   z-index: 1000;
-  padding: 26px 24px 26px 76px;
+  padding: 20px 24px 20px 24px;
 }
 #verification-modal .modal-content {
   height: 100%;
@@ -8970,9 +8990,8 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   font-family: 'Open Sans Light', sans-serif;
   font-size: 36px;
   font-weight: 300;
-  border-bottom: 2px solid #edeff1;
-  border-top-color: #dd2c2c;
   padding: 0 22px;
+  border-bottom: 2px solid #edeff1;
 }
 #verification-modal .modal-content .modal-header button.close {
   position: absolute;
@@ -9013,9 +9032,6 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   margin: 0;
   padding: 0;
   margin-bottom: 20px;
-}
-#verification-modal .modal-content .modal-body .verification-items .verification-item-container {
-  border-left: 4px solid #dd2c2c;
 }
 #verification-modal .modal-content .modal-body .verification-items .verification-item {
   margin-top: 3px;
@@ -9084,6 +9100,19 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
 }
 #verification-modal .modal-content .modal-footer .btn-link {
   padding-left: 0;
+}
+#verification-modal.error .modal-content .modal-header {
+  border-bottom: 2px solid #edeff1;
+  border-top-color: #dd2c2c;
+}
+#verification-modal.error .modal-content .modal-header h3 span {
+  color: #dd2c2c;
+}
+#verification-modal.warning .modal-content .modal-header {
+  border-top-color: #2075bf;
+}
+#verification-modal.warning .modal-content .modal-header h3 span {
+  color: #2075bf;
 }
 #verification-modal.ie9-backdrop {
   right: 0;

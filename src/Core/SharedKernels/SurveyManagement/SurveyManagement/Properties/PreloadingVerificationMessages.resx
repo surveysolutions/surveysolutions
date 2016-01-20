@@ -193,8 +193,8 @@
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
     <value>Responsible is locked</value>
   </data>
-  <data name="PL0028_UserIsNotSupervisor" xml:space="preserve">
-    <value>Provided User is not Supervisor</value>
+  <data name="PL0028_UserIsNotSupervisorOrInterviewer" xml:space="preserve">
+    <value>Provided User is not Supervisor or Interviewer</value>
   </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
     <value>Answer on roster size question cannot be greater than 40.</value>
@@ -209,7 +209,7 @@
     <value>Latitude must be greater  then -90° and less then 90°.</value>
   </data>
   <data name="PL0033_LongitudeMustBeGeaterThenN180AndLessThen180" xml:space="preserve">
-    <value>Longitude  must be greater then -180° and less then 180°.</value>
+    <value>Longitude must be greater than -180° and less than 180°.</value>
   </data>
   <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
     <value>"," symbol is not allowed in numeric answers. Please use "." as decimal separator.</value>

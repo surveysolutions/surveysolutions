@@ -10,6 +10,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     {
         private const int DEFAULTPAGESIZE = 12;
         private const string DEFAULTEMPTYQUERY = "";
+        private const bool DEFAULT_SHOW_LOCKED = false;
 
         private readonly ITeamViewFactory teamViewFactory;
 
@@ -32,9 +33,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public UsersView Supervisors(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
+        public UsersView Supervisors(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED)
         {
-            return this.teamViewFactory.GetAllSupervisors(pageSize: pageSize, searchBy: query);
+            return this.teamViewFactory.GetAllSupervisors(pageSize: pageSize, searchBy: query, showLocked: showLocked);
         }
 
         [HttpGet]

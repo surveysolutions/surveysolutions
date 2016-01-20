@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                                 rosterSizeSourceType: RosterSizeSourceType.Question)
                         }));
 
-            IQuestionnaireRepository questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, new PlainQuestionnaire(questionnaire, 1));
+            IPlainQuestionnaireRepository questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, new PlainQuestionnaire(questionnaire, 1));
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             interview.AnswerTextListQuestion(userId, questionId, Empty.RosterVector, DateTime.Now, new[] { Tuple.Create(1m, "one") });

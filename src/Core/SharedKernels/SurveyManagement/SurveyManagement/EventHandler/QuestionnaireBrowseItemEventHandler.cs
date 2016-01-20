@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private  QuestionnaireBrowseItem CreateBrowseItem(long version, QuestionnaireDocument questionnaireDocument, bool allowCensusMode)
         {
-            return new QuestionnaireBrowseItem(questionnaireDocument, version, allowCensusMode, this.serializer.Serialize(questionnaireDocument).Length);
+            return new QuestionnaireBrowseItem(questionnaireDocument, version, allowCensusMode);
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)

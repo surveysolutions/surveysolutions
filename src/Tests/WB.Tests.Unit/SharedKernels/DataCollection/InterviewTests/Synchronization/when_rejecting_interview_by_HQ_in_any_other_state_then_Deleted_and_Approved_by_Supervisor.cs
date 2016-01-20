@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
     {
         Establish context = () =>
         {
-            var questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
+            var questionnaireRepositoryMock = new Mock<IPlainQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.GetHistoricalQuestionnaire(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
                 .Returns(Mock.Of<IQuestionnaire>());
 
@@ -66,6 +66,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
         private static InterviewStatus[] statusToExclude = new InterviewStatus[]
         { InterviewStatus.Deleted, InterviewStatus.ApprovedBySupervisor };
 
-        private static IQuestionnaireRepository questionnaireRepository;
+        private static IPlainQuestionnaireRepository questionnaireRepository;
     }
 }

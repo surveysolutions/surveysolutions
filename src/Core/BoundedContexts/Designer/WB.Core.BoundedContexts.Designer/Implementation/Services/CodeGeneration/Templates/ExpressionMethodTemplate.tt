@@ -21,9 +21,9 @@ using <#=namespaceToInclude#>;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
-   internal partial class <#=Model.GeneratedClassName#>
+   internal partial class <#=Model.ClassName#>
    {   
-      private bool <#=Model.GeneratedMethodName#>()
+      private bool <#=Model.MethodName#>()
       {
 <# 
 	if(Model.GenerateSelf) 
@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 <# 
 	}
 #>
-          return <#=Model.ExpressionString#>;
+          return <#=Model.Expression#>;
       }      
    }
 }

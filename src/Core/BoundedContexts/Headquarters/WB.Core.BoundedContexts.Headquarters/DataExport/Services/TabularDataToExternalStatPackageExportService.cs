@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Threading;
-using StatData.Converters;
 using StatData.Core;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
@@ -20,12 +21,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
     {
         private readonly ITransactionManagerProvider transactionManager;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        
+
         private readonly ILogger logger;
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter;
         private readonly ITabFileReader tabReader;
         private readonly IDatasetWriterFactory datasetWriterFactory;
         private readonly IDataQueryFactory dataQueryFactory;
+
+        private readonly IQuestionnaireLabelFactory questionnaireLabelFactory;
 
         public TabularDataToExternalStatPackageExportService(
             IFileSystemAccessor fileSystemAccessor,
@@ -34,7 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             ILogger logger,
             ITabFileReader tabReader,
             IDataQueryFactory dataQueryFactory,
-            IDatasetWriterFactory datasetWriterFactory)
+            IDatasetWriterFactory datasetWriterFactory, IQuestionnaireLabelFactory questionnaireLabelFactory)
         {
             this.questionnaireExportStructureWriter = questionnaireExportStructureWriter;
             this.transactionManager = transactionManager;
@@ -43,22 +46,30 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             this.tabReader = tabReader;
             this.datasetWriterFactory = datasetWriterFactory;
+            this.questionnaireLabelFactory = questionnaireLabelFactory;
             this.dataQueryFactory = dataQueryFactory;
         }
 
         private string StataFileNameExtension { get { return ".dta"; } }
         private string SpssFileNameExtension { get { return ".sav"; } }
 
-        public string[] CreateAndGetStataDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string[] tabularDataFiles, IProgress<int> progress, CancellationToken cancellationToken)
+        public string[] CreateAndGetStataDataFilesForQuestionnaire(Guid questionnaireId, 
+            long questionnaireVersion,
+            string[] tabularDataFiles, 
+            IProgress<int> progress, 
+            CancellationToken cancellationToken)
         {
             return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, DataExportFormat.STATA, tabularDataFiles, progress, cancellationToken);
         }
 
-        public string[] CreateAndGetSpssDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string[] tabularDataFiles, IProgress<int> progress, CancellationToken cancellationToken)
+        public string[] CreateAndGetSpssDataFilesForQuestionnaire(Guid questionnaireId, 
+            long questionnaireVersion, 
+            string[] tabularDataFiles, 
+            IProgress<int> progress,
+            CancellationToken cancellationToken)
         {
             return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, DataExportFormat.SPSS, tabularDataFiles, progress, cancellationToken);
         }
-       
 
         private string[] CreateAndGetExportDataFiles(Guid questionnaireId, long questionnaireVersion, DataExportFormat format, string[] dataFiles, IProgress<int> progress, CancellationToken cancellationToken)
         {
@@ -75,12 +86,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 if (questionnaireExportStructure == null)
                     return new string[0];
 
-                Dictionary<string, string> varLabels;
-                Dictionary<string, Dictionary<double, string>> varValueLabels;
-                Dictionary<string, Dictionary<string, string>> labelsForServiceColumns;
-
-                questionnaireExportStructure.CollectLabels(out labelsForServiceColumns, out varLabels,
-                    out varValueLabels);
+                var labelsForQuestionnaire = this.questionnaireLabelFactory.CreateLabelsForQuestionnaire(questionnaireExportStructure);
 
                 var result = new List<string>();
                 string fileExtention = format == DataExportFormat.STATA
@@ -88,6 +94,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     : this.SpssFileNameExtension;
                 var writer = this.datasetWriterFactory.CreateDatasetWriter(format);
                 int processdFiles = 0;
+
                 foreach (var tabFile in dataFiles)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
@@ -98,8 +105,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     var meta = this.tabReader.GetMetaFromTabFile(tabFile);
 
                     var levelName = this.fileSystemAccessor.GetFileNameWithoutExtension(tabFile);
-                    if(labelsForServiceColumns.ContainsKey(levelName))
-                         UpdateMetaWithLabels(meta, labelsForServiceColumns[levelName], varLabels, varValueLabels);
+
+                    var questionnaireLevelLabels =
+                        labelsForQuestionnaire.FirstOrDefault(
+                            x => string.Equals(x.LevelName, levelName, StringComparison.InvariantCultureIgnoreCase));
+
+                    if (questionnaireLevelLabels != null)
+                        UpdateMetaWithLabels(meta, questionnaireLevelLabels);
 
                     using (IDataQuery tabStreamDataQuery = dataQueryFactory.CreateDataQuery(tabFile))
                     {
@@ -126,26 +138,27 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             return new string[0];
         }
 
-        private static void UpdateMetaWithLabels(IDatasetMeta meta, Dictionary<string, string> serviceColumnLabels, Dictionary<string, string> varLabels, Dictionary<string, Dictionary<double, string>> varValueLabels)
+        private static void UpdateMetaWithLabels(IDatasetMeta meta, QuestionnaireLevelLabels questionnaireLevelLabels)
         {
             foreach (var datasetVariable in meta.Variables)
             {
-                if (varLabels.ContainsKey(datasetVariable.VarName))
-                    datasetVariable.VarLabel = varLabels[datasetVariable.VarName];
+                if (!questionnaireLevelLabels.ContainsVariable(datasetVariable.VarName))
+                    continue;
 
-                if(serviceColumnLabels.ContainsKey(datasetVariable.VarName))
-                    datasetVariable.VarLabel = serviceColumnLabels[datasetVariable.VarName];
+                var variableLabels = questionnaireLevelLabels[datasetVariable.VarName];
 
-                if (varValueLabels.ContainsKey(datasetVariable.VarName))
+                datasetVariable.VarLabel = variableLabels.Label;
+
+                var valueSet = new ValueSet();
+
+                foreach (var variableValueLabel in variableLabels.VariableValueLabels)
                 {
-                    var valueSet = new ValueSet();
-                    foreach (var variable in varValueLabels[datasetVariable.VarName])
-                    {
-                        valueSet.Add(variable.Key, variable.Value);
-                    }
-
-                    meta.AssociateValueSet(datasetVariable.VarName, valueSet);
+                    double value;
+                    if (double.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
+                        valueSet.Add(value, variableValueLabel.Label);
                 }
+
+                meta.AssociateValueSet(datasetVariable.VarName, valueSet);
             }
         }
     }

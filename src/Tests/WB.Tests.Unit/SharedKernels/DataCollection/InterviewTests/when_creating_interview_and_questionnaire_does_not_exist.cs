@@ -25,8 +25,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             responsibleSupervisorId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA00");
             answersToFeaturedQuestions = new Dictionary<Guid, object>();
 
-            var repositoryWithoutQuestionnaire = Mock.Of<IQuestionnaireRepository>(repository
-                => repository.GetQuestionnaire(questionnaireId) == null as IQuestionnaire);
+            var repositoryWithoutQuestionnaire = Mock.Of<IPlainQuestionnaireRepository>(repository
+                => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == null as IQuestionnaire);
 
             interview = Create.Interview(questionnaireRepository: repositoryWithoutQuestionnaire);
         };

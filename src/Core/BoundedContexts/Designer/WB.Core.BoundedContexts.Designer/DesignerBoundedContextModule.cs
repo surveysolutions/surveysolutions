@@ -26,11 +26,11 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 
 using AccountAR = WB.Core.BoundedContexts.Designer.Aggregates.AccountAR;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 
 namespace WB.Core.BoundedContexts.Designer
 {

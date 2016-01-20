@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     {
         Establish context = () =>
         {
-            var questionnaireRepository = new Mock<IQuestionnaireRepository> { DefaultValue = DefaultValue.Mock }.Object;
+            var questionnaireRepository = new Mock<IPlainQuestionnaireRepository> { DefaultValue = DefaultValue.Mock }.Object;
 
             interview = CreateInterview(questionnaireRepository: questionnaireRepository);
 

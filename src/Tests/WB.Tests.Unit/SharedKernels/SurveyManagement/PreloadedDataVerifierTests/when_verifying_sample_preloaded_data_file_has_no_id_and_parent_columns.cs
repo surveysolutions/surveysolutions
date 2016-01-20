@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
+using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
@@ -21,10 +22,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             questionnaire = CreateQuestionnaireDocumentWithOneChapter();
             questionnaire.Title = "questionnaire";
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
-
+            preloadedDataByFile = CreatePreloadedDataByFile(new string[0], new string[][] {new string[0]},
+                QuestionnaireCsvFileName);
             preloadedDataServiceMock = new Mock<IPreloadedDataService>();
 
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(QuestionnaireCsvFileName)).Returns(new HeaderStructureForLevel());
+
+            preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(Moq.It.IsAny<PreloadedDataByFile>(), "responsible")).Returns(-1);
 
             preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, null, preloadedDataServiceMock.Object);
         };
@@ -32,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         Because of =
             () =>
                 result =
-                    preloadedDataVerifier.VerifySample(questionnaireId, 1, CreatePreloadedDataByFile(new string[0], null, QuestionnaireCsvFileName) );
+                    preloadedDataVerifier.VerifySample(questionnaireId, 1, preloadedDataByFile);
 
         It should_result_has_no_errors = () =>
            result.Errors.ShouldBeEmpty();
@@ -43,5 +47,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         private static Guid questionnaireId;
         private const string QuestionnaireCsvFileName = "questionnaire.csv";
         private static Mock<IPreloadedDataService> preloadedDataServiceMock;
+        private static PreloadedDataByFile preloadedDataByFile;
     }
 }

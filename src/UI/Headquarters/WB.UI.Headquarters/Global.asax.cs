@@ -61,6 +61,7 @@ namespace WB.UI.Headquarters
         {
             filters.Add(new ReplacePrincipalWebApi());
             filters.Add(new SupervisorFunctionsEnabledAttribute());
+            filters.Add(new ApiMaintenanceFilter());
         }
 
         public static void RegisterRoutes(RouteCollection routes)

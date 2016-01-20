@@ -13,7 +13,6 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -21,7 +20,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.V5;
-
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using It = Moq.It;
 
 namespace WB.Tests.Integration.InterviewTests
@@ -49,11 +48,10 @@ namespace WB.Tests.Integration.InterviewTests
             return new PlainQuestionnaire(questionnaireDocument, 1);
         }
 
-        protected static IQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire)
+        protected static IPlainQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire)
         {
-            return Mock.Of<IQuestionnaireRepository>(repository
-                => repository.GetQuestionnaire(questionnaireId) == questionaire
-                && repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
+            return Mock.Of<IPlainQuestionnaireRepository>(repository
+                => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
         }
 
         protected static IInterviewExpressionStatePrototypeProvider CreateInterviewExpressionStateProviderStub(Guid questionnaireId)
@@ -89,9 +87,8 @@ namespace WB.Tests.Integration.InterviewTests
 
             var questionnaire = Create.Questionnaire(questionnaireDocument);
 
-            var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
-                => repository.GetQuestionnaire(questionnaireId) == questionnaire.GetQuestionnaire()
-                    && repository.GetHistoricalQuestionnaire(questionnaireId, questionnaire.GetQuestionnaire().Version) == questionnaire.GetQuestionnaire()
+            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
+                => repository.GetHistoricalQuestionnaire(questionnaireId, questionnaire.GetQuestionnaire().Version) == questionnaire.GetQuestionnaire()
                     && repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionnaire.GetQuestionnaire());
 
             IInterviewExpressionStateV5 state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument) ;
@@ -110,7 +107,7 @@ namespace WB.Tests.Integration.InterviewTests
 
         protected static Interview SetupInterview(string questionnaireString, object[] events, IInterviewExpressionState precompiledState)
         {
-            var json = new NewtonJsonSerializer();
+            var json = new NewtonJsonSerializer(new JsonSerializerSettingsFactory());
             var questionnaireDocument = json.Deserialize<QuestionnaireDocument>(questionnaireString);
             return SetupInterview(questionnaireDocument, events);
         }

@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             gpsQuestionId = Guid.Parse("BBF000AAA111EE2DD2EE111AAA000AAA");
 
             questionnaireDocument =
-                Create.QuestionnaireDocument(children: Create.GpsCoordinateQuestion(questionId: gpsQuestionId, variableName:"gps"));
+                Create.QuestionnaireDocument(children: Create.GpsCoordinateQuestion(questionId: gpsQuestionId, variable:"gps"));
 
             exportViewFactory = CreateExportViewFactory();
         };

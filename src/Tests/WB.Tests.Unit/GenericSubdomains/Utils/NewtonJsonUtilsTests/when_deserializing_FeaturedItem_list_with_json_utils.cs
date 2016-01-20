@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.BoundedContexts.Interviewer.ViewModel.Dashboard;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
 {
@@ -11,8 +12,10 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
         Establish context = () =>
         {
             _jsonSerializer =
-                CreateNewtonJsonUtils(new Dictionary<string, string>()
-                {
+                CreateNewtonJsonUtils(
+                    new JsonSerializerSettingsFactory(),
+                    new Dictionary<string, string>()
+                    {
                     {
                         "WB.UI.Capi",
                         "WB.Core.BoundedContexts.Interviewer"

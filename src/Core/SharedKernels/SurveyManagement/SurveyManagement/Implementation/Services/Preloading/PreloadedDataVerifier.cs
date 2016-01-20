@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -15,7 +14,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
-using WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading
 {
@@ -48,7 +47,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         {
             VerificationStatus status = new VerificationStatus(); 
 
-            if (data == null)
+            if (data?.Content == null || data.Content.Length == 0)
             {
                 status.Errors = new[] { new PreloadedDataVerificationError("PL0024", PreloadingVerificationMessages.PL0024_DataWasNotFound) };
                 return status;
@@ -831,7 +830,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                     {
                         yield return
                             new PreloadedDataVerificationError("PL0028",
-                                PreloadingVerificationMessages.PL0028_UserIsNotSupervisor,
+                                PreloadingVerificationMessages.PL0028_UserIsNotSupervisorOrInterviewer,
                                 new PreloadedDataVerificationReference(supervisorNameIndex, y,
                                     PreloadedDataVerificationReferenceType.Cell,
                                     "",

@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 && _.IsRosterGroup(rosterId) == true
             );
 
-            IQuestionnaireRepository questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
+            IPlainQuestionnaireRepository questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 

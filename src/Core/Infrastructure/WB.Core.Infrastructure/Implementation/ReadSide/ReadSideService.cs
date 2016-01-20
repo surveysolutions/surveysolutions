@@ -236,19 +236,19 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                             }),
                 WarningEventHandlerErrors = ReverseList(exceptionsByEventHandlersWhichShouldBeIgnored)
                     .Take(10)
-                    .Select(error => new ReadSideRepositoryWriterError()
+                    .Select(error => new ReadSideRepositoryWriterError
                     {
                         ErrorTime = error.Item1,
                         ErrorMessage = error.Item2,
-                        InnerException = GetFullUnwrappedExceptionText(error.Item3.InnerException)
+                        InnerException = GetFullUnwrappedExceptionText(error.Item3)
                     }),
                 RebuildErrors = ReverseList(criticalRebuildReadSideExceptions)
                     .Take(10)
-                    .Select(error => new ReadSideRepositoryWriterError()
+                    .Select(error => new ReadSideRepositoryWriterError
                     {
                         ErrorTime = error.Item1,
                         ErrorMessage = error.Item2,
-                        InnerException = GetFullUnwrappedExceptionText(error.Item3.InnerException)
+                        InnerException = GetFullUnwrappedExceptionText(error.Item3)
                     }),
                 ReadSideDenormalizerStatistics = GetRebuildDenormalizerStatistics()
             };
@@ -609,7 +609,14 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
             foreach (ICacheableRepositoryWriter writer in writers)
             {
-                writer.EnableCache();
+                try
+                {
+                    writer.EnableCache();
+                }
+                catch
+                {
+                    UpdateStatusMessage($"Failed to enable cache for repository writer {GetStorageEntityName(writer)}.");
+                }
             }
 
             UpdateStatusMessage("Cache in repository writers enabled.");
@@ -626,6 +633,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     .ToArray();
 
                 var entitiesInProgress = new ConcurrentDictionary<string, Unit>();
+                var failedWriters = new ConcurrentDictionary<string, Unit>();
 
                 writers.AsParallel().ForAll(writer =>
                 {
@@ -644,15 +652,28 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                         }
                         catch (Exception exception)
                         {
+                            failedWriters.TryAdd(storageEntityName, Unit.Value);
                             this.transactionManagerProviderManager.GetTransactionManager().RollbackCommandTransaction();
                             string message = $"Failed to disable cache and store data to repository for writer {storageEntityName}.";
                             this.SaveErrorForStatusReport(message, exception);
                         }
 
                         entitiesInProgress.TryRemove(storageEntityName);
-                        UpdateStatusMessage($"Disabling cache in repository writer for entities {string.Join(", ", entitiesInProgress.Keys)}.");
+
+                        UpdateStatusMessage(
+                            failedWriters.Count > 0
+                                ? $"Disabling cache in repository writer for entities {string.Join(", ", entitiesInProgress.Keys)}. Failed writers: {string.Join(", ", failedWriters.Keys)}."
+                                : $"Disabling cache in repository writer for entities {string.Join(", ", entitiesInProgress.Keys)}.");
                     }
                 });
+
+                if (failedWriters.Count > 0)
+                {
+                    var message = $"Failed to disable cache for some repository writers: {string.Join(", ", failedWriters.Keys)}.";
+                    UpdateStatusMessage(message);
+                    this.logger.Fatal(message);
+                    throw new OperationCanceledException(message);
+                }
 
                 UpdateStatusMessage("Cache in repository writers disabled.");
             }
@@ -728,7 +749,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 {
                     var message = $"Failed to rebuild read side. Too many events failed: {this.FailedEventsCount}. Last processed event count: {this.processedEventsCount}";
                     UpdateStatusMessage(message);
-                    this.logger.Error(message);
+                    this.logger.Fatal(message);
                     throw new OperationCanceledException(message);
                 }
 

@@ -56,5 +56,11 @@ namespace WB.UI.Interviewer
         {
             linearLayout.Clickable = !linearLayout.Clickable;
         }
+
+        public void Include()
+        {
+            //fix for Thai calendar (KP-6403)
+            var thai = new System.Globalization.ThaiBuddhistCalendar();
+        }
     }
 }

@@ -3,6 +3,7 @@
   <integer name="HttpResponseTimeout">1200</integer>
   <integer name="BufferSize">512</integer>
   <integer name="GpsReceiveTimeoutSec">30</integer>
+  <integer name="GpsDesiredAccuracy">50</integer>
   <bool name="AcceptUnsignedSslCertificate">false</bool>
   <string name="DesignerEndpoint">https://solutions.worldbank.org/api/v11</string>
 </resources>

@@ -16,9 +16,12 @@ namespace WB.Core.BoundedContexts.Designer.Services
         public GenerationResult(bool success, ImmutableArray<Diagnostic> diagnostics)
         {
             this.Success = success;
-            this.Diagnostics =
-                diagnostics.Select(d => new GenerationDiagnostic(d.GetMessage(), d.Category, d.Location.SourceTree.FilePath, 
-                    (GenerationDiagnosticSeverity)d.Severity)).ToList();
+            this.Diagnostics = diagnostics
+                .Select(d => new GenerationDiagnostic(
+                    message: d.GetMessage(),
+                    location: d.Location.SourceTree.FilePath,
+                    severity: (GenerationDiagnosticSeverity)d.Severity))
+                .ToList();
         }
     }
 
@@ -26,17 +29,11 @@ namespace WB.Core.BoundedContexts.Designer.Services
     {
         private readonly string message;
         private readonly GenerationDiagnosticSeverity severity;
-        private readonly string category;
         private readonly string location;
 
         public string Message
         {
             get { return this.message; }
-        }
-
-        public string Category
-        {
-            get { return this.category; }
         }
 
         public string Location
@@ -49,12 +46,11 @@ namespace WB.Core.BoundedContexts.Designer.Services
             get { return this.severity; }
         }
 
-        public GenerationDiagnostic(string message, string category, string location,GenerationDiagnosticSeverity severity)
+        public GenerationDiagnostic(string message, string location, GenerationDiagnosticSeverity severity)
         {
             this.message = message;
             this.location = location;
             this.severity = severity;
-            this.category = category;
         }
     }
 

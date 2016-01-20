@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AccountIsLockedOnServer" xml:space="preserve">
-    <value>Your user account is locked. Please contact to your supervisor.</value>
+    <value>Your user account is locked. Please contact your supervisor.</value>
   </data>
   <data name="AccountIsNotAnInterviewer" xml:space="preserve">
     <value>Your account doesn't have Interviewer role</value>
   </data>
   <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
-    <value>Your account is not approved. Please contact to your supervisor.</value>
+    <value>Your account is not approved. Please contact your supervisor.</value>
   </data>
   <data name="DashboardItem_CensusModeComment" xml:space="preserve">
     <value>Census mode, Interviews created: {0}</value>
@@ -202,13 +202,13 @@ for further instructions</value>
     <value>You could try to sign in online if you forgot your password or it was reset</value>
   </data>
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
-    <value>Authentication problem on the remote server too. Please contact your Supervisor or Headquarter</value>
+    <value>Authentication problem on the remote server. Please contact your Supervisor</value>
   </data>
   <data name="Login_WrondPassword" xml:space="preserve">
     <value>Wrong password</value>
   </data>
   <data name="Maintenance" xml:space="preserve">
-    <value>The website of Survey Solutions Supervisor is on the maintenance mode now. Sorry for the inconvenience</value>
+    <value>The website of Survey Solutions Supervisor is on maintenance. Sorry for the inconvenience</value>
   </data>
   <data name="NoNetwork" xml:space="preserve">
     <value>No network. Check your network settings</value>
@@ -328,9 +328,9 @@ for further instructions</value>
     <value>User authentication</value>
   </data>
   <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
-    <value>Authentication problem. We were unable to confirm your interviewer account ('{0}'). 
-Your account may have one of the following problems: have a different password than you entered, be locked by Headquarter, or be deleted by Headquarter.
-Please enter your updated password. If doing so does not resolve the problem, please contact your Supervisor or Headquarter.</value>
+    <value>Authentication problem. We were unable to confirm your credentials ('{0}'). 
+Your account may have a different password; be locked or deleted.
+Please re-enter your password. If the problem persists, contact your Supervisor.</value>
   </data>
   <data name="Unauthorized" xml:space="preserve">
     <value>Your login or password is incorrect</value>
@@ -390,7 +390,7 @@ Please enter your updated password. If doing so does not resolve the problem, pl
     <value>Restore from backup</value>
   </data>
   <data name="Troubleshooting_RestoreConfirmation" xml:space="preserve">
-    <value>All current data will be erased. Are you sure you want to proceed to restore? If Yes, please make sure restore data is presented at {0}</value>
+    <value>All current data will be erased. Are you sure you want to proceed to restore? If Yes, please make sure restore data is present at {0}</value>
   </data>
   <data name="Troubleshooting_RestoredSuccessfully" xml:space="preserve">
     <value>Tablet was successfully restored</value>
@@ -450,7 +450,7 @@ Please enter your updated password. If doing so does not resolve the problem, pl
     <value>Assigned on {0}</value>
   </data>
   <data name="Diagnostics_Backup_Description" xml:space="preserve">
-    <value>All collected data will be saved as backup file on this device.</value>
+    <value>All collected data will be saved to backup file on this device.</value>
   </data>
   <data name="Diagnostics_Backup_Title" xml:space="preserve">
     <value>Backup all gathered information</value>
@@ -564,7 +564,7 @@ Please enter your updated password. If doing so does not resolve the problem, pl
     <value>&lt;font color="red"&gt;No connection with our server&lt;/font&gt;</value>
   </data>
   <data name="Troubleshooting_RestoreFolderIsEmpty" xml:space="preserve">
-    <value>Folder '{0}' is empty. Please put the backup you willing to restore in the folder.</value>
+    <value>Folder '{0}' is empty. Please put the backup you want to restore in the folder.</value>
   </data>
   <data name="FinishInstallation_EndpointDiffers" xml:space="preserve">
     <value>Synchronization endpoint '{0}' is different from provided in Settings ('{1}'). Load URL from settings?</value>
