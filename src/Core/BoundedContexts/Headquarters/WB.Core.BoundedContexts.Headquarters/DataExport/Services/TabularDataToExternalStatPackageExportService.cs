@@ -53,16 +53,23 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private string StataFileNameExtension { get { return ".dta"; } }
         private string SpssFileNameExtension { get { return ".sav"; } }
 
-        public string[] CreateAndGetStataDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string[] tabularDataFiles, IProgress<int> progress, CancellationToken cancellationToken)
+        public string[] CreateAndGetStataDataFilesForQuestionnaire(Guid questionnaireId, 
+            long questionnaireVersion,
+            string[] tabularDataFiles, 
+            IProgress<int> progress, 
+            CancellationToken cancellationToken)
         {
             return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, DataExportFormat.STATA, tabularDataFiles, progress, cancellationToken);
         }
 
-        public string[] CreateAndGetSpssDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string[] tabularDataFiles, IProgress<int> progress, CancellationToken cancellationToken)
+        public string[] CreateAndGetSpssDataFilesForQuestionnaire(Guid questionnaireId, 
+            long questionnaireVersion, 
+            string[] tabularDataFiles, 
+            IProgress<int> progress,
+            CancellationToken cancellationToken)
         {
             return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, DataExportFormat.SPSS, tabularDataFiles, progress, cancellationToken);
         }
-
 
         private string[] CreateAndGetExportDataFiles(Guid questionnaireId, long questionnaireVersion, DataExportFormat format, string[] dataFiles, IProgress<int> progress, CancellationToken cancellationToken)
         {
