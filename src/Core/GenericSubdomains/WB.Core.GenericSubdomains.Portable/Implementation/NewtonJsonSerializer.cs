@@ -52,7 +52,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
 
         public string Serialize(object item)
         {
-            return JsonConvert.SerializeObject(item);
+            return this.Serialize(item, this.jsonUtilsSettings.TypeNameHandling);
 
             //this.SerializeToByteArray(SerializeToByteArray);
         }
