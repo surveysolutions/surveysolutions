@@ -6,6 +6,7 @@ using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.Infrastructure.CommandBus;
@@ -24,9 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
             var principal = Mock.Of<IInterviewerPrincipal>(x =>
                 x.CurrentUserIdentity == Mock.Of<IInterviewerUserIdentity>(y => y.UserId == Guid.Parse("22222222222222222222222222222222")));
 
-            var inMemoryEventViewRepository = new TestAsyncPlainStorage<EventView>(eventViews);
-            mockOfEventRepository.Setup(x => x.Query(Moq.It.IsAny<Func<IQueryable<EventView>, List<EventView>>>()))
-                .Returns<Func<IQueryable<EventView>, List<EventView>>>(inMemoryEventViewRepository.Query);
+            eventStore = new Mock<IInterviewerEventStorage>();
 
             var inMemoryMultimediaViewRepository = new TestAsyncPlainStorage<InterviewMultimediaView>(interviewMultimediaViews);
             mockOfInterviewMultimediaViewRepository.Setup(x => x.Query(Moq.It.IsAny<Func<IQueryable<InterviewMultimediaView>, List<InterviewMultimediaView>>>()))
@@ -41,7 +40,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 aggregateRootRepositoryWithCache: mockOfAggregateRootRepositoryWithCache.Object,
                 snapshotStoreWithCache: mockOfSnapshotStoreWithCache.Object,
                 principal: principal,
-                eventRepository: mockOfEventRepository.Object,
+                eventStore: eventStore.Object,
                 interviewMultimediaViewRepository: mockOfInterviewMultimediaViewRepository.Object,
                 interviewFileViewRepository: mockOfInterviewFileViewRepository.Object);
         };
@@ -70,11 +69,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         It should_remove_files_by_specified_interview = () =>
             mockOfInterviewFileViewRepository.Verify(x => x.RemoveAsync(Moq.It.IsAny<string>()), Times.Exactly(2));
 
-        It should_not_event_repository_contains_events_by_specified_id = () =>
-            mockOfEventRepository.Object.Query(events => events.Any(evnt => evnt.EventSourceId == interviewId)).ShouldBeFalse();
-
         It should_remove_events_by_specified_interview = () =>
-            mockOfEventRepository.Verify(x => x.RemoveAsync(Moq.It.IsAny<IEnumerable<EventView>>()), Times.Once);
+             eventStore.Verify(x => x.RemoveEventSourceById(interviewId), Times.Once);
+
 
         private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static readonly EventView[] eventViews =
@@ -102,10 +99,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         private static readonly Mock<ICommandService> mockOfCommandService = new Mock<ICommandService>();
         private static readonly Mock<IAggregateRootRepositoryWithCache> mockOfAggregateRootRepositoryWithCache = new Mock<IAggregateRootRepositoryWithCache>();
         private static readonly Mock<ISnapshotStoreWithCache> mockOfSnapshotStoreWithCache = new Mock<ISnapshotStoreWithCache>();
-        private static readonly Mock<IAsyncPlainStorage<EventView>> mockOfEventRepository = new Mock<IAsyncPlainStorage<EventView>>();
-        private static readonly Mock<IAsyncPlainStorage<InterviewMultimediaView>> mockOfInterviewMultimediaViewRepository =
-                new Mock<IAsyncPlainStorage<InterviewMultimediaView>>();
+        private static readonly Mock<IAsyncPlainStorage<InterviewMultimediaView>> mockOfInterviewMultimediaViewRepository = new Mock<IAsyncPlainStorage<InterviewMultimediaView>>();
         private static readonly Mock<IAsyncPlainStorage<InterviewFileView>> mockOfInterviewFileViewRepository = new Mock<IAsyncPlainStorage<InterviewFileView>>();
         private static InterviewerInterviewAccessor interviewerInterviewAccessor;
+        private static Mock<IInterviewerEventStorage> eventStore;
     }
 }
