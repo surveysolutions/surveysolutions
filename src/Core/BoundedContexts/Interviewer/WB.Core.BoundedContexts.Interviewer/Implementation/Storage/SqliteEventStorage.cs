@@ -39,7 +39,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)
         {
             var events = this.connection.Table<EventView>().Where(eventView => eventView.EventSourceId == id &&
-                                                                  eventView.EventSequence >= minVersion && eventView.EventSequence <= maxVersion);
+                                                                  eventView.EventSequence >= minVersion && eventView.EventSequence <= maxVersion)
+                                                            .OrderBy(x => x.EventSequence);
             
             return new CommittedEventStream(id, events.Select(this.ToCommitedEvent));
         }
