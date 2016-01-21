@@ -5,20 +5,15 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.UI.Headquarters.Models;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    public class ExportModel {
-        public IEnumerable<TemplateViewItem> Questionnaires { get; set; }
-        public List<InterviewStatus> ExportStatuses { get; set; }
-    }
-
     [LimitsFilter]
     [Authorize(Roles = "Administrator, Headquarter")]
     public class DataExportController: BaseController

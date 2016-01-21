@@ -566,6 +566,7 @@
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\DataExportController.cs" />
     <Compile Include="Controllers\ApiUserController.cs" />
+    <Compile Include="Models\ExportModel.cs" />
     <Compile Include="Controllers\ObserverController.cs" />
     <Compile Include="Controllers\InterviewsApiController.cs" />
     <Compile Include="Controllers\QuestionnairesApiController.cs" />
