@@ -78,13 +78,16 @@ namespace WB.UI.Interviewer.Activities
                 InterviewerUIResources.Prefs_HttpResponseTimeoutSummary, interviewerSettings.Timeout.TotalSeconds.ToString(CultureInfo.InvariantCulture));
             this.SetPreferenceTitleAndSummary(SettingsNames.BufferSize, InterviewerUIResources.Prefs_BufferSizeTitle,
                 InterviewerUIResources.Prefs_BufferSizeSummary, interviewerSettings.BufferSize.ToString());
+
             this.SetPreferenceTitleAndSummary(SettingsNames.GpsReceiveTimeoutSec,
                 InterviewerUIResources.Prefs_GpsReceiveTimeoutSecTitle,
                 InterviewerUIResources.Prefs_GpsReceiveTimeoutSecSummary,
                 interviewerSettings.GpsReceiveTimeoutSec.ToString());
 
-            this.SetPreferenceTitleAndSummary(SettingsNames.GpsDesiredAccuracy, UIResources.Prefs_GpsDesiredAccuracyTitle,
-                string.Format(UIResources.Prefs_GpsDesiredAccuracySubTitle, interviewerSettings.GpsDesiredAccuracy));
+            this.SetPreferenceTitleAndSummary(SettingsNames.GpsDesiredAccuracy, 
+                UIResources.Prefs_GpsDesiredAccuracyTitle,
+                string.Format(UIResources.Prefs_GpsDesiredAccuracySubTitle, interviewerSettings.GpsDesiredAccuracy),
+                interviewerSettings.GpsDesiredAccuracy.ToString());
         }
 
         private static int ParseIntegerSettingsValue(object settingsValue, int defaultValue)
