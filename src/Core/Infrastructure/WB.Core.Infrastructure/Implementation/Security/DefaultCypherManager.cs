@@ -20,7 +20,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.Security
             throw new NotImplementedException();
         }
 
-        public void UpdatePassword(string password)
+        public void RegeneratePassword()
         {
             throw new NotImplementedException();
         }

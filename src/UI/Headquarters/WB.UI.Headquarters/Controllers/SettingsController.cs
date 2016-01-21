@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -32,7 +33,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DataEncryption(CypherSettingsModel model)
+        public ActionResult DataEncryption(string action, CypherSettingsModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Settings;
 
@@ -43,8 +44,14 @@ namespace WB.UI.Headquarters.Controllers
 
             CypherSettingsModel oldState = new CypherSettingsModel(this.cypherManager.EncryptionEnforced(), this.cypherManager.GetPassword());
 
-            if(oldState.IsEnabled != model.IsEnabled)
-                this.cypherManager.SetEncryptionEnforcement(model.IsEnabled);
+            if (string.Compare(action, "save", StringComparison.InvariantCultureIgnoreCase)==0)
+            {
+                if (oldState.IsEnabled != model.IsEnabled)
+                    this.cypherManager.SetEncryptionEnforcement(model.IsEnabled);
+            }
+            
+            else if (string.Compare(action, "regen", StringComparison.InvariantCultureIgnoreCase) == 0)
+                this.cypherManager.RegeneratePassword();
 
             return View(new CypherSettingsModel(this.cypherManager.EncryptionEnforced(), this.cypherManager.GetPassword()));
         }

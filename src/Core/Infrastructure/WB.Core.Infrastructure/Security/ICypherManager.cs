@@ -6,6 +6,6 @@
         string GetPassword();
 
         void SetEncryptionEnforcement(bool value);
-        void UpdatePassword(string password);
+        void RegeneratePassword();
     }
 }
