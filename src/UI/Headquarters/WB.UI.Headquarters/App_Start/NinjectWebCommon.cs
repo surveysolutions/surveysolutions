@@ -187,7 +187,8 @@ namespace WB.UI.Headquarters
                 bool.Parse(WebConfigurationManager.AppSettings["Export.EnableInterviewHistory"]),
                 WebConfigurationManager.AppSettings["Export.MaxRecordsCountPerOneExportQuery"].ToIntOrDefault(10000),
                 WebConfigurationManager.AppSettings["Export.LimitOfCachedItemsByDenormalizer"].ToIntOrDefault(100),
-                WebConfigurationManager.AppSettings["Export.InterviewsExportParallelTasksLimit"].ToIntOrDefault(10));
+                WebConfigurationManager.AppSettings["Export.InterviewsExportParallelTasksLimit"].ToIntOrDefault(10),
+                WebConfigurationManager.AppSettings["Export.InterviewIdsQueryBatchSize"].ToIntOrDefault(40000));
 
             var sampleImportSettings = new SampleImportSettings(
                 WebConfigurationManager.AppSettings["PreLoading.InterviewsImportParallelTasksLimit"].ToIntOrDefault(2));
