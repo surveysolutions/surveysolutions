@@ -1,16 +1,16 @@
 using System;
 using SQLite.Net.Attributes;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-    public class EventView : IPlainStorageEntity
+    public class EventView
     {
-        [PrimaryKey, AutoIncrement]
-        public int OID { get; set; }
-        public string Id { get; set; }
+        [PrimaryKey]
         public Guid EventId { get; set; }
+        [Unique(Name = "Unique AR sequence")]
+        [Indexed]
         public Guid EventSourceId { get; set; }
+        [Unique(Name = "Unique AR sequence")]
         public int EventSequence { get; set; }
         public DateTime DateTimeUtc { get; set; }
         public string JsonEvent { get; set; }

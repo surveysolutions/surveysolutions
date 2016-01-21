@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.Infrastructure.EventBus;
@@ -56,15 +57,9 @@ namespace Ncqrs.Eventing.Sourcing
             get { return _initialVersion; }            
         }
 
-        /// <summary>
-        /// A list that contains all the event handlers.
-        /// </summary>
         [NonSerialized]
         private readonly List<ISourcedEventHandler> _eventHandlers = new List<ISourcedEventHandler>();
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EventSource"/> class.
-        /// </summary>
         protected EventSource()
         {
             EventSourceId = Guid.NewGuid();
@@ -82,10 +77,6 @@ namespace Ncqrs.Eventing.Sourcing
             _initialVersion = _currentVersion = snapshot.Version;
         }
 
-        /// <summary>
-        /// Initializes from history.
-        /// </summary>
-        /// <param name="history">The history.</param>
         public virtual void InitializeFromHistory(CommittedEventStream history)
         {
             if (history == null)
@@ -160,7 +151,6 @@ namespace Ncqrs.Eventing.Sourcing
 
         private int GetNextSequence()
         {
-
             // 628426 31 Feb 2011 - the following absolutely needed to ensure correct sequencing, as incorrect versions were being passed to event store
             // TODO: I don't think this should stay here
             if (_initialVersion > 0 && _currentVersion == 0)
@@ -168,7 +158,7 @@ namespace Ncqrs.Eventing.Sourcing
                 _currentVersion = _initialVersion;
             }
         
-            _currentVersion++;
+            Interlocked.Increment(ref _currentVersion);
             return _currentVersion;
         }
 

@@ -7,6 +7,7 @@ using Ninject.Modules;
 using SQLite.Net.Interop;
 using SQLite.Net.Platform.XamarinAndroid;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -44,7 +45,8 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepositoryWithCache>();
             this.Bind<IPlainInterviewFileStorage>().To<InterviewerPlainInterviewFileStorage>();
 
-            this.Bind<IEventStore>().To<InterviewerEventStorage>();
+            this.Bind<IInterviewerEventStorage>().To<SqliteEventStorage>();
+            this.Bind<IEventStore>().ToMethod(context => context.Kernel.Get<IInterviewerEventStorage>());
 
             this.Bind<ISQLitePlatform>().To<SQLitePlatformAndroid>();
             this.Bind<SqliteSettings>().ToConstant(

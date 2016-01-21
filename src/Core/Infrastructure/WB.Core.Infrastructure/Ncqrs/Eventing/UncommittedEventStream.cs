@@ -26,9 +26,6 @@ namespace Ncqrs.Eventing
             this.Append(events);
         }
 
-        /// <summary>
-        /// Creates new uncommitted event stream.
-        /// </summary>
         public UncommittedEventStream(Guid commitId, string origin)
         {
             _commitId = commitId;
@@ -43,10 +40,6 @@ namespace Ncqrs.Eventing
             }
         }
 
-        /// <summary>
-        /// Appends new event to the stream.
-        /// </summary>
-        /// <param name="evnt">New event.</param>
         public void Append(UncommittedEvent evnt)
         {
             if (_events.Count > 0 && _hasSingleSource)
@@ -71,13 +64,7 @@ namespace Ncqrs.Eventing
             _eventSourceInformation[evnt.EventSourceId] = newInformation;
         }
 
-        /// <summary>
-        /// Gets information about sources of events in this stream.
-        /// </summary>
-        public IEnumerable<EventSourceInformation> Sources
-        {
-            get { return _eventSourceInformation.Values; }
-        }
+        public IEnumerable<EventSourceInformation> Sources => this._eventSourceInformation.Values;
 
         /// <summary>
         /// Returns whether this stream of events has a single source. An empty stream has single source by definition.
