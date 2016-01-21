@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Main.Core.Events;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
@@ -26,7 +27,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     public class InterviewerInterviewAccessor : IInterviewerInterviewAccessor
     {
         private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireRepository;
-        private readonly IAsyncPlainStorage<EventView> eventRepository;
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository;
         private readonly IAsyncPlainStorage<InterviewFileView> interviewFileViewRepository;
@@ -34,13 +34,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IInterviewerPrincipal principal;
         private readonly ISerializer serializer;
         private readonly IStringCompressor compressor;
-        private readonly IEventStore eventStore;
+        private readonly IInterviewerEventStorage eventStore;
         private readonly IAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache;
         private readonly ISnapshotStoreWithCache snapshotStoreWithCache;
 
         public InterviewerInterviewAccessor(
             IAsyncPlainStorage<QuestionnaireView> questionnaireRepository,
-            IAsyncPlainStorage<EventView> eventRepository,
             IAsyncPlainStorage<InterviewView> interviewViewRepository,
             IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository,
             IAsyncPlainStorage<InterviewFileView> interviewFileViewRepository,
@@ -48,12 +47,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IInterviewerPrincipal principal,
             ISerializer serializer,
             IStringCompressor compressor,
-            IEventStore eventStore,
+            IInterviewerEventStorage eventStore,
             IAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache,
             ISnapshotStoreWithCache snapshotStoreWithCache)
         {
             this.questionnaireRepository = questionnaireRepository;
-            this.eventRepository = eventRepository;
             this.interviewViewRepository = interviewViewRepository;
             this.interviewMultimediaViewRepository = interviewMultimediaViewRepository;
             this.interviewFileViewRepository = interviewFileViewRepository;
@@ -74,9 +72,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.aggregateRootRepositoryWithCache.CleanCache();
             this.snapshotStoreWithCache.CleanCache();
 
-            var eventViews = await Task.Run(() => this.eventRepository.Query(
-                events => events.Where(evnt => evnt.EventSourceId == interviewId).ToList()));
-            await this.eventRepository.RemoveAsync(eventViews);
+            this.eventStore.RemoveEventSourceById(interviewId);
 
             await this.RemoveInterviewImagesAsync(interviewId);
         }
