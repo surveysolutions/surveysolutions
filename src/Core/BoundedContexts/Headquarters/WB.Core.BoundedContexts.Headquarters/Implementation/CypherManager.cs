@@ -42,12 +42,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             this.settingCache = newSetting;
         }
 
-        public void UpdatePassword(string password)
+        public void RegeneratePassword()
         {
             var setting = this.settingsStorage.GetById(Setting.EncriptionSettingId);
             if (setting != null && setting.IsEnabled)
             {
-                var newSetting = new Setting(setting.IsEnabled, password);
+                var newSetting = new Setting(setting.IsEnabled, GeneratePassword());
                 this.settingsStorage.Store(newSetting, Setting.EncriptionSettingId);
 
                 this.settingCache = newSetting;
