@@ -27,7 +27,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     public class InterviewerInterviewAccessor : IInterviewerInterviewAccessor
     {
         private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireRepository;
-        private readonly IInterviewerEventStorage eventRepository;
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository;
         private readonly IAsyncPlainStorage<InterviewFileView> interviewFileViewRepository;
@@ -41,7 +40,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public InterviewerInterviewAccessor(
             IAsyncPlainStorage<QuestionnaireView> questionnaireRepository,
-            IInterviewerEventStorage eventRepository,
             IAsyncPlainStorage<InterviewView> interviewViewRepository,
             IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository,
             IAsyncPlainStorage<InterviewFileView> interviewFileViewRepository,
@@ -54,7 +52,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             ISnapshotStoreWithCache snapshotStoreWithCache)
         {
             this.questionnaireRepository = questionnaireRepository;
-            this.eventRepository = eventRepository;
             this.interviewViewRepository = interviewViewRepository;
             this.interviewMultimediaViewRepository = interviewMultimediaViewRepository;
             this.interviewFileViewRepository = interviewFileViewRepository;
@@ -75,7 +72,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.aggregateRootRepositoryWithCache.CleanCache();
             this.snapshotStoreWithCache.CleanCache();
 
-            this.eventRepository.RemoveEventSourceById(interviewId);
+            this.eventStore.RemoveEventSourceById(interviewId);
 
             await this.RemoveInterviewImagesAsync(interviewId);
         }
