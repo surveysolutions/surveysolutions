@@ -123,7 +123,8 @@
     <Compile Include="Implementation\Services\InterviewerQuestionnaireAccessor.cs" />
     <Compile Include="Implementation\Services\QuestionnaireKeyValueStorage.cs" />
     <Compile Include="Implementation\Services\QuestionnaireModelKeyValueStorage.cs" />
-    <Compile Include="Implementation\Services\InterviewerEventStorage.cs" />
+    <Compile Include="Implementation\Storage\IInterviewerEventStorage.cs" />
+    <Compile Include="Implementation\Storage\SqliteEventStorage.cs" />
     <Compile Include="Implementation\Services\SynchronizationException.cs" />
     <Compile Include="Implementation\Services\SynchronizationExceptionType.cs" />
     <Compile Include="Implementation\Services\SynchronizationService.cs" />
