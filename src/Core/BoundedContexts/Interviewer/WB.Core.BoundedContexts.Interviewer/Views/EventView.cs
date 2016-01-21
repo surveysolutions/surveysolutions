@@ -10,7 +10,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public int OID { get; set; }
         public string Id { get; set; }
         public Guid EventId { get; set; }
+        [Unique]
         public Guid EventSourceId { get; set; }
+        [Unique]
         public int EventSequence { get; set; }
         public DateTime DateTimeUtc { get; set; }
         public string JsonEvent { get; set; }

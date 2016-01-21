@@ -5,6 +5,7 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
@@ -33,7 +34,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public CommittedEventStream Store(UncommittedEventStream eventStream)
         {
             var storedEvents = eventStream.Select(ToStoredEvent).ToList();
-            this.eventRepository.StoreAsync(storedEvents).Wait();
+            this.eventRepository.StoreAsync(storedEvents).WaitAndUnwrapException();
 
             return new CommittedEventStream(eventStream.SourceId, storedEvents.Select(ToCommitedEvent));
         }

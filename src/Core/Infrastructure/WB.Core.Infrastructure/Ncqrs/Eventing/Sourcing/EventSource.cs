@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.Infrastructure.EventBus;
@@ -168,7 +169,7 @@ namespace Ncqrs.Eventing.Sourcing
                 _currentVersion = _initialVersion;
             }
         
-            _currentVersion++;
+            Interlocked.Increment(ref _currentVersion);
             return _currentVersion;
         }
 
