@@ -126,4 +126,7 @@
   <data name="InterviewStatus_Completed" xml:space="preserve">
     <value>Completed</value>
   </data>
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+    <value>Interviewer assigned</value>
+  </data>
 </root>
