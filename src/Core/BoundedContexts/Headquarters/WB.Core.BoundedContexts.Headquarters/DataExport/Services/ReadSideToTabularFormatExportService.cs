@@ -22,6 +22,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
@@ -39,13 +40,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly InterviewsExporter interviewsExporter;
         private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
+        private readonly InterviewDataExportSettings exportSettings;
 
         public ReadSideToTabularFormatExportService(IFileSystemAccessor fileSystemAccessor,
             ICsvWriter csvWriter, 
             ILogger logger,
             ITransactionManagerProvider transactionManager, 
             IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries)
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries,
+            InterviewDataExportSettings exportSettings)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
@@ -53,6 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.transactionManager = transactionManager;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.interviewSummaries = interviewSummaries;
+            this.exportSettings = exportSettings;
 
             this.interviewsExporter = ServiceLocator.Current.GetInstance<InterviewsExporter>();
 
@@ -129,7 +133,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                         .OrderBy(x => x.InterviewId)
                         .Select(x => x.InterviewId)
                         .Skip(interviewIdsToExport.Count)
-                        .Take(40000)
+                        .Take(this.exportSettings.InterviewIdsQueryBatchSize)
                         .ToList()));
                 if (ids.Count == 0) break;
 
