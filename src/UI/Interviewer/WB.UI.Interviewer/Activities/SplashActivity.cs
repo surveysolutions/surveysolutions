@@ -41,6 +41,7 @@ using Environment = System.Environment;
 #warning do not remove "Sqo" namespace
 #warning if after all the warning you intend to remove the namespace anyway, please remove NuGet packages SiaqoDB and SiaqoDbProtable also
 using Sqo;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -197,9 +198,8 @@ namespace WB.UI.Interviewer.Activities
 
         private async Task RestoreEventStreamsAsync()
         {
-            var eventViewRepository = Mvx.Resolve<IAsyncPlainStorage<EventView>>();
-
             var pathToEventStreams = PortablePath.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal),"EventStore");
+            var eventViewRepository = Mvx.Resolve<IInterviewerEventStorage>();
 
             var eventStreamsFolder = await FileSystem.Current.GetFolderFromPathAsync(pathToEventStreams);
 
@@ -207,16 +207,17 @@ namespace WB.UI.Interviewer.Activities
 
             foreach (var eventStreamFile in await eventStreamsFolder.GetFilesAsync())
             {
-                var eventStream = this.GetSqlLiteEntities<StoredEvent>(eventStreamFile.Name, "EventStore");
-                await eventViewRepository.StoreAsync(eventStream.Select(x => new EventView
+                IEnumerable<StoredEvent> eventStream = this.GetSqlLiteEntities<StoredEvent>(eventStreamFile.Name, "EventStore");
+
+                var eventViews = eventStream.OrderBy(x => x.Sequence).Select((x, index) => new EventView
                 {
-                    Id = Guid.Parse(x.EventId).FormatGuid(),
                     EventSourceId = Guid.Parse(eventStreamFile.Name),
                     DateTimeUtc = new DateTime(x.TimeStamp),
-                    EventSequence = x.Sequence,
+                    EventSequence = index + 1,
                     JsonEvent = x.Data,
                     EventId = Guid.Parse(x.EventId)
-                }));
+                });
+                eventViewRepository.MigrateOldEvents(eventViews);
             }
         }
 

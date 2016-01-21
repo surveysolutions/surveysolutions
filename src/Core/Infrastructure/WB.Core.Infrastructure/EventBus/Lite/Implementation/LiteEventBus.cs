@@ -23,8 +23,8 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
         public CommittedEventStream CommitUncommittedEvents(IAggregateRoot aggregateRoot, string origin)
         {
             var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnCommittedChanges());
-
-            return this.eventStore.Store(eventStream);
+            var commitUncommittedEvents = this.eventStore.Store(eventStream);
+            return commitUncommittedEvents;
         }
 
         public void PublishCommittedEvents(CommittedEventStream committedEvents)
