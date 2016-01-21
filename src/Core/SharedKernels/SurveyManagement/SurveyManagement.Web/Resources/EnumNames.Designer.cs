@@ -86,5 +86,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
                 return ResourceManager.GetString("InterviewStatus_Completed", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer assigned.
+        /// </summary>
+        internal static string InterviewStatus_InterviewerAssigned {
+            get {
+                return ResourceManager.GetString("InterviewStatus_InterviewerAssigned", resourceCulture);
+            }
+        }
     }
 }

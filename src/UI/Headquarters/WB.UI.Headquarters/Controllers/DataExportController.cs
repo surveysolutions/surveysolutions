@@ -43,6 +43,7 @@ namespace WB.UI.Headquarters.Controllers
             export.Questionnaires = usersAndQuestionnaires.Questionnaires;
             export.ExportStatuses = new List<InterviewStatus>
             {
+                InterviewStatus.InterviewerAssigned,
                 InterviewStatus.Completed,
                 InterviewStatus.ApprovedBySupervisor,
                 InterviewStatus.ApprovedByHeadquarters
