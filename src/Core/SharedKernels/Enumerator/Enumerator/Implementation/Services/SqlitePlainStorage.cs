@@ -103,5 +103,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.storage.RunInTransaction(() => result = query.Invoke(this.storage.Table<TEntity>().AsQueryable()));
             return result;
         }
+
+        public void Dispose()
+        {
+            this.storage.Dispose();
+        }
     }
 }
