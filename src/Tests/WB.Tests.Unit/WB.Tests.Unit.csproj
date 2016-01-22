@@ -779,6 +779,7 @@
     <Compile Include="SharedKernels\SurveyManagement\Merger\when_merging_questionnaire_and_interview_data_and_interview_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Merger\when_merging_questionnaire_and_interview_data_with_3_fixed_roster_rows.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_all_service_variables.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_with_locked_interviewer_by_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_where_integer_roster_size_question_has_answer_42.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_where_integer_roster_size_question_has_negative_answer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_answer_on_numeric_question_which_contains_comma.cs" />
