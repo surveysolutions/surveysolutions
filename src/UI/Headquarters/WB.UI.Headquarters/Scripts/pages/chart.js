@@ -57,7 +57,8 @@
         locale: {
             format: dateFormat
         }
-    }, function (start, end) {
+    },
+    function (start, end) {
         self.setReportRange(start, end);
         self.FromDate(start);
         self.ToDate(end);
@@ -69,7 +70,8 @@
         var formatedStartDate = start.format(dateFormat);
         var formatedEndDate = end.format(dateFormat);
         self.SelectedRange(formatedStartDate + "/" + formatedEndDate);
-        $('#dates-range').daterangepicker({ startDate: moment(start), endDate: moment(end) });
+        $('#dates-range').data('daterangepicker').setStartDate(moment(start));
+        $('#dates-range').data('daterangepicker').setEndDate(moment(end));
     };
 
     self.drawChart = function () {
