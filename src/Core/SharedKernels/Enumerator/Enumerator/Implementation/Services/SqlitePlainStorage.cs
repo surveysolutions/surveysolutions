@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public SqlitePlainStorage(ISQLitePlatform sqLitePlatform, ILogger logger,
             IAsynchronousFileSystemAccessor fileSystemAccessor, ISerializer serializer, SqliteSettings settings)
         {
-            var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, typeof(TEntity).Name + "-data.mdb");
+            var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, typeof(TEntity).Name + "-data.sqlite3");
             this.storage = new SQLiteConnectionWithLock(sqLitePlatform,
                 new SQLiteConnectionString(pathToDatabase, true, new BlobSerializerDelegate(
                     serializer.SerializeToByteArray,
