@@ -55,5 +55,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
         {
             return query.Invoke(this.items.AsQueryable());
         }
+
+        public void Dispose()
+        {
+        }
     }
 }
