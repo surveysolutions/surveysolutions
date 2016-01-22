@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     {
         private readonly SQLiteAsyncConnection asyncStorage;
         private readonly SQLiteConnectionWithLock storage;
-        protected readonly ILogger logger;
+        private readonly ILogger logger;
 
         public SqlitePlainStorage(ISQLitePlatform sqLitePlatform, ILogger logger,
             IAsynchronousFileSystemAccessor fileSystemAccessor, ISerializer serializer, SqliteSettings settings)
