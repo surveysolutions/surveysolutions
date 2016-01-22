@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public SqlitePlainStorage(ISQLitePlatform sqLitePlatform, ILogger logger,
             IAsynchronousFileSystemAccessor fileSystemAccessor, ISerializer serializer, SqliteSettings settings)
         {
-            var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, "data.mdb");
+            var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, typeof(TEntity).Name + "-data.mdb");
             this.storage = new SQLiteConnectionWithLock(sqLitePlatform,
                 new SQLiteConnectionString(pathToDatabase, true, new BlobSerializerDelegate(
                     serializer.SerializeToByteArray,
@@ -58,9 +58,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 });
                 
             }
-            catch (Exception ex)
+            catch (SQLiteException ex)
             {
-                this.logger.Fatal(ex.Message, ex);
+                this.logger.Fatal($"Failed to persist {entities.Count()} entities as batch", ex);
+                throw;
             }
         }
 
@@ -89,9 +90,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 });
 
             }
-            catch (Exception ex)
+            catch (SQLiteException ex)
             {
-                this.logger.Fatal(ex.Message, ex);
+                this.logger.Fatal($"Failed to persist {entities.Count()} entities as batch", ex);
+                throw;
             }
         }
 
