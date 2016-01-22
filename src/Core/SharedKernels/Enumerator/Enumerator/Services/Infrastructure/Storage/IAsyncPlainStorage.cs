@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage
 {
-    public interface IAsyncPlainStorage<TEntity> where TEntity : class, IPlainStorageEntity
+    public interface IAsyncPlainStorage<TEntity> : IDisposable where TEntity : class, IPlainStorageEntity
     {
         TEntity GetById(string id);
 
