@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using Cirrious.CrossCore;
 using Cirrious.MvvmCross.ViewModels;
 using MvvmCross.Plugins.PictureChooser;
@@ -101,7 +102,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     {
                         if (pictureStream != null)
                         {
-                            this.StorePictureFile(pictureStream, pictureFileName);
+                            await this.StorePictureFileAsync(pictureStream, pictureFileName);
 
                             var command = new AnswerPictureQuestionCommand(
                                 this.interviewId,
@@ -163,13 +164,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private void StorePictureFile(Stream pictureStream, string pictureFileName)
+        private async Task StorePictureFileAsync(Stream pictureStream, string pictureFileName)
         {
             using (MemoryStream ms = new MemoryStream())
             {
                 pictureStream.CopyTo(ms);
                 byte[] pictureBytes = ms.ToArray();
-                this.plainInterviewFileStorage.StoreInterviewBinaryData(this.interviewId, pictureFileName, pictureBytes);
+                await this.plainInterviewFileStorage.StoreInterviewBinaryDataAsync(this.interviewId, pictureFileName, pictureBytes);
             }
         }
 

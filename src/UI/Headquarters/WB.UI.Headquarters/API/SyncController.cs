@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.API
         {
             try
             {
-                plainFileRepository.StoreInterviewBinaryData(interviewId, fileName,
+                await plainFileRepository.StoreInterviewBinaryDataAsync(interviewId, fileName,
                     await this.Request.Content.ReadAsByteArrayAsync());
 
                 return Request.CreateResponse(HttpStatusCode.OK);
