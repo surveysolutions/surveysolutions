@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             ISerializer serializer, 
             SqliteSettings settings)
         {
-            var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, "data.mdb");
+            var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, "events-data.mdb");
             this.connection = new SQLiteConnectionWithLock(sqLitePlatform,
                 new SQLiteConnectionString(pathToDatabase, true, new BlobSerializerDelegate(
                     serializer.SerializeToByteArray,
