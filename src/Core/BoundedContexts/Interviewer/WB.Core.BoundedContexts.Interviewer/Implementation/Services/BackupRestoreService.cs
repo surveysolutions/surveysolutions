@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 await this.fileSystemAccessor.CopyFileAsync(crashFilePath, privateStorage);
 
             return await this.archiver.ZipDirectoryToByteArrayAsync(privateStorage,
-                fileFilter: @"\.log$;\.dll$;\.mdb$;");
+                fileFilter: @"\.log$;\.dll$;\.sqlite3$;");
         }
 
         public async Task<string> BackupAsync(string backupToFolderPath)

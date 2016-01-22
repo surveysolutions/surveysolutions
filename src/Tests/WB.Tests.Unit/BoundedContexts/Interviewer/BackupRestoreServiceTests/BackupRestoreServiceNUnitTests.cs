@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.BackupRestoreServiceTests
 
             asynchronousFileSystemAccessorMock.Verify(x => x.CopyFileAsync("crush", "private"), Times.Once);
 
-            archiveUtilsMock.Verify(x => x.ZipDirectoryToByteArrayAsync("private", null,  @"\.log$;\.dll$;\.mdb$;"), Times.Once);
+            archiveUtilsMock.Verify(x => x.ZipDirectoryToByteArrayAsync("private", null, @"\.log$;\.dll$;\.sqlite3$;"), Times.Once);
         }
 
         [Test]
