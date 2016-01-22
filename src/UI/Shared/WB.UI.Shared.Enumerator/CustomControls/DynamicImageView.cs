@@ -61,5 +61,14 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 this.Invalidate();
             });
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (disposing)
+            {
+                this.imageHelper.Dispose();
+            }
+        }
     }
 }
