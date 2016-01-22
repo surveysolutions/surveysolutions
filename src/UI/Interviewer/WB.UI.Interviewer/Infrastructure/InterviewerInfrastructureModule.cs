@@ -45,8 +45,7 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepositoryWithCache>();
             this.Bind<IPlainInterviewFileStorage>().To<InterviewerPlainInterviewFileStorage>();
 
-            this.Bind<IInterviewerEventStorage>().To<SqliteEventStorage>();
-            this.Bind<IEventStore>().ToMethod(context => context.Kernel.Get<IInterviewerEventStorage>());
+            this.Bind<IInterviewerEventStorage, IEventStore>().To<SqliteEventStorage>().InSingletonScope();
 
             this.Bind<ISQLitePlatform>().To<SQLitePlatformAndroid>();
             this.Bind<SqliteSettings>().ToConstant(

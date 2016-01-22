@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             ISerializer serializer, 
             SqliteSettings settings)
         {
-            var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, "data.mdb");
+            var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, "events-data.sqlite3");
             this.connection = new SQLiteConnectionWithLock(sqLitePlatform,
                 new SQLiteConnectionString(pathToDatabase, true, new BlobSerializerDelegate(
                     serializer.SerializeToByteArray,
@@ -39,7 +39,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)
         {
             var events = this.connection.Table<EventView>().Where(eventView => eventView.EventSourceId == id &&
-                                                                  eventView.EventSequence >= minVersion && eventView.EventSequence <= maxVersion);
+                                                                  eventView.EventSequence >= minVersion && eventView.EventSequence <= maxVersion)
+                                                            .OrderBy(x => x.EventSequence);
             
             return new CommittedEventStream(id, events.Select(this.ToCommitedEvent));
         }
