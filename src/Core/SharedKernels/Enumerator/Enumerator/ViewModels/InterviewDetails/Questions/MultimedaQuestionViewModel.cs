@@ -97,29 +97,31 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     var pictureFileName = this.GetPictureFileName();
 
                     var pictureChooserTask = Mvx.Resolve<IMvxPictureChooserTask>();
-                    Stream pictureStream = await pictureChooserTask.TakePictureAsync(400, 95);
-                    if (pictureStream != null)
+                    using (Stream pictureStream = await pictureChooserTask.TakePictureAsync(400, 95))
                     {
-                        this.StorePictureFile(pictureStream, pictureFileName);
-
-                        var command = new AnswerPictureQuestionCommand(
-                            this.interviewId,
-                            this.userId,
-                            this.questionIdentity.Id,
-                            this.questionIdentity.RosterVector,
-                            DateTime.UtcNow,
-                            pictureFileName);
-
-                        try
+                        if (pictureStream != null)
                         {
-                            await this.Answering.SendAnswerQuestionCommandAsync(command);
-                            this.Answer = this.plainInterviewFileStorage.GetInterviewBinaryData(this.interviewId, pictureFileName);
-                            this.QuestionState.Validity.ExecutedWithoutExceptions();
-                        }
-                        catch (InterviewException ex)
-                        {
-                            this.plainInterviewFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
-                            this.QuestionState.Validity.ProcessException(ex);
+                            this.StorePictureFile(pictureStream, pictureFileName);
+
+                            var command = new AnswerPictureQuestionCommand(
+                                this.interviewId,
+                                this.userId,
+                                this.questionIdentity.Id,
+                                this.questionIdentity.RosterVector,
+                                DateTime.UtcNow,
+                                pictureFileName);
+
+                            try
+                            {
+                                await this.Answering.SendAnswerQuestionCommandAsync(command);
+                                this.Answer = this.plainInterviewFileStorage.GetInterviewBinaryData(this.interviewId, pictureFileName);
+                                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                            }
+                            catch (InterviewException ex)
+                            {
+                                this.plainInterviewFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
+                                this.QuestionState.Validity.ProcessException(ex);
+                            }
                         }
                     }
                 });
