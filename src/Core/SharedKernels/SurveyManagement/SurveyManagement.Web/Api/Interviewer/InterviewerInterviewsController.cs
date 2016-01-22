@@ -140,7 +140,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         [Route("{id:guid}/image")]
         public void PostImage(PostFileRequest request)
         {
-            this.plainInterviewFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
+            this.plainInterviewFileStorage.StoreInterviewBinaryDataAsync(request.InterviewId, request.FileName,
                 Convert.FromBase64String(request.Data));
         }
 
