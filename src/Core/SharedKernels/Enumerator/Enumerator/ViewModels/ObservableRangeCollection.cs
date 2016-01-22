@@ -48,9 +48,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 this.Items.Remove(item);
             }
 
-            this.OnPropertyChanged(new PropertyChangedEventArgs(CountString));
-            this.OnPropertyChanged(new PropertyChangedEventArgs(IndexerName));
-            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                this.OnPropertyChanged(new PropertyChangedEventArgs(CountString));
+                this.OnPropertyChanged(new PropertyChangedEventArgs(IndexerName));
+                this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            });
         }
 
         public void Reset(IEnumerable<T> content)
@@ -63,10 +66,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             {
                 this.Items.Add(item);
             }
-
-            this.OnPropertyChanged(new PropertyChangedEventArgs(CountString));
-            this.OnPropertyChanged(new PropertyChangedEventArgs(IndexerName));
-            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                this.OnPropertyChanged(new PropertyChangedEventArgs(CountString));
+                this.OnPropertyChanged(new PropertyChangedEventArgs(IndexerName));
+                this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            });
         }
 
         public void NotifyItemChanged(int itemIndex)
@@ -77,8 +82,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             var item = this[itemIndex];
             this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
             {
-                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, item,
-                    item, itemIndex));
+                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, item, item, itemIndex));
             });
         }
     }
