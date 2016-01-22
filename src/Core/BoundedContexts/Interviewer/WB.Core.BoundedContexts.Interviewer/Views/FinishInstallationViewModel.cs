@@ -119,7 +119,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public async Task RefreshEndpoint()
         {
             var settingsEndpoint = this.interviewerSettings.Endpoint;
-            if (!string.Equals(settingsEndpoint, this.endpoint, StringComparison.OrdinalIgnoreCase))
+            if (!string.IsNullOrEmpty(settingsEndpoint) && !string.Equals(settingsEndpoint, this.endpoint, StringComparison.OrdinalIgnoreCase))
             {
                 var message = string.Format(InterviewerUIResources.FinishInstallation_EndpointDiffers,  this.Endpoint, settingsEndpoint);
                 if (await this.userInteractionService.ConfirmAsync(message))
