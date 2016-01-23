@@ -261,6 +261,7 @@
     <Compile Include="Api\ControlPanelApiController.cs" />
     <Compile Include="Api\ExpressionGenerationController.cs" />
     <Compile Include="Api\QuestionnairesController.cs" />
+    <Compile Include="Api\QuestionnairesV11Controller.cs" />
     <Compile Include="Api\QuestionnairesV10Controller.cs" />
     <Compile Include="Api\QuestionnairesV9Controller.cs" />
     <Compile Include="Api\QuestionnairesV8Controller.cs" />
