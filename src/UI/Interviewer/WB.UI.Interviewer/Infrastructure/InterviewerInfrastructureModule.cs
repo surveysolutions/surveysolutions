@@ -42,7 +42,7 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<IInterviewerInterviewAccessor>().To<InterviewerInterviewAccessor>();
 
 
-            this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepositoryWithCache>();
+            this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepositoryWithCache>().InSingletonScope();
             this.Bind<IPlainInterviewFileStorage>().To<InterviewerPlainInterviewFileStorage>();
 
             this.Bind<IInterviewerEventStorage, IEventStore>().To<SqliteEventStorage>().InSingletonScope();
