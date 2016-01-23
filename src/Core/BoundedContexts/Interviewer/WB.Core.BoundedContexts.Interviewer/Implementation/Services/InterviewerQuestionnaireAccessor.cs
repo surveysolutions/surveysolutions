@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
@@ -21,7 +22,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         private readonly IAsyncPlainStorage<QuestionnaireModelView> questionnaireModelViewRepository;
         private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
-        private readonly IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentRepository;
+
+        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
 
         public InterviewerQuestionnaireAccessor(
@@ -29,7 +31,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IQuestionnaireModelBuilder questionnaireModelBuilder,
             IAsyncPlainStorage<QuestionnaireModelView> questionnaireModelViewRepository,
             IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository,
-            IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentRepository,
+            IPlainQuestionnaireRepository plainQuestionnaireRepository,
             IAsyncPlainStorage<InterviewView> interviewViewRepository,
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor,
             IInterviewerInterviewAccessor interviewFactory)
@@ -38,7 +40,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.questionnaireModelBuilder = questionnaireModelBuilder;
             this.questionnaireModelViewRepository = questionnaireModelViewRepository;
             this.questionnaireViewRepository = questionnaireViewRepository;
-            this.questionnaireDocumentRepository = questionnaireDocumentRepository;
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.interviewViewRepository = interviewViewRepository;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
             this.interviewFactory = interviewFactory;
@@ -51,11 +53,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             var serializedQuestionnaireDocument = await Task.Run(() => this.serializer.Deserialize<QuestionnaireDocument>(questionnaireDocument));
             var questionnaireModel = await Task.Run(() => this.questionnaireModelBuilder.BuildQuestionnaireModel(serializedQuestionnaireDocument));
 
-            await this.questionnaireDocumentRepository.StoreAsync(new QuestionnaireDocumentView
-            {
-                Id = questionnaireId,
-                Document = serializedQuestionnaireDocument
-            });
+            this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId,
+                questionnaireIdentity.Version, serializedQuestionnaireDocument);
+
             await this.questionnaireModelViewRepository.StoreAsync(new QuestionnaireModelView
             {
                 Id = questionnaireId,
@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             var questionnaireId = questionnaireIdentity.ToString();
 
             await this.DeleteInterviewsByQuestionnaireAsync(questionnaireId);
-            await this.questionnaireDocumentRepository.RemoveAsync(questionnaireId);
+            this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
             await this.questionnaireModelViewRepository.RemoveAsync(questionnaireId);
             await this.questionnaireViewRepository.RemoveAsync(questionnaireId);
             await this.questionnaireAssemblyFileAccessor.RemoveAssemblyAsync(questionnaireIdentity);

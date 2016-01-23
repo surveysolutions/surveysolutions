@@ -368,11 +368,11 @@ namespace WB.Tests.Unit
 
         public static InterviewEventHandler DashboardDenormalizer(
             IAsyncPlainStorage<InterviewView> interviewViewRepository = null,
-            IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
+            IPlainQuestionnaireRepository plainQuestionnaireRepository = null)
         {
             return new InterviewEventHandler(
-               interviewViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewView>>(),
-            questionnaireDocumentViewRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireDocumentView>>());
+                interviewViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewView>>(),
+                plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>());
         }
 
         public static Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire DataCollectionQuestionnaire(
