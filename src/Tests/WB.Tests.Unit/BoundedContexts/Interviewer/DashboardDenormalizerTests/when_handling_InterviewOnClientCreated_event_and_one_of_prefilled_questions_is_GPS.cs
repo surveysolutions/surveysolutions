@@ -6,6 +6,8 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using It = Machine.Specifications.It;
@@ -31,13 +33,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                 version: 1);
 
             var questionnaireId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$33";
-            IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewStorage =
-                Mock.Of<IAsyncPlainStorage<QuestionnaireDocumentView>>(storage
-                    => storage.GetById(questionnaireId) == new QuestionnaireDocumentView()
-                    {
-                        Id = questionnaireId,
-                        Document = versionedQuestionnaire.Questionnaire
-                    });
+            IPlainQuestionnaireRepository plainQuestionnaireRepository =
+                Mock.Of<IPlainQuestionnaireRepository>(storage
+                    => storage.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(questionnaireId)) == versionedQuestionnaire.Questionnaire);
 
             var storeAsyncTask = new Task(() => { });
             storeAsyncTask.Start();
@@ -51,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                 .Returns(storeAsyncTask);
 
             denormalizer = Create.DashboardDenormalizer(interviewViewRepository: interviewViewStorage,
-                questionnaireDocumentViewRepository: questionnaireDocumentViewStorage);
+                plainQuestionnaireRepository: plainQuestionnaireRepository);
         };
 
         Because of = () =>

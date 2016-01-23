@@ -78,7 +78,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 {
                     foreach (var entity in entities.Where(entity => entity != null))
                     {
-                        if (this.GetById(entity.Id) != null)
+                        if (this.storage.Find<TEntity>(x => x.Id == entity.Id) != null)
                         {
                             connection.Update(entity);
                         }
