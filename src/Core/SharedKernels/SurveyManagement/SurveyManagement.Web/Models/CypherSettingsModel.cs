@@ -1,10 +1,10 @@
 ﻿namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
-    public class CypherSettingsModel
+    public class ExportSettingsModel
     {
-        public CypherSettingsModel(){}
+        public ExportSettingsModel(){}
 
-        public CypherSettingsModel(bool isEnabled, string password)
+        public ExportSettingsModel(bool isEnabled, string password)
         {
             this.IsEnabled = isEnabled;
             this.Password = password;

@@ -298,6 +298,7 @@
     <Content Include="Scripts\pages\import-interviews.js" />
     <Content Include="Scripts\pages\batchupload.js" />
     <Content Include="Scripts\pages\chart.js" />
+    <Content Include="Scripts\pages\export-settings.js" />
     <Content Include="Scripts\pages\userpreloading.js" />
     <Content Include="Scripts\popover-extra-placements.js" />
     <Content Include="Views\HQ\InterviewsChart.cshtml" />
@@ -488,7 +489,7 @@
     <Content Include="Views\ApiUser\Edit.cshtml" />
     <Content Include="Views\ApiUser\Index.cshtml" />
     <Content Include="Views\HQ\VerifySample.cshtml" />
-    <Content Include="Views\Settings\DataEncryption.cshtml" />
+    <Content Include="Views\Settings\ExportEncryptionSettings.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -513,6 +514,7 @@
     <Compile Include="API\DataExportApiController.cs" />
     <Compile Include="API\Feeds\QuestionnaireFeedController.cs" />
     <Compile Include="API\Filters\HeadquarterFeatureOnlyFilter.cs" />
+    <Compile Include="API\ExportSettingsApiController.cs" />
     <Compile Include="API\UserPreloadingController.cs" />
     <Compile Include="API\Resources\AssembliesResourceController.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.Designer.cs">
@@ -566,6 +568,7 @@
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\DataExportController.cs" />
     <Compile Include="Controllers\ApiUserController.cs" />
+    <Compile Include="Models\ChangeSettingsModel.cs" />
     <Compile Include="Models\ExportModel.cs" />
     <Compile Include="Controllers\ObserverController.cs" />
     <Compile Include="Controllers\InterviewsApiController.cs" />

@@ -192,7 +192,7 @@
     <Compile Include="DataExport\Ddi\Impl\DdiMetadataAccessor.cs" />
     <Compile Include="DataExport\Ddi\IDdiMetadataFactory.cs" />
     <Compile Include="DataExport\Ddi\IDdiMetadataAccessor.cs" />
-    <Compile Include="Implementation\CypherManager.cs" />
+    <Compile Include="Implementation\ExportSettings.cs" />
     <Compile Include="Implementation\Services\HeadquarterUserCommandValidator.cs" />
     <Compile Include="Interviews\Denormalizers\InterviewsFeedDenormalizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

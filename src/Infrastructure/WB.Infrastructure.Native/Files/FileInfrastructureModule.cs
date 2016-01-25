@@ -9,7 +9,7 @@ namespace WB.Infrastructure.Native.Files
         public override void Load()
         {
             this.Bind<IFileSystemAccessor>().To<FileSystemIOAccessor>();
-            this.Bind<IArchiveUtils>().To<ZipArchiveUtils>();
+            //this.Bind<IArchiveUtils>().To<ZipArchiveUtils>();
         }
     }
 }

@@ -21,8 +21,8 @@ using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Shared.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
-using WB.Infrastructure.Security;
-using WB.Infrastructure.Shared.Enumerator.Internals.Security;
+using WB.Core.Infrastructure.FileSystem;
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
 namespace WB.UI.Supervisor.Injections
 {
@@ -209,7 +209,7 @@ namespace WB.UI.Supervisor.Injections
 
             this.Bind<IStringCompressor>().To<JsonCompressor>();
 
-            this.Bind<ICypherManager>().To<DefaultCypherManager>();
+            this.Bind<IArchiveUtils>().To<ZipArchiveUtils>();
         }
     }
 }
