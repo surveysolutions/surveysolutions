@@ -25,8 +25,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
             var interviewer = CreateInterviewerIdentity(userName);
 
             InterviewersPlainStorageMock
-               .Setup(x => x.FirstOrDefaultAsync())
-               .Returns(Task.FromResult(interviewer));
+               .Setup(x => x.FirstOrDefault())
+               .Returns(interviewer);
 
             viewModel = CreateLoginViewModel(
                 viewModelNavigationService: ViewModelNavigationServiceMock.Object,

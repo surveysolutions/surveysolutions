@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using SQLite.Net;
 using SQLite.Net.Async;
 using SQLite.Net.Interop;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -99,10 +101,26 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
-        public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
+        public IReadOnlyCollection<TEntity> Where(Expression<Func<TEntity, bool>> predicate)
+            => this.RunInTransaction(table
+                => table.Where(predicate).ToReadOnlyCollection());
+
+        public int Count(Expression<Func<TEntity, bool>> predicate)
+            => this.RunInTransaction(table
+                => table.Count(predicate));
+
+        public TEntity FirstOrDefault()
+            => this.RunInTransaction(table
+                => table.FirstOrDefault());
+
+        public IReadOnlyCollection<TEntity> LoadAll()
+            => this.RunInTransaction(table
+                => table.ToReadOnlyCollection());
+
+        private TResult RunInTransaction<TResult>(Func<TableQuery<TEntity>, TResult> function)
         {
             TResult result = default(TResult);
-            this.storage.RunInTransaction(() => result = query.Invoke(this.storage.Table<TEntity>().AsQueryable()));
+            this.storage.RunInTransaction(() => result = function.Invoke(this.storage.Table<TEntity>()));
             return result;
         }
 
