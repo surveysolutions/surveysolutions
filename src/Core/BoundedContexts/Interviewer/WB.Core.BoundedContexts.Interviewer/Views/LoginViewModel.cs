@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public async void Init()
         {
-            InterviewerIdentity currentInterviewer = await this.interviewersPlainStorage.FirstOrDefaultAsync();
+            InterviewerIdentity currentInterviewer = this.interviewersPlainStorage.FirstOrDefault();
 
             if (currentInterviewer == null)
             {
@@ -141,7 +141,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 await this.synchronizationService.GetInterviewerAsync(restCredentials);
 
-                var localInterviewer = await this.interviewersPlainStorage.FirstOrDefaultAsync();
+                var localInterviewer = this.interviewersPlainStorage.FirstOrDefault();
                 localInterviewer.Password = restCredentials.Password;
 
                 await this.interviewersPlainStorage.StoreAsync(localInterviewer);
