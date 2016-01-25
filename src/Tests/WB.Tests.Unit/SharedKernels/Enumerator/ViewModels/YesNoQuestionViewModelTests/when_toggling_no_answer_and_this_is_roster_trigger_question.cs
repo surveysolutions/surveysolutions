@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
-using WB.Core.GenericSubdomains.Portable.Tasks;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
