@@ -6,8 +6,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class InterviewMultimediaView : IPlainStorageEntity
     {
-        [PrimaryKey, AutoIncrement]
-        public int OID { get; set; }
+        [PrimaryKey]
         public string Id { get; set; }
         public Guid InterviewId { get; set; }
         public string FileId { get; set; }
