@@ -222,6 +222,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 var itemsToRemove = this.Items.OfType<GroupViewModel>()
                               .Where(x => @event.Instances.Any(y => x.Identity.Equals(y.GetIdentity())));
+                itemsToRemove.ForEach(x => x.Dispose());
                 InvokeOnMainThread(() => this.Items.RemoveRange(itemsToRemove));
             }
             finally
