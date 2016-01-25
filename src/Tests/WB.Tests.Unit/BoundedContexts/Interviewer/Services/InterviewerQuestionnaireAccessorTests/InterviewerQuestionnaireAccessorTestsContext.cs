@@ -4,6 +4,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
@@ -16,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
             IQuestionnaireModelBuilder questionnaireModelBuilder = null,
             IAsyncPlainStorage<QuestionnaireModelView> questionnaireModelViewRepository = null,
             IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository = null,
-            IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentRepository = null,
+            IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
             IAsyncPlainStorage<InterviewView> interviewViewRepository = null,
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor = null,
             IInterviewerInterviewAccessor interviewFactory = null)
@@ -26,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
                 questionnaireModelBuilder: questionnaireModelBuilder ?? Mock.Of<IQuestionnaireModelBuilder>(),
                 questionnaireModelViewRepository: questionnaireModelViewRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireModelView>>(),
                 questionnaireViewRepository: questionnaireViewRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireView>>(),
-                questionnaireDocumentRepository: questionnaireDocumentRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireDocumentView>>(),
+                plainQuestionnaireRepository: plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 interviewViewRepository: interviewViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewView>>(),
                 questionnaireAssemblyFileAccessor: questionnaireAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
                 interviewFactory: interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>());

@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     {
         private readonly SQLiteAsyncConnection asyncStorage;
         private readonly SQLiteConnectionWithLock storage;
-        protected readonly ILogger logger;
+        private readonly ILogger logger;
 
         public SqlitePlainStorage(ISQLitePlatform sqLitePlatform, ILogger logger,
             IAsynchronousFileSystemAccessor fileSystemAccessor, ISerializer serializer, SqliteSettings settings)
@@ -78,7 +78,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 {
                     foreach (var entity in entities.Where(entity => entity != null))
                     {
-                        if (this.GetById(entity.Id) != null)
+                        if (this.storage.Find<TEntity>(x => x.Id == entity.Id) != null)
                         {
                             connection.Update(entity);
                         }
@@ -102,6 +102,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             TResult result = default(TResult);
             this.storage.RunInTransaction(() => result = query.Invoke(this.storage.Table<TEntity>().AsQueryable()));
             return result;
+        }
+
+        public void Dispose()
+        {
+            this.storage.Dispose();
         }
     }
 }

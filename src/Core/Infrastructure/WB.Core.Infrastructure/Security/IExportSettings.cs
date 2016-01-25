@@ -1,6 +1,6 @@
 ﻿namespace WB.Infrastructure.Security
 {
-    public interface ICypherManager
+    public interface IExportSettings
     {
         bool EncryptionEnforced();
         string GetPassword();

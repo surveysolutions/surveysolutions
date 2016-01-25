@@ -25,6 +25,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.SurveyManagement;
@@ -45,6 +46,8 @@ namespace WB.UI.Interviewer
     public class Setup : EnumeratorSetup
     {
         public Setup(Context applicationContext) : base(applicationContext){}
+
+        protected override Type SplashActivityType => typeof (SplashActivity);
 
         protected override void InitializeViewLookup()
         {
@@ -140,7 +143,7 @@ namespace WB.UI.Interviewer
         {
             var dashboardeventHandler = new InterviewEventHandler(
                 kernel.Get<IAsyncPlainStorage<InterviewView>>(),
-                kernel.Get<IAsyncPlainStorage<QuestionnaireDocumentView>>());
+                kernel.Get<IPlainQuestionnaireRepository>());
 
             bus.RegisterHandler(dashboardeventHandler, typeof(SynchronizationMetadataApplied));
             bus.RegisterHandler(dashboardeventHandler, typeof(InterviewStatusChanged));

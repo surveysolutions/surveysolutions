@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
 namespace WB.Core.SharedKernels.DataCollection.Repositories
@@ -8,7 +9,7 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
     {
         byte[] GetInterviewBinaryData(Guid interviewId, string fileName);
         List<InterviewBinaryDataDescriptor> GetBinaryFilesForInterview(Guid interviewId);
-        void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data);
+        Task StoreInterviewBinaryDataAsync(Guid interviewId, string fileName, byte[] data);
         void RemoveInterviewBinaryData(Guid interviewId, string fileName);
     }
 }

@@ -3,20 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Android.App;
 using Android.Content;
+using Android.Runtime;
 using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Converters;
+using Cirrious.CrossCore.Droid.Platform;
 using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
 using Cirrious.MvvmCross.Binding.Combiners;
 using Cirrious.MvvmCross.Binding.Droid.Views;
 using Cirrious.MvvmCross.Droid.Platform;
+using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Converters;
@@ -31,26 +36,34 @@ namespace WB.UI.Shared.Enumerator
     {
         protected EnumeratorSetup(Context applicationContext) : base(applicationContext)
         {
-            //killing app to avoid incorrect state
-            AppDomain.CurrentDomain.UnhandledException += OnCurrentDomainOnUnhandledException;
-            
-            TaskScheduler.UnobservedTaskException += OnTaskSchedulerOnUnobservedTaskException;
+            //restart the app to avoid incorrect state
+            TaskScheduler.UnobservedTaskException += (sender, args) =>
+            {
+                UncaughtExceptionHandler();
+            };
+            AndroidEnvironment.UnhandledExceptionRaiser += (sender, args) =>
+            {
+                UncaughtExceptionHandler();
+            };
+            AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+            {
+                UncaughtExceptionHandler();
+            };
         }
 
-        private void OnTaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs args)
+        private void UncaughtExceptionHandler()
         {
-            UncaughtExceptionHandler();
-        }
-
-        private void OnCurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs args)
-        {
-            UncaughtExceptionHandler();
-        }
-
-        static void UncaughtExceptionHandler()
-        {
+            var currentActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
+            if (this.SplashActivityType != null && currentActivity != null)
+            {
+                Intent intent = new Intent(currentActivity, SplashActivityType);
+                intent.AddFlags(ActivityFlags.NewTask);
+                Application.Context.StartActivity(intent);
+            }
             Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
         }
+
+        protected abstract Type SplashActivityType { get; }
 
         protected override void InitializeViewLookup()
         {

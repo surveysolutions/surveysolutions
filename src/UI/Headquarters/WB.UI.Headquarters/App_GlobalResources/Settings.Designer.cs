@@ -61,11 +61,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Data Encryption.
+        ///   Looks up a localized string similar to Export Encryption.
         /// </summary>
-        internal static string DataEncryption_Title {
+        internal static string ExportEncryption_Title {
             get {
-                return ResourceManager.GetString("DataEncryption_Title", resourceCulture);
+                return ResourceManager.GetString("ExportEncryption_Title", resourceCulture);
             }
         }
         

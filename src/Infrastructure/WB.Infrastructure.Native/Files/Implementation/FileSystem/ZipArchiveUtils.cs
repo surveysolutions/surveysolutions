@@ -7,20 +7,16 @@ using System.Threading.Tasks;
 using Ionic.Zip;
 using Ionic.Zlib;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Infrastructure.Security;
 
 namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 {
-    internal class ZipArchiveUtils : IArchiveUtils
+    public class ZipArchiveUtils : IArchiveUtils
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
 
-        private readonly ICypherManager cypherManager;
-
-        public ZipArchiveUtils(IFileSystemAccessor fileSystemAccessor, ICypherManager cypherManager)
+        public ZipArchiveUtils(IFileSystemAccessor fileSystemAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-            this.cypherManager = cypherManager;
         }
 
         public void ZipDirectory(string directory, string archiveFile)
@@ -35,9 +31,6 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                     AlternateEncodingUsage = ZipOption.Always
                 })
             {
-                if (this.cypherManager.EncryptionEnforced())
-                    zipFile.Password = this.cypherManager.GetPassword();
-
                 zipFile.AddDirectory(directory, this.fileSystemAccessor.GetFileName(directory));
                 zipFile.Save(archiveFile);
             }
@@ -57,9 +50,6 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
         {
             using (var zip = new ZipFile(this.fileSystemAccessor.GetFileName(archiveFilePath)))
             {
-                if(this.cypherManager.EncryptionEnforced())
-                    zip.Password = this.cypherManager.GetPassword();
-
                 zip.CompressionLevel = CompressionLevel.Default;
                 zip.AddFiles(files, "");
                 zip.Save(archiveFilePath);
