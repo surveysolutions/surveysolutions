@@ -1,7 +1,7 @@
 using System;
 using Machine.Specifications;
 using Moq;
-using WB.Core.GenericSubdomains.Portable.Tasks;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels;

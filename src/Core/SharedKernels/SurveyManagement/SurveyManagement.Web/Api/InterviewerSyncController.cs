@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web.Hosting;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
@@ -96,9 +97,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpPost]
         [ApiBasicAuth(new[] { UserRoles.Operator })]
-        public HttpResponseMessage PostFile(PostFileRequest request)
+        public async Task<HttpResponseMessage> PostFile(PostFileRequest request)
         {
-            plainFileRepository.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data));
+            await plainFileRepository.StoreInterviewBinaryDataAsync(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data));
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 

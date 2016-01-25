@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable;
@@ -145,9 +146,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.View();
         }
 
-        public ActionResult RunScavenge()
+        public async Task<ActionResult> RunScavenge()
         {
-            eventStoreApiService.RunScavenge();
+            await eventStoreApiService.RunScavengeAsync();
             object model = "Scavenge has executed at " + DateTime.Now;
             return this.View("EventStore", model);
         }

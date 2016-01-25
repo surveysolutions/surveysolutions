@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using It = Machine.Specifications.It;
 
@@ -20,14 +21,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
                 serializer: serializer,
                 questionnaireModelViewRepository: mockOfQuestionnaireModelViewRepository.Object,
                 questionnaireViewRepository: mockOfQuestionnaireViewRepository.Object,
-                questionnaireDocumentRepository: mockOfQuestionnaireDocumentRepository.Object);
+                plainQuestionnaireRepository: mockOfPlainQuestionnaireRepository.Object);
         };
 
         Because of = async () =>
             await interviewerQuestionnaireAccessor.StoreQuestionnaireAsync(questionnaireIdentity, questionnaireDocumentAsString, isCensusQuestionnaire);
 
         It should_store_questionnaire_document_view_to_plain_storage = () =>
-            mockOfQuestionnaireDocumentRepository.Verify(x => x.StoreAsync(Moq.It.IsAny<QuestionnaireDocumentView>()), Times.Once);
+            mockOfPlainQuestionnaireRepository.Verify(x => x.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, Moq.It.IsAny<QuestionnaireDocument>()), Times.Once);
 
         It should_store_questionnaire_model_view_to_plain_storage = () =>
             mockOfQuestionnaireModelViewRepository.Verify(x => x.StoreAsync(Moq.It.IsAny<QuestionnaireModelView>()), Times.Once);
@@ -36,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
             mockOfQuestionnaireViewRepository.Verify(x => x.StoreAsync(Moq.It.IsAny<QuestionnaireView>()), Times.Once);
 
         private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1);
-        private static readonly Mock<IAsyncPlainStorage<QuestionnaireDocumentView>> mockOfQuestionnaireDocumentRepository = new Mock<IAsyncPlainStorage<QuestionnaireDocumentView>>();
+        private static readonly Mock<IPlainQuestionnaireRepository> mockOfPlainQuestionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
         private static readonly Mock<IAsyncPlainStorage<QuestionnaireModelView>> mockOfQuestionnaireModelViewRepository = new Mock<IAsyncPlainStorage<QuestionnaireModelView>>();
         private static readonly Mock<IAsyncPlainStorage<QuestionnaireView>> mockOfQuestionnaireViewRepository = new Mock<IAsyncPlainStorage<QuestionnaireView>>();
         private const bool isCensusQuestionnaire = true;

@@ -347,7 +347,9 @@
     <AndroidResource Include="Resources\menu\interview.xml" />
     <AndroidResource Include="Resources\menu\dashboard.xml" />
     <AndroidResource Include="Resources\menu\login.xml" />
-    <AndroidResource Include="Resources\values\settings.xml" />
+    <AndroidResource Include="Resources\values\settings.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\drawable\dashboard_item.xml" />
     <AndroidResource Include="Resources\drawable\dashboard_item_bg.xml">
       <SubType>Designer</SubType>

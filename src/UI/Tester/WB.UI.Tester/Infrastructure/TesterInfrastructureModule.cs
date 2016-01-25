@@ -13,7 +13,6 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Infrastructure.Security;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Tester.Infrastructure.Internals;
@@ -25,7 +24,6 @@ using WB.UI.Tester.Infrastructure.Internals.Storage;
 using SQLite.Net.Interop;
 using SQLite.Net.Platform.XamarinAndroid;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
-using WB.Infrastructure.Shared.Enumerator.Internals.Security;
 
 namespace WB.UI.Tester.Infrastructure
 {
@@ -67,8 +65,7 @@ namespace WB.UI.Tester.Infrastructure
             this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(new JsonSerializerSettingsFactory()));
 
             this.Bind<IStringCompressor>().To<JsonCompressor>();
-            this.Bind<ICypherManager>().To<DefaultCypherManager>();
-
+            
             this.Bind<IDesignerApiService>().To<DesignerApiService>().InSingletonScope();
 
             this.Bind<IPrincipal>().To<TesterPrincipal>().InSingletonScope();

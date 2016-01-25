@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using It = Machine.Specifications.It;
 
@@ -28,7 +29,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
             interviewerQuestionnaireAccessor = CreateInterviewerQuestionnaireAccessor(
                 questionnaireModelViewRepository: mockOfQuestionnaireModelViewRepository.Object,
                 questionnaireViewRepository: mockOfQuestionnaireViewRepository.Object,
-                questionnaireDocumentRepository: mockOfQuestionnaireDocumentRepository.Object,
+                plainQuestionnaireRepository: mockOfPlainQuestionnaireRepository.Object,
                 questionnaireAssemblyFileAccessor: mockOfQuestionnaireAssemblyFileAccessor.Object,
                 interviewViewRepository: interviewsAsyncPlainStorage,
                 interviewFactory: mockOfInterviewAccessor.Object);
@@ -38,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
             await interviewerQuestionnaireAccessor.RemoveQuestionnaireAsync(questionnaireIdentity);
 
         It should_remove_questionnaire_document_view_from_plain_storage = () =>
-            mockOfQuestionnaireDocumentRepository.Verify(x => x.RemoveAsync(questionnaireIdentity.ToString()), Times.Once);
+            mockOfPlainQuestionnaireRepository.Verify(x => x.DeleteQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version), Times.Once);
 
         It should_remove_questionnaire_model_view_from_plain_storage = () =>
             mockOfQuestionnaireModelViewRepository.Verify(x => x.RemoveAsync(questionnaireIdentity.ToString()), Times.Once);
@@ -53,7 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
             mockOfInterviewAccessor.Verify(x => x.RemoveInterviewAsync(Moq.It.IsAny<Guid>()), Times.Exactly(2));
 
         private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1);
-        private static readonly Mock<IAsyncPlainStorage<QuestionnaireDocumentView>> mockOfQuestionnaireDocumentRepository = new Mock<IAsyncPlainStorage<QuestionnaireDocumentView>>();
+        private static readonly Mock<IPlainQuestionnaireRepository> mockOfPlainQuestionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
         private static readonly Mock<IAsyncPlainStorage<QuestionnaireModelView>> mockOfQuestionnaireModelViewRepository = new Mock<IAsyncPlainStorage<QuestionnaireModelView>>();
         private static readonly Mock<IAsyncPlainStorage<QuestionnaireView>> mockOfQuestionnaireViewRepository = new Mock<IAsyncPlainStorage<QuestionnaireView>>();
         private static readonly Mock<IQuestionnaireAssemblyFileAccessor> mockOfQuestionnaireAssemblyFileAccessor = new Mock<IQuestionnaireAssemblyFileAccessor>();
