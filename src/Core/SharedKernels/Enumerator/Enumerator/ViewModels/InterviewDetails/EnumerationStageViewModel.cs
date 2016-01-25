@@ -99,14 +99,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private async void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
-            if (eventArgs.TargetScreen == ScreenType.Complete) { return; }
-            
-            GroupModel @group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[eventArgs.TargetGroup.Id];
-
-            await this.CreateRegularGroupScreen(eventArgs, @group);
-            if (!this.eventRegistry.IsSubscribed(this, this.interviewId))
+            if (eventArgs.TargetScreen == ScreenType.Complete)
             {
-                this.eventRegistry.Subscribe(this, this.interviewId);
+                this.Items.OfType<IDisposable>().ForEach(x => x.Dispose());
+                this.Items.Clear();
+            }
+            else
+            {
+                GroupModel @group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[eventArgs.TargetGroup.Id];
+
+                await this.CreateRegularGroupScreen(eventArgs, @group);
+                if (!this.eventRegistry.IsSubscribed(this, this.interviewId))
+                {
+                    this.eventRegistry.Subscribe(this, this.interviewId);
+                }
             }
         }
 
@@ -160,6 +166,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
                 previousGroupNavigationViewModel.Init(this.interviewId, groupIdentity, this.navigationState);
+
+                foreach (var interviewItemViewModel in this.Items.OfType<IDisposable>())
+                {
+                    interviewItemViewModel.Dispose();
+                }
                 this.Items.Reset(interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<dynamic>()));
             }
             finally
@@ -217,6 +228,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 var itemsToRemove = this.Items.OfType<GroupViewModel>()
                               .Where(x => @event.Instances.Any(y => x.Identity.Equals(y.GetIdentity())));
+                itemsToRemove.ForEach(x => x.Dispose());
                 InvokeOnMainThread(() => this.Items.RemoveRange(itemsToRemove));
             }
             finally

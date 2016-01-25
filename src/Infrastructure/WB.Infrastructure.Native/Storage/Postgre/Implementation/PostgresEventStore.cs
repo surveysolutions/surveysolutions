@@ -213,12 +213,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             {
                 connection.Open();
 
-                var lastGlobalSequenceCommand = connection.CreateCommand();
-                lastGlobalSequenceCommand.CommandText = "SELECT globalsequence FROM events WHERE eventsourceid=:eventSourceId AND eventsequence = :sequence";
-                lastGlobalSequenceCommand.Parameters.AddWithValue("eventSourceId", position.Value.EventSourceIdOfLastEvent);
-                lastGlobalSequenceCommand.Parameters.AddWithValue("sequence", position.Value.SequenceOfLastEvent);
-
-                int globalSequence = (int)lastGlobalSequenceCommand.ExecuteScalar();
+                int globalSequence = 0;
+                if (position.HasValue)
+                {
+                    var lastGlobalSequenceCommand = connection.CreateCommand();
+                    lastGlobalSequenceCommand.CommandText = "SELECT globalsequence FROM events WHERE eventsourceid=:eventSourceId AND eventsequence = :sequence";
+                    lastGlobalSequenceCommand.Parameters.AddWithValue("eventSourceId", position.Value.EventSourceIdOfLastEvent);
+                    lastGlobalSequenceCommand.Parameters.AddWithValue("sequence", position.Value.SequenceOfLastEvent);
+                    globalSequence = (int)lastGlobalSequenceCommand.ExecuteScalar();
+                }
 
                 long eventsCountAfterPosition = this.GetEventsCountAfterPosition(position);
                 long processed = 0;

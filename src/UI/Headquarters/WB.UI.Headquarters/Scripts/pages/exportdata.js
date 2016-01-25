@@ -14,7 +14,7 @@
     self.exportFromats = $exportFromats;
 
     self.selectedTemplate = ko.observable();
-    self.selectedStatus = ko.observable();
+    self.selectedStatus = ko.observable({status : 'null'});
 
     self.selectedTemplateId = ko.computed(function () {
         return self.selectedTemplate() && self.selectedTemplate().id;
