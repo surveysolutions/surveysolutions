@@ -160,6 +160,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
                 previousGroupNavigationViewModel.Init(this.interviewId, groupIdentity, this.navigationState);
+
+                foreach (var interviewItemViewModel in this.Items.OfType<IDisposable>())
+                {
+                    interviewItemViewModel.Dispose();
+                }
                 this.Items.Reset(interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<dynamic>()));
             }
             finally
