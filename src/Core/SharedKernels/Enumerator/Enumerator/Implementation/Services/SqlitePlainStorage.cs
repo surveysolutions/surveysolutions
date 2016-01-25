@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Cirrious.CrossCore;
 using SQLite.Net;
 using SQLite.Net.Async;
 using SQLite.Net.Interop;
@@ -79,7 +78,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 {
                     foreach (var entity in entities.Where(entity => entity != null))
                     {
-                        if (this.storage.Find<TEntity>(x => x.Id == entity.Id) != null)
+                        var isEntityExists = this.storage.Table<TEntity>().Count(x => x.Id == entity.Id) > 0;
+
+                        if (isEntityExists)
                         {
                             connection.Update(entity);
                         }
