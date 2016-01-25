@@ -2,6 +2,8 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 
 namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
@@ -15,7 +17,7 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
             this.settings = settings;
         }
 
-        public void RunScavenge()
+        public async Task RunScavengeAsync()
         {
             UriBuilder uriBuilder = new UriBuilder("http", this.settings.ServerIP, this.settings.ServerHttpPort, "/admin/scavenge");
             var scanvageUri = uriBuilder.ToString();
@@ -25,8 +27,8 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
                 var byteArray = Encoding.ASCII.GetBytes(this.settings.Login + ":" + this.settings.Password);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
 
-                var response = client.PostAsync(scanvageUri, null).WaitAndUnwrapException();
-                var responseString = response.Content.ReadAsStringAsync().WaitAndUnwrapException();
+                var response = await client.PostAsync(scanvageUri, null);
+                var responseString = await response.Content.ReadAsStringAsync();
             }
         }
     }
