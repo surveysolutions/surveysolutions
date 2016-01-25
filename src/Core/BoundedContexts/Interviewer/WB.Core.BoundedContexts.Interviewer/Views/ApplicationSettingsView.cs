@@ -5,8 +5,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class ApplicationSettingsView : IPlainStorageEntity
     {
-        [PrimaryKey, AutoIncrement]
-        public int OID { get; set; }
+        [PrimaryKey]
         public string Id { get; set; }
         public string Endpoint { get; set; }
         public int HttpResponseTimeoutInSec { get; set; }

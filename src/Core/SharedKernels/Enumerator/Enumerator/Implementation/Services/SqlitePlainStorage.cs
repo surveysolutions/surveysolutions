@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Cirrious.CrossCore;
 using SQLite.Net;
 using SQLite.Net.Async;
 using SQLite.Net.Interop;
