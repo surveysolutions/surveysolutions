@@ -22,7 +22,9 @@ namespace WB.UI.Designer.Api
     [RoutePrefix("api/v12/questionnaires")]
     public class QuestionnairesController : ApiController
     {
-        internal static readonly Version ApiVersion = new Version(12, 0, 0);
+        //temporary fix
+        //api version should not be used as version for compilation
+        internal static readonly Version ApiVersion = new Version(11, 0, 0);
 
         private readonly IMembershipUserService userHelper;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
