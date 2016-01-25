@@ -222,7 +222,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task UpdatePasswordOfInterviewerAsync()
         {
-            var localInterviewer = await this.interviewersPlainStorage.FirstOrDefaultAsync();
+            var localInterviewer = this.interviewersPlainStorage.FirstOrDefault();
             localInterviewer.Password = this.restCredentials.Password;
 
             await this.interviewersPlainStorage.StoreAsync(localInterviewer);
@@ -306,7 +306,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             var remoteInterviewIds = remoteInterviews.Select(interview => interview.Id);
 
-            var localInterviews = await this.interviewViewRepository.LoadAllAsync();
+            var localInterviews = this.interviewViewRepository.LoadAll();
 
             var localInterviewIds = localInterviews.Select(interview => interview.InterviewId).ToList();
 
