@@ -1,4 +1,5 @@
-﻿using Ncqrs.Eventing.Storage;
+﻿using System.Threading.Tasks;
+using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -30,8 +31,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         class NullIEventStoreApiService : IEventStoreApiService
         {
-            public void RunScavenge()
+            public Task RunScavengeAsync()
             {
+                return Task.FromResult(true);
             }
         }
     }

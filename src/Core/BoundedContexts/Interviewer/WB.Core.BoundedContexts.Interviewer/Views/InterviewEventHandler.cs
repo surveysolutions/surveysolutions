@@ -10,6 +10,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -37,13 +38,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                                          IEventHandler<AnswerRemoved>
     {
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
-        private readonly IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
 
-        public InterviewEventHandler(IAsyncPlainStorage<InterviewView> interviewViewRepository,
-                                     IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository)
+        public InterviewEventHandler(IAsyncPlainStorage<InterviewView> interviewViewRepository, IPlainQuestionnaireRepository questionnaireRepository)
         {
             this.interviewViewRepository = interviewViewRepository;
-            this.questionnaireDocumentViewRepository = questionnaireDocumentViewRepository;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
         public override object[] Writers => new object[] { this.interviewViewRepository };
@@ -90,13 +90,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             DateTime? assignedDateTime, DateTime? startedDateTime, DateTime? rejectedDateTime)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
-            var questionnaireDocumentView = this.questionnaireDocumentViewRepository.GetById(questionnaireIdentity.ToString());
+            var questionnaireDocumentView = this.questionnaireRepository.GetQuestionnaireDocument(questionnaireIdentity);
 
             if (questionnaireDocumentView == null)
                 return;
 
             var prefilledQuestions = new List<InterviewAnswerOnPrefilledQuestionView>();
-            var featuredQuestions = questionnaireDocumentView.Document.Find<IQuestion>(q => q.Featured).ToList();
+            var featuredQuestions = questionnaireDocumentView.Find<IQuestion>(q => q.Featured).ToList();
 
             InterviewGpsCoordinatesView gpsCoordinates = null;
             Guid? prefilledGpsQuestionId = null;
@@ -287,8 +287,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 if (prefilledQuestion != null)
                 {
-                    var questionnaire = this.questionnaireDocumentViewRepository.GetById(interviewView.QuestionnaireId);
-                    var questionnairePrefilledQuestion = questionnaire.Document.FirstOrDefault<IQuestion>(question => question.PublicKey == questionId);
+                    var questionnaire = this.questionnaireRepository.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(interviewView.QuestionnaireId));
+                    var questionnairePrefilledQuestion = questionnaire.FirstOrDefault<IQuestion>(question => question.PublicKey == questionId);
 
                     prefilledQuestion.Answer = AnswerUtils.AnswerToString(answer, GetPrefilledCategoricalQuestionOptionText(questionnairePrefilledQuestion));
                 }
