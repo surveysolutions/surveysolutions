@@ -27,6 +27,8 @@ using WB.UI.Shared.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Infrastructure.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
+using WB.Core.Infrastructure.FileSystem;
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
 namespace WB.UI.Headquarters.Injections
 {
@@ -217,7 +219,10 @@ namespace WB.UI.Headquarters.Injections
 
             this.Bind<IRestService>().To<RestService>().WithConstructorArgument("networkService", _ => null).WithConstructorArgument("restServicePointManager", _=> null);
 
-            this.Bind<ICypherManager>().To<CypherManager>();
+            this.Bind<IExportSettings>().To<ExportSettings>();
+
+            this.Bind<IArchiveUtils>().To<ZipArchiveUtils>().WhenInjectedInto<ZipArchiveUtilsWithEncryptionDecorator>();
+            this.Bind<IArchiveUtils>().To<ZipArchiveUtilsWithEncryptionDecorator>();
         }
     }
 }

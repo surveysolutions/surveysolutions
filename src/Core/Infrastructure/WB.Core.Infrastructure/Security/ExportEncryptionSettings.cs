@@ -1,10 +1,10 @@
 namespace WB.Core.Infrastructure.Security
 {
-    public class Setting 
+    public class ExportEncryptionSettings
     {
-        public static readonly string EncriptionSettingId = "encryption";
+        public static readonly string EncriptionSettingId = "exportencryptionsettings";
 
-        public Setting(bool isEnabled, string value)
+        public ExportEncryptionSettings(bool isEnabled, string value)
         {
             this.Value = value;
             this.IsEnabled = isEnabled;

@@ -4,13 +4,13 @@ using WB.Infrastructure.Security;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation
 {
-    public class CypherManager : ICypherManager
+    public class ExportSettings : IExportSettings
     {
-        private Setting settingCache = null;
+        private ExportEncryptionSettings settingCache = null;
 
-        private readonly IPlainKeyValueStorage<Setting> settingsStorage;
+        private readonly IPlainKeyValueStorage<ExportEncryptionSettings> settingsStorage;
 
-        public CypherManager(IPlainKeyValueStorage<Setting> settingsStorage)
+        public ExportSettings(IPlainKeyValueStorage<ExportEncryptionSettings> settingsStorage)
         {
             this.settingsStorage = settingsStorage;
         }
@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
         public bool EncryptionEnforced()
         {
             if (this.settingCache == null)
-                this.settingCache = this.settingsStorage.GetById(Setting.EncriptionSettingId);
+                this.settingCache = this.settingsStorage.GetById(ExportEncryptionSettings.EncriptionSettingId);
             
             return this.settingCache != null && this.settingCache.IsEnabled;
         }
@@ -26,29 +26,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
         public string GetPassword()
         {
             if (this.settingCache == null)
-                this.settingCache = this.settingsStorage.GetById(Setting.EncriptionSettingId);
+                this.settingCache = this.settingsStorage.GetById(ExportEncryptionSettings.EncriptionSettingId);
 
             return this.settingCache != null ? this.settingCache.Value : string.Empty;
         }
 
         public void SetEncryptionEnforcement(bool enabled)
         {
-            var setting = this.settingsStorage.GetById(Setting.EncriptionSettingId);
+            var setting = this.settingsStorage.GetById(ExportEncryptionSettings.EncriptionSettingId);
             var password = setting != null ? setting.Value : this.GeneratePassword();
 
-            var newSetting = new Setting(enabled, password);
-            this.settingsStorage.Store(newSetting, Setting.EncriptionSettingId);
+            var newSetting = new ExportEncryptionSettings(enabled, password);
+            this.settingsStorage.Store(newSetting, ExportEncryptionSettings.EncriptionSettingId);
 
             this.settingCache = newSetting;
         }
 
         public void RegeneratePassword()
         {
-            var setting = this.settingsStorage.GetById(Setting.EncriptionSettingId);
+            var setting = this.settingsStorage.GetById(ExportEncryptionSettings.EncriptionSettingId);
             if (setting != null && setting.IsEnabled)
             {
-                var newSetting = new Setting(setting.IsEnabled, GeneratePassword());
-                this.settingsStorage.Store(newSetting, Setting.EncriptionSettingId);
+                var newSetting = new ExportEncryptionSettings(setting.IsEnabled, GeneratePassword());
+                this.settingsStorage.Store(newSetting, ExportEncryptionSettings.EncriptionSettingId);
 
                 this.settingCache = newSetting;
             }
