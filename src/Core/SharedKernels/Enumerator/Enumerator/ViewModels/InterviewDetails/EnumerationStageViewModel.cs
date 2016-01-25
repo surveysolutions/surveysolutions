@@ -99,14 +99,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private async void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
-            if (eventArgs.TargetScreen == ScreenType.Complete) { return; }
-            
-            GroupModel @group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[eventArgs.TargetGroup.Id];
-
-            await this.CreateRegularGroupScreen(eventArgs, @group);
-            if (!this.eventRegistry.IsSubscribed(this, this.interviewId))
+            if (eventArgs.TargetScreen == ScreenType.Complete)
             {
-                this.eventRegistry.Subscribe(this, this.interviewId);
+                this.Items.OfType<IDisposable>().ForEach(x => x.Dispose());
+                this.Items.Clear();
+            }
+            else
+            {
+                GroupModel @group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[eventArgs.TargetGroup.Id];
+
+                await this.CreateRegularGroupScreen(eventArgs, @group);
+                if (!this.eventRegistry.IsSubscribed(this, this.interviewId))
+                {
+                    this.eventRegistry.Subscribe(this, this.interviewId);
+                }
             }
         }
 
