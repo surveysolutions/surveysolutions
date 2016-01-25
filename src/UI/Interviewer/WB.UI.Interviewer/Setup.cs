@@ -47,6 +47,8 @@ namespace WB.UI.Interviewer
     {
         public Setup(Context applicationContext) : base(applicationContext){}
 
+        protected override Type SplashActivityType => typeof (SplashActivity);
+
         protected override void InitializeViewLookup()
         {
             base.InitializeViewLookup();
