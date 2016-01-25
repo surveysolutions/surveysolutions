@@ -78,7 +78,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 {
                     foreach (var entity in entities.Where(entity => entity != null))
                     {
-                        if (this.storage.Find<TEntity>(x => x.Id == entity.Id) != null)
+                        var isEntityExists = this.storage.Table<TEntity>().Count(x => x.Id == entity.Id) > 0;
+
+                        if (isEntityExists)
                         {
                             connection.Update(entity);
                         }

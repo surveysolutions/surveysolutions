@@ -59,12 +59,12 @@ namespace WB.UI.Headquarters.API
 
         [HttpGet]
         [ObserverNotAllowedApi]
-        public HttpResponseMessage AllData(Guid id, long version, DataExportFormat format)
+        public HttpResponseMessage AllData(Guid id, long version, DataExportFormat format, InterviewStatus? status = null)
         {
             return
                 CreateHttpResponseMessageWithFileContent(
                     this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
-                        new QuestionnaireIdentity(id, version), format));
+                        new QuestionnaireIdentity(id, version), format, status));
         }
 
         [HttpGet]
