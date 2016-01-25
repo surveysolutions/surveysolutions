@@ -6,8 +6,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class QuestionnaireDocumentView : IPlainStorageEntity
     {
-        [PrimaryKey, AutoIncrement]
-        public int OID { get; set; }
+        [PrimaryKey]
         public string Id { get; set; }
         public QuestionnaireDocument Document { get; set; }
     }
