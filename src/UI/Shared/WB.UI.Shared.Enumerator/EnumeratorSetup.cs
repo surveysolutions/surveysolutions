@@ -54,16 +54,16 @@ namespace WB.UI.Shared.Enumerator
         private void UncaughtExceptionHandler()
         {
             var currentActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
-            if (this.SplashActivityType != null && currentActivity != null)
+            if (this.StartupActivityType != null && currentActivity != null)
             {
-                Intent intent = new Intent(currentActivity, SplashActivityType);
+                Intent intent = new Intent(currentActivity, StartupActivityType);
                 intent.AddFlags(ActivityFlags.NewTask);
                 Application.Context.StartActivity(intent);
             }
             Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
         }
 
-        protected abstract Type SplashActivityType { get; }
+        protected abstract Type StartupActivityType { get; }
 
         protected override void InitializeViewLookup()
         {
