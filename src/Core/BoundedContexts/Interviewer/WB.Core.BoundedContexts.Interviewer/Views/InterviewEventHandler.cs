@@ -31,6 +31,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                                          IEventHandler<DateTimeQuestionAnswered>,
                                          IEventHandler<GeoLocationQuestionAnswered>,
                                          IEventHandler<QRBarcodeQuestionAnswered>,
+                                         IEventHandler<YesNoQuestionAnswered>,
 
                                          IEventHandler<AnswersRemoved>,
 
@@ -330,6 +331,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public void Handle(IPublishedEvent<DateTimeQuestionAnswered> evnt)
         {
             this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.Payload.AnswerTimeUtc);
+        }
+
+        public void Handle(IPublishedEvent<YesNoQuestionAnswered> evnt)
+        {
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.AnsweredOptions, evnt.Payload.AnswerTimeUtc);
         }
 
         public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)

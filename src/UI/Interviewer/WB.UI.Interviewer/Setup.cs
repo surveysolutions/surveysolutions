@@ -161,6 +161,7 @@ namespace WB.UI.Interviewer
 
             bus.RegisterHandler(dashboardeventHandler, typeof(GeoLocationQuestionAnswered));
             bus.RegisterHandler(dashboardeventHandler, typeof(QRBarcodeQuestionAnswered));
+            bus.RegisterHandler(dashboardeventHandler, typeof(YesNoQuestionAnswered));
 
             bus.RegisterHandler(dashboardeventHandler, typeof(AnswerRemoved));
         }
