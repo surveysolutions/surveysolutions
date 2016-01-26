@@ -95,6 +95,7 @@
     <Compile Include="QueryableExtensions.cs" />
     <Compile Include="RosterVectorUtils.cs" />
     <Compile Include="Services\IJsonSerializerSettingsFactory.cs" />
+    <Compile Include="Services\ILoggerProvider.cs" />
     <Compile Include="Services\ISerializer.cs" />
     <Compile Include="Services\ILogger.cs" />
     <Compile Include="Services\INetworkService.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Services\ISubstitutionService.cs" />
     <Compile Include="Services\JsonUtilsSettings.cs" />
     <Compile Include="Services\SerializationType.cs" />
+    <Compile Include="Services\ServiceLocatorLoggerProvider.cs" />
     <Compile Include="Services\TypeSerializationSettings.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="SyncStatusCode.cs" />

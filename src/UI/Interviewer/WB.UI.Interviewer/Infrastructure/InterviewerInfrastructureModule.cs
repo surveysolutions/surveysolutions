@@ -54,7 +54,8 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<InterviewerPrincipal>().To<InterviewerPrincipal>().InSingletonScope();
             this.Bind<IPrincipal>().ToMethod<IPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
             this.Bind<IInterviewerPrincipal>().ToMethod<IInterviewerPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
-            
+
+            this.Bind<ILoggerProvider>().To<ServiceLocatorLoggerProvider>();
             this.Bind<ILogger>().ToConstant(new FileLogger(AndroidPathUtils.GetPathToFileInLocalSubDirectory("logs", "errors.log")));
 
             this.Bind<IBackupRestoreService>()
