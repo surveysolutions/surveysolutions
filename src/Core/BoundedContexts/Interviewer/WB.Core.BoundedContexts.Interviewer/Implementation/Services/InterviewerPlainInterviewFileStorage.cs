@@ -26,7 +26,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
         {
-            var imageView = this.imageViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName).SingleOrDefault();
+            var imageView =
+                this.imageViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName)
+                    .FirstOrDefault();
 
             if (imageView == null) return null;
 
@@ -60,7 +62,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public void RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
-            var imageView = this.imageViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName).SingleOrDefault();
+            var imageView = this.imageViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName).FirstOrDefault();
 
             if (imageView == null) return;
 
