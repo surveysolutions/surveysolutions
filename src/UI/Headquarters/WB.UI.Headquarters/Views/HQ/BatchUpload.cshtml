@@ -6,6 +6,22 @@
     Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
     ViewBag.Title = "Index";
 }
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $('.prefilled-file-upload').bind('change', function() {
+                var fileSize = this.files[0].size / 1024 / 1024;
+                if (fileSize > 300) {
+                    bootbox.alert('The file size can not exceed 300MB.');
+                    $(".prefilled-file-upload").val('');
+                }
+            });
+        });
+    </script>
+}
+
 <div class="row-fluid">
         <div>
             <h3>@string.Format("{0}: (ver. {1}) {2}", BatchUpload.UploadSample, Model.QuestionnaireVersion, Model.QuestionnaireTitle)</h3>
@@ -51,11 +67,11 @@
                     <br />
                     <div class="control-group">
                         <div class="controls">
-                            @Html.TextBoxFor(m => m.File, new { type = "file", accept = ".tab, .txt, .zip" })
+                            @Html.TextBoxFor(m => m.File, new { type = "file", accept = ".tab, .txt, .zip", @class = "prefilled-file-upload" })
                             @Html.ValidationMessageFor(x => x.File)
                         </div>
                     </div>
-                        <input type="submit" class="btn btn-primary" name="Submit" value="@BatchUpload.Upload" />
+                    <input type="submit" class="btn btn-primary" name="Submit" value="@BatchUpload.Upload"/>
                 }
             </div>
         </div>
