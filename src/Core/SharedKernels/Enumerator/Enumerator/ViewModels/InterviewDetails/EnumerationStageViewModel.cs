@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
@@ -198,11 +199,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 userInterfaceStateService.NotifyRefreshStarted();
 
-                var viewModelEntities = this.interviewViewModelFactory.GetEntities(
+                List<IInterviewEntityViewModel> viewModelEntities = this.interviewViewModelFactory.GetEntities(
                     interviewId: this.navigationState.InterviewId,
                     groupIdentity: this.navigationState.CurrentGroup,
                     navigationState: this.navigationState).ToList();
-
+                List<IInterviewEntityViewModel> newViewModels = new List<IInterviewEntityViewModel>();
                 for (int indexOfViewModel = 0; indexOfViewModel < viewModelEntities.Count; indexOfViewModel++)
                 {
                     var viewModelEntity = viewModelEntities[indexOfViewModel];
@@ -210,8 +211,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     if (@event.Instances.Any(rosterInstance => rosterInstance.GetIdentity().Equals(viewModelEntity.Identity)))
                     {
                         this.Items.Insert(indexOfViewModel, viewModelEntity);
+                        newViewModels.Add(viewModelEntity);
                     }
                 }
+
+                viewModelEntities.Except(newViewModels).OfType<IDisposable>().ForEach(x => x.Dispose());
             }
             finally
             {
