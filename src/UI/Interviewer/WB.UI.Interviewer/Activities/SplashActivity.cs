@@ -70,7 +70,7 @@ namespace WB.UI.Interviewer.Activities
         private async Task BackwardCompatibilityAsync()
         {
             var settings = Mvx.Resolve<IAsyncPlainStorage<ApplicationSettingsView>>();
-            if (settings.Query(setting => setting.FirstOrDefault()) != null) return;
+            if (settings.FirstOrDefault() != null) return;
             
             await RestoreApplicationSettingsAsync();
             await RestoreInterviewerAsync();
@@ -95,7 +95,7 @@ namespace WB.UI.Interviewer.Activities
 
             if (interviewDetailsFolder == null) return;
 
-            var interviewer = interviewersRepository.Query(interviewers => interviewers.FirstOrDefault());
+            var interviewer = interviewersRepository.FirstOrDefault();
 
             if (interviewer == null) return;
 

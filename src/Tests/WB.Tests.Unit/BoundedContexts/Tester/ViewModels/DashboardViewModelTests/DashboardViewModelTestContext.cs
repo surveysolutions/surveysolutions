@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Linq.Expressions;
 using Cirrious.MvvmCross.Test.Core;
 
 using Moq;
@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -40,13 +41,14 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.Name == userName && _.UserId == userId);
             mockOfPrincipal.Setup(x => x.CurrentUserIdentity).Returns(userIdentity);
 
-            var localDashboardLastUpdateStorage = new Mock<IAsyncPlainStorage<DashboardLastUpdate>>();
-            localDashboardLastUpdateStorage.Setup(
-                x => x.Query(It.IsAny<Func<IQueryable<DashboardLastUpdate>, List<DashboardLastUpdate>>>()))
-                .Returns(new List<DashboardLastUpdate>
+            var localDashboardLastUpdateStorageMock = new Mock<IAsyncPlainStorage<DashboardLastUpdate>>();
+            localDashboardLastUpdateStorageMock
+                .Setup(x => x.Where(Moq.It.IsAny<Expression<Func<DashboardLastUpdate, bool>>>()))
+                .Returns(
+                    new List<DashboardLastUpdate>
                     {
                         new DashboardLastUpdate { Id = userName, LastUpdateDate = DateTime.Now }
-                    });
+                    }.ToReadOnlyCollection());
 
             return new DashboardViewModel(principal: mockOfPrincipal.Object,
                 designerApiService: designerApiService,
@@ -56,7 +58,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 friendlyErrorMessageService: friendlyErrorMessageService,
                 userInteractionService: userInteractionService,
                 questionnaireListStorage: questionnaireListStorage,
-                dashboardLastUpdateStorage: dashboardLastUpdateStorage ?? localDashboardLastUpdateStorage.Object);
+                dashboardLastUpdateStorage: dashboardLastUpdateStorage ?? localDashboardLastUpdateStorageMock.Object);
         }
 
         protected static readonly Guid userId = Guid.Parse("ffffffffffffffffffffffffffffffff");

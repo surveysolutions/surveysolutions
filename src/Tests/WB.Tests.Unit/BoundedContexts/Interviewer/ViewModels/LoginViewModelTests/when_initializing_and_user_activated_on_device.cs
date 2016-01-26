@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-
+using System.Threading.Tasks;
 using Machine.Specifications;
 
 using Moq;
@@ -24,13 +24,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
 
             var interviewer = CreateInterviewerIdentity(userName);
 
-            InterviewersPlainStorage
-               .Setup(x => x.Query(Moq.It.IsAny<Func<IQueryable<InterviewerIdentity>, InterviewerIdentity>>()))
+            InterviewersPlainStorageMock
+               .Setup(x => x.FirstOrDefault())
                .Returns(interviewer);
 
             viewModel = CreateLoginViewModel(
                 viewModelNavigationService: ViewModelNavigationServiceMock.Object,
-                interviewersPlainStorage: InterviewersPlainStorage.Object);
+                interviewersPlainStorage: InterviewersPlainStorageMock.Object);
         };
 
         Because of = () => viewModel.Init();
@@ -44,6 +44,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         static LoginViewModel viewModel;
         private static readonly string userName = "Vasya";
         static Mock<IViewModelNavigationService> ViewModelNavigationServiceMock = new Mock<IViewModelNavigationService>();
-        static Mock<IAsyncPlainStorage<InterviewerIdentity>> InterviewersPlainStorage = new Mock<IAsyncPlainStorage<InterviewerIdentity>>();
+        static Mock<IAsyncPlainStorage<InterviewerIdentity>> InterviewersPlainStorageMock = new Mock<IAsyncPlainStorage<InterviewerIdentity>>();
     }
 }

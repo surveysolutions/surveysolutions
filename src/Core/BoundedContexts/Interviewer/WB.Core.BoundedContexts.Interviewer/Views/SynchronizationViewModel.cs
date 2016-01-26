@@ -222,7 +222,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task UpdatePasswordOfInterviewerAsync()
         {
-            var localInterviewer = this.interviewersPlainStorage.Query(interviewers => interviewers.FirstOrDefault());
+            var localInterviewer = this.interviewersPlainStorage.FirstOrDefault();
             localInterviewer.Password = this.restCredentials.Password;
 
             await this.interviewersPlainStorage.StoreAsync(localInterviewer);
@@ -306,7 +306,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             var remoteInterviewIds = remoteInterviews.Select(interview => interview.Id);
 
-            var localInterviews = await Task.FromResult(this.interviewViewRepository.Query(interviews => interviews.ToList()));
+            var localInterviews = this.interviewViewRepository.LoadAll();
 
             var localInterviewIds = localInterviews.Select(interview => interview.InterviewId).ToList();
 
@@ -371,8 +371,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task UploadCompletedInterviewsAsync()
         {
-            var completedInterviews = this.interviewViewRepository.Query(
-                    interivews => interivews.Where(interview => interview.Status == InterviewStatus.Completed).ToList());
+            var completedInterviews = this.interviewViewRepository.Where(interview => interview.Status == InterviewStatus.Completed);
 
             this.statistics.TotalCompletedInterviewsCount = completedInterviews.Count;
 
@@ -401,8 +400,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task UploadImagesByCompletedInterview(Guid interviewId)
         {
-            var imageViews = this.interviewMultimediaViewStorage.Query(images =>
-                images.Where(image => image.InterviewId == interviewId).ToList());
+            var imageViews = this.interviewMultimediaViewStorage.Where(image => image.InterviewId == interviewId);
 
             foreach (var imageView in imageViews)
             {

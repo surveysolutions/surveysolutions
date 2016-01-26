@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> reader;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
-        private readonly InterviewSynchronizationDtoFactory synchronizationDtoFactory;
+        private readonly IInterviewSynchronizationDtoFactory synchronizationDtoFactory;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDataRepository;
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> interviewStatusesFactory;
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public InterviewerInterviewsFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> reader,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            InterviewSynchronizationDtoFactory synchronizationDtoFactory,
+            IInterviewSynchronizationDtoFactory synchronizationDtoFactory,
             IReadSideKeyValueStorage<InterviewData> interviewDataRepository,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> interviewStatusesFactory,
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue)
@@ -79,21 +79,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         {
             var interviewData = this.interviewDataRepository.GetById(interviewId);
 
-            var orderedInterviewStatuses = this.interviewStatusesFactory.Load(new ChangeStatusInputModel()
+            var statusHistory = this.interviewStatusesFactory.Load(new ChangeStatusInputModel()
             {
                 InterviewId = interviewId
-            }).StatusHistory.Where(status =>
+            }).StatusHistory
+                .OrderBy(status => status.Date).ToList();
+
+            var lastInterviewerAssignedStatus =
+                statusHistory.LastOrDefault(status => status.Status == InterviewStatus.InterviewerAssigned);
+
+            var lastCompleteStatus = statusHistory.LastOrDefault(x => x.Status == InterviewStatus.Completed);
+            if (lastCompleteStatus != null)
+            {
+                statusHistory = statusHistory.SkipWhile(status => status != lastCompleteStatus).ToList();
+            }
+
+            var orderedInterviewStatuses = statusHistory.Where(status =>
                 status.Status == InterviewStatus.RejectedBySupervisor ||
-                status.Status == InterviewStatus.InterviewerAssigned)
-                .OrderBy(status => status.Date);
+                status.Status == InterviewStatus.InterviewerAssigned).ToList();
 
             var lastInterviewStatus = orderedInterviewStatuses.LastOrDefault();
 
-            var lastInterviewerAssignedStatus = orderedInterviewStatuses.LastOrDefault(status => status.Status == InterviewStatus.InterviewerAssigned);
-            var lastRejectedBySupervisorStatus = orderedInterviewStatuses.LastOrDefault(status => status.Status == InterviewStatus.RejectedBySupervisor);
+            var lastRejectedBySupervisorStatus =
+                orderedInterviewStatuses.LastOrDefault(status => status.Status == InterviewStatus.RejectedBySupervisor);
 
             return this.synchronizationDtoFactory.BuildFrom(interviewData, interviewData.ResponsibleId,
-                lastInterviewStatus.Status, lastInterviewStatus.Comment, lastRejectedBySupervisorStatus?.Date,
+                lastInterviewStatus.Status, lastRejectedBySupervisorStatus?.Comment,
+                lastRejectedBySupervisorStatus?.Date,
                 lastInterviewerAssignedStatus?.Date);
         }
     }
