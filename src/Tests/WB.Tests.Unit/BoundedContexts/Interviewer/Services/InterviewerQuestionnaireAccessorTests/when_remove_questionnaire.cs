@@ -6,10 +6,12 @@ using Moq;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestionnaireAccessorTests
@@ -19,13 +21,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
         Establish context = () =>
         {
             var interviewsAsyncPlainStorage =
-                Mock.Of<IAsyncPlainStorage<InterviewView>>(x =>
-                    x.Query(Moq.It.IsAny<Func<IQueryable<InterviewView>, List<Guid>>>()) ==
-                    new List<Guid>
-                    {
-                        Guid.Parse("22222222222222222222222222222222"),
-                        Guid.Parse("33333333333333333333333333333333"),
-                    });
+                new TestAsyncPlainStorage<InterviewView>(new[]
+                {
+                    new InterviewView { QuestionnaireId = questionnaireIdentity.ToString(), InterviewId = Guid.Parse("22222222222222222222222222222222") },
+                    new InterviewView { QuestionnaireId = questionnaireIdentity.ToString(), InterviewId = Guid.Parse("33333333333333333333333333333333") },
+                });
+
             interviewerQuestionnaireAccessor = CreateInterviewerQuestionnaireAccessor(
                 questionnaireModelViewRepository: mockOfQuestionnaireModelViewRepository.Object,
                 questionnaireViewRepository: mockOfQuestionnaireViewRepository.Object,

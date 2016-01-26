@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage
@@ -15,6 +16,9 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage
         Task StoreAsync(TEntity entity);
         Task StoreAsync(IEnumerable<TEntity> entities);
 
-        TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query);
+        IReadOnlyCollection<TEntity> Where(Expression<Func<TEntity, bool>> predicate);
+        int Count(Expression<Func<TEntity, bool>> predicate);
+        TEntity FirstOrDefault();
+        IReadOnlyCollection<TEntity> LoadAll();
     }
 }

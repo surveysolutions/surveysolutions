@@ -26,9 +26,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public bool SignIn(string userName, string password, bool staySignedIn)
         {
-            var localInterviewer = this.interviewersPlainStorage.Query(
-                query => query.FirstOrDefault(interviewer => string.Equals(interviewer.Name, userName, StringComparison.OrdinalIgnoreCase) 
-                    && interviewer.Password == password));
+            var localInterviewer = this.interviewersPlainStorage
+                .Where(interviewer => interviewer.Password == password) // db query
+                .Where(interviewer => string.Equals(interviewer.Name, userName, StringComparison.OrdinalIgnoreCase)) // memory query
+                .FirstOrDefault();
             
             this.currentUserIdentity = localInterviewer;
 

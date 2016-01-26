@@ -79,8 +79,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         private async Task RemoveInterviewImagesAsync(Guid interviewId)
         {
-            var imageViews = this.interviewMultimediaViewRepository.Query(images =>
-                images.Where(image => image.InterviewId == interviewId).ToList());
+            var imageViews = this.interviewMultimediaViewRepository.Where(image => image.InterviewId == interviewId);
 
             foreach (var interviewMultimediaView in imageViews)
             {
