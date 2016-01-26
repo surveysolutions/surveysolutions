@@ -23,8 +23,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
             var interviewsAsyncPlainStorage =
                 new TestAsyncPlainStorage<InterviewView>(new[]
                 {
-                    new InterviewView { QuestionnaireId = questionnaireIdentity.QuestionnaireId.FormatGuid(), InterviewId = Guid.Parse("22222222222222222222222222222222") },
-                    new InterviewView { QuestionnaireId = questionnaireIdentity.QuestionnaireId.FormatGuid(), InterviewId = Guid.Parse("33333333333333333333333333333333") },
+                    new InterviewView { QuestionnaireId = questionnaireIdentity.ToString(), InterviewId = Guid.Parse("22222222222222222222222222222222") },
+                    new InterviewView { QuestionnaireId = questionnaireIdentity.ToString(), InterviewId = Guid.Parse("33333333333333333333333333333333") },
                 });
 
             interviewerQuestionnaireAccessor = CreateInterviewerQuestionnaireAccessor(
