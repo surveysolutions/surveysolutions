@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_not_return_error_with_code__WB0072__and__WB0073 = () =>
             resultErrors.Select(x => x.Code).ShouldNotContain("WB0072", "WB0073");
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 

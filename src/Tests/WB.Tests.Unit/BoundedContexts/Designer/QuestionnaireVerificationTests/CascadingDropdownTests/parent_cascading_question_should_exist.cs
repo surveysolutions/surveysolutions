@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
             verifier = CreateQuestionnaireVerifier();
         };
 
-        Because of = () => verificationErrors = Enumerable.ToList<QuestionnaireVerificationError>(verifier.Verify(questionnaire));
+        Because of = () => verificationErrors = Enumerable.ToList<QuestionnaireVerificationMessage>(verifier.Verify(questionnaire));
 
         It should_return_WB0086_verification_error = () => verificationErrors.First().Code.ShouldEqual("WB0086");
 
@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
 
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;
-        static IEnumerable<QuestionnaireVerificationError> verificationErrors;
+        static IEnumerable<QuestionnaireVerificationMessage> verificationErrors;
         static Guid questionId;
     }
 }

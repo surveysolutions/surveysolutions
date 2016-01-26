@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
 
             var questionnaireVerifier = Mock.Of<IQuestionnaireVerifier>(
                 _ => _.Verify(Moq.It.IsAny<QuestionnaireDocument>()) ==
-                     new[] { Create.QuestionnaireVerificationError(VerificationErrorLevel.Warning) });
+                     new[] { Create.QuestionnaireVerificationError(VerificationMessageLevel.Warning) });
 
             string generatedAssembly = "test";
             var expressionProcessorGenerator = Mock.Of<IExpressionProcessorGenerator>(

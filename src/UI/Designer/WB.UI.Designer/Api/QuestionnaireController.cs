@@ -150,10 +150,10 @@ namespace WB.UI.Designer.Api
         public VerificationResult Verify(Guid id)
         {
             var questionnaireDocument = this.GetQuestionnaire(id).Source;
-            QuestionnaireVerificationError[] verificationErrorsAndWarning = questionnaireVerifier.Verify(questionnaireDocument).Take(MaxVerificationErrors).ToArray();
+            QuestionnaireVerificationMessage[] verificationMessagesAndWarning = questionnaireVerifier.Verify(questionnaireDocument).Take(MaxVerificationErrors).ToArray();
             
-            var verificationErrors = verificationErrorsAndWarning.Where(x => x.ErrorLevel != VerificationErrorLevel.Warning).ToArray();
-            var verificationWarnings = verificationErrorsAndWarning.Where(x => x.ErrorLevel == VerificationErrorLevel.Warning).ToArray();
+            var verificationErrors = verificationMessagesAndWarning.Where(x => x.MessageLevel != VerificationMessageLevel.Warning).ToArray();
+            var verificationWarnings = verificationMessagesAndWarning.Where(x => x.MessageLevel == VerificationMessageLevel.Warning).ToArray();
 
             VerificationMessage[] errors = verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, questionnaireDocument);
             VerificationMessage[] warnings = verificationErrorsMapper.EnrichVerificationErrors(verificationWarnings, questionnaireDocument);

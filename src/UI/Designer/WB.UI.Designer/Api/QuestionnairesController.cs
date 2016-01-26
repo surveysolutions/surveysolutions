@@ -70,7 +70,7 @@ namespace WB.UI.Designer.Api
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
 
-            if (this.questionnaireVerifier.Verify(questionnaireView.Source).Any(x => x.ErrorLevel != VerificationErrorLevel.Warning))
+            if (this.questionnaireVerifier.Verify(questionnaireView.Source).Any(x => x.MessageLevel > VerificationMessageLevel.Warning))
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
             }

@@ -16,26 +16,26 @@ namespace WB.Tests.Unit.Applications.Designer.VerificationErrorsMapperTests
             return new VerificationErrorsMapper();
         }
 
-        internal static QuestionnaireVerificationError[] CreateQuestionnaireVerificationErrors(Guid questionId, Guid groupId)
+        internal static QuestionnaireVerificationMessage[] CreateQuestionnaireVerificationErrors(Guid questionId, Guid groupId)
         {
-            return new QuestionnaireVerificationError[4]
+            return new QuestionnaireVerificationMessage[4]
             {
-                new QuestionnaireVerificationError("aaa", "aaaa", VerificationErrorLevel.General, new QuestionnaireVerificationReference[1] { new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question, questionId) }),
-                new QuestionnaireVerificationError("bbb", "bbbb", VerificationErrorLevel.General, new QuestionnaireVerificationReference[1] { new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, groupId) }),
-                new QuestionnaireVerificationError("ccc", "cccc", VerificationErrorLevel.General, new QuestionnaireVerificationReference[2]
+                new QuestionnaireVerificationMessage("aaa", "aaaa", VerificationMessageLevel.General, new QuestionnaireVerificationReference[1] { new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question, questionId) }),
+                new QuestionnaireVerificationMessage("bbb", "bbbb", VerificationMessageLevel.General, new QuestionnaireVerificationReference[1] { new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, groupId) }),
+                new QuestionnaireVerificationMessage("ccc", "cccc", VerificationMessageLevel.General, new QuestionnaireVerificationReference[2]
                 {
                     new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question, questionId),
                     new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, groupId)
                 }),
-               new QuestionnaireVerificationError("aaa", "aaaa", VerificationErrorLevel.General, new QuestionnaireVerificationReference[1] { new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, groupId) }),
+               new QuestionnaireVerificationMessage("aaa", "aaaa", VerificationMessageLevel.General, new QuestionnaireVerificationReference[1] { new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Group, groupId) }),
             };
         }
 
-        internal static QuestionnaireVerificationError[] CreateStaticTextVerificationError(Guid staticTextId)
+        internal static QuestionnaireVerificationMessage[] CreateStaticTextVerificationError(Guid staticTextId)
         {
-            return new QuestionnaireVerificationError[1]
+            return new QuestionnaireVerificationMessage[1]
             {
-                new QuestionnaireVerificationError("aaa","aaaa", VerificationErrorLevel.General, new QuestionnaireVerificationReference[1]{ new QuestionnaireVerificationReference( QuestionnaireVerificationReferenceType.StaticText, staticTextId)})
+                new QuestionnaireVerificationMessage("aaa","aaaa", VerificationMessageLevel.General, new QuestionnaireVerificationReference[1]{ new QuestionnaireVerificationReference( QuestionnaireVerificationReferenceType.StaticText, staticTextId)})
             };
         }
 

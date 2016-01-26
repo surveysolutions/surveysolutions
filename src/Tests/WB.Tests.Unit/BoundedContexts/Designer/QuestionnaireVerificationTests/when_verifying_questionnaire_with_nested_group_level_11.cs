@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
     class when_verifying_questionnaire_with_nested_group_level_11 : QuestionnaireVerifierTestsContext
     {
-        static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         static QuestionnaireVerifier verifier;
         static QuestionnaireDocument questionnaire;
         static readonly Guid rosterGroupId = Guid.Parse("10000000000000000000000000000000");

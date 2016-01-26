@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_WB0019_error_with_second_reference_to_question_that_used_as_substitution_question = () =>
             resultErrors.Single().References.ElementAt(1).Id.ShouldEqual(underDeeperRosterLevelQuestionId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 

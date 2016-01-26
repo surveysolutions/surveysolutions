@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 
         private static QuestionnaireDocument questionnaire;
         private static QuestionnaireVerifier verifier;
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static Guid rosterSharedId = Guid.Parse("00000000000000001111111111111111");
         private static Guid staticTextSharedId = Guid.Parse("00000000000000002222222222222222");
     }

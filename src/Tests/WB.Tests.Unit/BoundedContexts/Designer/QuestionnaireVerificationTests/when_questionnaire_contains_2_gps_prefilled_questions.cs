@@ -48,6 +48,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         static Guid gpsQuestion1 = Guid.Parse("99999999999999999999999999999999");
         static Guid gpsQuestion2 = Guid.Parse("88888888888888888888888888888888");
         static QuestionnaireVerifier verifier;
-        static IEnumerable<QuestionnaireVerificationError> verificationErrors;
+        static IEnumerable<QuestionnaireVerificationMessage> verificationErrors;
     }
 }

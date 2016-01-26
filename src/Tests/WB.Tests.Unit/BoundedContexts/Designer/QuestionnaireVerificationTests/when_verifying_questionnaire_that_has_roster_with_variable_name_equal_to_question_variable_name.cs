@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             resultErrors.First().Code.ShouldEqual("WB0093");
 
         It should_return_error_with_level_critical = () =>
-            resultErrors.Single().ErrorLevel.ShouldEqual(VerificationErrorLevel.Critical);
+            resultErrors.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
 
         It should_return_error_with_two_references = () =>
             resultErrors.First().References.Count().ShouldEqual(2);
@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_error_with_second_references_with_id_equals_questionId = () =>
           resultErrors.First().References.Last().Id.ShouldEqual(questionId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

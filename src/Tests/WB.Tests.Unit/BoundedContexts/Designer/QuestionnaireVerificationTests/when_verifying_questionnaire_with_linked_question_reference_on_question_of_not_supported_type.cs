@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             resultErrors.Single().Code.ShouldEqual("WB0012");
 
         It should_return_error_with_level_general = () =>
-            resultErrors.Single().ErrorLevel.ShouldEqual(VerificationErrorLevel.General);
+            resultErrors.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
         It should_return_error_with_two_references = () =>
             resultErrors.Single().References.Count().ShouldEqual(2);
@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_last_error_reference_with_id_of_notSupportedForLinkingQuestionId = () =>
             resultErrors.Single().References.Last().Id.ShouldEqual(notSupportedForLinkingQuestionId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid linkedQuestionId;

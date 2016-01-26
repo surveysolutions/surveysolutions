@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             resultErrors.Single().Code.ShouldEqual("WB0047");
 
         It should_return_error_with_Critical_level = () =>
-            resultErrors.Single().ErrorLevel.ShouldEqual(VerificationErrorLevel.Critical);
+            resultErrors.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
 
         It should_return_error_with_1_reference = () =>
             resultErrors.Single().References.Count().ShouldEqual(1);
@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static readonly Mock<ILookupTableService> lookupTableServiceMock = new Mock<ILookupTableService>();
         private static readonly LookupTableContent lookupTableContent = Create.LookupTableContent(new[] { "header1" },
             Create.LookupTableRow(11111, new decimal?[] { 1.15m}),
