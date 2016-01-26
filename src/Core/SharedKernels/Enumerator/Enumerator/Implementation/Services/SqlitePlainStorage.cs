@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Cirrious.CrossCore;
+using Cirrious.CrossCore.Platform;
 using SQLite.Net;
 using SQLite.Net.Async;
 using SQLite.Net.Interop;
@@ -16,6 +18,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class SqlitePlainStorage<TEntity> : IAsyncPlainStorage<TEntity> where TEntity: class, IPlainStorageEntity
     {
+        private class MvxTraceListener : ITraceListener
+        {
+            public void Receive(string message)
+            {
+#if DEBUG
+                if (message.Contains("Executing Query"))
+                {
+                    Mvx.TaggedTrace(MvxTraceLevel.Diagnostic, "SQLite", message);
+                }
+#endif
+            }
+        }
+
         private readonly SQLiteAsyncConnection asyncStorage;
         private readonly SQLiteConnectionWithLock storage;
         private readonly ILogger logger;
@@ -28,7 +43,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 new SQLiteConnectionString(pathToDatabase, true, new BlobSerializerDelegate(
                     serializer.SerializeToByteArray,
                     (data, type) => serializer.DeserializeFromStream(new MemoryStream(data), type),
-                    (type) => true)));
+                    (type) => true)))
+            {
+                TraceListener = new MvxTraceListener(),
+            };
             this.asyncStorage = new SQLiteAsyncConnection(() => this.storage);
             this.logger = logger;
             this.storage.CreateTable<TEntity>();
