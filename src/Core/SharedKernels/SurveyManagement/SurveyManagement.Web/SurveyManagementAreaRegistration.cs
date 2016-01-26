@@ -73,7 +73,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/supervisor.framework.js",
                     "~/Scripts/viewmodels/viewmodelbase.js",
                     "~/Scripts/viewmodels/pagebase.js",
-                    "~/Scripts/viewmodels/surveymanagmentheader.js"
+                    "~/Scripts/viewmodels/surveymanagmentheader.js",
+                    "~/Scripts/bootbox.min.js",
                 }
             },
             {
@@ -89,7 +90,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/ko.pager.js",
                     "~/Scripts/viewmodels/listview.js",
                     "~/Scripts/components/bindings.js",
-                    "~/Scripts/bootbox.min.js",
                     "~/Scripts/spin.js",
                     "~/Scripts/knockout/ko.spin.js",
                 }
