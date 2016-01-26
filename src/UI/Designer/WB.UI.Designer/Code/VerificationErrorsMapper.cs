@@ -11,14 +11,14 @@ namespace WB.UI.Designer.Code
 {
     public interface IVerificationErrorsMapper
     {
-        VerificationMessage[] EnrichVerificationErrors(QuestionnaireVerificationError[] verificationErrors, QuestionnaireDocument questionnaireDocument);
+        VerificationMessage[] EnrichVerificationErrors(QuestionnaireVerificationMessage[] verificationMessages, QuestionnaireDocument questionnaireDocument);
     }
 
     public class VerificationErrorsMapper : IVerificationErrorsMapper
     {
-        public VerificationMessage[] EnrichVerificationErrors(QuestionnaireVerificationError[] verificationErrors, QuestionnaireDocument questionnaireDocument)
+        public VerificationMessage[] EnrichVerificationErrors(QuestionnaireVerificationMessage[] verificationMessages, QuestionnaireDocument questionnaireDocument)
         {
-            var errors = verificationErrors
+            var errors = verificationMessages
                 .Where(x => x.References.Count() == 1)
                 .GroupBy(x => new { x.Code, x.Message })
                 .Select(x => new VerificationMessage
@@ -29,7 +29,7 @@ namespace WB.UI.Designer.Code
                     IsGroupedMessage = true
                 }).ToList();
 
-            errors.AddRange(verificationErrors
+            errors.AddRange(verificationMessages
                 .Where(x => x.References.Count() != 1).Select(x => new VerificationMessage
                 {
                     Code = x.Code,

@@ -78,7 +78,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
         It should_return_second_error_reference_with_id_of_categorical_multi_linked_question = () =>
             ShouldExtensionMethods.ShouldEqual(resultErrors.Single().References.Second().Id, categoricalQuestionId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 

@@ -69,12 +69,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             resultErrors.First().Code.ShouldEqual("WB0056");
 
         It should_return_error_with_level_general = () =>
-            resultErrors.First().ErrorLevel.ShouldEqual(VerificationErrorLevel.General);
+            resultErrors.First().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
         It should_return_error_with_two_references = () =>
             resultErrors.First().References.Count().ShouldEqual(2);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
     }

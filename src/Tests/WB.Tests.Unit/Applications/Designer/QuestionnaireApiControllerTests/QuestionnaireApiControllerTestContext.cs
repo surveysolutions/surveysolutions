@@ -84,12 +84,12 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
             return new NewEditStaticTextView();
         }
 
-        internal static QuestionnaireVerificationError[] CreateQuestionnaireVerificationErrors(IEnumerable<IComposite> questionnaireItems)
+        internal static QuestionnaireVerificationMessage[] CreateQuestionnaireVerificationErrors(IEnumerable<IComposite> questionnaireItems)
         {
             return
                 questionnaireItems.Select(
                     questionnaireItem =>
-                        new QuestionnaireVerificationError("aaa", "aaaa", VerificationErrorLevel.General,
+                        new QuestionnaireVerificationMessage("aaa", "aaaa", VerificationMessageLevel.General,
                             new QuestionnaireVerificationReference[1]
                             {
                                 new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question,

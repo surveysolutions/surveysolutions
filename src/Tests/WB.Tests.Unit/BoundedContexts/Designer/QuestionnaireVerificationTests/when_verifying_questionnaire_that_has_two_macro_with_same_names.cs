@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
 
         private static readonly Guid macro1Id = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid macro2Id = Guid.Parse("22222222222222222222222222222222");

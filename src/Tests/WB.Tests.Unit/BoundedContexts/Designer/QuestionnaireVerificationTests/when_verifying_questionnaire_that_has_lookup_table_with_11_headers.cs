@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             resultErrors.Single().Code.ShouldEqual("WB0043");
 
         It should_return_error_with_General_level = () =>
-            resultErrors.Single().ErrorLevel.ShouldEqual(VerificationErrorLevel.General);
+            resultErrors.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
         It should_return_error_with_1_reference = () =>
             resultErrors.Single().References.Count().ShouldEqual(1);
@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static readonly Mock<ILookupTableService> lookupTableServiceMock = new Mock<ILookupTableService>();
         private static readonly LookupTableContent lookupTableContent = Create.LookupTableContent(new[] { "header1", "header2", "header3", "header4", "header5", "header6", "header7", "header8", "header9", "header10", "header11" },
             Create.LookupTableRow(1, new decimal?[] { 1.15m, 10 }),
