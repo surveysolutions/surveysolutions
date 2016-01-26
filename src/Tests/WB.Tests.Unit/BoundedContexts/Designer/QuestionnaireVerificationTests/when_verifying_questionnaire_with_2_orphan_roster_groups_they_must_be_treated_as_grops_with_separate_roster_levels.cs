@@ -78,7 +78,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             resultErrors.Single().References.ElementAt(1).Id.ShouldEqual(questionFromLevel2);
 
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 

@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_no_errors = () =>
             resultErrors.ShouldBeEmpty();
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static IQuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
     }

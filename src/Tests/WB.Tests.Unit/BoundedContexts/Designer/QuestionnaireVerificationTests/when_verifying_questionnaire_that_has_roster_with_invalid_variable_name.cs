@@ -79,7 +79,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_third_error_with_references_with_id_equals_rosterWithVariableNameWithInvalidSymbolsId = () =>
             resultErrors.Last().References.First().Id.ShouldEqual(rosterWithVariableNameWithInvalidSymbolsId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid rosterWithVariableNameLongerThen32SymbolsId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

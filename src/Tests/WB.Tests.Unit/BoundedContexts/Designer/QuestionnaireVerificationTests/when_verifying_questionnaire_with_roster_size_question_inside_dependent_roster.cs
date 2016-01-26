@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             resultErrors.Single().Code.ShouldEqual("WB0054");
 
         It should_return_error_with_level_general = () =>
-            resultErrors.Single().ErrorLevel.ShouldEqual(VerificationErrorLevel.General);
+            resultErrors.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
         
         It should_return_error_with_2_references = () =>
             resultErrors.Single().References.Count().ShouldEqual(2);
@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_second_error_reference_with_id_of_rosterSizeQuestionId = () =>
             resultErrors.Single().References.ElementAt(1).Id.ShouldEqual(rosterSizeQuestionId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid rosterGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

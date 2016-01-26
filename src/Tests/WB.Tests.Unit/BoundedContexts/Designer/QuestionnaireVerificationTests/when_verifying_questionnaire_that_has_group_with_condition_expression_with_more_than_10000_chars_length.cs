@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         private It should_not_call_GenerateProcessorStateAssembly = () =>
             questionnireExpressionProcessorGeneratorMock.Verify(x => x.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>(), out generationResult), Times.Never);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid groupId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");

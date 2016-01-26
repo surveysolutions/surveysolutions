@@ -75,7 +75,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;
         static Guid grandChildCascadingQuestion;
-        static IEnumerable<QuestionnaireVerificationError> verificationErrors;
+        static IEnumerable<QuestionnaireVerificationMessage> verificationErrors;
     }
 }
 

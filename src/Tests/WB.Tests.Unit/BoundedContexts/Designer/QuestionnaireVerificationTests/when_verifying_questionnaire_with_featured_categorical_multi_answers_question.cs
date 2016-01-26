@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             resultErrors.Count().ShouldEqual(1);
 
         It should_return_error_with_level_general = () =>
-            resultErrors.Single().ErrorLevel.ShouldEqual(VerificationErrorLevel.General);
+            resultErrors.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
         It should_return_error_with_code__WB0022 = () =>
             resultErrors.Single().Code.ShouldEqual("WB0022");
@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_error_reference_with_id_of_featuredQuestionIllegalTypeId = () =>
             resultErrors.Single().References.First().Id.ShouldEqual(featuredQuestionId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 

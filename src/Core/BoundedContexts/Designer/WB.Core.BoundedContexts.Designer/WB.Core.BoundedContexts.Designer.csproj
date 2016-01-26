@@ -412,10 +412,10 @@
     <Compile Include="Services\IExpressionReplacer.cs" />
     <Compile Include="Services\ExpressionLocationItemType.cs" />
     <Compile Include="ValueObjects\InconsistentVersionException.cs" />
-    <Compile Include="ValueObjects\QuestionnaireVerificationError.cs" />
+    <Compile Include="ValueObjects\QuestionnaireVerificationMessage.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationReference.cs" />
     <Compile Include="ValueObjects\QuestionnaireVerificationReferenceType.cs" />
-    <Compile Include="ValueObjects\VerificationErrorLEvel.cs" />
+    <Compile Include="ValueObjects\VerificationMessageLevel.cs" />
     <Compile Include="Views\Account\AccountDenormalizer.cs" />
     <Compile Include="Views\Account\AccountDocument.cs" />
     <Compile Include="Views\Account\AccountListItem.cs" />

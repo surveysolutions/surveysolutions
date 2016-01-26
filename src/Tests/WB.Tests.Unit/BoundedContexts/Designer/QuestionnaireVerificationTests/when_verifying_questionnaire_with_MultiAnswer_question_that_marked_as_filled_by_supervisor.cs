@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             resultErrors.Single().Code.ShouldEqual("WB0040");
 
         It should_return_error_with_level_general = () =>
-            resultErrors.Single().ErrorLevel.ShouldEqual(VerificationErrorLevel.General);
+            resultErrors.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
         It should_return_error_with_1_references = () =>
             resultErrors.Single().References.Count().ShouldEqual(1);
@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_error_reference_with_id_of_supervisorTextListquestionId = () =>
             resultErrors.Single().References.First().Id.ShouldEqual(supervisorTextListquestionId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 

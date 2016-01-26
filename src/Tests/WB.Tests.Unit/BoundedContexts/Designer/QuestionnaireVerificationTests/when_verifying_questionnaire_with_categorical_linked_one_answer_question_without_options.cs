@@ -67,6 +67,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
     }
 }

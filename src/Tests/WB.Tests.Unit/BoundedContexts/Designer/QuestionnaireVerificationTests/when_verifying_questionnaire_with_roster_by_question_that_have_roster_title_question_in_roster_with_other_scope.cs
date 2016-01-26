@@ -79,7 +79,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_error_reference_with_id_of_roster2Id = () =>
             resultErrors.Single().References.First().Id.ShouldEqual(roster2Id);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid roster1Id = Guid.Parse("10000000000000000000000000000000");

@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
 
             var questionnaireVerifier = Mock.Of<IQuestionnaireVerifier>(
                 _ => _.Verify(Moq.It.IsAny<QuestionnaireDocument>()) ==
-                     new[] {Create.QuestionnaireVerificationError(VerificationErrorLevel.General)});
+                     new[] {Create.QuestionnaireVerificationError(VerificationMessageLevel.General)});
 
             importController = CreateImportController(membershipUserService: membershipUserService,
                 questionnaireViewFactory: questionnaireViewFactory,

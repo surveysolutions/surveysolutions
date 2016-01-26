@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             resultErrors.Single().Code.ShouldEqual("WB0102");
 
         It should_return_error_with_level_critical = () =>
-            resultErrors.Single().ErrorLevel.ShouldEqual(VerificationErrorLevel.General);
+            resultErrors.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
         It should_return_error_with_2_references = () =>
             resultErrors.Single().References.Count.ShouldEqual(2);
@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 
         private static QuestionnaireDocument questionnaire;
         private static QuestionnaireVerifier verifier;
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static Guid sharedId = Guid.Parse("11111111111111111111111111111111");
     }
 }

@@ -107,7 +107,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_second_error_reference_with_id_of_rosterSizeQuestionWithInvalidRosterLevelId = () =>
             resultErrors.Single().References.ElementAt(1).Id.ShouldEqual(rosterSizeQuestionWithInvalidRosterLevelId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid groupWithInvalidRosterSizeQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");

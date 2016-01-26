@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_error_reference_with_id_of_macroId = () =>
             resultErrors.Single().References.First().Id.ShouldEqual(macroId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static readonly Guid macroId = Guid.Parse("11111111111111111111111111111111");

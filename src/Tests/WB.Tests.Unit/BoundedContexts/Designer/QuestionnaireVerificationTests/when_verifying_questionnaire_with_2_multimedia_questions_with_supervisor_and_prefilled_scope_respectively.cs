@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             resultErrors.First().Code.ShouldEqual("WB0078");
 
         It should_return_error_with_level_general = () =>
-            resultErrors.First().ErrorLevel.ShouldEqual(VerificationErrorLevel.General);
+            resultErrors.First().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
         It should_return_first_error_with_1_references = () =>
             resultErrors.First().References.Count().ShouldEqual(1);
@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_second_error_reference_with_id_of_hqQuestionId = () =>
             resultErrors.Last().References.First().Id.ShouldEqual(hqQuestionId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 

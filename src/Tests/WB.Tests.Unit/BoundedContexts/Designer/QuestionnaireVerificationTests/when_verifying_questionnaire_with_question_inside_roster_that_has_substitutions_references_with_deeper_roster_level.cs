@@ -84,7 +84,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_last_error_reference_with_id_of_underDeeperPropagationLevelQuestionVariableName = () =>
             resultErrors.Single().References.Last().Id.ShouldEqual(underDeeperRosterLevelQuestionId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 

@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_all_errors_reference_with_type_Question = () =>
             resultErrors.ShouldEachConformTo(e=>e.References.First().Type==QuestionnaireVerificationReferenceType.Question);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
     }

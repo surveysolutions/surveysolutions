@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
         It should_return_error_reference_with_id_of_multi_option_question = () =>
             resultErrors.Single().References.First().Id.ShouldEqual(multiOptionQuestionId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid multiOptionQuestionId = Guid.Parse("12222222222222222222222222222222");

@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             resultErrors.Single().Code.ShouldEqual("WB0076");
 
         It should_return_error_with_level_general = () =>
-            resultErrors.Single().ErrorLevel.ShouldEqual(VerificationErrorLevel.General);
+            resultErrors.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
         
         It should_return_error_with_1_references = () =>
             resultErrors.Single().References.Count().ShouldEqual(1);
@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
 
         private static Guid singleOptionId = Guid.Parse("10000000000000000000000000000000");
     }
