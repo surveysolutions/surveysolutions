@@ -135,6 +135,7 @@ using QuestionnaireView = WB.Core.BoundedContexts.Designer.Views.Questionnaire.E
 using SynchronizationStatus = WB.Core.BoundedContexts.Supervisor.Synchronization.SynchronizationStatus;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Tests.Unit
@@ -2560,6 +2561,11 @@ namespace WB.Tests.Unit
             IQueryableReadSideRepositoryReader<UserDocument> usersReader = null)
         {
             return new TeamViewFactory(interviewSummaryReader, usersReader);
+        }
+
+        public static CommentedStatusHistroyView CommentedStatusHistroyView(InterviewStatus status=InterviewStatus.InterviewerAssigned, string comment=null)
+        {
+            return new CommentedStatusHistroyView() {Status = status, Comment = comment};
         }
     }
 }

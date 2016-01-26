@@ -83,11 +83,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         private async Task DeleteInterviewsByQuestionnaireAsync(string questionnaireId)
         {
-            var interviewIdsByQuestionnaire = this.interviewViewRepository.Query(
-                interviews => interviews.Where(
-                    interview => interview.QuestionnaireId == questionnaireId)
-                    .Select(interview => interview.InterviewId)
-                    .ToList());
+            var interviewIdsByQuestionnaire = this.interviewViewRepository
+                .Where(interview => interview.QuestionnaireId == questionnaireId)
+                .Select(interview => interview.InterviewId);
 
             foreach (var interviewId in interviewIdsByQuestionnaire)
             {
@@ -102,10 +100,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public List<QuestionnaireIdentity> GetCensusQuestionnaireIdentities()
         {
-            return this.questionnaireViewRepository.Query(
-                questionnaires => questionnaires.Where(questionnaire => questionnaire.Census)
+            return this.questionnaireViewRepository.Where(questionnaire => questionnaire.Census)
                     .Select(questionnaire => questionnaire.Identity)
-                    .ToList());
+                    .ToList();
         }
 
         public bool IsQuestionnaireExists(QuestionnaireIdentity questionnaireIdentity)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@ using Moq;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using It = Machine.Specifications.It;
@@ -24,12 +26,12 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             var designerApiService = Mock.Of<IDesignerApiService>(_ => _.GetQuestionnairesAsync(false, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(MyQuestionnaires) &&
                 _.GetQuestionnairesAsync(true, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(PublicQuestionnaires));
 
-            var storageAccessor = new Mock<IAsyncPlainStorage<QuestionnaireListItem>>();
-            storageAccessor.Setup(
-                x => x.Query(Moq.It.IsAny<Func<IQueryable<QuestionnaireListItem>, List<QuestionnaireListItem>>>()))
-                .Returns(MyQuestionnaires.ToList());
+            var storageAccessorMock = new Mock<IAsyncPlainStorage<QuestionnaireListItem>>();
+            storageAccessorMock
+                .Setup(x => x.Where(Moq.It.IsAny<Expression<Func<QuestionnaireListItem, bool>>>()))
+                .Returns(MyQuestionnaires.ToReadOnlyCollection());
 
-            viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessor.Object,
+            viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessorMock.Object,
                 designerApiService: designerApiService);
 
             viewModel.Init();
