@@ -162,7 +162,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 var interviewEntityViewModels = this.interviewViewModelFactory.GetEntities(
                     interviewId: this.navigationState.InterviewId,
                     groupIdentity: groupIdentity,
-                    navigationState: this.navigationState);
+                    navigationState: this.navigationState).ToList();
 
 
                 var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
@@ -172,7 +172,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 {
                     interviewItemViewModel.Dispose();
                 }
-                this.Items.Reset(interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<dynamic>()));
+                InvokeOnMainThread(() =>this.Items.Reset(interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<dynamic>())));
             }
             finally
             {
@@ -204,17 +204,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     groupIdentity: this.navigationState.CurrentGroup,
                     navigationState: this.navigationState).ToList();
                 List<IInterviewEntityViewModel> newViewModels = new List<IInterviewEntityViewModel>();
-                for (int indexOfViewModel = 0; indexOfViewModel < viewModelEntities.Count; indexOfViewModel++)
+
+                InvokeOnMainThread(() =>
                 {
-                    var viewModelEntity = viewModelEntities[indexOfViewModel];
-
-                    if (@event.Instances.Any(rosterInstance => rosterInstance.GetIdentity().Equals(viewModelEntity.Identity)))
+                    for (int indexOfViewModel = 0; indexOfViewModel < viewModelEntities.Count; indexOfViewModel++)
                     {
-                        this.Items.Insert(indexOfViewModel, viewModelEntity);
-                        newViewModels.Add(viewModelEntity);
-                    }
-                }
+                        var viewModelEntity = viewModelEntities[indexOfViewModel];
 
+                        if (
+                            @event.Instances.Any(
+                                rosterInstance => rosterInstance.GetIdentity().Equals(viewModelEntity.Identity)))
+                        {
+                            this.Items.Insert(indexOfViewModel, viewModelEntity);
+                            newViewModels.Add(viewModelEntity);
+                        }
+                    }
+                });
                 viewModelEntities.Except(newViewModels).OfType<IDisposable>().ForEach(x => x.Dispose());
             }
             finally
@@ -263,15 +268,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void InvalidateViewModelsByConditions(Identity[] viewModelIdentities)
         {
-            var readOnlyItems = Items.ToArray();
-
-            for (int i = 0; i < readOnlyItems.Length; i++)
+            InvokeOnMainThread(() =>
             {
-                var interviewEntityViewModel = readOnlyItems[i] as IInterviewEntityViewModel;
-                if (interviewEntityViewModel != null && viewModelIdentities.Contains(interviewEntityViewModel.Identity))
-                    // here inconsistency of readOnlyItems and Items collections is possible but nothing bad will happen if wrong item be marked as changed.
-                    this.Items.NotifyItemChanged(i);
-            }
+                var readOnlyItems = Items.ToArray();
+
+                for (int i = 0; i < readOnlyItems.Length; i++)
+                {
+                    var interviewEntityViewModel = readOnlyItems[i] as IInterviewEntityViewModel;
+                    if (interviewEntityViewModel != null &&
+                        viewModelIdentities.Contains(interviewEntityViewModel.Identity))
+                        // here inconsistency of readOnlyItems and Items collections is possible but nothing bad will happen if wrong item be marked as changed.
+                        this.Items.NotifyItemChanged(i);
+                }
+            });
         }
 
         public void Dispose()
