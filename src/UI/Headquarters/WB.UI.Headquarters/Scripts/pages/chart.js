@@ -56,7 +56,8 @@
     $("#dates-range").daterangepicker({
         locale: {
             format: dateFormat
-        }
+        },
+        maxDate: new Date()
     },
     function (start, end) {
         self.setReportRange(start, end);
