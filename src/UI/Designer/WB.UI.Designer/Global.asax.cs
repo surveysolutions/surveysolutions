@@ -49,7 +49,7 @@ namespace WB.UI.Designer
             var ex = Server.GetLastError();
             var httpEx = ex as HttpException;
 
-            var logger = ServiceLocator.Current.GetInstance<ILogger>();
+            var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<MvcApplication>();
             if (!(httpEx != null && httpEx.GetHttpCode() == 404))
             {
                 logger.Error("Unexpected error occurred", ex);
