@@ -247,7 +247,7 @@
         self.markerlimitReached(false);
     };
 
-    self.redoMarkers = function () {
+    self.reloadMarkersInBounds = function () {
         self.clearAllMarkers();
         var bounds = self.map.getBounds();
 
