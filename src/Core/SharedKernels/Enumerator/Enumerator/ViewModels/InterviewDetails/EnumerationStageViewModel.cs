@@ -98,7 +98,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.navigationState.ScreenChanged += this.OnScreenChanged;
         }
 
-        private async void OnScreenChanged(ScreenChangedEventArgs eventArgs)
+        private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
             if (eventArgs.TargetScreen == ScreenType.Complete)
             {
@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 GroupModel @group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[eventArgs.TargetGroup.Id];
 
-                await this.CreateRegularGroupScreen(eventArgs, @group);
+                this.CreateRegularGroupScreen(eventArgs, @group);
                 if (!this.eventRegistry.IsSubscribed(this, this.interviewId))
                 {
                     this.eventRegistry.Subscribe(this, this.interviewId);
@@ -117,25 +117,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        private async Task CreateRegularGroupScreen(ScreenChangedEventArgs eventArgs, GroupModel @group)
+        private void CreateRegularGroupScreen(ScreenChangedEventArgs eventArgs, GroupModel @group)
         {
             if (@group is RosterModel)
             {
                 string title = @group.Title;
-                this.Name = this.substitutionService.GenerateRosterName(
-                    title,
-                    this.interview.GetRosterTitle(eventArgs.TargetGroup));
+                this.Name = this.substitutionService.GenerateRosterName(title, this.interview.GetRosterTitle(eventArgs.TargetGroup));
             }
             else
             {
                 this.Name = @group.Title;
             }
 
-            await Task.Run(() =>
-            {
-                this.LoadFromModel(eventArgs.TargetGroup);
-                this.SendScrollToMessage(eventArgs.AnchoredElementIdentity);
-            });
+            this.LoadFromModel(eventArgs.TargetGroup);
+            this.SendScrollToMessage(eventArgs.AnchoredElementIdentity);
         }
 
         private void SendScrollToMessage(Identity scrollTo)
@@ -162,7 +157,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 var interviewEntityViewModels = this.interviewViewModelFactory.GetEntities(
                     interviewId: this.navigationState.InterviewId,
                     groupIdentity: groupIdentity,
-                    navigationState: this.navigationState);
+                    navigationState: this.navigationState).ToList();
 
 
                 var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
@@ -172,7 +167,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 {
                     interviewItemViewModel.Dispose();
                 }
-                this.Items.Reset(interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<dynamic>()));
+                InvokeOnMainThread(() =>this.Items.Reset(interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<dynamic>())));
             }
             finally
             {
@@ -204,17 +199,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     groupIdentity: this.navigationState.CurrentGroup,
                     navigationState: this.navigationState).ToList();
                 List<IInterviewEntityViewModel> newViewModels = new List<IInterviewEntityViewModel>();
-                for (int indexOfViewModel = 0; indexOfViewModel < viewModelEntities.Count; indexOfViewModel++)
+
+                InvokeOnMainThread(() =>
                 {
-                    var viewModelEntity = viewModelEntities[indexOfViewModel];
-
-                    if (@event.Instances.Any(rosterInstance => rosterInstance.GetIdentity().Equals(viewModelEntity.Identity)))
+                    for (int indexOfViewModel = 0; indexOfViewModel < viewModelEntities.Count; indexOfViewModel++)
                     {
-                        this.Items.Insert(indexOfViewModel, viewModelEntity);
-                        newViewModels.Add(viewModelEntity);
-                    }
-                }
+                        var viewModelEntity = viewModelEntities[indexOfViewModel];
 
+                        if (
+                            @event.Instances.Any(
+                                rosterInstance => rosterInstance.GetIdentity().Equals(viewModelEntity.Identity)))
+                        {
+                            this.Items.Insert(indexOfViewModel, viewModelEntity);
+                            newViewModels.Add(viewModelEntity);
+                        }
+                    }
+                });
                 viewModelEntities.Except(newViewModels).OfType<IDisposable>().ForEach(x => x.Dispose());
             }
             finally
@@ -263,15 +263,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void InvalidateViewModelsByConditions(Identity[] viewModelIdentities)
         {
-            var readOnlyItems = Items.ToArray();
-
-            for (int i = 0; i < readOnlyItems.Length; i++)
+            InvokeOnMainThread(() =>
             {
-                var interviewEntityViewModel = readOnlyItems[i] as IInterviewEntityViewModel;
-                if (interviewEntityViewModel != null && viewModelIdentities.Contains(interviewEntityViewModel.Identity))
-                    // here inconsistency of readOnlyItems and Items collections is possible but nothing bad will happen if wrong item be marked as changed.
-                    this.Items.NotifyItemChanged(i);
-            }
+                var readOnlyItems = Items.ToArray();
+
+                for (int i = 0; i < readOnlyItems.Length; i++)
+                {
+                    var interviewEntityViewModel = readOnlyItems[i] as IInterviewEntityViewModel;
+                    if (interviewEntityViewModel != null &&
+                        viewModelIdentities.Contains(interviewEntityViewModel.Identity))
+                        // here inconsistency of readOnlyItems and Items collections is possible but nothing bad will happen if wrong item be marked as changed.
+                        this.Items.NotifyItemChanged(i);
+                }
+            });
         }
 
         public void Dispose()
