@@ -6,7 +6,6 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
 {
@@ -16,22 +15,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
         private readonly IReadSideKeyValueStorage<InterviewData> interviewStore;
         private readonly IReadSideRepositoryReader<UserDocument> userStore;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore;
-        private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructures;
-        private readonly IReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions> questionnaireReferenceInfoForLinkedQuestions;
 
         public InterviewTroubleshootFactory(IReadSideKeyValueStorage<InterviewData> interviewStore,
             IReadSideRepositoryReader<UserDocument> userStore,
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore,
-            IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructures,
-            IReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions> questionnaireReferenceInfoForLinkedQuestions,
             IInterviewDataAndQuestionnaireMerger merger)
         {
             this.merger = merger;
             this.interviewStore = interviewStore;
             this.userStore = userStore;
             this.questionnaireStore = questionnaireStore;
-            this.questionnaireRosterStructures = questionnaireRosterStructures;
-            this.questionnaireReferenceInfoForLinkedQuestions = questionnaireReferenceInfoForLinkedQuestions;
         }
 
         public InterviewTroubleshootView Load(InterviewTroubleshootInputModel input)
@@ -40,20 +33,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
             if (interview == null || interview.IsDeleted)
                 return null;
 
-            QuestionnaireDocumentVersioned questionnaire = this.questionnaireStore.AsVersioned().Get(interview.QuestionnaireId.FormatGuid(), interview.QuestionnaireVersion);
+            var questionnaire = this.questionnaireStore.AsVersioned().Get(interview.QuestionnaireId.FormatGuid(), interview.QuestionnaireVersion)?.Questionnaire;
             if (questionnaire == null)
-                throw new ArgumentException(string.Format(
-                    "Questionnaire with id {0} and version {1} is missing.", interview.QuestionnaireId, interview.QuestionnaireVersion));
-
-            var questionnaireReferenceInfo = this.questionnaireReferenceInfoForLinkedQuestions.AsVersioned().Get(interview.QuestionnaireId.FormatGuid(), interview.QuestionnaireVersion);
-
-            var questionnaireRosters = this.questionnaireRosterStructures.AsVersioned().Get(interview.QuestionnaireId.FormatGuid(), interview.QuestionnaireVersion);
+                throw new ArgumentException(
+                    $"Questionnaire with id {interview.QuestionnaireId} and version {interview.QuestionnaireVersion} is missing.");
 
             var user = this.userStore.GetById(interview.ResponsibleId);
             if (user == null)
-                throw new ArgumentException(string.Format("User with id {0} is not found.", interview.ResponsibleId));
+                throw new ArgumentException($"User with id {interview.ResponsibleId} is not found.");
 
-            var mergedInterview = this.merger.Merge(interview, questionnaire, questionnaireReferenceInfo, questionnaireRosters, user);
+            var mergedInterview = this.merger.Merge(interview, questionnaire, user.GetUseLight());
 
 
             var interviewTroubleshootView = new InterviewTroubleshootView
