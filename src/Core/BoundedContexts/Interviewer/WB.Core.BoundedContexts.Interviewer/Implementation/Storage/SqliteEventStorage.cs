@@ -21,7 +21,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         public SqliteEventStorage(ISQLitePlatform sqLitePlatform, 
             ILogger logger,
             IAsynchronousFileSystemAccessor fileSystemAccessor,
-            ISerializer serializer, 
+            ISerializer serializer,
+            ITraceListener traceListener, 
             SqliteSettings settings)
         {
             var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, "events-data.sqlite3");
@@ -29,7 +30,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 new SQLiteConnectionString(pathToDatabase, true, new BlobSerializerDelegate(
                     serializer.SerializeToByteArray,
                     (data, type) => serializer.DeserializeFromStream(new MemoryStream(data), type),
-                    (type) => true)));
+                    (type) => true)))
+            {
+                TraceListener = traceListener
+            };
             this.logger = logger;
             this.serializer = serializer;
             this.connection.CreateTable<EventView>();

@@ -94,6 +94,7 @@
     <Compile Include="Implementation\Services\QuestionnaireModelBuilder.cs" />
     <Compile Include="Implementation\Services\SqlitePlainStorage.cs" />
     <Compile Include="Implementation\Services\SqliteSettings.cs" />
+    <Compile Include="Implementation\Services\MvxTraceListener.cs" />
     <Compile Include="Models\Questionnaire\QuestionnaireModel.cs" />
     <Compile Include="Models\Questionnaire\Questions\YesNoQuestionModel.cs" />
     <Compile Include="Properties\UIResources.id-ID.Designer.cs">

@@ -17,7 +17,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage
         Task StoreAsync(IEnumerable<TEntity> entities);
 
         IReadOnlyCollection<TEntity> Where(Expression<Func<TEntity, bool>> predicate);
-        int Count(Expression<Func<TEntity, bool>> predicate);
+        Task<IReadOnlyCollection<TEntity>> WhereAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate);
         TEntity FirstOrDefault();
         IReadOnlyCollection<TEntity> LoadAll();
     }
