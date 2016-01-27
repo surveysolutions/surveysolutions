@@ -13,13 +13,17 @@ using Android.Widget;
 using Cirrious.CrossCore;
 using Cirrious.CrossCore.Converters;
 using Cirrious.CrossCore.Droid.Platform;
+using Cirrious.CrossCore.Exceptions;
 using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
 using Cirrious.MvvmCross.Binding.Combiners;
 using Cirrious.MvvmCross.Binding.Droid.Views;
 using Cirrious.MvvmCross.Droid.Platform;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
+using Java.Lang;
 using MvvmCross.Droid.Support.V7.RecyclerView;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -29,6 +33,7 @@ using WB.UI.Shared.Enumerator.CustomBindings;
 using WB.UI.Shared.Enumerator.CustomControls;
 using WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl;
 using WB.UI.Shared.Enumerator.ValueCombiners;
+using Exception = System.Exception;
 
 namespace WB.UI.Shared.Enumerator
 {
@@ -39,20 +44,33 @@ namespace WB.UI.Shared.Enumerator
             //restart the app to avoid incorrect state
             TaskScheduler.UnobservedTaskException += (sender, args) =>
             {
-                UncaughtExceptionHandler();
+                UncaughtExceptionHandler(args.Exception);
             };
             AndroidEnvironment.UnhandledExceptionRaiser += (sender, args) =>
             {
-                UncaughtExceptionHandler();
+                UncaughtExceptionHandler(args.Exception);
             };
             AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
             {
-                UncaughtExceptionHandler();
+                object exceptionObject = args.ExceptionObject;
+
+                var typedException = exceptionObject as Exception;
+                if (typedException != null)
+                {
+                    UncaughtExceptionHandler(typedException);
+                }
+                else
+                {
+                    UncaughtExceptionHandler(new Exception("Untyped exception message: '" + exceptionObject + "'"));
+                }
             };
         }
 
-        private void UncaughtExceptionHandler()
+        private void UncaughtExceptionHandler(Exception exception)
         {
+            Mvx.Error("UncaughtExceptionHandler with exception {0}", exception.ToLongString());
+            Mvx.Resolve<ILogger>().Fatal("UncaughtExceptionHandler", exception);
+
             var currentActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
             if (this.StartupActivityType != null && currentActivity != null)
             {
