@@ -4,8 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Cirrious.CrossCore;
-using Cirrious.CrossCore.Platform;
 using SQLite.Net;
 using SQLite.Net.Async;
 using SQLite.Net.Interop;
@@ -18,25 +16,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class SqlitePlainStorage<TEntity> : IAsyncPlainStorage<TEntity> where TEntity: class, IPlainStorageEntity
     {
-        private class MvxTraceListener : ITraceListener
-        {
-            public void Receive(string message)
-            {
-#if DEBUG
-                if (message.Contains("Executing Query"))
-                {
-                    Mvx.TaggedTrace(MvxTraceLevel.Diagnostic, "SQLite", message);
-                }
-#endif
-            }
-        }
-
         private readonly SQLiteAsyncConnection asyncStorage;
         private readonly SQLiteConnectionWithLock storage;
         private readonly ILogger logger;
 
         public SqlitePlainStorage(ISQLitePlatform sqLitePlatform, ILogger logger,
-            IAsynchronousFileSystemAccessor fileSystemAccessor, ISerializer serializer, SqliteSettings settings)
+            IAsynchronousFileSystemAccessor fileSystemAccessor, ISerializer serializer,
+            ITraceListener traceListener, SqliteSettings settings)
         {
             var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, typeof(TEntity).Name + "-data.sqlite3");
             this.storage = new SQLiteConnectionWithLock(sqLitePlatform,
@@ -45,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     (data, type) => serializer.DeserializeFromStream(new MemoryStream(data), type),
                     (type) => true)))
             {
-                TraceListener = new MvxTraceListener(),
+                TraceListener = traceListener
             };
             this.asyncStorage = new SQLiteAsyncConnection(() => this.storage);
             this.logger = logger;
@@ -98,7 +84,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 {
                     foreach (var entity in entities.Where(entity => entity != null))
                     {
-                        var isEntityExists = this.storage.Table<TEntity>().Count(x => x.Id == entity.Id) > 0;
+                        var isEntityExists = connection.Table<TEntity>().Count(x => x.Id == entity.Id) > 0;
 
                         if (isEntityExists)
                         {
@@ -120,25 +106,29 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         }
 
         public IReadOnlyCollection<TEntity> Where(Expression<Func<TEntity, bool>> predicate)
-            => this.RunInTransaction(table
-                => table.Where(predicate).ToReadOnlyCollection());
+            => this.RunInTransaction(table => table.Where(predicate).ToReadOnlyCollection());
 
-        public int Count(Expression<Func<TEntity, bool>> predicate)
-            => this.RunInTransaction(table
-                => table.Count(predicate));
+        public async Task<IReadOnlyCollection<TEntity>> WhereAsync(Expression<Func<TEntity, bool>> predicate)
+            => await this.RunInTransactionAsync(table => table.Where(predicate).ToReadOnlyCollection());
 
-        public TEntity FirstOrDefault()
-            => this.RunInTransaction(table
-                => table.FirstOrDefault());
+        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate)
+            => await this.RunInTransactionAsync(table => table.Count(predicate));
 
-        public IReadOnlyCollection<TEntity> LoadAll()
-            => this.RunInTransaction(table
-                => table.ToReadOnlyCollection());
+        public TEntity FirstOrDefault() => this.RunInTransaction(table => table.FirstOrDefault());
+
+        public IReadOnlyCollection<TEntity> LoadAll() => this.RunInTransaction(table => table.ToReadOnlyCollection());
 
         private TResult RunInTransaction<TResult>(Func<TableQuery<TEntity>, TResult> function)
         {
             TResult result = default(TResult);
             this.storage.RunInTransaction(() => result = function.Invoke(this.storage.Table<TEntity>()));
+            return result;
+        }
+
+        private async Task<TResult> RunInTransactionAsync<TResult>(Func<TableQuery<TEntity>, TResult> function)
+        {
+            TResult result = default(TResult);
+            await this.asyncStorage.RunInTransactionAsync(connection => result = function.Invoke(connection.Table<TEntity>()));
             return result;
         }
 

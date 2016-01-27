@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -22,6 +23,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IInterviewerDashboardFactory dashboardFactory;
         private readonly IPrincipal principal;
         private readonly IMvxMessenger messenger;
+        private readonly ICommandService commandService;
+
+        private DashboardInformation dashboardInformation = new DashboardInformation();
+        private DashboardInterviewStatus currentDashboardStatus;
 
         private MvxSubscriptionToken startingLongOperationMessageSubscriptionToken;
         private MvxSubscriptionToken removedDashboardItemMessageSubscriptionToken;
@@ -30,69 +35,49 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IInterviewerDashboardFactory dashboardFactory,
             IPrincipal principal, 
             SynchronizationViewModel synchronization,
-            IMvxMessenger messenger)
+            IMvxMessenger messenger,
+            ICommandService commandService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.dashboardFactory = dashboardFactory;
             this.principal = principal;
             this.messenger = messenger;
+            this.commandService = commandService;
             this.Synchronization = synchronization;
         }
 
-        public async void Init()
+        private IMvxCommand synchronizationCommand;
+        public IMvxCommand SynchronizationCommand
         {
-            if (!this.principal.IsAuthenticated)
+            get
             {
-                await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
-                return;
-            }
-
-            startingLongOperationMessageSubscriptionToken = this.messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
-            removedDashboardItemMessageSubscriptionToken = messenger.Subscribe<RemovedDashboardItemMessage>(DashboardItemOnRemovedDashboardItem);
-
-            await this.RefreshDashboardAsync();
-        }
-
-        private async Task RefreshDashboardAsync()
-        {
-            this.DashboardInformation = await Task.Run(() => this.dashboardFactory.GetInterviewerDashboard(
-                this.principal.CurrentUserIdentity.UserId));
-
-            if ((CurrentDashboardStatus == DashboardInterviewStatus.Completed && this.CompletedInterviewsCount == 0)
-                || (CurrentDashboardStatus == DashboardInterviewStatus.InProgress && this.StartedInterviewsCount == 0)
-                || (CurrentDashboardStatus == DashboardInterviewStatus.Rejected && this.RejectedInterviewsCount == 0))
-            {
-                this.CurrentDashboardStatus = DashboardInterviewStatus.New;
-            }
-
-            this.RefreshTab();
-
-            IsLoaded = true;
-        }
-
-        private void RefreshTab()
-        {
-            switch (this.CurrentDashboardStatus)
-            {
-                 case DashboardInterviewStatus.New:
-                    this.DashboardItems = dashboardInformation.CensusQuestionnaires.Union(dashboardInformation.NewInterviews);
-                    break;
-                 case DashboardInterviewStatus.InProgress:
-                    this.DashboardItems = dashboardInformation.StartedInterviews;
-                    break;
-                 case DashboardInterviewStatus.Completed:
-                    this.DashboardItems = dashboardInformation.CompletedInterviews;
-                    break;
-                 case DashboardInterviewStatus.Rejected:
-                    this.DashboardItems = dashboardInformation.RejectedInterviews;
-                    break;
+                return synchronizationCommand ??
+                       (synchronizationCommand = new MvxCommand(async () => await this.RunSynchronizationAsync(),
+                           () => !this.Synchronization.IsSynchronizationInProgress));
             }
         }
+        public IMvxCommand ShowNewItemsInterviewsCommand => new MvxCommand(() => ShowInterviews(DashboardInterviewStatus.New));
+        public IMvxCommand ShowStartedInterviewsCommand => new MvxCommand(() => ShowInterviews(DashboardInterviewStatus.InProgress));
+        public IMvxCommand ShowCompletedInterviewsCommand => new MvxCommand(() => ShowInterviews(DashboardInterviewStatus.Completed));
+        public IMvxCommand ShowRejectedInterviewsCommand => new MvxCommand(() => ShowInterviews(DashboardInterviewStatus.Rejected));
+        public IMvxCommand SignOutCommand => new MvxCommand(async () => await this.SignOutAsync());
+        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(async () => await this.NavigateToDiagnosticsAsync());
+            
+        public bool IsNewInterviewsCategorySelected => this.CurrentDashboardStatus == DashboardInterviewStatus.New;
+        public bool IsStartedInterviewsCategorySelected => this.CurrentDashboardStatus == DashboardInterviewStatus.InProgress;
+        public bool IsCompletedInterviewsCategorySelected => this.CurrentDashboardStatus == DashboardInterviewStatus.Completed;
+        public bool IsRejectedInterviewsCategorySelected => this.CurrentDashboardStatus == DashboardInterviewStatus.Rejected;
 
-        private async void DashboardItemOnRemovedDashboardItem(RemovedDashboardItemMessage message)
-        {
-            await this.RefreshDashboardAsync();
-        }
+        public int NewInterviewsCount => this.dashboardInformation.NewInterviews.Count();
+        public int StartedInterviewsCount => this.dashboardInformation.StartedInterviews.Count();
+        public int CompletedInterviewsCount => this.dashboardInformation.CompletedInterviews.Count();
+        public int RejectedInterviewsCount => this.dashboardInformation.RejectedInterviews.Count();
+
+        public bool IsExistsAnyCensusQuestionniories => this.dashboardInformation.CensusQuestionnaires.Any();
+        public bool IsExistsAnyNewInterview => this.NewInterviewsCount > 0;
+        public bool IsExistsAnyStartedInterview => this.StartedInterviewsCount > 0;
+        public bool IsExistsAnyCompletedInterview => this.CompletedInterviewsCount > 0;
+        public bool IsExistsAnyRejectedInterview => this.RejectedInterviewsCount > 0;
 
         private bool isInProgress;
         public bool IsInProgress
@@ -100,12 +85,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             get { return this.isInProgress; }
             set { this.isInProgress = value; this.RaisePropertyChanged(); }
         }
-
-        private void DashboardItemOnStartingLongOperation(StartingLongOperationMessage message)
-        {
-            IsInProgress = true;
-        }
-
+        
         private SynchronizationViewModel synchronization;
         public SynchronizationViewModel Synchronization
         {
@@ -117,18 +97,32 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        private DashboardInformation dashboardInformation = new DashboardInformation(Enumerable.Empty<CensusQuestionnaireDashboardItemViewModel>(), Enumerable.Empty<InterviewDashboardItemViewModel>());
-        private DashboardInterviewStatus currentDashboardStatus;
-        public bool IsNewInterviewsCategorySelected { get { return this.CurrentDashboardStatus == DashboardInterviewStatus.New; } }
-        public bool IsStartedInterviewsCategorySelected { get { return this.CurrentDashboardStatus == DashboardInterviewStatus.InProgress; } }
-        public bool IsCompletedInterviewsCategorySelected { get { return this.CurrentDashboardStatus == DashboardInterviewStatus.Completed; } }
-        public bool IsRejectedInterviewsCategorySelected { get { return this.CurrentDashboardStatus == DashboardInterviewStatus.Rejected; } }
-
         private bool isLoaded;
         public bool IsLoaded
         {
             get { return this.isLoaded; }
             set { this.isLoaded = value; this.RaisePropertyChanged(); }
+        }
+
+        public string DashboardTitle
+        {
+            get
+            {
+                var numberOfAssignedInterviews = this.NewInterviewsCount
+                    + this.StartedInterviewsCount
+                    + this.CompletedInterviewsCount
+                    + this.RejectedInterviewsCount;
+
+                var userName = this.principal.CurrentUserIdentity.Name;
+                return InterviewerUIResources.Dashboard_Title.FormatString(numberOfAssignedInterviews, userName);
+            }
+        }
+
+        private IList<IDashboardItem> dashboardItems;
+        public IList<IDashboardItem> DashboardItems
+        {
+            get { return this.dashboardItems; }
+            set { this.dashboardItems = value; this.RaisePropertyChanged(); }
         }
 
         public DashboardInterviewStatus CurrentDashboardStatus
@@ -163,14 +157,54 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 this.RaisePropertyChanged(() => DashboardTitle);
             }
         }
-        private IMvxCommand synchronizationCommand;
-        public IMvxCommand SynchronizationCommand
+
+        public async void Init()
         {
-            get
+            if (!this.principal.IsAuthenticated)
             {
-                return synchronizationCommand ??
-                       (synchronizationCommand = new MvxCommand(async () => await this.RunSynchronizationAsync(),
-                           () => !this.Synchronization.IsSynchronizationInProgress));
+                await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
+                return;
+            }
+
+            startingLongOperationMessageSubscriptionToken = this.messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
+            removedDashboardItemMessageSubscriptionToken = messenger.Subscribe<RemovedDashboardItemMessage>(DashboardItemOnRemovedDashboardItem);
+
+            await this.RefreshDashboardAsync();
+        }
+
+        private async Task RefreshDashboardAsync()
+        {
+            this.DashboardInformation = await this.dashboardFactory.GetInterviewerDashboardAsync(
+                this.principal.CurrentUserIdentity.UserId);
+
+            if ((CurrentDashboardStatus == DashboardInterviewStatus.Completed && this.CompletedInterviewsCount == 0)
+                || (CurrentDashboardStatus == DashboardInterviewStatus.InProgress && this.StartedInterviewsCount == 0)
+                || (CurrentDashboardStatus == DashboardInterviewStatus.Rejected && this.RejectedInterviewsCount == 0))
+            {
+                this.CurrentDashboardStatus = DashboardInterviewStatus.New;
+            }
+
+            this.RefreshTab();
+
+            IsLoaded = true;
+        }
+
+        private void RefreshTab()
+        {
+            switch (this.CurrentDashboardStatus)
+            {
+                case DashboardInterviewStatus.New:
+                    this.DashboardItems = dashboardInformation.CensusQuestionnaires.Union(dashboardInformation.NewInterviews).ToList();
+                    break;
+                case DashboardInterviewStatus.InProgress:
+                    this.DashboardItems = dashboardInformation.StartedInterviews;
+                    break;
+                case DashboardInterviewStatus.Completed:
+                    this.DashboardItems = dashboardInformation.CompletedInterviews;
+                    break;
+                case DashboardInterviewStatus.Rejected:
+                    this.DashboardItems = dashboardInformation.RejectedInterviews;
+                    break;
             }
         }
 
@@ -184,59 +218,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        public string DashboardTitle
-        {
-            get
-            {
-                var numberOfAssignedInterviews = this.NewInterviewsCount 
-                    + this.StartedInterviewsCount
-                    + this.CompletedInterviewsCount 
-                    + this.RejectedInterviewsCount;
-
-                var userName = this.principal.CurrentUserIdentity.Name;
-                return InterviewerUIResources.Dashboard_Title.FormatString(numberOfAssignedInterviews, userName);
-            }
-        }
-
-        public int NewInterviewsCount { get { return this.dashboardInformation.NewInterviews.Count(); } }
-        public int StartedInterviewsCount { get { return this.dashboardInformation.StartedInterviews.Count(); } }
-        public int CompletedInterviewsCount { get { return this.dashboardInformation.CompletedInterviews.Count(); } }
-        public int RejectedInterviewsCount { get { return this.dashboardInformation.RejectedInterviews.Count(); } }
-
-        public bool IsExistsAnyCensusQuestionniories { get { return this.dashboardInformation.CensusQuestionnaires.Any(); } }
-        public bool IsExistsAnyNewInterview { get { return this.NewInterviewsCount > 0; } }
-        public bool IsExistsAnyStartedInterview { get { return this.StartedInterviewsCount > 0; } }
-        public bool IsExistsAnyCompletedInterview { get { return this.CompletedInterviewsCount > 0; } }
-        public bool IsExistsAnyRejectedInterview { get { return this.RejectedInterviewsCount > 0; } }
-
-        private IEnumerable<IDashboardItem> dashboardItems;
-        public IEnumerable<IDashboardItem> DashboardItems
-        {
-            get { return this.dashboardItems; }
-            set { this.dashboardItems = value;  this.RaisePropertyChanged(); }
-        }
-
-        public IMvxCommand ShowNewItemsInterviewsCommand
-        {
-            get { return new MvxCommand(() => ShowInterviewsCommand(DashboardInterviewStatus.New)); }
-        }
-
-        public IMvxCommand ShowStartedInterviewsCommand
-        {
-            get { return new MvxCommand(() => ShowInterviewsCommand(DashboardInterviewStatus.InProgress)); }
-        }
-
-        public IMvxCommand ShowCompletedInterviewsCommand
-        {
-            get { return new MvxCommand(() => ShowInterviewsCommand(DashboardInterviewStatus.Completed)); }
-        }
-
-        public IMvxCommand ShowRejectedInterviewsCommand
-        {
-            get { return new MvxCommand(() => ShowInterviewsCommand(DashboardInterviewStatus.Rejected)); }
-        }
-
-        private void ShowInterviewsCommand(DashboardInterviewStatus status)
+        private void ShowInterviews(DashboardInterviewStatus status)
         {
             if (status == this.CurrentDashboardStatus)
                 return;
@@ -244,16 +226,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.CurrentDashboardStatus = status;
 
             this.RefreshTab();
-        }
-
-        public IMvxCommand SignOutCommand
-        {
-            get { return new MvxCommand(async () => await this.SignOutAsync()); }
-        }
-
-        public IMvxCommand NavigateToDiagnosticsPageCommand
-        {
-            get { return new MvxCommand(async () => await this.NavigateToDiagnosticsAsync()); }
         }
 
         private async Task NavigateToDiagnosticsAsync()
@@ -268,6 +240,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             this.principal.SignOut();
             await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
+        }
+
+        private async void DashboardItemOnRemovedDashboardItem(RemovedDashboardItemMessage message)
+        {
+            await this.commandService.WaitPendingCommandsAsync();
+            await this.RefreshDashboardAsync();
+        }
+        private void DashboardItemOnStartingLongOperation(StartingLongOperationMessage message)
+        {
+            IsInProgress = true;
         }
 
         public void Dispose()

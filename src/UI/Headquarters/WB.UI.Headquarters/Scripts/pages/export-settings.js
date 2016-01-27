@@ -26,12 +26,30 @@
         return true;
     };
 
-    self.regeneratePass = function() {
-        self.SendRequest(self.regenPasswordUrl,
-        {}, function (data) {
-            self.isEnabled(data.IsEnabled);
-            self.password(data.Password);
+    self.regeneratePass = function () {
+
+
+        var confirmRegenerateHtml = self.getBindedHtmlTemplate("#confirm-regenerate-password");
+
+        bootbox.dialog({
+            message: confirmRegenerateHtml,
+            buttons: {
+                cancel: {
+                    label: "No"
+                },
+                success: {
+                    label: "Yes",
+                    callback: function () {
+                        self.SendRequest(self.regenPasswordUrl,
+                                        {}, function (data) {
+                                        self.isEnabled(data.IsEnabled);
+                                        self.password(data.Password);
+                        });
+                    }
+                }
+            }
         });
+        
         return true;
     };
 };

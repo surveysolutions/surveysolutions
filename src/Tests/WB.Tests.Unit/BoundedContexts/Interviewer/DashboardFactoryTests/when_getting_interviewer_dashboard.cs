@@ -35,8 +35,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
                 interviewViewModelFactory: interviewViewModelFactory);
         };
 
-        Because of = () =>
-            dashboardByInterviewer = interviewerDashboardFactory.GetInterviewerDashboard(interviewerId);
+        Because of = async () =>
+            dashboardByInterviewer = await interviewerDashboardFactory.GetInterviewerDashboardAsync(interviewerId);
 
         It should_interviews_be_filered_by_specified_interviewer = () =>
             dashboardByInterviewer.StartedInterviews
