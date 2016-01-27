@@ -777,6 +777,8 @@
     <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_gps_question_answered.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_handling_InterviewDeleted_event_and_interview_has_2_gps_questions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_handling_InterviewHardDeleted_event_and_interview_has_2_gps_questions.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\MapReportTests\when_map_report_data_is_being_queried.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\MapReportTests\when_map_report_data_is_being_queried_and_bounds_are_inverted.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Merger\when_merging_questionnaire_and_interview_data_and_interview_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Merger\when_merging_questionnaire_and_interview_data_with_3_fixed_roster_rows.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_all_service_variables.cs" />
