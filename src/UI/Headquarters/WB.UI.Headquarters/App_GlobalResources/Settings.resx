@@ -121,7 +121,7 @@
     <value>Export Encryption</value>
   </data>
   <data name="RegeneratePasswordConfirm" xml:space="preserve">
-    <value>Are you sure you want to regenerate key? You will need to regenerate exported data to be able open it successfully.</value>
+    <value>Are you sure you want to regenerate password? You will need to regenerate exported data in order to open it.</value>
   </data>
   <data name="Settings_Title" xml:space="preserve">
     <value>Settings</value>
