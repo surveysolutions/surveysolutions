@@ -2,7 +2,7 @@
 {
     public class MapPointView
     {
-        public string InterviewId { get; set; }
+        public string Id { get; set; }
         public string Answers { get; set; }
     }
 }

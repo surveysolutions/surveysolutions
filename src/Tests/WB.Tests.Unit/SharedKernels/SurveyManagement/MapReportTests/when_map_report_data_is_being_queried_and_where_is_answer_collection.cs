@@ -21,7 +21,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportTests
             input = Mock.Of<MapReportInputModel>(x
                 => x.Variable == variableName
                    && x.QuestionnaireId == questionnaireId
-                   && x.QuestionnaireVersion == questionnaireVersion);
+                   && x.QuestionnaireVersion == questionnaireVersion &&
+                   x.NorthEastCornerLatitude == 180 &&
+                   x.NorthEastCornerLongtitude == 90 &&
+                   x.SouthWestCornerLatitude == -180 &&
+                   x.SouthWestCornerLongtitude == -90);
 
             List<MapReportPoint> points = new List<MapReportPoint>();
             points.Add(new MapReportPoint("id1")
@@ -44,8 +48,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportTests
             });
             points.Add(new MapReportPoint("id3")
             {
-                Latitude = 5555,
-                Longitude = 66666,
+                Latitude = 55.55,
+                Longitude = 66.666,
                 InterviewId = interview2Id,
                 QuestionnaireId = questionnaireId,
                 QuestionnaireVersion = questionnaireVersion,
@@ -68,16 +72,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportTests
             view.Points.Length.ShouldEqual(2);
 
         It should_interview_id_in_first_point_be_equal_to_interview1Id = () =>
-            view.Points[0].InterviewId.ShouldEqual(interview1Id.ToString());
+            view.Points[0].Id.ShouldEqual(interview1Id.ToString());
 
         It should_answers_in_first_point_be_specified_value = () =>
             view.Points[0].Answers.ShouldEqual("11.11;11.11|22;22");
 
         It should_interview_id_in_second_point_be_equal_to_interview2Id = () =>
-            view.Points[1].InterviewId.ShouldEqual(interview2Id.ToString());
+            view.Points[1].Id.ShouldEqual(interview2Id.ToString());
 
         It should_answers_in_second_point_be_specified_value = () =>
-            view.Points[1].Answers.ShouldEqual("5555;66666");
+            view.Points[1].Answers.ShouldEqual("55.55;66.666");
 
         private static Guid interview1Id = Guid.Parse("11111111111111111111111111111111");
         private static Guid interview2Id = Guid.Parse("22222222222222222222222222222222");
