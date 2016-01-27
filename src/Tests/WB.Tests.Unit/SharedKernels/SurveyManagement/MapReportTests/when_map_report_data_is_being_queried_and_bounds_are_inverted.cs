@@ -10,7 +10,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportTests
 {
-    internal class when_map_report_data_is_being_queried_and_where_is_answer_collection : MapReportTestContext
+    internal class when_map_report_data_is_being_queried_and_bounds_are_inverted : MapReportTestContext
     {
         Establish context = () =>
         {
@@ -22,16 +22,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportTests
                 => x.Variable == variableName
                    && x.QuestionnaireId == questionnaireId
                    && x.QuestionnaireVersion == questionnaireVersion &&
-                   x.NorthEastCornerLatitude == 90 &&
-                   x.NorthEastCornerLongtitude == 180 &&
-                   x.SouthWestCornerLatitude == -90 &&
-                   x.SouthWestCornerLongtitude == -180);
+                   x.NorthEastCornerLatitude == 80 &&
+                   x.NorthEastCornerLongtitude == -150 &&
+                   x.SouthWestCornerLatitude == -80 &&
+                   x.SouthWestCornerLongtitude == 160);
 
             List<MapReportPoint> points = new List<MapReportPoint>();
             points.Add(new MapReportPoint("id1")
             {
-                Latitude = 11.11,
-                Longitude = 11.11,
+                Latitude = -75.11,
+                Longitude = -171.21,
                 InterviewId = interview1Id,
                 QuestionnaireId = questionnaireId,
                 QuestionnaireVersion = questionnaireVersion,
@@ -39,23 +39,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportTests
             });
             points.Add(new MapReportPoint("id2")
             {
-                Latitude = 22,
-                Longitude = 22,
-                InterviewId = interview1Id,
-                QuestionnaireId = questionnaireId,
-                QuestionnaireVersion = questionnaireVersion,
-                Variable = variableName
-            });
-            points.Add(new MapReportPoint("id3")
-            {
-                Latitude = 55.55,
-                Longitude = 66.666,
+                Latitude = 72.555,
+                Longitude = 170.32,
                 InterviewId = interview2Id,
                 QuestionnaireId = questionnaireId,
                 QuestionnaireVersion = questionnaireVersion,
                 Variable = variableName
             });
-
+            
             var repositoryReader = new TestInMemoryWriter<MapReportPoint>();
             foreach (var mapReportPoint in points)
             {
@@ -75,13 +66,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportTests
             view.Points[0].Id.ShouldEqual(interview1Id.ToString());
 
         It should_answers_in_first_point_be_specified_value = () =>
-            view.Points[0].Answers.ShouldEqual("11.11;11.11|22;22");
+            view.Points[0].Answers.ShouldEqual("-75.11;-171.21");
 
         It should_interview_id_in_second_point_be_equal_to_interview2Id = () =>
             view.Points[1].Id.ShouldEqual(interview2Id.ToString());
 
         It should_answers_in_second_point_be_specified_value = () =>
-            view.Points[1].Answers.ShouldEqual("55.55;66.666");
+            view.Points[1].Answers.ShouldEqual("72.555;170.32");
 
         private static Guid interview1Id = Guid.Parse("11111111111111111111111111111111");
         private static Guid interview2Id = Guid.Parse("22222222222222222222222222222222");
