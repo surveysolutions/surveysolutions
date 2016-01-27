@@ -5,6 +5,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
@@ -12,7 +13,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     [DebuggerDisplay("{Title} ({Id})")]
     public class InterviewQuestionView : InterviewEntityView
     {
-        public InterviewQuestionView(IQuestion question, InterviewQuestion answeredQuestion, Dictionary<Guid, string> variablesMap, Dictionary<string, string> answersForTitleSubstitution, bool isParentGroupDisabled, decimal[] rosterVector)
+        public InterviewQuestionView(IQuestion question, 
+            InterviewQuestion answeredQuestion, 
+            Dictionary<Guid, string> variablesMap, 
+            Dictionary<string, string> answersForTitleSubstitution, 
+            bool isParentGroupDisabled, 
+            decimal[] rosterVector,
+            InterviewStatus interviewStatus)
         {
             this.Id = question.PublicKey;
             this.RosterVector = rosterVector;
@@ -24,7 +31,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             this.Variable = question.StataExportCaption;
             this.IsValid = true;
             this.IsEnabled = (question.QuestionScope == QuestionScope.Supervisor) || (answeredQuestion == null) && !isParentGroupDisabled;
-            this.IsReadOnly = question.QuestionScope != QuestionScope.Supervisor;
+            this.IsReadOnly = !(question.QuestionScope == QuestionScope.Supervisor && interviewStatus < InterviewStatus.ApprovedByHeadquarters);
             this.Scope = question.QuestionScope;
 
             if (question.Answers != null)
@@ -111,10 +118,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             bool shouldBeValidByConvention = !this.IsEnabled;
 
             this.IsValid = shouldBeValidByConvention || !answeredQuestion.IsInvalid();
-            this.AnswerString = FormatAnswerAsString(answeredQuestion.Answer, question);
+            this.AnswerString = FormatAnswerAsString(answeredQuestion.Answer);
         }
 
-        private string FormatAnswerAsString(object answer, IQuestion question)
+        private string FormatAnswerAsString(object answer)
         {
             if (answer == null) return "";
             switch (QuestionType)
