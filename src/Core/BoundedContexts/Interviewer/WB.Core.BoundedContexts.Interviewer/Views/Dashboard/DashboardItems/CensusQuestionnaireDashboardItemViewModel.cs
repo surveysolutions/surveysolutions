@@ -39,14 +39,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         private QuestionnaireIdentity questionnaireIdentity;
 
-        public void Init(QuestionnaireView questionnaire)
+        public async Task Init(QuestionnaireView questionnaire)
         {
             this.questionnaireIdentity = questionnaire.Identity;
             this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, questionnaire.Title, questionnaire.Identity.Version);
 
-            var countInterviewsFromCurrentQuestionnare = this.interviewViewRepository.Count(interview => interview.QuestionnaireId == questionnaire.Id);
+            var interviewsByQuestionnareCount = await
+                this.interviewViewRepository.CountAsync(interview => interview.QuestionnaireId == questionnaire.Id);
 
-            this.Comment = InterviewerUIResources.DashboardItem_CensusModeComment.FormatString(countInterviewsFromCurrentQuestionnare);
+            this.Comment = InterviewerUIResources.DashboardItem_CensusModeComment.FormatString(interviewsByQuestionnareCount);
         }
 
         public string QuestionnaireName { get; set; }
