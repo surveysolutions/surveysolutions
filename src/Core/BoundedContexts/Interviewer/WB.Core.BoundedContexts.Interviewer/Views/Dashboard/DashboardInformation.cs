@@ -1,25 +1,37 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class DashboardInformation
     {
-        private readonly List<CensusQuestionnaireDashboardItemViewModel> censusQuestionnaires;
-        private readonly List<InterviewDashboardItemViewModel> interviews;
-
-        public DashboardInformation(IEnumerable<CensusQuestionnaireDashboardItemViewModel> censusQuestionnaires,
-            IEnumerable<InterviewDashboardItemViewModel> interviews)
+        public DashboardInformation()
         {
-            this.censusQuestionnaires = new List<CensusQuestionnaireDashboardItemViewModel>(censusQuestionnaires);
-            this.interviews = new List<InterviewDashboardItemViewModel>(interviews);
+            this.CensusQuestionnaires = new List<IDashboardItem>();
+            this.NewInterviews = new List<IDashboardItem>();
+            this.StartedInterviews = new List<IDashboardItem>();
+            this.CompletedInterviews = new List<IDashboardItem>();
+            this.RejectedInterviews = new List<IDashboardItem>();
         }
 
-        public IEnumerable<IDashboardItem> CensusQuestionnaires { get { return this.censusQuestionnaires; } }
-        public IEnumerable<IDashboardItem> NewInterviews { get { return interviews.Where(i => i.Status == DashboardInterviewStatus.New);} }
-        public IEnumerable<IDashboardItem> StartedInterviews { get { return interviews.Where(i => i.Status == DashboardInterviewStatus.InProgress); } }
-        public IEnumerable<IDashboardItem> CompletedInterviews { get { return interviews.Where(i => i.Status == DashboardInterviewStatus.Completed); } }
-        public IEnumerable<IDashboardItem> RejectedInterviews { get { return interviews.Where(i => i.Status == DashboardInterviewStatus.Rejected); } }
+        public DashboardInformation(
+            IList<IDashboardItem> censusQuestionnaires, 
+            IList<IDashboardItem> newInterviews,
+            IList<IDashboardItem> startedInterviews,
+            IList<IDashboardItem> completedInterviews, 
+            IList<IDashboardItem> rejectedInterviews)
+        {
+            this.CensusQuestionnaires = censusQuestionnaires;
+            this.NewInterviews = newInterviews;
+            this.StartedInterviews = startedInterviews;
+            this.CompletedInterviews = completedInterviews;
+            this.RejectedInterviews = rejectedInterviews;
+        }
+
+        public IList<IDashboardItem> CensusQuestionnaires { get; private set; }
+        public IList<IDashboardItem> NewInterviews { get; private set; }
+        public IList<IDashboardItem> StartedInterviews { get; private set; }
+        public IList<IDashboardItem> CompletedInterviews { get; private set; }
+        public IList<IDashboardItem> RejectedInterviews { get; private set; }
     }
 }
