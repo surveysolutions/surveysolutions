@@ -70,7 +70,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to regenerate key? You will need to regenerate exported data to be able open it successfully..
+        ///   Looks up a localized string similar to Are you sure you want to regenerate password? You will need to regenerate exported data in order to open it..
         /// </summary>
         internal static string RegeneratePasswordConfirm {
             get {
