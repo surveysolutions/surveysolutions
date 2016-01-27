@@ -70,6 +70,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to regenerate key? You will need to regenerate exported data to be able open it successfully..
+        /// </summary>
+        internal static string RegeneratePasswordConfirm {
+            get {
+                return ResourceManager.GetString("RegeneratePasswordConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         internal static string Settings_Title {

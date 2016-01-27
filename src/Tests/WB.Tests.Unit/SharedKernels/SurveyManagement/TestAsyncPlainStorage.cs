@@ -35,17 +35,20 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
             => await Task.Run(()
                 => this.items.AddRange(entities));
 
+        public async Task<int> CountAsync(Expression<Func<T, bool>> predicate)
+            => await Task.FromResult(this.items.Count(predicate.Compile()));
+
         public T FirstOrDefault()
             => this.items.FirstOrDefault();
 
         public IReadOnlyCollection<T> LoadAll()
             => this.items.ToReadOnlyCollection();
 
-        public int Count(Expression<Func<T, bool>> predicate)
-            => this.items.Count(predicate.Compile());
-
         public IReadOnlyCollection<T> Where(Expression<Func<T, bool>> predicate)
             => this.items.Where(predicate.Compile()).ToReadOnlyCollection();
+
+        public async Task<IReadOnlyCollection<T>> WhereAsync(Expression<Func<T, bool>> predicate)
+            => await Task.FromResult(this.items.Where<T>(predicate.Compile()).ToReadOnlyCollection());
 
         public void Dispose() {}
     }
