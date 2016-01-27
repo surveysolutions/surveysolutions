@@ -22,10 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories
         private const string UnzippedFoldername = "Unzipped";
         private readonly string path;
         private readonly string[] permittedFileExtensions = { ExportFileSettings.ExtensionOfExportedDataFile, ".txt" };
-        private static ILogger Logger
-        {
-            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
-        }
+        private static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<FilebasedPreloadedDataRepository>();
 
         public FilebasedPreloadedDataRepository(IFileSystemAccessor fileSystemAccessor, string folderPath, IArchiveUtils archiveUtils, IRecordsAccessorFactory recordsAccessorFactory)
         {

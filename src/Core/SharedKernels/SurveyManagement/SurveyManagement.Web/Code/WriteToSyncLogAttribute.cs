@@ -55,10 +55,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             get { return ServiceLocator.Current.GetInstance<IUserViewFactory>(); }
         }
 
-        private ILogger logger
-        {
-            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
-        }
+        private ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<WriteToSyncLogAttribute>();
 
         public WriteToSyncLogAttribute(SynchronizationLogType logAction)
         {
