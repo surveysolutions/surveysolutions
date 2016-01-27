@@ -98,7 +98,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.navigationState.ScreenChanged += this.OnScreenChanged;
         }
 
-        private async void OnScreenChanged(ScreenChangedEventArgs eventArgs)
+        private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
             if (eventArgs.TargetScreen == ScreenType.Complete)
             {
@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 GroupModel @group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[eventArgs.TargetGroup.Id];
 
-                await this.CreateRegularGroupScreen(eventArgs, @group);
+                this.CreateRegularGroupScreen(eventArgs, @group);
                 if (!this.eventRegistry.IsSubscribed(this, this.interviewId))
                 {
                     this.eventRegistry.Subscribe(this, this.interviewId);
@@ -117,25 +117,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        private async Task CreateRegularGroupScreen(ScreenChangedEventArgs eventArgs, GroupModel @group)
+        private void CreateRegularGroupScreen(ScreenChangedEventArgs eventArgs, GroupModel @group)
         {
             if (@group is RosterModel)
             {
                 string title = @group.Title;
-                this.Name = this.substitutionService.GenerateRosterName(
-                    title,
-                    this.interview.GetRosterTitle(eventArgs.TargetGroup));
+                this.Name = this.substitutionService.GenerateRosterName(title, this.interview.GetRosterTitle(eventArgs.TargetGroup));
             }
             else
             {
                 this.Name = @group.Title;
             }
 
-            await Task.Run(() =>
-            {
-                this.LoadFromModel(eventArgs.TargetGroup);
-                this.SendScrollToMessage(eventArgs.AnchoredElementIdentity);
-            });
+            this.LoadFromModel(eventArgs.TargetGroup);
+            this.SendScrollToMessage(eventArgs.AnchoredElementIdentity);
         }
 
         private void SendScrollToMessage(Identity scrollTo)
