@@ -64,7 +64,10 @@ namespace WB.UI.Shared.Enumerator.Activities
 
             this.adapter = new InterviewEntityAdapter((IMvxAndroidBindingContext)this.BindingContext);
 
+            var oldSource = this.recyclerView.Adapter.ItemsSource;
+            this.recyclerView.Adapter.ItemsSource = null;
             this.recyclerView.Adapter = this.adapter;
+            this.recyclerView.Adapter.ItemsSource = oldSource;
         }
 
         protected override void OnStart()

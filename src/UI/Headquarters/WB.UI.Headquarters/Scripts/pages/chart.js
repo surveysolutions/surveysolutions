@@ -67,7 +67,9 @@
         self.initChart();
     });
 
-    self.setReportRange = function(start, end) {
+    self.setReportRange = function (start, end) {
+        if (!start || !end) return;
+
         var formatedStartDate = start.format(dateFormat);
         var formatedEndDate = end.format(dateFormat);
         self.SelectedRange(formatedStartDate + "/" + formatedEndDate);
