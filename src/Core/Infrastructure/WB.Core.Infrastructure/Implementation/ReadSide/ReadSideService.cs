@@ -715,7 +715,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 EventHandlerExceptionDelegate eventHandlerExceptionDelegate = (nonCriticalEventHandlerException) =>
                 {
                     string message =
-                        $"Failed to publish event {this.processedEventsCount + 1} of {this.totalEventsToRebuildCount} ({@event.EventIdentifier})";
+                        $"Failed to publish event {this.processedEventsCount + 1} of {this.totalEventsToRebuildCount} - {eventTypeName} ({@event.EventIdentifier.FormatGuid()})";
                     this.SaveErrorForStatusReport(
                         $"{nonCriticalEventHandlerException.EventHandlerType.Name}.{nonCriticalEventHandlerException.EventType.Name}: {message}",
                         nonCriticalEventHandlerException);
@@ -733,7 +733,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 catch (Exception exception)
                 {
                     string message =
-                        $"Failed to publish event {this.processedEventsCount + 1} of {this.totalEventsToRebuildCount} ({@event.EventIdentifier})";
+                        $"Failed to publish event {this.processedEventsCount + 1} of {this.totalEventsToRebuildCount} - {eventTypeName} ({@event.EventIdentifier.FormatGuid()})";
                     this.SaveErrorForStatusReport(message, exception);
                     this.logger.Error(message, exception);
 
