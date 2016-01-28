@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
@@ -20,13 +21,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTest
             result =
                 new InterviewQuestionView(question: question, answeredQuestion: null,
                     variablesMap: new Dictionary<Guid, string>(),
-                    answersForTitleSubstitution: new Dictionary<string, string>(), isParentGroupDisabled: false,
-                    rosterVector: new decimal[0]);
+                    answersForTitleSubstitution: new Dictionary<string, string>(), 
+                    isParentGroupDisabled: false,
+                    rosterVector: new decimal[0],
+                    interviewStatus: InterviewStatus.Completed);
 
         It should_set_enabled_flag_to_true = () =>
             result.IsEnabled.ShouldBeTrue();
 
-        It should_set_readonly_flag_to_true = () =>
+        It should_set_readonly_flag_to_false = () =>
             result.IsReadOnly.ShouldBeFalse();
 
         private static InterviewQuestionView result;

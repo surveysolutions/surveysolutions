@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -21,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTest
         };
 
         Because of = () => textListQuestionView = new InterviewQuestionView(textListQuestionTemplate, textListQuestionData,
-               null, null, false, new decimal[0]);
+               null, null, false, new decimal[0], InterviewStatus.Completed);
 
         It should_answer_be_null = () =>
             textListQuestionView.Answer.ShouldBeNull();

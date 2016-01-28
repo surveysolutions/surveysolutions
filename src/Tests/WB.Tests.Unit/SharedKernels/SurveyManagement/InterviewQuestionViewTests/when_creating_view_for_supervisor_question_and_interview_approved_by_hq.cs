@@ -9,24 +9,23 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTests
 {
-    internal class when_creating_view_for_question_which_not_answered_and_parent_group_is_enabled
+    internal class when_creating_view_for_supervisor_question_and_interview_approved_by_hq
     {
         Establish context = () =>
         {
             question = Mock.Of<IQuestion>();
+            question.QuestionScope = QuestionScope.Supervisor;
         };
 
         Because of = () =>
             result =
                 new InterviewQuestionView(question: question, answeredQuestion: null,
                     variablesMap: new Dictionary<Guid, string>(),
-                    answersForTitleSubstitution: new Dictionary<string, string>(), isParentGroupDisabled: false,
-                    rosterVector:new decimal[0],
-                    interviewStatus: InterviewStatus.Completed);
-
-        It should_set_enabled_flag_to_true = () =>
-            result.IsEnabled.ShouldBeTrue();
-
+                    answersForTitleSubstitution: new Dictionary<string, string>(), 
+                    isParentGroupDisabled: false,
+                    rosterVector: new decimal[0],
+                    interviewStatus: InterviewStatus.ApprovedByHeadquarters);
+        
         It should_set_readonly_flag_to_true = () =>
             result.IsReadOnly.ShouldBeTrue();
 
