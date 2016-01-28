@@ -3,7 +3,7 @@
 
     var self = this;
 
-    self.markersLimit = 10000;
+    self.markersLimit = 50000;
 
     self.questionnaireUrl = questionnaireUrl;
     self.questionsUrl = questionsUrl;
