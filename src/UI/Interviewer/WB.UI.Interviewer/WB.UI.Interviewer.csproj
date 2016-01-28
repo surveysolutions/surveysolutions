@@ -79,14 +79,6 @@
     <DevInstrumentationEnabled>False</DevInstrumentationEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cheesebaron.MvxPlugins.Settings, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Cheesebaron.MvxPlugins.Settings.1.2.2-pre6\lib\MonoAndroid10\Cheesebaron.MvxPlugins.Settings.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Cheesebaron.MvxPlugins.Settings.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Cheesebaron.MvxPlugins.Settings.1.2.2-pre6\lib\MonoAndroid10\Cheesebaron.MvxPlugins.Settings.Droid.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Cirrious.CrossCore, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\MvvmCross.HotTuna.CrossCore.4.0.0-beta7\lib\MonoAndroid\Cirrious.CrossCore.dll</HintPath>
       <Private>True</Private>
@@ -122,14 +114,6 @@
     <Reference Include="Flurl.Http, Version=0.6.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Flurl.Http.0.6.3\lib\portable-net45+sl50+win+wpa81+wp80+MonoAndroid10+MonoTouch10\Flurl.Http.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="IHS.MvvmCross.Plugins.Keychain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\IHS.MvvmCross.Plugins.Keychain.0.0.12\lib\monoandroid\IHS.MvvmCross.Plugins.Keychain.dll</HintPath>
-    </Reference>
-    <Reference Include="IHS.MvvmCross.Plugins.Keychain.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\IHS.MvvmCross.Plugins.Keychain.0.0.12\lib\monoandroid\IHS.MvvmCross.Plugins.Keychain.Droid.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -340,7 +324,6 @@
     <Compile Include="Bootstrap\NetworkPluginBootstrap.cs" />
     <Compile Include="Bootstrap\PictureChooserPluginBootstrap.cs" />
     <Compile Include="Bootstrap\ResourceLoaderPluginBootstrap.cs" />
-    <Compile Include="Bootstrap\SettingsPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="Converters\InterviewerLocalizationValueConverter.cs" />
     <Compile Include="Converters\IsSynchronizationFailOrCanceledConverter.cs" />
@@ -382,7 +365,6 @@
     <Compile Include="Infrastructure\Logging\FileReportSender.cs" />
     <Compile Include="Ninject\AndroidModelModule.cs" />
     <Compile Include="App.cs" />
-    <Compile Include="Bootstrap\KeychainPluginBootstrap.cs" />
     <Compile Include="Implementations\Services\ViewModelNavigationService.cs" />
     <Compile Include="Infrastructure\InterviewerInfrastructureModule.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
