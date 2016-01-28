@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 
 namespace WB.UI.Headquarters.API
 {
+    [Authorize(Roles = "Administrator, Headquarter")]
     public class DataExportApiController : ApiController
     {
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
