@@ -9,7 +9,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
     internal class MapReport : IMapReport
     {
         private readonly IQueryableReadSideRepositoryReader<MapReportPoint> answersByVariableStorage;
-        private const int MAXCOORDINATESCOUNTLIMIT = 10000;
+        private const int MAXCOORDINATESCOUNTLIMIT = 50000;
 
         public MapReport(IQueryableReadSideRepositoryReader<MapReportPoint> answersByVariableStorage)
         {
