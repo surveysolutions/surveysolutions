@@ -170,13 +170,7 @@
     <Compile Include="Views\InterviewEventHandler.cs" />
     <Compile Include="Views\Dashboard\Messages\RemovedDashboardItemMessage.cs" />
     <Compile Include="Views\Dashboard\Messages\StartingLongOperationMessage.cs" />
-    <Compile Include="Views\Dashboard\OldDashboardCapability\FeaturedCategoricalItem.cs" />
-    <Compile Include="Views\Dashboard\OldDashboardCapability\FeaturedCategoricalOption.cs" />
-    <Compile Include="Views\Dashboard\OldDashboardCapability\FeaturedItem.cs" />
     <Compile Include="Implementation\Services\InterviewerDashboardFactory.cs" />
-    <Compile Include="Views\Dashboard\OldDashboardCapability\GpsCoordinatesViewModel.cs" />
-    <Compile Include="Views\Dashboard\OldDashboardCapability\QuestionnaireDTO.cs" />
-    <Compile Include="Views\Dashboard\OldDashboardCapability\SurveyDTO.cs" />
     <Compile Include="Views\FinishInstallationViewModel.cs" />
     <Compile Include="Views\InterviewAnswerOnPrefilledQuestionView.cs" />
     <Compile Include="Views\InterviewerActiveStageViewModel.cs" />
