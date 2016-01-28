@@ -79,26 +79,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         {
             var interviewData = this.interviewDataRepository.GetById(interviewId);
 
-            var statusHistory = this.interviewStatusesFactory.Load(new ChangeStatusInputModel()
-            {
-                InterviewId = interviewId
-            }).StatusHistory
-                .OrderBy(status => status.Date).ToList();
+            var fullStatusHistory = this
+                .interviewStatusesFactory
+                .Load(new ChangeStatusInputModel { InterviewId = interviewId })
+                .StatusHistory
+                .OrderBy(status => status.Date)
+                .ToList();
 
-            var lastInterviewerAssignedStatus =
-                statusHistory.LastOrDefault(status => status.Status == InterviewStatus.InterviewerAssigned);
+            var lastInterviewerAssignedStatus = fullStatusHistory.LastOrDefault(status => status.Status == InterviewStatus.InterviewerAssigned);
 
-            var lastCompleteStatus = statusHistory.LastOrDefault(x => x.Status == InterviewStatus.Completed);
-            if (lastCompleteStatus != null)
-            {
-                statusHistory = statusHistory.SkipWhile(status => status != lastCompleteStatus).ToList();
-            }
+            var lastCompleteStatus = fullStatusHistory.LastOrDefault(x => x.Status == InterviewStatus.Completed);
 
-            var orderedInterviewStatuses = statusHistory.Where(status =>
-                status.Status == InterviewStatus.RejectedBySupervisor ||
-                status.Status == InterviewStatus.InterviewerAssigned).ToList();
+            var lastInterviewStatus = fullStatusHistory.Last();
 
-            var lastInterviewStatus = orderedInterviewStatuses.LastOrDefault();
+            var statusHistoryStartingWithLastComplete =
+                lastCompleteStatus != null
+                    ? fullStatusHistory.SkipWhile(status => status != lastCompleteStatus).ToList()
+                    : fullStatusHistory;
+
+            var orderedInterviewStatuses = statusHistoryStartingWithLastComplete
+                .Where(status =>
+                    status.Status == InterviewStatus.RejectedBySupervisor ||
+                    status.Status == InterviewStatus.InterviewerAssigned)
+                .ToList();
 
             var lastRejectedBySupervisorStatus =
                 orderedInterviewStatuses.LastOrDefault(status => status.Status == InterviewStatus.RejectedBySupervisor);
