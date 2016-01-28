@@ -166,7 +166,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 
                 await this.interviewersPlainStorage.StoreAsync(interviewerIdentity);
 
-                this.principal.SignIn(restCredentials.Login, restCredentials.Password, true);
+                await this.principal.SignInAsync(restCredentials.Login, restCredentials.Password, true);
                 await this.viewModelNavigationService.NavigateToDashboardAsync();
             }
             catch (SynchronizationException ex)
