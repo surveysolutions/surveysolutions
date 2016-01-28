@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
+using Nito.AsyncEx;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -38,19 +40,17 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
             }
         }
 
-        public bool SignIn(string usernName, string password, bool staySignedIn)
+        public async Task<bool> SignInAsync(string usernName, string password, bool staySignedIn)
         {
             if (staySignedIn)
             {
-                var storeAsync = this.usersStorage.StoreAsync(new TesterUserIdentity
+                await this.usersStorage.StoreAsync(new TesterUserIdentity
                 {
                     Name = usernName,
                     Password = password,
                     UserId = Guid.NewGuid(),
                     Id = usernName
-                });
-                storeAsync.ConfigureAwait(false);
-                storeAsync.WaitAndUnwrapException();
+                }).ConfigureAwait(false);
             }
 
             this.IsAuthenticated = true;
@@ -60,10 +60,10 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
             return this.IsAuthenticated;
         }
 
-        public void SignOut()
+        public async Task SignOutAsync()
         {
             var testerUserIdentities = this.usersStorage.LoadAll();
-            this.usersStorage.RemoveAsync(testerUserIdentities);
+            await this.usersStorage.RemoveAsync(testerUserIdentities).ConfigureAwait(false);
 
             this.IsAuthenticated = false;
             this.currentUserIdentity.Name = string.Empty;

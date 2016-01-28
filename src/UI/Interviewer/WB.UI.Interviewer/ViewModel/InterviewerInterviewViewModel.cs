@@ -63,7 +63,7 @@ namespace WB.UI.Interviewer.ViewModel
 
         private async Task SignOut()
         {
-            this.principal.SignOut();
+            await this.principal.SignOutAsync();
             await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
         }
 

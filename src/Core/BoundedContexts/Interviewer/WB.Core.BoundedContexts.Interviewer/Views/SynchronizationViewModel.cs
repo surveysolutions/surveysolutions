@@ -226,7 +226,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             localInterviewer.Password = this.restCredentials.Password;
 
             await this.interviewersPlainStorage.StoreAsync(localInterviewer);
-            this.principal.SignIn(localInterviewer.Name, localInterviewer.Password, true);
+            await this.principal.SignInAsync(localInterviewer.Name, localInterviewer.Password, true);
         }
 
         private async Task<string> GetNewPasswordAsync()
