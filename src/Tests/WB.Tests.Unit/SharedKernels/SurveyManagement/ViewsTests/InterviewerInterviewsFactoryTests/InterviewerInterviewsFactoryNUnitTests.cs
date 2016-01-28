@@ -35,6 +35,31 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
         }
 
         [Test]
+        public void GetInterviewDetails_When_interview_in_interviewer_assigned__but_supervisor_assigned_happend_before_according_To_timestamp_state_then_lastRejectedBySupervisorStatus_should_be_null()
+        {
+            var interviewId = Guid.NewGuid();
+            var interviewSynchronizationDtoFactoryMock = new Mock<IInterviewSynchronizationDtoFactory>();
+            var interviewerInterviewsFactory =
+                this.CreateInterviewerInterviewsFactory(
+                    synchronizationDtoFactory: interviewSynchronizationDtoFactoryMock.Object,
+                    statusHistory:
+                        new[]
+                        {
+                            Create.CommentedStatusHistroyView(status: InterviewStatus.SupervisorAssigned,
+                                timestamp: new DateTime(1984, 4, 18)),
+                            Create.CommentedStatusHistroyView(status: InterviewStatus.InterviewerAssigned,
+                                timestamp: new DateTime(1984, 4, 17))
+                        });
+
+            interviewerInterviewsFactory.GetInterviewDetails(interviewId);
+
+            interviewSynchronizationDtoFactoryMock.Verify(
+                x =>
+                    x.BuildFrom(Moq.It.IsAny<InterviewData>(), Moq.It.IsAny<Guid>(), InterviewStatus.InterviewerAssigned,
+                        null, null, Moq.It.IsAny<DateTime>()), Times.Once);
+        }
+
+        [Test]
         public void GetInterviewDetails_When_interview_in_rejected_by_supervisor_state_with_comment_then_lastRejectedBySupervisorStatus_should_not_be_null_and_comment_should_be_preserved()
         {
             var interviewId = Guid.NewGuid();
