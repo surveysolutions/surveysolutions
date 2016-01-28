@@ -346,7 +346,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         private List<DropdownQuestionView> GetSourcesOfLinkedQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection, Guid questionId)
         {
             Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
-                x => x.Where(q => q is TextDetailsView || q is NumericDetailsView || q is DateTimeDetailsView || q is GeoLocationDetailsView)
+                x => x.Where(q => q is TextDetailsView || q is NumericDetailsView || q is DateTimeDetailsView)
                 .Where(q => q.RosterScopeIds.Length > 0 && q.Id != questionId)
                 .ToList();
 
