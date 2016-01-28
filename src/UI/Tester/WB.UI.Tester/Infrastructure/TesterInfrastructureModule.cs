@@ -1,6 +1,7 @@
 ﻿using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
+using SQLite.Net;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
@@ -44,6 +45,7 @@ namespace WB.UI.Tester.Infrastructure
             this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>().To<InMemoryKeyValueStorage<QuestionnaireDocument>>().InSingletonScope();
             this.Bind<IPlainKeyValueStorage<QuestionnaireModel>>().To<InMemoryKeyValueStorage<QuestionnaireModel>>().InSingletonScope();
 
+            this.Bind<ITraceListener>().To<MvxTraceListener>();
             this.Bind<ISQLitePlatform>().To<SQLitePlatformAndroid>();
             this.Bind<SqliteSettings>().ToConstant(
                 new SqliteSettings()
