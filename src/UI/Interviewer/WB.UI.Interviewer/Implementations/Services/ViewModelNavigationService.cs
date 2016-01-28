@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
