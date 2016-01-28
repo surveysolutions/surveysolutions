@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private async Task SignOutAsync()
         {
-            this.principal.SignOut();
+            await this.principal.SignOutAsync();
             await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
         }
 

@@ -96,7 +96,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                             connection.Insert(entity);
                         }
                     }
-                });
+                }).ConfigureAwait(false);
 
             }
             catch (SQLiteException ex)

@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             var userName = this.UserName;
             var hashedPassword = this.passwordHasher.Hash(this.Password);
 
-            this.IsUserValid = this.principal.SignIn(userName, hashedPassword, true);
+            this.IsUserValid = await this.principal.SignInAsync(userName, hashedPassword, true);
 
             if (!this.IsUserValid)
             {

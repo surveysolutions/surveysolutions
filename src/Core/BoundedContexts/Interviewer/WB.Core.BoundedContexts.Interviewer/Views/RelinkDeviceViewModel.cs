@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     token: this.cancellationTokenSource.Token);
 
                 await this.interviewersPlainStorage.StoreAsync(this.userIdentityToRelink);
-                this.principal.SignIn(this.userIdentityToRelink.Name, this.userIdentityToRelink.Password, true);
+                await this.principal.SignInAsync(this.userIdentityToRelink.Name, this.userIdentityToRelink.Password, true);
                 await this.viewModelNavigationService.NavigateToDashboardAsync();
             }
             catch (SynchronizationException ex)
