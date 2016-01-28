@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task SignOut()
         {
-            this.principal.SignOutAsync();
+            await this.principal.SignOutAsync();
             await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
         }
     }
