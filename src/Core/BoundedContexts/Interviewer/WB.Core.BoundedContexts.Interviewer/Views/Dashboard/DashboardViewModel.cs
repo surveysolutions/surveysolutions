@@ -238,7 +238,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
 
-            this.principal.SignOutAsync();
+            await this.principal.SignOutAsync();
             await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
         }
 
