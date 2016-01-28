@@ -2563,9 +2563,14 @@ namespace WB.Tests.Unit
             return new TeamViewFactory(interviewSummaryReader, usersReader);
         }
 
-        public static CommentedStatusHistroyView CommentedStatusHistroyView(InterviewStatus status=InterviewStatus.InterviewerAssigned, string comment=null)
+        public static CommentedStatusHistroyView CommentedStatusHistroyView(InterviewStatus status=InterviewStatus.InterviewerAssigned, string comment=null, DateTime? timestamp=null)
         {
-            return new CommentedStatusHistroyView() {Status = status, Comment = comment};
+            return new CommentedStatusHistroyView()
+            {
+                Status = status,
+                Comment = comment,
+                Date = timestamp ?? DateTime.Now
+            };
         }
     }
 }
