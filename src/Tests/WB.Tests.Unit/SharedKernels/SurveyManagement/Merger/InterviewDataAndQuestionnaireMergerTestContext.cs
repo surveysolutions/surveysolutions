@@ -6,6 +6,9 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
@@ -186,9 +189,23 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             };
         }
 
-        internal static InterviewDataAndQuestionnaireMerger CreateMerger()
+        internal static InterviewDataAndQuestionnaireMerger CreateMerger(QuestionnaireDocument questionnaire, QuestionnaireRosterStructure questionnaireRosters = null)
         {
-            return new InterviewDataAndQuestionnaireMerger();
+            var questionnaireReferenceInfo = CreateQuestionnaireReferenceInfo(questionnaire);
+            questionnaireRosters = questionnaireRosters ?? CreateQuestionnaireRosterStructure(questionnaire);
+
+            var kvStorageQuestionnaireRosterStructure =
+                Mock.Of<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(
+                    x => x.GetById(Moq.It.IsAny<string>()) == questionnaireRosters);
+
+            var kvStorageOfReferenceInfoForLinkedQuestions =
+                Mock.Of<IReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions>>(
+                    x => x.GetById(Moq.It.IsAny<string>()) == questionnaireReferenceInfo);
+
+            return new InterviewDataAndQuestionnaireMerger(
+                substitutionService: new SubstitutionService(),
+                questionnaireRosterStructures: kvStorageQuestionnaireRosterStructure,
+                questionnaireReferenceInfoForLinkedQuestions: kvStorageOfReferenceInfoForLinkedQuestions);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)
