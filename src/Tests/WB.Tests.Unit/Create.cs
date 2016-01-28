@@ -124,7 +124,6 @@ using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using WB.UI.Designer.Models;
-using WB.UI.Interviewer.ViewModel.Dashboard;
 using WB.UI.Supervisor.Controllers;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
@@ -1721,11 +1720,6 @@ namespace WB.Tests.Unit
             }
 
             return result;
-        }
-
-        public static QuestionnaireDTO QuestionnaireDTO()
-        {
-            return new QuestionnaireDTO();
         }
 
         public static QuestionnaireExpressionStateModelFactory QuestionnaireExecutorTemplateModelFactory(

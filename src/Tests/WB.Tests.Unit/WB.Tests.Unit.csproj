@@ -544,7 +544,6 @@
     <Compile Include="BoundedContexts\Tester\ViewModels\PrefilledQuestionsViewModelTests\PrefilledQuestionsViewModelTestContext.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\PrefilledQuestionsViewModelTests\when_opening_not_existed_interview.cs" />
     <Compile Include="Create.Event.cs" />
-    <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_FeaturedItem_list_with_json_utils.cs" />
     <Compile Include="GenericSubdomains\Utils\ObjectExtensionsTests\when_wrapping_value_with_initialized_lazy_class.cs" />
     <Compile Include="GenericSubdomains\Utils\ProgressAggregator\when_reporting_progress_from_two_progresses.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_2_functional_handlers_and_second_catch_non_critical_exception.cs" />

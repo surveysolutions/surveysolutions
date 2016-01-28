@@ -383,7 +383,6 @@
     <Compile Include="Ninject\AndroidModelModule.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Bootstrap\KeychainPluginBootstrap.cs" />
-    <Compile Include="Implementations\Services\StoredEvent.cs" />
     <Compile Include="Implementations\Services\ViewModelNavigationService.cs" />
     <Compile Include="Infrastructure\InterviewerInfrastructureModule.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
@@ -393,9 +392,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Setup.cs" />
-    <Compile Include="ViewModel\InterviewerInterviewViewModel.cs" />
-    <Compile Include="ViewModel\Login\LoginDTO.cs" />
     <Compile Include="Activities\SplashActivity.cs" />
+    <Compile Include="ViewModel\InterviewerInterviewViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
