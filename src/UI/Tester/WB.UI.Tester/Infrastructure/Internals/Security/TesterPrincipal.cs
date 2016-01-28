@@ -1,49 +1,56 @@
 ﻿using System;
-using IHS.MvvmCross.Plugins.Keychain;
+using System.Linq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using ISettings = Cheesebaron.MvxPlugins.Settings.Interfaces.ISettings;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Security
 {
     internal class TesterPrincipal : IPrincipal
     {
         public const string ServiceParameterName = "authentication";
-        private const string UserNameParameterName = "authenticatedUser";
 
-        private readonly IKeychain securityService;
-        private readonly ISettings settingsService;
+        private readonly IAsyncPlainStorage<TesterUserIdentity> usersStorage;
 
         private TesterUserIdentity currentUserIdentity;
-        public bool IsAuthenticated { get; private set; }
-        public IUserIdentity CurrentUserIdentity { get { return this.currentUserIdentity; } }
 
-        public TesterPrincipal(IKeychain securityService, ISettings settingsService)
+        public bool IsAuthenticated { get; private set; }
+        public IUserIdentity CurrentUserIdentity => this.currentUserIdentity;
+
+        public TesterPrincipal(IAsyncPlainStorage<TesterUserIdentity> usersStorage)
         {
-            this.securityService = securityService;
-            this.settingsService = settingsService;
+            this.usersStorage = usersStorage;
 
             this.InitializeIdentity();
         }
 
         private void InitializeIdentity()
         {
-            var userName = this.settingsService.GetValue(UserNameParameterName, string.Empty);
-
-            this.IsAuthenticated = !string.IsNullOrEmpty(userName);
-            this.currentUserIdentity = new TesterUserIdentity()
+            var testerUserIdentity = this.usersStorage.LoadAll().FirstOrDefault();
+            if (testerUserIdentity != null)
             {
-                UserId = Guid.NewGuid(),
-                Name = userName,
-                Password = this.securityService.GetPassword(ServiceParameterName, userName)
-            };
+                this.IsAuthenticated = true;
+                this.currentUserIdentity = testerUserIdentity;
+            }
+            else
+            {
+                this.IsAuthenticated = false;
+            }
         }
 
         public bool SignIn(string usernName, string password, bool staySignedIn)
         {
             if (staySignedIn)
             {
-                this.settingsService.AddOrUpdateValue(UserNameParameterName, usernName);
-                this.securityService.SetPassword(password, ServiceParameterName, usernName);
+                var storeAsync = this.usersStorage.StoreAsync(new TesterUserIdentity
+                {
+                    Name = usernName,
+                    Password = password,
+                    UserId = Guid.NewGuid(),
+                    Id = usernName
+                });
+                storeAsync.ConfigureAwait(false);
+                storeAsync.WaitAndUnwrapException();
             }
 
             this.IsAuthenticated = true;
@@ -55,8 +62,8 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
 
         public void SignOut()
         {
-            this.settingsService.DeleteValue(UserNameParameterName);
-            this.securityService.DeleteAccount(ServiceParameterName, this.currentUserIdentity.Name);
+            var testerUserIdentities = this.usersStorage.LoadAll();
+            this.usersStorage.RemoveAsync(testerUserIdentities);
 
             this.IsAuthenticated = false;
             this.currentUserIdentity.Name = string.Empty;
