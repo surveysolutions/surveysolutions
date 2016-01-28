@@ -22,16 +22,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public SqlitePlainStorage(ISQLitePlatform sqLitePlatform, ILogger logger,
             IAsynchronousFileSystemAccessor fileSystemAccessor, ISerializer serializer,
-            ITraceListener traceListener, SqliteSettings settings)
+            SqliteSettings settings)
         {
-            var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, typeof(TEntity).Name + "-data.sqlite3");
+            var entityName = typeof(TEntity).Name;
+            var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, entityName + "-data.sqlite3");
             this.storage = new SQLiteConnectionWithLock(sqLitePlatform,
                 new SQLiteConnectionString(pathToDatabase, true, new BlobSerializerDelegate(
                     serializer.SerializeToByteArray,
                     (data, type) => serializer.DeserializeFromStream(new MemoryStream(data), type),
                     (type) => true)))
             {
-                TraceListener = traceListener
+                TraceListener = new MvxTraceListener($"{entityName}-SQL-Queries")
             };
             this.asyncStorage = new SQLiteAsyncConnection(() => this.storage);
             this.logger = logger;
