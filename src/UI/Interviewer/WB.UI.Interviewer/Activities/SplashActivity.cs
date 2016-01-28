@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
@@ -41,7 +42,11 @@ using Environment = System.Environment;
 #warning do not remove "Sqo" namespace
 #warning if after all the warning you intend to remove the namespace anyway, please remove NuGet packages SiaqoDB and SiaqoDbProtable also
 using Sqo;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
+using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -79,6 +84,27 @@ namespace WB.UI.Interviewer.Activities
             await Task.Run(this.RestoreQuestionnaireModelsAndDocumentsAsync);
             await Task.Run(this.RestoreEventStreamsAsync);
             await Task.Run(this.RestoreInterviewDetailsAsync);
+            await Task.Run(this.RestoreInterviewImagesAsync);
+        }
+
+        private async Task RestoreInterviewImagesAsync()
+        {
+            var basePath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+
+            var fileSystemAccessor = Mvx.Resolve<IFileSystemAccessor>();
+            IPlainInterviewFileStorage oldImageFileStorage = new PlainInterviewFileStorage(fileSystemAccessor, basePath);
+            IPlainInterviewFileStorage newImageFileStorage = Mvx.Resolve<IPlainInterviewFileStorage>();
+
+            var interviews = this.GetSqlLiteEntities<QuestionnaireDTO>("Projections");
+            foreach (var interview in interviews)
+            {
+                var binaryDataDescriptors = oldImageFileStorage.GetBinaryFilesForInterview(Guid.Parse(interview.Id));
+                foreach (var descriptor in binaryDataDescriptors)
+                {
+                    await newImageFileStorage.StoreInterviewBinaryDataAsync(descriptor.InterviewId, descriptor.FileName,
+                        descriptor.GetData());
+                }
+            }
         }
 
         private async Task RestoreInterviewDetailsAsync()
