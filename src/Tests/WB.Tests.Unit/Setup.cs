@@ -6,17 +6,15 @@ using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.SurveySolutions;
@@ -25,6 +23,14 @@ namespace WB.Tests.Unit
 {
     internal static class Setup
     {
+        public static IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> QuestionnaireReadSideKeyValueStorage(QuestionnaireDocument questionnaire = null)
+        {
+            var questionnaireMock = new Mock<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>();
+            questionnaireMock.Setup(_ => _.GetById(Moq.It.IsAny<string>()))
+                .Returns(new QuestionnaireDocumentVersioned() { Questionnaire = questionnaire ?? new QuestionnaireDocument() });
+            return questionnaireMock.Object;
+        }
+
         public static void InstanceToMockedServiceLocator<TInstance>(TInstance instance)
         {
             Mock.Get(ServiceLocator.Current)
