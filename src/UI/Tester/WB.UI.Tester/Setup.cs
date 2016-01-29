@@ -80,10 +80,11 @@ namespace WB.UI.Tester
                 }
             };
 
-            string xamarinInsightsKey = TesterSettings.IsDebug
-                ? "f4aa9cb599d509b96cb2ac2d36ca9f66caafd85f"     // Tester Dev
-                : "42692ba29c8395f41cf92fc810d365a4ec0c98d7";    // Tester Release
-            Insights.Initialize(xamarinInsightsKey, applicationContext);
+#if DEBUG
+            Insights.Initialize(Insights.DebugModeKey, applicationContext);
+#else
+            Insights.Initialize("42692ba29c8395f41cf92fc810d365a4ec0c98d7", applicationContext);
+#endif
         }
     }
 }
