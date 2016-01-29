@@ -23,15 +23,15 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
 
             verificationMessages =  new QuestionnaireVerificationMessage[]
             {
-                Create.VerificationError("error1", "message1", VerificationMessageLevel.General, Create.VerificationReference(Guid.NewGuid())),
-                Create.VerificationError("error2", "message2", VerificationMessageLevel.General, Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Group)),
+                Create.VerificationError("error1", "message1", Create.VerificationReference(Guid.NewGuid())),
+                Create.VerificationError("error2", "message2", Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Group)),
             };
 
             verificationWarnings = new QuestionnaireVerificationMessage[]
             {
-                Create.VerificationError("code1", "message3", VerificationMessageLevel.Warning, Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Roster)),
-                Create.VerificationError("code2", "message4", VerificationMessageLevel.Warning, Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Group)),
-                Create.VerificationError("code3", "message5", VerificationMessageLevel.Warning, Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Question))
+                Create.VerificationWarning("code1", "message3", Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Roster)),
+                Create.VerificationWarning("code2", "message4", Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Group)),
+                Create.VerificationWarning("code3", "message5", Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Question))
             };
 
             var allVerificationErrors = verificationMessages.Union(verificationWarnings);
