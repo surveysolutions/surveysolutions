@@ -263,13 +263,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             return status == InterviewStatus.Completed || status == InterviewStatus.Restarted;
         }
 
-        private Dictionary<Guid, HashSet<Guid>> mapInterviewToPrefilledQuestions = new Dictionary<Guid, HashSet<Guid>>();
+        private Dictionary<Guid, HashSet<Guid>> mapInterviewIdToPrefilledQuestionIds = new Dictionary<Guid, HashSet<Guid>>();
 
         private void AnswerQuestion(Guid interviewId, Guid questionId, object answer, DateTime answerTimeUtc)
         {
             // check  prefilled ids because we modify InterviewView in this method after changes in prefilled questions
             HashSet<Guid> prefilledIds;
-            if (mapInterviewToPrefilledQuestions.TryGetValue(interviewId, out prefilledIds))
+            if (this.mapInterviewIdToPrefilledQuestionIds.TryGetValue(interviewId, out prefilledIds))
             {
                 if (!prefilledIds.Contains(questionId))
                     return;
@@ -285,7 +285,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 prefilledIds.Add(interviewView.GpsLocation.PrefilledQuestionId.Value);
             }
-            this.mapInterviewToPrefilledQuestions.Add(interviewId, prefilledIds);
+            this.mapInterviewIdToPrefilledQuestionIds.Add(interviewId, prefilledIds);
 
             // this code always will executed first time and date will be saved
             if (!interviewView.StartedDateTime.HasValue)
