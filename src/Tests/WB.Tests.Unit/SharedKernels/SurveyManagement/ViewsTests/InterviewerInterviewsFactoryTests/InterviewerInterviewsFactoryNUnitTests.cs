@@ -109,6 +109,26 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
         }
 
         [Test]
+        public void GetInterviewDetails_When_interview_last_status_is_completed_Then_it_should_not_fail_KP_6661()
+        {
+            var interviewId = Guid.NewGuid();
+            var interviewerInterviewsFactory =
+                this.CreateInterviewerInterviewsFactory(
+                    statusHistory:
+                        new[]
+                        {
+                            Create.CommentedStatusHistroyView(InterviewStatus.Created),
+                            Create.CommentedStatusHistroyView(InterviewStatus.SupervisorAssigned),
+                            Create.CommentedStatusHistroyView(InterviewStatus.InterviewerAssigned),
+                            Create.CommentedStatusHistroyView(InterviewStatus.Completed),
+                        });
+
+            var result = interviewerInterviewsFactory.GetInterviewDetails(interviewId);
+
+            Assert.That(result, Is.Not.Null);
+        }
+
+        [Test]
         public void
             GetInterviewDetails_When_interview_in_rejected_by_supervisor_state_without_comment_for_second_then_lastRejectedBySupervisorStatus_should_not_be_null_and_comment_should_be_empty
             ()
