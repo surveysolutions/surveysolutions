@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Properties;
@@ -57,10 +58,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public IMvxCommand LoginCommand
         {
-            get { return new MvxCommand(this.Login, () => !IsInProgress); }
+            get { return new MvxCommand(async () => await this.LoginAsync(), () => !IsInProgress); }
         }
 
-        private async void Login()
+        private async Task LoginAsync()
         {
             IsInProgress = true;
 

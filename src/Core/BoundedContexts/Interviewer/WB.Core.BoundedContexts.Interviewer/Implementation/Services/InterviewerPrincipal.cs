@@ -23,16 +23,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.interviewersPlainStorage = interviewersPlainStorage;
         }
 
-        public Task<bool> SignInAsync(string userName, string password, bool staySignedIn)
+        public async Task<bool> SignInAsync(string userName, string password, bool staySignedIn)
         {
-            var localInterviewer = this.interviewersPlainStorage
-                .Where(interviewer => interviewer.Password == password) // db query
-                .Where(interviewer => string.Equals(interviewer.Name, userName, StringComparison.OrdinalIgnoreCase)) // memory query
-                .FirstOrDefault();
-            
+            var localInterviewers = await this.interviewersPlainStorage
+                .WhereAsync(interviewer => interviewer.Password == password); // db query
+
+            var localInterviewer = localInterviewers // memory query
+                .FirstOrDefault(interviewer => string.Equals(interviewer.Name, userName, StringComparison.OrdinalIgnoreCase));
+
             this.currentUserIdentity = localInterviewer;
 
-            return Task.FromResult(this.IsAuthenticated);
+            return this.IsAuthenticated;
         }
 
         public Task SignOutAsync()
