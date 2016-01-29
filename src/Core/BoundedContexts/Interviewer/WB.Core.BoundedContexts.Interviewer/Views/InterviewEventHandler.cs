@@ -263,11 +263,35 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             return status == InterviewStatus.Completed || status == InterviewStatus.Restarted;
         }
 
+        private Dictionary<Guid, HashSet<Guid>> mapInterviewToPrefilledQuestions = new Dictionary<Guid, HashSet<Guid>>();
+
         private void AnswerQuestion(Guid interviewId, Guid questionId, object answer, DateTime answerTimeUtc)
         {
+            // check  prefilled ids because we modify InterviewView in this method after changes in prefilled questions
+            HashSet<Guid> prefilledIds;
+            if (mapInterviewToPrefilledQuestions.TryGetValue(interviewId, out prefilledIds))
+            {
+                if (!prefilledIds.Contains(questionId))
+                    return;
+            }
+
             var interviewView = this.interviewViewRepository.GetById(interviewId.FormatGuid());
 
             if (interviewView == null) return;
+
+            // cache all prefilled ids because we modify InterviewView after changes in prefilled questions
+            prefilledIds = new HashSet<Guid>(interviewView.AnswersOnPrefilledQuestions.Select(a => a.QuestionId));
+            if (interviewView.GpsLocation.PrefilledQuestionId.HasValue)
+            {
+                prefilledIds.Add(interviewView.GpsLocation.PrefilledQuestionId.Value);
+            }
+            this.mapInterviewToPrefilledQuestions.Add(interviewId, prefilledIds);
+
+            // this code always will executed first time and date will be saved
+            if (!interviewView.StartedDateTime.HasValue)
+            {
+                interviewView.StartedDateTime = answerTimeUtc;
+            }
 
             if (questionId == interviewView.GpsLocation.PrefilledQuestionId)
             {
@@ -293,11 +317,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                     prefilledQuestion.Answer = AnswerUtils.AnswerToString(answer, GetPrefilledCategoricalQuestionOptionText(questionnairePrefilledQuestion));
                 }
-            }
-
-            if (!interviewView.StartedDateTime.HasValue)
-            {
-                interviewView.StartedDateTime = answerTimeUtc;
             }
 
             this.interviewViewRepository.StoreAsync(interviewView).Wait();
