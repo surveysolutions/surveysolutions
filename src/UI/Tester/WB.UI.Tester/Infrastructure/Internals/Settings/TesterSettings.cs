@@ -88,17 +88,5 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
                 return defValue;
             }
         }
-
-        public static bool IsDebug
-        {
-            get
-            {
-#if DEBUG
-                return true;
-#else
-                return false;
-#endif
-            }
-        }
     }
 }
