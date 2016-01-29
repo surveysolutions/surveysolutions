@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             resultErrors.Single().Code.ShouldEqual("WB0044");
 
         It should_return_error_with_Critical_level = () =>
-            resultErrors.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
+            resultErrors.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
 
         It should_return_error_with_1_reference = () =>
             resultErrors.Single().References.Count().ShouldEqual(1);

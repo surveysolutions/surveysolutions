@@ -1829,9 +1829,6 @@ namespace WB.Tests.Unit
             return ToPublishedEvent(new QuestionnaireUpdated() { Title = questionnaireTitle, IsPublic = isPublic }, new Guid(questionnaireId));
         }
 
-        public static QuestionnaireVerificationMessage QuestionnaireVerificationError(VerificationMessageLevel level = VerificationMessageLevel.General)
-            => new QuestionnaireVerificationMessage("ee", "mm", level);
-
         public static QuestionnaireView QuestionnaireView(Guid? createdBy)
             => Create.QuestionnaireView(new QuestionnaireDocument { CreatedBy = createdBy ?? Guid.NewGuid( )});
 
@@ -2410,9 +2407,14 @@ namespace WB.Tests.Unit
             return new VariableValueLabel(value, label);
         }
 
-        public static QuestionnaireVerificationMessage VerificationError(string code, string message, VerificationMessageLevel level, params QuestionnaireVerificationReference[] questionnaireVerificationReferences)
+        public static QuestionnaireVerificationMessage VerificationError(string code, string message, params QuestionnaireVerificationReference[] questionnaireVerificationReferences)
         {
-            return new QuestionnaireVerificationMessage(code, message, level, questionnaireVerificationReferences);
+            return QuestionnaireVerificationMessage.Error(code, message, questionnaireVerificationReferences);
+        }
+
+        public static QuestionnaireVerificationMessage VerificationWarning(string code, string message, params QuestionnaireVerificationReference[] questionnaireVerificationReferences)
+        {
+            return QuestionnaireVerificationMessage.Warning(code, message, questionnaireVerificationReferences);
         }
 
         public static VerificationMessage VerificationMessage(string code, string message, params VerificationReferenceEnriched[] references)

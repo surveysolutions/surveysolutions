@@ -8,7 +8,28 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
     {
         private readonly QuestionnaireVerificationReference[] references;
 
-        public QuestionnaireVerificationMessage(string code, 
+        public static QuestionnaireVerificationMessage Error(string code,
+            string message,
+            params QuestionnaireVerificationReference[] references)
+        {
+            return new QuestionnaireVerificationMessage(code, message, VerificationMessageLevel.General, references);
+        }
+
+        public static QuestionnaireVerificationMessage Warning(string code,
+            string message,
+            params QuestionnaireVerificationReference[] references)
+        {
+            return new QuestionnaireVerificationMessage(code, message, VerificationMessageLevel.Warning, references);
+        }
+
+        public static QuestionnaireVerificationMessage Critical(string code,
+            string message,
+            params QuestionnaireVerificationReference[] references)
+        {
+            return new QuestionnaireVerificationMessage(code, message, VerificationMessageLevel.Critical, references);
+        }
+
+        private QuestionnaireVerificationMessage(string code, 
             string message,
             VerificationMessageLevel messageLevel,
             params QuestionnaireVerificationReference[] references)
@@ -19,26 +40,17 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
             this.references = references ?? new QuestionnaireVerificationReference[0];
         }
 
-        public QuestionnaireVerificationMessage(string code, 
-            string message,
-            VerificationMessageLevel messageLevel,
-            IEnumerable<QuestionnaireVerificationReference> references)
-            : this(code, message, messageLevel, references.ToArray()) { }
-
         public string Code { get; private set; }
 
         public string Message { get; private set; }
 
         public VerificationMessageLevel MessageLevel { get; set; }
 
-        public IReadOnlyCollection<QuestionnaireVerificationReference> References
-        {
-            get { return new ReadOnlyCollection<QuestionnaireVerificationReference>(this.references); }
-        }
+        public IReadOnlyCollection<QuestionnaireVerificationReference> References => new ReadOnlyCollection<QuestionnaireVerificationReference>(this.references);
 
         public override string ToString()
         {
-            return string.Format("{0}: {1}", this.Code, this.Message);
+            return $"{this.Code}: {this.Message}";
         }
     }
 }
