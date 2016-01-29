@@ -53,7 +53,7 @@ namespace WB.UI.Interviewer.ViewModel
         private IMvxCommand signOutCommand;
         public IMvxCommand SignOutCommand
         {
-            get { return this.signOutCommand ?? (this.signOutCommand = new MvxCommand(async () => await this.SignOut())); }
+            get { return this.signOutCommand ?? (this.signOutCommand = new MvxCommand(async () => await this.SignOutAsync())); }
         }
 
         public IMvxCommand NavigateToDiagnosticsPageCommand
@@ -61,7 +61,7 @@ namespace WB.UI.Interviewer.ViewModel
             get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>()); }
         }
 
-        private async Task SignOut()
+        private async Task SignOutAsync()
         {
             await this.principal.SignOutAsync();
             await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();

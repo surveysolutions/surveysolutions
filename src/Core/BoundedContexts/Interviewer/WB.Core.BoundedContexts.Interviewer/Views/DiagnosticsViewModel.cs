@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxCommand SignOutCommand
         {
-            get { return new MvxCommand(async () => await this.SignOut()); }
+            get { return new MvxCommand(async () => await this.SignOutAsync()); }
         }
 
         public IMvxCommand NavigateToLoginCommand
@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 this.interviewerSettings.GetDeviceTechnicalInformation());
         }
 
-        private async Task SignOut()
+        private async Task SignOutAsync()
         {
             await this.principal.SignOutAsync();
             await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
