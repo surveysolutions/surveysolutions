@@ -28,14 +28,13 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
         const string CountProjectionName = "AllEventsCountV1";
         const string EventsPrefix = EventsCategory + "-";
         const string StreamDeletedEventType = "$streamDeleted";
-        private const int maxAllowedBatchSize = 4096;
         private readonly IEventTypeResolver eventTypeResolver;
         const string EventsCategory = "WB";
         static readonly Encoding Encoding = Encoding.UTF8;
         static long lastUsedGlobalSequence = -1;
 
         readonly IEventStoreConnection connection;
-        readonly TimeSpan defaultTimeout = TimeSpan.FromSeconds(30);
+        readonly TimeSpan defaultTimeout = TimeSpan.FromSeconds(30000);
         readonly ILogger logger;
         readonly EventStoreSettings settings;
         private readonly ISerializer serializer;
@@ -79,7 +78,7 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
             }
 
             var streamEvents = new List<ResolvedEvent>();
-            var batchSize = Math.Min(maxAllowedBatchSize, normalMax - normalMin);
+            var batchSize = Math.Min(this.settings.MaxCountToRead, normalMax - normalMin);
 
             StreamEventsSlice currentSlice;
             var nextSliceStart = StreamPosition.Start + normalMin;
