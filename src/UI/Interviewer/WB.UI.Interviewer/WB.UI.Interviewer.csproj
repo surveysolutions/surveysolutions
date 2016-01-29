@@ -336,6 +336,7 @@
     <Compile Include="CustomControls\InterviewerDashboardAdapter.cs" />
     <Compile Include="Implementations\Services\InMemorySnapshotStoreWithCache.cs" />
     <Compile Include="Implementations\Services\ProtobufSerializer.cs" />
+    <Compile Include="Implementations\Services\StoredEvent.cs" />
     <Compile Include="Implementations\Services\TabletDiagnosticService.cs" />
     <Compile Include="Infrastructure\Logging\FileLogger.cs" />
     <Compile Include="Infrastructure\Internals\Crasher\Attributes\CrasherAttribute.cs" />
@@ -376,6 +377,7 @@
     <Compile Include="Setup.cs" />
     <Compile Include="Activities\SplashActivity.cs" />
     <Compile Include="ViewModel\InterviewerInterviewViewModel.cs" />
+    <Compile Include="ViewModel\Login\LoginDTO.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
