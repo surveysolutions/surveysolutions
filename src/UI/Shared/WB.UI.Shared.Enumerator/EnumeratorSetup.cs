@@ -18,14 +18,10 @@ using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
 using Cirrious.MvvmCross.Binding.Combiners;
 using Cirrious.MvvmCross.Binding.Droid.Views;
 using Cirrious.MvvmCross.Droid.Platform;
-using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Views;
-using Java.Lang;
 using MvvmCross.Droid.Support.V7.RecyclerView;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Converters;
@@ -33,7 +29,8 @@ using WB.UI.Shared.Enumerator.CustomBindings;
 using WB.UI.Shared.Enumerator.CustomControls;
 using WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl;
 using WB.UI.Shared.Enumerator.ValueCombiners;
-using Exception = System.Exception;
+using Xamarin;
+using BindingFlags = System.Reflection.BindingFlags;
 
 namespace WB.UI.Shared.Enumerator
 {
@@ -44,11 +41,18 @@ namespace WB.UI.Shared.Enumerator
             //restart the app to avoid incorrect state
             TaskScheduler.UnobservedTaskException += (sender, args) =>
             {
-                UncaughtExceptionHandler(args.Exception);
+                ProcessException(args.Exception);
             };
             AndroidEnvironment.UnhandledExceptionRaiser += (sender, args) =>
             {
-                UncaughtExceptionHandler(args.Exception);
+                var exception = args.Exception;
+
+#warning this is super dirty hack in order to get exception's stack trace which happend inside async method
+                FieldInfo stackTrace = typeof(System.Exception).GetField("stack_trace", BindingFlags.NonPublic | BindingFlags.Instance);
+                stackTrace?.SetValue(exception, null);
+                this.ProcessException(Java.Lang.Throwable.FromException(exception));
+
+                ProcessException(args.Exception);
             };
             AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
             {
@@ -57,19 +61,21 @@ namespace WB.UI.Shared.Enumerator
                 var typedException = exceptionObject as Exception;
                 if (typedException != null)
                 {
-                    UncaughtExceptionHandler(typedException);
+                    ProcessException(typedException);
                 }
                 else
                 {
-                    UncaughtExceptionHandler(new Exception("Untyped exception message: '" + exceptionObject + "'"));
+                    ProcessException(new Exception("Untyped exception message: '" + exceptionObject + "'"));
                 }
             };
         }
 
-        private void UncaughtExceptionHandler(Exception exception)
+        private void ProcessException(Exception exception)
         {
             Mvx.Error("UncaughtExceptionHandler with exception {0}", exception.ToLongString());
             Mvx.Resolve<ILogger>().Fatal("UncaughtExceptionHandler", exception);
+
+            Insights.Report(exception);
 
             var currentActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
             if (this.StartupActivityType != null && currentActivity != null)

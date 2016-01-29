@@ -302,6 +302,10 @@
       <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v7.RecyclerView.23.1.1.0\lib\MonoAndroid403\Xamarin.Android.Support.v7.RecyclerView.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Xamarin.Insights, Version=1.11.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Xamarin.Insights.1.11.3\lib\MonoAndroid10\Xamarin.Insights.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Xamarin.Mobile">
       <HintPath>..\..\..\..\libs\android\Xamarin.Mobile.dll</HintPath>
     </Reference>
@@ -338,36 +342,11 @@
     <Compile Include="Implementations\Services\ProtobufSerializer.cs" />
     <Compile Include="Implementations\Services\StoredEvent.cs" />
     <Compile Include="Implementations\Services\TabletDiagnosticService.cs" />
+    <Compile Include="Infrastructure\InterviewerInfrastructureModule.cs" />
     <Compile Include="Infrastructure\Logging\FileLogger.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\Attributes\CrasherAttribute.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\Attributes\EmailReporterAttribute.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\Attributes\GoogleFormReporterAttribute.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\Constants.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\CrashManager.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\Data\Collectors\DeviceFeaturesCollector.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\Data\Collectors\DumpSysCollector.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\Data\Collectors\LogCatCollector.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\Data\Collectors\ReflectionCollector.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\Data\Collectors\SettingsCollector.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\Data\Collectors\SharedPreferencesCollector.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\Data\Compatibility.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\Data\ICustomReportDataProvider.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\Data\ReportData.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\Data\ReportDataFactory.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\Data\Submit\IReportSender.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\ExceptionProcessor.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\InteractionMode.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\ReportField.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\ReportSenderException.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\Utils\ConfigurationInspector.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\Utils\Installation.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\Utils\PackageManagerWrapper.cs" />
-    <Compile Include="Infrastructure\Internals\Crasher\Utils\ReportUtils.cs" />
-    <Compile Include="Infrastructure\Logging\FileReportSender.cs" />
     <Compile Include="Ninject\AndroidModelModule.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Implementations\Services\ViewModelNavigationService.cs" />
-    <Compile Include="Infrastructure\InterviewerInfrastructureModule.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Ninject\InterviewerUIModule.cs" />
     <Compile Include="Settings\InterviewerSettings.cs" />
@@ -680,6 +659,13 @@
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Import Project="..\..\..\..\packages\Xamarin.Insights.1.11.3\build\MonoAndroid10\Xamarin.Insights.targets" Condition="Exists('..\..\..\..\packages\Xamarin.Insights.1.11.3\build\MonoAndroid10\Xamarin.Insights.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\..\packages\Xamarin.Insights.1.11.3\build\MonoAndroid10\Xamarin.Insights.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Xamarin.Insights.1.11.3\build\MonoAndroid10\Xamarin.Insights.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
