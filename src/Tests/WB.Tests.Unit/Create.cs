@@ -342,13 +342,6 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> CreateQuestionnaireReadSideKeyValueStorage(QuestionnaireDocument questionnaire = null)
-        {
-            var questionnaireMock = new Mock<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>();
-            questionnaireMock.Setup(_ => _.GetById(Moq.It.IsAny<string>()))
-                .Returns(new QuestionnaireDocumentVersioned() { Questionnaire = questionnaire ?? new QuestionnaireDocument() });
-            return questionnaireMock.Object;
-        }
 
         public static CreateUserCommand CreateUserCommand(UserRoles role = UserRoles.Operator, string userName = "name", Guid? supervisorId=null)
         {

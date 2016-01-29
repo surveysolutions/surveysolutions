@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
     {
         private Establish context = () =>
         {
-            var questionnaireRepository = Create.CreateQuestionnaireReadSideKeyValueStorage(
+            var questionnaireRepository = Setup.QuestionnaireReadSideKeyValueStorage(
                 Create.QuestionnaireDocumentWithOneChapter(
                     Create.NumericQuestion(questionId: Guid.Parse("33333333333333333333333333333333"), variableName: "EANo", prefilled: true, isInteger: true),
                     Create.NumericQuestion(questionId: Guid.Parse("44444444444444444444444444444444"), variableName: "MapRefNo", prefilled: true, isInteger: true),
