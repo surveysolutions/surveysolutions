@@ -47,7 +47,7 @@ namespace WB.UI.Shared.Enumerator
             {
                 var exception = args.Exception;
 
-#warning this is super dirty hack in order to get exception's stack trace which happend inside async method
+                // this is super dirty hack in order to get exception's stack trace which happend inside async method
                 FieldInfo stackTrace = typeof(System.Exception).GetField("stack_trace", BindingFlags.NonPublic | BindingFlags.Instance);
                 stackTrace?.SetValue(exception, null);
                 this.ProcessException(Java.Lang.Throwable.FromException(exception));
