@@ -12,11 +12,9 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
-using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
@@ -89,7 +87,7 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
             return
                 questionnaireItems.Select(
                     questionnaireItem =>
-                        new QuestionnaireVerificationMessage("aaa", "aaaa", VerificationMessageLevel.General,
+                        Create.VerificationError("aaa", "aaaa",
                             new QuestionnaireVerificationReference[1]
                             {
                                 new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question,

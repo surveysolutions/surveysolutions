@@ -3,7 +3,6 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
@@ -31,7 +30,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
 
             var questionnaireVerifier = Mock.Of<IQuestionnaireVerifier>(
                 _ => _.Verify(Moq.It.IsAny<QuestionnaireDocument>()) ==
-                     new[] { Create.QuestionnaireVerificationError(VerificationMessageLevel.Warning) });
+                     new[] { Create.VerificationWarning("code", "message") });
 
             string generatedAssembly = "test";
             var expressionProcessorGenerator = Mock.Of<IExpressionProcessorGenerator>(
@@ -54,8 +53,8 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
 
         private static ImportController importController;
         private static DownloadQuestionnaireRequest request;
-        private static Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");
-        private static Guid userId = Guid.Parse("33333333333333333333333333333333");
+        private static readonly Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");
+        private static readonly Guid userId = Guid.Parse("33333333333333333333333333333333");
         private static QuestionnaireCommunicationPackage questionnaireCommunicationPackage;
     }
 }

@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             return new[]
             {
-                new QuestionnaireVerificationMessage("WB0200", VerificationMessages.WB0200_LargeNumberOfRostersIsCreated, VerificationMessageLevel.Warning)
+                QuestionnaireVerificationMessage.Warning("WB0200", VerificationMessages.WB0200_LargeNumberOfRostersIsCreated)
             };
         }
     }

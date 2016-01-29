@@ -36,8 +36,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_error_with_code__WB0043 = () =>
             resultErrors.Single().Code.ShouldEqual("WB0043");
 
-        It should_return_error_with_General_level = () =>
-            resultErrors.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
+        It should_return_error_with_Critical_level = () =>
+            resultErrors.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
 
         It should_return_error_with_1_reference = () =>
             resultErrors.Single().References.Count().ShouldEqual(1);
