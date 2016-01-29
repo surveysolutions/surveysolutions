@@ -280,7 +280,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             if (interviewView == null) return;
 
             // cache all prefilled ids because we modify InterviewView after changes in prefilled questions
-            prefilledIds = new HashSet<Guid>(interviewView.AnswersOnPrefilledQuestions.Select(a => a.QuestionId));
+            prefilledIds = new HashSet<Guid>();
+            if (interviewView.AnswersOnPrefilledQuestions != null)
+            {
+                prefilledIds.UnionWith(interviewView.AnswersOnPrefilledQuestions.Select(a => a.QuestionId));
+            }
             if (interviewView.GpsLocation.PrefilledQuestionId.HasValue)
             {
                 prefilledIds.Add(interviewView.GpsLocation.PrefilledQuestionId.Value);
