@@ -117,7 +117,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             IProgress<int> progress, 
             CancellationToken cancellationToken)
         {
-            int totalInterviewsProcessed = 0;
+            long totalInterviewsProcessed = 0;
             
             foreach (var batchIds in interviewIdsToExport.Batch(this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery))
             {
