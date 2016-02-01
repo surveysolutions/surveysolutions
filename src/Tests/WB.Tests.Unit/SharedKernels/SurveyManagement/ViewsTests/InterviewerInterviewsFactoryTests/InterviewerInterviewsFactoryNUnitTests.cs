@@ -112,8 +112,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
         public void GetInterviewDetails_When_interview_last_status_is_completed_Then_it_should_not_fail_KP_6661()
         {
             var interviewId = Guid.NewGuid();
+            var interviewSynchronizationDtoFactoryMock = new Mock<IInterviewSynchronizationDtoFactory>();
+
             var interviewerInterviewsFactory =
                 this.CreateInterviewerInterviewsFactory(
+                    synchronizationDtoFactory: interviewSynchronizationDtoFactoryMock.Object,
                     statusHistory:
                         new[]
                         {
@@ -125,7 +128,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
 
             var result = interviewerInterviewsFactory.GetInterviewDetails(interviewId);
 
-            Assert.That(result, Is.Not.Null);
+            interviewSynchronizationDtoFactoryMock.Verify(
+                x =>
+                    x.BuildFrom(Moq.It.IsAny<InterviewData>(), Moq.It.IsAny<Guid>(),
+                        InterviewStatus.Completed,
+                        null, null, Moq.It.IsAny<DateTime>()), Times.Once);
         }
 
         [Test]
