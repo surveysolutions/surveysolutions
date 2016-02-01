@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             var imageView =
                 this.imageViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName)
-                    .FirstOrDefault();
+                    .SingleOrDefault();
 
             if (imageView == null) return null;
 
@@ -50,19 +50,27 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 Id = FileId,
                 File = data
             }).ConfigureAwait(false);
-                
-            await this.imageViewStorage.StoreAsync(new InterviewMultimediaView
+
+
+            var imageView =
+             this.imageViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName)
+                 .SingleOrDefault();
+
+            if (imageView == null)
             {
-                Id = Guid.NewGuid().FormatGuid(),
-                InterviewId = interviewId,
-                FileId = FileId,
-                FileName = fileName
-            }).ConfigureAwait(false);
+                await this.imageViewStorage.StoreAsync(new InterviewMultimediaView
+                {
+                    Id = Guid.NewGuid().FormatGuid(),
+                    InterviewId = interviewId,
+                    FileId = FileId,
+                    FileName = fileName
+                }).ConfigureAwait(false);
+            }
         }
 
         public void RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
-            var imageView = this.imageViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName).FirstOrDefault();
+            var imageView = this.imageViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName).SingleOrDefault();
 
             if (imageView == null) return;
 
