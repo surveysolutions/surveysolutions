@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
             result.Title.ShouldEqual(GetQuestion(questionId).Title);
 
         It should_return_grouped_list_of_multi_questions_with_one_pair = () =>
-            result.SourceOfLinkedEntities.Count.ShouldEqual(6);
+            result.SourceOfLinkedEntities.Count.ShouldEqual(8);
 
         It should_replace_guids_in_condition_expressions_for_var_names = () =>
             result.EnablementCondition.ShouldEqual("[q1] > 25");
