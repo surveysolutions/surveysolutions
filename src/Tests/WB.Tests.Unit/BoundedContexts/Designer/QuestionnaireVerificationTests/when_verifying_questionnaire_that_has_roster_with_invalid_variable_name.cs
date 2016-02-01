@@ -61,22 +61,22 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_first_error_with_one_reference = () =>
             verificationMessages.First().References.Count().ShouldEqual(1);
 
-        It should_return_first_error_with_references_with_Group_type = () =>
+        It should_return_first_message_with_references_with_Group_type = () =>
             verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
 
-        It should_return_first_error_with_references_with_id_equals_rosterWithVariableNameLongerThen32SymbolsId = () =>
+        It should_return_first_message_with_references_with_id_equals_rosterWithVariableNameLongerThen32SymbolsId = () =>
             verificationMessages.First().References.First().Id.ShouldEqual(rosterWithVariableNameLongerThen32SymbolsId);
 
-        It should_return_second_error_with_references_with_Group_type = () =>
+        It should_return_second_message_with_references_with_Group_type = () =>
             verificationMessages.Skip(1).First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
 
-        It should_return_second_error_with_references_with_id_equals_rosterWithVariableNameStartingFromNumberId = () =>
+        It should_return_second_message_with_references_with_id_equals_rosterWithVariableNameStartingFromNumberId = () =>
             verificationMessages.Skip(1).First().References.First().Id.ShouldEqual(rosterWithVariableNameStartingFromNumberId);
 
-        It should_return_third_error_with_references_with_Group_type = () =>
+        It should_return_third_message_with_references_with_Group_type = () =>
             verificationMessages.Last().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
 
-        It should_return_third_error_with_references_with_id_equals_rosterWithVariableNameWithInvalidSymbolsId = () =>
+        It should_return_third_message_with_references_with_id_equals_rosterWithVariableNameWithInvalidSymbolsId = () =>
             verificationMessages.Last().References.First().Id.ShouldEqual(rosterWithVariableNameWithInvalidSymbolsId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

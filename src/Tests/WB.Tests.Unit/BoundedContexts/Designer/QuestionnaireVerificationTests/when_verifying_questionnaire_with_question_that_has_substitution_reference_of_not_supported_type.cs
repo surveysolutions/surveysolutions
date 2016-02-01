@@ -49,16 +49,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_message_with_2_references = () =>
             verificationMessages.Single().References.Count().ShouldEqual(2);
 
-        It should_return_firts_error_reference_with_type_Question = () =>
+        It should_return_firts_message_reference_with_type_Question = () =>
             verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_firts_error_reference_with_id_of_questionWithNotExistingSubstitutionsId = () =>
+        It should_return_firts_message_reference_with_id_of_questionWithNotExistingSubstitutionsId = () =>
             verificationMessages.Single().References.First().Id.ShouldEqual(questionWithSubstitutionReferenceToNotSupportedTypeId);
 
-        It should_return_last_error_reference_with_type_Question = () =>
+        It should_return_last_message_reference_with_type_Question = () =>
             verificationMessages.Single().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_last_error_reference_with_id_of_questionSubstitutionReferencerOfNotSupportedTypeId = () =>
+        It should_return_last_message_reference_with_id_of_questionSubstitutionReferencerOfNotSupportedTypeId = () =>
             verificationMessages.Single().References.Last().Id.ShouldEqual(questionSubstitutionReferencerOfNotSupportedTypeId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
