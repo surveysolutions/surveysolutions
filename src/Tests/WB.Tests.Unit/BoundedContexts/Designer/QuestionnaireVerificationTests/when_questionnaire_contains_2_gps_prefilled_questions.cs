@@ -14,8 +14,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Establish context = () =>
         {
             questionnaire = Create.QuestionnaireDocument(
-                children: new[]{Create.GpsCoordinateQuestion(questionId: gpsQuestion1, variableName:"gps1", isPrefilled:true),
-                Create.GpsCoordinateQuestion(questionId: gpsQuestion2, variableName: "gps2", isPrefilled:true)}
+                children: new[]{Create.GpsCoordinateQuestion(questionId: gpsQuestion1, variable:"gps1", isPrefilled:true),
+                Create.GpsCoordinateQuestion(questionId: gpsQuestion2, variable: "gps2", isPrefilled:true)}
                 );
             verifier = CreateQuestionnaireVerifier();
         };

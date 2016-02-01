@@ -6,12 +6,14 @@ using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 
 namespace WB.UI.Headquarters.API
@@ -26,13 +28,16 @@ namespace WB.UI.Headquarters.API
         private readonly IDataExportStatusReader dataExportStatusReader;
         private readonly IDataExportProcessesService dataExportProcessesService;
 
+        private readonly IDdiMetadataAccessor ddiMetadataAccessor;
+
         public DataExportApiController(
             IFileSystemAccessor fileSystemAccessor,
             IDataExportStatusReader dataExportStatusReader,
             IDataExportProcessesService dataExportProcessesService, 
             IParaDataAccessor paraDataAccessor,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
-            ILogger logger)
+            ILogger logger, 
+            IDdiMetadataAccessor ddiMetadataAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportStatusReader = dataExportStatusReader;
@@ -40,6 +45,7 @@ namespace WB.UI.Headquarters.API
             this.paraDataAccessor = paraDataAccessor;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
             this.logger = logger;
+            this.ddiMetadataAccessor = ddiMetadataAccessor;
         }
 
         [HttpGet]
@@ -53,22 +59,12 @@ namespace WB.UI.Headquarters.API
 
         [HttpGet]
         [ObserverNotAllowedApi]
-        public HttpResponseMessage AllData(Guid id, long version, DataExportFormat format)
+        public HttpResponseMessage AllData(Guid id, long version, DataExportFormat format, InterviewStatus? status = null)
         {
             return
                 CreateHttpResponseMessageWithFileContent(
                     this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
-                        new QuestionnaireIdentity(id, version), format));
-        }
-
-        [HttpGet]
-        [ObserverNotAllowedApi]
-        public HttpResponseMessage ApprovedData(Guid id, long version, DataExportFormat format)
-        {
-            return
-                CreateHttpResponseMessageWithFileContent(
-                    this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedApprovedData(
-                        new QuestionnaireIdentity(id, version), format));
+                        new QuestionnaireIdentity(id, version), format, status));
         }
 
         [HttpGet]
@@ -77,7 +73,7 @@ namespace WB.UI.Headquarters.API
         {
             return
                 CreateHttpResponseMessageWithFileContent(
-                    this.filebasedExportedDataAccessor.GetFilePathToExportedDDIMetadata(new QuestionnaireIdentity(id,
+                    this.ddiMetadataAccessor.GetFilePathToDDIMetadata(new QuestionnaireIdentity(id,
                         version)));
         }
 
@@ -100,29 +96,12 @@ namespace WB.UI.Headquarters.API
         [HttpPost]
         [ObserverNotAllowedApi]
         public HttpResponseMessage RequestUpdate(Guid questionnaireId, long questionnaireVersion,
-            DataExportFormat format)
+            DataExportFormat format,
+            InterviewStatus? status)
         {
             try
             {
-                this.dataExportProcessesService.AddAllDataExport(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), format);
-            }
-            catch (Exception e)
-            {
-                return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
-            }
-
-            return Request.CreateResponse(true);
-        }
-
-
-        [HttpPost]
-        [ObserverNotAllowedApi]
-        public HttpResponseMessage RequestUpdateOfApproved(Guid questionnaireId, long questionnaireVersion,
-            DataExportFormat format)
-        {
-            try
-            {
-                this.dataExportProcessesService.AddApprovedDataExport(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), format);
+                this.dataExportProcessesService.AddDataExport(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), format, status);
             }
             catch (Exception e)
             {
@@ -149,10 +128,11 @@ namespace WB.UI.Headquarters.API
         }
 
         public DataExportStatusView ExportedDataReferencesForQuestionnaire(Guid questionnaireId,
-            long questionnaireVersion)
+            long questionnaireVersion,
+            InterviewStatus? status)
         {
-            return this.dataExportStatusReader.GetDataExportStatusForQuestionnaire(
-                new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
+            var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
+            return this.dataExportStatusReader.GetDataExportStatusForQuestionnaire(questionnaireIdentity, status);
         }
 
         private HttpResponseMessage CreateHttpResponseMessageWithFileContent(string filePath)

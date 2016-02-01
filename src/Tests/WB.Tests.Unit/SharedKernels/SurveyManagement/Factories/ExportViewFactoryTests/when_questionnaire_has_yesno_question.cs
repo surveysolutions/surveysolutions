@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                 Create.MultyOptionsQuestion(id: questionId,
                     variable: "mult",
                     yesNoView: true,
-                    answers: new List<Answer> {
+                    options: new List<Answer> {
                         Create.Answer("foo", 28), Create.Answer("bar", 42)
                     }));
 

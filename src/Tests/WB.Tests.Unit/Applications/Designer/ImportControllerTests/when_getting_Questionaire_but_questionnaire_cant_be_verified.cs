@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
 using Machine.Specifications;
-using Machine.Specifications.Utility;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -37,7 +32,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
 
             var questionnaireVerifier = Mock.Of<IQuestionnaireVerifier>(
                 _ => _.Verify(Moq.It.IsAny<QuestionnaireDocument>()) ==
-                     new[] {Create.QuestionnaireVerificationError()});
+                     new[] {Create.QuestionnaireVerificationError(VerificationErrorLevel.General)});
 
             importController = CreateImportController(membershipUserService: membershipUserService,
                 questionnaireViewFactory: questionnaireViewFactory,

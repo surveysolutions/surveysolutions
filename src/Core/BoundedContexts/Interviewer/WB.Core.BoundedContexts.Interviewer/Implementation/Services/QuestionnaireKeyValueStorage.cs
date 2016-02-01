@@ -1,4 +1,5 @@
 using Main.Core.Documents;
+using Nito.AsyncEx;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -15,18 +16,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public QuestionnaireDocument GetById(string id)
         {
-            var questionnaireDocumntView = this.questionnaireDocumentViewRepository.GetById(id);
-            return questionnaireDocumntView?.Document;
+           var currentQuestionnaireDocument = this.questionnaireDocumentViewRepository.GetById(id);
+
+            return currentQuestionnaireDocument?.Document;
         }
 
         public void Remove(string id)
         {
-            throw new System.NotImplementedException();
+            AsyncContext.Run(() => this.questionnaireDocumentViewRepository.RemoveAsync(id));
         }
 
         public void Store(QuestionnaireDocument view, string id)
         {
-            throw new System.NotImplementedException();
+            AsyncContext.Run(() => this.questionnaireDocumentViewRepository.StoreAsync(new QuestionnaireDocumentView()
+            {
+                Document = view,
+                Id = id
+            }));
         }
     }
 }

@@ -8,9 +8,7 @@
         }
 
         public VerificationMessage[] Errors { get; set; }
-        public int ErrorsCount { get; set; }
-
+      
         public VerificationMessage[] Warnings { get; set; }
-        public int WarningsCount { get; set; }
     }
 }

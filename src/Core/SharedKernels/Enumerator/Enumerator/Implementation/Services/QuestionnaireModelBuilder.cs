@@ -22,35 +22,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             questionnaireDocument.ConnectChildrenWithParent();
 
-            var questionnaireModel = new QuestionnaireModel
-            {
-                Parents = new Dictionary<Guid, List<GroupReferenceModel>>(),
-                GroupsParentIdMap = new Dictionary<Guid, Guid?>(),
-                GroupsRosterLevelDepth = new Dictionary<Guid, int>(),
-                QuestionsNearestRosterIdMap = new Dictionary<Guid, Guid?>()
-            };
+            var questionnaireModel = new QuestionnaireModel();
 
             var groups = questionnaireDocument.GetAllGroups().ToList();
             var questions = questionnaireDocument.GetAllQuestions().ToList();
-            var staticTexts = questionnaireDocument.GetEntitiesByType<IStaticText>().ToList();
             var entities = questionnaireDocument.GetEntitiesByType<IComposite>().ToList();
-
-            questionnaireModel.Id = questionnaireDocument.PublicKey;
-            questionnaireModel.Title = questionnaireDocument.Title;
-            questionnaireModel.StaticTexts = staticTexts.ToDictionary(x => x.PublicKey, CreateStaticTextModel);
 
             var questionIdToRosterLevelDepth = new Dictionary<Guid, int>();
             questionnaireDocument.Children.TreeToEnumerable(x => x.Children)
-                .ForEach(x => PerformCalculationsBasedOnTreeStructure(questionnaireModel, x, questionIdToRosterLevelDepth));
+                .ForEach(x => PerformCalculationsBasedOnTreeStructure(x, questionIdToRosterLevelDepth));
 
             questionnaireModel.GroupsHierarchy = questionnaireDocument.Children.Cast<Group>().Select(x => this.BuildGroupsHierarchy(x, 0)).ToList();
 
             questionnaireModel.Questions = questions.ToDictionary(x => x.PublicKey, x => CreateQuestionModel(x, questionnaireDocument, questionIdToRosterLevelDepth));
-            questionnaireModel.EntityReferences = entities.Select(x => new QuestionnaireReferenceModel { Id = x.PublicKey, ModelType = x.GetType() }).ToList();
-            questionnaireModel.PrefilledQuestionsIds = questions.Where(x => x.Featured)
-                .Select(x => questionnaireModel.Questions[x.PublicKey])
-                .Select(x => new QuestionnaireReferenceModel { Id = x.Id, ModelType = x.GetType() })
-                .ToList();
 
             questionnaireModel.GroupsWithFirstLevelChildrenAsReferences = groups.ToDictionary(x => x.PublicKey,
                 x => CreateGroupModelWithoutNestedChildren(x, questionnaireModel.Questions));
@@ -76,13 +60,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return resultModel;
         }
 
-        private static void PerformCalculationsBasedOnTreeStructure(QuestionnaireModel questionnaireModel, IComposite item, Dictionary<Guid, int> questionIdToRosterLevelDeep)
+        private static void PerformCalculationsBasedOnTreeStructure(IComposite item, Dictionary<Guid, int> questionIdToRosterLevelDeep)
         {
-            var parents = new List<GroupReferenceModel>();
-
             var parentAsGroup = item.GetParent() as Group;
-
-            var closestParentGroupId = parentAsGroup == null ? (Guid?)null : parentAsGroup.PublicKey;
 
             var countOfRostersToTop = 0;
 
@@ -90,30 +70,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 countOfRostersToTop += parentAsGroup.IsRoster ? 1 : 0;
 
-                var parentPlaceholder = new GroupReferenceModel
-                {
-                    IsRoster = parentAsGroup.IsRoster,
-                    Id = parentAsGroup.PublicKey
-                };
-                parents.Add(parentPlaceholder);
                 parentAsGroup = parentAsGroup.GetParent() as Group;
-            }
-
-            var @group = item as Group;
-            if (@group != null)
-            {
-                parents.Reverse();
-                questionnaireModel.Parents.Add(item.PublicKey, parents);
-                questionnaireModel.GroupsRosterLevelDepth.Add(item.PublicKey, countOfRostersToTop);
-                questionnaireModel.GroupsParentIdMap.Add(item.PublicKey, closestParentGroupId);
             }
 
             if (item is IQuestion)
             {
-                var closestRosterReference = parents.FirstOrDefault(x => x.IsRoster);
-                questionnaireModel.QuestionsNearestRosterIdMap.Add(
-                    item.PublicKey,
-                    closestRosterReference == null ? (Guid?)null : closestRosterReference.Id);
                 questionIdToRosterLevelDeep.Add(item.PublicKey, countOfRostersToTop);
             }
         }
@@ -158,14 +119,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 }
             }
             return groupModel;
-        }
-
-        private static StaticTextModel CreateStaticTextModel(IStaticText staticText)
-        {
-            var staticTextModel = new StaticTextModel();
-            staticTextModel.Title = staticText.Text;
-            staticTextModel.Id = staticText.PublicKey;
-            return staticTextModel;
         }
 
         private static BaseQuestionModel CreateQuestionModel(IQuestion question, QuestionnaireDocument questionnaireDocument, Dictionary<Guid, int> questionIdToRosterLevelDeep)

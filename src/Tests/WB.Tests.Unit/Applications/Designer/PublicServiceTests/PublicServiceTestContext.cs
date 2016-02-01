@@ -2,16 +2,12 @@
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.SurveySolutions;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Designer.WebServices;
-using WB.UI.Designer.WebServices.Questionnaire;
 using WB.UI.Shared.Web.Membership;
 using DownloadQuestionnaireRequest = WB.UI.Designer.WebServices.Questionnaire.DownloadQuestionnaireRequest;
 

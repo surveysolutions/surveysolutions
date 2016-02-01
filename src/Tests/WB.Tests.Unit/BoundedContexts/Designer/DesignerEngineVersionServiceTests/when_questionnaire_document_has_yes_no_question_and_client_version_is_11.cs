@@ -18,10 +18,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.DesignerEngineVersionServiceTes
                 Create.Group(groupId: groupId, children: new[]
                                                          {
                                                              Create.MultyOptionsQuestion(id: questionId, variable: "yesno", yesNoView: true,
-                                                                 answers: new List<Answer>
+                                                                 options: new List<Answer>
                                                                           {
-                                                                              Create.Option(text: "option 1", value: "1"),
-                                                                              Create.Option(text: "option 2", value: "2"),
+                                                                              Create.Option(value: "1", text: "option 1"),
+                                                                              Create.Option(value: "2", text: "option 2"),
                                                                           })
                                                          })
                 );

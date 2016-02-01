@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage
 {
-    public interface IAsyncPlainStorage<TEntity> where TEntity : class, IPlainStorageEntity
+    public interface IAsyncPlainStorage<TEntity> : IDisposable where TEntity : class, IPlainStorageEntity
     {
         TEntity GetById(string id);
 
@@ -15,6 +16,10 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage
         Task StoreAsync(TEntity entity);
         Task StoreAsync(IEnumerable<TEntity> entities);
 
-        TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query);
+        IReadOnlyCollection<TEntity> Where(Expression<Func<TEntity, bool>> predicate);
+        Task<IReadOnlyCollection<TEntity>> WhereAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate);
+        TEntity FirstOrDefault();
+        IReadOnlyCollection<TEntity> LoadAll();
     }
 }

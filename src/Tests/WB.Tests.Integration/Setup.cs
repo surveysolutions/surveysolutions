@@ -3,8 +3,8 @@ using Moq;
 using Ncqrs;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
 namespace WB.Tests.Integration
 {

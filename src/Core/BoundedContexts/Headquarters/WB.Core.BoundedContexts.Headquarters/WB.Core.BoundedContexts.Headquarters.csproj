@@ -9,12 +9,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WB.Core.BoundedContexts.Headquarters</RootNamespace>
     <AssemblyName>WB.Core.BoundedContexts.Headquarters</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>2bff8ac9</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -59,8 +59,8 @@
       <HintPath>..\..\..\..\..\libs\ddidotnet.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -152,14 +152,17 @@
     <Compile Include="DataExport\Factories\DatasetWriterFactory.cs" />
     <Compile Include="DataExport\Factories\ICsvWriter.cs" />
     <Compile Include="DataExport\Factories\IDatasetWriterFactory.cs" />
-    <Compile Include="DataExport\Factories\IMetaDescriptionFactory.cs" />
-    <Compile Include="DataExport\Factories\MetaDescriptionFactory.cs" />
+    <Compile Include="DataExport\Ddi\IMetadataWriter.cs" />
+    <Compile Include="DataExport\Ddi\IMetaDescriptionFactory.cs" />
+    <Compile Include="DataExport\Factories\IQuestionnaireLabelFactory.cs" />
+    <Compile Include="DataExport\Ddi\Impl\MetadataWriter.cs" />
+    <Compile Include="DataExport\Ddi\Impl\MetaDescriptionFactory.cs" />
+    <Compile Include="DataExport\Factories\QuestionnaireLabelFactory.cs" />
     <Compile Include="DataExport\Jobs\ExportJob.cs" />
     <Compile Include="DataExport\Jobs\ExportJobScheduler.cs" />
     <Compile Include="DataExport\Mapping\LastPublishedEventPositionForHandlerMap.cs" />
     <Compile Include="DataExport\ExportProcessHandlers\IExportProcessHandler.cs" />
-    <Compile Include="DataExport\DataExportDetails\AllDataExportProcessDetails.cs" />
-    <Compile Include="DataExport\DataExportDetails\ApprovedDataExportProcessDetails.cs" />
+    <Compile Include="DataExport\DataExportDetails\DataExportProcessDetails.cs" />
     <Compile Include="DataExport\DataExportDetails\IDataExportProcessDetails.cs" />
     <Compile Include="DataExport\DataExportDetails\ParaDataExportProcessDetails.cs" />
     <Compile Include="DataExport\Services\Exporters\CommentsExporter.cs" />
@@ -170,11 +173,9 @@
     <Compile Include="DataExport\Services\IDataExporter.cs" />
     <Compile Include="DataExport\Services\IDataExportProcessesService.cs" />
     <Compile Include="DataExport\Services\IEnvironmentContentService.cs" />
-    <Compile Include="DataExport\Services\IMetadataExportService.cs" />
     <Compile Include="DataExport\Services\Exporters\InterviewActionsExporter.cs" />
     <Compile Include="DataExport\Services\InterviewExportConstants.cs" />
     <Compile Include="DataExport\Services\ITabularDataToExternalStatPackageExportService.cs" />
-    <Compile Include="DataExport\Services\MetadataExportService.cs" />
     <Compile Include="DataExport\Services\ReadSideToTabularFormatExportService.cs" />
     <Compile Include="DataExport\Services\StataEnvironmentContentService.cs" />
     <Compile Include="DataExport\Services\TabularDataToExternalStatPackageExportService.cs" />
@@ -182,8 +183,16 @@
     <Compile Include="DataExport\Views\DataExportStatusView.cs" />
     <Compile Include="DataExport\Views\DataExportStatusReader.cs" />
     <Compile Include="DataExport\Views\IDataExportStatusReader.cs" />
+    <Compile Include="DataExport\Views\Labels\LabeledVariable.cs" />
+    <Compile Include="DataExport\Views\Labels\QuestionnaireLevelLabels.cs" />
+    <Compile Include="DataExport\Views\Labels\VariableValueLabel.cs" />
     <Compile Include="DataExport\Views\RunningDataExportProcessView.cs" />
     <Compile Include="DataExport\Denormalizers\QuestionnaireExportStructureDenormalizer.cs" />
+    <Compile Include="DataExport\Ddi\Impl\DdiMetadataFactory.cs" />
+    <Compile Include="DataExport\Ddi\Impl\DdiMetadataAccessor.cs" />
+    <Compile Include="DataExport\Ddi\IDdiMetadataFactory.cs" />
+    <Compile Include="DataExport\Ddi\IDdiMetadataAccessor.cs" />
+    <Compile Include="Implementation\ExportSettings.cs" />
     <Compile Include="Implementation\Services\HeadquarterUserCommandValidator.cs" />
     <Compile Include="Interviews\Denormalizers\InterviewsFeedDenormalizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -233,13 +242,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
+      <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
+      <Name>WB.Infrastructure.Native</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
       <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
       <Name>WB.Core.GenericSubdomains.Portable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure.Storage\WB.Core.Infrastructure.Storage.csproj">
-      <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
-      <Name>WB.Core.Infrastructure.Storage</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
@@ -253,13 +262,13 @@
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
+      <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>
+      <Name>WB.Core.SharedKernels.Questionnaire</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\SharedKernels\SurveyManagement\SurveyManagement\WB.Core.SharedKernels.SurveyManagement.csproj">
       <Project>{29A132B5-A573-40D2-9E8F-2871E95D7766}</Project>
       <Name>WB.Core.SharedKernels.SurveyManagement</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
-      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
-      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -283,14 +292,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-    <Error Condition="!Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
-  </Target>
   <Import Project="..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -5,6 +5,7 @@ using Android.OS;
 using Android.Preferences;
 using Cirrious.CrossCore;
 using WB.Core.BoundedContexts.Tester.Properties;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Tester.Infrastructure.Internals.Settings;
 
 namespace WB.UI.Tester.Activities
@@ -15,7 +16,7 @@ namespace WB.UI.Tester.Activities
         private static int tapTimes = 0;
         private Preference devSettingsCategory;
 
-        private const string designerEndpointKey = "DesignerEndpointV11";
+        private const string designerEndpointKey = "DesignerEndpointV12";
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -33,8 +34,11 @@ namespace WB.UI.Tester.Activities
             this.SetPreferenceTitleAndSummary("GpsReceiveTimeoutSec", TesterUIResources.Prefs_GpsReceiveTimeoutSecTitle, TesterUIResources.Prefs_GpsReceiveTimeoutSecSummary);
             this.SetPreferenceTitleAndSummary("version", TesterUIResources.Prefs_VersionTitle, string.Empty);
             this.SetPreferenceTitleAndSummary("dev_settings_category", TesterUIResources.Prefs_ConnectionSettings, string.Empty);
-            this.SetPreferenceTitleAndSummary("DesignerEndpointV11", TesterUIResources.Prefs_DesignerEndPointTitle, settings.Endpoint);
+            this.SetPreferenceTitleAndSummary("DesignerEndpointV12", TesterUIResources.Prefs_DesignerEndPointTitle, settings.Endpoint);
             this.SetPreferenceTitleAndSummary("AcceptUnsignedSslCertificate", TesterUIResources.Prefs_AcceptUnsignedTitle, TesterUIResources.Prefs_AcceptUnsignedSummary);
+
+            this.SetPreferenceTitleAndSummary("GpsDesiredAccuracy", UIResources.Prefs_GpsDesiredAccuracyTitle, 
+                string.Format(UIResources.Prefs_GpsDesiredAccuracySubTitle, settings.GpsDesiredAccuracy));
 
             this.PreferenceScreen.RemovePreference(this.devSettingsCategory);
           

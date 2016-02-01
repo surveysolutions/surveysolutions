@@ -1,7 +1,7 @@
 ﻿using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
 using Ninject.Modules;
-using Sqo;
+using SQLite.Net;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
@@ -22,6 +22,8 @@ using WB.UI.Tester.Infrastructure.Internals.Rest;
 using WB.UI.Tester.Infrastructure.Internals.Security;
 using WB.UI.Tester.Infrastructure.Internals.Settings;
 using WB.UI.Tester.Infrastructure.Internals.Storage;
+using SQLite.Net.Interop;
+using SQLite.Net.Platform.XamarinAndroid;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.UI.Tester.Infrastructure
@@ -43,10 +45,14 @@ namespace WB.UI.Tester.Infrastructure
             this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>().To<InMemoryKeyValueStorage<QuestionnaireDocument>>().InSingletonScope();
             this.Bind<IPlainKeyValueStorage<QuestionnaireModel>>().To<InMemoryKeyValueStorage<QuestionnaireModel>>().InSingletonScope();
 
-            SiaqodbConfigurator.SetLicense(@"yrwPAibl/TwJ+pR5aBOoYieO0MbZ1HnEKEAwjcoqtdrUJVtXxorrxKZumV+Z48/Ffjj58P5pGVlYZ0G1EoPg0w==");
-            this.Bind<Siaqodb>().ToConstant(new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("database")));
-
-            this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SiaqodbPlainStorage<>)).InSingletonScope();
+            this.Bind<ITraceListener>().To<MvxTraceListener>();
+            this.Bind<ISQLitePlatform>().To<SQLitePlatformAndroid>();
+            this.Bind<SqliteSettings>().ToConstant(
+                new SqliteSettings()
+                {
+                    PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")
+                });
+            this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SqlitePlainStorage<>)).InSingletonScope();
 
             this.Bind<ILogger>().To<XamarinInsightsLogger>().InSingletonScope();
 
@@ -57,9 +63,11 @@ namespace WB.UI.Tester.Infrastructure
             this.Bind<IRestService>().To<RestService>();
 
             this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
-            this.Bind<ISerializer>().To<NewtonJsonSerializer>();
-            this.Bind<IStringCompressor>().To<JsonCompressor>();
 
+            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(new JsonSerializerSettingsFactory()));
+
+            this.Bind<IStringCompressor>().To<JsonCompressor>();
+            
             this.Bind<IDesignerApiService>().To<DesignerApiService>().InSingletonScope();
 
             this.Bind<IPrincipal>().To<TesterPrincipal>().InSingletonScope();

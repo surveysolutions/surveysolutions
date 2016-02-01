@@ -61,14 +61,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     "l class ");
             
             #line 24 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Model.GeneratedClassName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(Model.ClassName));
             
             #line default
             #line hidden
             this.Write("\r\n   {   \r\n      private bool ");
             
             #line 26 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Model.GeneratedMethodName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(Model.MethodName));
             
             #line default
             #line hidden
@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Write("          return ");
             
             #line 36 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Model.ExpressionString));
+            this.Write(this.ToStringHelper.ToStringWithCulture(Model.Expression));
             
             #line default
             #line hidden

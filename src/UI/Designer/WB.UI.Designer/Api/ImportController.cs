@@ -8,13 +8,13 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Resources;
@@ -109,7 +109,7 @@ namespace WB.UI.Designer.Api
 
             var questionnaireErrors = questionnaireVerifier.Verify(questionnaireView.Source).ToArray();
 
-            if (questionnaireErrors.Any())
+            if (questionnaireErrors.Any(x => x.ErrorLevel!=VerificationErrorLevel.Warning))
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
                 {
@@ -134,7 +134,7 @@ namespace WB.UI.Designer.Api
                     Diagnostics =
                         new List<GenerationDiagnostic>()
                         {
-                            new GenerationDiagnostic("Common verifier error", "Error", "unknown",
+                            new GenerationDiagnostic("Common verifier error", "unknown",
                                 GenerationDiagnosticSeverity.Error)
                         }
                 };

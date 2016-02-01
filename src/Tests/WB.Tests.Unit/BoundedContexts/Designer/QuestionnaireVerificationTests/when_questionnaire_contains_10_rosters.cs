@@ -12,8 +12,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    [Ignore("Warnings are disabled")]
-    internal class when_questionnaire_contains_10_rosters : QuestionnaireVerifierTestsContext
+    internal class when_questionnaire_contains_21_rosters : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
@@ -29,6 +28,17 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                 Create.Roster(variable:"r8"),
                 Create.Roster(variable:"r9"),
                 Create.Roster(variable:"r10"),
+                Create.Roster(variable:"r11"),
+                Create.Roster(variable:"r12"),
+                Create.Roster(variable:"r13"),
+                Create.Roster(variable:"r14"),
+                Create.Roster(variable:"r15"),
+                Create.Roster(variable:"r16"),
+                Create.Roster(variable:"r17"),
+                Create.Roster(variable:"r18"),
+                Create.Roster(variable:"r19"),
+                Create.Roster(variable:"r20"),
+                Create.Roster(variable:"r21"),
                 Create.NumericIntegerQuestion(Guid.NewGuid(), variable: "numeric")
             });
             verifier = CreateQuestionnaireVerifier();

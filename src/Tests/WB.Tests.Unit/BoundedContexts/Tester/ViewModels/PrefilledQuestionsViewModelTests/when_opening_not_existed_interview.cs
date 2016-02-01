@@ -21,31 +21,32 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsView
     {
         Establish context = () =>
         {
-            logger = Mock.Of<ILogger>();
-            interviewRepository = Mock.Of<IStatefulInterviewRepository>();
-            navigationService = Mock.Of<IViewModelNavigationService>();
+            loggerMock = new Mock<ILogger>();
+            interviewRepositoryMock = new Mock<IStatefulInterviewRepository>();
+            navigationServiceMock = new Mock<IViewModelNavigationService>();
 
-            viewModel = CreatePrefilledQuestionsViewModel(interviewRepository: interviewRepository,
-                viewModelNavigationService: navigationService,
-                logger: logger);
+            viewModel = CreatePrefilledQuestionsViewModel(
+                interviewRepository: interviewRepositoryMock.Object,
+                viewModelNavigationService: navigationServiceMock.Object,
+                logger: loggerMock.Object);
         };
 
         Because of = () => viewModel.Init(notExistedInterviewId);
 
         It should_check_interview_in_repository = () =>
-            Mock.Get(interviewRepository).Verify(ns => ns.Get(notExistedInterviewId), Times.Once());
+            interviewRepositoryMock.Verify(ns => ns.Get(notExistedInterviewId), Times.Once());
 
         It should_logged_error = () =>
-            Mock.Get(logger).Verify(ns => ns.Error(Moq.It.IsAny<string>(), null), Times.Once());
+            loggerMock.Verify(ns => ns.Error(Moq.It.IsAny<string>(), null), Times.Once());
 
         It should_navigate_to_dashboard = () =>
-            Mock.Get(navigationService).Verify(ns => ns.NavigateToDashboardAsync(), Times.Once());
+            navigationServiceMock.Verify(ns => ns.NavigateToDashboardAsync(), Times.Once());
 
 
         private static string notExistedInterviewId = "same id";
         private static PrefilledQuestionsViewModel viewModel;
-        private static ILogger logger;
-        private static IStatefulInterviewRepository interviewRepository;
-        private static IViewModelNavigationService navigationService;
+        private static Mock<ILogger> loggerMock;
+        private static Mock<IStatefulInterviewRepository> interviewRepositoryMock;
+        private static Mock<IViewModelNavigationService> navigationServiceMock;
     }
 }

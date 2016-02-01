@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionaire = Mock.Of<IQuestionnaire>(_
                 => _.GetRostersFromTopToSpecifiedGroup(groupId) == new[] { parentPropagatableGroupId });
 
-            var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
+            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
                 => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
 
             eventContext = new EventContext();
