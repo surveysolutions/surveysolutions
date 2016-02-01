@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
@@ -14,7 +15,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
         private Dictionary<string, string> assemblyReplacementMapping = new Dictionary<string, string>();
 
         //assuming it injected not in global scope but pet thread
-        private Dictionary<TypeSerializationSettings, JsonSerializer> JsonSerializerCache = new Dictionary<TypeSerializationSettings, JsonSerializer>();
+        private ConcurrentDictionary<TypeSerializationSettings, JsonSerializer> JsonSerializerCache = new ConcurrentDictionary<TypeSerializationSettings, JsonSerializer>();
 
         public NewtonJsonSerializer(IJsonSerializerSettingsFactory jsonSerializerSettingsFactory) 
             : this(jsonSerializerSettingsFactory, new Dictionary<string, string>()) { }
@@ -44,7 +45,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             if (!this.JsonSerializerCache.TryGetValue(settings, out serializer))
             {
                 serializer = JsonSerializer.Create(jsonSerializerSettingsFactory.GetJsonSerializerSettings(settings));
-                this.JsonSerializerCache[settings] = serializer;
+                this.JsonSerializerCache.TryAdd(settings, serializer);
             }
 
             return serializer;

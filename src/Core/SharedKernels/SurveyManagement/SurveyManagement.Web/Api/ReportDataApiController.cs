@@ -217,7 +217,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 QuestionnaireId = input.QuestionnaireId,
                 QuestionnaireVersion = input.QuestionnaireVersion,
                 BeginInterviewStatuses = GetBeginInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
-                EndInterviewStatuses = GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType)
+                EndInterviewStatuses = GetEndInterviewExportedActionsAccordingToReportTypeForSpeedBetweenStatusesReports(input.ReportType),
+                SupervisorId = input.SupervisorId ?? this.GlobalInfo.GetCurrentUser().Id
             };
 
             return this.speedBetweenStatusesByInterviewersReport.Load(inputParameters);
