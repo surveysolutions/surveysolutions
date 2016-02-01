@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.SharedKernels.SurveySolutions.Implementation.ServiceVariables;
-using WB.Core.SharedKernels.SurveySolutions.Services;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {

@@ -14,12 +14,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public string Conditions { set; get; }
 
-        public string GeneratedConditionsMethodName { set; get; }
-        public string GeneratedIdName { set; get; }
-        public string GeneratedStateName { set; get; }
-
         public Guid Id { set; get; }
 
         public string VariableName { set; get; }
+        public string ParentScopeTypeName { get; set; }
+
+        public string StateName => CodeGenerator.PrivateFieldsPrefix + VariableName + CodeGenerator.StateSuffix;
+        public string IdName => CodeGenerator.PrivateFieldsPrefix + VariableName + CodeGenerator.IdSuffix;
+        public string ConditionsMethodName => CodeGenerator.EnablementPrefix + VariableName;
     }
 }

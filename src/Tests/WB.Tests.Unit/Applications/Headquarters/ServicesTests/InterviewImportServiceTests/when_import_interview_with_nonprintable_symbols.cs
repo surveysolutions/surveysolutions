@@ -23,22 +23,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
     {
         private Establish context = () =>
         {
-            var mockOfSampleUploadVievFactory = new Mock<IViewFactory<SampleUploadViewInputModel, SampleUploadView>>();
-            mockOfSampleUploadVievFactory.Setup(x => x.Load(Moq.It.IsAny<SampleUploadViewInputModel>()))
-                .Returns(new SampleUploadView(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version,
-                    new List<FeaturedQuestionItem>()
-                    {
-                        new FeaturedQuestionItem(Guid.Parse("33333333333333333333333333333333"), "", "EANo"),
-                        new FeaturedQuestionItem(Guid.Parse("44444444444444444444444444444444"), "", "MapRefNo"),
-                        new FeaturedQuestionItem(Guid.Parse("55555555555555555555555555555555"), "", "DUNo"),
-                        new FeaturedQuestionItem(Guid.Parse("66666666666666666666666666666666"), "", "Prov"),
-                        new FeaturedQuestionItem(Guid.Parse("77777777777777777777777777777777"), "", "LocalMunic"),
-                        new FeaturedQuestionItem(Guid.Parse("88888888888888888888888888888888"), "", "MainPlace"),
-                        new FeaturedQuestionItem(Guid.Parse("99999999999999999999999999999999"), "", "SubPlace"),
-                        new FeaturedQuestionItem(Guid.Parse("10101010101010101010101010101010"), "", "LongLat__Latitude"),
-                        new FeaturedQuestionItem(Guid.Parse("10101010101010101010101010101010"), "", "LongLat__Longitude")
-                    }));
-
             var questionnaireRepository = Create.CreateQuestionnaireReadSideKeyValueStorage(
                 Create.QuestionnaireDocumentWithOneChapter(
                     Create.NumericQuestion(questionId: Guid.Parse("33333333333333333333333333333333"), variableName: "EANo", prefilled: true, isInteger: true),
@@ -48,7 +32,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                     Create.TextQuestion(questionId: Guid.Parse("77777777777777777777777777777777"), variable: "LocalMunic", preFilled: true),
                     Create.TextQuestion(questionId: Guid.Parse("88888888888888888888888888888888"), variable: "MainPlace", preFilled: true),
                     Create.TextQuestion(questionId: Guid.Parse("99999999999999999999999999999999"), variable: "SubPlace", preFilled: true),
-                    Create.GpsCoordinateQuestion(questionId: Guid.Parse("10101010101010101010101010101010"), variableName: "LongLat", isPrefilled: true)));
+                    Create.GpsCoordinateQuestion(questionId: Guid.Parse("10101010101010101010101010101010"), variable: "LongLat", isPrefilled: true)));
             
             var mockOfPreloadedDataRepository = new Mock<IPreloadedDataRepository>();
             mockOfPreloadedDataRepository.Setup(x => x.GetBytesOfSampleData(Moq.It.IsAny<string>())).Returns(csvBytes);
@@ -59,11 +43,17 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                 {
                     new InterviewImportData()
                     {
-                        InterviewerId = Guid.NewGuid(),
-                        SupervisorId = Guid.NewGuid(),
+                        InterviewerId = interviewerId,
+                        SupervisorId = supervisorId,
                         Answers = new Dictionary<Guid, object>()
                     }
                 });
+
+            mockOfCommandService.Setup(x => x.Execute(Moq.It.IsAny<CreateInterviewByPrefilledQuestions>(), null)).Callback<ICommand, string>(
+                    (command, ordinal) =>
+                    {
+                        executedCommand = command as CreateInterviewByPrefilledQuestions;
+                    });
 
             interviewImportService =
                 CreateInterviewImportService(questionnaireDocumentRepository: questionnaireRepository,
@@ -82,13 +72,31 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
         It should_call_execute_command_service_once = () =>
             mockOfCommandService.Verify(x=> x.Execute(Moq.It.IsAny<CreateInterviewByPrefilledQuestions>(), null), Times.Once);
 
+        It should_be_specified_interviewer = () =>
+            executedCommand.InterviewerId.ShouldEqual(interviewerId);
+
+        It should_be_specified_supervisor = () =>
+            executedCommand.SupervisorId.ShouldEqual(supervisorId);
+
         private static readonly byte[] csvBytes = Encoding.UTF8.GetBytes(
             "Responsible	EANo	MapRefNo	DUNo	Prov	LocalMunic	MainPlace	SubPlace	LongLat__Latitude	LongLat__Longitude\r\n" +
             @"GONZALES	138215891	318	2513	<?=/)L62O]#)7P#I_JOG[;>)1'	;A)=1C9'82LQ+K-S;YJ`AR	OR	`^!!4_!\\QF@RG_HL73ZD\	-6	1");
 
+        private static CreateInterviewByPrefilledQuestions executedCommand = null;
         private static Exception exception;
-        private static Mock<ICommandService> mockOfCommandService = new Mock<ICommandService>();
-        private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1);
         private static InterviewImportService interviewImportService;
+        private static readonly Mock<ICommandService> mockOfCommandService = new Mock<ICommandService>();
+        private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1);
+        private static readonly Guid longlatId = Guid.Parse("10101010101010101010101010101010");
+        private static readonly Guid subplaceId = Guid.Parse("99999999999999999999999999999999");
+        private static readonly Guid mainplaceId = Guid.Parse("88888888888888888888888888888888");
+        private static readonly Guid localmunicId = Guid.Parse("77777777777777777777777777777777");
+        private static readonly Guid provId = Guid.Parse("66666666666666666666666666666666");
+        private static readonly Guid dunoId = Guid.Parse("55555555555555555555555555555555");
+        private static readonly Guid maprefnoId = Guid.Parse("44444444444444444444444444444444");
+        private static readonly Guid eanoId = Guid.Parse("33333333333333333333333333333333");
+        private static readonly Guid headquartersId = Guid.Parse("22222222222222222222222222222222");
+        private static readonly Guid supervisorId = Guid.Parse("13131313131313131313131313131313");
+        private static readonly Guid interviewerId = Guid.Parse("12121212121212121212121212121212");
     }
 }

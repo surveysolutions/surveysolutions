@@ -47,17 +47,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
                     })
                 });
 
-            executorTemplateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory();
+            expressionStateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory();
         };
 
         Because of = () =>
-            templateModel = executorTemplateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, new CodeGenerationSettings(
-                    additionInterfaces: new string[0],
-                    namespaces: new string[0],
-                    areRosterServiceVariablesPresent: false,
-                    rosterType: "IEnumerable",
-                    abstractConditionalLevelClassName: "AbstractConditionalLevel",
-                    isLookupTablesFeatureSupported: true), true);
+            templateModel = expressionStateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings());
 
         It should_variable_r2n1_be_accesible_for_nested_roster = () =>
             GetRosterScopeByRosterId(r1r1).AllParentsQuestionsToTop.Count(x => x.VariableName == "r2n1").ShouldEqual(1);
@@ -79,8 +73,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
             return templateModel.RostersGroupedByScope.Single(r => r.Value.RostersInScope.Any(x => x.Id == id)).Value;
         }
 
-        private static QuestionnaireExecutorTemplateModelFactory executorTemplateModelFactory;
-        private static QuestionnaireExecutorTemplateModel templateModel;
+        private static QuestionnaireExpressionStateModelFactory expressionStateModelFactory;
+        private static QuestionnaireExpressionStateModel templateModel;
         private static QuestionnaireDocument questionnaire;
         private static readonly Guid r2Id = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid r1Id = Guid.Parse("22222222222222222222222222222222");

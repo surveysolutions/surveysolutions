@@ -20,8 +20,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
                 cm.Index("User_PublicKey");
                 cm.Unique(true);
             });
-            Property(x => x.CreationDate);
-            Property(x => x.Email);
+            Property(x => x.CreationDate, cm => cm.Index("User_CreationDate"));
+            Property(x => x.Email, cm => cm.Index("User_Email"));
             Property(x => x.IsLockedByHQ);
             Property(x => x.IsLockedBySupervisor);
             Property(x => x.IsArchived);
@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.UserName, cm => cm.Index("User_UserName_Password"));
             Property(x => x.LastChangeDate);
             Property(x => x.DeviceId, cm => cm.Index("User_DeviceId"));
-            Property(x => x.PersonName);
+            Property(x => x.PersonName, cm => cm.Index("User_PersonName"));
             Property(x => x.PhoneNumber);
             Component(x => x.Supervisor, cmp =>
             {

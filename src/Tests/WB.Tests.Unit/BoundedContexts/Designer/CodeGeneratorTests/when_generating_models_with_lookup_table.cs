@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
         };
 
         Because of = () =>
-            model = templateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings(), false);
+            model = templateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings());
 
         It should_generate_model_for_1_lookup_table = () =>
             model.LookupTables.Count.ShouldEqual(1);
@@ -75,8 +75,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
             model.LookupTables[0].VariableNames.ShouldContainOnly("min", "max");
 
         private static Version version = new Version(11, 0, 0);
-        private static QuestionnaireExecutorTemplateModelFactory templateModelFactory;
-        private static QuestionnaireExecutorTemplateModel model;
+        private static QuestionnaireExpressionStateModelFactory templateModelFactory;
+        private static QuestionnaireExpressionStateModel model;
         private static QuestionnaireDocument questionnaire;
         private static readonly Guid questionnaireId = Guid.Parse("ffffffffffffffffffffffffffffffff");
         private static readonly Guid questionA = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");

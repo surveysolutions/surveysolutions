@@ -1,7 +1,8 @@
 ﻿@using System
 @using System.Web.Optimization
 @using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos
-@model System.Collections.Generic.IEnumerable<WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views.TemplateViewItem>
+@using WB.Core.SharedKernels.SurveyManagement.Web.Utils
+@model WB.UI.Headquarters.Models.ExportModel
 
 @{
     ViewBag.Title = "Data Export";
@@ -12,23 +13,21 @@
 {
 
     @Scripts.Render("~/Scripts/viewmodels/pages/interviews.base.js",
-        "~/Scripts/viewmodels/pages/exportdata.js")
+        "~/Scripts/pages/exportdata.js")
 
     <script type="text/javascript">
 
         var $AllDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "AllData"})';
-        var $ApprovedDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "ApprovedData"})';
         var $HistoryUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "Paradata"})';
         var $UpdateHistoryUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "RequestUpdateOfParadata"})';
         var $UpdateTabularDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "RequestUpdate"})';
 
-        var $UpdateApprovedTabularDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "RequestUpdateOfApproved"})';
         var $DDIUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DDIMetadata"})';
         var $ExportedDataReferencesForQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "ExportedDataReferencesForQuestionnaire"})';
         var $DeleteDataExportProcessUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DeleteDataExportProcess"})';
         $(function() {
             var templates = [
-                @foreach (var item in Model)
+                @foreach (var item in Model.Questionnaires)
                 {
                     <text>{ id: '@item.TemplateId', version: '@item.TemplateVersion', title: '(ver. @item.TemplateVersion) @item.TemplateName' },</text>
                 }
@@ -39,7 +38,21 @@
                 <text>exportFromats[@((int) formatValue)] = '@formatValue.ToString()'</text>
             }
 
-            var model = new Supervisor.VM.ExportData(templates, $ExportedDataReferencesForQuestionnaireUrl, $UpdateHistoryUrl, exportFromats, $DeleteDataExportProcessUrl, $UpdateTabularDataUrl, $UpdateApprovedTabularDataUrl);
+            var statuses = [
+                { status: null, title: 'Any' },
+                @foreach (var item in Model.ExportStatuses)
+                {
+                <text>{ status: @((int)item), title: '@item.ToUiString()' },</text>
+                }
+            ];
+
+            var model = new Supervisor.VM.ExportData(templates, 
+                statuses, 
+                $ExportedDataReferencesForQuestionnaireUrl, 
+                $UpdateHistoryUrl, 
+                exportFromats, 
+                $DeleteDataExportProcessUrl, 
+                $UpdateTabularDataUrl);
             ko.applyBindings(model);
         });
 
@@ -73,8 +86,14 @@
 <table class="table table-bordered table-condensed">
     <thead>
         <tr>
-            <th>All Data</th>
-            <th>HQ Approved Data</th>
+            <th>
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label for="ddlStatus" class="control-label"> Status:</label>
+                        <select class="form-control" id="ddlStatus" data-bind="options: Statuses, value: selectedStatus, optionsText: 'title'"></select>
+                    </div>
+                </div>
+            </th>
             <th>Binary Data</th>
             <th>DDI</th>
             @if (this.ViewBag.EnableInterviewHistory)
@@ -90,13 +109,9 @@
                 @DataExportTemplate(type: DataExportType.Data, format: DataExportFormat.Tabular, dataUrl: "$AllDataUrl", iconUrl: "~/Content/icons/tabs.png", addFromat: true)
             </td>
             <td>
-                @DataExportTemplate(type: DataExportType.ApprovedData, format: DataExportFormat.Tabular, dataUrl: "$ApprovedDataUrl", iconUrl: "~/Content/icons/tabs.png", addFromat: true)
-            </td>
-            <td>
                 @DataExportTemplate(type: DataExportType.Data, format: DataExportFormat.Binary, dataUrl: "$AllDataUrl", iconUrl: "~/Content/icons/binary.png", addFromat: true)
             </td>
             <td>
-
                 <table class="table table-condensed"  style="margin-bottom: 0px;">
                     <thead>
                         <tr>
@@ -122,7 +137,6 @@
         </tr>
         <tr>
             <td>@DataExportTemplate(type: DataExportType.Data, format: DataExportFormat.STATA, dataUrl: "$AllDataUrl", iconUrl: "~/Content/icons/stata.gif", addFromat: true)</td>
-            <td>@DataExportTemplate(type: DataExportType.ApprovedData, format: DataExportFormat.STATA, dataUrl: "$ApprovedDataUrl", iconUrl: "~/Content/icons/stata.gif", addFromat: true)</td>
             <td></td>
             <td></td>
             @if (this.ViewBag.EnableInterviewHistory)
@@ -132,7 +146,6 @@
         </tr>
         <tr>
             <td>@DataExportTemplate(type: DataExportType.Data, format: DataExportFormat.SPSS, dataUrl: "$AllDataUrl", iconUrl: "~/Content/icons/spss.png", addFromat: true)</td>
-            <td>@DataExportTemplate(type: DataExportType.ApprovedData, format: DataExportFormat.SPSS, dataUrl: "$ApprovedDataUrl", iconUrl: "~/Content/icons/spss.png", addFromat: true)</td>
             <td></td>
             <td></td>
             @if (this.ViewBag.EnableInterviewHistory)
@@ -202,7 +215,7 @@ var exportParameters = "'" + (int)type + "','" + (int)format + "'";
                 </td>
                 <td>
 
-                    <a class="btn btn-default" data-bind="visible: showDownloadButton(@exportParameters), attr: { href: @dataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() @(addFromat ? "+ '&format=" + format + "'" : "") }">
+                    <a class="btn btn-default" data-bind="visible: showDownloadButton(@exportParameters), attr: { href: @dataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() @(addFromat ? "+ '&format=" + format + "'" : "") + '&status=' + selectedStatus().status }">
                         <i class="glyphicon glyphicon-download">
                         </i>
                     </a>

@@ -12,8 +12,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Compression
     /// </summary>
     public static class ZipHelper
     {
-        #region Public Methods and Operators
-
         /// <summary>
         /// Gets uploaded file and tries to convert it to zip file
         /// </summary>
@@ -40,26 +38,5 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Compression
 
             return ZipManager.GetZipContent(uploadFile.InputStream);
         }
-
-        #endregion
-
-        public static byte[] Compress(object data)
-        {
-            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-            var dataAsString= JsonConvert.SerializeObject(data, Formatting.Indented, settings);
-
-            var outputStream = new MemoryStream();
-            using (var zip = new ZipFile())
-            {
-                // var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-                zip.CompressionLevel = CompressionLevel.BestCompression;
-                zip.AddEntry("data.txt", dataAsString);
-                zip.Save(outputStream);
-            }
-
-            outputStream.Seek(0, SeekOrigin.Begin);
-            return outputStream.ToArray();
-        }
-
     }
 }

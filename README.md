@@ -1,20 +1,8 @@
-- Added new section for event bus to HQ/SV/D web configs. Make sure that all updated to 5.3.0 clients have it.
-  <section name="eventBus" type="WB.UI.Shared.Web.Configuration.EventBusConfigSection, WB.UI.Shared.Web, Version=3.0.60.0, Culture=neutral" />
-  <eventBus>
-    <eventHandlers>
-      <disabled>
-        <!--<add type="WB.Core.SharedKernels.SurveyManagement.EventHandler.InterviewHistoryDenormalizer, WB.Core.SharedKernels.SurveyManagement"/>-->
-      </disabled>
-      <withIgnoredExceptions>
-        <add type="WB.Core.SharedKernels.SurveyManagement.EventHandler.InterviewStatusTimeSpanDenormalizer, WB.Core.SharedKernels.SurveyManagement"/>
-        <add type="WB.Core.SharedKernels.SurveyManagement.EventHandler.InterviewsChartDenormalizer, WB.Core.SharedKernels.SurveyManagement"/>
-        <add type="WB.Core.SharedKernels.SurveyManagement.EventHandler.AnswersByVariableDenormalizer, WB.Core.SharedKernels.SurveyManagement"/>
-      </withIgnoredExceptions>
-    </eventHandlers>
-  </eventBus>
-- Rebuild read side on SV/HQ/D is needed for 5.3.0 version (added functionality for check readside version, first time rebuild readside is requered)
-
-
-
-5.4.0
-HQ/SV: increase read side version, we postponed it because of test limits
+5.5 
+- .NET Framework 4.6.1 is required    https://www.microsoft.com/en-us/download/details.aspx?id=49982
+- PostgreSQL 9.5 can be installed. Migration described here: http://wiki.wbcapi.org/dev_faq
+- All content in folder %Site-Data%/ExportedData should be deleted
+- Release is compatible with EventStore 3.4.0
+- Run utlity QToPlainStore to copy questionnaires to the plain storage. 
+  Read side should be valid and not empty. 
+  Utility has 2 params: "r" (readside) and "p" (plainstorage).

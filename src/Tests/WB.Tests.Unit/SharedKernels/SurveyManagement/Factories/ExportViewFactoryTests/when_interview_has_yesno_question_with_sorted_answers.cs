@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
                 Create.MultyOptionsQuestion(id: questionId,
                     variable: variableName,
-                    answers: new List<Answer> {
+                    options: new List<Answer> {
                         Create.Answer("foo", 28),
                         Create.Answer("bar", 42),
                         Create.Answer("blah", 21),

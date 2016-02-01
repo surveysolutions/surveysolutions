@@ -2,7 +2,6 @@
 {
     public enum DataExportType
     {
-        ApprovedData,
         Data,
         ParaData
     }

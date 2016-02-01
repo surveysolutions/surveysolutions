@@ -11,7 +11,7 @@
     self.IsSupervisorsLoading = ko.observable(false);
     self.Supervisors = function (query, sync, pageSize) {
         self.IsSupervisorsLoading(true);
-        self.SendRequest(self.SupervisorUrl, { query: query, pageSize: pageSize }, function (response) {
+        self.SendRequest(self.SupervisorUrl, { query: query, pageSize: pageSize, showLocked: true }, function (response) {
             sync(response.Users, response.TotalCountByQuery);
         }, true, true, function () {
             self.IsSupervisorsLoading(false);

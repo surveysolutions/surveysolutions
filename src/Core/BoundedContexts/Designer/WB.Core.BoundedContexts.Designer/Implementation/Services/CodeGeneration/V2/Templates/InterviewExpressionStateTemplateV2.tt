@@ -10,28 +10,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
- <#foreach (var namespaceToInclude in QuestionnaireTemplateStructure.Namespaces){#>
+ <#foreach (var namespaceToInclude in QuestionnaireStructure.Namespaces){#>
 	using <#=namespaceToInclude#>;
  <#}#>
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
-    public class <#=QuestionnaireTemplateStructure.GeneratedClassName#> : AbstractInterviewExpressionStateV2
-    <#foreach (var additionInterface in QuestionnaireTemplateStructure.AdditionInterfaces){#>
+    public class <#=QuestionnaireStructure.ClassName#> : AbstractInterviewExpressionStateV2
+    <#foreach (var additionInterface in QuestionnaireStructure.AdditionalInterfaces){#>
 	 , <#=additionInterface#>
 	<#}#>
 
 	{
-	    public <#=QuestionnaireTemplateStructure.GeneratedClassName#>() : base()
+	    public <#=QuestionnaireStructure.ClassName#>() : base()
         {
             var questionnaireLevelScope = new[] { IdOf.@__questionnaire };
             var questionnaireIdentityKey = Util.GetRosterKey(questionnaireLevelScope, Util.EmptyRosterVector);
-            var questionnaireLevel = new <#=QuestionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedTypeName#>(Util.EmptyRosterVector, questionnaireIdentityKey, this.GetRosterInstances, IdOf.conditionalDependencies, IdOf.structuralDependencies, this.InterviewProperties);
+            var questionnaireLevel = new <#=QuestionnaireStructure.QuestionnaireLevelModel.TypeName#>(Util.EmptyRosterVector, questionnaireIdentityKey, this.GetRosterInstances, IdOf.conditionalDependencies, IdOf.structuralDependencies, this.InterviewProperties);
             this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);				
         }
 		
 
-		public <#=QuestionnaireTemplateStructure.GeneratedClassName#>(Dictionary<string, IExpressionExecutableV2> interviewScopes, Dictionary<string, List<string>> siblingRosters, IInterviewProperties interviewProperties)
+		public <#=QuestionnaireStructure.ClassName#>(Dictionary<string, IExpressionExecutableV2> interviewScopes, Dictionary<string, List<string>> siblingRosters, IInterviewProperties interviewProperties)
 		 :base(interviewScopes, siblingRosters, interviewProperties){}
 
         public override void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex)
@@ -115,10 +115,10 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 
         public override IInterviewExpressionState Clone()
 		{
-			return new <#=QuestionnaireTemplateStructure.GeneratedClassName#>(this.InterviewScopes, this.SiblingRosters, this.InterviewProperties);
+			return new <#=QuestionnaireStructure.ClassName#>(this.InterviewScopes, this.SiblingRosters, this.InterviewProperties);
 		}
         
-		<#foreach (var additionInterface in QuestionnaireTemplateStructure.AdditionInterfaces){#>
+		<#foreach (var additionInterface in QuestionnaireStructure.AdditionalInterfaces){#>
 	    <#=additionInterface#> <#=additionInterface#>.Clone()
         {
             return Clone () as <#=additionInterface#>;
@@ -138,7 +138,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
          #>
 
         //generating rosters
-        <#foreach (var rosterGroup in QuestionnaireTemplateStructure.RostersGroupedByScope) 
+        <#foreach (var rosterGroup in QuestionnaireStructure.RostersGroupedByScope) 
            {
                 RosterScopeTemplateV2 template = CreateRosterScopeTemplate(rosterGroup.Value);
                 this.Write(template.TransformText());
@@ -147,33 +147,33 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 
         public static class IdOf
         {
-            public static readonly Guid @__questionnaire = Guid.Parse("<#= QuestionnaireTemplateStructure.Id #>"); 
+            public static readonly Guid @__questionnaire = Guid.Parse("<#= QuestionnaireStructure.Id #>"); 
             //questions
-            <#foreach (var q in QuestionnaireTemplateStructure.AllQuestions) 
+            <#foreach (var q in QuestionnaireStructure.AllQuestions) 
             {#>
-            public static readonly Guid <#= q.GeneratedIdName#> = Guid.Parse("<#= q.Id #>");
+            public static readonly Guid <#= q.IdName#> = Guid.Parse("<#= q.Id #>");
             <# }#>
             //groups
-            <#foreach (var g in QuestionnaireTemplateStructure.AllGroups) 
+            <#foreach (var g in QuestionnaireStructure.AllGroups) 
             {#>
-            public static readonly Guid <#= g.GeneratedIdName#> = Guid.Parse("<#= g.Id #>");
+            public static readonly Guid <#= g.IdName#> = Guid.Parse("<#= g.Id #>");
             <# }#>
             //rosters
-            <#foreach (var r in QuestionnaireTemplateStructure.AllRosters) 
+            <#foreach (var r in QuestionnaireStructure.AllRosters) 
             {#>
-            public static readonly Guid <#= r.GeneratedIdName#> = Guid.Parse("<#= r.Id #>");
+            public static readonly Guid <#= r.IdName#> = Guid.Parse("<#= r.Id #>");
             <# }#>
             
-            public static readonly Guid[] <#=QuestionnaireTemplateStructure.QuestionnaireLevelModel.GeneratedRosterScopeName#> = new[] {@__questionnaire};
+            public static readonly Guid[] <#=QuestionnaireStructure.QuestionnaireLevelModel.RosterScopeName#> = new[] {@__questionnaire};
 
-            <#foreach (var r in QuestionnaireTemplateStructure.AllRosters)
+            <#foreach (var r in QuestionnaireStructure.AllRosters)
             {#>
-            public static readonly Guid[] <#= r.GeneratedRosterScopeName#> = new[] {<#=String.Join(" ,", r.RosterScope.Select(g => string.Format("Guid.Parse(\"{0}\")", g)).ToArray()) #>};
+            public static readonly Guid[] <#= r.RosterScopeName#> = new[] {<#=String.Join(" ,", r.RosterScope.Select(g => string.Format("Guid.Parse(\"{0}\")", g)).ToArray()) #>};
             <# }#>
             
             public static Dictionary<Guid, Guid[]> conditionalDependencies = new Dictionary<Guid, Guid[]>()
             {            
-                <#foreach (var dependency in QuestionnaireTemplateStructure.ConditionalDependencies)
+                <#foreach (var dependency in QuestionnaireStructure.ConditionalDependencies)
                 {#>
                 {Guid.Parse("<#= dependency.Key #>"), new Guid[]{
                 <#foreach (var dependencyValue in dependency.Value)
@@ -186,7 +186,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 
             public static Dictionary<Guid, Guid[]> structuralDependencies = new Dictionary<Guid, Guid[]>()
             {
-                <#foreach (var dependency in QuestionnaireTemplateStructure.StructuralDependencies) 
+                <#foreach (var dependency in QuestionnaireStructure.StructuralDependencies) 
                 {#>
                 { Guid.Parse("<#= dependency.Key #>"), new Guid[]{
                 <#foreach (var d in dependency.Value)
@@ -200,19 +200,19 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             public static Dictionary<Guid, Guid[]> parentScopeMap = new Dictionary<Guid, Guid[]>
             {
                 //questions
-                <#foreach (var q in QuestionnaireTemplateStructure.AllQuestions) 
+                <#foreach (var q in QuestionnaireStructure.AllQuestions) 
                 {#>
-                {<#= q.GeneratedIdName#>, <#= q.RosterScopeName#>},
+                {<#= q.IdName#>, <#= q.RosterScopeName#>},
                 <# }#>
                 //groups
-                <#foreach (var g in QuestionnaireTemplateStructure.AllGroups) 
+                <#foreach (var g in QuestionnaireStructure.AllGroups) 
                 {#>
-                {<#= g.GeneratedIdName#>, <#= g.RosterScopeName#>},
+                {<#= g.IdName#>, <#= g.RosterScopeName#>},
                 <# }#>
                 //rosters
-                <#foreach (var r in QuestionnaireTemplateStructure.AllRosters)
+                <#foreach (var r in QuestionnaireStructure.AllRosters)
                 {#>
-                {<#= r.GeneratedIdName#>, <#= r.GeneratedRosterScopeName#>},
+                {<#= r.IdName#>, <#= r.RosterScopeName#>},
                 <# }#>                                        
             };
         }

@@ -9,5 +9,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public bool CanUnapprove { get; set; }
         public Guid QuestionnaireId { get; set; }
         public long QuestionnaireVersion { set; get; }
+
+        public bool ReceivedByInterviewer { get; set; }
     }
 }

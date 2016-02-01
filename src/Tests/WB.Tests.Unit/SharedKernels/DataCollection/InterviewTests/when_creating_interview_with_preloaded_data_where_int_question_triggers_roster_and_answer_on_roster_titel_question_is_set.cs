@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                    && _.DoesQuestionSpecifyRosterTitle(rosterTitleQuestionId) == true
                    && _.GetRostersAffectedByRosterTitleQuestion(rosterTitleQuestionId) == new Guid[] { rosterGroupId });
 
-            var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
+            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
                 => repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionaire);
 
             interview = Create.Interview(questionnaireRepository: questionnaireRepository);

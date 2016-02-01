@@ -15,5 +15,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts
         public string SupervisorName { get; set; }
         public PeriodiceReportType[] ReportTypes { get; set; }
         public string ReportNameDescription { get; set; }
+        public bool TotalRowPresent { get; set; }
     }
 }

@@ -4,16 +4,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public partial class InterviewExpressionStateTemplateV2
     {
-        public InterviewExpressionStateTemplateV2(QuestionnaireExecutorTemplateModel questionnaire)
+        public InterviewExpressionStateTemplateV2(QuestionnaireExpressionStateModel questionnaire)
         {
-            this.QuestionnaireTemplateStructure = questionnaire;
+            this.QuestionnaireStructure = questionnaire;
         }
 
-        public QuestionnaireExecutorTemplateModel QuestionnaireTemplateStructure { get; private set; }
+        public QuestionnaireExpressionStateModel QuestionnaireStructure { get; private set; }
 
         public QuestionnaireLevelTemplateV2 CreateQuestionnaireLevelTemplate()
         {
-            return new QuestionnaireLevelTemplateV2(this.QuestionnaireTemplateStructure.QuestionnaireLevelModel);
+            return new QuestionnaireLevelTemplateV2(this.QuestionnaireStructure.QuestionnaireLevelModel);
         }
 
         protected RosterScopeTemplateV2 CreateRosterScopeTemplate(RosterScopeTemplateModel rosterGroup)

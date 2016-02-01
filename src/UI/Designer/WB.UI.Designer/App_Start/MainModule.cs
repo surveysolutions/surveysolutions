@@ -1,8 +1,6 @@
 ﻿using System.Web.Mvc;
 using Ninject.Modules;
 using Ninject.Web.Mvc.FilterBindingSyntax;
-using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.GenericSubdomains.Native;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Designer.Code;
@@ -10,6 +8,9 @@ using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Exceptions;
 using WB.UI.Shared.Web.Membership;
 using IRecipientNotifier = WB.UI.Designer.Code.IRecipientNotifier;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.Infrastructure.FileSystem;
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
 namespace WB.UI.Designer
 {
@@ -24,8 +25,11 @@ namespace WB.UI.Designer
             this.BindFilter<CustomHandleErrorFilter>(FilterScope.Global, 0).InSingletonScope();
             this.BindFilter<CustomAuthorizeFilter>(FilterScope.Controller, 0).WhenControllerHas<CustomAuthorizeAttribute>().InSingletonScope();
             this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
-            this.Bind<ISerializer>().To<NewtonJsonSerializer>();
+
+            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(new JsonSerializerSettingsFactory()));
+
             this.Bind<IStringCompressor>().To<JsonCompressor>().InSingletonScope();
+            this.Bind<IArchiveUtils>().To<ZipArchiveUtils>();
             this.Bind<IMembershipHelper>().ToConstant(new MembershipHelper()).InSingletonScope();
             this.Bind<IMembershipWebUser>()
                 .ToConstructor(x => new MembershipWebUser(x.Inject<IMembershipHelper>()))

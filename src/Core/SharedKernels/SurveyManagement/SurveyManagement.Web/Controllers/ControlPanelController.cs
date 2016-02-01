@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.Storage.EventStore;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.Infrastructure.Native.Storage.EventStore;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Settings;
@@ -145,9 +146,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.View();
         }
 
-        public ActionResult RunScavenge()
+        public async Task<ActionResult> RunScavenge()
         {
-            eventStoreApiService.RunScavenge();
+            await eventStoreApiService.RunScavengeAsync();
             object model = "Scavenge has executed at " + DateTime.Now;
             return this.View("EventStore", model);
         }

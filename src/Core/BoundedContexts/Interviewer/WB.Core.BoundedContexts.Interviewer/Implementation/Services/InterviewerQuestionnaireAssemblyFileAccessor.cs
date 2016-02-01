@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Practices.ServiceLocation;
 using PCLStorage;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -29,16 +28,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 return this.GetFullPathToAssembly(questionnaireId);
             }
 
-            public string GetAssemblyAsBase64String(Guid questionnaireId, long questionnaireVersion)
-            {
-                byte[] assemblyAsByteArray = this.GetAssemblyAsByteArray(questionnaireId, questionnaireVersion);
-
-                if (assemblyAsByteArray == null)
-                    return null;
-
-                return Convert.ToBase64String(assemblyAsByteArray);
-            }
-
             public byte[] GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion)
             {
                 var assemblyPath = this.GetFullPathToAssembly(questionnaireId);
@@ -50,7 +39,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
             private string GetFolderNameForTemplate(Guid questionnaireId)
             {
-                return String.Format("dir-{0}", questionnaireId);
+                return $"dir-{questionnaireId}";
             }
 
             private string GetFullPathToAssembly(Guid questionnaireId)
@@ -68,20 +57,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         }
 
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IAsynchronousFileSystemAccessor asyncFileSystemAccessor;
+        private readonly ILogger logger;
         private readonly string pathToStore;
         private readonly BackwardCompatibleQuestionnaireAssemblyFileAccessor backwardCompatibleAccessor;
 
-        private static ILogger Logger
-        {
-            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
-        }
-
-        public InterviewerQuestionnaireAssemblyFileAccessor(IFileSystemAccessor fileSystemAccessor, string pathToAssembliesDirectory)
+        public InterviewerQuestionnaireAssemblyFileAccessor(IFileSystemAccessor fileSystemAccessor,
+            IAsynchronousFileSystemAccessor asyncFileSystemAccessor, ILogger logger,  string pathToAssembliesDirectory)
         {
             this.fileSystemAccessor = fileSystemAccessor;
+            this.asyncFileSystemAccessor = asyncFileSystemAccessor;
+            this.logger = logger;
             this.pathToStore = pathToAssembliesDirectory;
 
-            this.backwardCompatibleAccessor = new BackwardCompatibleQuestionnaireAssemblyFileAccessor(this.pathToStore, this.fileSystemAccessor);
+            this.backwardCompatibleAccessor = new BackwardCompatibleQuestionnaireAssemblyFileAccessor(this.pathToStore,
+                this.fileSystemAccessor);
         }
 
         public string GetFullPathToAssembly(Guid questionnaireId, long questionnaireVersion)
@@ -106,7 +96,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             var pathToSaveAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
 
             if (assembly.Length == 0)
-                throw new Exception(string.Format("Assembly file is empty. Cannot be saved. Questionnaire: {0}, version: {1}", questionnaireId, questionnaireVersion));
+                throw new Exception(
+                    $"Assembly file is empty. Cannot be saved. Questionnaire: {questionnaireId}, version: {questionnaireVersion}");
 
             this.fileSystemAccessor.WriteAllBytes(pathToSaveAssembly, assembly);
 
@@ -131,7 +122,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
             var pathToSaveAssembly = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
 
-            Logger.Info(string.Format("Trying to delete assembly for questionnaire {0} version {1}", questionnaireId, questionnaireVersion));
+            this.logger.Info(
+                $"Trying to delete assembly for questionnaire {questionnaireId} version {questionnaireVersion}");
 
             //loaded assembly could be locked
             try
@@ -140,28 +132,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             }
             catch (Exception e)
             {
-                Logger.Error(string.Format("Error on assembly deletion for questionnaire {0} version {1}", questionnaireId, questionnaireVersion));
-                Logger.Error(e.Message, e);
+                this.logger.Error(
+                    $"Error on assembly deletion for questionnaire {questionnaireId} version {questionnaireVersion}");
+                this.logger.Error(e.Message, e);
             }
         }
 
         public async Task RemoveAssemblyAsync(QuestionnaireIdentity questionnaireIdentity)
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
-
-            var assemblyFile = await FileSystem.Current.GetFileFromPathAsync(PortablePath.Combine(this.pathToStore, assemblyFileName));
-
-            await assemblyFile.DeleteAsync();
+            
+            await this.asyncFileSystemAccessor.DeleteFileAsync(this.asyncFileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName));
         }
 
         public string GetAssemblyAsBase64String(Guid questionnaireId, long questionnaireVersion)
         {
             byte[] assemblyAsByteArray = this.GetAssemblyAsByteArray(questionnaireId, questionnaireVersion);
 
-            if (assemblyAsByteArray == null)
-                return null;
-
-            return Convert.ToBase64String(assemblyAsByteArray);
+            return assemblyAsByteArray == null ? null : Convert.ToBase64String(assemblyAsByteArray);
         }
 
         public byte[] GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion)
@@ -182,7 +170,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         private string GetAssemblyFileName(Guid questionnaireId, long questionnaireVersion)
         {
-            return String.Format("assembly_{0}_v{1}.dll", questionnaireId, questionnaireVersion);
+            return $"assembly_{questionnaireId}_v{questionnaireVersion}.dll";
         }
     }
 }

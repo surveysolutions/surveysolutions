@@ -59,7 +59,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                     CanUnapprove = x.Status == InterviewStatus.ApprovedByHeadquarters,
                     QuestionnaireId = x.QuestionnaireId,
                     QuestionnaireVersion = x.QuestionnaireVersion,
-                    CreatedOnClient = x.WasCreatedOnClient
+                    CreatedOnClient = x.WasCreatedOnClient,
+                    ReceivedByInterviewer = x.ReceivedByInterviewer
                 }).ToList()
             };
             return result;

@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             multiOptionQuestion = Guid.NewGuid();
             questionnaireDocument =
                 CreateQuestionnaireDocumentWithOneChapter(Create.MultyOptionsQuestion(id: multiOptionQuestion, variable: "mul",
-                    answers:
+                    options:
                         new[]
                         {
                             Create.Answer("-23", -23), Create.Answer("70.3", (decimal)70.3), Create.Answer("-44.4", (decimal) -44.4),
