@@ -31,22 +31,22 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
+        It should_return_1_message = () =>
             resultErrors.Count().ShouldEqual(1);
 
-        It should_return_error_with_level_general = () =>
+        It should_return_message_with_level_general = () =>
             resultErrors.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
-        It should_return_error_with_code__WB0059 = () =>
+        It should_return_message_with_code__WB0059 = () =>
             resultErrors.Single().Code.ShouldEqual("WB0059");
 
-        It should_return_error_with_1_references = () =>
+        It should_return_message_with_1_references = () =>
             resultErrors.Single().References.Count().ShouldEqual(1);
 
-        It should_return_error_reference_with_type_Question = () =>
+        It should_return_message_reference_with_type_Question = () =>
             resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_error_reference_with_id_of_questionWithSelfSubstitutionsId = () =>
+        It should_return_message_reference_with_id_of_questionWithSelfSubstitutionsId = () =>
             resultErrors.Single().References.First().Id.ShouldEqual(questionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;

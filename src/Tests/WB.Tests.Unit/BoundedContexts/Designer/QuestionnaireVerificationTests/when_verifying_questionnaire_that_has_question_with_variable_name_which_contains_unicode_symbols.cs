@@ -32,80 +32,80 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
-        It should_return_6_errors = () =>
-            resultErrors.Count().ShouldEqual(7);
+        It should_return_7_messages = () =>
+            verificationMessages.Count().ShouldEqual(7);
 
         It should_return_all_errors_with_code_WB0077 = () =>
-            resultErrors.ShouldEachConformTo(e => e.Code == "WB0077");
+            verificationMessages.ShouldEachConformTo(e => e.Code == "WB0077");
 
-        It should_return_first_error_with_one_references = () =>
-            resultErrors.First().References.Count().ShouldEqual(1);
+        It should_return_first_message_with_one_references = () =>
+            verificationMessages.First().References.Count().ShouldEqual(1);
 
-        It should_return_first_error_with_first_references_with_Question_type = () =>
-            resultErrors.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+        It should_return_first_message_with_first_references_with_Question_type = () =>
+            verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_first_error_with_first_references_with_id_equals_questionWithUnicodeVariableNameId = () =>
-            resultErrors.First().References.First().Id.ShouldEqual(questionWithUnicodeVariableNameId);
+        It should_return_first_message_with_first_references_with_id_equals_questionWithUnicodeVariableNameId = () =>
+            verificationMessages.First().References.First().Id.ShouldEqual(questionWithUnicodeVariableNameId);
 
-        It should_return_second_error_with_one_references = () =>
-           resultErrors.Skip(1).First().References.Count().ShouldEqual(1);
+        It should_return_second_message_with_one_references = () =>
+           verificationMessages.Skip(1).First().References.Count().ShouldEqual(1);
 
-        It should_return_second_error_with_first_references_with_Question_type = () =>
-            resultErrors.Skip(1).First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+        It should_return_second_message_with_first_references_with_Question_type = () =>
+            verificationMessages.Skip(1).First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_second_error_with_first_references_with_id_equals_questionWithUnicodeVariableNameId = () =>
-            resultErrors.Skip(1).First().References.First().Id.ShouldEqual(questionStartsWithNumberVariableNameId);
+        It should_return_second_message_with_first_references_with_id_equals_questionWithUnicodeVariableNameId = () =>
+            verificationMessages.Skip(1).First().References.First().Id.ShouldEqual(questionStartsWithNumberVariableNameId);
 
-        It should_return_third_error_with_one_references = () =>
-           resultErrors.Skip(2).First().References.Count().ShouldEqual(1);
+        It should_return_third_message_with_one_references = () =>
+           verificationMessages.Skip(2).First().References.Count().ShouldEqual(1);
 
-        It should_return_third_error_with_first_references_with_Question_type = () =>
-            resultErrors.Skip(2).First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+        It should_return_third_message_with_first_references_with_Question_type = () =>
+            verificationMessages.Skip(2).First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_third_error_with_first_references_with_id_equals_questionWithUnicodeVariableNameId = () =>
-            resultErrors.Skip(2).First().References.First().Id.ShouldEqual(questionStartsWithLongThen32SymbolVariableNameId);
+        It should_return_third_message_with_first_references_with_id_equals_questionWithUnicodeVariableNameId = () =>
+            verificationMessages.Skip(2).First().References.First().Id.ShouldEqual(questionStartsWithLongThen32SymbolVariableNameId);
 
-        It should_return_fourth_error_with_one_references = () =>
-           resultErrors.Skip(3).First().References.Count().ShouldEqual(1);
+        It should_return_fourth_message_with_one_references = () =>
+           verificationMessages.Skip(3).First().References.Count().ShouldEqual(1);
 
-        It should_return_fourth_error_with_first_references_with_Question_type = () =>
-            resultErrors.Skip(3).First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+        It should_return_fourth_message_with_first_references_with_Question_type = () =>
+            verificationMessages.Skip(3).First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_fourth_error_with_first_references_with_id_equals_questionWithUnicodeVariableNameId = () =>
-            resultErrors.Skip(3).First().References.First().Id.ShouldEqual(questionStartsWithUnderscoreId);
+        It should_return_fourth_message_with_first_references_with_id_equals_questionWithUnicodeVariableNameId = () =>
+            verificationMessages.Skip(3).First().References.First().Id.ShouldEqual(questionStartsWithUnderscoreId);
 
-        It should_return_5_error_with_one_references = () =>
-           resultErrors.Skip(4).First().References.Count().ShouldEqual(1);
+        It should_return_5_message_with_one_references = () =>
+           verificationMessages.Skip(4).First().References.Count().ShouldEqual(1);
 
-        It should_return_5_error_with_first_references_with_Question_type = () =>
-            resultErrors.Skip(4).First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+        It should_return_5_message_with_first_references_with_Question_type = () =>
+            verificationMessages.Skip(4).First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_5_error_with_first_references_with_id_equals_questionWithUnicodeVariableNameId = () =>
-            resultErrors.Skip(4).First().References.First().Id.ShouldEqual(questionEndsWithUnderscoreId);
+        It should_return_5_message_with_first_references_with_id_equals_questionWithUnicodeVariableNameId = () =>
+            verificationMessages.Skip(4).First().References.First().Id.ShouldEqual(questionEndsWithUnderscoreId);
 
-        It should_return_6_error_with_one_references = () =>
-           resultErrors.Skip(5).First().References.Count().ShouldEqual(1);
+        It should_return_6_message_with_one_references = () =>
+           verificationMessages.Skip(5).First().References.Count().ShouldEqual(1);
 
-        It should_return_6_error_with_first_references_with_Question_type = () =>
-            resultErrors.Skip(5).First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+        It should_return_6_message_with_first_references_with_Question_type = () =>
+            verificationMessages.Skip(5).First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_6_error_with_first_references_with_id_equals_questionWithUnicodeVariableNameId = () =>
-            resultErrors.Skip(5).First().References.First().Id.ShouldEqual(questioncontainsConsecutiveUnderscores);
+        It should_return_6_message_with_first_references_with_id_equals_questionWithUnicodeVariableNameId = () =>
+            verificationMessages.Skip(5).First().References.First().Id.ShouldEqual(questioncontainsConsecutiveUnderscores);
 
-        It should_return_7_error_with_one_references = () =>
-           resultErrors.Skip(6).First().References.Count().ShouldEqual(1);
+        It should_return_7_message_with_one_references = () =>
+           verificationMessages.Skip(6).First().References.Count().ShouldEqual(1);
 
-        It should_return_7_error_with_first_references_with_Question_type = () =>
-            resultErrors.Skip(6).First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+        It should_return_7_message_with_first_references_with_Question_type = () =>
+            verificationMessages.Skip(6).First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_7_error_with_first_references_with_id_equals_questionWithUnicodeVariableNameId = () =>
-            resultErrors.Skip(6).First().References.First().Id.ShouldEqual(questionWith20SymbolVariableNameId);
+        It should_return_7_message_with_first_references_with_id_equals_questionWithUnicodeVariableNameId = () =>
+            verificationMessages.Skip(6).First().References.First().Id.ShouldEqual(questionWith20SymbolVariableNameId);
 
 
 
-        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionWithUnicodeVariableNameId = Guid.NewGuid();

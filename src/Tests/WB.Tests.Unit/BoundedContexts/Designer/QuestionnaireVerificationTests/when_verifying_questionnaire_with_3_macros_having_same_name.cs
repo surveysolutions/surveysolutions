@@ -23,13 +23,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
+        It should_return_1_message = () =>
             resultErrors.Count().ShouldEqual(1);
 
-        It should_return_error_with_code__WB0020 = () =>
+        It should_return_message_with_code__WB0020 = () =>
             resultErrors.ShouldEachConformTo(error => error.Code == "WB0020");
 
-        It should_return_error_with_3_references = () =>
+        It should_return_message_with_3_references = () =>
             resultErrors.Single().References.Count.ShouldEqual(3);
 
         private static QuestionnaireVerifier verifier;

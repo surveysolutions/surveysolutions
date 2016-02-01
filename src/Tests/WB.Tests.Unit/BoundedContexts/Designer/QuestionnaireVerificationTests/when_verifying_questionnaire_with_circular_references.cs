@@ -62,16 +62,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_2_errors = () =>
+        It should_return_2_messages = () =>
             resultErrors.Count().ShouldEqual(2);
 
-        It should_return_error_with_code__WB0056 = () =>
+        It should_return_message_with_code__WB0056 = () =>
             resultErrors.First().Code.ShouldEqual("WB0056");
 
-        It should_return_error_with_level_general = () =>
+        It should_return_message_with_level_general = () =>
             resultErrors.First().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
-        It should_return_error_with_two_references = () =>
+        It should_return_message_with_two_references = () =>
             resultErrors.First().References.Count().ShouldEqual(2);
 
         private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;

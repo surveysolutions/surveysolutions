@@ -55,28 +55,28 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         private Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        private It should_return_3_errors = () =>
+        private It should_return_3_messages = () =>
             resultErrors.Count().ShouldEqual(3);
 
-        private It should_return_errors_each_with_code__WB0005__ = () =>
+        private It should_return_messages_each_with_code__WB0005__ = () =>
             resultErrors.ShouldEachConformTo(error
                 => error.Code == "WB0005");
 
-        private It should_return_errors_each_having_single_reference = () =>
+        private It should_return_messages_each_having_single_reference = () =>
             resultErrors.ShouldEachConformTo(error
                 => error.References.Count() == 1);
 
-        private It should_return_error_referencing_first_incorrect_question = () =>
+        private It should_return_message_referencing_first_incorrect_question = () =>
             resultErrors.ShouldContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question
                     && error.References.Single().Id == firstIncorrectQuestionId);
 
-        private It should_return_error_referencing_second_incorrect_question = () =>
+        private It should_return_message_referencing_second_incorrect_question = () =>
             resultErrors.ShouldContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question
                     && error.References.Single().Id == secondIncorrectQuestionId);
 
-        private It should_return_error_referencing_incorrect_group = () =>
+        private It should_return_message_referencing_incorrect_group = () =>
             resultErrors.ShouldContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Group
                     && error.References.Single().Id == incorrectGroupId);

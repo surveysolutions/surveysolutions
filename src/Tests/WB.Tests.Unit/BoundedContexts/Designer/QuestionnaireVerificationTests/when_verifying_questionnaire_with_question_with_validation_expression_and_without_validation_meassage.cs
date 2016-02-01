@@ -31,19 +31,19 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_3_errors = () =>
+        It should_return_3_messages = () =>
             resultErrors.Count().ShouldEqual(1);
 
-        It should_return_errors_each_with_code__WB0002__ = () =>
+        It should_return_messages_each_with_code__WB0002__ = () =>
             resultErrors.Single().Code.ShouldEqual("WB0065");
 
-        It should_return_errors_each_having_single_reference = () =>
+        It should_return_messages_each_having_single_reference = () =>
             resultErrors.Single().References.Count().ShouldEqual(1);
 
-        It should_return_errors_each_referencing_question = () =>
+        It should_return_messages_each_referencing_question = () =>
             resultErrors.Single().References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_error_referencing_first_incorrect_question = () =>
+        It should_return_message_referencing_first_incorrect_question = () =>
             resultErrors.Single().References.Single().Id.ShouldEqual(questionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
