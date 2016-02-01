@@ -8,16 +8,10 @@ namespace WB.UI.Designer
 {
     public class DesignerSettingsProvider : SettingsProvider
     {
-        protected override List<string> settingsToSkip
+        protected override List<string> settingsToSkip => new List<string>(base.settingsToSkip)
         {
-            get
-            {
-                return new List<string>(base.settingsToSkip)
-                       {
-                           "ReCaptchaPrivateKey"
-                       };
-            }
-        }
+            "ReCaptchaPrivateKey"
+        };
 
         public override IEnumerable<ApplicationSetting> GetSettings()
         {
