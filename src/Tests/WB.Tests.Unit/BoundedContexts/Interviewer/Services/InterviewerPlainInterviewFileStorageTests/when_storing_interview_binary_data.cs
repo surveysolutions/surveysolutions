@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
@@ -12,6 +13,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
     {
         Establish context = () =>
         {
+            imageViewStorage.Setup(x => x.Where(Moq.It.IsAny<Expression<Func<InterviewMultimediaView, bool>>>()))
+                .Returns(new InterviewMultimediaView[0]);
+
             interviewerPlainInterviewFileStorage = CreateInterviewerPlainInterviewFileStorage(
                 fileViewStorage: fileViewStorage.Object,
                 imageViewStorage: imageViewStorage.Object);
