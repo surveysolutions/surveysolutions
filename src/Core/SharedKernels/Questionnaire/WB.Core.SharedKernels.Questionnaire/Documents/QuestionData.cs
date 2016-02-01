@@ -23,6 +23,7 @@ namespace Main.Core.Entities
             string mask,
             Answer[] answers,
             Guid? linkedToQuestionId,
+            Guid? linkedToRosterId,
             bool? isInteger,
             int? countOfDecimalPlaces,
             bool? areAnswersOrdered,
@@ -47,6 +48,7 @@ namespace Main.Core.Entities
             this.Instructions = instructions;
             this.Answers = answers;
             this.LinkedToQuestionId = linkedToQuestionId;
+            this.LinkedToRosterId = linkedToRosterId;
             this.IsInteger = isInteger;
             this.CountOfDecimalPlaces = countOfDecimalPlaces;
 
@@ -75,6 +77,7 @@ namespace Main.Core.Entities
         public readonly string Mask;
         public readonly Answer[] Answers;
         public readonly Guid? LinkedToQuestionId;
+        public readonly Guid? LinkedToRosterId;
         public readonly bool? IsInteger;
         public readonly int? CountOfDecimalPlaces;
 

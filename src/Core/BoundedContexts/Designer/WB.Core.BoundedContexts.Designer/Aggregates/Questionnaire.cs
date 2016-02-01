@@ -219,6 +219,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Mask,
                         e.Answers,
                         e.LinkedToQuestionId,
+                        e.LinkedToRosterId,
                         e.IsInteger,
                         null,
                         e.AreAnswersOrdered,
@@ -259,6 +260,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Featured,
                         e.Capital,
                         e.Instructions,
+                        null,
                         null,
                         null,
                         null,
@@ -307,6 +309,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null,
+                        null,
                         e.MaxAnswerCount,
                         null,
                         null,
@@ -342,6 +345,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Mask,
                         e.Answers,
                         e.LinkedToQuestionId,
+                        e.LinkedToRosterId,
                         e.IsInteger,
                         e.CountOfDecimalPlaces,
                         e.AreAnswersOrdered,
@@ -380,6 +384,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Featured,
                         e.Capital,
                         e.Instructions,
+                        null,
                         null,
                         null,
                         null,
@@ -422,6 +427,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         false,
                         false,
                         e.Instructions,
+                        null,
                         null,
                         null,
                         null,
@@ -476,6 +482,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Mask,
                         e.Answers,
                         e.LinkedToQuestionId,
+                        e.LinkedToRosterId,
                         e.IsInteger,
                         null,
                         e.AreAnswersOrdered,
@@ -513,6 +520,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null,
+                        null,
                         e.IsInteger,
                         e.CountOfDecimalPlaces,
                         null,
@@ -547,6 +555,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         false,
                         false,
                         e.Instructions,
+                        null,
                         null,
                         null,
                         null,
@@ -610,6 +619,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null,
+                        null,
                         null));
 
             if (question == null)
@@ -639,6 +649,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         false,
                         false,
                         e.Instructions,
+                        null,
                         null,
                         null,
                         null,
@@ -688,6 +699,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null,
+                        null,
                         null));
 
             if (question == null)
@@ -716,6 +728,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         false,
                         false,
                         e.Instructions,
+                        null,
                         null,
                         null,
                         null,
@@ -1246,6 +1259,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             validationExpression: categoricalMultiQuestion.ValidationExpression,
                             validationMessage: categoricalMultiQuestion.ValidationMessage,
                             linkedToQuestionId: GetIdOrReturnSameId(replacementIdDictionary, categoricalMultiQuestion.LinkedToQuestionId),
+                            linkedToRosterId: GetIdOrReturnSameId(replacementIdDictionary, categoricalMultiQuestion.LinkedToRosterId),
                             areAnswersOrdered: categoricalMultiQuestion.AreAnswersOrdered,
                             yesNoView: categoricalMultiQuestion.YesNoView,
                             maxAllowedAnswers: categoricalMultiQuestion.MaxAllowedAnswers,
@@ -1270,6 +1284,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             validationExpression: categoricalSingleQuestion.ValidationExpression,
                             validationMessage: categoricalSingleQuestion.ValidationMessage,
                             linkedToQuestionId: GetIdOrReturnSameId(replacementIdDictionary, categoricalSingleQuestion.LinkedToQuestionId),
+                            linkedToRosterId: GetIdOrReturnSameId(replacementIdDictionary, categoricalMultiQuestion.LinkedToRosterId),
                             isPreFilled: categoricalSingleQuestion.Featured,
                             isFilteredCombobox: categoricalSingleQuestion.IsFilteredCombobox,
                             cascadeFromQuestionId: GetIdOrReturnSameId(replacementIdDictionary, categoricalSingleQuestion.CascadeFromQuestionId),
@@ -1494,6 +1509,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 targetIndex: targetIndex,
                 responsibleId: responsibleId,
                 linkedToQuestionId: question.LinkedToQuestionId,
+                linkedToRosterId: question.LinkedToRosterId,
 
                 areAnswersOrdered: asMultioptions != null ? (bool?) asMultioptions.AreAnswersOrdered : null,
                 yesNoView: asMultioptions != null ? (bool?) asMultioptions.YesNoView : null,
@@ -1652,6 +1668,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 answerOrder: null,
                 answers: null,
                 linkedToQuestionId: null,
+                linkedToRosterId: null,
                 isInteger: null,
                 areAnswersOrdered: null,
                 yesNoView: null,
@@ -1702,7 +1719,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 capital: false,
                 answerOrder: null,
                 answers: null,
-                linkedToQuestionId: null,
+                linkedToQuestionId: null, 
+                linkedToRosterId: null,
                 isInteger: null,
                 areAnswersOrdered: null,
                 yesNoView: null,
@@ -1754,6 +1772,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 answerOrder: null,
                 answers: null,
                 linkedToQuestionId: null,
+                linkedToRosterId: null,
                 isInteger: null,
                 areAnswersOrdered: null,
                 yesNoView: null,
@@ -1791,6 +1810,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToEntityId, maxAllowedAnswers, options);
             this.ThrowIfCategoricalQuestionHasMoreThan200Options(options, linkedToEntityId.HasValue);
 
+            Guid? linkedQuestionId = linkedToEntityId.HasValue
+                ? (this.innerDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == linkedToEntityId.Value) == null
+                    ? (Guid?)null
+                    : linkedToEntityId.Value)
+                : null;
+
+            Guid? linkedRosterId = linkedToEntityId.HasValue && !linkedQuestionId.HasValue
+                ? linkedToEntityId.Value
+                : (Guid?)null;
             this.ApplyEvent(new QuestionChanged
             (
                 publicKey: questionId,
@@ -1810,7 +1838,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 capital: false,
                 answerOrder: null,
                 answers: ConvertOptionsToAnswers(options),
-                linkedToQuestionId: linkedToEntityId,
+                linkedToQuestionId: linkedQuestionId,
+                linkedToRosterId: linkedRosterId,
                 isInteger: null,
                 areAnswersOrdered: areAnswersOrdered,
                 yesNoView: yesNoView,
@@ -1872,7 +1901,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 this.ThrowIfCategoricalQuestionHasMoreThan200Options(options, linkedToEntityId.HasValue);
             }
+            Guid? linkedQuestionId = linkedToEntityId.HasValue
+          ? (this.innerDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == linkedToEntityId.Value) == null
+              ? (Guid?)null
+              : linkedToEntityId.Value)
+          : null;
 
+            Guid? linkedRosterId = linkedToEntityId.HasValue && !linkedQuestionId.HasValue
+                ? linkedToEntityId.Value
+                : (Guid?)null;
             this.ApplyEvent(new QuestionChanged
             (
                 publicKey: questionId,
@@ -1892,7 +1929,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 capital: false,
                 answerOrder: null,
                 answers: answers,
-                linkedToQuestionId: linkedToEntityId,
+                linkedToQuestionId: linkedQuestionId,
+                linkedToRosterId:linkedRosterId,
                 isInteger: null,
                 areAnswersOrdered: null,
                 yesNoView: null,
@@ -1931,6 +1969,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 answerOrder: null,
                 answers: ConvertOptionsToAnswers(options),
                 linkedToQuestionId: categoricalOneAnswerQuestion.LinkedToQuestionId,
+                linkedToRosterId:categoricalOneAnswerQuestion.LinkedToRosterId,
                 isInteger: null,
                 areAnswersOrdered: null,
                 yesNoView: null,
@@ -1975,6 +2014,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 answerOrder: null,
                 answers: ConvertOptionsToAnswers(options),
                 linkedToQuestionId: categoricalOneAnswerQuestion.LinkedToQuestionId,
+                linkedToRosterId: categoricalOneAnswerQuestion.LinkedToRosterId,
                 isInteger: null,
                 areAnswersOrdered: null,
                 yesNoView: null,
@@ -4111,6 +4151,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 answerOrder: null,
                 answers: null,
                 linkedToQuestionId: null,
+                linkedToRosterId:null,
                 isInteger: null,
                 areAnswersOrdered: null,
                 yesNoView: null,
@@ -4148,6 +4189,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 answerOrder: null,
                 answers: null,
                 linkedToQuestionId : null,
+                linkedToRosterId: null,
                 isInteger: null,
                 areAnswersOrdered: null,
                 yesNoView: null,
@@ -4186,6 +4228,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 answerOrder: null,
                 answers: null,
                 linkedToQuestionId: null,
+                linkedToRosterId: null,
                 isInteger: null,
                 areAnswersOrdered: null,
                 yesNoView: null,
@@ -4213,7 +4256,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             int targetIndex, 
             Guid responsibleId, 
             Option[] options, 
-            Guid? linkedToQuestionId, 
+            Guid? linkedToQuestionId,
+            Guid? linkedToRosterId,
             bool areAnswersOrdered, 
             int? maxAllowedAnswers,
             bool yesNoView)
@@ -4237,6 +4281,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 targetIndex : targetIndex,
                 responsibleId : responsibleId,
                 linkedToQuestionId : linkedToQuestionId,
+                linkedToRosterId: linkedToRosterId,
                 areAnswersOrdered : areAnswersOrdered,
                 maxAllowedAnswers : maxAllowedAnswers,
                 yesNoView : yesNoView,
@@ -4254,7 +4299,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private IEnumerable<IEvent> CreateCategoricalSingleAnswerQuestionEvents(Guid questionId, string title, string variableName, string variableLabel, 
             bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions, 
             Guid parentGroupId, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, Option[] options, 
-            Guid? linkedToQuestionId, bool? isFilteredCombobox, Guid? cascadeFromQuestionId)
+            Guid? linkedToQuestionId, Guid? linkedToRosterId, bool? isFilteredCombobox, Guid? cascadeFromQuestionId)
         {
             yield return new QuestionCloned(
                 publicKey : questionId,
@@ -4275,6 +4320,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 targetIndex : targetIndex,
                 responsibleId : responsibleId,
                 linkedToQuestionId : linkedToQuestionId,
+                linkedToRosterId: linkedToRosterId,
                 isFilteredCombobox : isFilteredCombobox,
                 cascadeFromQuestionId : cascadeFromQuestionId,
                 capital: false,
@@ -4387,6 +4433,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     answerOrder: null,
                     answers: null,
                     linkedToQuestionId: null,
+                    linkedToRosterId: null,
                     isInteger: null,
                     areAnswersOrdered: null,
                     yesNoView: null,

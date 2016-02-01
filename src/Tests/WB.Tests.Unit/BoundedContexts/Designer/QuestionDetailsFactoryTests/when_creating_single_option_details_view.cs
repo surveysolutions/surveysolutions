@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionDetailsFactoryTests
             questionView = (SingleOptionDetailsView)viewMapper.Map(question, parentGroupId);
 
         It should_set_LinkedToQuestionId_in_linkedToQuestionId = () =>
-            questionView.LinkedToQuestionId.ShouldEqual(linkedToQuestionId);
+            questionView.LinkedToEntityId.ShouldEqual(linkedToQuestionId);
 
         It should_set_Options_titles_in_specified_values__1__2__ = () =>
             questionView.Options.Select(x => x.Title).ShouldContainOnly("1", "2");
