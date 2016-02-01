@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
@@ -18,9 +19,11 @@ using QuestionnaireListItem = WB.Core.SharedKernels.SurveySolutions.Api.Designer
 namespace WB.UI.Designer.Api
 {
     [ApiBasicAuth]
-    [RoutePrefix("api/v11/questionnaires")]
+    [RoutePrefix("api/v12/questionnaires")]
     public class QuestionnairesController : ApiController
     {
+        //temporary fix
+        //api version should not be used as version for compilation
         internal static readonly Version ApiVersion = new Version(11, 0, 0);
 
         private readonly IMembershipUserService userHelper;
@@ -47,7 +50,7 @@ namespace WB.UI.Designer.Api
             this.engineVersionService = engineVersionService;
         }
 
-        [Route("~/api/v11/login")]
+        [Route("~/api/v12/login")]
         [HttpGet]
         public void Login()
         {
@@ -67,7 +70,7 @@ namespace WB.UI.Designer.Api
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
 
-            if (this.questionnaireVerifier.Verify(questionnaireView.Source).Any())
+            if (this.questionnaireVerifier.Verify(questionnaireView.Source).Any(x => x.ErrorLevel != VerificationErrorLevel.Warning))
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
             }

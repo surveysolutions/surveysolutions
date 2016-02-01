@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
-using MvvmCross.Plugins.Location;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -21,8 +20,8 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class GpsCoordinatesQuestionViewModel :
-        MvxNotifyPropertyChanged, 
-        IInterviewEntityViewModel, 
+        MvxNotifyPropertyChanged,
+        IInterviewEntityViewModel,
         ILiteEventHandler<AnswerRemoved>,
         IDisposable
     {
@@ -33,8 +32,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set { this.isInProgress = value; this.RaisePropertyChanged(); }
         }
 
-        private MvxCoordinates answer;
-        public MvxCoordinates Answer
+        private GpsLocation answer;
+        public GpsLocation Answer
         {
             get { return this.answer; }
             set { this.answer = value; this.RaisePropertyChanged(); }
@@ -76,7 +75,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.QuestionState.Validity.ProcessException(ex);
             }
 
-            if (this.AnswerRemoved != null) this.AnswerRemoved.Invoke(this, EventArgs.Empty);
+            this.AnswerRemoved?.Invoke(this, EventArgs.Empty);
         }
 
         private readonly Guid userId;
@@ -93,14 +92,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public QuestionStateViewModel<GeoLocationQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
+
         public GpsCoordinatesQuestionViewModel(
             IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
             IEnumeratorSettings settings,
             IGpsLocationService locationService,
             QuestionStateViewModel<GeoLocationQuestionAnswered> questionStateViewModel,
-            AnsweringViewModel answering, 
-            ILiteEventRegistry liteEventRegistry, 
+            AnsweringViewModel answering,
+            ILiteEventRegistry liteEventRegistry,
             IUserInteractionService userInteractionService, ILogger logger)
         {
             this.userId = principal.CurrentUserIdentity.UserId;
@@ -115,12 +115,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.logger = logger;
         }
 
-        public Identity Identity { get { return this.questionIdentity; } }
+        public Identity Identity => this.questionIdentity;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            if(interviewId == null) throw new ArgumentNullException("interviewId");
-            if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
+            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
             var interview = this.interviewRepository.Get(interviewId);
 
@@ -134,13 +134,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var answerModel = interview.GetGpsCoordinatesAnswer(entityIdentity);
             if (answerModel.IsAnswered)
             {
-                this.Answer = new MvxCoordinates
-                {
-                    Longitude = answerModel.Longitude.Value,
-                    Latitude = answerModel.Latitude.Value,
-                    Altitude = answerModel.Altitude,
-                    Accuracy = answerModel.Accuracy
-                };
+                this.Answer = new GpsLocation(answerModel.Accuracy.GetValueOrDefault(),
+                    answerModel.Altitude.GetValueOrDefault(),
+                    answerModel.Latitude.GetValueOrDefault(),
+                    answerModel.Longitude.GetValueOrDefault(),
+                    DateTimeOffset.MinValue);
             }
         }
 
@@ -152,7 +150,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
                 cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(this.settings.GpsReceiveTimeoutSec));
-                var mvxGeoLocation = await this.locationService.GetLocation(cancellationTokenSource.Token);
+                var mvxGeoLocation = await this.locationService.GetLocation(cancellationTokenSource.Token, this.settings.GpsDesiredAccuracy);
                 await this.SetGeoLocationAnswerAsync(mvxGeoLocation);
             }
             catch (OperationCanceledException)
@@ -176,7 +174,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private async Task SetGeoLocationAnswerAsync(MvxGeoLocation location)
+        private async Task SetGeoLocationAnswerAsync(GpsLocation location)
         {
             if (location == null)
             {
@@ -184,24 +182,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
             }
 
-
             var command = new AnswerGeoLocationQuestionCommand(
                 interviewId: this.interviewId,
                 userId: this.userId,
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
                 answerTime: DateTime.UtcNow,
-                accuracy: location.Coordinates.Accuracy ?? 0,
-                altitude: location.Coordinates.Altitude ?? 0,
-                latitude: location.Coordinates.Latitude,
-                longitude: location.Coordinates.Longitude,
+                accuracy: location.Accuracy,
+                altitude: location.Altitude,
+                latitude: location.Latitude,
+                longitude: location.Longitude,
                 timestamp: location.Timestamp);
 
             try
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
-                this.Answer = location.Coordinates;
+
+                this.Answer = location;
             }
             catch (InterviewException ex)
             {
@@ -212,7 +210,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Dispose()
         {
             this.QuestionState.Dispose();
-            this.liteEventRegistry.Unsubscribe(this, interviewId.FormatGuid()); 
+            this.liteEventRegistry.Unsubscribe(this, interviewId.FormatGuid());
         }
 
         public void Handle(AnswerRemoved @event)

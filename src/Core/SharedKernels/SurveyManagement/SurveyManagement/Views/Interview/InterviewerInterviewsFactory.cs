@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> reader;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
-        private readonly InterviewSynchronizationDtoFactory synchronizationDtoFactory;
+        private readonly IInterviewSynchronizationDtoFactory synchronizationDtoFactory;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDataRepository;
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> interviewStatusesFactory;
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public InterviewerInterviewsFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> reader,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            InterviewSynchronizationDtoFactory synchronizationDtoFactory,
+            IInterviewSynchronizationDtoFactory synchronizationDtoFactory,
             IReadSideKeyValueStorage<InterviewData> interviewDataRepository,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> interviewStatusesFactory,
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue)
@@ -79,21 +79,36 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         {
             var interviewData = this.interviewDataRepository.GetById(interviewId);
 
-            var orderedInterviewStatuses = this.interviewStatusesFactory.Load(new ChangeStatusInputModel()
-            {
-                InterviewId = interviewId
-            }).StatusHistory.Where(status =>
-                status.Status == InterviewStatus.RejectedBySupervisor ||
-                status.Status == InterviewStatus.InterviewerAssigned)
-                .OrderBy(status => status.Date);
+#warning do not sort status history by date! Status timestamp is taken from event timestamp and occasionally timestamp of an earlier event could be greater then timestamp of the latest events. StatusHistory is ordered list and the order of statuses is preserved by db.
+            var fullStatusHistory = this
+                .interviewStatusesFactory
+                .Load(new ChangeStatusInputModel { InterviewId = interviewId })
+                .StatusHistory
+                .ToList();
 
-            var lastInterviewStatus = orderedInterviewStatuses.LastOrDefault();
+            var lastInterviewerAssignedStatus = fullStatusHistory.LastOrDefault(status => status.Status == InterviewStatus.InterviewerAssigned);
 
-            var lastInterviewerAssignedStatus = orderedInterviewStatuses.LastOrDefault(status => status.Status == InterviewStatus.InterviewerAssigned);
-            var lastRejectedBySupervisorStatus = orderedInterviewStatuses.LastOrDefault(status => status.Status == InterviewStatus.RejectedBySupervisor);
+            var lastCompleteStatus = fullStatusHistory.LastOrDefault(x => x.Status == InterviewStatus.Completed);
+
+            var lastInterviewStatus = fullStatusHistory.Last();
+
+            var statusHistoryStartingWithLastComplete =
+                lastCompleteStatus != null
+                    ? fullStatusHistory.SkipWhile(status => status != lastCompleteStatus).ToList()
+                    : fullStatusHistory;
+
+            var orderedInterviewStatuses = statusHistoryStartingWithLastComplete
+                .Where(status =>
+                    status.Status == InterviewStatus.RejectedBySupervisor ||
+                    status.Status == InterviewStatus.InterviewerAssigned)
+                .ToList();
+
+            var lastRejectedBySupervisorStatus =
+                orderedInterviewStatuses.LastOrDefault(status => status.Status == InterviewStatus.RejectedBySupervisor);
 
             return this.synchronizationDtoFactory.BuildFrom(interviewData, interviewData.ResponsibleId,
-                lastInterviewStatus.Status, lastInterviewStatus.Comment, lastRejectedBySupervisorStatus?.Date,
+                lastInterviewStatus.Status, lastRejectedBySupervisorStatus?.Comment,
+                lastRejectedBySupervisorStatus?.Date,
                 lastInterviewerAssignedStatus?.Date);
         }
     }

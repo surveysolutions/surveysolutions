@@ -75,22 +75,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var maxVersion = presentVersions.Max(k => k.Key);
             return presentVersions.FirstOrDefault(v => v.Key == maxVersion).Value;
         }
-
-        public IQuestionnaire GetHistoricalQuestionnaire(long version)
-        {
-            if (availableVersions.ContainsKey(version) && !disabledQuestionnaires.Contains(version))
-                return availableVersions[version];
-
-            return null;
-        }
-
+        
         public QuestionnaireState CreateSnapshot()
         {
-            return this.isProxyToPlainQuestionnaireRepository
-                ? new QuestionnaireState(
-                    isProxyToPlainQuestionnaireRepository: true, availableVersions: this.availableVersions, disabledQuestionnaires: disabledQuestionnaires)
-                : new QuestionnaireState(
-                    isProxyToPlainQuestionnaireRepository: false, availableVersions: this.availableVersions, disabledQuestionnaires: disabledQuestionnaires);
+            return new QuestionnaireState( 
+                isProxyToPlainQuestionnaireRepository: this.isProxyToPlainQuestionnaireRepository,
+                availableVersions: this.availableVersions, 
+                disabledQuestionnaires: disabledQuestionnaires);
+            
         }
 
         public void RestoreFromSnapshot(QuestionnaireState snapshot)
@@ -113,6 +105,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var newVersion = GetNextVersion();
 
+            this.plainQuestionnaireRepository.StoreQuestionnaire(EventSourceId, newVersion, document);
             this.questionnaireAssemblyFileAccessor.StoreAssembly(EventSourceId, newVersion, command.SupportingAssembly);
 
             this.ApplyEvent(new TemplateImported
@@ -122,18 +115,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 Version = newVersion,
                 ResponsibleId = command.CreatedBy
             });
-            this.ApplyEvent(new QuestionnaireAssemblyImported { Version = newVersion });
 
-        }
-
-        public void ImportFromSupervisor(ImportFromSupervisor command)
-        {
-            ImportFromQuestionnaireDocument(command.Source);
-        }
-
-        public void ImportFromDesignerForTester(ImportFromDesignerForTester command)
-        {
-            ImportFromQuestionnaireDocument(command.Source);
+            //this.ApplyEvent(new QuestionnaireAssemblyImported { Version = newVersion });
         }
 
         public void DisableQuestionnaire(DisableQuestionnaire command)
@@ -184,12 +167,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     this.EventSourceId, command.Version));
 
             this.ApplyEvent(new PlainQuestionnaireRegistered(command.Version, command.AllowCensusMode));
-
-            //ignoring on interviewer but saving on supervisor
-            if (string.IsNullOrWhiteSpace(command.SupportingAssembly)) return;
-            
-            this.questionnaireAssemblyFileAccessor.StoreAssembly(EventSourceId, command.Version, command.SupportingAssembly);
-            this.ApplyEvent(new QuestionnaireAssemblyImported { Version = command.Version });
         }
 
         private static QuestionnaireDocument CastToQuestionnaireDocumentOrThrow(IQuestionnaireDocument source)
@@ -201,14 +178,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     source.GetType(), source.PublicKey));
 
             return document;
-        }
-
-        private void ImportFromQuestionnaireDocument(IQuestionnaireDocument source)
-        {
-            QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(source);
-            this.ThrowIfCurrentAggregateIsUsedOnlyAsProxyToPlainQuestionnaireRepository();
-
-            this.ApplyEvent(new TemplateImported { Source = document, Version = GetNextVersion() });
         }
 
         private long GetNextVersion()

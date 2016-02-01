@@ -49,7 +49,7 @@
         <span data-bind="text: ReportTypeName"></span>
         @if (Model.SupervisorId.HasValue)
     {<text>
-        @PeriodicStatusReport.By @Model.SupervisorName
+            @PeriodicStatusReport.By @Model.SupervisorName
     </text>
         }
     </h3>
@@ -141,6 +141,19 @@
             </tr>
         </thead>
         <tbody>
+            @if (Model.TotalRowPresent)
+            {
+                <tr>
+                    <td>
+                        <b>@PeriodicStatusReport.Total</b>
+                    </td>
+                    <!-- ko foreach: TotalRow().@(Model.ReportName + "ByPeriod") -->
+                    <td><span data-bind='text: $root.Format@(Model.ReportName)Period($data)'></span></td>
+                    <!-- /ko -->
+                    <td><span data-bind="text:  Format@(Model.ReportName)Period(getTotalAverage())"></span></td>
+                    <td><span data-bind="text:  Format@(Model.ReportName)Period(getTotalCount())"></span></td>
+                </tr>
+            }
             <!-- ko foreach:Items -->
             <tr>
                 <td>

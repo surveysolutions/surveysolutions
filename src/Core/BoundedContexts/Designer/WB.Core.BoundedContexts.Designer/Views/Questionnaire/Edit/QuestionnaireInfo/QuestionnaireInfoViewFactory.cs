@@ -36,11 +36,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 return null;
 
             QuestionnaireDocument questionnaireDocument = this.questionnaireDocumentReader.GetById(questionnaireId);
+            int questionsCount = 0, groupsCount = 0, rostersCount = 0;
             questionnaireDocument.Children.TreeToEnumerable(item => item.Children).ForEach(item =>
             {
                 if (item is IQuestion)
                 {
-                    questionnaireInfoView.QuestionsCount++;
+                    questionsCount++;
                     return;
                 }
                 var group = item as IGroup;
@@ -48,14 +49,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 {
                     if (group.IsRoster)
                     {
-                        questionnaireInfoView.RostersCount++;
+                        rostersCount++;
                     }
                     else
                     {
-                        questionnaireInfoView.GroupsCount++;
+                        groupsCount++;
                     }
                 }
             });
+            questionnaireInfoView.QuestionsCount = questionsCount;
+            questionnaireInfoView.GroupsCount = groupsCount;
+            questionnaireInfoView.RostersCount = rostersCount;
 
             var sharedPersonsList = new List<SharedPerson>();
 

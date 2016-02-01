@@ -17,7 +17,7 @@
     bottom: 0;
     position: fixed;
     z-index: 1000;
-    padding: @chapter-title-height/2 24px @chapter-title-height/2 @left-menu-width+24px;
+    padding: 20px 24px 20px 24px;
 
     .modal-content {
         height: 100%;
@@ -33,9 +33,9 @@
             .opensanslight-font();
             font-size: 36px;
             font-weight: 300;
-            border-bottom: 2px solid @verification-modal-content-border-color;
-            border-top-color: @verification-modal-error-color;
             padding: 0 22px;
+            border-bottom: 2px solid @verification-modal-content-border-color;
+
              button.close {
                 @s: 40px;
                 position: absolute;
@@ -83,7 +83,6 @@
                 margin-bottom: 20px;
 
                 .verification-item-container{
-                    border-left: 4px solid @verification-modal-error-color;
                 }
 
                 .verification-item {
@@ -165,6 +164,33 @@
         }
     }
     
+    &.error{
+        .modal-content {
+            .modal-header {
+                border-bottom: 2px solid @verification-modal-content-border-color;
+                border-top-color: @verification-modal-error-color;
+                h3 {
+                    span {
+                        color: @verification-modal-error-color;
+                    }
+                }
+            }
+        }
+    }
+    
+    &.warning{
+        .modal-content {
+            .modal-header {
+                
+                border-top-color: @verification-modal-warning-color;
+                h3 {
+                    span {
+                        color: @verification-modal-warning-color;
+                    }
+                }
+            }
+        }
+    }
 }
 
 #verification-modal.ie9-backdrop {

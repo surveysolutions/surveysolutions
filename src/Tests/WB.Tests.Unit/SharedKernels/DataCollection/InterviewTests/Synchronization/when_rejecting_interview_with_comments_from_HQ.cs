@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
                 }
             };
 
-            var questionnaireRepositoryMock = new Mock<IQuestionnaireRepository>();
+            var questionnaireRepositoryMock = new Mock<IPlainQuestionnaireRepository>();
             questionnaireRepositoryMock.Setup(x => x.GetHistoricalQuestionnaire(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
                 .Returns(Mock.Of<IQuestionnaire>());
 

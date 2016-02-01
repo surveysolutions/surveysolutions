@@ -66,9 +66,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public async void Init()
         {
-            questionnaireListStorageCache.AddRange(this.questionnaireListStorage.Query(query => query
-                .Where(questionnaire => questionnaire.OwnerName == this.principal.CurrentUserIdentity.Name || questionnaire.IsPublic)
-                .ToList()));
+            questionnaireListStorageCache.AddRange(this.questionnaireListStorage
+                .Where(questionnaire => questionnaire.OwnerName == this.principal.CurrentUserIdentity.Name || questionnaire.IsPublic == true));
 
             if (!questionnaireListStorageCache.Any())
             {
@@ -82,7 +81,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.ShowEmptyQuestionnaireListText = true;
             this.IsSearchVisible = false;
 
-            var lastUpdate = this.dashboardLastUpdateStorage.Query(query => query.FirstOrDefault(x => x.Id == this.principal.CurrentUserIdentity.Name));
+            var lastUpdate = this.dashboardLastUpdateStorage.Where(x => x.Id == this.principal.CurrentUserIdentity.Name).FirstOrDefault();
 
             this.UpdateLastUpdateDate(lastUpdate == null ? (DateTime?)null : lastUpdate.LastUpdateDate);
         }
@@ -333,8 +332,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     await this.commandService.ExecuteAsync(new CreateInterviewOnClientCommand(
                         interviewId: interviewId,
                         userId: this.principal.CurrentUserIdentity.UserId,
-                        questionnaireId: questionnaireIdentity.QuestionnaireId,
-                        questionnaireVersion: questionnaireIdentity.Version,
+                        questionnaireIdentity: questionnaireIdentity,
                         answersTime: DateTime.UtcNow,
                         supervisorId: Guid.NewGuid()));
 

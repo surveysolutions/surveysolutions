@@ -21,12 +21,7 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 try {
 
 	CheckPrerequisites | %{ if (-not $_) { Exit } }
-	CleanBinAndObjFolders
-
-	$restore = "src/.nuget/nuget.exe restore src/WB.sln"
-	Write-Host "Running package restore: '$restore'"
-	iex $restore
-		
+	CleanBinAndObjFolders		
 
 	if ($Deep) {
 		BuildSolutions $BuildConfiguration -ClearBinAndObjFoldersBeforeEachSolution | %{ if (-not $_) { Exit } }

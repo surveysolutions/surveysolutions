@@ -2,6 +2,8 @@
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
@@ -72,7 +74,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<InterviewDataExportSettings>().ToConstant(this.interviewDataExportSettings);
             this.Bind<ExportSettings>().ToConstant(this.exportSettings);
             this.Bind<IFilebasedExportedDataAccessor>().To<FilebasedExportedDataAccessor>();
-            this.Bind<IMetadataExportService>().To<MetadataExportService>();
+
+            this.Bind<IDdiMetadataAccessor>().To<DdiMetadataAccessor>();
+            this.Bind<IDdiMetadataFactory>().To<DdiMetadataFactory>();
             this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
             this.Bind<IDataExportProcessesService>().To<DataExportProcessesService>().InSingletonScope();
             this.Bind<IDataExporter>().To<DataExporter>().InSingletonScope();
@@ -83,6 +87,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IDataQueryFactory>().To<DataQueryFactory>();
 
             this.Bind<IEnvironmentContentService>().To<StataEnvironmentContentService>();
+            this.Bind<IQuestionnaireLabelFactory>().To<QuestionnaireLabelFactory>();
             this.Bind<IParaDataAccessor>().To<TabularParaDataAccessor>();
 
             this.Bind<TabularFormatDataExportHandler>().ToSelf();

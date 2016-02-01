@@ -3,4 +3,5 @@
   <integer name="HttpResponseTimeout">1200</integer>
   <integer name="BufferSize">4096</integer>
   <integer name="GpsReceiveTimeoutSec">30</integer>
+  <integer name="GpsDesiredAccuracy">50</integer>
 </resources>

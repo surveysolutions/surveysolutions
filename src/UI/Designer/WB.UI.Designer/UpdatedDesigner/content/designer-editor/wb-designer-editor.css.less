@@ -135,9 +135,39 @@
                         .questionnarie-title-span-gray-fontstyle();
                     }
 
-                    span.error-message {
+                    span.error-message,
+                    span.warning-message 
+                    {
+                        font-weight: bold;
+                        .trebuchet-font();
                         margin-left: 5px;
-                        .questionnarie-title-span-error-fontstyle();
+                        font-size: 12px;
+                        text-transform: uppercase;
+                        letter-spacing: 0.05em;
+                        > a {
+                            text-decoration: none;
+                        }
+                    }
+                    span.error-message
+                    {
+                        color: @error-message-color;
+                        > a {
+                            color: @error-message-link-color;
+                        }
+
+                         &.no-errors{
+                            color: @designer-editor-title-span-color;
+                            > a {
+                                color: @designer-editor-title-span-color;
+                            }
+                        }
+                    }
+
+                    span.warning-message {
+                        color: @warning-message-color;
+                        > a {
+                            color: @warning-message-link-color;
+                        }
                     }
 
                     span.text-success {

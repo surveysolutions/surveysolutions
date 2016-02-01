@@ -2,25 +2,18 @@
 using Android.App;
 using Android.Content;
 using Android.Preferences;
-using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.SharedKernels.Enumerator;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Settings
 {
     internal class TesterSettings : IEnumeratorSettings
     {
-        private const string DesignerEndpointParameterName = "DesignerEndpointV11";
+        private const string DesignerEndpointParameterName = "DesignerEndpointV12";
         private const string HttpResponseTimeoutParameterName = "HttpResponseTimeout";
         private const string BufferSizeParameterName = "BufferSize";
         private const string AcceptUnsignedSslCertificateParameterName = "AcceptUnsignedSslCertificate";
         private const string GpsReceiveTimeoutSecParameterName = "GpsReceiveTimeoutSec";
-
-        private readonly ITesterExpressionsEngineVersionService versionService;
-
-        public TesterSettings(ITesterExpressionsEngineVersionService versionService)
-        {
-            this.versionService = versionService;
-        }
+        private const string GpsDesiredAccuracyParameterName = "GpsDesiredAccuracy";
 
         private static ISharedPreferences SharedPreferences
         {
@@ -79,7 +72,23 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
                 return defValue;
             }
         }
-        
+
+        public double GpsDesiredAccuracy
+        {
+            get
+            {
+                var defValue = Application.Context.Resources.GetInteger(Resource.Integer.GpsDesiredAccuracy);
+                string gpsReceiveTimeoutSec = SharedPreferences.GetString(GpsDesiredAccuracyParameterName, defValue.ToString());
+                double result;
+                if (double.TryParse(gpsReceiveTimeoutSec, out result))
+                {
+                    return result;
+                }
+
+                return defValue;
+            }
+        }
+
         public static bool IsDebug
         {
             get

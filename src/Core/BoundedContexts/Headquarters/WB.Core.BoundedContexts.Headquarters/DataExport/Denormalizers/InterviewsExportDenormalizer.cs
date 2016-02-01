@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             InterviewStatus.ApprovedByHeadquarters,
             InterviewStatus.ApprovedBySupervisor,
             InterviewStatus.Completed,
-            InterviewStatus.SupervisorAssigned
+            InterviewStatus.InterviewerAssigned
         };
 
         public InterviewsExportDenormalizer(IReadSideKeyValueStorage<InterviewData> interviewDatas,

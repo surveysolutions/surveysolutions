@@ -1,7 +1,7 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
-using WB.Core.Infrastructure.Storage.Postgre.NhExtensions;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
+using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Mappings
 {

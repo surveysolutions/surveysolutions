@@ -7,11 +7,11 @@
 <#@ import namespace="WB.Core.SharedKernels.DataCollection" #> 
 <#@ include file="SharedTemplateV5.tt"#>
 
-internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelInstanceV5<<#=this.Model.GeneratedTypeName#>>, 
-	IRosterLevel<<#=this.Model.GeneratedTypeName#>>, 
+internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV5<<#=this.Model.TypeName#>>, 
+	IRosterLevel<<#=this.Model.TypeName#>>, 
 	IExpressionExecutableV5
 {	
-	public <#=Model.GeneratedTypeName#>(
+	public <#=Model.TypeName#>(
 		decimal[] rosterVector, Identity[] rosterKey, 
 		<#=this.Model.ParentTypeName#> parent, Func<Identity[], Guid, IEnumerable<IExpressionExecutableV5>> getInstances, 
 		Dictionary<Guid, Guid[]> conditionalDependencies, 
@@ -22,8 +22,13 @@ internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelIn
 		this.@_parent = parent; 
 	}
 
-	private <#=Model.GeneratedTypeName#>(decimal[] rosterVector, Identity[] rosterKey, Func<Identity[], Guid, IEnumerable<IExpressionExecutableV5>> getInstances, 
-		Dictionary<Guid, Guid[]> conditionalDependencies, Dictionary<Guid, Guid[]> structureDependencies, IInterviewProperties interviewProperties)
+	private <#=Model.TypeName#>(
+		decimal[] rosterVector, 
+		Identity[] rosterKey, 
+		Func<Identity[], Guid, IEnumerable<IExpressionExecutableV5>> getInstances, 
+		Dictionary<Guid, Guid[]> conditionalDependencies, 
+		Dictionary<Guid, Guid[]> structureDependencies, 
+		IInterviewProperties interviewProperties)
 		: base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties)
 	{	
 <#
@@ -33,10 +38,10 @@ internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelIn
 	RostersStatesInLevelConstructor(Model.Rosters);
 #>
 <#
-	foreach (var tuple in Model.ExecutorModel.GetOrderedListByConditionDependency(Model.Questions, Model.Groups, Model.RostersInScope)) 
+	foreach (var method in Model.ConditionMethodsSortedByExecutionOrder) 
     {
 #>
-		_conditionExpressions.Add(Verifier(<#= tuple.Item1#>, <#=tuple.Item2#>.ItemId, <#= tuple.Item2#>));                        
+		_conditionExpressions.Add(Verifier(<#= method.ConditionMethodName#>, <#=method.StateName#>.ItemId, <#= method.StateName#>));                        
 <#
 	}
 #>
@@ -48,7 +53,7 @@ internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelIn
 	foreach (var parentQuestion in Model.AllParentsQuestionsToTop) 
 	{
 #>
-	public <#=parentQuestion.GeneratedTypeName#> <#=parentQuestion.VariableName#> { get { return this.@_parent.<#=parentQuestion.VariableName#>; } }										
+	public <#=parentQuestion.TypeName#> <#=parentQuestion.VariableName#> { get { return this.@_parent.<#=parentQuestion.VariableName#>; } }										
 <#
 	}
 #>
@@ -64,7 +69,7 @@ internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelIn
 		this.@rowname = rosterRowName;
 	}
 
-	public RosterRowList<<#=this.Model.GeneratedTypeName#>> @roster
+	public RosterRowList<<#=this.Model.TypeName#>> @roster
 	{
 		get { return @_parent.<#=this.Model.RostersInScope[0].VariableName#>; }
 	}
@@ -73,14 +78,14 @@ internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelIn
 	foreach (var parentRoster in Model.AllParentsRostersToTop) 
 	{
 #>
-		public <#=Model.RosterType#><<#=parentRoster.GeneratedTypeName#>> <#=parentRoster.VariableName#> { get { return this.@_parent.<#=parentRoster.VariableName#>; } }										
+		public RosterRowList<<#=parentRoster.TypeName#>> <#=parentRoster.VariableName#> { get { return this.@_parent.<#=parentRoster.VariableName#>; } }										
 <#
 	}
 #>
 
 	public override IExpressionExecutableV5 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV5>> getInstances)
 	{
-		var level = new <#=Model.GeneratedTypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies, this.Quest)
+		var level = new <#=Model.TypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies, this.Quest)
 		{
 			ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
 			InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
@@ -114,41 +119,21 @@ internal partial class <#=Model.GeneratedTypeName#> : AbstractConditionalLevelIn
 	foreach (var @group in Model.Groups) 
 	{
 #>
-	private ConditionalState <#= @group.GeneratedStateName#> = new ConditionalState(IdOf.<#=@group.GeneratedIdName#>, ItemType.Group);
-<#
-	if(!string.IsNullOrWhiteSpace(@group.Conditions) && Model.ExecutorModel.GenerateEmbeddedExpressionMethods)
-	{
-#>
-	private bool <#=@group.GeneratedConditionsMethodName#>()
-	{
-		return <#=@group.Conditions#>;
-	}	  
-<#
-	}
-#>
+	private ConditionalState <#= @group.StateName#> = new ConditionalState(IdOf.<#=@group.IdName#>, ItemType.Group);
 <# 
 	}
 #>
 	//rosters
 <#
-	RosterCollectionsDefenitions(Model.RosterType, Model.Rosters);
+	RosterCollectionsDefenitions(Model.Rosters);
 #>
 <#
 	foreach (var @roster in Model.RostersInScope) 
 	{
 #>
-	private ConditionalState <#= @roster.GeneratedStateName#> = new ConditionalState(IdOf.<#=@roster.GeneratedIdName#>, ItemType.Group);
-
-<#
-		if(!string.IsNullOrWhiteSpace(@roster.Conditions) && Model.ExecutorModel.GenerateEmbeddedExpressionMethods)
-		{
-#>
-	private bool <#=@roster.GeneratedConditionsMethodName#>()
-	{
-		return <#=@roster.Conditions#>;
-	}	  
+	private ConditionalState <#= @roster.StateName#> = new ConditionalState(IdOf.<#=@roster.IdName#>, ItemType.Group);
+	  
 <# 
-		}
 	}
 #>
 	private readonly List<Action> _conditionExpressions = new List<Action>();

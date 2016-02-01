@@ -15,6 +15,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// </summary>
         long Version { get; }
 
+        string Title { get; }
+
         Guid? ResponsibleId { get; }
 
         void InitializeQuestionnaireDocument();
@@ -40,6 +42,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string GetGroupTitle(Guid groupId);
 
+        string GetStaticText(Guid staticTextId);
+
         Guid? GetCascadingQuestionParentId(Guid questionId);
 
         IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId);
@@ -60,7 +64,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string GetCustomValidationExpression(Guid questionId);
 
+        ReadOnlyCollection<Guid> GetPrefilledQuestions();
+
         IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId);
+
+        ReadOnlyCollection<Guid> GetParentsStartingFromTop(Guid entityId);
 
         Guid? GetParentGroup(Guid groupOrQuestionId);
 

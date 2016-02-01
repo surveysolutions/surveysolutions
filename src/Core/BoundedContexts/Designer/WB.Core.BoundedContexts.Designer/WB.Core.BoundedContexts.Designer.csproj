@@ -9,12 +9,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WB.Core.BoundedContexts.Designer</RootNamespace>
     <AssemblyName>WB.Core.BoundedContexts.Designer</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>88174f3a</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -52,24 +52,16 @@
       <HintPath>..\..\..\..\..\packages\HtmlSanitizer.1.1.5297.28403\lib\net40\HtmlSanitizer.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.Common.1.0.0-beta1-20141031-01\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+    <Reference Include="Microsoft.CodeAnalysis, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.Common.1.1.1\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.CSharp.1.0.0-beta1-20141031-01\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.CSharp.1.0.0-beta1-20141031-01\lib\net45\Microsoft.CodeAnalysis.CSharp.Desktop.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.Common.1.0.0-beta1-20141031-01\lib\net45\Microsoft.CodeAnalysis.Desktop.dll</HintPath>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.CodeAnalysis.CSharp.1.1.1\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -100,9 +92,9 @@
       <HintPath>..\..\..\..\..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Collections.Immutable, Version=1.1.32.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\System.Collections.Immutable.1.1.32-beta\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.Collections.Immutable.1.1.37\lib\dotnet\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -117,9 +109,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
-    <Reference Include="System.Reflection.Metadata, Version=1.0.17.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\System.Reflection.Metadata.1.0.17-beta\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+    <Reference Include="System.Reflection.Metadata, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\System.Reflection.Metadata.1.1.0\lib\dotnet5.2\System.Reflection.Metadata.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
@@ -212,8 +204,10 @@
     <Compile Include="Implementation\Services\CodeGeneration\CodeGenerationSettings.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\DefaultDynamicCompilerSettings.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\DynamicCompilerSettingsProvider.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\ConditionMethodAndState.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\LookupTableTemplateModel.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\QuestionnaireExecutorTemplateModelFactory.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\HierarchyReferenceModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\QuestionnaireExpressionStateModelFactory.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\RoslynCompiler.cs" />
     <Compile Include="Events\Users\AccountConfirmed.cs" />
     <Compile Include="Events\Users\AccountDeleted.cs" />
@@ -230,7 +224,7 @@
     <Compile Include="Events\Users\AccountUnlocked.cs" />
     <Compile Include="Events\Users\AccountUpdated.cs" />
     <Compile Include="Events\Users\UserLoggedIn.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\ExpressionMethodModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\ConditionDescriptionModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\ITemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\RoslynExpressionProcessor.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.cs">
@@ -239,10 +233,40 @@
       <DependentUpon>ExpressionMethodTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\Templates\ExpressionMethodTemplate.Extended.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\InterviewExpressionStateTemplateV5.cs">
-      <DependentUpon>InterviewExpressionStateTemplateV5.tt</DependentUpon>
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>InterviewExpressionStateTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireLevelTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RosterScopeTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InterviewExpressionStateTemplateV2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\QuestionnaireLevelTemplateV2.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireLevelTemplateV2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\RosterScopeTemplateV2.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RosterScopeTemplateV2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\InterviewExpressionStateTemplateV5.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InterviewExpressionStateTemplateV5.tt</DependentUpon>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.cs">
       <AutoGen>True</AutoGen>
@@ -262,31 +286,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>RosterScopeTemplateV5.tt</DependentUpon>
     </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.cs">
-      <DependentUpon>SharedTemplateV5.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\RosterScopeTemplateV5.Extended.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.cs">
-      <DependentUpon>InterviewExpressionStateTemplateV2.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\InterviewExpressionStateTemplateV2.Extended.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\QuestionnaireLevelTemplateV2.cs">
-      <DependentUpon>QuestionnaireLevelTemplateV2.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\QuestionnaireLevelTemplateV2.Extended.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\RosterScopeTemplateV2.cs">
-      <DependentUpon>RosterScopeTemplateV2.tt</DependentUpon>
+    <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\RosterScopeTemplateV2.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V5\Templates\SharedTemplateV5.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>SharedTemplateV5.tt</DependentUpon>
     </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\V2\Templates\RosterScopeTemplateV2.Extended.cs" />
     <Compile Include="Implementation\Services\DesignerEngineVersionService.cs" />
+    <Compile Include="Implementation\Services\JsonSerializerSettingsFactory.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableContent.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableContentFile.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableRow.cs" />
@@ -352,17 +362,12 @@
     <Compile Include="Implementation\Services\CodeGeneration\Model\RosterScopeBaseModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\QuestionnaireLevelTemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\RosterScopeTemplateModel.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>QuestionnaireLevelTemplate.tt</DependentUpon>
-    </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\Templates\QuestionnaireLevelTemplate.Extended.cs" />
     <Compile Include="Implementation\Services\ExpressionReplacer.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\RosterTemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\GroupTemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\QuestionTemplateModel.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Model\QuestionnaireExecutorTemplateModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\QuestionnaireExpressionStateModel.cs" />
     <Compile Include="Mappings\AccountDocumentMap.cs" />
     <Compile Include="Mappings\QuestionnaireChangeRecordMap.cs" />
     <Compile Include="Mappings\QuestionnaireListViewItemMap.cs" />
@@ -389,17 +394,7 @@
     <Compile Include="Services\IExpressionProcessor.cs" />
     <Compile Include="Services\IExpressionProcessorGenerator.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\QuestionnaireExpressionProcessorGenerator.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.cs">
-      <DependentUpon>InterviewExpressionStateTemplate.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\Templates\InterviewExpressionStateTemplate.Extended.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.cs">
-      <DependentUpon>RosterScopeTemplate.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\Templates\RosterScopeTemplate.Extended.cs" />
     <Compile Include="Services\IKeywordsProvider .cs" />
     <Compile Include="Services\IQuestionnaireVerifier.cs" />
@@ -584,9 +579,9 @@
       <Project>{553b4fc2-5fc7-4256-b14d-82758d64a3bd}</Project>
       <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
-      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
-      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
+    <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
+      <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>
+      <Name>WB.Core.SharedKernels.Questionnaire</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -691,16 +686,12 @@
       <LastGenOutput>LookupTablesTemplateV5.cs</LastGenOutput>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\..\..\..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
+    <Analyzer Include="..\..\..\..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-    <Error Condition="!Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
-  </Target>
   <Import Project="..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

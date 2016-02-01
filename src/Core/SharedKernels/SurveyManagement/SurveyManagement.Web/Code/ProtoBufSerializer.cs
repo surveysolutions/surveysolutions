@@ -31,7 +31,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             throw new NotImplementedException();
         }
 
+        public T Deserialize<T>(string payload, TypeSerializationSettings settings)
+        {
+            throw new NotImplementedException();
+        }
+
         public T Deserialize<T>(byte[] payload)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object Deserialize(string payload, Type type,TypeSerializationSettings settings)
         {
             throw new NotImplementedException();
         }
@@ -46,6 +56,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
         {
             SerializerBuilder.Build(type);
             return ProtoBuf.Serializer.NonGeneric.Deserialize(type, stream);
+        }
+
+        public byte[] SerializeToByteArray(object item, TypeSerializationSettings typeSerializationSettings, SerializationType serializationType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object Deserialize(byte[] payload, Type objectType, TypeSerializationSettings typeSerializationSettings, SerializationType serializationType)
+        {
+            throw new NotImplementedException();
         }
 
         private static class SerializerBuilder

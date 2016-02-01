@@ -56,6 +56,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             });
         }
 
+        public void Reset(IEnumerable<T> content)
+        {
+            if (content == null) throw new ArgumentNullException(nameof(content));
+            this.CheckReentrancy();
+
+            this.Items.Clear();
+            foreach (var item in content)
+            {
+                this.Items.Add(item);
+            }
+            this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                this.OnPropertyChanged(new PropertyChangedEventArgs(CountString));
+                this.OnPropertyChanged(new PropertyChangedEventArgs(IndexerName));
+                this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            });
+        }
+
         public void NotifyItemChanged(int itemIndex)
         {
             if (itemIndex < 0 || this.Count <= itemIndex)
@@ -64,8 +82,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             var item = this[itemIndex];
             this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
             {
-                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, item,
-                    item, itemIndex));
+                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, item, item, itemIndex));
             });
         }
     }

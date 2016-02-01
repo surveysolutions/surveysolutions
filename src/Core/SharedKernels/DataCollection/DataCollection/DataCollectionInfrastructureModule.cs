@@ -18,8 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection
             registry.BindAsSingletonWithConstructorArgument<IPlainInterviewFileStorage, PlainInterviewFileStorage>(
                 "rootDirectoryPath", this.basePath);
 
-            registry.BindAsSingleton<IPlainQuestionnaireRepository, PlainQuestionnaireRepository>();
-            registry.BindToRegisteredInterface<IQuestionnaireRepository, IPlainQuestionnaireRepository>();
+            registry.BindAsSingleton<IPlainQuestionnaireRepository, PlainQuestionnaireRepositoryWithCache>();
         }
     }
 }

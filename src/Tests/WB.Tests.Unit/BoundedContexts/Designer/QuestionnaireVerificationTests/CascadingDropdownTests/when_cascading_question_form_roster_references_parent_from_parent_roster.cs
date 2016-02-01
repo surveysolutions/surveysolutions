@@ -23,8 +23,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
                     {
                         Create.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
                         {
-                            Create.Option(text: "parent option 1", value: "1"),
-                            Create.Option(text: "parent option 2", value: "2")
+                            Create.Option(value: "1", text: "parent option 1"),
+                            Create.Option(value: "2", text: "parent option 2")
                         }),
                         Create.Roster(
                             variable: "roster2",
@@ -36,8 +36,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
                                     options:
                                         new List<Answer>
                                         {
-                                            Create.Option(text: "child 1 for parent option 1", value: "1", parentValue: "1"),
-                                            Create.Option(text: "child 1 for parent option 2", value: "3", parentValue: "2")
+                                            Create.Option(value: "1", text: "child 1 for parent option 1", parentValue: "1"),
+                                            Create.Option(value: "3", text: "child 1 for parent option 2", parentValue: "2")
                                         }
                                     )
                             })

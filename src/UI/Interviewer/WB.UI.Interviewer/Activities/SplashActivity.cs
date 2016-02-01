@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
@@ -16,7 +17,6 @@ using Cirrious.MvvmCross.Plugins.Sqlite;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using PCLStorage;
-using Sqo;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.ViewModel.Dashboard;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -37,6 +37,16 @@ using WB.UI.Interviewer.SharedPreferences;
 using WB.UI.Interviewer.ViewModel.Dashboard;
 using WB.UI.Interviewer.ViewModel.Login;
 using Environment = System.Environment;
+
+#warning we must keep "Sqo" namespace on siaqodb as long as at least one 5.1.0-5.3.* version exist
+#warning do not remove "Sqo" namespace
+#warning if after all the warning you intend to remove the namespace anyway, please remove NuGet packages SiaqoDB and SiaqoDbProtable also
+using Sqo;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
+using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -65,7 +75,7 @@ namespace WB.UI.Interviewer.Activities
         private async Task BackwardCompatibilityAsync()
         {
             var settings = Mvx.Resolve<IAsyncPlainStorage<ApplicationSettingsView>>();
-            if (settings.Query(setting => setting.FirstOrDefault()) != null) return;
+            if (settings.FirstOrDefault() != null) return;
             
             await RestoreApplicationSettingsAsync();
             await RestoreInterviewerAsync();
@@ -74,6 +84,27 @@ namespace WB.UI.Interviewer.Activities
             await Task.Run(this.RestoreQuestionnaireModelsAndDocumentsAsync);
             await Task.Run(this.RestoreEventStreamsAsync);
             await Task.Run(this.RestoreInterviewDetailsAsync);
+            await Task.Run(this.RestoreInterviewImagesAsync);
+        }
+
+        private async Task RestoreInterviewImagesAsync()
+        {
+            var basePath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+
+            var fileSystemAccessor = Mvx.Resolve<IFileSystemAccessor>();
+            IPlainInterviewFileStorage oldImageFileStorage = new PlainInterviewFileStorage(fileSystemAccessor, basePath);
+            IPlainInterviewFileStorage newImageFileStorage = Mvx.Resolve<IPlainInterviewFileStorage>();
+
+            var interviews = this.GetSqlLiteEntities<QuestionnaireDTO>("Projections");
+            foreach (var interview in interviews)
+            {
+                var binaryDataDescriptors = oldImageFileStorage.GetBinaryFilesForInterview(Guid.Parse(interview.Id));
+                foreach (var descriptor in binaryDataDescriptors)
+                {
+                    await newImageFileStorage.StoreInterviewBinaryDataAsync(descriptor.InterviewId, descriptor.FileName,
+                        descriptor.GetData());
+                }
+            }
         }
 
         private async Task RestoreInterviewDetailsAsync()
@@ -90,7 +121,7 @@ namespace WB.UI.Interviewer.Activities
 
             if (interviewDetailsFolder == null) return;
 
-            var interviewer = interviewersRepository.Query(interviewers => interviewers.FirstOrDefault());
+            var interviewer = interviewersRepository.FirstOrDefault();
 
             if (interviewer == null) return;
 
@@ -140,15 +171,14 @@ namespace WB.UI.Interviewer.Activities
         {
             InterviewerIdentity oldInterviewer;
 
+            #warning we must keep this code as long as at least one 5.1.0-5.3.* version exist
+            #warning do not remove this code
             SiaqodbConfigurator.EncryptedDatabase = false;
 
             using (var oldInterviewersRepository = new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("database")))
             {
                 oldInterviewer = await oldInterviewersRepository.Query<InterviewerIdentity>().FirstOrDefaultAsync();
             }
-
-            SiaqodbConfigurator.EncryptedDatabase = true;
-            SiaqodbConfigurator.SetEncryptionPassword("q=5+yaQqS0K!rWaw8FmLuRDWj8XpwI04Yr4MhtULYmD3zX+W+g");
 
             return oldInterviewer;
         }
@@ -194,9 +224,8 @@ namespace WB.UI.Interviewer.Activities
 
         private async Task RestoreEventStreamsAsync()
         {
-            var eventViewRepository = Mvx.Resolve<IAsyncPlainStorage<EventView>>();
-
             var pathToEventStreams = PortablePath.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal),"EventStore");
+            var eventViewRepository = Mvx.Resolve<IInterviewerEventStorage>();
 
             var eventStreamsFolder = await FileSystem.Current.GetFolderFromPathAsync(pathToEventStreams);
 
@@ -204,16 +233,17 @@ namespace WB.UI.Interviewer.Activities
 
             foreach (var eventStreamFile in await eventStreamsFolder.GetFilesAsync())
             {
-                var eventStream = this.GetSqlLiteEntities<StoredEvent>(eventStreamFile.Name, "EventStore");
-                await eventViewRepository.StoreAsync(eventStream.Select(x => new EventView
+                IEnumerable<StoredEvent> eventStream = this.GetSqlLiteEntities<StoredEvent>(eventStreamFile.Name, "EventStore");
+
+                var eventViews = eventStream.OrderBy(x => x.Sequence).Select((x, index) => new EventView
                 {
-                    Id = Guid.Parse(x.EventId).FormatGuid(),
                     EventSourceId = Guid.Parse(eventStreamFile.Name),
                     DateTimeUtc = new DateTime(x.TimeStamp),
-                    EventSequence = x.Sequence,
+                    EventSequence = index + 1,
                     JsonEvent = x.Data,
                     EventId = Guid.Parse(x.EventId)
-                }));
+                });
+                eventViewRepository.MigrateOldEvents(eventViews);
             }
         }
 

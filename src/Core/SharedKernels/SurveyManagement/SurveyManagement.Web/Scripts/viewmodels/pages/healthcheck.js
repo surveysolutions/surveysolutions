@@ -16,7 +16,6 @@
     self.numberOfUnhandledPackagesStatus = ko.observable('');
     self.numberOfUnhandledPackages = ko.observable('');
     self.numberOfUnhandledPackagesError = ko.observable('');
-    self.numberOfSyncPackagesWithBigSizeStatus = ko.observable('');
     self.numberOfSyncPackagesWithBigSize = ko.observable('');
     self.numberOfSyncPackagesWithBigSizeError = ko.observable('');
     self.deniedFoldersStatus = ko.observable('');
@@ -39,12 +38,6 @@
                 : data.NumberOfUnhandledPackages.Value;
             self.numberOfUnhandledPackages(numberOfUnhandledPackagesText);
             self.numberOfUnhandledPackagesError(data.NumberOfUnhandledPackages.ErrorMessage);
-            self.numberOfSyncPackagesWithBigSizeStatus(self.getTextStatus(data.NumberOfSyncPackagesWithBigSize.Status));
-            var numberOfSyncPackagesText = data.NumberOfSyncPackagesWithBigSize.Status == 3
-                ? self.getTextStatus(data.NumberOfSyncPackagesWithBigSize.Status)
-                : data.NumberOfSyncPackagesWithBigSize.Value;
-            self.numberOfSyncPackagesWithBigSize(numberOfSyncPackagesText);
-            self.numberOfSyncPackagesWithBigSizeError(data.NumberOfSyncPackagesWithBigSize.ErrorMessage);
             self.deniedFoldersStatus(self.getTextStatus(data.FolderPermissionCheckResult.Status));
             self.deniedFolders(data.FolderPermissionCheckResult.DeniedFolders);
 

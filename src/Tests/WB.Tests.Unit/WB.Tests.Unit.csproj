@@ -9,12 +9,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WB.Tests.Unit</RootNamespace>
     <AssemblyName>WB.Tests.Unit</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <NuGetPackageImportStamp>af6e198e</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -90,8 +90,8 @@
       <HintPath>..\..\..\packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.Core.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
@@ -107,31 +107,29 @@
     <Reference Include="Machine.Specifications.Should">
       <HintPath>..\..\..\packages\Machine.Specifications.Should.0.7.2\lib\net45\Machine.Specifications.Should.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.Common.1.0.0-beta1-20141031-01\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+    <Reference Include="Microsoft.CodeAnalysis, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.Common.1.1.1\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.Common.1.0.0-beta1-20141031-01\lib\net45\Microsoft.CodeAnalysis.Desktop.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation">
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Threading.Tasks.Extensions">
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop">
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
       <HintPath>..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Moq, Version=4.2.1502.911, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -185,9 +183,9 @@
       <HintPath>..\..\..\libs\StatData.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Collections.Immutable, Version=1.1.32.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\System.Collections.Immutable.1.1.32-beta\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+    <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Collections.Immutable.1.1.37\lib\dotnet\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -208,9 +206,9 @@
       <HintPath>..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
-    <Reference Include="System.Reflection.Metadata, Version=1.0.17.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\System.Reflection.Metadata.1.0.17-beta\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+    <Reference Include="System.Reflection.Metadata, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Reflection.Metadata.1.1.0\lib\dotnet5.2\System.Reflection.Metadata.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -295,6 +293,7 @@
     <Compile Include="Applications\Designer\FiltersTests\MaintenanceFilterTests\when_action_executing_and_read_side_is_outdated.cs" />
     <Compile Include="Applications\Designer\FiltersTests\MaintenanceFilterTests\when_action_executing_and_views_are_being_rebuilt_now.cs" />
     <Compile Include="Applications\Designer\ImportControllerTests\ImportControllerTestContext.cs" />
+    <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_and_questionnaire_has_warnings_only.cs" />
     <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_and_questionnaire_is_valid.cs" />
     <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_and_questionnaire_view_is_absent.cs" />
     <Compile Include="Applications\Designer\ImportControllerTests\when_getting_Questionaire_and_request_parameter_is_null.cs" />
@@ -355,9 +354,44 @@
     <Compile Include="Applications\Headquarters\ServicesTests\InterviewImportServiceTests\when_import_interview_with_nonprintable_symbols.cs" />
     <Compile Include="Bootstrap\MessengerPluginBootstrap.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_ends_with_underscore.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_fixed_roster.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_gps_question.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_list_question.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_list_roster.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_multimedia_question.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_multi_linked_question.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_multi_question.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_multi_roster.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_multi_yesno_question.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_numeric_roster.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_qr_question.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_single_cascading_question.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_single_combo_question.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_single_linked_question.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_single_question.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_real_question.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_text_question.cs" />
+    <Compile Include="BoundedContexts\Interviewer\DashboardFactoryTests\InterviewerDashboardFactoryTestsContext.cs" />
+    <Compile Include="BoundedContexts\Interviewer\DashboardFactoryTests\when_getting_interviewer_dashboard.cs" />
+    <Compile Include="BoundedContexts\Interviewer\Services\InterviewerInterviewAccessorTests\InterviewerInterviewAccessorTestsContext.cs" />
+    <Compile Include="BoundedContexts\Interviewer\Services\InterviewerInterviewAccessorTests\when_creating_interview.cs" />
+    <Compile Include="BoundedContexts\Interviewer\Services\InterviewerInterviewAccessorTests\when_removing_interview.cs" />
+    <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\InterviewerQuestionnaireAccessorTestsContext.cs" />
+    <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\when_getting_census_questionnaire_identities.cs" />
+    <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\when_remove_questionnaire.cs" />
+    <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\when_storing_questionnaire_assembly.cs" />
+    <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\when_storing_questionnaire.cs" />
+    <Compile Include="BoundedContexts\Interviewer\Services\QuestionnaireAssemblyFileAccessorTests\QuestionnaireAssemblyFileAccessorTestsContext.cs" />
+    <Compile Include="BoundedContexts\Interviewer\Services\QuestionnaireAssemblyFileAccessorTests\when_removing_questionnaire_assembly.cs" />
+    <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_designer_historical_events_Json.cs" />
+    <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_hq_historical_events.cs" />
+    <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_designer_historical_events.cs" />
+    <Compile Include="Id.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_executor_template_model_for_questionnaire_with_multimedia_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_9_with_questionnaire_with_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generate_single_class_for_version_10_with_questionnaire_with_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generating_classes_with_lookup_table.cs" />
+    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_integer_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generating_models_with_lookup_table.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\DesignerEngineVersionServiceNUnitTests.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_yes_no_question_and_client_version_is_10.cs" />
@@ -447,7 +481,6 @@
     <Compile Include="BoundedContexts\Headquarters\DataExportStatusReaderTests\when_getting_data_export_status_for_questionnaire.cs" />
     <Compile Include="BoundedContexts\Headquarters\SpssFormatExportHandlerTests\SpssFormatExportHandlerTestContext.cs" />
     <Compile Include="BoundedContexts\Headquarters\SpssFormatExportHandlerTests\when_exporting_all_data.cs" />
-    <Compile Include="BoundedContexts\Headquarters\SpssFormatExportHandlerTests\when_exporting_approved_data.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_contains_consecutive_underscore_characters.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_QuestionnaireItemMoved_event_received_and_question_moved_from_the_first_position_to_the_last_one.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGenerationTests\when_generating_assembly_and_questionnaire_has_validation_containing_self.cs" />
@@ -683,6 +716,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\SideBarSectionViewModelTests\when_roster_title_changed.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\SingleOptionLinkedQuestionViewModelTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_handling_answer_removed_event.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_handling_answer_removed_event_for_linked_question.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_initializing.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_selecting_first_option.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\TextListQuestionViewModelTestContext.cs" />
@@ -738,10 +772,11 @@
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_supervisor_filtering.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_supervisor_try_see_other_supervisor_interviewers.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_hq_sorting_by_deviceId.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_answer_removed_from_gps_qestion.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_gps_question_answered.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_handling_InterviewDeleted_event_and_interview_has_2_gps_questions.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_handling_InterviewHardDeleted_event_and_interview_has_2_gps_questions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Merger\when_merging_questionnaire_and_interview_data_and_interview_received_by_interviewer.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\MapReportTests\MapReportDenormalizerTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\MapReportTests\when_answer_removed_from_gps_qestion.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\MapReportTests\when_gps_question_answered.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Merger\when_merging_questionnaire_and_interview_data_with_3_fixed_roster_rows.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_all_service_variables.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_where_integer_roster_size_question_has_answer_42.cs" />
@@ -762,7 +797,6 @@
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionsInfoDenormalizerTests\when_template_imported_event_recived_with_version_set.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\CommentsExporterTests\when_getting_data_files_for_questionnaire_and_exported_cell_contains_new_line_symbol.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\InterviewActionsExporterTests\InterviewActionsExporterTestsContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\InterviewActionsExporterTests\when_exporting_approved_interviews.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\CommentsExporterTests\CommentsExporterTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\ReadSideToTabularFormatExportServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\MetadataExportServiceTests\MetadataExportServiceTestContext.cs" />
@@ -772,6 +806,10 @@
     <Compile Include="SharedKernels\SurveyManagement\SupervisorsViewFactoryTests\SupervisorsViewFactoryTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SupervisorsViewFactoryTests\when_need_sort_by_interviewers.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SupervisorsViewFactoryTests\when_searching_for_supervisor.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\TeamViewFactoryTests\when_getting_all_supervisors.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\TestAsyncPlainStorage.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\TeamViewFactoryTests\when_getting_all_not_locked_supervisors.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewerInterviewsFactoryTests\InterviewerInterviewsFactoryNUnitTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryTests\InterviewSummaryTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryTests\when_create_interview_summary_with_GPS_prefilled.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\NewtonJsonUtilsTestContext.cs" />
@@ -1092,7 +1130,6 @@
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewFactoryTests\when_loading_view_and_chapter_exists.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewFactoryTests\when_loading_view_and_chapter_is_absent.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGenerationModelTests\CodeGenerationModelTestsContext.cs" />
-    <Compile Include="BoundedContexts\Designer\CodeGenerationModelTests\when_getting_ordered_list_by_condition_dependency.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGenerationTests\CodeGenerationTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGenerationTests\when_expression_state_processes_condition_expressions.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGenerationTests\when_expression_state_processes_condition_expressions_on_nested_roster.cs" />
@@ -1103,7 +1140,6 @@
     <Compile Include="BoundedContexts\Designer\CodeGenerationTests\when_generating_assembly_and_questionnaire_has_roster_with_corner_naming.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGenerationTests\when_generating_assembly_with_evaluatorgenerator.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\CodeGeneratorTestsContext.cs" />
-    <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_executor_template_model_for_questionnaire_with_multimedia_question.cs" />
     <Compile Include="BoundedContexts\Designer\CreateQuestionnaireCommandTests\when_creating_new_questionnaire.cs" />
     <Compile Include="BoundedContexts\Designer\DeleteStaticTextHandlerTests\when_deleting_static_text_and_all_parameters_specified.cs" />
     <Compile Include="BoundedContexts\Designer\DeleteStaticTextHandlerTests\when_deleting_static_text_and_entity_does_not_exists.cs" />
@@ -2168,7 +2204,6 @@
     <Compile Include="SharedKernels\SurveyManagement\ResourceControllerTests\when_getting_interview_file_which_is_absent.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ResourceControllerTests\when_getting_interview_file_which_is_present.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ResourceControllerTests\ResourceControllerTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\FilebasedExportedDataAccessorTests\FilebasedExportedDataAccessorTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\TabularDataToExternalStatPackageExportServiceTests\TabularDataToExternalStatPackageExportServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\when_creating_template_for_preloading_from_questionnaire_export_structure.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\StataEnvironmentContentGeneratorTestContext.cs" />
@@ -2276,21 +2311,9 @@
       <Project>{755CA607-6B50-487F-98A0-34A98973593D}</Project>
       <Name>WB.Core.BoundedContexts.Supervisor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Native\WB.Core.GenericSubdomains.Native.csproj">
-      <Project>{B46F5753-42B4-45F0-98A6-A16C5ECEE9C7}</Project>
-      <Name>WB.Core.GenericSubdomains.Native</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
       <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
       <Name>WB.Core.GenericSubdomains.Portable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Files\WB.Core.Infrastructure.Files.csproj">
-      <Project>{6ac3a080-ceca-4974-9ca1-c239695ed8f8}</Project>
-      <Name>WB.Core.Infrastructure.Files</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure.Storage\WB.Core.Infrastructure.Storage.csproj">
-      <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
-      <Name>WB.Core.Infrastructure.Storage</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
@@ -2309,6 +2332,10 @@
       <Project>{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}</Project>
       <Name>WB.Core.SharedKernels.Enumerator</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
+      <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>
+      <Name>WB.Core.SharedKernels.Questionnaire</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\SurveyManagement\SurveyManagement.Web\WB.Core.SharedKernels.SurveyManagement.Web.csproj">
       <Project>{E96A3629-18F6-4B7C-9920-FC9A1B3892C1}</Project>
       <Name>WB.Core.SharedKernels.SurveyManagement.Web</Name>
@@ -2317,10 +2344,6 @@
       <Project>{29A132B5-A573-40D2-9E8F-2871E95D7766}</Project>
       <Name>WB.Core.SharedKernels.SurveyManagement</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
-      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
-      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
@@ -2328,6 +2351,10 @@
     <ProjectReference Include="..\..\Core\Synchronization\WB.Core.Synchronization\WB.Core.Synchronization.csproj">
       <Project>{75d70eb8-1e56-4bfe-816c-5231112f64c0}</Project>
       <Name>WB.Core.Synchronization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
+      <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
+      <Name>WB.Infrastructure.Native</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj">
       <Project>{3464F3AE-094C-4DEC-8725-59506328E597}</Project>
@@ -2358,16 +2385,19 @@
   <ItemGroup>
     <EmbeddedResource Include="BoundedContexts\Supervisor\Synchronization\UserChangedFeedReaderTests\Simplefeed.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
+    <Analyzer Include="..\..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Import Project="..\..\..\packages\Siaqodb.5.0.0.7\build\net451\Siaqodb.targets" Condition="Exists('..\..\..\packages\Siaqodb.5.0.0.7\build\net451\Siaqodb.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-    <Error Condition="!Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+    <Error Condition="!Exists('..\..\..\packages\Siaqodb.5.0.0.7\build\net451\Siaqodb.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Siaqodb.5.0.0.7\build\net451\Siaqodb.targets'))" />
   </Target>
-  <Import Project="..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -65,9 +65,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
 
         It should_each_line_has_2_days_inside = () => view.Lines.ShouldEachConformTo(line => line.Length == 2);
 
-        It should_each_line_has_first_record_equal_to_from_date_and_with_count_equal_to_1 = () => view.Lines.ShouldEachConformTo(line => line[0][0].ToString() == baseDate.AddDays(-2).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture) && (int)line[0][1]==1);
+        It should_each_line_has_first_record_equal_to_from_date_and_with_count_equal_to_1 = () => view.Lines.ShouldEachConformTo(line => line[0][0].ToString() == baseDate.AddDays(-2).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) && (int)line[0][1]==1);
 
-        It should_each_line_has_second_record_equal_to_to_date_and_with_count_equal_to_1 = () => view.Lines.ShouldEachConformTo(line => line[1][0].ToString() == baseDate.AddDays(-1).ToString("MM/dd/yyyy", CultureInfo.InvariantCulture) && (int)line[1][1] == 1);
+        It should_each_line_has_second_record_equal_to_to_date_and_with_count_equal_to_1 = () => view.Lines.ShouldEachConformTo(line => line[1][0].ToString() == baseDate.AddDays(-1).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) && (int)line[1][1] == 1);
 
         private static ChartStatisticsViewFactory chartStatisticsViewFactory;
         private static ChartStatisticsInputModel input;

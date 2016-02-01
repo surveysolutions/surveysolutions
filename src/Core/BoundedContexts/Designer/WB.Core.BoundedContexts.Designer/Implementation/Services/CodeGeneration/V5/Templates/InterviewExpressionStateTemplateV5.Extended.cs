@@ -4,25 +4,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public partial class InterviewExpressionStateTemplateV5
     {
-        public InterviewExpressionStateTemplateV5(QuestionnaireExecutorTemplateModel questionnaire)
+        public InterviewExpressionStateTemplateV5(QuestionnaireExpressionStateModel questionnaire)
         {
-            this.QuestionnaireTemplateStructure = questionnaire;
+            this.QuestionnaireStructure = questionnaire;
         }
 
-        public QuestionnaireExecutorTemplateModel QuestionnaireTemplateStructure { get; private set; }
+        public QuestionnaireExpressionStateModel QuestionnaireStructure { get; private set; }
 
         public QuestionnaireLevelTemplateV5 CreateQuestionnaireLevelTemplate()
         {
             return new QuestionnaireLevelTemplateV5(
-                this.QuestionnaireTemplateStructure.QuestionnaireLevelModel, 
-                this.QuestionnaireTemplateStructure.LookupTables);
+                this.QuestionnaireStructure.QuestionnaireLevelModel, 
+                this.QuestionnaireStructure.LookupTables);
         }
 
         protected RosterScopeTemplateV5 CreateRosterScopeTemplate(RosterScopeTemplateModel rosterGroup)
         {
             return new RosterScopeTemplateV5(
                 rosterGroup,
-                this.QuestionnaireTemplateStructure.LookupTables);
+                this.QuestionnaireStructure.LookupTables);
         }
     }
 }
