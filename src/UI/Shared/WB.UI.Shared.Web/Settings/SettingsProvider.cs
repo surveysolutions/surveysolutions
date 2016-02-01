@@ -20,10 +20,19 @@ namespace WB.UI.Shared.Web.Settings
             {
                 if (settingsToSkip.Contains(appSettingKey)) continue;
                 yield return new ApplicationSetting
-
                 {
                     Name = appSettingKey,
                     Value = WebConfigurationManager.AppSettings[appSettingKey]
+                };
+            }
+
+            for (int connectionStringIndex = 0; connectionStringIndex < WebConfigurationManager.ConnectionStrings.Count; connectionStringIndex++)
+            {
+                var connectionString = WebConfigurationManager.ConnectionStrings[connectionStringIndex];
+                yield return new ApplicationSetting
+                {
+                    Name = $"connectionStrings\\{connectionString.Name}",
+                    Value = connectionString.ConnectionString,
                 };
             }
 
