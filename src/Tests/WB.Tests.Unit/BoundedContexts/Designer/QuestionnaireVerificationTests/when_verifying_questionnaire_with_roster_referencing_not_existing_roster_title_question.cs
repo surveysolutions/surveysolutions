@@ -36,10 +36,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
+        It should_return_1_message = () =>
             resultErrors.Count().ShouldEqual(1);
 
-        It should_return_errors_with_code_WB0035 = () =>
+        It should_return_messages_with_code_WB0035 = () =>
             resultErrors.ShouldEachConformTo(error => error.Code == "WB0035");
 
         private static QuestionnaireDocument questionnaire;

@@ -29,13 +29,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
+        It should_return_1_message = () =>
             resultErrors.Count().ShouldEqual(1);
 
-        It should_return_errors_with_code_WB0011 = () =>
+        It should_return_messages_with_code_WB0011 = () =>
             resultErrors.ShouldEachConformTo(error => error.Code == "WB0011");
 
-        It should_return_error_with_level_general = () =>
+        It should_return_message_with_level_general = () =>
             resultErrors.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
         private static QuestionnaireDocument questionnaire;

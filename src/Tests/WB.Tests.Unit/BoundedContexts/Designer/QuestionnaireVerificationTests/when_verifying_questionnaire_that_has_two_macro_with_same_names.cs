@@ -23,22 +23,22 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
+        It should_return_1_message = () =>
             resultErrors.Count().ShouldEqual(1);
 
-        It should_return_error_with_code__WB0020 = () =>
+        It should_return_message_with_code__WB0020 = () =>
             resultErrors.Single().Code.ShouldEqual("WB0020");
 
-        It should_return_error_with_1_reference = () =>
+        It should_return_message_with_1_reference = () =>
             resultErrors.Single().References.Count().ShouldEqual(2);
 
-        It should_return_error_reference_with_type_Macro = () =>
+        It should_return_message_reference_with_type_Macro = () =>
             resultErrors.Single().References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.Macro);
 
-        It should_return_error_reference_with_id_of_macro1 = () =>
+        It should_return_message_reference_with_id_of_macro1 = () =>
             resultErrors.Single().References.ElementAt(0).Id.ShouldEqual(macro1Id);
 
-        It should_return_error_reference_with_id_of_macro2 = () =>
+        It should_return_message_reference_with_id_of_macro2 = () =>
             resultErrors.Single().References.ElementAt(1).Id.ShouldEqual(macro2Id);
 
         private static QuestionnaireVerifier verifier;

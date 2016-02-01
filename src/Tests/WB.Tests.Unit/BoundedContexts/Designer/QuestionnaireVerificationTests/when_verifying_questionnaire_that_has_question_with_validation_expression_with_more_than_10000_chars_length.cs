@@ -42,28 +42,28 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
-            resultErrors.Count().ShouldEqual(1);
+        It should_return_1_message = () =>
+            verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_error_with_code__WB0095 = () =>
-            resultErrors.First().Code.ShouldEqual("WB0095");
+        It should_return_message_with_code__WB0095 = () =>
+            verificationMessages.First().Code.ShouldEqual("WB0095");
 
-        It should_return_error_with_one_references = () =>
-            resultErrors.First().References.Count().ShouldEqual(1);
+        It should_return_message_with_one_references = () =>
+            verificationMessages.First().References.Count().ShouldEqual(1);
 
-        It should_return_error_with_one_references_with_question_type = () =>
-            resultErrors.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+        It should_return_message_with_one_references_with_question_type = () =>
+            verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_error_with_one_references_with_id_equals_questionId = () =>
-            resultErrors.First().References.First().Id.ShouldEqual(questionId);
+        It should_return_message_with_one_references_with_id_equals_questionId = () =>
+            verificationMessages.First().References.First().Id.ShouldEqual(questionId);
 
-        private It should_not_call_GenerateProcessorStateAssembly = () =>
+        It should_not_call_GenerateProcessorStateAssembly = () =>
             questionnireExpressionProcessorGeneratorMock.Verify(x => x.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>(), out generationResult), Times.Never);
 
         
-        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");

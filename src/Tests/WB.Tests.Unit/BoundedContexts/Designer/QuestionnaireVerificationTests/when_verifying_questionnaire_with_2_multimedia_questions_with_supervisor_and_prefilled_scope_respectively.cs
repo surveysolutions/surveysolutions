@@ -33,13 +33,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_2_errors = () =>
+        It should_return_2_messages = () =>
             resultErrors.Count().ShouldEqual(2);
 
         It should_return_first_error_with_code__WB0078 = () =>
             resultErrors.First().Code.ShouldEqual("WB0078");
 
-        It should_return_error_with_level_general = () =>
+        It should_return_message_with_level_general = () =>
             resultErrors.First().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
         It should_return_first_error_with_1_references = () =>
