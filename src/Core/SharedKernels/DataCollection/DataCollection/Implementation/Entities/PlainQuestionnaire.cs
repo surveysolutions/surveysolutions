@@ -512,6 +512,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     .Select(question => question.PublicKey)
                     .ToReadOnlyCollection());
 
+        public bool IsPrefilled(Guid questionId)
+        {
+            var question = this.QuestionnaireDocument.Find<IQuestion>(questionId);
+            return question.Featured;
+        }
+
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
         {
             if (!this.cacheOfUnderlyingGroupsAndRosters.ContainsKey(groupId))
