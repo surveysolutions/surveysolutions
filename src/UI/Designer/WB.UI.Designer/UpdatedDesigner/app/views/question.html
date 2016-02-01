@@ -199,33 +199,33 @@
 
             <div>
                 <div ng-if="!activeQuestion.isFilteredCombobox || !activeQuestion.isCascadingCombobox" class="form-group"
-                     ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}" />
+                     ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToEntity.$valid}" />
             </div>
 
             <div>
                 <div ng-if="activeQuestion.isCascade && !activeQuestion.isLinked"
-                     ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}"
+                     ng-class="{'has-error': !questionForm.linkedToEntity.$valid}"
                      class="form-group" ng-include="'CascadingComboBox-Template.html'" />
             </div>
         </script>
 
         <script type="text/ng-template" id="linkTemplate.html">
-            <div id="sourceOfLinkedQuestion" class="dropdown-with-breadcrumbs-and-icons">
-                <input type="hidden" name="linkedToQuestion" ng-model="activeQuestion.linkedToQuestion" ng-required="true" />
-                <label for="linkedQuestionSource">Bind to question from roster group</label>
+            <div id="sourceOfLinkedEntity" class="dropdown-with-breadcrumbs-and-icons">
+                <input type="hidden" name="linkedToEntity" ng-model="activeQuestion.linkedToEntity" ng-required="true" />
+                <label for="linkedEntitySource">Bind to question from roster group</label>
                 <div class="btn-group" dropdown>
-                    <button class="btn dropdown-toggle" dropdown-toggle id="linkedQuestionSource" type="button">
-                        <span class="select-placeholder" ng-if="(activeQuestion.linkedToQuestion.title || '') == ''">Select question</span>
+                    <button class="btn dropdown-toggle" dropdown-toggle id="linkedEntitySource" type="button">
+                        <span class="select-placeholder" ng-if="(activeQuestion.linkedToEntity.title || '') == ''">Select question</span>
 
-                        <span class="selected-item" ng-if="(activeQuestion.linkedToQuestion.title || '') !== ''">
-                            <span class="path">{{activeQuestion.linkedToQuestion.breadcrumbs}}</span>
-                            <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+activeQuestion.linkedToQuestion.type"></i>{{activeQuestion.linkedToQuestion.title}}</span>
+                        <span class="selected-item" ng-if="(activeQuestion.linkedToEntity.title || '') !== ''">
+                            <span class="path">{{activeQuestion.linkedToEntity.breadcrumbs}}</span>
+                            <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+activeQuestion.linkedToEntity.type"></i>{{activeQuestion.linkedToEntity.title}}</span>
                         </span>
                         <span class="dropdown-arrow"></span>
                     </button>
 
                     <ul class="dropdown-menu" role="menu">
-                        <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in sourceOfLinkedQuestions track by $index">
+                        <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in sourceOfLinkedEntities track by $index">
                             <span ng-if="breadCrumb.isSectionPlaceHolder">{{::breadCrumb.title}}</span>
 
                             <a ng-if="!breadCrumb.isSectionPlaceHolder"
@@ -238,14 +238,14 @@
                         </li>
                     </ul>
                 </div>
-                <p class="help-block ng-cloak" ng-show="questionForm.linkedToQuestion.$error.required">
+                <p class="help-block ng-cloak" ng-show="questionForm.linkedToEntity.$error.required">
                     You must bind this question
                 </p>
             </div>
         </script>
 
         <script type="text/ng-template" id="CascadingComboBox-Template.html">
-            <div id="sourceOfLinkedQuestion" class="dropdown-with-breadcrumbs-and-icons">
+            <div id="sourceOfLinkedEntitiy" class="dropdown-with-breadcrumbs-and-icons">
                 <input type="hidden" name="cascadeFromQuestionId" ng-model="activeQuestion.cascadeFromQuestionId" ng-update-hidden ng-required="true" />
                 <label for="singleOptionQuestionSource">Select parent question</label>
                 <div class="btn-group" dropdown>
@@ -357,7 +357,7 @@
                 </div>
             </div>
 
-            <div class="form-group" ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}">
+            <div class="form-group" ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToEntity.$valid}">
             </div>
         </div>
         </script>

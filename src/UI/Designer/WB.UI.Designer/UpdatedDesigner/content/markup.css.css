@@ -7136,6 +7136,9 @@ textarea {
 .icon-text {
   background-position: 0 -30px;
 }
+.icon-roster {
+    background-position: 0 -30px;
+}
 .icon-singleoption {
   background-position: 0 -60px;
 }
@@ -7305,25 +7308,25 @@ input#edit-group-title {
   opacity: 0;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons label,
-#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons label {
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons label {
   font-weight: normal;
   display: block;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group,
-#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .btn-group {
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group {
   width: 100%;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .btn.dropdown-toggle,
-#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .btn-group .btn.dropdown-toggle {
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group .btn.dropdown-toggle {
   width: 100%;
   border: none;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .selected-item,
-#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .btn-group .selected-item {
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group .selected-item {
   white-space: normal;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .selected-item .path,
-#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .btn-group .selected-item .path {
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group .selected-item .path {
   color: #c8ccd0;
   display: block;
   text-transform: uppercase;
@@ -7332,7 +7335,7 @@ input#edit-group-title {
   margin-bottom: 10px;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .selected-item .chosen-item,
-#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .btn-group .selected-item .chosen-item {
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group .selected-item .chosen-item {
   color: #555555;
   line-height: 20px;
   font-family: Arial, Helvetica, sans-serif;
@@ -7344,11 +7347,11 @@ input#edit-group-title {
   font-weight: normal;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group .dropdown-arrow,
-#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .btn-group .dropdown-arrow {
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group .dropdown-arrow {
   top: 14px;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu,
-#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .dropdown-menu {
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu {
   width: 100%;
   overflow-y: auto;
   max-height: 500px;
@@ -7356,7 +7359,7 @@ input#edit-group-title {
   border: none;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a,
-#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a {
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a {
   font-family: Arial, Helvetica, sans-serif;
   padding-top: 1px;
   padding-bottom: 1px;
@@ -7366,7 +7369,7 @@ input#edit-group-title {
   margin-left: 10px;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:after,
-#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:after {
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:after {
   display: block;
   position: absolute;
   height: 100%;
@@ -7382,22 +7385,22 @@ input#edit-group-title {
   z-index: 1010;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:hover,
-#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:hover {
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:hover {
   color: #2a81cb;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu .dropdown-header,
-#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .dropdown-menu .dropdown-header {
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu .dropdown-header {
   text-transform: uppercase;
   font-size: 10px;
   margin-top: 15px;
   line-height: 12px;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu .dropdown-header:first-child,
-#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .dropdown-menu .dropdown-header:first-child {
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu .dropdown-header:first-child {
   margin-top: 0;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .select-placeholder,
-#sourceOfLinkedQuestion.dropdown-with-breadcrumbs-and-icons .select-placeholder {
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .select-placeholder {
   color: #c8ccd0;
 }
 .question-editor .singleOption,

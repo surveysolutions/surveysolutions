@@ -118,7 +118,7 @@
                     case "SingleOption":
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
-                        command.linkedToQuestionId = question.linkedToQuestionId;
+                        command.linkedToEntityId = question.linkedToEntityId;
                         command.isFilteredCombobox = question.isFilteredCombobox || false;
                         command.cascadeFromQuestionId = question.cascadeFromQuestionId;
                         command.enablementCondition = question.cascadeFromQuestionId ? '' : command.enablementCondition;
@@ -133,9 +133,9 @@
                     case "MultyOption":
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
-                        command.linkedToQuestionId = question.linkedToQuestionId;
+                        command.linkedToEntityId = question.linkedToEntityId;
                         command.yesNoView = question.yesNoView;
-                        command.options = _.isEmpty(command.linkedToQuestionId) ? question.options : null;
+                        command.options = _.isEmpty(command.linkedToEntityId) ? question.options : null;
                         break;
                     case "Numeric":
                         command.isInteger = question.isInteger;

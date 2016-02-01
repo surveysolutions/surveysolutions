@@ -371,6 +371,7 @@
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_single_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_real_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_text_question.cs" />
+    <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_that_is_linked_and_referencing_group_is_not_roster.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_YesNoQuestionAnswered_event.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardFactoryTests\InterviewerDashboardFactoryTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardFactoryTests\when_getting_interviewer_dashboard.cs" />

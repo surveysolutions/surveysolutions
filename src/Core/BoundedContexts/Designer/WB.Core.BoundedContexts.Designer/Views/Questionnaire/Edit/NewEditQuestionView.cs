@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
     {
         public NewEditQuestionView()
         {
-            this.SourceOfLinkedQuestions = new List<DropdownQuestionView>();
+            this.SourceOfLinkedEntities = new List<DropdownQuestionView>();
             this.SourceOfSingleQuestions = new List<DropdownQuestionView>();
         }
 
@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public string ValidationExpression { get; set; }
         public string ValidationMessage { get; set; }
         public QuestionType Type { get; set; }
-        public string LinkedToQuestionId { get; set; }
+        public string LinkedToEntityId { get; set; }
         public CategoricalOption[] Options { get; set; }
         public bool AreAnswersOrdered { get; set; }
         public int? MaxAllowedAnswers { get; set; }
@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public bool? IsFilteredCombobox { get; set; }
         public string CascadeFromQuestionId { get; set; }
 
-        public List<DropdownQuestionView> SourceOfLinkedQuestions { get; set; }
+        public List<DropdownQuestionView> SourceOfLinkedEntities { get; set; }
         public List<DropdownQuestionView> SourceOfSingleQuestions { get; set; }
 
         public QuestionnaireInfoFactory.SelectOption[] QuestionTypeOptions { get; set; }

@@ -83,7 +83,7 @@
 
                 $scope.setQuestionType(question.type);
 
-                $scope.setLinkSource(question.linkedToQuestionId);
+                $scope.setLinkSource(question.linkedToEntityId);
                 $scope.setCascadeSource(question.cascadeFromQuestionId);
 
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = false;
@@ -98,7 +98,7 @@
             var dataBind = function (result) {
                 dictionnaires.allQuestionScopeOptions = result.allQuestionScopeOptions;
 
-                $scope.sourceOfLinkedQuestions = result.sourceOfLinkedQuestions;
+                $scope.sourceOfLinkedEntities = result.sourceOfLinkedEntities;
                 $scope.sourceOfSingleQuestions = result.sourceOfSingleQuestions;
                 
                 bindQuestion(result);
@@ -136,7 +136,7 @@
                             title: $scope.activeQuestion.title,
                             variable: $scope.activeQuestion.variable,
                             type: $scope.activeQuestion.type,
-                            linkedToQuestionId: $scope.activeQuestion.linkedToQuestionId,
+                            linkedToEntityId: $scope.activeQuestion.linkedToEntityId,
                             hasCondition: hasQuestionEnablementConditions($scope.activeQuestion),
                             hasValidation: hasQuestionValidations($scope.activeQuestion)
                         });
@@ -343,8 +343,8 @@
                 if (newValue) {
                     $scope.activeQuestion.yesNoView = false;
                 } else {
-                    $scope.activeQuestion.linkedToQuestionId = null;
-                    $scope.activeQuestion.linkedToQuestion = null;
+                    $scope.activeQuestion.linkedToEntityId = null;
+                    $scope.activeQuestion.linkedToEntity = null;
                 }
             });
             $scope.$watch('activeQuestion.yesNoView', function (newValue) {
@@ -370,8 +370,8 @@
                 $scope.activeQuestion.isLinked = !_.isEmpty(itemId);
 
                 if (itemId) {
-                    $scope.activeQuestion.linkedToQuestionId = itemId;
-                    $scope.activeQuestion.linkedToQuestion = _.find($scope.sourceOfLinkedQuestions, { id: $scope.activeQuestion.linkedToQuestionId });
+                    $scope.activeQuestion.linkedToEntityId = itemId;
+                    $scope.activeQuestion.linkedToEntity = _.find($scope.sourceOfLinkedEntities, { id: $scope.activeQuestion.linkedToEntityId });
                     $scope.questionForm.$setDirty();
                 } 
             };

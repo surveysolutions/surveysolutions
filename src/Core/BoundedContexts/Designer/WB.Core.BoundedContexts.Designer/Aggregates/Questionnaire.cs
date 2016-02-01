@@ -1775,7 +1775,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions,
             Guid responsibleId,
             Option[] options,
-            Guid? linkedToQuestionId,
+            Guid? linkedToEntityId,
             bool areAnswersOrdered,
             int? maxAllowedAnswers,
             bool yesNoView)
@@ -1786,10 +1786,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, QuestionType.MultyOption, responsibleId);
-            this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToQuestionId);
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, false, null, scope, null);
-            this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToQuestionId, maxAllowedAnswers, options);
-            this.ThrowIfCategoricalQuestionHasMoreThan200Options(options, linkedToQuestionId.HasValue);
+            this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToEntityId);
+            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToEntityId, false, null, scope, null);
+            this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToEntityId, maxAllowedAnswers, options);
+            this.ThrowIfCategoricalQuestionHasMoreThan200Options(options, linkedToEntityId.HasValue);
 
             this.ApplyEvent(new QuestionChanged
             (
@@ -1810,7 +1810,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 capital: false,
                 answerOrder: null,
                 answers: ConvertOptionsToAnswers(options),
-                linkedToQuestionId: linkedToQuestionId,
+                linkedToQuestionId: linkedToEntityId,
                 isInteger: null,
                 areAnswersOrdered: areAnswersOrdered,
                 yesNoView: yesNoView,
@@ -1835,7 +1835,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string instructions,
             Guid responsibleId,
             Option[] options,
-            Guid? linkedToQuestionId,
+            Guid? linkedToEntityId,
             bool isFilteredCombobox,
             Guid? cascadeFromQuestionId)
         {
@@ -1864,13 +1864,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 answers = categoricalOneAnswerQuestion != null ? categoricalOneAnswerQuestion.Answers.ToArray() : null;
             }
 
-            this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToQuestionId);
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToQuestionId, isPreFilled, isFilteredCombobox, scope, cascadeFromQuestionId);
+            this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToEntityId);
+            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToEntityId, isPreFilled, isFilteredCombobox, scope, cascadeFromQuestionId);
             this.ThrowIfCascadingQuestionHasConditionOrValidation(questionId, cascadeFromQuestionId, validationExpression, enablementCondition);
 
             if (!isFilteredCombobox && !cascadeFromQuestionId.HasValue)
             {
-                this.ThrowIfCategoricalQuestionHasMoreThan200Options(options, linkedToQuestionId.HasValue);
+                this.ThrowIfCategoricalQuestionHasMoreThan200Options(options, linkedToEntityId.HasValue);
             }
 
             this.ApplyEvent(new QuestionChanged
@@ -1892,7 +1892,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 capital: false,
                 answerOrder: null,
                 answers: answers,
-                linkedToQuestionId: linkedToQuestionId,
+                linkedToQuestionId: linkedToEntityId,
                 isInteger: null,
                 areAnswersOrdered: null,
                 yesNoView: null,
@@ -2767,19 +2767,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(ExceptionMessages.CascadingCantHaveConditionExpression);
             }
         }
-        private void ThrowIfCategoricalQuestionIsInvalid(Guid questionId, Option[] options, Guid? linkedToQuestionId, bool isFeatured, bool? isFilteredCombobox, QuestionScope scope, Guid? cascadeFromQuestionId)
+        private void ThrowIfCategoricalQuestionIsInvalid(Guid questionId, Option[] options, Guid? linkedToEntityId, bool isFeatured, bool? isFilteredCombobox, QuestionScope scope, Guid? cascadeFromQuestionId)
         {
-            bool questionIsLinked = linkedToQuestionId.HasValue;
+            bool entityIsLinked = linkedToEntityId.HasValue;
             bool questionHasOptions = options != null && options.Any();
 
-            if (questionIsLinked && questionHasOptions)
+            if (entityIsLinked && questionHasOptions)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.ConflictBetweenLinkedQuestionAndOptions,
                     "Categorical question cannot be with answers and linked to another question in the same time");
             }
 
-            if (cascadeFromQuestionId.HasValue && questionIsLinked)
+            if (cascadeFromQuestionId.HasValue && entityIsLinked)
             {
                 throw new QuestionnaireException(ExceptionMessages.CantBeLinkedAndCascadingAtSameTime);
             }
@@ -2793,10 +2793,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 }
             }
 
-            if (questionIsLinked)
+            if (entityIsLinked)
             {
                 //this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId);
-                this.ThrowIfLinkedCategoricalQuestionIsInvalid(linkedToQuestionId, isFeatured);
+                this.ThrowIfLinkedEntityIsInvalid(linkedToEntityId, isFeatured);
                 this.ThrowIfLinkedCategoricalQuestionIsNotFilledByInterviewer(scope);
             }
             else if (isFilteredCombobox != true && !(cascadeFromQuestionId.HasValue))
@@ -2851,16 +2851,27 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowIfLinkedCategoricalQuestionIsInvalid(Guid? linkedToQuestionId, bool isPrefilled)
+        private void ThrowIfLinkedEntityIsInvalid(Guid? linkedToEntityId, bool isPrefilled)
         {
             var linkedToQuestion =
-                this.innerDocument.Find<IQuestion>(x => x.PublicKey == linkedToQuestionId).FirstOrDefault();
+                this.innerDocument.Find<IQuestion>(x => x.PublicKey == linkedToEntityId).FirstOrDefault();
 
             if (linkedToQuestion == null)
             {
-                throw new QuestionnaireException(
-                    DomainExceptionType.LinkedQuestionDoesNotExist,
-                    "Question that you are linked to does not exist");
+                var linkedToRoster =
+                    this.innerDocument.Find<IGroup>(x => x.PublicKey == linkedToEntityId).FirstOrDefault();
+
+                if (linkedToRoster == null)
+                    throw new QuestionnaireException(
+                        DomainExceptionType.LinkedEntityDoesNotExist,
+                        "Entity that you are linked to does not exist");
+
+                if(!linkedToRoster.IsRoster)
+                    throw new QuestionnaireException(
+                       DomainExceptionType.GroupYouAreLinkedToIsNotRoster,
+                       "Group that you are linked to is not a roster");
+
+                return;
             }
 
             bool typeOfLinkedQuestionIsNotSupported = !(
