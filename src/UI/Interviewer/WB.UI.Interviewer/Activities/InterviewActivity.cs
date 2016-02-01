@@ -56,8 +56,6 @@ namespace WB.UI.Interviewer.Activities
                     this.ViewModel.SignOutCommand.Execute();
                     break;
             }
-
-            this.Finish();
         }
     }
 }
