@@ -372,7 +372,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                         VariableName = "linked_question",
                         ParentGroupsIds = new Guid[] { g2Id },
                         RosterScopeIds = new Guid[] { g2Id },
-                        LinkedToQuestionId = q4Id
+                        LinkedToEntityId = q4Id
                     },
                 },
                 StaticTexts = new List<StaticTextDetailsView>()

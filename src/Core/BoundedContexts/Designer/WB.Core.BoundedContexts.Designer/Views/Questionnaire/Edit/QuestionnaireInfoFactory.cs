@@ -290,7 +290,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     var newEditQuestionView = ObjectMapperManager.DefaultInstance
                                                                  .GetMapper<MultiOptionDetailsView, NewEditQuestionView>()
                                                                  .Map(multiOptionDetailsView);
-                    newEditQuestionView.LinkedToEntityId = Monads.Maybe(() => multiOptionDetailsView.LinkedToQuestionId.FormatGuid());
+                    newEditQuestionView.LinkedToEntityId = Monads.Maybe(() => multiOptionDetailsView.LinkedToEntityId.FormatGuid());
                     return
                         newEditQuestionView;
                 case QuestionType.SingleOption:
@@ -298,7 +298,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     var editQuestionView = ObjectMapperManager.DefaultInstance
                                                               .GetMapper<SingleOptionDetailsView, NewEditQuestionView>()
                                                               .Map(singleOptionDetailsView);
-                    editQuestionView.LinkedToEntityId = Monads.Maybe(() => singleOptionDetailsView.LinkedToQuestionId.FormatGuid());
+                    editQuestionView.LinkedToEntityId = Monads.Maybe(() => singleOptionDetailsView.LinkedToEntityId.FormatGuid());
                     editQuestionView.CascadeFromQuestionId = Monads.Maybe(() => singleOptionDetailsView.CascadeFromQuestionId.FormatGuid());
                     return editQuestionView;
                 case QuestionType.Text:
@@ -335,7 +335,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
                 x => x.Where(q => q.Id != questionId)
                     .Where(q => q is SingleOptionDetailsView)
-                    .Where(q => !(q as SingleOptionDetailsView).LinkedToQuestionId.HasValue)
+                    .Where(q => !(q as SingleOptionDetailsView).LinkedToEntityId.HasValue)
                     .ToList();
 
             var result = this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
@@ -439,7 +439,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
                 questions => questions
                     .OfType<MultiOptionDetailsView>()
-                    .Where(x => x.LinkedToQuestionId == null)
+                    .Where(x => x.LinkedToEntityId == null)
                     .Where(x => x.RosterScopeIds.Length <= rosterScopeIds.Length)
                     .Where(x => x.RosterScopeIds.All(rosterScopeIds.Contains))
                     .Cast<QuestionDetailsView>().ToList();
