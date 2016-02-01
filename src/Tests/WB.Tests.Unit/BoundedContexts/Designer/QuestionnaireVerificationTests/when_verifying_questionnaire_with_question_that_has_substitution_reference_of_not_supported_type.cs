@@ -38,30 +38,30 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
         It should_return_1_message = () =>
-            resultErrors.Count().ShouldEqual(1);
+            verificationMessages.Count().ShouldEqual(1);
 
         It should_return_message_with_code__WB0018 = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0018");
+            verificationMessages.Single().Code.ShouldEqual("WB0018");
 
         It should_return_message_with_2_references = () =>
-            resultErrors.Single().References.Count().ShouldEqual(2);
+            verificationMessages.Single().References.Count().ShouldEqual(2);
 
         It should_return_firts_error_reference_with_type_Question = () =>
-            resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         It should_return_firts_error_reference_with_id_of_questionWithNotExistingSubstitutionsId = () =>
-            resultErrors.Single().References.First().Id.ShouldEqual(questionWithSubstitutionReferenceToNotSupportedTypeId);
+            verificationMessages.Single().References.First().Id.ShouldEqual(questionWithSubstitutionReferenceToNotSupportedTypeId);
 
         It should_return_last_error_reference_with_type_Question = () =>
-            resultErrors.Single().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.Single().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         It should_return_last_error_reference_with_id_of_questionSubstitutionReferencerOfNotSupportedTypeId = () =>
-            resultErrors.Single().References.Last().Id.ShouldEqual(questionSubstitutionReferencerOfNotSupportedTypeId);
+            verificationMessages.Single().References.Last().Id.ShouldEqual(questionSubstitutionReferencerOfNotSupportedTypeId);
 
-        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 

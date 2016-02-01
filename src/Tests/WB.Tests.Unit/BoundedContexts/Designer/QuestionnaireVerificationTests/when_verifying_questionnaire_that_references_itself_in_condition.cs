@@ -46,24 +46,24 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
         It should_return_1_message = () =>
-            resultErrors.Count().ShouldEqual(1);
+            verificationMessages.Count().ShouldEqual(1);
 
         It should_return_message_with_code__WB0056 = () =>
-            resultErrors.First().Code.ShouldEqual("WB0056");
+            verificationMessages.First().Code.ShouldEqual("WB0056");
 
         It should_return_message_with_one_references = () =>
-            resultErrors.First().References.Count().ShouldEqual(1);
+            verificationMessages.First().References.Count().ShouldEqual(1);
 
         It should_return_message_with_one_references_with_question_type = () =>
-            resultErrors.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         It should_return_message_with_one_references_with_id_equals_questionId = () =>
-            resultErrors.First().References.First().Id.ShouldEqual(questionId);
+            verificationMessages.First().References.First().Id.ShouldEqual(questionId);
 
-        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");

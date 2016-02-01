@@ -38,15 +38,15 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
         It should_return_1_message = () =>
-            resultErrors.Count().ShouldEqual(1);
+            verificationMessages.Count().ShouldEqual(1);
 
         It should_return_first_error_with_code__WB0038 = () =>
-            resultErrors.First().Code.ShouldEqual("WB0038");
+            verificationMessages.First().Code.ShouldEqual("WB0038");
 
-        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 

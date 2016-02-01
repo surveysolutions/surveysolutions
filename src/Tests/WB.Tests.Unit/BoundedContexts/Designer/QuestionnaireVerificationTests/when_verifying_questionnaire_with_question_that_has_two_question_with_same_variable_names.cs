@@ -37,32 +37,32 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
         It should_return_1_message = () =>
-            resultErrors.Count().ShouldEqual(1);
+            verificationMessages.Count().ShouldEqual(1);
 
         It should_return_message_with_code__WB0062 = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0062");
+            verificationMessages.Single().Code.ShouldEqual("WB0062");
 
         It should_return_message_with_level_critical = () =>
-            resultErrors.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
+            verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
 
 
         It should_return_message_with_1_reference = () =>
-            resultErrors.Single().References.Count().ShouldEqual(1);
+            verificationMessages.Single().References.Count().ShouldEqual(1);
 
         It should_return_message_reference_with_type_Question = () =>
-            resultErrors.Single()
+            verificationMessages.Single()
                 .References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.Question);
 
         It should_return_message_reference_with_id_of_secondQuestion = () =>
-            resultErrors.Single().References.ElementAt(0).Id.ShouldEqual(secondQuestionId);
+            verificationMessages.Single().References.ElementAt(0).Id.ShouldEqual(secondQuestionId);
 
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 
-        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
 
         private static Guid firstQuestionId = Guid.Parse("a1111111111111111111111111111111");
         private static Guid secondQuestionId = Guid.Parse("b1111111111111111111111111111111");

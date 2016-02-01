@@ -34,33 +34,33 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
         It should_return_1_message = () =>
-            resultErrors.Count().ShouldEqual(1);
+            verificationMessages.Count().ShouldEqual(1);
 
         It should_return_message_with_code__WB0026 = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0026");
+            verificationMessages.Single().Code.ShouldEqual("WB0026");
 
         It should_return_message_with_Critical_level = () =>
-            resultErrors.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
+            verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
 
         It should_return_message_with_1_reference = () =>
-            resultErrors.Single().References.Count().ShouldEqual(2);
+            verificationMessages.Single().References.Count().ShouldEqual(2);
 
         It should_return_message_reference_with_type_LookupTable = () =>
-            resultErrors.Single().References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.LookupTable);
+            verificationMessages.Single().References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.LookupTable);
 
         It should_return_message_reference_with_id_of_table1 = () =>
-            resultErrors.Single().References.ElementAt(0).Id.ShouldEqual(table1Id);
+            verificationMessages.Single().References.ElementAt(0).Id.ShouldEqual(table1Id);
 
         It should_return_message_reference_with_id_of_table2 = () =>
-            resultErrors.Single().References.ElementAt(1).Id.ShouldEqual(table2Id);
+            verificationMessages.Single().References.ElementAt(1).Id.ShouldEqual(table2Id);
 
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 
-        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static readonly Mock<ILookupTableService> lookupTableServiceMock = new Mock<ILookupTableService>();
         private static readonly LookupTableContent lookupTableContent = Create.LookupTableContent(new[] { "min", "max" },
            Create.LookupTableRow(1, new decimal?[] { 1.15m, 10 }),

@@ -34,33 +34,33 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
         It should_return_2_messages = () =>
-            resultErrors.Count().ShouldEqual(2);
+            verificationMessages.Count().ShouldEqual(2);
 
         It should_return_message_with_code__WB0072__and__WB0073 = () =>
-            resultErrors.Select(x => x.Code).ShouldContainOnly("WB0072", "WB0073");
+            verificationMessages.Select(x => x.Code).ShouldContainOnly("WB0072", "WB0073");
 
         It should_return_first_error_with_1_references = () =>
-            resultErrors.First().References.Count().ShouldEqual(1);
+            verificationMessages.First().References.Count().ShouldEqual(1);
 
         It should_return_second_error_with_1_references = () =>
-            resultErrors.Last().References.Count().ShouldEqual(1);
+            verificationMessages.Last().References.Count().ShouldEqual(1);
 
         It should_return_first_error_reference_with_type_Question = () =>
-            resultErrors.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         It should_return_second_error_reference_with_type_Question = () =>
-            resultErrors.Last().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.Last().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         It should_return_first_error_reference_with_id_equals_multiQuestionId = () =>
-            resultErrors.First().References.First().Id.ShouldEqual(multiQuestionId);
+            verificationMessages.First().References.First().Id.ShouldEqual(multiQuestionId);
 
         It should_return_second_error_reference_with_id_equals_multiQuestionId = () =>
-            resultErrors.Last().References.First().Id.ShouldEqual(multiQuestionId);
+            verificationMessages.Last().References.First().Id.ShouldEqual(multiQuestionId);
 
-        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 

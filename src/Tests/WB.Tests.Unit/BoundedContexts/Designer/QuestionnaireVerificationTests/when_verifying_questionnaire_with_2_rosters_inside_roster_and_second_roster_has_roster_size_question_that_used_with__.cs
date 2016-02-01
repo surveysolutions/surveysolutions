@@ -84,30 +84,30 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
         It should_return_1_message = () =>
-            resultErrors.Count().ShouldEqual(1);
+            verificationMessages.Count().ShouldEqual(1);
 
         It should_return_message_with_code__WB0054__ = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0054");
+            verificationMessages.Single().Code.ShouldEqual("WB0054");
 
         It should_return_message_with_2_references = () =>
-            resultErrors.Single().References.Count().ShouldEqual(2);
+            verificationMessages.Single().References.Count().ShouldEqual(2);
 
         It should_return_first_error_reference_with_type_group = () =>
-            resultErrors.Single().References.ElementAt(0).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
+            verificationMessages.Single().References.ElementAt(0).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
 
         It should_return_first_error_reference_with_id_of_rosterId = () =>
-            resultErrors.Single().References.ElementAt(0).Id.ShouldEqual(groupWithInvalidRosterSizeQuestionId);
+            verificationMessages.Single().References.ElementAt(0).Id.ShouldEqual(groupWithInvalidRosterSizeQuestionId);
 
         It should_return_second_error_reference_with_type_question = () =>
-            resultErrors.Single().References.ElementAt(1).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.Single().References.ElementAt(1).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         It should_return_second_error_reference_with_id_of_rosterSizeQuestionWithInvalidRosterLevelId = () =>
-            resultErrors.Single().References.ElementAt(1).Id.ShouldEqual(rosterSizeQuestionWithInvalidRosterLevelId);
+            verificationMessages.Single().References.ElementAt(1).Id.ShouldEqual(rosterSizeQuestionWithInvalidRosterLevelId);
 
-        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid groupWithInvalidRosterSizeQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");

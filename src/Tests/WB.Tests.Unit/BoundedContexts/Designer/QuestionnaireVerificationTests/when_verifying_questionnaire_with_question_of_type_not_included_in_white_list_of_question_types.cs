@@ -37,31 +37,31 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
         It should_return_1_message = () =>
-            resultErrors.Count().ShouldEqual(1);
+            verificationMessages.Count().ShouldEqual(1);
 
         It should_return_message_with_level_general = () =>
-            resultErrors.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
+            verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
-        private It should_return_messages_each_with_code__WB0002__ = () =>
-            resultErrors.ShouldEachConformTo(error
+        It should_return_messages_each_with_code__WB0002__ = () =>
+            verificationMessages.ShouldEachConformTo(error
                 => error.Code == "WB0066");
 
-        private It should_return_messages_each_having_single_reference = () =>
-            resultErrors.ShouldEachConformTo(error
+        It should_return_messages_each_having_single_reference = () =>
+            verificationMessages.ShouldEachConformTo(error
                 => error.References.Count() == 1);
 
-        private It should_return_messages_each_referencing_question = () =>
-            resultErrors.ShouldEachConformTo(error
+        It should_return_messages_each_referencing_question = () =>
+            verificationMessages.ShouldEachConformTo(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question);
 
-        private It should_return_message_referencing_first_incorrect_question = () =>
-            resultErrors.ShouldContain(error
+        It should_return_message_referencing_first_incorrect_question = () =>
+            verificationMessages.ShouldContain(error
                 => error.References.Single().Id == questionId);
 
-        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionId;

@@ -26,24 +26,24 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
         It should_return_1_message = () =>
-            resultErrors.Count().ShouldEqual(1);
+            verificationMessages.Count().ShouldEqual(1);
 
         It should_return_message_with_code__WB0050 = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0050");
+            verificationMessages.Single().Code.ShouldEqual("WB0050");
 
         It should_return_message_with_1_references = () =>
-            resultErrors.Single().References.Count().ShouldEqual(1);
+            verificationMessages.Single().References.Count().ShouldEqual(1);
 
         It should_return_message_reference_with_type_Question = () =>
-            resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         It should_return_message_reference_with_id_of_questionId = () =>
-            resultErrors.Single().References.First().Id.ShouldEqual(questionId);
+            verificationMessages.Single().References.First().Id.ShouldEqual(questionId);
 
-        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 

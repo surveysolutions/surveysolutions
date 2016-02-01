@@ -54,35 +54,35 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
         It should_return_3_messages = () =>
-            resultErrors.Count().ShouldEqual(3);
+            verificationMessages.Count().ShouldEqual(3);
 
         It should_return_messages_each_with_code__WB0005__ = () =>
-            resultErrors.ShouldEachConformTo(error
+            verificationMessages.ShouldEachConformTo(error
                 => error.Code == "WB0005");
 
         It should_return_messages_each_having_single_reference = () =>
-            resultErrors.ShouldEachConformTo(error
+            verificationMessages.ShouldEachConformTo(error
                 => error.References.Count() == 1);
 
         It should_return_message_referencing_first_incorrect_question = () =>
-            resultErrors.ShouldContain(error
+            verificationMessages.ShouldContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question
                     && error.References.Single().Id == firstIncorrectQuestionId);
 
         It should_return_message_referencing_second_incorrect_question = () =>
-            resultErrors.ShouldContain(error
+            verificationMessages.ShouldContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question
                     && error.References.Single().Id == secondIncorrectQuestionId);
 
         It should_return_message_referencing_incorrect_group = () =>
-            resultErrors.ShouldContain(error
+            verificationMessages.ShouldContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Group
                     && error.References.Single().Id == incorrectGroupId);
 
-        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid firstIncorrectQuestionId;
