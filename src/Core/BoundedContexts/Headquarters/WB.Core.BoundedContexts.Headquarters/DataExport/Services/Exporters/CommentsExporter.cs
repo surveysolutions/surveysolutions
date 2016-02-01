@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             bool hasAtLeastOneRoster = questionnaireExportStructure.HeaderToLevelMap.Values.Any(x => x.LevelScopeVector.Count > 0);
             this.WriteFileHeader(hasAtLeastOneRoster, maxRosterDepthInQuestionnaire, commentsFilePath);
 
-            int totalProcessed = 0;
+            long totalProcessed = 0;
             var stopwatch = Stopwatch.StartNew();
             foreach (var interviewsChunk in interviewIdsToExport.Batch(this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery))
             {

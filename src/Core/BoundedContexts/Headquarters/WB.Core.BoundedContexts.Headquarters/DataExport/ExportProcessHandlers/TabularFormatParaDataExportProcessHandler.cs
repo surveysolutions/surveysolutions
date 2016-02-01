@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -121,12 +122,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId, 100);
         }
 
-        private void PersistResults(string dataExportProcessId, EventPosition eventPosition, long totatEventCount, int countOfProcessedEvents)
+        private void PersistResults(string dataExportProcessId, EventPosition eventPosition, long totatEventCount, long countOfProcessedEvents)
         {
             this.paraDataAccessor.PersistParaDataExport();
             this.UpdateLastHandledEventPosition(eventPosition);
-            this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessId,
-                Math.Min((int)(((double)countOfProcessedEvents / totatEventCount) * 100), 100));
+            int progressInPercents = countOfProcessedEvents.PercentOf(totatEventCount);
+            this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessId, progressInPercents);
         }
 
         private void UpdateLastHandledEventPosition(EventPosition eventPosition)
