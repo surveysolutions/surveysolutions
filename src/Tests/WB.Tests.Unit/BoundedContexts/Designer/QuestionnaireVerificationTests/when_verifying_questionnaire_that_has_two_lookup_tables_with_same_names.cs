@@ -36,25 +36,25 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
+        It should_return_1_message = () =>
             resultErrors.Count().ShouldEqual(1);
 
-        It should_return_error_with_code__WB0026 = () =>
+        It should_return_message_with_code__WB0026 = () =>
             resultErrors.Single().Code.ShouldEqual("WB0026");
 
-        It should_return_error_with_Critical_level = () =>
+        It should_return_message_with_Critical_level = () =>
             resultErrors.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
 
-        It should_return_error_with_1_reference = () =>
+        It should_return_message_with_1_reference = () =>
             resultErrors.Single().References.Count().ShouldEqual(2);
 
-        It should_return_error_reference_with_type_LookupTable = () =>
+        It should_return_message_reference_with_type_LookupTable = () =>
             resultErrors.Single().References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.LookupTable);
 
-        It should_return_error_reference_with_id_of_table1 = () =>
+        It should_return_message_reference_with_id_of_table1 = () =>
             resultErrors.Single().References.ElementAt(0).Id.ShouldEqual(table1Id);
 
-        It should_return_error_reference_with_id_of_table2 = () =>
+        It should_return_message_reference_with_id_of_table2 = () =>
             resultErrors.Single().References.ElementAt(1).Id.ShouldEqual(table2Id);
 
         private static QuestionnaireVerifier verifier;

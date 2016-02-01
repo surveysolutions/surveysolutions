@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_2_errors = () =>
+        It should_return_2_messages = () =>
             resultErrors.Count().ShouldEqual(2);
 
         It should_return_each_error_with_code__WB0003__ = () =>

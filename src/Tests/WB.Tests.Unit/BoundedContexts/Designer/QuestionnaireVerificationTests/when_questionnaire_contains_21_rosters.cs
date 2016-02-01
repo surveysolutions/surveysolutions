@@ -45,24 +45,22 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            verificationErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
-            verificationErrors.Count().ShouldEqual(1);
+        It should_return_1_message = () =>
+            verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_error_with_code_WB0200 = () =>
-            verificationErrors.First().Code.ShouldEqual("WB0200");
+        It should_return_message_with_code_WB0200 = () =>
+            verificationMessages.First().Code.ShouldEqual("WB0200");
 
-        It should_return_error_with_Warning_level = () =>
-            verificationErrors.First().MessageLevel.ShouldEqual(VerificationMessageLevel.Warning);
+        It should_return_message_with_Warning_level = () =>
+            verificationMessages.First().MessageLevel.ShouldEqual(VerificationMessageLevel.Warning);
 
-        It should_return_error_with_no_references = () =>
-            verificationErrors.First().References.Count().ShouldEqual(0);
+        It should_return_message_with_no_references = () =>
+            verificationMessages.First().References.Count().ShouldEqual(0);
 
         static QuestionnaireDocument questionnaire;
-        static Guid gpsQuestion1 = Guid.Parse("99999999999999999999999999999999");
-        static Guid gpsQuestion2 = Guid.Parse("88888888888888888888888888888888");
         static QuestionnaireVerifier verifier;
-        static IEnumerable<QuestionnaireVerificationMessage> verificationErrors;
+        static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
     }
 }

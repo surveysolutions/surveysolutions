@@ -31,23 +31,23 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
-        It should_return_2_errors = () =>
-            resultErrors.Count().ShouldEqual(2);
+        It should_return_2_messages = () =>
+            verificationMessages.Count().ShouldEqual(2);
 
-        It should_return_errors_with_code_WB0102 = () =>
-            resultErrors.ShouldEachConformTo(error => error.Code == "WB0102");
+        It should_return_messages_with_code_WB0102 = () =>
+            verificationMessages.ShouldEachConformTo(error => error.Code == "WB0102");
 
-        It should_return_error_with_2_references = () =>
-            resultErrors.ShouldContain(error => error.References.Count == 2);
+        It should_return_message_with_2_references = () =>
+            verificationMessages.ShouldContain(error => error.References.Count == 2);
 
-        It should_return_error_with_3_references = () =>
-            resultErrors.ShouldContain(error => error.References.Count == 3);
+        It should_return_message_with_3_references = () =>
+            verificationMessages.ShouldContain(error => error.References.Count == 3);
 
         private static QuestionnaireDocument questionnaire;
         private static QuestionnaireVerifier verifier;
-        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static Guid rosterSharedId = Guid.Parse("00000000000000001111111111111111");
         private static Guid staticTextSharedId = Guid.Parse("00000000000000002222222222222222");
     }

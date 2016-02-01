@@ -39,25 +39,25 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_1_errors = () =>
+        It should_return_1_message = () =>
             resultErrors.Count().ShouldEqual(1);
 
-        It should_return_error_with_level_general = () =>
+        It should_return_message_with_level_general = () =>
             resultErrors.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
-        private It should_return_errors_each_with_code__WB0002__ = () =>
+        private It should_return_messages_each_with_code__WB0002__ = () =>
             resultErrors.ShouldEachConformTo(error
                 => error.Code == "WB0066");
 
-        private It should_return_errors_each_having_single_reference = () =>
+        private It should_return_messages_each_having_single_reference = () =>
             resultErrors.ShouldEachConformTo(error
                 => error.References.Count() == 1);
 
-        private It should_return_errors_each_referencing_question = () =>
+        private It should_return_messages_each_referencing_question = () =>
             resultErrors.ShouldEachConformTo(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question);
 
-        private It should_return_error_referencing_first_incorrect_question = () =>
+        private It should_return_message_referencing_first_incorrect_question = () =>
             resultErrors.ShouldContain(error
                 => error.References.Single().Id == questionId);
 

@@ -39,13 +39,15 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             verifier = CreateQuestionnaireVerifier();
         };
 
-        private Because of = () => errors = Enumerable.ToList<QuestionnaireVerificationMessage>(verifier.Verify(questionnaire));
+        Because of = () => 
+            verificationMessages = Enumerable.ToList<QuestionnaireVerificationMessage>(verifier.Verify(questionnaire));
 
-        private It should_skip_empty_names_when_validating_uniqueness = () => errors.Where(x => x.Code == "WB0062").ShouldBeEmpty();
+        It should_skip_empty_names_when_validating_uniqueness = () => 
+            verificationMessages.Where(x => x.Code == "WB0062").ShouldBeEmpty();
 
         private static QuestionnaireDocument questionnaire;
         private static QuestionnaireVerifier verifier;
-        private static IEnumerable<QuestionnaireVerificationMessage> errors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
     }
 }
 

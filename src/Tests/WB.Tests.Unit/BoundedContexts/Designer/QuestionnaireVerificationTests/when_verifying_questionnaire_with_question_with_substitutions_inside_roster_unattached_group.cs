@@ -48,10 +48,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
+        It should_return_1_message = () =>
             resultErrors.Count().ShouldEqual(1);
 
-        It should_return_error_with_code__WB0019 = () =>
+        It should_return_message_with_code__WB0019 = () =>
             resultErrors.Single().Code.ShouldEqual("WB0019");
 
         private It should_return_WB0019_error_with_2_references_on_questions = () =>

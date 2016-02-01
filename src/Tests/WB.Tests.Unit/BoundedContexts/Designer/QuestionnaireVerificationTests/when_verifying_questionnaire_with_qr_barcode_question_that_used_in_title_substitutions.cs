@@ -33,22 +33,22 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
+        It should_return_1_message = () =>
             resultErrors.Count().ShouldEqual(1);
 
-        It should_return_error_with_code__WB0018 = () =>
+        It should_return_message_with_code__WB0018 = () =>
             resultErrors.Single().Code.ShouldEqual("WB0018");
 
-        It should_return_error_with_1_references = () =>
+        It should_return_message_with_1_references = () =>
             resultErrors.Single().References.Count().ShouldEqual(2);
 
-        It should_return_error_reference_with_type_Question = () =>
+        It should_return_message_reference_with_type_Question = () =>
             resultErrors.Single().References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_error_reference_with_id_of_questionWithSubstitutionToQRBarcodeId = () =>
+        It should_return_message_reference_with_id_of_questionWithSubstitutionToQRBarcodeId = () =>
             resultErrors.Single().References.ElementAt(0).Id.ShouldEqual(questionWithSubstitutionToQRBarcodeId);
 
-        It should_return_error_reference_with_id_of_qrBarcodeQuestionId = () =>
+        It should_return_message_reference_with_id_of_qrBarcodeQuestionId = () =>
             resultErrors.Single().References.ElementAt(1).Id.ShouldEqual(qrBarcodeQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;

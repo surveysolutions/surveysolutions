@@ -552,17 +552,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             var state = new VerificationState();
 
-            var staticVerificationErrors =
+            var verificationMessages =
                 (from verifier in this.AtomicVerifiers
                 let errors = verifier.Invoke(readOnlyQuestionnaireDocument, state)
                 from error in errors
                 select error).ToList();
 
-            if (staticVerificationErrors.Any(e => e.MessageLevel == VerificationMessageLevel.Critical))
-                return staticVerificationErrors;
+            if (verificationMessages.Any(e => e.MessageLevel == VerificationMessageLevel.Critical))
+                return verificationMessages;
 
-            return staticVerificationErrors.Concat(
-                ErrorsByConditionAndValidationExpressions(questionnaire, state));
+            return verificationMessages.Concat(ErrorsByConditionAndValidationExpressions(questionnaire, state));
         }
 
         private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> MacrosVerifier(

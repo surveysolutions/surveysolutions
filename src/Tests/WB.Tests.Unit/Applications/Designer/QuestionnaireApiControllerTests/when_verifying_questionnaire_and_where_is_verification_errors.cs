@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
         It should_call_errors_mapper_once = () =>
             errorsMapperMock.Verify(x => x.EnrichVerificationErrors(verificationMessages, questionnaireDocument), Times.Once);
 
-        It should_return_errors_created_by_mapper_as_action_result = () =>
+        It should_return_messages_created_by_mapper_as_action_result = () =>
             result.Errors.ShouldEqual(mappedAndEnrichedVerificationErrors);
 
         It should_return_warnings_created_by_mapper_as_action_result = () =>

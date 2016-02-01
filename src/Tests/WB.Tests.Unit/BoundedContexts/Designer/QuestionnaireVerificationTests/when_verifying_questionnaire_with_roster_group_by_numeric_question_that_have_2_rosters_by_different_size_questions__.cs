@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_2_errors = () =>
+        It should_return_2_messages = () =>
              resultErrors.Count().ShouldEqual(2);
 
         It should_return_2_errors_with_code__WB0035__ = () =>
@@ -60,13 +60,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_2_errors_with_1_references = () =>
             resultErrors.ShouldEachConformTo(error => error.References.Count() == 1);
 
-        It should_return_error_reference_with_type_group = () =>
+        It should_return_message_reference_with_type_group = () =>
             resultErrors.ShouldEachConformTo(error => error.References.First().Type == QuestionnaireVerificationReferenceType.Group);
 
-        It should_return_error_reference_with_id_of_rosterGroup1Id = () =>
+        It should_return_message_reference_with_id_of_rosterGroup1Id = () =>
             resultErrors.ElementAt(0).References.First().Id.ShouldEqual(rosterGroup1Id);
 
-        It should_return_error_reference_with_id_of_rosterGroup2Id = () =>
+        It should_return_message_reference_with_id_of_rosterGroup2Id = () =>
             resultErrors.ElementAt(1).References.First().Id.ShouldEqual(rosterGroup2Id);
 
         private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;

@@ -16,16 +16,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
             verifier = CreateQuestionnaireVerifier();
         };
 
-        Because of = () => errors = verifier.Verify(questionnaire);
+        Because of = () => verificationMessages = verifier.Verify(questionnaire);
 
-        It should_return_WB0097_error = () => errors.ShouldContain(x => x.Code == "WB0097");
+        It should_return_WB0097_message = () => verificationMessages.ShouldContain(x => x.Code == "WB0097");
 
-        It should_return_WB0097_error_with_appropriate_message = () =>
-            errors.ShouldContain(x => x.Message == "Questionnaire title contains characters that are not allowed. Only letters, numbers, space and _ are allowed.");
+        It should_return_WB0097_message_with_appropriate_message = () =>
+            verificationMessages.ShouldContain(x => x.Message == "Questionnaire title contains characters that are not allowed. Only letters, numbers, space and _ are allowed.");
 
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;
-        static IEnumerable<QuestionnaireVerificationMessage> errors;
+        static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
     }
 }
 

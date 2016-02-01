@@ -78,13 +78,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
+        It should_return_1_message = () =>
             resultErrors.Count().ShouldEqual(1);
 
-        It should_return_error_with_code__WB0046__ = () =>
+        It should_return_message_with_code__WB0046__ = () =>
             resultErrors.Single().Code.ShouldEqual("WB0046");
 
-        It should_return_error_with_two_references = () =>
+        It should_return_message_with_two_references = () =>
             resultErrors.Single().References.Count().ShouldEqual(2);
 
         It should_return_first_error_reference_with_type_Group = () =>

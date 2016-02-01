@@ -47,19 +47,19 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
+        It should_return_1_message = () =>
             resultErrors.Count().ShouldEqual(1);
 
-        It should_return_error_with_code__WB0099__ = () =>
+        It should_return_message_with_code__WB0099__ = () =>
             resultErrors.Single().Code.ShouldEqual("WB0099");
 
-        It should_return_error_with_1_references = () =>
+        It should_return_message_with_1_references = () =>
             resultErrors.Single().References.Count().ShouldEqual(1);
 
-        It should_return_error_reference_with_type_question = () =>
+        It should_return_message_reference_with_type_question = () =>
             resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_error_reference_with_id_of_rosterSizeQuestionId = () =>
+        It should_return_message_reference_with_id_of_rosterSizeQuestionId = () =>
             resultErrors.Single().References.First().Id.ShouldEqual(rosterSizeQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
