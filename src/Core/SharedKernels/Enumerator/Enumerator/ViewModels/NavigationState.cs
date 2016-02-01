@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
         }
 
-        public virtual event ScreenChanged ScreenChanged;
+        public virtual event GroupChanged ScreenChanged;
         public virtual event BeforeGroupChanged BeforeScreenChanged;
 
         private bool isNavigationStarted = false;
@@ -184,5 +184,5 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
     public delegate void BeforeGroupChanged(BeforeScreenChangedEventArgs eventArgs);
 
-    public delegate void ScreenChanged(ScreenChangedEventArgs eventArgs);
+    public delegate void GroupChanged(ScreenChangedEventArgs eventArgs);
 }
