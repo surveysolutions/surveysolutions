@@ -45,10 +45,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_first_error_with_1_references = () =>
             verificationMessages.First().References.Count().ShouldEqual(1);
 
-        It should_return_first_error_reference_with_type_Question = () =>
+        It should_return_first_message_reference_with_type_Question = () =>
             verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_first_error_reference_with_id_of_supervisorQuestionId = () =>
+        It should_return_first_message_reference_with_id_of_supervisorQuestionId = () =>
             verificationMessages.First().References.First().Id.ShouldEqual(supervisorQuestionId);
 
         It should_return_second_error_with_code__WB0078 = () =>
@@ -57,10 +57,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_second_error_with_1_references = () =>
             verificationMessages.Last().References.Count().ShouldEqual(1);
 
-        It should_return_second_error_reference_with_type_Question = () =>
+        It should_return_second_message_reference_with_type_Question = () =>
             verificationMessages.Last().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_second_error_reference_with_id_of_hqQuestionId = () =>
+        It should_return_second_message_reference_with_id_of_hqQuestionId = () =>
             verificationMessages.Last().References.First().Id.ShouldEqual(hqQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

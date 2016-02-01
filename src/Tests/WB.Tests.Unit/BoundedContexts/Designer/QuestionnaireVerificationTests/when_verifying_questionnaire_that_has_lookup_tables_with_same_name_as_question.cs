@@ -46,16 +46,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_message_with_1_reference = () =>
             verificationMessages.Single().References.Count().ShouldEqual(2);
 
-        It should_return_first_error_reference_with_type_Question = () =>
+        It should_return_first_message_reference_with_type_Question = () =>
             verificationMessages.Single().References.ElementAt(0).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_second_error_reference_with_type_LookupTable = () =>
+        It should_return_second_message_reference_with_type_LookupTable = () =>
             verificationMessages.Single().References.ElementAt(1).Type.ShouldEqual(QuestionnaireVerificationReferenceType.LookupTable);
 
-        It should_return_first_error_reference_with_id_of_question = () =>
+        It should_return_first_message_reference_with_id_of_question = () =>
             verificationMessages.Single().References.ElementAt(0).Id.ShouldEqual(questionId);
 
-        It should_return_second_error_reference_with_id_of_table = () =>
+        It should_return_second_message_reference_with_id_of_table = () =>
             verificationMessages.Single().References.ElementAt(1).Id.ShouldEqual(table1Id);
 
         private static QuestionnaireVerifier verifier;

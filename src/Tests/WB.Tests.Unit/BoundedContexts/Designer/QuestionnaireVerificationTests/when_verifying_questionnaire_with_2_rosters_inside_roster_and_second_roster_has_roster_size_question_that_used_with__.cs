@@ -95,16 +95,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_message_with_2_references = () =>
             verificationMessages.Single().References.Count().ShouldEqual(2);
 
-        It should_return_first_error_reference_with_type_group = () =>
+        It should_return_first_message_reference_with_type_group = () =>
             verificationMessages.Single().References.ElementAt(0).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
 
-        It should_return_first_error_reference_with_id_of_rosterId = () =>
+        It should_return_first_message_reference_with_id_of_rosterId = () =>
             verificationMessages.Single().References.ElementAt(0).Id.ShouldEqual(groupWithInvalidRosterSizeQuestionId);
 
-        It should_return_second_error_reference_with_type_question = () =>
+        It should_return_second_message_reference_with_type_question = () =>
             verificationMessages.Single().References.ElementAt(1).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_second_error_reference_with_id_of_rosterSizeQuestionWithInvalidRosterLevelId = () =>
+        It should_return_second_message_reference_with_id_of_rosterSizeQuestionWithInvalidRosterLevelId = () =>
             verificationMessages.Single().References.ElementAt(1).Id.ShouldEqual(rosterSizeQuestionWithInvalidRosterLevelId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

@@ -48,16 +48,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_second_error_with_1_references = () =>
             verificationMessages.Last().References.Count().ShouldEqual(1);
 
-        It should_return_first_error_reference_with_type_Question = () =>
+        It should_return_first_message_reference_with_type_Question = () =>
             verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_second_error_reference_with_type_Question = () =>
+        It should_return_second_message_reference_with_type_Question = () =>
             verificationMessages.Last().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_first_error_reference_with_id_equals_singleQuestionId = () =>
+        It should_return_first_message_reference_with_id_equals_singleQuestionId = () =>
             verificationMessages.First().References.First().Id.ShouldEqual(singleQuestionId);
 
-        It should_return_second_error_reference_with_id_equals_singleQuestionId = () =>
+        It should_return_second_message_reference_with_id_equals_singleQuestionId = () =>
             verificationMessages.Last().References.First().Id.ShouldEqual(singleQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
