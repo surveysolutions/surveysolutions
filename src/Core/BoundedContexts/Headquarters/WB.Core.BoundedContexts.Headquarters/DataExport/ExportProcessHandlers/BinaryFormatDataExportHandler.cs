@@ -94,7 +94,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
-            int totalInterviewsProcessed = 0;
+            long totalInterviewsProcessed = 0;
             foreach (var interviewId in interviewIdsToExport)
             {
                 dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();

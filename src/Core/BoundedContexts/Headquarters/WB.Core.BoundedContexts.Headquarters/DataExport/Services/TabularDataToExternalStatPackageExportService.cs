@@ -93,7 +93,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     ? this.StataFileNameExtension
                     : this.SpssFileNameExtension;
                 var writer = this.datasetWriterFactory.CreateDatasetWriter(format);
-                int processdFiles = 0;
+                long processdFiles = 0;
 
                 foreach (var tabFile in dataFiles)
                 {
