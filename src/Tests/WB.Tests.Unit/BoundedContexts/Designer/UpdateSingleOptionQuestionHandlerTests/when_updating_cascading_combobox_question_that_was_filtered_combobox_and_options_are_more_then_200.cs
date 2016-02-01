@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                 instructions: "intructions",
                 responsibleId: responsibleId,
                 options: null,
-                linkedToQuestionId: (Guid?)null,
+                linkedToEntityId: (Guid?)null,
                 isFilteredCombobox: false,
                 cascadeFromQuestionId: parentQuestionId);
 

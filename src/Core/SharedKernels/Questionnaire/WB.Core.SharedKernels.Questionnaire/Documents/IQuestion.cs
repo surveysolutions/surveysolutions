@@ -19,6 +19,7 @@ namespace Main.Core.Entities.SubEntities
         string ValidationExpression { get; set; }
         string ValidationMessage { get; set; }
         Guid? LinkedToQuestionId { get; set; }
+        Guid? LinkedToRosterId { get; set; }
         Guid? CascadeFromQuestionId { get; set; }
         bool? IsFilteredCombobox { get; set; }
         void AddAnswer(Answer answer);
