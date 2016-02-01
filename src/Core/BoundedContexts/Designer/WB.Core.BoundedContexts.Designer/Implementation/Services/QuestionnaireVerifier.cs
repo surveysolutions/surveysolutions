@@ -1646,7 +1646,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             var parentGroups = new List<IGroup>();
 
-            while (group.PublicKey != document.QuestionnaireId)
+            while (group.PublicKey != document.PublicKey)
             {
                 parentGroups.Add(group);
                 group = (IGroup)group.GetParent();

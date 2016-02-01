@@ -31,7 +31,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.allItems = this.questionnaire.Children.SelectMany<IComposite, IComposite>(x => x.TreeToEnumerable<IComposite>(g => g.Children)).ToList();
         }
 
-        public Guid QuestionnaireId => this.questionnaire.PublicKey;
         public Dictionary<Guid, Macro> Macros => this.questionnaire.Macros;
         public Dictionary<Guid, LookupTable> LookupTables => this.questionnaire.LookupTables;
         public string Title => this.questionnaire.Title;
