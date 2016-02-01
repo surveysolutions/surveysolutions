@@ -263,15 +263,42 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             return status == InterviewStatus.Completed || status == InterviewStatus.Restarted;
         }
 
-        private Dictionary<Guid, HashSet<Guid>> mapInterviewIdToPrefilledQuestionIds = new Dictionary<Guid, HashSet<Guid>>();
-
         private void AnswerQuestion(Guid interviewId, Guid questionId, object answer, DateTime answerTimeUtc)
         {
-            // check  prefilled ids because we modify InterviewView in this method after changes in prefilled questions
-            HashSet<Guid> prefilledIds;
-            if (this.mapInterviewIdToPrefilledQuestionIds.TryGetValue(interviewId, out prefilledIds))
+            this.AnswerOnPrefilledQuestion(interviewId, questionId, answer, answerTimeUtc);
+            this.SetStartedDateTimeOnFirstAnswer(interviewId, answerTimeUtc);
+        }
+
+        private readonly HashSet<Guid> interviewsWithExistedStartedDateTime = new HashSet<Guid>();
+
+        private void SetStartedDateTimeOnFirstAnswer(Guid interviewId, DateTime answerTimeUtc)
+        {
+            if (interviewsWithExistedStartedDateTime.Contains(interviewId))
+                return;
+
+            var interviewView = this.interviewViewRepository.GetById(interviewId.FormatGuid());
+
+            if (interviewView == null) return;
+
+            interviewsWithExistedStartedDateTime.Add(interviewId);
+
+            if (!interviewView.StartedDateTime.HasValue)
             {
-                if (!prefilledIds.Contains(questionId))
+                interviewView.StartedDateTime = answerTimeUtc;
+            }
+
+            this.interviewViewRepository.StoreAsync(interviewView).Wait();
+        }
+
+        private readonly Dictionary<Guid, QuestionnaireIdentity> mapInterviewIdToQuestionnaireIdentity = new Dictionary<Guid, QuestionnaireIdentity>();
+
+        private void AnswerOnPrefilledQuestion(Guid interviewId, Guid questionId, object answer, DateTime answerTimeUtc)
+        {
+            QuestionnaireIdentity questionnaireIdentity;
+            if (this.mapInterviewIdToQuestionnaireIdentity.TryGetValue(interviewId, out questionnaireIdentity))
+            {
+                var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity);
+                if (!questionnaire.IsPrefilled(questionId))
                     return;
             }
 
@@ -279,23 +306,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             if (interviewView == null) return;
 
-            // cache all prefilled ids because we modify InterviewView after changes in prefilled questions
-            prefilledIds = new HashSet<Guid>();
-            if (interviewView.AnswersOnPrefilledQuestions != null)
-            {
-                prefilledIds.UnionWith(interviewView.AnswersOnPrefilledQuestions.Select(a => a.QuestionId));
-            }
-            if (interviewView.GpsLocation.PrefilledQuestionId.HasValue)
-            {
-                prefilledIds.Add(interviewView.GpsLocation.PrefilledQuestionId.Value);
-            }
-            this.mapInterviewIdToPrefilledQuestionIds.Add(interviewId, prefilledIds);
-
-            // this code always will executed first time and date will be saved
-            if (!interviewView.StartedDateTime.HasValue)
-            {
-                interviewView.StartedDateTime = answerTimeUtc;
-            }
+            questionnaireIdentity = QuestionnaireIdentity.Parse(interviewView.QuestionnaireId);
+            this.mapInterviewIdToQuestionnaireIdentity.Add(interviewId, questionnaireIdentity);
 
             if (questionId == interviewView.GpsLocation.PrefilledQuestionId)
             {
@@ -316,10 +328,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 if (prefilledQuestion != null)
                 {
-                    var questionnaire = this.questionnaireRepository.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(interviewView.QuestionnaireId));
-                    var questionnairePrefilledQuestion = questionnaire.FirstOrDefault<IQuestion>(question => question.PublicKey == questionId);
+                    var questionnaire =
+                        this.questionnaireRepository.GetQuestionnaireDocument(
+                            QuestionnaireIdentity.Parse(interviewView.QuestionnaireId));
+                    var questionnairePrefilledQuestion =
+                        questionnaire.FirstOrDefault<IQuestion>(question => question.PublicKey == questionId);
 
-                    prefilledQuestion.Answer = AnswerUtils.AnswerToString(answer, GetPrefilledCategoricalQuestionOptionText(questionnairePrefilledQuestion));
+                    prefilledQuestion.Answer = AnswerUtils.AnswerToString(answer,
+                        GetPrefilledCategoricalQuestionOptionText(questionnairePrefilledQuestion));
                 }
             }
 
