@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     {
         private const int MaxRecommendedAmountOfRosters = 20;
 
-        private IEnumerable<QuestionnaireVerificationMessage> VerifyAmountOfRosters(CachedQuestionnaireDocument document, VerificationState state)
+        private IEnumerable<QuestionnaireVerificationMessage> VerifyAmountOfRosters(ReadOnlyQuestionnaireDocument document, VerificationState state)
         {
             var rosters = document.Find<IGroup>(q => q.IsRoster).ToArray();
 
