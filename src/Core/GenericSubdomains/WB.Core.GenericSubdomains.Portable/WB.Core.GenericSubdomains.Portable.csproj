@@ -77,7 +77,7 @@
     <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponent.cs" />
     <Compile Include="Implementation\TopologicalSorter\StronglyConnectedComponentList.cs" />
     <Compile Include="Implementation\TopologicalSorter\Vertex.cs" />
-    <Compile Include="Int32Extensions.cs" />
+    <Compile Include="Int64Extensions.cs" />
     <Compile Include="IPasswordHasher.cs" />
     <Compile Include="ITopologicalSorter.cs" />
     <Compile Include="JsonDeserializationException.cs" />
