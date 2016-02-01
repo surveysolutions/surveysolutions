@@ -13,6 +13,7 @@ using Cirrious.MvvmCross.Views;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Ninject;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -40,12 +41,35 @@ using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Ninject;
+using Xamarin;
 
 namespace WB.UI.Interviewer
 {
     public class Setup : EnumeratorSetup
     {
-        public Setup(Context applicationContext) : base(applicationContext){}
+        public Setup(Context applicationContext) : base(applicationContext)
+        {
+            InitializeLogger(applicationContext);
+        }
+
+        private void InitializeLogger(Context applicationContext)
+        {
+            //ec9917607bbc4cf9e9413eaf25917e863c31cc7a
+
+            Insights.HasPendingCrashReport += (sender, isStartupCrash) =>
+            {
+                if (isStartupCrash)
+                {
+                    Insights.PurgePendingCrashReports().WaitAndUnwrapException();
+                }
+            };
+
+#if DEBUG
+            Insights.Initialize(Insights.DebugModeKey, applicationContext);
+#else
+            Insights.Initialize("ec9917607bbc4cf9e9413eaf25917e863c31cc7a", applicationContext);
+#endif
+        }
 
         protected override Type StartupActivityType => typeof (SplashActivity);
 
