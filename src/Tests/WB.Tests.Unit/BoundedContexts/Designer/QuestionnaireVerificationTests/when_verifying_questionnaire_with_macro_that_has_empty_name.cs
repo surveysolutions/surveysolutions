@@ -19,28 +19,28 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
         It should_return_1_message = () =>
-            resultErrors.Count().ShouldEqual(1);
+            verificationMessages.Count().ShouldEqual(1);
 
         It should_return_message_with_code__WB0014 = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0014");
+            verificationMessages.Single().Code.ShouldEqual("WB0014");
 
         It should_return_message_with_1_reference = () =>
-            resultErrors.Single().References.Count().ShouldEqual(1);
+            verificationMessages.Single().References.Count().ShouldEqual(1);
 
         It should_return_message_reference_with_type_Macro = () =>
-            resultErrors.Single()
+            verificationMessages.Single()
                 .References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.Macro);
 
         It should_return_message_reference_with_id_of_macro = () =>
-            resultErrors.Single().References.ElementAt(0).Id.ShouldEqual(macroId);
+            verificationMessages.Single().References.ElementAt(0).Id.ShouldEqual(macroId);
 
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 
-        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
 
         private static readonly Guid macroId = Guid.Parse("11111111111111111111111111111111");
     }

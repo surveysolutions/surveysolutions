@@ -53,45 +53,45 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultMessages = verifier.Verify(questionnaire).ToArray();
+            verificationMessages = verifier.Verify(questionnaire).ToArray();
 
         It should_return_3_messages = () =>
-            resultMessages.Count().ShouldEqual(3);
+            verificationMessages.Count().ShouldEqual(3);
 
         It should_return_messages_each_with_code__WB0003__ = () =>
-            resultMessages.ShouldEachConformTo(error
+            verificationMessages.ShouldEachConformTo(error
                 => error.Code == "WB0003");
 
         It should_return_messages_each_having_single_reference = () =>
-            resultMessages.ShouldEachConformTo(error
+            verificationMessages.ShouldEachConformTo(error
                 => error.References.Count() == 1);
 
         It should_return_message_referencing_first_incorrect_question = () =>
-            resultMessages.ShouldContain(error
+            verificationMessages.ShouldContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question
                     && error.References.Single().Id == firstIncorrectQuestionId);
 
         It should_return_message_referencing_second_incorrect_question = () =>
-            resultMessages.ShouldContain(error
+            verificationMessages.ShouldContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question
                     && error.References.Single().Id == secondIncorrectQuestionId);
 
         It should_return_message_referencing_incorrect_group = () =>
-            resultMessages.ShouldContain(error
+            verificationMessages.ShouldContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Group
                     && error.References.Single().Id == incorrectGroupId);
 
         It should_not_return_error_referencing_correct_question = () =>
-            resultMessages.ShouldNotContain(error
+            verificationMessages.ShouldNotContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question
                     && error.References.Single().Id == correctQuestionId);
 
         It should_not_return_error_referencing_correct_group = () =>
-            resultMessages.ShouldNotContain(error
+            verificationMessages.ShouldNotContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Group
                     && error.References.Single().Id == correctGroupId);
 
-        private static QuestionnaireVerificationMessage[] resultMessages;
+        private static QuestionnaireVerificationMessage[] verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid firstIncorrectQuestionId;
