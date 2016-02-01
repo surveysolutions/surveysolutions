@@ -65,16 +65,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
         It should_return_message_with_two_references = () =>
             resultErrors.Single().References.Count().ShouldEqual(2);
 
-        It should_return_first_error_reference_with_type_Group = () =>
+        It should_return_first_message_reference_with_type_Group = () =>
             resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
 
-        It should_return_first_error_reference_with_id_of_group_with_enablement_condition = () =>
+        It should_return_first_message_reference_with_id_of_group_with_enablement_condition = () =>
             resultErrors.Single().References.First().Id.ShouldEqual(groupWithEnablementConditionId);
 
-        It should_return_second_error_reference_with_type_Question = () =>
+        It should_return_second_message_reference_with_type_Question = () =>
             ShouldExtensionMethods.ShouldEqual(resultErrors.Single().References.Second().Type, QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_second_error_reference_with_id_of_categorical_multi_linked_question = () =>
+        It should_return_second_message_reference_with_id_of_categorical_multi_linked_question = () =>
             ShouldExtensionMethods.ShouldEqual(resultErrors.Single().References.Second().Id, categoricalQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;

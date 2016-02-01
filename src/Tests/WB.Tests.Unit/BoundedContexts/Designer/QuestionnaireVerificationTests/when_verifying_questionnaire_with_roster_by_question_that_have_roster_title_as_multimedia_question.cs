@@ -57,16 +57,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_message_with_2_references = () =>
             verificationMessages.Single().References.Count().ShouldEqual(2);
 
-        It should_return_first_error_reference_with_type_group = () =>
+        It should_return_first_message_reference_with_type_group = () =>
             verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
 
-        It should_return_first_error_reference_with_id_rosterId = () =>
+        It should_return_first_message_reference_with_id_rosterId = () =>
            verificationMessages.Single().References.First().Id.ShouldEqual(rosterId);
 
-        It should_return_second_error_reference_with_type_group = () =>
+        It should_return_second_message_reference_with_type_group = () =>
            ShouldExtensionMethods.ShouldEqual(verificationMessages.Single().References.Second().Type, QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_second_error_reference_with_id_rosterTitleMultimediaQuestionId = () =>
+        It should_return_second_message_reference_with_id_rosterTitleMultimediaQuestionId = () =>
            ShouldExtensionMethods.ShouldEqual(verificationMessages.Single().References.Second().Id, rosterTitleMultimediaQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

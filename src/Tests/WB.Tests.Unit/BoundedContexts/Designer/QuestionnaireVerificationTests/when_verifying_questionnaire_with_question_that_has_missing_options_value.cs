@@ -40,10 +40,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_message_with_one_reference = () =>
             verificationMessages.First().References.Count().ShouldEqual(1);
 
-        It should_return_first_error_reference_with_type_Question = () =>
+        It should_return_first_message_reference_with_type_Question = () =>
             verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_first_error_reference_with_id_of_questionWithCustomCondition = () =>
+        It should_return_first_message_reference_with_id_of_questionWithCustomCondition = () =>
             verificationMessages.First().References.First().Id.ShouldEqual(questionWithMissingValues);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

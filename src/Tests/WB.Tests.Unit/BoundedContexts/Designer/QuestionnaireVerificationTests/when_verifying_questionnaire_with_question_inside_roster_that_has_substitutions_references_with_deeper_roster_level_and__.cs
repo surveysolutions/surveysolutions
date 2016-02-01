@@ -74,16 +74,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_message_with_two_references = () =>
             verificationMessages.Single().References.Count().ShouldEqual(2);
 
-        It should_return_first_error_reference_with_type_Question = () =>
+        It should_return_first_message_reference_with_type_Question = () =>
             verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_first_error_reference_with_id_of_underDeeperPropagationLevelQuestionId = () =>
+        It should_return_first_message_reference_with_id_of_underDeeperPropagationLevelQuestionId = () =>
             verificationMessages.Single().References.First().Id.ShouldEqual(questionWithSubstitutionsId);
 
-        It should_return_last_error_reference_with_type_Question = () =>
+        It should_return_last_message_reference_with_type_Question = () =>
             verificationMessages.Single().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_last_error_reference_with_id_of_underDeeperPropagationLevelQuestionVariableName = () =>
+        It should_return_last_message_reference_with_id_of_underDeeperPropagationLevelQuestionVariableName = () =>
             verificationMessages.Single().References.Last().Id.ShouldEqual(underDeeperRosterLevelQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
