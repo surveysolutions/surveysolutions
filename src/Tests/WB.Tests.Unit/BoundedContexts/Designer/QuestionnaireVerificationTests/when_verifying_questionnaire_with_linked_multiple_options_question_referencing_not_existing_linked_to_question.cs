@@ -27,19 +27,19 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
         It should_return_1_message = () =>
-            resultErrors.Count().ShouldEqual(1);
+            verificationMessages.Count().ShouldEqual(1);
 
         It should_return_messages_with_code_WB0011 = () =>
-            resultErrors.ShouldEachConformTo(error => error.Code == "WB0011");
+            verificationMessages.ShouldEachConformTo(error => error.Code == "WB0011");
 
         It should_return_message_with_level_general = () =>
-            resultErrors.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
+            verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
         private static QuestionnaireDocument questionnaire;
         private static QuestionnaireVerifier verifier;
-        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
     }
 }

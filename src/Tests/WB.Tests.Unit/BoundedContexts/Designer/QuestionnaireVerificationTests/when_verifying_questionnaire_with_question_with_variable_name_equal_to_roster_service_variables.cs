@@ -52,21 +52,21 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
         It should_return_5_error = () =>
-            resultErrors.Count().ShouldEqual(5);
+            verificationMessages.Count().ShouldEqual(5);
 
         It should_return_all_errors_with_code__WB0058 = () =>
-            resultErrors.ShouldEachConformTo(e=>e.Code=="WB0058");
+            verificationMessages.ShouldEachConformTo(e=>e.Code=="WB0058");
 
         It should_return_all_errors_with_1_references = () =>
-            resultErrors.ShouldEachConformTo(e=>e.References.Count==1);
+            verificationMessages.ShouldEachConformTo(e=>e.References.Count==1);
 
         It should_return_all_errors_reference_with_type_Question = () =>
-            resultErrors.ShouldEachConformTo(e=>e.References.First().Type==QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.ShouldEachConformTo(e=>e.References.First().Type==QuestionnaireVerificationReferenceType.Question);
 
-        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
     }

@@ -37,33 +37,33 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
         It should_return_1_message = () =>
-            resultErrors.Count().ShouldEqual(1);
+            verificationMessages.Count().ShouldEqual(1);
 
         It should_return_message_with_code__WB0012__ = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0012");
+            verificationMessages.Single().Code.ShouldEqual("WB0012");
 
         It should_return_message_with_level_general = () =>
-            resultErrors.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
+            verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
         It should_return_message_with_two_references = () =>
-            resultErrors.Single().References.Count().ShouldEqual(2);
+            verificationMessages.Single().References.Count().ShouldEqual(2);
 
         It should_return_first_error_reference_with_type_Question = () =>
-            resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         It should_return_first_error_reference_with_id_of_linkedQuestionId = () =>
-            resultErrors.Single().References.First().Id.ShouldEqual(linkedQuestionId);
+            verificationMessages.Single().References.First().Id.ShouldEqual(linkedQuestionId);
 
         It should_return_last_error_reference_with_type_Question = () =>
-           resultErrors.Single().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+           verificationMessages.Single().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         It should_return_last_error_reference_with_id_of_notSupportedForLinkingQuestionId = () =>
-            resultErrors.Single().References.Last().Id.ShouldEqual(notSupportedForLinkingQuestionId);
+            verificationMessages.Single().References.Last().Id.ShouldEqual(notSupportedForLinkingQuestionId);
 
-        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid linkedQuestionId;
