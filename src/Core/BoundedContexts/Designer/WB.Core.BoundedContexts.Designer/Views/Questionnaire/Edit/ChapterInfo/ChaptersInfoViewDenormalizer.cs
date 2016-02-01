@@ -131,7 +131,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionVariable: @event.Payload.StataExportCaption,
                 questionConditionExpression: @event.Payload.ConditionExpression,
                 questionValidationExpression: @event.Payload.ValidationExpression,
-                linkedToQuestionId: Monads.Maybe(() => @event.Payload.LinkedToQuestionId.FormatGuid()));
+                linkedToQuestionId: Monads.Maybe(() => @event.Payload.LinkedToQuestionId.FormatGuid()),
+                linkedToRosterId: Monads.Maybe(() => @event.Payload.LinkedToRosterId.FormatGuid()));
 
             return state;
         }
@@ -147,6 +148,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionConditionExpression: @event.Payload.ConditionExpression,
                 questionValidationExpression: @event.Payload.ValidationExpression,
                 linkedToQuestionId: Monads.Maybe(() => @event.Payload.LinkedToQuestionId.FormatGuid()),
+                linkedToRosterId: Monads.Maybe(() => @event.Payload.LinkedToRosterId.FormatGuid()),
                 orderIndex: @event.Payload.TargetIndex);
 
             return state;
@@ -256,7 +258,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionVariable: @event.Payload.StataExportCaption,
                 questionConditionExpression: @event.Payload.ConditionExpression,
                 questionValidationExpression: @event.Payload.ValidationExpression,
-                linkedToQuestionId: Monads.Maybe(() => @event.Payload.LinkedToQuestionId.FormatGuid()));
+                linkedToQuestionId: Monads.Maybe(() => @event.Payload.LinkedToQuestionId.FormatGuid()),
+                linkedToRosterId: Monads.Maybe(() => @event.Payload.LinkedToRosterId.FormatGuid()));
 
             return state;
         }
@@ -270,7 +273,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionVariable: @event.Payload.StataExportCaption,
                 questionConditionExpression: @event.Payload.ConditionExpression,
                 questionValidationExpression: @event.Payload.ValidationExpression,
-                linkedToQuestionId: null);
+                linkedToQuestionId: null,
+                linkedToRosterId:null);
 
             return state;
         }
@@ -284,7 +288,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionVariable: @event.Payload.StataExportCaption,
                 questionConditionExpression: @event.Payload.ConditionExpression,
                 questionValidationExpression: @event.Payload.ValidationExpression,
-                linkedToQuestionId: null);
+                linkedToQuestionId: null,
+                linkedToRosterId: null);
 
             return state;
         }
@@ -298,7 +303,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionVariable: @event.Payload.VariableName,
                 questionConditionExpression: @event.Payload.EnablementCondition,
                 questionValidationExpression: @event.Payload.ValidationExpression,
-                linkedToQuestionId: null);
+                linkedToQuestionId: null,
+                linkedToRosterId: null);
 
             return state;
         }
@@ -312,7 +318,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionVariable: @event.Payload.VariableName,
                 questionConditionExpression: @event.Payload.EnablementCondition,
                 questionValidationExpression: @event.Payload.ValidationExpression,
-                linkedToQuestionId: null);
+                linkedToQuestionId: null,
+                linkedToRosterId: null);
 
             return state;
         }
@@ -470,6 +477,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             string questionConditionExpression,
             string questionValidationExpression,
             string linkedToQuestionId = null,
+            string linkedToRosterId = null,
             int? orderIndex = null)
         {
             var groupView = this.FindGroup(questionnaireOrGroup: questionnaire, groupId: groupId);
@@ -486,6 +494,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 Type = questionType,
                 Variable = questionVariable,
                 LinkedToQuestionId = linkedToQuestionId,
+                LinkedToRosterId = linkedToRosterId,
                 HasCondition = !string.IsNullOrWhiteSpace(questionConditionExpression),
                 HasValidation = !string.IsNullOrWhiteSpace(questionValidationExpression)    
         };
@@ -508,7 +517,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             string questionVariable,
             string questionConditionExpression,
             string questionValidationExpression,
-            string linkedToQuestionId)
+            string linkedToQuestionId,
+            string linkedToRosterId)
         {
             var questionView = this.FindQuestion(questionnaireOrGroup: questionnaire, questionId: questionId);
 
@@ -519,6 +529,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             questionView.Type = questionType;
             questionView.Variable = questionVariable;
             questionView.LinkedToQuestionId = linkedToQuestionId;
+            questionView.LinkedToRosterId = linkedToRosterId;
             questionView.HasCondition = !string.IsNullOrWhiteSpace(questionConditionExpression);
             questionView.HasValidation = !string.IsNullOrWhiteSpace(questionValidationExpression);
         }

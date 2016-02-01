@@ -140,6 +140,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                 answerOrder: answerOrder,
                 answers: answers,
                 linkedToQuestionId: null,
+                linkedToRosterId: null,
                 areAnswersOrdered: null,
                 yesNoView: null,
                 maxAllowedAnswers: null,
