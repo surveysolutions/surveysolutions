@@ -343,13 +343,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return result;
         }
 
-        private List<DropdownQuestionView> GetSourcesOfLinkedQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection, Guid questionId)
+        private List<DropdownQuestionView> GetSourcesOfLinkedQuestionBriefs(
+            QuestionsAndGroupsCollectionView questionsCollection, Guid questionId)
         {
             var result = new List<DropdownQuestionView>();
             var rosters = questionsCollection.Groups.Where(g => g.IsRoster).ToList();
             foreach (var roster in rosters)
             {
-                var sectionPlaceholder = new DropdownQuestionView
+                var rosterPlaceholder = new DropdownQuestionView
                 {
                     Title =
                         string.Join(" / ",
@@ -359,7 +360,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     IsSectionPlaceHolder = true
                 };
 
-                result.Add(sectionPlaceholder);
+                result.Add(rosterPlaceholder);
 
                 if (!roster.RosterSizeQuestionId.HasValue || questionsCollection.Questions.FirstOrDefault(x => x.Id == roster.RosterSizeQuestionId.Value).Type !=
                     QuestionType.Numeric)
@@ -369,22 +370,43 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                         Title = "%roster_title%",
                         Id = roster.Id.FormatGuid(),
                         IsSectionPlaceHolder = false,
-                        Breadcrumbs = sectionPlaceholder.Title,
+                        Breadcrumbs = rosterPlaceholder.Title,
                         Type = "roster"
                     });
                 }
-                var questions = questionsCollection.Questions.Where(q => q is TextDetailsView || q is NumericDetailsView || q is DateTimeDetailsView)
-                .Where(q => q.RosterScopeIds.Length > 0 && q.RosterScopeIds.Last()== roster.Id &&  q.Id != questionId)
-                .ToList();
 
-                result.AddRange(questions.Select(question => new DropdownQuestionView
+                var questions =
+                    questionsCollection.Questions.Where(
+                        q => q is TextDetailsView || q is NumericDetailsView || q is DateTimeDetailsView)
+                        .Where(
+                            q =>
+                                q.RosterScopeIds.SequenceEqual(roster.RosterScopeIds) && q.Id != questionId)
+                        .Select(q => new DropdownQuestionView
+                        {
+                            Id = q.Id.FormatGuid(),
+                            Title = q.Title,
+                            Breadcrumbs = this.GetBreadcrumbsAsString(questionsCollection, q),
+                            Type = q.Type.ToString().ToLower()
+                        }).ToList();
+
+                var groupedQuestionsList = questions.GroupBy(x => x.Breadcrumbs);
+                foreach (var brief in groupedQuestionsList)
                 {
-                    Title = question.Title,
-                    Id = question.Id.FormatGuid(),
-                    IsSectionPlaceHolder = false,
-                    Breadcrumbs = sectionPlaceholder.Title,
-                    Type = question.Type.ToString().ToLower()
-                }));
+                    if(brief.Key!= rosterPlaceholder.Title)
+                        result.Add(new DropdownQuestionView
+                        {
+                            Title = brief.Key,
+                            IsSectionPlaceHolder = true
+                        });
+                    result.AddRange(brief.Select(question => new DropdownQuestionView
+                    {
+                        Title = question.Title,
+                        Id = question.Id,
+                        IsSectionPlaceHolder = false,
+                        Breadcrumbs = brief.Key,
+                        Type = question.Type
+                    }));
+                }
             }
 
             return result;
