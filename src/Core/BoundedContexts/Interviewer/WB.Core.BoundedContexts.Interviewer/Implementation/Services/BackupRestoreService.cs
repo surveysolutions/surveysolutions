@@ -10,24 +10,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IArchiveUtils archiver;
         private readonly IAsynchronousFileSystemAccessor fileSystemAccessor;
         private readonly string privateStorage;
-        private readonly string crashFilePath;
+        private readonly string logFilePath;
 
         public BackupRestoreService(
             IArchiveUtils archiver,
             IAsynchronousFileSystemAccessor fileSystemAccessor, 
             string privateStorage,
-            string crashFilePath)
+            string logFilePath)
         {
             this.archiver = archiver;
             this.fileSystemAccessor = fileSystemAccessor;
             this.privateStorage = privateStorage;
-            this.crashFilePath = crashFilePath;
+            this.logFilePath = logFilePath;
         }
 
         public async Task<byte[]> GetSystemBackupAsync()
         {
-            if (await this.fileSystemAccessor.IsFileExistsAsync(crashFilePath))
-                await this.fileSystemAccessor.CopyFileAsync(crashFilePath, privateStorage);
+            if (await this.fileSystemAccessor.IsFileExistsAsync(this.logFilePath))
+                await this.fileSystemAccessor.CopyFileAsync(this.logFilePath, privateStorage);
 
             return await this.archiver.ZipDirectoryToByteArrayAsync(privateStorage,
                 fileFilter: @"\.log$;\.dll$;\.sqlite3$;");

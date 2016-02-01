@@ -60,12 +60,12 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<IInterviewerPrincipal>().ToMethod<IInterviewerPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
 
             this.Bind<ILoggerProvider>().To<ServiceLocatorLoggerProvider>();
-            this.Bind<ILogger>().ToConstant(new FileLogger(AndroidPathUtils.GetPathToFileInLocalSubDirectory("logs", "errors.log")));
+            this.Bind<ILogger>().ToConstant(new FileLogger(AndroidPathUtils.GetPathToLogFile()));
 
             this.Bind<IBackupRestoreService>()
                 .To<BackupRestoreService>()
                 .WithConstructorArgument("privateStorage", AndroidPathUtils.GetPathToLocalDirectory())
-                .WithConstructorArgument("crashFilePath", AndroidPathUtils.GetPathToCrashFile());
+                .WithConstructorArgument("logFilePath", AndroidPathUtils.GetPathToLogFile());
 
             this.Bind<IQuestionnaireAssemblyFileAccessor>().ToConstructor(
                 kernel => new InterviewerQuestionnaireAssemblyFileAccessor(kernel.Inject<IFileSystemAccessor>(), 
