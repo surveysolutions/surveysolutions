@@ -5,8 +5,11 @@ using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using It = Machine.Specifications.It;
 using it = Moq.It;
@@ -17,9 +20,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
     {
         Establish context = () =>
         {
-            dashboardItem = Create.InterviewView();
+            var questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 1);
+            var questionId = Guid.Parse("11111111111111111111111111111111");
 
-            @event = Create.Event.YesNoQuestionAnswered(Guid.Parse("11111111111111111111111111111111"), new AnsweredYesNoOption[0]).ToPublishedEvent();
+            dashboardItem = Create.InterviewView();
+            dashboardItem.QuestionnaireId = questionnaireIdentity.ToString();
+
+            @event = Create.Event.YesNoQuestionAnswered(questionId, new AnsweredYesNoOption[0]).ToPublishedEvent();
 
             var storeAsyncTask = new Task(()=> {});
             storeAsyncTask.Start();
@@ -32,7 +39,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                 .Callback<InterviewView>((view) => dashboardItem = view)
                 .Returns(storeAsyncTask);
 
-            denormalizer = Create.DashboardDenormalizer(interviewViewRepository: interviewViewStorage);
+            var questionnaire = Mock.Of<IQuestionnaire>(q => q.IsPrefilled(questionId) == true);
+            var plainQuestionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(r =>
+                r.GetQuestionnaire(questionnaireIdentity) == questionnaire);
+
+            denormalizer = Create.DashboardDenormalizer(interviewViewRepository: interviewViewStorage, plainQuestionnaireRepository: plainQuestionnaireRepository);
         };
 
         Because of = () =>
