@@ -121,9 +121,7 @@
             };
 
             var hasQuestionValidations = function(question) {
-                return $scope.doesQuestionSupportValidations() &&
-                    question.validationExpression !== null &&
-                    /\S/.test(question.validationExpression);
+                return $scope.doesQuestionSupportValidations() && question.validationConditions.length > 0;
             };
 
             $scope.saveQuestion = function (callback) {
@@ -298,6 +296,7 @@
 
             $scope.removeValidationCondition = function(index) {
                 $scope.activeQuestion.validationConditions.splice(index, 1);
+                $scope.questionForm.$setDirty();
             }
 
             $scope.addValidationCondition = function() {
@@ -305,6 +304,7 @@
                     expression: '',
                     message: ''
                 });
+                $scope.questionForm.$setDirty();
             }
 
             $scope.showOptionsInTextarea = function () {
