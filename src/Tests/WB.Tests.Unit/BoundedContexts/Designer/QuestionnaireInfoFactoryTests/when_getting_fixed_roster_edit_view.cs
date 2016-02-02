@@ -93,10 +93,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
             result.NumericIntegerQuestions.Where(x => x.IsSectionPlaceHolder).Select(x => x.Title).ShouldContainOnly("Group 1", "Group 2");
 
         It should_return_integer_questions_in_group_with_key__Group_1__with_ids_contains_only_q1Id = () =>
-            result.NumericIntegerQuestions.ElementAt(1).Id.ShouldContainOnly(q1Id.FormatGuid());
+            result.NumericIntegerQuestions.ElementAt(1).Id.ShouldContainOnly(numericQuestionId.FormatGuid());
 
         It should_return_integer_questions_in_group_with_key__Group_1__with_titles_contains_only_q1_title = () =>
-            result.NumericIntegerQuestions.ElementAt(1).Title.ShouldContainOnly(GetQuestion(q1Id).Title);
+            result.NumericIntegerQuestions.ElementAt(1).Title.ShouldContainOnly(GetQuestion(numericQuestionId).Title);
 
         It should_return_integer_questions_in_group_with_key__Group_2__with_ids_contains_only_q1Id = () =>
             result.NumericIntegerQuestions.ElementAt(3).Id.ShouldContainOnly(q6Id.FormatGuid());
