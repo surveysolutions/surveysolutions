@@ -1,0 +1,25 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.QuestionnaireEntities;
+
+namespace WB.Core.SharedKernels.NonConficltingNamespace // we cannot put any classes here without compilation errors since namespace will conflict with class names )))
+{
+    public static class ValidationConditionsBackwardCompatibility
+    {
+        public static List<ValidationCondition> ConcatWithOldConditionIfNotEmpty(
+            this List<ValidationCondition> validationConditions, string expression, string message)
+        {
+            if (!string.IsNullOrEmpty(expression) || !string.IsNullOrEmpty(message))
+            {
+                return validationConditions.Concat(new ValidationCondition
+                {
+                    Expression = expression,
+                    Message = message
+                }.ToEnumerable()).ToList();
+            }
+
+            return validationConditions;
+        } 
+    }
+}

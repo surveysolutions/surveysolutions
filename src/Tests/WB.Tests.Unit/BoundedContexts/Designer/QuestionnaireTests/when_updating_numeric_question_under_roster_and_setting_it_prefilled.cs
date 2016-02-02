@@ -7,7 +7,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
-using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {

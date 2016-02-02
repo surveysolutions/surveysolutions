@@ -1,4 +1,4 @@
-﻿namespace WB.Core.SharedKernels.Questionnaire.Documents
+﻿namespace WB.Core.SharedKernels.QuestionnaireEntities
 {
     public class ValidationCondition
     {
