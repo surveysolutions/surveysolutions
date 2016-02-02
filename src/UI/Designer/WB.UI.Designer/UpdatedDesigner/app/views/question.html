@@ -83,7 +83,7 @@
 
         <div class="form-group validation-group" ng-if="doesQuestionSupportValidations()" ng-repeat="validation in activeQuestion.validationConditions">
             <div class="validation-group-marker"></div>
-            <label>Validation condition {{$index + 1}} <help key="validationExpression"/></label>
+            <label>Validation condition {{$index + 1}} <help key="validationExpression" /></label>
 
             <button class="btn delete-btn-sm delete-validation-condition" ng-click="removeValidationCondition($index)" tabindex="-1"></button>
 
@@ -95,26 +95,9 @@
             <textarea id="validationMessage{{$index}}" ng-model="validation.message"
                       class="form-control" msd-elastic></textarea>
         </div>
-
-        <div class="form-group"  ng-if="doesQuestionSupportValidations()" >
+        <div class="form-group" ng-if="doesQuestionSupportValidations()">
             <button type="button" class="btn btn-lg btn-link" ng-click="addValidationCondition()">Add new validation rule</button>
         </div>
-    <!--<div class="form-group validation-group" ng-show="doesQuestionSupportValidations()">
-            
-            
-            <div class="validation-group-marker"></div>
-            <label for="edit-question-validation-expression">Validation condition <help key="validationExpression" /></label>
-            <div class="pseudo-form-control">
-                <div id="edit-question-validation-expression" ui-ace="{ onLoad : aceLoaded }" ng-model="activeQuestion.validationExpression"></div>
-            </div>
-        </div>
-
-        <div class="form-group" ng-show="doesQuestionSupportValidations()">
-            <label for="edit-question-validation-message">Error message <help key="validationMessage" /></label>
-            <textarea id="edit-question-validation-message" ng-model="activeQuestion.validationMessage"
-                      class="form-control" msd-elastic></textarea>
-        </div>-->
-
 
         <div class="form-group">
             <div class="form-group pull-right">
@@ -147,7 +130,7 @@
                                     <input type="text" ng-model="option.value" ng-keypress="onKeyPressInOptions($event)" class="form-control question-option-value-editor">
                                 </div>
                                 <div class="column-3">
-                                    <input type="text" ng-model="option.title"  ng-keypress="onKeyPressInOptions($event)" class="form-control">
+                                    <input type="text" ng-model="option.title" ng-keypress="onKeyPressInOptions($event)" class="form-control">
                                 </div>
                                 <div class="column-4">
                                     <a href ng:click="removeOption($index)" class="btn" tabindex="-1"></a>
@@ -299,7 +282,7 @@
             </div>
         </script>
 
-    <script type="text/ng-template" id="MultyOption-template.html">
+        <script type="text/ng-template" id="MultyOption-template.html">
             <div class="multyOption">
                 <div ng-if="!activeQuestion.isLinked">
 
@@ -342,47 +325,47 @@
                     </div>
                 </div>
             </div>
-        <div class="table-holder">
-            <div class="row">
-                <div class="col-xs-5">
-                    <div class="checkbox checkbox-in-column">
-                        <input id="cb-is-ordered" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.areAnswersOrdered" />
-                        <label for="cb-is-ordered"><span></span>Record answer order</label>
+            <div class="table-holder">
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div class="checkbox checkbox-in-column">
+                            <input id="cb-is-ordered" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.areAnswersOrdered" />
+                            <label for="cb-is-ordered"><span></span>Record answer order</label>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="form-group singleline-group checkbox-in-column" ng-class="{'has-error': !questionForm.editQuestionMaxAnswersNumber.$valid}">
+                            <label for="edit-question-max-answers-number">Max number of answers</label>
+                            <input maxlength="9" name="editQuestionMaxAnswersNumber" ng-pattern="/^\d+$/" id="edit-question-max-answers-number" type="text" class="form-control small-numeric-input" ng-model="activeQuestion.maxAllowedAnswers">
+                            <p class="help-block ng-cloak" ng-show="questionForm.editQuestionMaxAnswersNumber.$error.pattern">
+                                Only integers are allowed
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <div class="col-xs-6">
-                    <div class="form-group singleline-group checkbox-in-column" ng-class="{'has-error': !questionForm.editQuestionMaxAnswersNumber.$valid}">
-                        <label for="edit-question-max-answers-number">Max number of answers</label>
-                        <input maxlength="9" name="editQuestionMaxAnswersNumber" ng-pattern="/^\d+$/" id="edit-question-max-answers-number" type="text" class="form-control small-numeric-input" ng-model="activeQuestion.maxAllowedAnswers">
-                        <p class="help-block ng-cloak" ng-show="questionForm.editQuestionMaxAnswersNumber.$error.pattern">
-                            Only integers are allowed
-                        </p>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="checkbox checkbox-in-column" ng-show="!activeQuestion.isLinked">
+                            <input id="cb-multyoption-yes-no-view" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.yesNoView" />
+                            <label for="cb-multyoption-yes-no-view"><span></span>Yes/No mode</label>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-4">
-                    <div class="checkbox checkbox-in-column" ng-show="!activeQuestion.isLinked">
-                        <input id="cb-multyoption-yes-no-view" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.yesNoView" />
-                        <label for="cb-multyoption-yes-no-view"><span></span>Yes/No mode</label>
+                <div class="row">
+                    <div class="col-xs-4" ng-show="!activeQuestion.yesNoView">
+                        <div class="checkbox checkbox-in-column">
+                            <input id="cb-multyoption-is-linked" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isLinked" />
+                            <label for="cb-multyoption-is-linked"><span></span>Is linked</label>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-4" ng-show="!activeQuestion.yesNoView">
-                    <div class="checkbox checkbox-in-column">
-                        <input id="cb-multyoption-is-linked" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isLinked" />
-                        <label for="cb-multyoption-is-linked"><span></span>Is linked</label>
-                    </div>
-                </div>
-            </div>
 
-            <div class="form-group" ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}">
+                <div class="form-group" ng-include="activeQuestion.isLinked ? 'linkTemplate.html' : ''" ng-class="{'has-error': !questionForm.linkedToQuestion.$valid}">
+                </div>
             </div>
-        </div>
         </script>
 
-    <script type="text/ng-template" id="Numeric-template.html">
+        <script type="text/ng-template" id="Numeric-template.html">
             <div class="row">
                 <div class="col-xs-4">
                     <div class="checkbox checkbox-in-column">
@@ -392,7 +375,7 @@
                 </div>
                 <div class="col-xs-8 inline-inputs">
                     <div class="form-group checkbox-in-column" ng-show="!activeQuestion.isInteger" ng-class="{'has-error': !questionForm.countOfDecimalPlaces.$valid}">
-                        <label for="edit-question-count-decimal">Number of decimal places</label> 
+                        <label for="edit-question-count-decimal">Number of decimal places</label>
                         <input id="edit-question-count-decimal" type="text"
                                maxlength="15"
                                name="countOfDecimalPlaces"
