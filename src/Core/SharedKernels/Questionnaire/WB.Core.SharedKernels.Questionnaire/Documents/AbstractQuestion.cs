@@ -80,6 +80,8 @@ namespace Main.Core.Entities.SubEntities
 
         public string ValidationMessage { get; set; }
 
+        public Guid? LinkedToRosterId { get; set; }
+
         /// <summary>
         /// Id of parent question to cascade from 
         /// </summary>

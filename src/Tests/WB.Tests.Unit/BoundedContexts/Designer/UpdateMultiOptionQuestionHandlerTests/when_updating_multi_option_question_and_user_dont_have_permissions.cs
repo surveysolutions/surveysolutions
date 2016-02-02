@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                     instructions: instructions,
                     responsibleId: notExistinigUserId
                     , options: options,
-                    linkedToQuestionId: linkedToQuestionId,
+                    linkedToEntityId: linkedToQuestionId,
                     areAnswersOrdered: areAnswersOrdered,
                     maxAllowedAnswers: maxAllowedAnswers,
                     yesNoView: yesNoView

@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionDetailsFactoryTests
             questionView = (MultiOptionDetailsView)viewMapper.Map(question, parentGroupId);
 
         It should_set_LinkedToQuestionId_in_linkedToQuestionId = () =>
-            questionView.LinkedToQuestionId.ShouldEqual(linkedToQuestionId);
+            questionView.LinkedToEntityId.ShouldEqual(linkedToQuestionId);
 
         It should_set_MaxAllowedAnswers_in_maxAllowedAnswers = () =>
             questionView.MaxAllowedAnswers.ShouldEqual(maxAllowedAnswers);

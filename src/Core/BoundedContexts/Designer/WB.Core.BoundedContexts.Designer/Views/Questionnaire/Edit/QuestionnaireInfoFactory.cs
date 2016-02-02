@@ -4,6 +4,7 @@ using System.Linq;
 using EmitMapper;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Properties;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
@@ -80,6 +81,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 Text = "Picture"
             }
         };
+
+        private readonly string rosterType = "roster";
 
         private static readonly SelectOption[] RosterTypeOptions =
         {
@@ -207,7 +210,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             result.Options = result.Options ?? new CategoricalOption[0];
             result.OptionsCount = result.Options.Length;
             result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, question);
-            result.SourceOfLinkedQuestions = this.GetSourcesOfLinkedQuestionBriefs(questionnaire, questionId);
+            result.SourceOfLinkedEntities = this.GetSourcesOfLinkedQuestionBriefs(questionnaire, questionId);
             result.SourceOfSingleQuestions = this.GetSourcesOfSingleQuestionBriefs(questionnaire, questionId);
             result.QuestionTypeOptions = QuestionTypeOptions;
             result.AllQuestionScopeOptions = AllQuestionScopeOptions;
@@ -294,7 +297,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     var newEditQuestionView = ObjectMapperManager.DefaultInstance
                                                                  .GetMapper<MultiOptionDetailsView, NewEditQuestionView>()
                                                                  .Map(multiOptionDetailsView);
-                    newEditQuestionView.LinkedToQuestionId = Monads.Maybe(() => multiOptionDetailsView.LinkedToQuestionId.FormatGuid());
+                    newEditQuestionView.LinkedToEntityId = Monads.Maybe(() => multiOptionDetailsView.LinkedToEntityId.FormatGuid());
                     return
                         newEditQuestionView;
                 case QuestionType.SingleOption:
@@ -302,7 +305,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     var editQuestionView = ObjectMapperManager.DefaultInstance
                                                               .GetMapper<SingleOptionDetailsView, NewEditQuestionView>()
                                                               .Map(singleOptionDetailsView);
-                    editQuestionView.LinkedToQuestionId = Monads.Maybe(() => singleOptionDetailsView.LinkedToQuestionId.FormatGuid());
+                    editQuestionView.LinkedToEntityId = Monads.Maybe(() => singleOptionDetailsView.LinkedToEntityId.FormatGuid());
                     editQuestionView.CascadeFromQuestionId = Monads.Maybe(() => singleOptionDetailsView.CascadeFromQuestionId.FormatGuid());
                     return editQuestionView;
                 case QuestionType.Text:
@@ -339,7 +342,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
                 x => x.Where(q => q.Id != questionId)
                     .Where(q => q is SingleOptionDetailsView)
-                    .Where(q => !(q as SingleOptionDetailsView).LinkedToQuestionId.HasValue)
+                    .Where(q => !(q as SingleOptionDetailsView).LinkedToEntityId.HasValue)
                     .ToList();
 
             var result = this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
@@ -347,16 +350,87 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return result;
         }
 
-        private List<DropdownQuestionView> GetSourcesOfLinkedQuestionBriefs(QuestionsAndGroupsCollectionView questionsCollection, Guid questionId)
+        private List<DropdownQuestionView> GetSourcesOfLinkedQuestionBriefs(
+            QuestionsAndGroupsCollectionView questionsCollection, Guid questionId)
         {
-            Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
-                x => x.Where(q => q is TextDetailsView || q is NumericDetailsView || q is DateTimeDetailsView)
-                .Where(q => q.RosterScopeIds.Length > 0 && q.Id != questionId)
-                .ToList();
+            var result = new List<DropdownQuestionView>();
+            var rosters = questionsCollection.Groups.Where(g => g.IsRoster).ToList();
+            foreach (var roster in rosters)
+            {
+                var rosterPlaceholder = new DropdownQuestionView
+                {
+                    Title =
+                        string.Join(" / ",
+                            this.GetBreadcrumbs(questionsCollection, roster)
+                                .Select(x => x.Title)
+                                .Union(new[] {roster.Title})),
+                    IsSectionPlaceHolder = true
+                };
 
-            var result = this.PrepareGroupedQuestionsListForDropdown(questionsCollection, questionFilter);
+                result.Add(rosterPlaceholder);
+
+                if (RosterTitleItemShouldBeIncluded(questionsCollection, roster))
+                {
+                    result.Add(new DropdownQuestionView
+                    {
+                        Title = Roster.RosterTitle,
+                        Id = roster.Id.FormatGuid(),
+                        IsSectionPlaceHolder = false,
+                        Breadcrumbs = rosterPlaceholder.Title,
+                        Type = rosterType
+                    });
+                }
+
+                var questions =
+                    questionsCollection.Questions.Where(
+                        q => q is TextDetailsView || q is NumericDetailsView || q is DateTimeDetailsView)
+                        .Where(
+                            q =>
+                                q.RosterScopeIds.SequenceEqual(roster.RosterScopeIds) && q.Id != questionId)
+                        .OrderBy(q => q.ParentGroupsIds.Length)
+                        .Select(q => new DropdownQuestionView
+                        {
+                            Id = q.Id.FormatGuid(),
+                            Title = q.Title,
+                            Breadcrumbs = this.GetBreadcrumbsAsString(questionsCollection, q),
+                            Type = q.Type.ToString().ToLower()
+                        }).ToList();
+
+                var groupedQuestionsList = questions.GroupBy(x => x.Breadcrumbs);
+                foreach (var brief in groupedQuestionsList)
+                {
+                    if(brief.Key!= rosterPlaceholder.Title)
+                        result.Add(new DropdownQuestionView
+                        {
+                            Title = brief.Key,
+                            IsSectionPlaceHolder = true
+                        });
+                    result.AddRange(brief.Select(question => new DropdownQuestionView
+                    {
+                        Title = question.Title,
+                        Id = question.Id,
+                        IsSectionPlaceHolder = false,
+                        Breadcrumbs = brief.Key,
+                        Type = question.Type
+                    }));
+                }
+            }
 
             return result;
+        }
+
+        private static bool RosterTitleItemShouldBeIncluded(QuestionsAndGroupsCollectionView questionsCollection, GroupAndRosterDetailsView roster)
+        {
+            if (!roster.RosterSizeQuestionId.HasValue)
+                return true;
+
+            var rosterSizeQuestion =
+                questionsCollection.Questions.FirstOrDefault(x => x.Id == roster.RosterSizeQuestionId.Value);
+
+            if (rosterSizeQuestion != null && rosterSizeQuestion.Type == QuestionType.Numeric)
+                return false;
+
+            return true;
         }
 
         private List<DropdownQuestionView> GetNumericIntegerTitles(QuestionsAndGroupsCollectionView questionsCollection,
@@ -386,7 +460,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             Func<List<QuestionDetailsView>, List<QuestionDetailsView>> questionFilter =
                 questions => questions
                     .OfType<MultiOptionDetailsView>()
-                    .Where(x => x.LinkedToQuestionId == null)
+                    .Where(x => x.LinkedToEntityId == null)
                     .Where(x => x.RosterScopeIds.Length <= rosterScopeIds.Length)
                     .Where(x => x.RosterScopeIds.All(rosterScopeIds.Contains))
                     .Cast<QuestionDetailsView>().ToList();

@@ -254,7 +254,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private bool MultiOptionQuestionYesNoQuestionCantBeLinked(IMultyOptionsQuestion question)
         {
-            return question.YesNoView && question.LinkedToQuestionId.HasValue;
+            return question.YesNoView && (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue);
         }
 
         private bool MultiOptionQuestionSupportsOnlyIntegerPositiveValues(IMultyOptionsQuestion question)
@@ -485,7 +485,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool FilteredComboboxIsLinked(IQuestion question)
         {
-            return IsFilteredComboboxQuestion(question) && question.LinkedToQuestionId.HasValue;
+            return IsFilteredComboboxQuestion(question) && (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue);
         }
 
         private static bool StaticTextIsEmpty(IStaticText staticText)
@@ -526,7 +526,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (!IsCategoricalSingleAnswerQuestion(question) && !IsCategoricalMultiAnswersQuestion(question))
                 return false;
 
-            if (question.LinkedToQuestionId.HasValue)
+            if (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue)
                 return false;
 
             return question.Answers == null || question.Answers.Count < 2;
@@ -711,7 +711,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount(IMultyOptionsQuestion question)
         {
-            return question.MaxAllowedAnswers.HasValue && !question.LinkedToQuestionId.HasValue &&
+            return question.MaxAllowedAnswers.HasValue && !(question.LinkedToQuestionId.HasValue|| question.LinkedToRosterId.HasValue) &&
                    (question.MaxAllowedAnswers.Value > question.Answers.Count);
         }
 
@@ -893,7 +893,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool IsCategoricalRosterSizeQuestion(IQuestion question)
         {
-            return IsCategoricalMultiAnswersQuestion(question) && !question.LinkedToQuestionId.HasValue;
+            return IsCategoricalMultiAnswersQuestion(question) && !(question.LinkedToQuestionId.HasValue|| question.LinkedToRosterId.HasValue);
         }
 
         private static bool IsCategoricalMultiAnswersQuestion(IQuestion question)
@@ -928,7 +928,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (!(question is SingleQuestion || question is IMultyOptionsQuestion))
                 return false;
 
-            if (question.LinkedToQuestionId.HasValue)
+            if (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue)
                 return false;
 
             return question.Answers.Any(option => string.IsNullOrEmpty(option.AnswerValue));
@@ -1055,7 +1055,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool LinkedQuestionIsInterviewersOnly(IQuestion question)
         {
-            if (!question.LinkedToQuestionId.HasValue)
+            if (!(question.LinkedToQuestionId.HasValue|| question.LinkedToRosterId.HasValue))
                 return false;
 
             return question.QuestionScope != QuestionScope.Interviewer || IsPreFilledQuestion(question);
@@ -1218,6 +1218,39 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 if (!isSourceQuestionInsideRosterGroup)
                 {
                     yield return LinkedQuestionReferenceQuestionNotUnderRosterGroup(linkedQuestion, sourceQuestion);
+                }
+            }
+
+            var questionsLinkedOnRoster = questionnaire.Find<IQuestion>(
+                question => question.LinkedToRosterId.HasValue);
+
+            foreach (var questionLinkedOnRoster in questionsLinkedOnRoster)
+            {
+                var sourceRoster = questionnaire.Find<IGroup>(questionLinkedOnRoster.LinkedToRosterId.Value);
+                if (sourceRoster == null)
+                {
+                    yield return QuestionnaireVerificationMessage.Error("WB0053",
+                        VerificationMessages.WB0053_LinkedQuestionReferencesNotExistingRoster,
+                        CreateReference(questionLinkedOnRoster));
+                    continue;
+                }
+                if(!sourceRoster.IsRoster)
+                {
+                    yield return QuestionnaireVerificationMessage.Error("WB0103",
+                        VerificationMessages.WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster,
+                        CreateReference(questionLinkedOnRoster));
+                    continue;
+                }
+                if (sourceRoster.RosterSizeSource == RosterSizeSourceType.Question &&
+                    sourceRoster.RosterSizeQuestionId.HasValue)
+                {
+                    var sourceQuestion = questionnaire.Find<IQuestion>(sourceRoster.RosterSizeQuestionId.Value);
+                    if (sourceQuestion != null && sourceQuestion.QuestionType == QuestionType.Numeric)
+                    {
+                        yield return QuestionnaireVerificationMessage.Error("WB0104",
+                            VerificationMessages.WB0104_LinkedQuestionReferencesNumericRoster,
+                            CreateReference(questionLinkedOnRoster));
+                    }
                 }
             }
         }
@@ -1695,7 +1728,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool IsCategoricalLinkedQuestion(IQuestion question)
         {
             return (IsCategoricalMultiAnswersQuestion(question) || IsCategoricalSingleAnswerQuestion(question)) &&
-                   question.LinkedToQuestionId.HasValue;
+                   (question.LinkedToQuestionId.HasValue|| question.LinkedToRosterId.HasValue);
         }
 
         private static bool IsFilteredComboboxQuestion(IQuestion question)

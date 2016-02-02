@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             string validationMessage,
             QuestionScope scope,
             Option[] options,
-            Guid? linkedToQuestionId,
+            Guid? linkedToEntityId,
             bool areAnswersOrdered,
             int? maxAllowedAnswers,
             bool yesNoView,
@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             options?.ToList()
                 .ForEach(x => x.Title = CommandUtils.SanitizeHtml(x.Title, removeAllTags: true));
             this.Options = options;
-            this.LinkedToQuestionId = linkedToQuestionId;
+            this.LinkedToEntityId = linkedToEntityId;
             this.AreAnswersOrdered = areAnswersOrdered;
             this.MaxAllowedAnswers = maxAllowedAnswers;
             this.YesNoView = yesNoView;
@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 
         public bool AreAnswersOrdered { get; set; }
 
-        public Guid? LinkedToQuestionId { get; set; }
+        public Guid? LinkedToEntityId { get; set; }
 
         public int? MaxAllowedAnswers { get; set; }
 

@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             QuestionScope scope,
             bool isPreFilled,
             Option[] options,
-            Guid? linkedToQuestionId,
+            Guid? linkedToEntityId,
             bool isFilteredCombobox,
             Guid? cascadeFromQuestionId,
             List<ValidationCondition> validationConditions)
@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             options?.ToList()
                 .ForEach(x => x.Title = CommandUtils.SanitizeHtml(x.Title, removeAllTags: true));
             this.Options = options;
-            this.LinkedToQuestionId = linkedToQuestionId;
+            this.LinkedToEntityId = linkedToEntityId;
             this.IsFilteredCombobox = isFilteredCombobox;
             this.CascadeFromQuestionId = cascadeFromQuestionId;
         }
@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 
         public bool IsPreFilled { get; set; }
 
-        public Guid? LinkedToQuestionId { get; set; }
+        public Guid? LinkedToEntityId { get; set; }
 
         public Option[] Options { get; set; }
     }

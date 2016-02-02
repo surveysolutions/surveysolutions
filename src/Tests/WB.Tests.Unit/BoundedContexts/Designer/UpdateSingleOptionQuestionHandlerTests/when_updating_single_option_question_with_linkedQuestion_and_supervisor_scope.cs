@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                     instructions: instructions,
                     responsibleId: responsibleId,
                     options: null,
-                    linkedToQuestionId: linkedToQuestionId,
+                    linkedToEntityId: linkedToQuestionId,
                     isFilteredCombobox: isFilteredCombobox,
                     cascadeFromQuestionId: сascadeFromQuestionId
                     ));

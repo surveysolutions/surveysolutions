@@ -37,6 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 data.Instructions,
                 data.Mask,
                 data.LinkedToQuestionId,
+                data.LinkedToRosterId,
                 data.QuestionType == QuestionType.AutoPropagate ? true : data.IsInteger,
                 data.CountOfDecimalPlaces,
                 data.AreAnswersOrdered,
@@ -120,7 +121,32 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             }
         }
 
-        private static void UpdateQuestion(IQuestion question, QuestionType questionType, QuestionScope questionScope, string questionText, string stataExportCaption, string variableLabel, string conditionExpression, string validationExpression, string validationMessage, Order? answerOrder, bool featured, bool capital, string instructions, string mask, Guid? linkedToQuestionId, bool? isInteger, int? countOfDecimalPlaces, bool? areAnswersOrdered, int? maxAllowedAnswers, int? masAnswerCount, bool? isFilteredCombobox, Guid? cascadeFromQuestionId, bool? yesNoView, List<ValidationCondition> validationConditions)
+        private static void UpdateQuestion(
+            IQuestion question,
+            QuestionType questionType,
+            QuestionScope questionScope,
+            string questionText,
+            string stataExportCaption,
+            string variableLabel,
+            string conditionExpression,
+            string validationExpression,
+            string validationMessage,
+            Order? answerOrder,
+            bool featured,
+            bool capital,
+            string instructions,
+            string mask,
+            Guid? linkedToQuestionId,
+            Guid? linkedToRosterId,
+            bool? isInteger,
+            int? countOfDecimalPlaces,
+            bool? areAnswersOrdered,
+            int? maxAllowedAnswers,
+            int? masAnswerCount,
+            bool? isFilteredCombobox,
+            Guid? cascadeFromQuestionId,
+            bool? yesNoView,
+            List<ValidationCondition> validationConditions)
         {
             question.QuestionType = questionType;
             question.QuestionScope = questionScope;
@@ -135,6 +161,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             question.Instructions = instructions;
             question.Capital = capital;
             question.LinkedToQuestionId = linkedToQuestionId;
+            question.LinkedToRosterId = linkedToRosterId;
             question.IsFilteredCombobox = isFilteredCombobox;
             question.CascadeFromQuestionId = cascadeFromQuestionId;
             question.ValidationConditions = validationConditions;

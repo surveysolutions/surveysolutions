@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                     instructions: instructions,
                     responsibleId: responsibleId
                     , options: options,
-                    linkedToQuestionId: linkedToQuestionId,
+                    linkedToEntityId: linkedToQuestionId,
                     areAnswersOrdered: areAnswersOrdered,
                     maxAllowedAnswers: maxAllowedAnswers,
                     yesNoView: yesNoView
@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
             exception.ShouldBeOfExactType<QuestionnaireException>();
 
         It should_throw_exception_with_message_containting__linked_question_doesnot_exist__ = () =>
-            new[] { "question that you are linked to does not exist" }.ShouldEachConformTo(
+            new[] { "entity that you are linked to does not exist" }.ShouldEachConformTo(
                 keyword => exception.Message.ToLower().Contains(keyword));
 
         private static Exception exception;
