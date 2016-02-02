@@ -232,6 +232,25 @@ input#edit-question-title, input#edit-group-title {
         height: 34px;
     }
 
+     button.delete-btn-sm {
+        background: url("../i/cross-red.png") center center no-repeat;
+        width: 15px;
+        height: 15px;
+        .opacity(0.3);
+        &:hover {
+            .opacity(1);
+        }
+    }
+
+     &.validation-group {
+         background: #f1f2f3;
+         padding: 8px;
+         border-radius: 4px;
+         .delete-validation-condition {
+             float: right;
+         }
+     }
+
     .btn-group button.dropdown-toggle {
         padding: 10px 40px 10px 10px;
         background-color: #ffffff;
@@ -255,6 +274,10 @@ input#edit-question-title, input#edit-group-title {
             width: 100%;
         }
     }
+}
+
+.help-bracket{
+    color:#bfd8ed;
 }
 
 .edit-question-note{

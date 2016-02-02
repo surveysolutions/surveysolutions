@@ -6804,7 +6804,7 @@ ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a > i {
 }
 .validation-group-marker {
   display: inline-block;
-  background: #2075bf;
+  background: #14A6A7;
   border-radius: 50%;
   width: 8px;
   height: 8px;
@@ -7501,6 +7501,29 @@ input#edit-group-title {
   width: 34px;
   height: 34px;
 }
+.row .form-group button.delete-btn-sm {
+  background: url("i/cross-red.png") center center no-repeat;
+  width: 15px;
+  height: 15px;
+  filter: alpha(opacity=30);
+  -webkit-opacity: 0.3;
+  -moz-opacity: 0.3;
+  opacity: 0.3;
+}
+.row .form-group button.delete-btn-sm:hover {
+  filter: alpha(opacity=100);
+  -webkit-opacity: 1;
+  -moz-opacity: 1;
+  opacity: 1;
+}
+.row .form-group.validation-group {
+  background: #f1f2f3;
+  padding: 8px;
+  border-radius: 4px;
+}
+.row .form-group.validation-group .delete-validation-condition {
+  float: right;
+}
 .row .form-group .btn-group button.dropdown-toggle {
   padding: 10px 40px 10px 10px;
   background-color: #ffffff;
@@ -7521,6 +7544,9 @@ input#edit-group-title {
   overflow: hidden;
   padding-left: 10px;
   width: 100%;
+}
+.help-bracket {
+  color: #bfd8ed;
 }
 .edit-question-note {
   font-family: "Helvetica Neue", "Helvetica", Arial, sans-serif;
@@ -7586,6 +7612,7 @@ textarea#edit-group-description {
   padding-top: 8px;
   padding-bottom: 8px;
   border-radius: 4px;
+  background-color: #fff;
 }
 .ui-match {
   background-color: #FFCC00;

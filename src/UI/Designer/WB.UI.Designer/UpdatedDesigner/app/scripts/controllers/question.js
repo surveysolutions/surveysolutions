@@ -66,6 +66,16 @@
                 $scope.activeQuestion.yesNoView = question.yesNoView;
                 $scope.activeQuestion.isFilteredCombobox = question.isFilteredCombobox;
 
+                $scope.activeQuestion.validationConditions = [];
+                $scope.activeQuestion.validationConditions.push({
+                    expression: 'expression',
+                    message: 'message'
+                });
+                $scope.activeQuestion.validationConditions.push({
+                    expression: 'expression1',
+                    message: 'message1'
+                });
+
                 var options = question.options || [];
                 _.each(options, function(option) {
                     option.id = utilityService.guid();
@@ -293,6 +303,17 @@
                 $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
                 $scope.questionForm.$setDirty();
             };
+
+            $scope.removeValidationCondition = function(index) {
+                $scope.activeQuestion.validationConditions.splice(index, 1);
+            }
+
+            $scope.addValidationCondition = function() {
+                $scope.activeQuestion.validationConditions.push({
+                    expression: '',
+                    message: ''
+                });
+            }
 
             $scope.showOptionsInTextarea = function () {
                 $scope.activeQuestion.stringifiedOptions = optionsService.stringifyOptions($scope.activeQuestion.options);
