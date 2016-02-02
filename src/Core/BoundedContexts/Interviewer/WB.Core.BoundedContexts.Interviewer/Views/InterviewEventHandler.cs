@@ -303,11 +303,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
 
             var interviewView = this.interviewViewRepository.GetById(interviewId.FormatGuid());
-
             if (interviewView == null) return;
 
-            questionnaireIdentity = QuestionnaireIdentity.Parse(interviewView.QuestionnaireId);
-            this.mapInterviewIdToQuestionnaireIdentity.Add(interviewId, questionnaireIdentity);
+            if (questionnaireIdentity == null)
+            {
+                questionnaireIdentity = QuestionnaireIdentity.Parse(interviewView.QuestionnaireId);
+                this.mapInterviewIdToQuestionnaireIdentity.Add(interviewId, questionnaireIdentity);
+            }
+            
 
             if (questionId == interviewView.GpsLocation.PrefilledQuestionId)
             {
