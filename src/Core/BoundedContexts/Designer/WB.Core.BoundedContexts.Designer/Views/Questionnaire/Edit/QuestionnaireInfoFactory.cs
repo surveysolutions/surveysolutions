@@ -211,6 +211,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             result.SourceOfSingleQuestions = this.GetSourcesOfSingleQuestionBriefs(questionnaire, questionId);
             result.QuestionTypeOptions = QuestionTypeOptions;
 
+            if (!string.IsNullOrEmpty(question.ValidationExpression) ||
+                !string.IsNullOrEmpty(question.ValidationMessage))
+            {
+                result.ValidationConditions.Add(new ValidationCondition
+                {
+                    Expression = question.ValidationExpression,
+                    Message = question.ValidationMessage
+                });
+            }
             result.AllQuestionScopeOptions = AllQuestionScopeOptions;
 
             this.ReplaceGuidsInValidationAndConditionRules(result, questionnaire, questionnaireId);
@@ -278,7 +287,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var expressionReplacer = new ExpressionReplacer(questionnaire);
             Guid questionnaireGuid = Guid.Parse(questionnaireKey);
             model.EnablementCondition = expressionReplacer.ReplaceGuidsWithStataCaptions(model.EnablementCondition, questionnaireGuid);
-            model.ValidationExpression = expressionReplacer.ReplaceGuidsWithStataCaptions(model.ValidationExpression, questionnaireGuid);
+
+            foreach (var validationExpression in model.ValidationConditions)
+            {
+                validationExpression.Expression = expressionReplacer.ReplaceGuidsWithStataCaptions(validationExpression.Expression, questionnaireGuid);
+            }
         }
 
         private static NewEditQuestionView MapQuestionFields(QuestionDetailsView question)
