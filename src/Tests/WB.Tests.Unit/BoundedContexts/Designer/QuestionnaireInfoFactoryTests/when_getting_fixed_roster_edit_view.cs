@@ -122,7 +122,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
         private static QuestionsAndGroupsCollectionView questionnaireView;
         private static Mock<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>> questionDetailsReaderMock;
         private static string questionnaireId = "11111111111111111111111111111111";
-        private static Guid rosterId = g3Id;
+        private static Guid rosterId = fixedRoster;
         private static string textListGroupKey = "Group 1 / Roster 1.1 / Roster 1.1.1";
     }
 }

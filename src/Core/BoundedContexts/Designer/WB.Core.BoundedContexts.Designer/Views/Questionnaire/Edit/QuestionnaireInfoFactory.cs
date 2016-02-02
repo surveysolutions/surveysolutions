@@ -362,8 +362,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
                 result.Add(rosterPlaceholder);
 
-                if (!roster.RosterSizeQuestionId.HasValue || questionsCollection.Questions.FirstOrDefault(x => x.Id == roster.RosterSizeQuestionId.Value).Type !=
-                    QuestionType.Numeric)
+                if (RosterTitleItemShouldBeIncluded(questionsCollection, roster))
                 {
                     result.Add(new DropdownQuestionView
                     {
@@ -411,6 +410,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             }
 
             return result;
+        }
+
+        private static bool RosterTitleItemShouldBeIncluded(QuestionsAndGroupsCollectionView questionsCollection, GroupAndRosterDetailsView roster)
+        {
+            if (!roster.RosterSizeQuestionId.HasValue)
+                return true;
+
+            var rosterSizeQuestion =
+                questionsCollection.Questions.FirstOrDefault(x => x.Id == roster.RosterSizeQuestionId.Value);
+
+            if (rosterSizeQuestion != null && rosterSizeQuestion.Type == QuestionType.Numeric)
+                return false;
+
+            return true;
         }
 
         private List<DropdownQuestionView> GetNumericIntegerTitles(QuestionsAndGroupsCollectionView questionsCollection,
