@@ -417,14 +417,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .ToList();
         }
 
-        public Guid[] GetRosterSizeSourcesForQuestion(Guid questionId)
+        public Guid[] GetRosterSizeSourcesForEntity(Guid entityId)
         {
-            this.ThrowIfQuestionDoesNotExist(questionId);
+            var entity = GetEntityOrThrow(entityId);
+            var rosterSizes=new List<Guid>();
+            while (entity != this.innerDocument)
+            {
+                var group= entity as IGroup;
+                if (group != null)
+                {
+                    if (IsRosterGroup(group))
+                        rosterSizes.Add(this.GetRosterSource(group.PublicKey));
 
-            return this
-                .GetRostersFromTopToSpecifiedQuestion(questionId)
-                .Select(this.GetRosterSource)
-                .ToArray();
+                }
+                entity = entity.GetParent();
+            }
+            rosterSizes.Reverse();
+            return rosterSizes.ToArray();
         }
 
         public int GetRosterLevelForQuestion(Guid questionId)
