@@ -7,7 +7,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests

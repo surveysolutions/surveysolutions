@@ -28,7 +28,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
