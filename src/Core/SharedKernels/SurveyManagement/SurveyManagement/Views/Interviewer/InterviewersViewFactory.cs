@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using NHibernate.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -21,22 +22,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
         {
             IQueryable<UserDocument> interviewers = this.GetInterviewersListForViewer(input);
             
-            var items = interviewers.OrderUsingSortExpression(input.Order)
+            var interviewerDetails = interviewers.OrderUsingSortExpression(input.Order)
                                     .Skip((input.Page - 1) * input.PageSize)
                                     .Take(input.PageSize)
-                                    .ToList()
-                                    .Select(x => new InterviewersItem(x.PublicKey, x.UserName, x.Supervisor?.Name, x.Email, x.CreationDate, x.IsLockedBySupervisor, x.IsLockedByHQ, x.DeviceId));
+                                    .Select(x => new InterviewersItem(x.PublicKey, x.UserName, x.Supervisor.Name, x.Email, x.CreationDate, x.IsLockedBySupervisor, x.IsLockedByHQ, x.DeviceId))
+                                    .ToList();
 
-            return new InterviewersView() {Items = items, TotalCount = interviewers.Count()};
+            return new InterviewersView() { Items = interviewerDetails, TotalCount = interviewers.Count() };
         }
 
         protected IQueryable<UserDocument> GetInterviewersListForViewer(InterviewersInputModel input)
-        {
-            return this.GetTeamMembersForViewer(input)
-                .Where(viewer => viewer.Roles.Any(role => role == UserRoles.Operator));
-        }
-
-        protected IQueryable<UserDocument> GetTeamMembersForViewer(InterviewersInputModel input)
         {
             var viewer = this.users.GetById(input.ViewerId);
 
@@ -59,7 +54,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
 
         protected IQueryable<UserDocument> GetTeamMembersForSupervisor(Guid supervisorId, string searchBy, bool archived, bool? connectedToDevice)
         {
-            List<UserDocument> userDocuments = this.users.Query(_ =>
+            var userDocuments = this.users.Query(_ =>
             {
                 var all = _.Where(u => u.IsArchived == archived);
                 if (!string.IsNullOrWhiteSpace(searchBy))
@@ -77,7 +72,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
                     (user.Roles.Any(role => role == UserRoles.Operator) && user.Supervisor.Id == supervisorId) ||
                         user.PublicKey == supervisorId);
 
-                return all.ToList();
+                return all;
             });
             return userDocuments.AsQueryable();
         }
@@ -104,7 +99,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
                     all = all.Where(user => user.Supervisor.Name == input.SupervisorName);
                 }
                 
-                return all.ToList();
+                return all;
             });
             return result.AsQueryable();
         }
