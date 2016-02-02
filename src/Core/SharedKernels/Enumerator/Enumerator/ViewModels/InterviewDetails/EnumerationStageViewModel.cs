@@ -87,7 +87,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Init(string interviewId, NavigationState navigationState)
         {
-            if (navigationState == null) throw new ArgumentNullException("navigationState");
+            if (navigationState == null) throw new ArgumentNullException(nameof(navigationState));
             if (this.navigationState != null) throw new Exception("ViewModel already initialized");
 
             this.interviewId = interviewId;
@@ -156,10 +156,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 userInterfaceStateService.NotifyRefreshStarted();
 
-                var interviewEntityViewModels = this.interviewViewModelFactory.GetEntities(
-                    interviewId: this.navigationState.InterviewId,
-                    groupIdentity: groupIdentity,
-                    navigationState: this.navigationState).ToList();
+                var interview = this.interviewRepository.Get(this.interviewId);
+
+                var interviewEntityViewModels = this.interviewViewModelFactory
+                    .GetEntities(
+                        interviewId: this.navigationState.InterviewId,
+                        groupIdentity: groupIdentity,
+                        navigationState: this.navigationState)
+                    .Where(entity => this.ShouldPutEntityToList(entity, interview))
+                    .ToList();
 
 
                 var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
@@ -176,6 +181,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 userInterfaceStateService.NotifyRefreshFinished();
             }
         }
+
+        private bool ShouldPutEntityToList(IInterviewEntityViewModel entity, IStatefulInterview statefulInterview)
+            => this.ShouldRemoveDisabledEntities
+                ? statefulInterview.IsEnabled(entity.Identity)
+                : true;
 
         public void Handle(RosterInstancesTitleChanged @event)
         {
