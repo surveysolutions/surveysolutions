@@ -532,6 +532,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Linked question references roster which doesn&apos;t not exist..
+        /// </summary>
+        internal static string WB0053_LinkedQuestionReferencesNotExistingRoster {
+            get {
+                return ResourceManager.GetString("WB0053_LinkedQuestionReferencesNotExistingRoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Roster should have deeper or the same roster level as it&apos;s roster size question..
         /// </summary>
         internal static string WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster {
@@ -979,6 +988,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0102_QuestionnaireEntitiesShareSameInternalId {
             get {
                 return ResourceManager.GetString("WB0102_QuestionnaireEntitiesShareSameInternalId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Linked question references group which is not a roster..
+        /// </summary>
+        internal static string WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster {
+            get {
+                return ResourceManager.GetString("WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Linked question references numeric roster..
+        /// </summary>
+        internal static string WB0104_LinkedQuestionReferencesNumericRoster {
+            get {
+                return ResourceManager.GetString("WB0104_LinkedQuestionReferencesNumericRoster", resourceCulture);
             }
         }
         

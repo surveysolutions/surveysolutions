@@ -367,7 +367,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 {
                     result.Add(new DropdownQuestionView
                     {
-                        Title = "%roster_title%",
+                        Title = "%rostertitle%",
                         Id = roster.Id.FormatGuid(),
                         IsSectionPlaceHolder = false,
                         Breadcrumbs = rosterPlaceholder.Title,
@@ -381,6 +381,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                         .Where(
                             q =>
                                 q.RosterScopeIds.SequenceEqual(roster.RosterScopeIds) && q.Id != questionId)
+                        .OrderBy(q => q.ParentGroupsIds.Length)
                         .Select(q => new DropdownQuestionView
                         {
                             Id = q.Id.FormatGuid(),
