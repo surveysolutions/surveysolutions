@@ -72,6 +72,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
         private static Guid questionId = q2Id;
         private static string linkedQuestionsKey1 = "Group 1 / Roster 1.1";
         private static string linkedQuestionsKey2 = "Group 1 / Roster 1.1 / Group 1.1.2";
-        private static string rosterTitle = "%rostertitle%";
+        private static string rosterTitle = "$$Roster Title$$";
     }
 }
