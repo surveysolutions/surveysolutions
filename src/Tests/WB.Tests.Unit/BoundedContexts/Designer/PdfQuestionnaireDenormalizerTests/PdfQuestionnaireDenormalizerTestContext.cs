@@ -99,6 +99,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTes
                 answerOrder: null,
                 answers: null,
                 linkedToQuestionId: null,
+                linkedToRosterId: null,
                 isInteger: null,
                 areAnswersOrdered: null,
                 yesNoView: null,

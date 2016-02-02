@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                     instructions: instructions,
                     responsibleId: responsibleId, 
                     options: options,
-                    linkedToQuestionId: linkedToQuestionId,
+                    linkedToEntityId: linkedToQuestionId,
                     areAnswersOrdered: false,
                     maxAllowedAnswers: 5,
                     yesNoView: false));
