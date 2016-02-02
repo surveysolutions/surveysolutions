@@ -38,14 +38,14 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                     },
                     new GroupAndRosterDetailsView
                     {
-                        Id = g2Id,
+                        Id = multiOptionRoster,
                         Title = "Chapter 1 / Group 1",
                         ParentGroupId = g1Id,
                         ParentGroupsIds = new[] { g1Id }
                     },
                     new GroupAndRosterDetailsView
                     {
-                        Id = g3Id,
+                        Id = fixedRoster,
                         Title = "Chapter 1/ Group 2",
                         ParentGroupId = g1Id,
                         ParentGroupsIds =  new[] { g1Id }
@@ -55,21 +55,21 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                 {
                     new NumericDetailsView
                     {
-                        Id = q1Id,
+                        Id = numericQuestionId,
                         IsInteger = true,
                         Title = "Integer 1",
-                        ParentGroupId = g2Id,
+                        ParentGroupId = multiOptionRoster,
                         VariableName = "q1",
-                        ParentGroupsIds = new [] { g2Id, g1Id },
+                        ParentGroupsIds = new [] { multiOptionRoster, g1Id },
                         RosterScopeIds = new Guid[] {  },
                         EnablementCondition = "q2 == \"aaaa\""
                     },
                     new TextDetailsView
                     {
                         Id = q2Id,
-                        ParentGroupId = g3Id,
+                        ParentGroupId = fixedRoster,
                         Title = "text title",
-                        ParentGroupsIds = new [] { g3Id, g1Id },
+                        ParentGroupsIds = new [] { fixedRoster, g1Id },
                         RosterScopeIds = new Guid[] {  },
                         ValidationExpression = "q1 > 10"
                     },
@@ -77,9 +77,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                     {
                         Id = q5Id,
                         Title = "sINGLE 1",
-                        ParentGroupId = g2Id,
+                        ParentGroupId = multiOptionRoster,
                         VariableName = "qqqq",
-                        ParentGroupsIds = new [] { g2Id, g1Id },
+                        ParentGroupsIds = new [] { multiOptionRoster, g1Id },
                         RosterScopeIds = new Guid[] {  },
                     },
                      new MultiOptionDetailsView
@@ -91,17 +91,17 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                             new CategoricalOption {Title = "2", Value = 2}
                         },
                         Title = "MultiOption",
-                        ParentGroupId = g2Id,
-                        ParentGroupsIds = new [] { g2Id, g1Id },
+                        ParentGroupId = multiOptionRoster,
+                        ParentGroupsIds = new [] { multiOptionRoster, g1Id },
                         RosterScopeIds = new Guid[] {  },
                         EnablementCondition = "q2 == \"aaaa\""
                     },
                     new SingleOptionDetailsView()
                     {
                         Id = q4Id,
-                        ParentGroupId = g3Id,
+                        ParentGroupId = fixedRoster,
                         Title = "single title",
-                        ParentGroupsIds = new [] { g3Id, g1Id },
+                        ParentGroupsIds = new [] { fixedRoster, g1Id },
                         RosterScopeIds = new Guid[] {  },
                         CascadeFromQuestionId = q5Id
                     },
@@ -128,34 +128,34 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                     },
                     new GroupAndRosterDetailsView
                     {
-                        Id = g2Id,
+                        Id = multiOptionRoster,
                         Title = "Roster 1.1",
                         IsRoster = true,
                         RosterSizeSourceType = RosterSizeSourceType.Question,
                         RosterSizeQuestionId = q2Id,
-                        RosterTitleQuestionId = q3Id,
+                        RosterTitleQuestionId = null,
                         ParentGroupId = g1Id,
                         ParentGroupsIds = new Guid[] { g1Id },
                         RosterScopeIds = new Guid[] { q2Id }
                     },
                     new GroupAndRosterDetailsView
                     {
-                        Id = g3Id,
+                        Id = fixedRoster,
                         Title = "Roster 1.1.1",
                         IsRoster = true,
                         RosterSizeSourceType = RosterSizeSourceType.FixedTitles,
                         FixedRosterTitles = new [] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2"), new FixedRosterTitle(3, "3")},
-                        ParentGroupId = g2Id,
-                        ParentGroupsIds = new Guid[] { g2Id, g1Id },
-                        RosterScopeIds = new Guid[] { g3Id, q2Id }
+                        ParentGroupId = multiOptionRoster,
+                        ParentGroupsIds = new Guid[] { multiOptionRoster, g1Id },
+                        RosterScopeIds = new Guid[] { fixedRoster, q2Id }
                     },
                     new GroupAndRosterDetailsView
                     {
                         Id = g4Id,
                         Title = "Group 1.1.2",
-                        EnablementCondition = "[" + q1Id +"] > 40",
-                        ParentGroupId = g2Id,
-                        ParentGroupsIds = new Guid[] { g2Id, g1Id },
+                        EnablementCondition = "[" + numericQuestionId +"] > 40",
+                        ParentGroupId = multiOptionRoster,
+                        ParentGroupsIds = new Guid[] { multiOptionRoster, g1Id },
                         RosterScopeIds = new Guid[] { q2Id }
                     },
                     new GroupAndRosterDetailsView
@@ -164,13 +164,25 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                         Title = "Group 2",
                         ParentGroupId = Guid.Empty,
                         ParentGroupsIds = new Guid[0]
+                    },
+                    new GroupAndRosterDetailsView
+                    {
+                        Id = numericRosterId,
+                        Title = "Roster 1.2",
+                        IsRoster = true,
+                        RosterSizeSourceType = RosterSizeSourceType.Question,
+                        RosterSizeQuestionId = numericQuestionId,
+                        RosterTitleQuestionId = q3Id,
+                        ParentGroupId = g1Id,
+                        ParentGroupsIds = new Guid[] { g1Id },
+                        RosterScopeIds = new Guid[] { numericQuestionId }
                     }
                 },
                 Questions = new List<QuestionDetailsView>
                 {
                     new NumericDetailsView
                     {
-                        Id = q1Id,
+                        Id = numericQuestionId,
                         IsInteger = true,
                         Title = "Integer 1",
                         ParentGroupId = g1Id,
@@ -190,31 +202,31 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                         ParentGroupId = g1Id,
                         ParentGroupsIds = new Guid[] { g1Id },
                         RosterScopeIds = new Guid[] {  },
-                        EnablementCondition = "["+ q1Id +"] > 25"
+                        EnablementCondition = "["+ numericQuestionId +"] > 25"
                     },
                     new TextDetailsView
                     {
                         Id = q3Id,
-                        ParentGroupId = g2Id,
+                        ParentGroupId = numericRosterId,
                         Title = "text title",
-                        ParentGroupsIds = new Guid[] { g2Id, g1Id },
-                        RosterScopeIds = new Guid[] { q2Id }
+                        ParentGroupsIds = new Guid[] { numericRosterId, g1Id },
+                        RosterScopeIds = new Guid[] { numericQuestionId }
                     },
                     new TextListDetailsView
                     {
                         Id = q4Id,
                         Title = "text list title",
-                        ParentGroupId = g3Id,
-                        ParentGroupsIds = new Guid[] { g3Id, g2Id, g1Id },
-                        RosterScopeIds = new Guid[] { g3Id, q2Id }
+                        ParentGroupId = fixedRoster,
+                        ParentGroupsIds = new Guid[] { fixedRoster, multiOptionRoster, g1Id },
+                        RosterScopeIds = new Guid[] { fixedRoster, q2Id }
                     },
                     new NumericDetailsView
                     {
                         Id = q7Id,
                         Title = "numeric title",
-                        ParentGroupId = g3Id,
-                        ParentGroupsIds = new Guid[] { g3Id, g2Id, g1Id },
-                        RosterScopeIds = new Guid[] { g3Id, q2Id }
+                        ParentGroupId = fixedRoster,
+                        ParentGroupsIds = new Guid[] { fixedRoster, multiOptionRoster, g1Id },
+                        RosterScopeIds = new Guid[] { fixedRoster, q2Id }
                     },
                     new NumericDetailsView
                     {
@@ -222,7 +234,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                         Title = "numeric title",
                         IsInteger = false,
                         ParentGroupId = g4Id,
-                        ParentGroupsIds = new Guid[] { g4Id, g2Id, g1Id },
+                        ParentGroupsIds = new Guid[] { g4Id, multiOptionRoster, g1Id },
                         RosterScopeIds = new Guid[] { q2Id }
                     },
                     new NumericDetailsView
@@ -257,7 +269,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                     {
                         Id = st2Id,
                         ParentGroupId = g4Id,
-                        ParentGroupsIds = new Guid[] { g4Id, g2Id, g1Id },
+                        ParentGroupsIds = new Guid[] { g4Id, multiOptionRoster, g1Id },
                         RosterScopeIds = new Guid[] { q2Id },
                         Text = "static text 2"
                     }
@@ -281,7 +293,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                     },
                     new GroupAndRosterDetailsView
                     {
-                        Id = g2Id,
+                        Id = multiOptionRoster,
                         Title = "Roster 1.1",
                         IsRoster = true,
                         RosterSizeSourceType = RosterSizeSourceType.Question,
@@ -313,7 +325,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                     },
                     new GroupAndRosterDetailsView
                     {
-                        Id = g2Id,
+                        Id = multiOptionRoster,
                         Title = "Roster",
                         IsRoster = true,
                         RosterSizeSourceType = RosterSizeSourceType.FixedTitles,
@@ -359,19 +371,19 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                         Id = q4Id,
                         IsInteger = true,
                         Title = "Integer 1",
-                        ParentGroupId = g2Id,
+                        ParentGroupId = multiOptionRoster,
                         VariableName = "int",
-                        ParentGroupsIds = new Guid[] { g2Id },
-                        RosterScopeIds = new Guid[] {  g2Id }
+                        ParentGroupsIds = new Guid[] { multiOptionRoster },
+                        RosterScopeIds = new Guid[] {  multiOptionRoster }
                     },
                     new SingleOptionDetailsView
                     {
                         Id = q5Id,
                         Title = "linked",
-                        ParentGroupId = g2Id,
+                        ParentGroupId = multiOptionRoster,
                         VariableName = "linked_question",
-                        ParentGroupsIds = new Guid[] { g2Id },
-                        RosterScopeIds = new Guid[] { g2Id },
+                        ParentGroupsIds = new Guid[] { multiOptionRoster },
+                        RosterScopeIds = new Guid[] { multiOptionRoster },
                         LinkedToEntityId = q4Id
                     },
                 },
@@ -383,26 +395,26 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
         {
             var fixedNestedRoster = new GroupAndRosterDetailsView
             {
-                Id = g3Id,
+                Id = fixedRoster,
                 Title = "fixed_roster_inside_list_roster",
                 VariableName = "fixed_roster_inside_list_roster",
                 IsRoster = true,
                 RosterSizeSourceType = RosterSizeSourceType.FixedTitles,
                 FixedRosterTitles = new[] { new FixedRosterTitle(1, "1"), new FixedRosterTitle(2, "2"), new FixedRosterTitle(3, "3") },
-                ParentGroupId = g2Id,
-                ParentGroupsIds = new Guid[] { g2Id, g1Id },
-                RosterScopeIds = new Guid[] { g3Id, q1Id }
+                ParentGroupId = multiOptionRoster,
+                ParentGroupsIds = new Guid[] { multiOptionRoster, g1Id },
+                RosterScopeIds = new Guid[] { fixedRoster, q1Id }
             };
             var listNestedRoster = new GroupAndRosterDetailsView
             {
-                Id = g3Id,
+                Id = fixedRoster,
                 Title = "list_roster_inside_list_roster",
                 VariableName = "fixed_roster_inside_list_roster",
                 IsRoster = true,
                 RosterSizeSourceType = RosterSizeSourceType.Question,
                 RosterSizeQuestionId = q2Id,
-                ParentGroupId = g2Id,
-                ParentGroupsIds = new Guid[] { g2Id, g1Id },
+                ParentGroupId = multiOptionRoster,
+                ParentGroupsIds = new Guid[] { multiOptionRoster, g1Id },
                 RosterScopeIds = new Guid[] { q2Id, q1Id }
             };
             return new QuestionsAndGroupsCollectionView
@@ -419,7 +431,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                     },
                     new GroupAndRosterDetailsView
                     {
-                        Id = g2Id,
+                        Id = multiOptionRoster,
                         Title = "list_roster",
                         VariableName = "list_roster",
                         IsRoster = true,
@@ -450,7 +462,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                         MaxAnswerCount = 16,
                         ParentGroupId = g1Id,
                         VariableName = "list_question",
-                        ParentGroupsIds = new Guid[] { g2Id, g1Id },
+                        ParentGroupsIds = new Guid[] { multiOptionRoster, g1Id },
                         RosterScopeIds = new Guid[] { q1Id }
                     },
                     new TextListDetailsView
@@ -460,8 +472,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                         MaxAnswerCount = 16,
                         ParentGroupId = g1Id,
                         VariableName = "list_question",
-                        ParentGroupsIds = new Guid[] { g3Id, g2Id, g1Id },
-                        RosterScopeIds = new Guid[] { g3Id, q1Id }
+                        ParentGroupsIds = new Guid[] { fixedRoster, multiOptionRoster, g1Id },
+                        RosterScopeIds = new Guid[] { fixedRoster, q1Id }
                     }
                 },
                 StaticTexts = new List<StaticTextDetailsView>()
@@ -469,10 +481,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
         }
 
         protected static Guid g1Id = Guid.Parse("11111111111111111111111111111111");
-        protected static Guid g2Id = Guid.Parse("22222222222222222222222222222222");
-        protected static Guid g3Id = Guid.Parse("33333333333333333333333333333333");
+        protected static Guid multiOptionRoster = Guid.Parse("22222222222222222222222222222222");
+        protected static Guid fixedRoster = Guid.Parse("33333333333333333333333333333333");
         protected static Guid g4Id = Guid.Parse("44444444444444444444444444444444");
         protected static Guid g5Id = Guid.Parse("55555555555555555555555555555555");
+        protected static Guid numericRosterId = Guid.NewGuid();
 
         protected static Guid q1Id = Guid.Parse("66666666666666666666666666666666");
         protected static Guid q2Id = Guid.Parse("77777777777777777777777777777777");
@@ -482,8 +495,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
         protected static Guid q6Id = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         protected static Guid q7Id = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         protected static Guid q8Id = Guid.Parse("11EEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-        
+        protected static Guid numericQuestionId = Guid.NewGuid();
+
+
         protected static Guid st1Id = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         protected static Guid st2Id = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+
     }
 }

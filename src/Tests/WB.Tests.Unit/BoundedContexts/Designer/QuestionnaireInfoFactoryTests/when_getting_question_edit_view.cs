@@ -35,8 +35,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
         It should_return_question_equals_g3 = () =>
             result.Title.ShouldEqual(GetQuestion(questionId).Title);
 
-        It should_return_grouped_list_of_multi_questions_with_one_pair = () =>
-            result.SourceOfLinkedEntities.Count.ShouldEqual(8);
+        It should_return_grouped_list_possible_linked_questions = () =>
+            result.SourceOfLinkedEntities.Count.ShouldEqual(9);
 
         It should_replace_guids_in_condition_expressions_for_var_names = () =>
             result.EnablementCondition.ShouldEqual("[q1] > 25");
@@ -56,6 +56,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
         It should_return_integer_questions_in_group_with_key__linkedQuestionsKey2__with_titles_contains_only_q5_title = () =>
             result.SourceOfLinkedEntities.Select(x => x.Title).ShouldContain(GetQuestion(q5Id).Title);
 
+        It should_return_2_roster_title_items = () =>
+            result.SourceOfLinkedEntities.Select(x => x.Title).Count(x => x == rosterTitle).ShouldEqual(2);
+
         private static QuestionDetailsView GetQuestion(Guid questionId)
         {
             return questionnaireView.Questions.Single(x => x.Id == questionId);
@@ -69,6 +72,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
         private static Guid questionId = q2Id;
         private static string linkedQuestionsKey1 = "Group 1 / Roster 1.1";
         private static string linkedQuestionsKey2 = "Group 1 / Roster 1.1 / Group 1.1.2";
-
+        private static string rosterTitle = "%rostertitle%";
     }
 }
