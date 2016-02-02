@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace Main.Core.Entities
 {
@@ -57,6 +58,7 @@ namespace Main.Core.Entities
             this.IsFilteredCombobox = isFilteredCombobox;
             this.CascadeFromQuestionId = cascadeFromQuestionId;
             this.YesNoView = yesNoView;
+            this.ValidationConditions = new List<ValidationCondition>();
         }
 
         public readonly Guid PublicKey;
@@ -85,5 +87,7 @@ namespace Main.Core.Entities
         public readonly bool? IsFilteredCombobox;
         public readonly Guid? CascadeFromQuestionId;
         public readonly bool? YesNoView;
+
+        public List<ValidationCondition> ValidationConditions { get; set; } 
     }
 }

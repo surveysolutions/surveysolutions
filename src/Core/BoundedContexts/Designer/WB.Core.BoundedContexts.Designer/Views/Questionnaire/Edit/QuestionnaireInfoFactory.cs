@@ -210,17 +210,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             result.SourceOfLinkedQuestions = this.GetSourcesOfLinkedQuestionBriefs(questionnaire, questionId);
             result.SourceOfSingleQuestions = this.GetSourcesOfSingleQuestionBriefs(questionnaire, questionId);
             result.QuestionTypeOptions = QuestionTypeOptions;
-
-            if (!string.IsNullOrEmpty(question.ValidationExpression) ||
-                !string.IsNullOrEmpty(question.ValidationMessage))
-            {
-                result.ValidationConditions.Add(new ValidationCondition
-                {
-                    Expression = question.ValidationExpression,
-                    Message = question.ValidationMessage
-                });
-            }
             result.AllQuestionScopeOptions = AllQuestionScopeOptions;
+            result.ValidationConditions.AddRange(question.ValidationConditions);
 
             this.ReplaceGuidsInValidationAndConditionRules(result, questionnaire, questionnaireId);
 
@@ -256,9 +247,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
             var allReferencedQuestionsByExpressions = questionnaire.Questions
                 .Where(x => !x.ParentGroupsIds.Contains(id))
-                .Where(x => !string.IsNullOrEmpty(x.EnablementCondition) || !string.IsNullOrEmpty(x.ValidationExpression))
+                .Where(x => !string.IsNullOrEmpty(x.EnablementCondition) || x.ValidationConditions.Any(q => !string.IsNullOrEmpty(q.Expression)))
                 .Where(x => this.expressionProcessor.GetIdentifiersUsedInExpression(x.EnablementCondition).Any(v => variablesToBeDeleted.Contains(v))
-                         || this.expressionProcessor.GetIdentifiersUsedInExpression(x.ValidationExpression).Any(v => variablesToBeDeleted.Contains(v)));
+                         || x.ValidationConditions.SelectMany(q => this.expressionProcessor.GetIdentifiersUsedInExpression(q.Expression)).Any(v => variablesToBeDeleted.Contains(v)));
 
             var singleQuestionIdsToBeDeleted = questionnaire.Questions
                 .Where(x => x.ParentGroupsIds.Contains(id))

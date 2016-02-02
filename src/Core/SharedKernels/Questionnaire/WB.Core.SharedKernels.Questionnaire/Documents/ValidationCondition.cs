@@ -1,4 +1,4 @@
-﻿namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
+﻿namespace WB.Core.SharedKernels.Questionnaire.Documents
 {
     public class ValidationCondition
     {

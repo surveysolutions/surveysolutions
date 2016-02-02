@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
@@ -26,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public string VariableLabel { get; set; }
         public string Title { get; set; }
 
-        public List<ValidationCondition> ValidationConditions { get; set; }
+        public List<ValidationCondition> ValidationConditions { get; private set; }
 
         public QuestionType Type { get; set; }
         public string LinkedToQuestionId { get; set; }

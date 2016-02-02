@@ -3,6 +3,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using System.Collections.Generic;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
@@ -17,8 +18,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             string enablementCondition,
             string instructions,
             Guid responsibleId,
-            string validationExpression,
-            string validationMessage,
             QuestionScope scope,
             bool isPreFilled,
             List<ValidationCondition> validationConditions)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Main.Core.Entities.Composite;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 // ReSharper disable once CheckNamespace
 namespace Main.Core.Entities.SubEntities
@@ -84,7 +85,9 @@ namespace Main.Core.Entities.SubEntities
         public Guid? LinkedToQuestionId { get; set; }
         
         public bool? IsFilteredCombobox { get; set; }
-        
+
+        public List<ValidationCondition> ValidationConditions { get; set; }
+
         public abstract void AddAnswer(Answer answer);
 
         public virtual IComposite Clone()

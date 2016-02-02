@@ -177,6 +177,7 @@
     <Compile Include="Commands\Questionnaire\Question\UpdateNumericQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\AddDefaultTypeQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\UpdateTextQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateValidatableQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\RemoveSharedPersonFromQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\DeleteQuestionnaireCommand.cs" />
@@ -478,7 +479,6 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\StaticTextDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\TextDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\TextListDetailsView.cs" />
-    <Compile Include="Views\Questionnaire\Edit\QuestionInfo\ValidationCondition.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfoFactory.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\LookupTableView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\MacroView.cs" />
