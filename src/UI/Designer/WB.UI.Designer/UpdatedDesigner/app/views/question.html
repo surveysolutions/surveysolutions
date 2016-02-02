@@ -91,7 +91,7 @@
                 <div ui-ace="{ onLoad : aceLoaded }" ng-model="validation.expression"></div>
             </div>
 
-            <label for="validationMessage{{$index}}">Error message <help key="validationMessage" /></label>
+            <label for="validationMessage{{$index}}" class="validation-message">Error message <help key="validationMessage" /></label>
             <textarea id="validationMessage{{$index}}" ng-model="validation.message"
                       class="form-control" msd-elastic></textarea>
         </div>

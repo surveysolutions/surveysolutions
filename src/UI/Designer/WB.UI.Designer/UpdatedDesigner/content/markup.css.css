@@ -7518,11 +7518,15 @@ input#edit-group-title {
 }
 .row .form-group.validation-group {
   background: #f1f2f3;
-  padding: 8px;
+  padding: 16px;
   border-radius: 4px;
+  margin-bottom: 4px;
 }
 .row .form-group.validation-group .delete-validation-condition {
   float: right;
+}
+.row .form-group.validation-group .validation-message {
+  margin-top: 18px;
 }
 .row .form-group .btn-group button.dropdown-toggle {
   padding: 10px 40px 10px 10px;
