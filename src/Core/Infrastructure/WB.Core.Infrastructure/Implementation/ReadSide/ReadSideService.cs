@@ -626,8 +626,10 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         {
             using (GlobalStopwatcher.Scope("Disable caches"))
             {
-                UpdateStatusMessage("Disabling cache in repository writers.");
+                this.logger.Info("Starting Disabling cache in repository writers.");
 
+                UpdateStatusMessage("Disabling cache in repository writers.");
+                
                 var writers = handlers.SelectMany(x => x.Writers.OfType<ICacheableRepositoryWriter>())
                     .Distinct()
                     .ToArray();
@@ -641,6 +643,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                     using (GlobalStopwatcher.Scope("Disable cache", storageEntityName))
                     {
+                        this.logger.Info($"Disabling cache for {storageEntityName}");
+
                         entitiesInProgress.TryAdd(storageEntityName, Unit.Value);
                         UpdateStatusMessage($"Disabling cache for {string.Join(", ", entitiesInProgress.Keys)}.");
 
