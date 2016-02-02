@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.NonConficltingNamespace;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
 {
     public abstract class AbstractQuestionUpdated : QuestionnaireActiveEvent
     {
+        private List<ValidationCondition> validationConditions;
         public Guid QuestionId { get; set; }
         public string EnablementCondition { get; set; }
         public string Instructions { get; set; }
@@ -16,5 +20,11 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         public string ValidationMessage { get; set; }
 
         public QuestionScope QuestionScope { get; set; }
+
+        public List<ValidationCondition> ValidationConditions
+        {
+            get { return this.validationConditions.ConcatWithOldConditionIfNotEmpty(this.ValidationExpression, this.ValidationMessage); }
+            set { this.validationConditions = value; }
+        }
     }
 }

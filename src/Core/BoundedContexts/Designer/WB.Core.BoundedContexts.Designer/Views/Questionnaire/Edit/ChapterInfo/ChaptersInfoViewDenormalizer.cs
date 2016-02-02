@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
@@ -130,7 +131,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionType: @event.Payload.QuestionType,
                 questionVariable: @event.Payload.StataExportCaption,
                 questionConditionExpression: @event.Payload.ConditionExpression,
-                questionValidationExpression: @event.Payload.ValidationExpression,
+               validationCondions: @event.Payload.ValidationConditions,
                 linkedToQuestionId: Monads.Maybe(() => @event.Payload.LinkedToQuestionId.FormatGuid()));
 
             return state;
@@ -145,7 +146,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionType: @event.Payload.QuestionType,
                 questionVariable: @event.Payload.StataExportCaption,
                 questionConditionExpression: @event.Payload.ConditionExpression,
-                questionValidationExpression: @event.Payload.ValidationExpression,
+                validationCondions: @event.Payload.ValidationConditions,
                 linkedToQuestionId: Monads.Maybe(() => @event.Payload.LinkedToQuestionId.FormatGuid()),
                 orderIndex: @event.Payload.TargetIndex);
 
@@ -161,7 +162,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionType: QuestionType.Numeric,
                 questionVariable: @event.Payload.StataExportCaption,
                 questionConditionExpression: @event.Payload.ConditionExpression,
-                questionValidationExpression: @event.Payload.ValidationExpression);
+                validationCondions: @event.Payload.ValidationConditions);
 
             return state;
         }
@@ -175,7 +176,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionType: QuestionType.Numeric,
                 questionVariable: @event.Payload.StataExportCaption,
                 questionConditionExpression: @event.Payload.ConditionExpression,
-                questionValidationExpression: @event.Payload.ValidationExpression,
+                validationCondions: @event.Payload.ValidationConditions,
                 orderIndex: @event.Payload.TargetIndex);
 
             return state;
@@ -190,7 +191,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                  questionType: QuestionType.TextList,
                  questionVariable: @event.Payload.StataExportCaption,
                  questionConditionExpression: @event.Payload.ConditionExpression,
-                 questionValidationExpression: @event.Payload.ValidationExpression);
+                 validationCondions: @event.Payload.ValidationConditions); 
 
             return state;
         }
@@ -203,8 +204,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                  questionTitle: @event.Payload.QuestionText,
                  questionType: QuestionType.TextList, 
                  questionVariable: @event.Payload.StataExportCaption,
-                 questionConditionExpression: @event.Payload.ConditionExpression, 
-                 questionValidationExpression: @event.Payload.ValidationExpression, 
+                 questionConditionExpression: @event.Payload.ConditionExpression,
+                 validationCondions: @event.Payload.ValidationConditions, 
                  orderIndex: @event.Payload.TargetIndex);
 
             return state;
@@ -219,7 +220,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                  questionType: QuestionType.QRBarcode, 
                  questionVariable: @event.Payload.VariableName,
                  questionConditionExpression: @event.Payload.EnablementCondition,
-                 questionValidationExpression: @event.Payload.ValidationExpression);
+                 validationCondions: @event.Payload.ValidationConditions);
 
             return state;
         }
@@ -230,7 +231,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                  questionId: @event.Payload.QuestionId.FormatGuid(), questionTitle: @event.Payload.Title,
                  questionType: QuestionType.QRBarcode, questionVariable: @event.Payload.VariableName,
                  questionConditionExpression: @event.Payload.EnablementCondition,
-                 questionValidationExpression: @event.Payload.ValidationExpression,
+                validationCondions: @event.Payload.ValidationConditions,
                  orderIndex: @event.Payload.TargetIndex);
 
             return state;
@@ -468,7 +469,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             QuestionType questionType,
             string questionVariable,
             string questionConditionExpression,
-            string questionValidationExpression,
+            List<ValidationCondition> validationCondions,
             string linkedToQuestionId = null,
             int? orderIndex = null)
         {
@@ -479,7 +480,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 return;
             }
 
-            var questionInfoView = new QuestionInfoView()
+            var questionInfoView = new QuestionInfoView
             {
                 ItemId = questionId,
                 Title = questionTitle,
@@ -487,8 +488,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 Variable = questionVariable,
                 LinkedToQuestionId = linkedToQuestionId,
                 HasCondition = !string.IsNullOrWhiteSpace(questionConditionExpression),
-                HasValidation = !string.IsNullOrWhiteSpace(questionValidationExpression)    
-        };
+                HasValidation = validationCondions.Count > 0    
+            };
 
             if (orderIndex.HasValue)
             {
@@ -606,7 +607,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                                      questionType: questionChild.QuestionType,
                                      questionVariable: questionChild.StataExportCaption,
                                      questionConditionExpression: questionChild.ConditionExpression,
-                                     questionValidationExpression: questionChild.ValidationExpression,
+                                     validationCondions: questionChild.ValidationConditions,
                                      linkedToQuestionId: Monads.Maybe(() => questionChild.LinkedToQuestionId.FormatGuid()));
 
                     continue;
