@@ -63,6 +63,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         IStatefulInterview interview;
         QuestionnaireModel questionnaire;
         string interviewId;
+        private readonly object itemsListUpdateBlockLock = new object();
+        private readonly object itemsListUpdateOnUILock = new object();
 
 
         public EnumerationStageViewModel(
@@ -266,29 +268,35 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 this.userInterfaceStateService.NotifyRefreshStarted();
 
-                List<IInterviewEntityViewModel> createdViewModelEntities = this.interviewViewModelFactory.GetEntities(
-                    interviewId: this.navigationState.InterviewId,
-                    groupIdentity: this.navigationState.CurrentGroup,
-                    navigationState: this.navigationState).ToList();
-
-                List<IInterviewEntityViewModel> usedViewModelEntities = new List<IInterviewEntityViewModel>();
-
-                this.InvokeOnMainThread(() =>
+                lock (this.itemsListUpdateBlockLock)
                 {
-                    for (int indexOfViewModel = 0; indexOfViewModel < createdViewModelEntities.Count; indexOfViewModel++)
+                    List<IInterviewEntityViewModel> createdViewModelEntities = this.interviewViewModelFactory.GetEntities(
+                        interviewId: this.navigationState.InterviewId,
+                        groupIdentity: this.navigationState.CurrentGroup,
+                        navigationState: this.navigationState).ToList();
+
+                    List<IInterviewEntityViewModel> usedViewModelEntities = new List<IInterviewEntityViewModel>();
+
+                    this.InvokeOnMainThread(() =>
                     {
-                        var viewModelEntity = createdViewModelEntities[indexOfViewModel];
-
-                        if (identitiesToAdd.Contains(viewModelEntity.Identity))
+                        lock (this.itemsListUpdateOnUILock)
                         {
-                            this.Items.Insert(indexOfViewModel, viewModelEntity);
-                            usedViewModelEntities.Add(viewModelEntity);
-                        }
-                    }
-                });
+                            for (int indexOfViewModel = 0; indexOfViewModel < createdViewModelEntities.Count; indexOfViewModel++)
+                            {
+                                var viewModelEntity = createdViewModelEntities[indexOfViewModel];
 
-                var notUsedViewModelEntities = createdViewModelEntities.Except(usedViewModelEntities);
-                notUsedViewModelEntities.OfType<IDisposable>().ForEach(x => x.Dispose());
+                                if (identitiesToAdd.Contains(viewModelEntity.Identity))
+                                {
+                                    this.Items.Insert(indexOfViewModel, viewModelEntity);
+                                    usedViewModelEntities.Add(viewModelEntity);
+                                }
+                            }
+                        }
+                    });
+
+                    var notUsedViewModelEntities = createdViewModelEntities.Except(usedViewModelEntities);
+                    notUsedViewModelEntities.OfType<IDisposable>().ForEach(x => x.Dispose());
+                }
             }
             finally
             {
@@ -300,23 +308,36 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void RemoveEntities(HashSet<Identity> identitiesToRemove)
         {
-            try
+            this.InvokeOnMainThread(() =>
             {
-                this.userInterfaceStateService.NotifyRefreshStarted();
+                try
+                {
+                    this.userInterfaceStateService.NotifyRefreshStarted();
 
-                var itemsToRemove = this
-                    .Items
-                    .OfType<GroupViewModel>()
-                    .Where(x => identitiesToRemove.Contains(x.Identity))
-                    .ToList();
+                    lock (this.itemsListUpdateOnUILock)
+                    {
+                        var itemsToRemove = this
+                            .Items
+                            .OfType<IInterviewEntityViewModel>()
+                            .Where(item => identitiesToRemove.Contains(item.Identity))
+                            .ToList();
 
-                itemsToRemove.ForEach(x => x.Dispose());
-                this.InvokeOnMainThread(() => this.Items.RemoveRange(itemsToRemove));
-            }
-            finally
-            {
-                this.userInterfaceStateService.NotifyRefreshFinished();
-            }
+                        this.Items.RemoveRange(itemsToRemove);
+
+                        foreach (var item in itemsToRemove)
+                        {
+                            if (item is IDisposable)
+                            {
+                                ((IDisposable)item).Dispose();
+                            }
+                        }
+                    }
+                }
+                finally
+                {
+                    this.userInterfaceStateService.NotifyRefreshFinished();
+                }
+            });
         }
 
         private void InvalidateViewModelsByConditions(Identity[] viewModelIdentities)
