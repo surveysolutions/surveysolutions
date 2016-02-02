@@ -4,6 +4,7 @@ using System.Linq;
 using EmitMapper;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Properties;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
@@ -80,6 +81,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 Text = "Picture"
             }
         };
+
+        private readonly string rosterType = "roster";
 
         private static readonly SelectOption[] RosterTypeOptions =
         {
@@ -366,11 +369,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 {
                     result.Add(new DropdownQuestionView
                     {
-                        Title = "%rostertitle%",
+                        Title = Roster.RosterTitle,
                         Id = roster.Id.FormatGuid(),
                         IsSectionPlaceHolder = false,
                         Breadcrumbs = rosterPlaceholder.Title,
-                        Type = "roster"
+                        Type = rosterType
                     });
                 }
 
