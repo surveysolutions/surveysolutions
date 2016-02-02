@@ -11,6 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         {
             this.SourceOfLinkedQuestions = new List<DropdownQuestionView>();
             this.SourceOfSingleQuestions = new List<DropdownQuestionView>();
+            this.ValidationConditions = new List<ValidationCondition>();
         }
 
         public Guid Id { get; set; }
@@ -24,8 +25,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public string VariableName { get; set; }
         public string VariableLabel { get; set; }
         public string Title { get; set; }
-        public string ValidationExpression { get; set; }
-        public string ValidationMessage { get; set; }
+
+        public List<ValidationCondition> ValidationConditions { get; set; }
+
         public QuestionType Type { get; set; }
         public string LinkedToQuestionId { get; set; }
         public CategoricalOption[] Options { get; set; }

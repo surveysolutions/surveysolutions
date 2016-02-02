@@ -66,15 +66,7 @@
                 $scope.activeQuestion.yesNoView = question.yesNoView;
                 $scope.activeQuestion.isFilteredCombobox = question.isFilteredCombobox;
 
-                $scope.activeQuestion.validationConditions = [];
-                $scope.activeQuestion.validationConditions.push({
-                    expression: 'expression',
-                    message: 'message'
-                });
-                $scope.activeQuestion.validationConditions.push({
-                    expression: 'expression1',
-                    message: 'message1'
-                });
+                $scope.activeQuestion.validationConditions = question.validationConditions;
 
                 var options = question.options || [];
                 _.each(options, function(option) {
