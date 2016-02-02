@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     {
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
         private NavigationState navigationState;
-        string interviewId;
+        private string interviewId;
 
         public ActiveStageViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,

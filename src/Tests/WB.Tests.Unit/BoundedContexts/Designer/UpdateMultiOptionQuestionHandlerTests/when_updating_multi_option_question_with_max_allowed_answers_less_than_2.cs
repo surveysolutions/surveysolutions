@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                         new Option(Guid.NewGuid(), "1", "opt1Title"),
                         new Option(Guid.NewGuid(), "2", "opt2Title")
                     },
-                    linkedToQuestionId: null,
+                    linkedToEntityId: null,
                     areAnswersOrdered: false,
                     maxAllowedAnswers: 1,
                     yesNoView: yesNoView

@@ -61,6 +61,15 @@ namespace WB.Core.BoundedContexts.Designer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to $$Roster Title$$.
+        /// </summary>
+        internal static string RosterTitle {
+            get {
+                return ResourceManager.GetString("RosterTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fixed set of items.
         /// </summary>
         internal static string RosterType_Fixed {

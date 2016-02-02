@@ -75,7 +75,7 @@
 
         OwnerCannotBeInShareList,
 
-        LinkedQuestionDoesNotExist,
+        LinkedEntityDoesNotExist,
 
         QuestionCanNotBeFeatured,
 
@@ -158,6 +158,7 @@
 
         VariableNameEndsWithUnderscore,
 
-        VariableNameHasConsecutiveUnderscores
+        VariableNameHasConsecutiveUnderscores,
+        GroupYouAreLinkedToIsNotRoster
     }
 }
