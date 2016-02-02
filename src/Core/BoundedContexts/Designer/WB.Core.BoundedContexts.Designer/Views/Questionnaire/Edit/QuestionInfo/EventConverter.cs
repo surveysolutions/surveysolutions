@@ -409,6 +409,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 null,
                 null);
+            data.ValidationConditions = evnt.Payload.ValidationConditions;
             return data;
         }
 

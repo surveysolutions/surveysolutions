@@ -26,7 +26,9 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
@@ -520,7 +522,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null,
-                        null));
+                        null)
+                    {
+                        ValidationConditions = e.ValidationConditions
+                    });
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
 
@@ -1993,12 +1998,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isPreFilled,
             QuestionScope scope, 
             string enablementCondition, 
-            string validationExpression, 
-            string validationMessage,
             string instructions,
             Guid responsibleId,
             bool isInteger,
-            int? countOfDecimalPlaces)
+            int? countOfDecimalPlaces,
+            List<ValidationCondition> validationConditions)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -2022,13 +2026,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 capital : false,
                 questionScope : scope,
                 conditionExpression : enablementCondition,
-                validationExpression : validationExpression,
-                validationMessage : validationMessage,
+                validationExpression:null,
+                validationMessage:null,
                 instructions : instructions,
                 responsibleId : responsibleId,
                 isInteger : isInteger,
                 countOfDecimalPlaces : countOfDecimalPlaces
-            ));
+            )
+            {
+                ValidationConditions = validationConditions
+            });
         }
 
         public void UpdateTextListQuestion(Guid questionId, string title, string variableName, string variableLabel,

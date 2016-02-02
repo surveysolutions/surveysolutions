@@ -5,6 +5,8 @@ using Main.Core.Entities;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
 {
@@ -42,7 +44,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 data.MaxAnswerCount,
                 data.IsFilteredCombobox,
                 data.CascadeFromQuestionId,
-                data.YesNoView);
+                data.YesNoView,
+                data.ValidationConditions);
 
             UpdateAnswerList(data.Answers, q, data.LinkedToQuestionId);
 
@@ -117,30 +120,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             }
         }
 
-        private static void UpdateQuestion(
-            IQuestion question,
-            QuestionType questionType,
-            QuestionScope questionScope,
-            string questionText,
-            string stataExportCaption,
-            string variableLabel,
-            string conditionExpression,
-            string validationExpression,
-            string validationMessage,
-            Order? answerOrder,
-            bool featured,
-            bool capital,
-            string instructions,
-            string mask,
-            Guid? linkedToQuestionId,
-            bool? isInteger,
-            int? countOfDecimalPlaces,
-            bool? areAnswersOrdered,
-            int? maxAllowedAnswers,
-            int? masAnswerCount,
-            bool? isFilteredCombobox,
-            Guid? cascadeFromQuestionId,
-            bool? yesNoView)
+        private static void UpdateQuestion(IQuestion question, QuestionType questionType, QuestionScope questionScope, string questionText, string stataExportCaption, string variableLabel, string conditionExpression, string validationExpression, string validationMessage, Order? answerOrder, bool featured, bool capital, string instructions, string mask, Guid? linkedToQuestionId, bool? isInteger, int? countOfDecimalPlaces, bool? areAnswersOrdered, int? maxAllowedAnswers, int? masAnswerCount, bool? isFilteredCombobox, Guid? cascadeFromQuestionId, bool? yesNoView, List<ValidationCondition> validationConditions)
         {
             question.QuestionType = questionType;
             question.QuestionScope = questionScope;
@@ -157,6 +137,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             question.LinkedToQuestionId = linkedToQuestionId;
             question.IsFilteredCombobox = isFilteredCombobox;
             question.CascadeFromQuestionId = cascadeFromQuestionId;
+            question.ValidationConditions = validationConditions;
 
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion != null)
