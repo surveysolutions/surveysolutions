@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 {

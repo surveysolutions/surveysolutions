@@ -87,6 +87,7 @@
     <Compile Include="Documents\UserLight.cs" />
     <Compile Include="Documents\UserRoles.cs" />
     <Compile Include="Documents\ValidationCondition.cs" />
+    <Compile Include="Documents\ValidationConditionsBackwardCompatibility.cs" />
     <Compile Include="IReadSideRepositoryEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

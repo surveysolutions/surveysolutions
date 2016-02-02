@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Main.Core.Entities.Composite;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
-using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.NonConficltingNamespace;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 // ReSharper disable once CheckNamespace
 namespace Main.Core.Entities.SubEntities
@@ -14,6 +15,7 @@ namespace Main.Core.Entities.SubEntities
         protected AbstractQuestion()
         {
             this.Answers = new List<Answer>();
+            this.validationConditions = new List<ValidationCondition>();
         }
 
         protected AbstractQuestion(string text)
@@ -50,6 +52,7 @@ namespace Main.Core.Entities.SubEntities
 
         
         private IComposite parent;
+        private List<ValidationCondition> validationConditions;
 
         public IComposite GetParent()
         {
@@ -86,7 +89,20 @@ namespace Main.Core.Entities.SubEntities
         
         public bool? IsFilteredCombobox { get; set; }
 
-        public List<ValidationCondition> ValidationConditions { get; set; }
+        public List<ValidationCondition> ValidationConditions
+        {
+            get
+            {
+                return this.validationConditions.ConcatWithOldConditionIfNotEmpty(ValidationExpression, ValidationMessage);
+            }
+            set
+            {
+                if (value != null)
+                {
+                    this.validationConditions = value;
+                }
+            }
+        }
 
         public abstract void AddAnswer(Answer answer);
 
