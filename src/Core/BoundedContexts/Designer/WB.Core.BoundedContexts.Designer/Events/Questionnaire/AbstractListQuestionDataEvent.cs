@@ -10,6 +10,11 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
     public class AbstractListQuestionDataEvent : QuestionnaireActiveEvent
     {
         private IList<ValidationCondition> validationConditions;
+
+        public AbstractListQuestionDataEvent()
+        {
+            this.validationConditions = new List<ValidationCondition>();
+        }
         public string ConditionExpression { get; set; }
         public string Instructions { get; set; }
         
