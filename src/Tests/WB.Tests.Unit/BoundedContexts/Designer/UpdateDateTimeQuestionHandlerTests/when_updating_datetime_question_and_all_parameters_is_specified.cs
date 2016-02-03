@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -80,11 +81,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateDateTimeQuestionHandlerTe
 
         It should_raise_QuestionChanged_event_with_validationExpression_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
-                .ValidationExpression.ShouldEqual(validationExpression);
+                .ValidationConditions.First().Expression.ShouldEqual(validationExpression);
 
         It should_raise_QuestionChanged_event_with_validationMessage_specified = () =>
            eventContext.GetSingleEvent<QuestionChanged>()
-               .ValidationMessage.ShouldEqual(validationMessage);
+               .ValidationConditions.First().Message.ShouldEqual(validationMessage);
 
         private static EventContext eventContext;
         private static Questionnaire questionnaire;

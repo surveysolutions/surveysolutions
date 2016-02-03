@@ -80,11 +80,11 @@ questionType: QuestionType.QRBarcode
 
         It should_raise_QuestionChanged_event_with_validationExpression_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
-                .ValidationExpression.ShouldEqual(validationExpression);
+                .ValidationConditions.First().Expression.ShouldEqual(validationExpression);
 
         It should_raise_QuestionChanged_event_with_validationMessage_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
-                .ValidationMessage.ShouldEqual(validationMessage);
+                .ValidationConditions.First().Message.ShouldEqual(validationMessage);
 
         It should_raise_NewQuestionAdded_event_with_same_options_count_as_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -65,11 +66,11 @@ questionType: QuestionType.QRBarcode
 
         It should_raise_QRBarcodeQuestionAdded_event_with_validation_specified = () =>
            eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
-               .ValidationExpression.ShouldEqual(validation);
+               .ValidationConditions.First().Expression.ShouldEqual(validation);
 
         It should_raise_QRBarcodeQuestionAdded_event_with_validation_message_specified = () =>
          eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
-             .ValidationMessage.ShouldEqual(validationMessage);
+             .ValidationConditions.First().Message.ShouldEqual(validationMessage);
 
         private static EventContext eventContext;
         private static Questionnaire questionnaire;
