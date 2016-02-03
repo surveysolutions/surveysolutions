@@ -28,14 +28,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                 isPreFilled: false,
                 scope: QuestionScope.Interviewer,
                 enablementCondition: "not empty condition",
-                validationExpression: null,
-                validationMessage: null,
                 instructions: "intructions",
                 responsibleId: responsibleId,
                 options: null,
                 linkedToEntityId: (Guid?)null,
                 isFilteredCombobox: false,
-                cascadeFromQuestionId: parentQuestionId));
+                cascadeFromQuestionId: parentQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

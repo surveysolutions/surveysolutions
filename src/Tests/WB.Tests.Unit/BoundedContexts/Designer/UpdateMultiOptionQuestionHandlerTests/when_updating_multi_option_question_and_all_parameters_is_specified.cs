@@ -37,16 +37,13 @@ questionType: QuestionType.QRBarcode
                 variableLabel: null,
                 scope: scope,
                 enablementCondition: enablementCondition,
-                validationExpression: validationExpression,
-                validationMessage: validationMessage,
                 instructions: instructions,
                 responsibleId: responsibleId
                 , options: options,
                 linkedToEntityId: linkedToQuestionId,
                 areAnswersOrdered: areAnswersOrdered,
                 maxAllowedAnswers: maxAllowedAnswers,
-                yesNoView: yesNoView
-                );
+                yesNoView: yesNoView, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>());
 
         Cleanup stuff = () =>
         {

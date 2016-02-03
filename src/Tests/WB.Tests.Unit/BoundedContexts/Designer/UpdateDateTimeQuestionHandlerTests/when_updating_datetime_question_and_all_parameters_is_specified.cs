@@ -38,11 +38,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateDateTimeQuestionHandlerTe
                 isPreFilled: isPreFilled,
                 scope: scope,
                 enablementCondition: enablementCondition,
-                validationExpression: validationExpression,
-                validationMessage: validationMessage,
                 instructions: instructions,
-                responsibleId: responsibleId
-                );
+                responsibleId: responsibleId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>());
 
         Cleanup stuff = () =>
         {

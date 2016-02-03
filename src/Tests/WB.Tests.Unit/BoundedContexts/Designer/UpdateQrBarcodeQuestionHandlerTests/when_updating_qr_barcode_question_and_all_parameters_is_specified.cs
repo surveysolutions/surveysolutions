@@ -32,7 +32,7 @@ questionType: QuestionType.QRBarcode
                 questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: "title",
                     variableName: "qr_barcode_question",
                 variableLabel: null, enablementCondition: condition, instructions: instructions,
-                    responsibleId: responsibleId, validationExpression: validation, validationMessage: validationMessage, scope: QuestionScope.Interviewer);
+                    responsibleId: responsibleId, scope: QuestionScope.Interviewer, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>());
 
         Cleanup stuff = () =>
         {

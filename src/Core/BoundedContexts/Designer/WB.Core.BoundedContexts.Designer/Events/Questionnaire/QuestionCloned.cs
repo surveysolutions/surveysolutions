@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace Main.Core.Events.Questionnaire
 {
@@ -15,7 +17,7 @@ namespace Main.Core.Events.Questionnaire
             string mask, bool? isFilteredCombobox, Guid? cascadeFromQuestionId, Guid? sourceQuestionnaireId, Guid sourceQuestionId, int targetIndex, int? maxAnswerCount, int? countOfDecimalPlaces) 
             : base(responsibleId, conditionExpression, featured, instructions, capital, publicKey, questionText, questionScope, stataExportCaption, variableLabel, validationExpression, 
                   validationMessage, questionType, answerOrder, answers, groupPublicKey, linkedToQuestionId, linkedToRosterId, isInteger, areAnswersOrdered, yesNoView, maxAllowedAnswers, mask, isFilteredCombobox,
-                  cascadeFromQuestionId)
+                  cascadeFromQuestionId, new List<ValidationCondition>()) // todo : KP-6698
         {
             this.SourceQuestionnaireId = sourceQuestionnaireId;
             this.SourceQuestionId = sourceQuestionId;

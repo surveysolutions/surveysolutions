@@ -40,7 +40,7 @@ questionType: QuestionType.QRBarcode
                 questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: "title",
                     variableName: "var",
                 variableLabel: null, enablementCondition: conditionExpression, instructions: null,
-                    responsibleId: responsibleId, validationExpression: null, validationMessage: null, scope: QuestionScope.Interviewer));
+                    responsibleId: responsibleId, scope: QuestionScope.Interviewer, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

@@ -37,13 +37,9 @@ questionType: QuestionType.QRBarcode
                 isPreFilled: isPreFilled,
                 scope: scope,
                 enablementCondition: enablementCondition,
-                validationExpression: validationExpression,
-                validationMessage: validationMessage,
                 instructions: instructions,
                  mask: null,
-                responsibleId: responsibleId
-         
-    );
+                responsibleId: responsibleId, validationCoditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>());
 
         Cleanup stuff = () =>
         {
