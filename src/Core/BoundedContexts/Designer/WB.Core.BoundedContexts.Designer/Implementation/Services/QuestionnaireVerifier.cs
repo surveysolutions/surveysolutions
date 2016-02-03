@@ -1241,17 +1241,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         CreateReference(questionLinkedOnRoster));
                     continue;
                 }
-                if (sourceRoster.RosterSizeSource == RosterSizeSourceType.Question &&
-                    sourceRoster.RosterSizeQuestionId.HasValue)
-                {
-                    var sourceQuestion = questionnaire.Find<IQuestion>(sourceRoster.RosterSizeQuestionId.Value);
-                    if (sourceQuestion != null && sourceQuestion.QuestionType == QuestionType.Numeric)
-                    {
-                        yield return QuestionnaireVerificationMessage.Error("WB0104",
-                            VerificationMessages.WB0104_LinkedQuestionReferencesNumericRoster,
-                            CreateReference(questionLinkedOnRoster));
-                    }
-                }
             }
         }
 

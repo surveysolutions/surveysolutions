@@ -365,17 +365,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
                 result.Add(rosterPlaceholder);
 
-                if (RosterTitleItemShouldBeIncluded(questionsCollection, roster))
+                result.Add(new DropdownQuestionView
                 {
-                    result.Add(new DropdownQuestionView
-                    {
-                        Title = Roster.RosterTitle,
-                        Id = roster.Id.FormatGuid(),
-                        IsSectionPlaceHolder = false,
-                        Breadcrumbs = rosterPlaceholder.Title,
-                        Type = rosterType
-                    });
-                }
+                    Title = Roster.RosterTitle,
+                    Id = roster.Id.FormatGuid(),
+                    IsSectionPlaceHolder = false,
+                    Breadcrumbs = rosterPlaceholder.Title,
+                    Type = rosterType
+                });
 
                 var questions =
                     questionsCollection.Questions.Where(
