@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
         public string Title { get; set; }
 
-        public List<ValidationCondition> ValidationConditions { get; set; } 
+        public IList<ValidationCondition> ValidationConditions { get; set; } 
 
         public abstract QuestionType Type { get; set; }
     }

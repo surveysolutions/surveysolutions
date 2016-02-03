@@ -431,7 +431,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             QuestionType questionType,
             string questionVariable,
             string questionConditionExpression,
-            List<ValidationCondition> validationCondions,
+            IList<ValidationCondition> validationCondions,
             string linkedToQuestionId = null,
             string linkedToRosterId = null,
             int? orderIndex = null)
@@ -472,7 +472,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             QuestionType questionType,
             string questionVariable,
             string questionConditionExpression,
-            List<ValidationCondition> questionValidationConditions,       
+            IList<ValidationCondition> questionValidationConditions,       
             string linkedToQuestionId,
             string linkedToRosterId)
         {
