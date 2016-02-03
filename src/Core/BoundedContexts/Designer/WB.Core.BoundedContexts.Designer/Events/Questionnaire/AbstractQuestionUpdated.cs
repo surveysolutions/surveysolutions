@@ -10,6 +10,12 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
     public abstract class AbstractQuestionUpdated : QuestionnaireActiveEvent
     {
         private List<ValidationCondition> validationConditions;
+
+        public AbstractQuestionUpdated()
+        {
+            this.validationConditions = new List<ValidationCondition>();
+        }
+
         public Guid QuestionId { get; set; }
         public string EnablementCondition { get; set; }
         public string Instructions { get; set; }
