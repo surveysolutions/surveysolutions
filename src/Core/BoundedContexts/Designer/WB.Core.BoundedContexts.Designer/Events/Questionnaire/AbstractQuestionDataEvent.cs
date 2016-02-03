@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
@@ -24,18 +25,9 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
             this.QuestionScope = questionScope;
             this.StataExportCaption = stataExportCaption;
             this.VariableLabel = variableLabel;
-            this.ValidationExpression = validationExpression;
-            this.ValidationMessage = validationMessage;
 
             this.ValidationConditions = new List<ValidationCondition>();
-            if (!string.IsNullOrEmpty(this.ValidationExpression))
-            {
-                this.ValidationConditions.Add(new ValidationCondition
-                {
-                    Expression = this.ValidationExpression,
-                    Message = this.ValidationMessage
-                });
-            }
+            this.ValidationConditions = this.ValidationConditions.ConcatWithOldConditionIfNotEmpty(validationExpression, validationMessage);
         }
 
         public string ConditionExpression { get; private set; }
@@ -50,6 +42,6 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         public string ValidationExpression { get; private set; }
         public string ValidationMessage { get; private set; }
 
-        public List<ValidationCondition> ValidationConditions { get; set; }
+        public IList<ValidationCondition> ValidationConditions { get; set; }
     }
 }

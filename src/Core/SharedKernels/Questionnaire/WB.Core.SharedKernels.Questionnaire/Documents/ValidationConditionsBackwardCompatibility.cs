@@ -7,8 +7,8 @@ namespace WB.Core.SharedKernels.NonConficltingNamespace // we cannot put any cla
 {
     public static class ValidationConditionsBackwardCompatibility
     {
-        public static List<ValidationCondition> ConcatWithOldConditionIfNotEmpty(
-            this List<ValidationCondition> validationConditions, string expression, string message)
+        public static IList<ValidationCondition> ConcatWithOldConditionIfNotEmpty(
+            this IList<ValidationCondition> validationConditions, string expression, string message)
         {
             if (!string.IsNullOrEmpty(expression) || !string.IsNullOrEmpty(message))
             {
