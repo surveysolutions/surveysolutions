@@ -47,6 +47,7 @@ namespace WB.UI.Tester.Activities
                     break;
                 case Resource.Id.interview_signout:
                     this.ViewModel.SignOutCommand.Execute();
+                    this.Finish();
                     break;
 
             }

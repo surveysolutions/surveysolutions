@@ -54,6 +54,7 @@ namespace WB.UI.Interviewer.Activities
                     break;
                 case Resource.Id.menu_signout:
                     this.ViewModel.SignOutCommand.Execute();
+                    this.Finish();
                     break;
             }
         }
