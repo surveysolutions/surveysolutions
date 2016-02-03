@@ -36,8 +36,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                 variableLabel: null,
                     scope: QuestionScope.Interviewer,
                     enablementCondition: null,
-                    validationExpression: null,
-                    validationMessage: null,
                     instructions: null,
                     responsibleId: responsibleId,
                     options: new Option[]
@@ -48,8 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                     linkedToEntityId: null,
                     areAnswersOrdered: false,
                     maxAllowedAnswers: 1,
-                    yesNoView: yesNoView
-                    ));
+                    yesNoView: yesNoView, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
 
 
         It should_throw_QuestionnaireException = () =>

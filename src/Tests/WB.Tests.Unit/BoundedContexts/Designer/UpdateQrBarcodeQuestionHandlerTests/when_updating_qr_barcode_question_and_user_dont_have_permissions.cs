@@ -32,7 +32,7 @@ questionType: QuestionType.QRBarcode
                 questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: "title",
                     variableName: "qr_barcode_question",
                 variableLabel: null, enablementCondition: null, instructions: null,
-                    responsibleId: notExistinigUserId, validationExpression: null, validationMessage: null, scope: QuestionScope.Interviewer));
+                    responsibleId: notExistinigUserId, scope: QuestionScope.Interviewer, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

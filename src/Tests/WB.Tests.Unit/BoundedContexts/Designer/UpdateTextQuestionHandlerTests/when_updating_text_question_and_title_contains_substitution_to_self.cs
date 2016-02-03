@@ -11,20 +11,20 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateTextQuestionHandlerTests
 {
     internal class when_updating_text_question_and_title_contains_substitution_to_self : QuestionnaireTestsContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
+            questionnaire.Apply(new NewGroupAdded {PublicKey = chapterId});
             questionnaire.Apply(Create.Event.NewQuestionAdded(
-publicKey: questionId,
-groupPublicKey: chapterId,
-questionText: "old title",
-stataExportCaption: "old_variable_name",
-instructions: "old instructions",
-conditionExpression: "old condition",
-responsibleId: responsibleId,
-questionType: QuestionType.QRBarcode
-));
+                publicKey: questionId,
+                groupPublicKey: chapterId,
+                questionText: "old title",
+                stataExportCaption: "old_variable_name",
+                instructions: "old instructions",
+                conditionExpression: "old condition",
+                responsibleId: responsibleId,
+                questionType: QuestionType.QRBarcode
+                ));
         };
 
         Because of = () =>
@@ -37,13 +37,9 @@ questionType: QuestionType.QRBarcode
                     isPreFilled: isPreFilled,
                     scope: scope,
                     enablementCondition: enablementCondition,
-                    validationExpression: validationExpression,
-                    validationMessage: validationMessage,
                     instructions: instructions,
                      mask: null,
-                    responsibleId: responsibleId
-         
-                    ));
+                    responsibleId: responsibleId, validationCoditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
@@ -64,7 +60,5 @@ questionType: QuestionType.QRBarcode
         private static bool isPreFilled = false;
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static string enablementCondition = null;
-        private static string validationExpression = null;
-        private static string validationMessage = "";
     }
 }

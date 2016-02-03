@@ -66,14 +66,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                 isPreFilled: false,
                 scope: QuestionScope.Interviewer,
                 enablementCondition: "some condition",
-                validationExpression: "some validation",
-                validationMessage: "validation message",
                 instructions: "intructions",
                 responsibleId: responsibleId,
                 options: null,
                 linkedToEntityId: (Guid?)null,
                 isFilteredCombobox: true,
-                cascadeFromQuestionId: null);
+                cascadeFromQuestionId: null, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>());
 
         private Cleanup stuff = () =>
         {
