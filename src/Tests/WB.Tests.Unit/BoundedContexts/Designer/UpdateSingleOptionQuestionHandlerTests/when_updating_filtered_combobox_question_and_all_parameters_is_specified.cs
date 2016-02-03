@@ -7,6 +7,7 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandlerTests
@@ -51,7 +52,15 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                 options: new_options,
                 linkedToEntityId: linkedToQuestionId,
                 isFilteredCombobox: isFilteredCombobox,
-                cascadeFromQuestionId: сascadeFromQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>());
+                cascadeFromQuestionId: сascadeFromQuestionId, 
+                validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>
+                {
+                    new ValidationCondition
+                    {
+                        Message = validationMessage,
+                        Expression = validationExpression
+                    }
+                });
 
         private Cleanup stuff = () =>
         {
