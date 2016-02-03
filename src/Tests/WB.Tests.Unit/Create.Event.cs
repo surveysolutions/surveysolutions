@@ -89,7 +89,8 @@ namespace WB.Tests.Unit
                     instructions: instructions,
                     responsibleId: responsibleId ?? Guid.NewGuid(),
                     capital: false,
-                    isInteger: isInteger);
+                    isInteger: isInteger,
+                    questionType:QuestionType.Numeric);
             }
 
             public static AnswersDeclaredInvalid AnswersDeclaredInvalid(Guid? id = null, decimal[] rosterVector = null)
