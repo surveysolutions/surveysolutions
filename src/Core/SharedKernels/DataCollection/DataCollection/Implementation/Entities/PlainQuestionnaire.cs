@@ -514,8 +514,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool IsPrefilled(Guid questionId)
         {
-            var question = this.QuestionnaireDocument.Find<IQuestion>(questionId);
+            var question = this.GetQuestionOrThrow(questionId);
             return question.Featured;
+        }
+
+        public bool ShouldBeHiddenIfDisabled(Guid entityId)
+        {
+            var entity = this.GetEntityOrThrow(entityId);
+            return (entity as IConditional)?.HideIfDisabled ?? false;
         }
 
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)

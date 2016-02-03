@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ActiveGroupViewModelTests
 {
@@ -15,7 +16,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ActiveGroupViewModel
     {
         public static EnumerationStageViewModel CreateEnumerationStageViewModel(
             IInterviewViewModelFactory interviewViewModelFactory = null,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository = null,
+            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
             ISubstitutionService substitutionService = null,
             ILiteEventRegistry eventRegistry = null,
@@ -24,7 +26,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ActiveGroupViewModel
         {
             return new EnumerationStageViewModel(
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
-                questionnaireRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
+                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireModelRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 substitutionService ?? Mock.Of<ISubstitutionService>(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
