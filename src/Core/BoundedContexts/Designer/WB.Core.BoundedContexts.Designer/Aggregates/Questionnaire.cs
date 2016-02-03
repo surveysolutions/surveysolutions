@@ -3805,10 +3805,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     conditionIds = this.expressionProcessor.GetIdentifiersUsedInExpression(question.ConditionExpression);
                 }
 
-                IEnumerable<string> validationIds = new List<string>();
-                if (IsExpressionDefined(question.ValidationExpression))
+                List<string> validationIds = new List<string>();
+                foreach (var validationCondition in question.ValidationConditions)
                 {
-                    validationIds = this.expressionProcessor.GetIdentifiersUsedInExpression(question.ValidationExpression);
+                    if (IsExpressionDefined(validationCondition.Expression))
+                    {
+                        validationIds.AddRange(this.expressionProcessor.GetIdentifiersUsedInExpression(validationCondition.Expression));
+                    }
                 }
 
                 return validationIds.Contains(questionId) || validationIds.Contains(alias) ||
