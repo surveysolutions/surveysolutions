@@ -33,15 +33,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireChangeHistoryDenor
             questionnaireChangeHistoryDenormalizer.Handle(Create.QuestionChangedEvent(questionId: questionId,questionTitle: questionTitle));
             questionnaireChangeHistoryDenormalizer.Handle(Create.QuestionDeletedEvent(questionId));
 
-            questionnaireChangeHistoryDenormalizer.Handle(Create.NumericQuestionAddedEvent(questionId));
             questionnaireChangeHistoryDenormalizer.Handle(Create.NumericQuestionClonedEvent(questionId2));
             questionnaireChangeHistoryDenormalizer.Handle(Create.NumericQuestionChangedEvent(questionId));
 
-            questionnaireChangeHistoryDenormalizer.Handle(Create.TextListQuestionAddedEvent(questionId));
             questionnaireChangeHistoryDenormalizer.Handle(Create.TextListQuestionClonedEvent(questionId2));
             questionnaireChangeHistoryDenormalizer.Handle(Create.TextListQuestionChangedEvent(questionId));
 
-            questionnaireChangeHistoryDenormalizer.Handle(Create.QRBarcodeQuestionAddedEvent(questionId));
             questionnaireChangeHistoryDenormalizer.Handle(Create.QRBarcodeQuestionClonedEvent(questionId2));
             questionnaireChangeHistoryDenormalizer.Handle(Create.QRBarcodeQuestionUpdatedEvent(questionId));
 

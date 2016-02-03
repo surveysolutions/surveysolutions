@@ -9,38 +9,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 {
     internal static class EventConverter
     {
-        public static QuestionData QRBarcodeQuestionAddedToQuestionData(IPublishedEvent<QRBarcodeQuestionAdded> evnt)
-        {
-            QRBarcodeQuestionAdded e = evnt.Payload;
-            var data = new QuestionData(
-                e.QuestionId,
-                QuestionType.QRBarcode,
-                e.QuestionScope,
-                e.Title,
-                e.VariableName,
-                e.VariableLabel,
-                e.EnablementCondition,
-                e.ValidationExpression,
-                e.ValidationMessage,
-                Order.AZ,
-                false,
-                false,
-                e.Instructions,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
-            return data;
-        }
-
         public static QuestionData QRBarcodeQuestionUpdatedToQuestionData(IPublishedEvent<QRBarcodeQuestionUpdated> evnt)
         {
             QRBarcodeQuestionUpdated e = evnt.Payload;
@@ -131,38 +99,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 null,
                 null,
-                null,
-                null,
-                null);
-            return data;
-        }
-
-        public static QuestionData TextListQuestionAddedToQuestionData(IPublishedEvent<TextListQuestionAdded> evnt)
-        {
-            TextListQuestionAdded e = evnt.Payload;
-            var data = new QuestionData(
-                e.PublicKey,
-                QuestionType.TextList,
-                e.QuestionScope,
-                e.QuestionText,
-                e.StataExportCaption,
-                e.VariableLabel,
-                e.ConditionExpression,
-                e.ValidationExpression,
-                e.ValidationMessage,
-                Order.AZ,
-                false,
-                false,
-                e.Instructions,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                e.MaxAnswerCount,
                 null,
                 null,
                 null);
@@ -326,38 +262,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 e.IsFilteredCombobox,
                 e.CascadeFromQuestionId,
                 e.YesNoView);
-            return data;
-        }
-
-        public static QuestionData NumericQuestionAddedToQuestionData(IPublishedEvent<NumericQuestionAdded> evnt)
-        {
-            NumericQuestionAdded e = evnt.Payload;
-            var data = new QuestionData(
-                e.PublicKey,
-                QuestionType.Numeric,
-                e.QuestionScope,
-                e.QuestionText,
-                e.StataExportCaption,
-                e.VariableLabel,
-                e.ConditionExpression,
-                e.ValidationExpression,
-                e.ValidationMessage,
-                Order.AZ,
-                e.Featured,
-                e.Capital,
-                e.Instructions,
-                null,
-                null,
-                null,
-                null,
-                e.IsInteger,
-                e.CountOfDecimalPlaces,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
             return data;
         }
 

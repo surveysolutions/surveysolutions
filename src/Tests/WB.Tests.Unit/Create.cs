@@ -1305,19 +1305,6 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static IPublishedEvent<NumericQuestionAdded> NumericQuestionAddedEvent(string questionId = null,
-            string parentGroupId = null, string questionVariable = null, string questionTitle = null,
-            string questionConditionExpression = null)
-        {
-            return ToPublishedEvent(Event.NumericQuestionAdded(
-                publicKey : GetQuestionnaireItemId(questionId),
-                groupPublicKey : GetQuestionnaireItemId(parentGroupId),
-                stataExportCaption : questionVariable,
-                questionText : questionTitle,
-                conditionExpression : questionConditionExpression
-            ));
-        }
-
         public static IPublishedEvent<NumericQuestionChanged> NumericQuestionChangedEvent(string questionId,
             string questionVariable = null, string questionTitle = null, string questionConditionExpression = null)
         {
@@ -1449,20 +1436,6 @@ namespace WB.Tests.Unit
                 QuestionScope = scope,
                 Featured = preFilled
             };
-        }
-
-        public static IPublishedEvent<QRBarcodeQuestionAdded> QRBarcodeQuestionAddedEvent(string questionId = null,
-            string parentGroupId = null, string questionVariable = null, string questionTitle = null,
-            string questionConditionExpression = null)
-        {
-            return ToPublishedEvent(new QRBarcodeQuestionAdded()
-            {
-                QuestionId = GetQuestionnaireItemId(questionId),
-                ParentGroupId = GetQuestionnaireItemId(parentGroupId),
-                VariableName = questionVariable,
-                Title = questionTitle,
-                EnablementCondition = questionConditionExpression
-            });
         }
 
         public static IPublishedEvent<QRBarcodeQuestionCloned> QRBarcodeQuestionClonedEvent(string questionId = null,
@@ -2160,20 +2133,6 @@ namespace WB.Tests.Unit
                 QuestionType = QuestionType.TextList,
                 StataExportCaption = variable
             };
-        }
-
-        public static IPublishedEvent<TextListQuestionAdded> TextListQuestionAddedEvent(string questionId = null,
-            string parentGroupId = null, string questionVariable = null, string questionTitle = null,
-            string questionConditionExpression = null)
-        {
-            return ToPublishedEvent(new TextListQuestionAdded()
-            {
-                PublicKey = GetQuestionnaireItemId(questionId),
-                GroupId = GetQuestionnaireItemId(parentGroupId),
-                StataExportCaption = questionVariable,
-                QuestionText = questionTitle,
-                ConditionExpression = questionConditionExpression
-            });
         }
 
         public static IPublishedEvent<TextListQuestionChanged> TextListQuestionChangedEvent(string questionId,

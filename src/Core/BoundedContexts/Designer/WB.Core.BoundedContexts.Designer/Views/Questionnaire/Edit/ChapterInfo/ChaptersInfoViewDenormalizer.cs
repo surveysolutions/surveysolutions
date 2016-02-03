@@ -26,13 +26,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         IUpdateHandler<GroupInfoView, QuestionChanged>,
         IUpdateHandler<GroupInfoView, QuestionCloned>,
         IUpdateHandler<GroupInfoView, QuestionDeleted>,
-        IUpdateHandler<GroupInfoView, NumericQuestionAdded>,
         IUpdateHandler<GroupInfoView, NumericQuestionChanged>,
         IUpdateHandler<GroupInfoView, NumericQuestionCloned>,
-        IUpdateHandler<GroupInfoView, TextListQuestionAdded>,
         IUpdateHandler<GroupInfoView, TextListQuestionChanged>,
         IUpdateHandler<GroupInfoView, TextListQuestionCloned>,
-        IUpdateHandler<GroupInfoView, QRBarcodeQuestionAdded>,
         IUpdateHandler<GroupInfoView, QRBarcodeQuestionUpdated>,
         IUpdateHandler<GroupInfoView, QRBarcodeQuestionCloned>,
         IUpdateHandler<GroupInfoView, MultimediaQuestionUpdated>,
@@ -155,20 +152,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             return state;
         }
 
-        public GroupInfoView Update(GroupInfoView state, IPublishedEvent<NumericQuestionAdded> @event)
-        {
-            this.AddQuestion(questionnaire: state,
-                groupId: @event.Payload.GroupPublicKey.FormatGuid(),
-                questionId: @event.Payload.PublicKey.FormatGuid(),
-                questionTitle: @event.Payload.QuestionText,
-                questionType: QuestionType.Numeric,
-                questionVariable: @event.Payload.StataExportCaption,
-                questionConditionExpression: @event.Payload.ConditionExpression,
-                validationCondions: @event.Payload.ValidationConditions);
-
-            return state;
-        }
-
         public GroupInfoView Update(GroupInfoView state, IPublishedEvent<NumericQuestionCloned> @event)
         {
             this.AddQuestion(questionnaire: state,
@@ -184,20 +167,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             return state;
         }
 
-        public GroupInfoView Update(GroupInfoView state, IPublishedEvent<TextListQuestionAdded> @event)
-        {
-            this.AddQuestion(questionnaire: state,
-                groupId: @event.Payload.GroupId.FormatGuid(),
-                 questionId: @event.Payload.PublicKey.FormatGuid(),
-                 questionTitle: @event.Payload.QuestionText,
-                 questionType: QuestionType.TextList,
-                 questionVariable: @event.Payload.StataExportCaption,
-                 questionConditionExpression: @event.Payload.ConditionExpression,
-                 validationCondions: @event.Payload.ValidationConditions); 
-
-            return state;
-        }
-
         public GroupInfoView Update(GroupInfoView state, IPublishedEvent<TextListQuestionCloned> @event)
         {
             this.AddQuestion(questionnaire: state, 
@@ -209,20 +178,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                  questionConditionExpression: @event.Payload.ConditionExpression,
                  validationCondions: @event.Payload.ValidationConditions, 
                  orderIndex: @event.Payload.TargetIndex);
-
-            return state;
-        }
-
-        public GroupInfoView Update(GroupInfoView state, IPublishedEvent<QRBarcodeQuestionAdded> @event)
-        {
-            this.AddQuestion(questionnaire: state, 
-                groupId: @event.Payload.ParentGroupId.FormatGuid(),
-                 questionId: @event.Payload.QuestionId.FormatGuid(), 
-                 questionTitle: @event.Payload.Title,
-                 questionType: QuestionType.QRBarcode, 
-                 questionVariable: @event.Payload.VariableName,
-                 questionConditionExpression: @event.Payload.EnablementCondition,
-                 validationCondions: @event.Payload.ValidationConditions);
 
             return state;
         }

@@ -323,14 +323,11 @@
     <Compile Include="Events\Questionnaire\StaticTextAdded.cs" />
     <Compile Include="Events\Questionnaire\QRBarcodeQuestionCloned.cs" />
     <Compile Include="Events\Questionnaire\QRBarcodeQuestionUpdated.cs" />
-    <Compile Include="Events\Questionnaire\QRBarcodeQuestionAdded.cs" />
     <Compile Include="Events\Questionnaire\GroupBecameARoster.cs" />
     <Compile Include="Events\Questionnaire\GroupEvent.cs" />
     <Compile Include="Events\Questionnaire\GroupStoppedBeingARoster.cs" />
     <Compile Include="Events\Questionnaire\TextListQuestionCloned.cs" />
     <Compile Include="Events\Questionnaire\TextListQuestionChanged.cs" />
-    <Compile Include="Events\Questionnaire\TextListQuestionAdded.cs" />
-    <Compile Include="Events\Questionnaire\NumericQuestionAdded.cs" />
     <Compile Include="Events\Questionnaire\NumericQuestionChanged.cs" />
     <Compile Include="Events\Questionnaire\NumericQuestionCloned.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireActiveEvent.cs" />
