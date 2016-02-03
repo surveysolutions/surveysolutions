@@ -562,11 +562,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IQuestion linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);
 
             if (!linkedQuestion.LinkedToQuestionId.HasValue)
-                throw new QuestionnaireException(string.Format(
-                    "Cannot return id of referenced question because specified question {0} is not linked.",
-                    FormatQuestionForException(linkedQuestion)));
+                throw new QuestionnaireException($"Cannot return id of referenced question because specified question {FormatQuestionForException(linkedQuestion)} is not linked.");
 
             return linkedQuestion.LinkedToQuestionId.Value;
+        }
+
+        public Guid GetRosterReferencedByLinkedQuestion(Guid linkedQuestionId)
+        {
+            IQuestion linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);
+
+            if (!linkedQuestion.LinkedToRosterId.HasValue)
+                throw new QuestionnaireException($"Cannot return id of referenced roster because specified question {FormatQuestionForException(linkedQuestion)} is not linked.");
+
+            return linkedQuestion.LinkedToRosterId.Value;
+        }
+
+        public bool IsQuestionLinkedToRoster(Guid linkedQuestionId)
+        {
+            IQuestion linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);
+            if (!linkedQuestion.LinkedToRosterId.HasValue && !linkedQuestion.LinkedToQuestionId.HasValue)
+                throw new QuestionnaireException($"Question {FormatQuestionForException(linkedQuestion)} is not linked.");
+
+            return linkedQuestion.LinkedToRosterId.HasValue;
         }
 
         public bool IsQuestionInteger(Guid questionId)

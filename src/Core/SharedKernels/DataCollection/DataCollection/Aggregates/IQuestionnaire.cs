@@ -111,7 +111,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetAllUnderlyingChildRosters(Guid groupId);
 
         Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId);
-        
+
+        Guid GetRosterReferencedByLinkedQuestion(Guid linkedQuestionId);
+
+        bool IsQuestionLinkedToRoster(Guid questionId);
+
         bool IsQuestionInteger(Guid questionId);
 
         bool IsQuestionYesNo(Guid questionId);
