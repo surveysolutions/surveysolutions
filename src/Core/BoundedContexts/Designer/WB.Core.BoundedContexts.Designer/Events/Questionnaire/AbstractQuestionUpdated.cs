@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
 {
     public abstract class AbstractQuestionUpdated : QuestionnaireActiveEvent
     {
-        private List<ValidationCondition> validationConditions;
+        private IList<ValidationCondition> validationConditions;
 
         public AbstractQuestionUpdated()
         {
@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
 
         public QuestionScope QuestionScope { get; set; }
 
-        public List<ValidationCondition> ValidationConditions
+        public IList<ValidationCondition> ValidationConditions
         {
             get { return this.validationConditions.ConcatWithOldConditionIfNotEmpty(this.ValidationExpression, this.ValidationMessage); }
             set { this.validationConditions = value; }
