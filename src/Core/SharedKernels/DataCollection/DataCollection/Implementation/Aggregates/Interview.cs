@@ -2212,19 +2212,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (questionnaire.IsQuestionLinkedToRoster(questionId))
             {
-                Guid linkedRosterId = questionnaire.GetRosterReferencedByLinkedQuestion(questionId);
-                var availableRosterInstanceIds = this.interviewState.GetRosterInstanceIds(linkedRosterId, new RosterVector(selectedRosterVector.WithoutLast()));
-                var rosterInstanceId = selectedRosterVector.Last();
-                if (!availableRosterInstanceIds.Contains(rosterInstanceId))
-                {
-                    throw new InterviewException(string.Format(
-                        "Answer on linked to roster question {0} is incorrect. " +
-                        "Answer refers to instance of roster group {1} by instance id [{2}] " +
-                        "but roster group has only following roster instances: {3}. InterviewId: {4}",
-                        FormatQuestionForException(questionId, questionnaire),
-                        FormatGroupForException(linkedRosterId, questionnaire), rosterInstanceId,
-                        string.Join(", ", availableRosterInstanceIds), this.EventSourceId));
-                }
+                this.ThrowIfSelectedRosterRowIsAbsent(questionId, selectedRosterVector, questionnaire);
             }
             else
             {
@@ -2235,6 +2223,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredLinkedQuestion, questionnaire);
                 ThrowIfLinkedQuestionDoesNotHaveAnswer(this.interviewState, answeredQuestion, answeredLinkedQuestion,
                     questionnaire);
+            }
+        }
+
+        private void ThrowIfSelectedRosterRowIsAbsent(Guid questionId, decimal[] selectedRosterVector,
+            IQuestionnaire questionnaire)
+        {
+            Guid linkedRosterId = questionnaire.GetRosterReferencedByLinkedQuestion(questionId);
+            var availableRosterInstanceIds = this.interviewState.GetRosterInstanceIds(linkedRosterId,
+                new RosterVector(selectedRosterVector.WithoutLast()));
+            var rosterInstanceId = selectedRosterVector.Last();
+            if (!availableRosterInstanceIds.Contains(rosterInstanceId))
+            {
+                throw new InterviewException(string.Format(
+                    "Answer on linked to roster question {0} is incorrect. " +
+                    "Answer refers to instance of roster group {1} by instance id [{2}] " +
+                    "but roster group has only following roster instances: {3}. InterviewId: {4}",
+                    FormatQuestionForException(questionId, questionnaire),
+                    FormatGroupForException(linkedRosterId, questionnaire), rosterInstanceId,
+                    string.Join(", ", availableRosterInstanceIds), this.EventSourceId));
             }
         }
 
