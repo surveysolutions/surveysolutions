@@ -5,6 +5,7 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateTextQuestionHandlerTests
@@ -16,15 +17,15 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateTextQuestionHandlerTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.Apply(Create.Event.NewQuestionAdded(
-publicKey: questionId,
-groupPublicKey: chapterId,
-questionText: "old title",
-stataExportCaption: "old_variable_name",
-instructions: "old instructions",
-conditionExpression: "old condition",
-responsibleId: responsibleId,
-questionType: QuestionType.QRBarcode
-));
+                publicKey: questionId,
+                groupPublicKey: chapterId,
+                questionText: "old title",
+                stataExportCaption: "old_variable_name",
+                instructions: "old instructions",
+                conditionExpression: "old condition",
+                responsibleId: responsibleId,
+                questionType: QuestionType.QRBarcode
+                ));
             eventContext = new EventContext();
         };
 
@@ -39,7 +40,10 @@ questionType: QuestionType.QRBarcode
                 enablementCondition: enablementCondition,
                 instructions: instructions,
                  mask: null,
-                responsibleId: responsibleId, validationCoditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>());
+                responsibleId: responsibleId, validationCoditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>
+                {
+                    new ValidationCondition { Expression = validationExpression, Message = validationMessage }
+                });
 
         Cleanup stuff = () =>
         {
