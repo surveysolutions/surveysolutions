@@ -24,7 +24,7 @@ namespace WB.UI.Designer.Api
     {
         //temporary fix
         //api version should not be used as version for compilation
-        internal static readonly Version ApiVersion = new Version(13, 0, 0);
+        internal static readonly Version ApiVersion = new Version(12, 0, 0);
 
         private readonly IMembershipUserService userHelper;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
