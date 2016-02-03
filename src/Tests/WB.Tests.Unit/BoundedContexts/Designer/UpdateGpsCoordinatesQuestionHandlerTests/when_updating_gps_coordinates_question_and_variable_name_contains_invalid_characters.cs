@@ -15,16 +15,15 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new QRBarcodeQuestionAdded()
-            {
-                QuestionId = questionId,
-                ParentGroupId = chapterId,
-                Title = "old title",
-                VariableName = "old_variable_name",
-                Instructions = "old instructions",
-                EnablementCondition = "old condition",
-                ResponsibleId = responsibleId
-            });
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
+                    publicKey: questionId,
+                    groupPublicKey: chapterId,
+                    questionText: "old title",
+                    stataExportCaption: "old_variable_name",
+                    instructions: "old instructions",
+                    conditionExpression: "old condition",
+                    responsibleId: responsibleId
+            ));
         };
 
         Because of = () =>

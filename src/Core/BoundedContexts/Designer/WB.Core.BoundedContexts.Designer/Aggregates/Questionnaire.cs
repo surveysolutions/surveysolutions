@@ -244,88 +244,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
 
-        internal void Apply(NumericQuestionAdded e)
-        {
-            IQuestion question =
-                this.questionnaireEntityFactory.CreateQuestion(
-                    new QuestionData(
-                        e.PublicKey,
-                        QuestionType.Numeric,
-                        e.QuestionScope,
-                        e.QuestionText,
-                        e.StataExportCaption,
-                        e.VariableLabel,
-                        e.ConditionExpression,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
-                        Order.AZ,
-                        e.Featured,
-                        e.Capital,
-                        e.Instructions,
-                        null,
-                        null,
-                        null,
-                        null,
-                        e.IsInteger,
-                        e.CountOfDecimalPlaces,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null));
-
-            if (question == null)
-            {
-                return;
-            }
-
-            this.innerDocument.Add(question, e.GroupPublicKey, null);
-
-            if (e.Capital)
-                this.innerDocument.MoveHeadQuestionPropertiesToRoster(e.PublicKey, e.GroupPublicKey);
-        }
-
-        internal void Apply(TextListQuestionAdded e)
-        {
-            IQuestion question =
-                this.questionnaireEntityFactory.CreateQuestion(
-                    new QuestionData(
-                        e.PublicKey,
-                        QuestionType.TextList,
-                        e.QuestionScope,
-                        e.QuestionText,
-                        e.StataExportCaption,
-                        e.VariableLabel,
-                        e.ConditionExpression,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
-                        Order.AZ,
-                        false,
-                        false,
-                        e.Instructions,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        e.MaxAnswerCount,
-                        null,
-                        null,
-                        null));
-
-            if (question == null)
-            {
-                return;
-            }
-
-            this.innerDocument.Add(question, e.GroupId, null);
-
-        }
-
         internal void Apply(QuestionCloned e)
         {
             IQuestion question =
@@ -594,45 +512,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.TargetIndex);
 
             this.innerDocument.CheckIsQuestionHeadAndUpdateRosterProperties(e.PublicKey, e.GroupKey);
-        }
-
-        internal void Apply(QRBarcodeQuestionAdded e)
-        {
-            IQuestion question =
-                this.questionnaireEntityFactory.CreateQuestion(
-                    new QuestionData(
-                        e.QuestionId,
-                        QuestionType.QRBarcode,
-                        e.QuestionScope,
-                        e.Title,
-                        e.VariableName,
-                        e.VariableLabel,
-                        e.EnablementCondition,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
-                        Order.AZ,
-                        false,
-                        false,
-                        e.Instructions,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null));
-
-            if (question == null)
-            {
-                return;
-            }
-
-            this.innerDocument.Add(question, e.ParentGroupId, null);
         }
 
         internal void Apply(QRBarcodeQuestionUpdated e)

@@ -15,13 +15,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(Create.Event.NumericQuestionAdded
-            (
-                publicKey : rosterSizeQuestionId,
-                groupPublicKey : chapterId,
-                isInteger : true,
-                stataExportCaption : "roster_size_question"
-            ));
+
+            questionnaire.Apply(Create.Event.NewQuestionAdded(publicKey: rosterSizeQuestionId,
+                groupPublicKey: chapterId,
+                isInteger: true,
+                stataExportCaption: "roster_size_question",
+                questionType: QuestionType.Numeric));
+
             questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId: responsibleId, groupId: rosterId));
             questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: rosterId){
@@ -30,11 +30,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
                     FixedRosterTitles = null,
                     RosterTitleQuestionId = null
                 });
-            questionnaire.Apply( Create.Event.NumericQuestionAdded(
+            questionnaire.Apply( Create.Event.NewQuestionAdded(
                 publicKey : questionFromRosterId,
                 groupPublicKey : rosterId,
                 isInteger : true,
-                stataExportCaption : substitutionVariableName
+                stataExportCaption : substitutionVariableName,
+                questionType:QuestionType.Numeric
             ));
         };
 
