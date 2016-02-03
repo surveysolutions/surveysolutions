@@ -45,8 +45,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireChangeHistoryDenor
             questionnaireChangeHistoryDenormalizer.Handle(Create.MultimediaQuestionUpdatedEvent(questionId));
         };
 
-        It should_store_14_changes = () =>
-           GetAllRecords(questionnaireChangeRecordStorage).Length.ShouldEqual(14);
+        It should_store_11_changes = () =>
+           GetAllRecords(questionnaireChangeRecordStorage).Length.ShouldEqual(11);
 
         It should_store_change_all_record_with_target_type_equal_to_group = () =>
             GetAllRecords(questionnaireChangeRecordStorage)
