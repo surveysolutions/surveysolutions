@@ -89,11 +89,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
 
         It should_raise_QuestionChanged_event_with_validationExpression_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
-                .ValidationExpression.ShouldEqual(validationExpression);
+                .ValidationConditions.First().Expression.ShouldEqual(validationExpression);
 
         It should_raise_QuestionChanged_event_with_validationMessage_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
-                .ValidationMessage.ShouldEqual(validationMessage);
+                .ValidationConditions.First().Message.ShouldEqual(validationMessage);
 
         It should_raise_QuestionChanged_event_with_isFilteredCombobox_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
