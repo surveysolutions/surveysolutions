@@ -75,8 +75,6 @@ namespace WB.UI.Shared.Enumerator
             Mvx.Error("UncaughtExceptionHandler with exception {0}", exception.ToLongString());
             Mvx.Resolve<ILogger>().Fatal("UncaughtExceptionHandler", exception);
 
-            Insights.Report(exception);
-
             var currentActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
             if (this.StartupActivityType != null && currentActivity != null)
             {
