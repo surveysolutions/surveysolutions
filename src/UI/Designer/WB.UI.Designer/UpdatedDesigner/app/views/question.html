@@ -93,9 +93,9 @@
 
             <label for="validationMessage{{$index}}" class="validation-message">Error message <help key="validationMessage" /></label>
             <textarea id="validationMessage{{$index}}" ng-model="validation.message"
-                      class="form-control" msd-elastic></textarea>
+                      class="form-control" msd-elastic maxlength="250"></textarea>
         </div>
-        <div class="form-group" ng-if="doesQuestionSupportValidations()">
+        <div class="form-group" ng-if="doesQuestionSupportValidations() && activeQuestion.validationConditions.length < 10">
             <button type="button" class="btn btn-lg btn-link" ng-click="addValidationCondition()">Add new validation rule</button>
         </div>
 
