@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -49,7 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
 
         It should_raise_NewQuestionAdded_event_with_validationExpression_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
-                .ValidationExpression.ShouldEqual(validationExpression);
+                .ValidationConditions.First().Expression.ShouldEqual(validationExpression);
 
         private static Questionnaire questionnaire;
         private static EventContext eventContext;
