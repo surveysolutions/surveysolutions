@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
+using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit
@@ -27,7 +28,20 @@ namespace WB.Tests.Unit
             int? index = null)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId, index));
-            questionnaire.UpdateTextQuestion(questionId, title, variableName, variableLabel, isPreFilled, scope, enablementCondition, instructions, mask, responsibleId, new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>());
+            var validationConditions = new List<ValidationCondition>().ConcatWithOldConditionIfNotEmpty(validationExpression, validationMessage);
+            
+            questionnaire.UpdateTextQuestion(
+                questionId, 
+                title, 
+                variableName, 
+                variableLabel, 
+                isPreFilled, 
+                scope, 
+                enablementCondition, 
+                instructions, 
+                mask, 
+                responsibleId, 
+                validationConditions);
         }
 
         public static void AddGpsCoordinatesQuestion(
