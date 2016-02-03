@@ -561,6 +561,8 @@
     <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsV5Tests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewExpressionStateStub.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_integer_question_decreasing_roster_size_of_roster_with_nested_roster.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_single_option_linked_on_roster_title_question.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_single_option_linked_question_with_the_link_on_absent_roster_row.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_decreasing_roster_size_of_roster_with_nested_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_decreasing_roster_size_of_roster_with_nested_roster_with_empty_value.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question.cs" />
