@@ -38,12 +38,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
                     isPreFilled: false,
                     scope: scope,
                     enablementCondition: enablementCondition,
-                    validationExpression: string.Empty,
-                    validationMessage: string.Empty,
                     instructions: instructions,
-                    responsibleId: responsibleId
-
-                    ));
+                    responsibleId: responsibleId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

@@ -38,14 +38,12 @@ questionType: QuestionType.QRBarcode
                 isPreFilled: isPreFilled,
                 scope: scope,
                 enablementCondition: enablementCondition,
-                validationExpression: validationExpression,
-                validationMessage: validationMessage,
                 instructions: instructions,
                 responsibleId: responsibleId,
-                options:options,
+                options: options,
                 linkedToEntityId: linkedToQuestionId,
                 isFilteredCombobox: isFilteredCombobox,
-                cascadeFromQuestionId: сascadeFromQuestionId);
+                cascadeFromQuestionId: сascadeFromQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>());
 
         private Cleanup stuff = () =>
         {

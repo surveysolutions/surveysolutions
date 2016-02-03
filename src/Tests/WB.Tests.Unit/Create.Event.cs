@@ -1,6 +1,7 @@
 ﻿extern alias designer;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -18,6 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using QuestionnaireDeleted = WB.Core.SharedKernels.DataCollection.Events.Questionnaire.QuestionnaireDeleted;
 
@@ -286,7 +288,8 @@ namespace WB.Tests.Unit
                     maxAllowedAnswers: maxAllowedAnswers,
                     mask: mask,
                     isFilteredCombobox: isFilteredCombobox,
-                    cascadeFromQuestionId: cascadeFromQuestionId);
+                    cascadeFromQuestionId: cascadeFromQuestionId,
+                    validationConditions: new List<ValidationCondition>());
             }
 
             public static IPublishedEvent<NewUserCreated> NewUserCreated(Guid userId, 
@@ -335,7 +338,8 @@ namespace WB.Tests.Unit
                     responsibleId: responsibleId.HasValue ? responsibleId.Value : Guid.NewGuid(),
                     capital: false,
                     isInteger: isInteger,
-                    countOfDecimalPlaces: null);
+                    countOfDecimalPlaces: null,
+                    validationConditions: new List<ValidationCondition>());
             }
 
             public static NumericQuestionCloned NumericQuestionCloned(Guid publicKey,
@@ -415,7 +419,8 @@ namespace WB.Tests.Unit
                     mask: null,
                     isFilteredCombobox: isFilteredCombobox,
                     cascadeFromQuestionId: cascadeFromQuestionId,
-                    targetGroupKey: targetGroupKey);
+                    targetGroupKey: targetGroupKey,
+                    validationConditions: new List<ValidationCondition>());
             }
 
             public static QuestionChanged QuestionChanged(Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
@@ -449,7 +454,8 @@ namespace WB.Tests.Unit
                     mask: null,
                     isFilteredCombobox: isFilteredCombobox,
                     cascadeFromQuestionId: cascadeFromQuestionId,
-                    targetGroupKey: Guid.NewGuid());
+                    targetGroupKey: Guid.NewGuid(),
+                    validationConditions: new List<ValidationCondition>());
             }
 
 

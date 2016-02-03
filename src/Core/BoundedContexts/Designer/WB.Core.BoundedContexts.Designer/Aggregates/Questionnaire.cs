@@ -201,7 +201,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         internal void Apply(NewQuestionAdded e)
         {
-            QuestionType questionType = e.QuestionType;
             IQuestion question =
                 this.questionnaireEntityFactory.CreateQuestion(
                     new QuestionData(
@@ -212,8 +211,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.StataExportCaption,
                         e.VariableLabel,
                         e.ConditionExpression,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
                         e.AnswerOrder,
                         e.Featured,
                         e.Capital,
@@ -229,8 +226,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         e.IsFilteredCombobox,
                         e.CascadeFromQuestionId,
-                        null
-                        ));
+                        null,
+                        e.ValidationConditions));
 
             if (question == null)
             {
@@ -256,8 +253,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.StataExportCaption,
                         e.VariableLabel,
                         e.ConditionExpression,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
                         e.AnswerOrder,
                         e.Featured,
                         e.Capital,
@@ -273,7 +268,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.MaxAnswerCount,
                         e.IsFilteredCombobox,
                         e.CascadeFromQuestionId,
-                        e.YesNoView));
+                        e.YesNoView,
+                        e.ValidationConditions));
 
             if (question == null)
             {
@@ -298,8 +294,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.StataExportCaption,
                         e.VariableLabel,
                         e.ConditionExpression,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
                         Order.AZ,
                         e.Featured,
                         e.Capital,
@@ -315,7 +309,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null,
-                        null));
+                        null,
+                        e.ValidationConditions));
 
             if (question == null)
             {
@@ -341,8 +336,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.StataExportCaption,
                         e.VariableLabel,
                         e.ConditionExpression,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
                         Order.AZ,
                         false,
                         false,
@@ -358,7 +351,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.MaxAnswerCount,
                         null,
                         null,
-                        null));
+                        null,
+                        e.ValidationConditions));
 
             if (question == null)
             {
@@ -382,7 +376,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void Apply(QuestionChanged e)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
-            QuestionType questionType = e.QuestionType;
             IQuestion newQuestion =
                 this.questionnaireEntityFactory.CreateQuestion(
                     new QuestionData(
@@ -393,8 +386,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.StataExportCaption,
                         e.VariableLabel,
                         e.ConditionExpression,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
                         e.AnswerOrder,
                         e.Featured,
                         e.Capital,
@@ -410,7 +401,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         e.IsFilteredCombobox,
                         e.CascadeFromQuestionId,
-                        e.YesNoView));
+                        e.YesNoView,
+                        e.ValidationConditions));
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
 
@@ -431,8 +423,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.StataExportCaption,
                         e.VariableLabel,
                         e.ConditionExpression,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
                         Order.AZ,
                         e.Featured,
                         e.Capital,
@@ -448,10 +438,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null,
-                        null)
-                    {
-                        ValidationConditions = e.ValidationConditions
-                    });
+                        null,
+                        e.ValidationConditions)
+                    );
 
             this.innerDocument.ReplaceEntity(question, newQuestion);
 
@@ -471,8 +460,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.QuestionText,
                         e.StataExportCaption,
                         e.VariableLabel,
-                        e.ConditionExpression,
-                        e.ValidationExpression,
                         e.ValidationMessage,
                         Order.AZ,
                         false,
@@ -489,7 +476,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.MaxAnswerCount,
                         null,
                         null,
-                        null));
+                        null,
+                        e.ValidationConditions));
 
             if (question == null)
             {
@@ -527,8 +515,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.VariableName,
                         e.VariableLabel,
                         e.EnablementCondition,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
                         Order.AZ,
                         false,
                         false,
@@ -544,7 +530,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null,
-                        null));
+                        null,
+                        e.ValidationConditions));
 
             if (question == null)
             {
@@ -567,8 +554,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.VariableName,
                         e.VariableLabel,
                         e.EnablementCondition,
-                        null,
-                        null,
                         Order.AZ,
                         false,
                         false,
@@ -584,7 +569,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null,
-                        null));
+                        null,
+                        e.ValidationConditions));
 
             if (question == null)
             {
@@ -606,8 +592,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.VariableName,
                         e.VariableLabel,
                         e.EnablementCondition,
-                        e.ValidationExpression,
-                        e.ValidationMessage,
                         Order.AZ,
                         false,
                         false,
@@ -623,7 +607,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         null,
                         null,
                         null,
-                        null));
+                        null,
+                        e.ValidationConditions));
 
             if (question == null)
             {
@@ -1450,7 +1435,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 answerOrder:null,
                 answers: null,
                 isInteger: null,
-                yesNoView: null
+                yesNoView: null,
+                validationConditions: new List<ValidationCondition>()
             ));
 
             if (command.Index.HasValue)
@@ -1510,18 +1496,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void UpdateTextQuestion(
-            Guid questionId,
-            string title,
-            string variableName, string variableLabel,
-            bool isPreFilled,
-            QuestionScope scope,
-            string enablementCondition,
-            string validationExpression,
-            string validationMessage,
-            string instructions,
-            string mask,
-            Guid responsibleId)
+        public void UpdateTextQuestion(Guid questionId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, string enablementCondition, string instructions, string mask, Guid responsibleId, IList<ValidationCondition> validationCoditions)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1543,8 +1518,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 featured : isPreFilled,
                 questionScope : scope,
                 conditionExpression : enablementCondition,
-                validationExpression : validationExpression,
-                validationMessage : validationMessage,
+                validationExpression : null,
+                validationMessage : null,
                 instructions : instructions,
                 responsibleId : responsibleId,
                 mask : mask,
@@ -1559,22 +1534,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 maxAllowedAnswers: null,
                 isFilteredCombobox: null,
                 cascadeFromQuestionId: null,
-                targetGroupKey: Guid.Empty
+                targetGroupKey: Guid.Empty,
+                validationConditions: validationCoditions
             ));
         }
 
-        public void UpdateGpsCoordinatesQuestion(
-            Guid questionId,
-            string title,
-            string variableName, 
-            string variableLabel,
-            bool isPreFilled,
-            QuestionScope scope,
-            string enablementCondition,
-            string validationExpression,
-            string validationMessage,
-            string instructions,
-            Guid responsibleId)
+        public void UpdateGpsCoordinatesQuestion(Guid questionId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, string enablementCondition, string instructions, Guid responsibleId, IList<ValidationCondition> validationConditions)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1595,8 +1560,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 featured: isPreFilled,
                 questionScope: scope,
                 conditionExpression: enablementCondition,
-                validationExpression: validationExpression,
-                validationMessage: validationMessage,
+                validationExpression: null,
+                validationMessage: null,
                 instructions: instructions,
                 responsibleId: responsibleId,
                 mask: null,
@@ -1611,21 +1576,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 maxAllowedAnswers: null,
                 isFilteredCombobox: null,
                 cascadeFromQuestionId: null,
-                targetGroupKey: Guid.Empty
+                targetGroupKey: Guid.Empty,
+                validationConditions: validationConditions
             ));
         }
 
-        public void UpdateDateTimeQuestion(
-            Guid questionId,
-            string title,
-            string variableName, string variableLabel,
-            bool isPreFilled,
-            QuestionScope scope,
-            string enablementCondition,
-            string validationExpression,
-            string validationMessage,
-            string instructions,
-            Guid responsibleId)
+        public void UpdateDateTimeQuestion(Guid questionId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, string enablementCondition, string instructions, Guid responsibleId, IList<ValidationCondition> validationConditions)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1647,8 +1603,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 featured: isPreFilled,
                 questionScope: scope,
                 conditionExpression: enablementCondition,
-                validationExpression: validationExpression,
-                validationMessage: validationMessage,
+                validationExpression: null,
+                validationMessage: null,
                 instructions: instructions,
                 responsibleId: responsibleId,
                 mask: null,
@@ -1663,25 +1619,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 maxAllowedAnswers: null,
                 isFilteredCombobox: null,
                 cascadeFromQuestionId: null,
-                targetGroupKey: Guid.Empty
+                targetGroupKey: Guid.Empty,
+                validationConditions: validationConditions
             ));
         }
 
-        public void UpdateMultiOptionQuestion(
-            Guid questionId,
-            string title,
-            string variableName, string variableLabel,
-            QuestionScope scope,
-            string enablementCondition,
-            string validationExpression,
-            string validationMessage,
-            string instructions,
-            Guid responsibleId,
-            Option[] options,
-            Guid? linkedToEntityId,
-            bool areAnswersOrdered,
-            int? maxAllowedAnswers,
-            bool yesNoView)
+        public void UpdateMultiOptionQuestion(Guid questionId, string title, string variableName, string variableLabel, QuestionScope scope, string enablementCondition, string instructions, Guid responsibleId, Option[] options, Guid? linkedToEntityId, bool areAnswersOrdered, int? maxAllowedAnswers, bool yesNoView, IList<ValidationCondition> validationConditions)
         {
             PrepareGeneralProperties(ref title, ref variableName);
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
@@ -1714,8 +1657,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 featured: false,
                 questionScope: scope,
                 conditionExpression: enablementCondition,
-                validationExpression: validationExpression,
-                validationMessage: validationMessage,
+                validationExpression: null,
+                validationMessage: null,
                 instructions: instructions,
                 responsibleId: responsibleId,
                 mask: null,
@@ -1730,27 +1673,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 maxAllowedAnswers: maxAllowedAnswers,
                 isFilteredCombobox: null,
                 cascadeFromQuestionId: null,
-                targetGroupKey: Guid.Empty
+                targetGroupKey: Guid.Empty,
+                validationConditions: validationConditions
             ));
         }
 
         #region Question: SingleOption command handlers
 
-        public void UpdateSingleOptionQuestion(
-            Guid questionId,
-            string title,
-            string variableName, string variableLabel,
-            bool isPreFilled,
-            QuestionScope scope,
-            string enablementCondition,
-            string validationExpression,
-            string validationMessage,
-            string instructions,
-            Guid responsibleId,
-            Option[] options,
-            Guid? linkedToEntityId,
-            bool isFilteredCombobox,
-            Guid? cascadeFromQuestionId)
+        public void UpdateSingleOptionQuestion(Guid questionId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, string enablementCondition, string instructions, Guid responsibleId, Option[] options, Guid? linkedToEntityId, bool isFilteredCombobox, Guid? cascadeFromQuestionId, IList<ValidationCondition> validationConditions)
         {
             Answer[] answers;
 
@@ -1779,7 +1709,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToEntityId);
             this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToEntityId, isPreFilled, isFilteredCombobox, scope, cascadeFromQuestionId);
-            this.ThrowIfCascadingQuestionHasConditionOrValidation(questionId, cascadeFromQuestionId, validationExpression, enablementCondition);
+            this.ThrowIfCascadingQuestionHasConditionOrValidation(questionId, cascadeFromQuestionId, validationConditions, enablementCondition);
 
             if (!isFilteredCombobox && !cascadeFromQuestionId.HasValue)
             {
@@ -1805,8 +1735,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 featured: isPreFilled,
                 questionScope: scope,
                 conditionExpression: enablementCondition,
-                validationExpression: validationExpression,
-                validationMessage: validationMessage,
+                validationExpression: null,
+                validationMessage: null,
                 instructions: instructions,
                 responsibleId: responsibleId,
                 mask: null,
@@ -1821,7 +1751,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 maxAllowedAnswers: null,
                 isFilteredCombobox: isFilteredCombobox,
                 cascadeFromQuestionId: cascadeFromQuestionId,
-                targetGroupKey: Guid.Empty
+                targetGroupKey: Guid.Empty,
+                validationConditions:validationConditions
             ));
         }
 
@@ -1860,7 +1791,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 maxAllowedAnswers: null,
                 isFilteredCombobox: categoricalOneAnswerQuestion.IsFilteredCombobox,
                 cascadeFromQuestionId: categoricalOneAnswerQuestion.CascadeFromQuestionId,
-                targetGroupKey: Guid.Empty
+                targetGroupKey: Guid.Empty,
+                validationConditions: categoricalOneAnswerQuestion.ValidationConditions
             ));
         }
 
@@ -1905,7 +1837,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 maxAllowedAnswers: null,
                 isFilteredCombobox: categoricalOneAnswerQuestion.IsFilteredCombobox,
                 cascadeFromQuestionId: categoricalOneAnswerQuestion.CascadeFromQuestionId,
-                targetGroupKey: Guid.Empty
+                targetGroupKey: Guid.Empty,
+                validationConditions: categoricalOneAnswerQuestion.ValidationConditions
             ));
         }
         #endregion
@@ -1950,18 +1883,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 instructions : instructions,
                 responsibleId : responsibleId,
                 isInteger : isInteger,
-                countOfDecimalPlaces : countOfDecimalPlaces
-            )
-            {
-                ValidationConditions = validationConditions
-            });
+                countOfDecimalPlaces : countOfDecimalPlaces,
+                validationConditions: validationConditions
+            ));
         }
 
-        public void UpdateTextListQuestion(Guid questionId, string title, string variableName, string variableLabel,
-            string enablementCondition,
-            string validationExpression,
-            string validationMessage, string instructions, Guid responsibleId, int? maxAnswerCount,
-            QuestionScope scope)
+        public void UpdateTextListQuestion(Guid questionId, string title, string variableName, string variableLabel, string enablementCondition, string instructions, Guid responsibleId, int? maxAnswerCount, QuestionScope scope, IList<ValidationCondition> validationConditions)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1982,12 +1909,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 StataExportCaption = variableName,
                 VariableLabel = variableLabel,
                 ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression,
-                ValidationMessage = validationMessage,
                 Instructions = instructions,
                 ResponsibleId = responsibleId,
                 QuestionScope = scope,
-                MaxAnswerCount = maxAnswerCount
+                MaxAnswerCount = maxAnswerCount,
+                ValidationConditions = validationConditions
             });
         }
 
@@ -2018,11 +1944,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void UpdateQRBarcodeQuestion(Guid questionId, string title, string variableName, string variableLabel,
-            string enablementCondition,
-            string validationExpression,
-            string validationMessage, string instructions, Guid responsibleId,
-            QuestionScope scope)
+        public void UpdateQRBarcodeQuestion(Guid questionId, string title, string variableName, string variableLabel, string enablementCondition, string instructions, Guid responsibleId, QuestionScope scope, IList<ValidationCondition> validationConditions)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -2042,11 +1964,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 VariableName = variableName,
                 VariableLabel = variableLabel,
                 EnablementCondition = enablementCondition,
-                ValidationExpression = validationExpression,
-                ValidationMessage = validationMessage,
+                ValidationExpression = null,
+                ValidationMessage = null,
                 Instructions = instructions,
                 QuestionScope = scope,
-                ResponsibleId = responsibleId
+                ResponsibleId = responsibleId,
+                ValidationConditions = validationConditions
             });
         }
 
@@ -2676,14 +2599,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowIfCascadingQuestionHasConditionOrValidation(Guid questionId, Guid? cascadeFromQuestionId, string validationExpression, string enablementCondition)
+        private void ThrowIfCascadingQuestionHasConditionOrValidation(Guid questionId, Guid? cascadeFromQuestionId, IList<ValidationCondition> validationExpression, string enablementCondition)
         {
             if (!cascadeFromQuestionId.HasValue )
             {
                 return;
             }
 
-            if (!string.IsNullOrWhiteSpace(validationExpression))
+            if (validationExpression.Count > 0)
             {
                 throw new QuestionnaireException(ExceptionMessages.CascadingCantHaveValidationExpression);
             }
@@ -4378,6 +4301,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 yield return new GroupStoppedBeingARoster(responsibleId, groupId);
             }
         }
+
         #endregion
     }
 }

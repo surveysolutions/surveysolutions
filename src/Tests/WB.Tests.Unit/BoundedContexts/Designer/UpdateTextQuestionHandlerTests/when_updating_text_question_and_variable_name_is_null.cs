@@ -36,13 +36,9 @@ questionType: QuestionType.QRBarcode
                     isPreFilled: isPreFilled,
                     scope: scope,
                     enablementCondition: enablementCondition,
-                    validationExpression: validationExpression,
-                    validationMessage: validationMessage,
                     instructions: instructions,
                     mask: null,
-                    responsibleId: responsibleId
-         
-                    ));
+                    responsibleId: responsibleId, validationCoditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
 
         It should_not_throw_exception = () => exception.ShouldBeNull();
 
@@ -56,7 +52,5 @@ questionType: QuestionType.QRBarcode
         private static bool isPreFilled = false;
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static string enablementCondition = null;
-        private static string validationExpression = null;
-        private static string validationMessage = "";
     }
 }

@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         {
         }
 
-        public AbstractQuestionDataEvent(Guid responsibleId, string conditionExpression, bool featured, string instructions, bool capital, Guid publicKey, string questionText, QuestionScope questionScope, string stataExportCaption, string variableLabel, string validationExpression, string validationMessage) : base(responsibleId)
+        public AbstractQuestionDataEvent(Guid responsibleId, string conditionExpression, bool featured, string instructions, bool capital, Guid publicKey, string questionText, QuestionScope questionScope, string stataExportCaption, string variableLabel, string validationExpression, string validationMessage, IList<ValidationCondition> validationConditions) : base(responsibleId)
         {
             this.ConditionExpression = conditionExpression;
             this.Featured = featured;
@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
             this.StataExportCaption = stataExportCaption;
             this.VariableLabel = variableLabel;
 
-            this.ValidationConditions = new List<ValidationCondition>();
+            this.ValidationConditions = validationConditions ?? new List<ValidationCondition>();
             this.ValidationConditions = this.ValidationConditions.ConcatWithOldConditionIfNotEmpty(validationExpression, validationMessage);
         }
 

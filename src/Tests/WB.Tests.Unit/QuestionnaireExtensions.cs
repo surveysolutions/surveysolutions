@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit
 {
@@ -25,7 +27,7 @@ namespace WB.Tests.Unit
             int? index = null)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId, index));
-            questionnaire.UpdateTextQuestion(questionId, title, variableName, variableLabel, isPreFilled, scope, enablementCondition, validationExpression, validationMessage, instructions, mask, responsibleId);
+            questionnaire.UpdateTextQuestion(questionId, title, variableName, variableLabel, isPreFilled, scope, enablementCondition, instructions, mask, responsibleId, new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>());
         }
 
         public static void AddGpsCoordinatesQuestion(
@@ -41,25 +43,7 @@ namespace WB.Tests.Unit
             Guid responsibleId)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateGpsCoordinatesQuestion(questionId, title, variableName, variableLabel,false, scope, enablementCondition, string.Empty, string.Empty, instructions, responsibleId);
-        }
-
-        public static void AddDateTimeQuestion(
-            this Questionnaire questionnaire,
-            Guid questionId,
-            Guid parentGroupId,
-            string title,
-            string variableName, string variableLabel,
-            bool isPreFilled,
-            QuestionScope scope,
-            string enablementCondition,
-            string validationExpression,
-            string validationMessage,
-            string instructions,
-            Guid responsibleId)
-        {
-            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateDateTimeQuestion(questionId, title, variableName, variableLabel, isPreFilled, scope, enablementCondition, validationExpression, validationMessage, instructions, responsibleId);
+            questionnaire.UpdateGpsCoordinatesQuestion(questionId, title, variableName, variableLabel,false, scope, enablementCondition, instructions, responsibleId, new List<ValidationCondition>());
         }
 
         public static void AddMultiOptionQuestion(
@@ -81,7 +65,7 @@ namespace WB.Tests.Unit
             bool yesNoView)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateMultiOptionQuestion(questionId, title, variableName, variableLabel, scope, enablementCondition, validationExpression, validationMessage, instructions, responsibleId, options, linkedToQuestionId, areAnswersOrdered, maxAllowedAnswers, yesNoView);
+            questionnaire.UpdateMultiOptionQuestion(questionId, title, variableName, variableLabel, scope, enablementCondition, instructions, responsibleId, options, linkedToQuestionId, areAnswersOrdered, maxAllowedAnswers, yesNoView, new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>());
         }
 
         public static void AddSingleOptionQuestion(
@@ -103,7 +87,7 @@ namespace WB.Tests.Unit
             Guid? cascadeFromQuestionId)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateSingleOptionQuestion(questionId, title, variableName, variableLabel, isPreFilled, scope, enablementCondition, validationExpression, validationMessage, instructions, responsibleId, options, linkedToQuestionId, isFilteredCombobox, cascadeFromQuestionId);
+            questionnaire.UpdateSingleOptionQuestion(questionId, title, variableName, variableLabel, isPreFilled, scope, enablementCondition, instructions, responsibleId, options, linkedToQuestionId, isFilteredCombobox, cascadeFromQuestionId, new List<ValidationCondition>());
         }
 
         public static void AddNumericQuestion(
@@ -124,25 +108,18 @@ namespace WB.Tests.Unit
             int? countOfDecimalPlaces)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateDateTimeQuestion(questionId, title, variableName, variableLabel, isPreFilled, scope, enablementCondition, validationExpression, validationMessage, instructions, responsibleId);
-        }
-
-        public static void AddTextListQuestion(
-            this Questionnaire questionnaire,
-            Guid questionId,
-            Guid parentGroupId,
-            string title,
-            string variableName,
-            string variableLabel,
-            string enablementCondition,
-            string validationExpression,
-            string validationMessage,
-            string instructions,
-            Guid responsibleId,
-            int? maxAnswerCount)
-        {
-            questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateTextListQuestion(questionId, title, variableName, variableLabel, enablementCondition, validationExpression, validationMessage, instructions, responsibleId, maxAnswerCount, scope: QuestionScope.Interviewer);
+            questionnaire.UpdateDateTimeQuestion(
+                questionId: questionId,
+                title: title,
+                variableName: variableName,
+                variableLabel: null,
+                isPreFilled: isPreFilled,
+                scope: scope,
+                enablementCondition: enablementCondition,
+                instructions: instructions,
+                responsibleId: responsibleId,
+                validationConditions: new List<ValidationCondition>()
+                );
         }
 
         public static void AddQRBarcodeQuestion(
@@ -159,7 +136,7 @@ namespace WB.Tests.Unit
             string validationMessage)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestionCommand(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateQRBarcodeQuestion(questionId, title, variableName, variableLabel, enablementCondition, validation, validationMessage, instructions, responsibleId, scope: QuestionScope.Interviewer);
+            questionnaire.UpdateQRBarcodeQuestion(questionId, title, variableName, variableLabel, enablementCondition, instructions, responsibleId, scope: QuestionScope.Interviewer, validationConditions: new List<ValidationCondition>());
         }
     }
 }

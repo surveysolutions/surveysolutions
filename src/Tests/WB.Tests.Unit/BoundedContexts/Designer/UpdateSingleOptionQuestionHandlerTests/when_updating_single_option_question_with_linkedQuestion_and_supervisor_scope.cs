@@ -48,15 +48,12 @@ questionType: QuestionType.QRBarcode
                     isPreFilled: isPreFilled,
                     scope: QuestionScope.Supervisor,
                     enablementCondition: enablementCondition,
-                    validationExpression: validationExpression,
-                    validationMessage: validationMessage,
                     instructions: instructions,
                     responsibleId: responsibleId,
                     options: null,
                     linkedToEntityId: linkedToQuestionId,
                     isFilteredCombobox: isFilteredCombobox,
-                    cascadeFromQuestionId: сascadeFromQuestionId
-                    ));
+                    cascadeFromQuestionId: сascadeFromQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
 
 
         It should_throw_QuestionnaireException = () =>
@@ -78,8 +75,6 @@ questionType: QuestionType.QRBarcode
         private static string title = "title";
         private static string instructions = "intructions";
         private static string enablementCondition = "";
-        private static string validationExpression = "";
-        private static string validationMessage = "";
         private static Guid linkedToQuestionId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static bool isFilteredCombobox = false;
         private static Guid? сascadeFromQuestionId = (Guid?)null;
