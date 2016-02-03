@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -36,7 +37,7 @@ namespace ChangeInterviewStatus
 
             public async Task RunAsync(CommandLineProcessor processor, IConsoleHost host)
             {
-                await Task.Run(() => base.Run(ApproveUrl));
+                await base.RunAsync(ApproveUrl);
             }
         }
 
@@ -45,13 +46,15 @@ namespace ChangeInterviewStatus
             private static string RejectUrl => "reject";
             public async Task RunAsync(CommandLineProcessor processor, IConsoleHost host)
             {
-                await Task.Run(() => base.Run(RejectUrl));
+                await base.RunAsync(RejectUrl);
             }
         }
 
         internal abstract class ChangeInterviewStatusCommand
         {
-            [Description("HQ application host with http(s).Default value is https://ocalhost")]
+            private const int MaxNumberOfParallelTasks = 20;
+
+            [Description("HQ application host with http(s)")]
             [Argument(Name = "host", DefaultValue = "https://localhost")]
             public string Host { get; set; }
 
@@ -67,8 +70,12 @@ namespace ChangeInterviewStatus
             [Argument(Name = "filePath")]
             public string FilePath { get; set; }
 
+            [Description("Path to file to write all errors after command completion.")]
+            [Argument(Name = "errorLog", DefaultValue = "errors.log")]
+            public string ErrorLogFilePath { get; set; }
+
             [Description("Max number of parallel tasks.")]
-            [Argument(Name = "file", DefaultValue = 20)]
+            [Argument(Name = "tasksLimit", DefaultValue = MaxNumberOfParallelTasks)]
             public int ParallelTasksLimit { get; set; }
 
             [Description("Max number of parallel tasks.")]
@@ -82,8 +89,12 @@ namespace ChangeInterviewStatus
 
             private CancellationTokenSource cancellationTokenSource;
 
-            public void Run(string changeStatusUrl)
+            public async Task RunAsync(string changeStatusUrl)
             {
+                if (ZlpIOHelper.FileExists(this.ErrorLogFilePath))
+                {
+                    ZlpIOHelper.DeleteFile(this.ErrorLogFilePath);
+                }
                 this.restServiceSettings = new ConsoleRestServiceSettings();
                 this.cancellationTokenSource = new CancellationTokenSource();
 
@@ -112,13 +123,12 @@ namespace ChangeInterviewStatus
                     int processedInterviewsCount = 0;
                     Stopwatch elapsedTime = Stopwatch.StartNew();
 
-                    Parallel.ForEach(interviewsToImport,
-                        new ParallelOptions { MaxDegreeOfParallelism = this.ParallelTasksLimit, CancellationToken = this.cancellationTokenSource.Token }, 
-                        (importedInterview) =>
+                    await interviewsToImport.ForEachAsync(Math.Min(this.ParallelTasksLimit, MaxNumberOfParallelTasks),
+                        async (importedInterview) =>
                         {
                             try
                             {
-                                this.ChangeStatus(changeStatusUrl, importedInterview, credentials).RunSynchronously();
+                                await this.ChangeStatus(changeStatusUrl, importedInterview, credentials);
                             }
                             catch (Exception ex)
                             {
@@ -134,7 +144,7 @@ namespace ChangeInterviewStatus
                             this.status.ElapsedTime = elapsedTime.ElapsedTicks;
                             this.status.TimePerInterview = this.status.ElapsedTime / this.status.ProcessedInterviewsCount;
                             this.status.EstimatedTime = this.status.TimePerInterview * this.status.TotalInterviewsCount;
-                            Console.SetCursorPosition(0, 0);
+                            Console.Clear();
                             Console.Write(this.status.ToString());
                         });
 
@@ -149,6 +159,10 @@ namespace ChangeInterviewStatus
                 finally
                 {
                     this.status.IsInProgress = false;
+                    if (this.status.Errors.Any())
+                    {
+                        ZlpIOHelper.WriteAllText(this.ErrorLogFilePath, string.Join(Environment.NewLine, this.status.Errors.Select(x => x.ErrorMessage)));
+                    }
                 }
             }
 
@@ -231,7 +245,7 @@ namespace ChangeInterviewStatus
                 return data == null ? null : new CapturedStringContent(serializedData, Encoding.UTF8, "application/json");
             }
 
-            
+
             private InterviewInfo[] ParseFileWithInterviewsInfo(string filePath)
             {
                 const string ID = "Id";
@@ -362,8 +376,23 @@ namespace ChangeInterviewStatus
         public string Comment { get; set; }
     }
 
-    public static class ExceptionExtensions
+    public static class Extensions
     {
+        /// <summary>
+        /// http://blogs.msdn.com/b/pfxteam/archive/2012/03/05/10278165.aspx
+        /// </summary>
+        public static Task ForEachAsync<T>(this IEnumerable<T> source, int sizeOfpartition, Func<T, Task> action)
+        {
+            return Task.WhenAll(
+                from partition in Partitioner.Create(source).GetPartitions(sizeOfpartition)
+                select Task.Run(async delegate
+                {
+                    using (partition)
+                        while (partition.MoveNext())
+                            await action(partition.Current);
+                }));
+        }
+
         public static TException GetSelfOrInnerAs<TException>(this Exception source)
             where TException : Exception
         {
