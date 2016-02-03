@@ -91,6 +91,6 @@ namespace Main.Core.Entities
         public readonly Guid? CascadeFromQuestionId;
         public readonly bool? YesNoView;
 
-        public List<ValidationCondition> ValidationConditions { get; set; } 
+        public IList<ValidationCondition> ValidationConditions { get; set; } 
     }
 }

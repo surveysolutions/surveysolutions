@@ -146,7 +146,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             bool? isFilteredCombobox,
             Guid? cascadeFromQuestionId,
             bool? yesNoView,
-            List<ValidationCondition> validationConditions)
+            IList<ValidationCondition> validationConditions)
         {
             question.QuestionType = questionType;
             question.QuestionScope = questionScope;
