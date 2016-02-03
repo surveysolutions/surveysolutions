@@ -23,7 +23,7 @@ namespace Main.Core.Entities.SubEntities
         Guid? LinkedToRosterId { get; set; }
         Guid? CascadeFromQuestionId { get; set; }
         bool? IsFilteredCombobox { get; set; }
-        List<ValidationCondition> ValidationConditions { get; set; }
+        IList<ValidationCondition> ValidationConditions { get; set; }
         void AddAnswer(Answer answer);
         IEnumerable<string> GetVariablesUsedInTitle();
     }

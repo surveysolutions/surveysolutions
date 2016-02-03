@@ -52,7 +52,7 @@ namespace Main.Core.Entities.SubEntities
 
         
         private IComposite parent;
-        private List<ValidationCondition> validationConditions;
+        private IList<ValidationCondition> validationConditions;
 
         public IComposite GetParent()
         {
@@ -91,7 +91,7 @@ namespace Main.Core.Entities.SubEntities
         
         public bool? IsFilteredCombobox { get; set; }
 
-        public List<ValidationCondition> ValidationConditions
+        public IList<ValidationCondition> ValidationConditions
         {
             get
             {
