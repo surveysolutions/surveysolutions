@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using NHibernate.Bytecode;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
@@ -59,6 +60,36 @@ namespace WB.Tests.Unit
                     answerOrder: null,
                     answers: null,
                     isInteger: null);
+            }
+
+            public static NewQuestionAdded NumericQuestionAdded(Guid publicKey, Guid groupPublicKey,
+             bool? isInteger = null,
+             string stataExportCaption = null,
+             string questionText = null,
+             string variableLabel = null,
+             bool featured = false,
+             string conditionExpression = null,
+             string validationExpression = null,
+             string validationMessage = null,
+             string instructions = null,
+             Guid? responsibleId = null,
+             int? countOfDecimalPlaces = null,
+             QuestionScope? questionScope = null)
+            {
+                return Create.Event.NewQuestionAdded(publicKey: publicKey,
+                    groupPublicKey: groupPublicKey,
+                    questionText: questionText,
+                    stataExportCaption: stataExportCaption,
+                    variableLabel: variableLabel,
+                    featured: featured,
+                    questionScope: questionScope ?? QuestionScope.Interviewer,
+                    conditionExpression: conditionExpression,
+                    validationExpression: validationExpression,
+                    validationMessage: validationMessage,
+                    instructions: instructions,
+                    responsibleId: responsibleId ?? Guid.NewGuid(),
+                    capital: false,
+                    isInteger: isInteger);
             }
 
             public static AnswersDeclaredInvalid AnswersDeclaredInvalid(Guid? id = null, decimal[] rosterVector = null)
@@ -274,38 +305,6 @@ namespace WB.Tests.Unit
                     IsLocked = isLocked,
                     Roles = new[] { UserRoles.Operator }
                 }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
-            }
-
-            public static NumericQuestionAdded NumericQuestionAdded(Guid publicKey, Guid groupPublicKey,
-                bool? isInteger = null,
-                string stataExportCaption = null,
-                string questionText = null,
-                string variableLabel = null,
-                bool featured = false,
-                string conditionExpression = null,
-                string validationExpression = null,
-                string validationMessage = null,
-                string instructions = null,
-                Guid? responsibleId = null,
-                int? countOfDecimalPlaces = null,
-                QuestionScope? questionScope = null)
-            {
-                return new NumericQuestionAdded(
-                    publicKey: publicKey,
-                    groupPublicKey: groupPublicKey,
-                    questionText: questionText,
-                    stataExportCaption: stataExportCaption,
-                    variableLabel: variableLabel,
-                    featured: featured,
-                    questionScope: questionScope ?? QuestionScope.Interviewer,
-                    conditionExpression: conditionExpression,
-                    validationExpression: validationExpression,
-                    validationMessage: validationMessage,
-                    instructions: instructions,
-                    responsibleId: responsibleId ?? Guid.NewGuid(),
-                    capital: false,
-                    isInteger: isInteger,
-                    countOfDecimalPlaces: countOfDecimalPlaces);
             }
 
             public static NumericQuestionChanged NumericQuestionChanged(

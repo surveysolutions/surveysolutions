@@ -25,16 +25,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                 questionText : "text question",
                 stataExportCaption : "source_of_linked_question"
             ));
-            questionnaire.Apply(new QRBarcodeQuestionAdded
-            {
-                QuestionId = questionId,
-                ParentGroupId = parentGroupId,
-                Title = "old title",
-                VariableName = "old_variable_name",
-                Instructions = "old instructions",
-                EnablementCondition = "old condition",
-                ResponsibleId = responsibleId
-            });
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
+                publicKey: questionId,
+                groupPublicKey: parentGroupId,
+                questionText: "old title",
+                stataExportCaption: "old_variable_name",
+                instructions: "old instructions",
+                conditionExpression: "old condition",
+                responsibleId: responsibleId,
+                questionType: QuestionType.QRBarcode
+                ));
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupFromRosterId, ParentGroupPublicKey = rosterId });
         };
 

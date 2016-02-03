@@ -32,14 +32,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         IEventHandler<QuestionnaireUpdated>,
         IEventHandler<TemplateImported>,
         IEventHandler<QuestionnaireCloned>,
-        IEventHandler<NumericQuestionAdded>,
         IEventHandler<NumericQuestionCloned>,
         IEventHandler<NumericQuestionChanged>,
-        IEventHandler<QRBarcodeQuestionAdded>,
         IEventHandler<QRBarcodeQuestionCloned>,
         IEventHandler<QRBarcodeQuestionUpdated>,
         IEventHandler<MultimediaQuestionUpdated>,
-        IEventHandler<TextListQuestionAdded>,
         IEventHandler<TextListQuestionCloned>,
         IEventHandler<TextListQuestionChanged>,
         IEventHandler<StaticTextAdded>,
@@ -238,27 +235,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             });
         }
 
-        public void Handle(IPublishedEvent<NumericQuestionAdded> evnt)
-        {
-            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
-            {
-
-                var newQuestion = new PdfQuestionView
-                {
-                    PublicId = @event.PublicKey,
-                    Title = @event.QuestionText,
-                    QuestionType = PdfQuestionType.Numeric,
-                    Answers = new List<PdfAnswerView>(),
-                    VariableName = @event.StataExportCaption
-                };
-
-                newQuestion.ValidationExpression = @event.ValidationExpression;
-                newQuestion.ConditionExpression = @event.ConditionExpression;
-                questionnaire.AddEntity(newQuestion, @event.GroupPublicKey);
-                return questionnaire;
-            });
-        }
-
         public void Handle(IPublishedEvent<NumericQuestionCloned> evnt)
         {
             HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
@@ -296,25 +272,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 existingQuestion.QuestionType = PdfQuestionType.Numeric;
                 existingQuestion.Answers = new List<PdfAnswerView>(0);
 
-                return questionnaire;
-            });
-        }
-
-        public void Handle(IPublishedEvent<TextListQuestionAdded> evnt)
-        {
-            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
-            {
-                var newQuestion = new PdfQuestionView
-                {
-                    PublicId = @event.PublicKey,
-                    Title = @event.QuestionText,
-                    QuestionType = PdfQuestionType.TextList,
-                    Answers = new List<PdfAnswerView>(),
-                    VariableName = @event.StataExportCaption
-                };
-
-                newQuestion.ConditionExpression = @event.ConditionExpression;
-                questionnaire.AddEntity(newQuestion, @event.GroupId);
                 return questionnaire;
             });
         }
@@ -458,26 +415,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
             pdf.FillFrom(questionnaireDocument);
             return pdf;
-        }
-
-        public void Handle(IPublishedEvent<QRBarcodeQuestionAdded> evnt)
-        {
-            HandleUpdateEvent(evnt, handle: (@event, questionnaire) =>
-            {
-
-                var newQuestion = new PdfQuestionView
-                {
-                    PublicId = @event.QuestionId,
-                    Title = @event.Title,
-                    QuestionType = PdfQuestionType.QRBarcode,
-                    Answers = new List<PdfAnswerView>(),
-                    VariableName = @event.VariableName,
-                    ConditionExpression = @event.EnablementCondition
-                };
-
-                questionnaire.AddEntity(newQuestion, @event.ParentGroupId);
-                return questionnaire;
-            });
         }
 
         public void Handle(IPublishedEvent<QRBarcodeQuestionCloned> evnt)
