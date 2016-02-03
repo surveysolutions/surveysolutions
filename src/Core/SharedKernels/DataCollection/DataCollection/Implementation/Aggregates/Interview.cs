@@ -456,6 +456,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(RosterInstancesTitleChanged @event)
         {
+            this.interviewState.ChangeRosterTitles(@event.ChangedInstances);
             foreach (var instance in @event.ChangedInstances)
             {
                 this.ExpressionProcessorStatePrototype.UpdateRosterTitle(instance.RosterInstance.GroupId, instance.RosterInstance.OuterRosterVector, instance.RosterInstance.RosterInstanceId, instance.Title);
@@ -1375,10 +1376,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.CheckLinkedSingleOptionQuestionInvariants(questionId, rosterVector, selectedRosterVector, questionnaire, answeredQuestion);
             this.ThrowIfInterviewReceivedByInterviewer();
 
-            Guid linkedQuestionId = this.GetLinkedQuestionIdOrThrow(questionId, questionnaire);
-            var answeredLinkedQuestion = new Identity(linkedQuestionId, selectedRosterVector);
+            string answerFormattedAsRosterTitle;
+            if (questionnaire.IsQuestionLinkedToRoster(questionId))
+            {
+                Guid linkedRosterId = questionnaire.GetRosterReferencedByLinkedQuestion(questionId);
+                answerFormattedAsRosterTitle = this.interviewState.GetRosterTitle(linkedRosterId,
+                    new RosterVector(selectedRosterVector));
+            }
+            else
+            {
+                Guid linkedQuestionId = this.GetLinkedQuestionIdOrThrow(questionId, questionnaire);
+                var answeredLinkedQuestion = new Identity(linkedQuestionId, selectedRosterVector);
+                answerFormattedAsRosterTitle = GetLinkedQuestionAnswerFormattedAsRosterTitle(this.interviewState, answeredLinkedQuestion, questionnaire);
+            }
 
-            string answerFormattedAsRosterTitle = GetLinkedQuestionAnswerFormattedAsRosterTitle(this.interviewState, answeredLinkedQuestion, questionnaire);
 
             IInterviewExpressionStateV5 expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
@@ -2191,8 +2202,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedRosterVectors.Length, questionnaire);
         }
 
-        private void CheckLinkedSingleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal[] selectedRosterVector, IQuestionnaire questionnaire,
-    Identity answeredQuestion)
+        private void CheckLinkedSingleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal[] selectedRosterVector, IQuestionnaire questionnaire, Identity answeredQuestion)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
@@ -2200,12 +2210,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
             ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
 
-            Guid linkedQuestionId = this.GetLinkedQuestionIdOrThrow(questionId, questionnaire);
-            var answeredLinkedQuestion = new Identity(linkedQuestionId, selectedRosterVector);
+            if (questionnaire.IsQuestionLinkedToRoster(questionId))
+            {
+                Guid linkedRosterId = questionnaire.GetRosterReferencedByLinkedQuestion(questionId);
+                var availableRosterInstanceIds = this.interviewState.GetRosterInstanceIds(linkedRosterId, new RosterVector(selectedRosterVector.WithoutLast()));
+                var rosterInstanceId = selectedRosterVector.Last();
+                if (!availableRosterInstanceIds.Contains(rosterInstanceId))
+                {
+                    throw new InterviewException(string.Format(
+                        "Answer on linked to roster question {0} is incorrect. " +
+                        "Answer refers to instance of roster group {1} by instance id [{2}] " +
+                        "but roster group has only following roster instances: {3}. InterviewId: {4}",
+                        FormatQuestionForException(questionId, questionnaire),
+                        FormatGroupForException(linkedRosterId, questionnaire), rosterInstanceId,
+                        string.Join(", ", availableRosterInstanceIds), this.EventSourceId));
+                }
+            }
+            else
+            {
+                Guid linkedQuestionId = this.GetLinkedQuestionIdOrThrow(questionId, questionnaire);
+                var answeredLinkedQuestion = new Identity(linkedQuestionId, selectedRosterVector);
 
-            ThrowIfRosterVectorIsIncorrect(this.interviewState, linkedQuestionId, selectedRosterVector, questionnaire);
-            ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredLinkedQuestion, questionnaire);
-            ThrowIfLinkedQuestionDoesNotHaveAnswer(this.interviewState, answeredQuestion, answeredLinkedQuestion, questionnaire);
+                ThrowIfRosterVectorIsIncorrect(this.interviewState, linkedQuestionId, selectedRosterVector, questionnaire);
+                ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredLinkedQuestion, questionnaire);
+                ThrowIfLinkedQuestionDoesNotHaveAnswer(this.interviewState, answeredQuestion, answeredLinkedQuestion,
+                    questionnaire);
+            }
         }
 
         private void CheckNumericRealQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal answer,
