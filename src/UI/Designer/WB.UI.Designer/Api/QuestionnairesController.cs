@@ -19,12 +19,12 @@ using QuestionnaireListItem = WB.Core.SharedKernels.SurveySolutions.Api.Designer
 namespace WB.UI.Designer.Api
 {
     [ApiBasicAuth]
-    [RoutePrefix("api/v12/questionnaires")]
+    [RoutePrefix("api/v13/questionnaires")]
     public class QuestionnairesController : ApiController
     {
         //temporary fix
         //api version should not be used as version for compilation
-        internal static readonly Version ApiVersion = new Version(11, 0, 0);
+        internal static readonly Version ApiVersion = new Version(13, 0, 0);
 
         private readonly IMembershipUserService userHelper;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
@@ -32,14 +32,13 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireListViewFactory viewFactory;
-        private readonly IDesignerEngineVersionService engineVersionService;
 
         public QuestionnairesController(IMembershipUserService userHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
-            IQuestionnaireListViewFactory viewFactory, IDesignerEngineVersionService engineVersionService)
+            IQuestionnaireListViewFactory viewFactory)
         {
             this.userHelper = userHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
@@ -47,10 +46,9 @@ namespace WB.UI.Designer.Api
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.viewFactory = viewFactory;
-            this.engineVersionService = engineVersionService;
         }
 
-        [Route("~/api/v12/login")]
+        [Route("~/api/v13/login")]
         [HttpGet]
         public void Login()
         {
