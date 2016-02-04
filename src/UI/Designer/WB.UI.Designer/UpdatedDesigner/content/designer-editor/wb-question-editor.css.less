@@ -84,9 +84,13 @@ input#edit-question-title, input#edit-group-title {
         .arial-font();
         border: none;
 
-        li{
+        li {
                padding-left: 5px;
                padding-right: 5px;
+               span{    
+                   padding-right: 5px;
+                    padding-left: 5px;
+               }
         }
 
         li a{
@@ -105,10 +109,11 @@ input#edit-question-title, input#edit-group-title {
             }
             &.linked-roster-source{ 
                 margin-left: 0px;
-                padding-left: 0px;
                 font-style: italic;
                 font-family: Georgia, serif;
-                font-weight: normal;
+                font-weight: normal;    
+                padding-right: 5px;
+                padding-left: 5px;
                 color: @questionnaire-tree-roster-color;
             }
             i{
