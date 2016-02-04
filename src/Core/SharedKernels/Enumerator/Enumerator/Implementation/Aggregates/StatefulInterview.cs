@@ -593,6 +593,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return answers;
         }
 
+        public IEnumerable<InterviewRoster> FindReferencedRostersForLinkedQuestion(Guid rosterId, Identity linkedQuestion)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            var rosterVectorToStartFrom = this.CalculateStartRosterVectorForAnswersOfLinkedToQuestion(rosterId, linkedQuestion, questionnaire);
+
+            IEnumerable<Identity> targetRosters =
+                this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, new[] {rosterId},
+                    rosterVectorToStartFrom, questionnaire).ToArray();
+
+            return targetRosters
+                .Select(this.GetRoster).ToArray();
+        }
+
         private void SaveAnswerFromAnswerDto(InterviewAnswerDto answerDto)
         {
             switch (answerDto.Type)
@@ -734,20 +748,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         }
 
         private decimal[] CalculateStartRosterVectorForAnswersOfLinkedToQuestion(
-            Guid linkedToQuestionId, Identity linkedQuestion, IQuestionnaire questionnaire)
+            Guid linkedToEntityId, Identity linkedQuestion, IQuestionnaire questionnaire)
         {
-            Guid[] linkedToQuestionRosterSources = questionnaire.GetRosterSizeSourcesForQuestion(linkedToQuestionId);
-            Guid[] linkedQuestionRosterSources = questionnaire.GetRosterSizeSourcesForQuestion(linkedQuestion.Id);
+            Guid[] linkSourceRosterVector = questionnaire.GetRosterSizeSourcesForEntity(linkedToEntityId);
+            Guid[] linkedQuestionRosterSources = questionnaire.GetRosterSizeSourcesForEntity(linkedQuestion.Id);
 
             int commonRosterSourcesPartLength = Enumerable
-                .Zip(linkedToQuestionRosterSources, linkedQuestionRosterSources, AreEqual)
+                .Zip(linkSourceRosterVector, linkedQuestionRosterSources, AreEqual)
                 .TakeWhile(areEqual => areEqual)
                 .Count();
-
-            int linkedToQuestionRosterLevel = questionnaire.GetRosterLevelForQuestion(linkedToQuestionId);
+            
             int linkedQuestionRosterLevel = linkedQuestion.RosterVector.Length;
 
-            int targetRosterLevel = Math.Min(commonRosterSourcesPartLength, Math.Min(linkedToQuestionRosterLevel - 1, linkedQuestionRosterLevel));
+            int targetRosterLevel = Math.Min(commonRosterSourcesPartLength, Math.Min(linkSourceRosterVector.Length - 1, linkedQuestionRosterLevel));
 
             return linkedQuestion.RosterVector.Shrink(targetRosterLevel);
         }
@@ -767,7 +780,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            IEnumerable<Guid> parentRosters = questionnaire.GetRostersFromTopToSpecifiedQuestion(questionId).WithoutLast();
+            IEnumerable<Guid> parentRosters = questionnaire.GetRosterSizeSourcesForEntity(questionId).WithoutLast();
 
             foreach (var parentRosterId in parentRosters)
             {

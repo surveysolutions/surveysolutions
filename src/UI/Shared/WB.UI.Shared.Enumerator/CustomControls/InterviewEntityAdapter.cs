@@ -37,6 +37,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (MultimedaQuestionViewModel), Resource.Layout.interview_question_multimedia},
             {typeof (SingleOptionQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (SingleOptionLinkedQuestionViewModel), Resource.Layout.interview_question_single_option},
+            {typeof (SingleOptionRosterLinkedQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (MultiOptionQuestionViewModel), Resource.Layout.interview_question_multi_option},
             {typeof (MultiOptionLinkedQuestionViewModel), Resource.Layout.interview_question_multi_option},
             {typeof (DateTimeQuestionViewModel), Resource.Layout.interview_question_datetime},

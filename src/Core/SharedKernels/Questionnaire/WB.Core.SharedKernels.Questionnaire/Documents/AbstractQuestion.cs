@@ -46,6 +46,8 @@ namespace Main.Core.Entities.SubEntities
 
         public string ConditionExpression { get; set; }
 
+        public bool HideIfDisabled { get; set; }
+
         public bool Featured { get; set; }
 
         public string Instructions { get; set; }
