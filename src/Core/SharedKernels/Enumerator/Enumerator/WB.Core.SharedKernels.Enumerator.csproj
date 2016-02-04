@@ -165,6 +165,7 @@
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\ActiveStageViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\GpsLocation.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\SingleOptionRosterLinkedQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\YesNoQuestionOptionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\YesNoQuestionViewModel.cs" />
     <Compile Include="ViewModels\ScreenChangedEventArgs.cs" />

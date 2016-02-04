@@ -417,14 +417,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .ToList();
         }
 
-        public Guid[] GetRosterSizeSourcesForQuestion(Guid questionId)
+        public Guid[] GetRosterSizeSourcesForEntity(Guid entityId)
         {
-            this.ThrowIfQuestionDoesNotExist(questionId);
+            var entity = GetEntityOrThrow(entityId);
+            var rosterSizes=new List<Guid>();
+            while (entity != this.innerDocument)
+            {
+                var group= entity as IGroup;
+                if (group != null)
+                {
+                    if (IsRosterGroup(group))
+                        rosterSizes.Add(this.GetRosterSource(group.PublicKey));
 
-            return this
-                .GetRostersFromTopToSpecifiedQuestion(questionId)
-                .Select(this.GetRosterSource)
-                .ToArray();
+                }
+                entity = entity.GetParent();
+            }
+            rosterSizes.Reverse();
+            return rosterSizes.ToArray();
         }
 
         public int GetRosterLevelForQuestion(Guid questionId)
@@ -514,8 +523,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool IsPrefilled(Guid questionId)
         {
-            var question = this.QuestionnaireDocument.Find<IQuestion>(questionId);
+            var question = this.GetQuestionOrThrow(questionId);
             return question.Featured;
+        }
+
+        public bool ShouldBeHiddenIfDisabled(Guid entityId)
+        {
+            var entity = this.GetEntityOrThrow(entityId);
+            return (entity as IConditional)?.HideIfDisabled ?? false;
         }
 
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
@@ -547,11 +562,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IQuestion linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);
 
             if (!linkedQuestion.LinkedToQuestionId.HasValue)
-                throw new QuestionnaireException(string.Format(
-                    "Cannot return id of referenced question because specified question {0} is not linked.",
-                    FormatQuestionForException(linkedQuestion)));
+                throw new QuestionnaireException($"Cannot return id of referenced question because specified question {FormatQuestionForException(linkedQuestion)} is not linked.");
 
             return linkedQuestion.LinkedToQuestionId.Value;
+        }
+
+        public Guid GetRosterReferencedByLinkedQuestion(Guid linkedQuestionId)
+        {
+            IQuestion linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);
+
+            if (!linkedQuestion.LinkedToRosterId.HasValue)
+                throw new QuestionnaireException($"Cannot return id of referenced roster because specified question {FormatQuestionForException(linkedQuestion)} is not linked.");
+
+            return linkedQuestion.LinkedToRosterId.Value;
+        }
+
+        public bool IsQuestionLinkedToRoster(Guid linkedQuestionId)
+        {
+            IQuestion linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);
+            if (!linkedQuestion.LinkedToRosterId.HasValue && !linkedQuestion.LinkedToQuestionId.HasValue)
+                throw new QuestionnaireException($"Question {FormatQuestionForException(linkedQuestion)} is not linked.");
+
+            return linkedQuestion.LinkedToRosterId.HasValue;
         }
 
         public bool IsQuestionInteger(Guid questionId)
