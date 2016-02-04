@@ -189,7 +189,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                                 ParentValue = x.ParentValue,
                             }).ToList(),
                             VariableName = childQuestion.StataExportCaption,
-                            ValidationExpression = childQuestion.ValidationExpression,
+                            ValidationConditions = childQuestion.ValidationConditions,
                             ConditionExpression = childQuestion.ConditionExpression,
                             QuestionType = pdfTypeConverter.GetPdfQuestionTypeFromQuestion(childQuestion),
                             Depth = this.GetEntityDepth(childQuestion.PublicKey) + 1
@@ -229,7 +229,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public IEnumerable<PdfQuestionView> GetQuestionsWithValidation()
         {
-            return Children.TreeToEnumerable().OfType<PdfQuestionView>().Where(x => !string.IsNullOrEmpty(x.GetReadableValidationExpression())).OrderBy(x => x.GetStringItemNumber());
+            return Children.TreeToEnumerable().OfType<PdfQuestionView>().Where(x => x.ValidationConditions.Count > 0).OrderBy(x => x.GetStringItemNumber());
         }
 
         public IEnumerable<Macro> GetMacros()

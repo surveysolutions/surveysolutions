@@ -176,7 +176,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                         VariableName = @event.StataExportCaption
                     };
 
-                newQuestion.ValidationExpression = @event.ValidationExpression;
+                newQuestion.ValidationConditions = @event.ValidationConditions;
                 newQuestion.ConditionExpression = @event.ConditionExpression;
                 questionnaire.AddEntity(newQuestion, @event.GroupPublicKey);
                 return questionnaire;
@@ -193,7 +193,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     return questionnaire;
                 }
                 existingQuestion.ConditionExpression = @event.ConditionExpression;
-                existingQuestion.ValidationExpression = @event.ValidationExpression;
+                existingQuestion.ValidationConditions = @event.ValidationConditions;
 
                 existingQuestion.Title = @event.QuestionText;
                 existingQuestion.QuestionType = pdfTypeConverter.GetPdfQuestionTypeFromFullQuestionDataEvent(@event);
@@ -228,7 +228,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     VariableName = @event.StataExportCaption
                 };
 
-                newQuestion.ValidationExpression = @event.ValidationExpression;
+                newQuestion.ValidationConditions = @event.ValidationConditions;
                 newQuestion.ConditionExpression = @event.ConditionExpression;
                 questionnaire.AddEntity(newQuestion, @event.GroupPublicKey);
                 return questionnaire;
@@ -248,7 +248,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     VariableName = @event.StataExportCaption
                 };
 
-                newQuestion.ValidationExpression = @event.ValidationExpression;
+                newQuestion.ValidationConditions = @event.ValidationConditions;
                 newQuestion.ConditionExpression = @event.ConditionExpression;
                 questionnaire.AddEntity(newQuestion, @event.GroupPublicKey);
                 return questionnaire;
@@ -265,7 +265,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     return questionnaire;
                 }
                 existingQuestion.ConditionExpression = @event.ConditionExpression;
-                existingQuestion.ValidationExpression = @event.ValidationExpression;
+                existingQuestion.ValidationConditions = @event.ValidationConditions;
                 existingQuestion.VariableName = @event.StataExportCaption;
 
                 existingQuestion.Title = @event.QuestionText;
@@ -290,7 +290,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 };
 
                 newQuestion.ConditionExpression = @event.ConditionExpression;
-                newQuestion.ValidationExpression = @event.ValidationExpression;
+                newQuestion.ValidationConditions = @event.ValidationConditions;
                 questionnaire.AddEntity(newQuestion, @event.GroupId);
                 return questionnaire;
             });
@@ -306,7 +306,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     return questionnaire;
                 }
                 existingQuestion.ConditionExpression = @event.ConditionExpression;
-                existingQuestion.ValidationExpression = @event.ValidationExpression;
+                existingQuestion.ValidationConditions = @event.ValidationConditions;
                 existingQuestion.Title = @event.QuestionText;
                 existingQuestion.QuestionType = PdfQuestionType.TextList;
                 existingQuestion.Answers = new List<PdfAnswerView>(0);
@@ -448,7 +448,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
                 existingQuestion.VariableName = @event.VariableName;
                 existingQuestion.ConditionExpression = @event.EnablementCondition;
-                existingQuestion.ValidationExpression = @event.ValidationExpression;
+                existingQuestion.ValidationConditions = @event.ValidationConditions;
                 existingQuestion.Title = @event.Title;
                 existingQuestion.QuestionType = PdfQuestionType.QRBarcode;
                 existingQuestion.Answers = new List<PdfAnswerView>(0);
