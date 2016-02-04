@@ -7312,7 +7312,6 @@ input#edit-group-title {
     font-size: 14px;
     color: #5d5d5d;
 }
-#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a.linked-roster-source,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .linked-roster-source{
     margin-left: 0px;
     font-style: italic;
@@ -7391,6 +7390,13 @@ input#edit-group-title {
     padding: 5px;
     padding-left: 20px;
 }
+    #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a.linked-roster-source {
+        margin-left: 0px;
+        font-style: italic;
+        font-family: Georgia, serif;
+        font-weight: normal;
+        color: #2075bf;
+    }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a i,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a i{
     position: relative;
