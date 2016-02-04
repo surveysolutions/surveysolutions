@@ -60,8 +60,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             Assert.That(evnt.ConditionExpression, Is.EqualTo(question.ConditionExpression));
             Assert.That(evnt.Instructions, Is.EqualTo(question.Instructions));
             Assert.That(evnt.StataExportCaption, Is.EqualTo(question.StataExportCaption));
-            Assert.That(evnt.ValidationConditions.First().Expression, Is.EqualTo(question.ValidationExpression));
-            Assert.That(evnt.ValidationConditions.First().Message, Is.EqualTo(question.ValidationMessage));
+            Assert.That(evnt.ValidationConditions, Is.EqualTo(question.ValidationConditions));
         }
 
         private static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(Mock<IReadSideKeyValueStorage<QuestionnaireDocument>> storageStub)
@@ -103,8 +102,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                     answers : null,
                     instructions : "Answer this question, please",
                     stataExportCaption : "name",
-                    validationExpression : "[this]!=''",
-                    validationMessage : "Empty names is invalid answer"
+                    validationConditions: new List<ValidationCondition> { new ValidationCondition("[this]!=''", "Empty names is invalid answer") }
                 );
         }
 
@@ -118,7 +116,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
         public static QuestionChanged CreateQuestionChanged(Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
             string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string validationExpression = null, string validationMessage = null,
             QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
-            QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null)
+            QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null,
+            Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
+            IList<ValidationCondition> validationConditions = null)
         {
             return new QuestionChanged(
                 publicKey: publicKey,
@@ -147,7 +147,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                 isFilteredCombobox: isFilteredCombobox,
                 cascadeFromQuestionId: cascadeFromQuestionId,
                 targetGroupKey: Guid.NewGuid(),
-                    validationConditions: new List<ValidationCondition>());
+                    validationConditions: validationConditions ?? new List<ValidationCondition>());
         }
     }
 }
