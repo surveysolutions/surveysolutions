@@ -460,7 +460,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.QuestionText,
                         e.StataExportCaption,
                         e.VariableLabel,
-                        e.ValidationMessage,
+                        e.ConditionExpression,
                         Order.AZ,
                         false,
                         false,

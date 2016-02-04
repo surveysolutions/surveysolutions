@@ -39,7 +39,9 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         public QuestionScope QuestionScope { get; private set; }
         public string StataExportCaption { get; private set; }
         public string VariableLabel { get; private set; }
+        [Obsolete("KP-6647")]
         public string ValidationExpression { get; private set; }
+        [Obsolete("KP-6647")]
         public string ValidationMessage { get; private set; }
 
         public IList<ValidationCondition> ValidationConditions { get; set; }

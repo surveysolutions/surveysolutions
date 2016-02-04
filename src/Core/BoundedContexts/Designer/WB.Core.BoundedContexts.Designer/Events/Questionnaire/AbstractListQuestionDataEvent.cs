@@ -23,7 +23,9 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         public string StataExportCaption { get; set; }
         public string VariableLabel { get; set; }
         public int? MaxAnswerCount { get; set; }
+        [Obsolete("KP-6647")]
         public string ValidationExpression { get; set; }
+        [Obsolete("KP-6647")]
         public string ValidationMessage { get; set; }
 
         public QuestionScope QuestionScope { get; set; }
