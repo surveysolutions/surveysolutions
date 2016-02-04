@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
@@ -36,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
 
-        public SingleOptionRosterLinkedQuestionViewModel(
+       public SingleOptionRosterLinkedQuestionViewModel(
             IPrincipal principal,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
@@ -62,6 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private Identity questionIdentity;
         private Guid interviewId;
+        private IStatefulInterview interview;
         private Guid referencedRosterId;
         private ObservableCollection<SingleOptionLinkedQuestionOptionViewModel> options;
 
@@ -95,7 +97,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.QuestionState.Init(interviewId, questionIdentity, navigationState);
 
-            var interview = this.interviewRepository.Get(interviewId);
+            interview = this.interviewRepository.Get(interviewId);
 
             this.questionIdentity = questionIdentity;
             this.interviewId = interview.Id;
@@ -134,8 +136,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return referencedRosters
                 .Select(
                     referencedRoster =>
-                        this.GenerateOptionViewModelOrNull(referencedRoster, linkedAnswerModel, interview))
-                .Where(o => o != null)
+                        this.GenerateOptionViewModel(referencedRoster, linkedAnswerModel, interview))
                 .ToList();
         }
 
@@ -210,16 +211,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private SingleOptionLinkedQuestionOptionViewModel GenerateOptionViewModelOrNull(
+        private SingleOptionLinkedQuestionOptionViewModel GenerateOptionViewModel(
             InterviewRoster referencedRoster, LinkedSingleOptionAnswer linkedAnswerModel, IStatefulInterview interview)
         {
-            if (referencedRoster == null)
-                return null;
-
             var title = this.GenerateOptionTitle(referencedRoster, interview);
-
-            if (string.IsNullOrEmpty(title))
-                return null;
 
             var isSelected =
                 linkedAnswerModel != null &&
@@ -270,55 +265,34 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(RosterInstancesRemoved @event)
         {
-            foreach (var instancesToRemove in @event.Instances)
-            {
-                if (instancesToRemove.GroupId == this.referencedRosterId)
+            var optionListShouldBeUpdated = @event.Instances.Any(x => x.GroupId == referencedRosterId);
+            var optionsToUpdate = this.GenerateOptionsFromModel(interview).ToArray();
+            if (optionListShouldBeUpdated)
+                this.mainThreadDispatcher.RequestMainThreadAction(() =>
                 {
-                    var rosterVector =
-                        instancesToRemove.OuterRosterVector.Union(new[]
-                        {instancesToRemove.RosterInstanceId}).ToArray();
-
-                    this.mainThreadDispatcher.RequestMainThreadAction(() =>
+                    this.Options.Clear();
+                    foreach (var singleOptionLinkedQuestionOptionViewModel in optionsToUpdate)
                     {
-                        var optionToRemove =
-                            this.Options.SingleOrDefault(
-                                option => option.RosterVector.SequenceEqual(rosterVector));
-                        if (optionToRemove != null)
-                            this.Options.Remove(optionToRemove);
-
-                        this.RaisePropertyChanged(() => this.HasOptions);
-                    });
-                }
-            }
+                        this.Options.Add(singleOptionLinkedQuestionOptionViewModel);
+                    }
+                    this.RaisePropertyChanged(() => this.HasOptions);
+                });
         }
 
         public void Handle(RosterInstancesTitleChanged @event)
         {
-            foreach (var changedInstances in @event.ChangedInstances)
-            {
-                if (changedInstances.RosterInstance.GroupId == this.referencedRosterId)
+            var optionListShouldBeUpdated = @event.ChangedInstances.Any(x => x.RosterInstance.GroupId == referencedRosterId);
+            var optionsToUpdate = this.GenerateOptionsFromModel(interview).ToArray();
+            if (optionListShouldBeUpdated)
+                this.mainThreadDispatcher.RequestMainThreadAction(() =>
                 {
-                    var rosterVector =
-                        changedInstances.RosterInstance.OuterRosterVector.Union(new[]
-                        {changedInstances.RosterInstance.RosterInstanceId}).ToArray();
-
-                    this.mainThreadDispatcher.RequestMainThreadAction(() =>
+                    this.Options.Clear();
+                    foreach (var singleOptionLinkedQuestionOptionViewModel in optionsToUpdate)
                     {
-                        var optionToUpdate =
-                            this.Options.SingleOrDefault(
-                                option => option.RosterVector.SequenceEqual(rosterVector));
-                        if (optionToUpdate == null)
-                            this.Options.Add(CreateSingleOptionLinkedQuestionOptionViewModel(changedInstances.Title,
-                                false, rosterVector));
-                        else
-                        {
-                            optionToUpdate.Title = changedInstances.Title;
-                        }
-
-                        this.RaisePropertyChanged(() => this.HasOptions);
-                    });
-                }
-            }
+                        this.Options.Add(singleOptionLinkedQuestionOptionViewModel);
+                    }
+                    this.RaisePropertyChanged(() => this.HasOptions);
+                });
         }
     }
 }

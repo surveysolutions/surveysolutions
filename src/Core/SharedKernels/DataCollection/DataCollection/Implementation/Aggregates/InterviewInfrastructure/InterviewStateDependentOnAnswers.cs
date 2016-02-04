@@ -152,8 +152,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 string rosterGroupKey =
                     ConversionHelper.ConvertIdAndRosterVectorToString(changedInstance.RosterInstance.GroupId,
-                        changedInstance.RosterInstance.OuterRosterVector.Union(new[]
-                        {changedInstance.RosterInstance.RosterInstanceId}).ToArray());
+                        changedInstance.RosterInstance.GetIdentity().RosterVector);
 
                 this.RosterTitles[rosterGroupKey] = changedInstance.Title;
             }
