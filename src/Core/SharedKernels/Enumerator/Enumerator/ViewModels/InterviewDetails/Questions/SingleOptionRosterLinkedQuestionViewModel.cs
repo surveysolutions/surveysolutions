@@ -211,6 +211,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+
+        public void Handle(AnswersRemoved @event)
+        {
+            foreach (var question in @event.Questions)
+            {
+                if (this.questionIdentity.Equals(question.Id, question.RosterVector))
+                {
+                    foreach (var option in this.Options.Where(option => option.Selected))
+                    {
+                        option.Selected = false;
+                    }
+                    this.QuestionState.IsAnswered = false;
+                }
+            }
+        }
+
         private SingleOptionLinkedQuestionOptionViewModel GenerateOptionViewModel(
             InterviewRoster referencedRoster, LinkedSingleOptionAnswer linkedAnswerModel, IStatefulInterview interview)
         {
@@ -256,11 +272,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return string.IsNullOrEmpty(rosterPrefixes)
                 ? rosterTitle
                 : string.Join(": ", rosterPrefixes, rosterTitle);
-        }
-
-        public void Handle(AnswersRemoved @event)
-        {
-
         }
 
         public void Handle(RosterInstancesRemoved @event)
