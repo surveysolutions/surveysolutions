@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Designer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to $$Roster Title$$.
+        ///   Looks up a localized string similar to Roster itself.
         /// </summary>
         internal static string RosterTitle {
             get {

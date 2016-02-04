@@ -7136,9 +7136,6 @@ textarea {
 .icon-text {
   background-position: 0 -30px;
 }
-.icon-roster {
-    background-position: 0 -30px;
-}
 .icon-singleoption {
   background-position: 0 -60px;
 }
@@ -7309,8 +7306,19 @@ input#edit-group-title {
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons label,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons label {
-  font-weight: normal;
-  display: block;
+    font-weight: normal;
+    display: block;
+    font-family: "Lucida Console", Monaco, monospace;
+    font-size: 14px;
+    color: #5d5d5d;
+}
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a.linked-roster-source,
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .linked-roster-source{
+    margin-left: 0px;
+    font-style: italic;
+    font-family: Georgia, serif;
+    font-weight: normal;
+    color: #2075bf;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group {
@@ -7358,6 +7366,15 @@ input#edit-group-title {
   font-family: Arial, Helvetica, sans-serif;
   border: none;
 }
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li{
+    padding-left: 5px;
+    padding-right: 5px;
+}
+    #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a,
+    #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li span { 
+        padding-right: 5px;
+        padding-left: 5px;
+    }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a {
   font-family: Arial, Helvetica, sans-serif;
@@ -7365,9 +7382,20 @@ input#edit-group-title {
   padding-bottom: 1px;
   color: #555555;
   position: relative;
-  padding-left: 29px;
   margin-left: 10px;
+  padding-right: 5px;
+  padding-left: 5px;
 }
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a.linked-question-source {
+    margin-left: 0px;
+    padding: 5px;
+    padding-left: 20px;
+}
+#roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a i,
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a i{
+    position: relative;
+}
+
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:after,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:after {
   display: block;
@@ -7377,16 +7405,12 @@ input#edit-group-title {
   width: 50px;
   top: 0;
   right: 0;
-  background-image: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%);
-  background-image: -o-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%);
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#e6ffffff', GradientType=1);
   z-index: 1010;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:hover,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:hover {
-  color: #2a81cb;
+  background:  #f1f2f3;
+  border-radius: 4px;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu .dropdown-header,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu .dropdown-header {
