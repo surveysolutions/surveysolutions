@@ -62,6 +62,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ValidAnsweredQuestions = new ConcurrentHashSet<string>();
             this.InvalidAnsweredQuestions = new ConcurrentHashSet<string>();
             this.AnswerComments = new ConcurrentBag<AnswerComment>();
+            this.RosterTitles = new ConcurrentDictionary<string, string>();
         }
 
         public ConcurrentDictionary<string, object> AnswersSupportedInExpressions { set; get; }
@@ -72,6 +73,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public ConcurrentHashSet<string> DisabledGroups { set; get; }
         public ConcurrentHashSet<string> DisabledQuestions { set; get; }
         public ConcurrentDictionary<string, ConcurrentDistinctList<decimal>> RosterGroupInstanceIds { set; get; }
+        public ConcurrentDictionary<string, string> RosterTitles { set; get; }
         public ConcurrentHashSet<string> ValidAnsweredQuestions { set; get; }
         public ConcurrentHashSet<string> InvalidAnsweredQuestions { set; get; }
         public ConcurrentBag<AnswerComment> AnswerComments { get; set; }
@@ -94,6 +96,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (changes.AnswersForLinkedQuestionsToRemove != null)
             {
                 this.RemoveAnswers(changes.AnswersForLinkedQuestionsToRemove);
+            }
+
+            if (changes.RosterInstancesWithAffectedTitles != null)
+            {
+                this.ChangeRosterTitles(
+                    changes.RosterInstancesWithAffectedTitles.Select(
+                        r =>
+                            new ChangedRosterInstanceTitleDto(
+                                new RosterInstance(r.GroupId, r.OuterRosterVector, r.RosterInstanceId),
+                                changes.AnswerAsRosterTitle)).ToArray());
             }
         }
 
@@ -123,7 +135,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.RemoveAnswers(rosterCalculationData.AnswersToRemoveByDecreasedRosterSize);
             }
-
             rosterCalculationData.RosterInstantiatesFromNestedLevels.ForEach(this.ApplyRosterData);
         }
 
@@ -133,6 +144,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.DisableGroups(enablementChanges.GroupsToBeDisabled);
             this.EnableQuestions(enablementChanges.QuestionsToBeEnabled);
             this.DisableQuestions(enablementChanges.QuestionsToBeDisabled);
+        }
+
+        public void ChangeRosterTitles(ChangedRosterInstanceTitleDto[] changedInstances)
+        {
+            foreach (var changedInstance in changedInstances)
+            {
+                string rosterGroupKey =
+                    ConversionHelper.ConvertIdAndRosterVectorToString(changedInstance.RosterInstance.GroupId,
+                        changedInstance.RosterInstance.OuterRosterVector.Union(new[]
+                        {changedInstance.RosterInstance.RosterInstanceId}).ToArray());
+
+                this.RosterTitles[rosterGroupKey] = changedInstance.Title;
+            }
         }
 
         public void AddRosterInstances(AddedRosterInstance[] instances)
@@ -283,6 +307,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.RosterGroupInstanceIds.ContainsKey(groupKey)
                 ? this.RosterGroupInstanceIds[groupKey].ToReadOnlyCollection()
                 : Enumerable.Empty<decimal>().ToReadOnlyCollection();
+        }
+
+        public string GetRosterTitle(Guid rosterId, RosterVector rosterVector)
+        {
+            string groupKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterId, rosterVector);
+
+            return this.RosterTitles.ContainsKey(groupKey)
+                ? this.RosterTitles[groupKey]
+                : null;
         }
 
         public IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedSingleOptionAnswers(IQuestionnaire questionnaire)

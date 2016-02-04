@@ -427,12 +427,9 @@
     <value>Lookup table name cannot be a reserved word.</value>
   </data>
   <data name="WB0053_LinkedQuestionReferencesNotExistingRoster" xml:space="preserve">
-    <value>Linked question references roster which doesn't not exist.</value>
+    <value>Roster which is the source of the link should exist.</value>
   </data>
   <data name="WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster" xml:space="preserve">
-    <value>Linked question references group which is not a roster.</value>
-  </data>
-  <data name="WB0104_LinkedQuestionReferencesNumericRoster" xml:space="preserve">
-    <value>Linked question references numeric roster.</value>
+    <value>Roster which is the source of the link is a roster, not a subsection.</value>
   </data>
 </root>

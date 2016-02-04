@@ -54,8 +54,6 @@ namespace WB.UI.Interviewer
 
         private void InitializeLogger(Context applicationContext)
         {
-            //ec9917607bbc4cf9e9413eaf25917e863c31cc7a
-
             Insights.HasPendingCrashReport += (sender, isStartupCrash) =>
             {
                 if (isStartupCrash)
@@ -67,11 +65,9 @@ namespace WB.UI.Interviewer
 #if DEBUG
             Insights.Initialize(Insights.DebugModeKey, applicationContext);
 #else
-            Insights.Initialize("ec9917607bbc4cf9e9413eaf25917e863c31cc7a", applicationContext);
+            Insights.Initialize("20fe6ac44d54f5fed5370bc877d7ba7524f15363", applicationContext);
 #endif
         }
-
-        protected override Type StartupActivityType => typeof (SplashActivity);
 
         protected override void InitializeViewLookup()
         {

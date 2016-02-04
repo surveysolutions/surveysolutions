@@ -36,6 +36,8 @@ namespace Main.Core.Documents
 
         public string ConditionExpression { get; set; }
 
+        public bool HideIfDisabled { get; set; }
+
         public DateTime CreationDate { get; set; }
 
         public DateTime LastEntryDate { get; set; }

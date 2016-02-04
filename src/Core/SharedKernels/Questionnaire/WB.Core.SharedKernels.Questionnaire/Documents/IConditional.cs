@@ -9,5 +9,6 @@
         /// Gets or sets the condition expression.
         /// </summary>
         string ConditionExpression { get; set; }
+        bool HideIfDisabled { get; set; }
     }
 }

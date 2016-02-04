@@ -17,6 +17,8 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -49,8 +51,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
-
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ISubstitutionService substitutionService;
         readonly ILiteEventRegistry eventRegistry;
@@ -63,13 +65,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private NavigationState navigationState;
 
         IStatefulInterview interview;
-        QuestionnaireModel questionnaire;
+        private IQuestionnaire questionnaire;
+        QuestionnaireModel questionnaireModel;
         string interviewId;
 
 
         public EnumerationStageViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
+            IPlainQuestionnaireRepository questionnaireRepository,
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository,
             IStatefulInterviewRepository interviewRepository,
             ISubstitutionService substitutionService,
             ILiteEventRegistry eventRegistry,
@@ -78,6 +82,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.questionnaireRepository = questionnaireRepository;
+            this.questionnaireModelRepository = questionnaireModelRepository;
             this.interviewRepository = interviewRepository;
             this.substitutionService = substitutionService;
             this.eventRegistry = eventRegistry;
@@ -94,7 +99,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.interviewId = interviewId;
             this.interview = this.interviewRepository.Get(interviewId);
-            this.questionnaire = this.questionnaireRepository.GetById(this.interview.QuestionnaireId);
+            this.questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity);
+            this.questionnaireModel = this.questionnaireModelRepository.GetById(this.interview.QuestionnaireId);
 
             this.eventRegistry.Subscribe(this, interviewId);
             this.navigationState = navigationState;
@@ -111,7 +117,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
             else
             {
-                GroupModel @group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[eventArgs.TargetGroup.Id];
+                GroupModel @group = this.questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[eventArgs.TargetGroup.Id];
 
                 this.CreateRegularGroupScreen(eventArgs, @group);
                 if (!this.eventRegistry.IsSubscribed(this, this.interviewId))
@@ -156,16 +162,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             try
             {
-                userInterfaceStateService.NotifyRefreshStarted();
-
-                var interview = this.interviewRepository.Get(this.interviewId);
+                this.userInterfaceStateService.NotifyRefreshStarted();
 
                 var interviewEntityViewModels = this.interviewViewModelFactory
                     .GetEntities(
                         interviewId: this.navigationState.InterviewId,
                         groupIdentity: groupIdentity,
                         navigationState: this.navigationState)
-                    .Where(entity => this.ShouldPutEntityToList(entity, interview))
+                    .Where(entity => !this.ShouldBeHidden(entity.Identity))
                     .ToList();
 
 
@@ -176,18 +180,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 {
                     interviewItemViewModel.Dispose();
                 }
-                InvokeOnMainThread(() =>this.Items.Reset(interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<dynamic>())));
+                this.InvokeOnMainThread(() => this.Items.Reset(interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<dynamic>())));
             }
             finally
             {
-                userInterfaceStateService.NotifyRefreshFinished();
+                this.userInterfaceStateService.NotifyRefreshFinished();
             }
         }
-
-        private bool ShouldPutEntityToList(IInterviewEntityViewModel entity, IStatefulInterview statefulInterview)
-            => this.ShouldRemoveDisabledEntities
-                ? statefulInterview.IsEnabled(entity.Identity)
-                : true;
 
         public void Handle(RosterInstancesTitleChanged @event)
         {
@@ -195,7 +194,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 if (this.navigationState.CurrentGroup.Equals(rosterInstance.RosterInstance.GetIdentity()))
                 {
-                    GroupModel group = this.questionnaire.GroupsWithFirstLevelChildrenAsReferences[this.navigationState.CurrentGroup.Id];
+                    GroupModel group = this.questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[this.navigationState.CurrentGroup.Id];
                     this.Name = this.substitutionService.GenerateRosterName(@group.Title,
                         this.interview.GetRosterTitle(this.navigationState.CurrentGroup));
                 }
@@ -204,7 +203,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(RosterInstancesAdded @event)
         {
-            this.AddEntities();
+            this.AddMissingEntities();
         }
 
         public void Handle(RosterInstancesRemoved @event)
@@ -214,53 +213,29 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(QuestionsEnabled @event)
         {
-            if (this.ShouldRemoveDisabledEntities)
-            {
-                this.AddEntities();
-            }
-            else
-            {
-                this.InvalidateViewModelsByConditions(@event.Questions);
-            }
+            this.AddMissingEntities();
+            this.InvalidateViewModelsByConditions(@event.Questions);
         }
 
         public void Handle(QuestionsDisabled @event)
         {
-            if (this.ShouldRemoveDisabledEntities)
-            {
-                this.RemoveEntities(@event.Questions);
-            }
-            else
-            {
-                this.InvalidateViewModelsByConditions(@event.Questions);
-            }
+            this.InvalidateViewModelsByConditions(@event.Questions);
+            this.RemoveEntities(@event.Questions.Where(this.ShouldBeHiddenIfDisabled).ToArray());
         }
 
         public void Handle(GroupsEnabled @event)
         {
-            if (this.ShouldRemoveDisabledEntities)
-            {
-                this.AddEntities();
-            }
-            else
-            {
-                this.InvalidateViewModelsByConditions(@event.Groups);
-            }
+            this.AddMissingEntities();
+            this.InvalidateViewModelsByConditions(@event.Groups);
         }
 
         public void Handle(GroupsDisabled @event)
         {
-            if (this.ShouldRemoveDisabledEntities)
-            {
-                this.RemoveEntities(@event.Groups);
-            }
-            else
-            {
-                this.InvalidateViewModelsByConditions(@event.Groups);
-            }
+            this.InvalidateViewModelsByConditions(@event.Groups);
+            this.RemoveEntities(@event.Groups.Where(this.ShouldBeHiddenIfDisabled).ToArray());
         }
 
-        private void AddEntities()
+        private void AddMissingEntities()
         {
             this.InvokeOnMainThread(() =>
             {
@@ -275,6 +250,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                                 interviewId: this.navigationState.InterviewId,
                                 groupIdentity: this.navigationState.CurrentGroup,
                                 navigationState: this.navigationState)
+                            .Where(entity => !this.ShouldBeHidden(entity.Identity))
                             .ToList();
 
                         List<IInterviewEntityViewModel> usedViewModelEntities = new List<IInterviewEntityViewModel>();
@@ -356,6 +332,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 }
             });
         }
+
+        private bool ShouldBeHidden(Identity entity)
+            => this.ShouldBeHiddenIfDisabled(entity) &&
+               !this.interview.IsEnabled(entity);
+
+        private bool ShouldBeHiddenIfDisabled(Identity entity)
+            => this.questionnaire.ShouldBeHiddenIfDisabled(entity.Id);
 
         public void Dispose()
         {

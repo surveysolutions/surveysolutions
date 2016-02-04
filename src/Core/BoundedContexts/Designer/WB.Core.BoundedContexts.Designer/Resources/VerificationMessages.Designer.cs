@@ -532,7 +532,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked question references roster which doesn&apos;t not exist..
+        ///   Looks up a localized string similar to Roster which is the source of the link should exist..
         /// </summary>
         internal static string WB0053_LinkedQuestionReferencesNotExistingRoster {
             get {
@@ -992,20 +992,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked question references group which is not a roster..
+        ///   Looks up a localized string similar to Roster which is the source of the link is a roster, not a subsection..
         /// </summary>
         internal static string WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster {
             get {
                 return ResourceManager.GetString("WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Linked question references numeric roster..
-        /// </summary>
-        internal static string WB0104_LinkedQuestionReferencesNumericRoster {
-            get {
-                return ResourceManager.GetString("WB0104_LinkedQuestionReferencesNumericRoster", resourceCulture);
             }
         }
         
