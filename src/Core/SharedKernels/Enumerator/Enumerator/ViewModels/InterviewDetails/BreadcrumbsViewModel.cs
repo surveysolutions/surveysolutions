@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -73,8 +74,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private static Identity GetChangedRosterIdentity(ChangedRosterInstanceTitleDto changedRosterInstance)
         {
             var changedRosterInstanceIdentity = new Identity(changedRosterInstance.RosterInstance.GroupId,
-                changedRosterInstance.RosterInstance.OuterRosterVector.Concat(
-                    changedRosterInstance.RosterInstance.RosterInstanceId.ToEnumerable()).ToArray());
+                changedRosterInstance.RosterInstance.GetIdentity().RosterVector);
             return changedRosterInstanceIdentity;
         }
 
