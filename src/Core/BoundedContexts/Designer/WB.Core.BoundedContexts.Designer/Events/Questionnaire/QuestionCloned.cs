@@ -14,10 +14,11 @@ namespace Main.Core.Events.Questionnaire
         public QuestionCloned(Guid responsibleId, string conditionExpression, bool featured, string instructions, bool capital, Guid publicKey, string questionText, 
             QuestionScope questionScope, string stataExportCaption, string variableLabel, string validationExpression, string validationMessage, QuestionType questionType, 
             Order? answerOrder, Answer[] answers, Guid? groupPublicKey, Guid? linkedToQuestionId, Guid? linkedToRosterId, bool? isInteger, bool? areAnswersOrdered, bool? yesNoView, int? maxAllowedAnswers, 
-            string mask, bool? isFilteredCombobox, Guid? cascadeFromQuestionId, Guid? sourceQuestionnaireId, Guid sourceQuestionId, int targetIndex, int? maxAnswerCount, int? countOfDecimalPlaces) 
+            string mask, bool? isFilteredCombobox, Guid? cascadeFromQuestionId, Guid? sourceQuestionnaireId, Guid sourceQuestionId, int targetIndex, int? maxAnswerCount, int? countOfDecimalPlaces,
+            IList<ValidationCondition> validationConditions) 
             : base(responsibleId, conditionExpression, featured, instructions, capital, publicKey, questionText, questionScope, stataExportCaption, variableLabel, validationExpression, 
                   validationMessage, questionType, answerOrder, answers, groupPublicKey, linkedToQuestionId, linkedToRosterId, isInteger, areAnswersOrdered, yesNoView, maxAllowedAnswers, mask, isFilteredCombobox,
-                  cascadeFromQuestionId, new List<ValidationCondition>()) // todo : KP-6698
+                  cascadeFromQuestionId, validationConditions) 
         {
             this.SourceQuestionnaireId = sourceQuestionnaireId;
             this.SourceQuestionId = sourceQuestionId;
