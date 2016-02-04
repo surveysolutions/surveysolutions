@@ -1024,7 +1024,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             sourceQuestionnaireId:sourceQuestionnaireId,
                             responsibleId: responsibleId,
                             isInteger: numericQuestion.IsInteger,
-                            countOfDecimalPlaces: numericQuestion.CountOfDecimalPlaces));
+                            countOfDecimalPlaces: numericQuestion.CountOfDecimalPlaces,
+                            validationConditions: numericQuestion.ValidationConditions));
                         continue;
                     }
 
@@ -1074,8 +1075,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             sourceQuestionnaireId: sourceQuestionnaireId, 
                             instructions: instructions, mask: textQuestion.Mask,
                             isPreFilled: textQuestion.Featured,
-                            scope: textQuestion.QuestionScope, validationExpression: textQuestion.ValidationExpression,
-                            validationMessage: textQuestion.ValidationMessage));
+                            scope: textQuestion.QuestionScope,
+                            validationConditions: textQuestion.ValidationConditions));
                         continue;
                     }
 
@@ -1092,7 +1093,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             validationMessage: geoLocationQuestion.ValidationMessage,
                             scope: geoLocationQuestion.QuestionScope,
                             featured: geoLocationQuestion.Featured,
-                            capital: geoLocationQuestion.Capital));
+                            capital: geoLocationQuestion.Capital,
+                            validationConditions: geoLocationQuestion.ValidationConditions));
                         continue;
                     }
 
@@ -1109,7 +1111,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             scope: dateTitmeQuestion.QuestionScope,
                             isPreFilled: dateTitmeQuestion.Featured,
                             validationExpression: dateTitmeQuestion.ValidationExpression,
-                            validationMessage: dateTitmeQuestion.ValidationMessage));
+                            validationMessage: dateTitmeQuestion.ValidationMessage,
+                            validationConditions: dateTitmeQuestion.ValidationConditions));
                         continue;
                     }
 
@@ -1135,7 +1138,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             options:
                                 categoricalMultiQuestion.Answers.Select(
                                     answer => new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText))
-                                    .ToArray()));
+                                    .ToArray(),
+                            validationConditions: categoricalMultiQuestion.ValidationConditions));
                         continue;
                     }
 
@@ -1160,7 +1164,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             options:
                                 categoricalSingleQuestion.Answers.Select(
                                     answer => new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText, answer.ParentValue))
-                                    .ToArray()));
+                                    .ToArray(),
+                            validationConditions: categoricalSingleQuestion.ValidationConditions));
                         continue;
                     }
 
@@ -1175,7 +1180,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId: sourceQuestionnaireId, 
                             scope : multimediaQuestion.QuestionScope,
-                            responsibleId: responsibleId));
+                            responsibleId: responsibleId,
+                            validationConditions: multimediaQuestion.ValidationConditions));
                         continue;
                     }
                 }
@@ -1392,7 +1398,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 countOfDecimalPlaces: (asNumeric != null) ? (int?) asNumeric.CountOfDecimalPlaces : null,
                 maxAnswerCount: asListQuestion != null ? asListQuestion.MaxAnswerCount : null,
                 maxAllowedAnswers: asMultioptions != null ? asMultioptions.MaxAllowedAnswers : null,
-                answerOrder : null);
+                answerOrder : null,
+                validationConditions: question.ValidationConditions);
 
             return questionCloned;
         }
@@ -3939,8 +3946,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #region Create clone events
 
         private IEnumerable<IEvent> CreateTextQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel,
-            bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions,
-            string mask, Guid parentGroupId, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId)
+            bool isPreFilled, QuestionScope scope, string enablementCondition, string instructions,
+            string mask, Guid parentGroupId, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId,
+            IList<ValidationCondition> validationConditions)
         {
             yield return new QuestionCloned(
                 publicKey: questionId,
@@ -3951,8 +3959,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 variableLabel: variableLabel,
                 questionScope: scope,
                 conditionExpression: enablementCondition,
-                validationExpression: validationExpression,
-                validationMessage: validationMessage,
+                validationExpression: null,
+                validationMessage: null,
                 instructions: instructions,
                 sourceQuestionId: sourceQuestionId,
                 sourceQuestionnaireId: sourceQuestionnaireId,
@@ -3972,13 +3980,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 isFilteredCombobox: null,
                 cascadeFromQuestionId: null,
                 maxAnswerCount: null,
-                countOfDecimalPlaces: null
+                countOfDecimalPlaces: null,
+                validationConditions: validationConditions
             );
         }
 
         private IEnumerable<IEvent> CreateGeoLocationQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, 
             string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid parentGroupId, Guid sourceQuestionId,
-            Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, QuestionScope scope, bool featured, bool capital)
+            Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, QuestionScope scope, bool featured, bool capital,
+            IList<ValidationCondition> validationConditions)
         {
             yield return new QuestionCloned(
                 publicKey: questionId,
@@ -3989,8 +3999,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 variableLabel: variableLabel,
                 questionScope: scope,
                 conditionExpression: enablementCondition,
-                validationExpression : validationExpression,
-                validationMessage : validationMessage,
+                validationExpression : null,
+                validationMessage : null,
                 instructions : instructions,
                 sourceQuestionId : sourceQuestionId,
                 sourceQuestionnaireId : sourceQuestionnaireId,
@@ -4010,16 +4020,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 isFilteredCombobox : null,
                 cascadeFromQuestionId : null,
                 maxAnswerCount : null,
-                countOfDecimalPlaces: null
+                countOfDecimalPlaces: null,
+                validationConditions: validationConditions
             );
         }
 
         private IEnumerable<IEvent> CreateDateTimeQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, 
             bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions, 
-            Guid parentGroupId, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId)
+            Guid parentGroupId, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId,
+            IList<ValidationCondition> validationConditions)
         {
             yield return new QuestionCloned(
-            
                 publicKey : questionId,
                 groupPublicKey : parentGroupId,
                 questionText : title,
@@ -4029,8 +4040,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 featured : isPreFilled,
                 questionScope : scope,
                 conditionExpression : enablementCondition,
-                validationExpression : validationExpression,
-                validationMessage : validationMessage,
+                validationExpression : null,
+                validationMessage : null,
                 instructions : instructions,
                 sourceQuestionId : sourceQuestionId,
                 sourceQuestionnaireId : sourceQuestionnaireId,
@@ -4049,7 +4060,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 isFilteredCombobox: null,
                 cascadeFromQuestionId: null,
                 maxAnswerCount: null,
-                countOfDecimalPlaces: null);
+                countOfDecimalPlaces: null,
+                validationConditions: validationConditions);
         }
 
         private IEnumerable<IEvent> CreateCategoricalMultiAnswersQuestionClonedEvents(
@@ -4072,7 +4084,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid? linkedToRosterId,
             bool areAnswersOrdered, 
             int? maxAllowedAnswers,
-            bool yesNoView)
+            bool yesNoView,
+            IList<ValidationCondition> validationConditions)
         {
             yield return new QuestionCloned(
             
@@ -4084,8 +4097,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 variableLabel : variableLabel,
                 questionScope : scope,
                 conditionExpression : enablementCondition,
-                validationExpression : validationExpression,
-                validationMessage : validationMessage,
+                validationExpression : null,
+                validationMessage : null,
                 instructions : instructions,
                 answers : ConvertOptionsToAnswers(options),
                 sourceQuestionId : sourceQuestionId,
@@ -4105,13 +4118,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 isFilteredCombobox: null,
                 cascadeFromQuestionId: null,
                 maxAnswerCount: null,
-                countOfDecimalPlaces: null);
+                countOfDecimalPlaces: null,
+                validationConditions: validationConditions);
         }
 
         private IEnumerable<IEvent> CreateCategoricalSingleAnswerQuestionEvents(Guid questionId, string title, string variableName, string variableLabel, 
             bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions, 
             Guid parentGroupId, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, Option[] options, 
-            Guid? linkedToQuestionId, Guid? linkedToRosterId, bool? isFilteredCombobox, Guid? cascadeFromQuestionId)
+            Guid? linkedToQuestionId, Guid? linkedToRosterId, bool? isFilteredCombobox, Guid? cascadeFromQuestionId,
+            IList<ValidationCondition> validationConditions)
         {
             yield return new QuestionCloned(
                 publicKey : questionId,
@@ -4123,8 +4138,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 featured : isPreFilled,
                 questionScope : scope,
                 conditionExpression : enablementCondition,
-                validationExpression : validationExpression,
-                validationMessage : validationMessage,
+                validationExpression : null,
+                validationMessage : null,
                 instructions : instructions,
                 answers : ConvertOptionsToAnswers(options),
                 sourceQuestionId : sourceQuestionId,
@@ -4143,12 +4158,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 maxAllowedAnswers: null,
                 mask: null,
                 maxAnswerCount: null,
-                countOfDecimalPlaces: null);
+                countOfDecimalPlaces: null,
+                validationConditions: validationConditions);
         }
 
         private IEnumerable<IEvent> CreateNumericQuestionCloneEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, 
             string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid sourceQuestionId, 
-            Guid sourceQuestionnaireId,int targetIndex, Guid responsibleId, bool isInteger, int? countOfDecimalPlaces)
+            Guid sourceQuestionnaireId,int targetIndex, Guid responsibleId, bool isInteger, int? countOfDecimalPlaces,
+            IList<ValidationCondition> validationConditions)
         {
             yield return new NumericQuestionCloned
             (
@@ -4161,15 +4178,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 capital : false,
                 questionScope : scope,
                 conditionExpression : enablementCondition,
-                validationExpression : validationExpression,
-                validationMessage : validationMessage,
+                validationExpression : null,
+                validationMessage : null,
                 instructions : instructions,
                 sourceQuestionId : sourceQuestionId,
                 sourceQuestionnaireId : sourceQuestionnaireId,
                 targetIndex : targetIndex,
                 responsibleId : responsibleId,
                 isInteger : isInteger,
-                countOfDecimalPlaces : countOfDecimalPlaces
+                countOfDecimalPlaces : countOfDecimalPlaces,
+                validationConditions: validationConditions
             );
         }
 
@@ -4185,8 +4203,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 StataExportCaption = variableName,
                 VariableLabel = variableLabel,
                 ConditionExpression = enablementCondition,
-                ValidationExpression = validationExpression,
-                ValidationMessage = validationMessage,
+                ValidationExpression = null,
+                ValidationMessage = null,
                 Instructions = instructions,
                 SourceQuestionId = sourceQuestionId,
                 SourceQuestionnaireId = sourceQuestionnaireId,
@@ -4209,8 +4227,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 VariableName = variableName,
                 VariableLabel = variableLabel,
                 EnablementCondition = enablementCondition,
-                ValidationExpression = validationExpression,
-                ValidationMessage = validationMessage,
+                ValidationExpression = null,
+                ValidationMessage = null,
                 Instructions = instructions,
                 SourceQuestionId = sourceQuestionId,
                 SourceQuestionnaireId = sourceQuestionnaireId,
@@ -4221,7 +4239,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private IEnumerable<IEvent> CreateMultimediaQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, 
-            string enablementCondition, string instructions, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, QuestionScope scope)
+            string enablementCondition, string instructions, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, QuestionScope scope,
+            IList<ValidationCondition> validationConditions)
         {
             yield return
                 new QuestionCloned(
@@ -4254,7 +4273,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     isFilteredCombobox: null,
                     cascadeFromQuestionId: null,
                     maxAnswerCount: null,
-                    countOfDecimalPlaces: null);
+                    countOfDecimalPlaces: null,
+                    validationConditions: validationConditions);
             yield return
                 new MultimediaQuestionUpdated
                 {

@@ -356,7 +356,8 @@ namespace WB.Tests.Unit
                 string instructions = null,
                 Guid? responsibleId = null,
                 int targetIndex = 0,
-                QuestionScope scope = QuestionScope.Interviewer)
+                QuestionScope scope = QuestionScope.Interviewer,
+                IList<ValidationCondition> validationConditions = null)
             {
                 return new NumericQuestionCloned(
                     publicKey: publicKey,
@@ -376,7 +377,8 @@ namespace WB.Tests.Unit
                     countOfDecimalPlaces: null,
                     sourceQuestionnaireId: null,
                     sourceQuestionId: sourceQuestionId,
-                    targetIndex: targetIndex);
+                    targetIndex: targetIndex,
+                    validationConditions: validationConditions ?? new List<ValidationCondition>());
             }
 
             public static QuestionChanged QuestionChanged(Guid questionId, string variableName, QuestionType questionType)
@@ -463,7 +465,8 @@ namespace WB.Tests.Unit
                 string stataExportCaption = null, Guid? linkedToQuestionId = null, string variableLabel = null, bool capital = false, string validationExpression = null, string validationMessage = null,
                 QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
                 QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
-                Guid? sourceQuestionnaireId = null, int targetIndex = 0, int? maxAnswerCount = null, int? countOfDecimalPlaces = null)
+                Guid? sourceQuestionnaireId = null, int targetIndex = 0, int? maxAnswerCount = null, int? countOfDecimalPlaces = null,
+                IList<ValidationCondition> validationConditions = null)
             {
                 return new QuestionCloned(
                     publicKey: publicKey,
@@ -495,7 +498,8 @@ namespace WB.Tests.Unit
                     sourceQuestionId: sourceQuestionId,
                     targetIndex: targetIndex,
                     maxAnswerCount: maxAnswerCount,
-                    countOfDecimalPlaces: countOfDecimalPlaces);
+                    countOfDecimalPlaces: countOfDecimalPlaces,
+                    validationConditions: validationConditions ?? new List<ValidationCondition>());
             }
 
             public static IPublishedEvent<QuestionnaireDeleted> QuestionnaireDeleted(Guid? questionnaireId = null, long? version = null)
