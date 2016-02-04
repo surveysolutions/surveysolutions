@@ -1972,7 +1972,8 @@ namespace WB.Tests.Unit
         }
 
         public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null,
-            Guid? cascadeFromQuestionId = null, List<Answer> options = null, Guid? linkedToQuestionId = null, QuestionScope scope = QuestionScope.Interviewer, bool isFilteredCombobox = false)
+            Guid? cascadeFromQuestionId = null, List<Answer> options = null, Guid? linkedToQuestionId = null, QuestionScope scope = QuestionScope.Interviewer, 
+            bool isFilteredCombobox = false, Guid? linkedToRosterId = null)
         {
             return new SingleQuestion
             {
@@ -1984,6 +1985,7 @@ namespace WB.Tests.Unit
                 Answers = options ?? new List<Answer>(),
                 CascadeFromQuestionId = cascadeFromQuestionId,
                 LinkedToQuestionId = linkedToQuestionId,
+                LinkedToRosterId = linkedToRosterId,
                 QuestionScope = scope,
                 IsFilteredCombobox = isFilteredCombobox
             };
