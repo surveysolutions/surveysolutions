@@ -74,18 +74,7 @@ namespace WB.UI.Shared.Enumerator
         {
             Mvx.Error("UncaughtExceptionHandler with exception {0}", exception.ToLongString());
             Mvx.Resolve<ILogger>().Fatal("UncaughtExceptionHandler", exception);
-
-            var currentActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
-            if (this.StartupActivityType != null && currentActivity != null)
-            {
-                Intent intent = new Intent(currentActivity, StartupActivityType);
-                intent.AddFlags(ActivityFlags.NewTask);
-                Application.Context.StartActivity(intent);
-            }
-            Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
         }
-
-        protected abstract Type StartupActivityType { get; }
 
         protected override void InitializeViewLookup()
         {
