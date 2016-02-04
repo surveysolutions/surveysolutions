@@ -37,8 +37,6 @@ namespace WB.UI.Tester
             return NinjectIoCAdapterSetup.CreateIocProvider();
         }
 
-        protected override Type StartupActivityType => typeof(SplashActivity);
-
         protected override void InitializeViewLookup()
         {
             base.InitializeViewLookup();
