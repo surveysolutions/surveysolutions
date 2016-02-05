@@ -37,13 +37,15 @@ namespace WB.Tests.Unit
             question.Id.ShouldEqual(id);
             question.VariableName.ShouldEqual(variableName);
             question.Condition.ShouldEqual(conditions);
-            question.Validation.ShouldEqual(validations);
+
+            //question.ValidationExpressions.FirstOrDefault().ValidationExpression.ShouldEqual(validations);
+
             question.IdName.ShouldEqual(generatedIdName);
             question.TypeName.ShouldEqual(generatedTypeName);
             question.MemberName.ShouldEqual(generatedMemberName);
             question.StateName.ShouldEqual(generatedStateName);
             question.RosterScopeName.ShouldEqual(rosterScopeName);
-            question.ValidationMethodName.ShouldEqual(generatedValidationsMethodName);
+            //question.ValidationExpressions.FirstOrDefault().ValidationMethodName.ShouldEqual(generatedValidationsMethodName);
             question.ConditionMethodName.ShouldEqual(generatedConditionsMethodName);
         }
 

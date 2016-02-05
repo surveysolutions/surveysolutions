@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
             question.VariableName.ShouldEqual("integer");
             question.AllMultioptionYesNoCodes.ShouldBeNull();
             question.Condition.ShouldEqual("integer condition");
-            question.Validation.ShouldEqual("integer validation");
+            question.ValidationExpressions.FirstOrDefault().ValidationExpression.ShouldEqual("integer validation");
             question.IsMultiOptionYesNoQuestion.ShouldEqual(false);
             question.TypeName.ShouldEqual("long?");
             question.RosterScopeName.ShouldEqual(CodeGenerator.QuestionnaireScope);

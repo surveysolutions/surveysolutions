@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
         {
             QuestionTemplateModel question = model.AllQuestions.Single(x => x.Id == Id.gB);
             question.VariableName.ShouldEqual("singleCascading");
-            question.Validation.ShouldEqual("singleCascading validation");
+            question.ValidationExpressions.FirstOrDefault().ValidationExpression.ShouldEqual("singleCascading validation");
             question.Condition.ShouldEqual("!IsAnswerEmpty(single) && singleCascading condition");
             question.IsMultiOptionYesNoQuestion.ShouldEqual(false);
             question.AllMultioptionYesNoCodes.ShouldBeNull();

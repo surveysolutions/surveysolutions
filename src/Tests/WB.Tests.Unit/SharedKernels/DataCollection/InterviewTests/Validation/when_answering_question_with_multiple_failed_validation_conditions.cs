@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Validation
         Because of = () => interview.AnswerTextQuestion(Guid.NewGuid(), questionIdentity.Id, questionIdentity.RosterVector, DateTime.UtcNow, "answer");
 
         It should_raise_events_with_mutliple_validations_info = () => 
-            eventContext.ShouldContainEvent<AnswersDeclaredInvalid>(e => e.Questions.First().Equals(questionIdentity) && e.FailedValidationConditions.Count == 2);
+            eventContext.ShouldContainEvent<AnswersDeclaredInvalid>(e => e.Questions.First().Equals(questionIdentity) && e.FailedValidationConditions.Values.First().Count == 2);
 
         static Interview interview;
         static Identity questionIdentity;

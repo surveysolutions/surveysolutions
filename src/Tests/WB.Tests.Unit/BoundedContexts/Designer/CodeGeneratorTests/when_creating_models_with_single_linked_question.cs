@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
         {
             QuestionTemplateModel question = model.AllQuestions.Single(x => x.Id == Id.gA);
             question.VariableName.ShouldEqual("singleLinked");
-            question.Validation.ShouldEqual("singleLinked validation");
+            question.ValidationExpressions.FirstOrDefault().ValidationExpression.ShouldEqual("singleLinked validation");
             question.Condition.ShouldEqual("singleLinked condition");
             question.IsMultiOptionYesNoQuestion.ShouldBeFalse();
             question.AllMultioptionYesNoCodes.ShouldBeNull();
