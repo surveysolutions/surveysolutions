@@ -2,7 +2,7 @@ using Android.App;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
-using Cirrious.MvvmCross.Binding.Droid.BindingContext;
+using MvvmCross.Binding.Droid.BindingContext;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Shared.Enumerator.CustomControls;

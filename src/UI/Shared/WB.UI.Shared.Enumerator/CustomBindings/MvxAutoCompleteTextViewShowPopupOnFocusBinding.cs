@@ -1,8 +1,7 @@
 ﻿using Android.Views;
 using Android.Widget;
-
-using Cirrious.MvvmCross.Binding;
-using Cirrious.MvvmCross.Binding.Droid.Views;
+using MvvmCross.Binding;
+using MvvmCross.Binding.Droid.Views;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {

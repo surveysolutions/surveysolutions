@@ -1,10 +1,10 @@
 ﻿using System;
 using Android.App;
 using Android.Widget;
-using Cirrious.CrossCore;
-using Cirrious.CrossCore.Droid.Platform;
-using Cirrious.MvvmCross.Binding.Droid.Target;
-using Cirrious.MvvmCross.ViewModels;
+using MvvmCross.Binding.Droid.Target;
+using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
+using MvvmCross.Platform.Droid.Platform;
 using WB.UI.Shared.Enumerator.CustomControls;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings

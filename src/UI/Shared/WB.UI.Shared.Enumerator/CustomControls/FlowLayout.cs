@@ -5,10 +5,10 @@ using Android.Content;
 using Android.Graphics;
 using Android.Util;
 using Android.Views;
-using Cirrious.MvvmCross.Binding;
-using Cirrious.MvvmCross.Binding.Attributes;
-using Cirrious.MvvmCross.Binding.BindingContext;
-using Cirrious.MvvmCross.Binding.Droid.Views;
+using MvvmCross.Binding;
+using MvvmCross.Binding.Attributes;
+using MvvmCross.Binding.BindingContext;
+using MvvmCross.Binding.Droid.Views;
 
 namespace WB.UI.Shared.Enumerator.CustomControls
 {

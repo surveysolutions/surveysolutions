@@ -1,5 +1,5 @@
 ﻿using System;
-using Cirrious.CrossCore.Core;
+using MvvmCross.Platform.Core;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.EventBus.Lite;
