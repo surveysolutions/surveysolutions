@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Specialized;
 using System.Globalization;
-using Cirrious.CrossCore.Converters;
+using MvvmCross.Platform.Converters;
 using WB.Core.SharedKernels.Enumerator.Properties;
 
 namespace WB.UI.Shared.Enumerator.Converters

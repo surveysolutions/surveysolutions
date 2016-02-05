@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Android.Content;
 using Android.Views;
-using Cirrious.MvvmCross.Binding.Droid.BindingContext;
+using MvvmCross.Binding.Droid.BindingContext;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 

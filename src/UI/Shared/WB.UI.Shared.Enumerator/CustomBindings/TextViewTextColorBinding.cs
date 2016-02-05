@@ -1,6 +1,6 @@
 ﻿using Android.Graphics;
 using Android.Widget;
-using Cirrious.MvvmCross.Binding;
+using MvvmCross.Binding;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {

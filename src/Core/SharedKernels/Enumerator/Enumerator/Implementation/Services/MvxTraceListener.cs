@@ -1,5 +1,5 @@
-using Cirrious.CrossCore;
-using Cirrious.CrossCore.Platform;
+using MvvmCross.Platform;
+using MvvmCross.Platform.Platform;
 using SQLite.Net;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services

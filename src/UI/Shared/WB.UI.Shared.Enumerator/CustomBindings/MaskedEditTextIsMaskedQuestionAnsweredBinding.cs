@@ -1,5 +1,5 @@
 ﻿using System;
-using Cirrious.MvvmCross.Binding;
+using MvvmCross.Binding;
 using WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
