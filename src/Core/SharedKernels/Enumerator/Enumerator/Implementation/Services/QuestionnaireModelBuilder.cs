@@ -197,6 +197,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                             AreAnswersOrdered = multiQuestion.AreAnswersOrdered
                         };
                     }
+                    else if(multiQuestion.LinkedToRosterId.HasValue)
+                    {
+                        questionModel = new LinkedToRosterMultiOptionQuestionModel
+                        {
+                            LinkedToRosterId = multiQuestion.LinkedToRosterId.Value
+                        };
+                    }
                     else
                     {
                         questionModel = new MultiOptionQuestionModel
