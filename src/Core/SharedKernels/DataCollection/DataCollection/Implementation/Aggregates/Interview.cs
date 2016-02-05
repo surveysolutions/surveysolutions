@@ -4212,7 +4212,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
-            var allLinkedMultipleOptionsAnswers = state.GetAllLinkedMultipleOptionsAnswers();
+            var allLinkedMultipleOptionsAnswers = state.GetAllLinkedMultipleOptionsAnswers(questionnaire);
 
             foreach (Tuple<Identity, RosterVector[]> linkedMultipleOptionsAnswer in allLinkedMultipleOptionsAnswers)
             {
