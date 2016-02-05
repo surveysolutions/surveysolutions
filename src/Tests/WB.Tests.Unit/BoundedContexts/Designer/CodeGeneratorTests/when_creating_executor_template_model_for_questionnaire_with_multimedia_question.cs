@@ -60,10 +60,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
                 generatedIdName: "@__multimedia__id",
                 generatedTypeName: "string",
                 generatedMemberName: "@__multimedia",
-                generatedStateName: "@__multimedia_state",
+                generatedStateName: "@__multimedia__state",
                 rosterScopeName: "@__questionnaire_scope",
-                generatedValidationsMethodName: "IsValid_multimedia",
-                generatedConditionsMethodName: "IsEnabled_multimedia");
+                generatedValidationsMethodName: "IsValid__multimedia",
+                generatedConditionsMethodName: "IsEnabled__multimedia");
 
 
         It should_generate_model_for_text_question = () =>

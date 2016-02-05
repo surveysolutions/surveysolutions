@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
         {
             QuestionTemplateModel question = model.AllQuestions.Single(x => x.Id == Id.gA);
             question.VariableName.ShouldEqual("multiYesNo");
-            question.Validation.ShouldEqual("multiYesNo validation");
+            question.ValidationExpressions.FirstOrDefault().ValidationExpression.ShouldEqual("multiYesNo validation");
             question.Condition.ShouldEqual("multiYesNo condition");
             question.IsMultiOptionYesNoQuestion.ShouldBeTrue();
             question.AllMultioptionYesNoCodes.ShouldContainOnly("1", "2");

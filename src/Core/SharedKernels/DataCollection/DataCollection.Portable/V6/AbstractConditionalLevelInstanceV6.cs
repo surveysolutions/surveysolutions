@@ -72,20 +72,27 @@ namespace WB.Core.SharedKernels.DataCollection.V6
                 {
                     // do not validate disabled questions
                     Guid questionId = validationExpressionDescription.Key.Id;
-                    if (this.EnablementStates.ContainsKey(questionId) &&
-                        this.EnablementStates[questionId].State == State.Disabled)
+                    if (this.EnablementStates.ContainsKey(questionId) && this.EnablementStates[questionId].State == State.Disabled)
                         continue;
 
                     bool isValid;
                     List<FailedValidationCondition> invalids = new List<FailedValidationCondition>();
                     if (validationExpressionDescription.Value.PreexecutionCheck())
                         isValid = true;
+
                     else
                     {
                         foreach (var validation in validationExpressionDescription.Value.Validations)
                         {
-                            if (!validation.Value())
-                                invalids.Add(new FailedValidationCondition() {FailedConditionIndex = validation.Key});
+                            try
+                            {
+                                if (!validation.Value())
+                                    invalids.Add(new FailedValidationCondition() {FailedConditionIndex = validation.Key});
+                            }
+                            catch 
+                            {
+                                invalids.Add(new FailedValidationCondition() { FailedConditionIndex = validation.Key });
+                            }
                         }
 
                         isValid = invalids.Count() == 0;

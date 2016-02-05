@@ -9,14 +9,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string VariableName { set; get; }
         
         public string Condition { set; get; }
-        public string Validation { set; get; }
+        //public string Validation { set; get; }
 
         public List<ValidationExpressionModel> ValidationExpressions { get; set; }
 
         public string TypeName { set; get; }
 
         public string ConditionMethodName => CodeGenerator.EnablementPrefix + this.VariableName;
-        public string ValidationMethodName => CodeGenerator.ValidationPrefix + VariableName;
+        //public string ValidationMethodName => CodeGenerator.ValidationPrefix + VariableName;
 
         public string MemberName => CodeGenerator.PrivateFieldsPrefix + VariableName;
         public string StateName => CodeGenerator.PrivateFieldsPrefix + VariableName + CodeGenerator.StateSuffix;

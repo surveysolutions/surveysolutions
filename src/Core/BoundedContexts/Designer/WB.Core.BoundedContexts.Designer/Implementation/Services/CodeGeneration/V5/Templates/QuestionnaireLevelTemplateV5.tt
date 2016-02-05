@@ -31,7 +31,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV5<
 <#
 	}
 #>
-	}		 
+	}		  
 
 	public override IExpressionExecutableV5 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV5>> getInstances)
 	{
