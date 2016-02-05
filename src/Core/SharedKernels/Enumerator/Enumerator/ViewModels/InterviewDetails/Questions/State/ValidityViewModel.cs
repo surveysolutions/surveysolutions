@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Cirrious.MvvmCross.ViewModels;
+using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;

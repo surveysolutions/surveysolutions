@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Cirrious.CrossCore.Droid.Platform;
+using MvvmCross.Platform.Droid.Platform;
 using MWBarcodeScanner;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 

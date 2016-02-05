@@ -1,5 +1,5 @@
 ﻿using Android.Widget;
-using Cirrious.MvvmCross.Binding;
+using MvvmCross.Binding;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings

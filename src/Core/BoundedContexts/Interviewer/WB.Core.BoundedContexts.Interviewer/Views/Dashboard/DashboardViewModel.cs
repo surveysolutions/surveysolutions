@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.ViewModels;
+using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;

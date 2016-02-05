@@ -3,9 +3,8 @@ using System.Globalization;
 using Android.Graphics;
 using Android.Text;
 using Android.Text.Style;
-using Android.Widget;
-using Cirrious.CrossCore;
-using Cirrious.CrossCore.Converters;
+using MvvmCross.Platform;
+using MvvmCross.Platform.Converters;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.GenericSubdomains.Portable.Services;
 

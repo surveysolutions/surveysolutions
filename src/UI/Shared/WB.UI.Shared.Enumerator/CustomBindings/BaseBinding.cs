@@ -1,5 +1,5 @@
 using System;
-using Cirrious.MvvmCross.Binding.Droid.Target;
+using MvvmCross.Binding.Droid.Target;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {

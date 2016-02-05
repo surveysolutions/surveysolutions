@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.DataTransferObjects;
@@ -599,12 +600,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             var rosterVectorToStartFrom = this.CalculateStartRosterVectorForAnswersOfLinkedToQuestion(rosterId, linkedQuestion, questionnaire);
 
-            IEnumerable<Identity> targetRosters =
-                this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, new[] {rosterId},
-                    rosterVectorToStartFrom, questionnaire).ToArray();
+            IEnumerable<Identity> targetRosters = this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, new[] {rosterId}, rosterVectorToStartFrom, questionnaire).ToArray();
 
-            return targetRosters
-                .Select(this.GetRoster).ToArray();
+            return
+                targetRosters
+                    .Select(this.GetRoster)
+                    .Where(r => !r.IsDisabled && !string.IsNullOrEmpty(r.Title))
+                    .OrderBy(r => sortIndexesOfRosterInstanses[new Identity(r.Id, r.RosterVector)] ?? r.RosterVector.Last())
+                    .ToArray();
         }
 
         private void SaveAnswerFromAnswerDto(InterviewAnswerDto answerDto)
@@ -1215,7 +1218,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         private static decimal[] GetFullRosterVector(RosterInstance instance)
         {
-            return instance.OuterRosterVector.Concat(new[] { instance.RosterInstanceId }).ToArray();
+            return instance.GetIdentity().RosterVector;
         }
 
         private BaseInterviewAnswer GetExistingAnswerOrNull(string questionKey)

@@ -1,5 +1,5 @@
-﻿using Cirrious.MvvmCross.Test.Core;
-using Moq;
+﻿using Moq;
+using MvvmCross.Test.Core;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
