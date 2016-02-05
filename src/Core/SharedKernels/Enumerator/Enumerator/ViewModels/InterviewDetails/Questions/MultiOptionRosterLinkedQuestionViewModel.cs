@@ -106,29 +106,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return string.IsNullOrEmpty(rosterPrefixes) ? referencedRoster.Title : string.Join(": ", rosterPrefixes, referencedRoster.Title);
         }
 
-        private void PutOrderOnOptions(MultipleOptionsLinkedQuestionAnswered @event)
-        {
-            foreach (var option in this.Options)
-            {
-                var foundIndex = @event.SelectedRosterVectors
-                                       .Select((o, i) => new { index = i, selectedVector = o })
-                                       .FirstOrDefault(item => item.selectedVector.Identical(option.Value));
-
-                var selectedOptionIndex = foundIndex?.index ?? -1;
-
-                if (selectedOptionIndex >= 0)
-                {
-                    option.CheckedOrder = selectedOptionIndex + 1;
-                    option.Checked = true;
-                }
-                else
-                {
-                    option.CheckedOrder = null;
-                    option.Checked = false;
-                }
-            }
-        }
-
         public void Handle(AnswersRemoved @event)
         {
             foreach (var question in @event.Questions)
@@ -141,14 +118,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     }
                     this.QuestionState.IsAnswered = false;
                 }
-            }
-        }
-
-        public void Handle(MultipleOptionsLinkedQuestionAnswered @event)
-        {
-            if (this.areAnswersOrdered && @event.QuestionId == this.questionIdentity.Id && @event.RosterVector.Identical(this.questionIdentity.RosterVector))
-            {
-                this.PutOrderOnOptions(@event);
             }
         }
 
