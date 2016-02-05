@@ -1810,15 +1810,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToEntityId, maxAllowedAnswers, options);
             this.ThrowIfCategoricalQuestionHasMoreThan200Options(options, linkedToEntityId.HasValue);
 
-            Guid? linkedQuestionId = linkedToEntityId.HasValue
-                ? (this.innerDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == linkedToEntityId.Value) == null
-                    ? (Guid?)null
-                    : linkedToEntityId.Value)
-                : null;
+            Guid? linkedRosterId;
+            Guid? linkedQuestionId;
 
-            Guid? linkedRosterId = linkedToEntityId.HasValue && !linkedQuestionId.HasValue
-                ? linkedToEntityId.Value
-                : (Guid?)null;
+            this.ExtractLinkedQuestionValues(linkedToEntityId, out linkedQuestionId, out linkedRosterId);
+
             this.ApplyEvent(new QuestionChanged
             (
                 publicKey: questionId,
@@ -1901,15 +1897,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 this.ThrowIfCategoricalQuestionHasMoreThan200Options(options, linkedToEntityId.HasValue);
             }
-            Guid? linkedQuestionId = linkedToEntityId.HasValue
-          ? (this.innerDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == linkedToEntityId.Value) == null
-              ? (Guid?)null
-              : linkedToEntityId.Value)
-          : null;
+            Guid? linkedRosterId;
+            Guid? linkedQuestionId;
 
-            Guid? linkedRosterId = linkedToEntityId.HasValue && !linkedQuestionId.HasValue
-                ? linkedToEntityId.Value
-                : (Guid?)null;
+            this.ExtractLinkedQuestionValues(linkedToEntityId, out linkedQuestionId, out linkedRosterId);
+
             this.ApplyEvent(new QuestionChanged
             (
                 publicKey: questionId,
@@ -1939,6 +1931,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 cascadeFromQuestionId: cascadeFromQuestionId,
                 targetGroupKey: Guid.Empty
             ));
+        }
+
+        private void  ExtractLinkedQuestionValues(Guid? linkedToEntityId, out Guid? linkedQuestionId, out Guid? linkedRosterId)
+        {
+            linkedQuestionId = linkedToEntityId.HasValue
+                ? (this.innerDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == linkedToEntityId.Value) == null
+                    ? (Guid?) null
+                    : linkedToEntityId.Value)
+                : null;
+
+            linkedRosterId = linkedToEntityId.HasValue && !linkedQuestionId.HasValue
+                ? linkedToEntityId.Value
+                : (Guid?) null;
         }
 
         public void UpdateFilteredComboboxOptions(Guid questionId, Guid responsibleId, Option[] options)
