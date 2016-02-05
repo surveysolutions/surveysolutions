@@ -3,7 +3,7 @@ using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using Android.Preferences;
-using Cirrious.CrossCore;
+using MvvmCross.Platform;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Tester.Infrastructure.Internals.Settings;

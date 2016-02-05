@@ -1,5 +1,5 @@
 using System;
-using Cirrious.CrossCore.Core;
+using MvvmCross.Platform.Core;
 using Moq;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.Infrastructure.PlainStorage;

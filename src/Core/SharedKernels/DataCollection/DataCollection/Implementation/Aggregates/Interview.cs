@@ -4067,14 +4067,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 where rosterInstanceIdsBeingRemoved.Contains(question.RosterVector[indexOfRosterInRosterVector])
                 select question
                 ).ToList();
-
+         
             IEnumerable<Identity> linkedQuestionsWithNoLongerValidAnswersBecauseOfSelectedOptionBeingRemoved =
                 this.GetAnswersForLinkedQuestionsToRemoveBecauseOfRemovedQuestionAnswers(state,
                     underlyingQuestionsBeingRemovedByRemovedRosterInstances, questionnaire);
 
-            return Enumerable.Concat(
+            IEnumerable<Identity> linkedQuestionsWithNoLongerValidAnswersBecauseOfRosterRowBeingRemoved =
+        this.GetAnswersForLinkedQuestionsToRemoveBecauseOfRemovedRow(state, questionnaire,
+            rosterId, rosterInstanceIdsBeingRemoved, nearestToOuterRosterVector);
+            return Enumerable.Concat(Enumerable.Concat(
                 underlyingQuestionsBeingRemovedByRemovedRosterInstances,
-                linkedQuestionsWithNoLongerValidAnswersBecauseOfSelectedOptionBeingRemoved);
+                linkedQuestionsWithNoLongerValidAnswersBecauseOfSelectedOptionBeingRemoved),
+                linkedQuestionsWithNoLongerValidAnswersBecauseOfRosterRowBeingRemoved);
         }
 
         private static IEnumerable<decimal> GetRosterInstanceIdsBeingAdded(IEnumerable<decimal> existingRosterInstanceIds, IEnumerable<decimal> newRosterInstanceIds)
@@ -4112,7 +4116,54 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 isQuestionAnswerGoingToDisappear:
                     question => IsQuestionGoingToBeDisabled(question, groupsToBeDisabled, questionsToBeDisabled, questionnaire));
         }
+        private List<Identity> GetAnswersForLinkedQuestionsToRemoveBecauseOfRemovedRow(
+          IReadOnlyInterviewStateDependentOnAnswers state,
+          IQuestionnaire questionnaire, Guid rosterId, List<decimal> rosterInstanceIdsBeingRemoved, decimal[] nearestToOuterRosterVector)
+        {
+            var answersToRemove = new List<Identity>();
+            var rosterVectorsToRemove =
+                rosterInstanceIdsBeingRemoved.Select(x => nearestToOuterRosterVector.Union(new[] {x}).ToArray())
+                    .ToArray();
+            foreach (Tuple<Identity, RosterVector> linkedSingleOptionAnswer in state.GetAllLinkedToRosterSingleOptionAnswers(questionnaire))
+            {
+                var linkedQuestion = linkedSingleOptionAnswer.Item1;
+                decimal[] linkedQuestionSelectedOption = linkedSingleOptionAnswer.Item2;
 
+                var linkedToRoster = questionnaire.GetRosterReferencedByLinkedQuestion(linkedQuestion.Id);
+                if(linkedToRoster!= rosterId)
+                    continue;
+
+                if (rosterVectorsToRemove.Any(x => x.SequenceEqual(linkedQuestionSelectedOption)))
+                {
+                    answersToRemove.Add(linkedQuestion);
+                }
+            }
+
+       /*     var allLinkedMultipleOptionsAnswers = state.GetAllLinkedMultipleOptionsAnswers();
+
+            foreach (Tuple<Identity, RosterVector[]> linkedMultipleOptionsAnswer in allLinkedMultipleOptionsAnswers)
+            {
+                var linkedQuestion = linkedMultipleOptionsAnswer.Item1;
+                RosterVector[] linkedQuestionSelectedOptions = linkedMultipleOptionsAnswer.Item2;
+
+                IEnumerable<Identity> questionsReferencedByLinkedQuestion =
+                    this.GetQuestionsReferencedByLinkedQuestion(state, linkedQuestion, questionnaire);
+
+                IEnumerable<Identity> questionsSelectedAsAnswers =
+                    questionsReferencedByLinkedQuestion
+                        .Where(
+                            question => linkedQuestionSelectedOptions.Any(
+                                selectedOption => AreEqualRosterVectors(selectedOption, question.RosterVector)));
+
+                bool isSomeOfSelectedOptionsGoingToDisappear = questionsSelectedAsAnswers.Any(isQuestionAnswerGoingToDisappear);
+                if (isSomeOfSelectedOptionsGoingToDisappear)
+                {
+                    answersToRemove.Add(linkedQuestion);
+                }
+            }*/
+
+            return answersToRemove;
+        }
         private List<Identity> GetAnswersForLinkedQuestionsToRemoveBecauseOfReferencedAnswersGoingToDisappear(
             IReadOnlyInterviewStateDependentOnAnswers state,
             IQuestionnaire questionnaire,

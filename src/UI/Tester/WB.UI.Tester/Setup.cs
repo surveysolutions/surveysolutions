@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Android.Content;
-using Cirrious.CrossCore;
-using Cirrious.CrossCore.Converters;
-using Cirrious.CrossCore.IoC;
-using Cirrious.MvvmCross.ViewModels;
-using Cirrious.MvvmCross.Views;
+using MvvmCross.Core.ViewModels;
+using MvvmCross.Core.Views;
+using MvvmCross.Platform;
+using MvvmCross.Platform.Converters;
+using MvvmCross.Platform.IoC;
 using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Tester.Activities;
 using WB.UI.Tester.Converters;
-using WB.UI.Tester.Infrastructure.Internals.Settings;
 using WB.UI.Tester.Ninject;
 using Xamarin;
-
 
 namespace WB.UI.Tester
 {

@@ -1,7 +1,6 @@
 using System;
 using System.IO;
-using Cirrious.CrossCore.IoC;
-using PCLStorage;
+using MvvmCross.Platform.IoC;
 using WB.Core.BoundedContexts.Tester;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Ncqrs;
