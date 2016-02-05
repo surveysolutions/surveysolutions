@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Globalization;
-using Android.Graphics;
-using Cirrious.CrossCore.Converters;
-using Cirrious.CrossCore.Droid.Platform;
 using Microsoft.Practices.ServiceLocation;
+using MvvmCross.Platform.Converters;
+using MvvmCross.Platform.Droid.Platform;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.UI.Shared.Enumerator.Converters

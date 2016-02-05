@@ -1,7 +1,7 @@
 using Android.App;
 using Android.Content.PM;
-using Cirrious.CrossCore;
-using Cirrious.MvvmCross.Droid.Views;
+using MvvmCross.Droid.Views;
+using MvvmCross.Platform;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;

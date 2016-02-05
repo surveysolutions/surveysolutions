@@ -4,8 +4,8 @@ using System.IO;
 using System.Net;
 using Android.App;
 using Android.Content;
-using Cirrious.CrossCore;
-using Cirrious.CrossCore.Droid.Platform;
+using MvvmCross.Platform;
+using MvvmCross.Platform.Droid.Platform;
 using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.UI.Shared.Enumerator.CustomServices

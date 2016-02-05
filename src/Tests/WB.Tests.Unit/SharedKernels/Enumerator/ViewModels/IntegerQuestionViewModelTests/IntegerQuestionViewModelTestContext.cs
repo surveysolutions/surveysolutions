@@ -1,5 +1,5 @@
 ﻿using System;
-using Cirrious.MvvmCross.Test.Core;
+using MvvmCross.Test.Core;
 using Moq;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
