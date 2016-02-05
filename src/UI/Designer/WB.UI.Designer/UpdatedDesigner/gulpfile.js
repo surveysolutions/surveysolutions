@@ -45,7 +45,7 @@ gulp.task("bowerJs", function(){
 
 gulp.task('templates', function () {
     return gulp.src(paths.htmls)
-      .pipe(minifyHTML())
+      //.pipe(minifyHTML())
       .pipe(templateCache({ root: 'views' }))
       .pipe(plugins.rev())
       .pipe(gulp.dest('build'));
