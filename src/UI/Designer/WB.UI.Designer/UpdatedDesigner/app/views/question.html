@@ -212,7 +212,7 @@
             </div>
         </script>
 
-        <script type="text/ng-template" id="linkTemplate.html">
+    <script type="text/ng-template" id="linkTemplate.html">
             <div id="sourceOfLinkedEntity" class="dropdown-with-breadcrumbs-and-icons">
                 <input type="hidden" name="linkedToEntity" ng-model="activeQuestion.linkedToEntity" ng-required="true" />
                 <label for="linkedEntitySource">Bind to question from roster group</label>
@@ -222,7 +222,8 @@
 
                         <span class="selected-item" ng-if="(activeQuestion.linkedToEntity.title || '') !== ''">
                             <span class="path">{{activeQuestion.linkedToEntity.breadcrumbs}}</span>
-                            <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+activeQuestion.linkedToEntity.type"></i>{{activeQuestion.linkedToEntity.title}}</span>
+                            <span class="chosen-item"  ng-if="activeQuestion.linkedToEntity.type!=='roster'"><i class="dropdown-icon" ng-class="'icon-'+activeQuestion.linkedToEntity.type"></i>{{activeQuestion.linkedToEntity.title}}</span>
+                            <span class="linked-roster-source" ng-if="activeQuestion.linkedToEntity.type==='roster'">{{activeQuestion.linkedToEntity.title}}</span>
                         </span>
                         <span class="dropdown-arrow"></span>
                     </button>
@@ -231,10 +232,18 @@
                         <li role="presentation" ng-class="{'dropdown-header': breadCrumb.isSectionPlaceHolder}" ng-repeat="breadCrumb in sourceOfLinkedEntities track by $index">
                             <span ng-if="breadCrumb.isSectionPlaceHolder">{{::breadCrumb.title}}</span>
 
-                            <a ng-if="!breadCrumb.isSectionPlaceHolder"
+                            <a ng-if="!breadCrumb.isSectionPlaceHolder && breadCrumb.type==='roster'"
                                ng-click="setLinkSource(breadCrumb.id)"
                                role="menuitem"
                                tabindex="-1"
+                               class="linked-roster-source"
+                               href="javascript:void(0);">{{::breadCrumb.title}}</a>
+
+                            <a ng-if="!breadCrumb.isSectionPlaceHolder&& breadCrumb.type!=='roster'"
+                               ng-click="setLinkSource(breadCrumb.id)"
+                               role="menuitem"
+                               tabindex="-1"
+                               class="linked-question-source"
                                href="javascript:void(0);">
                                 <i class="dropdown-icon" ng-class="'icon-'+breadCrumb.type"></i> {{::breadCrumb.title}}
                             </a>

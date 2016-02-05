@@ -3,7 +3,7 @@ using System.Linq;
 using Android.Graphics;
 using Android.Text;
 using Android.Widget;
-using Cirrious.MvvmCross.Binding;
+using MvvmCross.Binding;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {

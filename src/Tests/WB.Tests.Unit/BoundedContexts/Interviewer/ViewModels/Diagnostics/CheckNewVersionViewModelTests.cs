@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.Test.Core;
+using MvvmCross.Test.Core;
 using Moq;
 using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;

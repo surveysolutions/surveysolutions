@@ -27,8 +27,17 @@ input#edit-question-title, input#edit-group-title {
     label {
         font-weight: normal;
         display: block;
+        font-family: "Lucida Console", Monaco, monospace;
+        font-size: 14px;
+        color: #5d5d5d;
     }
-
+    .linked-roster-source{ 
+        margin-left: 0px;
+        font-style: italic;
+        font-family: Georgia, serif;
+        font-weight: normal;
+        color: @questionnaire-tree-roster-color;
+    }
     .btn-group {
         width: 100%;
 
@@ -50,7 +59,7 @@ input#edit-question-title, input#edit-group-title {
             }
 
             .chosen-item {
-                color: @questionnarie-question-editor-color;
+                color: color: #2075bf;
                 line-height: 20px;
                 .arial-font();
                 font-size: 14px;
@@ -75,16 +84,41 @@ input#edit-question-title, input#edit-group-title {
         .arial-font();
         border: none;
 
+        li {
+               padding-left: 5px;
+               padding-right: 5px;
+               span{    
+                   padding-right: 5px;
+                    padding-left: 5px;
+               }
+        }
 
-        li a {
+        li a{
             .arial-font();
             padding-top: 1px;
             padding-bottom: 1px;
             color: @questionnarie-question-editor-color;
-            position: relative;
-            padding-left: 29px;
+            position: relative;            
+            padding-right: 5px;
+            padding-left: 5px;
             margin-left: 10px;
-
+            &.linked-question-source {
+                margin-left: 0px;
+                padding: 5px;
+                padding-left: 20px;
+            }
+            &.linked-roster-source{ 
+                margin-left: 0px;
+                font-style: italic;
+                font-family: Georgia, serif;
+                font-weight: normal;    
+                padding-right: 5px;
+                padding-left: 5px;
+                color: @questionnaire-tree-roster-color;
+            }
+            i{
+                    position: relative;
+            }
             &:after {
                 @w: 50px;
                 display: block;
@@ -94,12 +128,12 @@ input#edit-question-title, input#edit-group-title {
                 width: @w;
                 top: 0;
                 right: 0;
-                #gradient > .horizontal(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.9));
                 z-index: 1010;
             }
 
             &:hover {
-                color: @common-blue-color;
+                background:  #f1f2f3;
+                border-radius: 4px;
             }
         }
 

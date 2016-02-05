@@ -126,12 +126,14 @@ namespace ChangeInterviewStatus
                     await interviewsToImport.ForEachAsync(Math.Min(this.ParallelTasksLimit, MaxNumberOfParallelTasks),
                         async (importedInterview) =>
                         {
+                            bool hasError = false;
                             try
                             {
                                 await this.ChangeStatus(changeStatusUrl, importedInterview, credentials);
                             }
                             catch (Exception ex)
                             {
+                                hasError = true;
                                 var errorMessage =
                                     $"Error during changing status of interview {importedInterview.Id}. " +
                                     $"Exception: {ex.Message}";
@@ -144,16 +146,19 @@ namespace ChangeInterviewStatus
                             this.status.ElapsedTime = elapsedTime.ElapsedTicks;
                             this.status.TimePerInterview = this.status.ElapsedTime / this.status.ProcessedInterviewsCount;
                             this.status.EstimatedTime = this.status.TimePerInterview * this.status.TotalInterviewsCount;
-                            Console.Clear();
                             Console.Write(this.status.ToString());
+                            Console.WriteLine("{0} - {1}", importedInterview.Id.ToString("N"), hasError ? "Error" : "OK");
                         });
 
                     Console.WriteLine();
+                    var timePerInterview = new TimeSpan((long) this.status.TimePerInterview);
+                    Console.WriteLine($"Average time per interview: {timePerInterview:g)}");
                     var totalTime = new TimeSpan(elapsedTime.ElapsedTicks);
-                    Console.WriteLine($"Total time: {totalTime.ToString("g")}");
+                    Console.WriteLine($"Total time: {totalTime:g)}");
                 }
                 catch (Exception exception)
                 {
+                    Console.WriteLine("Process was aborted.");
                     Console.WriteLine(exception.Message);
                 }
                 finally
@@ -164,6 +169,7 @@ namespace ChangeInterviewStatus
                         ZlpIOHelper.WriteAllText(this.ErrorLogFilePath, string.Join(Environment.NewLine, this.status.Errors.Select(x => x.ErrorMessage)));
                     }
                 }
+                Console.WriteLine("Completed");
             }
 
             private async Task ChangeStatus(string url, InterviewInfo interviewInfo, RestCredentials credentials)
@@ -360,7 +366,7 @@ namespace ChangeInterviewStatus
         public override string ToString()
         {
             var finishTime = new TimeSpan((long)(this.EstimatedTime - this.ElapsedTime));
-            return $"{this.ProcessedInterviewsCount}/{this.TotalInterviewsCount}. Errors: {this.Errors.Count}. End in: {finishTime.ToString("g")}";
+            return $"{this.ProcessedInterviewsCount}/{this.TotalInterviewsCount}. OK: {this.ProcessedInterviewsCount - this.Errors.Count} Errors: {this.Errors.Count}. End in: {finishTime:g)}.";
         }
     }
 

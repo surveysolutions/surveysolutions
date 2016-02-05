@@ -45,6 +45,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             public IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedSingleOptionAnswers(IQuestionnaire questionnaire) => this.actualState.GetAllLinkedSingleOptionAnswers(questionnaire);
 
             public IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedMultipleOptionsAnswers() => this.actualState.GetAllLinkedMultipleOptionsAnswers();
+            public IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedToRosterSingleOptionAnswers(IQuestionnaire questionnaire)=> this.actualState.GetAllLinkedToRosterSingleOptionAnswers(questionnaire);
+
+            public IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedToRosterMultipleOptionsAnswers(IQuestionnaire questionnaire)=>this.actualState.GetAllLinkedToRosterMultipleOptionsAnswers(questionnaire);
         }
 
 
@@ -152,8 +155,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 string rosterGroupKey =
                     ConversionHelper.ConvertIdAndRosterVectorToString(changedInstance.RosterInstance.GroupId,
-                        changedInstance.RosterInstance.OuterRosterVector.Union(new[]
-                        {changedInstance.RosterInstance.RosterInstanceId}).ToArray());
+                        changedInstance.RosterInstance.GetIdentity().RosterVector);
 
                 this.RosterTitles[rosterGroupKey] = changedInstance.Title;
             }
@@ -327,6 +329,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedMultipleOptionsAnswers()
         {
             return this.LinkedMultipleOptionsAnswers.Values;
+        }
+
+        public IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedToRosterSingleOptionAnswers(
+            IQuestionnaire questionnaire)
+        {
+            return this.LinkedSingleOptionAnswersBuggy.Values.Where(answer => questionnaire.IsQuestionLinkedToRoster(answer.Item1.Id));
+        }
+
+        public IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedToRosterMultipleOptionsAnswers(IQuestionnaire questionnaire)
+        {
+            return this.LinkedMultipleOptionsAnswers.Values.Where(answer => questionnaire.IsQuestionLinkedToRoster(answer.Item1.Id));
         }
     }
 }

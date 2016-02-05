@@ -17,5 +17,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         ReadOnlyCollection<decimal> GetRosterInstanceIds(Guid groupId, RosterVector outerRosterVector);
         IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedSingleOptionAnswers(IQuestionnaire questionnaire);
         IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedMultipleOptionsAnswers();
+
+        IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedToRosterSingleOptionAnswers(IQuestionnaire questionnaire);
+        IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedToRosterMultipleOptionsAnswers(IQuestionnaire questionnaire);
     }
 }

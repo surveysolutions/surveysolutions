@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.Test.Core;
+using MvvmCross.Test.Core;
 using Moq;
-using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;

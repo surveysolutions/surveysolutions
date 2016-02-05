@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using Android.Graphics;
-using Cirrious.CrossCore.Converters;
-using Cirrious.CrossCore.Droid.Platform;
 using Microsoft.Practices.ServiceLocation;
+using MvvmCross.Platform.Converters;
+using MvvmCross.Platform.Droid.Platform;
 
 namespace WB.UI.Shared.Enumerator.Converters
 {
