@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> QuestionState { get; protected set; }
         public AnsweringViewModel Answering { get; protected set; }
 
-        public AbstractMultiOptionLinkedQuestionViewModel(
+        protected AbstractMultiOptionLinkedQuestionViewModel(
             QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState,
             AnsweringViewModel answering,
             IStatefulInterviewRepository interviewRepository,
@@ -59,7 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Options = new ObservableCollection<MultiOptionLinkedQuestionOptionViewModel>();
         }
 
-        public Identity Identity { get { return this.questionIdentity; } }
+        public Identity Identity => this.questionIdentity;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
@@ -87,10 +87,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             private set { this.options = value; this.RaisePropertyChanged(() => this.HasOptions); }
         }
 
-        public bool HasOptions
-        {
-            get { return this.Options.Any(); }
-        }
+        public bool HasOptions => this.Options.Any();
 
         public async Task ToggleAnswerAsync(MultiOptionLinkedQuestionOptionViewModel changedModel)
         {
