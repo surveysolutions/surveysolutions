@@ -283,7 +283,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             base.Apply(@event);
             this.ResetCalculatedState();
 
-            @event.Questions.ForEach(x => this.DeclareAnswerAsInvalid(x.Id, x.RosterVector));
+            @event.FailedValidationConditions.Keys.ForEach(x => this.DeclareAnswerAsInvalid(x.Id, x.RosterVector));
         }
 
         public new void Apply(GroupsDisabled @event)
