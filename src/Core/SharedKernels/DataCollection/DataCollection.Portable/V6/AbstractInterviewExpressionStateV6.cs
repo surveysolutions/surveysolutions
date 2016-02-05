@@ -182,9 +182,14 @@ namespace WB.Core.SharedKernels.DataCollection.V6
             }
         }
 
+        public void DeclareAnswersValid(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
+        {
+            this.DeclareAnswersValid(failedValidationConditions.Keys);
+        }
+
         #endregion
 
-       
+
         IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone()
         {
             return Clone() as IInterviewExpressionStateV2;

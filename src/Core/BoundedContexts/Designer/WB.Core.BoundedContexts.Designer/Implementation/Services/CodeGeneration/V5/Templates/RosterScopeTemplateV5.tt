@@ -24,7 +24,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV5<
 
 	private <#=Model.TypeName#>(
 		decimal[] rosterVector, 
-		Identity[] rosterKey, 
+		Identity[] rosterKey,  
 		Func<Identity[], Guid, IEnumerable<IExpressionExecutableV5>> getInstances, 
 		Dictionary<Guid, Guid[]> conditionalDependencies, 
 		Dictionary<Guid, Guid[]> structureDependencies, 

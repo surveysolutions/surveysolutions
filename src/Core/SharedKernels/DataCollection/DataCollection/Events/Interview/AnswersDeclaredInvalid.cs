@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview
@@ -23,7 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 
         public AnswersDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
         {
-            this.Questions = new Identity[] {};
+            this.Questions = failedValidationConditions.Keys.ToArray();
             this.FailedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>(failedValidationConditions);
         }
     }

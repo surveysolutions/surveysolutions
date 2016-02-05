@@ -385,19 +385,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 ? childAsIQuestion.StataExportCaption
                 : "__" + childAsIQuestion.PublicKey.FormatGuid();
 
-            var validation = this.macrosSubstitutionService.InlineMacros(childAsIQuestion.ValidationExpression, questionnaireDoc.Macros.Values);
+            //var validation = this.macrosSubstitutionService.InlineMacros(childAsIQuestion.ValidationExpression, questionnaireDoc.Macros.Values);
             var validationConditions = new List<ValidationExpressionModel>();
 
             //backward compatibility could be fixed by updating old templates
             //assuming no questions containing both validations
-            if (!string.IsNullOrWhiteSpace(validation))
+            /*if (!string.IsNullOrWhiteSpace(validation))
             {
                 validationConditions.Add(new ValidationExpressionModel(
                         validation,
                         varName,
                         0));
             }
-            else
+            else*/
             {
                 for (int i = 0; i < childAsIQuestion.ValidationConditions.Count; i++)
                 {
@@ -417,7 +417,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 Id = childAsIQuestion.PublicKey,
                 VariableName = varName,
                 Condition = condition,
-                Validation = validation,
+                //Validation = validation,
                 TypeName = GenerateQuestionTypeName(childAsIQuestion),
                 RosterScopeName = rosterScopeName,
                 ParentScopeTypeName = parentScopeTypeName,

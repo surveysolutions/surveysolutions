@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
         {
             QuestionTemplateModel question = model.AllQuestions.Single(x => x.Id == Id.gA);
             question.VariableName.ShouldEqual("date");
-            question.Validation.ShouldEqual("date validation");
+            question.ValidationExpressions.FirstOrDefault().ValidationExpression.ShouldEqual("date validation");
             question.Condition.ShouldEqual("date condition");
             question.IsMultiOptionYesNoQuestion.ShouldBeFalse();
             question.AllMultioptionYesNoCodes.ShouldBeNull();
