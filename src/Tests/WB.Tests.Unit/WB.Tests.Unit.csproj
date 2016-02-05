@@ -584,6 +584,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_comment_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_flag_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_row_from_link_source_roster.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_row_from_multioption_link_source_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_set_flag_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_two_nested_rosters_linked_to_the_same_list_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_unapprove_by_headquarters.cs" />
