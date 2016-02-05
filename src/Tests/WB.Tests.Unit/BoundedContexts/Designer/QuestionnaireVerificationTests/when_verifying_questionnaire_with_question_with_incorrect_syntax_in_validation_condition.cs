@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            verificationMessages = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire).ToList();
 
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);
@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_message_referencing_with_specified_question_id = () =>
             verificationMessages.First().References.Single().Id.ShouldEqual(questionId);
 
-        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
+        private static List<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
