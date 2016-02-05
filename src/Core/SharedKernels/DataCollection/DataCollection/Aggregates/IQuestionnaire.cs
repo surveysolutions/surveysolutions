@@ -56,13 +56,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         int GetMaxRosterRowCount();
 
-        bool IsCustomValidationDefined(Guid questionId);
-
         bool IsQuestion(Guid entityId);
 
         bool IsInterviewierQuestion(Guid questionId);
-
-        string GetCustomValidationExpression(Guid questionId);
 
         ReadOnlyCollection<Guid> GetPrefilledQuestions();
 
