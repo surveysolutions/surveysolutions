@@ -137,6 +137,7 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.Synchronization.SyncStorage;
+using designer::WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V6.Templates;
 
 namespace WB.Tests.Unit
 {
@@ -237,6 +238,26 @@ namespace WB.Tests.Unit
                 isLookupTablesFeatureSupported: true)
             {
                 ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV5(expressionStateModel).TransformText()
+            };
+        }
+
+        public static CodeGenerationSettings CodeGenerationSettingsV6()
+        {
+            return new CodeGenerationSettings(additionInterfaces: new[] { "IInterviewExpressionStateV6" },
+                namespaces: new[]
+                {
+                    "WB.Core.SharedKernels.DataCollection.V2",
+                    "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                    "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
+                    "WB.Core.SharedKernels.DataCollection.V4",
+                    "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
+                    "WB.Core.SharedKernels.DataCollection.V5",
+                    "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions",
+                    "WB.Core.SharedKernels.DataCollection.V5"
+                },
+                isLookupTablesFeatureSupported: true)
+            {
+                ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV6(expressionStateModel).TransformText()
             };
         }
 
