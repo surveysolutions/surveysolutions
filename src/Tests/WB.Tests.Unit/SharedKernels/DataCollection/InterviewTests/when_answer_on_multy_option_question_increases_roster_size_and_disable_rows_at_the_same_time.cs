@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
@@ -13,12 +9,8 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.DataCollection.V2;
-using WB.Core.SharedKernels.DataCollection.V4;
-using WB.Core.SharedKernels.DataCollection.V5;
+using WB.Core.SharedKernels.DataCollection.V6;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using It = Machine.Specifications.It;
 
@@ -85,7 +77,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             //answer on numeric question
             enablementQueue.Enqueue(new EnablementChanges(new List<Identity>(), new List<Identity>(), new List<Identity>(), new List<Identity>()));
 
-            interviewExpressionState = new Mock<IInterviewExpressionStateV5>();
+            interviewExpressionState = new Mock<IInterviewExpressionStateV6>();
             interviewExpressionState.Setup(x => x.ProcessEnablementConditions()).Returns(enablementQueue.Dequeue);
             interviewExpressionState.Setup(x => x.Clone()).Returns(interviewExpressionState.Object);
 
@@ -140,6 +132,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid multyOptionRosterSizeId;
         private static Guid numericQuestionInsideRoster;
         private static Guid rosterGroupId;
-        private static Mock<IInterviewExpressionStateV5> interviewExpressionState;
+        private static Mock<IInterviewExpressionStateV6> interviewExpressionState;
     }
 }

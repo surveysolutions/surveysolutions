@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
                 conditions: "text == \"a\"",
                 validations: null,
                 questionType: QuestionType.Multimedia,
-                generatedIdName: "@__multimedia_id",
+                generatedIdName: "@__multimedia__id",
                 generatedTypeName: "string",
                 generatedMemberName: "@__multimedia",
                 generatedStateName: "@__multimedia_state",
