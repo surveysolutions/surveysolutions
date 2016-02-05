@@ -394,8 +394,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(AnswersDeclaredInvalid @event)
         {
-            this.interviewState.DeclareAnswersInvalid(@event.Questions);
-            this.ExpressionProcessorStatePrototype.DeclareAnswersInvalid(@event.Questions);
+            this.interviewState.DeclareAnswersInvalid(@event.FailedValidationConditions.Keys);
+            this.ExpressionProcessorStatePrototype.DeclareAnswersInvalid(@event.FailedValidationConditions.Keys);
         }
 
         public virtual void Apply(GroupsDisabled @event)
@@ -1975,7 +1975,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (validityChanges.AnswersDeclaredInvalid.Any())
             {
-                this.ApplyEvent(new AnswersDeclaredInvalid(validityChanges.AnswersDeclaredInvalid.ToArray()));
+                this.ApplyEvent(new AnswersDeclaredInvalid(validityChanges.FailedValidationConditions));
             }
         }
 
