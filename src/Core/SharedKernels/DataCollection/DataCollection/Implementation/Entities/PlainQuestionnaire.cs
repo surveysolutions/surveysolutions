@@ -285,13 +285,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public int GetMaxRosterRowCount() => Constants.MaxRosterRowCount;
 
-        public bool IsCustomValidationDefined(Guid questionId)
-        {
-            var validationExpression = this.GetCustomValidationExpression(questionId);
-
-            return IsExpressionDefined(validationExpression);
-        }
-
         public bool IsQuestion(Guid entityId) => this.HasQuestion(entityId);
 
         public bool IsInterviewierQuestion(Guid questionId)
@@ -300,8 +293,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             return question != null && question.QuestionScope == QuestionScope.Interviewer && !question.Featured;
         }
-
-        public string GetCustomValidationExpression(Guid questionId) => this.GetQuestionOrThrow(questionId).ValidationExpression;
 
         public ReadOnlyCollection<Guid> GetPrefilledQuestions()
             => this
