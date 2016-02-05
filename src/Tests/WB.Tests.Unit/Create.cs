@@ -1495,6 +1495,7 @@ namespace WB.Tests.Unit
             string validationExpression = null,
             string validationMessage = null,
             QuestionType questionType = QuestionType.Text,
+            IList<ValidationCondition> validationConditions = null,
             params Answer[] answers)
         {
             return new TextQuestion("Question X")
@@ -1505,7 +1506,8 @@ namespace WB.Tests.Unit
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
-                Answers = answers.ToList()
+                Answers = answers.ToList(),
+                ValidationConditions = validationConditions ?? new List<ValidationCondition>()
             };
         }
 

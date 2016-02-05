@@ -116,7 +116,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(AnswersDeclaredInvalid @event)
         {
-            if (@event.Questions.Contains(this.questionIdentity))
+            if (@event.FailedValidationConditions.Keys.Contains(this.questionIdentity))
             {
                 this.UpdateValidState();
             }

@@ -557,7 +557,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public InterviewData Update(InterviewData state, IPublishedEvent<AnswersDeclaredInvalid> @event)
         {
             return
-                @event.Payload.Questions.Aggregate(
+                @event.Payload.FailedValidationConditions.Keys.Aggregate(
                     state,
                     (document, question) => ChangeQuestionConditionValidity(document, question.RosterVector, question.Id, true));
         }
