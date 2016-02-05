@@ -1263,10 +1263,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.CheckLinkedMultiOptionQuestionInvariants(questionId, rosterVector, selectedRosterVectors, questionnaire, answeredQuestion);
             this.ThrowIfInterviewReceivedByInterviewer();
 
-            Guid linkedQuestionId = this.GetLinkedQuestionIdOrThrow(questionId, questionnaire);
-            var answeredLinkedQuestions = selectedRosterVectors.Select(selectedRosterVector => new Identity(linkedQuestionId, selectedRosterVector));
-
-            string answerFormattedAsRosterTitle = string.Join(", ", answeredLinkedQuestions.Select(q => GetLinkedQuestionAnswerFormattedAsRosterTitle(this.interviewState, q, questionnaire)));
+            string answerFormattedAsRosterTitle;
+            if (questionnaire.IsQuestionLinkedToRoster(questionId))
+            {
+                Guid linkedRosterId = questionnaire.GetRosterReferencedByLinkedQuestion(questionId);
+                answerFormattedAsRosterTitle = string.Join(", ", selectedRosterVectors.Select(selectedRosterVector => this.interviewState.GetRosterTitle(linkedRosterId,
+                    new RosterVector(selectedRosterVector))));
+            }
+            else
+            {
+                Guid linkedQuestionId = this.GetLinkedQuestionIdOrThrow(questionId, questionnaire);
+                var answeredLinkedQuestions = selectedRosterVectors.Select(selectedRosterVector => new Identity(linkedQuestionId, selectedRosterVector));
+                answerFormattedAsRosterTitle = string.Join(", ", answeredLinkedQuestions.Select(q => GetLinkedQuestionAnswerFormattedAsRosterTitle(this.interviewState, q, questionnaire)));
+            }
 
             IInterviewExpressionStateV5 expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
 
@@ -2189,15 +2198,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
             ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
 
-            Guid linkedQuestionId = this.GetLinkedQuestionIdOrThrow(questionId, questionnaire);
-            var answeredLinkedQuestions =
-                selectedRosterVectors.Select(selectedRosterVector => new Identity(linkedQuestionId, selectedRosterVector));
-
-            foreach (var answeredLinkedQuestion in answeredLinkedQuestions)
+            if (questionnaire.IsQuestionLinkedToRoster(questionId))
             {
-                ThrowIfRosterVectorIsIncorrect(this.interviewState, linkedQuestionId, answeredLinkedQuestion.RosterVector, questionnaire);
-                ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredLinkedQuestion, questionnaire);
-                ThrowIfLinkedQuestionDoesNotHaveAnswer(this.interviewState, answeredQuestion, answeredLinkedQuestion, questionnaire);
+                foreach (var selectedRosterVector in selectedRosterVectors)
+                {
+                    this.ThrowIfSelectedRosterRowIsAbsent(questionId, selectedRosterVector, questionnaire);
+                }
+            }
+            else
+            {
+                Guid linkedQuestionId = this.GetLinkedQuestionIdOrThrow(questionId, questionnaire);
+                var answeredLinkedQuestions =
+                    selectedRosterVectors.Select(
+                        selectedRosterVector => new Identity(linkedQuestionId, selectedRosterVector));
+
+                foreach (var answeredLinkedQuestion in answeredLinkedQuestions)
+                {
+                    ThrowIfRosterVectorIsIncorrect(this.interviewState, linkedQuestionId,
+                        answeredLinkedQuestion.RosterVector, questionnaire);
+                    ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredLinkedQuestion, questionnaire);
+                    ThrowIfLinkedQuestionDoesNotHaveAnswer(this.interviewState, answeredQuestion, answeredLinkedQuestion,
+                        questionnaire);
+                }
             }
             ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedRosterVectors.Length, questionnaire);
         }
@@ -4139,28 +4161,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
-       /*     var allLinkedMultipleOptionsAnswers = state.GetAllLinkedMultipleOptionsAnswers();
+            var allLinkedMultipleOptionsAnswers = state.GetAllLinkedToRosterMultipleOptionsAnswers(questionnaire);
 
             foreach (Tuple<Identity, RosterVector[]> linkedMultipleOptionsAnswer in allLinkedMultipleOptionsAnswers)
             {
                 var linkedQuestion = linkedMultipleOptionsAnswer.Item1;
                 RosterVector[] linkedQuestionSelectedOptions = linkedMultipleOptionsAnswer.Item2;
 
-                IEnumerable<Identity> questionsReferencedByLinkedQuestion =
-                    this.GetQuestionsReferencedByLinkedQuestion(state, linkedQuestion, questionnaire);
+                var linkedToRoster = questionnaire.GetRosterReferencedByLinkedQuestion(linkedQuestion.Id);
+                if (linkedToRoster != rosterId)
+                    continue;
 
-                IEnumerable<Identity> questionsSelectedAsAnswers =
-                    questionsReferencedByLinkedQuestion
-                        .Where(
-                            question => linkedQuestionSelectedOptions.Any(
-                                selectedOption => AreEqualRosterVectors(selectedOption, question.RosterVector)));
-
-                bool isSomeOfSelectedOptionsGoingToDisappear = questionsSelectedAsAnswers.Any(isQuestionAnswerGoingToDisappear);
-                if (isSomeOfSelectedOptionsGoingToDisappear)
+                foreach (var linkedQuestionSelectedOption in linkedQuestionSelectedOptions)
                 {
-                    answersToRemove.Add(linkedQuestion);
+                    if (rosterVectorsToRemove.Any(x => x.SequenceEqual(linkedQuestionSelectedOption)))
+                    {
+                        answersToRemove.Add(linkedQuestion);
+                        break;
+                    }
                 }
-            }*/
+            }
 
             return answersToRemove;
         }

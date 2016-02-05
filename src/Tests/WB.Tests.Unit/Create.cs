@@ -1191,7 +1191,7 @@ namespace WB.Tests.Unit
 
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null, 
             IEnumerable<Answer> options = null, Guid? linkedToQuestionId = null, string variable = null, bool yesNoView=false,
-            string enablementCondition = null, string validationExpression = null)
+            string enablementCondition = null, string validationExpression = null, Guid? linkedToRosterId =null)
         {
             return new MultyOptionsQuestion
             {
@@ -1199,6 +1199,7 @@ namespace WB.Tests.Unit
                 PublicKey = id ?? Guid.NewGuid(),
                 Answers = linkedToQuestionId.HasValue ? null : new List<Answer>(options ?? new Answer[] { }),
                 LinkedToQuestionId = linkedToQuestionId,
+                LinkedToRosterId = linkedToRosterId,
                 StataExportCaption = variable,
                 YesNoView = yesNoView,
                 ConditionExpression = enablementCondition,
