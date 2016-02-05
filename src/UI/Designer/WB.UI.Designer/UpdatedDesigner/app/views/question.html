@@ -82,7 +82,7 @@
         </div>
 
         <div class="form-group validation-group" ng-if="doesQuestionSupportValidations()" ng-repeat="validation in activeQuestion.validationConditions">
-            <div class="validation-group-marker"></div>&nbsp;
+            <div class="validation-group-marker"></div>
             <label>Validation condition {{$index + 1}} <help key="validationExpression" /></label>
 
             <button class="btn delete-btn-sm delete-validation-condition" ng-click="removeValidationCondition($index)" tabindex="-1"></button>
