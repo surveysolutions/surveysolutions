@@ -7,12 +7,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class MultiOptionLinkedQuestionOptionViewModel : MvxNotifyPropertyChanged
     {
-        private readonly MultiOptionLinkedQuestionViewModel questionViewModel;
+        private readonly AbstractMultiOptionLinkedQuestionViewModel questionViewModel;
 
         private string title;
         private bool @checked;
 
-        public MultiOptionLinkedQuestionOptionViewModel(MultiOptionLinkedQuestionViewModel questionViewModel)
+        public MultiOptionLinkedQuestionOptionViewModel(AbstractMultiOptionLinkedQuestionViewModel questionViewModel)
         {
             this.questionViewModel = questionViewModel;
         }
