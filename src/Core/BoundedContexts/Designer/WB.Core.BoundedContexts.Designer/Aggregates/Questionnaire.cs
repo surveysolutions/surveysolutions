@@ -1374,8 +1374,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 questionScope: question.QuestionScope,
                 conditionExpression: question.ConditionExpression,
-                validationExpression: question.ValidationExpression,
-                validationMessage: question.ValidationMessage,
+                validationExpression: null,
+                validationMessage: null,
                 instructions: question.Instructions,
 
                 answers: question.Answers.ToArray(),
