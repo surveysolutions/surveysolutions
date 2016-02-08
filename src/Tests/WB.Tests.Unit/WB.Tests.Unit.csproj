@@ -388,6 +388,9 @@
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\when_storing_questionnaire.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\QuestionnaireAssemblyFileAccessorTests\QuestionnaireAssemblyFileAccessorTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\QuestionnaireAssemblyFileAccessorTests\when_removing_questionnaire_assembly.cs" />
+    <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\CensusQuestionnaireDashboardItemViewModelTestsContext.cs" />
+    <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\when_create_new_interview.cs" />
+    <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\when_init.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_designer_historical_events_Json.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_hq_historical_events.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_designer_historical_events.cs" />
