@@ -40,6 +40,35 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                 mainThreadDispatcher ?? Stub.MvxMainThreadDispatcher());
         }
 
+        protected static MultiOptionRosterLinkedQuestionViewModel CreateMultiOptionRosterLinkedQuestionViewModel(
+            QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState = null,
+            AnsweringViewModel answering = null,
+            IStatefulInterviewRepository interviewRepository = null,
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage = null,
+            IPrincipal userIdentity = null,
+            ILiteEventRegistry eventRegistry = null,
+            IMvxMainThreadDispatcher mainThreadDispatcher = null)
+        {
+            return
+                new MultiOptionRosterLinkedQuestionViewModel(
+                    questionState ??
+                    Mock.Of<QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered>>(
+                        x => x.Validity == Mock.Of<ValidityViewModel>()),
+                    answering ?? Mock.Of<AnsweringViewModel>(),
+                    interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                    questionnaireStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
+                    userIdentity ??
+                    Mock.Of<IPrincipal>(
+                        x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
+                    eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
+                    mainThreadDispatcher ?? Stub.MvxMainThreadDispatcher());
+        }
+        protected static MultiOptionRosterLinkedQuestionViewModel CreateMultiOptionRosterLinkedQuestionViewModel(QuestionnaireModel questionnaire,
+          IStatefulInterview statefulInterview)
+        {
+            return CreateMultiOptionRosterLinkedQuestionViewModel(questionnaireStorage: Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(x => x.GetById(Moq.It.IsAny<string>()) == questionnaire),
+                interviewRepository: Mock.Of<IStatefulInterviewRepository>(x => x.Get(Moq.It.IsAny<string>()) == statefulInterview));
+        }
         protected static MultiOptionLinkedQuestionViewModel CreateViewModel(QuestionnaireModel questionnaire, 
             IStatefulInterview statefulInterview,
             AnswerNotifier answerNotifier = null)
