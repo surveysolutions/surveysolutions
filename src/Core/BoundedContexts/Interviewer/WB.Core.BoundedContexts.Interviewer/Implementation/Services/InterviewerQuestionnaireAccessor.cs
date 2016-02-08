@@ -53,8 +53,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             var serializedQuestionnaireDocument = await Task.Run(() => this.serializer.Deserialize<QuestionnaireDocument>(questionnaireDocument));
             var questionnaireModel = await Task.Run(() => this.questionnaireModelBuilder.BuildQuestionnaireModel(serializedQuestionnaireDocument));
 
-            this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId,
-                questionnaireIdentity.Version, serializedQuestionnaireDocument);
+            await Task.Run(() => this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId,
+                        questionnaireIdentity.Version, serializedQuestionnaireDocument));
 
             await this.questionnaireModelViewRepository.StoreAsync(new QuestionnaireModelView
             {
