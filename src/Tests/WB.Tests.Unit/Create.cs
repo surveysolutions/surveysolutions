@@ -2005,6 +2005,23 @@ namespace WB.Tests.Unit
             return statefulInterview;
         }
 
+        public static StatefulInterview StatefulInterview(Guid? questionnaireId = null, Guid? userId = null,
+    IQuestionnaire questionnaire = null)
+        {
+            questionnaireId = questionnaireId ?? Guid.NewGuid();
+            var statefulInterview = new StatefulInterview(
+                Mock.Of<ILogger>(),
+                Mock.Of<IPlainQuestionnaireRepository>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire),
+                Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues)
+            {
+                QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, 1),
+            };
+
+            statefulInterview.Apply(new InterviewCreated(userId ?? Guid.NewGuid(), questionnaireId.Value, 1));
+
+            return statefulInterview;
+        }
+
         public static StaticText StaticText(
             Guid? staticTextId = null,
             string text = "Static Text X")

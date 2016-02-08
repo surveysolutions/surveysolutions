@@ -104,6 +104,11 @@ namespace WB.Tests.Unit
                 return new AnswersDeclaredInvalid(identities);
             }
 
+            public static AnswersDeclaredInvalid AnswersDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedConditions)
+            {
+                return new AnswersDeclaredInvalid(failedConditions);
+            }
+
             public static AnswersRemoved AnswersRemoved(params Identity[] questions)
             {
                 return new AnswersRemoved(questions);
