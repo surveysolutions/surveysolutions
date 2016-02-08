@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
-            this.Write(@"( 
+            this.Write(@"(  
 		decimal[] rosterVector, 
 		Identity[] rosterKey, 
 		Func<Identity[], Guid, IEnumerable<IExpressionExecutableV6>> getInstances, 
