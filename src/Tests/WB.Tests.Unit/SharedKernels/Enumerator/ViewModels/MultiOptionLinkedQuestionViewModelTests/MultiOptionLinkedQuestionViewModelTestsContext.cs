@@ -16,10 +16,10 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQuestionViewModelTests
 {
-    [Subject(typeof(MultiOptionLinkedQuestionViewModel))]
+    [Subject(typeof(MultiOptionLinkedToQuestionQuestionViewModel))]
     internal class MultiOptionLinkedQuestionViewModelTestsContext
     {
-        protected static MultiOptionLinkedQuestionViewModel CreateViewModel(QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState = null, 
+        protected static MultiOptionLinkedToQuestionQuestionViewModel CreateViewModel(QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState = null, 
             AnsweringViewModel answering = null, 
             IStatefulInterviewRepository interviewRepository = null, 
             IAnswerToStringService answerToStringService = null, 
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             ILiteEventRegistry eventRegistry = null,
             IMvxMainThreadDispatcher mainThreadDispatcher = null)
         {
-            return new MultiOptionLinkedQuestionViewModel(questionState ?? Mock.Of<QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),
+            return new MultiOptionLinkedToQuestionQuestionViewModel(questionState ?? Mock.Of<QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 answerNotifier ?? Create.AnswerNotifier(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                 mainThreadDispatcher ?? Stub.MvxMainThreadDispatcher());
         }
 
-        protected static MultiOptionRosterLinkedQuestionViewModel CreateMultiOptionRosterLinkedQuestionViewModel(
+        protected static MultiOptionLinkedToRosterQuestionViewModel CreateMultiOptionRosterLinkedQuestionViewModel(
             QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState = null,
             AnsweringViewModel answering = null,
             IStatefulInterviewRepository interviewRepository = null,
@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             IMvxMainThreadDispatcher mainThreadDispatcher = null)
         {
             return
-                new MultiOptionRosterLinkedQuestionViewModel(
+                new MultiOptionLinkedToRosterQuestionViewModel(
                     questionState ??
                     Mock.Of<QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered>>(
                         x => x.Validity == Mock.Of<ValidityViewModel>()),
@@ -63,13 +63,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                     eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                     mainThreadDispatcher ?? Stub.MvxMainThreadDispatcher());
         }
-        protected static MultiOptionRosterLinkedQuestionViewModel CreateMultiOptionRosterLinkedQuestionViewModel(QuestionnaireModel questionnaire,
+        protected static MultiOptionLinkedToRosterQuestionViewModel CreateMultiOptionRosterLinkedQuestionViewModel(QuestionnaireModel questionnaire,
           IStatefulInterview statefulInterview)
         {
             return CreateMultiOptionRosterLinkedQuestionViewModel(questionnaireStorage: Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(x => x.GetById(Moq.It.IsAny<string>()) == questionnaire),
                 interviewRepository: Mock.Of<IStatefulInterviewRepository>(x => x.Get(Moq.It.IsAny<string>()) == statefulInterview));
         }
-        protected static MultiOptionLinkedQuestionViewModel CreateViewModel(QuestionnaireModel questionnaire, 
+        protected static MultiOptionLinkedToQuestionQuestionViewModel CreateViewModel(QuestionnaireModel questionnaire, 
             IStatefulInterview statefulInterview,
             AnswerNotifier answerNotifier = null)
         {

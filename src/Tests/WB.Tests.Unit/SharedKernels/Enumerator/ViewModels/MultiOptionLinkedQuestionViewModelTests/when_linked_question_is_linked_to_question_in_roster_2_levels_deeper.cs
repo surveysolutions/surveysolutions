@@ -44,16 +44,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                     "nastya"
                 });
 
-            viewModel = CreateViewModel(questionnaireModel, interview);
+            questionViewModel = CreateViewModel(questionnaireModel, interview);
         };
 
-        Because of = () => viewModel.Init("interview", linkedQuestionId, Create.NavigationState());
+        Because of = () => questionViewModel.Init("interview", linkedQuestionId, Create.NavigationState());
 
-        It should_substitute_titles_from_both_questions = () => viewModel.Options.First().Title.ShouldEqual("nastya: hamster");
+        It should_substitute_titles_from_both_questions = () => questionViewModel.Options.First().Title.ShouldEqual("nastya: hamster");
 
-        It should_substitute_titles_all_roster_combinations = () => viewModel.Options.Count.ShouldEqual(4);
+        It should_substitute_titles_all_roster_combinations = () => questionViewModel.Options.Count.ShouldEqual(4);
 
-        static MultiOptionLinkedQuestionViewModel viewModel;
+        static MultiOptionLinkedToQuestionQuestionViewModel questionViewModel;
         static Identity linkedQuestionId;
     }
 }
