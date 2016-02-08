@@ -22,7 +22,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV6<
 		this.@_parent = parent; 
 	}
 
-	private <#=Model.TypeName#>( 
+	private <#=Model.TypeName#>(  
 		decimal[] rosterVector, 
 		Identity[] rosterKey, 
 		Func<Identity[], Guid, IEnumerable<IExpressionExecutableV6>> getInstances, 
