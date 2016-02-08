@@ -1,5 +1,8 @@
 ﻿using System.Globalization;
 using System.Threading;
+using Cirrious.CrossCore;
+using Cirrious.CrossCore.Core;
+using Cirrious.CrossCore.IoC;
 using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
@@ -20,7 +23,9 @@ namespace WB.Tests.Unit
             SetupServiceLocator();
         }
 
-        public void OnAssemblyComplete() {}
+        public void OnAssemblyComplete()
+        {
+        }
 
         public static void SetupServiceLocator()
         {
