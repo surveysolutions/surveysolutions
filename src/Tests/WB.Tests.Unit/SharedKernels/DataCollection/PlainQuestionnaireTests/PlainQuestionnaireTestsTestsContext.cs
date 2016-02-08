@@ -9,11 +9,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 {
     internal class PlainQuestionnaireTestsContext
     {
-        protected static PlainQuestionnaire CreatePlainQuestionnaire(QuestionnaireDocument questionnaireDocument, long version = 1)
-        {
-            return new PlainQuestionnaire(questionnaireDocument, version);
-        }
-
         protected static IQuestion CreateTextListQuestion(Guid questionId)
         {
             IQuestionnaireEntityFactory questionnaireEntityFactory = new QuestionnaireEntityFactory();
