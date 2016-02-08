@@ -996,7 +996,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return interviewAnswerModel.IsValid;
         }
 
-        public IReadOnlyList<FailedValidationCondition> GetValidationMessages(Identity questionId)
+        public IReadOnlyList<FailedValidationCondition> GetFailedValidationConditions(Identity questionId)
         {
             var interviewAnswerModel = this.Answers[ConversionHelper.ConvertIdentityToString(questionId)];
             return interviewAnswerModel.FailedValidations.ToReadOnlyCollection();

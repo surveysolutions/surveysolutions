@@ -392,6 +392,7 @@
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\when_storing_questionnaire.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\QuestionnaireAssemblyFileAccessorTests\QuestionnaireAssemblyFileAccessorTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\QuestionnaireAssemblyFileAccessorTests\when_removing_questionnaire_assembly.cs" />
+    <Compile Include="CreateViewModels.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_designer_historical_events_Json.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_hq_historical_events.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_designer_historical_events.cs" />
@@ -744,6 +745,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_interviewId_is_missing_interviewId.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_there_is_answer_in_interview.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_there_is_no_answers_in_interview.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\ValidityViewModelTests\when_question_became_invalid_and_has_more_then_one_validation.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_handling_question_answered_event.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_handling_question_answered_event_when_ordered_functionality_is_enabled.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_handling_question_answered_event_of_another_question.cs" />
