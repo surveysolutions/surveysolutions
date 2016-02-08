@@ -6,6 +6,7 @@ using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -162,6 +163,16 @@ namespace WB.Tests.Unit
         public static Interview InterviewForQuestionnaireDocument(QuestionnaireDocument questionnaireDocument)
         {
             return Setup.InterviewForQuestionnaire(Create.PlainQuestionnaire(document: questionnaireDocument));
+        }
+
+        public static IDesignerEngineVersionService DesignerEngineVersionService(bool isClientVersionSupported = true, bool isQuestionnaireVersionSupported = true, int questionnaireContentVersion = 9)
+        {
+            var version = new Version(questionnaireContentVersion, 0, 0);
+
+            return Mock.Of<IDesignerEngineVersionService>(_ 
+                => _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == isClientVersionSupported
+                && _.IsQuestionnaireDocumentSupportedByClientVersion(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>()) == isQuestionnaireVersionSupported
+                && _.GetQuestionnaireContentVersion(Moq.It.IsAny<QuestionnaireDocument>()) == version);
         }
     }
 }

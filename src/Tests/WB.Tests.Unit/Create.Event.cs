@@ -17,6 +17,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -37,6 +38,11 @@ namespace WB.Tests.Unit
     {
         internal static class Event
         {
+            public static ImportFromDesigner ImportFromDesigner(Guid responsibleId, QuestionnaireDocument questionnaire, bool allowCensus, string assembly, long contentVersion)
+            {
+                return new ImportFromDesigner(responsibleId, questionnaire, allowCensus, assembly, contentVersion);
+            }
+
             public static NewGroupAdded AddGroup(Guid groupId, Guid? parentId = null, string variableName = null)
             {
                 return new NewGroupAdded

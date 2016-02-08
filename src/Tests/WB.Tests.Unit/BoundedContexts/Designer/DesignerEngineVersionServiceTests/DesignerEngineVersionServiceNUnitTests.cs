@@ -39,6 +39,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.DesignerEngineVersionServiceTes
             var designerEngineVersionService =
                 this.CreateDesignerEngineVersionService();
 
+            var expressionsEngineVersionService = Setup.DesignerEngineVersionService();
+
             var result =
                 designerEngineVersionService.IsQuestionnaireDocumentSupportedByClientVersion(
                     Create.QuestionnaireDocument(), new Version(9, 0, 0));

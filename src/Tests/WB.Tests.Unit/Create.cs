@@ -2680,7 +2680,8 @@ namespace WB.Tests.Unit
             }
 
             public static ImportFromDesigner ImportFromDesigner(Guid? questionnaireId = null, string title = "Questionnaire X",
-                Guid? responsibleId = null, string base64StringOfAssembly = "<base64>assembly</base64> :)")
+                Guid? responsibleId = null, string base64StringOfAssembly = "<base64>assembly</base64> :)",
+                long questionnaireContentVersion = 1)
             {
                 return new ImportFromDesigner(
                     responsibleId ?? Guid.NewGuid(),
@@ -2690,7 +2691,8 @@ namespace WB.Tests.Unit
                         Title = title,
                     },
                     false,
-                    base64StringOfAssembly);
+                    base64StringOfAssembly,
+                    questionnaireContentVersion);
             }
 
             public static LinkUserToDevice LinkUserToDeviceCommand(Guid userId, string deviceId)

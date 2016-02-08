@@ -149,12 +149,16 @@ namespace WB.UI.Designer.Api
                 });
             }
 
+            var questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source).Major;
+
             var questionnaire = questionnaireView.Source;
             questionnaire.Macros = null;
+            
             return new QuestionnaireCommunicationPackage
             {
                 Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaire)),
-                QuestionnaireAssembly = resultAssembly
+                QuestionnaireAssembly = resultAssembly,
+                QuestionnaireContentVersion = questionnaireContentVersion
             };
         }
         
