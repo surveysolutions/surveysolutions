@@ -626,6 +626,7 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_finding_referenced_answers_for_linked_question_on_roster_level_3_and_referenced_answers_are_on_roster_level_1.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_finding_referenced_answers_for_linked_question_on_roster_level_3_and_referenced_answers_are_on_roster_level_2.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_finding_referenced_answers_for_linked_question_on_roster_level_3_and_referenced_answers_are_on_roster_level_3.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_finding_referenced_rows_for_linked_on_roster_question.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_count_of_invalid_questions_recursively.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_enabled_subgroups.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_question_answer.cs" />
