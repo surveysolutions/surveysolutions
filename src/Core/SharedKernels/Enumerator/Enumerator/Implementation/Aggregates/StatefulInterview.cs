@@ -736,9 +736,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             var rosterIdentity = new Identity(rosterInstance.GroupId, GetFullRosterVector(rosterInstance));
 
             var rosterKey = ConversionHelper.ConvertIdentityToString(rosterIdentity);
-            var rosterParentKey = ConversionHelper.ConvertIdAndRosterVectorToString(
-                rosterInstance.GroupId,
-                rosterInstance.OuterRosterVector);
 
             this.groups[rosterKey] = new InterviewRoster
             {
