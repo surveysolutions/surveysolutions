@@ -86,7 +86,7 @@ namespace WB.Core.SharedKernels.DataCollection.V6
                         {
                             try
                             {
-                                if (!validation.Value())
+                                if (!validation.Value.Invoke())
                                     invalids.Add(new FailedValidationCondition() {FailedConditionIndex = validation.Key});
                             }
                             catch 
@@ -95,7 +95,7 @@ namespace WB.Core.SharedKernels.DataCollection.V6
                             }
                         }
 
-                        isValid = invalids.Count() == 0;
+                        isValid = !invalids.Any();
                     }
 
                     if (isValid && !this.ValidAnsweredQuestions.Contains(questionId))

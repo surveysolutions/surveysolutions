@@ -388,26 +388,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             //var validation = this.macrosSubstitutionService.InlineMacros(childAsIQuestion.ValidationExpression, questionnaireDoc.Macros.Values);
             var validationConditions = new List<ValidationExpressionModel>();
 
-            //backward compatibility could be fixed by updating old templates
-            //assuming no questions containing both validations
-            /*if (!string.IsNullOrWhiteSpace(validation))
-            {
-                validationConditions.Add(new ValidationExpressionModel(
-                        validation,
-                        varName,
-                        0));
-            }
-            else*/
-            {
-                for (int i = 0; i < childAsIQuestion.ValidationConditions.Count; i++)
+            for (int i = 0; i < childAsIQuestion.ValidationConditions.Count; i++)
                 {
                     validationConditions.Add(new ValidationExpressionModel(
-                        this.macrosSubstitutionService.InlineMacros(childAsIQuestion.ValidationExpression, questionnaireDoc.Macros.Values),
+                        this.macrosSubstitutionService.InlineMacros(childAsIQuestion.ValidationConditions[i].Expression, questionnaireDoc.Macros.Values),
                         varName,
                         i));
                 }
-            }
-
+            
             var condition = childAsIQuestion.CascadeFromQuestionId.HasValue
                 ? this.GetConditionForCascadingQuestion(questionnaireDoc, childAsIQuestion.PublicKey)
                 : this.macrosSubstitutionService.InlineMacros(childAsIQuestion.ConditionExpression, questionnaireDoc.Macros.Values);

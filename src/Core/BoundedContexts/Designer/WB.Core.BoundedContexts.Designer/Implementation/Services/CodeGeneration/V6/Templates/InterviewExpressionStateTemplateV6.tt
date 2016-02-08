@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 		}
 		
 
-		public override Dictionary<Guid, Guid[]> GetParentsMap()
+		public override Dictionary<Guid, Guid[]> GetParentsMap() 
 		{
 			return IdOf.parentScopeMap;
 		}

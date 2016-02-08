@@ -214,7 +214,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             #line 82 "C:\Work\surveysolutions-slave\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V6\Templates\QuestionnaireLevelTemplateV6.tt"
 
 	foreach (var @group in Model.Groups) 
-	{
+	{ 
 
             
             #line default

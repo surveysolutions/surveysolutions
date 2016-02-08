@@ -127,8 +127,8 @@ foreach (var namespaceToInclude in QuestionnaireStructure.Namespaces)
             #line default
             #line hidden
             this.Write("(this.InterviewScopes, this.SiblingRosters, this.InterviewProperties);\r\n\t\t}\r\n\t\t\r\n" +
-                    "\r\n\t\tpublic override Dictionary<Guid, Guid[]> GetParentsMap()\r\n\t\t{\r\n\t\t\treturn IdO" +
-                    "f.parentScopeMap;\r\n\t\t}\r\n\t}\r\n\t\t//generate QuestionnaireLevel\r\n");
+                    "\r\n\t\tpublic override Dictionary<Guid, Guid[]> GetParentsMap() \r\n\t\t{\r\n\t\t\treturn Id" +
+                    "Of.parentScopeMap;\r\n\t\t}\r\n\t}\r\n\t\t//generate QuestionnaireLevel\r\n");
             
             #line 71 "C:\Work\surveysolutions-slave\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V6\Templates\InterviewExpressionStateTemplateV6.tt"
 	
