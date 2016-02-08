@@ -2565,5 +2565,16 @@ namespace WB.Tests.Unit
                 Date = timestamp ?? DateTime.Now
             };
         }
+
+        public static InterviewRoster InterviewRoster(Guid? rosterId=null, decimal[] rosterVector=null, string rosterTitle="titile")
+        {
+            return new InterviewRoster()
+            {
+                Id = rosterId ?? Guid.NewGuid(),
+                IsDisabled = false,
+                RosterVector = rosterVector ?? new decimal[0],
+                Title = rosterTitle
+            };
+        }
     }
 }
