@@ -15,14 +15,14 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class MultiOptionRosterLinkedQuestionViewModel : AbstractMultiOptionLinkedQuestionViewModel,
+    public class MultiOptionLinkedToRosterQuestionViewModel : MultiOptionLinkedQuestionViewModel,
         ILiteEventHandler<AnswersRemoved>,
         ILiteEventHandler<RosterInstancesRemoved>,
         ILiteEventHandler<RosterInstancesTitleChanged>
     {
         private Guid linkedToRosterId;
 
-        public MultiOptionRosterLinkedQuestionViewModel(
+        public MultiOptionLinkedToRosterQuestionViewModel(
             QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState,
             AnsweringViewModel answering,
             IStatefulInterviewRepository interviewRepository,

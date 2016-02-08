@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQuestionViewModelTests
 {
-    internal class when_roster_row_title_changed_and_question_is_linked_on_it : MultiOptionLinkedQuestionViewModelTestsContext
+    internal class when_answers_removed_event_received_by_linked_on_roster_question : MultiOptionLinkedQuestionViewModelTestsContext
     {
         Establish context = () =>
         {
@@ -29,7 +28,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
 
             interview = new Mock<IStatefulInterview>();
             interview.Setup(x => x.FindReferencedRostersForLinkedQuestion(rosterId.Id, Moq.It.IsAny<Identity>()))
-                 .Returns(new [] { Create.InterviewRoster(rosterId.Id, new decimal[] { 1 }, "title") });
+                 .Returns(new[] { Create.InterviewRoster(rosterId.Id, new decimal[] { 1 }, "title"), Create.InterviewRoster(rosterId.Id, new decimal[] { 2 }, "title2") });
+
+            var linkedMultiOptionAnswer = new LinkedMultiOptionAnswer(questionId.Id, new decimal[0]);
+            linkedMultiOptionAnswer.SetAnswers(new[] {new decimal[] {1}});
+            interview.Setup(x => x.GetLinkedMultiOptionAnswer(questionId))
+                .Returns(linkedMultiOptionAnswer);
 
             viewModel = CreateMultiOptionRosterLinkedQuestionViewModel(questionnaire, interview.Object);
             viewModel.Init("interview", questionId, Create.NavigationState());
@@ -37,12 +41,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
 
         Because of = () =>
         {
-          
-            viewModel.Handle(Create.RosterInstancesTitleChanged(rosterId: rosterId.Id, rosterTitle: "title",
-                outerRosterVector: new decimal[0], instanceId: 1));
+            viewModel.Handle(Create.Event.AnswersRemoved(questionId));
         };
 
-        It should_insert_new_option = () => viewModel.Options.Count.ShouldEqual(1);
+        It should_uncheck_all_options = () => viewModel.Options.Count(o=>!o.Checked).ShouldEqual(2);
 
         static MultiOptionLinkedToRosterQuestionViewModel viewModel;
         static Identity questionId;
@@ -50,4 +52,3 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
         static Mock<IStatefulInterview> interview;
     }
 }
-

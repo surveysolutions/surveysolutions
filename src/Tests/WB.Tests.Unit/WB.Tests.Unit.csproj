@@ -691,9 +691,11 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\IntegerQuestionViewModelTests\when_answering_roster_size_numeric_question_with_negative_value_and_question_was_answered.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\IntegerQuestionViewModelTests\when_answering_roster_size_numeric_question_with_negative_value_and_question_was_not_answered.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\MultiOptionLinkedQuestionViewModelTestsContext.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_answers_removed_event_received_by_linked_on_roster_question.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_handling_question_answered_event_on_sorted_multioption_question.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_initing_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_linked_question_is_linked_to_question_in_roster_2_levels_deeper.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_roster_row_removed_and_question_is_linked_on_it.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_roster_row_title_changed_and_question_is_linked_on_it.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_linked_to_question_is_answered.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_title_of_linked_question_changes.cs" />
