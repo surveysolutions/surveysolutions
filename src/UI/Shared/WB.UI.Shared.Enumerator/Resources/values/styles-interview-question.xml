@@ -296,7 +296,7 @@
     <item name="android:layout_marginRight">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
   </style>
 
-  <style name="Interview_Question_Errors" parent="VerticalFullWidthWrappingLayout">
+  <style name="Interview_Question_Errors">
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
     <item name="android:layout_marginRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
     <item name="android:layout_marginBottom">@dimen/Interview_Comments_Details_margin_bottom</item>
@@ -311,7 +311,7 @@
     <item name="android:layout_marginTop">@dimen/Interview_Question_Errors_Title_margin_top</item>
   </style>
 
-  <style name="Interview_Question_Errors_Details" parent="FullWidthWrappingLayout">
+  <style name="Interview_Question_Errors_Details">
     <item name="android:fontFamily">Arial</item>
     <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:textStyle">bold|italic</item>
