@@ -166,9 +166,9 @@
     <Compile Include="Services\MaskText\RawText.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\ActiveStageViewModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\Questions\AbstractMultiOptionLinkedQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\GpsLocation.cs" />
-    <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionRosterLinkedQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedToRosterQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\SingleOptionRosterLinkedQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\YesNoQuestionOptionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\YesNoQuestionViewModel.cs" />
@@ -197,7 +197,7 @@
     <Compile Include="ViewModels\InterviewDetails\Questions\IntegerQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultimedaQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedQuestionOptionViewModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedQuestionViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedToQuestionQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionQuestionOptionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\QRBarcodeQuestionViewModel.cs" />
