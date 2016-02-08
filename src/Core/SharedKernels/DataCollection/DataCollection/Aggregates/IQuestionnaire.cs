@@ -164,5 +164,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId);
         bool IsPrefilled(Guid questionId);
         bool ShouldBeHiddenIfDisabled(Guid entityId);
+
+        string GetValidationMessage(Guid questionId, int conditionIndex);
     }
 }

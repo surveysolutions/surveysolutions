@@ -533,6 +533,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return (entity as IConditional)?.HideIfDisabled ?? false;
         }
 
+        public string GetValidationMessage(Guid questionId, int conditionIndex)
+        {
+            return this.GetQuestion(questionId).ValidationConditions[conditionIndex].Message;
+        }
+
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
         {
             if (!this.cacheOfUnderlyingGroupsAndRosters.ContainsKey(groupId))
