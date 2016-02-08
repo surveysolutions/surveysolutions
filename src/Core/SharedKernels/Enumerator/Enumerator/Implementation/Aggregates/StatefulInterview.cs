@@ -677,6 +677,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             if (answer != null)
             {
                 answer.IsValid = true;
+                answer.FailedValidations.Clear();
             }
             else
             {
