@@ -1,56 +1,38 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Designer.ValueObjects
 {
     public class QuestionnaireVerificationMessage
     {
-        private readonly QuestionnaireVerificationReference[] references;
+        public static QuestionnaireVerificationMessage Error(string code, string message, params QuestionnaireVerificationReference[] references)
+            => new QuestionnaireVerificationMessage(code, message, VerificationMessageLevel.General, references);
 
-        public static QuestionnaireVerificationMessage Error(string code,
-            string message,
-            params QuestionnaireVerificationReference[] references)
-        {
-            return new QuestionnaireVerificationMessage(code, message, VerificationMessageLevel.General, references);
-        }
+        public static QuestionnaireVerificationMessage Warning(string code, string message, params QuestionnaireVerificationReference[] references)
+            => new QuestionnaireVerificationMessage(code, message, VerificationMessageLevel.Warning, references);
 
-        public static QuestionnaireVerificationMessage Warning(string code,
-            string message,
-            params QuestionnaireVerificationReference[] references)
-        {
-            return new QuestionnaireVerificationMessage(code, message, VerificationMessageLevel.Warning, references);
-        }
+        public static QuestionnaireVerificationMessage Critical(string code, string message, params QuestionnaireVerificationReference[] references)
+            => new QuestionnaireVerificationMessage(code, message, VerificationMessageLevel.Critical, references);
 
-        public static QuestionnaireVerificationMessage Critical(string code,
-            string message,
-            params QuestionnaireVerificationReference[] references)
-        {
-            return new QuestionnaireVerificationMessage(code, message, VerificationMessageLevel.Critical, references);
-        }
-
-        private QuestionnaireVerificationMessage(string code, 
+        private QuestionnaireVerificationMessage(
+            string code, 
             string message,
             VerificationMessageLevel messageLevel,
-            params QuestionnaireVerificationReference[] references)
+            IEnumerable<QuestionnaireVerificationReference> references)
         {
             this.Code = code;
             this.Message = message;
             this.MessageLevel = messageLevel;
-            this.references = references ?? new QuestionnaireVerificationReference[0];
+            this.References = (references ?? Enumerable.Empty<QuestionnaireVerificationReference>()).ToReadOnlyCollection();
         }
 
-        public string Code { get; private set; }
+        public string Code { get; }
+        public string Message { get; }
+        public VerificationMessageLevel MessageLevel { get; }
+        public IReadOnlyCollection<QuestionnaireVerificationReference> References { get; }
 
-        public string Message { get; private set; }
-
-        public VerificationMessageLevel MessageLevel { get; set; }
-
-        public IReadOnlyCollection<QuestionnaireVerificationReference> References => new ReadOnlyCollection<QuestionnaireVerificationReference>(this.references);
-
-        public override string ToString()
-        {
-            return $"{this.Code}: {this.Message}";
-        }
+        public override string ToString() => $"{this.Code}: {this.Message}";
     }
 }
