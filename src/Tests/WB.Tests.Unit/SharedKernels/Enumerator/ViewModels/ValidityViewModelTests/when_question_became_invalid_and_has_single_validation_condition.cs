@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -6,6 +6,7 @@ using Main.Core.Documents;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -13,8 +14,8 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTests
 {
     [Subject(typeof(ValidityViewModel))]
-    public class when_question_became_invalid_and_has_more_then_one_validation
-    { 
+    public class when_question_became_invalid_and_has_single_validation_condition
+    {
         Establish context = () =>
         {
             questionIdentity = Create.Identity(Guid.NewGuid(), RosterVector.Empty);
@@ -22,12 +23,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
                 validationConditions: new List<ValidationCondition>
                 {
                     new ValidationCondition {Expression = "validation 1", Message = "message 1"},
-                    new ValidationCondition {Expression = "validation 2", Message = "message 2"}
                 }));
 
             failedValidationConditions = new List<FailedValidationCondition>
             {
-                new FailedValidationCondition(1),
                 new FailedValidationCondition(0)
             };
 
@@ -36,7 +35,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
             var interview = Substitute.For<IStatefulInterview>();
             interview.GetFailedValidationConditions(questionIdentity)
                 .Returns(failedValidationConditions);
-            interview.IsValid(questionIdentity).Returns(false);
             interview.WasAnswered(questionIdentity).Returns(true);
 
             var statefulInterviewRepository = Substitute.For<IStatefulInterviewRepository>();
@@ -59,13 +57,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
                 }));
         };
 
-        It should_show_all_failed_validation_messages = () => viewModel.Error.ValidationErrors.Count.ShouldEqual(2);
+        It should_set_validation_caption = () => viewModel.Error.Caption.ShouldEqual(UIResources.Validity_Answered_Invalid_ErrorCaption);
 
-        It should_show_error_messages_according_to_failed_validation_indexes_with_postfix_added = () =>
-        {
-            viewModel.Error.ValidationErrors.First().ShouldEqual("message 2 [2]");
-            viewModel.Error.ValidationErrors.Second().ShouldEqual("message 1 [1]");
-        };
+        It should_show_single_error_message = () => viewModel.Error.ValidationErrors.Count.ShouldEqual(1);
+
+        It should_show_error_message_without_index_postfix = () => viewModel.Error.ValidationErrors.First().ShouldEqual("message 1");
 
         static ValidityViewModel viewModel;
         static Identity questionIdentity;
