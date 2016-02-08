@@ -21,7 +21,8 @@ namespace WB.Tests.Unit
             {
                 var result = new ValidityViewModel(eventRegistry ?? Create.LiteEventRegistry(),
                     interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                    Mock.Of<IPlainQuestionnaireRepository>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire));
+                    Mock.Of<IPlainQuestionnaireRepository>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire),
+                    Stub.MvxMainThreadDispatcher());
                 result.Init("interviewid", entityIdentity, Create.NavigationState(interviewRepository));
 
                 Mvx.RegisterSingleton(Stub.MvxMainThreadDispatcher());

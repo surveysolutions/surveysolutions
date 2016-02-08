@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Cirrious.CrossCore.Core;
 using Cirrious.MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -47,16 +48,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
 
         protected ValidityViewModel() { }
 
         public ValidityViewModel(ILiteEventRegistry liteEventRegistry,
             IStatefulInterviewRepository interviewRepository,
-            IPlainQuestionnaireRepository questionnaireRepository)
+            IPlainQuestionnaireRepository questionnaireRepository,
+            IMvxMainThreadDispatcher mainThreadDispatcher)
         {
             this.liteEventRegistry = liteEventRegistry;
             this.interviewRepository = interviewRepository;
             this.questionnaireRepository = questionnaireRepository;
+            this.mainThreadDispatcher = mainThreadDispatcher;
             this.error = new ErrorMessage(null, new List<string>());
         }
 
@@ -99,7 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             bool isInvalidAnswer = !interview.IsValid(this.questionIdentity) && interview.WasAnswered(this.questionIdentity);
             bool wasError = this.exceptionErrorMessageFromViewModel != null;
 
-            InvokeOnMainThread(() =>
+            mainThreadDispatcher.RequestMainThreadAction(() =>
             {
                 if (isInvalidAnswer && !wasError)
                 {
