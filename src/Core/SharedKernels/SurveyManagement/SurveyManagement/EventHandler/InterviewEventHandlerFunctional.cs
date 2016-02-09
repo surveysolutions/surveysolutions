@@ -6,6 +6,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -187,7 +188,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             });
         }
 
-        private static InterviewData ChangeQuestionConditionValidity(InterviewData interview, decimal[] vector, Guid questionId, bool invalid)
+        private static InterviewData ChangeQuestionConditionValidity(InterviewData interview, 
+            RosterVector vector, 
+            Guid questionId, 
+            bool invalid, IReadOnlyList<FailedValidationCondition> failedValidationCondition)
         {
             return UpdateQuestion(interview, vector, questionId, (question) =>
             {
@@ -195,6 +199,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     question.QuestionState &= ~QuestionState.Valid; 
                 else
                     question.QuestionState = question.QuestionState | QuestionState.Valid;
+                question.FailedValidationConditions = failedValidationCondition;
             });
         }
 
@@ -559,7 +564,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return
                 @event.Payload.FailedValidationConditions.Keys.Aggregate(
                     state,
-                    (document, question) => ChangeQuestionConditionValidity(document, question.RosterVector, question.Id, true));
+                    (document, question) => ChangeQuestionConditionValidity(document, question.RosterVector, question.Id, true, @event.Payload.FailedValidationConditions[question]));
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<AnswersDeclaredValid> @event)
@@ -567,7 +572,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             return 
                 @event.Payload.Questions.Aggregate(
                     state,
-                    (document, question) => ChangeQuestionConditionValidity(document, question.RosterVector, question.Id, false));
+                    (document, question) => ChangeQuestionConditionValidity(document, question.RosterVector, question.Id, false, new FailedValidationCondition[] {}));
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<FlagRemovedFromAnswer> @event)

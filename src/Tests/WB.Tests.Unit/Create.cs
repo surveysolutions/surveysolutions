@@ -1202,7 +1202,7 @@ namespace WB.Tests.Unit
             HashSet<InterviewItemId> validQuestions = null,
             HashSet<InterviewItemId> invalidQuestions = null,
             Guid? interviewId = null,
-            Dictionary<Identity, List<FailedValidationCondition>> failedValidationConditions = null,
+            Dictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions = null,
             InterviewStatus status = InterviewStatus.SupervisorAssigned,
             Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances = null,
             bool? wasCompleted = false)
@@ -1222,7 +1222,7 @@ namespace WB.Tests.Unit
                 validQuestions ?? new HashSet<InterviewItemId>(),
                 invalidQuestions ?? new HashSet<InterviewItemId>(),
                 rosterGroupInstances ?? new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), 
-                failedValidationConditions ?? new Dictionary<Identity, List<FailedValidationCondition>>(),
+                failedValidationConditions ?? new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>(),
                 wasCompleted ?? false);
         }
 
