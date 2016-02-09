@@ -5,6 +5,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 {
     public interface IInterviewerSettings : IEnumeratorSettings
     {
+        long GetSupportedQuestionnaireContentVersion();
         string GetDeviceId();
         string GetApplicationVersionName();
         string GetDeviceTechnicalInformation();
