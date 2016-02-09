@@ -146,8 +146,8 @@ namespace ChangeInterviewStatus
                             this.status.ElapsedTime = elapsedTime.ElapsedTicks;
                             this.status.TimePerInterview = this.status.ElapsedTime / this.status.ProcessedInterviewsCount;
                             this.status.EstimatedTime = this.status.TimePerInterview * this.status.TotalInterviewsCount;
-                            Console.Write(this.status.ToString());
-                            Console.WriteLine("{0} - {1}", importedInterview.Id.ToString("N"), hasError ? "Error" : "OK");
+                            Console.WriteLine(this.status.ToString());
+                            Console.WriteLine("{0} - {1}. Took: {2:g} to execute", importedInterview.Id.ToString("N"), hasError ? "Error" : changeStatusUrl, new TimeSpan((long)this.status.TimePerInterview));
                         });
 
                     Console.WriteLine();
