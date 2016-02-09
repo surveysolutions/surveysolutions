@@ -350,7 +350,7 @@ namespace WB.Tests.Unit
                 selectedRosterVectors: answer);
         }
 
-        public static AnswerYesNoQuestion AnswerYesNoQuestion(Guid interviewId, Guid userId, IEnumerable<AnsweredYesNoOption> answer = null)
+        public static AnswerYesNoQuestion AnswerYesNoQuestion(Guid interviewId, Guid userId, IEnumerable<AnsweredYesNoOption> answer = default(IEnumerable<AnsweredYesNoOption>))
         {
             return new AnswerYesNoQuestion(
                 interviewId: interviewId,
