@@ -164,7 +164,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             switch (questionType)
             {
                 case QuestionType.SingleOption:
-                    return IsQuestionLinked(questionId)
+                    return IsQuestionLinked(questionId) || IsQuestionLinkedToRoster(questionId)
                         ? AnswerType.RosterVector
                         : AnswerType.OptionCode;
 
@@ -172,7 +172,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     return
                         IsQuestionYesNo(questionId)
                             ? AnswerType.YesNoArray
-                            : IsQuestionLinked(questionId)
+                            : IsQuestionLinked(questionId) || IsQuestionLinkedToRoster(questionId)
                                 ? AnswerType.RosterVectorArray
                                 : AnswerType.OptionCodeArray;
 
