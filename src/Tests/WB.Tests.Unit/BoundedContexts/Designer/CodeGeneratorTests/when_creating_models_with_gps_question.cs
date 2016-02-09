@@ -41,7 +41,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
         {
             QuestionTemplateModel question = model.AllQuestions.Single(x => x.Id == Id.gA);
             question.VariableName.ShouldEqual("gps");
-            question.Validation.ShouldEqual("gps validation");
+            question.ValidationExpressions.FirstOrDefault().ValidationExpression.ShouldEqual("gps validation");
+            //question.Validation.ShouldEqual("gps validation");
             question.Condition.ShouldEqual("gps condition");
             question.IsMultiOptionYesNoQuestion.ShouldBeFalse();
             question.AllMultioptionYesNoCodes.ShouldBeNull();

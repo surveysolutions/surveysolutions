@@ -62,8 +62,8 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
             appDomainContext = null;
         };
 
-        It should_not_raise_AnswersDeclaredInvalid_event = () =>
-            result.AnswersDeclaredInvalidEventCount.ShouldEqual(0);
+        It should_not_AnswersDeclaredInvalid_event = () =>
+            result.AnswersDeclaredInvalidEventCount.ShouldEqual(1);
 
         It should_raise_AnswersDeclaredValid_event = () =>
             result.AnswersDeclaredValidEventCount.ShouldEqual(1);

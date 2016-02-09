@@ -137,6 +137,7 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.Synchronization.SyncStorage;
+using designer::WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V6.Templates;
 
 namespace WB.Tests.Unit
 {
@@ -237,6 +238,26 @@ namespace WB.Tests.Unit
                 isLookupTablesFeatureSupported: true)
             {
                 ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV5(expressionStateModel).TransformText()
+            };
+        }
+
+        public static CodeGenerationSettings CodeGenerationSettingsV6()
+        {
+            return new CodeGenerationSettings(additionInterfaces: new[] { "IInterviewExpressionStateV6" },
+                namespaces: new[]
+                {
+                    "WB.Core.SharedKernels.DataCollection.V2",
+                    "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                    "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
+                    "WB.Core.SharedKernels.DataCollection.V4",
+                    "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
+                    "WB.Core.SharedKernels.DataCollection.V5",
+                    "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions",
+                    "WB.Core.SharedKernels.DataCollection.V5"
+                },
+                isLookupTablesFeatureSupported: true)
+            {
+                ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV6(expressionStateModel).TransformText()
             };
         }
 
@@ -1474,6 +1495,7 @@ namespace WB.Tests.Unit
             string validationExpression = null,
             string validationMessage = null,
             QuestionType questionType = QuestionType.Text,
+            IList<ValidationCondition> validationConditions = null,
             params Answer[] answers)
         {
             return new TextQuestion("Question X")
@@ -1484,7 +1506,8 @@ namespace WB.Tests.Unit
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
-                Answers = answers.ToList()
+                Answers = answers.ToList(),
+                ValidationConditions = validationConditions ?? new List<ValidationCondition>()
             };
         }
 
@@ -1974,6 +1997,23 @@ namespace WB.Tests.Unit
             var statefulInterview = new StatefulInterview(
                 Mock.Of<ILogger>(),
                 questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues)
+            {
+                QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, 1),
+            };
+
+            statefulInterview.Apply(new InterviewCreated(userId ?? Guid.NewGuid(), questionnaireId.Value, 1));
+
+            return statefulInterview;
+        }
+
+        public static StatefulInterview StatefulInterview(Guid? questionnaireId = null, Guid? userId = null,
+    IQuestionnaire questionnaire = null)
+        {
+            questionnaireId = questionnaireId ?? Guid.NewGuid();
+            var statefulInterview = new StatefulInterview(
+                Mock.Of<ILogger>(),
+                Mock.Of<IPlainQuestionnaireRepository>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire),
                 Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues)
             {
                 QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, 1),
