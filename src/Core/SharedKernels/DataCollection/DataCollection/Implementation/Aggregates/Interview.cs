@@ -37,6 +37,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private bool wasHardDeleted;
         private bool receivedByInterviewer;
         protected InterviewStatus status;
+        public InterviewStatus Status => this.status;
 
         private IInterviewExpressionStateV5 expressionProcessorStatePrototype = null;
         private IInterviewExpressionStateV5 ExpressionProcessorStatePrototype
