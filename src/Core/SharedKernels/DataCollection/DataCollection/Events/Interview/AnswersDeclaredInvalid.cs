@@ -21,7 +21,11 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
                 return this.failedValidationConditions ?? 
                         (this.failedValidationConditions = this.FailedConditionsStorage.ToDictionary(x => x.Key, x => x.Value));
             }
-            protected set { this.FailedConditionsStorage = value.ToList(); }
+            protected set
+            {
+                this.FailedConditionsStorage = value.ToList();
+                this.failedValidationConditions = null;
+            }
         }
 
         protected AnswersDeclaredInvalid()
