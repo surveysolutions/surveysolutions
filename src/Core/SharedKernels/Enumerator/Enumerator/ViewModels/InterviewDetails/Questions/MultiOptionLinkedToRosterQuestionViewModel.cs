@@ -98,7 +98,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             IEnumerable<string> parentRosterTitlesWithoutLastOneAndFirstKnown =
                interview
-                   .GetParentRosterTitlesWithoutLast(referencedRoster.Id, referencedRoster.RosterVector)
+                   .GetParentRosterTitlesWithoutLastForRoster(referencedRoster.Id, referencedRoster.RosterVector)
                    .Skip(currentRosterLevel);
 
             string rosterPrefixes = string.Join(": ", parentRosterTitlesWithoutLastOneAndFirstKnown);

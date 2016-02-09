@@ -81,6 +81,8 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         IEnumerable<string> GetParentRosterTitlesWithoutLast(Guid questionId, RosterVector rosterVector);
 
+        IEnumerable<string> GetParentRosterTitlesWithoutLastForRoster(Guid rosterId, RosterVector rosterVector);
+
         int CountInterviewerQuestionsInGroupRecursively(Identity groupIdentity);
 
         int CountActiveInterviewerQuestionsInGroupOnly(Identity group);
