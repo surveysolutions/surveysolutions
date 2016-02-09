@@ -10,18 +10,14 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
         public UpdateDateTimeQuestionCommand(
             Guid questionnaireId,
             Guid questionId,
-            string title,
-            string variableName, string variableLabel,
-            string enablementCondition,
-            string instructions,
             Guid responsibleId,
+            CommonQuestionParameters commonQuestionParameters,
             string validationExpression,
             string validationMessage,
             QuestionScope scope,
             bool isPreFilled)
-            : base(
-                responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, enablementCondition: enablementCondition, instructions: instructions,variableLabel:variableLabel)
+            : base(responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
+                  commonQuestionParameters: commonQuestionParameters)
         {
             this.IsPreFilled = isPreFilled;
             this.Scope = scope;

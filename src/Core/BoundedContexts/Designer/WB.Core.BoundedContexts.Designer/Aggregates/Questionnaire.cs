@@ -129,7 +129,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private void Apply(GroupUpdated e)
         {
-            this.innerDocument.UpdateGroup(e.GroupPublicKey, e.GroupText,e.VariableName, e.Description, e.ConditionExpression);
+            this.innerDocument.UpdateGroup(e.GroupPublicKey, e.GroupText,e.VariableName, e.Description, e.ConditionExpression, e.HideIfDisabled);
         }
 
         internal void Apply(NewGroupAdded e)
@@ -140,6 +140,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             group.PublicKey = e.PublicKey;
             group.Description = e.Description;
             group.ConditionExpression = e.ConditionExpression;
+            group.HideIfDisabled = e.HideIfDisabled;
             this.innerDocument.Add(group, e.ParentGroupPublicKey, null);
         }
 

@@ -7,14 +7,14 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
     [Serializable]
     public class UpdateMultimediaQuestionCommand: AbstractUpdateQuestionCommand
     {
-        public UpdateMultimediaQuestionCommand(Guid questionnaireId, Guid questionId, string title, string variableName,
-            string variableLabel,
-            string enablementCondition, string instructions, Guid responsibleId,
+        public UpdateMultimediaQuestionCommand(Guid questionnaireId, 
+            Guid questionId, 
+            Guid responsibleId,
+            CommonQuestionParameters commonQuestionParameters,
             QuestionScope scope)
             : base(
-                responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, enablementCondition: enablementCondition, instructions: instructions,
-                variableLabel: variableLabel)
+                responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
+                commonQuestionParameters: commonQuestionParameters)
         {
             this.Scope = scope;
         }

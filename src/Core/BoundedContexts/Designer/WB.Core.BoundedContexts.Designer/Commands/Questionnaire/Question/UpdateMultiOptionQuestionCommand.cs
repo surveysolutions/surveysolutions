@@ -11,11 +11,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
         public UpdateMultiOptionQuestionCommand(
             Guid questionnaireId,
             Guid questionId,
-            string title,
-            string variableName, string variableLabel,
-            string enablementCondition,
-            string instructions,
             Guid responsibleId,
+            CommonQuestionParameters commonQuestionParameters,
             string validationExpression,
             string validationMessage,
             QuestionScope scope,
@@ -25,8 +22,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             int? maxAllowedAnswers,
             bool yesNoView)
             : base(
-                responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, enablementCondition: enablementCondition, instructions: instructions,variableLabel:variableLabel)
+                responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
+                commonQuestionParameters: commonQuestionParameters)
         {
             this.Scope = scope;
             this.ValidationMessage = CommandUtils.SanitizeHtml(validationMessage, removeAllTags: true);
