@@ -1,10 +1,31 @@
-﻿using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
+﻿using System.Collections.Generic;
+using System.Linq;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
-    public class AnswersDeclaredInvalid : QuestionsPassiveEvent
+    public class AnswersDeclaredInvalid : InterviewPassiveEvent
     {
+        public Identity[] Questions { get; protected set; }
+        public IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> FailedValidationConditions { get; private set; }
+
         public AnswersDeclaredInvalid(Identity[] questions)
-            : base(questions) {}
+        {
+            this.Questions = questions;
+
+            var dictionary  = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
+            foreach (var question in questions)
+            {
+                dictionary.Add(question, new List<FailedValidationCondition>());
+            }
+
+            this.FailedValidationConditions = dictionary;
+        }
+
+        public AnswersDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
+        {
+            this.Questions = failedValidationConditions.Keys.ToArray();
+            this.FailedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>(failedValidationConditions);
+        }
     }
 }

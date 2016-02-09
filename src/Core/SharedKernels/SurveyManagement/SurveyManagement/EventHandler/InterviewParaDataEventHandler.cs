@@ -535,7 +535,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AnswersDeclaredInvalid> @event)
         {
-            foreach (var question in @event.Payload.Questions)
+            foreach (var question in @event.Payload.FailedValidationConditions.Keys)
             {
                 AddHistoricalRecord(view, InterviewHistoricalAction.QuestionDeclaredInvalid, null, null,
                 CreateQuestionParameters(question.Id, question.RosterVector));
