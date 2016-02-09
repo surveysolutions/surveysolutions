@@ -18,7 +18,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             QuestionScope scope,
             bool isPreFilled,
             List<ValidationCondition> validationConditions)
-                  commonQuestionParameters: commonQuestionParameters)
              : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
                 commonQuestionParameters: commonQuestionParameters,

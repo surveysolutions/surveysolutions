@@ -15,6 +15,7 @@ namespace Main.Core.Entities
             string stataExportCaption,
             string variableLabel,
             string conditionExpression,
+            bool hideIfDisabled,
             Order? answerOrder,
             bool featured,
             bool capital,
@@ -40,6 +41,7 @@ namespace Main.Core.Entities
             this.StataExportCaption = stataExportCaption;
             this.VariableLabel = variableLabel;
             this.ConditionExpression = conditionExpression;
+            this.HideIfDisabled = hideIfDisabled;
             this.AnswerOrder = answerOrder;
             this.Featured = featured;
             this.Capital = capital;
@@ -67,6 +69,7 @@ namespace Main.Core.Entities
         public readonly string StataExportCaption;
         public readonly string VariableLabel;
         public readonly string ConditionExpression;
+        public readonly bool HideIfDisabled;
         public readonly string ValidationExpression;
         public readonly string ValidationMessage;
         public readonly Order? AnswerOrder;
