@@ -267,7 +267,7 @@ namespace WB.Tests.Unit
             string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string variableLabel = null, string validationExpression = null, string validationMessage = null,
             QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
             QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
-            string mask = null, int? maxAllowedAnswers = null, bool? yesNoView = null, bool? areAnswersOrdered = null)
+            string mask = null, int? maxAllowedAnswers = null, bool? yesNoView = null, bool? areAnswersOrdered = null, bool hideIfDisabled = false)
             {
                 return new NewQuestionAdded(
                     publicKey: publicKey,
@@ -278,6 +278,7 @@ namespace WB.Tests.Unit
                     featured: featured,
                     questionScope: questionScope,
                     conditionExpression: conditionExpression,
+                    hideIfDisabled: hideIfDisabled,
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
@@ -327,7 +328,8 @@ namespace WB.Tests.Unit
                 string validationExpression = null,
                 string validationMessage = null,
                 string instructions = null,
-                Guid? responsibleId = null)
+                Guid? responsibleId = null,
+                bool hideIfDisabled = false)
             {
                 return new NumericQuestionChanged(
                     publicKey: publicKey,
@@ -337,6 +339,7 @@ namespace WB.Tests.Unit
                     featured: featured,
                     questionScope: QuestionScope.Interviewer,
                     conditionExpression: conditionExpression,
+                    hideIfDisabled: hideIfDisabled,
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
@@ -362,7 +365,8 @@ namespace WB.Tests.Unit
                 Guid? responsibleId = null,
                 int targetIndex = 0,
                 QuestionScope scope = QuestionScope.Interviewer,
-                IList<ValidationCondition> validationConditions = null)
+                IList<ValidationCondition> validationConditions = null,
+                bool hideIfDisabled = false)
             {
                 return new NumericQuestionCloned(
                     publicKey: publicKey,
@@ -373,6 +377,7 @@ namespace WB.Tests.Unit
                     featured: featured,
                     questionScope: scope,
                     conditionExpression: conditionExpression,
+                    hideIfDisabled: hideIfDisabled,
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
@@ -398,7 +403,8 @@ namespace WB.Tests.Unit
             public static QuestionChanged QuestionChanged(Guid publicKey, Guid targetGroupKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
                 string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string validationExpression = null, string validationMessage = null,
                 QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
-                QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null)
+                QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
+                bool hideIfDisabled = false)
             {
                 return new QuestionChanged(
                     publicKey: publicKey,
@@ -409,6 +415,7 @@ namespace WB.Tests.Unit
                     featured: featured,
                     questionScope: questionScope,
                     conditionExpression: conditionExpression,
+                    hideIfDisabled: hideIfDisabled,
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
@@ -444,6 +451,7 @@ namespace WB.Tests.Unit
                     featured: featured,
                     questionScope: questionScope,
                     conditionExpression: conditionExpression,
+                    hideIfDisabled: false,
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
@@ -482,6 +490,7 @@ namespace WB.Tests.Unit
                     featured: featured,
                     questionScope: questionScope,
                     conditionExpression: conditionExpression,
+                    hideIfDisabled: false,
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,

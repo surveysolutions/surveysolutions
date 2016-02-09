@@ -38,10 +38,11 @@ questionType: QuestionType.QRBarcode
                     questionId: questionId,
                     title: title,
                     variableName: notUniqueVariableName,
-                variableLabel: null,
+                    variableLabel: null,
                     isPreFilled: isPreFilled,
                     scope: scope,
                     enablementCondition: enablementCondition,
+                    hideIfDisabled: false,
                     instructions: instructions,
                      mask: null,
                     responsibleId: responsibleId, validationCoditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));

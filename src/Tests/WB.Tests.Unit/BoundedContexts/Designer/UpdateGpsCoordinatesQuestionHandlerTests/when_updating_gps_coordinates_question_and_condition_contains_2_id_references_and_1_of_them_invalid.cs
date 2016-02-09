@@ -46,6 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
                     isPreFilled: false,
                     scope: scope,
                     enablementCondition: enablementCondition,
+                    hideIfDisabled: hideIfDisabled,
                     instructions: instructions,
                     responsibleId: responsibleId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
 
@@ -69,5 +70,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
         private static string instructions = "intructions";
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static string enablementCondition = string.Format("[{0}] > 1 and [{1}] < 2", existingQuestionId, notExistingQuestionId);
+        private static bool hideIfDisabled = true;
     }
 }

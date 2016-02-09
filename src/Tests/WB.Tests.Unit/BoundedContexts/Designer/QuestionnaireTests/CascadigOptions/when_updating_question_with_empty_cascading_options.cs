@@ -52,6 +52,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.CascadigOpti
             false,
             QuestionScope.Interviewer,
             null,
+            false,
             null,
             actorId,
             new[]

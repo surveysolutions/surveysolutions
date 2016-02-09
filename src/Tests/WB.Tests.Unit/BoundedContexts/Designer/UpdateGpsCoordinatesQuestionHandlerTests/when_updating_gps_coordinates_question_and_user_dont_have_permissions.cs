@@ -37,6 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
                     isPreFilled: false,
                     scope: scope,
                     enablementCondition: enablementCondition,
+                    hideIfDisabled: false,
                     instructions: instructions,
                     responsibleId: notExistinigUserId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
 

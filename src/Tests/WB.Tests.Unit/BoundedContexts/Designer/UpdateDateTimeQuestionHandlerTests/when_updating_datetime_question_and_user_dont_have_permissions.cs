@@ -36,10 +36,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateDateTimeQuestionHandlerTe
                     questionId: questionId,
                     title: title,
                     variableName: variableName,
-                variableLabel: null,
+                    variableLabel: null,
                     isPreFilled: isPreFilled,
                     scope: scope,
                     enablementCondition: enablementCondition,
+                    hideIfDisabled: false,
                     instructions: instructions,
                     responsibleId: notExistinigUserId,
                     validationConditions: new List<ValidationCondition>()

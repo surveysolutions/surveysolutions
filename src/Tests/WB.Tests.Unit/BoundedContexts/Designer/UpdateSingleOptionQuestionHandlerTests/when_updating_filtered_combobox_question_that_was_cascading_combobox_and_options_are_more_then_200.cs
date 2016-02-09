@@ -66,6 +66,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                 isPreFilled: false,
                 scope: QuestionScope.Interviewer,
                 enablementCondition: "some condition",
+                hideIfDisabled: false,
                 instructions: "intructions",
                 responsibleId: responsibleId,
                 options: null,

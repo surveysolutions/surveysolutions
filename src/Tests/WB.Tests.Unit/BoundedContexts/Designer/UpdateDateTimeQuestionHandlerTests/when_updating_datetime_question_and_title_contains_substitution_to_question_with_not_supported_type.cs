@@ -42,10 +42,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateDateTimeQuestionHandlerTe
                     questionId: questionId,
                     title: titleWithSubstitution,
                     variableName: variableName,
-                variableLabel: null,
+                    variableLabel: null,
                     isPreFilled: isPreFilled,
                     scope: scope,
                     enablementCondition: enablementCondition,
+                    hideIfDisabled: hideIfDisabled,
                     instructions: instructions,
                     responsibleId: responsibleId,
                     validationConditions: new List<ValidationCondition>()
@@ -71,5 +72,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateDateTimeQuestionHandlerTe
         private static bool isPreFilled = false;
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static string enablementCondition = null;
+        private static bool hideIfDisabled = true;
     }
 }

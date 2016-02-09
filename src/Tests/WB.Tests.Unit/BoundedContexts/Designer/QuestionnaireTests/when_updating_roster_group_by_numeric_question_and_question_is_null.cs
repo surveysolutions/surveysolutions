@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             exception = Catch.Exception(
                 () =>
                     questionnaire.UpdateGroup(groupId: groupId, responsibleId: responsibleId, title: "title", variableName: null,
-                        description: null, condition: null, rosterSizeQuestionId: null, isRoster: true,
+                        description: null, condition: null, hideIfDisabled: false, rosterSizeQuestionId: null, isRoster: true,
                         rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: rosterTitleQuestionId));
 
         It should_throw_QuestionnaireException = () =>

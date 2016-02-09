@@ -82,6 +82,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTes
                 validationExpression: validationExpression,
                 responsibleId: Guid.NewGuid(),
                 conditionExpression: null,
+                hideIfDisabled: false,
                 featured:false,
                 instructions: null,
                 capital: false,

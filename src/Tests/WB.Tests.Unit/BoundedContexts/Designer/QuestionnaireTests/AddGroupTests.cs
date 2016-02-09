@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             TestDelegate act =
                 () =>
                     questionnaire.AddGroupAndMoveIfNeeded(Guid.NewGuid(), responsibleId: responsibleId, title: emptyTitle, variableName: null, rosterSizeQuestionId: null,
-                        description: null, condition: null, parentGroupId: null, isRoster: false,
+                        description: null, condition: null, hideIfDisabled:false, parentGroupId: null, isRoster: false,
                         rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             // assert
@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             {
                 // act
                 questionnaire.AddGroupAndMoveIfNeeded(Guid.NewGuid(), responsibleId: responsibleId, title: notEmptyNewTitle, variableName: null, rosterSizeQuestionId: null,
-                    description: null, condition: null, parentGroupId: null, isRoster: false,
+                    description: null, condition: null, hideIfDisabled: false, parentGroupId: null, isRoster: false,
                     rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
                 // assert
@@ -75,7 +75,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
                 // act
                 questionnaire.AddGroupAndMoveIfNeeded(Guid.NewGuid(), responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null,
-                    description: null, condition: null, parentGroupId: parentRegularGroupId, isRoster: false,
+                    description: null, condition: null, hideIfDisabled: false, parentGroupId: parentRegularGroupId, isRoster: false,
                     rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
                 // assert
@@ -92,7 +92,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             TestDelegate act =
                 () =>
                     questionnaire.AddGroupAndMoveIfNeeded(Guid.NewGuid(), responsibleId: Guid.NewGuid(), title: "Title", variableName: null, rosterSizeQuestionId: null,
-                        description: null, condition: null, parentGroupId: null, isRoster: false,
+                        description: null, condition: null, hideIfDisabled: false, parentGroupId: null, isRoster: false,
                         rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
@@ -113,7 +113,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             TestDelegate act =
                 () =>
                     questionnaire.AddGroupAndMoveIfNeeded(Guid.NewGuid(), responsibleId: readOnlyUser, title: "Title", variableName: null, rosterSizeQuestionId: null,
-                        description: null, condition: null, parentGroupId: null, isRoster: false,
+                        description: null, condition: null, hideIfDisabled: false, parentGroupId: null, isRoster: false,
                         rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
             // assert
             var domainException = Assert.Throws<QuestionnaireException>(act);
@@ -142,7 +142,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 () =>
                     questionnaire.AddGroupAndMoveIfNeeded(
                         groupId: Guid.NewGuid(),
-                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, condition: expression,
+                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, 
+                        condition: expression, hideIfDisabled: false,
                         parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             // assert
@@ -172,7 +173,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 () =>
                     questionnaire.AddGroupAndMoveIfNeeded(
                         groupId: Guid.NewGuid(),
-                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, condition: expression,
+                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, 
+                        condition: expression, hideIfDisabled: false,
                         parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             // assert
@@ -202,7 +204,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 () =>
                     questionnaire.AddGroupAndMoveIfNeeded(
                         groupId: Guid.NewGuid(),
-                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, condition: expression,
+                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, 
+                        condition: expression, hideIfDisabled: false,
                         parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             // assert
@@ -234,7 +237,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 () =>
                     questionnaire.AddGroupAndMoveIfNeeded(
                         groupId: Guid.NewGuid(),
-                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, condition: expression,
+                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null,
+                        condition: expression, hideIfDisabled: false,
                         parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             // assert

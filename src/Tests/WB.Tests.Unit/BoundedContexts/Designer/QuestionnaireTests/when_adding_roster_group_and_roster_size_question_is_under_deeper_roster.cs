@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.AddGroupAndMoveIfNeeded(groupId, responsibleId, "title",null, rosterSizeQuestionId, null, null, chapterId, true,
+                questionnaire.AddGroupAndMoveIfNeeded(groupId, responsibleId, "title",null, rosterSizeQuestionId, null, null, false, chapterId, true,
                     RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null));
 
         It should_throw_QuestionnaireException = () =>

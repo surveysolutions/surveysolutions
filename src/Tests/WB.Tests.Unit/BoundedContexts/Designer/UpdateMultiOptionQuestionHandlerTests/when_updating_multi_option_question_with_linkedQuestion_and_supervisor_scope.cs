@@ -47,6 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                     variableLabel: null,
                     scope: QuestionScope.Supervisor,
                     enablementCondition: enablementCondition,
+                    hideIfDisabled: false,
                     instructions: instructions,
                     responsibleId: responsibleId,
                     options: null,
