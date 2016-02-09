@@ -10,18 +10,14 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
         public UpdateGpsCoordinatesQuestionCommand(
             Guid questionnaireId,
             Guid questionId,
-            string title,
-            string variableName, string variableLabel,
+            Guid responsibleId,
+            CommonQuestionParameters commonQuestionParameters,
             bool isPreFilled,
-            string enablementCondition,
             string validationExpression,
             string validationMessage,
-            string instructions,
-            Guid responsibleId,
             QuestionScope scope)
-            : base(
-                responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, enablementCondition: enablementCondition, instructions: instructions,variableLabel:variableLabel)
+            : base(responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId,
+                  commonQuestionParameters: commonQuestionParameters)
         {
             this.Scope = scope;
             this.ValidationExpression = validationExpression;

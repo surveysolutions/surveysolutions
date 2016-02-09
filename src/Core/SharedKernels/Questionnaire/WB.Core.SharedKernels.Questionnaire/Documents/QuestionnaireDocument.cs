@@ -229,11 +229,12 @@ namespace Main.Core.Documents
             }
         }
 
-        public void UpdateGroup(Guid groupId, string title, string variableName, string description, string conditionExpression)
+        public void UpdateGroup(Guid groupId, string title, string variableName, string description, string conditionExpression, bool hideIfDisabled)
         {
             this.UpdateGroup(groupId, group =>
             {
                 @group.ConditionExpression = conditionExpression;
+                @group.HideIfDisabled = hideIfDisabled;
                 @group.Description = description;
                 @group.VariableName = variableName;
                 @group.Update(title);

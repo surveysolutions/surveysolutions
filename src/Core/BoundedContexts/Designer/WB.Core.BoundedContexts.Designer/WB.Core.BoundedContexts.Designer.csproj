@@ -144,6 +144,7 @@
     <Compile Include="Commands\CommandUtils.cs" />
     <Compile Include="Commands\Questionnaire\Base\AbstractUpdateQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\AbstractQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Base\CommonQuestionParameters.cs" />
     <Compile Include="Commands\Questionnaire\Base\FullGroupDataCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\GroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\QuestionCommand.cs" />
