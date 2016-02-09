@@ -152,5 +152,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             return new InterviewExpressionStateForPreloading();
         }
+
+        public void ApplyFailedValidations(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
+        {
+        }
     }
 }

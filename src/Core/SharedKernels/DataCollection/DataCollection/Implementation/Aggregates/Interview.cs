@@ -206,7 +206,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             this.ExpressionProcessorStatePrototype.DeclareAnswersValid(@event.InterviewData.ValidAnsweredQuestions.Select(validAnsweredQuestion => new Identity(validAnsweredQuestion.Id, validAnsweredQuestion.InterviewItemRosterVector)));
+            //should call this.ExpressionProcessorStatePrototype.ApplyFailedValidations(...) when sync is ready
             this.ExpressionProcessorStatePrototype.DeclareAnswersInvalid(@event.InterviewData.InvalidAnsweredQuestions.Select(validAnsweredQuestion => new Identity(validAnsweredQuestion.Id, validAnsweredQuestion.InterviewItemRosterVector)));
+
             this.ExpressionProcessorStatePrototype.DisableQuestions(@event.InterviewData.DisabledQuestions.Select(validAnsweredQuestion => new Identity(validAnsweredQuestion.Id, validAnsweredQuestion.InterviewItemRosterVector)));
             this.ExpressionProcessorStatePrototype.DisableGroups(@event.InterviewData.DisabledGroups.Select(validAnsweredQuestion => new Identity(validAnsweredQuestion.Id, validAnsweredQuestion.InterviewItemRosterVector)));
 
@@ -395,7 +397,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(AnswersDeclaredInvalid @event)
         {
             this.interviewState.DeclareAnswersInvalid(@event.FailedValidationConditions.Keys);
-            this.ExpressionProcessorStatePrototype.DeclareAnswersInvalid(@event.FailedValidationConditions.Keys);
+
+            if (@event.FailedValidationConditions.Count > 0)
+            {
+                this.ExpressionProcessorStatePrototype.ApplyFailedValidations(@event.FailedValidationConditions);
+            }
+            else //handling of old events
+            {
+                this.ExpressionProcessorStatePrototype.DeclareAnswersInvalid(@event.FailedValidationConditions.Keys);
+            }
         }
 
         public virtual void Apply(GroupsDisabled @event)

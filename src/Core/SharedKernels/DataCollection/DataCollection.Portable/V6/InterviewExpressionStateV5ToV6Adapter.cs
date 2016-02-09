@@ -172,5 +172,11 @@ namespace WB.Core.SharedKernels.DataCollection.V6
         {
             this.interviewExpressionState.SetInterviewProperties(properties);
         }
+
+        public void ApplyFailedValidations(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
+        {
+            //map to old 
+            this.interviewExpressionState.DeclareAnswersInvalid(failedValidationConditions.Keys);
+        }
     }
 }
