@@ -7,7 +7,14 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     public class AnswersDeclaredInvalid : InterviewPassiveEvent
     {
         public Identity[] Questions { get; protected set; }
-        public IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> FailedValidationConditions { get; private set; }
+
+        public IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> FailedValidationConditions { get; protected set; }
+
+        protected AnswersDeclaredInvalid()
+        {
+            this.Questions = new Identity[] {};
+            this.FailedValidationConditions = new FailedValidationConditionsDictionary();
+        }
 
         public AnswersDeclaredInvalid(Identity[] questions)
         {
@@ -19,13 +26,13 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
                 dictionary.Add(question, new List<FailedValidationCondition>());
             }
 
-            this.FailedValidationConditions = dictionary;
+            this.FailedValidationConditions = new FailedValidationConditionsDictionary(dictionary);
         }
 
         public AnswersDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
         {
             this.Questions = failedValidationConditions.Keys.ToArray();
-            this.FailedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>(failedValidationConditions);
+            this.FailedValidationConditions = new FailedValidationConditionsDictionary(failedValidationConditions);
         }
     }
 }
