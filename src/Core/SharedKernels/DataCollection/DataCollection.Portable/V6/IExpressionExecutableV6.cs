@@ -14,5 +14,6 @@ namespace WB.Core.SharedKernels.DataCollection.V6
         new IExpressionExecutableV6 CreateChildRosterInstance(Guid rosterId, decimal[] rosterVector, Identity[] rosterIdentityKey);
 
         ValidityChanges ProcessValidationExpressions();
+        void ApplyFailedValidations(Guid questionId, IReadOnlyList<FailedValidationCondition> failedValidations);
     }
 }
