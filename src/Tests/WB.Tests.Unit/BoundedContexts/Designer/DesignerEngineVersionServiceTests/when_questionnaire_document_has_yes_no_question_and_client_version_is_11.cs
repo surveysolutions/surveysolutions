@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
-
 using Machine.Specifications;
-
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-
 using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.DesignerEngineVersionServiceTests
@@ -16,15 +13,14 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.DesignerEngineVersionServiceTes
         {
             questionnaire = Create.QuestionnaireDocument(questionnaireId,
                 Create.Group(groupId: groupId, children: new[]
-                                                         {
-                                                             Create.MultyOptionsQuestion(id: questionId, variable: "yesno", yesNoView: true,
-                                                                 options: new List<Answer>
-                                                                          {
-                                                                              Create.Option(value: "1", text: "option 1"),
-                                                                              Create.Option(value: "2", text: "option 2"),
-                                                                          })
-                                                         })
-                );
+                {
+                    Create.MultyOptionsQuestion(id: questionId, variable: "yesno", yesNoView: true, options: new List<Answer>
+                    {
+                        Create.Option(value: "1", text: "option 1"),
+                        Create.Option(value: "2", text: "option 2"),
+                    })
+                })
+            );
 
             designerEngineVersionService = Create.DesignerEngineVersionService();
         };

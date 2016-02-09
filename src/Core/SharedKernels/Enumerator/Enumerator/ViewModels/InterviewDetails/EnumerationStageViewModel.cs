@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -59,6 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private readonly IMvxMessenger messenger;
         readonly IUserInterfaceStateService userInterfaceStateService;
+        private IMvxMainThreadDispatcher mvxMainThreadDispatcher;
 
         private readonly object itemsListUpdateOnUILock = new object();
 
@@ -78,7 +80,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             ISubstitutionService substitutionService,
             ILiteEventRegistry eventRegistry,
             IMvxMessenger messenger,
-            IUserInterfaceStateService userInterfaceStateService)
+            IUserInterfaceStateService userInterfaceStateService,
+            IMvxMainThreadDispatcher mvxMainThreadDispatcher)
         {
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.questionnaireRepository = questionnaireRepository;
@@ -88,6 +91,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.eventRegistry = eventRegistry;
             this.messenger = messenger;
             this.userInterfaceStateService = userInterfaceStateService;
+            this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
         }
 
         public bool ShouldRemoveDisabledEntities => true;
@@ -180,7 +184,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 {
                     interviewItemViewModel.Dispose();
                 }
-                this.InvokeOnMainThread(() => this.Items.Reset(interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<dynamic>())));
+                this.mvxMainThreadDispatcher.RequestMainThreadAction(() => this.Items.Reset(interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<dynamic>())));
             }
             finally
             {
@@ -237,7 +241,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void AddMissingEntities()
         {
-            this.InvokeOnMainThread(() =>
+            this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
             {
                 lock (this.itemsListUpdateOnUILock)
                 {
@@ -287,7 +291,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void RemoveEntities(HashSet<Identity> identitiesToRemove)
         {
-            this.InvokeOnMainThread(() =>
+            this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
             {
                 lock (this.itemsListUpdateOnUILock)
                 {
@@ -320,7 +324,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             InvokeOnMainThread(() =>
             {
-                var readOnlyItems = Items.ToArray();
+                var readOnlyItems = this.Items.ToArray();
 
                 for (int i = 0; i < readOnlyItems.Length; i++)
                 {
