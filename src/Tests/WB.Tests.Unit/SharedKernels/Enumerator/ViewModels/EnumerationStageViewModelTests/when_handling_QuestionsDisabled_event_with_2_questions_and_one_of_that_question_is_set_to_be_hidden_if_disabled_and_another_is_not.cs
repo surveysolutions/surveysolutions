@@ -17,7 +17,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
         Establish context = () =>
         {
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaire
-                => questionnaire.ShouldBeHiddenIfDisabled(disabledAndHideIfDisabledQuestion.Id) == true);
+                => questionnaire.ShouldBeHiddenIfDisabled(disabledAndHideIfDisabledQuestion.Id) == true
+                && questionnaire.ShouldBeHiddenIfDisabled(disabledAndNotHideIfDisabledQuestion.Id) == false);
 
             IStatefulInterviewRepository interviewRepository = Setup.StatefulInterviewRepository(
                 Mock.Of<IStatefulInterview>(_ => _.QuestionnaireIdentity == questionnaireIdentity));
