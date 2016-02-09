@@ -154,6 +154,7 @@ namespace WB.UI.Interviewer
             kernel.Bind<ISynchronizationService>().To<SynchronizationService>();
 
             kernel.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
+            kernel.Bind<IQuestionnaireContentVersionProvider>().To<QuestionnaireContentVersionProvider>().InSingletonScope();
 
             this.InitDashboard(kernel, cqrsEventBus);
             return kernel;

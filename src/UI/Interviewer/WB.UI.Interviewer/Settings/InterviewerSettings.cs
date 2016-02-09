@@ -20,6 +20,7 @@ namespace WB.UI.Interviewer.Settings
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly ISyncProtocolVersionProvider syncProtocolVersionProvider;
+        private readonly IQuestionnaireContentVersionProvider questionnaireContentVersionProvider;
         private readonly IFileSystemAccessor fileSystemAccessor;
         
         private readonly string backupFolder;
@@ -28,6 +29,7 @@ namespace WB.UI.Interviewer.Settings
         public InterviewerSettings(
             IAsyncPlainStorage<ApplicationSettingsView> settingsStorage, 
             ISyncProtocolVersionProvider syncProtocolVersionProvider, 
+            IQuestionnaireContentVersionProvider questionnaireContentVersionProvider,
             IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
             IAsyncPlainStorage<InterviewView> interviewViewRepository, 
             IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository, 
@@ -37,6 +39,7 @@ namespace WB.UI.Interviewer.Settings
         {
             this.settingsStorage = settingsStorage;
             this.syncProtocolVersionProvider = syncProtocolVersionProvider;
+            this.questionnaireContentVersionProvider = questionnaireContentVersionProvider;
             this.interviewersPlainStorage = interviewersPlainStorage;
             this.interviewViewRepository = interviewViewRepository;
             this.questionnaireViewRepository = questionnaireViewRepository;
@@ -64,7 +67,7 @@ namespace WB.UI.Interviewer.Settings
 
         public long GetSupportedQuestionnaireContentVersion()
         {
-            return 12;
+            return questionnaireContentVersionProvider.GetSupportedQuestionnaireContentVersion();
         }
 
         public string GetDeviceId()
