@@ -581,8 +581,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public bool IsQuestionLinkedToRoster(Guid linkedQuestionId)
         {
             IQuestion linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);
-            if (!linkedQuestion.LinkedToRosterId.HasValue && !linkedQuestion.LinkedToQuestionId.HasValue)
-                throw new QuestionnaireException($"Question {FormatQuestionForException(linkedQuestion)} is not linked.");
 
             return linkedQuestion.LinkedToRosterId.HasValue;
         }
