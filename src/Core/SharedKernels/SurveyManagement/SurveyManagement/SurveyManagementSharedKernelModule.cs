@@ -164,6 +164,21 @@ namespace WB.Core.SharedKernels.SurveyManagement
             CommandRegistry.Configure<Interview, CreateInterviewCreatedOnClientCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
             CommandRegistry.Configure<Interview, CreateInterviewByPrefilledQuestions>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
 
+            CommandRegistry.Configure<Interview, AnswerTextQuestionCommand>(configuration => configuration.ValidatedBy<InterviewAnswersCommandValidator>());
+            CommandRegistry.Configure<Interview, AnswerNumericIntegerQuestionCommand>(configuration => configuration.ValidatedBy<InterviewAnswersCommandValidator>());
+            CommandRegistry.Configure<Interview, AnswerNumericRealQuestionCommand>(configuration => configuration.ValidatedBy<InterviewAnswersCommandValidator>());
+            CommandRegistry.Configure<Interview, AnswerSingleOptionQuestionCommand>(configuration => configuration.ValidatedBy<InterviewAnswersCommandValidator>());
+            CommandRegistry.Configure<Interview, AnswerSingleOptionLinkedQuestionCommand>(configuration => configuration.ValidatedBy<InterviewAnswersCommandValidator>());
+            CommandRegistry.Configure<Interview, AnswerMultipleOptionsQuestionCommand>(configuration => configuration.ValidatedBy<InterviewAnswersCommandValidator>());
+            CommandRegistry.Configure<Interview, AnswerMultipleOptionsLinkedQuestionCommand>(configuration => configuration.ValidatedBy<InterviewAnswersCommandValidator>());
+            CommandRegistry.Configure<Interview, AnswerYesNoQuestion>(configuration => configuration.ValidatedBy<InterviewAnswersCommandValidator>());
+            CommandRegistry.Configure<Interview, AnswerDateTimeQuestionCommand>(configuration => configuration.ValidatedBy<InterviewAnswersCommandValidator>());
+            CommandRegistry.Configure<Interview, AnswerGeoLocationQuestionCommand>(configuration => configuration.ValidatedBy<InterviewAnswersCommandValidator>());
+            CommandRegistry.Configure<Interview, AnswerPictureQuestionCommand>(configuration => configuration.ValidatedBy<InterviewAnswersCommandValidator>());
+            CommandRegistry.Configure<Interview, AnswerQRBarcodeQuestionCommand>(configuration => configuration.ValidatedBy<InterviewAnswersCommandValidator>());
+            CommandRegistry.Configure<Interview, AnswerTextListQuestionCommand>(configuration => configuration.ValidatedBy<InterviewAnswersCommandValidator>());
+
+
             this.Bind<ISampleImportService>().To<SampleImportService>();
             this.Bind<Func<ISampleImportService>>().ToMethod(context => () => context.Kernel.Get<ISampleImportService>());
 

@@ -273,6 +273,154 @@ namespace WB.Tests.Unit
                 Guid.NewGuid(), 1);
         }
 
+        public static AnswerTextQuestionCommand AnswerTextQuestionCommand(Guid interviewId, Guid userId, string answer = "")
+        {
+            return new AnswerTextQuestionCommand(
+                interviewId: interviewId, 
+                userId: userId, 
+                questionId: Guid.NewGuid(), 
+                rosterVector: new decimal[0],
+                answerTime: DateTime.UtcNow,
+                answer: answer);
+        }
+
+        public static AnswerNumericIntegerQuestionCommand AnswerNumericIntegerQuestionCommand(Guid interviewId, Guid userId, int answer = 0)
+        {
+            return new AnswerNumericIntegerQuestionCommand(
+                interviewId: interviewId,
+                userId: userId,
+                questionId: Guid.NewGuid(),
+                rosterVector: new decimal[0],
+                answerTime: DateTime.UtcNow,
+                answer: answer);
+        }
+
+        public static AnswerNumericRealQuestionCommand AnswerNumericRealQuestionCommand(Guid interviewId, Guid userId, decimal answer = 0)
+        {
+            return new AnswerNumericRealQuestionCommand(
+                interviewId: interviewId,
+                userId: userId,
+                questionId: Guid.NewGuid(),
+                rosterVector: new decimal[0],
+                answerTime: DateTime.UtcNow,
+                answer: answer);
+        }
+
+        public static AnswerSingleOptionQuestionCommand AnswerSingleOptionQuestionCommand(Guid interviewId, Guid userId, decimal answer = 0)
+        {
+            return new AnswerSingleOptionQuestionCommand(
+                interviewId: interviewId,
+                userId: userId,
+                questionId: Guid.NewGuid(),
+                rosterVector: new decimal[0],
+                answerTime: DateTime.UtcNow,
+                selectedValue: answer);
+        }
+
+        public static AnswerSingleOptionLinkedQuestionCommand AnswerSingleOptionLinkedQuestionCommand(Guid interviewId, Guid userId, decimal[] answer = null)
+        {
+            return new AnswerSingleOptionLinkedQuestionCommand(
+                interviewId: interviewId,
+                userId: userId,
+                questionId: Guid.NewGuid(),
+                rosterVector: new decimal[0],
+                answerTime: DateTime.UtcNow,
+                selectedRosterVector: answer);
+        }
+
+        public static AnswerMultipleOptionsQuestionCommand AnswerMultipleOptionsQuestionCommand(Guid interviewId, Guid userId, decimal[] answer = null)
+        {
+            return new AnswerMultipleOptionsQuestionCommand(
+                interviewId: interviewId,
+                userId: userId,
+                questionId: Guid.NewGuid(),
+                rosterVector: new decimal[0],
+                answerTime: DateTime.UtcNow,
+                selectedValues: answer);
+        }
+
+        public static AnswerMultipleOptionsLinkedQuestionCommand AnswerMultipleOptionsLinkedQuestionCommand(Guid interviewId, Guid userId, decimal[][] answer = null)
+        {
+            return new AnswerMultipleOptionsLinkedQuestionCommand(
+                interviewId: interviewId,
+                userId: userId,
+                questionId: Guid.NewGuid(),
+                rosterVector: new decimal[0],
+                answerTime: DateTime.UtcNow,
+                selectedRosterVectors: answer);
+        }
+
+        public static AnswerYesNoQuestion AnswerYesNoQuestion(Guid interviewId, Guid userId, IEnumerable<AnsweredYesNoOption> answer = null)
+        {
+            return new AnswerYesNoQuestion(
+                interviewId: interviewId,
+                userId: userId,
+                questionId: Guid.NewGuid(),
+                rosterVector: new decimal[0],
+                answerTime: DateTime.UtcNow,
+                answeredOptions: answer);
+        }
+        
+        public static AnswerDateTimeQuestionCommand AnswerDateTimeQuestionCommand(Guid interviewId, Guid userId, DateTime answer = default(DateTime))
+        {
+            return new AnswerDateTimeQuestionCommand(
+                interviewId: interviewId,
+                userId: userId,
+                questionId: Guid.NewGuid(),
+                rosterVector: new decimal[0],
+                answerTime: DateTime.UtcNow,
+                answer: answer);
+        }
+
+        public static AnswerGeoLocationQuestionCommand AnswerGeoLocationQuestionCommand(Guid interviewId, Guid userId, double latitude = 0, 
+            double longitude = 0, double accuracy = 0, double altitude = 0, DateTimeOffset timestamp = default(DateTimeOffset))
+        {
+            return new AnswerGeoLocationQuestionCommand(
+                interviewId: interviewId,
+                userId: userId,
+                questionId: Guid.NewGuid(),
+                rosterVector: new decimal[0],
+                answerTime: DateTime.UtcNow,
+                longitude: longitude,
+                latitude: latitude,
+                accuracy: accuracy,
+                altitude: altitude,
+                timestamp: timestamp);
+        }
+
+        public static AnswerPictureQuestionCommand AnswerPictureQuestionCommand(Guid interviewId, Guid userId, string answer = "")
+        {
+            return new AnswerPictureQuestionCommand(
+                interviewId: interviewId,
+                userId: userId,
+                questionId: Guid.NewGuid(),
+                rosterVector: new decimal[0],
+                answerTime: DateTime.UtcNow,
+                pictureFileName: answer);
+        }
+
+        public static AnswerQRBarcodeQuestionCommand AnswerQRBarcodeQuestionCommand(Guid interviewId, Guid userId, string answer = "")
+        {
+            return new AnswerQRBarcodeQuestionCommand(
+                interviewId: interviewId,
+                userId: userId,
+                questionId: Guid.NewGuid(),
+                rosterVector: new decimal[0],
+                answerTime: DateTime.UtcNow,
+                answer: answer);
+        }
+
+        public static AnswerTextListQuestionCommand AnswerTextListQuestionCommand(Guid interviewId, Guid userId, Tuple<decimal, string>[] answer = null)
+        {
+            return new AnswerTextListQuestionCommand(
+                interviewId: interviewId,
+                userId: userId,
+                questionId: Guid.NewGuid(),
+                rosterVector: new decimal[0],
+                answerTime: DateTime.UtcNow,
+                answers: answer);
+        }
+
         public static CreateInterviewControllerCommand CreateInterviewControllerCommand()
         {
             return new CreateInterviewControllerCommand()
