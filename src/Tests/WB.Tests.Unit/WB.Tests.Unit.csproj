@@ -367,6 +367,9 @@
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_single_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_real_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_text_question.cs" />
+    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_hidden_question.cs" />
+    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_linked_on_roster_question.cs" />
+    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_yes_no_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_linked_question_referencing_on_group_which_is_not_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_linked_question_referencing_on_not_existing_roster.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_that_is_linked_and_referencing_group_is_not_roster.cs" />
@@ -790,6 +793,7 @@
     <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_load_quantity_report_for_interviewers_where_one_out_of_three_periods_is_in_future.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\SampleUploadViewFactoryTests\SampleUploadViewFactoryNUnitTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_interviewers_where_one_out_of_three_periods_is_in_future.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\InterviewerQuestionnairesControllerTests\when_getting_questionnaire_and_interviewer_content_version_is_less_then_in_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\InterviewersViewFactoryTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_hq_filtering_by_archived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_supervisor_filtering.cs" />
@@ -2307,6 +2311,7 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <Compile Include="Create.Controller.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
