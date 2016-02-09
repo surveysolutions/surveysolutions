@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerT
         Because of = () =>            
                 questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: "title",
                     variableName: "qr_barcode_question",
-                variableLabel: null, enablementCondition: condition, instructions: instructions,
+                variableLabel: null, enablementCondition: condition, hideIfDisabled: hideIfDisabled, instructions: instructions,
                     responsibleId: responsibleId, scope: QuestionScope.Interviewer, 
                     validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>
                     {
@@ -69,6 +69,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerT
             eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
                 .EnablementCondition.ShouldEqual(condition);
 
+        It should_raise_QRBarcodeQuestionAdded_event_with_hideIfDisabled_specified = () =>
+            eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
+                .HideIfDisabled.ShouldEqual(hideIfDisabled);
+
         It should_raise_QRBarcodeQuestionAdded_event_with_instructions_specified = () =>
             eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
                 .Instructions.ShouldEqual(instructions);
@@ -90,6 +94,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerT
         private static string title = "title";
         private static string instructions = "intructions";
         private static string condition = "condition";
+        private static bool hideIfDisabled = true;
         private static string validation = "validation";
         private static string validationMessage = "validationMessage";
     }

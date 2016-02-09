@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
         Because of =
             () =>
-                questionnaire.UpdateGroup(groupToUpdateId, responsibleId, "title", null, null, "", "", false, RosterSizeSourceType.Question, null, null);
+                questionnaire.UpdateGroup(groupToUpdateId, responsibleId, "title", null, null, "", "", false, false, RosterSizeSourceType.Question, null, null);
 
         It should_raise_GroupStoppedBeingARoster_event_with_groupToUpdateId_specified = () =>
             eventContext.GetSingleEvent<GroupStoppedBeingARoster>().GroupId.ShouldEqual(groupToUpdateId);

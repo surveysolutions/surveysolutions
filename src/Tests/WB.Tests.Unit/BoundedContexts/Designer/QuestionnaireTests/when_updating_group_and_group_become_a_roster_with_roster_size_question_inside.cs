@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
         Because of = () =>
                 questionnaire.UpdateGroup(groupId: groupId, responsibleId: responsibleId, title: "title", variableName: null, rosterSizeQuestionId: rosterSizeQuestionId,
-                    description: null, condition: null, isRoster: true, rosterSizeSource: RosterSizeSourceType.Question,
+                    description: null, condition: null, hideIfDisabled: false, isRoster: true, rosterSizeSource: RosterSizeSourceType.Question,
                     rosterFixedTitles: null, rosterTitleQuestionId: null);
 
         It should_raise_GroupBecameARoster_event = () =>

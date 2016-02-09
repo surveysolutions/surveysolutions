@@ -39,6 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                 isPreFilled: isPreFilled,
                 scope: scope,
                 enablementCondition: enablementCondition,
+                hideIfDisabled: false,
                 instructions: instructions,
                 responsibleId: responsibleId,
                 options: options,

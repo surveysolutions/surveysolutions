@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         };
 
         Because of = () => questionnaire.AddGroupAndMoveIfNeeded(groupId: groupId, responsibleId: responsibleId, title: title, variableName: null, rosterSizeQuestionId: null, description: description,
-                    condition: condition, parentGroupId: parentRosterId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, index: index);
+                    condition: condition, hideIfDisabled: hideIfDisabled, parentGroupId: parentRosterId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, index: index);
 
         Cleanup stuff = () =>
         {
@@ -43,6 +43,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         It should_raise_NewGroupAdded_event_with_ConditionExpression_specified = () =>
             eventContext.GetSingleEvent<NewGroupAdded>()
                 .ConditionExpression.ShouldEqual(condition);
+
+        It should_raise_NewGroupAdded_event_with_HideIfDisabled_specified = () =>
+            eventContext.GetSingleEvent<NewGroupAdded>()
+                .HideIfDisabled.ShouldEqual(hideIfDisabled);
 
         It should_raise_NewGroupAdded_event_with_Title_specified = () =>
             eventContext.GetSingleEvent<NewGroupAdded>()
@@ -77,6 +81,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         private static Guid parentRosterId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static string condition = "some condition";
+        private static bool hideIfDisabled = true;
         private static string title = "title";
         private static string description = "description";
         private static EventContext eventContext;

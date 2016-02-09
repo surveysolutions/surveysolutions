@@ -33,9 +33,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                     questionId: questionId,
                     title: "title",
                     variableName: "var",
-                variableLabel: null,
+                    variableLabel: null,
                     scope: QuestionScope.Interviewer,
                     enablementCondition: null,
+                    hideIfDisabled: false,
                     instructions: null,
                     responsibleId: responsibleId,
                     options: new Option[]

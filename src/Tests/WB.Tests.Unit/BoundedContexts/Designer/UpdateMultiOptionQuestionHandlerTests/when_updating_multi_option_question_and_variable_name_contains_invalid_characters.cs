@@ -33,9 +33,10 @@ questionType: QuestionType.QRBarcode
                     questionId: questionId,
                     title: title,
                     variableName: variableNameWithInvalidCharacters,
-                variableLabel: null,
+                    variableLabel: null,
                     scope: scope,
                     enablementCondition: enablementCondition,
+                    hideIfDisabled: false,
                     instructions: instructions,
                     responsibleId: responsibleId
                     , options: options,

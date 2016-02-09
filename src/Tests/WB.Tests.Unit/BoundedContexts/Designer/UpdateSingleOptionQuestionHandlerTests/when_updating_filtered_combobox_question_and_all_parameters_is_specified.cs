@@ -47,6 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                 isPreFilled: isPreFilled,
                 scope: scope,
                 enablementCondition: enablementCondition,
+                hideIfDisabled: hideIfDisabled,
                 instructions: instructions,
                 responsibleId: responsibleId,
                 options: new_options,
@@ -86,6 +87,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
         It should_raise_QuestionChanged_event_with_condition_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
                 .ConditionExpression.ShouldEqual(enablementCondition);
+
+        It should_raise_QuestionChanged_event_with_hideIfDisabled_specified = () =>
+            eventContext.GetSingleEvent<QuestionChanged>()
+                .HideIfDisabled.ShouldEqual(hideIfDisabled);
 
         It should_raise_QuestionChanged_event_with_instructions_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
@@ -135,6 +140,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
         private static bool isPreFilled = false;
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static string enablementCondition = "some condition";
+        private static bool hideIfDisabled = true;
         private static string validationExpression = "some validation";
         private static string validationMessage = "validation message";
         private static Option[] old_options = new Option[] { new Option(Guid.NewGuid(), "1", "Option old 1"), new Option(Guid.NewGuid(), "2", "Option old 2"), };
