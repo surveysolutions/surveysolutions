@@ -385,7 +385,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 evnt.Payload.GroupPublicKey,
                 evnt.Payload.GroupText, evnt.Payload.VariableName,
                 evnt.Payload.Description,
-                evnt.Payload.ConditionExpression);
+                evnt.Payload.ConditionExpression,
+                evnt.Payload.HideIfDisabled);
 
             this.UpdateQuestionnaire(evnt, item);
         }
