@@ -1,5 +1,5 @@
-﻿using Cirrious.CrossCore;
-using Moq;
+﻿using Moq;
+using MvvmCross.Platform;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
