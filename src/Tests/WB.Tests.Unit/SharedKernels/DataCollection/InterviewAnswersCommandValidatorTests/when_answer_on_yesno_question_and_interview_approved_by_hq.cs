@@ -1,5 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -18,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewAnswersCommandVali
 
         Because of = () => exception = Catch.Only<InterviewException>(
             () => commandValidator.Validate(interview,
-                    Create.AnswerYesNoQuestion(interviewId: interviewId, userId: responsibleId)));
+                    Create.AnswerYesNoQuestion(interviewId: interviewId, userId: responsibleId, answer: new AnsweredYesNoOption[0])));
 
         It should_raise_interviewException = () =>
             exception.ShouldNotBeNull();
