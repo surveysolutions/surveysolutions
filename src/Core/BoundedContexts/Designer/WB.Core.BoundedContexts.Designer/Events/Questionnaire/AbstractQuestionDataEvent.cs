@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.SharedKernels.NonConficltingNamespace;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
 {
@@ -10,7 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         {
         }
 
-        public AbstractQuestionDataEvent(Guid responsibleId, string conditionExpression, bool featured, string instructions, bool capital, Guid publicKey, string questionText, QuestionScope questionScope, string stataExportCaption, string variableLabel, string validationExpression, string validationMessage) : base(responsibleId)
+        public AbstractQuestionDataEvent(Guid responsibleId, string conditionExpression, bool featured, string instructions, bool capital, Guid publicKey, string questionText, QuestionScope questionScope, string stataExportCaption, string variableLabel, string validationExpression, string validationMessage, IList<ValidationCondition> validationConditions) : base(responsibleId)
         {
             this.ConditionExpression = conditionExpression;
             this.Featured = featured;
@@ -21,8 +25,9 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
             this.QuestionScope = questionScope;
             this.StataExportCaption = stataExportCaption;
             this.VariableLabel = variableLabel;
-            this.ValidationExpression = validationExpression;
-            this.ValidationMessage = validationMessage;
+
+            this.ValidationConditions = validationConditions ?? new List<ValidationCondition>();
+            this.ValidationConditions = this.ValidationConditions.ConcatWithOldConditionIfNotEmpty(validationExpression, validationMessage);
         }
 
         public string ConditionExpression { get; private set; }
@@ -34,7 +39,11 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         public QuestionScope QuestionScope { get; private set; }
         public string StataExportCaption { get; private set; }
         public string VariableLabel { get; private set; }
+        [Obsolete("KP-6647")]
         public string ValidationExpression { get; private set; }
+        [Obsolete("KP-6647")]
         public string ValidationMessage { get; private set; }
+
+        public IList<ValidationCondition> ValidationConditions { get; set; }
     }
 }

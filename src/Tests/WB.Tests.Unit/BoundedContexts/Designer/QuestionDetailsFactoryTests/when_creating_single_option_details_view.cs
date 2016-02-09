@@ -78,10 +78,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionDetailsFactoryTests
             questionView.Title.ShouldEqual(title);
 
         It should_set_ValidationExpressiont_in_validationExpression = () =>
-            questionView.ValidationExpression.ShouldEqual(validationExpression);
+            questionView.ValidationConditions.First().Expression.ShouldEqual(validationExpression);
 
         It should_set_ValidationMessaget_in_validationMessage = () =>
-            questionView.ValidationMessage.ShouldEqual(validationMessage);
+            questionView.ValidationConditions.First().Message.ShouldEqual(validationMessage);
 
         It should_set_IsFilteredCombobox_to_true = () =>
            questionView.IsFilteredCombobox.ShouldEqual(isFilteredCombobox);

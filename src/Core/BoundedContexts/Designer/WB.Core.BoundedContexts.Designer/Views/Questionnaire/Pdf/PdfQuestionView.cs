@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
@@ -14,23 +15,25 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public PdfQuestionView()
         {
             this.Answers = new List<PdfAnswerView>();
+            this.ValidationConditions = new List<ValidationCondition>();
         }
 
         public PdfQuestionType QuestionType { get; set; }
 
         public List<PdfAnswerView> Answers { get; set; }
 
-        public string GetReadableValidationExpression()
+        public string GetReadableValidationExpression(ValidationCondition validationCondition)
         {
-            if (string.IsNullOrWhiteSpace(this.ValidationExpression))
+            if (string.IsNullOrWhiteSpace(validationCondition.Expression))
             {
                 return null;
             }
 
-            return this.ReplaceGuidsWithQuestionNumbers(this.ValidationExpression);
+            return this.ReplaceGuidsWithQuestionNumbers(validationCondition.Expression);
         }
 
-        public string ValidationExpression { get; set; }
+
+        public IList<ValidationCondition> ValidationConditions { get; set; } 
 
         public string GetReadableConditionExpression()
         {

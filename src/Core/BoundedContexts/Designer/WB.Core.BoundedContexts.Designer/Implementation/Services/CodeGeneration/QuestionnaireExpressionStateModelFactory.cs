@@ -86,17 +86,34 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         false,
                         question.VariableName));
                 }
-
-                if (!string.IsNullOrWhiteSpace(question.Validation))
+                //old storage(backward compatibility)
+                /*if (!string.IsNullOrWhiteSpace(question.Validation))
                 {
-                    methodModels.Add(ExpressionLocation.QuestionValidation(question.Id).Key, new ConditionDescriptionModel(
-                        question.ParentScopeTypeName,
-                        question.ValidationMethodName,
-                        codeGenerationSettings.Namespaces,
-                        question.Validation,
-                        true,
-                        question.VariableName));
+                    methodModels.Add(ExpressionLocation.QuestionValidation(question.Id, null).Key,
+                        new ConditionDescriptionModel(
+                            question.ParentScopeTypeName,
+                            question.ValidationMethodName,
+                            codeGenerationSettings.Namespaces,
+                            question.Validation,
+                            true,
+                            question.VariableName));
+                }*/
+                
+                foreach (var validation in question.ValidationExpressions)
+                {
+                    if (!string.IsNullOrWhiteSpace(validation.ValidationExpression))
+                        {
+                            methodModels.Add(ExpressionLocation.QuestionValidation(question.Id, validation.Order).Key,
+                                new ConditionDescriptionModel(
+                                    question.ParentScopeTypeName,
+                                    validation.ValidationMethodName,
+                                    codeGenerationSettings.Namespaces,
+                                    validation.ValidationExpression,
+                                    true,
+                                    validation.VariableName));
+                        }
                 }
+                
             }
 
             foreach (GroupTemplateModel group in questionnaireTemplate.AllGroups.Where(x => !string.IsNullOrWhiteSpace(x.Condition)))
@@ -368,7 +385,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 ? childAsIQuestion.StataExportCaption
                 : "__" + childAsIQuestion.PublicKey.FormatGuid();
 
-            var validation = this.macrosSubstitutionService.InlineMacros(childAsIQuestion.ValidationExpression, questionnaireDoc.Macros.Values);
+            //var validation = this.macrosSubstitutionService.InlineMacros(childAsIQuestion.ValidationExpression, questionnaireDoc.Macros.Values);
+            var validationConditions = new List<ValidationExpressionModel>();
+
+            for (int i = 0; i < childAsIQuestion.ValidationConditions.Count; i++)
+                {
+                    validationConditions.Add(new ValidationExpressionModel(
+                        this.macrosSubstitutionService.InlineMacros(childAsIQuestion.ValidationConditions[i].Expression, questionnaireDoc.Macros.Values),
+                        varName,
+                        i));
+                }
+            
             var condition = childAsIQuestion.CascadeFromQuestionId.HasValue
                 ? this.GetConditionForCascadingQuestion(questionnaireDoc, childAsIQuestion.PublicKey)
                 : this.macrosSubstitutionService.InlineMacros(childAsIQuestion.ConditionExpression, questionnaireDoc.Macros.Values);
@@ -378,10 +405,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 Id = childAsIQuestion.PublicKey,
                 VariableName = varName,
                 Condition = condition,
-                Validation = validation,
+                //Validation = validation,
                 TypeName = GenerateQuestionTypeName(childAsIQuestion),
                 RosterScopeName = rosterScopeName,
-                ParentScopeTypeName = parentScopeTypeName
+                ParentScopeTypeName = parentScopeTypeName,
+                ValidationExpressions = validationConditions
             };
 
             if (childAsIQuestion.QuestionType == QuestionType.MultyOption && childAsIQuestion is IMultyOptionsQuestion)

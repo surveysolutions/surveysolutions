@@ -5,6 +5,8 @@ using Main.Core.Entities;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
 {
@@ -43,7 +45,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 data.MaxAnswerCount,
                 data.IsFilteredCombobox,
                 data.CascadeFromQuestionId,
-                data.YesNoView);
+                data.YesNoView,
+                data.ValidationConditions);
 
             UpdateAnswerList(data.Answers, q, data.LinkedToQuestionId);
 
@@ -142,7 +145,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             int? masAnswerCount,
             bool? isFilteredCombobox,
             Guid? cascadeFromQuestionId,
-            bool? yesNoView)
+            bool? yesNoView,
+            IList<ValidationCondition> validationConditions)
         {
             question.QuestionType = questionType;
             question.QuestionScope = questionScope;
@@ -160,6 +164,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             question.LinkedToRosterId = linkedToRosterId;
             question.IsFilteredCombobox = isFilteredCombobox;
             question.CascadeFromQuestionId = cascadeFromQuestionId;
+            question.ValidationConditions = validationConditions;
 
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion != null)

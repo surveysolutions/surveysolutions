@@ -48,7 +48,14 @@
     <h1>Validation conditions</h1>
     foreach (var question in this.Model.GetQuestionsWithValidation()) {
         <p id="@("v" + question.ItemNumber)">
-            <a href="#@("vq" + question.ItemNumber)">[v @(question.ItemNumber)]</a>: @question.GetReadableValidationExpression()
+            <a href="#@("vq" + question.ItemNumber)">[v @(question.ItemNumber)]</a>:
+            <dl>
+                @foreach (var validationCondition in question.ValidationConditions)
+                {
+                    <dt>@question.GetReadableValidationExpression(validationCondition)</dt>
+                    <dd>@validationCondition.Message</dd>
+                }
+            </dl>
         </p>
     }
 }

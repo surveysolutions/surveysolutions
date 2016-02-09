@@ -40,13 +40,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.CascadigOpti
             QuestionScope.Interviewer,
             null,
             null,
-            null,
-            null,
             actorId,
             new Option[]{}, 
             null,
             false,
-            cascadeFromQuestionId: Guid.NewGuid()));
+            cascadeFromQuestionId: Guid.NewGuid(), validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
 
         It should_not_allow_cascades_from_non_existing_question = () =>
         {

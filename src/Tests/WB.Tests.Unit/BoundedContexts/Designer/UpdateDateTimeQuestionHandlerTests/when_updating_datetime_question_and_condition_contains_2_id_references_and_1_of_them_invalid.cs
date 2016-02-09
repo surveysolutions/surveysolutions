@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -7,6 +8,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
 using It = Machine.Specifications.It;
 
@@ -23,16 +25,17 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateDateTimeQuestionHandlerTe
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId, expressionProcessor: expressionProcessor);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.Apply(Create.Event.NumericQuestionAdded(publicKey : existingQuestionId, groupPublicKey : chapterId ));
-            questionnaire.Apply(new QRBarcodeQuestionAdded()
-            {
-                QuestionId = questionId,
-                ParentGroupId = chapterId,
-                Title = "old title",
-                VariableName = "old_variable_name",
-                Instructions = "old instructions",
-                EnablementCondition = "old condition",
-                ResponsibleId = responsibleId
-            });
+            questionnaire.Apply(
+                Create.Event.NewQuestionAdded(
+                    publicKey: questionId,
+                    groupPublicKey: chapterId,
+                    questionText: "old title",
+                    stataExportCaption: "old_variable_name",
+                    instructions: "old instructions",
+                    conditionExpression: "old condition",
+                    responsibleId: responsibleId,
+                    questionType: QuestionType.QRBarcode
+            ));
         };
 
         Because of = () =>
@@ -45,11 +48,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateDateTimeQuestionHandlerTe
                     isPreFilled: isPreFilled,
                     scope: scope,
                     enablementCondition: enablementCondition,
-                    validationExpression: validationExpression,
-                    validationMessage: validationMessage,
                     instructions: instructions,
-                    responsibleId: responsibleId
-                    ));
+                    responsibleId: responsibleId,
+                    validationConditions: new List<ValidationCondition>()));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
@@ -72,7 +73,5 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateDateTimeQuestionHandlerTe
         private static bool isPreFilled = false;
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static string enablementCondition = string.Format("[{0}] > 1 and [{1}] < 2", existingQuestionId, notExistingQuestionId);
-        private static string validationExpression = null;
-        private static string validationMessage = "";
     }
 }

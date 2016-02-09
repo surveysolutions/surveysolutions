@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Mo
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V2.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5.Templates;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V6.Templates;
 using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
@@ -16,10 +17,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public const string PrivateFieldsPrefix = "@__";
         public const string QuestionnaireTypeName = "QuestionnaireTopLevel";
         public const string QuestionnaireScope = "@__questionnaire_scope";
-        public const string EnablementPrefix = "IsEnabled_";
-        public const string ValidationPrefix = "IsValid_";
-        public const string IdSuffix = "_id";
-        public const string StateSuffix = "_state";
+        public const string EnablementPrefix = "IsEnabled__";
+        public const string ValidationPrefix = "IsValid__";
+        public const string IdSuffix = "__id";
+        public const string StateSuffix = "__state";
 
         private readonly QuestionnaireExpressionStateModelFactory expressionStateModelFactory;
 
@@ -49,7 +50,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             if (codeGenerationSettings.IsLookupTablesFeatureSupported)
             {
-                var lookupTablesTemplate = new LookupTablesTemplateV5(expressionStateModel.LookupTables);
+                var lookupTablesTemplate = new LookupTablesTemplateV6(expressionStateModel.LookupTables);
                 generatedClasses.Add(ExpressionLocation.LookupTables().Key, lookupTablesTemplate.TransformText());
             }
 
@@ -96,7 +97,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 {
                     ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV2(expressionStateModel).TransformText()
                 };
-            return new CodeGenerationSettings(
+
+            if (version.Major == 11)
+                return new CodeGenerationSettings(
                    additionInterfaces: new[] { "IInterviewExpressionStateV5" },
                    namespaces: new[]
                    {
@@ -112,6 +115,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             {
                 ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV5(expressionStateModel).TransformText()
             };
+
+            return new CodeGenerationSettings(
+                   additionInterfaces: new[] { "IInterviewExpressionStateV6" },
+                   namespaces: new[]
+                   {
+                        "WB.Core.SharedKernels.DataCollection.V2",
+                        "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                        "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
+                        "WB.Core.SharedKernels.DataCollection.V4",
+                        "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
+                        "WB.Core.SharedKernels.DataCollection.V5",
+                        "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions",
+                        "WB.Core.SharedKernels.DataCollection.V6"
+                   },
+                   isLookupTablesFeatureSupported: true)
+            {
+                ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV6(expressionStateModel).TransformText()
+            };
+
         }
     }
 }

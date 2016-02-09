@@ -7,6 +7,7 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandlerTests
@@ -46,14 +47,20 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                 isPreFilled: isPreFilled,
                 scope: scope,
                 enablementCondition: enablementCondition,
-                validationExpression: validationExpression,
-                validationMessage: validationMessage,
                 instructions: instructions,
                 responsibleId: responsibleId,
                 options: new_options,
                 linkedToEntityId: linkedToQuestionId,
                 isFilteredCombobox: isFilteredCombobox,
-                cascadeFromQuestionId: сascadeFromQuestionId);
+                cascadeFromQuestionId: сascadeFromQuestionId, 
+                validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>
+                {
+                    new ValidationCondition
+                    {
+                        Message = validationMessage,
+                        Expression = validationExpression
+                    }
+                });
 
         private Cleanup stuff = () =>
         {
@@ -94,11 +101,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
 
         It should_raise_QuestionChanged_event_with_validationExpression_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
-                .ValidationExpression.ShouldEqual(validationExpression);
+                .ValidationConditions.First().Expression.ShouldEqual(validationExpression);
 
         It should_raise_QuestionChanged_event_with_validationMessage_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
-                .ValidationMessage.ShouldEqual(validationMessage);
+                .ValidationConditions.First().Message.ShouldEqual(validationMessage);
 
         It should_raise_QuestionChanged_event_with_isFilteredCombobox_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()

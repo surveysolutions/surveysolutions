@@ -135,10 +135,12 @@ using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Des
 using QuestionnaireView = WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireView;
 using SynchronizationStatus = WB.Core.BoundedContexts.Supervisor.Synchronization.SynchronizationStatus;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.Synchronization.SyncStorage;
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
+using designer::WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V6.Templates;
 
 namespace WB.Tests.Unit
 {
@@ -244,6 +246,26 @@ namespace WB.Tests.Unit
                 isLookupTablesFeatureSupported: true)
             {
                 ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV5(expressionStateModel).TransformText()
+            };
+        }
+
+        public static CodeGenerationSettings CodeGenerationSettingsV6()
+        {
+            return new CodeGenerationSettings(additionInterfaces: new[] { "IInterviewExpressionStateV6" },
+                namespaces: new[]
+                {
+                    "WB.Core.SharedKernels.DataCollection.V2",
+                    "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                    "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
+                    "WB.Core.SharedKernels.DataCollection.V4",
+                    "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
+                    "WB.Core.SharedKernels.DataCollection.V5",
+                    "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions",
+                    "WB.Core.SharedKernels.DataCollection.V5"
+                },
+                isLookupTablesFeatureSupported: true)
+            {
+                ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV6(expressionStateModel).TransformText()
             };
         }
 
@@ -1479,19 +1501,6 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static IPublishedEvent<NumericQuestionAdded> NumericQuestionAddedEvent(string questionId = null,
-            string parentGroupId = null, string questionVariable = null, string questionTitle = null,
-            string questionConditionExpression = null)
-        {
-            return ToPublishedEvent(Event.NumericQuestionAdded(
-                publicKey : GetQuestionnaireItemId(questionId),
-                groupPublicKey : GetQuestionnaireItemId(parentGroupId),
-                stataExportCaption : questionVariable,
-                questionText : questionTitle,
-                conditionExpression : questionConditionExpression
-            ));
-        }
-
         public static IPublishedEvent<NumericQuestionChanged> NumericQuestionChangedEvent(string questionId,
             string questionVariable = null, string questionTitle = null, string questionConditionExpression = null)
         {
@@ -1625,20 +1634,6 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static IPublishedEvent<QRBarcodeQuestionAdded> QRBarcodeQuestionAddedEvent(string questionId = null,
-            string parentGroupId = null, string questionVariable = null, string questionTitle = null,
-            string questionConditionExpression = null)
-        {
-            return ToPublishedEvent(new QRBarcodeQuestionAdded()
-            {
-                QuestionId = GetQuestionnaireItemId(questionId),
-                ParentGroupId = GetQuestionnaireItemId(parentGroupId),
-                VariableName = questionVariable,
-                Title = questionTitle,
-                EnablementCondition = questionConditionExpression
-            });
-        }
-
         public static IPublishedEvent<QRBarcodeQuestionCloned> QRBarcodeQuestionClonedEvent(string questionId = null,
             string parentGroupId = null, string questionVariable = null, string questionTitle = null,
             string questionConditionExpression = null, string sourceQuestionId = null)
@@ -1674,6 +1669,7 @@ namespace WB.Tests.Unit
             string validationExpression = null,
             string validationMessage = null,
             QuestionType questionType = QuestionType.Text,
+            IList<ValidationCondition> validationConditions = null,
             params Answer[] answers)
         {
             return new TextQuestion("Question X")
@@ -1684,7 +1680,8 @@ namespace WB.Tests.Unit
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
-                Answers = answers.ToList()
+                Answers = answers.ToList(),
+                ValidationConditions = validationConditions ?? new List<ValidationCondition>()
             };
         }
 
@@ -1709,7 +1706,8 @@ namespace WB.Tests.Unit
         public static IPublishedEvent<QuestionCloned> QuestionClonedEvent(string questionId = null,
             string parentGroupId = null, string questionVariable = null, string questionTitle = null,
             QuestionType questionType = QuestionType.Text, string questionConditionExpression = null,
-            string sourceQuestionId = null)
+            string sourceQuestionId = null,
+            IList<ValidationCondition> validationConditions = null)
         {
             return ToPublishedEvent(new QuestionCloned(
                 publicKey : GetQuestionnaireItemId(questionId),
@@ -1741,7 +1739,8 @@ namespace WB.Tests.Unit
                 cascadeFromQuestionId: null,
                 sourceQuestionnaireId: null,
                 maxAnswerCount: null,
-                countOfDecimalPlaces: null
+                countOfDecimalPlaces: null,
+                validationConditions: validationConditions
             ));
         }
 
@@ -2182,6 +2181,23 @@ namespace WB.Tests.Unit
             return statefulInterview;
         }
 
+        public static StatefulInterview StatefulInterview(Guid? questionnaireId = null, Guid? userId = null,
+    IQuestionnaire questionnaire = null)
+        {
+            questionnaireId = questionnaireId ?? Guid.NewGuid();
+            var statefulInterview = new StatefulInterview(
+                Mock.Of<ILogger>(),
+                Mock.Of<IPlainQuestionnaireRepository>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire),
+                Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues)
+            {
+                QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, 1),
+            };
+
+            statefulInterview.Apply(new InterviewCreated(userId ?? Guid.NewGuid(), questionnaireId.Value, 1));
+
+            return statefulInterview;
+        }
+
         public static StaticText StaticText(
             Guid? staticTextId = null,
             string text = "Static Text X")
@@ -2336,20 +2352,6 @@ namespace WB.Tests.Unit
                 QuestionType = QuestionType.TextList,
                 StataExportCaption = variable
             };
-        }
-
-        public static IPublishedEvent<TextListQuestionAdded> TextListQuestionAddedEvent(string questionId = null,
-            string parentGroupId = null, string questionVariable = null, string questionTitle = null,
-            string questionConditionExpression = null)
-        {
-            return ToPublishedEvent(new TextListQuestionAdded()
-            {
-                PublicKey = GetQuestionnaireItemId(questionId),
-                GroupId = GetQuestionnaireItemId(parentGroupId),
-                StataExportCaption = questionVariable,
-                QuestionText = questionTitle,
-                ConditionExpression = questionConditionExpression
-            });
         }
 
         public static IPublishedEvent<TextListQuestionChanged> TextListQuestionChangedEvent(string questionId,

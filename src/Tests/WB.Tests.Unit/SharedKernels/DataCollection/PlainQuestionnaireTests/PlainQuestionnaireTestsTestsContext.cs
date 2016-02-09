@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using Main.Core.Documents;
 using Main.Core.Entities;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 {
@@ -18,8 +20,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                     questionId,
                     QuestionType.TextList,
                     QuestionScope.Interviewer,
-                    "",
-                    "",
                     "",
                     "",
                     "",
@@ -39,7 +39,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                     null,
                     false,
                     null,
-                    null
+                    null,
+                new List<ValidationCondition>()
             ));
         }
 
@@ -52,8 +53,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                     questionId,
                     QuestionType.SingleOption,
                     QuestionScope.Interviewer,
-                    "",
-                    "",
                     "",
                     "",
                     "",
@@ -73,7 +72,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                     null,
                     false,
                     null,
-                    null
+                    null,
+                    new List<ValidationCondition>()
             ));
         }
     }

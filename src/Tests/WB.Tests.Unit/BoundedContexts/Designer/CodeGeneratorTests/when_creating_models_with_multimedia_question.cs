@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
         {
             QuestionTemplateModel question = model.AllQuestions.Single(x => x.Id == Id.gA);
             question.VariableName.ShouldEqual("pic");
-            question.Validation.ShouldEqual("pic validation");
+            question.ValidationExpressions.FirstOrDefault().ValidationExpression.ShouldEqual("pic validation");
             question.Condition.ShouldEqual("pic condition");
             question.IsMultiOptionYesNoQuestion.ShouldBeFalse();
             question.AllMultioptionYesNoCodes.ShouldBeNull();
