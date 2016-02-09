@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
@@ -11,6 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         {
             this.SourceOfLinkedEntities = new List<DropdownQuestionView>();
             this.SourceOfSingleQuestions = new List<DropdownQuestionView>();
+            this.ValidationConditions = new List<ValidationCondition>();
         }
 
         public Guid Id { get; set; }
@@ -24,8 +26,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public string VariableName { get; set; }
         public string VariableLabel { get; set; }
         public string Title { get; set; }
-        public string ValidationExpression { get; set; }
-        public string ValidationMessage { get; set; }
+
+        public List<ValidationCondition> ValidationConditions { get; private set; }
+
         public QuestionType Type { get; set; }
         public string LinkedToEntityId { get; set; }
         public CategoricalOption[] Options { get; set; }

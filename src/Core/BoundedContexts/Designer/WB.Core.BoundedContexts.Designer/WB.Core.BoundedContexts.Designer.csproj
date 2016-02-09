@@ -79,8 +79,8 @@
       <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
@@ -177,6 +177,7 @@
     <Compile Include="Commands\Questionnaire\Question\UpdateNumericQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\AddDefaultTypeQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\UpdateTextQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateValidatableQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\RemoveSharedPersonFromQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\DeleteQuestionnaireCommand.cs" />
@@ -200,6 +201,36 @@
     <Compile Include="Events\Questionnaire\Macros\MacroDeleted.cs" />
     <Compile Include="Events\Questionnaire\Macros\MacroUpdated.cs" />
     <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\ValidationExpressionModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\InterviewExpressionStateTemplateV6.cs">
+      <DependentUpon>InterviewExpressionStateTemplateV6.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\InterviewExpressionStateTemplateV6.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\LookupTablesTemplateV6.cs">
+      <DependentUpon>LookupTablesTemplateV6.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\LookupTablesTemplateV6.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\QuestionnaireLevelTemplateV6.cs">
+      <DependentUpon>QuestionnaireLevelTemplateV6.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\QuestionnaireLevelTemplateV6.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\RosterScopeTemplateV6.cs">
+      <DependentUpon>RosterScopeTemplateV6.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\RosterScopeTemplateV6.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\SharedTemplateV6.cs">
+      <DependentUpon>SharedTemplateV6.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Implementation\Services\QuestionnaireDocumentExtensions.cs" />
     <Compile Include="Implementation\Services\ReadOnlyQuestionnaireDocument.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\CodeGenerationSettings.cs" />
@@ -322,14 +353,11 @@
     <Compile Include="Events\Questionnaire\StaticTextAdded.cs" />
     <Compile Include="Events\Questionnaire\QRBarcodeQuestionCloned.cs" />
     <Compile Include="Events\Questionnaire\QRBarcodeQuestionUpdated.cs" />
-    <Compile Include="Events\Questionnaire\QRBarcodeQuestionAdded.cs" />
     <Compile Include="Events\Questionnaire\GroupBecameARoster.cs" />
     <Compile Include="Events\Questionnaire\GroupEvent.cs" />
     <Compile Include="Events\Questionnaire\GroupStoppedBeingARoster.cs" />
     <Compile Include="Events\Questionnaire\TextListQuestionCloned.cs" />
     <Compile Include="Events\Questionnaire\TextListQuestionChanged.cs" />
-    <Compile Include="Events\Questionnaire\TextListQuestionAdded.cs" />
-    <Compile Include="Events\Questionnaire\NumericQuestionAdded.cs" />
     <Compile Include="Events\Questionnaire\NumericQuestionChanged.cs" />
     <Compile Include="Events\Questionnaire\NumericQuestionCloned.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireActiveEvent.cs" />
@@ -686,6 +714,26 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>LookupTablesTemplateV5.cs</LastGenOutput>
     </Content>
+    <Content Include="Implementation\Services\CodeGeneration\V6\Templates\LookupTablesTemplateV6.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>LookupTablesTemplateV6.cs</LastGenOutput>
+    </Content>
+    <None Include="Implementation\Services\CodeGeneration\V6\Templates\SharedTemplateV6.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>SharedTemplateV6.cs</LastGenOutput>
+    </None>
+    <None Include="Implementation\Services\CodeGeneration\V6\Templates\RosterScopeTemplateV6.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>RosterScopeTemplateV6.cs</LastGenOutput>
+    </None>
+    <None Include="Implementation\Services\CodeGeneration\V6\Templates\QuestionnaireLevelTemplateV6.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>QuestionnaireLevelTemplateV6.cs</LastGenOutput>
+    </None>
+    <None Include="Implementation\Services\CodeGeneration\V6\Templates\InterviewExpressionStateTemplateV6.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>InterviewExpressionStateTemplateV6.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\..\..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />

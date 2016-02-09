@@ -57,6 +57,8 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         bool IsValid(Identity identity);
 
+        IReadOnlyList<FailedValidationCondition> GetFailedValidationConditions(Identity questionId);
+
         bool IsEnabled(Identity entityIdentity);
 
         bool WasAnswered(Identity entityIdentity);

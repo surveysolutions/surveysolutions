@@ -285,13 +285,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public int GetMaxRosterRowCount() => Constants.MaxRosterRowCount;
 
-        public bool IsCustomValidationDefined(Guid questionId)
-        {
-            var validationExpression = this.GetCustomValidationExpression(questionId);
-
-            return IsExpressionDefined(validationExpression);
-        }
-
         public bool IsQuestion(Guid entityId) => this.HasQuestion(entityId);
 
         public bool IsInterviewierQuestion(Guid questionId)
@@ -300,8 +293,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             return question != null && question.QuestionScope == QuestionScope.Interviewer && !question.Featured;
         }
-
-        public string GetCustomValidationExpression(Guid questionId) => this.GetQuestionOrThrow(questionId).ValidationExpression;
 
         public ReadOnlyCollection<Guid> GetPrefilledQuestions()
             => this
@@ -531,6 +522,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             var entity = this.GetEntityOrThrow(entityId);
             return (entity as IConditional)?.HideIfDisabled ?? false;
+        }
+
+        public string GetValidationMessage(Guid questionId, int conditionIndex)
+        {
+            return this.GetQuestion(questionId).ValidationConditions[conditionIndex].Message;
+        }
+
+        public bool HasMoreThanOneValidationRule(Guid questionId)
+        {
+            return this.GetQuestion(questionId).ValidationConditions.Count > 1;
         }
 
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)

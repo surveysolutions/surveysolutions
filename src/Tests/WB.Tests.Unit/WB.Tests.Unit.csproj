@@ -139,9 +139,9 @@
       <HintPath>..\..\..\packages\MvvmCross.Core.4.0.0\lib\net45\MvvmCross.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -391,6 +391,7 @@
     <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\CensusQuestionnaireDashboardItemViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\when_create_new_interview.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\when_init.cs" />
+    <Compile Include="CreateViewModels.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_designer_historical_events_Json.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_hq_historical_events.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_designer_historical_events.cs" />
@@ -525,7 +526,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_group_by_categorical_multy_question_with_max_allowed_answers_more_then_40.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_group_by_categorical_multy_question_with_more_then_40_options.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_nested_group_level_11.cs" />
-    <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_validation_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_size_more_then_5MB.cs" />
     <Compile Include="BoundedContexts\Headquarters\UserBatchCreatorTests\UserBatchCreatorTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\UserPreloadingServiceTests\UserPreloadingServiceTests.cs" />
@@ -561,6 +561,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewAnswersCommandValidatorTests\when_responsible_supervisor_answer_on_supervisors_questions.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewAnswersCommandValidatorTests\when_not_responsible_supervisor_answer_on_supervisors_questions.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewExpressionStateStub.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\Validation\when_answering_question_with_multiple_failed_validation_conditions.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_integer_question_decreasing_roster_size_of_roster_with_nested_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_single_option_linked_on_roster_title_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_single_option_linked_question_with_the_link_on_absent_roster_row.cs" />
@@ -754,6 +755,8 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_interviewId_is_missing_interviewId.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_there_is_answer_in_interview.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_there_is_no_answers_in_interview.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\ValidityViewModelTests\when_question_became_invalid_and_has_more_then_one_validation.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\ValidityViewModelTests\when_question_became_invalid_and_has_single_validation_condition.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_handling_question_answered_event.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_handling_question_answered_event_when_ordered_functionality_is_enabled.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_handling_question_answered_event_of_another_question.cs" />
@@ -1124,12 +1127,8 @@
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_NewQuestionAdded_event_received.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_NewQuestionAdded_event_received_and_parent_for_question_does_not_exist.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_NewQuestionnaireCreated_event_received.cs" />
-    <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_NumericQuestionAdded_event_received.cs" />
-    <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_NumericQuestionAdded_event_received_and_parent_for_question_does_not_exist.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_NumericQuestionChanged_event_received.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_NumericQuestionCloned_event_received.cs" />
-    <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_QRBarcodeQuestionAdded_event_received.cs" />
-    <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_QRBarcodeQuestionAdded_event_received_and_parent_for_question_does_not_exist.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_QRBarcodeQuestionCloned_event_received.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_QRBarcodeQuestionUpdated_event_received.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_QuestionChanged_event_received.cs" />
@@ -1146,8 +1145,6 @@
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_StaticTextUpdated_event_received.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_StaticTextUpdated_event_received_and_entity_does_not_exists.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_TemplateImported_event_received.cs" />
-    <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_TextListQuestionAdded_event_received.cs" />
-    <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_TextListQuestionAdded_event_received_and_parent_for_question_does_not_exist.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_TextListQuestionChanged_event_received.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_TextListQuestionCloned_event_received.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewFactoryTests\ChapterInfoViewFactoryContext.cs" />
@@ -1181,7 +1178,6 @@
     <Compile Include="BoundedContexts\Designer\MoveStaticTextHandlerTests\when_moving_static_text_and_user_dont_have_permissions.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\PdfQuestionnaireDenormalizerTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_MultimediaQuestionUpdated_event.cs" />
-    <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionCloned_event.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionUpdated_event.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_QuestionCloned_event_with_validation_expression.cs" />
@@ -1190,7 +1186,6 @@
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_StaticTextCloned_event.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_StaticTextDeleted_event.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_StaticTextUpdated_event.cs" />
-    <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_TextListQuestionAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_TextListQuestionChanged_event.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_TextListQuestionCloned_event.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\PdfQuestionnaireViewTestsContext.cs" />
@@ -1218,7 +1213,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_GroupBecameARoster_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_GroupStoppedBeingARoster_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_MultimediaQuestionUpdated_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionCloned_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionUpdated_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_RosterChanged_event.cs" />
@@ -1226,8 +1220,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_StaticTextCloned_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_StaticTextDeleted_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_StaticTextUpdated_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_TextListQuestionAdded_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_TextListQuestionAdded_event_and_max_answer_count_is_specified.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_TextListQuestionChanged_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_TextListQuestionChanged_event_and_max_value_is_specified.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_TextListQuestionCloned_event.cs" />
@@ -1544,10 +1536,8 @@
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_NewGroupAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_NewQuestionAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_NewQuestionnaireCreated_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_NumericQuestionAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_NumericQuestionChanged_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_NumericQuestionCloned_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_QRBarcodeQuestionAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_QRBarcodeQuestionCloned_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_QRBarcodeQuestionUpdated_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_QuestionChanged_event.cs" />
@@ -1565,7 +1555,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_StaticTextDeleted_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_StaticTextUpdated_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_TemplateImported_event_for_old_templates.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_TextListQuestionAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_TextListQuestionChanged_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_TextListQuestionCloned_event.cs" />
     <Compile Include="BoundedContexts\Designer\RoleProviderTests\RoleProviderTestsContext.cs" />
@@ -2420,12 +2409,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <Import Project="..\..\..\packages\Siaqodb.5.0.0.7\build\net451\Siaqodb.targets" Condition="Exists('..\..\..\packages\Siaqodb.5.0.0.7\build\net451\Siaqodb.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\packages\Siaqodb.5.0.0.7\build\net451\Siaqodb.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Siaqodb.5.0.0.7\build\net451\Siaqodb.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

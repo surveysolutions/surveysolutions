@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
@@ -71,7 +72,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
                         Title = "text title",
                         ParentGroupsIds = new [] { fixedRoster, g1Id },
                         RosterScopeIds = new Guid[] {  },
-                        ValidationExpression = "q1 > 10"
+                        ValidationConditions = new List<ValidationCondition> {new ValidationCondition { Expression = "q1 > 10" } }
                     },
                     new SingleOptionDetailsView
                     {

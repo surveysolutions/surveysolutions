@@ -251,26 +251,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                 });
         }
 
-        protected static IPublishedEvent<NumericQuestionAdded> CreateNumericQuestionAddedEvent(
-            Guid questionId, Guid? parentGroupId = null)
-        {
-            return ToPublishedEvent(Create.Event.NumericQuestionAdded
-            (
-                publicKey : questionId,
-                groupPublicKey : parentGroupId ?? Guid.NewGuid()
-            ));
-        }
-
-        protected static IPublishedEvent<TextListQuestionAdded> CreateTextListQuestionAddedEvent(
-            Guid questionId, Guid parentGroupId)
-        {
-            return ToPublishedEvent(new TextListQuestionAdded
-            {
-                PublicKey = questionId,
-                GroupId = parentGroupId
-            });
-        }
-
         protected static IPublishedEvent<TextListQuestionCloned> CreateTextListQuestionClonedEvent(Guid questionId, Guid sourceQuestionId)
         {
             return ToPublishedEvent(new TextListQuestionCloned
@@ -331,18 +311,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             return ToPublishedEvent(new QuestionnaireCloned
             {
                 QuestionnaireDocument = questionnaireDocument ?? new QuestionnaireDocument()
-            });
-        }
-
-
-        protected static IPublishedEvent<TextListQuestionAdded> CreateTextListQuestionAddedEvent(
-            Guid questionId, Guid? parentGroupId = null, int? maxAnswerCount = null)
-        {
-            return ToPublishedEvent(new TextListQuestionAdded
-            {
-                PublicKey = questionId,
-                GroupId = parentGroupId ?? Guid.NewGuid(),
-                MaxAnswerCount = maxAnswerCount
             });
         }
 

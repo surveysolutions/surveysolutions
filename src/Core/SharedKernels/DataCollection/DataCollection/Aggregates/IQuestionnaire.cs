@@ -56,13 +56,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         int GetMaxRosterRowCount();
 
-        bool IsCustomValidationDefined(Guid questionId);
-
         bool IsQuestion(Guid entityId);
 
         bool IsInterviewierQuestion(Guid questionId);
-
-        string GetCustomValidationExpression(Guid questionId);
 
         ReadOnlyCollection<Guid> GetPrefilledQuestions();
 
@@ -164,5 +160,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId);
         bool IsPrefilled(Guid questionId);
         bool ShouldBeHiddenIfDisabled(Guid entityId);
+
+        string GetValidationMessage(Guid questionId, int conditionIndex);
+
+        bool HasMoreThanOneValidationRule(Guid questionId);
     }
 }

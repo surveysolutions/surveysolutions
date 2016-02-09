@@ -33,14 +33,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                     isPreFilled: isPreFilled,
                     scope: scope,
                     enablementCondition: enablementCondition,
-                    validationExpression: validationExpression,
-                    validationMessage: validationMessage,
                     instructions: instructions,
                     responsibleId: responsibleId
                     , options: options,
                     linkedToEntityId: linkedToQuestionId,
                     isFilteredCombobox: isFilteredCombobox,
-                    cascadeFromQuestionId: null));
+                    cascadeFromQuestionId: null, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
 
 
         It should_throw_QuestionnaireException = () =>
@@ -59,8 +57,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
         private static string title = "title";
         private static string instructions = "instructions";
         private static string enablementCondition = "";
-        private static string validationExpression = "";
-        private static string validationMessage = "";
         private static Option[] options;
         private static Guid? linkedToQuestionId = (Guid?)null;
         private static QuestionScope scope = QuestionScope.Interviewer;

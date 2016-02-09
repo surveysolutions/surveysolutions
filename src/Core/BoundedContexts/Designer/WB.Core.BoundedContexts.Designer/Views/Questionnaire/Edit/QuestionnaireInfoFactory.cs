@@ -216,8 +216,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             result.SourceOfLinkedEntities = this.GetSourcesOfLinkedQuestionBriefs(questionnaire, questionId);
             result.SourceOfSingleQuestions = this.GetSourcesOfSingleQuestionBriefs(questionnaire, questionId);
             result.QuestionTypeOptions = QuestionTypeOptions;
-
             result.AllQuestionScopeOptions = AllQuestionScopeOptions;
+            result.ValidationConditions.AddRange(question.ValidationConditions);
 
             this.ReplaceGuidsInValidationAndConditionRules(result, questionnaire, questionnaireId);
 
@@ -253,9 +253,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
             var allReferencedQuestionsByExpressions = questionnaire.Questions
                 .Where(x => !x.ParentGroupsIds.Contains(id))
-                .Where(x => !string.IsNullOrEmpty(x.EnablementCondition) || !string.IsNullOrEmpty(x.ValidationExpression))
+                .Where(x => !string.IsNullOrEmpty(x.EnablementCondition) || x.ValidationConditions.Any(q => !string.IsNullOrEmpty(q.Expression)))
                 .Where(x => this.expressionProcessor.GetIdentifiersUsedInExpression(x.EnablementCondition).Any(v => variablesToBeDeleted.Contains(v))
-                         || this.expressionProcessor.GetIdentifiersUsedInExpression(x.ValidationExpression).Any(v => variablesToBeDeleted.Contains(v)));
+                         || x.ValidationConditions.SelectMany(q => this.expressionProcessor.GetIdentifiersUsedInExpression(q.Expression)).Any(v => variablesToBeDeleted.Contains(v)));
 
             var singleQuestionIdsToBeDeleted = questionnaire.Questions
                 .Where(x => x.ParentGroupsIds.Contains(id))
@@ -284,7 +284,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var expressionReplacer = new ExpressionReplacer(questionnaire);
             Guid questionnaireGuid = Guid.Parse(questionnaireKey);
             model.EnablementCondition = expressionReplacer.ReplaceGuidsWithStataCaptions(model.EnablementCondition, questionnaireGuid);
-            model.ValidationExpression = expressionReplacer.ReplaceGuidsWithStataCaptions(model.ValidationExpression, questionnaireGuid);
+
+            foreach (var validationExpression in model.ValidationConditions)
+            {
+                validationExpression.Expression = expressionReplacer.ReplaceGuidsWithStataCaptions(validationExpression.Expression, questionnaireGuid);
+            }
         }
 
         private static NewEditQuestionView MapQuestionFields(QuestionDetailsView question)

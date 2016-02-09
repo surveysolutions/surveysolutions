@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -43,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTes
             denormalizer.Handle(@event);
 
         It should_set_TextList_question_title_be_equal_to_passed_title = () =>
-            pdfQuestionnaireDocument.GetEntityById<PdfQuestionView>(questionId).ValidationExpression.ShouldEqual("validationExpression of question");
+            pdfQuestionnaireDocument.GetEntityById<PdfQuestionView>(questionId).ValidationConditions.First().Expression.ShouldEqual("validationExpression of question");
 
          It should_set_TextList_question_title_be_equal_to_passed_condition = () =>
             pdfQuestionnaireDocument.GetEntityById<PdfQuestionView>(questionId).ConditionExpression.ShouldEqual( "enablementCondition of question");

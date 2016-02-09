@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Factories
 
         public IQuestionnaire CreateTemporaryInstance(QuestionnaireDocument document)
         {
-            var temporaryInstance = this.serviceLocator.GetInstance<Questionnaire>();
+            var temporaryInstance = this.serviceLocator.GetInstance<Aggregates.Questionnaire>();
             temporaryInstance.Apply(new TemplateImported { Source = document });
             return temporaryInstance.GetQuestionnaire();
         }
