@@ -1201,10 +1201,14 @@ namespace WB.Tests.Unit
             HashSet<InterviewItemId> disabledQuestions = null,
             HashSet<InterviewItemId> validQuestions = null,
             HashSet<InterviewItemId> invalidQuestions = null,
-            InterviewStatus status=InterviewStatus.SupervisorAssigned)
+            Guid? interviewId = null,
+            Dictionary<Identity, List<FailedValidationCondition>> failedValidationConditions = null,
+            InterviewStatus status = InterviewStatus.SupervisorAssigned,
+            Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances = null,
+            bool? wasCompleted = false)
         {
             return new InterviewSynchronizationDto(
-                Guid.NewGuid(),
+                interviewId ?? Guid.NewGuid(),
                 status,
                 "", 
                 null,
@@ -1216,9 +1220,10 @@ namespace WB.Tests.Unit
                 disabledGroups ?? new HashSet<InterviewItemId>(),
                 disabledQuestions ?? new HashSet<InterviewItemId>(),
                 validQuestions ?? new HashSet<InterviewItemId>(),
-                invalidQuestions ?? new HashSet<InterviewItemId>(), 
-                new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), 
-                false);
+                invalidQuestions ?? new HashSet<InterviewItemId>(),
+                rosterGroupInstances ?? new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), 
+                failedValidationConditions ?? new Dictionary<Identity, List<FailedValidationCondition>>(),
+                wasCompleted ?? false);
         }
 
         public static InterviewView InterviewView(Guid? prefilledQuestionId = null)
