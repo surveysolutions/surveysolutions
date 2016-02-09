@@ -144,6 +144,11 @@ namespace WB.Tests.Unit
 {
     internal static partial class Create
     {
+        public static InterviewAnswersCommandValidator InterviewAnswersCommandValidator()
+        {
+            return new InterviewAnswersCommandValidator();
+        }
+
         public static AccountDocument AccountDocument(string userName="")
         {
             return new AccountDocument() { UserName = userName };
