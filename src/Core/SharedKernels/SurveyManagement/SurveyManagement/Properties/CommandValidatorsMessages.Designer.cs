@@ -61,11 +61,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You cannot change answer because interview is approved by Headquarters.
+        ///   Looks up a localized string similar to Only responsible supervisor can answer on supervisor&apos;s questions.
         /// </summary>
-        internal static string InterviewApprovedByHQ {
+        internal static string UserDontHavePermissionsToAnswer {
             get {
-                return ResourceManager.GetString("InterviewApprovedByHQ", resourceCulture);
+                return ResourceManager.GetString("UserDontHavePermissionsToAnswer", resourceCulture);
             }
         }
     }
