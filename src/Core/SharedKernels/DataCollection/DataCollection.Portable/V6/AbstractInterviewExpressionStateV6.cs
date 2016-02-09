@@ -182,13 +182,18 @@ namespace WB.Core.SharedKernels.DataCollection.V6
             }
         }
 
-        public void DeclareAnswersValid(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
-        {
-            this.DeclareAnswersValid(failedValidationConditions.Keys);
-        }
-
         #endregion
+        
+        void IInterviewExpressionStateV6.ApplyFailedValidations(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
+        {
+            foreach (var failedValidationCondition in failedValidationConditions)
+            {
+                var targetLevel = this.GetRosterByIdAndVector(failedValidationCondition.Key.Id, failedValidationCondition.Key.RosterVector);
+                if (targetLevel == null) return;
 
+                (targetLevel as IExpressionExecutableV6).ApplyFailedValidations(failedValidationCondition.Key.Id, failedValidationCondition.Value);
+            }
+        }
 
         IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone()
         {
@@ -209,5 +214,6 @@ namespace WB.Core.SharedKernels.DataCollection.V6
             return Clone() as IInterviewExpressionStateV6;
         }
 
+        
     }
 }

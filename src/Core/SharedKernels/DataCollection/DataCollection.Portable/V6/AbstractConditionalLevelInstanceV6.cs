@@ -10,6 +10,9 @@ namespace WB.Core.SharedKernels.DataCollection.V6
     public abstract class AbstractConditionalLevelInstanceV6<T> : AbstractConditionalLevelInstanceV5<T>
         where T : IExpressionExecutableV6, IExpressionExecutableV5, IExpressionExecutableV2, IExpressionExecutable
     {
+
+        protected Dictionary<Guid, IReadOnlyList<FailedValidationCondition>> InvalidAnsweredFailedValidations = new Dictionary<Guid, IReadOnlyList<FailedValidationCondition>>();
+
         protected new Func<Identity[], Guid, IEnumerable<IExpressionExecutableV6>> GetInstances { get; private set; }
 
         protected new Dictionary<Guid, Func<decimal[], Identity[], IExpressionExecutableV6>> RosterGenerators { get;
@@ -60,6 +63,29 @@ namespace WB.Core.SharedKernels.DataCollection.V6
             return this.RosterGenerators[rosterId].Invoke(rosterVector, rosterIdentityKey);
         }
 
+        public new void DeclareAnswerValid(Guid questionId)
+        {
+            this.ValidAnsweredQuestions.Add(questionId);
+            this.InvalidAnsweredQuestions.Remove(questionId);
+            this.InvalidAnsweredFailedValidations.Remove(questionId);
+        }
+
+        /*public new void DeclareAnswerInvalid(Guid questionId)
+        {
+            this.InvalidAnsweredQuestions.Add(questionId);
+            this.ValidAnsweredQuestions.Remove(questionId);
+            
+            //failedvalidations
+        }*/
+
+        public void ApplyFailedValidations(Guid questionId, IReadOnlyList<FailedValidationCondition> failedValidations)
+        {
+            this.ValidAnsweredQuestions.Remove(questionId);
+            this.InvalidAnsweredQuestions.Add(questionId);
+
+            this.InvalidAnsweredFailedValidations[questionId] = failedValidations;
+        }
+
         protected ValidityChanges ExecuteValidations()
         {
             var questionsToBeValid = new List<Identity>();
@@ -99,12 +125,22 @@ namespace WB.Core.SharedKernels.DataCollection.V6
                     }
 
                     if (isValid && !this.ValidAnsweredQuestions.Contains(questionId))
-                        questionsToBeValid.Add(validationExpressionDescription.Key);
-                    else if (!isValid && !this.InvalidAnsweredQuestions.Contains(questionId))
-                        // store invalid validations to get diff
                     {
-                        questionsToBeInvalid.Add(validationExpressionDescription.Key);
-                        failedValidationConditions.Add(validationExpressionDescription.Key, invalids);
+                        questionsToBeValid.Add(validationExpressionDescription.Key);
+                    }
+                    else if (!isValid)// && !this.InvalidAnsweredQuestions.Contains(questionId)
+                    {
+                        // no changes in invalid validations
+                        // do not raise
+                        if (this.InvalidAnsweredFailedValidations.ContainsKey(questionId) &&
+                            (this.InvalidAnsweredFailedValidations[questionId].Count == invalids.Count) &&
+                            !this.InvalidAnsweredFailedValidations[questionId].Except(invalids).Any())
+                            continue;
+                        else // first invalid old events support, raising a new one 
+                        {
+                            questionsToBeInvalid.Add(validationExpressionDescription.Key);
+                            failedValidationConditions.Add(validationExpressionDescription.Key, invalids);
+                        }
                     }
                 }
 #pragma warning disable
