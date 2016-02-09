@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -42,7 +43,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTes
             pdfQuestionnaireDocument.GetEntityById<PdfQuestionView>(questionId).Title.ShouldEqual("someTitle");
 
         It should_set__some_expression___as_validation_for_cloned_question = () =>
-            pdfQuestionnaireDocument.GetEntityById<PdfQuestionView>(questionId).ValidationExpression.ShouldEqual("some expression");
+            pdfQuestionnaireDocument.GetEntityById<PdfQuestionView>(questionId).ValidationConditions.First().Expression.ShouldEqual("some expression");
 
         private static PdfQuestionnaireDenormalizer denormalizer;
         private static IPublishedEvent<QuestionCloned> @event;

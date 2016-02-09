@@ -22,13 +22,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionChanged>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionCloned>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionDeleted>
-        , IUpdateHandler<QuestionsAndGroupsCollectionView, NumericQuestionAdded>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, NumericQuestionChanged>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, NumericQuestionCloned>
-        , IUpdateHandler<QuestionsAndGroupsCollectionView, TextListQuestionAdded>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, TextListQuestionChanged>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, TextListQuestionCloned>
-        , IUpdateHandler<QuestionsAndGroupsCollectionView, QRBarcodeQuestionAdded>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QRBarcodeQuestionUpdated>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QRBarcodeQuestionCloned>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, MultimediaQuestionUpdated>
@@ -92,13 +89,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
-            IPublishedEvent<NumericQuestionAdded> @event)
-        {
-            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.NumericQuestionAddedToQuestionData(@event));
-            return this.UpdateStateWithAddedQuestion(state, @event.Payload.GroupPublicKey, question);
-        }
-
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
             IPublishedEvent<NumericQuestionChanged> @event)
         {
             IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.NumericQuestionChangedToQuestionData(@event));
@@ -113,13 +103,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
-            IPublishedEvent<TextListQuestionAdded> @event)
-        {
-            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.TextListQuestionAddedToQuestionData(@event));
-            return this.UpdateStateWithAddedQuestion(state, @event.Payload.GroupId, question);
-        }
-
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
             IPublishedEvent<TextListQuestionCloned> @event)
         {
             IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.TextListQuestionClonedToQuestionData(@event));
@@ -131,13 +114,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         {
             IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.TextListQuestionChangedToQuestionData(@event));
             return this.UpdateStateWithUpdatedQuestion(state, question);
-        }
-
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
-            IPublishedEvent<QRBarcodeQuestionAdded> @event)
-        {
-            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QRBarcodeQuestionAddedToQuestionData(@event));
-            return this.UpdateStateWithAddedQuestion(state, @event.Payload.ParentGroupId, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,

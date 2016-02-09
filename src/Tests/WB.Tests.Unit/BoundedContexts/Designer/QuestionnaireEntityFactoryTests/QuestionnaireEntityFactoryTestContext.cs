@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Main.Core.Entities;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireEntityFactoryTests
 {
@@ -24,8 +25,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireEntityFactoryTests
                 variable ?? "var", 
                 null,
                 condition ?? "", 
-                "", 
-                "",
                 Order.AsIs,
                 false,
                 false,
@@ -40,7 +39,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireEntityFactoryTests
                 null,
                 null,
                 null,
-                null);
+                null,
+                new List<ValidationCondition>());
         }
     }
 }

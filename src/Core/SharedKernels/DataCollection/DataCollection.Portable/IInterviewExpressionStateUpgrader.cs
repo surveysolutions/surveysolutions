@@ -1,9 +1,9 @@
-﻿using WB.Core.SharedKernels.DataCollection.V5;
+﻿using WB.Core.SharedKernels.DataCollection.V6;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
     public interface IInterviewExpressionStateUpgrader
     {
-        IInterviewExpressionStateV5 UpgradeToLatestVersionIfNeeded(IInterviewExpressionState state);
+        IInterviewExpressionStateV6 UpgradeToLatestVersionIfNeeded(IInterviewExpressionState state);
     }
 }

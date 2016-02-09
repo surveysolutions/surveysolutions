@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
-    public class UpdateMultiOptionQuestionCommand : AbstractUpdateQuestionCommand
+    public class UpdateMultiOptionQuestionCommand : UpdateValidatableQuestionCommand
     {
         public UpdateMultiOptionQuestionCommand(
             Guid questionnaireId,
@@ -23,18 +26,16 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             Guid? linkedToEntityId,
             bool areAnswersOrdered,
             int? maxAllowedAnswers,
-            bool yesNoView)
+            bool yesNoView,
+            List<ValidationCondition> validationConditions)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, enablementCondition: enablementCondition, instructions: instructions,variableLabel:variableLabel)
+                variableName: variableName, enablementCondition: enablementCondition, instructions: instructions,variableLabel:variableLabel,
+                validationConditions: validationConditions)
         {
             this.Scope = scope;
-            this.ValidationMessage = CommandUtils.SanitizeHtml(validationMessage, removeAllTags: true);
-            this.ValidationExpression = validationExpression;
-            if (options != null)
-                options
-                    .ToList()
-                    .ForEach(x => x.Title = CommandUtils.SanitizeHtml(x.Title, removeAllTags: true));
+            options?.ToList()
+                .ForEach(x => x.Title = CommandUtils.SanitizeHtml(x.Title, removeAllTags: true));
             this.Options = options;
             this.LinkedToEntityId = linkedToEntityId;
             this.AreAnswersOrdered = areAnswersOrdered;
@@ -43,10 +44,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
         }
 
         public QuestionScope Scope { get; set; }
-
-        public string ValidationMessage { get; set; }
-
-        public string ValidationExpression { get; set; }
 
         public bool AreAnswersOrdered { get; set; }
 

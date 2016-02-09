@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities;
@@ -117,11 +118,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
         It should_set_target_index_to_2 = () =>
            questionnaireView.Find<IGroup>(parentGroupId).Children.IndexOf(GetQRBarcodeQuestionById()).ShouldEqual(targetIndex);
 
-        It should_set_validation_value_for__ValidationExpression__field = () =>
-           questionData.ValidationExpression.ShouldEqual(validation);
+        It should_set_validation_value_for__ValidationExpression__field = () => 
+           questionData.ValidationConditions.First().Expression.ShouldEqual(validation);
 
         It should_set_validationMessage_value_for__ValidationMessage__field = () =>
-            questionData.ValidationMessage.ShouldEqual(validationMessage);
+            questionData.ValidationConditions.First().Message.ShouldEqual(validationMessage);
 
         It should_set_Interviewer_as_default_value_for__QuestionScope__field = () =>
             GetQRBarcodeQuestionById().QuestionScope.ShouldEqual(QuestionScope.Interviewer);

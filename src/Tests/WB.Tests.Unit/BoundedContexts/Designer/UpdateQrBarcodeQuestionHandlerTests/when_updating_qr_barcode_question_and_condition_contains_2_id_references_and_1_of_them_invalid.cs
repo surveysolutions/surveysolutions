@@ -23,16 +23,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerT
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId, expressionProcessor: expressionProcessor);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.Apply(Create.Event.NumericQuestionAdded(publicKey : existingQuestionId, groupPublicKey : chapterId ));
-            questionnaire.Apply(new QRBarcodeQuestionAdded()
-            {
-                QuestionId = questionId,
-                ParentGroupId = chapterId,
-                Title = "old title",
-                VariableName = "old_variable_name",
-                Instructions = "old instructions",
-                EnablementCondition = "old condition",
-                ResponsibleId = responsibleId
-            });
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
+publicKey: questionId,
+groupPublicKey: chapterId,
+questionText: "old title",
+stataExportCaption: "old_variable_name",
+instructions: "old instructions",
+conditionExpression: "old condition",
+responsibleId: responsibleId,
+questionType: QuestionType.QRBarcode
+));
         };
 
         Because of = () =>
@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerT
                 questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: "title",
                     variableName: "var",
                 variableLabel: null, enablementCondition: conditionExpression, instructions: null,
-                    responsibleId: responsibleId, validationExpression: null, validationMessage: null, scope: QuestionScope.Interviewer));
+                    responsibleId: responsibleId, scope: QuestionScope.Interviewer, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

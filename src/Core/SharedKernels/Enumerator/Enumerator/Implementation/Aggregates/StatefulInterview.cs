@@ -103,7 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             }
 
             @event.InterviewData.ValidAnsweredQuestions.ForEach(x => DeclareAnswerAsValid(x.Id, x.InterviewItemRosterVector));
-            @event.InterviewData.InvalidAnsweredQuestions.ForEach(x => DeclareAnswerAsInvalid(x.Id, x.InterviewItemRosterVector));
+            @event.InterviewData.InvalidAnsweredQuestions.ForEach(x => DeclareAnswerAsInvalid(x.Id, x.InterviewItemRosterVector, new FailedValidationCondition[] {})); // TODO: KP-6680
 
             @event.InterviewData.DisabledQuestions.ForEach(x => DisableQuestion(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.DisabledGroups.ForEach(x => DisableGroup(x.Id, x.InterviewItemRosterVector));
@@ -284,7 +284,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             base.Apply(@event);
             this.ResetCalculatedState();
 
-            @event.Questions.ForEach(x => this.DeclareAnswerAsInvalid(x.Id, x.RosterVector));
+            @event.FailedValidationConditions.ForEach(x => this.DeclareAnswerAsInvalid(x.Key.Id, x.Key.RosterVector, x.Value));
         }
 
         public new void Apply(GroupsDisabled @event)
@@ -600,7 +600,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             var rosterVectorToStartFrom = this.CalculateStartRosterVectorForAnswersOfLinkedToQuestion(rosterId, linkedQuestion, questionnaire);
 
-            IEnumerable<Identity> targetRosters = this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, new[] {rosterId}, rosterVectorToStartFrom, questionnaire).ToArray();
+            IEnumerable<Identity> targetRosters = 
+                this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, new[] {rosterId}, rosterVectorToStartFrom, questionnaire).ToArray();
 
             return
                 targetRosters
@@ -676,6 +677,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             if (answer != null)
             {
                 answer.IsValid = true;
+                answer.FailedValidations.Clear();
             }
             else
             {
@@ -683,13 +685,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             }
         }
 
-        private void DeclareAnswerAsInvalid(Guid id, RosterVector rosterVector)
+        private void DeclareAnswerAsInvalid(Guid id, RosterVector rosterVector, IReadOnlyList<FailedValidationCondition> value)
         {
             var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(id, rosterVector);
             var answer = this.GetExistingAnswerOrNull(questionKey);
             if (answer != null)
             {
                 answer.IsValid = false;
+                answer.FailedValidations.Clear();
+                foreach (var failedValidationCondition in value)
+                {
+                    answer.FailedValidations.Add(failedValidationCondition);
+                }
             }
             else
             {
@@ -985,6 +992,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             var interviewAnswerModel = this.Answers[questionKey];
             return interviewAnswerModel.IsValid;
         }
+
+        public IReadOnlyList<FailedValidationCondition> GetFailedValidationConditions(Identity questionId)
+        {
+            var interviewAnswerModel = this.Answers[ConversionHelper.ConvertIdentityToString(questionId)];
+            return interviewAnswerModel.FailedValidations.ToReadOnlyCollection();
+        } 
 
         public bool IsEnabled(Identity entityIdentity)
         {

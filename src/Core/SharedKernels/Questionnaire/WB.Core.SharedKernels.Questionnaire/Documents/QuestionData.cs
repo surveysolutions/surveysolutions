@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace Main.Core.Entities
 {
@@ -14,8 +15,6 @@ namespace Main.Core.Entities
             string stataExportCaption,
             string variableLabel,
             string conditionExpression,
-            string validationExpression,
-            string validationMessage,
             Order? answerOrder,
             bool featured,
             bool capital,
@@ -31,7 +30,8 @@ namespace Main.Core.Entities
             int? maxAnswerCount,
             bool? isFilteredCombobox,
             Guid? cascadeFromQuestionId,
-            bool? yesNoView)
+            bool? yesNoView,
+            IList<ValidationCondition> validationConditions)
         {
             this.PublicKey = publicKey;
             this.QuestionType = questionType;
@@ -40,8 +40,6 @@ namespace Main.Core.Entities
             this.StataExportCaption = stataExportCaption;
             this.VariableLabel = variableLabel;
             this.ConditionExpression = conditionExpression;
-            this.ValidationExpression = validationExpression;
-            this.ValidationMessage = validationMessage;
             this.AnswerOrder = answerOrder;
             this.Featured = featured;
             this.Capital = capital;
@@ -59,6 +57,7 @@ namespace Main.Core.Entities
             this.IsFilteredCombobox = isFilteredCombobox;
             this.CascadeFromQuestionId = cascadeFromQuestionId;
             this.YesNoView = yesNoView;
+            this.ValidationConditions = validationConditions ?? new List<ValidationCondition>();
         }
 
         public readonly Guid PublicKey;
@@ -88,5 +87,7 @@ namespace Main.Core.Entities
         public readonly bool? IsFilteredCombobox;
         public readonly Guid? CascadeFromQuestionId;
         public readonly bool? YesNoView;
+
+        public IList<ValidationCondition> ValidationConditions { get; set; } 
     }
 }

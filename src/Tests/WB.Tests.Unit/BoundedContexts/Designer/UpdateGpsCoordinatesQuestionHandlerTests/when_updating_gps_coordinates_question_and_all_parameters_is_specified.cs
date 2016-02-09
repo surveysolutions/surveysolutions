@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHandlerTests
@@ -15,16 +17,17 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new QRBarcodeQuestionAdded()
-            {
-                QuestionId = questionId,
-                ParentGroupId = chapterId,
-                Title = "old title",
-                VariableName = "old_variable_name",
-                Instructions = "old instructions",
-                EnablementCondition = "old condition",
-                ResponsibleId = responsibleId
-            });
+            questionnaire.Apply(
+                Create.Event.NewQuestionAdded(
+                    publicKey: questionId,
+                    groupPublicKey: chapterId,
+                    questionText: "old title",
+                    stataExportCaption: "old_variable_name",
+                    instructions: "old instructions",
+                    conditionExpression: "old condition",
+                    responsibleId: responsibleId,
+                    questionType: QuestionType.QRBarcode
+            ));
             eventContext = new EventContext();
         };
 
@@ -37,10 +40,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
                 isPreFilled:false,
                 scope: scope,
                 enablementCondition: enablementCondition,
-                validationExpression: validationExpression,
-                validationMessage: validationMessage,
                 instructions: instructions,
-                responsibleId: responsibleId
+                responsibleId: responsibleId,
+                    validationConditions: new List<ValidationCondition>()
 
     );
 
@@ -92,7 +94,5 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
         private static string instructions = "intructions";
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static string enablementCondition = "some condition";
-        private static string validationExpression = "some expression";
-        private static string validationMessage = "some message";
     }
 }

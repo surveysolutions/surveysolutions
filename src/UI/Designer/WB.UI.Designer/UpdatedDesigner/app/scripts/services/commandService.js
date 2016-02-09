@@ -105,8 +105,7 @@
                         variableLabel: question.variableLabel,
                         mask: question.mask,
                         enablementCondition: question.enablementCondition,
-                        validationExpression: question.validationExpression,
-                        validationMessage: question.validationMessage,
+                        validationConditions: question.validationConditions,
                         instructions: question.instructions
                     };
 

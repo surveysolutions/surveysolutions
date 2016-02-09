@@ -20,16 +20,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                 groupPublicKey : chapterId,
                 stataExportCaption : notUniqueVariableName
             ));
-            questionnaire.Apply(new QRBarcodeQuestionAdded()
-            {
-                QuestionId = questionId,
-                ParentGroupId = chapterId,
-                Title = "old title",
-                VariableName = "old_variable_name",
-                Instructions = "old instructions",
-                EnablementCondition = "old condition",
-                ResponsibleId = responsibleId
-            });
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
+publicKey: questionId,
+groupPublicKey: chapterId,
+questionText: "old title",
+stataExportCaption: "old_variable_name",
+instructions: "old instructions",
+conditionExpression: "old condition",
+responsibleId: responsibleId,
+questionType: QuestionType.QRBarcode
+));
         };
 
         Because of = () =>
@@ -42,15 +42,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                     isPreFilled: isPreFilled,
                     scope: scope,
                     enablementCondition: enablementCondition,
-                    validationExpression: validationExpression,
-                    validationMessage: validationMessage,
                     instructions: instructions,
                     responsibleId: responsibleId,
-                    options:options,
+                    options: options,
                     linkedToEntityId: linkedToQuestionId,
                     isFilteredCombobox: isFilteredCombobox,
-                    cascadeFromQuestionId: ñascadeFromQuestionId
-                    ));
+                    cascadeFromQuestionId: ñascadeFromQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
@@ -71,8 +68,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
         private static bool isPreFilled = false;
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static string enablementCondition = null;
-        private static string validationExpression = null;
-        private static string validationMessage = "";
         private static Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };
         private static Guid? linkedToQuestionId = (Guid?)null;
         private static bool isFilteredCombobox = false;

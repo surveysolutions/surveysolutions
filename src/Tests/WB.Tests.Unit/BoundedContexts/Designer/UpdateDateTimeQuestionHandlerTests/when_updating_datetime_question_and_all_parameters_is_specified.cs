@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -6,6 +7,7 @@ using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateDateTimeQuestionHandlerTests
 {
@@ -15,16 +17,17 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateDateTimeQuestionHandlerTe
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new QRBarcodeQuestionAdded()
-            {
-                QuestionId = questionId,
-                ParentGroupId = chapterId,
-                Title = "old title",
-                VariableName = "old_variable_name",
-                Instructions = "old instructions",
-                EnablementCondition = "old condition",
-                ResponsibleId = responsibleId
-            });
+            questionnaire.Apply(
+                Create.Event.NewQuestionAdded(
+                    publicKey: questionId,
+                    groupPublicKey: chapterId,
+                    questionText: "old title",
+                    stataExportCaption: "old_variable_name",
+                    instructions: "old instructions",
+                    conditionExpression: "old condition",
+                    responsibleId: responsibleId,
+                    questionType: QuestionType.QRBarcode
+            ));
             eventContext = new EventContext();
         };
 
@@ -37,11 +40,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateDateTimeQuestionHandlerTe
                 isPreFilled: isPreFilled,
                 scope: scope,
                 enablementCondition: enablementCondition,
-                validationExpression: validationExpression,
-                validationMessage: validationMessage,
                 instructions: instructions,
-                responsibleId: responsibleId
-                );
+                responsibleId: responsibleId, 
+                validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>
+                {
+                    new ValidationCondition { Message = validationMessage, Expression = validationExpression }
+                });
 
         Cleanup stuff = () =>
         {
@@ -82,11 +86,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateDateTimeQuestionHandlerTe
 
         It should_raise_QuestionChanged_event_with_validationExpression_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
-                .ValidationExpression.ShouldEqual(validationExpression);
+                .ValidationConditions.First().Expression.ShouldEqual(validationExpression);
 
         It should_raise_QuestionChanged_event_with_validationMessage_specified = () =>
            eventContext.GetSingleEvent<QuestionChanged>()
-               .ValidationMessage.ShouldEqual(validationMessage);
+               .ValidationConditions.First().Message.ShouldEqual(validationMessage);
 
         private static EventContext eventContext;
         private static Questionnaire questionnaire;

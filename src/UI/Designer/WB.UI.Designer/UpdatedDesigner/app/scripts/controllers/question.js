@@ -66,6 +66,8 @@
                 $scope.activeQuestion.yesNoView = question.yesNoView;
                 $scope.activeQuestion.isFilteredCombobox = question.isFilteredCombobox;
 
+                $scope.activeQuestion.validationConditions = question.validationConditions;
+
                 var options = question.options || [];
                 _.each(options, function(option) {
                     option.id = utilityService.guid();
@@ -119,9 +121,7 @@
             };
 
             var hasQuestionValidations = function(question) {
-                return $scope.doesQuestionSupportValidations() &&
-                    question.validationExpression !== null &&
-                    /\S/.test(question.validationExpression);
+                return $scope.doesQuestionSupportValidations() && question.validationConditions.length > 0;
             };
 
             $scope.saveQuestion = function (callback) {
@@ -293,6 +293,19 @@
                 $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
                 $scope.questionForm.$setDirty();
             };
+
+            $scope.removeValidationCondition = function(index) {
+                $scope.activeQuestion.validationConditions.splice(index, 1);
+                $scope.questionForm.$setDirty();
+            }
+
+            $scope.addValidationCondition = function() {
+                $scope.activeQuestion.validationConditions.push({
+                    expression: '',
+                    message: ''
+                });
+                $scope.questionForm.$setDirty();
+            }
 
             $scope.showOptionsInTextarea = function () {
                 $scope.activeQuestion.stringifiedOptions = optionsService.stringifyOptions($scope.activeQuestion.options);
