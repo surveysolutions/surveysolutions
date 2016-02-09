@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             List<ValidationCondition> validationConditions)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
-                commonQuestionParameters: commonQuestionParameters)
+                commonQuestionParameters: commonQuestionParameters,
                 validationConditions: validationConditions)
         {
             this.Scope = scope;
