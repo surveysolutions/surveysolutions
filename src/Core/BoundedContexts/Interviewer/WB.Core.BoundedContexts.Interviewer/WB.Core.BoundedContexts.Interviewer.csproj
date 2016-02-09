@@ -121,6 +121,7 @@
     <Compile Include="Implementation\Services\InterviewerQuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Implementation\Services\InterviewerInterviewAccessor.cs" />
     <Compile Include="Implementation\Services\InterviewerQuestionnaireAccessor.cs" />
+    <Compile Include="Implementation\Services\QuestionnaireContentVersionProvider.cs" />
     <Compile Include="Implementation\Services\QuestionnaireKeyValueStorage.cs" />
     <Compile Include="Implementation\Services\QuestionnaireModelKeyValueStorage.cs" />
     <Compile Include="Implementation\Storage\IInterviewerEventStorage.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="Services\Infrastructure\IInterviewerPrincipal.cs" />
     <Compile Include="Services\Infrastructure\IInterviewerQuestionnaireAccessor.cs" />
     <Compile Include="Services\Infrastructure\IInterviewerUserIdentity.cs" />
+    <Compile Include="Services\IQuestionnaireContentVersionProvider.cs" />
     <Compile Include="Services\ISynchronizationService.cs" />
     <Compile Include="Services\ITabletDiagnosticService.cs" />
     <Compile Include="Services\IBackupRestoreService.cs" />
