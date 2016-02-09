@@ -10,17 +10,18 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
     [Serializable]
     public class UpdateQRBarcodeQuestionCommand : UpdateValidatableQuestionCommand
     {
-        public UpdateQRBarcodeQuestionCommand(Guid questionnaireId, Guid questionId, string title, string variableName,
-            string variableLabel,
-            string enablementCondition, string instructions, Guid responsibleId,
+        public UpdateQRBarcodeQuestionCommand(Guid questionnaireId, 
+            Guid questionId, 
+            Guid responsibleId,
+            CommonQuestionParameters commonQuestionParameters,
             string validationExpression,
             string validationMessage,
             QuestionScope scope,
             List<ValidationCondition> validationConditions)
             : base(
-                responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, enablementCondition: enablementCondition,
-                instructions: instructions, variableLabel: variableLabel,
+                responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
+                commonQuestionParameters: commonQuestionParameters,
+                
                 validationConditions: validationConditions)
         {
             this.Scope = scope;

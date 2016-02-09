@@ -21,6 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             questionView.Title = question.QuestionText;
             questionView.VariableName = question.StataExportCaption;
             questionView.VariableLabel = question.VariableLabel;
+            questionView.HideIfDisabled = question.HideIfDisabled;
             questionView.EnablementCondition = question.ConditionExpression;
             questionView.ValidationConditions = question.ValidationConditions;
             questionView.IsPreFilled = question.Featured;
