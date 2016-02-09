@@ -1149,6 +1149,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             isPreFilled: numericQuestion.Featured,
                             scope: numericQuestion.QuestionScope, 
                             enablementCondition: enablementCondition,
+                            hideIfDisabled: numericQuestion.HideIfDisabled,
                             validationExpression: numericQuestion.ValidationExpression,
                             validationMessage: numericQuestion.ValidationMessage, 
                             instructions: instructions,
@@ -1201,6 +1202,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         events.AddRange(this.CreateTextQuestionClonedEvents(questionId: itemId, targetIndex: itemTargetIndex,
                             variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
                             title: title,
+                            hideIfDisabled: textQuestion.HideIfDisabled,
                             enablementCondition: enablementCondition, responsibleId: responsibleId,
                             sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId: sourceQuestionnaireId, 
@@ -1216,6 +1218,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     {
                         events.AddRange(this.CreateGeoLocationQuestionClonedEvents(questionId: itemId, targetIndex: itemTargetIndex,
                             variableName: variableName, variableLabel: variableLabel, title: title,
+                            hideIfDisabled: geoLocationQuestion.HideIfDisabled,
                             enablementCondition: enablementCondition, instructions: instructions,
                             parentGroupId: groupId, 
                             sourceQuestionId: sourceItemId,
@@ -1233,6 +1236,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     {
                         events.AddRange(this.CreateDateTimeQuestionClonedEvents(questionId: itemId, targetIndex: itemTargetIndex,
                             variableName: variableName, variableLabel: variableLabel, title: title,
+                            hideIfDisabled: dateTitmeQuestion.HideIfDisabled,
                             enablementCondition: enablementCondition, instructions: instructions,
                             parentGroupId: groupId, 
                             sourceQuestionId: sourceItemId,
@@ -1251,7 +1255,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         events.AddRange(this.CreateCategoricalMultiAnswersQuestionClonedEvents(questionId: itemId,
                             targetIndex: itemTargetIndex, variableName: variableName, 
                             variableLabel: variableLabel,
-                            title: title, 
+                            title: title,
+                            hideIfDisabled: categoricalMultiQuestion.HideIfDisabled,
                             enablementCondition: enablementCondition, parentGroupId: groupId,
                             sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId: sourceQuestionnaireId,
@@ -1277,6 +1282,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         events.AddRange(this.CreateCategoricalSingleAnswerQuestionEvents(questionId: itemId,
                             targetIndex: itemTargetIndex, variableName: variableName, variableLabel: variableLabel,
                             title: title, 
+                            hideIfDisabled: categoricalSingleQuestion.HideIfDisabled,
                             enablementCondition: enablementCondition, parentGroupId: groupId,
                             sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId: sourceQuestionnaireId,
@@ -1285,7 +1291,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             validationExpression: categoricalSingleQuestion.ValidationExpression,
                             validationMessage: categoricalSingleQuestion.ValidationMessage,
                             linkedToQuestionId: GetIdOrReturnSameId(replacementIdDictionary, categoricalSingleQuestion.LinkedToQuestionId),
-                            linkedToRosterId: GetIdOrReturnSameId(replacementIdDictionary, categoricalMultiQuestion.LinkedToRosterId),
+                            linkedToRosterId: GetIdOrReturnSameId(replacementIdDictionary, categoricalSingleQuestion.LinkedToRosterId),
                             isPreFilled: categoricalSingleQuestion.Featured,
                             isFilteredCombobox: categoricalSingleQuestion.IsFilteredCombobox,
                             cascadeFromQuestionId: GetIdOrReturnSameId(replacementIdDictionary, categoricalSingleQuestion.CascadeFromQuestionId),
@@ -1302,6 +1308,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         events.AddRange(this.CreateMultimediaQuestionClonedEvents(questionId: itemId, targetIndex: itemTargetIndex,
                             variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
                             title: title,
+                            hideIfDisabled: multimediaQuestion.HideIfDisabled,
                             enablementCondition: enablementCondition,
                             instructions: instructions,
                             sourceQuestionId: sourceItemId,
@@ -1500,6 +1507,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 questionScope: question.QuestionScope,
                 conditionExpression: question.ConditionExpression,
+                hideIfDisabled: question.HideIfDisabled,
                 validationExpression: question.ValidationExpression,
                 validationMessage: question.ValidationMessage,
                 instructions: question.Instructions,
@@ -1553,7 +1561,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 featured : false,
                 questionScope : QuestionScope.Interviewer,
                 conditionExpression : null,
-                validationExpression : null,
+                hideIfDisabled: false,
+                validationExpression: null,
                 validationMessage : null,
                 instructions : null,
                 responsibleId : command.ResponsibleId,
@@ -1634,6 +1643,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isPreFilled,
             QuestionScope scope,
             string enablementCondition,
+            bool hideIfDisabled,
             string validationExpression,
             string validationMessage,
             string instructions,
@@ -1660,7 +1670,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 featured : isPreFilled,
                 questionScope : scope,
                 conditionExpression : enablementCondition,
-                validationExpression : validationExpression,
+                hideIfDisabled: hideIfDisabled,
+                validationExpression: validationExpression,
                 validationMessage : validationMessage,
                 instructions : instructions,
                 responsibleId : responsibleId,
@@ -1688,6 +1699,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isPreFilled,
             QuestionScope scope,
             string enablementCondition,
+            bool hideIfDisabled,
             string validationExpression,
             string validationMessage,
             string instructions,
@@ -1712,6 +1724,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 featured: isPreFilled,
                 questionScope: scope,
                 conditionExpression: enablementCondition,
+                hideIfDisabled: hideIfDisabled,
                 validationExpression: validationExpression,
                 validationMessage: validationMessage,
                 instructions: instructions,
@@ -1739,6 +1752,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isPreFilled,
             QuestionScope scope,
             string enablementCondition,
+            bool hideIfDisabled,
             string validationExpression,
             string validationMessage,
             string instructions,
@@ -1764,6 +1778,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 featured: isPreFilled,
                 questionScope: scope,
                 conditionExpression: enablementCondition,
+                hideIfDisabled: hideIfDisabled,
                 validationExpression: validationExpression,
                 validationMessage: validationMessage,
                 instructions: instructions,
@@ -1790,6 +1805,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string variableName, string variableLabel,
             QuestionScope scope,
             string enablementCondition,
+            bool hideIfDisabled,
             string validationExpression,
             string validationMessage,
             string instructions,
@@ -1827,6 +1843,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 featured: false,
                 questionScope: scope,
                 conditionExpression: enablementCondition,
+                hideIfDisabled: hideIfDisabled,
                 validationExpression: validationExpression,
                 validationMessage: validationMessage,
                 instructions: instructions,
@@ -1856,6 +1873,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isPreFilled,
             QuestionScope scope,
             string enablementCondition,
+            bool hideIfDisabled,
             string validationExpression,
             string validationMessage,
             string instructions,
@@ -1914,6 +1932,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 featured: isPreFilled,
                 questionScope: scope,
                 conditionExpression: enablementCondition,
+                hideIfDisabled: hideIfDisabled,
                 validationExpression: validationExpression,
                 validationMessage: validationMessage,
                 instructions: instructions,
@@ -1966,6 +1985,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 featured: categoricalOneAnswerQuestion.Featured,
                 questionScope: categoricalOneAnswerQuestion.QuestionScope,
                 conditionExpression: categoricalOneAnswerQuestion.ConditionExpression,
+                hideIfDisabled: categoricalOneAnswerQuestion.HideIfDisabled,
                 validationExpression: categoricalOneAnswerQuestion.ValidationExpression,
                 validationMessage: categoricalOneAnswerQuestion.ValidationMessage,
                 instructions: categoricalOneAnswerQuestion.Instructions,
@@ -2011,6 +2031,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 featured: categoricalOneAnswerQuestion.Featured,
                 questionScope: categoricalOneAnswerQuestion.QuestionScope,
                 conditionExpression: categoricalOneAnswerQuestion.ConditionExpression,
+                hideIfDisabled: categoricalOneAnswerQuestion.HideIfDisabled,
                 validationExpression: categoricalOneAnswerQuestion.ValidationExpression,
                 validationMessage: categoricalOneAnswerQuestion.ValidationMessage,
                 instructions: categoricalOneAnswerQuestion.Instructions,
@@ -2039,6 +2060,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isPreFilled,
             QuestionScope scope, 
             string enablementCondition, 
+            bool hideIfDisabled, 
             string validationExpression, 
             string validationMessage,
             string instructions,
@@ -2068,6 +2090,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 capital : false,
                 questionScope : scope,
                 conditionExpression : enablementCondition,
+                hideIfDisabled: hideIfDisabled,
                 validationExpression : validationExpression,
                 validationMessage : validationMessage,
                 instructions : instructions,
@@ -4133,7 +4156,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #region Create clone events
 
         private IEnumerable<IEvent> CreateTextQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel,
-            bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions,
+            bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string validationExpression, string validationMessage, string instructions,
             string mask, Guid parentGroupId, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId)
         {
             yield return new QuestionCloned(
@@ -4145,6 +4168,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 variableLabel: variableLabel,
                 questionScope: scope,
                 conditionExpression: enablementCondition,
+                hideIfDisabled: hideIfDisabled,
                 validationExpression: validationExpression,
                 validationMessage: validationMessage,
                 instructions: instructions,
@@ -4171,7 +4195,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private IEnumerable<IEvent> CreateGeoLocationQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, 
-            string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid parentGroupId, Guid sourceQuestionId,
+            string enablementCondition, bool hideIfDisabled, string validationExpression, string validationMessage, string instructions, Guid parentGroupId, Guid sourceQuestionId,
             Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, QuestionScope scope, bool featured, bool capital)
         {
             yield return new QuestionCloned(
@@ -4183,6 +4207,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 variableLabel: variableLabel,
                 questionScope: scope,
                 conditionExpression: enablementCondition,
+                hideIfDisabled: hideIfDisabled,
                 validationExpression : validationExpression,
                 validationMessage : validationMessage,
                 instructions : instructions,
@@ -4209,7 +4234,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private IEnumerable<IEvent> CreateDateTimeQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, 
-            bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions, 
+            bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string validationExpression, string validationMessage, string instructions, 
             Guid parentGroupId, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId)
         {
             yield return new QuestionCloned(
@@ -4223,6 +4248,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 featured : isPreFilled,
                 questionScope : scope,
                 conditionExpression : enablementCondition,
+                hideIfDisabled: hideIfDisabled,
                 validationExpression : validationExpression,
                 validationMessage : validationMessage,
                 instructions : instructions,
@@ -4253,6 +4279,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             string variableLabel, 
             QuestionScope scope, 
             string enablementCondition, 
+            bool hideIfDisabled, 
             string validationExpression, 
             string validationMessage,
             string instructions, 
@@ -4278,6 +4305,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 variableLabel : variableLabel,
                 questionScope : scope,
                 conditionExpression : enablementCondition,
+                hideIfDisabled: hideIfDisabled,
                 validationExpression : validationExpression,
                 validationMessage : validationMessage,
                 instructions : instructions,
@@ -4303,7 +4331,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private IEnumerable<IEvent> CreateCategoricalSingleAnswerQuestionEvents(Guid questionId, string title, string variableName, string variableLabel, 
-            bool isPreFilled, QuestionScope scope, string enablementCondition, string validationExpression, string validationMessage, string instructions, 
+            bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string validationExpression, string validationMessage, string instructions, 
             Guid parentGroupId, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, Option[] options, 
             Guid? linkedToQuestionId, Guid? linkedToRosterId, bool? isFilteredCombobox, Guid? cascadeFromQuestionId)
         {
@@ -4317,6 +4345,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 featured : isPreFilled,
                 questionScope : scope,
                 conditionExpression : enablementCondition,
+                hideIfDisabled: hideIfDisabled,
                 validationExpression : validationExpression,
                 validationMessage : validationMessage,
                 instructions : instructions,
@@ -4341,7 +4370,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private IEnumerable<IEvent> CreateNumericQuestionCloneEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, 
-            string enablementCondition, string validationExpression, string validationMessage, string instructions, Guid sourceQuestionId, 
+            string enablementCondition, bool hideIfDisabled, string validationExpression, string validationMessage, string instructions, Guid sourceQuestionId, 
             Guid sourceQuestionnaireId,int targetIndex, Guid responsibleId, bool isInteger, int? countOfDecimalPlaces)
         {
             yield return new NumericQuestionCloned
@@ -4355,6 +4384,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 capital : false,
                 questionScope : scope,
                 conditionExpression : enablementCondition,
+                hideIfDisabled: hideIfDisabled,
                 validationExpression : validationExpression,
                 validationMessage : validationMessage,
                 instructions : instructions,
@@ -4415,7 +4445,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private IEnumerable<IEvent> CreateMultimediaQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, 
-            string enablementCondition, string instructions, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, QuestionScope scope)
+            string enablementCondition, bool hideIfDisabled, string instructions, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, QuestionScope scope)
         {
             yield return
                 new QuestionCloned(
@@ -4429,6 +4459,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     capital : false,
                     questionScope : scope,
                     conditionExpression : enablementCondition,
+                    hideIfDisabled: hideIfDisabled,
                     instructions : instructions,
                     sourceQuestionId : sourceQuestionId,
                     sourceQuestionnaireId : sourceQuestionnaireId,

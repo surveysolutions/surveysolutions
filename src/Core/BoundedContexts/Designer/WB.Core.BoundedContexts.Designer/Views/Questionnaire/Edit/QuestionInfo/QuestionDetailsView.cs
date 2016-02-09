@@ -8,6 +8,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
     {
         public string EnablementCondition { get; set; }
 
+        public bool HideIfDisabled { get; set; }
+
         public bool IsPreFilled { get; set; }
 
         public string Instructions { get; set; }
