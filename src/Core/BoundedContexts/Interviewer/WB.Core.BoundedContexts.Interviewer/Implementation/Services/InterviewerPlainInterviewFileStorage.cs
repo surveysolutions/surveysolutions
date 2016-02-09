@@ -44,26 +44,33 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task StoreInterviewBinaryDataAsync(Guid interviewId, string fileName, byte[] data)
         {
-            string FileId = Guid.NewGuid().FormatGuid();
-            await this.fileViewStorage.StoreAsync(new InterviewFileView
-            {
-                Id = FileId,
-                File = data
-            }).ConfigureAwait(false);
-
-
             var imageView =
              this.imageViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName)
                  .SingleOrDefault();
 
             if (imageView == null)
             {
+                string fileId = Guid.NewGuid().FormatGuid();
+                await this.fileViewStorage.StoreAsync(new InterviewFileView
+                {
+                    Id = fileId,
+                    File = data
+                }).ConfigureAwait(false);
+
                 await this.imageViewStorage.StoreAsync(new InterviewMultimediaView
                 {
                     Id = Guid.NewGuid().FormatGuid(),
                     InterviewId = interviewId,
-                    FileId = FileId,
+                    FileId = fileId,
                     FileName = fileName
+                }).ConfigureAwait(false);
+            }
+            else
+            {
+                await this.fileViewStorage.StoreAsync(new InterviewFileView
+                {
+                    Id = imageView.FileId,
+                    File = data
                 }).ConfigureAwait(false);
             }
         }
