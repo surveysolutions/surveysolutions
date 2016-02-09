@@ -889,6 +889,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             Guid? rosterSizeQuestionId, 
             string description, 
             string condition, 
+            bool hideIfDisabled,
             Guid? parentGroupId, 
             bool isRoster, 
             RosterSizeSourceType rosterSizeSource,
@@ -926,6 +927,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ParentGroupPublicKey = parentGroupId,
                 Description = description,
                 ConditionExpression = condition,
+                HideIfDisabled = hideIfDisabled,
                 ResponsibleId = responsibleId
             });
 
@@ -978,6 +980,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 targetIndex: targetIndex,
                 description: sourceGroup.Description, 
                 condition: sourceGroup.ConditionExpression,
+                hideIfDisabled: sourceGroup.HideIfDisabled,
                 isRoster: sourceGroup.IsRoster, 
                 rosterSizeSource: sourceGroup.RosterSizeSource,
                 rosterSizeQuestionId: GetIdOrReturnSameId(replacementIdDictionary, sourceGroup.RosterSizeQuestionId),
@@ -1223,8 +1226,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public void UpdateGroup(Guid groupId, Guid responsibleId,
-            string title,string variableName, Guid? rosterSizeQuestionId, string description, string condition, bool isRoster,
-            RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] rosterFixedTitles, Guid? rosterTitleQuestionId)
+            string title,string variableName, Guid? rosterSizeQuestionId, string description, string condition, bool hideIfDisabled, 
+            bool isRoster, RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] rosterFixedTitles, Guid? rosterTitleQuestionId)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1267,6 +1270,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 VariableName = variableName,
                 Description = description,
                 ConditionExpression = condition,
+                HideIfDisabled = hideIfDisabled,
                 ResponsibleId = responsibleId
             });
 
@@ -4335,7 +4339,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public IEnumerable<IEvent> CreateCloneGroupWithoutChildrenEvents(Guid groupId, Guid responsibleId, string title, string variableName, 
-            Guid? rosterSizeQuestionId, string description, string condition, Guid? parentGroupId, Guid sourceGroupId, int targetIndex, bool isRoster,
+            Guid? rosterSizeQuestionId, string description, string condition, bool hideIfDisabled, Guid? parentGroupId, Guid sourceGroupId, int targetIndex, bool isRoster,
             RosterSizeSourceType rosterSizeSource, FixedRosterTitle[] rosterFixedTitles, Guid? rosterTitleQuestionId, Guid? sourceQuestionnaireId)
         {
             yield return
@@ -4347,6 +4351,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     ParentGroupPublicKey = parentGroupId,
                     Description = description,
                     ConditionExpression = condition,
+                    HideIfDisabled = hideIfDisabled,
                     SourceGroupId = sourceGroupId,
                     TargetIndex = targetIndex,
                     ResponsibleId = responsibleId,

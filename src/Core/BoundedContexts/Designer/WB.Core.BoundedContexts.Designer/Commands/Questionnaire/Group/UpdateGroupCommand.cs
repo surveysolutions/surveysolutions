@@ -9,10 +9,10 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
     public class UpdateGroupCommand : FullGroupDataCommand
     {
         public UpdateGroupCommand(Guid questionnaireId, Guid groupId, Guid responsibleId,
-            string title, string variableName, Guid? rosterSizeQuestionId, string condition, bool isRoster,
+            string title, string variableName, Guid? rosterSizeQuestionId, string condition, bool hideIfDisabled, bool isRoster,
             RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] fixedRosterTitles, Guid? rosterTitleQuestionId)
             : base(
-                questionnaireId, groupId, responsibleId, title, variableName, rosterSizeQuestionId, condition, isRoster, rosterSizeSource,
+                questionnaireId, groupId, responsibleId, title, variableName, rosterSizeQuestionId, condition, hideIfDisabled, isRoster, rosterSizeSource,
                 fixedRosterTitles, rosterTitleQuestionId) {}
     }
 }
