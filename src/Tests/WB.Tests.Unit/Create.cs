@@ -448,7 +448,7 @@ namespace WB.Tests.Unit
             IMvxMainThreadDispatcher mvxMainThreadDispatcher = null)
             => new EnumerationStageViewModel(
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
-                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireRepository ?? Stub<IPlainQuestionnaireRepository>.WithNotEmptyValues,
                 questionnaireModelRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 substitutionService ?? Mock.Of<ISubstitutionService>(),

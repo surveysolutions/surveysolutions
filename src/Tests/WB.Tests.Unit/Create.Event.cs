@@ -118,6 +118,8 @@ namespace WB.Tests.Unit
                 return new GroupsDisabled(identities);
             }
 
+            public static GroupsEnabled GroupsEnabled(Identity[] groups) => new GroupsEnabled(groups);
+
             public static GroupsEnabled GroupsEnabled(Guid? id = null, decimal[] rosterVector = null)
             {
                 var identities = new[]
