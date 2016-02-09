@@ -253,7 +253,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             if (question is IMultyOptionsQuestion)
             {
                 var multioptionQuestion = (IMultyOptionsQuestion) question;
-                if (multioptionQuestion.LinkedToQuestionId.HasValue)
+                if (multioptionQuestion.LinkedToQuestionId.HasValue || multioptionQuestion.LinkedToRosterId.HasValue)
                 {
                     exportedHeaderItem.QuestionSubType = QuestionSubtype.MultyOption_Linked;
                 }
@@ -324,7 +324,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
         private static bool IsQuestionLinked(IQuestion question)
         {
-            return question.LinkedToQuestionId.HasValue;
+            return question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue;
         }
 
         private void ThrowIfQuestionIsNotMultiSelectOrTextList(IQuestion question)
@@ -440,9 +440,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 {
                     if (this.IsQuestionMultiOption(question))
                     {
-                        if (question.LinkedToQuestionId.HasValue)
-                            this.AddHeadersForLinkedMultiOptions(headerStructureForLevel.HeaderItems, question,
-                                referenceInfoForLinkedQuestions, maxValuesForRosterSizeQuestions);
+                        if (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue)
+                            this.AddHeadersForLinkedMultiOptions(headerStructureForLevel.HeaderItems, question, referenceInfoForLinkedQuestions, maxValuesForRosterSizeQuestions);
+
                         else this.AddHeadersForMultiOptions(headerStructureForLevel.HeaderItems, question, referenceInfoForLinkedQuestions);
                     }
                     else if (this.IsQuestionTextList(question))
