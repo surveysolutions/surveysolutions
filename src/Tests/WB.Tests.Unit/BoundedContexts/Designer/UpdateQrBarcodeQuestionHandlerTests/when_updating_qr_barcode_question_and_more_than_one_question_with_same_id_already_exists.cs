@@ -32,7 +32,7 @@ questionType: QuestionType.QRBarcode
             exception = Catch.Exception(() =>
                 questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: "title",
                     variableName: "qr_barcode_question",
-                variableLabel: null, enablementCondition: null, instructions: null,
+                variableLabel: null, enablementCondition: null, hideIfDisabled: false, instructions: null,
                     responsibleId: responsibleId, scope: QuestionScope.Interviewer, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
 
         It should_throw_QuestionnaireException = () =>

@@ -45,6 +45,7 @@ questionType: QuestionType.QRBarcode
                     isPreFilled: isPreFilled,
                     scope: scope,
                     enablementCondition: enablementCondition,
+                    hideIfDisabled: false,
                     instructions: instructions,
                     responsibleId: responsibleId,
                     options: options,

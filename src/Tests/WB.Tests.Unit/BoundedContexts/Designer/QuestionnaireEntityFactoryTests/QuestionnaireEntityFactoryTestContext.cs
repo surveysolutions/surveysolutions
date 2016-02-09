@@ -25,6 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireEntityFactoryTests
                 variable ?? "var", 
                 null,
                 condition ?? "", 
+                false,
                 Order.AsIs,
                 false,
                 false,

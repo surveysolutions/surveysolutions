@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         Because of = () =>
             exception = Catch.Exception(() =>
                 questionnaire.AddGroupAndMoveIfNeeded(groupId: groupId, responsibleId: responsibleId, title: tooLongTitle, variableName: null,
-                    rosterSizeQuestionId: null, description: null, condition: null, parentGroupId: parentGroupId,
+                    rosterSizeQuestionId: null, description: null, condition: null, hideIfDisabled: false, parentGroupId: parentGroupId,
                     isRoster: true, rosterSizeSource: RosterSizeSourceType.FixedTitles, rosterFixedTitles: new[] { new FixedRosterTitleItem("1", "roster fixed title 1"), new FixedRosterTitleItem("2", "roster fixed title 2") }, rosterTitleQuestionId: null));
 
         It should_throw_QuestionnaireException = () =>

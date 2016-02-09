@@ -33,10 +33,11 @@ questionType: QuestionType.QRBarcode
                     questionId: questionId,
                     title: emptyTitle,
                     variableName: variableName,
-                variableLabel: null,
+                    variableLabel: null,
                     isPreFilled: isPreFilled,
                     scope: scope,
                     enablementCondition: enablementCondition,
+                    hideIfDisabled: false,
                     instructions: instructions,
                      mask: null,
                     responsibleId: responsibleId, validationCoditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));

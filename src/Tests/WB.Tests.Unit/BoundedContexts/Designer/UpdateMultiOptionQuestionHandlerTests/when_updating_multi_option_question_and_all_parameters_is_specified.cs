@@ -38,6 +38,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                 variableLabel: null,
                 scope: scope,
                 enablementCondition: enablementCondition,
+                hideIfDisabled: hideIfDisabled,
                 instructions: instructions,
                 responsibleId: responsibleId
                 , options: options,
@@ -75,6 +76,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
         It should_raise_QuestionChanged_event_with_condition_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
                 .ConditionExpression.ShouldEqual(enablementCondition);
+
+        It should_raise_QuestionChanged_event_with_HideIfDisabled_specified = () =>
+            eventContext.GetSingleEvent<QuestionChanged>()
+                .HideIfDisabled.ShouldEqual(hideIfDisabled);
 
         It should_raise_QuestionChanged_event_with_instructions_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
@@ -114,6 +119,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
         private static string instructions = "intructions";
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static string enablementCondition = "some condition";
+        private static bool hideIfDisabled = true;
         private static string validationExpression = "some validation";
         private static string validationMessage = "validation message";
         private static Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };

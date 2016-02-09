@@ -42,9 +42,10 @@ questionType: QuestionType.QRBarcode
                     questionId: questionId,
                     title: title,
                     variableName: variableName,
-                variableLabel: null,
+                    variableLabel: null,
                     scope: scope,
                     enablementCondition: enablementCondition,
+                    hideIfDisabled: false,
                     instructions: instructions,
                     responsibleId: responsibleId
                     , options: options,

@@ -117,7 +117,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string validationExpression = null, string validationMessage = null,
             QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
             QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null,
-            Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
+            Guid? cascadeFromQuestionId = null, string conditionExpression = null, bool hideIfDisabled = false, Order? answerOrder = null,
             IList<ValidationCondition> validationConditions = null)
         {
             return new QuestionChanged(
@@ -129,6 +129,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                 featured: featured,
                 questionScope: questionScope,
                 conditionExpression: conditionExpression,
+                hideIfDisabled: hideIfDisabled,
                 validationExpression: validationExpression,
                 validationMessage: validationMessage,
                 instructions: instructions,

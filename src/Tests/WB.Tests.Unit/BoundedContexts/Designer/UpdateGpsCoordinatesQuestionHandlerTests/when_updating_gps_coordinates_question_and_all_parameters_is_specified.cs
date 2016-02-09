@@ -40,9 +40,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
                 isPreFilled:false,
                 scope: scope,
                 enablementCondition: enablementCondition,
+                hideIfDisabled: hideIfDisabled,
                 instructions: instructions,
                 responsibleId: responsibleId,
-                    validationConditions: new List<ValidationCondition>()
+                validationConditions: new List<ValidationCondition>()
 
     );
 
@@ -75,6 +76,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
             eventContext.GetSingleEvent<QuestionChanged>()
                 .ConditionExpression.ShouldEqual(enablementCondition);
 
+        It should_raise_QuestionChanged_event_with_hideIfDisabled_specified = () =>
+            eventContext.GetSingleEvent<QuestionChanged>()
+                .HideIfDisabled.ShouldEqual(hideIfDisabled);
+
         It should_raise_QuestionChanged_event_with_instructions_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
                 .Instructions.ShouldEqual(instructions);
@@ -94,5 +99,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateGpsCoordinatesQuestionHan
         private static string instructions = "intructions";
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static string enablementCondition = "some condition";
+        private static bool hideIfDisabled = true;
     }
 }

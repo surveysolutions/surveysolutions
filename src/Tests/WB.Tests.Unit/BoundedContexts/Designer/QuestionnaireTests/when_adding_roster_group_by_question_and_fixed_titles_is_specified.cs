@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 Catch.Exception(
                     () =>
                         questionnaire.AddGroupAndMoveIfNeeded(groupId: groupId, responsibleId: responsibleId, title: "title", variableName: null,
-                            rosterSizeQuestionId: rosterSizeQuestionId, description: null, condition: null,
+                            rosterSizeQuestionId: rosterSizeQuestionId, description: null, condition: null, hideIfDisabled: false,
                             parentGroupId: chapterId, isRoster: true, rosterSizeSource: RosterSizeSourceType.Question,
                             rosterFixedTitles: rosterFixedTitles, rosterTitleQuestionId: null));
         
