@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -81,6 +82,16 @@ namespace WB.Tests.Unit
             return Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
         }
 
+        public static IPlainQuestionnaireRepository QuestionnaireRepositoryWithOneQuestionnaire(
+            QuestionnaireIdentity questionnaireIdentity, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
+        {
+            var questionnaire = Mock.Of<IQuestionnaire>(questionnaireMoqPredicate);
+
+            return Mock.Of<IPlainQuestionnaireRepository>(repository
+                => repository.GetQuestionnaire(questionnaireIdentity) == questionnaire
+                && repository.GetHistoricalQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version) == questionnaire);
+        }
+
         public static IEventHandler FailingFunctionalEventHandler()
         {
             return FailingFunctionalEventHandlerHavingUniqueType<object>();
@@ -137,7 +148,7 @@ namespace WB.Tests.Unit
             IPlainQuestionnaireRepository questionnaireRepository = Create.QuestionnaireRepositoryStubWithOneQuestionnaire(
                 questionnaireId: questionnaireId,
                 questionnaireVersion: questionnaireVersion,
-                questionaire: questionnaire);
+                questionnaire: questionnaire);
 
             Interview interview = Create.Interview(questionnaireRepository: questionnaireRepository);
 
