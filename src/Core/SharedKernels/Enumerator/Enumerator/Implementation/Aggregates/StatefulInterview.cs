@@ -776,8 +776,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            int grosterLevel = questionnaire.GetRosterLevelForGroup(rosterId);
-            var rosterVector = targetRosterVector.Shrink(grosterLevel);
+            int rosterLevel = questionnaire.GetRosterLevelForGroup(rosterId);
+            var rosterVector = targetRosterVector.Shrink(rosterLevel);
             var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterId, rosterVector);
 
             return this.groups.ContainsKey(rosterKey) ? this.groups[rosterKey] as InterviewRoster : null;
@@ -786,10 +786,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public IEnumerable<string> GetParentRosterTitlesWithoutLast(Guid questionId, RosterVector rosterVector)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            return GetParentRosterTitlesWithoutLast(questionnaire.GetRostersFromTopToSpecifiedQuestion(questionId), rosterVector);
+        }
 
-            IEnumerable<Guid> parentRosters = questionnaire.GetRosterSizeSourcesForEntity(questionId).WithoutLast();
+        public IEnumerable<string> GetParentRosterTitlesWithoutLastForRoster(Guid rosterId, RosterVector rosterVector)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            return GetParentRosterTitlesWithoutLast(questionnaire.GetRostersFromTopToSpecifiedGroup(rosterId), rosterVector);
+        }
 
-            foreach (var parentRosterId in parentRosters)
+        private IEnumerable<string> GetParentRosterTitlesWithoutLast(IEnumerable<Guid> parentRosters, RosterVector rosterVector)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            var parentRostersWithout = parentRosters.WithoutLast().ToArray();
+            foreach (var parentRosterId in parentRostersWithout)
             {
                 int parentRosterLevel = questionnaire.GetRosterLevelForGroup(parentRosterId);
                 var parentRosterVector = rosterVector.Shrink(parentRosterLevel);
