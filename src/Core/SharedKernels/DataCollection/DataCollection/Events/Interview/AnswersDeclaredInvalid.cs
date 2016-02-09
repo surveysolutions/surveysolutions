@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview
@@ -8,7 +9,14 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     {
         public Identity[] Questions { get; protected set; }
 
-        public IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> FailedValidationConditions { get; protected set; }
+        public List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>> FailedConditionsStorage { get; protected set; }
+
+        [JsonIgnore]
+        public IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> FailedValidationConditions
+        {
+            get { return this.FailedConditionsStorage.ToDictionary(x => x.Key, x => x.Value); }
+            protected set { this.FailedConditionsStorage = value.ToList(); }
+        }
 
         protected AnswersDeclaredInvalid()
         {
