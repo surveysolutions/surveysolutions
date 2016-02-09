@@ -73,7 +73,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         }
 
         [HttpGet]
-        [Route("{id:guid}/{version:int}")]
+        [Route("{id:guid}/{version:int}/{contentVersion:long}")]
         [WriteToSyncLog(SynchronizationLogType.GetQuestionnaire)]
         public HttpResponseMessage Get(Guid id, int version, long contentVersion)
         {
