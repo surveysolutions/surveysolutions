@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         }
 
         internal static void AddInterviewLevel(InterviewData interview, ValueVector<Guid> scopeVector,
-            decimal[] rosterVector, Dictionary<Guid, object> answeredQuestions,
+            decimal[] rosterVector, Dictionary<Guid, object> answeredQuestions = null,
             Dictionary<Guid, string> rosterTitles = null, int? sortIndex = null)
         {
             InterviewLevel rosterLevel;
@@ -58,16 +58,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                 rosterLevel = interview.Levels[levelKey];
                 rosterLevel.ScopeVectors.Add(scopeVector, sortIndex);
             }
+            if (answeredQuestions != null)
+                foreach (var answeredQuestion in answeredQuestions)
+                {
+                    if (!rosterLevel.QuestionsSearchCache.ContainsKey(answeredQuestion.Key))
+                        rosterLevel.QuestionsSearchCache.Add(answeredQuestion.Key,
+                            new InterviewQuestion(answeredQuestion.Key));
 
-            foreach (var answeredQuestion in answeredQuestions)
-            {
-                if (!rosterLevel.QuestionsSearchCache.ContainsKey(answeredQuestion.Key))
-                    rosterLevel.QuestionsSearchCache.Add(answeredQuestion.Key,
-                        new InterviewQuestion(answeredQuestion.Key));
-
-                var nestedQuestion = rosterLevel.QuestionsSearchCache[answeredQuestion.Key];
-                nestedQuestion.Answer = answeredQuestion.Value;
-            }
+                    var nestedQuestion = rosterLevel.QuestionsSearchCache[answeredQuestion.Key];
+                    nestedQuestion.Answer = answeredQuestion.Value;
+                }
 
             if (rosterTitles != null)
             {

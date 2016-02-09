@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (question == null)
                 return ValueParsingResult.QuestionWasNotFound;
 
-            if (question.LinkedToQuestionId.HasValue)
+            if (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue)
                 return ValueParsingResult.UnsupportedLinkedQuestion;
 
             if (question is IMultimediaQuestion)

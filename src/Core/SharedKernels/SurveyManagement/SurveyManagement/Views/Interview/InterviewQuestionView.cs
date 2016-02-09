@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                     YesNoQuestion = categoricalMultiQuestion.YesNoView,
                     AreAnswersOrdered = categoricalMultiQuestion.AreAnswersOrdered,
                     MaxAllowedAnswers = categoricalMultiQuestion.MaxAllowedAnswers,
-                    IsLinked = categoricalMultiQuestion.LinkedToQuestionId.HasValue
+                    IsLinked = (categoricalMultiQuestion.LinkedToQuestionId.HasValue|| categoricalMultiQuestion.LinkedToRosterId.HasValue)
                 };
             }
 
@@ -72,7 +72,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 {
                     IsFilteredCombobox = categoricalSingleQuestion.IsFilteredCombobox ?? false,
                     IsCascade = categoricalSingleQuestion.CascadeFromQuestionId.HasValue,
-                    IsLinked = categoricalSingleQuestion.LinkedToQuestionId.HasValue
+                    IsLinked = (categoricalSingleQuestion.LinkedToQuestionId.HasValue|| categoricalSingleQuestion.LinkedToRosterId.HasValue)
                 };
             }
 
