@@ -15,6 +15,8 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using System.Collections.Generic;
 
 using Microsoft.Practices.ServiceLocation;
+using MvvmCross.Platform.Core;
+using MvvmCross.Plugins.Messenger;
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Spec;
@@ -136,6 +138,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.Synchronization.SyncStorage;
+using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
 
 namespace WB.Tests.Unit
 {
@@ -169,7 +172,7 @@ namespace WB.Tests.Unit
         {
             return new AnsweredQuestionSynchronizationDto(
                 questionId ?? Guid.NewGuid(),
-                rosterVector ?? WB.Core.SharedKernels.DataCollection.RosterVector.Empty,
+                rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty,
                 answer ?? "42",
                 "no comment");
         }
@@ -433,6 +436,27 @@ namespace WB.Tests.Unit
                 questionsToBeEnabled ?? new List<Identity>());
         }
 
+        public static EnumerationStageViewModel EnumerationStageViewModel(
+            IInterviewViewModelFactory interviewViewModelFactory = null,
+            IPlainQuestionnaireRepository questionnaireRepository = null,
+            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository = null,
+            IStatefulInterviewRepository interviewRepository = null,
+            ISubstitutionService substitutionService = null,
+            ILiteEventRegistry eventRegistry = null,
+            IMvxMessenger messenger = null,
+            IUserInterfaceStateService userInterfaceStateService = null,
+            IMvxMainThreadDispatcher mvxMainThreadDispatcher = null)
+            => new EnumerationStageViewModel(
+                interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
+                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                questionnaireModelRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                substitutionService ?? Mock.Of<ISubstitutionService>(),
+                eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
+                messenger ?? Mock.Of<IMvxMessenger>(),
+                userInterfaceStateService ?? Mock.Of<IUserInterfaceStateService>(),
+                mvxMainThreadDispatcher ?? Stub.MvxMainThreadDispatcher());
+
         public static EventContext EventContext()
         {
             return new EventContext();
@@ -655,14 +679,10 @@ namespace WB.Tests.Unit
         }
 
         public static Identity Identity(string id, RosterVector rosterVector)
-        {
-            return Create.Identity(Guid.Parse(id), rosterVector);
-        }
+            => Create.Identity(Guid.Parse(id), rosterVector);
 
-        public static Identity Identity(Guid id, RosterVector rosterVector)
-        {
-            return new Identity(id, rosterVector);
-        }
+        public static Identity Identity(Guid id, RosterVector rosterVector
+            ) => new Identity(id, rosterVector);
 
         public static Interview Interview(Guid? interviewId = null, IPlainQuestionnaireRepository questionnaireRepository = null,
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
@@ -776,7 +796,7 @@ namespace WB.Tests.Unit
         {
             return new InterviewDataExportRecord("test", new string[0], new string[0], new string [0])
             {
-                Answers = questions.Select(x => string.Join("\n", x)).ToArray() 
+                Answers = questions.Select(x => String.Join("\n", x)).ToArray() 
             };
         }
 
@@ -895,7 +915,7 @@ namespace WB.Tests.Unit
             ISerializer serializer = null,
             ICommandService commandService = null,
             HeadquartersPushContext headquartersPushContext = null,
-            IQueryableReadSideRepositoryReader<UserDocument> userDocumentStorage = null, WB.Core.Infrastructure.PlainStorage.IPlainStorageAccessor<LocalInterviewFeedEntry> plainStorage = null,
+            IQueryableReadSideRepositoryReader<UserDocument> userDocumentStorage = null, IPlainStorageAccessor<LocalInterviewFeedEntry> plainStorage = null,
             IHeadquartersInterviewReader headquartersInterviewReader = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
             IInterviewSynchronizationFileStorage interviewSynchronizationFileStorage = null,
@@ -906,11 +926,11 @@ namespace WB.Tests.Unit
                 HeadquartersSettings(),
                 logger ?? Mock.Of<ILogger>(),
                 commandService ?? Mock.Of<ICommandService>(),
-                plainStorage ?? Mock.Of<WB.Core.Infrastructure.PlainStorage.IPlainStorageAccessor<LocalInterviewFeedEntry>>(),
+                plainStorage ?? Mock.Of<IPlainStorageAccessor<LocalInterviewFeedEntry>>(),
                 userDocumentStorage ?? Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>(),
                 plainQuestionnaireRepository ??
                     Mock.Of<IPlainQuestionnaireRepository>(
-                        _ => _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == new QuestionnaireDocument()),
+                        _ => _.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()) == new QuestionnaireDocument()),
                 headquartersInterviewReader ?? Mock.Of<IHeadquartersInterviewReader>(),
                 HeadquartersPullContext(),
                 headquartersPushContext ?? HeadquartersPushContext(),
@@ -1798,13 +1818,13 @@ namespace WB.Tests.Unit
         }
 
         public static IPlainQuestionnaireRepository QuestionnaireRepositoryStubWithOneQuestionnaire(
-            Guid questionnaireId, IQuestionnaire questionaire = null, long? questionnaireVersion = null)
+            Guid questionnaireId, IQuestionnaire questionnaire = null, long? questionnaireVersion = null)
         {
-            questionaire = questionaire ?? Mock.Of<IQuestionnaire>();
+            questionnaire = questionnaire ?? Mock.Of<IQuestionnaire>();
 
             return Mock.Of<IPlainQuestionnaireRepository>(repository
-                => repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion ?? questionaire.Version) == questionaire
-                && repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion ?? 1) == questionaire);
+                => repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion ?? questionnaire.Version) == questionnaire
+                && repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion ?? 1) == questionnaire);
         }
 
         public static QuestionnaireSharedPersons QuestionnaireSharedPersons(Guid? questionnaireId = null)
@@ -2104,7 +2124,7 @@ namespace WB.Tests.Unit
                 Mock.Of<ILogger>());
         }
 
-        public static IPublishedEvent<designer::Main.Core.Events.Questionnaire.TemplateImported> TemplateImportedEvent(
+        public static IPublishedEvent<TemplateImported> TemplateImportedEvent(
             string questionnaireId,
             string chapter1Id = null,
             string chapter1Title = null,
@@ -2119,7 +2139,7 @@ namespace WB.Tests.Unit
             string chapter1StaticTextId = null, string chapter1StaticText = null,
             bool? isPublic = null)
         {
-            return ToPublishedEvent(new designer::Main.Core.Events.Questionnaire.TemplateImported()
+            return ToPublishedEvent(new TemplateImported()
             {
                 Source =
                     CreateQuestionnaireDocument(questionnaireId: questionnaireId, questionnaireTitle: questionnaireTitle,
@@ -2464,7 +2484,7 @@ namespace WB.Tests.Unit
                 AreAnswersOrdered = areAnswersOrdered,
                 Id = id,
                 Instructions = "instructions",
-                Options = options ?? new List <OptionModel>
+                Options = options ?? new List<OptionModel>
                 {
                     Create.OptionModel("item1", 1),
                     Create.OptionModel("item2", 2),
@@ -2496,7 +2516,7 @@ namespace WB.Tests.Unit
                     interviewId: Guid.NewGuid(),
                     userId: userId ?? Guid.NewGuid(),
                     questionId: questionId ?? Guid.NewGuid(),
-                    rosterVector: rosterVector ?? WB.Core.SharedKernels.DataCollection.RosterVector.Empty,
+                    rosterVector: rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty,
                     answerTime: answerTime ?? DateTime.UtcNow,
                     answeredOptions: answeredOptions ?? new AnsweredYesNoOption[] {});
             }

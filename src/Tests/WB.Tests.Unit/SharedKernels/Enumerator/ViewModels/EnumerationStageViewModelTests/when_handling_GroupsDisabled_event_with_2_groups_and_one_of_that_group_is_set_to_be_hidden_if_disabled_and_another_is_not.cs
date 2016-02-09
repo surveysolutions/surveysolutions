@@ -1,0 +1,67 @@
+using System;
+using System.Linq;
+using Machine.Specifications;
+using Moq;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using It = Machine.Specifications.It;
+
+namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageViewModelTests
+{
+    internal class when_handling_GroupsDisabled_event_with_2_groups_and_one_of_that_group_is_set_to_be_hidden_if_disabled_and_another_is_not
+    {
+        Establish context = () =>
+        {
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaire
+                => questionnaire.ShouldBeHiddenIfDisabled(disabledAndHideIfDisabledGroup.Id) == true);
+
+            IStatefulInterviewRepository interviewRepository = Setup.StatefulInterviewRepository(
+                Mock.Of<IStatefulInterview>(_ => _.QuestionnaireIdentity == questionnaireIdentity));
+
+            viemModel = Create.EnumerationStageViewModel(
+                questionnaireRepository: questionnaireRepository,
+                interviewRepository: interviewRepository,
+                mvxMainThreadDispatcher: Stub.MvxMainThreadDispatcher());
+
+            viemModel.Init(interviewId, Create.NavigationState());
+
+            viemModel.Items = new ObservableRangeCollection<dynamic>(new dynamic[]
+            {
+                Mock.Of<IInterviewEntityViewModel>(_ => _.Identity == disabledAndHideIfDisabledGroup),
+                Mock.Of<IInterviewEntityViewModel>(_ => _.Identity == disabledAndNotHideIfDisabledGroup),
+                Mock.Of<IInterviewEntityViewModel>(_ => _.Identity == enabledGroup),
+            });
+        };
+
+        Because of = () =>
+            viemModel.Handle(
+                Create.Event.GroupsDisabled(new[]
+                {
+                    disabledAndHideIfDisabledGroup,
+                    disabledAndNotHideIfDisabledGroup,
+                }));
+
+        It should_remove_disabled_group_which_is_set_to_be_hidden_if_disabled_from_items_list = () =>
+            viemModel.Items.OfType<IInterviewEntityViewModel>().Select(entity => entity.Identity)
+                .ShouldNotContain(disabledAndHideIfDisabledGroup);
+
+        It should_not_remove_disabled_group_which_is_not_set_to_be_hidden_if_disabled_from_items_list = () =>
+            viemModel.Items.OfType<IInterviewEntityViewModel>().Select(entity => entity.Identity)
+                .ShouldContain(disabledAndNotHideIfDisabledGroup);
+
+        It should_not_remove_enabled_group_which_is_set_to_be_hidden_if_disabled_from_items_list = () =>
+            viemModel.Items.OfType<IInterviewEntityViewModel>().Select(entity => entity.Identity)
+                .ShouldContain(enabledGroup);
+
+        private static EnumerationStageViewModel viemModel;
+        private static Identity disabledAndHideIfDisabledGroup = Create.Identity("DDDDDDDDDDDDDDDDD111111111111111", RosterVector.Empty);
+        private static Identity disabledAndNotHideIfDisabledGroup = Create.Identity("DDDDDDDDDDDDDDD00000000000000000", RosterVector.Empty);
+        private static Identity enabledGroup = Create.Identity("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", RosterVector.Empty);
+        private static QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), 99);
+        private static string interviewId = "11111111111111111111111111111111";
+    }
+}
