@@ -9,6 +9,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public InterviewSynchronizationDto()
         {
             Answers = new AnsweredQuestionSynchronizationDto[0];
+            this.FailedValidationConditions = new Dictionary<Identity, List<FailedValidationCondition>>();
         }
 
         public InterviewSynchronizationDto(Guid id, 
@@ -25,6 +26,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             HashSet<InterviewItemId> validAnsweredQuestions,
             HashSet<InterviewItemId> invalidAnsweredQuestions,
             Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances,
+            Dictionary<Identity, List<FailedValidationCondition>> failedValidationConditions,
             bool wasCompleted,
             bool createdOnClient = false)
         {
@@ -43,6 +45,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             InvalidAnsweredQuestions = invalidAnsweredQuestions;
             
             RosterGroupInstances = rosterGroupInstances;
+            this.FailedValidationConditions = failedValidationConditions;
             this.WasCompleted = wasCompleted;
             this.CreatedOnClient = createdOnClient;
 
@@ -62,6 +65,8 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public HashSet<InterviewItemId> DisabledQuestions { get;  set; }
         public HashSet<InterviewItemId> ValidAnsweredQuestions { get;  set; }
         public HashSet<InterviewItemId> InvalidAnsweredQuestions { get;  set; }
+
+        public Dictionary<Identity, List<FailedValidationCondition>> FailedValidationConditions { get; set; } 
         
         public Dictionary<InterviewItemId, RosterSynchronizationDto[]> RosterGroupInstances { get; set; }
 

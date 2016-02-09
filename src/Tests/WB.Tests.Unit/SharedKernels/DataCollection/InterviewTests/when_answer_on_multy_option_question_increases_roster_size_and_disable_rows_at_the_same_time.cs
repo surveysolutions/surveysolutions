@@ -89,20 +89,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interview.SynchronizeInterview(
                 userId,
-                new InterviewSynchronizationDto(
-                    interview.EventSourceId, 
-                    InterviewStatus.InterviewerAssigned, 
-                    null, 
-                    null, 
-                    null,
-                    userId, 
-                    questionnaireId,
-                    questionnaire.Version,
-                    new AnsweredQuestionSynchronizationDto[0],
-                    new HashSet<InterviewItemId>(),
-                    new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
-                    new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),
-                    true));
+                Create.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
+                    status: InterviewStatus.InterviewerAssigned,
+                    userId: userId,
+                    questionnaireId: questionnaireId,
+                    questionnaireVersion: questionnaire.Version,
+                    wasCompleted: true
+                    ));
 
             interview.AnswerMultipleOptionsQuestion(userId, multyOptionRosterSizeId, new decimal[0], DateTime.Now, new decimal[] { 1 });
             interview.AnswerMultipleOptionsQuestion(userId, multyOptionRosterSizeId, new decimal[0], DateTime.Now, new decimal[] { 1, 2 });

@@ -56,29 +56,33 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository,
                 expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
 
-            interviewSynchronizationDto =new InterviewSynchronizationDto(interview.EventSourceId, InterviewStatus.RejectedBySupervisor, null, null, null, userId, questionnaireId,
-                    questionnaire.Version,
-                    new AnsweredQuestionSynchronizationDto[0],
-                    new HashSet<InterviewItemId>(),
-                    new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
-                    new Dictionary<InterviewItemId, RosterSynchronizationDto[]>
-                    {
+            interviewSynchronizationDto =
+                Create.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
+                    status: InterviewStatus.RejectedBySupervisor,
+                    userId: userId,
+                    questionnaireId: questionnaireId,
+                    questionnaireVersion: questionnaire.Version,
+                    rosterGroupInstances:
+                        new Dictionary<InterviewItemId, RosterSynchronizationDto[]>
                         {
-                            new InterviewItemId(nestedRosterGroupId, new decimal[] {1}),
-                            new[]
                             {
-                                new RosterSynchronizationDto(nestedRosterGroupId, new decimal[] {1}, 1, null, string.Empty),
+                                new InterviewItemId(nestedRosterGroupId, new decimal[] {1}),
+                                new[]
+                                {
+                                    new RosterSynchronizationDto(nestedRosterGroupId, new decimal[] {1}, 1, null,
+                                        string.Empty),
+                                }
+                            },
+                            {
+                                new InterviewItemId(rosterGroupId, new decimal[] {}),
+                                new[]
+                                {
+                                    new RosterSynchronizationDto(rosterGroupId, new decimal[] {}, 1, null, string.Empty),
+                                }
                             }
                         },
-                        {
-                            new InterviewItemId(rosterGroupId, new decimal[] {}),
-                            new[]
-                            {
-                                new RosterSynchronizationDto(rosterGroupId, new decimal[] {}, 1, null, string.Empty),
-                            }
-                        }
-                    },
-                    true);
+                    wasCompleted: true
+                    );
 
             eventContext = new EventContext();
         };
