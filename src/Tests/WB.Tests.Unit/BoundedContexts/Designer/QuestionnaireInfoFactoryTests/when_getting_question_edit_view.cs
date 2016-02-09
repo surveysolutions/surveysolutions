@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
             result.EnablementCondition.ShouldEqual("[q1] > 25");
 
         It should_return_grouped_list_of_multi_questions_with_one_pair_and_key_equals_ = () =>
-            result.SourceOfLinkedEntities.Select(x => x.Title).ShouldContain(linkedQuestionsKey1, linkedQuestionsKey2);
+            result.SourceOfLinkedEntities.Select(x => x.Title).ShouldContain(linkedQuestionsKey1);
 
         It should_return_integer_questions_in_group_with_key__linkedQuestionsKey1__with_ids_contains_only_q3Id = () =>
             result.SourceOfLinkedEntities.Select(x => x.Id).ShouldContain(q3Id.FormatGuid());
@@ -56,8 +56,14 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
         It should_return_integer_questions_in_group_with_key__linkedQuestionsKey2__with_titles_contains_only_q5_title = () =>
             result.SourceOfLinkedEntities.Select(x => x.Title).ShouldContain(GetQuestion(q5Id).Title);
 
-        It should_return_3_roster_title_items = () =>
-            result.SourceOfLinkedEntities.Select(x => x.Title).Count(x => x == rosterTitle).ShouldEqual(3);
+        It should_return_roster_title_reference_for_first_roster = () =>
+            result.SourceOfLinkedEntities.Count(x => x.Title == "Roster: Roster 1.1" && !x.IsSectionPlaceHolder).ShouldEqual(1);
+
+        It should_return_roster_title_reference_for_second_roster = () =>
+            result.SourceOfLinkedEntities.Count(x => x.Title == "Roster: Roster 1.1.1" && !x.IsSectionPlaceHolder).ShouldEqual(1);
+
+        It should_return_roster_title_reference_for_third_roster = () =>
+          result.SourceOfLinkedEntities.Count(x => x.Title == "Roster: Roster 1.2" && !x.IsSectionPlaceHolder).ShouldEqual(1);
 
         private static QuestionDetailsView GetQuestion(Guid questionId)
         {
@@ -71,7 +77,5 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
         private static string questionnaireId = "11111111111111111111111111111111";
         private static Guid questionId = q2Id;
         private static string linkedQuestionsKey1 = "Group 1 / Roster 1.1";
-        private static string linkedQuestionsKey2 = "Group 1 / Roster 1.1 / Group 1.1.2";
-        private static string rosterTitle = "Roster itself";
     }
 }

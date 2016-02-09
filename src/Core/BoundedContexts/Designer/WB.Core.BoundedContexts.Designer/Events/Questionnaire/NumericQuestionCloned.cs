@@ -7,10 +7,10 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
 {
     public class NumericQuestionCloned : AbstractNumericQuestionDataEvent
     {
-        public NumericQuestionCloned(Guid responsibleId, string conditionExpression, bool featured, string instructions, bool capital, Guid publicKey, string questionText, 
+        public NumericQuestionCloned(Guid responsibleId, string conditionExpression, bool hideIfDisabled, bool featured, string instructions, bool capital, Guid publicKey, string questionText, 
             QuestionScope questionScope, string stataExportCaption, string variableLabel, string validationExpression, string validationMessage, bool? isInteger, int? countOfDecimalPlaces, 
             Guid? sourceQuestionnaireId, Guid sourceQuestionId, Guid groupPublicKey, int targetIndex, IList<ValidationCondition> validationConditions) 
-            : base(responsibleId, conditionExpression, featured, instructions, capital, 
+            : base(responsibleId, conditionExpression, hideIfDisabled, featured, instructions, capital, 
                 publicKey, questionText, questionScope, stataExportCaption, variableLabel, validationExpression, validationMessage, isInteger, countOfDecimalPlaces,
                 validationConditions) 
         {

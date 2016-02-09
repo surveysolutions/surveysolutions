@@ -13,19 +13,16 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
         public UpdateNumericQuestionCommand(
             Guid questionnaireId,
             Guid questionId,
-            string title,
-            string variableName, string variableLabel, 
+            Guid responsibleId,
+            CommonQuestionParameters commonQuestionParameters,
             bool isPreFilled,
             QuestionScope scope, 
-            string enablementCondition, 
-            string instructions,
-            Guid responsibleId,
             bool isInteger, 
             int? countOfDecimalPlaces,
             List<ValidationCondition> validationConditions)
             : base(
-                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                 variableName: variableName, enablementCondition: enablementCondition, instructions: instructions, variableLabel:variableLabel,
+                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
+                 commonQuestionParameters: commonQuestionParameters,
                  validationConditions: validationConditions)
         {
             this.IsInteger = isInteger;

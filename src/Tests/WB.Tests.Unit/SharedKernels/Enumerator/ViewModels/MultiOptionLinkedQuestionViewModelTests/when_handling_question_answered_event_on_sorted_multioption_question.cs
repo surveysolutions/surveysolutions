@@ -48,19 +48,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             interviews.SetReturnsDefault(interview);
             questionnaires.SetReturnsDefault(questionnaire);
 
-            viewModel = CreateViewModel(interviewRepository: interviews.Object, questionnaireStorage: questionnaires.Object);
-            viewModel.Init(interviewId, questionId, Create.NavigationState());
+            questionViewModel = CreateViewModel(interviewRepository: interviews.Object, questionnaireStorage: questionnaires.Object);
+            questionViewModel.Init(interviewId, questionId, Create.NavigationState());
         };
 
-        Because of = () => viewModel.Handle(Create.Event.MultipleOptionsLinkedQuestionAnswered(questionId:questionId.Id,
+        Because of = () => questionViewModel.Handle(Create.Event.MultipleOptionsLinkedQuestionAnswered(questionId:questionId.Id,
             rosterVector: questionId.RosterVector,
             selectedRosterVectors: new[] { new decimal[] { 2 }, new decimal[] { 1 } }));
 
-        It should_put_answers_order_on_option1 = () => viewModel.Options.First().CheckedOrder.ShouldEqual(2);
-        It should_put_answers_order_on_option2 = () => viewModel.Options.Second().CheckedOrder.ShouldEqual(1);
-        It should_put_checked_on_checked_items = () => viewModel.Options.Count(x => x.Checked).ShouldEqual(2);
+        It should_put_answers_order_on_option1 = () => questionViewModel.Options.First().CheckedOrder.ShouldEqual(2);
+        It should_put_answers_order_on_option2 = () => questionViewModel.Options.Second().CheckedOrder.ShouldEqual(1);
+        It should_put_checked_on_checked_items = () => questionViewModel.Options.Count(x => x.Checked).ShouldEqual(2);
 
-        static MultiOptionLinkedQuestionViewModel viewModel;
+        static MultiOptionLinkedToQuestionQuestionViewModel questionViewModel;
         static string interviewId;
         static Identity questionId;
     }
