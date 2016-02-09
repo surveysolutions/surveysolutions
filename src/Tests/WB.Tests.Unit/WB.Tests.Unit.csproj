@@ -389,6 +389,9 @@
     <Compile Include="BoundedContexts\Interviewer\Services\QuestionnaireAssemblyFileAccessorTests\QuestionnaireAssemblyFileAccessorTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\QuestionnaireAssemblyFileAccessorTests\when_removing_questionnaire_assembly.cs" />
     <Compile Include="CreateViewModels.cs" />
+    <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\CensusQuestionnaireDashboardItemViewModelTestsContext.cs" />
+    <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\when_create_new_interview.cs" />
+    <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\when_init.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_designer_historical_events_Json.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_hq_historical_events.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_designer_historical_events.cs" />
@@ -585,6 +588,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_comment_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_flag_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_row_from_link_source_roster.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_row_from_multioption_link_source_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_set_flag_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_two_nested_rosters_linked_to_the_same_list_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_unapprove_by_headquarters.cs" />
@@ -623,6 +627,7 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_finding_referenced_answers_for_linked_question_on_roster_level_3_and_referenced_answers_are_on_roster_level_1.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_finding_referenced_answers_for_linked_question_on_roster_level_3_and_referenced_answers_are_on_roster_level_2.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_finding_referenced_answers_for_linked_question_on_roster_level_3_and_referenced_answers_are_on_roster_level_3.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_finding_referenced_rows_for_linked_on_roster_question.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_count_of_invalid_questions_recursively.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_enabled_subgroups.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_question_answer.cs" />
@@ -688,9 +693,12 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\IntegerQuestionViewModelTests\when_answering_roster_size_numeric_question_with_negative_value_and_question_was_answered.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\IntegerQuestionViewModelTests\when_answering_roster_size_numeric_question_with_negative_value_and_question_was_not_answered.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\MultiOptionLinkedQuestionViewModelTestsContext.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_answers_removed_event_received_by_linked_on_roster_question.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_handling_question_answered_event_on_sorted_multioption_question.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_initing_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_linked_question_is_linked_to_question_in_roster_2_levels_deeper.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_roster_row_removed_and_question_is_linked_on_it.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_roster_row_title_changed_and_question_is_linked_on_it.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_linked_to_question_is_answered.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_title_of_linked_question_changes.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_toggling_answer.cs" />

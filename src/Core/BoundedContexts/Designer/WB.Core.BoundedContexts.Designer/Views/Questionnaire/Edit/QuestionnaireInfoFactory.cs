@@ -32,6 +32,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             new SelectOption { Value = "Prefilled", Text = "Prefilled" }
         };
 
+        private static readonly Type[] QuestionsWhichCanBeUsedAsSourceOfLinkedQuestion = new[]
+        {typeof (TextDetailsView), typeof (NumericDetailsView), typeof (DateTimeDetailsView)};
+
         private static readonly SelectOption[] QuestionTypeOptions =
         {
             new SelectOption
@@ -354,80 +357,73 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             QuestionsAndGroupsCollectionView questionsCollection, Guid questionId)
         {
             var result = new List<DropdownQuestionView>();
+
             var rosters = questionsCollection.Groups.Where(g => g.IsRoster).ToList();
+
             foreach (var roster in rosters)
             {
-                var rosterPlaceholder = new DropdownQuestionView
-                {
-                    Title =
-                        string.Join(" / ",
-                            this.GetBreadcrumbs(questionsCollection, roster)
-                                .Select(x => x.Title)
-                                .Union(new[] {roster.Title})),
-                    IsSectionPlaceHolder = true
-                };
-
+                var rosterPlaceholder = this.CreateRosterBreadcrumbPlaceholder(questionsCollection, roster);
                 result.Add(rosterPlaceholder);
 
-                result.Add(new DropdownQuestionView
-                {
-                    Title = Roster.RosterTitle,
-                    Id = roster.Id.FormatGuid(),
-                    IsSectionPlaceHolder = false,
-                    Breadcrumbs = rosterPlaceholder.Title,
-                    Type = rosterType
-                });
+                var rosterTitlePlaceholder = this.CreateRosterTitlePlaceholder(roster, rosterPlaceholder);
+                result.Add(rosterTitlePlaceholder);
 
-                var questions =
-                    questionsCollection.Questions.Where(
-                        q => q is TextDetailsView || q is NumericDetailsView || q is DateTimeDetailsView)
-                        .Where(
-                            q =>
-                                q.RosterScopeIds.SequenceEqual(roster.RosterScopeIds) && q.Id != questionId)
-                        .OrderBy(q => q.ParentGroupsIds.Length)
-                        .Select(q => new DropdownQuestionView
-                        {
-                            Id = q.Id.FormatGuid(),
-                            Title = q.Title,
-                            Breadcrumbs = this.GetBreadcrumbsAsString(questionsCollection, q),
-                            Type = q.Type.ToString().ToLower()
-                        }).ToList();
-
-                var groupedQuestionsList = questions.GroupBy(x => x.Breadcrumbs);
-                foreach (var brief in groupedQuestionsList)
-                {
-                    if(brief.Key!= rosterPlaceholder.Title)
-                        result.Add(new DropdownQuestionView
-                        {
-                            Title = brief.Key,
-                            IsSectionPlaceHolder = true
-                        });
-                    result.AddRange(brief.Select(question => new DropdownQuestionView
-                    {
-                        Title = question.Title,
-                        Id = question.Id,
-                        IsSectionPlaceHolder = false,
-                        Breadcrumbs = brief.Key,
-                        Type = question.Type
-                    }));
-                }
+                var questions = GetQuestionInsideRosterWhichCanBeUsedAsSourceOfLink(questionsCollection, questionId, roster, rosterPlaceholder);
+                result.AddRange(questions);
             }
 
             return result;
         }
 
-        private static bool RosterTitleItemShouldBeIncluded(QuestionsAndGroupsCollectionView questionsCollection, GroupAndRosterDetailsView roster)
+        private static List<DropdownQuestionView> GetQuestionInsideRosterWhichCanBeUsedAsSourceOfLink(
+            QuestionsAndGroupsCollectionView questionsCollection, Guid questionId, GroupAndRosterDetailsView roster,
+            DropdownQuestionView rosterPlaceholder)
         {
-            if (!roster.RosterSizeQuestionId.HasValue)
-                return true;
+            var pathInsideRoster = new[] {roster.Id}.Union(roster.ParentGroupsIds).ToArray();
+            var questions =
+                questionsCollection.Questions.Where(
+                    q => QuestionsWhichCanBeUsedAsSourceOfLinkedQuestion.Contains(q.GetType()))
+                    .Where(
+                        q =>
+                            pathInsideRoster.SequenceEqual(q.ParentGroupsIds.Skip(q.ParentGroupsIds.Length - pathInsideRoster.Length)) &&
+                            q.Id != questionId)
+                    .OrderBy(q => q.ParentGroupsIds.Length)
+                    .Select(q => new DropdownQuestionView
+                    {
+                        Id = q.Id.FormatGuid(),
+                        Title = q.Title,
+                        Breadcrumbs = rosterPlaceholder.Breadcrumbs,
+                        Type = q.Type.ToString().ToLower()
+                    }).ToList();
+            return questions;
+        }
 
-            var rosterSizeQuestion =
-                questionsCollection.Questions.FirstOrDefault(x => x.Id == roster.RosterSizeQuestionId.Value);
+        private DropdownQuestionView CreateRosterTitlePlaceholder(GroupAndRosterDetailsView roster,
+            DropdownQuestionView rosterPlaceholder)
+        {
+            var rosterTitlePlaceholder = new DropdownQuestionView
+            {
+                Title = string.Format(Roster.RosterTitle, roster.Title),
+                Id = roster.Id.FormatGuid(),
+                IsSectionPlaceHolder = false,
+                Breadcrumbs = rosterPlaceholder.Title,
+                Type = this.rosterType
+            };
+            return rosterTitlePlaceholder;
+        }
 
-            if (rosterSizeQuestion != null && rosterSizeQuestion.Type == QuestionType.Numeric)
-                return false;
-
-            return true;
+        private DropdownQuestionView CreateRosterBreadcrumbPlaceholder(QuestionsAndGroupsCollectionView questionsCollection,
+            GroupAndRosterDetailsView roster)
+        {
+            var rosterPlaceholder = new DropdownQuestionView
+            {
+                Title =
+                    string.Join(" / ",
+                        this.GetBreadcrumbs(questionsCollection, roster)
+                            .Select(x => x.Title)),
+                IsSectionPlaceHolder = true
+            };
+            return rosterPlaceholder;
         }
 
         private List<DropdownQuestionView> GetNumericIntegerTitles(QuestionsAndGroupsCollectionView questionsCollection,

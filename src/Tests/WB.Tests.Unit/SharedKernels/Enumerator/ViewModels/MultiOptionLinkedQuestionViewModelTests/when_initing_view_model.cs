@@ -47,18 +47,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             interviews.SetReturnsDefault(interview);
             questionnaires.SetReturnsDefault(questionnaire);
 
-            viewModel = CreateViewModel(interviewRepository: interviews.Object, questionnaireStorage: questionnaires.Object);
+            questionViewModel = CreateViewModel(interviewRepository: interviews.Object, questionnaireStorage: questionnaires.Object);
         };
 
-        Because of = () => viewModel.Init(interviewId, questionId, Create.NavigationState());
+        Because of = () => questionViewModel.Init(interviewId, questionId, Create.NavigationState());
 
-        It should_fill_options_from_linked_question = () => viewModel.Options.Count.ShouldEqual(2);
+        It should_fill_options_from_linked_question = () => questionViewModel.Options.Count.ShouldEqual(2);
 
-        It should_add_linked_question_roster_vectors_as_values_for_answers = () => viewModel.Options.First().Value.ShouldContainOnly(1m);
+        It should_add_linked_question_roster_vectors_as_values_for_answers = () => questionViewModel.Options.First().Value.ShouldContainOnly(1m);
 
-        It should_use_question_answer_as_title = () => viewModel.Options.Second().Title.ShouldEqual("answer2");
+        It should_use_question_answer_as_title = () => questionViewModel.Options.Second().Title.ShouldEqual("answer2");
 
-        static MultiOptionLinkedQuestionViewModel viewModel;
+        static MultiOptionLinkedToQuestionQuestionViewModel questionViewModel;
         static string interviewId;
         static Identity questionId;
     }

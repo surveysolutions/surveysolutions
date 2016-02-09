@@ -6,9 +6,4 @@ namespace WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions
     {
         public Guid LinkedToQuestionId { get; set; }
     }
-
-    public class LinkedToRosterSingleOptionQuestionModel : BaseQuestionModel
-    {
-        public Guid LinkedToRosterId { get; set; }
-    }
 }

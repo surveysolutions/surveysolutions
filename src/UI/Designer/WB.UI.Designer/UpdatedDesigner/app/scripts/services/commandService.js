@@ -99,14 +99,18 @@
                     var command = {
                         questionnaireId: questionnaireId,
                         questionId: question.itemId,
-                        title: question.title,
                         type: question.type,
-                        variableName: question.variable,
-                        variableLabel: question.variableLabel,
                         mask: question.mask,
-                        enablementCondition: question.enablementCondition,
                         validationConditions: question.validationConditions,
-                        instructions: question.instructions
+
+                        commonQuestionParameters : {
+                            title: question.title,
+                            variableName: question.variable,
+                            variableLabel: question.variableLabel,
+                            enablementCondition: question.enablementCondition,
+                            hideIfDisabled: question.hideIfDisabled,
+                            instructions: question.instructions,
+                        }
                     };
 
                     var isPrefilledScopeSelected = question.questionScope == 'Prefilled';

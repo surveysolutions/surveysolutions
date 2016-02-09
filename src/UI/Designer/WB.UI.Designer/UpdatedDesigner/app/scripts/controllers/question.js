@@ -57,6 +57,7 @@
                 
                 $scope.activeQuestion.enablementCondition = question.enablementCondition;
                 $scope.activeQuestion.validationExpression = question.validationExpression;
+                $scope.activeQuestion.hideIfDisabled = question.hideIfDisabled;
                 $scope.activeQuestion.validationMessage = question.validationMessage;
                 $scope.activeQuestion.allQuestionScopeOptions = question.allQuestionScopeOptions;
                 $scope.activeQuestion.instructions = question.instructions;
@@ -133,12 +134,13 @@
 
                         $rootScope.$emit('questionUpdated', {
                             itemId: $scope.activeQuestion.itemId,
-                            title: $scope.activeQuestion.title,
-                            variable: $scope.activeQuestion.variable,
                             type: $scope.activeQuestion.type,
                             linkedToEntityId: $scope.activeQuestion.linkedToEntityId,
                             hasCondition: hasQuestionEnablementConditions($scope.activeQuestion),
-                            hasValidation: hasQuestionValidations($scope.activeQuestion)
+                            hasValidation: hasQuestionValidations($scope.activeQuestion),
+                            title: $scope.activeQuestion.title,
+                            variable: $scope.activeQuestion.variable,
+                            hideIfDisabled: $scope.activeQuestion.hideIfDisabled
                         });
 
                         var notIsFilteredCombobox = !$scope.activeQuestion.isFilteredCombobox;

@@ -50,21 +50,21 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
 
             answering = new Mock<AnsweringViewModel>();
 
-            viewModel = CreateViewModel(interviewRepository: interviews.Object, questionnaireStorage: questionnaires.Object, answering:answering.Object);
-            viewModel.Init("interviewId", questionId, Create.NavigationState());
+            questionViewModel = CreateViewModel(interviewRepository: interviews.Object, questionnaireStorage: questionnaires.Object, answering:answering.Object);
+            questionViewModel.Init("interviewId", questionId, Create.NavigationState());
         };
 
         Because of = () =>
         {
-            viewModel.Options.First().Checked = true;
-            viewModel.ToggleAnswerAsync(viewModel.Options.First()).WaitAndUnwrapException();
+            questionViewModel.Options.First().Checked = true;
+            questionViewModel.ToggleAnswerAsync(questionViewModel.Options.First()).WaitAndUnwrapException();
         };
 
         private It should_send_command_with_selected_roster_vectors = () =>
             answering.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerMultipleOptionsLinkedQuestionCommand>(c =>
-                c.QuestionId == questionId.Id && c.SelectedRosterVectors.Any(pv => pv.SequenceEqual(viewModel.Options.First().Value)))));
+                c.QuestionId == questionId.Id && c.SelectedRosterVectors.Any(pv => pv.SequenceEqual(questionViewModel.Options.First().Value)))));
 
-        static MultiOptionLinkedQuestionViewModel viewModel;
+        static MultiOptionLinkedToQuestionQuestionViewModel questionViewModel;
         static Identity questionId;
         static Mock<AnsweringViewModel> answering;
     }

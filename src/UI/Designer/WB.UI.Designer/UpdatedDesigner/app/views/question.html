@@ -76,6 +76,10 @@
         <div class="form-group enabling-group" ng-hide="!doesQuestionSupportEnablementConditions()">
             <div class="enabling-group-marker"></div>
             <label for="edit-question-enablement-condition">Enabling condition <help key="conditionExpression" /></label>
+
+                <input id="cb-hideIfDisabled" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.hideIfDisabled" />
+                <label for="cb-hideIfDisabled"><span></span>Hide if disabled</label>
+
             <div class="pseudo-form-control">
                 <div id="edit-question-enablement-condition" ui-ace="{ onLoad : aceLoaded }" ng-model="activeQuestion.enablementCondition"></div>
             </div>
@@ -257,7 +261,7 @@
         </script>
 
         <script type="text/ng-template" id="CascadingComboBox-Template.html">
-            <div id="sourceOfLinkedEntitiy" class="dropdown-with-breadcrumbs-and-icons">
+            <div id="sourceOfLinkedEntity" class="dropdown-with-breadcrumbs-and-icons">
                 <input type="hidden" name="cascadeFromQuestionId" ng-model="activeQuestion.cascadeFromQuestionId" ng-update-hidden ng-required="true" />
                 <label for="singleOptionQuestionSource">Select parent question</label>
                 <div class="btn-group" dropdown>
