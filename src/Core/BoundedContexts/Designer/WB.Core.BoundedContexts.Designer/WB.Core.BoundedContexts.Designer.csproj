@@ -201,6 +201,36 @@
     <Compile Include="Events\Questionnaire\Macros\MacroDeleted.cs" />
     <Compile Include="Events\Questionnaire\Macros\MacroUpdated.cs" />
     <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\ValidationExpressionModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\InterviewExpressionStateTemplateV6.cs">
+      <DependentUpon>InterviewExpressionStateTemplateV6.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\InterviewExpressionStateTemplateV6.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\LookupTablesTemplateV6.cs">
+      <DependentUpon>LookupTablesTemplateV6.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\LookupTablesTemplateV6.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\QuestionnaireLevelTemplateV6.cs">
+      <DependentUpon>QuestionnaireLevelTemplateV6.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\QuestionnaireLevelTemplateV6.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\RosterScopeTemplateV6.cs">
+      <DependentUpon>RosterScopeTemplateV6.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\RosterScopeTemplateV6.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\SharedTemplateV6.cs">
+      <DependentUpon>SharedTemplateV6.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Implementation\Services\QuestionnaireDocumentExtensions.cs" />
     <Compile Include="Implementation\Services\ReadOnlyQuestionnaireDocument.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\CodeGenerationSettings.cs" />
@@ -684,6 +714,26 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>LookupTablesTemplateV5.cs</LastGenOutput>
     </Content>
+    <Content Include="Implementation\Services\CodeGeneration\V6\Templates\LookupTablesTemplateV6.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>LookupTablesTemplateV6.cs</LastGenOutput>
+    </Content>
+    <None Include="Implementation\Services\CodeGeneration\V6\Templates\SharedTemplateV6.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>SharedTemplateV6.cs</LastGenOutput>
+    </None>
+    <None Include="Implementation\Services\CodeGeneration\V6\Templates\RosterScopeTemplateV6.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>RosterScopeTemplateV6.cs</LastGenOutput>
+    </None>
+    <None Include="Implementation\Services\CodeGeneration\V6\Templates\QuestionnaireLevelTemplateV6.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>QuestionnaireLevelTemplateV6.cs</LastGenOutput>
+    </None>
+    <None Include="Implementation\Services\CodeGeneration\V6\Templates\InterviewExpressionStateTemplateV6.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>InterviewExpressionStateTemplateV6.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\..\..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />

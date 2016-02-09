@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.V4;
 using WB.Core.SharedKernels.DataCollection.V5;
+using WB.Core.SharedKernels.DataCollection.V6;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public class InterviewExpressionStateForPreloading : IInterviewExpressionStateV5
+    public class InterviewExpressionStateForPreloading : IInterviewExpressionStateV6
     {
         public InterviewExpressionStateForPreloading()
         {
@@ -127,6 +128,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
         }
 
+        IInterviewExpressionStateV6 IInterviewExpressionStateV6.Clone()
+        {
+            return new InterviewExpressionStateForPreloading();
+        }
+
         IInterviewExpressionStateV5 IInterviewExpressionStateV5.Clone()
         {
             return new InterviewExpressionStateForPreloading();
@@ -147,5 +153,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return new InterviewExpressionStateForPreloading();
         }
 
+        public void ApplyFailedValidations(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
+        {
+        }
     }
 }

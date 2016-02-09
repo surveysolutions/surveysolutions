@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
         {
             QuestionTemplateModel question = model.AllQuestions.Single(x => x.Id == Id.gA);
             question.VariableName.ShouldEqual("list");
-            question.Validation.ShouldEqual("list validation");
+            question.ValidationExpressions.FirstOrDefault().ValidationExpression.ShouldEqual("list validation");
             question.Condition.ShouldEqual("list condition");
             question.IsMultiOptionYesNoQuestion.ShouldBeFalse();
             question.AllMultioptionYesNoCodes.ShouldBeNull();

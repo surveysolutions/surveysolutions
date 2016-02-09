@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using NSubstitute;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -43,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
         };
 
         Because of = () =>
-               deleteQuestionnaireService.DeleteQuestionnaire(questionnaireId, questionnaireVersion, userId).Wait();
+               deleteQuestionnaireService.DeleteQuestionnaire(questionnaireId, questionnaireVersion, userId).WaitAndUnwrapException();
 
         It should_once_execute_DisableQuestionnaire_Command = () =>
             commandServiceMock.Verify(x => x.Execute(Moq.It.Is<DisableQuestionnaire>(_ => _.QuestionnaireId == questionnaireId && _.QuestionnaireVersion == questionnaireVersion && _.ResponsibleId == userId), Moq.It.IsAny<string>()), Times.Once);
