@@ -16,7 +16,7 @@ namespace WB.UI.Tester.Activities
         private static int tapTimes = 0;
         private Preference devSettingsCategory;
 
-        private const string designerEndpointKey = "DesignerEndpointV12";
+        private const string designerEndpointPreferenceKey = "DesignerEndpointV13";
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -27,14 +27,14 @@ namespace WB.UI.Tester.Activities
 
             this.devSettingsCategory = this.FindPreference("dev_settings_category");
 
-            Preference designerEndpointPreference = this.FindPreference(designerEndpointKey);
+            Preference designerEndpointPreference = this.FindPreference(designerEndpointPreferenceKey);
             designerEndpointPreference.PreferenceChange += DevSettingsCategoryOnPreferenceChange;
 
             this.SetPreferenceTitleAndSummary("HttpResponseTimeout", TesterUIResources.Prefs_HttpResponseTimeoutTitle, TesterUIResources.Prefs_HttpResponseTimeoutSummary);
             this.SetPreferenceTitleAndSummary("GpsReceiveTimeoutSec", TesterUIResources.Prefs_GpsReceiveTimeoutSecTitle, TesterUIResources.Prefs_GpsReceiveTimeoutSecSummary);
             this.SetPreferenceTitleAndSummary("version", TesterUIResources.Prefs_VersionTitle, string.Empty);
             this.SetPreferenceTitleAndSummary("dev_settings_category", TesterUIResources.Prefs_ConnectionSettings, string.Empty);
-            this.SetPreferenceTitleAndSummary("DesignerEndpointV12", TesterUIResources.Prefs_DesignerEndPointTitle, settings.Endpoint);
+            this.SetPreferenceTitleAndSummary("DesignerEndpointV13", TesterUIResources.Prefs_DesignerEndPointTitle, settings.Endpoint);
             this.SetPreferenceTitleAndSummary("AcceptUnsignedSslCertificate", TesterUIResources.Prefs_AcceptUnsignedTitle, TesterUIResources.Prefs_AcceptUnsignedSummary);
 
             this.SetPreferenceTitleAndSummary("GpsDesiredAccuracy", UIResources.Prefs_GpsDesiredAccuracyTitle, 

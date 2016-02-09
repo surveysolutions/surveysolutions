@@ -7,7 +7,6 @@ using PCLStorage;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -62,6 +61,11 @@ namespace WB.UI.Interviewer.Settings
         public bool AcceptUnsignedSslCertificate => false;
         public int GpsReceiveTimeoutSec => this.CurrentSettings.GpsResponseTimeoutInSec;
         public double GpsDesiredAccuracy => this.CurrentSettings.GpsDesiredAccuracy.GetValueOrDefault((double)Application.Context.Resources.GetInteger(Resource.Integer.GpsDesiredAccuracy));
+
+        public long GetSupportedQuestionnaireContentVersion()
+        {
+            return 12;
+        }
 
         public string GetDeviceId()
         {

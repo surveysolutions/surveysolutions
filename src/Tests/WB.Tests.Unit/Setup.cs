@@ -6,12 +6,14 @@ using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -81,6 +83,16 @@ namespace WB.Tests.Unit
             return Create.QuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
         }
 
+        public static IPlainQuestionnaireRepository QuestionnaireRepositoryWithOneQuestionnaire(
+            QuestionnaireIdentity questionnaireIdentity, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
+        {
+            var questionnaire = Mock.Of<IQuestionnaire>(questionnaireMoqPredicate);
+
+            return Mock.Of<IPlainQuestionnaireRepository>(repository
+                => repository.GetQuestionnaire(questionnaireIdentity) == questionnaire
+                && repository.GetHistoricalQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version) == questionnaire);
+        }
+
         public static IEventHandler FailingFunctionalEventHandler()
         {
             return FailingFunctionalEventHandlerHavingUniqueType<object>();
@@ -137,7 +149,7 @@ namespace WB.Tests.Unit
             IPlainQuestionnaireRepository questionnaireRepository = Create.QuestionnaireRepositoryStubWithOneQuestionnaire(
                 questionnaireId: questionnaireId,
                 questionnaireVersion: questionnaireVersion,
-                questionaire: questionnaire);
+                questionnaire: questionnaire);
 
             Interview interview = Create.Interview(questionnaireRepository: questionnaireRepository);
 
@@ -151,6 +163,16 @@ namespace WB.Tests.Unit
         public static Interview InterviewForQuestionnaireDocument(QuestionnaireDocument questionnaireDocument)
         {
             return Setup.InterviewForQuestionnaire(Create.PlainQuestionnaire(document: questionnaireDocument));
+        }
+
+        public static IDesignerEngineVersionService DesignerEngineVersionService(bool isClientVersionSupported = true, bool isQuestionnaireVersionSupported = true, int questionnaireContentVersion = 9)
+        {
+            var version = new Version(questionnaireContentVersion, 0, 0);
+
+            return Mock.Of<IDesignerEngineVersionService>(_ 
+                => _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == isClientVersionSupported
+                && _.IsQuestionnaireDocumentSupportedByClientVersion(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>()) == isQuestionnaireVersionSupported
+                && _.GetQuestionnaireContentVersion(Moq.It.IsAny<QuestionnaireDocument>()) == version);
         }
     }
 }

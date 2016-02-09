@@ -7,21 +7,33 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
+using Moq;
+using MvvmCross.Plugins.Messenger;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NHibernate.Bytecode;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Events.User;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using QuestionnaireDeleted = WB.Core.SharedKernels.DataCollection.Events.Questionnaire.QuestionnaireDeleted;
+using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
 
 namespace WB.Tests.Unit
 {
@@ -29,6 +41,11 @@ namespace WB.Tests.Unit
     {
         internal static class Event
         {
+            public static ImportFromDesigner ImportFromDesigner(Guid responsibleId, QuestionnaireDocument questionnaire, bool allowCensus, string assembly, long contentVersion)
+            {
+                return new ImportFromDesigner(responsibleId, questionnaire, allowCensus, assembly, contentVersion);
+            }
+
             public static NewGroupAdded AddGroup(Guid groupId, Guid? parentId = null, string variableName = null)
             {
                 return new NewGroupAdded
@@ -135,6 +152,8 @@ namespace WB.Tests.Unit
                 return new GroupBecameARoster(Guid.NewGuid(), rosterId);
             }
 
+            public static GroupsDisabled GroupsDisabled(Identity[] groups) => new GroupsDisabled(groups);
+
             public static GroupsDisabled GroupsDisabled(Guid? id = null, decimal[] rosterVector = null)
             {
                 var identities = new[]
@@ -143,6 +162,8 @@ namespace WB.Tests.Unit
                 };
                 return new GroupsDisabled(identities);
             }
+
+            public static GroupsEnabled GroupsEnabled(Identity[] groups) => new GroupsEnabled(groups);
 
             public static GroupsEnabled GroupsEnabled(Guid? id = null, decimal[] rosterVector = null)
             {
@@ -526,15 +547,13 @@ namespace WB.Tests.Unit
                 return questionnaireDeleted;
             }
 
-            public static QuestionsDisabled QuestionsDisabled(Guid? id = null, decimal[] rosterVector = null)
-            {
-                var identities = new[]
-                {
-                    new Identity(id ?? Guid.NewGuid(), rosterVector ?? new decimal[0]), 
-                };
-                return new QuestionsDisabled(identities);
-            }
+            public static QuestionsDisabled QuestionsDisabled(Identity[] questions) => new QuestionsDisabled(questions);
 
+            public static QuestionsDisabled QuestionsDisabled(Guid? id = null, decimal[] rosterVector = null)
+                => Create.Event.QuestionsDisabled(new[]
+                {
+                    Create.Identity(id ?? Guid.NewGuid(), rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty),
+                });
 
             public static QuestionsEnabled QuestionsEnabled(Guid? id = null, decimal[] rosterVector = null)
             {
@@ -703,9 +722,9 @@ namespace WB.Tests.Unit
 
             internal static class Designer
             {
-                public static designer::Main.Core.Events.Questionnaire.TemplateImported TemplateImported(QuestionnaireDocument questionnaireDocument)
+                public static TemplateImported TemplateImported(QuestionnaireDocument questionnaireDocument)
                 {
-                    return new designer::Main.Core.Events.Questionnaire.TemplateImported { Source = questionnaireDocument };
+                    return new TemplateImported { Source = questionnaireDocument };
                 }
             }
         }

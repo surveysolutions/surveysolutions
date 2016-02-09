@@ -30,6 +30,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected Guid questionnaireId;
         protected Guid interviewerId;
+        private Guid supervisorId;
+        public virtual Guid SupervisorId => this.supervisorId;
 
         protected long questionnaireVersion;
         private bool wasCompleted;
@@ -496,7 +498,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.status = @event.Status;
         }
 
-        public virtual void Apply(SupervisorAssigned @event) { }
+        public virtual void Apply(SupervisorAssigned @event)
+        {
+            this.supervisorId = @event.SupervisorId;
+        }
 
         public virtual void Apply(InterviewerAssigned @event)
         {
@@ -1118,6 +1123,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerTextQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, string answer)
         {
             ThrowIfInterviewHardDeleted();
+            ThrowIfInterviewApprovedByHQ();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
@@ -1136,6 +1142,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerNumericRealQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal answer)
         {
             ThrowIfInterviewHardDeleted();
+            ThrowIfInterviewApprovedByHQ();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
@@ -1155,6 +1162,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerQRBarcodeQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, string answer)
         {
             ThrowIfInterviewHardDeleted();
+            ThrowIfInterviewApprovedByHQ();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
@@ -1176,6 +1184,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerPictureQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, string pictureFileName)
         {
             ThrowIfInterviewHardDeleted();
+            ThrowIfInterviewApprovedByHQ();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
@@ -1194,6 +1203,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerNumericIntegerQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, int answer)
         {
             ThrowIfInterviewHardDeleted();
+            ThrowIfInterviewApprovedByHQ();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
@@ -1217,6 +1227,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerMultipleOptionsQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal[] selectedValues)
         {
             ThrowIfInterviewHardDeleted();
+            ThrowIfInterviewApprovedByHQ();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
@@ -1241,6 +1252,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerYesNoQuestion(AnswerYesNoQuestion command)
         {
             ThrowIfInterviewHardDeleted();
+            ThrowIfInterviewApprovedByHQ();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
             this.CheckYesNoQuestionInvariants(command.Question, command.AnsweredOptions, questionnaire, this.interviewState);
@@ -1264,6 +1276,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerMultipleOptionsLinkedQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal[][] selectedRosterVectors)
         {
             ThrowIfInterviewHardDeleted();
+            ThrowIfInterviewApprovedByHQ();
 
             var answeredQuestion = new Identity(questionId, rosterVector);
 
@@ -1299,6 +1312,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerDateTimeQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, DateTime answer)
         {
             ThrowIfInterviewHardDeleted();
+            ThrowIfInterviewApprovedByHQ();
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
@@ -1316,6 +1330,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal selectedValue)
         {
             ThrowIfInterviewHardDeleted();
+            ThrowIfInterviewApprovedByHQ();
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
@@ -1335,6 +1350,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Tuple<decimal, string>[] answers)
         {
             ThrowIfInterviewHardDeleted();
+            ThrowIfInterviewApprovedByHQ();
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
@@ -1358,6 +1374,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             double accuracy, double altitude, DateTimeOffset timestamp)
         {
             ThrowIfInterviewHardDeleted();
+            ThrowIfInterviewApprovedByHQ();
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
@@ -1387,6 +1404,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerSingleOptionLinkedQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal[] selectedRosterVector)
         {
             ThrowIfInterviewHardDeleted();
+            ThrowIfInterviewApprovedByHQ();
             var answeredQuestion = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow(this.questionnaireId, this.questionnaireVersion);
@@ -3484,6 +3502,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         #endregion
 
         #region ThrowIfs
+
+        private void ThrowIfInterviewApprovedByHQ()
+        {
+            if (this.status == InterviewStatus.ApprovedByHeadquarters)
+                throw new InterviewException($"Interview was approved by Headquarters and cannot be edited. InterviewId: {this.EventSourceId}");
+        }
 
         private void ThrowIfInterviewWasCompleted()
         {

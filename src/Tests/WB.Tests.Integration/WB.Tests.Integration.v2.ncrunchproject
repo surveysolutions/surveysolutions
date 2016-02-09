@@ -30,6 +30,9 @@
     <NamedTestSelector>
       <TestName>WB.Tests.Integration.TesterResourcesTests.when_getting_xml_based_resources_which_contain_hardcoded_dimensions.should_return_only_dimensions_xmls_from_values_folders</TestName>
     </NamedTestSelector>
+    <NamedTestSelector>
+      <TestName>WB.Tests.Integration.TesterSettingsTests.when_settings_contain_designer_accesss_point.should_correspond_designer_latest_route_path</TestName>
+    </NamedTestSelector>
   </IgnoredTests>
   <AdditionalFilesToInclude>..\..\..\packages\System.Data.SQLite.Core.1.0.94.0\build\net45\**.*;..\..\UI\QuestionnaireTester\WB.UI.QuestionnaireTester\**.*;..\..\Core\SharedKernels\Enumerator\Enumerator\**.*;..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\**.*;..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\**.*</AdditionalFilesToInclude>
   <HiddenWarnings>CopyReferencedAssembliesToWorkspaceIsOn;UnnecessaryFileIncludeWarning</HiddenWarnings>

@@ -393,7 +393,7 @@ namespace WB.Tests.Integration
                 Mock.Of<IPlainQuestionnaireRepository>(),
                 Mock.Of<IQuestionnaireAssemblyFileAccessor>());
 
-            questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), questionnaireDocument, false, "base64 string of assembly"));
+            questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), questionnaireDocument, false, "base64 string of assembly", 1));
 
             return questionnaire;
         }

@@ -103,8 +103,9 @@
       <HintPath>..\..\..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\NHibernate.4.0.3.4000\lib\net40\NHibernate.dll</HintPath>
@@ -264,6 +265,8 @@
     <Compile Include="TesterResourcesTests\TesterResourcesTestsContext.cs" />
     <Compile Include="TesterResourcesTests\when_getting_dimensions_from_values_large_folder_and_dimensions_from_values_small_folder.cs" />
     <Compile Include="TesterResourcesTests\when_getting_xml_based_resources_which_contain_hardcoded_dimensions.cs" />
+    <Compile Include="TesterSettingsTests\TesterSettingsTestsContext.cs" />
+    <Compile Include="TesterSettingsTests\when_settings_contain_designer_accesss_point.cs" />
     <Compile Include="Versions\when_request_versions_of_designer_hq_and_tester.cs" />
     <Compile Include="ZipUtilsTests\ZipUtilsTestsFixture.cs" />
   </ItemGroup>

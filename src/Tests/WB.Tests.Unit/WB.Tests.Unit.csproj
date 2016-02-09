@@ -139,9 +139,9 @@
       <HintPath>..\..\..\packages\MvvmCross.Core.4.0.0\lib\net45\MvvmCross.Wpf.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -558,6 +558,8 @@
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_2_old_school_handlers_and_first_catch_non_critical_exception.cs" />
     <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsV4Tests.cs" />
     <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsV5Tests.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewAnswersCommandValidatorTests\when_responsible_supervisor_answer_on_supervisors_questions.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewAnswersCommandValidatorTests\when_not_responsible_supervisor_answer_on_supervisors_questions.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewExpressionStateStub.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Validation\when_answering_question_with_multiple_failed_validation_conditions.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_integer_question_decreasing_roster_size_of_roster_with_nested_roster.cs" />
@@ -597,6 +599,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_numeric_roster_size_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_textlist_roster_size_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\with_event_context.cs" />
+    <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_checking_should_static_text_be_hidden_if_it_is_disabled.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_interviewer_underlying_questions_in_group.cs" />
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_creating_YesNoAnswers_from_another_one.cs" />
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_creating_YesNoAnswers_with_all_codes_only.cs" />
@@ -653,8 +656,10 @@
     <Compile Include="SharedKernels\Enumerator\Services\RosterTitleSubstitutionServiceTests\RosterTitleSubstitutionServiceTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\RosterTitleSubstitutionServiceTests\when_replacing_roster_title.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_restoring_interview_state_from_sync_package_and_all_answers_are_null.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\ActiveGroupViewModelTests\EnumerationStageViewModelTestContext.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\ActiveGroupViewModelTests\when_initializing_active_group_view_model.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_handling_GroupsDisabled_event_with_2_groups_and_one_of_that_group_is_set_to_be_hidden_if_disabled_and_another_is_not.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_handling_GroupsEnabled_event_for_group_which_was_not_in_items_list.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_handling_QuestionsDisabled_event_with_2_questions_and_one_of_that_question_is_set_to_be_hidden_if_disabled_and_anothe___.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_initializing_active_group_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\CascadingSingleOptionQuestionViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_creating_cascading_single_option_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_handling_AnswersRemoved_for_cascading_question.cs" />
@@ -2404,12 +2409,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <Import Project="..\..\..\packages\Siaqodb.5.0.0.7\build\net451\Siaqodb.targets" Condition="Exists('..\..\..\packages\Siaqodb.5.0.0.7\build\net451\Siaqodb.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\packages\Siaqodb.5.0.0.7\build\net451\Siaqodb.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Siaqodb.5.0.0.7\build\net451\Siaqodb.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

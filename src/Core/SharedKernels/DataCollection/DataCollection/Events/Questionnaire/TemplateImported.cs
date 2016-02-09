@@ -12,5 +12,6 @@ namespace Main.Core.Events.Questionnaire
         public bool AllowCensusMode { get; set; }
         public long? Version { get; set; }
         public Guid? ResponsibleId { get; set; }
+        public long? ContentVersion { get; set; }
     }
 }
