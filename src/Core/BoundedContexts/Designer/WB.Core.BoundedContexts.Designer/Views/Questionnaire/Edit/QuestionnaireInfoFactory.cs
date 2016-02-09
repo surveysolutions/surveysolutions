@@ -117,6 +117,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     Id = group.Id,
                     Title = group.Title,
                     EnablementCondition = group.EnablementCondition,
+                    HideIfDisabled = group.HideIfDisabled,
                     VariableName = group.VariableName
                 }, questionnaire, questionnaireId),
                 Breadcrumbs = this.GetBreadcrumbs(questionnaire, group)
