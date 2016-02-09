@@ -324,7 +324,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             InvokeOnMainThread(() =>
             {
-                var readOnlyItems = Items.ToArray();
+                var readOnlyItems = this.Items.ToArray();
 
                 for (int i = 0; i < readOnlyItems.Length; i++)
                 {
