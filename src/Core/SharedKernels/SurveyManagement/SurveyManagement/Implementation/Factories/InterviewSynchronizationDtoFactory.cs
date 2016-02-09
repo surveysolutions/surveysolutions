@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             var questionnariePropagationStructure = this.questionnriePropagationStructures.AsVersioned().Get(interview.QuestionnaireId.FormatGuid(),
                 interview.QuestionnaireVersion);
 
-            Dictionary<Identity, List<FailedValidationCondition>> failedValidationConditions = new Dictionary<Identity, List<FailedValidationCondition>>();
+            Dictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
             foreach (var interviewLevel in interview.Levels.Values)
             {
                 foreach (var interviewQuestion in interviewLevel.QuestionsSearchCache)
