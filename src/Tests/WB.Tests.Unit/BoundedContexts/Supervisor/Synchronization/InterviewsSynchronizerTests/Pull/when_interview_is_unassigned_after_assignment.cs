@@ -33,10 +33,13 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             var interviewSummaryStorage =
                 Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(_ => _.GetById(it.IsAny<string>()) == new InterviewSummary());
 
-            var interviewSynchronizationDto = new InterviewSynchronizationDto(interviewId, InterviewStatus.Deleted, "", null, null,
-                     userId, questionnaireId, 2, new AnsweredQuestionSynchronizationDto[0], new HashSet<InterviewItemId>(),
-                     new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
-                     new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), true);
+            var interviewSynchronizationDto =
+                Create.InterviewSynchronizationDto(status: InterviewStatus.Deleted,
+                    userId: userId,
+                    questionnaireId: questionnaireId,
+                    questionnaireVersion: 2,
+                    wasCompleted: true,
+                    interviewId: interviewId);
 
             headquartersInterviewReaderMock.Setup(x => x.GetInterviewByUri(Moq.It.IsAny<Uri>()))
                 .Returns(

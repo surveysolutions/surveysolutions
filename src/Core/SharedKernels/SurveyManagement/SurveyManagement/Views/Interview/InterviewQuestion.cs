@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
@@ -9,6 +9,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     {
         public InterviewQuestion()
         {
+            this.FailedValidationConditions = new List<FailedValidationCondition>();
         }
              
         public InterviewQuestion(Guid id):this()
@@ -21,6 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public object Answer { get;  set; }
         public List<InterviewQuestionComment> Comments { get; set; }
         public QuestionState QuestionState { get; set; }
+        public List<FailedValidationCondition> FailedValidationConditions { get; set; }
 
         public bool IsInvalid()
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -53,6 +54,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             var questionnariePropagationStructure = this.questionnriePropagationStructures.AsVersioned().Get(interview.QuestionnaireId.FormatGuid(),
                 interview.QuestionnaireVersion);
 
+            Dictionary<Identity, List<FailedValidationCondition>> failedValidationConditions = new Dictionary<Identity, List<FailedValidationCondition>>();
             foreach (var interviewLevel in interview.Levels.Values)
             {
                 foreach (var interviewQuestion in interviewLevel.QuestionsSearchCache)
@@ -75,6 +77,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                     if (interviewQuestion.Value.IsInvalid())
                     {
                         invalidQuestions.Add(new InterviewItemId(interviewQuestion.Key, interviewLevel.RosterVector));
+                        failedValidationConditions.Add(new Identity(interviewQuestion.Key, interviewLevel.RosterVector), interviewQuestion.Value.FailedValidationConditions);
                     }
                     if (!interviewQuestion.Value.IsInvalid())
                     {
@@ -133,6 +136,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 validQuestions,
                 invalidQuestions,
                 propagatedGroupInstanceCounts,
+                failedValidationConditions,
                 interview.WasCompleted,
                 interview.CreatedOnClient);
         }
