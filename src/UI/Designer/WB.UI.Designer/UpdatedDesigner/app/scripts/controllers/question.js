@@ -138,12 +138,9 @@
                             linkedToEntityId: $scope.activeQuestion.linkedToEntityId,
                             hasCondition: hasQuestionEnablementConditions($scope.activeQuestion),
                             hasValidation: hasQuestionValidations($scope.activeQuestion),
-
-                            commonQuestionParameters: {
-                                title: $scope.activeQuestion.title,
-                                variable: $scope.activeQuestion.variable,
-                                hideIfDisabled: $scope.activeQuestion.hideIfDisabled,
-                            },
+                            title: $scope.activeQuestion.title,
+                            variable: $scope.activeQuestion.variable,
+                            hideIfDisabled: $scope.activeQuestion.hideIfDisabled
                         });
 
                         var notIsFilteredCombobox = !$scope.activeQuestion.isFilteredCombobox;
