@@ -29,6 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 data.StataExportCaption,
                 data.VariableLabel,
                 data.ConditionExpression,
+                data.HideIfDisabled,
                 data.ValidationExpression,
                 data.ValidationMessage,
                 data.AnswerOrder,
@@ -129,6 +130,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             string stataExportCaption,
             string variableLabel,
             string conditionExpression,
+            bool hideIfDisabled,
             string validationExpression,
             string validationMessage,
             Order? answerOrder,
@@ -154,6 +156,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             question.StataExportCaption = stataExportCaption;
             question.VariableLabel = variableLabel;
             question.ConditionExpression = conditionExpression;
+            question.HideIfDisabled = hideIfDisabled;
             question.ValidationExpression = validationExpression;
             question.ValidationMessage = validationMessage;
             question.AnswerOrder = answerOrder;

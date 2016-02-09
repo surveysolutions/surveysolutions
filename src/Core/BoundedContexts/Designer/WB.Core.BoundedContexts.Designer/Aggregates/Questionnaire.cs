@@ -212,6 +212,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.StataExportCaption,
                         e.VariableLabel,
                         e.ConditionExpression,
+                        e.HideIfDisabled,
                         e.AnswerOrder,
                         e.Featured,
                         e.Capital,
@@ -254,6 +255,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.StataExportCaption,
                         e.VariableLabel,
                         e.ConditionExpression,
+                        e.HideIfDisabled,
                         e.AnswerOrder,
                         e.Featured,
                         e.Capital,
@@ -295,6 +297,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.StataExportCaption,
                         e.VariableLabel,
                         e.ConditionExpression,
+                        e.HideIfDisabled,
                         Order.AZ,
                         e.Featured,
                         e.Capital,
@@ -337,6 +340,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.StataExportCaption,
                         e.VariableLabel,
                         e.ConditionExpression,
+                        e.HideIfDisabled,
                         Order.AZ,
                         false,
                         false,
@@ -387,6 +391,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.StataExportCaption,
                         e.VariableLabel,
                         e.ConditionExpression,
+                        e.HideIfDisabled,
                         e.AnswerOrder,
                         e.Featured,
                         e.Capital,
@@ -424,6 +429,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.StataExportCaption,
                         e.VariableLabel,
                         e.ConditionExpression,
+                        e.HideIfDisabled,
                         Order.AZ,
                         e.Featured,
                         e.Capital,
@@ -462,6 +468,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.StataExportCaption,
                         e.VariableLabel,
                         e.ConditionExpression,
+                        e.HideIfDisabled,
                         Order.AZ,
                         false,
                         false,
@@ -516,6 +523,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.VariableName,
                         e.VariableLabel,
                         e.EnablementCondition,
+                        e.HideIfDisabled,
                         Order.AZ,
                         false,
                         false,
@@ -555,6 +563,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.VariableName,
                         e.VariableLabel,
                         e.EnablementCondition,
+                        e.HideIfDisabled,
                         Order.AZ,
                         false,
                         false,
@@ -593,6 +602,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.VariableName,
                         e.VariableLabel,
                         e.EnablementCondition,
+                        e.HideIfDisabled,
                         Order.AZ,
                         false,
                         false,
@@ -1919,7 +1929,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             ));
         }
 
-        public void UpdateTextListQuestion(Guid questionId, string title, string variableName, string variableLabel, string enablementCondition, string instructions, Guid responsibleId, int? maxAnswerCount, QuestionScope scope, IList<ValidationCondition> validationConditions)
+        public void UpdateTextListQuestion(Guid questionId, string title, string variableName, string variableLabel, string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, int? maxAnswerCount, QuestionScope scope, IList<ValidationCondition> validationConditions)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1940,6 +1950,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 StataExportCaption = variableName,
                 VariableLabel = variableLabel,
                 ConditionExpression = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
                 Instructions = instructions,
                 ResponsibleId = responsibleId,
                 QuestionScope = scope,
@@ -1949,7 +1960,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         public void UpdateMultimediaQuestion(Guid questionId, string title, string variableName, string variableLabel,
-         string enablementCondition, string instructions, Guid responsibleId,
+         string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId,
             QuestionScope scope)
         {
             PrepareGeneralProperties(ref title, ref variableName);
@@ -1969,13 +1980,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 VariableName = variableName,
                 VariableLabel = variableLabel,
                 EnablementCondition = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
                 Instructions = instructions,
                 QuestionScope = scope,
                 ResponsibleId = responsibleId
             });
         }
 
-        public void UpdateQRBarcodeQuestion(Guid questionId, string title, string variableName, string variableLabel, string enablementCondition, string instructions, Guid responsibleId, QuestionScope scope, IList<ValidationCondition> validationConditions)
+        public void UpdateQRBarcodeQuestion(Guid questionId, string title, string variableName, string variableLabel, string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, QuestionScope scope, IList<ValidationCondition> validationConditions)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1995,6 +2007,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 VariableName = variableName,
                 VariableLabel = variableLabel,
                 EnablementCondition = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
                 ValidationExpression = null,
                 ValidationMessage = null,
                 Instructions = instructions,
