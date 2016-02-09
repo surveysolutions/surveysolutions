@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         protected AnswersDeclaredInvalid()
         {
             this.Questions = new Identity[] {};
-            this.FailedValidationConditions = new FailedValidationConditionsDictionary();
+            this.FailedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
         }
 
         public AnswersDeclaredInvalid(Identity[] questions)
@@ -44,13 +44,13 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
                 dictionary.Add(question, new List<FailedValidationCondition>());
             }
 
-            this.FailedValidationConditions = new FailedValidationConditionsDictionary(dictionary);
+            this.FailedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>(dictionary);
         }
 
         public AnswersDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
         {
             this.Questions = failedValidationConditions.Keys.ToArray();
-            this.FailedValidationConditions = new FailedValidationConditionsDictionary(failedValidationConditions);
+            this.FailedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>(failedValidationConditions);
         }
     }
 }
