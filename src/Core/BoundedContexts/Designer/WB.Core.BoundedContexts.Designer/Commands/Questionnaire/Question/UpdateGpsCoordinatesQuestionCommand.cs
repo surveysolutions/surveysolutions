@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             string validationMessage,
             QuestionScope scope,
             List<ValidationCondition> validationConditions)
-                 
+            :base ( 
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId,
                 commonQuestionParameters: commonQuestionParameters,
                 validationConditions: validationConditions)

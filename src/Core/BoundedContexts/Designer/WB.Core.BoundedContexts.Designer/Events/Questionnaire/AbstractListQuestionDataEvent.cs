@@ -16,6 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
             this.validationConditions = new List<ValidationCondition>();
         }
         public string ConditionExpression { get; set; }
+        public bool HideIfDisabled { get; set; }
         public string Instructions { get; set; }
         
         public Guid PublicKey { get; set; }
