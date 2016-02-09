@@ -90,7 +90,6 @@
     <Compile Include="DataTransferObjects\AnswerType.cs" />
     <Compile Include="Events\Interview\AnswerRemoved.cs" />
     <Compile Include="Events\Interview\Dtos\AnsweredYesNoOption.cs" />
-    <Compile Include="Events\Interview\FailedValidationConditionsDictionary.cs" />
     <Compile Include="Events\Interview\InterviewReceivedByInterviewer.cs" />
     <Compile Include="Events\Interview\InterviewReceivedBySupervisor.cs" />
     <Compile Include="Events\Interview\UnapprovedByHeadquarters.cs" />
