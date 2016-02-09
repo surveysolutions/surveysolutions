@@ -152,6 +152,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 ItemId = roster.Id.FormatGuid(),
                 Title = roster.Title,
                 EnablementCondition = roster.EnablementCondition,
+                HideIfDisabled = roster.HideIfDisabled,
                 VariableName = roster.VariableName,
 
                 Type = rosterType,
