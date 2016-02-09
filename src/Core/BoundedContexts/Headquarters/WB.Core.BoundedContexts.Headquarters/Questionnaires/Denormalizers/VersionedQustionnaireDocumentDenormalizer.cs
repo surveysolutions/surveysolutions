@@ -11,7 +11,8 @@ using WB.Core.SharedKernels.SurveyManagement.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers
 {
-    internal class VersionedQustionnaireDocumentDenormalizer : BaseDenormalizer, IEventHandler<TemplateImported>,
+    internal class VersionedQustionnaireDocumentDenormalizer : BaseDenormalizer, 
+        IEventHandler<TemplateImported>,
         IEventHandler<QuestionnaireDeleted>
     {
         private readonly IQuestionnaireCacheInitializer questionnaireCacheInitializer;

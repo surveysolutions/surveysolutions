@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Documents;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
@@ -12,20 +17,20 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
     {
         Establish context = () =>
         {
-            linkedQuestionRosterVector = new decimal[] { };
+            linkedQuestionRosterVector = Create.RosterVector();
             var linkedQuestionRosters = new Guid[] { };
 
             var referencedQuestionRosters = new[] { rosterId };
 
-            IPlainQuestionnaireRepository questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
-                => _.HasQuestion(linkedQuestionId) == true
-                && _.GetRosterLevelForQuestion(linkedQuestionId) == linkedQuestionRosters.Length
-                && _.GetRostersFromTopToSpecifiedQuestion(linkedQuestionId) == linkedQuestionRosters
-                && _.GetRosterSizeSourcesForEntity(linkedQuestionId) == linkedQuestionRosters
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocument(id: questionnaireId,
+                children: new IComposite[]
+                {
+                    Create.Roster(rosterId: rosterId, variable: "ros",
+                        fixedRosterTitles: new[] {Create.FixedRosterTitle(1, "1")}),
+                    Create.SingleQuestion(id: linkedQuestionId, linkedToRosterId: rosterId)
+                });
 
-                && _.GetRosterLevelForGroup(rosterId) == referencedQuestionRosters.Length
-                && _.GetRostersFromTopToSpecifiedGroup(rosterId)== referencedQuestionRosters
-                && _.GetRosterSizeSourcesForEntity(rosterId) == referencedQuestionRosters);
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, new PlainQuestionnaire(questionnaire, 1));
 
             interview = Create.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
@@ -50,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         private static IEnumerable<InterviewRoster> result;
         private static Guid rosterId = Guid.Parse("55555555555555555555555555555555");
         private static Guid linkedQuestionId = Guid.Parse("11111111111111111111111111111111");
-        private static decimal[] linkedQuestionRosterVector;
+        private static RosterVector linkedQuestionRosterVector;
         private static Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
     }
 }

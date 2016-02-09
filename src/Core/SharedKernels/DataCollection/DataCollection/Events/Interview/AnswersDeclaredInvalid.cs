@@ -1,13 +1,38 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class AnswersDeclaredInvalid : InterviewPassiveEvent
     {
+        private IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions;
+
         public Identity[] Questions { get; protected set; }
-        public IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> FailedValidationConditions { get; private set; }
+
+        public List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>> FailedConditionsStorage { get; protected set; }
+
+        [JsonIgnore]
+        public IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> FailedValidationConditions
+        {
+            get
+            {
+                return this.failedValidationConditions ?? 
+                        (this.failedValidationConditions = this.FailedConditionsStorage.ToDictionary(x => x.Key, x => x.Value));
+            }
+            protected set
+            {
+                this.FailedConditionsStorage = value.ToList();
+                this.failedValidationConditions = null;
+            }
+        }
+
+        protected AnswersDeclaredInvalid()
+        {
+            this.Questions = new Identity[] {};
+            this.FailedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
+        }
 
         public AnswersDeclaredInvalid(Identity[] questions)
         {
@@ -19,7 +44,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
                 dictionary.Add(question, new List<FailedValidationCondition>());
             }
 
-            this.FailedValidationConditions = dictionary;
+            this.FailedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>(dictionary);
         }
 
         public AnswersDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)

@@ -15,8 +15,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
     {
         Establish context = () =>
         {
-            questionId = new Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), new decimal[] { 1 });
-            rosterId = new Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), new decimal[] { 1 });
+            questionId = new Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Create.RosterVector(1));
+            rosterId = new Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), Create.RosterVector(1));
 
             var questionnaire = Create.QuestionnaireModel(new BaseQuestionModel[] {
                     new LinkedToRosterMultiOptionQuestionModel()
@@ -26,9 +26,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                     }
                 });
 
-            interview = new Mock<IStatefulInterview>();
+            var interview = new Mock<IStatefulInterview>();
             interview.Setup(x => x.FindReferencedRostersForLinkedQuestion(rosterId.Id, Moq.It.IsAny<Identity>()))
-                 .Returns(new[] { Create.InterviewRoster(rosterId.Id, new decimal[] { 1 }, "title"), Create.InterviewRoster(rosterId.Id, new decimal[] { 2 }, "title2") });
+                 .Returns(new[] { Create.InterviewRoster(rosterId.Id, Create.RosterVector(1), "title"), Create.InterviewRoster(rosterId.Id, Create.RosterVector(2), "title2") });
 
             var linkedMultiOptionAnswer = new LinkedMultiOptionAnswer(questionId.Id, new decimal[0]);
             linkedMultiOptionAnswer.SetAnswers(new[] {new decimal[] {1}});
@@ -49,6 +49,5 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
         static MultiOptionLinkedToRosterQuestionViewModel viewModel;
         static Identity questionId;
         static Identity rosterId;
-        static Mock<IStatefulInterview> interview;
     }
 }
