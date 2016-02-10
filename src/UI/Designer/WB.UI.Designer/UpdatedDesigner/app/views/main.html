@@ -15,7 +15,7 @@
                     {{questionnaire.title}}
                 </div>
                 <div class="questionnarie-title-buttons">
-                    <span class="text-muted">({{questionnaire.questionsCount}}Q, {{questionnaire.groupsCount}}G, {{questionnaire.rostersCount}}R)</span>
+                    <span class="text-muted">({{questionnaire.questionsCount}}Q, {{questionnaire.groupsCount}}S, {{questionnaire.rostersCount}}R)</span>
                     <input id="verification-btn" type="button" class="btn" value="COMPILE" ng-click="verify()"/>
                     <span ng-show="verificationStatus.warnings!=null && verificationStatus.errors!=null">
                         <span data-toggle="modal" ng-show="(verificationStatus.warnings.length + verificationStatus.errors.length) > 0" class="error-message ng-hide" ng-class="{'no-errors': verificationStatus.errors.length == 0}">
