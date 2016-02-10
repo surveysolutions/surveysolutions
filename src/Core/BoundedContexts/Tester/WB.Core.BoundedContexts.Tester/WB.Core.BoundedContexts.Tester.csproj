@@ -39,7 +39,6 @@
   <ItemGroup>
     <Compile Include="Implementation\Services\IDesignerApiService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireImportService.cs" />
-    <Compile Include="Implementation\Services\TesterExpressionsEngineVersionService.cs" />
     <Compile Include="Implementation\Services\ViewModelNavigationService.cs" />
     <Compile Include="Properties\TesterUIResources.id-ID.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -59,7 +58,6 @@
     <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="TesterBoundedContextModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\ITesterExpressionsEngineVersionService.cs" />
     <Compile Include="Properties\TesterUIResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
