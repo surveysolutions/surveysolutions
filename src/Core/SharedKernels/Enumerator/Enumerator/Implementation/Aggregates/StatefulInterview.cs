@@ -1204,7 +1204,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 if (this.notAnsweredQuestionsValidityStatus.ContainsKey(questionKey))
                 {
                     question.IsValid = this.notAnsweredQuestionsValidityStatus[questionKey];
-                    question.FailedValidations = this.notAnsweredFailedConditions[questionKey];
+                    if (!question.IsValid)
+                    {
+                        question.FailedValidations = this.notAnsweredFailedConditions[questionKey];
+                    }
                     bool removedItemValidityStatus;
                     this.notAnsweredQuestionsValidityStatus.TryRemove(questionKey, out removedItemValidityStatus);
                 }
