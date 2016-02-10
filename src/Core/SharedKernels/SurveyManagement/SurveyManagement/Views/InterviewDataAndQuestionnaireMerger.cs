@@ -246,9 +246,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                             (questionId) => GetAvailableOptionsForQuestionLinkedOnRoster(question, interviewLevel.RosterVector, question.LinkedToRosterId.Value, interviewInfo),
                             isQuestionsParentGroupDisabled, interviewLevel.RosterVector, interviewInfo.Interview.Status);
                     else
-                        interviewEntity = new InterviewQuestionView(question, answeredQuestion,
-                            interviewInfo.QuestionIdToVariable,
-                            answersForTitleSubstitution, isQuestionsParentGroupDisabled, interviewLevel.RosterVector,
+                        interviewEntity = new InterviewQuestionView(question,
+                            answeredQuestion,
+                            answersForTitleSubstitution, 
+                            isQuestionsParentGroupDisabled, 
+                            interviewLevel.RosterVector,
                             interviewInfo.Interview.Status);
 
                 }

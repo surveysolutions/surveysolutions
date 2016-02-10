@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public InterviewLinkedQuestionView(IQuestion question, InterviewQuestion answeredQuestion,
             Dictionary<Guid, string> variablesMap, Dictionary<string, string> answersForTitleSubstitution,
             Func<Guid, Dictionary<decimal[], string>> getAvailableOptions, bool isParentGroupDisabled, decimal[] rosterVector, InterviewStatus interviewStatus)
-            : base(question, answeredQuestion, variablesMap, answersForTitleSubstitution, isParentGroupDisabled, rosterVector, interviewStatus)
+            : base(question, answeredQuestion, answersForTitleSubstitution, isParentGroupDisabled, rosterVector, interviewStatus)
         {
             this.Options = getAvailableOptions(question.PublicKey).Select(a => new QuestionOptionView
                 {

@@ -801,6 +801,7 @@
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_supervisor_filtering.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_supervisor_try_see_other_supervisor_interviewers.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_hq_sorting_by_deviceId.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\InterviewQuestionViewTests\when_creating_view_for_question_with_multiple_failed_validation_conditions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewQuestionViewTests\when_creating_view_for_supervisor_question_and_interview_approved_by_hq.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_answer_removed_from_gps_qestion.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_gps_question_answered.cs" />

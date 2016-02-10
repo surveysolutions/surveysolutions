@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -20,7 +19,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTest
         Because of = () =>
             result =
                 new InterviewQuestionView(question: question, answeredQuestion: null,
-                    variablesMap: new Dictionary<Guid, string>(),
                     answersForTitleSubstitution: new Dictionary<string, string>(), 
                     isParentGroupDisabled: false,
                     rosterVector: new decimal[0],

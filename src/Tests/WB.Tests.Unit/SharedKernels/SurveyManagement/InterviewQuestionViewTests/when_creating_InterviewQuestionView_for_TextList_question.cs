@@ -21,8 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewQuestionViewTest
                 new InterviewTextListAnswers(new[] { new Tuple<decimal, string>(1, "q1"), new Tuple<decimal, string>(2, "q2") });
         };
 
-        Because of = () => textListQuestionView = new InterviewQuestionView(textListQuestionTemplate, textListQuestionData,
-               null, null, false, new decimal[0], InterviewStatus.Completed);
+        Because of = () => textListQuestionView = new InterviewQuestionView(textListQuestionTemplate, textListQuestionData, null, false, new decimal[0], InterviewStatus.Completed);
 
         It should_answer_be_null = () =>
             textListQuestionView.Answer.ShouldBeNull();

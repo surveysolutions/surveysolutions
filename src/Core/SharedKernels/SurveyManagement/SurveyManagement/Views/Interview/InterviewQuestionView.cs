@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
@@ -15,7 +16,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     {
         public InterviewQuestionView(IQuestion question, 
             InterviewQuestion answeredQuestion, 
-            Dictionary<Guid, string> variablesMap, 
             Dictionary<string, string> answersForTitleSubstitution, 
             bool isParentGroupDisabled, 
             decimal[] rosterVector,
@@ -26,8 +26,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             this.Title = GetTitleWithSubstitutedVariables(question, answersForTitleSubstitution);
             this.QuestionType = question.QuestionType;
             this.IsFeatured = question.Featured;
-            this.ValidationMessage = question.ValidationMessage;
-            this.ValidationExpression = this.ReplaceGuidsWithVariables(question.ValidationExpression, variablesMap);
             this.Variable = question.StataExportCaption;
             this.IsValid = true;
             this.IsEnabled = (question.QuestionScope == QuestionScope.Supervisor) || (answeredQuestion == null) && !isParentGroupDisabled;
@@ -119,7 +117,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
             this.IsValid = shouldBeValidByConvention || !answeredQuestion.IsInvalid();
             this.AnswerString = FormatAnswerAsString(answeredQuestion.Answer);
+
+            this.FailedValidationMessages = answeredQuestion.FailedValidationConditions.Select(x => question.ValidationConditions[x.FailedConditionIndex]).ToList();
         }
+
+        public List<ValidationCondition> FailedValidationMessages { get; private set; }
 
         private string FormatAnswerAsString(object answer)
         {
@@ -180,21 +182,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             return title;
         }
 
-        private string ReplaceGuidsWithVariables(string expression, Dictionary<Guid, string> variablesMap)
-        {
-            if (string.IsNullOrWhiteSpace(expression))
-                return expression;
-
-            string expression1 = expression;
-
-            foreach (var pair in variablesMap)
-            {
-                expression1 = expression1.Replace(string.Format("[{0}]", pair.Key), string.Format("[{0}]", pair.Value));
-            }
-
-            return expression1;
-        }
-
         public string AnswerString { get; private set; }
 
         public decimal[] RosterVector { get; set; }
@@ -216,8 +203,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public bool IsEnabled { get; set; }
         public bool IsReadOnly { get; set; }
         public bool IsFlagged { get; set; }
-        public string ValidationExpression { get; set; }
-        public string ValidationMessage { get; set; }
 
         public int[] PropagationVector { get; set; }
 
