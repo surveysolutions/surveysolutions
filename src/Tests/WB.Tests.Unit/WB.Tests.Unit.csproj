@@ -586,6 +586,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_qr_barcode_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_single_option_linked_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_single_option_question_received_by_interviewer.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_all_type_of_questions_and_interview_approved_by_hq.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_text_list_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_text_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_yes_no_question_received_by_interviewer.cs" />
