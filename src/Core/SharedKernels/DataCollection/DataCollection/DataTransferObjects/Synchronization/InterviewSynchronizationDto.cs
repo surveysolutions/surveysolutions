@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public HashSet<InterviewItemId> ValidAnsweredQuestions { get;  set; }
         public HashSet<InterviewItemId> InvalidAnsweredQuestions { get;  set; }
 
-        public Dictionary<Identity, IReadOnlyList<FailedValidationCondition>> FailedValidationConditions { get; set; } 
+        public IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> FailedValidationConditions { get; set; } 
         
         public Dictionary<InterviewItemId, RosterSynchronizationDto[]> RosterGroupInstances { get; set; }
 

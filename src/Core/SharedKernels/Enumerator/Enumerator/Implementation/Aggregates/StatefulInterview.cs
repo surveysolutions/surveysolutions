@@ -103,11 +103,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             }
 
             @event.InterviewData.ValidAnsweredQuestions.ForEach(x => DeclareAnswerAsValid(x.Id, x.InterviewItemRosterVector));
-            @event.InterviewData.InvalidAnsweredQuestions.ForEach(x => DeclareAnswerAsInvalid(x.Id, x.InterviewItemRosterVector, new FailedValidationCondition[] {})); // TODO: KP-6680
+            @event.InterviewData.FailedValidationConditions.ForEach(x => this.DeclareAnswerAsInvalid(x.Key.Id, x.Key.RosterVector, x.Value)); 
 
             @event.InterviewData.DisabledQuestions.ForEach(x => DisableQuestion(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.DisabledGroups.ForEach(x => DisableGroup(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.Answers.ForEach(x => CommentQuestion(x.Id, x.QuestionRosterVector,x.Comments));
+            
         }
 
         public void Apply(InterviewAnswersFromSyncPackageRestored @event)

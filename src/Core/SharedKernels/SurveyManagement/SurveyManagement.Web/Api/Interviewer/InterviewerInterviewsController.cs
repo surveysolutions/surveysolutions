@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -100,15 +101,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
                 LastSupervisorOrInterviewerComment = interviewDetails.Comments,
                 RejectedDateTime = interviewDetails.RejectDateTime,
                 InterviewerAssignedDateTime = interviewDetails.InterviewerAssignedDateTime,
-                AnswersOnPrefilledQuestions =
-                    interviewMetaInfo.FeaturedQuestionsMeta.Select(ToAnswerOnPrefilledQuestionApiView).ToList(),
+                AnswersOnPrefilledQuestions = interviewMetaInfo.FeaturedQuestionsMeta.Select(ToAnswerOnPrefilledQuestionApiView).ToList(),
                 DisabledGroups = interviewDetails.DisabledGroups.Select(this.ToIdentityApiView).ToList(),
                 DisabledQuestions = interviewDetails.DisabledQuestions.Select(this.ToIdentityApiView).ToList(),
                 InvalidAnsweredQuestions = interviewDetails.InvalidAnsweredQuestions.Select(this.ToIdentityApiView).ToList(),
                 ValidAnsweredQuestions = interviewDetails.ValidAnsweredQuestions.Select(this.ToIdentityApiView).ToList(),
                 WasCompleted = interviewDetails.WasCompleted,
                 RosterGroupInstances = interviewDetails.RosterGroupInstances.Select(this.ToRosterApiView).ToList(),
-                Answers = interviewDetails.Answers.Select(this.ToInterviewApiView).ToList()
+                Answers = interviewDetails.Answers.Select(this.ToInterviewApiView).ToList(),
+                FailedValidationConditions = ToInterviewApiView(interviewDetails.FailedValidationConditions)
             };
             var response = this.Request.CreateResponse(resultValue);
             response.Headers.CacheControl = new CacheControlHeaderValue
@@ -118,6 +119,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             };
 
             return response;
+        }
+
+        private Dictionary<IdentityApiView, List<FailedValidationCondition>> ToInterviewApiView(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
+        {
+            return failedValidationConditions.ToDictionary(condition => new IdentityApiView {QuestionId = condition.Key.Id, RosterVector = condition.Key.RosterVector.ToList()}, condition => condition.Value.ToList());
         }
 
         [HttpPost]
