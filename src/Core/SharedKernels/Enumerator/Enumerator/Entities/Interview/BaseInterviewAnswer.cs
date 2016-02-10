@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.Entities.Interview
 
         public bool IsValid { get; set; }
         public bool IsEnabled { get; set; }
-        public IList<FailedValidationCondition> FailedValidations { get; private set; }
+        public IList<FailedValidationCondition> FailedValidations { get; set; }
         public abstract bool IsAnswered { get; }
 
         public string InterviewerComment { get; set; }

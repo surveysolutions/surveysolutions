@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Events;
@@ -171,7 +172,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 valid: true,
                 createdOnClient: questionnaireView.Census);
 
-            var synchronizeInterviewCommand = new SynchronizeInterviewCommand(
+            IList<KeyValuePair<Identity, IList<FailedValidationCondition>>> failedConditionsList =
+                this.serializer.Deserialize<IList<KeyValuePair<Identity, IList<FailedValidationCondition>>>>(details.FailedValidationConditions);
+
+           var synchronizeInterviewCommand = new SynchronizeInterviewCommand(
                 interviewId: info.Id,
                 userId: this.principal.CurrentUserIdentity.UserId,
                 sycnhronizedInterview: new InterviewSynchronizationDto(
@@ -191,17 +195,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     details.RosterGroupInstances?.ToDictionary(roster => this.ToInterviewItemId(roster.Identity), roster =>
                             roster.Instances?.Select(this.ToRosterSynchronizationDto).ToArray() ??
                             new RosterSynchronizationDto[0]) ?? new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),
-                    ToSyncPackageType(details.FailedValidationConditions),
+                    failedConditionsList,
                     false)
                 );
 
             await this.commandService.ExecuteAsync(createInterviewFromSynchronizationMetadataCommand);
             await this.commandService.ExecuteAsync(synchronizeInterviewCommand);
-        }
-
-        private Dictionary<Identity, IReadOnlyList<FailedValidationCondition>> ToSyncPackageType(Dictionary<IdentityApiView, List<FailedValidationCondition>> failedValidationConditions)
-        {
-            return failedValidationConditions.ToDictionary<KeyValuePair<IdentityApiView, List<FailedValidationCondition>>, Identity, IReadOnlyList<FailedValidationCondition>>(failedValidationCondition => new Identity(failedValidationCondition.Key.QuestionId, failedValidationCondition.Key.RosterVector.ToArray()), failedValidationCondition => failedValidationCondition.Value);
         }
 
         private AnsweredQuestionSynchronizationDto ToAnsweredQuestionSynchronizationDto(InterviewAnswerApiView answer)
