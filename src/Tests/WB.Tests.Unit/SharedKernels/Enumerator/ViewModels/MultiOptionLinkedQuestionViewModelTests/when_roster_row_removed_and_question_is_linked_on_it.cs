@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Linq;
 using Machine.Specifications;
-using Moq;
+using NSubstitute;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQuestionViewModelTests
 {
@@ -27,14 +24,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                     }
                 });
 
-            var interview = new Mock<IStatefulInterview>();
-            interview.Setup(x => x.FindReferencedRostersForLinkedQuestion(rosterId.Id, Moq.It.IsAny<Identity>()))
+            var interview = Substitute.For<IStatefulInterview>();
+            interview.FindReferencedRostersForLinkedQuestion(rosterId.Id, Arg.Any<Identity>())
                  .Returns(new[] { Create.InterviewRoster(rosterId.Id, Create.RosterVector(1), "title"), Create.InterviewRoster(rosterId.Id, Create.RosterVector(2), "title2") });
 
-            viewModel = CreateMultiOptionRosterLinkedQuestionViewModel(questionnaire, interview.Object);
+            viewModel = CreateMultiOptionRosterLinkedQuestionViewModel(questionnaire, interview);
             viewModel.Init("interview", questionId, Create.NavigationState());
 
-            interview.Setup(x => x.FindReferencedRostersForLinkedQuestion(rosterId.Id, Moq.It.IsAny<Identity>()))
+            interview.FindReferencedRostersForLinkedQuestion(rosterId.Id, Arg.Any<Identity>())
                    .Returns(new[] { Create.InterviewRoster(rosterId.Id, Create.RosterVector(1), "title")});
         };
 
@@ -43,8 +40,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             viewModel.Handle(Create.RosterInstancesRemoved(rosterId.Id));
         };
 
-        It should_remove_one_option =
-            () => viewModel.Options.ShouldNotContain(o => o.Value.Identical(Create.RosterVector(2)));
+        It should_remove_single_option = () => viewModel.Options.Count.ShouldEqual(1);
+
+        It should_remove_option_with_correct_roster_vector = () => viewModel.Options.ShouldNotContain(o => o.Value.Identical(Create.RosterVector(2)));
 
         static MultiOptionLinkedToRosterQuestionViewModel viewModel;
         static Identity questionId;
