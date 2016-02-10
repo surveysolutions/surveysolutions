@@ -78,7 +78,7 @@ namespace ChangeInterviewStatus
             [Argument(Name = "tasksLimit", DefaultValue = MaxNumberOfParallelTasks)]
             public int ParallelTasksLimit { get; set; }
 
-            [Description("Max number of parallel tasks.")]
+            [Description("Delimiter in tab separated file. Default is tab symbol.")]
             [Argument(Name = "delimeter", DefaultValue = "\t")]
             public string Delimeter { get; set; }
 
