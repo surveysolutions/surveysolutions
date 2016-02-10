@@ -370,31 +370,32 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 var rosterTitlePlaceholder = this.CreateRosterTitlePlaceholder(roster, rosterPlaceholder);
                 result.Add(rosterTitlePlaceholder);
 
-                var questions = GetQuestionInsideRosterWhichCanBeUsedAsSourceOfLink(questionsCollection, questionId, roster, rosterPlaceholder);
+                var questions = GetQuestionInsideRosterWhichCanBeUsedAsSourceOfLink(questionsCollection, questionId, roster);
                 result.AddRange(questions);
             }
 
             return result;
         }
 
-        private static List<DropdownQuestionView> GetQuestionInsideRosterWhichCanBeUsedAsSourceOfLink(
-            QuestionsAndGroupsCollectionView questionsCollection, Guid questionId, GroupAndRosterDetailsView roster,
-            DropdownQuestionView rosterPlaceholder)
+        private List<DropdownQuestionView> GetQuestionInsideRosterWhichCanBeUsedAsSourceOfLink(
+            QuestionsAndGroupsCollectionView questionsCollection, Guid questionId, GroupAndRosterDetailsView roster)
         {
+            
             var pathInsideRoster = new[] {roster.Id}.Union(roster.ParentGroupsIds).ToArray();
             var questions =
                 questionsCollection.Questions.Where(
                     q => QuestionsWhichCanBeUsedAsSourceOfLinkedQuestion.Contains(q.GetType()))
                     .Where(
                         q =>
-                            pathInsideRoster.SequenceEqual(q.ParentGroupsIds.Skip(q.ParentGroupsIds.Length - pathInsideRoster.Length)) &&
-                            q.Id != questionId)
+                            pathInsideRoster.SequenceEqual(q.ParentGroupsIds.Skip(q.ParentGroupsIds.Length - pathInsideRoster.Length)) 
+                            && q.RosterScopeIds.SequenceEqual(roster.RosterScopeIds)
+                            && q.Id != questionId)
                     .OrderBy(q => q.ParentGroupsIds.Length)
                     .Select(q => new DropdownQuestionView
                     {
                         Id = q.Id.FormatGuid(),
                         Title = q.Title,
-                        Breadcrumbs = rosterPlaceholder.Breadcrumbs,
+                        Breadcrumbs = GetBreadcrumbsAsString(questionsCollection,q),
                         Type = q.Type.ToString().ToLower()
                     }).ToList();
             return questions;
