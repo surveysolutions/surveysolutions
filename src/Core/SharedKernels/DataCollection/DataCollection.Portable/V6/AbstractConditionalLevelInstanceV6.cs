@@ -70,14 +70,6 @@ namespace WB.Core.SharedKernels.DataCollection.V6
             this.InvalidAnsweredFailedValidations.Remove(questionId);
         }
 
-        /*public new void DeclareAnswerInvalid(Guid questionId)
-        {
-            this.InvalidAnsweredQuestions.Add(questionId);
-            this.ValidAnsweredQuestions.Remove(questionId);
-            
-            //failedvalidations
-        }*/
-
         public void ApplyFailedValidations(Guid questionId, IReadOnlyList<FailedValidationCondition> failedValidations)
         {
             this.ValidAnsweredQuestions.Remove(questionId);
@@ -136,7 +128,7 @@ namespace WB.Core.SharedKernels.DataCollection.V6
                             (this.InvalidAnsweredFailedValidations[questionId].Count == invalids.Count) &&
                             !this.InvalidAnsweredFailedValidations[questionId].Except(invalids).Any())
                             continue;
-                        else // first invalid old events support, raising a new one 
+                        else // first or invalid old events support, raising a new one 
                         {
                             questionsToBeInvalid.Add(validationExpressionDescription.Key);
                             failedValidationConditions.Add(validationExpressionDescription.Key, invalids);
