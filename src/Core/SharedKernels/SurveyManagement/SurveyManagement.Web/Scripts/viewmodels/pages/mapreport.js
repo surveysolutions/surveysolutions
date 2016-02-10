@@ -3,6 +3,8 @@
 
     var self = this;
 
+    self.IsShowRequestIndicator(true);
+
     self.markersLimit = 50000;
 
     self.questionnaireUrl = questionnaireUrl;
