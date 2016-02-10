@@ -51,7 +51,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                     userId: userId,
                     questionnaireId: questionnaireId,
                     questionnaireVersion: 2,
-                    wasCompleted: true);
+                    wasCompleted: true,
+                    interviewId: Guid.Empty);
 
             headquartersInterviewReaderMock.Setup(x => x.GetInterviewByUri(Moq.It.IsAny<Uri>()))
                 .Returns(
