@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public List<IdentityApiView> ValidAnsweredQuestions { get; set; }
         public List<IdentityApiView> InvalidAnsweredQuestions { get; set; }
 
-        public Dictionary<IdentityApiView, List<FailedValidationCondition>> FailedValidationConditions { get; set; }
+        public string FailedValidationConditions { get; set; }
 
         public List<RosterApiView> RosterGroupInstances { get; set; }
 

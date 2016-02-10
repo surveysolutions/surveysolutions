@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
                 WasCompleted = interviewDetails.WasCompleted,
                 RosterGroupInstances = interviewDetails.RosterGroupInstances.Select(this.ToRosterApiView).ToList(),
                 Answers = interviewDetails.Answers.Select(this.ToInterviewApiView).ToList(),
-                FailedValidationConditions = ToInterviewApiView(interviewDetails.FailedValidationConditions)
+                FailedValidationConditions = this.serializer.Serialize(interviewDetails.FailedValidationConditions.ToList())
             };
             var response = this.Request.CreateResponse(resultValue);
             response.Headers.CacheControl = new CacheControlHeaderValue
@@ -119,11 +119,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             };
 
             return response;
-        }
-
-        private Dictionary<IdentityApiView, List<FailedValidationCondition>> ToInterviewApiView(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
-        {
-            return failedValidationConditions.ToDictionary(condition => new IdentityApiView {QuestionId = condition.Key.Id, RosterVector = condition.Key.RosterVector.ToList()}, condition => condition.Value.ToList());
         }
 
         [HttpPost]

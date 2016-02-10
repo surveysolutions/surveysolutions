@@ -44,6 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         private readonly ConcurrentDictionary<string, InterviewGroup> groups;
         private readonly ConcurrentDictionary<Identity, int?> sortIndexesOfRosterInstanses;
         private readonly ConcurrentDictionary<string, bool> notAnsweredQuestionsValidityStatus;
+        private readonly ConcurrentDictionary<string, IList<FailedValidationCondition>> notAnsweredFailedConditions;
         private readonly ConcurrentDictionary<string, bool> notAnsweredQuestionsEnablementStatus;
         private readonly ConcurrentDictionary<string, string> notAnsweredQuestionsInterviewerComments;
         private bool createdOnClient;
@@ -57,6 +58,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.notAnsweredQuestionsValidityStatus = new ConcurrentDictionary<string, bool>();
             this.notAnsweredQuestionsEnablementStatus = new ConcurrentDictionary<string, bool>();
             this.notAnsweredQuestionsInterviewerComments = new ConcurrentDictionary<string, string>();
+            this.notAnsweredFailedConditions = new ConcurrentDictionary<string, IList<FailedValidationCondition>>();
         }
 
         private void ResetCalculatedState()
@@ -108,7 +110,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             @event.InterviewData.DisabledQuestions.ForEach(x => DisableQuestion(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.DisabledGroups.ForEach(x => DisableGroup(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.Answers.ForEach(x => CommentQuestion(x.Id, x.QuestionRosterVector,x.Comments));
-            
         }
 
         public void Apply(InterviewAnswersFromSyncPackageRestored @event)
@@ -285,7 +286,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             base.Apply(@event);
             this.ResetCalculatedState();
 
-            @event.FailedValidationConditions.ForEach(x => this.DeclareAnswerAsInvalid(x.Key.Id, x.Key.RosterVector, x.Value));
+            @event.FailedValidationConditions.ForEach(x => this.DeclareAnswerAsInvalid(x.Key.Id, x.Key.RosterVector, x.Value.ToList()));
         }
 
         public new void Apply(GroupsDisabled @event)
@@ -686,7 +687,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             }
         }
 
-        private void DeclareAnswerAsInvalid(Guid id, RosterVector rosterVector, IReadOnlyList<FailedValidationCondition> value)
+        private void DeclareAnswerAsInvalid(Guid id, RosterVector rosterVector, IList<FailedValidationCondition> value)
         {
             var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(id, rosterVector);
             var answer = this.GetExistingAnswerOrNull(questionKey);
@@ -702,6 +703,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             else
             {
                 this.notAnsweredQuestionsValidityStatus[questionKey] = false;
+                this.notAnsweredFailedConditions[questionKey] = value;
             }
         }
 
@@ -1006,8 +1008,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public IReadOnlyList<FailedValidationCondition> GetFailedValidationConditions(Identity questionId)
         {
-            var interviewAnswerModel = this.Answers[ConversionHelper.ConvertIdentityToString(questionId)];
-            return interviewAnswerModel.FailedValidations.ToReadOnlyCollection();
+            var convertIdentityToString = ConversionHelper.ConvertIdentityToString(questionId);
+            if (this.Answers.ContainsKey(convertIdentityToString))
+            {
+                return this.Answers[convertIdentityToString].FailedValidations.ToReadOnlyCollection();
+            }
+            if (this.notAnsweredFailedConditions.ContainsKey(convertIdentityToString))
+            {
+                return this.notAnsweredFailedConditions[convertIdentityToString].ToReadOnlyCollection();
+            }
+
+            return new List<FailedValidationCondition>();
         } 
 
         public bool IsEnabled(Identity entityIdentity)
@@ -1193,6 +1204,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 if (this.notAnsweredQuestionsValidityStatus.ContainsKey(questionKey))
                 {
                     question.IsValid = this.notAnsweredQuestionsValidityStatus[questionKey];
+                    question.FailedValidations = this.notAnsweredFailedConditions[questionKey];
                     bool removedItemValidityStatus;
                     this.notAnsweredQuestionsValidityStatus.TryRemove(questionKey, out removedItemValidityStatus);
                 }
