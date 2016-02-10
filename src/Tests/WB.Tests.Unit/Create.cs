@@ -141,6 +141,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.Synchronization.SyncStorage;
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
 using designer::WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V6.Templates;
+using WB.Core.SharedKernels.NonConficltingNamespace;
 
 namespace WB.Tests.Unit
 {
@@ -2396,7 +2397,8 @@ namespace WB.Tests.Unit
             QuestionScope scope = QuestionScope.Interviewer, 
             bool preFilled=false,
             string label=null,
-            string instruction=null)
+            string instruction=null,
+            List<ValidationCondition> validationConditions = null)
             
         {
             return new TextQuestion("Question T")
@@ -2412,7 +2414,8 @@ namespace WB.Tests.Unit
                 QuestionScope = scope,
                 Featured = preFilled,
                 VariableLabel = label,
-                Instructions = instruction
+                Instructions = instruction,
+                ValidationConditions = validationConditions.ConcatWithOldConditionIfNotEmpty(validationExpression, validationMessage)
             };
         }
 
@@ -2758,6 +2761,11 @@ namespace WB.Tests.Unit
                 RosterVector = rosterVector ?? new decimal[0],
                 Title = rosterTitle
             };
+        }
+
+        public static ValidationCondition ValidationCondition(string expression, string message)
+        {
+            return new ValidationCondition(expression, message);
         }
     }
 }

@@ -72,6 +72,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public Version GetQuestionnaireContentVersion(QuestionnaireDocument questionnaireDocument)
         {
+            var countOfQuestionsWithMultipleValidations = questionnaireDocument.Find<IQuestion>(q => q.ValidationConditions.Count() > 1).Count();
+            if (countOfQuestionsWithMultipleValidations > 0)
+                return version_12;
+
             var countOfLinkedOnRosterQuestions = questionnaireDocument.Find<IQuestion>(q => q.LinkedToRosterId.HasValue).Count();
             if (countOfLinkedOnRosterQuestions > 0)
                 return version_12;
