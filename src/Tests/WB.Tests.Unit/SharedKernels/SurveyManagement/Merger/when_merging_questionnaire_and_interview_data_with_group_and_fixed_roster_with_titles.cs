@@ -22,9 +22,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             questionnaire = CreateQuestionnaireDocumentWithGroupAndFixedRoster(groupId, groupTitle, fixedRosterId, fixedRosterTitle, rosterFixedTitles);
             interview = CreateInterviewDataForQuestionnaireWithGroupAndFixedRoster(interviewId, groupId, groupTitle, fixedRosterId, fixedRosterTitle, rosterFixedTitles);
             
-            var questionnaireRosters = CreateQuestionnaireRosterStructureWithOneFixedRoster(fixedRosterId);
             user = Mock.Of<UserDocument>();
-            merger = CreateMerger(questionnaire, questionnaireRosters);
+            merger = CreateMerger(questionnaire);
         };
 
         Because of = () =>

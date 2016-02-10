@@ -189,23 +189,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             };
         }
 
-        internal static InterviewDataAndQuestionnaireMerger CreateMerger(QuestionnaireDocument questionnaire, QuestionnaireRosterStructure questionnaireRosters = null)
+        internal static InterviewDataAndQuestionnaireMerger CreateMerger(QuestionnaireDocument questionnaire)
         {
-            var questionnaireReferenceInfo = CreateQuestionnaireReferenceInfo(questionnaire);
-            questionnaireRosters = questionnaireRosters ?? CreateQuestionnaireRosterStructure(questionnaire);
-
-            var kvStorageQuestionnaireRosterStructure =
-                Mock.Of<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(
-                    x => x.GetById(Moq.It.IsAny<string>()) == questionnaireRosters);
-
-            var kvStorageOfReferenceInfoForLinkedQuestions =
-                Mock.Of<IReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions>>(
-                    x => x.GetById(Moq.It.IsAny<string>()) == questionnaireReferenceInfo);
-
             return new InterviewDataAndQuestionnaireMerger(
-                substitutionService: new SubstitutionService(),
-                questionnaireRosterStructures: kvStorageQuestionnaireRosterStructure,
-                questionnaireReferenceInfoForLinkedQuestions: kvStorageOfReferenceInfoForLinkedQuestions);
+                substitutionService: new SubstitutionService());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)
