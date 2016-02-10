@@ -117,13 +117,15 @@ namespace WB.UI.Designer.Api
                 });
             }
 
+            var questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
+
             GenerationResult generationResult;
             string resultAssembly;
             try
             {
                 generationResult =
                     this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
-                        questionnaireView.Source, supportedClientVersion,
+                        questionnaireView.Source, questionnaireContentVersion,
                         out resultAssembly);
             }
             catch (Exception)
@@ -149,7 +151,7 @@ namespace WB.UI.Designer.Api
                 });
             }
 
-            var questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source).Major;
+            
 
             var questionnaire = questionnaireView.Source;
             questionnaire.Macros = null;
@@ -158,7 +160,7 @@ namespace WB.UI.Designer.Api
             {
                 Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaire)),
                 QuestionnaireAssembly = resultAssembly,
-                QuestionnaireContentVersion = questionnaireContentVersion
+                QuestionnaireContentVersion = questionnaireContentVersion.Major
             };
         }
         
