@@ -17,11 +17,11 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public List<IdentityApiView> ValidAnsweredQuestions { get; set; }
         public List<IdentityApiView> InvalidAnsweredQuestions { get; set; }
 
-        public string FailedValidationConditions { get; set; }
-
         public List<RosterApiView> RosterGroupInstances { get; set; }
 
         public bool WasCompleted { get; set; }
+
+        public string FailedValidationConditions { get; set; }
     }
 
     public class InterviewAnswerApiView
