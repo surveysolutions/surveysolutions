@@ -385,7 +385,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 ? childAsIQuestion.StataExportCaption
                 : "__" + childAsIQuestion.PublicKey.FormatGuid();
 
-            //var validation = this.macrosSubstitutionService.InlineMacros(childAsIQuestion.ValidationExpression, questionnaireDoc.Macros.Values);
             var validationConditions = new List<ValidationExpressionModel>();
 
             for (int i = 0; i < childAsIQuestion.ValidationConditions.Count; i++)
@@ -405,7 +404,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 Id = childAsIQuestion.PublicKey,
                 VariableName = varName,
                 Condition = condition,
-                //Validation = validation,
                 TypeName = GenerateQuestionTypeName(childAsIQuestion),
                 RosterScopeName = rosterScopeName,
                 ParentScopeTypeName = parentScopeTypeName,
