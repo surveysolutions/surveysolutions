@@ -153,11 +153,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task<InterviewDetailsApiView> GetInterviewDetailsAsync(Guid interviewId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {
-            return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<InterviewDetailsApiView>(
+            var interviewDetailsApiView = await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<InterviewDetailsApiView>(
                 url: string.Concat(this.interviewsController, "/", interviewId),
                 credentials: this.restCredentials,
                 onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
                 token: token));
+            return interviewDetailsApiView;
         }
 
         public async Task UploadInterviewAsync(Guid interviewId, string content, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
