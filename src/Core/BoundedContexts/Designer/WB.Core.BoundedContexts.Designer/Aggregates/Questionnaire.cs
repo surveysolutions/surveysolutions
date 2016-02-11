@@ -3920,12 +3920,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return !string.IsNullOrWhiteSpace(@group.ConditionExpression);
         }
 
-        private static bool HasEnablementConditionOrValidationExpression(IQuestion question)
-        {
-            return !string.IsNullOrWhiteSpace(question.ConditionExpression)
-                || !string.IsNullOrWhiteSpace(question.ValidationExpression);
-        }
-
+        
         private FixedRosterTitle[] GetRosterFixedTitlesOrThrow(FixedRosterTitleItem[] rosterFixedTitles)
         {
             if (rosterFixedTitles == null)
