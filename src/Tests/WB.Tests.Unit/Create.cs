@@ -1642,7 +1642,8 @@ namespace WB.Tests.Unit
 
         public static IPublishedEvent<QRBarcodeQuestionCloned> QRBarcodeQuestionClonedEvent(string questionId = null,
             string parentGroupId = null, string questionVariable = null, string questionTitle = null,
-            string questionConditionExpression = null, string sourceQuestionId = null)
+            string questionConditionExpression = null, string sourceQuestionId = null,
+            IList<ValidationCondition> validationConditions = null)
         {
             return ToPublishedEvent(new QRBarcodeQuestionCloned()
             {
@@ -1652,7 +1653,8 @@ namespace WB.Tests.Unit
                 Title = questionTitle,
                 EnablementCondition = questionConditionExpression,
                 SourceQuestionId = GetQuestionnaireItemId(sourceQuestionId),
-                TargetIndex = 0
+                TargetIndex = 0,
+                ValidationConditions = validationConditions
             });
         }
 
