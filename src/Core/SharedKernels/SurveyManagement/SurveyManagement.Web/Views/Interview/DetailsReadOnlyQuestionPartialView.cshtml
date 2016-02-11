@@ -25,8 +25,17 @@
 
         @if (!Model.IsValid)
         {
-            <small class="text-error">@Model.ValidationExpression</small>
-            <small class="text-error">@Model.ValidationMessage</small>
+            <dl>
+                @foreach (var validationCondition in Model.FailedValidationMessages)
+                {
+                    <dt>
+                        <small class="text-error">@validationCondition.Expression</small>
+                    </dt>
+                    <dd>
+                        <small class="text-error">@validationCondition.Message</small>
+                    </dd>
+                }
+            </dl>
         }
     </td>
 
