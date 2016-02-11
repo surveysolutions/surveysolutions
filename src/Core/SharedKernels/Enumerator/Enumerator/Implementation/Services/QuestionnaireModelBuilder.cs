@@ -201,7 +201,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     {
                         questionModel = new LinkedToRosterMultiOptionQuestionModel
                         {
-                            LinkedToRosterId = multiQuestion.LinkedToRosterId.Value
+                            LinkedToRosterId = multiQuestion.LinkedToRosterId.Value,
+                            MaxAllowedAnswers = multiQuestion.MaxAllowedAnswers,
+                            AreAnswersOrdered = multiQuestion.AreAnswersOrdered
                         };
                     }
                     else
