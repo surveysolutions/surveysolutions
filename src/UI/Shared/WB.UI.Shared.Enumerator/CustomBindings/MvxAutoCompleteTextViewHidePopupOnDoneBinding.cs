@@ -2,12 +2,13 @@
 using Android.Widget;
 using MvvmCross.Binding;
 using MvvmCross.Binding.Droid.Views;
+using MvvmCross.Droid.Support.V7.AppCompat.Widget;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
-    public class MvxAutoCompleteTextViewHidePopupOnDoneBinding : BaseBinding<MvxAutoCompleteTextView, object>
+    public class MvxAutoCompleteTextViewHidePopupOnDoneBinding : BaseBinding<MvxAppCompatAutoCompleteTextView, object>
     {
-        public MvxAutoCompleteTextViewHidePopupOnDoneBinding(MvxAutoCompleteTextView androidControl) : base(androidControl)
+        public MvxAutoCompleteTextViewHidePopupOnDoneBinding(MvxAppCompatAutoCompleteTextView androidControl) : base(androidControl)
         {
         }
 
@@ -16,7 +17,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             get { return MvxBindingMode.TwoWay; }
         }
 
-        protected override void SetValueToView(MvxAutoCompleteTextView view, object value) { }
+        protected override void SetValueToView(MvxAppCompatAutoCompleteTextView view, object value) { }
 
         public override void SubscribeToEvents()
         {
