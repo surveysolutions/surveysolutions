@@ -20,15 +20,11 @@
         <#foreach (var question in Model.Questions)
         {#>
             EnablementStates.Add(<#=question.StateName#>.ItemId, <#=question.StateName#>);
-        <#
-            bool hasAnyValidation = question.ValidationExpressions.Any(x=> !string.IsNullOrWhiteSpace(x.ValidationExpression));                       
-
-            if(hasAnyValidation)
+        <#            
+            if(question.HasAnyValidation())
             {#>    
-            ValidationExpressions.Add(new Identity(IdOf.<#= question.IdName#>, rosterVector), new Func<bool>[] {                             
-                <#if(question.ValidationExpressions.Any(x=> !string.IsNullOrWhiteSpace(x.ValidationExpression))) {#>  
-                    () => this.IsAnswerEmpty(<#=question.VariableName#>) || <#=question.ValidationExpressions.FirstOrDefault(x=> !string.IsNullOrWhiteSpace(x.ValidationExpression)).ValidationMethodName#>() , 
-                <# }#>
+            ValidationExpressions.Add(new Identity(IdOf.<#= question.IdName#>, rosterVector), new Func<bool>[] {
+                    () => this.IsAnswerEmpty(<#=question.VariableName#>) || <#=question.ValidationExpressions.FirstOrDefault(x=> !string.IsNullOrWhiteSpace(x.ValidationExpression)).ValidationMethodName#>()                
             }); 
         <# }#>
             AddUpdaterToMap(IdOf.<#= question.IdName#>, (<#=question.TypeName#> val) => {<#=question.MemberName#>  = val; });

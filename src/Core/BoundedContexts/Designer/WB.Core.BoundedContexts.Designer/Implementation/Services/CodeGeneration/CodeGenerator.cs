@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             if (codeGenerationSettings.IsLookupTablesFeatureSupported)
             {
-                var lookupTablesTemplate = new LookupTablesTemplateV6(expressionStateModel.LookupTables);
+                var lookupTablesTemplate = new LookupTablesTemplateV5(expressionStateModel.LookupTables);
                 generatedClasses.Add(ExpressionLocation.LookupTables().Key, lookupTablesTemplate.TransformText());
             }
 

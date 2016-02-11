@@ -209,12 +209,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\InterviewExpressionStateTemplateV6.Extended.cs" />
-    <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\LookupTablesTemplateV6.cs">
-      <DependentUpon>LookupTablesTemplateV6.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\LookupTablesTemplateV6.Extended.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\QuestionnaireLevelTemplateV6.cs">
       <DependentUpon>QuestionnaireLevelTemplateV6.tt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -233,6 +227,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Implementation\Services\QuestionnaireDocumentExtensions.cs" />
+    <Compile Include="Implementation\Services\QuestionTemplateModelExtensions.cs" />
     <Compile Include="Implementation\Services\ReadOnlyQuestionnaireDocument.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\CodeGenerationSettings.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\DefaultDynamicCompilerSettings.cs" />
@@ -714,10 +709,6 @@
     <Content Include="Implementation\Services\CodeGeneration\V5\Templates\LookupTablesTemplateV5.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>LookupTablesTemplateV5.cs</LastGenOutput>
-    </Content>
-    <Content Include="Implementation\Services\CodeGeneration\V6\Templates\LookupTablesTemplateV6.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>LookupTablesTemplateV6.cs</LastGenOutput>
     </Content>
     <None Include="Implementation\Services\CodeGeneration\V6\Templates\SharedTemplateV6.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>

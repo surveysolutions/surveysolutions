@@ -25,8 +25,8 @@ void QuestionsStatesInLevelConstructor(List<QuestionTemplateModel> questions)
 #>
 		EnablementStates.Add(<#=question.StateName#>.ItemId, <#=question.StateName#>);
 <#+
-		bool hasAnyValidation = question.ValidationExpressions.Any(x=> !string.IsNullOrWhiteSpace(x.ValidationExpression));					   
-		if(hasAnyValidation)
+							   
+		if(question.HasAnyValidation())
 		{
 #>
         var <#= question.IdName#>__allValidations = new Dictionary<int, Func<bool>>();
