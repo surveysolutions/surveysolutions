@@ -65,7 +65,7 @@ namespace WB.UI.Interviewer.Settings
         public int GpsReceiveTimeoutSec => this.CurrentSettings.GpsResponseTimeoutInSec;
         public double GpsDesiredAccuracy => this.CurrentSettings.GpsDesiredAccuracy.GetValueOrDefault((double)Application.Context.Resources.GetInteger(Resource.Integer.GpsDesiredAccuracy));
 
-        public long GetSupportedQuestionnaireContentVersion()
+        public Version GetSupportedQuestionnaireContentVersion()
         {
             return questionnaireContentVersionProvider.GetSupportedQuestionnaireContentVersion();
         }
