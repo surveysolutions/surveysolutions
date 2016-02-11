@@ -122,7 +122,8 @@ namespace WB.UI.Designer.Code
                         Variable = question.StataExportCaption,
                         QuestionType = "icon-" + question.QuestionType.ToString().ToLower(),
                         Title = question.QuestionText,
-                        ChapterId = Monads.Maybe(() => parent.PublicKey.FormatGuid())
+                        ChapterId = Monads.Maybe(() => parent.PublicKey.FormatGuid()),
+                        FailedValidationConditionIndex = reference.FailedValidationConditionIndex
                     };
                 }
             }
