@@ -33,7 +33,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.PhoneNumber);
             Component(x => x.Supervisor, cmp =>
             {
-                cmp.Property(x => x.Id, ptp => ptp.Column("SupervisorId"));
+                cmp.Property(x => x.Id, ptp => { ptp.Column("SupervisorId"); ptp.Index("User_SupervisorId"); });
+              
                 cmp.Property(x => x.Name, ptp => ptp.Column("SupervisorName"));
             });
 
