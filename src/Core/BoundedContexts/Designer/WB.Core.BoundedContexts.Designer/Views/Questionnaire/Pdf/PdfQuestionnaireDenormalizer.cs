@@ -428,7 +428,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     QuestionType = PdfQuestionType.QRBarcode,
                     Answers = new List<PdfAnswerView>(0),
                     VariableName = @event.VariableName,
-                    ConditionExpression = @event.EnablementCondition
+                    ConditionExpression = @event.EnablementCondition,
+                    ValidationConditions = @event.ValidationConditions
                 };
 
                 questionnaire.AddEntity(newQuestion, @event.ParentGroupId);
