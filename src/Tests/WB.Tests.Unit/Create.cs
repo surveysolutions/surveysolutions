@@ -1609,7 +1609,7 @@ namespace WB.Tests.Unit
         public static PreloadedDataService PreloadedDataService(QuestionnaireDocument questionnaire)
         {
             return new PreloadedDataService(
-                    new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory(),
+                    new ExportViewFactory(
                         new QuestionnaireRosterStructureFactory(), new FileSystemIOAccessor())
                         .CreateQuestionnaireExportStructure(questionnaire, 1), new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(questionnaire, 1), questionnaire,
                     new QuestionDataParser(),
