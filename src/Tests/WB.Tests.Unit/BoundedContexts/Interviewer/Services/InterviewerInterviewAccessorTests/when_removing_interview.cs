@@ -5,6 +5,7 @@ using System.Threading;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.Storage;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
@@ -41,8 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 interviewFileViewRepository: inMemoryFileViewRepository);
         };
 
-        Because of = async () =>
-            await interviewerInterviewAccessor.RemoveInterviewAsync(interviewId);
+        Because of = () => interviewerInterviewAccessor.RemoveInterviewAsync(interviewId).WaitAndUnwrapException();
 
         It should_remove_questionnaire_document_view_from_plain_storage = () =>
             mockOfCommandService.Verify(x=>x.ExecuteAsync(Moq.It.IsAny<HardDeleteInterview>(), null, Moq.It.IsAny<CancellationToken>()), Times.Once);
