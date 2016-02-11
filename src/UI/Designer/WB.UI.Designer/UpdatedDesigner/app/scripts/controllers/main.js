@@ -171,6 +171,15 @@ angular.module('designerApp')
                         chapterId: reference.chapterId,
                         itemId: reference.itemId
                     });
+
+                    if (!_.isNull(reference.failedValidationConditionIndex)) {
+                        _.defer(function() {
+                            $(".question-editor .form-holder").scrollTo("#validationCondition" + reference.failedValidationConditionIndex, 500, {
+                                easing: 'swing',
+                                offset: -10
+                            });
+                        });
+                    }
                 }
             };
 

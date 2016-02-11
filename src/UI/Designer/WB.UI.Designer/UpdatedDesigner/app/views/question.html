@@ -85,7 +85,7 @@
             </div>
         </div>
 
-        <div class="form-group validation-group" ng-if="doesQuestionSupportValidations()" ng-repeat="validation in activeQuestion.validationConditions">
+        <div class="form-group validation-group" ng-if="doesQuestionSupportValidations()" ng-repeat="validation in activeQuestion.validationConditions" id="validationCondition{{$index}}">
             <div class="validation-group-marker"></div>
             <label>Validation condition {{$index + 1}} <help key="validationExpression" /></label>
 
