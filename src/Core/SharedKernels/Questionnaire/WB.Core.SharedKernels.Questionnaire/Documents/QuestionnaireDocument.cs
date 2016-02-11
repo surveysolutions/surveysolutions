@@ -497,6 +497,14 @@ namespace Main.Core.Documents
             {
                 doc.Children.Add(composite.Clone());
             }
+            doc.Macros = new Dictionary<Guid, Macro>();
+            this.Macros.ForEach(x => doc.Macros.Add(x.Key, x.Value.Clone()));
+
+            doc.LookupTables = new Dictionary<Guid, LookupTable>();
+            this.LookupTables.ForEach(x => doc.LookupTables.Add(x.Key, x.Value.Clone()));
+
+            doc.SharedPersons = new List<Guid>();
+            this.SharedPersons.ForEach(x => doc.SharedPersons.Add(x));
 
             return doc;
         }
