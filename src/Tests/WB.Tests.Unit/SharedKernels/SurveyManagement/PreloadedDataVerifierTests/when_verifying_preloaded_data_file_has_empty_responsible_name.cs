@@ -13,14 +13,14 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
-    internal class when_verifying_preloaded_data_file_has_empty_supervisor_name : PreloadedDataVerifierTestContext
+    internal class when_verifying_preloaded_data_file_has_empty_responsible_name : PreloadedDataVerifierTestContext
     {
         Establish context = () =>
         {
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
             questionnaire = CreateQuestionnaireDocumentWithOneChapter();
             questionnaire.Title = "questionnaire";
-            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "responsible" }, new string[][] { new string[] { "1", "" } },
+            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "_responsible" }, new string[][] { new string[] { "1", "" } },
                 QuestionnaireCsvFileName);
 
             preloadedDataServiceMock = new Mock<IPreloadedDataService>();
