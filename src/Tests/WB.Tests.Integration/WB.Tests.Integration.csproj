@@ -202,6 +202,8 @@
     <Compile Include="InterviewTests\CascadingDropdowns\when_remove_answer_from_parent_cascading_question.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_datetime_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_w___.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_group_GB_with_question_B_and_disabled_B_disables_question_C.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_on_questionnaire_level_with_multiple_conditions.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_on_1st_level_of_roster_with_multiple_conditions.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_list_question_that_is_roster_size_and_roster_has_condition_should_turn_it_off.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_multiple_options_question_which_is_roster_size_question_and_roster_was_disabled_and_deleted.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_gps_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
@@ -209,6 +211,7 @@
     <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_roster_title_question_is_changed_and_roster_title_is_used_in_a_condition.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_text_question_inside_roster_that_was_disabled_then_deleted_then_added_again.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_condition_uses_three_levels_of_nested_rosters.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_on_2nd_level_of_nested_roster_with_multiple_conditions.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_creating_interview_and_questionnaire_has_group_with_custom_enablement_condition_and_group_is_not_propagatable_and____.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_integer_question_increases_roster_size_of_disabled_roster_with_disabled_nested_roster_with_disabled_questions_inside_triggered_by__.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_question_disables_roster_size_question.cs" />

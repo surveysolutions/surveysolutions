@@ -38,6 +38,7 @@ using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Integration
 {
@@ -272,6 +273,18 @@ namespace WB.Tests.Integration
                 IsInteger = true,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
+            };
+        }
+
+        public static NumericQuestion NumericIntegerQuestion(Guid id, string variable, IList<ValidationCondition> validationExpression)
+        {
+            return new NumericQuestion
+            {
+                QuestionType = QuestionType.Numeric,
+                PublicKey = id,
+                StataExportCaption = variable,
+                IsInteger = true,
+                ValidationConditions = validationExpression?? new List<ValidationCondition>()
             };
         }
 
