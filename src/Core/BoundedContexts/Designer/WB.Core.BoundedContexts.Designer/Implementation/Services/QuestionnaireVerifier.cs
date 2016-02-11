@@ -1577,6 +1577,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             if(expressionLocation.ExpressionType == ExpressionLocationType.Validation)
             {
+                reference.FailedValidationConditionIndex = expressionLocation.ExpressionPosition;
                 return QuestionnaireVerificationMessage.Error("WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, reference);
             }
             else 
