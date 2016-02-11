@@ -3,22 +3,16 @@
 using System;
 using System.Linq;
 using Main.Core.Documents;
-using Main.Core.Events.Questionnaire;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using NHibernate.Util;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.UI.Designer.Providers.CQRS.Accounts;
-
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormalizerTests
@@ -35,21 +29,20 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormaliz
             Guid questionnaireId = Guid.NewGuid();
             string newtitle = "newTitle";
             var document = new QuestionnaireDocument() { PublicKey = questionnaireId, Title = newtitle, CreatedBy = Guid.NewGuid()};
-            
-            QuestionnaireListViewItemDenormalizer target = CreateQuestionnaireDenormalizer();
+
+            TestInMemoryWriter<QuestionnaireListViewItem> questionnaireStorage = new TestInMemoryWriter<QuestionnaireListViewItem>();
+
+            QuestionnaireListViewItemDenormalizer target = CreateQuestionnaireDenormalizer(questionnaireStorage: questionnaireStorage);
             var eventToPublish = CreateEvent(new QuestionnaireCloned() { QuestionnaireDocument = document }, DateTime.Now);
             // act
             target.Handle(eventToPublish);
 
             // assert
-            questionnaireStorageMock.Verify(
-                x =>
-                    x.Store(
-                        It.Is<QuestionnaireListViewItem>(
-                            i =>
-                                i.Title == newtitle && i.CreationDate == eventToPublish.EventTimeStamp &&
-                                    i.LastEntryDate == eventToPublish.EventTimeStamp), questionnaireId.FormatGuid()));
+            var storedQuestionnaire = questionnaireStorage.Dictionary.Values.FirstOrDefault(i =>
+                    i.Title == newtitle && i.CreationDate == eventToPublish.EventTimeStamp &&
+                    i.LastEntryDate == eventToPublish.EventTimeStamp);
 
+            Assert.That(storedQuestionnaire, Is.Not.Null);
         }
 
         [Test]
@@ -73,13 +66,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormaliz
             // assert
             questionnaireStorageMock.Verify(
                 x =>
-                    x.Store(
-                        It.Is<QuestionnaireListViewItem>(
-                            i =>
-                                i.Title == newtitle && i.CreationDate == documentReplacement.CreationDate &&
+                    x.Store(It.Is<QuestionnaireListViewItem>(i => i.Title == newtitle && i.CreationDate == documentReplacement.CreationDate &&
                                     i.LastEntryDate == documentReplacement.CreationDate && i.SharedPersons.Count == 1 &&
                                     i.SharedPersons.Contains(oldView.SharedPersons.First())), questionnaireId.FormatGuid()));
-
         }
 
 
@@ -99,9 +88,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormaliz
             return mock.Object;
         }
 
-        private QuestionnaireListViewItemDenormalizer CreateQuestionnaireDenormalizer()
+        private QuestionnaireListViewItemDenormalizer CreateQuestionnaireDenormalizer(IReadSideRepositoryWriter<QuestionnaireListViewItem> questionnaireStorage = null)
         {
-            return new QuestionnaireListViewItemDenormalizer(questionnaireStorageMock.Object, Mock.Of<IReadSideRepositoryWriter<AccountDocument>>(
+            return new QuestionnaireListViewItemDenormalizer(questionnaireStorage ?? questionnaireStorageMock.Object, Mock.Of<IReadSideRepositoryWriter<AccountDocument>>(
                             _ => _.GetById(It.IsAny<string>()) == new AccountDocument() { UserName = "nastya" }));
         }
 
