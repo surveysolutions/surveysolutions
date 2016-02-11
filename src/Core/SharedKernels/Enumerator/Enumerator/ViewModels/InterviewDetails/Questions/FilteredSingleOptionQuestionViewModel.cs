@@ -220,7 +220,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 if (searchFor != null)
                 {
-                    var startIndexOfSearchedText = model.Text.IndexOf(searchFor, StringComparison.CurrentCultureIgnoreCase);
+                    //Insert and IndexOf with culture specific search cannot be used together 
+                    //http://stackoverflow.com/questions/4923187/string-indexof-and-replace
+                    var startIndexOfSearchedText = model.Text.IndexOf(searchFor, StringComparison.OrdinalIgnoreCase);
                     if (startIndexOfSearchedText >= 0)
                     {
                         yield return new FilteredComboboxItemViewModel
