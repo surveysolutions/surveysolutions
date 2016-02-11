@@ -307,6 +307,9 @@
                     message: ''
                 });
                 $scope.questionForm.$setDirty();
+                _.defer(function () {
+                    $(".question-editor .form-holder").scrollTo({ top: '+=200px', left: "+=0" }, 250);
+                });
             }
 
             $scope.showOptionsInTextarea = function () {
