@@ -86,19 +86,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         false,
                         question.VariableName));
                 }
-                //old storage(backward compatibility)
-                /*if (!string.IsNullOrWhiteSpace(question.Validation))
-                {
-                    methodModels.Add(ExpressionLocation.QuestionValidation(question.Id, null).Key,
-                        new ConditionDescriptionModel(
-                            question.ParentScopeTypeName,
-                            question.ValidationMethodName,
-                            codeGenerationSettings.Namespaces,
-                            question.Validation,
-                            true,
-                            question.VariableName));
-                }*/
-                
                 foreach (var validation in question.ValidationExpressions)
                 {
                     if (!string.IsNullOrWhiteSpace(validation.ValidationExpression))
@@ -113,7 +100,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                                     validation.VariableName));
                         }
                 }
-                
             }
 
             foreach (GroupTemplateModel group in questionnaireTemplate.AllGroups.Where(x => !string.IsNullOrWhiteSpace(x.Condition)))
