@@ -1654,7 +1654,7 @@ namespace WB.Tests.Unit
                 EnablementCondition = questionConditionExpression,
                 SourceQuestionId = GetQuestionnaireItemId(sourceQuestionId),
                 TargetIndex = 0,
-                ValidationConditions = validationConditions
+                ValidationConditions = validationConditions ?? new List<ValidationCondition>()
             });
         }
 
