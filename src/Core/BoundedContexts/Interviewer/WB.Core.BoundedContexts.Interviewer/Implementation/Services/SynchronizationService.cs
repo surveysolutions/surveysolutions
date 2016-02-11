@@ -104,7 +104,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {
-            var questionnaireContentVersion = this.interviewerSettings.GetSupportedQuestionnaireContentVersion();
+            var questionnaireContentVersion = this.interviewerSettings.GetSupportedQuestionnaireContentVersion().Major;
             return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<QuestionnaireApiView>(
                 url: $"{this.questionnairesController}/{questionnaire.QuestionnaireId}/{questionnaire.Version}/{questionnaireContentVersion}",
                 onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
