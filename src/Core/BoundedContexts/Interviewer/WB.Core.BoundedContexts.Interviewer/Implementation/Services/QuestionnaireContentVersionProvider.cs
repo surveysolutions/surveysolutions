@@ -1,12 +1,13 @@
-﻿using WB.Core.BoundedContexts.Interviewer.Services;
+﻿using System;
+using WB.Core.BoundedContexts.Interviewer.Services;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public class QuestionnaireContentVersionProvider : IQuestionnaireContentVersionProvider
     {
-        public long GetSupportedQuestionnaireContentVersion()
+        public Version GetSupportedQuestionnaireContentVersion()
         {
-            return 12;
+            return new Version(12, 0, 0);
         }
     }
 }
