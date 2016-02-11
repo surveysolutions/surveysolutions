@@ -20,9 +20,9 @@ namespace WB.Tests.Integration.Versions
         };
 
         It should_return_same_versions_for_tester_version_and_designer_latest_supported_version = () =>
-            questionnaireContentVersion.ShouldEqual(designerLatestSupportedVersion.Major);
+            questionnaireContentVersion.ShouldEqual(designerLatestSupportedVersion);
 
-        private static long questionnaireContentVersion;
+        private static Version questionnaireContentVersion;
         private static Version designerLatestSupportedVersion;
 
         private static QuestionnaireContentVersionProvider questionnaireContentVersionProvider;
