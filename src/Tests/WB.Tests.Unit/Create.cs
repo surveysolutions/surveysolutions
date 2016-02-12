@@ -1686,6 +1686,8 @@ namespace WB.Tests.Unit
                 QuestionType = questionType,
                 StataExportCaption = variable,
                 ConditionExpression = enablementCondition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
                 Answers = answers.ToList(),
                 ValidationConditions = validationConditions
                     ?? ((validationExpression != null && validationMessage != null)
