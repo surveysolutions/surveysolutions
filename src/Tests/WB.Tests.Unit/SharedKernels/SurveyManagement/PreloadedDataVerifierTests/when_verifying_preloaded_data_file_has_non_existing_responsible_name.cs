@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
@@ -15,7 +14,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
-    internal class when_verifying_preloaded_data_file_has_non_supervisor_name : PreloadedDataVerifierTestContext
+    internal class when_verifying_preloaded_data_file_has_non_existing_responsible_name : PreloadedDataVerifierTestContext
     {
         Establish context = () =>
         {
@@ -29,10 +28,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(QuestionnaireCsvFileName)).Returns(new HeaderStructureForLevel());
             preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFile, Moq.It.IsAny<string>())).Returns(1);
-            var userViewFactory = new Mock<IUserViewFactory>();
-            userViewFactory.Setup(x => x.Load(Moq.It.IsAny<UserViewInputModel>())).Returns(new UserView(){IsLockedByHQ = false, Roles = {UserRoles.Operator}});
 
-            preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, null, preloadedDataServiceMock.Object, userViewFactory: userViewFactory.Object);
+            preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, null, preloadedDataServiceMock.Object);
         };
 
         Because of =
@@ -44,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             result.Errors.Count().ShouldEqual(1);
 
         It should_return_single_PL0006_error = () =>
-            result.Errors.First().Code.ShouldEqual("PL0028");
+            result.Errors.First().Code.ShouldEqual("PL0026");
 
         It should_return_reference_with_Cell_type = () =>
             result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);

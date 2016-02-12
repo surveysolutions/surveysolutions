@@ -14,7 +14,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
-    internal class when_verifying_preloaded_data_file_has_locked_supervisor_name : PreloadedDataVerifierTestContext
+    internal class when_verifying_preloaded_data_file_has_locked_responsible_name : PreloadedDataVerifierTestContext
     {
         Establish context = () =>
         {
@@ -29,7 +29,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(QuestionnaireCsvFileName)).Returns(new HeaderStructureForLevel());
             preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFile, Moq.It.IsAny<string>())).Returns(1);
             var userViewFactory = new Mock<IUserViewFactory>();
-            userViewFactory.Setup(x => x.Load(Moq.It.IsAny<UserViewInputModel>())).Returns(new UserView(){IsLockedByHQ = true});
+
+            var user = new UserView()
+            {
+                PublicKey = Guid.NewGuid(),
+                UserName = "fd",
+                IsLockedByHQ = true
+            };
+
+            userViewFactory.Setup(x => x.Load(Moq.It.IsAny<UserViewInputModel>())).Returns(user);
 
             preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, null, preloadedDataServiceMock.Object, userViewFactory: userViewFactory.Object);
         };
