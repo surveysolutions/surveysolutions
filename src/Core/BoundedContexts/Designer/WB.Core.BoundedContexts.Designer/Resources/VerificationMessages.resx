@@ -432,4 +432,7 @@
   <data name="WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster" xml:space="preserve">
     <value>Roster which is the source of the link is a roster, not a subsection.</value>
   </data>
+  <data name="WB0104_ValidationMessageIsTooLong" xml:space="preserve">
+    <value>Validation error message #{0} is too long. It should be no longer than 250 characters.</value>
+  </data>
 </root>

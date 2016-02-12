@@ -1001,6 +1001,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Validation error message #{0} is too long. It should be no longer than 250 characters..
+        /// </summary>
+        internal static string WB0104_ValidationMessageIsTooLong {
+            get {
+                return ResourceManager.GetString("WB0104_ValidationMessageIsTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters..
         /// </summary>
         internal static string WB0200_LargeNumberOfRostersIsCreated {
