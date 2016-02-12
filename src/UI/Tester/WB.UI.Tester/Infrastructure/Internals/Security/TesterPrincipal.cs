@@ -37,6 +37,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
             else
             {
                 this.IsAuthenticated = false;
+                this.currentUserIdentity = new TesterUserIdentity();
             }
         }
 
