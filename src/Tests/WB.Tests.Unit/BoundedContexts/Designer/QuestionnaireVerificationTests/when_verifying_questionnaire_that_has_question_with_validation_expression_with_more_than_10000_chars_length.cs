@@ -59,8 +59,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_message_with_one_references_with_id_equals_questionId = () =>
             verificationMessages.First().References.First().Id.ShouldEqual(questionId);
 
-        //It should_not_call_GenerateProcessorStateAssembly = () =>
-        //    questionnireExpressionProcessorGeneratorMock.Verify(x => x.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>(), out generationResult), Times.Never);
+        It should_not_call_GenerateProcessorStateAssembly = () =>
+            questionnireExpressionProcessorGeneratorMock.Verify(x => x.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>(), out generationResult), Times.Never);
 
         
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
@@ -70,5 +70,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         private static Guid groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
         private static Mock<IExpressionProcessorGenerator> questionnireExpressionProcessorGeneratorMock;
+        private static string generationResult;
     }
 }
