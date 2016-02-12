@@ -613,11 +613,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TSubEntity, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
             where TEntity : class, IComposite
         {
+            return Verifier(getSubEnitites, (subEntity, state) => hasError(subEntity), code, getMessageBySubEntityIndex);
+        }
+
+        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity, TSubEntity>(
+            Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TSubEntity, VerificationState, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
+            where TEntity : class, IComposite
+        {
             return (questionnaire, state) =>
                 questionnaire
                     .Find<TEntity>(entity => true)
                     .SelectMany(entity => getSubEnitites(entity).Select((subEntity, index) => new { Entity = entity, SubEntity = subEntity, Index = index }))
-                    .Where(descriptor => hasError(descriptor.SubEntity))
+                    .Where(descriptor => hasError(descriptor.SubEntity, state))
                     .Select(descriptor => QuestionnaireVerificationMessage.Error(code, getMessageBySubEntityIndex(descriptor.Index + 1), CreateReference(descriptor.Entity)));
         }
 
@@ -870,8 +877,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return groupLevel > 10 + 1/*questionnaire level*/;
         }
 
-        private static bool ValidationConditionIsTooLong(ValidationCondition validationCondition)
-            => validationCondition.Expression.Length > 10000;
+        private static bool ValidationConditionIsTooLong(ValidationCondition validationCondition, VerificationState state)
+        {
+            var isValidationConditionTooLong = validationCondition.Expression.Length > 10000;
+
+            state.HasExceededLimitByValidationExpresssionCharactersLength |= isValidationConditionTooLong;
+
+            return isValidationConditionTooLong;
+        }
 
         private static bool ValidationMessageIsTooLong(ValidationCondition validationCondition)
             => validationCondition.Message.Length > 250;
