@@ -192,7 +192,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier(QuestionnaireTitleHasInvalidCharacters, "WB0097", VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
             Verifier(QuestionnaireHasSizeMoreThan5MB, "WB0098", size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size)),
             Verifier<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10),
-            Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationMessageIsTooLong, "WB0104", index => string.Format(VerificationMessages.WB0104_ValidationMessageIsTooLong, index)),
+            Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationConditionIsTooLong, "WB0104", index => string.Format(VerificationMessages.WB0104_ValidationConditionIsTooLong, index)),
+            Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationMessageIsTooLong, "WB0105", index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index)),
+            Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationConditionIsEmpty, "WB0106", index => string.Format(VerificationMessages.WB0106_ValidationConditionIsEmpty, index)),
+            Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationMessageIsEmpty, "WB0107", index => string.Format(VerificationMessages.WB0107_ValidationMessageIsEmpty, index)),
                     
 
             MacrosVerifier(MacroHasEmptyName, "WB0014", VerificationMessages.WB0014_MacroHasEmptyName),
@@ -883,20 +886,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return groupLevel > 10 + 1/*questionnaire level*/;
         }
 
+        private static bool ValidationConditionIsTooLong(ValidationCondition validationCondition)
+            => validationCondition.Expression.Length > 10000;
+
         private static bool ValidationMessageIsTooLong(ValidationCondition validationCondition)
             => validationCondition.Message.Length > 250;
 
+        private static bool ValidationConditionIsEmpty(ValidationCondition validationCondition)
+            => string.IsNullOrWhiteSpace(validationCondition.Expression);
+
+        private static bool ValidationMessageIsEmpty(ValidationCondition validationCondition)
+            => string.IsNullOrWhiteSpace(validationCondition.Message);
+
         private static bool IsQuestionAllowedToBeRosterSizeSource(IQuestion question)
-        {
-            return IsNumericRosterSizeQuestion(question)
-                || IsCategoricalRosterSizeQuestion(question)
-                || IsTextListQuestion(question);
-        }
+            => IsNumericRosterSizeQuestion(question) ||
+               IsCategoricalRosterSizeQuestion(question) ||
+               IsTextListQuestion(question);
 
         private static bool IsTextListQuestion(IQuestion question)
-        {
-            return question.QuestionType == QuestionType.TextList;
-        }
+            => question.QuestionType == QuestionType.TextList;
 
         private static bool IsNumericRosterSizeQuestion(IQuestion question)
         {
