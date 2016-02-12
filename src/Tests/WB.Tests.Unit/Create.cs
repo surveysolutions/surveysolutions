@@ -1689,10 +1689,7 @@ namespace WB.Tests.Unit
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 Answers = answers.ToList(),
-                ValidationConditions = validationConditions
-                    ?? ((validationExpression != null && validationMessage != null)
-                        ? new List<ValidationCondition>() { new ValidationCondition(validationExpression, validationMessage) }
-                        : new List<ValidationCondition>())
+                ValidationConditions = validationConditions ?? new List<ValidationCondition>()
             };
         }
 
