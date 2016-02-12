@@ -80,9 +80,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.ShowEmptyQuestionnaireListText = true;
             this.IsSearchVisible = false;
 
-            var lastUpdate = this.dashboardLastUpdateStorage.Where(x => x.Id == this.principal.CurrentUserIdentity.Name).FirstOrDefault();
+            var lastUpdate = this.dashboardLastUpdateStorage.GetById(this.principal.CurrentUserIdentity.Name);
 
-            this.UpdateLastUpdateDate(lastUpdate == null ? (DateTime?)null : lastUpdate.LastUpdateDate);
+            this.HumanizeLastUpdateDate(lastUpdate?.LastUpdateDate);
         }
        
         private void LoadFilteredListFromLocalStorage(string searchTerm)
@@ -119,7 +119,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             else this.ShowPublicQuestionnaires();
         }
 
-        private bool loadServerQuestionnairesProcessIsCanceled=false;
+        private bool loadServerQuestionnairesProcessIsCanceled = false;
         private string humanizedLastUpdateDate;
         public string HumanizedLastUpdateDate
         {
@@ -398,11 +398,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                 await this.questionnaireListStorage.StoreAsync(questionnaireListStorageCache);
 
-                var lastUpdateDate = DateTime.Now;
+                var lastUpdateDate = DateTime.UtcNow;
+                this.HumanizeLastUpdateDate(lastUpdateDate);
 
-                UpdateLastUpdateDate(lastUpdateDate);
-
-                await this.dashboardLastUpdateStorage.RemoveAsync(this.principal.CurrentUserIdentity.Name);
                 await this.dashboardLastUpdateStorage.StoreAsync(new DashboardLastUpdate
                 {
                     Id = this.principal.CurrentUserIdentity.Name,
@@ -434,10 +432,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 await this.userInteractionService.AlertAsync(errorMessage);
         }
 
-        private void UpdateLastUpdateDate(DateTime? lastUpdate)
+        private void HumanizeLastUpdateDate(DateTime? lastUpdate)
         {
             this.HumanizedLastUpdateDate = lastUpdate.HasValue
-                ? string.Format(TesterUIResources.Dashboard_LastUpdated, lastUpdate.Value.Humanize(utcDate: false))
+                ? string.Format(TesterUIResources.Dashboard_LastUpdated, lastUpdate.Value.Humanize(utcDate: true, dateToCompareAgainst: DateTime.UtcNow))
                 : TesterUIResources.Dashboard_HaveNotBeenUpdated;
         }
 
