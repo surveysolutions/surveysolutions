@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
         It should_return_group_N6_with_enablement_condition_equals_enablementCondition = () =>
             newState.Groups.Single(x => x.Id == groupId).EnablementCondition.ShouldEqual(enablementCondition);
 
-        It should_return_group_N6_with_enablement_condition_equals_HideIfDisabled = () =>
+        It should_return_group_N6_with_HideIfDisabled_equals_hideIfDisabled = () =>
             newState.Groups.Single(x => x.Id == groupId).HideIfDisabled.ShouldEqual(hideIfDisabled);
 
         It should_return_group_N6_with_title_equals_title = () =>
