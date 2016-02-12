@@ -255,9 +255,6 @@
   <data name="WB0064_CategoricalLinkedQuestionUsedInEnablementCondition" xml:space="preserve">
     <value>Categorical linked question cannot be used in enabling condition.</value>
   </data>
-  <data name="WB0065_QuestionHasValidationExpressionWithoutValidationMessage" xml:space="preserve">
-    <value>Error message is required if question has validation condition.</value>
-  </data>
   <data name="WB0066_QuestionTypeIsNotAllowed" xml:space="preserve">
     <value>Question of this type is not supported.</value>
   </data>
@@ -347,9 +344,6 @@
   </data>
   <data name="WB0094_ConditionExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
     <value>Enabling condition has length more than 10,000 characters.</value>
-  </data>
-  <data name="WB0095_ValidationExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
-    <value>Validation condition has length more than 10,000 characters.</value>
   </data>
   <data name="WB0096_GeneralCompilationError" xml:space="preserve">
     <value>Error occurred during questionnaire compilation.</value>

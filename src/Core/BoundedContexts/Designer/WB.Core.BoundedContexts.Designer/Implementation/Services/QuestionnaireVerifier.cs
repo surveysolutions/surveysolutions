@@ -160,7 +160,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInValidationExpression, "WB0063", VerificationMessages.WB0063_CategoricalLinkedQuestionUsedInValidationExpression),
             Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInQuestionEnablementCondition, "WB0064", VerificationMessages.WB0064_CategoricalLinkedQuestionUsedInEnablementCondition),
             Verifier<IGroup, IComposite>(this.CategoricalLinkedQuestionUsedInGroupEnablementCondition, "WB0064", VerificationMessages.WB0064_CategoricalLinkedQuestionUsedInEnablementCondition),
-            Verifier<IQuestion>(QuestionHasValidationExpressionWithoutValidationMessage, "WB0065", VerificationMessages.WB0065_QuestionHasValidationExpressionWithoutValidationMessage),
             Verifier<IQuestion>(QuestionTypeIsNotAllowed, "WB0066", VerificationMessages.WB0066_QuestionTypeIsNotAllowed),
             Verifier<IGroup>(RosterHasEmptyVariableName, "WB0067", VerificationMessages.WB0067_RosterHasEmptyVariableName),
             Verifier<IGroup>(RosterHasInvalidVariableName, "WB0069", VerificationMessages.WB0069_RosterHasInvalidVariableName),
@@ -188,7 +187,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<SingleQuestion>(CascadingQuestionHasEnablementCondition, "WB0091", VerificationMessages.WB0091_CascadingChildQuestionShouldNotContainCondition),
             Verifier<SingleQuestion>(CascadingQuestionHasValidationExpresssion, "WB0092", VerificationMessages.WB0092_CascadingChildQuesionShouldNotContainValidation),
             Verifier<IComposite>(this.ConditionExpresssionHasLengthMoreThan10000Characters, "WB0094", VerificationMessages.WB0094_ConditionExpresssionHasLengthMoreThan10000Characters),
-            Verifier<IQuestion>(this.ValidationExpresssionHasLengthMoreThan10000Characters, "WB0095", VerificationMessages.WB0095_ValidationExpresssionHasLengthMoreThan10000Characters),
             Verifier(QuestionnaireTitleHasInvalidCharacters, "WB0097", VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
             Verifier(QuestionnaireHasSizeMoreThan5MB, "WB0098", size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size)),
             Verifier<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10),
@@ -291,20 +289,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     VerificationMessages.WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled,
                     gpsPrefilledQuestionsReferences)
             };
-        }
-
-        private bool ValidationExpresssionHasLengthMoreThan10000Characters(IQuestion question, VerificationState state, ReadOnlyQuestionnaireDocument questionnaire)
-        {
-            if (string.IsNullOrEmpty(question.ValidationExpression))
-                return false;
-
-            string expressionWithMacrosesInlined = this.macrosSubstitutionService.InlineMacros(question.ValidationExpression, questionnaire.Macros.Values);
-
-            bool exceeded = expressionWithMacrosesInlined.Length > MaxExpressionLength;
-
-            state.HasExceededLimitByValidationExpresssionCharactersLength |= exceeded;
-
-            return exceeded;
         }
 
         private bool ConditionExpresssionHasLengthMoreThan10000Characters(IComposite groupOrQuestion, VerificationState state, ReadOnlyQuestionnaireDocument questionnaire)
@@ -1435,14 +1419,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 entity.PublicKey);
         }
 
-        private static bool QuestionHasValidationExpressionWithoutValidationMessage(IQuestion question)
-        {
-            if (string.IsNullOrWhiteSpace(question.ValidationExpression))
-                return false;
-
-            return string.IsNullOrWhiteSpace(question.ValidationMessage);
-        }
-        
         private static bool CategoricalMultianswerQuestionIsFeatured(IMultyOptionsQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
         {
             return IsPreFilledQuestion(question);
