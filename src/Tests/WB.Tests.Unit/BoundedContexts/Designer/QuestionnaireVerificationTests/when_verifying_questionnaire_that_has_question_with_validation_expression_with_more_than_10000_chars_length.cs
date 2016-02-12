@@ -70,6 +70,5 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         private static Guid groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
         private static Mock<IExpressionProcessorGenerator> questionnireExpressionProcessorGeneratorMock;
-        private static string generationResult;
     }
 }
