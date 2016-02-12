@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
             questionDetailsFactoryMock = new Mock<IQuestionDetailsViewMapper>();
             questionFactoryMock = new Mock<IQuestionnaireEntityFactory>();
 
-            evnt = CreateNewGroupAddedEvent(groupId, g3Id, enablementCondition, description, title);
+            evnt = CreateNewGroupAddedEvent(groupId, g3Id, enablementCondition, description, title, hideIfDisabled);
 
             denormalizer = CreateQuestionnaireInfoDenormalizer(
                 questionDetailsViewMapper: questionDetailsFactoryMock.Object,
@@ -43,6 +43,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
         It should_return_group_N6_with_enablement_condition_equals_enablementCondition = () =>
             newState.Groups.Single(x => x.Id == groupId).EnablementCondition.ShouldEqual(enablementCondition);
 
+        It should_return_group_N6_with_HideIfDisabled_equals_hideIfDisabled = () =>
+            newState.Groups.Single(x => x.Id == groupId).HideIfDisabled.ShouldEqual(hideIfDisabled);
+
         It should_return_group_N6_with_title_equals_title = () =>
             newState.Groups.Single(x => x.Id == groupId).Title.ShouldEqual(title);
 
@@ -61,5 +64,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
         private static string enablementCondition = "expression";
         private static string description = "Description";
         private static string title = "New Group X";
+        private static bool hideIfDisabled = true;
     }
 }
