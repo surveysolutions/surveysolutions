@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
             });
         }
 
-        protected static IPublishedEvent<NewGroupAdded> CreateNewGroupAddedEvent(Guid groupId, Guid parentGroupId, string enablementCondition, string description, string title)
+        protected static IPublishedEvent<NewGroupAdded> CreateNewGroupAddedEvent(Guid groupId, Guid parentGroupId, string enablementCondition, string description, string title, bool hideIfDisabled)
         {
             return ToPublishedEvent(new NewGroupAdded
             {
@@ -66,11 +66,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
                 GroupText = title,
                 ParentGroupPublicKey = parentGroupId,
                 Description = description,
-                ConditionExpression = enablementCondition
+                ConditionExpression = enablementCondition,
+                HideIfDisabled = hideIfDisabled
             });
         }
 
-        protected static IPublishedEvent<GroupCloned> CreateGroupClonedEvent(Guid groupId, Guid parentGroupId, string enablementCondition, string description, string title)
+        protected static IPublishedEvent<GroupCloned> CreateGroupClonedEvent(Guid groupId, Guid parentGroupId, string enablementCondition, string description, string title, bool hideIfDisabled)
         {
             return ToPublishedEvent(new GroupCloned
             {
@@ -78,7 +79,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
                 GroupText = title,
                 ParentGroupPublicKey = parentGroupId,
                 Description = description,
-                ConditionExpression = enablementCondition
+                ConditionExpression = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
             });
         }
 

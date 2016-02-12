@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
             questionDetailsFactoryMock = new Mock<IQuestionDetailsViewMapper>();
             questionFactoryMock = new Mock<IQuestionnaireEntityFactory>();
 
-            evnt = CreateGroupClonedEvent(groupId, g3Id, enablementCondition, description, title);
+            evnt = CreateGroupClonedEvent(groupId, g3Id, enablementCondition, description, title, hideIfDisabled);
 
             denormalizer = CreateQuestionnaireInfoDenormalizer(
                 questionDetailsViewMapper: questionDetailsFactoryMock.Object,
