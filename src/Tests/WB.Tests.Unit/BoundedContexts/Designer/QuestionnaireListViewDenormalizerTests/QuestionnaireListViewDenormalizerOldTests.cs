@@ -53,24 +53,33 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormaliz
 
             Guid questionnaireId = Guid.NewGuid();
             string newtitle = "newTitle";
-            var documentReplacement = new QuestionnaireDocument() { PublicKey = questionnaireId, Title = newtitle, CreationDate = DateTime.Now, LastEntryDate = DateTime.Now };
+            var documentReplacement = new QuestionnaireDocument()
+            {
+                PublicKey = questionnaireId,
+                Title = newtitle,
+                CreationDate = DateTime.Now,
+                LastEntryDate = DateTime.Now
+            };
 
             var oldView = new QuestionnaireListViewItem(questionnaireId, "test", DateTime.Now, DateTime.Now, null, true);
             oldView.SharedPersons.Add(Guid.NewGuid());
-            questionnaireStorageMock.Setup(x => x.GetById(questionnaireId.FormatGuid()))
-                .Returns(oldView);
-            QuestionnaireListViewItemDenormalizer target = CreateQuestionnaireDenormalizer();
+
+            TestInMemoryWriter<QuestionnaireListViewItem> questionnaireStorage = new TestInMemoryWriter<QuestionnaireListViewItem>();
+            questionnaireStorage.Store(oldView, questionnaireId.FormatGuid());
+
+            QuestionnaireListViewItemDenormalizer target = CreateQuestionnaireDenormalizer(questionnaireStorage: questionnaireStorage);
             // act
             target.Handle(CreateEvent(CreateTemplateImportedEvent(documentReplacement)));
 
             // assert
-            questionnaireStorageMock.Verify(
-                x =>
-                    x.Store(It.Is<QuestionnaireListViewItem>(i => i.Title == newtitle && i.CreationDate == documentReplacement.CreationDate &&
-                                    i.LastEntryDate == documentReplacement.CreationDate && i.SharedPersons.Count == 1 &&
-                                    i.SharedPersons.Contains(oldView.SharedPersons.First())), questionnaireId.FormatGuid()));
+            var questionnaireListViewItem = questionnaireStorage.GetById(questionnaireId.FormatGuid());
+            Assert.That(questionnaireListViewItem, Is.Not.Null);
+            Assert.That(questionnaireListViewItem.Title, Is.EqualTo(newtitle));
+            Assert.That(questionnaireListViewItem.CreationDate, Is.EqualTo(documentReplacement.CreationDate));
+            Assert.That(questionnaireListViewItem.LastEntryDate, Is.EqualTo(documentReplacement.CreationDate));
+            Assert.That(questionnaireListViewItem.SharedPersons.Count, Is.EqualTo(1));
+            Assert.That(questionnaireListViewItem.SharedPersons.Contains(oldView.SharedPersons.First()), Is.True);
         }
-
 
         private TemplateImported CreateTemplateImportedEvent(QuestionnaireDocument content)
         {
