@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             });
 
             var interview = Mock.Of<IStatefulInterview>(x => x.GetYesNoAnswer(questionId) == yesNoAnswer);
-
+            
             var questionnaireStorage = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
             answering = new Mock<AnsweringViewModel>();
@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             viewModel.Init("blah", questionId, Create.NavigationState());
         };
 
-        private Because of = () =>
+        Because of = () =>
         {
             viewModel.Options.Single(o => o.Value == 4).YesSelected = true;
         };
