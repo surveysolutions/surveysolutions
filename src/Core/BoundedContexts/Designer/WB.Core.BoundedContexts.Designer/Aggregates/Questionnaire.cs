@@ -176,6 +176,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             group.PublicKey = e.PublicKey;
             group.Description = e.Description;
             group.ConditionExpression = e.ConditionExpression;
+            group.HideIfDisabled = e.HideIfDisabled;
             this.innerDocument.Insert(e.TargetIndex, group, e.ParentGroupPublicKey);
         }
 
