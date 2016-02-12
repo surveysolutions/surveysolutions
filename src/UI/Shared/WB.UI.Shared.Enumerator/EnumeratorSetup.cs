@@ -11,9 +11,9 @@ using Android.Views;
 using Android.Widget;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Binding.Combiners;
-using MvvmCross.Binding.Droid.Views;
 using MvvmCross.Core.Views;
 using MvvmCross.Droid.Platform;
+using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Droid.Support.V7.AppCompat.Widget;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Platform;
@@ -134,7 +134,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<View>("Activated", view => new ViewActivatedBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("TextColor", (view) => new TextViewTextColorBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("UnderlinePressed", (view) => new TextViewUnderlinePressedBinding(view));
-
+            MvxAppCompatSetupHelper.FillTargetFactories(registry);
             base.FillTargetFactories(registry);
         }
 
