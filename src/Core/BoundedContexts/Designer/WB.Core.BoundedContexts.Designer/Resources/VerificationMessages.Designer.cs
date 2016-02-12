@@ -1001,11 +1001,38 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Validation condition #{0} is too long. It should be no longer than 10000 characters..
+        /// </summary>
+        internal static string WB0104_ValidationConditionIsTooLong {
+            get {
+                return ResourceManager.GetString("WB0104_ValidationConditionIsTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validation error message #{0} is too long. It should be no longer than 250 characters..
         /// </summary>
-        internal static string WB0104_ValidationMessageIsTooLong {
+        internal static string WB0105_ValidationMessageIsTooLong {
             get {
-                return ResourceManager.GetString("WB0104_ValidationMessageIsTooLong", resourceCulture);
+                return ResourceManager.GetString("WB0105_ValidationMessageIsTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation condition #{0} is empty..
+        /// </summary>
+        internal static string WB0106_ValidationConditionIsEmpty {
+            get {
+                return ResourceManager.GetString("WB0106_ValidationConditionIsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation error message #{0} is empty..
+        /// </summary>
+        internal static string WB0107_ValidationMessageIsEmpty {
+            get {
+                return ResourceManager.GetString("WB0107_ValidationMessageIsEmpty", resourceCulture);
             }
         }
         
