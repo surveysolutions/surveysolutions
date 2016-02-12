@@ -195,7 +195,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
             catch (Exception ex)
             {
-                Mvx.Error("Sync failed with exception {0}", ex.ToLongString());
                 this.Status = SynchronizationStatus.Fail;
                 this.SetProgressOperation(InterviewerUIResources.Synchronization_Fail_Title,
                     InterviewerUIResources.Synchronization_Fail_UnexpectedException);
