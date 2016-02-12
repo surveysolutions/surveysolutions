@@ -640,15 +640,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error message is required if question has validation condition..
-        /// </summary>
-        internal static string WB0065_QuestionHasValidationExpressionWithoutValidationMessage {
-            get {
-                return ResourceManager.GetString("WB0065_QuestionHasValidationExpressionWithoutValidationMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Question of this type is not supported..
         /// </summary>
         internal static string WB0066_QuestionTypeIsNotAllowed {
@@ -915,15 +906,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0094_ConditionExpresssionHasLengthMoreThan10000Characters {
             get {
                 return ResourceManager.GetString("WB0094_ConditionExpresssionHasLengthMoreThan10000Characters", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Validation condition has length more than 10,000 characters..
-        /// </summary>
-        internal static string WB0095_ValidationExpresssionHasLengthMoreThan10000Characters {
-            get {
-                return ResourceManager.GetString("WB0095_ValidationExpresssionHasLengthMoreThan10000Characters", resourceCulture);
             }
         }
         
