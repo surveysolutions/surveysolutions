@@ -68,9 +68,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
                     all = all.Where(x => (x.DeviceId != null) == connectedToDevice.Value);
                 }
 
-                all = all.Where(user =>
-                    (user.Roles.Any(role => role == UserRoles.Operator) && user.Supervisor.Id == supervisorId) ||
-                        user.PublicKey == supervisorId);
+                all = all.Where(user => (user.Roles.Any(role => role == UserRoles.Operator) && user.Supervisor.Id == supervisorId));
 
                 return all;
             });
