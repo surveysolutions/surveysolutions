@@ -189,8 +189,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             get { return new MvxCommand(async () => await this.LoadInterview()); }
         }
 
+        private bool isOpeningInProgress = false;
+
         public async Task LoadInterview()
         {
+            if (this.isOpeningInProgress)
+                return;
+
+            isOpeningInProgress = true;
+
             if (this.Status == DashboardInterviewStatus.Completed)
             {
                 var isReopen = await this.userInteractionService.ConfirmAsync(
@@ -200,6 +207,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
                 if (!isReopen)
                 {
+                    isOpeningInProgress = false;
                     return;
                 }
 
@@ -222,6 +230,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 {
                     await this.viewModelNavigationService.NavigateToInterviewAsync(interviewIdString);
                 }
+
+                isOpeningInProgress = false;
             });
         }
 
