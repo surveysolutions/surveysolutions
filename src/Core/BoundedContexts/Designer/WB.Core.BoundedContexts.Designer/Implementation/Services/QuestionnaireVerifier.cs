@@ -879,7 +879,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool ValidationConditionIsTooLong(ValidationCondition validationCondition, VerificationState state)
         {
-            var isValidationConditionTooLong = validationCondition.Expression.Length > 10000;
+            var isValidationConditionTooLong = validationCondition.Expression?.Length > 10000;
 
             state.HasExceededLimitByValidationExpresssionCharactersLength |= isValidationConditionTooLong;
 
@@ -887,7 +887,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private static bool ValidationMessageIsTooLong(ValidationCondition validationCondition)
-            => validationCondition.Message.Length > 250;
+            => validationCondition.Message?.Length > 250;
 
         private static bool ValidationConditionIsEmpty(ValidationCondition validationCondition)
             => string.IsNullOrWhiteSpace(validationCondition.Expression);

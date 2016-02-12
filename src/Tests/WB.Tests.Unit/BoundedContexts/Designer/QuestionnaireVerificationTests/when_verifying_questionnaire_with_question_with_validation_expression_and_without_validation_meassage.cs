@@ -11,7 +11,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    internal class when_verifying_questionnaire_with_question_with_validation_expression_and_without_validation_meassage : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_question_with_validation_expression_and_without_validation_message : QuestionnaireVerifierTestsContext
     {
         private Establish context = () =>
         {
@@ -31,11 +31,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Because of = () =>
             verificationMessages = verifier.Verify(questionnaire);
 
-        It should_return_3_messages = () =>
+        It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_messages_each_with_code__WB0002__ = () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0065");
+        It should_return_messages_each_with_code__WB00107__ = () =>
+            verificationMessages.Single().Code.ShouldEqual("WB0107");
 
         It should_return_messages_each_having_single_reference = () =>
             verificationMessages.Single().References.Count().ShouldEqual(1);
