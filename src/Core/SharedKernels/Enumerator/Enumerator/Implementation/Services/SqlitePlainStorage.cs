@@ -74,7 +74,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public async Task StoreAsync(TEntity entity)
         {
-            await this.StoreAsync(new[] { entity });
+            await this.StoreAsync(new[] { entity }).ConfigureAwait(false);
         }
 
         public virtual async Task StoreAsync(IEnumerable<TEntity> entities)
