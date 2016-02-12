@@ -11,10 +11,11 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using It = Machine.Specifications.It;
+using Main.Core.Entities.SubEntities;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
-    internal class when_verifying_preloaded_data_file_with_locked_interviewer_by_supervisor : PreloadedDataVerifierTestContext
+    internal class when_verifying_preloaded_data_file_with_valid_interviewer_responsible_name : PreloadedDataVerifierTestContext
     {
         Establish context = () =>
         {
@@ -28,14 +29,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(QuestionnaireCsvFileName)).Returns(new HeaderStructureForLevel());
             preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFile, Moq.It.IsAny<string>())).Returns(1);
+
             var userViewFactory = new Mock<IUserViewFactory>();
 
             var user = new UserView()
             {
                 PublicKey = Guid.NewGuid(),
                 UserName = "fd",
-                IsLockedBySupervisor = true,
-                
+                IsLockedByHQ = false,
+                IsLockedBySupervisor = false,
+                Roles = { UserRoles.Operator }
             };
             userViewFactory.Setup(x => x.Load(Moq.It.IsAny<UserViewInputModel>())).Returns(user);
 
@@ -47,21 +50,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                 result =
                     preloadedDataVerifier.VerifyPanel(questionnaireId, 1, new[] { preloadedDataByFile });
 
-        It should_result_has_1_error = () =>
-            result.Errors.Count().ShouldEqual(1);
+        It should_result_has_0_error = () =>
+            result.Errors.Count().ShouldEqual(0);
 
-        It should_return_single_PL0006_error = () =>
-            result.Errors.First().Code.ShouldEqual("PL0027");
-
-        It should_return_reference_with_Cell_type = () =>
-            result.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
-
-        It should_error_PositionX_be_equal_to_0 = () =>
-          result.Errors.First().References.First().PositionX.ShouldEqual(1);
-
-        It should_error_PositionY_be_equal_to_1 = () =>
-          result.Errors.First().References.First().PositionY.ShouldEqual(0);
-
+        
         private static PreloadedDataVerifier preloadedDataVerifier;
         private static VerificationStatus result;
         private static QuestionnaireDocument questionnaire;

@@ -771,7 +771,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private IEnumerable<PreloadedDataVerificationError> ErrorsBySupervisorName(PreloadedDataByFile[] allLevels,
             IPreloadedDataService preloadedDataService)
         {
-            return ErrorsByResposibleName(allLevels, preloadedDataService, false);
+            return ErrorsByResposibleName(allLevels, preloadedDataService, true);
         }
         private IEnumerable<PreloadedDataVerificationError> ErrorsByResposibleName(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService, bool acceptInterviewers)
         {
