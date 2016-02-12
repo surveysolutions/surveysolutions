@@ -267,8 +267,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 var tableName = table.Value.TableName;
                 var tableTemplateModel = new LookupTableTemplateModel
                 {
-                    TableName = tableName.ToCamelCase(),
-                    TypeName = tableName.ToPascalCase(),
+                    TableName = tableName,
+                    TypeName = CodeGenerator.LookupPrefix + tableName.ToPascalCase(),
                     TableNameField = CodeGenerator.PrivateFieldsPrefix + tableName.ToCamelCase(),
                     Rows = lookupTableData.Rows,
                     VariableNames = lookupTableData.VariableNames
