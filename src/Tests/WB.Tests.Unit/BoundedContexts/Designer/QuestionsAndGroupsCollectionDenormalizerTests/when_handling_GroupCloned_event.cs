@@ -43,6 +43,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
         It should_return_group_N6_with_enablement_condition_equals_enablementCondition = () =>
             newState.Groups.Single(x => x.Id == groupId).EnablementCondition.ShouldEqual(enablementCondition);
 
+        It should_return_group_N6_with_enablement_condition_equals_HideIfDisabled = () =>
+            newState.Groups.Single(x => x.Id == groupId).HideIfDisabled.ShouldEqual(hideIfDisabled);
+
         It should_return_group_N6_with_title_equals_title = () =>
             newState.Groups.Single(x => x.Id == groupId).Title.ShouldEqual(title);
 
@@ -59,6 +62,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
         private static Mock<IQuestionnaireEntityFactory> questionFactoryMock;
         private static Guid groupId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static string enablementCondition = "expression";
+        private static bool hideIfDisabled = true;
         private static string description = "Description";
         private static string title = "New Group X";
     }
