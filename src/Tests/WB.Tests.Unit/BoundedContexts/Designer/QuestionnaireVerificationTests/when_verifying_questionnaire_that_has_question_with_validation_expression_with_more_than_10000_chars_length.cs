@@ -47,8 +47,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code__WB0095 = () =>
-            verificationMessages.First().Code.ShouldEqual("WB0095");
+        It should_return_message_with_code__WB0104 = () =>
+            verificationMessages.First().Code.ShouldEqual("WB0104");
 
         It should_return_message_with_one_references = () =>
             verificationMessages.First().References.Count().ShouldEqual(1);
@@ -59,8 +59,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_message_with_one_references_with_id_equals_questionId = () =>
             verificationMessages.First().References.First().Id.ShouldEqual(questionId);
 
-        It should_not_call_GenerateProcessorStateAssembly = () =>
-            questionnireExpressionProcessorGeneratorMock.Verify(x => x.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>(), out generationResult), Times.Never);
+        //It should_not_call_GenerateProcessorStateAssembly = () =>
+        //    questionnireExpressionProcessorGeneratorMock.Verify(x => x.GenerateProcessorStateAssembly(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>(), out generationResult), Times.Never);
 
         
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
