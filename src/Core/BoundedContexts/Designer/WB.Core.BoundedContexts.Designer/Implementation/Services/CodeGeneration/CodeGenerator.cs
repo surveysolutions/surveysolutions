@@ -21,6 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public const string ValidationPrefix = "IsValid__";
         public const string IdSuffix = "__id";
         public const string StateSuffix = "__state";
+        public const string LookupPrefix = "@Lookup__";
 
         private readonly QuestionnaireExpressionStateModelFactory expressionStateModelFactory;
 

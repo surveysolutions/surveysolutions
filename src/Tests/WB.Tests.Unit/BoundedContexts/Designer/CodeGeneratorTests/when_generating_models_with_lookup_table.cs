@@ -69,7 +69,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
             model.LookupTables[0].TableNameField.ShouldEqual("@__price");
 
         It should_generate_model_with_TypeName_Price = () =>
-            model.LookupTables[0].TypeName.ShouldEqual("Price");
+            model.LookupTables[0].TypeName.ShouldEqual("@Lookup__Price");
 
         It should_generate_model_with_VariableNames__min__max = () =>
             model.LookupTables[0].VariableNames.ShouldContainOnly("min", "max");
