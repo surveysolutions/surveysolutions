@@ -5,12 +5,13 @@ using System.Linq;
 using System.Reflection;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.CustomCollections;
 
 namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 {
     public class LiteEventRegistry : ILiteEventRegistry
     {
-        private readonly ConcurrentDictionary<string, List<WeakReference<ILiteEventHandler>>> handlers = new ConcurrentDictionary<string, List<WeakReference<ILiteEventHandler>>>();
+        private readonly ConcurrentDictionary<string, ConcurrentHashSet<WeakReference<ILiteEventHandler>>> handlers = new ConcurrentDictionary<string, ConcurrentHashSet<WeakReference<ILiteEventHandler>>>();
 
         private static readonly object LockObject = new object();
 
@@ -52,7 +53,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 
             lock (LockObject)
             {
-                List<WeakReference<ILiteEventHandler>> handlersForEventType;
+                ConcurrentHashSet<WeakReference<ILiteEventHandler>> handlersForEventType;
                 if (!handlers.TryGetValue(eventKey, out handlersForEventType))
                 {
                     return Enumerable.Empty<Action<object>>();
@@ -69,7 +70,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             lock (LockObject)
             {
                 var handlerKey = GetEventKey(eventType, aggregateRootId);
-                List<WeakReference<ILiteEventHandler>> handlersForEventType = this.handlers.GetOrAdd(handlerKey, new List<WeakReference<ILiteEventHandler>>());
+                ICollection<WeakReference<ILiteEventHandler>> handlersForEventType = this.handlers.GetOrAdd(handlerKey, new ConcurrentHashSet<WeakReference<ILiteEventHandler>>());
 
                 if (IsHandlerAlreadySubscribed(handler, handlersForEventType))
                     throw new InvalidOperationException("This handler {0} already subscribed to event {1}".FormatString(handler.ToString(), eventType.Name));
@@ -90,7 +91,14 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
                 var eventName = GetEventKey(eventType, aggregateRootId);
                 if (this.handlers.ContainsKey(eventName))
                 {
-                    this.handlers[eventName].RemoveAll(registeredHandler => ShouldRemoveHandler(registeredHandler, handler));
+                    ICollection<WeakReference<ILiteEventHandler>> subsribedRefences = this.handlers[eventName];
+                    foreach (var weakReference in subsribedRefences)
+                    {
+                        if (ShouldRemoveHandler(weakReference, handler))
+                        {
+                            subsribedRefences.Remove(weakReference);
+                        }
+                    }
                 }
             }
         }
@@ -103,7 +111,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             return handlerNoLongerExists || unregisteringHandler == handlerFromWeakReference;
         }
 
-        private IEnumerable<ILiteEventHandler> GetExistingHandlers(string eventKey, List<WeakReference<ILiteEventHandler>> handlersForEventType)
+        private IEnumerable<ILiteEventHandler> GetExistingHandlers(string eventKey, ICollection<WeakReference<ILiteEventHandler>> handlersForEventType)
         {
             var registeredHandlers = handlersForEventType.ToList();
 
@@ -122,7 +130,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             }
         }
 
-        private static bool IsHandlerAlreadySubscribed(ILiteEventHandler handler, List<WeakReference<ILiteEventHandler>> handlersForEventType)
+        private static bool IsHandlerAlreadySubscribed(ILiteEventHandler handler, IEnumerable<WeakReference<ILiteEventHandler>> handlersForEventType)
         {
             ILiteEventHandler handlerFromWeakReferance;
 

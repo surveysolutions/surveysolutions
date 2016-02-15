@@ -6,6 +6,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Domain;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.CustomCollections;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
