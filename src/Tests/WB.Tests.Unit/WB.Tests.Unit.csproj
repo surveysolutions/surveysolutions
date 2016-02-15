@@ -374,6 +374,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_sending_command_with_HideIfDisabled_flag.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_linked_question_referencing_on_group_which_is_not_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_linked_question_referencing_on_not_existing_roster.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_question_with_empty_and_too_long_validation_messages_and_expressions.cs" />
     <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_that_is_linked_and_referencing_group_is_not_roster.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_GeoLocationQuestionAnswered_event_second_time.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_YesNoQuestionAnswered_event.cs" />
