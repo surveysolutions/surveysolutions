@@ -43,20 +43,21 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
 
         public async Task<bool> SignInAsync(string usernName, string password, bool staySignedIn)
         {
+            var testerUserIdentity = new TesterUserIdentity
+            {
+                Name = usernName,
+                Password = password,
+                UserId = Guid.NewGuid(),
+                Id = usernName
+            };
+
             if (staySignedIn)
             {
-                await this.usersStorage.StoreAsync(new TesterUserIdentity
-                {
-                    Name = usernName,
-                    Password = password,
-                    UserId = Guid.NewGuid(),
-                    Id = usernName
-                }).ConfigureAwait(false);
+                await this.usersStorage.StoreAsync(testerUserIdentity).ConfigureAwait(false);
             }
 
             this.IsAuthenticated = true;
-            this.currentUserIdentity.Name = usernName;
-            this.currentUserIdentity.Password = password;
+            this.currentUserIdentity = testerUserIdentity;
 
             return this.IsAuthenticated;
         }
@@ -69,6 +70,8 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
             this.IsAuthenticated = false;
             this.currentUserIdentity.Name = string.Empty;
             this.currentUserIdentity.Password = string.Empty;
+            this.currentUserIdentity.UserId = Guid.Empty;
+            this.currentUserIdentity.Id = String.Empty;
         }
     }
 }
