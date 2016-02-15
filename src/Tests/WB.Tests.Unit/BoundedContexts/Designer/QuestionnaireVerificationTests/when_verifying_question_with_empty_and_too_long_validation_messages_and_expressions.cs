@@ -30,11 +30,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Because of = () =>
             verificationMessages = verifier.Verify(questionnaire).ToList();
 
-        It should_return_4_messages = () =>
-            verificationMessages.Count.ShouldEqual(4);
-
         It should_return_messages_with_codes__WB0104___WB0105___WB0106__and__WB0107__ = () =>
-            verificationMessages.Select(message => message.Code).ShouldContainOnly("WB0104", "WB0105", "WB0106", "WB0107");
+            verificationMessages.Select(message => message.Code).ShouldContain("WB0104", "WB0105", "WB0106", "WB0107");
 
         It should_return_validation_condition_index_in_message_WB0106 = () =>
             verificationMessages.Single(message => message.Code == "WB0106").Message.ShouldContain("#2");
