@@ -300,6 +300,8 @@ angular.module('designerApp')
                 renderer.setShowGutter(false);
                 renderer.setPadding(12);
 
+
+                editor.$blockScrolling = Infinity;
                 editor.commands.addCommand({
                     name: "replace",
                     bindKey: { win: "Tab|Shift-Tab", mac: "Tab" },
