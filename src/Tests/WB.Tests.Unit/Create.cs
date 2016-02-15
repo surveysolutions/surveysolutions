@@ -2393,17 +2393,17 @@ namespace WB.Tests.Unit
 
         public static TextQuestion TextQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string mask = null, 
-            string variable = null, 
+            string variable = "text_question", 
             string validationMessage = null, 
-            string text = null, 
+            string text = "Question T", 
             QuestionScope scope = QuestionScope.Interviewer, 
             bool preFilled=false,
             string label=null,
             string instruction=null,
-            List<ValidationCondition> validationConditions = null)
+            IEnumerable<ValidationCondition> validationConditions = null)
             
         {
-            return new TextQuestion("Question T")
+            return new TextQuestion(text)
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
@@ -2417,7 +2417,7 @@ namespace WB.Tests.Unit
                 Featured = preFilled,
                 VariableLabel = label,
                 Instructions = instruction,
-                ValidationConditions = validationConditions.ConcatWithOldConditionIfNotEmpty(validationExpression, validationMessage)
+                ValidationConditions = validationConditions?.ToList().ConcatWithOldConditionIfNotEmpty(validationExpression, validationMessage)
             };
         }
 

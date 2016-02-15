@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
     internal class when_verifying_questionnaire_with_question_with_validation_expression_and_without_validation_message : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             questionId = Guid.Parse("1111CCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
