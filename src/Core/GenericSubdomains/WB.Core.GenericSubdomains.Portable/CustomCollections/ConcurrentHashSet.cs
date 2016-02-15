@@ -2,9 +2,8 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.GenericSubdomains.Portable;
 
-namespace WB.Core.SharedKernels.DataCollection.Utils
+namespace WB.Core.GenericSubdomains.Portable.CustomCollections
 {
     public class ConcurrentHashSet<T> : ICollection<T>, IEnumerable<T>
     {
@@ -34,17 +33,17 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            dictionary.Keys.CopyTo(array, arrayIndex);
+            this.dictionary.Keys.CopyTo(array, arrayIndex);
         }
 
         bool ICollection<T>.Remove(T item)
         {
             byte removedValue;
-            return dictionary.TryRemove(item, out removedValue);
+            return this.dictionary.TryRemove(item, out removedValue);
         }
 
-        public int Count { get { return dictionary.Count; } }
-        public bool IsReadOnly { get {return false; } }
+        public int Count => this.dictionary.Count;
+        public bool IsReadOnly => false;
 
         public void Remove(T item)
         {

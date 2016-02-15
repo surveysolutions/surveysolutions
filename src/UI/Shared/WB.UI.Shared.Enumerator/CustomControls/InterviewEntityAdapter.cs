@@ -117,14 +117,6 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             return new View(context);
         }
 
-        protected override void OnItemsSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            using (var handler = new Handler(Looper.MainLooper))
-            {
-                handler.Post(() => this.NotifyDataSetChanged(e));
-            }
-        }
-
         public override void OnViewDetachedFromWindow(Object holder)
         {
             // we do this, because same bindings use focus as triger, 
