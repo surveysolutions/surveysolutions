@@ -114,6 +114,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.Endpoint = this.interviewerSettings.Endpoint;
 
             this.UserName = userIdentity.Name;
+            this.Endpoint = "http://cs-statssa.statssa.gov.za";
         }
 
         public async Task RefreshEndpoint()
