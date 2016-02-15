@@ -42,6 +42,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ActionUtils.cs" />
+    <Compile Include="CustomCollections\ConcurrentHashSet.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EventHandlerUtils.cs" />
