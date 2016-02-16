@@ -248,6 +248,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private async Task SignOutAsync()
         {
+            this.CancelLoadServerQuestionnaires();
+
             await this.principal.SignOutAsync();
             await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
         }
