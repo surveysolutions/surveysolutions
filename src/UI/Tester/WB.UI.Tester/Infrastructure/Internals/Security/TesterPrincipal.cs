@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Nito.AsyncEx;
-using Nito.AsyncEx.Synchronous;
+using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
@@ -10,71 +8,51 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
 {
     internal class TesterPrincipal : IPrincipal
     {
-        public const string ServiceParameterName = "authentication";
-
         private readonly IAsyncPlainStorage<TesterUserIdentity> usersStorage;
+        private readonly IAsyncPlainStorage<QuestionnaireListItem> questionnairesStorage;
+        private readonly IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage;
 
         private TesterUserIdentity currentUserIdentity;
 
-        public bool IsAuthenticated { get; private set; }
+        public bool IsAuthenticated => this.currentUserIdentity != null;
         public IUserIdentity CurrentUserIdentity => this.currentUserIdentity;
 
-        public TesterPrincipal(IAsyncPlainStorage<TesterUserIdentity> usersStorage)
+        public TesterPrincipal(IAsyncPlainStorage<TesterUserIdentity> usersStorage,
+            IAsyncPlainStorage<QuestionnaireListItem> questionnairesStorage,
+            IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage)
         {
             this.usersStorage = usersStorage;
+            this.questionnairesStorage = questionnairesStorage;
+            this.dashboardLastUpdateStorage = dashboardLastUpdateStorage;
 
-            this.InitializeIdentity();
+            this.currentUserIdentity = usersStorage.FirstOrDefault();
         }
 
-        private void InitializeIdentity()
+        public async Task<bool> SignInAsync(string userName, string password, bool staySignedIn)
         {
-            var testerUserIdentity = this.usersStorage.LoadAll().FirstOrDefault();
-            if (testerUserIdentity != null)
+            this.currentUserIdentity = new TesterUserIdentity
             {
-                this.IsAuthenticated = true;
-                this.currentUserIdentity = testerUserIdentity;
-            }
-            else
-            {
-                this.IsAuthenticated = false;
-                this.currentUserIdentity = new TesterUserIdentity();
-            }
-        }
-
-        public async Task<bool> SignInAsync(string usernName, string password, bool staySignedIn)
-        {
-            var testerUserIdentity = new TesterUserIdentity
-            {
-                Name = usernName,
+                Name = userName,
                 Password = password,
                 UserId = Guid.NewGuid(),
-                Id = usernName
+                Id = userName
             };
 
             if (staySignedIn)
             {
-                await this.usersStorage.StoreAsync(testerUserIdentity).ConfigureAwait(false);
+                await this.usersStorage.StoreAsync(this.currentUserIdentity).ConfigureAwait(false);
             }
-
-            this.IsAuthenticated = true;
-            this.currentUserIdentity.Name = testerUserIdentity.Name;
-            this.currentUserIdentity.Password = testerUserIdentity.Password;
-            this.currentUserIdentity.UserId = testerUserIdentity.UserId;
-            this.currentUserIdentity.Id = testerUserIdentity.Id;
 
             return this.IsAuthenticated;
         }
 
         public async Task SignOutAsync()
         {
-            var testerUserIdentities = this.usersStorage.LoadAll();
-            await this.usersStorage.RemoveAsync(testerUserIdentities).ConfigureAwait(false);
+            await this.usersStorage.RemoveAsync(this.usersStorage.LoadAll()).ConfigureAwait(false);
+            await this.dashboardLastUpdateStorage.RemoveAsync(this.dashboardLastUpdateStorage.LoadAll()).ConfigureAwait(false);
+            await this.questionnairesStorage.RemoveAsync(this.questionnairesStorage.LoadAll()).ConfigureAwait(false);
 
-            this.IsAuthenticated = false;
-            this.currentUserIdentity.Name = string.Empty;
-            this.currentUserIdentity.Password = string.Empty;
-            this.currentUserIdentity.UserId = Guid.Empty;
-            this.currentUserIdentity.Id = String.Empty;
+            this.currentUserIdentity = null;
         }
     }
 }
