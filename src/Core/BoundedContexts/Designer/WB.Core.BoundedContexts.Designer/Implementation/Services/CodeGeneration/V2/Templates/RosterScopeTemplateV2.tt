@@ -56,7 +56,8 @@
 <#
 	}
 #>
-    
+        }
+
         private <#= Model.ParentTypeName#> @_parent;		
 
         <#foreach (var parentQuestion in Model.AllParentsQuestionsToTop) 
