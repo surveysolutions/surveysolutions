@@ -36,11 +36,11 @@ namespace WB.Core.BoundedContexts.Designer
 {
     public class DesignerBoundedContextModule : NinjectModule
     {
-        private readonly IDynamicCompilerSettingsGroup dynamicCompilerSettingsGroup;
+        private readonly ICompilerSettings compilerSettings;
 
-        public DesignerBoundedContextModule(IDynamicCompilerSettingsGroup dynamicCompilerSettingsGroup)
+        public DesignerBoundedContextModule(ICompilerSettings compilerSettings)
         {
-            this.dynamicCompilerSettingsGroup = dynamicCompilerSettingsGroup;
+            this.compilerSettings = compilerSettings;
         }
         public override void Load()
         {
@@ -56,8 +56,8 @@ namespace WB.Core.BoundedContexts.Designer
 
             this.Unbind<IExpressionProcessor>();
             this.Bind<IExpressionProcessor>().To<RoslynExpressionProcessor>().InSingletonScope();
-            this.Unbind<IDynamicCompilerSettingsGroup>();
-            this.Bind<IDynamicCompilerSettingsGroup>().ToConstant(this.dynamicCompilerSettingsGroup);
+            this.Unbind<ICompilerSettings>();
+            this.Bind<ICompilerSettings>().ToConstant(this.compilerSettings);
             this.Bind<IDynamicCompilerSettingsProvider>().To<DynamicCompilerSettingsProvider>();
             this.Bind<PdfQuestionTypeConverter>().To<PdfQuestionTypeConverter>();
 
