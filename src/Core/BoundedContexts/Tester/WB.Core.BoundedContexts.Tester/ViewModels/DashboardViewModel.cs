@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -38,6 +39,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly List<QuestionnaireListItem> questionnaireListStorageCache = new List<QuestionnaireListItem>();
         private readonly IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage;
         private readonly IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage;
+        private readonly ILogger logger;
 
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
@@ -50,7 +52,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IFriendlyErrorMessageService friendlyErrorMessageService,
             IUserInteractionService userInteractionService,
             IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage, 
-            IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage)
+            IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage,
+            ILogger logger)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
@@ -60,13 +63,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.userInteractionService = userInteractionService;
             this.questionnaireListStorage = questionnaireListStorage;
             this.dashboardLastUpdateStorage = dashboardLastUpdateStorage;
+            this.logger = logger;
             this.friendlyErrorMessageService = friendlyErrorMessageService;
         }
 
         public async void Init()
         {
             questionnaireListStorageCache.AddRange(this.questionnaireListStorage
-                .Where(questionnaire => questionnaire.OwnerName == this.principal.CurrentUserIdentity.Name || questionnaire.IsPublic == true));
+                .Where(questionnaire => questionnaire.OwnerName == this.principal.CurrentUserIdentity.Name || questionnaire.IsPublic));
 
             if (!questionnaireListStorageCache.Any())
             {
@@ -96,13 +100,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 : titleSearchFilter;
 
             var myQuestionnaireListItems = questionnaireListStorageCache
-                .Where(questionnaire => questionnaire.OwnerName == this.principal.CurrentUserIdentity.Name)
-                .Where(searchFilter)
+                .Where(questionnaire => searchFilter(questionnaire) &&
+                                        !questionnaire.IsPublic &&
+                                        questionnaire.OwnerName == this.principal.CurrentUserIdentity.Name)
                 .ToList();
 
             var publicQuestionnaireListItems = questionnaireListStorageCache
-                .Where(questionnaire => questionnaire.IsPublic)
-                .Where(searchFilter)
+                .Where(questionnaire => searchFilter(questionnaire) && questionnaire.IsPublic)
                 .ToList();
 
             this.myQuestionnaires = this.HightlightSearchTermInFilteredList(
@@ -191,62 +195,27 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             get { return this.isListEmpty; }
             set { this.isListEmpty = value; RaisePropertyChanged(); }
         }
+        
+        public IMvxCommand ClearSearchCommand => new MvxCommand(this.ClearSearch);
 
-        private IMvxCommand clearSearchCommand;
-        public IMvxCommand ClearSearchCommand
-        {
-            get { return clearSearchCommand ?? (clearSearchCommand = new MvxCommand(this.ClearSearch)); }
-        }
-
-        public IMvxCommand ShowSearchCommand
-        {
-            get { return new MvxCommand(this.ShowSearch); }
-        }
-
-        private void ShowSearch()
-        {
-            if (IsInProgress)
-                return;
-            IsSearchVisible = true;
-        }
-
-        private void ClearSearch()
-        {
-            this.SearchText = null;
-            IsSearchVisible = false;
-        }
-
-        private IMvxCommand signOutCommand;
-        public IMvxCommand SignOutCommand
-        {
-            get { return signOutCommand ?? (signOutCommand = new MvxCommand(async () => await this.SignOutAsync())); }
-        }
+        public IMvxCommand ShowSearchCommand => new MvxCommand(this.ShowSearch);
+        
+        public IMvxCommand SignOutCommand => new MvxCommand(async () => await this.SignOutAsync());
 
         private IMvxCommand loadQuestionnaireCommand;
-        public IMvxCommand LoadQuestionnaireCommand
-        {
-            get { return loadQuestionnaireCommand ?? 
-                (loadQuestionnaireCommand = new MvxCommand<QuestionnaireListItem>(async (questionnaire) => await this.LoadQuestionnaireAsync(questionnaire), 
-               (item) => !this.IsInProgress)); }
-        }
+
+        public IMvxCommand LoadQuestionnaireCommand => this.loadQuestionnaireCommand ??
+                                                       (this.loadQuestionnaireCommand = new MvxCommand<QuestionnaireListItem>(
+                                                               async (questionnaire) => await this.LoadQuestionnaireAsync(questionnaire), (item) => !this.IsInProgress));
 
         private IMvxCommand refreshQuestionnairesCommand;
-        public IMvxCommand RefreshQuestionnairesCommand
-        {
-            get { return refreshQuestionnairesCommand ?? (refreshQuestionnairesCommand = new MvxCommand(async () => await this.LoadServerQuestionnairesAsync(), () => !this.IsInProgress)); }
-        }
 
-        private IMvxCommand showMyQuestionnairesCommand;
-        public IMvxCommand ShowMyQuestionnairesCommand
-        {
-            get { return showMyQuestionnairesCommand ?? (showMyQuestionnairesCommand = new MvxCommand(this.ShowMyQuestionnaires)); }
-        }
-
-        private IMvxCommand showPublicQuestionnairesCommand;
-        public IMvxCommand ShowPublicQuestionnairesCommand
-        {
-            get { return showPublicQuestionnairesCommand ?? (showPublicQuestionnairesCommand = new MvxCommand(this.ShowPublicQuestionnaires)); }
-        }
+        public IMvxCommand RefreshQuestionnairesCommand => this.refreshQuestionnairesCommand ??
+                                                           (this.refreshQuestionnairesCommand =
+                                                               new MvxCommand(async () => await this.LoadServerQuestionnairesAsync(), () => !this.IsInProgress));
+        
+        public IMvxCommand ShowMyQuestionnairesCommand => new MvxCommand(this.ShowMyQuestionnaires);
+        public IMvxCommand ShowPublicQuestionnairesCommand => new MvxCommand(this.ShowPublicQuestionnaires);
 
         private string searchText;
         public string SearchText
@@ -263,6 +232,19 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private List<QuestionnaireListItem> publicQuestionnaires;
 
         private bool isListEmpty;
+
+        private void ShowSearch()
+        {
+            if (IsInProgress)
+                return;
+            IsSearchVisible = true;
+        }
+
+        private void ClearSearch()
+        {
+            this.SearchText = null;
+            IsSearchVisible = false;
+        }
 
         private async Task SignOutAsync()
         {
@@ -300,7 +282,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_CheckConnectionToServer;
 
-            string errorMessage = null;
             try
             {
                 var questionnairePackage = await this.designerApiService.GetQuestionnaireAsync(
@@ -343,6 +324,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 if (ex.Type == RestExceptionType.RequestCanceledByUser)
                     return;
 
+                string errorMessage;
                 switch (ex.StatusCode)
                 {
                     case HttpStatusCode.Forbidden:
@@ -359,27 +341,24 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         break;
                 }
 
-                if (string.IsNullOrEmpty(errorMessage))
-                    throw;
+                if (!string.IsNullOrEmpty(errorMessage))
+                    await this.userInteractionService.AlertAsync(errorMessage);
+                else throw;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return;
+                this.logger.Error("Import questionaire exception. ", ex);
             }
             finally
             {
                 this.IsInProgress = false;   
             }
-
-            if (!string.IsNullOrEmpty(errorMessage))
-                await this.userInteractionService.AlertAsync(errorMessage);
         }
 
         private async Task LoadServerQuestionnairesAsync()
         {
             this.IsInProgress = true;
             this.tokenSource = new CancellationTokenSource();
-            string errorMessage = null;
             try
             {
                 ClearSearch();
@@ -414,22 +393,20 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 if (ex.Type == RestExceptionType.RequestCanceledByUser)
                     return;
 
-                errorMessage = this.friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(ex);
+                var errorMessage = this.friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(ex);
 
-                if (string.IsNullOrEmpty(errorMessage))
-                    throw;
+                if (!string.IsNullOrEmpty(errorMessage))
+                    await this.userInteractionService.AlertAsync(errorMessage);
+                else throw;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return;
+                this.logger.Error("Load questionaire list exception. ", ex);
             }
             finally
             {
                 this.IsInProgress = false;
             }
-
-            if (!string.IsNullOrEmpty(errorMessage))
-                await this.userInteractionService.AlertAsync(errorMessage);
         }
 
         private void HumanizeLastUpdateDate(DateTime? lastUpdate)
