@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -31,10 +32,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             answerCommands.ForEach(answerCommand => exceptions.Add(Catch.Only<InterviewException>(answerCommand)));
 
         It should_exceptions_have_specified_error_messages = () =>
-            exceptions.ShouldEachConformTo(x => x.Message.IndexOf("Interview was approved by Headquarters and cannot be edited", StringComparison.Ordinal) > -1);
+            exceptions.ShouldEachConformTo(exception => new []{"interview", "approved"}.All(keyword => exception.Message.ToLower().Contains(keyword)) );
 
         It should_number_of_raised_interviewExceptions_be_equal_to_number_of_commands = () =>
-            exceptions.Count.ShouldEqual(answerCommands.Count);
+            exceptions.All(x => x != null).ShouldBeTrue();
 
         private static Interview interview;
         private static readonly Guid userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");

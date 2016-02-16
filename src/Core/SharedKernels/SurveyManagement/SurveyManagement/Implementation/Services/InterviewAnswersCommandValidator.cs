@@ -4,6 +4,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.SurveyManagement.Properties;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 {
@@ -22,10 +23,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
         ICommandValidator<Interview, AnswerQRBarcodeQuestionCommand>,
         ICommandValidator<Interview, AnswerTextListQuestionCommand>
     {
+        private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
+
+        public InterviewAnswersCommandValidator(IInterviewSummaryViewFactory interviewSummaryViewFactory)
+        {
+            this.interviewSummaryViewFactory = interviewSummaryViewFactory;
+        }
 
         private void ThrowIfUserDontHavePermissionsToAnswer(Interview interview, InterviewCommand command)
         {
-            if(command.UserId != interview.SupervisorId)
+            var interviewSummary = this.interviewSummaryViewFactory.Load(interview.EventSourceId);
+            if(command.UserId != interviewSummary.TeamLeadId)
                 throw new InterviewException(CommandValidatorsMessages.UserDontHavePermissionsToAnswer);
         }
 

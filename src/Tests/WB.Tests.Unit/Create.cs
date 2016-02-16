@@ -148,9 +148,9 @@ namespace WB.Tests.Unit
 {
     internal static partial class Create
     {
-        public static InterviewAnswersCommandValidator InterviewAnswersCommandValidator()
+        public static InterviewAnswersCommandValidator InterviewAnswersCommandValidator(IInterviewSummaryViewFactory interviewSummaryViewFactory = null)
         {
-            return new InterviewAnswersCommandValidator();
+            return new InterviewAnswersCommandValidator(interviewSummaryViewFactory ?? Mock.Of<IInterviewSummaryViewFactory>());
         }
 
         public static AccountDocument AccountDocument(string userName="")

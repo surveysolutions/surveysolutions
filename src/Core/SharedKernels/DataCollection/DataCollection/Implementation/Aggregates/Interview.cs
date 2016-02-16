@@ -31,8 +31,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected Guid questionnaireId;
         protected Guid interviewerId;
-        private Guid supervisorId;
-        public virtual Guid SupervisorId => this.supervisorId;
 
         protected long questionnaireVersion;
         private bool wasCompleted;
@@ -501,7 +499,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(SupervisorAssigned @event)
         {
-            this.supervisorId = @event.SupervisorId;
         }
 
         public virtual void Apply(InterviewerAssigned @event)
