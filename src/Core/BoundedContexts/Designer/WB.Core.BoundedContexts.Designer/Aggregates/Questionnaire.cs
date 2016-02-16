@@ -1025,6 +1025,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     var variableLabel = question.VariableLabel;
                     var title = question.QuestionText;
                     var enablementCondition = question.ConditionExpression;
+                    var hideIfDisabled = question.HideIfDisabled;
                     var instructions = question.Instructions;
 
                     var numericQuestion = question as INumericQuestion;
@@ -1039,7 +1040,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             isPreFilled: numericQuestion.Featured,
                             scope: numericQuestion.QuestionScope, 
                             enablementCondition: enablementCondition,
-                            hideIfDisabled: numericQuestion.HideIfDisabled,
+                            hideIfDisabled: hideIfDisabled,
                             validationExpression: null,
                             validationMessage: null, 
                             instructions: instructions,
@@ -1059,6 +1060,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
                             title: title,
                             enablementCondition: enablementCondition, 
+                            hideIfDisabled: hideIfDisabled,
                             instructions: instructions,
                             sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId: sourceQuestionnaireId,
@@ -1076,6 +1078,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
                             title: title,
                             enablementCondition: enablementCondition, 
+                            hideIfDisabled: hideIfDisabled,
                             instructions: instructions,
                             sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId: sourceQuestionnaireId,
@@ -1091,8 +1094,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         events.AddRange(this.CreateTextQuestionClonedEvents(questionId: itemId, targetIndex: itemTargetIndex,
                             variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
                             title: title,
-                            hideIfDisabled: textQuestion.HideIfDisabled,
-                            enablementCondition: enablementCondition, responsibleId: responsibleId,
+                            enablementCondition: enablementCondition, 
+                            hideIfDisabled: hideIfDisabled,
+                            responsibleId: responsibleId,
                             sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId: sourceQuestionnaireId, 
                             instructions: instructions, mask: textQuestion.Mask,
@@ -1107,8 +1111,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     {
                         events.AddRange(this.CreateGeoLocationQuestionClonedEvents(questionId: itemId, targetIndex: itemTargetIndex,
                             variableName: variableName, variableLabel: variableLabel, title: title,
-                            hideIfDisabled: geoLocationQuestion.HideIfDisabled,
-                            enablementCondition: enablementCondition, instructions: instructions,
+                            enablementCondition: enablementCondition, 
+                            hideIfDisabled: hideIfDisabled,
+                            instructions: instructions,
                             parentGroupId: groupId, 
                             sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId: sourceQuestionnaireId,
@@ -1125,8 +1130,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     {
                         events.AddRange(this.CreateDateTimeQuestionClonedEvents(questionId: itemId, targetIndex: itemTargetIndex,
                             variableName: variableName, variableLabel: variableLabel, title: title,
-                            hideIfDisabled: dateTitmeQuestion.HideIfDisabled,
-                            enablementCondition: enablementCondition, instructions: instructions,
+                            hideIfDisabled: hideIfDisabled,
+                            enablementCondition: enablementCondition, 
+                            instructions: instructions,
                             parentGroupId: groupId, 
                             sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId: sourceQuestionnaireId,
@@ -1144,8 +1150,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             targetIndex: itemTargetIndex, variableName: variableName, 
                             variableLabel: variableLabel,
                             title: title,
-                            hideIfDisabled: categoricalMultiQuestion.HideIfDisabled,
-                            enablementCondition: enablementCondition, parentGroupId: groupId,
+                            hideIfDisabled: hideIfDisabled,
+                            enablementCondition: enablementCondition, 
+                            parentGroupId: groupId,
                             sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId: sourceQuestionnaireId,
                             instructions: instructions, responsibleId: responsibleId,
@@ -1169,8 +1176,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         events.AddRange(this.CreateCategoricalSingleAnswerQuestionEvents(questionId: itemId,
                             targetIndex: itemTargetIndex, variableName: variableName, variableLabel: variableLabel,
                             title: title, 
-                            hideIfDisabled: categoricalSingleQuestion.HideIfDisabled,
-                            enablementCondition: enablementCondition, parentGroupId: groupId,
+                            hideIfDisabled: hideIfDisabled,
+                            enablementCondition: enablementCondition, 
+                            parentGroupId: groupId,
                             sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId: sourceQuestionnaireId,
                             instructions: instructions, responsibleId: responsibleId,
@@ -1196,7 +1204,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         events.AddRange(this.CreateMultimediaQuestionClonedEvents(questionId: itemId, targetIndex: itemTargetIndex,
                             variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
                             title: title,
-                            hideIfDisabled: multimediaQuestion.HideIfDisabled,
+                            hideIfDisabled: hideIfDisabled,
                             enablementCondition: enablementCondition,
                             instructions: instructions,
                             sourceQuestionId: sourceItemId,
@@ -4234,7 +4242,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private IEnumerable<IEvent> CreateTextListQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, 
-            string variableLabel, string enablementCondition, string instructions, 
+            string variableLabel, string enablementCondition, bool hideIfDisabled, string instructions, 
             Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, QuestionScope scope, int? maxAnswerCount,
             IList<ValidationCondition> validationConditions)
         {
@@ -4246,6 +4254,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 StataExportCaption = variableName,
                 VariableLabel = variableLabel,
                 ConditionExpression = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
                 ValidationExpression = null,
                 ValidationMessage = null,
                 Instructions = instructions,
@@ -4260,7 +4269,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private IEnumerable<IEvent> CreateQrBarcodeQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, 
-            string enablementCondition, string instructions, Guid sourceQuestionId, Guid sourceQuestionnaireId,
+            string enablementCondition, bool hideIfDisabled, string instructions, Guid sourceQuestionId, Guid sourceQuestionnaireId,
             int targetIndex, QuestionScope scope, Guid responsibleId, IList<ValidationCondition> validationConditions)
         {
             yield return new QRBarcodeQuestionCloned
@@ -4271,6 +4280,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 VariableName = variableName,
                 VariableLabel = variableLabel,
                 EnablementCondition = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
                 ValidationExpression = null,
                 ValidationMessage = null,
                 Instructions = instructions,
@@ -4329,6 +4339,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     VariableName = variableName,
                     VariableLabel = variableLabel,
                     EnablementCondition = enablementCondition,
+                    HideIfDisabled = hideIfDisabled,
                     Instructions = instructions,
                     ResponsibleId = responsibleId,
                     QuestionScope = scope
