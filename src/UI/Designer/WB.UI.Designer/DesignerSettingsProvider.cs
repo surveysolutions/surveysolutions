@@ -20,7 +20,7 @@ namespace WB.UI.Designer
                 yield return applicationSetting;
             }
 
-            var dynamicCompilerSettings = (IDynamicCompilerSettingsGroup)WebConfigurationManager.GetSection("dynamicCompilerSettingsGroup");
+            var dynamicCompilerSettings = (ICompilerSettings)WebConfigurationManager.GetSection("dynamicCompilerSettingsGroup");
 
             //int esentCacheSize = ;
             //var hqSettings = (HeadquartersSettings)WebConfigurationManager.GetSection("dynamicCompilerSettingsGroup/settings");

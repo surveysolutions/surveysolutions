@@ -141,6 +141,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.Synchronization.SyncStorage;
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
 using designer::WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V6.Templates;
+using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable.CustomCollections;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 
@@ -280,7 +281,9 @@ namespace WB.Tests.Unit
             return new CodeGenerator(
                 macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService(),
                 expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
-                lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>());
+                lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>(),
+                Mock.Of<IFileSystemAccessor>(),
+                Mock.Of<ICompilerSettings>());
         }
 
         public static CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, IEvent payload = null,

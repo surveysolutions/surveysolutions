@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
                     && _.Name == "profile111")
             };
 
-            var defaultDynamicCompilerSettings = Mock.Of<IDynamicCompilerSettingsGroup>(_ => _.SettingsCollection == settings);
+            var defaultDynamicCompilerSettings = Mock.Of<ICompilerSettings>(_ => _.SettingsCollection == settings);
 
             var settingsProvider = new DynamicCompilerSettingsProvider(defaultDynamicCompilerSettings, fileAccessor);
 
