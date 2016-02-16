@@ -18,12 +18,12 @@
             @Html.TextBoxFor(x => x.Title, new { @class = "form-control", placeholder = "Questionnaire Title" })
             @Html.ValidationMessageFor(x => x.Title, null, new { @class = "help-inline" })
         </div>
-        <div class="form-group">
+        @*<div class="form-group">
             @Html.CheckBoxFor(x => x.IsPublic, new { @id = "is-public-questionnaire", @class = "wb-checkbox" })
             <label for="is-public-questionnaire">
                 <span></span>Is Public
             </label><br />
-        </div>
+        </div>*@
 
         <div class="form-actions">
             <input type="submit" class="btn btn-success btn-lg" value="Create" id="inputSubmitQuestionnaire" />
