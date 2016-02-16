@@ -223,11 +223,12 @@ namespace WB.Tests.Unit
                    };
         }
 
-        public static Group Chapter(string title = "Chapter X",Guid? chapterId=null, IEnumerable<IComposite> children = null)
+        public static Group Chapter(string title = "Chapter X",Guid? chapterId=null, bool hideIfDisabled = false, IEnumerable<IComposite> children = null)
         {
             return Create.Group(
                 title: title,
                 groupId: chapterId,
+                hideIfDisabled: hideIfDisabled,
                 children: children);
         }
 
@@ -557,12 +558,14 @@ namespace WB.Tests.Unit
         }
 
         public static DateTimeQuestion DateTimeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer, bool preFilled = false)
+            string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer, 
+            bool preFilled = false, bool hideIfDisabled = false)
         {
             return new DateTimeQuestion("Question DT")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 QuestionText = text,
@@ -703,7 +706,7 @@ namespace WB.Tests.Unit
         }
 
         public static GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variable = "var1", bool isPrefilled=false, string title = null,
-            string enablementCondition = null, string validationExpression = null)
+            string enablementCondition = null, string validationExpression = null, bool hideIfDisabled = false)
         {
             return new GpsCoordinateQuestion()
             {
@@ -713,7 +716,8 @@ namespace WB.Tests.Unit
                 Featured = isPrefilled,
                 QuestionText = title,
                 ValidationExpression = validationExpression,
-                ConditionExpression = enablementCondition
+                ConditionExpression = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
             };
         }
 
@@ -722,6 +726,7 @@ namespace WB.Tests.Unit
             string title = "Group X",
             string variable = null,
             string enablementCondition = null,
+            bool hideIfDisabled = false,
             IEnumerable<IComposite> children = null)
         {
             return new Group(title)
@@ -729,6 +734,7 @@ namespace WB.Tests.Unit
                 PublicKey = groupId ?? Guid.NewGuid(),
                 VariableName = variable,
                 ConditionExpression = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
                 Children = children != null ? children.ToList() : new List<IComposite>(),
             };
         }
@@ -1341,7 +1347,8 @@ namespace WB.Tests.Unit
                 mapReportPointStorage ?? new TestInMemoryWriter<MapReportPoint>());
 
         public static MultimediaQuestion MultimediaQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer)
+            string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer
+            , bool hideIfDisabled = false)
         {
             return new MultimediaQuestion("Question T")
             {
@@ -1350,6 +1357,7 @@ namespace WB.Tests.Unit
                 StataExportCaption = variable,
                 QuestionScope = scope,
                 ConditionExpression = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 QuestionText = text
@@ -1373,7 +1381,7 @@ namespace WB.Tests.Unit
         }
 
         public static IMultyOptionsQuestion MultipleOptionsQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, bool isYesNo = false,
+            bool areAnswersOrdered = false, int? maxAllowedAnswers = null, Guid? linkedToQuestionId = null, bool isYesNo = false, bool hideIfDisabled = false,
             params decimal[] answers)
         {
             return new MultyOptionsQuestion("Question MO")
@@ -1381,6 +1389,7 @@ namespace WB.Tests.Unit
                 PublicKey = questionId ?? Guid.NewGuid(),
                 StataExportCaption = "mo_question",
                 ConditionExpression = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
                 AreAnswersOrdered = areAnswersOrdered,
                 MaxAllowedAnswers = maxAllowedAnswers,
@@ -1476,7 +1485,8 @@ namespace WB.Tests.Unit
         }
 
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = "numeric_question", string enablementCondition = null, 
-            string validationExpression = null, QuestionScope scope = QuestionScope.Interviewer, bool isPrefilled = false)
+            string validationExpression = null, QuestionScope scope = QuestionScope.Interviewer, bool isPrefilled = false,
+            bool hideIfDisabled = false)
         {
             return new NumericQuestion
             {
@@ -1485,6 +1495,7 @@ namespace WB.Tests.Unit
                 StataExportCaption = variable,
                 IsInteger = true,
                 ConditionExpression = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
                 QuestionScope = scope,
                 Featured = isPrefilled
@@ -1625,12 +1636,14 @@ namespace WB.Tests.Unit
         }
 
         public static QRBarcodeQuestion QRBarcodeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer, bool preFilled = false)
+            string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer, bool preFilled = false, 
+            bool hideIfDisabled = false)
         {
             return new QRBarcodeQuestion()
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 QuestionText = text,
@@ -2138,7 +2151,7 @@ namespace WB.Tests.Unit
         }
 
         public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null,
-            Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title=null)
+            Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title=null, bool hideIfDisabled = false)
         {
             return new SingleQuestion
             {
@@ -2146,6 +2159,7 @@ namespace WB.Tests.Unit
                 StataExportCaption = variable ?? "single_option_question",
                 QuestionText = title??"SO Question",
                 ConditionExpression = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
                 QuestionType = QuestionType.SingleOption,
                 LinkedToQuestionId = linkedToQuestionId,
@@ -2351,12 +2365,13 @@ namespace WB.Tests.Unit
         }
 
         public static ITextListQuestion TextListQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            int? maxAnswerCount = null, string variable=null)
+            int? maxAnswerCount = null, string variable=null, bool hideIfDisabled = false)
         {
             return new TextListQuestion("Question TL")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
                 MaxAnswerCount = maxAnswerCount,
                 QuestionType = QuestionType.TextList,
@@ -2401,13 +2416,15 @@ namespace WB.Tests.Unit
             bool preFilled=false,
             string label=null,
             string instruction=null,
-            IEnumerable<ValidationCondition> validationConditions = null)
+            IEnumerable<ValidationCondition> validationConditions = null, 
+            bool hideIfDisabled = false)
             
         {
             return new TextQuestion(text)
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
                 Mask = mask,
