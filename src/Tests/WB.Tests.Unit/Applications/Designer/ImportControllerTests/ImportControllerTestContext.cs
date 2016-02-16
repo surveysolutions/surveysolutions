@@ -27,9 +27,10 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
             IDesignerEngineVersionService engineVersionService = null,
             IQuestionnaireVerifier questionnaireVerifier = null,
             IExpressionProcessorGenerator expressionProcessorGenerator=null,
-            ISerializer serializer=null)
+            ISerializer serializer=null,
+            IStringCompressor zipUtils = null)
         {
-            return new ImportController(Mock.Of<IStringCompressor>(),
+            return new ImportController(zipUtils ?? Mock.Of<IStringCompressor>(),
                 membershipUserService ?? Mock.Of<IMembershipUserService>(),
                 Mock.Of<IQuestionnaireListViewFactory>(),
                 questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),

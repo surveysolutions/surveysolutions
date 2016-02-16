@@ -1285,17 +1285,13 @@ namespace WB.Tests.Unit
             return new LiteEventRegistry();
         }
 
-        public static LookupTable LookupTable(string tableName)
+        public static LookupTable LookupTable(string tableName, string fileName = null)
         {
             return new LookupTable
             {
-                TableName = tableName
+                TableName = tableName,
+                FileName = fileName ?? "lookup.tab"
             };
-        }
-
-        public static LookupTable LookupTable()
-        {
-            return new LookupTable() {FileName = "name", TableName = "table"};
         }
 
         public static LookupTableContent LookupTableContent(string[] variableNames, params LookupTableRow[] rows)
