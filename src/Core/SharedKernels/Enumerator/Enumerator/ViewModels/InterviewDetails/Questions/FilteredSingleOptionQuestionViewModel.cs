@@ -211,8 +211,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private IEnumerable<FilteredComboboxItemViewModel> GetSuggestionsList(string searchFor)
         {
-            
-
             foreach (var model in this.Options)
             {
                 if (model.Text.IsNullOrEmpty())
