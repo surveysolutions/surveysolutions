@@ -348,7 +348,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             string resultAssembly;
 
             return this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
-                questionnaire,this.engineVersionService.GetLatestSupportedVersion(), 
+                questionnaire, this.engineVersionService.GetQuestionnaireContentVersion(questionnaire), 
                 out resultAssembly);
         }
 
