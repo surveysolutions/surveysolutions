@@ -408,7 +408,7 @@
     </Compile>
     <Compile Include="QuestionnaireVerificationModule.cs" />
     <Compile Include="Services\CodeGeneration\IDynamicCompiler.cs" />
-    <Compile Include="Services\CodeGeneration\IDynamicCompilerSettingsGroup.cs" />
+    <Compile Include="Services\CodeGeneration\ICompilerSettings.cs" />
     <Compile Include="Services\CodeGeneration\IDynamicCompilerSettingsProvider.cs" />
     <Compile Include="Services\CodeGeneration\IDynamicCompilerSettings.cs" />
     <Compile Include="Services\ExpressionLocation.cs" />

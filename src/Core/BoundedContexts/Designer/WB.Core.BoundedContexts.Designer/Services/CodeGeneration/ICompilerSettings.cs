@@ -2,8 +2,11 @@
 
 namespace WB.Core.BoundedContexts.Designer.Services.CodeGeneration
 {
-    public interface IDynamicCompilerSettingsGroup
+    public interface ICompilerSettings
     {
+        bool EnableDump { get; }
+        string DumpFolder { get; }
+
         IEnumerable<IDynamicCompilerSettings> SettingsCollection { get; }
     }
 }

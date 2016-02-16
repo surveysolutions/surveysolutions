@@ -14,6 +14,7 @@ using NHibernate.Transform;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
@@ -52,7 +53,9 @@ namespace WB.Tests.Integration
             return new CodeGenerator(
                 macrosSubstitutionService ?? DefaultMacrosSubstitutionService(),
                 expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
-                lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>());
+                lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>(),
+                Mock.Of<IFileSystemAccessor>(),
+                Mock.Of<ICompilerSettings>());
         }
 
         public static IMacrosSubstitutionService DefaultMacrosSubstitutionService()

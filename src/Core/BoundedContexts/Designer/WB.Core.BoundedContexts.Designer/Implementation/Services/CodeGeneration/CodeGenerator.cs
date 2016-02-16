@@ -8,6 +8,8 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V2
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V6.Templates;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
@@ -24,18 +26,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public const string LookupPrefix = "@Lookup__";
 
         private readonly QuestionnaireExpressionStateModelFactory expressionStateModelFactory;
+        private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly ICompilerSettings settings;
 
         public CodeGenerator(
             IMacrosSubstitutionService macrosSubstitutionService, 
             IExpressionProcessor expressionProcessor,
-            ILookupTableService lookupTableService)
+            ILookupTableService lookupTableService,
+            IFileSystemAccessor fileSystemAccessor,
+            ICompilerSettings settings)
         {
             this.expressionStateModelFactory = new QuestionnaireExpressionStateModelFactory(
                 macrosSubstitutionService, 
                 expressionProcessor, 
                 lookupTableService);
+
+            this.fileSystemAccessor = fileSystemAccessor;
+            this.settings = settings;
         }
-        
+
         public Dictionary<string, string> Generate(QuestionnaireDocument questionnaire, Version targetVersion)
         {
             CodeGenerationSettings codeGenerationSettings = this.CreateCodeGenerationSettingsBasedOnEngineVersion(targetVersion);
@@ -60,8 +69,29 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 var methodTemplate = new ExpressionMethodTemplate(expressionMethodModel.Value);
                 generatedClasses.Add(expressionMethodModel.Key, methodTemplate.TransformText());
             }
+
+            this.DumpCodeIfNeeded(generatedClasses);
             
             return generatedClasses;
+        }
+
+        private void DumpCodeIfNeeded(Dictionary<string, string> generatedClasses)
+        {
+            if (!this.settings.EnableDump)
+                return;
+
+            if (this.fileSystemAccessor.IsDirectoryExists(this.settings.DumpFolder))
+                this.fileSystemAccessor.DeleteDirectory(this.settings.DumpFolder);
+
+            this.fileSystemAccessor.CreateDirectory(this.settings.DumpFolder);
+
+            foreach (var generatedClass in generatedClasses)
+            {
+                string fileName = this.fileSystemAccessor.MakeValidFileName($"{generatedClass.Key}.cs");
+                string filePath = this.fileSystemAccessor.CombinePath(this.settings.DumpFolder, fileName);
+
+                this.fileSystemAccessor.WriteAllText(filePath, generatedClass.Value);
+            }
         }
 
         private CodeGenerationSettings CreateCodeGenerationSettingsBasedOnEngineVersion(Version version)
