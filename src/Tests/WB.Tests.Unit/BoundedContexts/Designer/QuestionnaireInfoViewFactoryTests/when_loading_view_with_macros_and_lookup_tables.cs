@@ -99,8 +99,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoViewFactoryTes
 
         private static Dictionary<Guid, LookupTable> lookupTables = new Dictionary<Guid, LookupTable>
         {
-            { lookupTable1Id, Create.LookupTable()},
-            { lookupTable2Id, Create.LookupTable()}
+            { lookupTable1Id, Create.LookupTable("table1")},
+            { lookupTable2Id, Create.LookupTable("table2")}
         };
         private static string questionnaireId = "11111111111111111111111111111111";
         private static string questionnaireTitle = "questionnaire title";
