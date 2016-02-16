@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Machine.Specifications;
+using Moq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewAnswersCommandValidatorTests
@@ -15,8 +17,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewAnswersCommandVali
     {
         Establish context = () =>
         {
+            var mockOfInterviewSummaryViewFactory = new Mock<IInterviewSummaryViewFactory>();
+            mockOfInterviewSummaryViewFactory.Setup(x => x.Load(interviewId)).Returns(new InterviewSummary
+            {
+                TeamLeadId = responsibleId
+            });
+            
             interview.Apply(Create.SupervisorAssignedEvent(interviewId: interviewId, supervisorId: responsibleId.FormatGuid()).Payload);
-            commandValidator = Create.InterviewAnswersCommandValidator();
+            commandValidator = Create.InterviewAnswersCommandValidator(mockOfInterviewSummaryViewFactory.Object);
         };
 
         Because of = () => commandValidations.ForEach(validate => exceptions.Add(Catch.Only<InterviewException>(validate)));

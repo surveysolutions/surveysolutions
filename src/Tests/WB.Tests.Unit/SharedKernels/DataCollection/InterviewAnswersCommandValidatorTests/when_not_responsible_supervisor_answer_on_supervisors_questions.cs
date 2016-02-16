@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
+using Moq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Properties;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewAnswersCommandValidatorTests
@@ -16,7 +19,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewAnswersCommandVali
     {
         Establish context = () =>
         {
-            commandValidator = Create.InterviewAnswersCommandValidator();
+            var mockOfInterviewSummaryViewFactory = new Mock<IInterviewSummaryViewFactory>();
+            mockOfInterviewSummaryViewFactory.Setup(x => x.Load(interviewId)).Returns(new InterviewSummary
+            {
+                TeamLeadId = Guid.NewGuid()
+            });
+            commandValidator = Create.InterviewAnswersCommandValidator(mockOfInterviewSummaryViewFactory.Object);
         };
 
         Because of = () => commandValidations.ForEach(validate => exceptions.Add(Catch.Only<InterviewException>(validate)));
@@ -25,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewAnswersCommandVali
             exceptions.ShouldEachConformTo(x => x.Message == CommandValidatorsMessages.UserDontHavePermissionsToAnswer);
 
         It should_number_of_raised_interviewExceptions_be_equal_to_number_of_commands = () =>
-            exceptions.Count.ShouldEqual(commandValidations.Length);
+            exceptions.All(x => x != null).ShouldBeTrue();
 
         private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
