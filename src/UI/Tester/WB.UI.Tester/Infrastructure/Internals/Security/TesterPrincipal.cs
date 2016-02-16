@@ -57,7 +57,10 @@ namespace WB.UI.Tester.Infrastructure.Internals.Security
             }
 
             this.IsAuthenticated = true;
-            this.currentUserIdentity = testerUserIdentity;
+            this.currentUserIdentity.Name = testerUserIdentity.Name;
+            this.currentUserIdentity.Password = testerUserIdentity.Password;
+            this.currentUserIdentity.UserId = testerUserIdentity.UserId;
+            this.currentUserIdentity.Id = testerUserIdentity.Id;
 
             return this.IsAuthenticated;
         }
