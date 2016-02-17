@@ -183,14 +183,7 @@ angular.module('designerApp')
             };
 
             $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams) {
-                if (!_.isNull(toParams.validationIndex)) {
-                    _.defer(function() {
-                        $(".question-editor .form-holder").scrollTo("#validationCondition" + toParams.validationIndex, 500, {
-                            easing: 'swing',
-                            offset: -10
-                        });
-                    });
-                }
+                utilityService.scrollToValidationCondition(toParams.validationIndex);
             });
 
             $scope.removeItemWithIdFromErrors = function (itemId) {
