@@ -167,31 +167,21 @@ angular.module('designerApp')
                     $rootScope.$broadcast("openLookupTables", { focusOn: reference.itemId });
                 }
                 else {
+                    $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
+                        chapterId: reference.chapterId,
+                        itemId: reference.itemId
+                    });
+
                     if (!_.isNull(reference.failedValidationConditionIndex)) {
-                        $state.go('questionnaire.chapter.' + reference.type.toLowerCase() + ".validation", {
-                            chapterId: reference.chapterId,
-                            itemId: reference.itemId,
-                            validationIndex: reference.failedValidationConditionIndex
-                        });
-                    } else {
-                        $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
-                            chapterId: reference.chapterId,
-                            itemId: reference.itemId
+                        _.defer(function() {
+                            $(".question-editor .form-holder").scrollTo("#validationCondition" + reference.failedValidationConditionIndex, 500, {
+                                easing: 'swing',
+                                offset: -10
+                            });
                         });
                     }
                 }
             };
-
-            $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams) {
-                if (!_.isNull(toParams.validationIndex)) {
-                    _.defer(function() {
-                        $(".question-editor .form-holder").scrollTo("#validationCondition" + toParams.validationIndex, 500, {
-                            easing: 'swing',
-                            offset: -10
-                        });
-                    });
-                }
-            });
 
             $scope.removeItemWithIdFromErrors = function (itemId) {
                 var errors = $scope.verificationStatus.errors;
