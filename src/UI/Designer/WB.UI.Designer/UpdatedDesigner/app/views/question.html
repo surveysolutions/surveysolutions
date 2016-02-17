@@ -123,7 +123,7 @@
             </div>
         </div>
 
-        <script type="text/ng-template" id="SingleOption-template.html">
+    <script type="text/ng-template" id="SingleOption-template.html">
             <div class="singleOption">
                 <div class="well well-sm" ng-if="!(activeQuestion.isCascade || activeQuestion.isFilteredCombobox) && !activeQuestion.isLinked && activeQuestion.wereOptionsTruncated">As the question was marked as "Combo box" or "Cascading combo box" while uploading question's details and contained many options, it's value was reduced up to 200</div>
                 <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isCascade">
@@ -183,22 +183,24 @@
             </p>
             <div class="table-holder">
                 <div class="row">
-                    <div class="col-xs-3">
-                        <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isCascade" class="checkbox checkbox-in-column">
-                            <input id="cb-is-linked" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isLinked" />
-                            <label for="cb-is-linked"><span></span>Is linked</label>
+                    <div class="col-xs-5" ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked">
+                        <div  class="checkbox checkbox-in-column">
+                            <input id="cb-is-cascading" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isCascade" />
+                            <label for="cb-is-cascading"><span></span>Cascading combo box</label>
                         </div>
                     </div>
-                    <div class="col-xs-3">
-                        <div ng-if="!activeQuestion.isCascade && !activeQuestion.isLinked" class="checkbox checkbox-in-column">
+                    <div class="col-xs-5" ng-if="!activeQuestion.isCascade && !activeQuestion.isLinked">
+                        <div class="checkbox checkbox-in-column">
                             <input id="cb-is-filtered-combobox" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isFilteredCombobox" />
                             <label for="cb-is-filtered-combobox"><span></span>Combo box</label>
                         </div>
                     </div>
-                    <div class="col-xs-6">
-                        <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked" class="checkbox checkbox-in-column">
-                            <input id="cb-is-cascading" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isCascade" />
-                            <label for="cb-is-cascading"><span></span>Cascading combo box</label>
+                </div>
+                <div class="row">
+                    <div class="col-xs-5">
+                        <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isCascade" class="checkbox checkbox-in-column">
+                            <input id="cb-is-linked" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isLinked" />
+                            <label for="cb-is-linked"><span></span>Is linked</label>
                         </div>
                     </div>
                 </div>
