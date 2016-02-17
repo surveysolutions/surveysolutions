@@ -145,7 +145,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private async Task SaveAnswerAsync()
         {
             this.IsInProgress = true;
-            string errorMessage = null;
+
             try
             {
                 CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
@@ -160,18 +160,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             catch (Exception e)
             {
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_Timeout);
-                errorMessage = UIResources.GpsQuestion_Timeout;
                 logger.Error(e.Message, e);
             }
             finally
             {
                 this.IsInProgress = false;
-            }
-
-            if (!string.IsNullOrEmpty(errorMessage))
-            {
-                await
-                    this.userInteractionService.AlertAsync((errorMessage));
             }
         }
 
