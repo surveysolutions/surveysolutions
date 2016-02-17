@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.friendlyErrorMessageService = friendlyErrorMessageService;
         }
 
-        public async void Init()
+        public override async void Start()
         {
             questionnaireListStorageCache.AddRange(this.questionnaireListStorage
                 .Where(questionnaire => questionnaire.OwnerName == this.principal.CurrentUserIdentity.Name || questionnaire.IsPublic));

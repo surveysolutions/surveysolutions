@@ -1,24 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
-
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
-    internal class when_init_and_local_storage_has_2_public_and_2_my_questionnaires : DashboardViewModelTestContext
+    internal class when_start_and_local_storage_has_2_public_and_2_my_questionnaires : DashboardViewModelTestContext
     {
         Establish context = () =>
         {
@@ -32,12 +28,12 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 questionnaireListStorage: storageAccessor);
         };
 
-        Because of = () => viewModel.Init();
+        Because of = () => viewModel.Start();
 
         It should_Questionnaires_have_my_questionnaires_only = () =>
             viewModel.Questionnaires.All(questionnaire => questionnaire.Id == firstMyQuestionnaire || questionnaire.Id == secondMyQuestionnaire).ShouldBeTrue();
 
-        private static DashboardViewModel viewModel;
+        static DashboardViewModel viewModel;
 
         private static readonly string firstMyQuestionnaire = Guid.Parse("11111111111111111111111111111111").FormatGuid();
         private static readonly string secondMyQuestionnaire = Guid.Parse("22222222222222222222222222222222").FormatGuid();
@@ -49,9 +45,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         private static readonly IList<QuestionnaireListItem> PublicQuestionnaires = new List<QuestionnaireListItem>
         {
-            new QuestionnaireListItem(){IsPublic = true},
-            new QuestionnaireListItem(){IsPublic = true},
-            new QuestionnaireListItem(){IsPublic = true}
+            new QuestionnaireListItem(){IsPublic = true, OwnerName = userName},
+            new QuestionnaireListItem(){IsPublic = true, OwnerName = userName}
         };
     }
 }

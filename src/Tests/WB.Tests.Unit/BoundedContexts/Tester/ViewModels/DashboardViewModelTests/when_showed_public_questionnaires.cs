@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
             viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessorMock.Object,
                 designerApiService: designerApiService);
-            viewModel.Init();
+            viewModel.Start();
         };
 
         Because of = () => viewModel.ShowPublicQuestionnairesCommand.Execute();
