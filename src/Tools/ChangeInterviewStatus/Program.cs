@@ -210,6 +210,7 @@ namespace ChangeInterviewStatus
                 try
                 {
                     result = await restClient.SendAsync(method, this.CreateJsonContent(request), linkedCancellationTokenSource.Token);
+                    Console.WriteLine("Request has been sent successfully");
                 }
                 catch (OperationCanceledException ex)
                 {
