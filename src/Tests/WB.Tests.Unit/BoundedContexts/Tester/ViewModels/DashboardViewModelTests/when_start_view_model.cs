@@ -17,7 +17,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
-    internal class when_init_view_model : DashboardViewModelTestContext
+    internal class when_start_view_model : DashboardViewModelTestContext
     {
         Establish context = () =>
         {
@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 questionnaireListStorage: storageAccessorMock.Object);
         };
 
-        Because of = () => viewModel.Init();
+        Because of = () => viewModel.Start();
 
         It should_set_ShowEmptyQuestionnaireListText_to_true = () => viewModel.ShowEmptyQuestionnaireListText.ShouldBeTrue();
         It should_set_IsPublicShowed_to_false = () => viewModel.IsPublicShowed.ShouldBeFalse();
