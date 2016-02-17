@@ -395,7 +395,8 @@
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\when_storing_questionnaire.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\QuestionnaireAssemblyFileAccessorTests\QuestionnaireAssemblyFileAccessorTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\QuestionnaireAssemblyFileAccessorTests\when_removing_questionnaire_assembly.cs" />
-    <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_init_and_local_storage_has_2_public_and_2_my_questionnaires.cs" />
+    <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_showed_public_questionnaires_and_local_storage_has_2_public_and_2_my_questionnaires.cs" />
+    <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_start_and_local_storage_has_2_public_and_2_my_questionnaires.cs" />
     <Compile Include="CreateViewModels.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\CensusQuestionnaireDashboardItemViewModelTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\when_create_new_interview.cs" />
@@ -698,7 +699,7 @@
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_load_questionnaire.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_refresh_questionnaire_list_and_previous_request_is_in_progress.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_refresh_questionnaire_list.cs" />
-    <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_init_view_model.cs" />
+    <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_start_view_model.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_showed_my_questionnaires_and_was_public.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_showed_public_questionnaires.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_load_questionnaire_and_previous_request_is_in_progress.cs" />

@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 designerApiService: designerApiService,
                 questionnaireListStorage: storageAccessorMock.Object);
 
-            viewModel.Init();
+            viewModel.Start();
             viewModel.ShowPublicQuestionnairesCommand.Execute();
         };
 
