@@ -155,7 +155,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             var restResponse = await this.ReceiveBytesWithProgressAsync(response: response, token: token ?? default(CancellationToken),
                         onDownloadProgressChanged: onDownloadProgressChanged);
 
-            return restResponse.Response;
+            var fileContent = this.GetDecompressedContentFromHttpResponseMessage(restResponse);
+            return fileContent;
         }
 
         private HttpContent CreateJsonContent(object data)
@@ -246,10 +247,25 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
         private T GetDecompressedJsonFromHttpResponseMessage<T>(RestResponse restResponse)
         {
-            var responseContent = restResponse.Response;
-
             if (restResponse.ContentType != RestContentType.Json)
                 throw new RestException(message: Resources.CheckServerSettings, statusCode: HttpStatusCode.Redirect);
+
+            try
+            {
+                var responseContent = GetDecompressedContentFromHttpResponseMessage(restResponse);
+                return this.serializer.Deserialize<T>(responseContent);
+            }
+            catch (JsonDeserializationException ex)
+            {
+                throw new RestException(message: Resources.UpdateRequired, statusCode: HttpStatusCode.UpgradeRequired, innerException: ex);
+            }
+
+
+        }
+
+        private byte[] GetDecompressedContentFromHttpResponseMessage(RestResponse restResponse)
+        {
+            var responseContent = restResponse.Response;
 
             switch (restResponse.ContentCompressionType)
             {
@@ -261,15 +277,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                     break;
             }
 
-            try
-            {
-                return this.serializer.Deserialize<T>(responseContent);
-            }
-            catch (JsonDeserializationException ex)
-            {
-                throw new RestException(message: Resources.UpdateRequired, statusCode: HttpStatusCode.UpgradeRequired, innerException: ex);
-            }
-
+            return responseContent;
         }
 
         private bool IsValidHostAddress(string url)
