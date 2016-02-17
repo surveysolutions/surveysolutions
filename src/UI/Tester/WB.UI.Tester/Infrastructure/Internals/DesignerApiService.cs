@@ -33,7 +33,8 @@ namespace WB.UI.Tester.Infrastructure.Internals
                 {
                     Login = login,
                     Password = password
-                });
+                },
+                forceNoCache: true);
 
             return true;
         }
