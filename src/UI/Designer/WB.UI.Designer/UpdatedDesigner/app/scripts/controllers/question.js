@@ -112,6 +112,7 @@
                     .success(function (result) {
                         $scope.initialQuestion = angular.copy(result);
                         dataBind(result);
+                        utilityService.scrollToValidationCondition($state.params.validationIndex);
                     });
             };
 

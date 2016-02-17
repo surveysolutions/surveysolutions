@@ -142,6 +142,17 @@
                     };
                 };
 
+                utilityService.scrollToValidationCondition = function(conditionIndex) {
+                    if (!_.isNull(conditionIndex)) {
+                        _.defer(function () {
+                            $(".question-editor .form-holder").scrollTo("#validationCondition" + conditionIndex, 500, {
+                                easing: 'swing',
+                                offset: -10
+                            });
+                        });
+                    }
+                }
+
                 return utilityService;
             }
         ]);
