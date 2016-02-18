@@ -70,7 +70,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
         It should_call_userInteractionService_for_reduce_roster_size = () =>
             userInteractionServiceMock.Verify(s => s.ConfirmAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>()), Times.Once());
 
-        [Ignore("Can't fix it in KP-6577")]
         It should_answer_question_with_updated_state_of_options = () =>
             answeringViewModelMock.Verify(_ => _.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerYesNoQuestion>(
                 command => command.AnsweredOptions.Length == 1
