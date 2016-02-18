@@ -1035,5 +1035,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0201_LargeNumberOfQuestionsInGroup", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Section contains no questions. Consider removing the empty section .
+        /// </summary>
+        internal static string WB0202_GroupWithoutQuestions {
+            get {
+                return ResourceManager.GetString("WB0202_GroupWithoutQuestions", resourceCulture);
+            }
+        }
     }
 }

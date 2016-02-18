@@ -441,4 +441,7 @@
   <data name="WB0201_LargeNumberOfQuestionsInGroup" xml:space="preserve">
     <value>Section contains more than 200 questions, consider splitting into sub-sections</value>
   </data>
+  <data name="WB0202_GroupWithoutQuestions" xml:space="preserve">
+    <value>Section contains no questions. Consider removing the empty section </value>
+  </data>
 </root>
