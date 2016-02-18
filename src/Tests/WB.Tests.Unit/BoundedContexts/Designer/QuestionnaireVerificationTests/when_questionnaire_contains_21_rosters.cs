@@ -47,17 +47,14 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Because of = () =>
             verificationMessages = verifier.Verify(questionnaire);
 
-        It should_return_1_message = () =>
-            verificationMessages.Count().ShouldEqual(1);
-
-        It should_return_message_with_code_WB0200 = () =>
-            verificationMessages.First().Code.ShouldEqual("WB0200");
+        It should_return_1_WB0200_message = () =>
+            verificationMessages.Count(x => x.Code == "WB0200").ShouldEqual(1);
 
         It should_return_message_with_Warning_level = () =>
-            verificationMessages.First().MessageLevel.ShouldEqual(VerificationMessageLevel.Warning);
+            verificationMessages.First(x => x.Code == "WB0200").MessageLevel.ShouldEqual(VerificationMessageLevel.Warning);
 
         It should_return_message_with_no_references = () =>
-            verificationMessages.First().References.Count().ShouldEqual(0);
+            verificationMessages.First(x => x.Code == "WB0200").References.Count().ShouldEqual(0);
 
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;
