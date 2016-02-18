@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             var questionnaireViewFactory = CreateQuestionnaireViewFactory(questionnaireId);            
 
             var questionnaireVerifier = new Mock<IQuestionnaireVerifier>();
-            questionnaireVerifier.Setup(x => x.Verify(Moq.It.IsAny<QuestionnaireDocument>())).Returns(new List<QuestionnaireVerificationMessage>() { Create.VerificationError("test", "t1", new QuestionnaireVerificationReference[0]) });
+            questionnaireVerifier.Setup(x => x.CheckForErrors(Moq.It.IsAny<QuestionnaireDocument>())).Returns(new List<QuestionnaireVerificationMessage>() { Create.VerificationError("test", "t1", new QuestionnaireVerificationReference[0]) });
 
             service = CreatePublicService(questionnaireVerifier: questionnaireVerifier.Object,
                 questionnaireViewFactory: questionnaireViewFactory, isClientVersionSupported: true);

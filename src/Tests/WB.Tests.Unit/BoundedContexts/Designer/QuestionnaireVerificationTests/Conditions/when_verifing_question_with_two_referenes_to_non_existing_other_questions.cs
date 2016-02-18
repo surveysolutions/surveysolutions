@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
             verifier = CreateQuestionnaireVerifier(expressionProcessor.Object);
         };
 
-        private Because of = () => errors = verifier.Verify(questionnaire);
+        private Because of = () => errors = verifier.CheckForErrors(questionnaire);
 
         private It should_not_duplicate_errors = () => errors.Count(x => x.Code == "WB0005").ShouldEqual(1);
 

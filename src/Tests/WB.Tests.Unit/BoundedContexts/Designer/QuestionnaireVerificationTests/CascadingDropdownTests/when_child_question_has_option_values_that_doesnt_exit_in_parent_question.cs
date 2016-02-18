@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
             verifier = CreateQuestionnaireVerifier();
         };
 
-        Because of = () => verificationErrors = Enumerable.ToList<QuestionnaireVerificationMessage>(verifier.Verify(questionnaire));
+        Because of = () => verificationErrors = Enumerable.ToList<QuestionnaireVerificationMessage>(verifier.CheckForErrors(questionnaire));
 
         It should_output_WB0084_verification_error = () => verificationErrors.First().Code.ShouldEqual("WB0084");
 

@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
                 _ => _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == true && _.IsQuestionnaireDocumentSupportedByClientVersion(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>()) == true);
 
             var questionnaireVerifier = Mock.Of<IQuestionnaireVerifier>(
-                _ => _.Verify(Moq.It.IsAny<QuestionnaireDocument>()) ==
+                _ => _.CheckForErrors(Moq.It.IsAny<QuestionnaireDocument>()) ==
                      new[] {Create.VerificationError("code", "message") });
 
             importController = CreateImportController(membershipUserService: membershipUserService,
