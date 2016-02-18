@@ -250,7 +250,7 @@
     <value>Another question with the same variable name already exists.</value>
   </data>
   <data name="WB0063_CategoricalLinkedQuestionUsedInValidationExpression" xml:space="preserve">
-    <value>Categorical linked question cannot be used in validation condition.</value>
+    <value>Categorical linked question cannot be used in validation condition #{0}.</value>
   </data>
   <data name="WB0064_CategoricalLinkedQuestionUsedInEnablementCondition" xml:space="preserve">
     <value>Categorical linked question cannot be used in enabling condition.</value>
