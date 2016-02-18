@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
             verifier = CreateQuestionnaireVerifier();
         };
 
-        Because of = () => verificationErrors = verifier.Verify(questionnaire);
+        Because of = () => verificationErrors = verifier.CheckForErrors(questionnaire);
 
 
         It should_result_contains_WB0091_error = () =>

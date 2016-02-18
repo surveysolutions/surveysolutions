@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
             verifier = CreateQuestionnaireVerifier();
         };
 
-        Because of = () => verificationErrors = Enumerable.ToList<QuestionnaireVerificationMessage>(verifier.Verify(questionnaire));
+        Because of = () => verificationErrors = Enumerable.ToList<QuestionnaireVerificationMessage>(verifier.CheckForErrors(questionnaire));
 
         It should_return_WB0089_error = () => verificationErrors.First().Code.ShouldEqual("WB0089");
 

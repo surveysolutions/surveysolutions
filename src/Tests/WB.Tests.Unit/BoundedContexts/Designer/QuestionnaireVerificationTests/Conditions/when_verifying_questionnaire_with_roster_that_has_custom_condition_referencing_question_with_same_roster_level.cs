@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            resultErrors = verifier.CheckForErrors(questionnaire);
 
         It should_return_0_error = () =>
             resultErrors.Count().ShouldEqual(0);

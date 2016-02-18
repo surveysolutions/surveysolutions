@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            verificationMessages = verifier.Verify(questionnaire).ToList();
+            verificationMessages = verifier.CheckForErrors(questionnaire).ToList();
 
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);
