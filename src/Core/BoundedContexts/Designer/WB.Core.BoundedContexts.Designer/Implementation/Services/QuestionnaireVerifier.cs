@@ -195,7 +195,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationConditionIsEmpty, "WB0106", index => string.Format(VerificationMessages.WB0106_ValidationConditionIsEmpty, index)),
             Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationMessageIsEmpty, "WB0107", index => string.Format(VerificationMessages.WB0107_ValidationMessageIsEmpty, index)),
 
-            Warning<IGroup>(VerifyAmountOfQuestionsInGroup, "WB0201", VerificationMessages.WB0201_LargeNumberOfQuestionsInGroup),
+            Warning<IGroup>(this.TooManyQuestionsInGroup, "WB0201", VerificationMessages.WB0201_LargeNumberOfQuestionsInGroup),
+            Warning<IGroup>(this.GroupWithoutQuestions, "WB0202", VerificationMessages.WB0202_GroupWithoutQuestions),
 
             MacrosVerifier(MacroHasEmptyName, "WB0014", VerificationMessages.WB0014_MacroHasEmptyName),
             MacrosVerifier(MacroHasInvalidName, "WB0010", VerificationMessages.WB0010_MacroHasInvalidName),

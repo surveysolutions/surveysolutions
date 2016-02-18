@@ -26,9 +26,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             };
         }
 
-        private bool VerifyAmountOfQuestionsInGroup(IGroup group)
+        private bool TooManyQuestionsInGroup(IGroup group)
         {
             return group.Children.OfType<IQuestion>().Count() > 200;
+        }
+
+
+        private bool GroupWithoutQuestions(IGroup group)
+        {
+            return !group.Children.OfType<IQuestion>().Any();
         }
 
         private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity, TSubEntity>(
