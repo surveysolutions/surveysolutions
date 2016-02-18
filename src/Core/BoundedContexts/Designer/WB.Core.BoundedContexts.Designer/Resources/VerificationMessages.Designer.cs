@@ -1026,5 +1026,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0200_LargeNumberOfRostersIsCreated", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Section contains more than 200 questions, consider splitting into sub-sections.
+        /// </summary>
+        internal static string WB0201_LargeNumberOfQuestionsInGroup {
+            get {
+                return ResourceManager.GetString("WB0201_LargeNumberOfQuestionsInGroup", resourceCulture);
+            }
+        }
     }
 }
