@@ -622,7 +622,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categorical linked question cannot be used in validation condition..
+        ///   Looks up a localized string similar to Categorical linked question cannot be used in validation condition #{0}..
         /// </summary>
         internal static string WB0063_CategoricalLinkedQuestionUsedInValidationExpression {
             get {
