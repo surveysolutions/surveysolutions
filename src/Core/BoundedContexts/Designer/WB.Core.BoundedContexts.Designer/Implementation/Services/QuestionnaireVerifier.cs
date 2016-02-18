@@ -530,18 +530,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return roster.VariableName != null && keywordsProvider.GetAllReservedKeywords().Contains(roster.VariableName.ToLower());
         }
 
+        public IEnumerable<QuestionnaireVerificationMessage> CheckForErrors(QuestionnaireDocument questionnaire)
+        {
+            return Verify(questionnaire).Where(x => x.MessageLevel != VerificationMessageLevel.Warning);
+        }
+
         public IEnumerable<QuestionnaireVerificationMessage> Verify(QuestionnaireDocument questionnaire)
         {
             var readOnlyQuestionnaireDocument = questionnaire.AsReadOnly();
-            //questionnaire.ConnectChildrenWithParent();
 
             var state = new VerificationState();
 
             var verificationMessages =
                 (from verifier in this.AtomicVerifiers
-                let errors = verifier.Invoke(readOnlyQuestionnaireDocument, state)
-                from error in errors
-                select error).ToList();
+                 let errors = verifier.Invoke(readOnlyQuestionnaireDocument, state)
+                 from error in errors
+                 select error).ToList();
 
             if (verificationMessages.Any(e => e.MessageLevel == VerificationMessageLevel.Critical))
                 return verificationMessages;

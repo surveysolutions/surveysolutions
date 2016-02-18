@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
             var expressionsEngineVersionService = Setup.DesignerEngineVersionService();
 
             var questionnaireVerifier = Mock.Of<IQuestionnaireVerifier>(
-                _ => _.Verify(Moq.It.IsAny<QuestionnaireDocument>()) ==
+                _ => _.CheckForErrors(Moq.It.IsAny<QuestionnaireDocument>()) ==
                      new[] { Create.VerificationWarning("code", "message") });
 
             string generatedAssembly = "test";

@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            verificationMessages = verifier.Verify(questionnaire);
+            verificationMessages = verifier.CheckForErrors(questionnaire);
 
         It should_not_produce_any_messages = () =>
             verificationMessages.ShouldBeEmpty();

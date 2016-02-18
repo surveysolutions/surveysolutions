@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            verificationMessages = verifier.Verify(questionnaire);
+            verificationMessages = verifier.CheckForErrors(questionnaire);
 
         It should_return_3_messages = () =>
             verificationMessages.Count().ShouldEqual(3);

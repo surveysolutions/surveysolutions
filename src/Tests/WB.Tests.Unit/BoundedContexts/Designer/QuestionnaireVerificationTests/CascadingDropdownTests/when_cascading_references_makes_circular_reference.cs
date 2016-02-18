@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
             verifier = CreateQuestionnaireVerifier();
         };
 
-        Because of = () => verificationErrors = verifier.Verify(questionnaire);
+        Because of = () => verificationErrors = verifier.CheckForErrors(questionnaire);
 
         It should_return_WB0087_error = () => verificationErrors.First().Code.ShouldEqual("WB0087");
 
