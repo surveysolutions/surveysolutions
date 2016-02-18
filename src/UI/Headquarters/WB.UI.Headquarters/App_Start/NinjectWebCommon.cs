@@ -106,7 +106,8 @@ namespace WB.UI.Headquarters
 
             var interviewDetailsDataLoaderSettings =
                 new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled,
-                    LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval);
+                    LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval,
+                    synchronizationBatchCount: WebConfigurationManager.AppSettings.GetInt("Scheduler.SynchronizationBatchCount", @default: 5));
 
             string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
             if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
