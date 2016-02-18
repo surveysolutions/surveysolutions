@@ -7,14 +7,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.Inte
     [DisallowConcurrentExecution]
     internal class InterviewDetailsBackgroundJob : IJob
     {
-        ISyncPackagesProcessor SyncPackagesProcessor
-        {
-            get { return ServiceLocator.Current.GetInstance<ISyncPackagesProcessor>(); }
-        }
+        ISyncPackagesProcessor SyncPackagesProcessor => ServiceLocator.Current.GetInstance<ISyncPackagesProcessor>();
+        InterviewDetailsDataLoaderSettings InterviewDetailsDataLoaderSettings => ServiceLocator.Current.GetInstance<InterviewDetailsDataLoaderSettings>();
 
         public void Execute(IJobExecutionContext context)
         {
-            SyncPackagesProcessor.ProcessNextSyncPackage();
+            for (int i = 0; i < InterviewDetailsDataLoaderSettings.SynchronizationBatchCount; i++)
+                SyncPackagesProcessor.ProcessNextSyncPackage();
         }
     }
 }
