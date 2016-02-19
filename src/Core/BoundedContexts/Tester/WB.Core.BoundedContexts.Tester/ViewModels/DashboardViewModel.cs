@@ -67,10 +67,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.friendlyErrorMessageService = friendlyErrorMessageService;
         }
 
-        public override async void Start()
+        public override async Task StartAsync()
         {
-            questionnaireListStorageCache.AddRange(this.questionnaireListStorage
-                .Where(questionnaire => questionnaire.OwnerName == this.principal.CurrentUserIdentity.Name || questionnaire.IsPublic));
+            var allUserQuestionnaires = await this.questionnaireListStorage.LoadAllAsync();
+
+            this.questionnaireListStorageCache.AddRange(allUserQuestionnaires);
 
             if (!questionnaireListStorageCache.Any())
             {

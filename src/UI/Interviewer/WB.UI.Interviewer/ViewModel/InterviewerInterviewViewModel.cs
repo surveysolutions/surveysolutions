@@ -64,7 +64,7 @@ namespace WB.UI.Interviewer.ViewModel
         private async Task SignOutAsync()
         {
             await this.principal.SignOutAsync();
-            await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
+            await this.viewModelNavigationService.NavigateToLoginAsync();
         }
 
         public async Task NavigateToPreviousViewModelAsync(Action navigateToIfHistoryIsEmpty)

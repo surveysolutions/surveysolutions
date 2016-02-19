@@ -3,9 +3,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 
@@ -48,12 +46,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             set { this.prefilledQuestions = value; this.RaisePropertyChanged(); }
         }
 
-        public async void Init(string interviewId)
+        public void Init(string interviewId)
+        {
+            this.interviewId = interviewId;   
+        }
+
+        public override async Task StartAsync()
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-
-            this.interviewId = interviewId;
-
             var interview = this.interviewRepository.Get(this.interviewId);
             if (interview == null)
             {

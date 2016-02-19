@@ -52,18 +52,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
         }
 
-        private IMvxCommand navigateToHelpCommand;
-        public IMvxCommand NavigateToHelpCommand
-        {
-            get
-            {
-                return this.navigateToHelpCommand ?? (this.navigateToHelpCommand = new MvxCommand(async () =>
-                {
-                    await this.viewModelNavigationService.NavigateToAsync<HelpViewModel>();
-                }));
-            }
-        }
-
         private IMvxCommand signOutCommand;
         public IMvxCommand SignOutCommand
         {

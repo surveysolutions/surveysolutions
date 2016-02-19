@@ -40,6 +40,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.logger = logger;
         }
 
+        public override bool IsAuthenticationRequired => false;
+
         public string UserName { get; set; }
 
         private string password;
@@ -94,8 +96,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>()); }
         }
-
-        public async void Init()
+        
+        public override async Task StartAsync()
         {
             InterviewerIdentity currentInterviewer = this.interviewersPlainStorage.FirstOrDefault();
 

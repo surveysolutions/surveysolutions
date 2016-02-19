@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
@@ -25,11 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 _.GetQuestionnairesAsync(false, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(MyQuestionnaires) &&
                 _.GetQuestionnairesAsync(true, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(PublicQuestionnaires));
 
-            var storageAccessorMock = new Mock<IAsyncPlainStorage<QuestionnaireListItem>>();
-            storageAccessorMock
-                .Setup(x => x.Where(Moq.It.IsAny<Expression<Func<QuestionnaireListItem, bool>>>()))
-                .Returns(
-                    new List<QuestionnaireListItem>
+            var storageAccessor = new TestAsyncPlainStorage<QuestionnaireListItem>(new List<QuestionnaireListItem>
                     {
                         new QuestionnaireListItem {IsPublic = false, OwnerName = userName},
                         new QuestionnaireListItem {IsPublic = false, OwnerName = userName},
@@ -39,10 +36,10 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                     }.ToReadOnlyCollection());
 
             viewModel = CreateDashboardViewModel(designerApiService: designerApiService,
-                questionnaireListStorage: storageAccessorMock.Object);
+                questionnaireListStorage: storageAccessor);
         };
 
-        Because of = () => viewModel.Start();
+        Because of = async () => await viewModel.StartAsync();
 
         It should_set_ShowEmptyQuestionnaireListText_to_true = () => viewModel.ShowEmptyQuestionnaireListText.ShouldBeTrue();
         It should_set_IsPublicShowed_to_false = () => viewModel.IsPublicShowed.ShouldBeFalse();

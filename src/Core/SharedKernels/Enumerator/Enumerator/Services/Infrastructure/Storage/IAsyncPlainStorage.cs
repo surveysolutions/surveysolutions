@@ -21,5 +21,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage
         Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate);
         TEntity FirstOrDefault();
         IReadOnlyCollection<TEntity> LoadAll();
+        Task<IReadOnlyCollection<TEntity>> LoadAllAsync();
     }
 }
