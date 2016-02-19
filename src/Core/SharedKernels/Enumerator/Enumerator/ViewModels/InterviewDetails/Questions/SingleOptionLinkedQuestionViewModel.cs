@@ -27,6 +27,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         IInterviewEntityViewModel,
         ILiteEventHandler<AnswersRemoved>,
         ILiteEventHandler<AnswerRemoved>,
+        ILiteEventHandler<QuestionsDisabled>,
+        ILiteEventHandler<QuestionsEnabled>,
         IDisposable
     {
         private readonly Guid userId;
@@ -198,6 +200,35 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 this.QuestionState.Validity.ProcessException(ex);
             }
+        }
+
+        public void Handle(QuestionsDisabled @event)
+        {
+            foreach (var question in @event.Questions)
+            {
+                RemoveOptionIfQuestionIsSourceofTheLink(question.Id, question.RosterVector);
+            }
+        }
+
+        public void Handle(QuestionsEnabled @event)
+        {
+            var optionListShouldBeUpdated = @event.Questions.Any(x => x.Id == this.referencedQuestionId);
+            if (!optionListShouldBeUpdated)
+                return;
+
+            IStatefulInterview interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
+            var questionnaire = this.questionnaireStorage.GetById(interview.QuestionnaireId);
+
+            var optionsToUpdate = this.GenerateOptionsFromModel(interview, questionnaire);
+            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                this.Options.Clear();
+                foreach (var option in optionsToUpdate)
+                {
+                    this.Options.Add(option);
+                }
+                this.RaisePropertyChanged(() => this.HasOptions);
+            });
         }
 
         public void Handle(AnswersRemoved @event)

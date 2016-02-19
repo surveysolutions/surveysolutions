@@ -19,7 +19,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class MultiOptionLinkedToQuestionQuestionViewModel : MultiOptionLinkedQuestionViewModel,
         ILiteEventHandler<AnswersRemoved>,
-        ILiteEventHandler<AnswerRemoved>
+        ILiteEventHandler<AnswerRemoved>,
+        ILiteEventHandler<QuestionsDisabled>,
+        ILiteEventHandler<QuestionsEnabled>
     {
         private readonly AnswerNotifier answerNotifier;
         private readonly IAnswerToStringService answerToStringService;
@@ -114,6 +116,33 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     }
                 }
 
+                this.RaisePropertyChanged(() => this.HasOptions);
+            });
+        }
+
+
+        public void Handle(QuestionsDisabled @event)
+        {
+            foreach (var question in @event.Questions)
+            {
+                RemoveOptionIfQuestionIsSourceofTheLink(question.Id, question.RosterVector);
+            }
+        }
+
+        public void Handle(QuestionsEnabled @event)
+        {
+            var optionListShouldBeUpdated = @event.Questions.Any(x => x.Id == this.linkedToQuestionId);
+            if (!optionListShouldBeUpdated)
+                return;
+
+            var optionsToUpdate = this.CreateOptions().ToArray();
+            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                this.Options.Clear();
+                foreach (var option in optionsToUpdate)
+                {
+                    this.Options.Add(option);
+                }
                 this.RaisePropertyChanged(() => this.HasOptions);
             });
         }
