@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -40,7 +41,12 @@ namespace WB.UI.Interviewer.Implementations.Services
 
         public async Task NavigateToDashboardAsync()
         {
-            await this.NavigateToAsync<DashboardViewModel>(new { });
+            await this.NavigateToAsync<DashboardViewModel>();
+        }
+
+        public async Task NavigateToLoginAsync()
+        {
+            await this.NavigateToAsync<LoginViewModel>();
         }
 
         public async Task NavigateToPrefilledQuestionsAsync(string interviewId)

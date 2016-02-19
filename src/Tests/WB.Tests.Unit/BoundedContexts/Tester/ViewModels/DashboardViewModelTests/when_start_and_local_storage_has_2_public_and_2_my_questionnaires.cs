@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 questionnaireListStorage: storageAccessor);
         };
 
-        Because of = () => viewModel.Start();
+        Because of = async () => await viewModel.StartAsync();
 
         It should_Questionnaires_have_my_questionnaires_only = () =>
             viewModel.Questionnaires.All(questionnaire => questionnaire.Id == firstMyQuestionnaire || questionnaire.Id == secondMyQuestionnaire).ShouldBeTrue();

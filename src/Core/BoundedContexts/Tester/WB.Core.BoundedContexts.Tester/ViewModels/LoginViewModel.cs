@@ -28,6 +28,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.friendlyErrorMessageService = friendlyErrorMessageService;
         }
 
+        public override bool IsAuthenticationRequired => false;
+
         private bool isInProgress = false;
         public bool IsInProgress
         {

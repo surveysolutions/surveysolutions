@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-    public class CheckNewVersionViewModel : BaseViewModel
+    public class CheckNewVersionViewModel : MvxNotifyPropertyChanged
     {
         private readonly ISynchronizationService synchronizationService;
         private readonly IInterviewerSettings interviewerSettings;

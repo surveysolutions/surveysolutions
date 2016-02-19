@@ -32,6 +32,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.interviewersPlainStorage = interviewersPlainStorage;
         }
 
+        public override bool IsAuthenticationRequired => false;
+
         private string errorMessage;
         public string ErrorMessage
         {

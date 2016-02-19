@@ -21,14 +21,11 @@ namespace WB.UI.Interviewer.Activities
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class DashboardActivity : BaseActivity<DashboardViewModel>
     {
-        private readonly IMvxMessenger messenger = Mvx.Resolve<IMvxMessenger>();
+        private IMvxMessenger messenger => Mvx.Resolve<IMvxMessenger>();
         private MvxSubscriptionToken syncStartSubscriptionToken;
         private MvxSubscriptionToken syncEndSubscriptionToken;
 
-        protected override int ViewResourceId
-        {
-            get { return Resource.Layout.dashboard; }
-        }
+        protected override int ViewResourceId => Resource.Layout.dashboard;
 
         protected override void OnCreate(Bundle bundle)
         {

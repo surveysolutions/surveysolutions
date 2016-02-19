@@ -8,13 +8,14 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 
 using Moq;
-
+using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
@@ -26,14 +27,11 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             var designerApiService = Mock.Of<IDesignerApiService>(_ => _.GetQuestionnairesAsync(false, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(MyQuestionnaires) &&
                 _.GetQuestionnairesAsync(true, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(PublicQuestionnaires));
 
-            var storageAccessorMock = new Mock<IAsyncPlainStorage<QuestionnaireListItem>>();
-            storageAccessorMock
-                .Setup(x => x.Where(Moq.It.IsAny<Expression<Func<QuestionnaireListItem, bool>>>()))
-                .Returns(Enumerable.Empty<QuestionnaireListItem>().ToReadOnlyCollection());
+            var storageAccessor = new TestAsyncPlainStorage<QuestionnaireListItem>(Enumerable.Empty<QuestionnaireListItem>().ToReadOnlyCollection());
 
-            viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessorMock.Object,
+            viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessor,
                 designerApiService: designerApiService);
-            viewModel.Start();
+            viewModel.StartAsync().WaitAndUnwrapException();
         };
 
         Because of = () => viewModel.ShowPublicQuestionnairesCommand.Execute();
