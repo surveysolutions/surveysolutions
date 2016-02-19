@@ -8,7 +8,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -54,10 +53,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Sections = sectionsViewModel;
         }
 
-        public async Task Init(string interviewId)
+        public void Init(string interviewId)
         {
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             this.interviewId = interviewId;
+        }
+
+        public override async Task StartAsync()
+        {
+            if (this.interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             var interview = this.interviewRepository.Get(interviewId);
             if (interview == null) throw new Exception("Interview is null.");
             var questionnaireModel = this.questionnaireModelRepository.GetById(interview.QuestionnaireId);

@@ -69,15 +69,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.messenger = messenger;
             this.questionnaireFactory = questionnaireFactory;
             this.interviewFactory = interviewFactory;
-
-            this.restCredentials = new RestCredentials()
-            {
-                Login = this.principal.CurrentUserIdentity.Name,
-                Password = this.principal.CurrentUserIdentity.Password
-            };
         }
 
-        private readonly RestCredentials restCredentials;
+        private RestCredentials restCredentials => new RestCredentials()
+        {
+            Login = this.principal.CurrentUserIdentity.Name,
+            Password = this.principal.CurrentUserIdentity.Password
+        };
         private CancellationToken Token => this.synchronizationCancellationTokenSource.Token;
 
         private SychronizationStatistics statistics;

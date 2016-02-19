@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
             viewModel = CreateDashboardViewModel(designerApiService: designerApiService,
                 questionnaireListStorage: questionnairesStorage);
-            viewModel.Start();
+            viewModel.StartAsync();
         };
 
         Because of = () => viewModel.ShowPublicQuestionnairesCommand.Execute();

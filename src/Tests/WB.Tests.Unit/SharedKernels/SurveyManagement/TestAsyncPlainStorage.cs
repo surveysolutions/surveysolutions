@@ -44,6 +44,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
         public IReadOnlyCollection<T> LoadAll()
             => this.items.ToReadOnlyCollection();
 
+        public async Task<IReadOnlyCollection<T>> LoadAllAsync()
+            => await Task.FromResult(this.items.ToReadOnlyCollection());
+
         public IReadOnlyCollection<T> Where(Expression<Func<T, bool>> predicate)
             => this.items.Where(predicate.Compile()).ToReadOnlyCollection();
 

@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-    public class BackupRestoreViewModel : BaseViewModel
+    public class BackupRestoreViewModel : MvxNotifyPropertyChanged
     {
         private readonly IBackupRestoreService backupRestoreService;
         private readonly IUserInteractionService userInteractionService;

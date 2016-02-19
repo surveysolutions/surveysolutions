@@ -158,16 +158,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        public async void Init()
+        public override async Task StartAsync()
         {
-            if (!this.principal.IsAuthenticated)
-            {
-                await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
-                return;
-            }
-
             startingLongOperationMessageSubscriptionToken = this.messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
-            removedDashboardItemMessageSubscriptionToken = messenger.Subscribe<RemovedDashboardItemMessage>(DashboardItemOnRemovedDashboardItem);
+            removedDashboardItemMessageSubscriptionToken = this.messenger.Subscribe<RemovedDashboardItemMessage>(DashboardItemOnRemovedDashboardItem);
 
             await this.RefreshDashboardAsync();
         }
@@ -239,7 +233,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Synchronization.CancelSynchronizationCommand.Execute();
 
             await this.principal.SignOutAsync();
-            await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
+            await this.viewModelNavigationService.NavigateToLoginAsync();
         }
 
         private async void DashboardItemOnRemovedDashboardItem(RemovedDashboardItemMessage message)

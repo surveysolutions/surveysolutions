@@ -119,6 +119,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public IReadOnlyCollection<TEntity> LoadAll() => this.RunInTransaction(table => table.ToReadOnlyCollection());
 
+        public async Task<IReadOnlyCollection<TEntity>> LoadAllAsync() 
+            => await this.RunInTransactionAsync(table => table.ToReadOnlyCollection());
+        
         private TResult RunInTransaction<TResult>(Func<TableQuery<TEntity>, TResult> function)
         {
             TResult result = default(TResult);

@@ -35,6 +35,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.BandwidthTest = bandwidthTest;
         }
 
+        public override bool IsAuthenticationRequired => false;
+
         public SendTabletInformationViewModel TabletInformation { get; set; }
 
         public CheckNewVersionViewModel CheckNewVersion { get; set; }
@@ -57,7 +59,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxCommand NavigateToLoginCommand
         {
-            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>()); }
+            get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToLoginAsync()); }
         }
 
         public bool IsAuthenticated => this.principal.IsAuthenticated;
@@ -71,7 +73,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private async Task SignOutAsync()
         {
             await this.principal.SignOutAsync();
-            await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
+            await this.viewModelNavigationService.NavigateToLoginAsync();
         }
     }
 }

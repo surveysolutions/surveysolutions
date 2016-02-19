@@ -67,7 +67,7 @@ namespace WB.UI.Interviewer.Activities
         {
             await this.BackwardCompatibilityAsync();
 
-            await Mvx.Resolve<IViewModelNavigationService>().NavigateToAsync<LoginViewModel>();
+            await Mvx.Resolve<IViewModelNavigationService>().NavigateToLoginAsync();
         }
 
         private async Task BackwardCompatibilityAsync()
