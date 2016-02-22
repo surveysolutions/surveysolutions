@@ -1425,9 +1425,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_question_that_has_enablement_condition_referencing_to_multi_not_linked.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_question_that_has_enablement_condition_referencing_to_single_linked_.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_question_that_has_enablement_condition_referencing_to_single_not_linked.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_question_that_has_validation_expression_referencing_to_multi_linked_.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_question_that_has_validation_expression_referencing_to_multi_not_linked.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_question_that_has_validation_expression_referencing_to_single_linked_.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_question_that_has_validation_expression_referencing_to_single_not_linked_.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifing_question_with_two_referenes_to_non_existing_other_questions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_2_rosters_inside_roster_and_question_from_first_child_roster_has_custom_condition_.cs" />

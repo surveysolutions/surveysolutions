@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
-
+using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
@@ -22,12 +22,16 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
     {
         Establish context = () =>
         {
-            var storageAccessor = new TestAsyncPlainStorage<QuestionnaireListItem>(MyQuestionnaires.Union(PublicQuestionnaires));
+            var designerApiService = Mock.Of<IDesignerApiService>(
+                _ => _.GetQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(Questionnaires));
 
-            viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessor);
+            var storageAccessor = new TestAsyncPlainStorage<QuestionnaireListItem>(Questionnaires);
+
+            viewModel = CreateDashboardViewModel(designerApiService: designerApiService,
+                questionnaireListStorage: storageAccessor);
         };
 
-        Because of = async () => await viewModel.StartAsync();
+        Because of = () => viewModel.StartAsync().WaitAndUnwrapException();
 
         It should_set_ShowEmptyQuestionnaireListText_to_true = () => viewModel.ShowEmptyQuestionnaireListText.ShouldBeTrue();
         It should_set_IsPublicShowed_to_false = () => viewModel.IsPublicShowed.ShouldBeFalse();
@@ -38,14 +42,10 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         private static DashboardViewModel viewModel;
 
-        private static readonly IReadOnlyCollection<QuestionnaireListItem> MyQuestionnaires = new List<QuestionnaireListItem>
+        private static readonly IReadOnlyCollection<QuestionnaireListItem> Questionnaires = new List<QuestionnaireListItem>
         {
             new QuestionnaireListItem(){IsPublic = false, OwnerName = userName},
-            new QuestionnaireListItem(){IsPublic = false, OwnerName = userName}
-        };
-
-        private static readonly IReadOnlyCollection<QuestionnaireListItem> PublicQuestionnaires = new List<QuestionnaireListItem>
-        {
+            new QuestionnaireListItem(){IsPublic = false, OwnerName = userName},
             new QuestionnaireListItem(){IsPublic = true},
             new QuestionnaireListItem(){IsPublic = true},
             new QuestionnaireListItem(){IsPublic = true}
