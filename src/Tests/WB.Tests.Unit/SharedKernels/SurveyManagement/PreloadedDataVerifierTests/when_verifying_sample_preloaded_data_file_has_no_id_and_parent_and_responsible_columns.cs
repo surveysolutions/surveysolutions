@@ -15,7 +15,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
-    internal class when_verifying_sample_preloaded_data_file_has_no_id_and_parent_columns : PreloadedDataVerifierTestContext
+    internal class when_verifying_sample_preloaded_data_file_has_no_id_and_parent_and_responsible_columns : PreloadedDataVerifierTestContext
     {
         Establish context = () =>
         {
