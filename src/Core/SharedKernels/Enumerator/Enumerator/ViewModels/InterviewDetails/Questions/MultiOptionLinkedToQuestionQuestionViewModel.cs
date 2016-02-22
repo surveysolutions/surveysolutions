@@ -168,7 +168,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var shownAnswer = this.Options.SingleOrDefault(x => removedQuestionRosterVector.Identical(x.Value));
             if (shownAnswer != null)
             {
-                this.InvokeOnMainThread(() => this.Options.Remove(shownAnswer));
+                this.mainThreadDispatcher.RequestMainThreadAction(() =>
+                {
+                    this.Options.Remove(shownAnswer);
+                });
                 this.RaisePropertyChanged(() => this.HasOptions);
             }
         }

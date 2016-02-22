@@ -718,6 +718,8 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_handling_question_answered_event_on_sorted_multioption_question.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_initing_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_linked_question_is_linked_to_question_in_roster_2_levels_deeper.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_questions_disabled_event_received_by_linked_question.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_questions_enabled_event_received_by_linked_question.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_roster_row_removed_and_question_is_linked_on_it.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_roster_row_title_changed_and_question_is_linked_on_it.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_linked_to_question_is_answered.cs" />
