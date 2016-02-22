@@ -87,8 +87,8 @@
 
     self.selectedQuestionnaire.subscribe(function () {
         if (!_.isUndefined(self.selectedQuestionnaire()) && self.selectedQuestionnaire().Versions.length === 1) {
+            self.selectedVersion(undefined);
             self.selectedVersion(self.selectedQuestionnaire().Versions[0]);
-            self.selectedVersion.valueHasMutated();
         } else {
             self.selectedVersion(undefined);
         }
