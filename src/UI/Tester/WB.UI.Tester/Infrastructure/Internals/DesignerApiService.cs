@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -39,7 +40,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
             return true;
         }
 
-        public async Task<IList<QuestionnaireListItem>> GetQuestionnairesAsync(bool isPublic, CancellationToken token)
+        public async Task<IReadOnlyCollection<QuestionnaireListItem>> GetQuestionnairesAsync(CancellationToken token)
         {
             var pageIndex = 1;
             var serverQuestionnaires = new List<QuestionnaireListItem>();
@@ -47,12 +48,12 @@ namespace WB.UI.Tester.Infrastructure.Internals
             QuestionnaireListItem[] batchOfServerQuestionnaires;
             do
             {
-                batchOfServerQuestionnaires = await this.GetPageOfQuestionnairesAsync(isPublic: isPublic, pageIndex: pageIndex++, token: token);
+                batchOfServerQuestionnaires = await this.GetPageOfQuestionnairesAsync(pageIndex: pageIndex++, token: token);
                 serverQuestionnaires.AddRange(batchOfServerQuestionnaires);
 
             } while (batchOfServerQuestionnaires.Any());
 
-            return serverQuestionnaires;
+            return serverQuestionnaires.ToReadOnlyCollection();
         }
 
         public async Task<Questionnaire> GetQuestionnaireAsync(QuestionnaireListItem selectedQuestionnaire, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, CancellationToken token)
@@ -72,7 +73,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
             return downloadedQuestionnaire;
         }
 
-        private async Task<QuestionnaireListItem[]> GetPageOfQuestionnairesAsync(bool isPublic, int pageIndex, CancellationToken token)
+        private async Task<QuestionnaireListItem[]> GetPageOfQuestionnairesAsync(int pageIndex, CancellationToken token)
         {
             var  batchOfServerQuestionnaires = await this.restService.GetAsync<Core.SharedKernels.SurveySolutions.Api.Designer.QuestionnaireListItem[]>(
                 url: "questionnaires",
@@ -83,15 +84,16 @@ namespace WB.UI.Tester.Infrastructure.Internals
                         Login = this.principal.CurrentUserIdentity.Name,
                         Password = this.principal.CurrentUserIdentity.Password
                     },
-                queryString: new { pageIndex = pageIndex, isPublic = isPublic });
+                queryString: new { pageIndex = pageIndex });
 
             return batchOfServerQuestionnaires.Select(questionnaireListItem => new QuestionnaireListItem()
             {
                 Id = questionnaireListItem.Id,
                 Title = questionnaireListItem.Title,
                 LastEntryDate = questionnaireListItem.LastEntryDate,
-                IsPublic = isPublic,
-                OwnerName = questionnaireListItem.Owner == "you" ?  this.principal.CurrentUserIdentity.Name : questionnaireListItem.Owner
+                IsPublic = questionnaireListItem.IsPublic,
+                OwnerName = questionnaireListItem.Owner,
+                IsShared = questionnaireListItem.IsShared
             }).ToArray();
         }
     }

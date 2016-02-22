@@ -213,6 +213,7 @@
     <Compile Include="Converters\ViewOptionStyleBackgroundConverter.cs" />
     <Compile Include="CustomBindings\BaseBinding.cs" />
     <Compile Include="CustomBindings\DecimalPlacesFilter.cs" />
+    <Compile Include="CustomBindings\EditTextChangedBinding.cs" />
     <Compile Include="CustomBindings\EditTextDateBinding.cs" />
     <Compile Include="CustomBindings\EditTextDecimalPlacesBinding.cs" />
     <Compile Include="CustomBindings\EditTextFocusValueChangedBinding.cs" />

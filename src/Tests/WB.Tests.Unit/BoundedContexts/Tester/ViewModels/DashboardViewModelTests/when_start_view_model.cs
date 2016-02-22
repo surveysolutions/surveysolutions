@@ -22,21 +22,9 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
     {
         Establish context = () =>
         {
-            var designerApiService = Mock.Of<IDesignerApiService>(_ => 
-                _.GetQuestionnairesAsync(false, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(MyQuestionnaires) &&
-                _.GetQuestionnairesAsync(true, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(PublicQuestionnaires));
+            var storageAccessor = new TestAsyncPlainStorage<QuestionnaireListItem>(MyQuestionnaires.Union(PublicQuestionnaires));
 
-            var storageAccessor = new TestAsyncPlainStorage<QuestionnaireListItem>(new List<QuestionnaireListItem>
-                    {
-                        new QuestionnaireListItem {IsPublic = false, OwnerName = userName},
-                        new QuestionnaireListItem {IsPublic = false, OwnerName = userName},
-                        new QuestionnaireListItem { IsPublic = true },
-                        new QuestionnaireListItem { IsPublic = true },
-                        new QuestionnaireListItem { IsPublic = true }
-                    }.ToReadOnlyCollection());
-
-            viewModel = CreateDashboardViewModel(designerApiService: designerApiService,
-                questionnaireListStorage: storageAccessor);
+            viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessor);
         };
 
         Because of = async () => await viewModel.StartAsync();
@@ -50,13 +38,13 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         private static DashboardViewModel viewModel;
 
-        private static readonly IList<QuestionnaireListItem> MyQuestionnaires = new List<QuestionnaireListItem>
+        private static readonly IReadOnlyCollection<QuestionnaireListItem> MyQuestionnaires = new List<QuestionnaireListItem>
         {
             new QuestionnaireListItem(){IsPublic = false, OwnerName = userName},
             new QuestionnaireListItem(){IsPublic = false, OwnerName = userName}
         };
 
-        private static readonly IList<QuestionnaireListItem> PublicQuestionnaires = new List<QuestionnaireListItem>
+        private static readonly IReadOnlyCollection<QuestionnaireListItem> PublicQuestionnaires = new List<QuestionnaireListItem>
         {
             new QuestionnaireListItem(){IsPublic = true},
             new QuestionnaireListItem(){IsPublic = true},
