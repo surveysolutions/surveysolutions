@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Machine.Specifications;
-using Moq;
-using WB.Core.BoundedContexts.Tester.Implementation.Services;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable;
@@ -18,17 +15,12 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
     {
         Establish context = () =>
         {
-            var designerApiService = Mock.Of<IDesignerApiService>(_ => 
-                _.GetQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(MyQuestionnaires) &&
-                _.GetQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(PublicQuestionnaires));
-
             var storageAccessor = new TestAsyncPlainStorage<QuestionnaireListItem>(MyQuestionnaires.Union(PublicQuestionnaires));
 
-            viewModel = CreateDashboardViewModel(designerApiService: designerApiService,
-                questionnaireListStorage: storageAccessor);
+            viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessor);
         };
 
-        Because of = async () => await viewModel.StartAsync();
+        Because of = () => viewModel.StartAsync().WaitAndUnwrapException();
 
         It should_Questionnaires_have_my_questionnaires_only = () =>
             viewModel.Questionnaires.All(questionnaire => questionnaire.Id == firstMyQuestionnaire || questionnaire.Id == secondMyQuestionnaire).ShouldBeTrue();
@@ -45,8 +37,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         private static readonly IReadOnlyCollection<QuestionnaireListItem> PublicQuestionnaires = new List<QuestionnaireListItem>
         {
-            new QuestionnaireListItem(){IsPublic = true, OwnerName = userName},
-            new QuestionnaireListItem(){IsPublic = true, OwnerName = userName}
+            new QuestionnaireListItem(){IsPublic = true},
+            new QuestionnaireListItem(){IsPublic = true}
         };
     }
 }
