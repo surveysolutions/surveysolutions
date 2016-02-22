@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         Because of = () => viewModel.RefreshQuestionnairesCommand.Execute();
 
-        It should_not_questionnaire_list_be_updated = () => mockOfDesignerApiService.Verify(_=>_.GetQuestionnairesAsync(Moq.It.IsAny<bool>(), Moq.It.IsAny<CancellationToken>()), Times.Never);
+        It should_not_questionnaire_list_be_updated = () => mockOfDesignerApiService.Verify(_=>_.GetQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()), Times.Never);
 
         private static DashboardViewModel viewModel;
         private static readonly Mock<IDesignerApiService> mockOfDesignerApiService = new Mock<IDesignerApiService>();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -99,26 +100,30 @@ namespace WB.UI.Designer.Api
         }
 
         [Route("")]
-        public IEnumerable<QuestionnaireListItem> Get([FromUri]int pageIndex = 1, [FromUri]int pageSize = 128, [FromUri]string sortBy = "", [FromUri]string filter = "", [FromUri]bool isPublic = false)
+        public HttpResponseMessage Get([FromUri]int pageIndex = 1, [FromUri]int pageSize = 128)
         {
-            var questionnaireListView = this.viewFactory.Load(new QuestionnaireListInputModel
-            {
-                ViewerId = this.userHelper.WebUser.UserId,
-                IsAdminMode = this.userHelper.WebUser.IsAdmin,
-                IsPublic = isPublic,
-                Page = pageIndex,
-                PageSize = pageSize,
-                Order = string.IsNullOrEmpty(sortBy) ? "LastEntryDate DESC" : sortBy,
-                Filter = filter
-            });
+            var questionnaireViews = this.viewFactory.GetUserQuestionnaires(
+                userId: this.userHelper.WebUser.UserId,
+                isAdmin: this.userHelper.WebUser.IsAdmin,
+                pageIndex: pageIndex,
+                pageSize: pageSize);
 
-            return questionnaireListView.Items.Select(questionnaire => new QuestionnaireListItem()
+            var questionnaires = questionnaireViews.Select(questionnaire => new QuestionnaireListItem()
             {
-                Id = questionnaire.PublicId.FormatGuid(),
+                Id = questionnaire.QuestionnaireId,
                 Title = questionnaire.Title,
                 LastEntryDate = questionnaire.LastEntryDate,
-                Owner = questionnaire.Owner
+                Owner = questionnaire.Owner,
+                IsPublic = questionnaire.IsPublic || this.userHelper.WebUser.IsAdmin,
+                IsShared = questionnaire.SharedPersons.Any(sharedPerson => sharedPerson == this.userHelper.WebUser.UserId)
             });
+
+            var response = this.Request.CreateResponse(questionnaires);
+            response.Headers.CacheControl = new CacheControlHeaderValue
+            {
+                NoCache = true
+            };
+            return response;
         }
 
         private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)
