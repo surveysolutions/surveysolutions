@@ -24,13 +24,9 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
     {
         Establish context = () =>
         {
-            var designerApiService = Mock.Of<IDesignerApiService>(_ => _.GetQuestionnairesAsync(false, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(MyQuestionnaires) &&
-                _.GetQuestionnairesAsync(true, Moq.It.IsAny<CancellationToken>()) == Task.FromResult(PublicQuestionnaires));
+            var storageAccessor = new TestAsyncPlainStorage<QuestionnaireListItem>(MyQuestionnaires.Union(PublicQuestionnaires));
 
-            var storageAccessor = new TestAsyncPlainStorage<QuestionnaireListItem>(Enumerable.Empty<QuestionnaireListItem>().ToReadOnlyCollection());
-
-            viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessor,
-                designerApiService: designerApiService);
+            viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessor);
             viewModel.StartAsync().WaitAndUnwrapException();
         };
 
@@ -42,13 +38,13 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         private static DashboardViewModel viewModel;
 
-        private static readonly IList<QuestionnaireListItem> MyQuestionnaires = new List<QuestionnaireListItem>
+        private static readonly IReadOnlyCollection<QuestionnaireListItem> MyQuestionnaires = new List<QuestionnaireListItem>
         {
             new QuestionnaireListItem(){IsPublic = false},
             new QuestionnaireListItem(){IsPublic = false}
         };
 
-        private static readonly IList<QuestionnaireListItem> PublicQuestionnaires = new List<QuestionnaireListItem>
+        private static readonly IReadOnlyCollection<QuestionnaireListItem> PublicQuestionnaires = new List<QuestionnaireListItem>
         {
             new QuestionnaireListItem(){IsPublic = true},
             new QuestionnaireListItem(){IsPublic = true},

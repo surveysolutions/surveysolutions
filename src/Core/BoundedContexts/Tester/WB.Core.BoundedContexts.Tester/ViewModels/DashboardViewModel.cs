@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -36,7 +35,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IQuestionnaireImportService questionnaireImportService;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IUserInteractionService userInteractionService;
-        private readonly List<QuestionnaireListItem> questionnaireListStorageCache = new List<QuestionnaireListItem>();
+        private IReadOnlyCollection<QuestionnaireListItem> localQuestionnaires = new List<QuestionnaireListItem>();
         private readonly IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage;
         private readonly IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage;
         private readonly ILogger logger;
@@ -69,17 +68,15 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public override async Task StartAsync()
         {
-            var allUserQuestionnaires = await this.questionnaireListStorage.LoadAllAsync();
-
-            this.questionnaireListStorageCache.AddRange(allUserQuestionnaires);
-
-            if (!questionnaireListStorageCache.Any())
+            this.localQuestionnaires = await this.questionnaireListStorage.LoadAllAsync();
+            
+            if (!localQuestionnaires.Any())
             {
                 await LoadServerQuestionnairesAsync();
             }
             else
             {
-                this.LoadFilteredListFromLocalStorage(null);
+                this.SearchByLocalQuestionnaires();
             }
 
             this.ShowEmptyQuestionnaireListText = true;
@@ -90,41 +87,39 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.HumanizeLastUpdateDate(lastUpdate?.LastUpdateDate);
         }
        
-        private void LoadFilteredListFromLocalStorage(string searchTerm)
+        private void SearchByLocalQuestionnaires(string searchTerm = null)
         {
             var trimmedSearchText = (searchTerm ?? "").Trim();
 
             Func<QuestionnaireListItem, bool> emptyFilter = x => true;
-            Func<QuestionnaireListItem, bool> titleSearchFilter = x => x.Title.Contains(trimmedSearchText);
+            Func<QuestionnaireListItem, bool> titleSearchFilter = x => x.Title.Contains(trimmedSearchText) || x.OwnerName.Contains(trimmedSearchText);
             Func<QuestionnaireListItem, bool> searchFilter = string.IsNullOrEmpty(trimmedSearchText)
                 ? emptyFilter
                 : titleSearchFilter;
 
-            var myQuestionnaireListItems = questionnaireListStorageCache
-                .Where(questionnaire => searchFilter(questionnaire) &&
-                                        !questionnaire.IsPublic &&
-                                        questionnaire.OwnerName == this.principal.CurrentUserIdentity.Name)
+            var myQuestionnaires = this.localQuestionnaires
+                .Where(questionnaire =>
+                    searchFilter(questionnaire) &&
+                    (questionnaire.OwnerName == this.principal.CurrentUserIdentity.Name || questionnaire.IsShared))
                 .ToList();
 
-            var publicQuestionnaireListItems = questionnaireListStorageCache
+            var publicQuestionnaires = this.localQuestionnaires
                 .Where(questionnaire => searchFilter(questionnaire) && questionnaire.IsPublic)
                 .ToList();
 
-            this.myQuestionnaires = this.HightlightSearchTermInFilteredList(
-                myQuestionnaireListItems,
-                trimmedSearchText);
-            this.publicQuestionnaires = this.HightlightSearchTermInFilteredList(
-                publicQuestionnaireListItems,
-                trimmedSearchText);
+            var selectedQuestionnaires = this.IsPublicShowed ? publicQuestionnaires : myQuestionnaires;
 
-            this.MyQuestionnairesCount = this.myQuestionnaires.Count;
-            this.PublicQuestionnairesCount = this.publicQuestionnaires.Count;
+            this.MyQuestionnairesCount = myQuestionnaires.Count;
+            this.PublicQuestionnairesCount = publicQuestionnaires.Count;
 
-            if (!IsPublicShowed) this.ShowMyQuestionnaires();
-            else this.ShowPublicQuestionnaires();
+            this.IsListEmpty = !selectedQuestionnaires.Any();
+
+            this.Questionnaires = selectedQuestionnaires
+                .Select(questionnaire => ToDashboardQuestionnaire(questionnaire, searchTerm))
+                .OrderByDescending(questionnaire => questionnaire.LastEntryDate)
+                .ToList();
         }
 
-        private bool loadServerQuestionnairesProcessIsCanceled = false;
         private string humanizedLastUpdateDate;
         public string HumanizedLastUpdateDate
         {
@@ -132,14 +127,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             set { this.humanizedLastUpdateDate = value; RaisePropertyChanged(); }
         }
 
-        private ObservableCollection<QuestionnaireListItem> questionnaires = new ObservableCollection<QuestionnaireListItem>();
-        public ObservableCollection<QuestionnaireListItem> Questionnaires
+        private IList<QuestionnaireListItem> questionnaires = new List<QuestionnaireListItem>();
+        public IList<QuestionnaireListItem> Questionnaires
         {
             get { return this.questionnaires; }
-            set { 
-                this.questionnaires = value; 
-                RaisePropertyChanged(); 
-            }
+            set { this.questionnaires = value; RaisePropertyChanged(); }
         }
 
         private bool showEmptyQuestionnaireListText;
@@ -200,7 +192,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         public IMvxCommand ClearSearchCommand => new MvxCommand(this.ClearSearch);
 
         public IMvxCommand ShowSearchCommand => new MvxCommand(this.ShowSearch);
-        
+
+        public IMvxCommand SearchCommand => new MvxCommand<string>(this.SearchByLocalQuestionnaires);
+
         public IMvxCommand SignOutCommand => new MvxCommand(async () => await this.SignOutAsync());
 
         private IMvxCommand loadQuestionnaireCommand;
@@ -222,15 +216,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         public string SearchText
         {
             get { return this.searchText; }
-            set {  
-                this.searchText = value;
-                RaisePropertyChanged(); 
-                LoadFilteredListFromLocalStorage(searchText);
-            }
+            set { this.searchText = value; RaisePropertyChanged(); }
         }
-
-        private List<QuestionnaireListItem> myQuestionnaires;
-        private List<QuestionnaireListItem> publicQuestionnaires;
 
         private bool isListEmpty;
 
@@ -257,24 +244,16 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private void ShowPublicQuestionnaires()
         {
-            this.ChangeQuestionnairesList(this.publicQuestionnaires);
-
             this.IsPublicShowed = true;
+
+            this.SearchByLocalQuestionnaires();
         }
 
         private void ShowMyQuestionnaires()
         {
-            this.ChangeQuestionnairesList(this.myQuestionnaires);
-
             this.IsPublicShowed = false;
-        }
 
-        private void ChangeQuestionnairesList(List<QuestionnaireListItem> questionnaireListItems)
-        {
-            this.Questionnaires.Clear();
-            questionnaireListItems.ForEach(x => this.Questionnaires.Add(x));
-            this.RaisePropertyChanged(() => this.Questionnaires);
-            IsListEmpty = !this.Questionnaires.Any();
+            this.SearchByLocalQuestionnaires();
         }
 
         private async Task LoadQuestionnaireAsync(QuestionnaireListItem selectedQuestionnaire)
@@ -364,21 +343,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.tokenSource = new CancellationTokenSource();
             try
             {
-                ClearSearch();
+                this.ClearSearch();
 
-                await this.questionnaireListStorage.RemoveAsync(this.myQuestionnaires);
-                await this.questionnaireListStorage.RemoveAsync(this.publicQuestionnaires);
-                questionnaireListStorageCache.Clear();
+                await this.questionnaireListStorage.RemoveAsync(this.localQuestionnaires);
 
-                var loadedMyQuestionnaires =
-                    await this.designerApiService.GetQuestionnairesAsync(isPublic: false, token: tokenSource.Token);
-                var loadedPublicQuestionnaires =
-                    await this.designerApiService.GetQuestionnairesAsync(isPublic: true, token: tokenSource.Token);
-
-                questionnaireListStorageCache.AddRange(loadedMyQuestionnaires);
-                questionnaireListStorageCache.AddRange(loadedPublicQuestionnaires);
-
-                await this.questionnaireListStorage.StoreAsync(questionnaireListStorageCache);
+                this.localQuestionnaires = await this.designerApiService.GetQuestionnairesAsync(token: tokenSource.Token);
+                
+                await this.questionnaireListStorage.StoreAsync(this.localQuestionnaires);
 
                 var lastUpdateDate = DateTime.UtcNow;
                 this.HumanizeLastUpdateDate(lastUpdateDate);
@@ -389,7 +360,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     LastUpdateDate = lastUpdateDate
                 });
 
-                LoadFilteredListFromLocalStorage(null);
+                this.SearchByLocalQuestionnaires();
             }
             catch (RestException ex)
             {
@@ -419,49 +390,35 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 : TesterUIResources.Dashboard_HaveNotBeenUpdated;
         }
 
-        private List<QuestionnaireListItem> HightlightSearchTermInFilteredList(List<QuestionnaireListItem> questionnaireListItems, string searchTerm)
+        private QuestionnaireListItem ToDashboardQuestionnaire(QuestionnaireListItem x, string searchTerm)
         {
-            if (searchTerm.IsNullOrEmpty() || !questionnaireListItems.Any())
-            {
-                return questionnaireListItems;
-            }
-
-            return questionnaireListItems.Select(x => HightlightTitleInListItem(x, searchTerm)).ToList();
-        }
-
-        private static QuestionnaireListItem HightlightTitleInListItem(QuestionnaireListItem x, string searchTerm)
-        {
-            var index = x.Title.IndexOf(searchTerm, StringComparison.CurrentCultureIgnoreCase);
-
-            var title = index >= 0
-                ? Regex.Replace(x.Title, searchTerm, "<b>" + searchTerm + "</b>", RegexOptions.IgnoreCase)
-                : x.Title;
-
             return new QuestionnaireListItem
                    {
                        Id = x.Id,
-                       IsPublic = x.IsPublic,
+                       IsPublic = this.IsPublicShowed,
                        LastEntryDate = x.LastEntryDate,
                        OwnerName = x.OwnerName,
-                       Title = title
-                   };
+                       Title = ToDashboardTitle(x.Title, searchTerm)
+            };
+        }
+
+        private static string ToDashboardTitle(string questionnaireTitle, string searchTerm)
+        {
+            if (string.IsNullOrEmpty(searchTerm)) return questionnaireTitle;
+
+            var index = questionnaireTitle.IndexOf(searchTerm, StringComparison.CurrentCultureIgnoreCase);
+
+            var title = index >= 0
+                ? Regex.Replace(questionnaireTitle, searchTerm, "<b>" + searchTerm + "</b>", RegexOptions.IgnoreCase)
+                : questionnaireTitle;
+            return title;
         }
 
         public void CancelLoadServerQuestionnaires()
         {
-            if (tokenSource != null && !tokenSource.IsCancellationRequested && IsInProgress)
+            if (tokenSource != null && !tokenSource.IsCancellationRequested)
             {
                 this.tokenSource.Cancel();
-                this.loadServerQuestionnairesProcessIsCanceled = true;
-            }
-        }
-
-        public async void RestartLoadServerQuestionnairesIfNeeded()
-        {
-            if (loadServerQuestionnairesProcessIsCanceled)
-            {
-                await LoadServerQuestionnairesAsync();
-                loadServerQuestionnairesProcessIsCanceled = false;
             }
         }
     }

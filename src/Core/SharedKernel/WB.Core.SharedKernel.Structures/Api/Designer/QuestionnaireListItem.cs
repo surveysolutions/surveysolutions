@@ -10,5 +10,6 @@ namespace WB.Core.SharedKernels.SurveySolutions.Api.Designer
         public DateTime LastEntryDate { get; set; }
         public bool IsPublic { get; set; }
         public string Owner { get; set; }
+        public bool IsShared { get; set; }
     }
 }
