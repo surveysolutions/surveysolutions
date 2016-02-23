@@ -24,17 +24,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             return Task.FromResult(true);
         }
 
-        public override void Start()
+        public override async void Start()
         {
             base.Start();
 
             if (this.IsAuthenticationRequired && !this.principal.IsAuthenticated)
             {
-                this.viewModelNavigationService.NavigateToLoginAsync().WaitAndUnwrapException();
+                await this.viewModelNavigationService.NavigateToLoginAsync();
                 return;
             }
 
-            this.StartAsync().WaitAndUnwrapException();
+            await this.StartAsync();
         }
     }
 }
