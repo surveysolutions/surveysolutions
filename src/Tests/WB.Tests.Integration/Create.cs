@@ -22,8 +22,8 @@ using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -40,6 +40,9 @@ using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.SharedKernels.SurveyManagement.Commands;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Tests.Integration
 {
@@ -407,7 +410,8 @@ namespace WB.Tests.Integration
         {
             var questionnaire = new Questionnaire(
                 Mock.Of<IPlainQuestionnaireRepository>(),
-                Mock.Of<IQuestionnaireAssemblyFileAccessor>());
+                Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
+                Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
 
             questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), questionnaireDocument, false, "base64 string of assembly", 1));
 

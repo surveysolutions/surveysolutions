@@ -6,11 +6,10 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
@@ -24,21 +23,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
     [ProtobufJsonSerializer]
     public class InterviewerQuestionnairesController : ApiController
     {
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore;
+        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly ISerializer serializer;
 
         public InterviewerQuestionnairesController(
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore,
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            ISerializer serializer)
+            ISerializer serializer, 
+            IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
-            this.questionnaireStore = questionnaireStore;
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.serializer = serializer;
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
         }
 
         [HttpGet]
@@ -77,19 +76,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         [WriteToSyncLog(SynchronizationLogType.GetQuestionnaire)]
         public HttpResponseMessage Get(Guid id, int version, long contentVersion)
         {
-            var questionnaireDocumentVersioned = this.questionnaireStore.AsVersioned().Get(id.FormatGuid(), version);
+            var questionnaireDocumentVersioned = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
 
             if (questionnaireDocumentVersioned == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            if (contentVersion < questionnaireDocumentVersioned.QuestionnaireContentVersion)
+            if (contentVersion < this.plainQuestionnaireRepository.GetQuestionnaireContentVersion(new QuestionnaireIdentity(id, version)))
             {
                 return Request.CreateResponse(HttpStatusCode.UpgradeRequired);
             }
 
             var resultValue = new QuestionnaireApiView
             {
-                QuestionnaireDocument = this.serializer.Serialize(questionnaireDocumentVersioned.Questionnaire),
+                QuestionnaireDocument = this.serializer.Serialize(questionnaireDocumentVersioned),
                 AllowCensus = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version)).AllowCensusMode
             };
 

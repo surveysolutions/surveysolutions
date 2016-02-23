@@ -157,6 +157,8 @@
     <Compile Include="PlainStorage\IPlainStorageAccessor.cs" />
     <Compile Include="PlainStorage\IPlainTransactionManager.cs" />
     <Compile Include="PlainStorage\PlainStorageAttribute.cs" />
+    <Compile Include="PlainStorage\PlainStorageExtensions.cs" />
+    <Compile Include="PlainStorage\PlainStorageVersionedWrapper.cs" />
     <Compile Include="ReadSide\ICacheableRepositoryWriter.cs" />
     <Compile Include="ReadSide\IReadSideAdministrationService.cs" />
     <Compile Include="ReadSide\IReadSideStatusService.cs" />
@@ -170,13 +172,11 @@
     <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryCleaner.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryIndexAccessor.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IReadSideStorage.cs" />
-    <Compile Include="ReadSide\Repository\Accessors\ReadSideRepositoryReaderVersionedWrapper.cs" />
     <Compile Include="ReadSide\Repository\Accessors\ReadSideExtensions.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryReader.cs" />
     <Compile Include="MaintenanceException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryWriter.cs" />
-    <Compile Include="ReadSide\Repository\Accessors\ReadSideStorageVersionedWrapper.cs" />
     <Compile Include="InfrastructureModuleMobile.cs" />
     <Compile Include="Security\IExportSettings.cs" />
     <Compile Include="Security\ExportEncryptionSettings.cs" />

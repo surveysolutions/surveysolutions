@@ -16,9 +16,12 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using It = Moq.It;
@@ -38,18 +41,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
 
             return new DdiMetadataFactory(
                 fileSystemAccessor.Object,
-                Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
-                    It.IsAny<string>()) == new QuestionnaireExportStructure()),
-                Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 Mock.Of<ILogger>(),
-                Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(_ => _.GetById(It.IsAny<string>()) ==
-                                                                                       new QuestionnaireDocumentVersioned()
-                                                                                       {
-                                                                                           Questionnaire =questionnaireDocument,
-                                                                                           Version = 1
-                                                                                       }),
                 metaDescriptionFactory ?? Mock.Of<IMetaDescriptionFactory>(),
-                questionnaireLabelFactory ?? new QuestionnaireLabelFactory());
+                questionnaireLabelFactory ?? new QuestionnaireLabelFactory(),
+                Mock.Of<IQuestionnaireProjectionsRepository>(
+                    _ =>
+                        _.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()) ==
+                        new QuestionnaireExportStructure()),
+                Mock.Of<IPlainQuestionnaireRepository>(
+                    _ =>
+                        _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) ==
+                        questionnaireDocument));
         }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)

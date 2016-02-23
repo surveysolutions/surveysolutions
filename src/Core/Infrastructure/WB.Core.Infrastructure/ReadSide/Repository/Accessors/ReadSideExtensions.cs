@@ -2,23 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
 {
     public static class ReadSideExtensions
     {
-        public static ReadSideStorageVersionedWrapper<T> AsVersioned<T>(this IReadSideStorage<T> storage)
-            where T : class, IReadSideRepositoryEntity
-        {
-            return new ReadSideStorageVersionedWrapper<T>(storage);
-        }
-
-        public static ReadSideRepositoryReaderVersionedWrapper<T> AsVersioned<T>(this IReadSideRepositoryReader<T> storage)
-            where T : class, IReadSideRepositoryEntity
-        {
-            return new ReadSideRepositoryReaderVersionedWrapper<T>(storage);
-        }
 
         public static T GetById<T>(this IReadSideStorage<T> writer, Guid? id)
             where T : class, IReadSideRepositoryEntity

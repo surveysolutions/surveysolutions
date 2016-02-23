@@ -117,14 +117,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\DeleteQuestionnaire.cs" />
+    <Compile Include="Commands\DisableQuestionnaire.cs" />
+    <Compile Include="Commands\ImportFromDesigner.cs" />
+    <Compile Include="Commands\QuestionnaireCommand.cs" />
+    <Compile Include="Commands\RegisterPlainQuestionnaire.cs" />
+    <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireQuestionsInfo.cs" />
     <Compile Include="EventHandler\InterviewExportedCommentariesDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewReferencesDenormalizer.cs" />
-    <Compile Include="EventHandler\QuestionnaireQuestionsInfoDenormalizer.cs" />
     <Compile Include="Factories\IOldschoolChartStatisticsDataProvider.cs" />
     <Compile Include="Factories\IQuestionnaireBrowseViewFactory.cs" />
+    <Compile Include="Implementation\Aggregates\Questionnaire.cs" />
+    <Compile Include="Implementation\Factories\IExportViewFactory.cs" />
     <Compile Include="Implementation\Factories\OldschoolChartStatisticsDataProvider.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireBrowseViewFactory.cs" />
+    <Compile Include="Implementation\Repositories\QuestionnaireProjectionsRepository.cs" />
     <Compile Include="Implementation\Services\AndroidPackageReader.cs" />
     <Compile Include="Implementation\Services\DecimalToHeaderConverter.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\ReadSideHealthChecker.cs" />
@@ -143,6 +151,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Repositories\IQuestionnaireProjectionsRepository.cs" />
     <Compile Include="Services\AndroidPackageInfo.cs" />
     <Compile Include="Services\Export\ITabularFormatExportService.cs" />
     <Compile Include="Services\IAndroidPackageReader.cs" />
@@ -195,9 +204,6 @@
     <Compile Include="EventHandler\InterviewSynchronizationDenormalizer.cs" />
     <Compile Include="Factories\IChartStatisticsViewFactory.cs" />
     <Compile Include="Implementation\Factories\InterviewSynchronizationDtoFactory.cs" />
-    <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
-    <Compile Include="EventHandler\QuestionnaireRosterStructureEventHandler.cs" />
-    <Compile Include="EventHandler\ReferenceInfoForLinkedQuestionsDenormalizer.cs" />
     <Compile Include="EventHandler\UserDenormalizer.cs" />
     <Compile Include="Factories\IInterviewSynchronizationDtoFactory.cs" />
     <Compile Include="Factories\IRecordsAccessorFactory.cs" />
@@ -217,7 +223,6 @@
     <Compile Include="Implementation\Services\Preloading\PreloadedDataVerifier.cs" />
     <Compile Include="Implementation\Services\Preloading\QuestionDataParser.cs" />
     <Compile Include="Implementation\Services\Preloading\PreloadedDataService.cs" />
-    <Compile Include="Implementation\Services\QuestionnaireCacheInitializer.cs" />
     <Compile Include="Implementation\Services\SampleImportService.cs" />
     <Compile Include="Implementation\Services\SupportedVersionProvider.cs" />
     <Compile Include="Implementation\Services\TabletInformation\FileBasedTabletInformationService.cs" />
@@ -244,7 +249,6 @@
     <Compile Include="Implementation\Services\HealthCheck\HealthCheckService.cs" />
     <Compile Include="Services\HealthCheck\IHealthCheckService.cs" />
     <Compile Include="Services\ICsvWriterService.cs" />
-    <Compile Include="Services\IQuestionnaireCacheInitializer.cs" />
     <Compile Include="Services\IQuestionnaireUpgradeService.cs" />
     <Compile Include="Services\ISampleImportService.cs" />
     <Compile Include="Services\ISupportedVersionProvider.cs" />

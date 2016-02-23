@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Linq;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
@@ -24,28 +21,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<InterviewHardDeleted>
     {
         private readonly IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage;
-        private readonly IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> questionsInfoStorage;
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentStorage;
+        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
         private readonly IReadSideRepositoryWriter<MapReportPoint> mapReportPointStorage;
 
         public override object[] Writers => new object[] { this.mapReportPointStorage };
 
-        public override object[] Readers => new object[] { this.interviewReferencesStorage, this.questionsInfoStorage, this.questionnaireDocumentStorage };
+        public override object[] Readers => new object[] { this.interviewReferencesStorage};
 
         public MapReportDenormalizer(
             IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage,
             IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> questionsInfoStorage,
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentStorage, 
-            IReadSideRepositoryWriter<MapReportPoint> mapReportPointStorage)
+            IReadSideRepositoryWriter<MapReportPoint> mapReportPointStorage, 
+            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
+            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
         {
             if (interviewReferencesStorage == null) throw new ArgumentNullException(nameof(interviewReferencesStorage));
             if (questionsInfoStorage == null) throw new ArgumentNullException(nameof(questionsInfoStorage));
             if (mapReportPointStorage == null) throw new ArgumentNullException(nameof(mapReportPointStorage));
 
             this.interviewReferencesStorage = interviewReferencesStorage;
-            this.questionsInfoStorage = questionsInfoStorage;
-            this.questionnaireDocumentStorage = questionnaireDocumentStorage;
             this.mapReportPointStorage = mapReportPointStorage;
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
         }
 
         public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)
@@ -99,10 +97,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private void ClearMapReportPointsForInterview(Guid interviewId)
         {
             InterviewReferences interviewReferences = this.interviewReferencesStorage.GetById(interviewId);
-            QuestionnaireDocumentVersioned questionnaireDocumentVersioned = this.questionnaireDocumentStorage.AsVersioned().Get(interviewReferences.QuestionnaireId.FormatGuid(), interviewReferences.QuestionnaireVersion);
+            var questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interviewReferences.QuestionnaireId, interviewReferences.QuestionnaireVersion);
 
-            var gpsQuestionVariableNames = questionnaireDocumentVersioned
-                .Questionnaire
+            var gpsQuestionVariableNames = questionnaireDocument
                 .Find<GpsCoordinateQuestion>()
                 .Select(question => question.StataExportCaption)
                 .ToList();
@@ -120,7 +117,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private string GetVariableNameForQuestion(Guid questionId, QuestionnaireIdentity questionnaireIdentity)
         {
-            var questionnaireQuestionsInfo = this.questionsInfoStorage.GetById(questionnaireIdentity.ToString());
+            var questionnaireQuestionsInfo = this.questionnaireProjectionsRepository.GetQuestionnaireQuestionsInfo(questionnaireIdentity);
             return questionnaireQuestionsInfo.QuestionIdToVariableMap[questionId];
         }
     }

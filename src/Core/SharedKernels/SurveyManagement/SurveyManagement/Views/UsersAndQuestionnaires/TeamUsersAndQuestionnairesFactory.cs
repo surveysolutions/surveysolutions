@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -12,10 +13,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires
 {
     public class TeamUsersAndQuestionnairesFactory : ITeamUsersAndQuestionnairesFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> questionnairesReader;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesReader;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
         public TeamUsersAndQuestionnairesFactory(
-            IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> questionnairesReader, 
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesReader, 
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader)
         {
             this.questionnairesReader = questionnairesReader;

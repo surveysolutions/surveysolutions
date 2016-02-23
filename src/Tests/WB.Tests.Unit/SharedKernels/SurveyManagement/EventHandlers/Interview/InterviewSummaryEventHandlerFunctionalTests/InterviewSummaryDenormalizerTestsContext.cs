@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
@@ -33,8 +34,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         {
             return
                 new InterviewSummaryDenormalizer(
-                    interviewSummary: CreateInterviewSummaryWriter(), questionnaires: CreateQuestionnaire(),
-                    users: users ?? CreateUsersWriterWith1User(new Guid().ToString(), new Guid().ToString()));
+                    interviewSummary: CreateInterviewSummaryWriter(),
+                    users: users ?? CreateUsersWriterWith1User(new Guid().ToString(), new Guid().ToString()),
+                    plainQuestionnaireRepository:
+                        Mock.Of<IPlainQuestionnaireRepository>(
+                            _ =>
+                                _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) ==
+                                new QuestionnaireDocument()));
         }
 
         private static IReadSideRepositoryWriter<InterviewSummary> CreateInterviewSummaryWriter()

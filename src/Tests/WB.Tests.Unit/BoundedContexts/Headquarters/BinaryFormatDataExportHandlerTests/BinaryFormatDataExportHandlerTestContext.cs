@@ -7,6 +7,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -35,8 +36,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
                 interviewSummaries ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
                 archiveUtils ?? Mock.Of<IArchiveUtils>(),
                 interviewDatas ?? Mock.Of<IReadSideKeyValueStorage<InterviewData>>(),
-                questionnaireReader ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(),
-                dataExportProcessesService ?? Mock.Of<IDataExportProcessesService>());
+                dataExportProcessesService ?? Mock.Of<IDataExportProcessesService>(),
+                questionnaireProjectionsRepository: Mock.Of<IQuestionnaireProjectionsRepository>());
         }
     }
 }

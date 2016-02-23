@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
@@ -38,7 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly CommentsExporter commentsExporter;
         private readonly InterviewActionsExporter interviewActionsExporter;
         private readonly InterviewsExporter interviewsExporter;
-        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
         private readonly InterviewDataExportSettings exportSettings;
 
@@ -46,17 +47,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             ICsvWriter csvWriter, 
             ILogger logger,
             ITransactionManagerProvider transactionManager, 
-            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries,
-            InterviewDataExportSettings exportSettings)
+            InterviewDataExportSettings exportSettings, IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
             this.logger = logger;
             this.transactionManager = transactionManager;
-            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.interviewSummaries = interviewSummaries;
             this.exportSettings = exportSettings;
+            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
 
             this.interviewsExporter = ServiceLocator.Current.GetInstance<InterviewsExporter>();
 
@@ -149,11 +149,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath)
         {
             QuestionnaireExportStructure questionnaireExportStructure =
-              this.transactionManager.GetTransactionManager()
-                  .ExecuteInQueryTransaction(
-                      () =>
-                          this.questionnaireExportStructureStorage.AsVersioned()
-                              .Get(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version));
+                this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(
+                    new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
 
             if (questionnaireExportStructure == null)
                 return;
@@ -203,11 +200,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private QuestionnaireExportStructure BuildQuestionnaireExportStructure(Guid questionnaireId, long questionnaireVersion)
         {
-            QuestionnaireExportStructure questionnaireExportStructure =
-             this.transactionManager.GetTransactionManager()
-                 .ExecuteInQueryTransaction(() =>
-                         this.questionnaireExportStructureStorage.AsVersioned()
-                             .Get(questionnaireId.FormatGuid(), questionnaireVersion));
+            QuestionnaireExportStructure questionnaireExportStructure = this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(
+                    new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
             return questionnaireExportStructure;
         }
     }

@@ -5,9 +5,11 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -16,16 +18,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 {
     internal class InterviewSynchronizationDtoFactory : IInterviewSynchronizationDtoFactory
     {
-        private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures;
+        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
         private readonly IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository;
 
-        public InterviewSynchronizationDtoFactory(IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures, IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository)
+        public InterviewSynchronizationDtoFactory(
+            IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository, 
+            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
         {
-            if (questionnriePropagationStructures == null) throw new ArgumentNullException(nameof(questionnriePropagationStructures));
             if (interviewsRepository == null) throw new ArgumentNullException(nameof(interviewsRepository));
-
-            this.questionnriePropagationStructures = questionnriePropagationStructures;
+            
             this.interviewsRepository = interviewsRepository;
+            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
         }
 
         public InterviewSynchronizationDto BuildFrom(InterviewData interview, string comments, DateTime? rejectedDateTime, DateTime? interviewerAssignedDateTime)
@@ -51,8 +54,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             var invalidQuestions = new HashSet<InterviewItemId>();
             var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
 
-            var questionnariePropagationStructure = this.questionnriePropagationStructures.AsVersioned().Get(interview.QuestionnaireId.FormatGuid(),
-                interview.QuestionnaireVersion);
+            var questionnariePropagationStructure =
+                this.questionnaireProjectionsRepository.GetQuestionnaireRosterStructure(
+                    new QuestionnaireIdentity(interview.QuestionnaireId,
+                        interview.QuestionnaireVersion));
 
             Dictionary<Identity, IList<FailedValidationCondition>> failedValidationConditions = new Dictionary<Identity, IList<FailedValidationCondition>>();
             foreach (var interviewLevel in interview.Levels.Values)

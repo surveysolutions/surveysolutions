@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
@@ -20,21 +21,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         private readonly IInterviewDataAndQuestionnaireMerger merger;
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore;
+        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
         public InterviewDetailsViewFactory(IReadSideKeyValueStorage<InterviewData> interviewStore,
             IReadSideRepositoryReader<UserDocument> userStore,
             IInterviewDataAndQuestionnaireMerger merger,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore)
+            IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.interviewStore = interviewStore;
             this.userStore = userStore;
             this.merger = merger;
             this.changeStatusFactory = changeStatusFactory;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
-            this.questionnaireStore = questionnaireStore;
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
         }
 
         public DetailsViewModel GetInterviewDetails(Guid interviewId, Guid? currentGroupId, decimal[] currentGroupRosterVector, InterviewDetailsFilter? filter)
@@ -48,8 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             if (user == null)
                 throw new ArgumentException($"User with id {interview.ResponsibleId} is not found.");
 
-            var questionnaire = this.questionnaireStore.GetById(
-                new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion).ToString())?.Questionnaire;
+            var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireId, interview.QuestionnaireVersion);
 
             if (questionnaire == null)
                 throw new ArgumentException(
@@ -116,10 +116,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
             if (interview != null && !interview.IsDeleted)
             {
-                QuestionnaireDocumentVersioned questionnaire = this.questionnaireStore.AsVersioned()
-                    .Get(interview.QuestionnaireId.FormatGuid(), interview.QuestionnaireVersion);
+                var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireId, interview.QuestionnaireVersion);
 
-                return questionnaire.Questionnaire.Children[0].PublicKey;
+                return questionnaire.Children[0].PublicKey;
             }
 
             return null;

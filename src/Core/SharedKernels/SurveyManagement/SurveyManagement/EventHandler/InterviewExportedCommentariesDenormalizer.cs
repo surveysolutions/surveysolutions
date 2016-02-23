@@ -6,7 +6,9 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
@@ -30,25 +32,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage;
         private readonly IReadSideRepositoryWriter<UserDocument> userStorage;
-        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader;
+        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
         private readonly string unknown = "Unknown";
 
         public InterviewExportedCommentariesDenormalizer(IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage, 
-            IReadSideRepositoryWriter<UserDocument> userStorage, IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader)
+            IReadSideRepositoryWriter<UserDocument> userStorage,
+            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
         {
             this.interviewCommentariesStorage = interviewCommentariesStorage;
             this.userStorage = userStorage;
-            this.questionnaireReader = questionnaireReader;
+            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
         }
 
-        public override object[] Writers
-        {
-            get { return new[] {interviewCommentariesStorage}; }
-        }
+        public override object[] Writers => new[] {this.interviewCommentariesStorage};
 
         public override object[] Readers
         {
-            get { return new object[] { this.userStorage, questionnaireReader }; }
+            get { return new object[] { this.userStorage }; }
         }
 
         public void CleanWritersByEventSource(Guid eventSourceId)
@@ -186,8 +186,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return;
 
             QuestionnaireExportStructure questionnaire =
-                questionnaireReader.AsVersioned()
-                    .Get(interviewCommentaries.QuestionnaireId, interviewCommentaries.QuestionnaireVersion);
+                this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(
+                    new QuestionnaireIdentity(Guid.Parse(interviewCommentaries.QuestionnaireId),
+                        interviewCommentaries.QuestionnaireVersion));
             if (questionnaire == null)
                 return;
 

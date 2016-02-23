@@ -1,8 +1,8 @@
-﻿using Main.Core.Documents;
+using Main.Core.Documents;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
+namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 {
     public interface IExportViewFactory
     {
