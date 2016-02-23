@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
 
             viemModel.Init(interviewId, Create.NavigationState());
 
-            viemModel.Items = new ObservableRangeCollection<dynamic>(new dynamic[]
+            viemModel.Items = new ObservableRangeCollection<IInterviewEntityViewModel>(new IInterviewEntityViewModel[]
             {
                 Mock.Of<IInterviewEntityViewModel>(_ => _.Identity == disabledAndHideIfDisabledQuestion),
                 Mock.Of<IInterviewEntityViewModel>(_ => _.Identity == disabledAndNotHideIfDisabledQuestion),
@@ -47,15 +47,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
                 }));
 
         It should_remove_disabled_question_which_is_set_to_be_hidden_if_disabled_from_items_list = () =>
-            viemModel.Items.OfType<IInterviewEntityViewModel>().Select(entity => entity.Identity)
+            viemModel.Items.Select(entity => entity.Identity)
                 .ShouldNotContain(disabledAndHideIfDisabledQuestion);
 
         It should_not_remove_disabled_question_which_is_not_set_to_be_hidden_if_disabled_from_items_list = () =>
-            viemModel.Items.OfType<IInterviewEntityViewModel>().Select(entity => entity.Identity)
+            viemModel.Items.Select(entity => entity.Identity)
                 .ShouldContain(disabledAndNotHideIfDisabledQuestion);
 
         It should_not_remove_enabled_question_which_is_set_to_be_hidden_if_disabled_from_items_list = () =>
-            viemModel.Items.OfType<IInterviewEntityViewModel>().Select(entity => entity.Identity)
+            viemModel.Items.Select(entity => entity.Identity)
                 .ShouldContain(enabledQuestion);
 
         private static EnumerationStageViewModel viemModel;

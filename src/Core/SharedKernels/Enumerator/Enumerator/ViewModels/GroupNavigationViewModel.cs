@@ -17,7 +17,11 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
-    public class GroupNavigationViewModel : MvxNotifyPropertyChanged, ILiteEventHandler<GroupsEnabled>, ILiteEventHandler<GroupsDisabled>, IDisposable
+    public class GroupNavigationViewModel : MvxNotifyPropertyChanged,
+        IInterviewEntityViewModel,
+        ILiteEventHandler<GroupsEnabled>, 
+        ILiteEventHandler<GroupsDisabled>, 
+        IDisposable
     {
         private enum NavigationGroupType { Section, LastSection, InsideGroupOrRoster }
         public class GroupStatistics
@@ -33,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private QuestionnaireIdentity questionnaireIdentity;
         private NavigationState navigationState;
 
-        private Identity currentGroupIdentity;
+        public Identity Identity { get; private set; }
         private Identity groupOrSectionToNavigateIdentity;
         private NavigationGroupType navigationGroupType;
         private readonly List<Identity> listOfDisabledSectionBetweenCurrentSectionAndNextEnabledSection = new List<Identity>();
@@ -86,7 +90,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public virtual void Init(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
             this.interviewId = interviewId;
-            this.currentGroupIdentity = groupIdentity;
+            this.Identity = groupIdentity;
             this.navigationState = navigationState;
 
             this.eventRegistry.Subscribe(this, interviewId);
@@ -123,10 +127,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity);
 
-            Guid parentId = questionnaire.GetParentGroup(this.currentGroupIdentity.Id).Value;
+            Guid parentId = questionnaire.GetParentGroup(this.Identity.Id).Value;
             int rosterLevelOfParent = questionnaire.GetRosterLevelForGroup(parentId);
 
-            RosterVector parentRosterVector = this.currentGroupIdentity.RosterVector.Shrink(rosterLevelOfParent);
+            RosterVector parentRosterVector = this.Identity.RosterVector.Shrink(rosterLevelOfParent);
 
             return new Identity(parentId, parentRosterVector);
         }
@@ -144,7 +148,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     break;
             }
 
-            this.groupState.Init(this.interviewId, this.currentGroupIdentity);
+            this.groupState.Init(this.interviewId, this.Identity);
             this.RaisePropertyChanged(() => this.GroupState);
         }
  
@@ -155,9 +159,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity);
 
-            var sections = questionnaire.GetAllSections().ToList();
-
-            int currentSectionIndex = sections.FindIndex(x => x == this.currentGroupIdentity.Id);
+            int currentSectionIndex = questionnaire.GroupsHierarchy.FindIndex(x => x.Id == this.Identity.Id);
             for (int sectionIndex = currentSectionIndex + 1; sectionIndex < sections.Count; sectionIndex++)
             {
                 var nextSectionIdentity = new Identity(sections[sectionIndex], RosterVector.Empty);
@@ -210,7 +212,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 case NavigationGroupType.InsideGroupOrRoster:
                     await this.navigationState.NavigateToAsync(
                         NavigationIdentity.CreateForGroup(this.groupOrSectionToNavigateIdentity,
-                            anchoredElementIdentity: this.currentGroupIdentity));
+                            anchoredElementIdentity: this.Identity));
                     break;
                 case NavigationGroupType.Section:
                     await this.navigationState.NavigateToAsync(
