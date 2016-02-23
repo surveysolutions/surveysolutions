@@ -881,10 +881,6 @@
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireNameValidatorTests\when_validating_ImportFromDesigner_command_and_no_questionnaire_with_such_title_exists.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireNameValidatorTests\when_validating_ImportFromDesigner_command_and_other_questionnaire_with_such_title_already_exists.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireNameValidatorTests\when_validating_ImportFromDesigner_command_and_same_questionnaire_with_such_title_already_exists.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionsInfoDenormalizerTests\QuestionnaireQuestionsInfoDenormalizerTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionsInfoDenormalizerTests\when_importing_questionnaire_with_7_numeric_questions_in_all_roster_types_with_neted_groups.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionsInfoDenormalizerTests\when_questionnaire_deleted_event_recived.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionsInfoDenormalizerTests\when_template_imported_event_recived_with_version_set.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\CommentsExporterTests\when_getting_data_files_for_questionnaire_and_exported_cell_contains_new_line_symbol.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\InterviewActionsExporterTests\InterviewActionsExporterTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\CommentsExporterTests\CommentsExporterTestsContext.cs" />
@@ -899,6 +895,7 @@
     <Compile Include="SharedKernels\SurveyManagement\TeamViewFactoryTests\when_getting_all_supervisors.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SqliteInmemoryStorage.cs" />
     <Compile Include="SharedKernels\SurveyManagement\TeamViewFactoryTests\when_getting_all_not_locked_supervisors.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\TestInMemoryPlainStorageAccessor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewerInterviewsFactoryTests\InterviewerInterviewsFactoryNUnitTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryTests\InterviewSummaryTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryTests\when_create_interview_summary_with_GPS_prefilled.cs" />
@@ -979,7 +976,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_interview_events_but_for_interview_is_responsible_other_user.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_questions_affected_by_substitutions.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireAssemblyFileAccessorTests\when_storing_assembly_with_empty_content.cs" />
-    <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_creating_questionnaire_imported_from_designer_in_census_mode.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_import_questionnaire_and_base64string_of_assembly_is_empty.cs" />
     <Compile Include="SharedKernels\DataCollection\UserTests\UserTestContext.cs" />
     <Compile Include="SharedKernels\DataCollection\UserTests\when_archive_archived_user.cs" />
@@ -2119,13 +2115,6 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\InterviewSummaryEventHandlerUpdateAnswerTest.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewHardDeleted_event.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_SynchronizationMetadataApplied_event_and_interview_was_created_on_capi.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\QuestionnaireExportStructureDenormalizerTests\when_QuestionnaireDeleted_event_recived.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\QuestionnaireExportStructureDenormalizerTests\when_TemplateImported_event_recived.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\QuestionnaireExportStructureDenormalizerTests\when_TemplateImported_event_recived_and_version_is_set.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\ReferenceInfoForLinkedQuestionsDenormalizerTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\when_importing_questionnaire_and_version_is_set.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\when_importing_questionnaire_with_fixed_roster_with_numeric_question_and_linked_.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\when_questionnaire_deleted_event_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\UserDenormalizerTests\UserDenormalizerContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\UserDenormalizerTests\when_UserLockedBySupervisor_received.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\UserDenormalizerTests\when_UserLocked_received.cs" />
@@ -2264,11 +2253,6 @@
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_single_option_question_and_answer_cant_be_mapped_on_any_option.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_single_option_question_and_answer_cant_be_parsed.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_text_question.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireDenormalizerTests\QuestionnaireDenormalizerTestsContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireDenormalizerTests\when_PlainQuestionnaireRegistered_event_arrived.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireDenormalizerTests\when_questionnaire_is_deleted_and_all_interviews_deleted.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireDenormalizerTests\when_questionnaire_is_deleted_but_interviews_still_exists.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireDenormalizerTests\when_TemplateImported_event_arrived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionInfoFactoryTests\QuestionnaireQuestionInfoFactoryTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionInfoFactoryTests\when_loading_list_of_all_questions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionInfoFactoryTests\when_loading_list_of_all_questions_and_questionnaire_is_absent.cs" />

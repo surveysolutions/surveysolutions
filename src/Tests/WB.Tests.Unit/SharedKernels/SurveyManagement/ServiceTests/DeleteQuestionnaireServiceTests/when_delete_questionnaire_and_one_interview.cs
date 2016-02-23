@@ -8,11 +8,12 @@ using Moq;
 using Nito.AsyncEx.Synchronous;
 using NSubstitute;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQuestionnaireTemplate;
 using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -39,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                 interviewsToDeleteFactory: interviewsToDeleteFactoryMock.Object,
                 plainQuestionnaireRepository:plainQuestionnaireRepository.Object,
                 questionnaireBrowseItemStorage:
-                    Mock.Of<IReadSideRepositoryReader<QuestionnaireBrowseItem>>(
+                    Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(
                         _ => _.GetById(Moq.It.IsAny<string>()) == new QuestionnaireBrowseItem() { Disabled = false, QuestionnaireId = questionnaireId, Version = questionnaireVersion }));
         };
 

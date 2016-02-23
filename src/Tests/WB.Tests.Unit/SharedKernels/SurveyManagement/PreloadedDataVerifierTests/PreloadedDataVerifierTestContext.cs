@@ -20,6 +20,9 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
@@ -40,22 +43,23 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                 questionnaireDocument, new QuestionDataParser(), Mock.Of<IUserViewFactory>(), null);
             return
                 new PreloadedDataVerifier(
-                    Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(
-                        _ =>
-                            _.GetById(Moq.It.IsAny<string>()) == (questionnaireDocument != null
-                                ? new QuestionnaireDocumentVersioned() {Questionnaire = questionnaireDocument}
-                                : null)),
-                    Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(
-                        _ =>
-                            _.GetById(Moq.It.IsAny<string>()) == questionnaireExportStructure),
-                    Mock.Of<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(
-                        _ => _.GetById(Moq.It.IsAny<string>()) == questionnaireRosterStructure),
                     Mock.Of<IPreloadedDataServiceFactory>(
                         _ =>
                             _.CreatePreloadedDataService(Moq.It.IsAny<QuestionnaireExportStructure>(),
                                 Moq.It.IsAny<QuestionnaireRosterStructure>(), Moq.It.IsAny<QuestionnaireDocument>()) ==
                             (preloadedDataService ?? preloadedService)),
-                    userViewFactory ?? Mock.Of<IUserViewFactory>());
+                    userViewFactory ?? Mock.Of<IUserViewFactory>(),
+                    Mock.Of<IPlainQuestionnaireRepository>(
+                        _ =>
+                            _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) ==
+                            questionnaireDocument),
+                    Mock.Of<IQuestionnaireProjectionsRepository>(
+                        _ =>
+                            _.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()) ==
+                            questionnaireExportStructure
+                            &&
+                            _.GetQuestionnaireRosterStructure(Moq.It.IsAny<QuestionnaireIdentity>()) ==
+                            questionnaireRosterStructure));
         }
 
         protected static PreloadedDataByFile CreatePreloadedDataByFile(string[] header=null, string[][] content=null, string fileName=null)

@@ -11,10 +11,12 @@ using NUnit.Framework;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -36,9 +38,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(
                     _ => _.GetById(It.IsAny<string>()) == new InterviewSummary()),
                 userDocumentWriter ?? Mock.Of<IReadSideRepositoryWriter<UserDocument>>(),
-                Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(
+                new InterviewDataExportSettings("", false, 10000, 100, 1, 1),
+                Mock.Of<IQuestionnaireProjectionsRepository>(
                     _ =>
-                        _.GetById(It.IsAny<string>()) == (questionnaire ?? new QuestionnaireExportStructure())), new InterviewDataExportSettings("", false, 10000, 100,1,1));
+                        _.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()) ==
+                        (questionnaire ?? new QuestionnaireExportStructure())));
         }
 
         protected static InterviewHistoryView CreateInterviewHistoryView(Guid? interviewId=null)

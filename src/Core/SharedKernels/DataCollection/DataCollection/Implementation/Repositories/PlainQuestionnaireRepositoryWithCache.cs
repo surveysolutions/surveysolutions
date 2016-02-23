@@ -57,6 +57,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             return this.cache[repositoryId];
         }
 
+        public long GetQuestionnaireContentVersion(QuestionnaireIdentity identity)
+        {
+            return 1;
+        }
+
         public QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireIdentity identity)
         {
             return this.GetQuestionnaireDocument(identity.QuestionnaireId, identity.Version);

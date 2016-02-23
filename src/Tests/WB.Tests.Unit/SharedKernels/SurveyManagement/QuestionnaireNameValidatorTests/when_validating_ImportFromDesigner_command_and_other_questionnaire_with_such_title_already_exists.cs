@@ -1,12 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
+using Moq;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireNameValidatorTests
 {
@@ -16,12 +20,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireNameValidato
         {
             command = Create.Command.ImportFromDesigner(title: title, questionnaireId: importedQuestionnaireId);
 
-            IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaireBrowseItemStorage =
-                Setup.QueryableReadSideRepositoryReaderByQueryResultType<QuestionnaireBrowseItem, List<QuestionnaireBrowseItem>>(new[]
-                {
-                    Create.QuestionnaireBrowseItem(title: title, questionnaireId: differentQuestionnaireId),
-                });
+            var questionnaireBrowseItemStorage = Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
 
+            Mock.Get(questionnaireBrowseItemStorage)
+                .Setup(reader => reader.Query(Moq.It.IsAny<Func<IQueryable<QuestionnaireBrowseItem>, List<QuestionnaireBrowseItem>>>()))
+                .Returns<Func<IQueryable<QuestionnaireBrowseItem>, List<QuestionnaireBrowseItem>>>(query => query.Invoke(new[]
+                {
+                      Create.QuestionnaireBrowseItem(title: title, questionnaireId: differentQuestionnaireId),
+                }.AsQueryable()));
             validator = Create.QuestionnaireNameValidator(questionnaireBrowseItemStorage: questionnaireBrowseItemStorage);
         };
 
