@@ -1,7 +1,9 @@
 ﻿using System;
 using Machine.Specifications;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
@@ -12,6 +14,15 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
     {
         Establish context = () =>
         {
+            imageViewStorage = new SqliteInmemoryStorage<InterviewMultimediaView>();
+            imageViewStorage.StoreAsync(new InterviewMultimediaView
+            {
+                Id = Guid.NewGuid().FormatGuid(),
+                InterviewId = interviewId,
+                FileName = imageFileName,
+                FileId = imageFileId
+            }).WaitAndUnwrapException();
+
             interviewerPlainInterviewFileStorage = CreateInterviewerPlainInterviewFileStorage(
                 fileViewStorage: fileViewStorage,
                 imageViewStorage: imageViewStorage);
@@ -30,16 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
         private static string imageFileName = "image.png";
         private static string imageFileId = "1";
         private static readonly byte[] imageFileBytes = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
-        private static readonly IAsyncPlainStorage<InterviewMultimediaView> imageViewStorage =
-            new TestAsyncPlainStorage<InterviewMultimediaView>(new[]
-            {
-                new InterviewMultimediaView
-                {
-                    InterviewId = interviewId,
-                    FileName = imageFileName,
-                    FileId = imageFileId
-                }
-            });
+        private static IAsyncPlainStorage<InterviewMultimediaView> imageViewStorage;
 
         private static readonly IAsyncPlainStorage<InterviewFileView> fileViewStorage =
             new TestAsyncPlainStorage<InterviewFileView>(new[]
