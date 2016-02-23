@@ -34,11 +34,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                         query = query.Where(x => x.CreatedBy == input.CreatedBy);
                     }
 
-                    if (!input.IsAdminMode.Value)
-                    {
-                        query = query.Where(x => !x.IsDeleted);
-                    }
-
                     if (input.QuestionnaireId.HasValue)
                     {
                         query = query.Where(x => x.QuestionnaireId == input.QuestionnaireId.Value);
@@ -54,6 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                         query = query.Where(x => x.Title.ContainsIgnoreCaseSensitive(input.Filter));
                     }
                 }
+                else { query = query.Where(x => !x.IsDeleted); }
 
                 var queryResult = query.OrderUsingSortExpression(input.Order);
 

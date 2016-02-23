@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires
                             .Select(x => new UsersViewItem {UserId = x.Key.TeamLeadId, UserName = x.Key.TeamLeadName})
                             .OrderBy(x => x.UserName).ToList());
 
-            var questionnaires = this.questionnairesReader.Query(_ => _.Select(questionnaire => new TemplateViewItem
+            var questionnaires = this.questionnairesReader.Query(_ => _.Where(q=>!q.IsDeleted).Select(questionnaire => new TemplateViewItem
             {
                 TemplateId = questionnaire.QuestionnaireId,
                 TemplateName = questionnaire.Title,

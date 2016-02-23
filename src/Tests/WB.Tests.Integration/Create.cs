@@ -410,8 +410,7 @@ namespace WB.Tests.Integration
         {
             var questionnaire = new Questionnaire(
                 Mock.Of<IPlainQuestionnaireRepository>(),
-                Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
-                Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
+                Mock.Of<IQuestionnaireAssemblyFileAccessor>());
 
             questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), questionnaireDocument, false, "base64 string of assembly", 1));
 

@@ -14,9 +14,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewerQuestionnaires
     {
         Establish context = () =>
         {
-            var questionnaire = Mock.Of<QuestionnaireDocumentVersioned>(x => x.QuestionnaireContentVersion == HqQuestionnaireContentVersion);
-            var questionnaireStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(x => x.GetById("11111111111111111111111111111111$1") == questionnaire);
-            controller = Create.Controller.InterviewerQuestionnaires(questionnaireStorage);
+            //var questionnaire = Mock.Of<QuestionnaireDocumentVersioned>(x => x.QuestionnaireContentVersion == HqQuestionnaireContentVersion);
+            //var questionnaireStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(x => x.GetById("11111111111111111111111111111111$1") == questionnaire);
+            controller = Create.Controller.InterviewerQuestionnaires();
         };
 
         Because of = () =>
@@ -28,6 +28,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewerQuestionnaires
         private static HttpResponseMessage response;
         private static InterviewerQuestionnairesController controller;
         private static readonly int InterviewerQuestionnaireContentVersion = 7;
-        private static readonly int HqQuestionnaireContentVersion = 12;
+//        private static readonly int HqQuestionnaireContentVersion = 12;
     }
 }

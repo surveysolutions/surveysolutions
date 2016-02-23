@@ -23,17 +23,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
 
-        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage;
+        private IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
         #endregion
 
         public Questionnaire(
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
-            IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor,
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage)
+            IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor)
         {
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
-            this.questionnaireBrowseItemStorage = questionnaireBrowseItemStorage;
         }
 
         public void ImportFromDesigner(ImportFromDesigner command)
@@ -49,7 +47,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
 
             this.plainQuestionnaireRepository.StoreQuestionnaire(this.EventSourceId, newVersion, document);
             this.questionnaireAssemblyFileAccessor.StoreAssembly(this.EventSourceId, newVersion, command.SupportingAssembly);
-            this.questionnaireBrowseItemStorage.AsVersioned().Store(new QuestionnaireBrowseItem((QuestionnaireDocument) command.Source, newVersion,command.AllowCensusMode), this.EventSourceId.FormatGuid(), newVersion);
+            this.questionnaireBrowseItemStorage.AsVersioned().Store(new QuestionnaireBrowseItem((QuestionnaireDocument) command.Source, newVersion,command.AllowCensusMode, command.QuestionnaireContentVersion), this.EventSourceId.FormatGuid(), newVersion);
             //this.ApplyEvent(new TemplateImported
             //{
             //    AllowCensusMode = command.AllowCensusMode,
@@ -125,7 +123,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
                     "Plain questionnaire {0} ver {1} cannot be registered because it is absent in plain repository.",
                     this.EventSourceId, command.Version));
 
-            this.ApplyEvent(new PlainQuestionnaireRegistered(command.Version, command.AllowCensusMode));
+            //this.ApplyEvent(new PlainQuestionnaireRegistered(command.Version, command.AllowCensusMode));
         }
 
         private static QuestionnaireDocument CastToQuestionnaireDocumentOrThrow(IQuestionnaireDocument source)
@@ -141,13 +139,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
 
         private long GetNextVersion()
         {
-            IPlainTransactionManager plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
 
             var availableVersions =
-                plainTransactionManager.ExecuteInPlainTransaction(
-                    () =>
-                        this.questionnaireBrowseItemStorage.Query(
-                            _ => _.Where(q => q.QuestionnaireId == this.EventSourceId).Select(q => q.Version)));
+                this.questionnaireBrowseItemStorage.Query(
+                    _ => _.Where(q => q.QuestionnaireId == this.EventSourceId).Select(q => q.Version));
             if (!availableVersions.Any())
                 return 1;
             return availableVersions.Max() + 1;
@@ -155,10 +150,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
 
         private QuestionnaireBrowseItem GetQuestionnaireBrowseItem(Guid id, long version)
         {
-            IPlainTransactionManager plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
-            return plainTransactionManager.ExecuteInPlainTransaction(() =>
+            return
                 this.questionnaireBrowseItemStorage.AsVersioned()
-                    .Get(id.FormatGuid(), version));
+                    .Get(id.FormatGuid(), version);
         }
     }
 }

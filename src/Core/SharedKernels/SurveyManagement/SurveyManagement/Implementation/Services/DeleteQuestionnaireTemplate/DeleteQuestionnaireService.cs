@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
     internal class DeleteQuestionnaireService : IDeleteQuestionnaireService
     {
         private readonly Func<IInterviewsToDeleteFactory> interviewsToDeleteFactory;
-        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader;
+        private IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
         private readonly ICommandService commandService;
         private readonly ILogger logger;
 
@@ -29,28 +29,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
 
         public DeleteQuestionnaireService(Func<IInterviewsToDeleteFactory> interviewsToDeleteFactory, 
             ICommandService commandService,
-            ILogger logger,
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader)
+            ILogger logger)
         {
             this.interviewsToDeleteFactory = interviewsToDeleteFactory;
             this.commandService = commandService;
             this.logger = logger;
-            this.questionnaireBrowseItemReader = questionnaireBrowseItemReader;
         }
 
         public Task DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? userId)
         {
-            IPlainTransactionManager plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
-            var questionnaire = plainTransactionManager.ExecuteInPlainTransaction(() => 
-                questionnaireBrowseItemReader.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion));
+            var questionnaire =
+                questionnaireBrowseItemReader.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
 
             if (questionnaire != null)
             {
                 if (!questionnaire.Disabled)
                 {
-                    plainTransactionManager.ExecuteInPlainTransaction(() =>
-                        this.commandService.Execute(new DisableQuestionnaire(questionnaireId, questionnaireVersion,
-                            userId)));
+                    this.commandService.Execute(new DisableQuestionnaire(questionnaireId, questionnaireVersion,
+                        userId));
                 }
             }
 
@@ -84,9 +80,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
             {
                 DeleteInterviews(questionnaireId, questionnaireVersion, userId);
 
+
                 IPlainTransactionManager plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
-                plainTransactionManager.ExecuteInPlainTransaction(() => this.commandService.Execute(new DeleteQuestionnaire(questionnaireId, questionnaireVersion,
-                    userId)));
+                plainTransactionManager.ExecuteInPlainTransaction(() =>
+                    this.commandService.Execute(new DeleteQuestionnaire(questionnaireId, questionnaireVersion,
+                        userId)));
             }
             catch (Exception e)
             {

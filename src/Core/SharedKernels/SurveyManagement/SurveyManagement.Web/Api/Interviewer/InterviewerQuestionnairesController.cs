@@ -6,13 +6,16 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 
@@ -26,18 +29,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter;
         private readonly ISerializer serializer;
 
         public InterviewerQuestionnairesController(
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             ISerializer serializer, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository)
+            IPlainQuestionnaireRepository plainQuestionnaireRepository, IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter)
         {
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.serializer = serializer;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.readsideRepositoryWriter = readsideRepositoryWriter;
         }
 
         [HttpGet]
@@ -77,11 +82,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         public HttpResponseMessage Get(Guid id, int version, long contentVersion)
         {
             var questionnaireDocumentVersioned = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
+            var questionnaireBrowseItem = this.readsideRepositoryWriter.AsVersioned().Get(id.FormatGuid(), version);
 
-            if (questionnaireDocumentVersioned == null)
+            if (questionnaireDocumentVersioned == null || questionnaireBrowseItem==null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            if (contentVersion < this.plainQuestionnaireRepository.GetQuestionnaireContentVersion(new QuestionnaireIdentity(id, version)))
+            if (contentVersion < questionnaireBrowseItem.QuestionnaireContentVersion)
             {
                 return Request.CreateResponse(HttpStatusCode.UpgradeRequired);
             }

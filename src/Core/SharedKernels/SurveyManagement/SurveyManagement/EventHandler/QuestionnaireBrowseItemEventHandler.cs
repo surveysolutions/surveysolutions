@@ -32,9 +32,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public override object[] Writers => new object[0];
 
-        private  QuestionnaireBrowseItem CreateBrowseItem(long version, QuestionnaireDocument questionnaireDocument, bool allowCensusMode)
+        private  QuestionnaireBrowseItem CreateBrowseItem(long version, QuestionnaireDocument questionnaireDocument, bool allowCensusMode, long questionnaireContentVersion)
         {
-            return new QuestionnaireBrowseItem(questionnaireDocument, version, allowCensusMode);
+            return new QuestionnaireBrowseItem(questionnaireDocument, version, allowCensusMode, questionnaireContentVersion);
         }
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             long version = evnt.Payload.Version ?? evnt.EventSequence;
             QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(evnt.EventSourceId, version);
 
-            var view = this.CreateBrowseItem(version, questionnaireDocument, evnt.Payload.AllowCensusMode);
+            var view = this.CreateBrowseItem(version, questionnaireDocument, evnt.Payload.AllowCensusMode, evnt.Payload.ContentVersion??1);
             plainTransactionManager.ExecuteInPlainTransaction(() => this.readsideRepositoryWriter.Store(view, view.Id));
         }
 
@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             long version = evnt.Payload.Version;
             QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
 
-            var view = this.CreateBrowseItem(version, questionnaireDocument, evnt.Payload.AllowCensusMode);
+            var view = this.CreateBrowseItem(version, questionnaireDocument, evnt.Payload.AllowCensusMode, 1);
             plainTransactionManager.ExecuteInPlainTransaction(() => this.readsideRepositoryWriter.Store(view, view.Id));
         }
 

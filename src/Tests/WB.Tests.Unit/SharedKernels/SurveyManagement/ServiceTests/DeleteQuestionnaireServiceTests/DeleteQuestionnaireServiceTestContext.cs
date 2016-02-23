@@ -28,9 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             return
                 new DeleteQuestionnaireService(
                     factory,
-                    commandService ?? Mock.Of<ICommandService>(), Mock.Of<ILogger>(),
-                    questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
-                    plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>());
+                    commandService ?? Mock.Of<ICommandService>(), Mock.Of<ILogger>());
         }
     }
 }
