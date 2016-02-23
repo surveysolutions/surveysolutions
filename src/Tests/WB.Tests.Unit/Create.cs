@@ -558,7 +558,7 @@ namespace WB.Tests.Unit
         {
             return new Core.SharedKernels.SurveyManagement.Implementation.Aggregates.Questionnaire(
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
-                Mock.Of<IQuestionnaireAssemblyFileAccessor>(), Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
+                Mock.Of<IQuestionnaireAssemblyFileAccessor>());
         }
 
         public static DateTimeQuestion DateTimeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
@@ -1338,8 +1338,7 @@ namespace WB.Tests.Unit
         public static MapReportDenormalizer MapReportDenormalizer(
             IReadSideRepositoryWriter<MapReportPoint> mapReportPointStorage = null,
             IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage = null,
-            IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> questionsInfoStorage = null,
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentStorage = null)
+            IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> questionsInfoStorage = null)
             => new MapReportDenormalizer(
                 interviewReferencesStorage ?? new TestInMemoryWriter<InterviewReferences>(),
                 questionsInfoStorage ?? new TestInMemoryWriter<QuestionnaireQuestionsInfo>(),
@@ -1803,7 +1802,7 @@ namespace WB.Tests.Unit
 
         public static QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire)
         {
-            return new QuestionnaireBrowseItem(questionnaire, 1, false);
+            return new QuestionnaireBrowseItem(questionnaire, 1, false,1);
         }
 
         public static QuestionnaireChangeRecord QuestionnaireChangeRecord(
@@ -1881,16 +1880,6 @@ namespace WB.Tests.Unit
                 PublicKey = id ?? Guid.NewGuid(),
                 Children = children?.ToList() ?? new List<IComposite>(),
                 UsesCSharp = usesCSharp,
-            };
-        }
-
-        public static QuestionnaireDocumentVersioned QuestionnaireDocumentVersioned(
-            QuestionnaireDocument questionnaireDocument, long? version = null)
-        {
-            return new QuestionnaireDocumentVersioned
-            {
-                Questionnaire = questionnaireDocument,
-                Version = version ?? 77,
             };
         }
 

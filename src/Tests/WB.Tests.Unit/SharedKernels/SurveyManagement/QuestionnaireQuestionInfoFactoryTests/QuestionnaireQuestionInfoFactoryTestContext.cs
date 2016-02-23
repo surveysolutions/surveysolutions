@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireQuestionInfo
                    && x.PublicKey == (questionId.HasValue? questionId.Value : Guid.NewGuid())
                 );
         }
-        protected static QuestionnaireQuestionInfoFactory CreateQuestionnaireQuestionInfoFactory(IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore = null)
+        protected static QuestionnaireQuestionInfoFactory CreateQuestionnaireQuestionInfoFactory()
         {
             return new QuestionnaireQuestionInfoFactory(Mock.Of<IPlainQuestionnaireRepository>());
         }
