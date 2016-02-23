@@ -38,8 +38,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             set { this.name = value; this.RaisePropertyChanged(); }
         }
 
-        private ObservableRangeCollection<dynamic> items;
-        public ObservableRangeCollection<dynamic> Items
+        private ObservableRangeCollection<IInterviewEntityViewModel> items;
+        public ObservableRangeCollection<IInterviewEntityViewModel> Items
         {
             get { return this.items; }
             set
@@ -88,8 +88,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
         }
 
-        public bool ShouldRemoveDisabledEntities => true;
-
         public void Init(string interviewId, NavigationState navigationState)
         {
             if (navigationState == null) throw new ArgumentNullException(nameof(navigationState));
@@ -101,7 +99,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.eventRegistry.Subscribe(this, interviewId);
             this.navigationState = navigationState;
-            this.Items = new ObservableRangeCollection<dynamic>();
+            this.Items = new ObservableRangeCollection<IInterviewEntityViewModel>();
             this.navigationState.ScreenChanged += this.OnScreenChanged;
         }
 
@@ -175,7 +173,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 {
                     interviewItemViewModel.Dispose();
                 }
-                this.mvxMainThreadDispatcher.RequestMainThreadAction(() => this.Items.Reset(interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<dynamic>())));
+                this.mvxMainThreadDispatcher.RequestMainThreadAction(() => this.Items.Reset(interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<IInterviewEntityViewModel>())));
             }
             finally
             {
@@ -256,7 +254,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                             var existingIdentities =
                                 this.Items
-                                    .OfType<IInterviewEntityViewModel>()
                                     .Select(entity => entity.Identity)
                                     .ToHashSet();
 
@@ -292,7 +289,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                         var itemsToRemove = this
                             .Items
-                            .OfType<IInterviewEntityViewModel>()
                             .Where(item => identitiesToRemove.Contains(item.Identity))
                             .ToList();
 

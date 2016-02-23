@@ -149,9 +149,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public ActiveStageViewModel CurrentStage { get; set; }
         public SideBarSectionsViewModel Sections { get; set; }
         public string QuestionnaireTitle { get; set; }
-        public IEnumerable<dynamic> PrefilledQuestions { get; set; }
+        public IEnumerable<SideBarPrefillQuestion> PrefilledQuestions { get; set; }
 
-        public IEnumerable<dynamic> PrefilledQuestionsStats
+        public IEnumerable<SideBarPrefillQuestion> PrefilledQuestionsStats
         {
             get { return PrefilledQuestions.Where(x => !x.StatsInvisible); }
 
