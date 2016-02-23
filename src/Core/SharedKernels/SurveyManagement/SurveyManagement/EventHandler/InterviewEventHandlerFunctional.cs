@@ -9,11 +9,13 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
@@ -61,12 +63,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewData, AnswerRemoved>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
-        private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures;
-
+        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
 
         public override object[] Readers
         {
-            get { return new object[] { users, questionnriePropagationStructures }; }
+            get { return new object[] { users }; }
         }
 
         private static string CreateLevelIdFromPropagationVector(decimal[] vector)
@@ -260,12 +261,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
 
         public InterviewEventHandlerFunctional(IReadSideRepositoryWriter<UserDocument> users,
-            IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures,
-            IReadSideKeyValueStorage<InterviewData> interviewData)
+            IReadSideKeyValueStorage<InterviewData> interviewData, 
+            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
             : base(interviewData)
         {
             this.users = users;
-            this.questionnriePropagationStructures = questionnriePropagationStructures;
+            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<InterviewCreated> @event)
@@ -344,7 +345,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewData Update(InterviewData state, IPublishedEvent<RosterInstancesAdded> @event)
         {
-            var questionnarie = this.questionnriePropagationStructures.AsVersioned().Get(state.QuestionnaireId.FormatGuid(), state.QuestionnaireVersion);
+            var questionnarie = this.questionnaireProjectionsRepository.GetQuestionnaireRosterStructure(
+                new QuestionnaireIdentity(state.QuestionnaireId, state.QuestionnaireVersion));
 
             foreach (var instance in @event.Payload.Instances)
             {
@@ -359,8 +361,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewData Update(InterviewData state, IPublishedEvent<RosterInstancesRemoved> @event)
         {
+            var questionnarie = this.questionnaireProjectionsRepository.GetQuestionnaireRosterStructure(
+               new QuestionnaireIdentity(state.QuestionnaireId, state.QuestionnaireVersion));
 
-            var questionnarie = this.questionnriePropagationStructures.AsVersioned().Get(state.QuestionnaireId.FormatGuid(), state.QuestionnaireVersion);
             foreach (var instance in @event.Payload.Instances)
             {
                 var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(state, instance.GroupId, questionnarie);
@@ -375,8 +378,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewData Update(InterviewData state, IPublishedEvent<GroupPropagated> @event)
         {
+            var questionnarie = this.questionnaireProjectionsRepository.GetQuestionnaireRosterStructure(
+               new QuestionnaireIdentity(state.QuestionnaireId, state.QuestionnaireVersion));
 
-            var questionnarie = this.questionnriePropagationStructures.AsVersioned().Get(state.QuestionnaireId.FormatGuid(), state.QuestionnaireVersion);
             var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(state,
                                                           @event.Payload.GroupId, questionnarie);
             List<string> keysOfLevelsByScope =

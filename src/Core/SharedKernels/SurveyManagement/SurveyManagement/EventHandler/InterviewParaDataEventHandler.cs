@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -55,7 +56,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
-        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader;
+        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
         private readonly IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage;
         private readonly ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireExportStructure> cacheQuestionnaireExportStructure = new ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireExportStructure>();
         private readonly ConcurrentDictionary<string, UserDocument> cacheUserDocument = new ConcurrentDictionary<string, UserDocument>();
@@ -65,14 +66,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader, 
             IReadSideRepositoryWriter<UserDocument> userReader,
-            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader, 
-            InterviewDataExportSettings interviewDataExportSettings)
+            InterviewDataExportSettings interviewDataExportSettings, 
+            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
         {
             this.readSideStorage = readSideStorage;
             this.interviewSummaryReader = interviewSummaryReader;
             this.userReader = userReader;
-            this.questionnaireReader = questionnaireReader;
             this.interviewDataExportSettings = interviewDataExportSettings;
+            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
         }
 
 
@@ -433,8 +434,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             var cachedQuestionnaireExportStructure =
                 this.cacheQuestionnaireExportStructure.GetOrAdd(
                     new QuestionnaireIdentity(questionnaireId, questionnaireVersion),
-                    (key) =>
-                        this.questionnaireReader.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion));
+                    (key) => this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaireId, questionnaireVersion)));
 
             ReduceCacheIfNeeded(cacheQuestionnaireExportStructure);
             return cachedQuestionnaireExportStructure;

@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 {

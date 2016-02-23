@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire
 {
-    public class QuestionnaireBrowseItem : IReadSideRepositoryEntity
+    public class QuestionnaireBrowseItem
     {
         public QuestionnaireBrowseItem()
         {

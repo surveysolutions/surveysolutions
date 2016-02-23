@@ -73,7 +73,6 @@ using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -144,6 +143,8 @@ using designer::WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGen
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable.CustomCollections;
 using WB.Core.SharedKernels.NonConficltingNamespace;
+using WB.Core.SharedKernels.SurveyManagement.Commands;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 
 namespace WB.Tests.Unit
 {
@@ -552,12 +553,12 @@ namespace WB.Tests.Unit
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>());
         }
 
-        public static Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire DataCollectionQuestionnaire(
+        public static Core.SharedKernels.SurveyManagement.Implementation.Aggregates.Questionnaire DataCollectionQuestionnaire(
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null)
         {
-            return new Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire(
+            return new Core.SharedKernels.SurveyManagement.Implementation.Aggregates.Questionnaire(
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
-                Mock.Of<IQuestionnaireAssemblyFileAccessor>());
+                Mock.Of<IQuestionnaireAssemblyFileAccessor>(), Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
         }
 
         public static DateTimeQuestion DateTimeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
@@ -1342,8 +1343,9 @@ namespace WB.Tests.Unit
             => new MapReportDenormalizer(
                 interviewReferencesStorage ?? new TestInMemoryWriter<InterviewReferences>(),
                 questionsInfoStorage ?? new TestInMemoryWriter<QuestionnaireQuestionsInfo>(),
-                questionnaireDocumentStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
-                mapReportPointStorage ?? new TestInMemoryWriter<MapReportPoint>());
+                mapReportPointStorage ?? new TestInMemoryWriter<MapReportPoint>(),
+                Mock.Of<IPlainQuestionnaireRepository>(),
+                Mock.Of<IQuestionnaireProjectionsRepository>());
 
         public static MultimediaQuestion MultimediaQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer
@@ -1986,10 +1988,10 @@ namespace WB.Tests.Unit
         }
 
         public static QuestionnaireNameValidator QuestionnaireNameValidator(
-            IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
         {
             return new QuestionnaireNameValidator(
-                questionnaireBrowseItemStorage ?? Stub<IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem>>.WithNotEmptyValues);
+                questionnaireBrowseItemStorage ?? Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
         }
 
         public static IPlainQuestionnaireRepository QuestionnaireRepositoryStubWithOneQuestionnaire(

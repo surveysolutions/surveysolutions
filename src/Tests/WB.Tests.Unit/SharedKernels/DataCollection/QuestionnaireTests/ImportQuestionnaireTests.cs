@@ -4,11 +4,12 @@ using Main.Core.Documents;
 using Moq;
 using Ncqrs.Spec;
 using NUnit.Framework;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Commands;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
 using QuestionnaireDeleted = WB.Core.SharedKernels.DataCollection.Events.Questionnaire.QuestionnaireDeleted;
 using TemplateImported = datacollection::Main.Core.Events.Questionnaire.TemplateImported;
 
@@ -20,23 +21,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         public void SetUp()
         {
             AssemblyContext.SetupServiceLocator();
-        }
-
-        [Test]
-        public void CreateNewSnapshot_When_ArgumentIsNotNull_Then_TemplateImportedEventIsRised()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                Questionnaire questionnaire = CreateImportedQuestionnaire();
-                var newState = CreateQuestionnaireDocumentWithOneChapter();
-
-                // act
-                questionnaire.ImportFromDesigner(Create.Event.ImportFromDesigner(Guid.NewGuid(), newState, false, "base64 string of assembly", 1));
-
-                // assert
-                Assert.That(GetLastEvent<TemplateImported>(eventContext).Source, Is.EqualTo(newState));
-            }
         }
 
         [Test]

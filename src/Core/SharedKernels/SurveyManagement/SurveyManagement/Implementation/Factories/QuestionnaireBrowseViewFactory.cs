@@ -3,6 +3,7 @@ using System.Linq;
 using NHibernate.Criterion;
 using NHibernate.Linq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -13,9 +14,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 {
     public class QuestionnaireBrowseViewFactory : IQuestionnaireBrowseViewFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> reader;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> reader;
 
-        public QuestionnaireBrowseViewFactory(IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> reader)
+        public QuestionnaireBrowseViewFactory(IPlainStorageAccessor<QuestionnaireBrowseItem> reader)
         {
             this.reader = reader;
         }

@@ -4,23 +4,26 @@ using System.Text;
 using System.Threading.Tasks;
 using NHibernate.Mapping;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire
 {
     public class SampleUploadViewFactory : IViewFactory<SampleUploadViewInputModel, SampleUploadView>
     {
-        private readonly IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaires;
-        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
+        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
 
-        public SampleUploadViewFactory(IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaires,
-            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
+        public SampleUploadViewFactory(IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires,
+            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
         {
             this.questionnaires = questionnaires;
-            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
+            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
         }
 
         public SampleUploadView Load(SampleUploadViewInputModel input)
@@ -29,7 +32,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire
             if (questionnaire == null)
                 return null;
 
-            var questionnaireExportStructure = this.questionnaireExportStructureStorage.AsVersioned().Get(input.QuestionnaireId.FormatGuid(), input.Version);
+            var questionnaireExportStructure =
+                this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(
+                    new QuestionnaireIdentity(input.QuestionnaireId, input.Version));
+
             if (questionnaireExportStructure == null)
                 return null;
 

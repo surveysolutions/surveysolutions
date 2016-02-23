@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.Core.SharedKernels.DataCollection.Commands.Questionnaire
+namespace WB.Core.SharedKernels.SurveyManagement.Commands
 {
     public class DeleteQuestionnaire : QuestionnaireCommand
     {

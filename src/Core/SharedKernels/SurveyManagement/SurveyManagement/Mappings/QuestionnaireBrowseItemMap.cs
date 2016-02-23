@@ -1,10 +1,12 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Mappings
 {
+    [PlainStorage]
     public class QuestionnaireBrowseItemMap : ClassMapping<QuestionnaireBrowseItem>
     {
         public QuestionnaireBrowseItemMap()

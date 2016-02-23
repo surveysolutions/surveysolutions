@@ -1,7 +1,7 @@
 using System;
 using Ncqrs.Commanding;
 
-namespace WB.Core.SharedKernels.DataCollection.Commands.Questionnaire
+namespace WB.Core.SharedKernels.SurveyManagement.Commands
 {
     public abstract class QuestionnaireCommand : CommandBase
     {

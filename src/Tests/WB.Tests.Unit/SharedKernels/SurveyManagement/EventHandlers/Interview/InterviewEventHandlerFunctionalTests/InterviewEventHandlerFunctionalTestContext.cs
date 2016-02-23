@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewEventHandlerFunctionalTests
@@ -28,8 +29,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             return new InterviewEventHandlerFunctional(
                  userDocumentMockStorage.Object,
-                questionnaireRosterStructureMockStorage.Object,
-                new Mock<IReadSideKeyValueStorage<InterviewData>>().Object);
+                new Mock<IReadSideKeyValueStorage<InterviewData>>().Object,
+                Mock.Of<IQuestionnaireProjectionsRepository>());
         }
 
         protected static QuestionnaireRosterStructure CreateQuestionnaireRosterStructure(Guid scopeId,
