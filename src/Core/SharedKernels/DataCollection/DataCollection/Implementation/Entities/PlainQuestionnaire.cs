@@ -205,6 +205,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool IsQuestionLinked(Guid questionId) => this.GetQuestionOrThrow(questionId).LinkedToQuestionId.HasValue;
 
+        public Guid GetQuestionIdByVariable(string variable)
+        {
+            return this.QuestionCache.Values.Single(x => x.StataExportCaption == variable).PublicKey;
+        }
+
         public string GetQuestionTitle(Guid questionId) => this.GetQuestionOrThrow(questionId).QuestionText;
 
         public string GetQuestionVariableName(Guid questionId) => this.GetQuestionOrThrow(questionId).StataExportCaption;
@@ -532,6 +537,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public bool HasMoreThanOneValidationRule(Guid questionId)
         {
             return this.GetQuestion(questionId).ValidationConditions.Count > 1;
+        }
+
+        public string GetQuestionInstruction(Guid questionId)
+        {
+            return this.GetQuestion(questionId).Instructions;
         }
 
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
