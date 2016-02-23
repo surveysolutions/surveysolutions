@@ -14,6 +14,16 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
     {
         Establish context = () =>
         {
+            fileViewStorage = new SqliteInmemoryStorage<InterviewFileView>();
+
+            fileViewStorage.StoreAsync(
+                new InterviewFileView
+                {
+                    Id = imageFileId,
+                    File = imageFileBytes
+                }
+                ).WaitAndUnwrapException();
+
             imageViewStorage = new SqliteInmemoryStorage<InterviewMultimediaView>();
             imageViewStorage.StoreAsync(new InterviewMultimediaView
             {
@@ -43,15 +53,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
         private static readonly byte[] imageFileBytes = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
         private static IAsyncPlainStorage<InterviewMultimediaView> imageViewStorage;
 
-        private static readonly IAsyncPlainStorage<InterviewFileView> fileViewStorage =
-            new TestAsyncPlainStorage<InterviewFileView>(new[]
-            {
-                new InterviewFileView
-                {
-                    Id = imageFileId,
-                    File = imageFileBytes
-                }
-            });
+        private static IAsyncPlainStorage<InterviewFileView> fileViewStorage;
         private static InterviewerPlainInterviewFileStorage interviewerPlainInterviewFileStorage;
     }
 }
