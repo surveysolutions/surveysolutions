@@ -93,8 +93,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .ResolvesIdFrom<QuestionnaireCommand>(command => command.QuestionnaireId)
                 .InitializesWith<ImportFromDesigner>(aggregate => aggregate.ImportFromDesigner, config => config.ValidatedBy<QuestionnaireNameValidator>())
                 .InitializesWith<RegisterPlainQuestionnaire>(aggregate => aggregate.RegisterPlainQuestionnaire)
-                .Handles<DeleteQuestionnaire>(aggregate => aggregate.DeleteQuestionnaire)
-                .Handles<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire);
+                .InitializesWith<DeleteQuestionnaire>(aggregate => aggregate.DeleteQuestionnaire)
+                .InitializesWith<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire);
 
             CommandRegistry
                 .Setup<User>()

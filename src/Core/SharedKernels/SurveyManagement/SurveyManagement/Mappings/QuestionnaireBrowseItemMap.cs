@@ -24,6 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.IsDeleted);
             Property(x => x.AllowCensusMode);
             Property(x => x.Disabled);
+            Property(x => x.QuestionnaireContentVersion);
 
             List(x => x.FeaturedQuestions, listMap =>
             {

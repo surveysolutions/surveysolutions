@@ -48,14 +48,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             return Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>();
         }
 
-        private static IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> CreateQuestionnaire()
-        {
-            var questionnaireMock = new Mock<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>();
-            questionnaireMock.Setup(_ => _.GetById(Moq.It.IsAny<string>()))
-                .Returns(new QuestionnaireDocumentVersioned() { Questionnaire = new QuestionnaireDocument() });
-            return questionnaireMock.Object;
-        }
-
         private static IReadSideRepositoryWriter<UserDocument> CreateUsersWriterWith1User(string userId, string userName)
         {
             var usersMock = new Mock<IReadSideRepositoryWriter<UserDocument>>();
