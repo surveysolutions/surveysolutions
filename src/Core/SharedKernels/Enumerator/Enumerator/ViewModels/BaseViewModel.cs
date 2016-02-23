@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
-using Microsoft.Practices.ServiceLocation;
 using MvvmCross.Core.ViewModels;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
@@ -8,10 +8,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public abstract class BaseViewModel : MvxViewModel
     {
-        private IPrincipal principal => ServiceLocator.Current.GetInstance<IPrincipal>();
+        private readonly IPrincipal principal;
+        private readonly IViewModelNavigationService viewModelNavigationService;
 
-        private IViewModelNavigationService viewModelNavigationService
-            => ServiceLocator.Current.GetInstance<IViewModelNavigationService>();
+        protected BaseViewModel(IPrincipal principal, IViewModelNavigationService viewModelNavigationService)
+        {
+            this.principal = principal;
+            this.viewModelNavigationService = viewModelNavigationService;
+        }
 
         public virtual bool IsAuthenticationRequired => true;
 
@@ -20,17 +24,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             return Task.FromResult(true);
         }
 
-        public override async void Start()
+        public override void Start()
         {
             base.Start();
 
             if (this.IsAuthenticationRequired && !this.principal.IsAuthenticated)
             {
-                await this.viewModelNavigationService.NavigateToLoginAsync();
+                this.viewModelNavigationService.NavigateToLoginAsync().WaitAndUnwrapException();
                 return;
             }
 
-            await this.StartAsync();
+            this.StartAsync().WaitAndUnwrapException();
         }
     }
 }

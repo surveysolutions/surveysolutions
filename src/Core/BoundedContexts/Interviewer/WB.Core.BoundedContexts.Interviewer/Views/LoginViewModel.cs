@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IPasswordHasher passwordHasher,
             IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
             ISynchronizationService synchronizationService,
-            ILogger logger)
+            ILogger logger) : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.principal = principal;

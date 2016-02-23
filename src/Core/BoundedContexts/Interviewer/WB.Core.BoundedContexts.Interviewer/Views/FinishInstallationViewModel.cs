@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IInterviewerSettings interviewerSettings,
             ISynchronizationService synchronizationService,
             ILogger logger, 
-            IUserInteractionService userInteractionService)
+            IUserInteractionService userInteractionService) : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.principal = principal;
