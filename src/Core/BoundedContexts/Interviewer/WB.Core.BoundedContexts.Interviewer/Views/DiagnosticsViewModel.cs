@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             SendTabletInformationViewModel sendTabletInformationViewModel,
             CheckNewVersionViewModel checkNewVersion,
             BackupRestoreViewModel backupRestore,
-            BandwidthTestViewModel bandwidthTest)
+            BandwidthTestViewModel bandwidthTest) : base(principal, viewModelNavigationService)
         {
             this.principal = principal;
             this.viewModelNavigationService = viewModelNavigationService;
