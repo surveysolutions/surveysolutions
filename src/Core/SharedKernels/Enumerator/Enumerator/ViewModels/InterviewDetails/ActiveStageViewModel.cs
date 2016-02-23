@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -50,7 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.RaisePropertyChanged(() => this.Name);
         }
 
-        public ObservableRangeCollection<dynamic> Items
+        public ObservableRangeCollection<object> Items
         {
             get
             {
@@ -58,11 +59,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 {
                     var completionInterview = this.CompletionInterviewViewModel();
                     completionInterview.Init(this.interviewId);
-                    return new ObservableRangeCollection<dynamic>(completionInterview.ToEnumerable());
+                    return new ObservableRangeCollection<object>(completionInterview.ToEnumerable());
                 }
                 else
                 {
-                    return this.EnumerationStage.Items;
+                    return new ObservableRangeCollection<object>(this.EnumerationStage.Items);
                 }
             }
         }
