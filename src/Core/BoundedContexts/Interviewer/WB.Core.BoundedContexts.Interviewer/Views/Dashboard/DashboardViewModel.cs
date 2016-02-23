@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IPrincipal principal, 
             SynchronizationViewModel synchronization,
             IMvxMessenger messenger,
-            ICommandService commandService)
+            ICommandService commandService) : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.dashboardFactory = dashboardFactory;

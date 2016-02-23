@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IUserInteractionService userInteractionService,
             IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage, 
             IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage,
-            ILogger logger)
+            ILogger logger) : base(principal, viewModelNavigationService)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;

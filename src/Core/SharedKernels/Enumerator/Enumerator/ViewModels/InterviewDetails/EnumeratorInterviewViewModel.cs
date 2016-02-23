@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -37,7 +38,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             NavigationState navigationState,
             AnswerNotifier answerNotifier,
             GroupStateViewModel groupState, 
-            InterviewStateViewModel interviewState)
+            InterviewStateViewModel interviewState,
+            IPrincipal principal,
+            IViewModelNavigationService viewModelNavigationService) : base(principal, viewModelNavigationService)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.questionnaireModelRepository = questionnaireModelRepository;

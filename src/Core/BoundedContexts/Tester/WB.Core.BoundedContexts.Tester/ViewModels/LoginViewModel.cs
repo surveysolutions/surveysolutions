@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
         public LoginViewModel(IPrincipal principal, IDesignerApiService designerApiService, IViewModelNavigationService viewModelNavigationService,
-            IUserInteractionService userInteractionService, IFriendlyErrorMessageService friendlyErrorMessageService)
+            IUserInteractionService userInteractionService, IFriendlyErrorMessageService friendlyErrorMessageService) : base(principal, viewModelNavigationService)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
