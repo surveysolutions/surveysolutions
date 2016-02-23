@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -28,9 +29,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
 
             eventStore = new Mock<IInterviewerEventStorage>();
 
-            inMemoryMultimediaViewRepository = new TestAsyncPlainStorage<InterviewMultimediaView>(interviewMultimediaViews);
+            inMemoryMultimediaViewRepository = new SqliteInmemoryStorage<InterviewMultimediaView>();
+            inMemoryMultimediaViewRepository.StoreAsync(interviewMultimediaViews).WaitAndUnwrapException();
 
-            inMemoryFileViewRepository = new TestAsyncPlainStorage<InterviewFileView>(interviewFileViews);
+            inMemoryFileViewRepository = new SqliteInmemoryStorage<InterviewFileView>();
+            inMemoryFileViewRepository.StoreAsync(interviewFileViews);
 
             interviewerInterviewAccessor = CreateInterviewerInterviewAccessor(
                 commandService: mockOfCommandService.Object,
@@ -66,9 +69,21 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static readonly InterviewMultimediaView[] interviewMultimediaViews =
         {
-            new InterviewMultimediaView { InterviewId = interviewId, FileId = interviewFile1},
-            new InterviewMultimediaView { InterviewId = interviewId, FileId = interviewFile2},
-            new InterviewMultimediaView { InterviewId = Guid.Parse("44444444444444444444444444444444")},
+            new InterviewMultimediaView
+            {
+                Id = Guid.NewGuid().FormatGuid(),
+                InterviewId = interviewId, FileId = interviewFile1
+            },
+            new InterviewMultimediaView
+            {
+                Id = Guid.NewGuid().FormatGuid(),
+                InterviewId = interviewId, FileId = interviewFile2
+            },
+            new InterviewMultimediaView
+            {
+                Id = Guid.NewGuid().FormatGuid(),
+                InterviewId = Guid.Parse("44444444444444444444444444444444")
+            },
         };
         private static readonly InterviewFileView[] interviewFileViews =
         {
@@ -85,7 +100,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         private static readonly Mock<ISnapshotStoreWithCache> mockOfSnapshotStoreWithCache = new Mock<ISnapshotStoreWithCache>();
         private static InterviewerInterviewAccessor interviewerInterviewAccessor;
         private static Mock<IInterviewerEventStorage> eventStore;
-        private static TestAsyncPlainStorage<InterviewMultimediaView> inMemoryMultimediaViewRepository;
-        private static TestAsyncPlainStorage<InterviewFileView> inMemoryFileViewRepository;
+        private static IAsyncPlainStorage<InterviewMultimediaView> inMemoryMultimediaViewRepository;
+        private static IAsyncPlainStorage<InterviewFileView> inMemoryFileViewRepository;
     }
 }

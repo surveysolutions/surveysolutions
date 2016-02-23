@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,9 +10,6 @@ using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
@@ -27,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             var designerApiService = Mock.Of<IDesignerApiService>(
                 _ => _.GetQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(Questionnaires));
 
-            var storageAccessor = new TestAsyncPlainStorage<QuestionnaireListItem>(Enumerable.Empty<QuestionnaireListItem>());
+            var storageAccessor = new SqliteInmemoryStorage<QuestionnaireListItem>();
 
             viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessor,
                 designerApiService: designerApiService);
@@ -44,11 +39,11 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         private static readonly IReadOnlyCollection<QuestionnaireListItem> Questionnaires = new List<QuestionnaireListItem>
         {
-            new QuestionnaireListItem(){IsPublic = false},
-            new QuestionnaireListItem(){IsPublic = false},
-            new QuestionnaireListItem(){IsPublic = true},
-            new QuestionnaireListItem(){IsPublic = true},
-            new QuestionnaireListItem(){IsPublic = true}
+            new QuestionnaireListItem { IsPublic = false, Id = "1"},
+            new QuestionnaireListItem { IsPublic = false, Id = "2"},
+            new QuestionnaireListItem {IsPublic = true, Id = "3"},
+            new QuestionnaireListItem {IsPublic = true, Id = "4"},
+            new QuestionnaireListItem {IsPublic = true, Id = "5"}
         };
     }
 }
