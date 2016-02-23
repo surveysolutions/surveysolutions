@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
@@ -77,7 +78,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 .Select(questionId => new SideBarPrefillQuestion
                 {
                     Question = questionnaireModel.Questions[questionId].Title,
-                    Answer = this.GetAnswer(interview, questionnaireModel, new QuestionnaireReferenceModel { Id = questionId, ModelType = questionnaireModel.Questions[questionId].GetType() }),
+                    Answer = this.GetAnswer(interview, questionnaire, new QuestionnaireReferenceModel { Id = questionId, ModelType = questionnaireModel.Questions[questionId].GetType() }),
                     StatsInvisible = questionnaire.GetQuestionType(questionId) == QuestionType.GpsCoordinates,
                 })
                 .ToList();
@@ -129,12 +130,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Status = this.interviewState.Status;
         }
 
-        private string GetAnswer(IStatefulInterview interview, QuestionnaireModel questionnaire, QuestionnaireReferenceModel referenceToQuestion)
+        private string GetAnswer(IStatefulInterview interview, IQuestionnaire questionnaire, QuestionnaireReferenceModel referenceToQuestion)
         {
             var identityAsString = ConversionHelper.ConvertIdAndRosterVectorToString(referenceToQuestion.Id, new decimal[0]);
             var interviewAnswer = interview.Answers.ContainsKey(identityAsString) ? interview.Answers[identityAsString] : null;
-            var questionModel = questionnaire.Questions[referenceToQuestion.Id];
-            return this.answerToStringService.AnswerToUIString(questionModel, interviewAnswer, interview, questionnaire);
+            return this.answerToStringService.AnswerToUIString(referenceToQuestion.Id, interviewAnswer, interview, questionnaire);
         }
 
         private GroupStatus status;

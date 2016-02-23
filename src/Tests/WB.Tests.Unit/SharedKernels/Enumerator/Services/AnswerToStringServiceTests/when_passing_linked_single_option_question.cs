@@ -1,12 +1,13 @@
 ﻿using System;
 using Machine.Specifications;
+using Moq;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Services;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceTests
 {
@@ -15,38 +16,34 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
         Establish context = () =>
         {
             answerToStringService = CreateAnswerToStringService();
-            var sourceOfLinking =
-                CreateSingleOptionQuestionModel(
-                    new[]
-                    {
-                        new OptionModel {Title = "1", Value = 1},
-                        new OptionModel {Title = "2", Value = 2},
-                        new OptionModel {Title = "answer", Value = 3},
-                        new OptionModel {Title = "4", Value = 4},
-                    });
-            sourceOfLinking.Id = sourceOfLinkId;
-            var answerOnSourceOfLinking = CreateSingleOptionAnswer(3);
-            answerOnSourceOfLinking.RosterVector = new decimal[] { 3 };
+          
+            var answerOnSourceOfLinking = CreateSingleOptionAnswer(sourceOfLinkId, 3);
+            answerOnSourceOfLinking.RosterVector = Create.RosterVector(3);
 
             statefulInterviewMock = Substitute.For<IStatefulInterview>();
             statefulInterviewMock.FindAnswersOfReferencedQuestionForLinkedQuestion(sourceOfLinkId, Arg.Any<Identity>())
                 .Returns(new[] { answerOnSourceOfLinking });
 
-            questionnaireModel = Create.QuestionnaireModel(new BaseQuestionModel[] { sourceOfLinking });
-            singleOptionAnswer = CreateLinkedSingleOptionAnswer(new decimal[] { 3 });
-            singleOptionQuestionModel = CreateLinkedSingleOptionQuestionModel(sourceOfLinkId);
+            singleOptionAnswer = CreateLinkedSingleOptionAnswer(Create.RosterVector(3), linkedId);
+
+            questionnaire = Mock.Of<IQuestionnaire>(_ 
+                => _.IsQuestionLinked(linkedId) == true
+                && _.GetAnswerOptionTitle(sourceOfLinkId, 3) == "answer"
+                && _.GetQuestionReferencedByLinkedQuestion(linkedId) == sourceOfLinkId);
         };
 
-        Because of = () => result = answerToStringService.AnswerToUIString(singleOptionQuestionModel, singleOptionAnswer, statefulInterviewMock, questionnaireModel);
+        Because of = () => 
+            result = answerToStringService.AnswerToUIString(linkedId, singleOptionAnswer, statefulInterviewMock, questionnaire);
 
-        It should_return_linked_answer_text = () => result.ShouldEqual("answer");
+        It should_return_linked_answer_text = () => 
+            result.ShouldEqual("answer");
 
         static string result;
+        static IQuestionnaire questionnaire;
         static LinkedSingleOptionAnswer singleOptionAnswer;
-        static LinkedSingleOptionQuestionModel singleOptionQuestionModel;
         static IAnswerToStringService answerToStringService;
-        static Guid sourceOfLinkId = Guid.NewGuid();
-        static QuestionnaireModel questionnaireModel;
+        static Guid sourceOfLinkId = Id.g1;
+        static Guid linkedId = Id.g2;
         static IStatefulInterview statefulInterviewMock;
     }
 }

@@ -6,7 +6,9 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
@@ -26,6 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly AnswerNotifier answerNotifier;
         private readonly IAnswerToStringService answerToStringService;
         private Guid linkedToQuestionId;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
 
 
         public MultiOptionLinkedToQuestionQuestionViewModel(
@@ -36,13 +39,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IAnswerToStringService answerToStringService,
             IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage,
             IPrincipal userIdentity, ILiteEventRegistry eventRegistry,
-            IMvxMainThreadDispatcher mainThreadDispatcher)
+            IMvxMainThreadDispatcher mainThreadDispatcher, 
+            IPlainQuestionnaireRepository questionnaireRepository)
             : base(
                 questionState, answering, interviewRepository, questionnaireStorage, userIdentity, eventRegistry,
                 mainThreadDispatcher)
         {
             this.answerNotifier = answerNotifier;
             this.answerToStringService = answerToStringService;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
         protected override void InitFromModel(QuestionnaireModel questionnaire)
@@ -59,7 +64,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         protected override IEnumerable<MultiOptionLinkedQuestionOptionViewModel> CreateOptions()
         {
-            QuestionnaireModel questionnaire = this.questionnaireStorage.GetById(interview.QuestionnaireId);
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
             LinkedMultiOptionAnswer thisQuestionAnswers = interview.GetLinkedMultiOptionAnswer(this.questionIdentity);
             IEnumerable<BaseInterviewAnswer> linkedToQuestionAnswers =
@@ -68,8 +73,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             List<MultiOptionLinkedQuestionOptionViewModel> options = new List<MultiOptionLinkedQuestionOptionViewModel>();
             foreach (var answer in linkedToQuestionAnswers)
             {
-                BaseQuestionModel linkedToQuestion = questionnaire.Questions[this.linkedToQuestionId];
-                var option = this.BuildOption(questionnaire, linkedToQuestion, answer, thisQuestionAnswers);
+                var option = this.BuildOption(questionnaire, this.linkedToQuestionId, answer, thisQuestionAnswers);
 
                 if (option != null)
                 {
@@ -176,8 +180,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private MultiOptionLinkedQuestionOptionViewModel BuildOption(QuestionnaireModel questionnaire,
-            BaseQuestionModel linkedToQuestion,
+        private MultiOptionLinkedQuestionOptionViewModel BuildOption(IQuestionnaire questionnaire,
+            Guid linkedToQuestionId,
             BaseInterviewAnswer linkedToAnswer,
             LinkedMultiOptionAnswer linkedMultiOptionAnswer)
         {
@@ -190,7 +194,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return null;
             }
 
-            var title = this.BuildOptionTitle(questionnaire, linkedToQuestion, linkedToAnswer);
+            var title = this.BuildOptionTitle(questionnaire, linkedToQuestionId, linkedToAnswer);
 
             var option = new MultiOptionLinkedQuestionOptionViewModel(this)
             {
@@ -208,9 +212,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return option;
         }
 
-        private string BuildOptionTitle(QuestionnaireModel questionnaire, BaseQuestionModel linkedToQuestion, BaseInterviewAnswer linkedToAnswer)
+        private string BuildOptionTitle(IQuestionnaire questionnaire, Guid linkedToQuestionId, BaseInterviewAnswer linkedToAnswer)
         {
-            string answerAsTitle = this.answerToStringService.AnswerToUIString(linkedToQuestion, linkedToAnswer, interview, questionnaire);
+            string answerAsTitle = this.answerToStringService.AnswerToUIString(linkedToQuestionId, linkedToAnswer, interview, questionnaire);
 
             int currentRosterLevel = this.questionIdentity.RosterVector.Length;
 

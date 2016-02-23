@@ -30,9 +30,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
             return model;
         }
 
-        public static SingleOptionAnswer CreateSingleOptionAnswer(decimal answer)
+        public static SingleOptionAnswer CreateSingleOptionAnswer(Guid id, decimal answer)
         {
-            var singleOptionAnswer = new SingleOptionAnswer();
+            var singleOptionAnswer = new SingleOptionAnswer(id, Create.RosterVector());
             singleOptionAnswer.SetAnswer(answer);
             return singleOptionAnswer;
         }
@@ -58,9 +58,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
             return model;
         }
 
-        public static LinkedSingleOptionAnswer CreateLinkedSingleOptionAnswer(decimal[] answer)
+        public static LinkedSingleOptionAnswer CreateLinkedSingleOptionAnswer(decimal[] answer, Guid? id = null)
         {
-            var model= new LinkedSingleOptionAnswer(Guid.NewGuid(),new decimal[0]);
+            var model= new LinkedSingleOptionAnswer(id ?? Guid.NewGuid(),new decimal[0]);
             model.SetAnswer(answer);
             return model;
         }
