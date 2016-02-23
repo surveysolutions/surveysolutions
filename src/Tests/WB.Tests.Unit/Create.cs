@@ -2130,18 +2130,16 @@ namespace WB.Tests.Unit
             interview = interview ?? Mock.Of<IStatefulInterview>();
 
             return new SingleOptionLinkedQuestionViewModel(
-                Mock.Of<IPrincipal>(_
-                    => _.CurrentUserIdentity == userIdentity),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(_
-                    => _.GetById(It.IsAny<string>()) == questionnaireModel),
-                Mock.Of<IStatefulInterviewRepository>(_
-                    => _.Get(It.IsAny<string>()) == interview),
+                Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity),
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(_ => _.GetById(It.IsAny<string>()) == questionnaireModel),
+                Mock.Of<IStatefulInterviewRepository>(_ => _.Get(It.IsAny<string>()) == interview),
                 Create.AnswerToStringService(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 Stub.MvxMainThreadDispatcher(),
                 questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
                 answering ?? Mock.Of<AnsweringViewModel>(),
-                Mock.Of<AnswerNotifier>());
+                Mock.Of<AnswerNotifier>(),
+                Mock.Of<IPlainQuestionnaireRepository>());
         }
 
         public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null,

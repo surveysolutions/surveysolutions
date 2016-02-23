@@ -26,8 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             var groups = questionnaireDocument.GetAllGroups().ToList();
             var questions = questionnaireDocument.GetAllQuestions().ToList();
-            var entities = questionnaireDocument.GetEntitiesByType<IComposite>().ToList();
-
+            
             var questionIdToRosterLevelDepth = new Dictionary<Guid, int>();
             questionnaireDocument.Children.TreeToEnumerable(x => x.Children)
                 .ForEach(x => PerformCalculationsBasedOnTreeStructure(x, questionIdToRosterLevelDepth));
@@ -39,7 +38,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             questionnaireModel.GroupsWithFirstLevelChildrenAsReferences = groups.ToDictionary(x => x.PublicKey,
                 x => CreateGroupModelWithoutNestedChildren(x, questionnaireModel.Questions));
 
-            questionnaireModel.QuestionsByVariableNames = questions.ToDictionary(x => x.StataExportCaption, x => questionnaireModel.Questions[x.PublicKey]);
             return questionnaireModel;
         }
 

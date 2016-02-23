@@ -1,7 +1,11 @@
-﻿using Machine.Specifications;
+﻿using System;
+using Machine.Specifications;
+using Moq;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Services;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceTests
 {
@@ -10,27 +14,21 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
         Establish context = () =>
         {
             answerToStringService = CreateAnswerToStringService();
-            singleOptionAnswer = CreateSingleOptionAnswer(3);
-            singleOptionQuestionModel = CreateSingleOptionQuestionModel(
-                new[]
-                {
-                    new OptionModel() { Title = "1", Value = 1 },
-                    new OptionModel() { Title = "2", Value = 2 },
-                    new OptionModel() { Title = "3", Value = 3 },
-                    new OptionModel() { Title = "4", Value = 4 },
-                });
+            singleOptionAnswer = CreateSingleOptionAnswer(questionId, 3);
+            questionnaireMock = Mock.Of<IQuestionnaire>(_ => _.GetAnswerOptionTitle(questionId, 3) == "3");
         };
 
         Because of = () =>
-            result = answerToStringService.AnswerToUIString(singleOptionQuestionModel, singleOptionAnswer, null, null);
+            result = answerToStringService.AnswerToUIString(questionId, singleOptionAnswer, null, questionnaireMock);
 
         It should_return_3 = () =>
             result.ShouldEqual("3");
 
 
         static string result;
+        static Guid questionId = Id.g1;
+        static IQuestionnaire questionnaireMock;
         static SingleOptionAnswer singleOptionAnswer;
-        static SingleOptionQuestionModel singleOptionQuestionModel;
         static IAnswerToStringService answerToStringService;
     }
 }

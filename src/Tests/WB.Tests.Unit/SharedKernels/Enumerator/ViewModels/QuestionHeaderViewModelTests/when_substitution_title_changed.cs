@@ -7,7 +7,10 @@ using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
@@ -30,35 +33,21 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             answer.SetAnswer("new value");
             var interview = Mock.Of<IStatefulInterview>(x => x.FindBaseAnswerByOrDeeperRosterLevel(substitedQuestionId, Empty.RosterVector) == answer);
 
-            var questionnaire = new QuestionnaireModel
-            {
-                Questions = new Dictionary<Guid, BaseQuestionModel>(),
-                QuestionsByVariableNames = new Dictionary<string, BaseQuestionModel>()
-            };
-            var substTargetModel = new TextQuestionModel
-            {
-                Title = "Old title %substitute%",
-                Id = substitutionTargetQuestionId
-            };
-            var substitutedModel = new TextQuestionModel
-            {
-                Id = substitedQuestionId,
-                Variable = "substitute"
-            };
-            questionnaire.Questions[substitutionTargetQuestionId] = substTargetModel;
-            questionnaire.Questions[substitedQuestionId] = substitutedModel;
-            questionnaire.QuestionsByVariableNames["blah"] = substTargetModel;
-            questionnaire.QuestionsByVariableNames[substitutedModel.Variable] = substitutedModel;
-
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
-            var questionnaireRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(x => x.GetById(Moq.It.IsAny<string>()) == questionnaire);
 
+            var questionnaireMock = Mock.Of<IQuestionnaire>(_
+            => _.GetQuestionTitle(substitutionTargetQuestionId) == "Old title %substitute%"
+            && _.GetQuestionInstruction(substitutionTargetQuestionId) == "Instruction"
+            && _.GetQuestionIdByVariable("substitute") == substitedQuestionId
+            );
+
+            var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
+            questionnaireRepository.SetReturnsDefault(questionnaireMock);
+           
             ILiteEventRegistry registry = Create.LiteEventRegistry();
             liteEventBus = Create.LiteEventBus(registry);
 
-            viewModel = CreateViewModel(questionnaireRepository,
-                interviewRepository,
-                registry);
+            viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository, registry);
 
             Identity id = new Identity(substitutionTargetQuestionId, Empty.RosterVector);
             viewModel.Init(interviewId, id);
