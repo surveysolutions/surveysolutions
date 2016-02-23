@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -21,11 +22,23 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
         Establish context = () =>
         {
             var interviewsAsyncPlainStorage =
-                new TestAsyncPlainStorage<InterviewView>(new[]
+                new SqliteInmemoryStorage<InterviewView>();
+            interviewsAsyncPlainStorage.StoreAsync(
+            new[]
                 {
-                    new InterviewView { QuestionnaireId = questionnaireIdentity.ToString(), InterviewId = Guid.Parse("22222222222222222222222222222222") },
-                    new InterviewView { QuestionnaireId = questionnaireIdentity.ToString(), InterviewId = Guid.Parse("33333333333333333333333333333333") },
-                });
+                    new InterviewView
+                    {
+                        QuestionnaireId = questionnaireIdentity.ToString(),
+                        InterviewId = Guid.Parse("22222222222222222222222222222222"),
+                        Id = Guid.Parse("22222222222222222222222222222222").FormatGuid()
+                    },
+                    new InterviewView
+                    {
+                        QuestionnaireId = questionnaireIdentity.ToString(),
+                        InterviewId = Guid.Parse("33333333333333333333333333333333"),
+                        Id = Guid.Parse("33333333333333333333333333333333").FormatGuid()
+                    },
+                }).WaitAndUnwrapException();
 
             interviewerQuestionnaireAccessor = CreateInterviewerQuestionnaireAccessor(
                 questionnaireModelViewRepository: mockOfQuestionnaireModelViewRepository.Object,
