@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
             this.navigationState.ScreenChanged += this.OnScreenChanged;
-            await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(new Identity(questionnaireModel.GroupsWithFirstLevelChildrenAsReferences.Keys.First(), new decimal[0])));
+            await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(new Identity(questionnaire.GetAllSections().First(), new decimal[0])));
 
             this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
         }

@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using Moq;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
@@ -21,20 +23,21 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
             sectionAId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             sectionBId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-            var questionnaire = Create.QuestionnaireModel();
-            questionnaire.GroupsHierarchy = new List<GroupsHierarchyModel>
-            {
-                CreateGroupsHierarchyModel(sectionAId, "A"),
-                CreateGroupsHierarchyModel(sectionBId, "B")
-            };
-            questionnaire.GroupsWithFirstLevelChildrenAsReferences = new Dictionary<Guid, GroupModel>();
-            questionnaire.GroupsWithFirstLevelChildrenAsReferences[sectionAId] = new GroupModel { Id = sectionAId, Title = "A" };
-            questionnaire.GroupsWithFirstLevelChildrenAsReferences[sectionBId] = new GroupModel { Id = sectionBId, Title = "B" };
+            //var questionnaire = Create.QuestionnaireModel();
+            //questionnaire.GroupsHierarchy = new List<GroupsHierarchyModel>
+            //{
+            //    CreateGroupsHierarchyModel(sectionAId, "A"),
+            //    CreateGroupsHierarchyModel(sectionBId, "B")
+            //};
+            //questionnaire.GroupsWithFirstLevelChildrenAsReferences = new Dictionary<Guid, GroupModel>();
+            //questionnaire.GroupsWithFirstLevelChildrenAsReferences[sectionAId] = new GroupModel { Id = sectionAId, Title = "A" };
+            //questionnaire.GroupsWithFirstLevelChildrenAsReferences[sectionBId] = new GroupModel { Id = sectionBId, Title = "B" };
 
             var interview = Substitute.For<IStatefulInterview>();
             interview.IsEnabled(Moq.It.IsAny<Identity>()).ReturnsForAnyArgs(true);
 
-            viewModel = CreateSectionsViewModel(questionnaire, interview);
+            var questionnaire = new Mock<IQuestionnaire>();
+            viewModel = CreateSectionsViewModel(questionnaire.Object, interview);
             navigationState = Substitute.For<NavigationState>();
             viewModel.Init("", "", navigationState);
 

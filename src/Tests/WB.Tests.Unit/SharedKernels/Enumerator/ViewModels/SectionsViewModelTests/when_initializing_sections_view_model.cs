@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -17,12 +18,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
     {
         Establish context = () =>
         {
-            var questionnaireModel = Mock.Of<QuestionnaireModel>(_ => _.GroupsWithFirstLevelChildrenAsReferences == listOfSection && _.GroupsHierarchy == sectionsHierarchy);
+            //var questionnaireModel = Mock.Of<QuestionnaireModel>(_ => _.GroupsWithFirstLevelChildrenAsReferences == listOfSection && _.GroupsHierarchy == sectionsHierarchy);
+            var questionnaire = Mock.Of<IQuestionnaire>();
             var interview = Mock.Of<IStatefulInterview>(_ => _.IsEnabled(Moq.It.IsAny<Identity>()) == true);
 
-            questionnaireRepositoryMock
-                .Setup(x => x.GetById(questionnaireId))
-                .Returns(questionnaireModel);
+            questionnaireRepositoryMock.SetReturnsDefault(questionnaire);
             interviewRepositoryMock
                 .Setup(x => x.Get(interviewId))
                 .Returns(interview);
@@ -33,9 +33,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
 
         Because of = () => 
             sectionsModel.Init(questionnaireId, interviewId, navigationState);
-
-        It should_get_questionnaire_by_id_once = () =>
-            questionnaireRepositoryMock.Verify(x => x.GetById(questionnaireId), Times.Once);
 
         It should_initialize_section_list = () =>
             sectionsModel.Sections.ShouldNotBeEmpty();
@@ -48,23 +45,23 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
         private const string questionnaireId = "questionnaire Id";
         private const string interviewId = "interview Id";
         private static readonly NavigationState navigationState = Mock.Of<NavigationState>();
-        private static readonly Mock<IPlainKeyValueStorage<QuestionnaireModel>> questionnaireRepositoryMock = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
+        private static readonly Mock<IPlainQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IPlainQuestionnaireRepository>();
         private static readonly Mock<IStatefulInterviewRepository> interviewRepositoryMock = new Mock<IStatefulInterviewRepository>();
 
         private static readonly Dictionary<Guid, GroupModel> listOfSection = new Dictionary<Guid, GroupModel> 
-                                                                           {
-                                                                               {Guid.Parse("11111111111111111111111111111111"), Create.GroupModel(Guid.Parse("11111111111111111111111111111111"),"Section 1")  },
-                                                                               {Guid.Parse("22222222222222222222222222222222"), Create.GroupModel(Guid.Parse("22222222222222222222222222222222"),"Section 2")  },
-                                                                               {Guid.Parse("33333333333333333333333333333333"), Create.GroupModel(Guid.Parse("33333333333333333333333333333333"),"Section 3")  },
-                                                                               {Guid.Parse("44444444444444444444444444444444"), Create.GroupModel(Guid.Parse("44444444444444444444444444444444"),"Section 4")  },
-                                                                           };
+        {
+            {Guid.Parse("11111111111111111111111111111111"), Create.GroupModel(Guid.Parse("11111111111111111111111111111111"),"Section 1")  },
+            {Guid.Parse("22222222222222222222222222222222"), Create.GroupModel(Guid.Parse("22222222222222222222222222222222"),"Section 2")  },
+            {Guid.Parse("33333333333333333333333333333333"), Create.GroupModel(Guid.Parse("33333333333333333333333333333333"),"Section 3")  },
+            {Guid.Parse("44444444444444444444444444444444"), Create.GroupModel(Guid.Parse("44444444444444444444444444444444"),"Section 4")  },
+        };
 
         private static readonly List<GroupsHierarchyModel> sectionsHierarchy = new List<GroupsHierarchyModel>
-                                                                           {
-                                                                               CreateGroupsHierarchyModel(Guid.Parse("11111111111111111111111111111111"),"Section 1"),
-                                                                               CreateGroupsHierarchyModel(Guid.Parse("22222222222222222222222222222222"),"Section 2"),
-                                                                               CreateGroupsHierarchyModel(Guid.Parse("33333333333333333333333333333333"),"Section 3"),
-                                                                               CreateGroupsHierarchyModel(Guid.Parse("44444444444444444444444444444444"),"Section 4")
-                                                                           };
+        {
+            CreateGroupsHierarchyModel(Guid.Parse("11111111111111111111111111111111"),"Section 1"),
+            CreateGroupsHierarchyModel(Guid.Parse("22222222222222222222222222222222"),"Section 2"),
+            CreateGroupsHierarchyModel(Guid.Parse("33333333333333333333333333333333"),"Section 3"),
+            CreateGroupsHierarchyModel(Guid.Parse("44444444444444444444444444444444"),"Section 4")
+        };
     }
 }

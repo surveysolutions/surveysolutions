@@ -11,10 +11,6 @@ namespace WB.Core.SharedKernels.Enumerator.Models.Questionnaire
 
         public Dictionary<Guid, BaseQuestionModel> Questions { get; set; }
 
-        public Dictionary<string, BaseQuestionModel> QuestionsByVariableNames { get; set; }
-
-        public List<GroupsHierarchyModel> GroupsHierarchy { get; set; }
-
 
         public IntegerNumericQuestionModel GetIntegerNumericQuestion(Guid questionId)
         {

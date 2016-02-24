@@ -167,5 +167,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool HasMoreThanOneValidationRule(Guid questionId);
         string GetQuestionInstruction(Guid questionId);
+        bool IsQuestionFilteredCombobox(Guid questionId);
+        bool IsQuestionCascading(Guid questionId);
     }
 }

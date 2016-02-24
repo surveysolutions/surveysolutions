@@ -1,6 +1,7 @@
 ﻿using Moq;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -15,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SideBarSectionViewMo
         {
             Mock<IStatefulInterviewRepository> interviewRepository = new Mock<IStatefulInterviewRepository>();
             interviewRepository.SetReturnsDefault(interview);
-            Mock<IPlainKeyValueStorage<QuestionnaireModel>> questionnaireRepository = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
+            Mock<IPlainQuestionnaireRepository> questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
             questionnaireRepository.SetReturnsDefault(questionnaire);
 
             return new SideBarSectionViewModel(interviewRepository.Object, 
