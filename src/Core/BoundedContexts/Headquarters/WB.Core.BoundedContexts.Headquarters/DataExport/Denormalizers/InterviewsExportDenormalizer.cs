@@ -4,6 +4,7 @@ using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -20,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
     {
         private readonly IReadSideRepositoryWriter<InterviewDataExportRecord> exportRecords;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDatas;
-        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
         private readonly IReadSideKeyValueStorage<InterviewReferences> interviewReferences;
         private readonly IExportViewFactory exportViewFactory;
 
@@ -35,14 +36,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         public InterviewsExportDenormalizer(IReadSideKeyValueStorage<InterviewData> interviewDatas,
             IReadSideKeyValueStorage<InterviewReferences> interviewReferences,
             IExportViewFactory exportViewFactory, 
-            IReadSideRepositoryWriter<InterviewDataExportRecord> exportRecords, 
-            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
+            IReadSideRepositoryWriter<InterviewDataExportRecord> exportRecords,
+            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
         {
             this.interviewDatas = interviewDatas;
             this.interviewReferences = interviewReferences;
             this.exportViewFactory = exportViewFactory;
             this.exportRecords = exportRecords;
-            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
 
         public override object[] Writers => new object[] { this.exportRecords };
@@ -57,9 +58,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 var interviewReference = this.interviewReferences.GetById(interviewId);
 
                 var questionnaireExportStructure =
-                    this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(
+                    this.questionnaireExportStructureStorage.GetById(
                         new QuestionnaireIdentity(interviewReference.QuestionnaireId,
-                            interviewReference.QuestionnaireVersion));
+                            interviewReference.QuestionnaireVersion).ToString());
 
                 InterviewDataExportView interviewDataExportView =
                     this.exportViewFactory.CreateInterviewDataExportView(questionnaireExportStructure, this.interviewDatas.GetById(interviewId));
