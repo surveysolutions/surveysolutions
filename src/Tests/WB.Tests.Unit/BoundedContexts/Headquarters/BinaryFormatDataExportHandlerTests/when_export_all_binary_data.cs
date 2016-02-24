@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
@@ -45,9 +46,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
                 Create.InterviewData(Create.InterviewQuestion(questionId: multiMediaQuestion.PublicKey,
                     answer: "var.jpg")), interviewId.FormatGuid());
 
-            var questionnaireStorage = new Mock<IReadSideKeyValueStorage<QuestionnaireExportStructure>>();
+            var questionnaireStorage = new Mock<IQuestionnaireProjectionsRepository>();
 
-            questionnaireStorage.Setup(x => x.GetById(Moq.It.IsAny<string>()))
+            questionnaireStorage.Setup(x => x.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()))
                 .Returns(questionnaireExportStructure);
 
             plainInterviewFileStorageMock=new Mock<IPlainInterviewFileStorage>();
@@ -62,7 +63,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
                 CreateBinaryFormatDataExportHandler(
                     interviewSummaries: interviewSummarytorage,
                     interviewDatas: interviewDataStorage,
-                    questionnaireReader: questionnaireStorage.Object,
+                    questionnaireProjectionsRepository: questionnaireStorage.Object,
                     plainFileRepository: plainInterviewFileStorageMock.Object,
                     fileSystemAccessor: fileSystemAccessor.Object);
         };

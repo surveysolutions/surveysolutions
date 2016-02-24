@@ -1,13 +1,10 @@
 using System;
 using System.Linq;
 using Main.Core.Documents;
-using Main.Core.Events.Questionnaire;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;

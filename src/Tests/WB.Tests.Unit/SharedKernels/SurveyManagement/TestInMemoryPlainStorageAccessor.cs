@@ -14,6 +14,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
 
         public T GetById(object id)
         {
+            if (!this.storage.ContainsKey(id))
+                return null;
             return storage[id];
         }
 

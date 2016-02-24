@@ -26,16 +26,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTest
             interviews.Store(Create.InterviewReferences(questionnaireId: questionnaireId, questionnaireVersion: 1), interviewId);
 
             mapPoints = new TestInMemoryWriter<MapReportPoint>();
-            var questionIdToVariable = new TestInMemoryWriter<QuestionnaireQuestionsInfo>();
-            questionIdToVariable.Store(new QuestionnaireQuestionsInfo
+            var questionnaireQuestionsInfo = new QuestionnaireQuestionsInfo
             {
                 QuestionIdToVariableMap = new Dictionary<Guid, string>
-            {
-                {questionId, gpsVariableName }
-            }
-            }, new QuestionnaireIdentity(questionnaireId, 1).ToString());
+                {
+                    {questionId, gpsVariableName}
+                }
+            };
 
-            denormalizer = Create.MapReportDenormalizer(mapPoints, interviews, questionIdToVariable);
+            denormalizer = Create.MapReportDenormalizer(mapPoints, interviews, questionnaireQuestionsInfo: questionnaireQuestionsInfo);
             gpsQuestionAnswered = Create.Event.GeoLocationQuestionAnswered(Create.Identity(questionId, Empty.RosterVector), 1, 2).ToPublishedEvent(eventSourceId: interviewId);
         };
 

@@ -30,7 +30,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTest
 
             denormalizer = Create.MapReportDenormalizer(
                 mapReportPointStorage: mapReportPointStorageMock.Object,
-                interviewReferencesStorage: interviewReferencesStorage);
+                interviewReferencesStorage: interviewReferencesStorage,
+                questionnaireDocument: questionnaireDocument);
         };
 
         Because of = () =>

@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
@@ -18,10 +19,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SampleUploadVie
     internal class SampleUploadViewFactoryNUnitTests
     {
         private SampleUploadViewFactory CreateSampleUploadViewFactory(
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires = null)
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires = null, QuestionnaireExportStructure questionnaireExportStructure=null)
         {
             return new SampleUploadViewFactory(questionnaires ?? new TestInMemoryPlainStorageAccessor<QuestionnaireBrowseItem>(),
-                Mock.Of<IQuestionnaireProjectionsRepository>());
+                Mock.Of<IQuestionnaireProjectionsRepository>(_=>_.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>())== questionnaireExportStructure));
         }
 
         private SampleUploadViewInputModel CreateSampleUploadViewInputModel(Guid? questionnaireId=null)
@@ -86,7 +87,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SampleUploadVie
             var prefiledQuestionVarName = "pref";
 
             var questionnaireStorage = new TestInMemoryPlainStorageAccessor<QuestionnaireBrowseItem>();
-            var questionnaireExportStructureStorage = new TestInMemoryPlainStorageAccessor<QuestionnaireExportStructure>();
 
             var prefilledTxtQuestion = Create.TextQuestion(preFilled: true, variable: prefiledQuestionVarName);
             (questionnaireStorage).AsVersioned()
@@ -102,10 +102,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SampleUploadVie
                 Create.ExportedHeaderItem(questionId: prefilledTxtQuestion.PublicKey,
                     variableName: prefiledQuestionVarName));
 
-            (questionnaireExportStructureStorage).AsVersioned().Store(exportStructure, questionnaireId.FormatGuid(), 1);
-
             var sampleUploadViewFactory =
-                this.CreateSampleUploadViewFactory(questionnaires: questionnaireStorage);
+                this.CreateSampleUploadViewFactory(questionnaires: questionnaireStorage, questionnaireExportStructure: exportStructure);
 
             var result = sampleUploadViewFactory.Load(CreateSampleUploadViewInputModel(questionnaireId: questionnaireId));
 

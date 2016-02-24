@@ -14,11 +14,13 @@ using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -110,7 +112,7 @@ namespace WB.Tests.Integration.EventHandler
 
        private static Type[] typesToExclude =
        {
-            typeof (ILogger), typeof (IQuestionnaireEntityFactory),
+            typeof (ILogger), typeof (IQuestionnaireEntityFactory), typeof(IPlainTransactionManager), typeof(IQuestionnaireProjectionsRepository),
             typeof (IPlainQuestionnaireRepository), typeof (IQuestionnaireAssemblyFileAccessor), typeof (IExportViewFactory),
             typeof (IQuestionnaireRosterStructureFactory), typeof (IReferenceInfoForLinkedQuestionsFactory),
             typeof (IQuestionDetailsViewMapper), typeof(ISerializer), typeof(IMetaInfoBuilder),

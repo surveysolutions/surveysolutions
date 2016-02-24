@@ -68,9 +68,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
         It should_once_execute_HardDeleteInterview_Command = () =>
             commandServiceMock.Verify(x => x.Execute(Moq.It.Is<HardDeleteInterview>(_ => _.InterviewId == interviewId && _.UserId == userId), Moq.It.IsAny<string>()), Times.Once);
 
-        It should_once_call_DeleteQuestionnaireDocument = () =>
-            plainQuestionnaireRepository.Verify(x => x.DeleteQuestionnaireDocument(questionnaireId, questionnaireVersion), Times.Once);
-
         private static async Task RunDeletes()
         {
             var delete1 = deleteQuestionnaireService.DeleteQuestionnaire(questionnaireId, questionnaireVersion,
