@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using MvvmCross.Core.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -21,6 +22,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         protected readonly NavigationState navigationState;
         private readonly AnswerNotifier answerNotifier;
         private readonly IAnswerToStringService answerToStringService;
+        private readonly CompleteInterviewViewModel completeInterviewViewModel;
+        private readonly ActiveStageViewModel activeStageViewModel;
         private readonly GroupStateViewModel groupState;
         private readonly InterviewStateViewModel interviewState;
         protected string interviewId;
@@ -31,7 +34,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IAnswerToStringService answerToStringService,
             SideBarSectionsViewModel sectionsViewModel, 
             BreadCrumbsViewModel breadCrumbsViewModel,
-            ActiveStageViewModel stageViewModel, 
+            ActiveStageViewModel activeStageViewModel,
+            CompleteInterviewViewModel completeInterviewViewModel,
             NavigationState navigationState,
             AnswerNotifier answerNotifier,
             GroupStateViewModel groupState, 
@@ -44,11 +48,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.navigationState = navigationState;
             this.answerNotifier = answerNotifier;
             this.answerToStringService = answerToStringService;
+            this.completeInterviewViewModel = completeInterviewViewModel;
             this.groupState = groupState;
             this.interviewState = interviewState;
 
             this.BreadCrumbs = breadCrumbsViewModel;
-            this.CurrentStage = stageViewModel;
+            this.activeStageViewModel = activeStageViewModel;
             this.Sections = sectionsViewModel;
         }
 
@@ -78,7 +83,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.BreadCrumbs.Init(interviewId, this.navigationState);
             this.Sections.Init(interview.QuestionnaireId, interviewId, this.navigationState);
-            this.CurrentStage.Init(interviewId, this.navigationState);
+            this.activeStageViewModel.Init(interviewId, this.navigationState);
+            this.completeInterviewViewModel.Init(this.interviewId);
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
             this.navigationState.ScreenChanged += this.OnScreenChanged;
@@ -100,6 +106,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (eventArgs.TargetScreen != ScreenType.Group)
             {
                 this.UpdateInterviewStatus(null, ScreenType.Complete);
+                this.ShowViewModel<CompleteInterviewViewModel>(new {interviewId = interviewId});
                 return;
             }
 
@@ -109,6 +116,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
 
             this.UpdateGroupStatus(eventArgs.TargetGroup);
+            this.ShowViewModel<ActiveStageViewModel>(new { interviewId = interviewId, navigationState = navigationState });
         }
 
         private void UpdateGroupStatus(Identity groupIdentity, ScreenType type = ScreenType.Group)
@@ -146,10 +154,28 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         public BreadCrumbsViewModel BreadCrumbs { get; set; }
-        public ActiveStageViewModel CurrentStage { get; set; }
         public SideBarSectionsViewModel Sections { get; set; }
         public string QuestionnaireTitle { get; set; }
         public IEnumerable<SideBarPrefillQuestion> PrefilledQuestions { get; set; }
+
+        public MvxViewModel CurrentStage
+        {
+            get
+            {
+                if (this.navigationState.CurrentScreenType == ScreenType.Complete)
+                {
+                    return this.completeInterviewViewModel;
+//                    var completionInterview = this.CompletionInterviewViewModel();
+//                    completionInterview.Init(this.interviewId);
+//                    return new ObservableRangeCollection<object>(completionInterview.ToEnumerable());
+                }
+                else
+                {
+                    return this.activeStageViewModel;
+                }
+            }
+        }
+
 
         public IEnumerable<SideBarPrefillQuestion> PrefilledQuestionsStats
         {
@@ -161,7 +187,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.navigationState.ScreenChanged -= this.OnScreenChanged;
             this.answerNotifier.QuestionAnswered -= this.AnswerNotifierOnQuestionAnswered;
-            this.CurrentStage.Dispose();
+            this.activeStageViewModel.Dispose();
             this.answerNotifier.Dispose();
             this.BreadCrumbs.Dispose();
             this.Sections.Dispose();

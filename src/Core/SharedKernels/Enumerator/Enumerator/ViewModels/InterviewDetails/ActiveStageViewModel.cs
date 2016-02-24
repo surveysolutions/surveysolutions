@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class ActiveStageViewModel : 
-        MvxNotifyPropertyChanged,
+        MvxViewModel,
         IDisposable
     {
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
@@ -51,19 +51,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.RaisePropertyChanged(() => this.Name);
         }
 
-        public ObservableRangeCollection<object> Items
+        public ObservableRangeCollection<IInterviewEntityViewModel> Items
         {
             get
             {
-                if (this.navigationState.CurrentScreenType == ScreenType.Complete)
+               /* if (this.navigationState.CurrentScreenType == ScreenType.Complete)
                 {
                     var completionInterview = this.CompletionInterviewViewModel();
                     completionInterview.Init(this.interviewId);
                     return new ObservableRangeCollection<object>(completionInterview.ToEnumerable());
                 }
-                else
+                else*/
                 {
-                    return new ObservableRangeCollection<object>(this.EnumerationStage.Items);
+                    return this.EnumerationStage.Items;
                 }
             }
         }
