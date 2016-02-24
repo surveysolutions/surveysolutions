@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries = null,
             IArchiveUtils archiveUtils = null,
             IReadSideKeyValueStorage<InterviewData> interviewDatas = null,
-            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader = null,
+            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository = null,
             IDataExportProcessesService dataExportProcessesService = null)
         {
             return new BinaryFormatDataExportHandler(
@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
                 archiveUtils ?? Mock.Of<IArchiveUtils>(),
                 interviewDatas ?? Mock.Of<IReadSideKeyValueStorage<InterviewData>>(),
                 dataExportProcessesService ?? Mock.Of<IDataExportProcessesService>(),
-                questionnaireProjectionsRepository: Mock.Of<IQuestionnaireProjectionsRepository>());
+                questionnaireProjectionsRepository: questionnaireProjectionsRepository?? Mock.Of<IQuestionnaireProjectionsRepository>());
         }
     }
 }

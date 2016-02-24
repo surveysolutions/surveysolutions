@@ -56,11 +56,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
         It should_never_execute_DeleteQuestionnaire_Command = () =>
             commandServiceMock.Verify(x => x.Execute(Moq.It.Is<DeleteQuestionnaire>(_ => _.QuestionnaireId == questionnaireId && _.QuestionnaireVersion == questionnaireVersion && _.ResponsibleId == userId), Moq.It.IsAny<string>()), Times.Never);
 
-
-        It should_once_call_DeleteQuestionnaireDocument = () =>
-            plainQuestionnaireRepository.Verify(x => x.DeleteQuestionnaireDocument(questionnaireId, questionnaireVersion), Times.Once);
-
-
         private static DeleteQuestionnaireService deleteQuestionnaireService;
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static long questionnaireVersion = 5;

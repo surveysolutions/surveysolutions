@@ -25,6 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
            ICommandService commandService = null, IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null, IPlainQuestionnaireRepository plainQuestionnaireRepository=null)
         {
             Func<IInterviewsToDeleteFactory> factory = () => (interviewsToDeleteFactory ?? Mock.Of<IInterviewsToDeleteFactory>());
+            Setup.InstanceToMockedServiceLocator(questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
             return
                 new DeleteQuestionnaireService(
                     factory,

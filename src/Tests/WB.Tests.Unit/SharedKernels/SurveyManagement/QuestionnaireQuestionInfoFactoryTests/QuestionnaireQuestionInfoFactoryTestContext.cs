@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -23,9 +24,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireQuestionInfo
                    && x.PublicKey == (questionId.HasValue? questionId.Value : Guid.NewGuid())
                 );
         }
-        protected static QuestionnaireQuestionInfoFactory CreateQuestionnaireQuestionInfoFactory()
+        protected static QuestionnaireQuestionInfoFactory CreateQuestionnaireQuestionInfoFactory(QuestionnaireDocument questionnaireDocument = null)
         {
-            return new QuestionnaireQuestionInfoFactory(Mock.Of<IPlainQuestionnaireRepository>());
+            return new QuestionnaireQuestionInfoFactory(Mock.Of<IPlainQuestionnaireRepository>(_ => _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == questionnaireDocument));
         }
 
         protected static QuestionnaireQuestionInfoInputModel CreateQuestionnaireQuestionInfoInputModel(Guid questionnaireId, long version = 1, QuestionType? questionType = null)

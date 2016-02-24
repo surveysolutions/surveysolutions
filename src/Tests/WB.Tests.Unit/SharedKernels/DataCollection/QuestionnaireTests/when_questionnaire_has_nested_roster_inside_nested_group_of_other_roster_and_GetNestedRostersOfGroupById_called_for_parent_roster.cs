@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         Establish context = () =>
         {
             rosterGroupId = new Guid("EBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            QuestionnaireDocument questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
+            questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
             {
                 new NumericQuestion()
                 {

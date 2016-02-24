@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireQuestionInfo
                 }
             };
 
-            factory = CreateQuestionnaireQuestionInfoFactory();
+            factory = CreateQuestionnaireQuestionInfoFactory(questionnaire);
 
             input = CreateQuestionnaireQuestionInfoInputModel(questionnaireId: questionnaireId, version: version, questionType: null);
         };

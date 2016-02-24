@@ -1338,13 +1338,13 @@ namespace WB.Tests.Unit
         public static MapReportDenormalizer MapReportDenormalizer(
             IReadSideRepositoryWriter<MapReportPoint> mapReportPointStorage = null,
             IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage = null,
-            IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> questionsInfoStorage = null)
+            QuestionnaireQuestionsInfo questionnaireQuestionsInfo=null,
+            QuestionnaireDocument questionnaireDocument=null)
             => new MapReportDenormalizer(
                 interviewReferencesStorage ?? new TestInMemoryWriter<InterviewReferences>(),
-                questionsInfoStorage ?? new TestInMemoryWriter<QuestionnaireQuestionsInfo>(),
                 mapReportPointStorage ?? new TestInMemoryWriter<MapReportPoint>(),
-                Mock.Of<IPlainQuestionnaireRepository>(),
-                Mock.Of<IQuestionnaireProjectionsRepository>());
+                Mock.Of<IPlainQuestionnaireRepository>(_=>_.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == questionnaireDocument),
+                Mock.Of<IQuestionnaireProjectionsRepository>(_=>_.GetQuestionnaireQuestionsInfo(Moq.It.IsAny<QuestionnaireIdentity>())== questionnaireQuestionsInfo));
 
         public static MultimediaQuestion MultimediaQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer
