@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -32,16 +33,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage;
         private readonly IReadSideRepositoryWriter<UserDocument> userStorage;
-        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository;
         private readonly string unknown = "Unknown";
 
         public InterviewExportedCommentariesDenormalizer(IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage, 
             IReadSideRepositoryWriter<UserDocument> userStorage,
-            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
+            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository)
         {
             this.interviewCommentariesStorage = interviewCommentariesStorage;
             this.userStorage = userStorage;
-            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
+            this.questionnaireExportStructureRepository = questionnaireExportStructureRepository;
         }
 
         public override object[] Writers => new[] {this.interviewCommentariesStorage};
@@ -186,9 +187,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return;
 
             QuestionnaireExportStructure questionnaire =
-                this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(
-                    new QuestionnaireIdentity(Guid.Parse(interviewCommentaries.QuestionnaireId),
-                        interviewCommentaries.QuestionnaireVersion));
+                this.questionnaireExportStructureRepository.GetById(new QuestionnaireIdentity(Guid.Parse(interviewCommentaries.QuestionnaireId),interviewCommentaries.QuestionnaireVersion).ToString());
             if (questionnaire == null)
                 return;
 

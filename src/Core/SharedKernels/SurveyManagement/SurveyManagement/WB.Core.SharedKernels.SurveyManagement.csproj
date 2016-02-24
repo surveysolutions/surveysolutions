@@ -131,7 +131,6 @@
     <Compile Include="Implementation\Factories\IExportViewFactory.cs" />
     <Compile Include="Implementation\Factories\OldschoolChartStatisticsDataProvider.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireBrowseViewFactory.cs" />
-    <Compile Include="Implementation\Repositories\QuestionnaireProjectionsRepository.cs" />
     <Compile Include="Implementation\Services\AndroidPackageReader.cs" />
     <Compile Include="Implementation\Services\DecimalToHeaderConverter.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\ReadSideHealthChecker.cs" />
@@ -150,7 +149,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Repositories\IQuestionnaireProjectionsRepository.cs" />
     <Compile Include="Services\AndroidPackageInfo.cs" />
     <Compile Include="Services\Export\ITabularFormatExportService.cs" />
     <Compile Include="Services\IAndroidPackageReader.cs" />

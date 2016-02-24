@@ -1,14 +1,22 @@
 using System;
 using System.Linq;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
+using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Commands;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
@@ -20,20 +28,37 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
 
+        private readonly IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory;
+        private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
+        private readonly IExportViewFactory exportViewFactory;
+
         private IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
+
+        private IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions> referenceInfoForLinkedQuestionsStorage => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions>>();
+        private IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireRosterStructure>>();
+        private IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireExportStructure>>();
+        private IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>();
         #endregion
 
         public Questionnaire(
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
-            IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor)
+            IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor, 
+            IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory, 
+            IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory, 
+            IExportViewFactory exportViewFactory)
         {
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
+            this.referenceInfoForLinkedQuestionsFactory = referenceInfoForLinkedQuestionsFactory;
+            this.questionnaireRosterStructureFactory = questionnaireRosterStructureFactory;
+            this.exportViewFactory = exportViewFactory;
         }
 
         public void ImportFromDesigner(ImportFromDesigner command)
         {
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(command.Source);
+
+            document.ConnectChildrenWithParent();
 
             if (string.IsNullOrWhiteSpace(command.SupportingAssembly))
             {
@@ -45,13 +70,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
             this.plainQuestionnaireRepository.StoreQuestionnaire(this.EventSourceId, newVersion, document);
             this.questionnaireAssemblyFileAccessor.StoreAssembly(this.EventSourceId, newVersion, command.SupportingAssembly);
             this.questionnaireBrowseItemStorage.AsVersioned().Store(new QuestionnaireBrowseItem((QuestionnaireDocument) command.Source, newVersion,command.AllowCensusMode, command.QuestionnaireContentVersion), this.EventSourceId.FormatGuid(), newVersion);
-            //this.ApplyEvent(new TemplateImported
-            //{
-            //    AllowCensusMode = command.AllowCensusMode,
-            //    Version = newVersion,
-            //    ResponsibleId = command.CreatedBy,
-            //    ContentVersion = command.QuestionnaireContentVersion
-            //});
+            
+            var questionnaireEntityId = new QuestionnaireIdentity(command.QuestionnaireId, newVersion).ToString();
+
+            this.referenceInfoForLinkedQuestionsStorage.Store(this.referenceInfoForLinkedQuestionsFactory.CreateReferenceInfoForLinkedQuestions(document, newVersion), questionnaireEntityId);
+            this.questionnaireExportStructureStorage.Store(this.exportViewFactory.CreateQuestionnaireExportStructure(document,newVersion), questionnaireEntityId);
+            this.questionnaireRosterStructureStorage.Store(this.questionnaireRosterStructureFactory.CreateQuestionnaireRosterStructure(document,newVersion), questionnaireEntityId);
+            this.questionnaireQuestionsInfoStorage.Store(new QuestionnaireQuestionsInfo{
+                QuestionIdToVariableMap =
+                    document.Find<IQuestion>(question => true).ToDictionary(x => x.PublicKey, x => x.StataExportCaption)
+            }, questionnaireEntityId);
         }
 
         public void DisableQuestionnaire(DisableQuestionnaire command)
@@ -77,12 +105,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
                 browseItem.Disabled = true;
                 questionnaireBrowseItemStorage.Store(browseItem, browseItem.Id);
             }
-
-            //this.ApplyEvent(new QuestionnaireDisabled()
-            //{
-            //    QuestionnaireVersion = command.QuestionnaireVersion,
-            //    ResponsibleId = command.ResponsibleId
-            //});
         }
 
         public void DeleteQuestionnaire(DeleteQuestionnaire command)
@@ -104,11 +126,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
                 browseItem.IsDeleted = true;
                 questionnaireBrowseItemStorage.Store(browseItem, browseItem.Id);
             }
-            //this.ApplyEvent(new QuestionnaireDeleted()
-            //{
-            //    QuestionnaireVersion = command.QuestionnaireVersion,
-            //    ResponsibleId = command.ResponsibleId
-            //});
+
+            var questionnaireEntityId = new QuestionnaireIdentity(command.QuestionnaireId, command.QuestionnaireVersion).ToString();
+            this.referenceInfoForLinkedQuestionsStorage.Remove(questionnaireEntityId);
+            this.questionnaireExportStructureStorage.Remove(questionnaireEntityId);
+            this.questionnaireRosterStructureStorage.Remove(questionnaireEntityId);
+            this.questionnaireQuestionsInfoStorage.Remove(questionnaireEntityId);
         }
 
         public void RegisterPlainQuestionnaire(RegisterPlainQuestionnaire command)

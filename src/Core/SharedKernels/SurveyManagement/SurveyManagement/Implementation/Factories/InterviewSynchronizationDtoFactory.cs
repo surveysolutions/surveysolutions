@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -18,17 +19,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 {
     internal class InterviewSynchronizationDtoFactory : IInterviewSynchronizationDtoFactory
     {
-        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository;
 
         public InterviewSynchronizationDtoFactory(
-            IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository, 
-            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
+            IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository,
+            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage)
         {
             if (interviewsRepository == null) throw new ArgumentNullException(nameof(interviewsRepository));
             
             this.interviewsRepository = interviewsRepository;
-            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
+            this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
         }
 
         public InterviewSynchronizationDto BuildFrom(InterviewData interview, string comments, DateTime? rejectedDateTime, DateTime? interviewerAssignedDateTime)
@@ -55,9 +56,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
 
             var questionnariePropagationStructure =
-                this.questionnaireProjectionsRepository.GetQuestionnaireRosterStructure(
+                this.questionnaireRosterStructureStorage.GetById(
                     new QuestionnaireIdentity(interview.QuestionnaireId,
-                        interview.QuestionnaireVersion));
+                        interview.QuestionnaireVersion).ToString());
 
             Dictionary<Identity, IList<FailedValidationCondition>> failedValidationConditions = new Dictionary<Identity, IList<FailedValidationCondition>>();
             foreach (var interviewLevel in interview.Levels.Values)

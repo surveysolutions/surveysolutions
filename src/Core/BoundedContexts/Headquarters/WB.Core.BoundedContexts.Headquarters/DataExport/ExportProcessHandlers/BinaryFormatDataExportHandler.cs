@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -28,7 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly IArchiveUtils archiveUtils;
         private readonly ITransactionManager transactionManager;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
-        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
         private readonly IDataExportProcessesService dataExportProcessesService;
 
         private const string temporaryTabularExportFolder = "TemporaryBinaryExport";
@@ -44,7 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             IArchiveUtils archiveUtils, 
             IReadSideKeyValueStorage<InterviewData> interviewDatas, 
             IDataExportProcessesService dataExportProcessesService, 
-            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
+            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.plainFileRepository = plainFileRepository;
@@ -54,7 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.archiveUtils = archiveUtils;
             this.interviewDatas = interviewDatas;
             this.dataExportProcessesService = dataExportProcessesService;
-            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
 
             this.pathToExportedData = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath, temporaryTabularExportFolder);
 
@@ -82,10 +83,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
-            QuestionnaireExportStructure questionnaire = this.questionnaireProjectionsRepository
-                .GetQuestionnaireExportStructure
-                (new QuestionnaireIdentity(dataExportProcessDetails.Questionnaire.QuestionnaireId,
-                    dataExportProcessDetails.Questionnaire.Version));
+            QuestionnaireExportStructure questionnaire = this.questionnaireExportStructureStorage
+                .GetById(new QuestionnaireIdentity(dataExportProcessDetails.Questionnaire.QuestionnaireId,
+                    dataExportProcessDetails.Questionnaire.Version).ToString());
        
             var multimediaQuestionIds =
                 questionnaire.HeaderToLevelMap.Values.SelectMany(

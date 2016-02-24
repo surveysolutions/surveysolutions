@@ -3,6 +3,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -22,7 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
-        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage;
         private readonly IReadSideRepositoryWriter<MapReportPoint> mapReportPointStorage;
 
         public override object[] Writers => new object[] { this.mapReportPointStorage };
@@ -32,8 +33,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public MapReportDenormalizer(
             IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage,
             IReadSideRepositoryWriter<MapReportPoint> mapReportPointStorage, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
-            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
+            IPlainQuestionnaireRepository plainQuestionnaireRepository,
+            IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage)
         {
             if (interviewReferencesStorage == null) throw new ArgumentNullException(nameof(interviewReferencesStorage));
             if (mapReportPointStorage == null) throw new ArgumentNullException(nameof(mapReportPointStorage));
@@ -41,7 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.interviewReferencesStorage = interviewReferencesStorage;
             this.mapReportPointStorage = mapReportPointStorage;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
-            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
+            this.questionnaireQuestionsInfoStorage = questionnaireQuestionsInfoStorage;
         }
 
         public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)
@@ -115,7 +116,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private string GetVariableNameForQuestion(Guid questionId, QuestionnaireIdentity questionnaireIdentity)
         {
-            var questionnaireQuestionsInfo = this.questionnaireProjectionsRepository.GetQuestionnaireQuestionsInfo(questionnaireIdentity);
+            var questionnaireQuestionsInfo = this.questionnaireQuestionsInfoStorage.GetById(questionnaireIdentity.ToString());
             return questionnaireQuestionsInfo.QuestionIdToVariableMap[questionId];
         }
     }
