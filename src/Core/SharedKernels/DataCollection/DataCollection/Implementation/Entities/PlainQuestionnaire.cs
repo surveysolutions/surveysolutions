@@ -544,6 +544,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.GetQuestion(questionId).Instructions;
         }
 
+        public bool IsQuestionFilteredCombobox(Guid questionId)
+        {
+            var singleQuestion = (this.GetQuestion(questionId) as SingleQuestion);
+            return singleQuestion?.IsFilteredCombobox != null;
+        }
+
+        public bool IsQuestionCascading(Guid questionId)
+        {
+            var singleQuestion = (this.GetQuestion(questionId) as SingleQuestion);
+            return singleQuestion?.CascadeFromQuestionId != null;
+        }
+
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
         {
             if (!this.cacheOfUnderlyingGroupsAndRosters.ContainsKey(groupId))

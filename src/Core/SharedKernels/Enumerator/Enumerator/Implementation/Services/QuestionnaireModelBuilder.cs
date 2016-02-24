@@ -31,12 +31,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             questionnaireDocument.Children.TreeToEnumerable(x => x.Children)
                 .ForEach(x => PerformCalculationsBasedOnTreeStructure(x, questionIdToRosterLevelDepth));
 
-            questionnaireModel.GroupsHierarchy = questionnaireDocument.Children.Cast<Group>().Select(x => this.BuildGroupsHierarchy(x, 0)).ToList();
+            //questionnaireModel.GroupsHierarchy = questionnaireDocument.Children.Cast<Group>().Select(x => this.BuildGroupsHierarchy(x, 0)).ToList();
 
             questionnaireModel.Questions = questions.ToDictionary(x => x.PublicKey, x => CreateQuestionModel(x, questionnaireDocument, questionIdToRosterLevelDepth));
-
-            questionnaireModel.GroupsWithFirstLevelChildrenAsReferences = groups.ToDictionary(x => x.PublicKey,
-                x => CreateGroupModelWithoutNestedChildren(x, questionnaireModel.Questions));
 
             return questionnaireModel;
         }
@@ -75,48 +72,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 questionIdToRosterLevelDeep.Add(item.PublicKey, countOfRostersToTop);
             }
-        }
-
-        private static GroupModel CreateGroupModelWithoutNestedChildren(Group @group, Dictionary<Guid, BaseQuestionModel> questions)
-        {
-            var groupModel = group.IsRoster ? new RosterModel() : new GroupModel();
-
-            groupModel.Id = group.PublicKey;
-            groupModel.Title = group.Title;
-
-            foreach (var child in group.Children)
-            {
-                var question = child as AbstractQuestion;
-                if (question != null)
-                {
-                    if (question.QuestionScope != QuestionScope.Interviewer || question.Featured)
-                        continue;
-
-                    var questionModelPlaceholder = new QuestionnaireReferenceModel { Id = question.PublicKey, ModelType = questions[question.PublicKey].GetType() };
-                    groupModel.Children.Add(questionModelPlaceholder);
-                    continue;
-                }
-
-                var text = child as StaticText;
-                if (text != null)
-                {
-                    var staticTextModel = new QuestionnaireReferenceModel { Id = text.PublicKey, ModelType = typeof(StaticTextModel) };
-                    groupModel.Children.Add(staticTextModel);
-                    continue;
-                }
-
-                var subGroup = child as Group;
-                if (subGroup != null)
-                {
-                    var subGroupPlaceholder = new QuestionnaireReferenceModel
-                    {
-                        Id = subGroup.PublicKey,
-                        ModelType = subGroup.IsRoster ? typeof(RosterModel) : typeof(GroupModel)
-                    };
-                    groupModel.Children.Add(subGroupPlaceholder);
-                }
-            }
-            return groupModel;
         }
 
         private static BaseQuestionModel CreateQuestionModel(IQuestion question, QuestionnaireDocument questionnaireDocument, Dictionary<Guid, int> questionIdToRosterLevelDeep)

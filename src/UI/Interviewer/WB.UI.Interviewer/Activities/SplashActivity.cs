@@ -303,44 +303,6 @@ namespace WB.UI.Interviewer.Activities
             public string SerializedData { get; set; }
         }
 
-        public async Task FixCompleteScreenAndStoreQuestionnaireAsync(string questionnaireId, QuestionnaireModel questionnaireModel, QuestionnaireDocument questionnaireDocument)
-        {
-            var questionnaireDocumentViewRepository = Mvx.Resolve<IAsyncPlainStorage<QuestionnaireDocumentView>>();
-            var questionnaireModelViewRepository = Mvx.Resolve<IAsyncPlainStorage<QuestionnaireModelView>>();
-
-            if (questionnaireModel?.GroupsHierarchy != null && !questionnaireModel.GroupsHierarchy.Any())
-            {
-                var lastGroupInHierarchy = questionnaireModel.GroupsHierarchy.Last();
-
-                if (lastGroupInHierarchy.Title == UIResources.Interview_Complete_Screen_Title &&
-                    !lastGroupInHierarchy.Children.Any())
-                {
-                    questionnaireModel.GroupsHierarchy.Remove(lastGroupInHierarchy);
-
-                    var groupInQuestionnaireDocument =
-                    questionnaireDocument.Children.OfType<IGroup>().FirstOrDefault(g => g.PublicKey == lastGroupInHierarchy.Id);
-
-                    if (groupInQuestionnaireDocument != null)
-                    {
-                        questionnaireDocument.Children.Remove(groupInQuestionnaireDocument);
-                    }
-                }
-            }
-
-            await questionnaireModelViewRepository.StoreAsync(new QuestionnaireModelView
-            {
-                Id = questionnaireId,
-                Model = questionnaireModel
-            });
-
-            await questionnaireDocumentViewRepository.StoreAsync(new QuestionnaireDocumentView
-            {
-                Id = questionnaireId,
-                Document = questionnaireDocument
-            });
-        }
-
-
         private static async Task RestoreApplicationSettingsAsync()
         {
             var settings = Mvx.Resolve<IInterviewerSettings>();

@@ -158,12 +158,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.groupOrSectionToNavigateIdentity = null;
             this.listOfDisabledSectionBetweenCurrentSectionAndNextEnabledSection.Clear();
 
-            var questionnaire = this.questionnaireModelRepository.GetById(this.QuestionnaireId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity);
 
-            int currentSectionIndex = questionnaire.GroupsHierarchy.FindIndex(x => x.Id == this.currentGroupIdentity.Id);
-            for (int sectionIndex = currentSectionIndex + 1; sectionIndex < questionnaire.GroupsHierarchy.Count; sectionIndex++)
+            var sections = questionnaire.GetAllSections().ToList();
+
+            int currentSectionIndex = sections.FindIndex(x => x == this.currentGroupIdentity.Id);
+            for (int sectionIndex = currentSectionIndex + 1; sectionIndex < sections.Count; sectionIndex++)
             {
-                var nextSectionIdentity = new Identity(questionnaire.GroupsHierarchy[sectionIndex].Id, RosterVector.Empty);
+                var nextSectionIdentity = new Identity(sections[sectionIndex], RosterVector.Empty);
 
                 if (!this.CanNavigateToSection(nextSectionIdentity))
                 {

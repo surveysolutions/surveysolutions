@@ -10,6 +10,8 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTests
 {
@@ -19,21 +21,21 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
         protected static SideBarSectionsViewModel CreateSectionsViewModel(
             IMvxMessenger messenger = null,
             IStatefulInterviewRepository interviewRepository = null,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository = null,
+            IPlainQuestionnaireRepository questionnaireRepository = null,
             ISubstitutionService substitutionService = null,
             ISideBarSectionViewModelsFactory sideBarSectionViewModelsFactory = null)
         {
 
             return new SideBarSectionsViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                questionnaireRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
+                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 Create.LiteEventRegistry(),
                 sideBarSectionViewModelsFactory ?? Stub.SideBarSectionViewModelsFactory());
         }
 
 
-        protected static SideBarSectionsViewModel CreateSectionsViewModel(QuestionnaireModel questionnaire, IStatefulInterview interview)
+        protected static SideBarSectionsViewModel CreateSectionsViewModel(IQuestionnaire questionnaire, IStatefulInterview interview)
         {
-            var questionnaireRepository = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
+            var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
             questionnaireRepository.SetReturnsDefault(questionnaire);
 
             var interviewsRepository = new Mock<IStatefulInterviewRepository>();

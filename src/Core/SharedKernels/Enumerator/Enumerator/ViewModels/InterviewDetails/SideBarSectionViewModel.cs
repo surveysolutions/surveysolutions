@@ -18,6 +18,9 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -27,19 +30,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         IDisposable
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly ISubstitutionService substitutionService;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly ISideBarSectionViewModelsFactory modelsFactory;
         private readonly IMvxMessenger messenger;
         private string interviewId;
-        string questionnaireId;
+        QuestionnaireIdentity questionnaireId;
 
         private SideBarSectionsViewModel root;
 
         public SideBarSectionViewModel(
             IStatefulInterviewRepository statefulInterviewRepository,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
+            IPlainQuestionnaireRepository questionnaireRepository,
             ISubstitutionService substitutionService,
             ILiteEventRegistry eventRegistry,
             ISideBarSectionViewModelsFactory modelsFactory,
@@ -66,10 +69,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.eventRegistry.Subscribe(this, interviewId);
             
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
-            this.questionnaireId = interview.QuestionnaireId;
-            var questionnaireModel = this.questionnaireRepository.GetById(this.questionnaireId);
-            var groupModel =
-                questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[navigationIdentity.TargetGroup.Id];
+            this.questionnaireId = interview.QuestionnaireIdentity;
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            
 
             groupStateViewModel.Init(interviewId, navigationIdentity.TargetGroup);
             this.root = root;
@@ -78,14 +80,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.HasChildren = interview.GetEnabledSubgroups(navigationIdentity.TargetGroup).Any();
             this.NodeDepth = this.UnwrapReferences(x => x.Parent).Count() - 1;
             this.IsCurrent = this.SectionIdentity.Equals(navigationState.CurrentGroup);
-            if (groupModel is RosterModel)
+            var groupId = navigationIdentity.TargetGroup.Id;
+            if (questionnaire.IsRosterGroup(groupId))
             {
                 string rosterTitle = interview.GetRosterTitle(navigationIdentity.TargetGroup);
-                this.Title = this.substitutionService.GenerateRosterName(groupModel.Title, rosterTitle);
+                this.Title = this.substitutionService.GenerateRosterName(questionnaire.GetGroupTitle(groupId), rosterTitle);
             }
             else
             {
-                this.Title = groupModel.Title;
+                this.Title = questionnaire.GetGroupTitle(groupId);
             }
             if (this.Parent != null)
             {
@@ -286,11 +289,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var myChangedInstance = @event.ChangedInstances.SingleOrDefault(x => x.RosterInstance.GetIdentity().Equals(this.SectionIdentity));
             if (myChangedInstance != null)
             {
-                QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(this.questionnaireId);
+                IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireId);
                 if (questionnaire == null) throw new Exception("questionnaire is null");
-                var groupModel = questionnaire.GroupsWithFirstLevelChildrenAsReferences[this.SectionIdentity.Id];
-                if (groupModel == null) throw new Exception("groupModel is null");
-                string groupTitle = groupModel.Title;
+
+                string groupTitle = questionnaire.GetGroupTitle(this.SectionIdentity.Id);
                 string rosterTitle = myChangedInstance.Title;
 
                 string sectionFullName = this.substitutionService.GenerateRosterName(groupTitle, rosterTitle);

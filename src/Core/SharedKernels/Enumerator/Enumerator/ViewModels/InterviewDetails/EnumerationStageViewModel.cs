@@ -121,9 +121,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
             else
             {
-                GroupModel @group = this.questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[eventArgs.TargetGroup.Id];
-
-                this.CreateRegularGroupScreen(eventArgs, @group);
+                this.CreateRegularGroupScreen(eventArgs, eventArgs.TargetGroup.Id);
                 if (!this.eventRegistry.IsSubscribed(this, this.interviewId))
                 {
                     this.eventRegistry.Subscribe(this, this.interviewId);
@@ -131,16 +129,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        private void CreateRegularGroupScreen(ScreenChangedEventArgs eventArgs, GroupModel @group)
+        private void CreateRegularGroupScreen(ScreenChangedEventArgs eventArgs, Guid groupId)
         {
-            if (@group is RosterModel)
+            if (this.questionnaire.IsRosterGroup(groupId))
             {
-                string title = @group.Title;
+                string title = this.questionnaire.GetGroupTitle(groupId);
                 this.Name = this.substitutionService.GenerateRosterName(title, this.interview.GetRosterTitle(eventArgs.TargetGroup));
             }
             else
             {
-                this.Name = @group.Title;
+                this.Name = this.questionnaire.GetGroupTitle(groupId); ;
             }
 
             this.LoadFromModel(eventArgs.TargetGroup);
@@ -198,8 +196,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 if (this.navigationState.CurrentGroup.Equals(rosterInstance.RosterInstance.GetIdentity()))
                 {
-                    GroupModel group = this.questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[this.navigationState.CurrentGroup.Id];
-                    this.Name = this.substitutionService.GenerateRosterName(@group.Title,
+                    this.Name = this.substitutionService.GenerateRosterName(
+                        this.questionnaire.GetGroupTitle(this.navigationState.CurrentGroup.Id),
                         this.interview.GetRosterTitle(this.navigationState.CurrentGroup));
                 }
             }
