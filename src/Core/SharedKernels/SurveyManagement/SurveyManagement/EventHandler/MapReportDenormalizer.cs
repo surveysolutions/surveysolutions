@@ -31,13 +31,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public MapReportDenormalizer(
             IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage,
-            IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> questionsInfoStorage,
             IReadSideRepositoryWriter<MapReportPoint> mapReportPointStorage, 
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
             IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
         {
             if (interviewReferencesStorage == null) throw new ArgumentNullException(nameof(interviewReferencesStorage));
-            if (questionsInfoStorage == null) throw new ArgumentNullException(nameof(questionsInfoStorage));
             if (mapReportPointStorage == null) throw new ArgumentNullException(nameof(mapReportPointStorage));
 
             this.interviewReferencesStorage = interviewReferencesStorage;

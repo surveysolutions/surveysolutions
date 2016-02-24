@@ -2,9 +2,11 @@
 using System.Net;
 using System.Net.Http;
 using Machine.Specifications;
+using Main.Core.Documents;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer;
 using It = Machine.Specifications.It;
 
@@ -14,9 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewerQuestionnaires
     {
         Establish context = () =>
         {
-            //var questionnaire = Mock.Of<QuestionnaireDocumentVersioned>(x => x.QuestionnaireContentVersion == HqQuestionnaireContentVersion);
-            //var questionnaireStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(x => x.GetById("11111111111111111111111111111111$1") == questionnaire);
-            controller = Create.Controller.InterviewerQuestionnaires();
+            controller = Create.Controller.InterviewerQuestionnaires(questionnaire: new QuestionnaireDocument(), questionnaireBrowseItem:new QuestionnaireBrowseItem() {QuestionnaireContentVersion = HqQuestionnaireContentVersion });
         };
 
         Because of = () =>
@@ -28,6 +28,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewerQuestionnaires
         private static HttpResponseMessage response;
         private static InterviewerQuestionnairesController controller;
         private static readonly int InterviewerQuestionnaireContentVersion = 7;
-//        private static readonly int HqQuestionnaireContentVersion = 12;
+        private static readonly int HqQuestionnaireContentVersion = 12;
     }
 }

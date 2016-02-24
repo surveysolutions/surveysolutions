@@ -17,20 +17,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<QuestionnaireDisabled>
     {
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
-        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemWriter;
         private readonly IPlainTransactionManager plainTransactionManager;
 
         public QuestionnaireBrowseItemEventHandler(
-            IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter, 
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemWriter, 
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
             IPlainTransactionManager plainTransactionManager)
         {
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.plainTransactionManager = plainTransactionManager;
-            this.readsideRepositoryWriter = readsideRepositoryWriter;
+            this.questionnaireBrowseItemWriter = questionnaireBrowseItemWriter;
         }
 
-        public override object[] Writers => new object[0];
+        public override object[] Writers => new object[] { this.questionnaireBrowseItemWriter };
 
         private  QuestionnaireBrowseItem CreateBrowseItem(long version, QuestionnaireDocument questionnaireDocument, bool allowCensusMode, long questionnaireContentVersion)
         {
@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(evnt.EventSourceId, version);
 
             var view = this.CreateBrowseItem(version, questionnaireDocument, evnt.Payload.AllowCensusMode, evnt.Payload.ContentVersion??1);
-            plainTransactionManager.ExecuteInPlainTransaction(() => this.readsideRepositoryWriter.Store(view, view.Id));
+            plainTransactionManager.ExecuteInPlainTransaction(() => this.questionnaireBrowseItemWriter.Store(view, view.Id));
         }
 
         public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
@@ -53,29 +53,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
 
             var view = this.CreateBrowseItem(version, questionnaireDocument, evnt.Payload.AllowCensusMode, 1);
-            plainTransactionManager.ExecuteInPlainTransaction(() => this.readsideRepositoryWriter.Store(view, view.Id));
+            plainTransactionManager.ExecuteInPlainTransaction(() => this.questionnaireBrowseItemWriter.Store(view, view.Id));
         }
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
         {
-            var versionedWrapper = this.readsideRepositoryWriter.AsVersioned();
+            var versionedWrapper = this.questionnaireBrowseItemWriter.AsVersioned();
             var browseItem = plainTransactionManager.ExecuteInPlainTransaction(() => versionedWrapper.Get(evnt.EventSourceId.FormatGuid(), evnt.Payload.QuestionnaireVersion));
             if (browseItem == null)
                 return;
 
             browseItem.IsDeleted = true;
-            plainTransactionManager.ExecuteInPlainTransaction(() => this.readsideRepositoryWriter.Store(browseItem, browseItem.Id));
+            plainTransactionManager.ExecuteInPlainTransaction(() => this.questionnaireBrowseItemWriter.Store(browseItem, browseItem.Id));
         }
 
         public void Handle(IPublishedEvent<QuestionnaireDisabled> evnt)
         {
-            var versionedWrapper = this.readsideRepositoryWriter.AsVersioned();
+            var versionedWrapper = this.questionnaireBrowseItemWriter.AsVersioned();
             var browseItem = plainTransactionManager.ExecuteInPlainTransaction(() => versionedWrapper.Get(evnt.EventSourceId.FormatGuid(), evnt.Payload.QuestionnaireVersion));
             if (browseItem == null)
                 return;
 
             browseItem.Disabled = true;
-            plainTransactionManager.ExecuteInPlainTransaction(() => this.readsideRepositoryWriter.Store(browseItem, browseItem.Id));
+            plainTransactionManager.ExecuteInPlainTransaction(() => this.questionnaireBrowseItemWriter.Store(browseItem, browseItem.Id));
         }
     }
 }
