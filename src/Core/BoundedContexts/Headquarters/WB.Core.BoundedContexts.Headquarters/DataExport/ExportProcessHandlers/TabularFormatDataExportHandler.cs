@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -22,7 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly ITabularFormatExportService tabularFormatExportService;
         private readonly IEnvironmentContentService environmentContentService;
-        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
 
         public TabularFormatDataExportHandler(
             IFileSystemAccessor fileSystemAccessor, 
@@ -33,13 +34,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             IEnvironmentContentService environmentContentService, 
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             IDataExportProcessesService dataExportProcessesService,
-            ILogger logger, IQuestionnaireProjectionsRepository questionnaireProjectionsRepository) : 
+            ILogger logger, IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage) : 
             base(fileSystemAccessor, archiveUtils, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, logger)
         {
             this.transactionManagerProvider = transactionManagerProvider;
             this.tabularFormatExportService = tabularFormatExportService;
             this.environmentContentService = environmentContentService;
-            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
 
         protected override DataExportFormat Format => DataExportFormat.Tabular;
@@ -56,8 +57,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() =>
             {
                 var questionnaireExportStructure =
-                    this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(
-                        new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
+                    this.questionnaireExportStructureStorage.GetById(
+                        new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version).ToString());
 
                 this.environmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, directoryPath, cancellationToken);
             });

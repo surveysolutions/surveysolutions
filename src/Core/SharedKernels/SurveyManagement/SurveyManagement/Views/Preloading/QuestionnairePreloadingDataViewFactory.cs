@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -12,18 +13,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Preloading
 {
     public class QuestionnairePreloadingDataViewFactory : IViewFactory<QuestionnairePreloadingDataInputModel, QuestionnairePreloadingDataItem>
     {
-        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
 
-        public QuestionnairePreloadingDataViewFactory(IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
+        public QuestionnairePreloadingDataViewFactory(IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
         {
-            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
 
         public QuestionnairePreloadingDataItem Load(QuestionnairePreloadingDataInputModel input)
         {
             var questionnaire =
-                this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(
-                    new QuestionnaireIdentity(input.QuestionnaireId, input.QuestionnaireVerstion));
+                this.questionnaireExportStructureStorage.GetById(
+                    new QuestionnaireIdentity(input.QuestionnaireId, input.QuestionnaireVerstion).ToString());
             if (questionnaire == null)
                 return null;
             var firstLevel = questionnaire.HeaderToLevelMap[new ValueVector<Guid>()];

@@ -28,7 +28,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
         private static readonly Dictionary<string, SampleCreationStatus> preLoadingStatuses = new Dictionary<string, SampleCreationStatus>();
 
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
-        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+        private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
         private readonly IPlainTransactionManager transactionManager;
         private readonly SampleImportSettings sampleImportSettings;
@@ -40,13 +41,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             IPlainTransactionManager transactionManager,
             SampleImportSettings sampleImportSettings, 
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
-            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
+            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage, 
+            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage)
         {
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.transactionManager = transactionManager;
             this.sampleImportSettings = sampleImportSettings;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
-            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
+            this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
         }
 
         public void CreatePanel(Guid questionnaireId, long version, string id, PreloadedDataByFile[] data, Guid responsibleHeadquarterId,
@@ -102,8 +105,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             try
             {
                 bigTemplate = this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireId, version);
-                questionnaireExportStructure = this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaireId, version));
-                questionnaireRosterStructure = this.questionnaireProjectionsRepository.GetQuestionnaireRosterStructure(new QuestionnaireIdentity(questionnaireId, version));
+                questionnaireExportStructure = this.questionnaireExportStructureStorage.GetById(new QuestionnaireIdentity(questionnaireId, version).ToString());
+                questionnaireRosterStructure = this.questionnaireRosterStructureStorage.GetById(new QuestionnaireIdentity(questionnaireId, version).ToString());
             }
             finally
             {

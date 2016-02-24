@@ -7,6 +7,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
@@ -25,9 +26,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
             document.ConnectChildrenWithParent();
             return new InterviewSynchronizationDtoFactory(
                 Mock.Of<IReadSideRepositoryWriter<InterviewStatuses>>(),
-                Mock.Of<IQuestionnaireProjectionsRepository>(
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireRosterStructure>>(
                     _ =>
-                        _.GetQuestionnaireRosterStructure(Moq.It.IsAny<QuestionnaireIdentity>()) ==
+                        _.GetById(Moq.It.IsAny<string>()) ==
                         new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(document, 1)));
         }
 
@@ -35,9 +36,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
         {
             return new InterviewSynchronizationDtoFactory(
                 Mock.Of<IReadSideRepositoryWriter<InterviewStatuses>>(),
-                Mock.Of<IQuestionnaireProjectionsRepository>(
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireRosterStructure>>(
                     _ =>
-                        _.GetQuestionnaireRosterStructure(Moq.It.IsAny<QuestionnaireIdentity>()) ==
+                        _.GetById(Moq.It.IsAny<string>()) ==
                         questionnaireRosterStructure));
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using Moq;
 using NUnit.Framework;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -16,12 +17,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewEx
         private InterviewExportedCommentariesDenormalizer CreateInterviewExportedCommentariesDenormalizer(
             IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage = null,
             IReadSideRepositoryWriter<UserDocument> userStorage = null,
-            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader = null)
+            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireReader = null)
         {
             return new InterviewExportedCommentariesDenormalizer(
                 interviewCommentariesStorage ?? new TestInMemoryWriter<InterviewCommentaries>(),
                 userStorage ?? new TestInMemoryWriter<UserDocument>(),
-                Mock.Of<IQuestionnaireProjectionsRepository>());
+                questionnaireReader??Mock.Of<IPlainKeyValueStorage<QuestionnaireExportStructure>>());
         }
 
         [Test]

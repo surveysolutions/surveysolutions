@@ -4,6 +4,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -24,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries = null,
             IArchiveUtils archiveUtils = null,
             IReadSideKeyValueStorage<InterviewData> interviewDatas = null,
-            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository = null,
+            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage = null,
             IDataExportProcessesService dataExportProcessesService = null)
         {
             return new BinaryFormatDataExportHandler(
@@ -37,7 +38,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
                 archiveUtils ?? Mock.Of<IArchiveUtils>(),
                 interviewDatas ?? Mock.Of<IReadSideKeyValueStorage<InterviewData>>(),
                 dataExportProcessesService ?? Mock.Of<IDataExportProcessesService>(),
-                questionnaireProjectionsRepository: questionnaireProjectionsRepository?? Mock.Of<IQuestionnaireProjectionsRepository>());
+                questionnaireExportStructureStorage: questionnaireExportStructureStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireExportStructure>>());
         }
     }
 }

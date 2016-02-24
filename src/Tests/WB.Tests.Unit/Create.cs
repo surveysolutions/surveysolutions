@@ -558,7 +558,10 @@ namespace WB.Tests.Unit
         {
             return new Core.SharedKernels.SurveyManagement.Implementation.Aggregates.Questionnaire(
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
-                Mock.Of<IQuestionnaireAssemblyFileAccessor>());
+                Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
+                new ReferenceInfoForLinkedQuestionsFactory(),
+                new QuestionnaireRosterStructureFactory(),
+                Mock.Of<IExportViewFactory>());
         }
 
         public static DateTimeQuestion DateTimeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
@@ -1344,7 +1347,7 @@ namespace WB.Tests.Unit
                 interviewReferencesStorage ?? new TestInMemoryWriter<InterviewReferences>(),
                 mapReportPointStorage ?? new TestInMemoryWriter<MapReportPoint>(),
                 Mock.Of<IPlainQuestionnaireRepository>(_=>_.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == questionnaireDocument),
-                Mock.Of<IQuestionnaireProjectionsRepository>(_=>_.GetQuestionnaireQuestionsInfo(Moq.It.IsAny<QuestionnaireIdentity>())== questionnaireQuestionsInfo));
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(_=>_.GetById(Moq.It.IsAny<string>())== questionnaireQuestionsInfo));
 
         public static MultimediaQuestion MultimediaQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer

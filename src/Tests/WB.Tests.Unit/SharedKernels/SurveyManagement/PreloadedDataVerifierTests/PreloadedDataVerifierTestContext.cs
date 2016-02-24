@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
@@ -53,13 +54,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                         _ =>
                             _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) ==
                             questionnaireDocument),
-                    Mock.Of<IQuestionnaireProjectionsRepository>(
-                        _ =>
-                            _.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()) ==
-                            questionnaireExportStructure
-                            &&
-                            _.GetQuestionnaireRosterStructure(Moq.It.IsAny<QuestionnaireIdentity>()) ==
-                            questionnaireRosterStructure));
+                    Mock.Of<IPlainKeyValueStorage<QuestionnaireExportStructure>>( _ => _.GetById(Moq.It.IsAny<string>()) == questionnaireExportStructure),
+                    Mock.Of<IPlainKeyValueStorage<QuestionnaireRosterStructure>>( _ => _.GetById(Moq.It.IsAny<string>()) == questionnaireRosterStructure));
         }
 
         protected static PreloadedDataByFile CreatePreloadedDataByFile(string[] header=null, string[][] content=null, string fileName=null)

@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -25,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         private readonly ILogger logger;
-        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
         private readonly IMetaDescriptionFactory metaDescriptionFactory;
@@ -35,15 +36,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
             IFileSystemAccessor fileSystemAccessor,
             ILogger logger,
             IMetaDescriptionFactory metaDescriptionFactory, 
-            IQuestionnaireLabelFactory questionnaireLabelFactory, 
-            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository, 
+            IQuestionnaireLabelFactory questionnaireLabelFactory,
+            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage, 
             IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
             this.metaDescriptionFactory = metaDescriptionFactory;
             this.questionnaireLabelFactory = questionnaireLabelFactory;
-            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
         }
 
@@ -118,8 +119,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
         private QuestionnaireExportStructure GetQuestionnaireExportStructure(Guid questionnaireId, long questionnaireVersion)
         {
             return
-                this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(
-                    new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
+                this.questionnaireExportStructureStorage.GetById(
+                    new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString());
         }
 
         private QuestionnaireDocument GetQuestionnaireDocument(Guid questionnaireId, long questionnaireVersion)

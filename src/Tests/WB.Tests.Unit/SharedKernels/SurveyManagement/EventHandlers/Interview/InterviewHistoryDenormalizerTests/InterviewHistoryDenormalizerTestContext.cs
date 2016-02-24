@@ -10,6 +10,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -39,9 +40,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                     _ => _.GetById(It.IsAny<string>()) == new InterviewSummary()),
                 userDocumentWriter ?? Mock.Of<IReadSideRepositoryWriter<UserDocument>>(),
                 new InterviewDataExportSettings("", false, 10000, 100, 1, 1),
-                Mock.Of<IQuestionnaireProjectionsRepository>(
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireExportStructure>>(
                     _ =>
-                        _.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()) ==
+                        _.GetById(Moq.It.IsAny<string>()) ==
                         (questionnaire ?? new QuestionnaireExportStructure())));
         }
 

@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -63,7 +64,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewData, AnswerRemoved>
     {
         private readonly IReadSideRepositoryWriter<UserDocument> users;
-        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
 
         public override object[] Readers
         {
@@ -261,12 +262,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
 
         public InterviewEventHandlerFunctional(IReadSideRepositoryWriter<UserDocument> users,
-            IReadSideKeyValueStorage<InterviewData> interviewData, 
-            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
+            IReadSideKeyValueStorage<InterviewData> interviewData, IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage)
             : base(interviewData)
         {
             this.users = users;
-            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
+            this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<InterviewCreated> @event)
@@ -345,8 +345,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewData Update(InterviewData state, IPublishedEvent<RosterInstancesAdded> @event)
         {
-            var questionnarie = this.questionnaireProjectionsRepository.GetQuestionnaireRosterStructure(
-                new QuestionnaireIdentity(state.QuestionnaireId, state.QuestionnaireVersion));
+            var questionnarie = this.questionnaireRosterStructureStorage.GetById(
+                new QuestionnaireIdentity(state.QuestionnaireId, state.QuestionnaireVersion).ToString());
 
             foreach (var instance in @event.Payload.Instances)
             {
@@ -361,8 +361,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewData Update(InterviewData state, IPublishedEvent<RosterInstancesRemoved> @event)
         {
-            var questionnarie = this.questionnaireProjectionsRepository.GetQuestionnaireRosterStructure(
-               new QuestionnaireIdentity(state.QuestionnaireId, state.QuestionnaireVersion));
+            var questionnarie = this.questionnaireRosterStructureStorage.GetById(
+               new QuestionnaireIdentity(state.QuestionnaireId, state.QuestionnaireVersion).ToString());
 
             foreach (var instance in @event.Payload.Instances)
             {
@@ -378,8 +378,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewData Update(InterviewData state, IPublishedEvent<GroupPropagated> @event)
         {
-            var questionnarie = this.questionnaireProjectionsRepository.GetQuestionnaireRosterStructure(
-               new QuestionnaireIdentity(state.QuestionnaireId, state.QuestionnaireVersion));
+            var questionnarie = this.questionnaireRosterStructureStorage.GetById(
+               new QuestionnaireIdentity(state.QuestionnaireId, state.QuestionnaireVersion).ToString());
 
             var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(state,
                                                           @event.Payload.GroupId, questionnarie);

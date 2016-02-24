@@ -11,9 +11,11 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
@@ -22,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly ITransactionManagerProvider transactionManager;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILogger logger;
-        private readonly IQuestionnaireProjectionsRepository questionnaireProjectionsRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository;
         private readonly ITabFileReader tabReader;
         private readonly IDatasetWriterFactory datasetWriterFactory;
         private readonly IDataQueryFactory dataQueryFactory;
@@ -36,8 +38,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             ITabFileReader tabReader,
             IDataQueryFactory dataQueryFactory,
             IDatasetWriterFactory datasetWriterFactory, 
-            IQuestionnaireLabelFactory questionnaireLabelFactory, 
-            IQuestionnaireProjectionsRepository questionnaireProjectionsRepository)
+            IQuestionnaireLabelFactory questionnaireLabelFactory,
+            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository)
         {
             this.transactionManager = transactionManager;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -46,7 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.tabReader = tabReader;
             this.datasetWriterFactory = datasetWriterFactory;
             this.questionnaireLabelFactory = questionnaireLabelFactory;
-            this.questionnaireProjectionsRepository = questionnaireProjectionsRepository;
+            this.questionnaireExportStructureRepository = questionnaireExportStructureRepository;
             this.dataQueryFactory = dataQueryFactory;
         }
 
@@ -80,8 +82,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                 var questionnaireExportStructure =
                     this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
-                        this.questionnaireProjectionsRepository.GetQuestionnaireExportStructure(
-                            new QuestionnaireIdentity(questionnaireId, questionnaireVersion)));
+                        this.questionnaireExportStructureRepository.GetById(
+                            new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString()));
 
                 if (questionnaireExportStructure == null)
                     return new string[0];

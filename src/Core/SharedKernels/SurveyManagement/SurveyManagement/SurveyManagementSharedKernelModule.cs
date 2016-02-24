@@ -266,8 +266,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
             this.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>().InSingletonScope();
-
-            this.Bind<IQuestionnaireProjectionsRepository>().To<QuestionnaireProjectionsRepository>().InSingletonScope();
         }
     }
 }
