@@ -122,7 +122,6 @@
     <Compile Include="Commands\ImportFromDesigner.cs" />
     <Compile Include="Commands\QuestionnaireCommand.cs" />
     <Compile Include="Commands\RegisterPlainQuestionnaire.cs" />
-    <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireQuestionsInfo.cs" />
     <Compile Include="EventHandler\InterviewExportedCommentariesDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewReferencesDenormalizer.cs" />
@@ -161,7 +160,6 @@
     <Compile Include="EventHandler\MapReportDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewStatusTimeSpanDenormalizer.cs" />
     <Compile Include="EventHandler\StatusChangeHistoryDenormalizerFunctional.cs" />
-    <Compile Include="EventHandler\QuestionnaireBrowseItemEventHandler.cs" />
     <Compile Include="Factories\IPreloadedDataServiceFactory.cs" />
     <Compile Include="EventHandler\InterviewParaDataEventHandler.cs" />
     <Compile Include="EventHandler\DummyEventHandler.cs" />
