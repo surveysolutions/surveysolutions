@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using Moq;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTests
 {
@@ -15,22 +18,22 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
     {
         Establish context = () =>
         {
-            var questionnaire = Create.QuestionnaireModel();
-            questionnaire.GroupsHierarchy = new List<GroupsHierarchyModel>
-            {
-                CreateGroupsHierarchyModel(sectionAId, "A"),
-                CreateGroupsHierarchyModel(sectionBId, "B"),
-                CreateGroupsHierarchyModel(sectionCId, "C"),
-                CreateGroupsHierarchyModel(sectionDId, "D")
-            };
+            //var questionnaire = Create.QuestionnaireModel();
+            //questionnaire.GroupsHierarchy = new List<GroupsHierarchyModel>
+            //{
+            //    CreateGroupsHierarchyModel(sectionAId, "A"),
+            //    CreateGroupsHierarchyModel(sectionBId, "B"),
+            //    CreateGroupsHierarchyModel(sectionCId, "C"),
+            //    CreateGroupsHierarchyModel(sectionDId, "D")
+            //};
 
-            questionnaire.GroupsWithFirstLevelChildrenAsReferences = new Dictionary<Guid, GroupModel>
-            {
-                { sectionAId, new GroupModel { Id = sectionAId, Title = "A" }},
-                { sectionBId, new GroupModel { Id = sectionBId, Title = "B" }},
-                { sectionCId, new GroupModel { Id = sectionCId, Title = "C" }},
-                { sectionDId, new GroupModel { Id = sectionDId, Title = "D" }},
-            };
+            //questionnaire.GroupsWithFirstLevelChildrenAsReferences = new Dictionary<Guid, GroupModel>
+            //{
+            //    { sectionAId, new GroupModel { Id = sectionAId, Title = "A" }},
+            //    { sectionBId, new GroupModel { Id = sectionBId, Title = "B" }},
+            //    { sectionCId, new GroupModel { Id = sectionCId, Title = "C" }},
+            //    { sectionDId, new GroupModel { Id = sectionDId, Title = "D" }},
+            //};
 
             var interview = Substitute.For<IStatefulInterview>();
 
@@ -39,7 +42,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
             interview.IsEnabled(Arg.Is<Identity>(x => x.Id == sectionCId)).Returns(false);
             interview.IsEnabled(Arg.Is<Identity>(x => x.Id == sectionDId)).Returns(false);
 
-            viewModel = CreateSectionsViewModel(questionnaire, interview);
+            var questionnaire = new Mock<IQuestionnaire>();
+            viewModel = CreateSectionsViewModel(questionnaire.Object, interview);
             navigationState = Substitute.For<NavigationState>();
             viewModel.Init("", "", navigationState);
 

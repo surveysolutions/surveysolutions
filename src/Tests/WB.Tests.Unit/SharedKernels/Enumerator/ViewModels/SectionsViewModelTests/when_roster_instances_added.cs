@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using Moq;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTests
 {
@@ -14,59 +17,59 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
     {
         Establish context = () =>
         {
-            QuestionnaireModel questionnaire = Create.QuestionnaireModel();
+            //QuestionnaireModel questionnaire = Create.QuestionnaireModel();
             var sectionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             group1Id = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             group2Id = Guid.Parse("11111111111111111111111111111111");
-            questionnaire.GroupsHierarchy = new List<GroupsHierarchyModel>
-            {
-                new GroupsHierarchyModel
-                {
-                    Title = "Section 1",
-                    Id = sectionId,
-                    Children = new List<GroupsHierarchyModel>
-                    {
-                        new GroupsHierarchyModel
-                        {
-                            Title = "Group 1",
-                            Id = group1Id
-                        },
-                        new GroupsHierarchyModel
-                        {
-                            Title = "Roster 1",
-                            Id = rosterId,
-                            IsRoster = true
-                        },
-                        new GroupsHierarchyModel
-                        {
-                            Title = "Group 2",
-                            Id = group2Id
-                        }
-                    }
-                }
-            };
-            questionnaire.GroupsWithFirstLevelChildrenAsReferences = new Dictionary<Guid, GroupModel>();
-            questionnaire.GroupsWithFirstLevelChildrenAsReferences[rosterId] = new RosterModel
-            {
-                Title = "Roster 1",
-                Id = rosterId
-            };
-            questionnaire.GroupsWithFirstLevelChildrenAsReferences[group1Id] = new GroupModel
-            {
-                Title = "Group 1",
-                Id = group1Id
-            };
-            questionnaire.GroupsWithFirstLevelChildrenAsReferences[group2Id] = new GroupModel
-            {
-                Title = "Group 2",
-                Id = group2Id
-            };
-            questionnaire.GroupsWithFirstLevelChildrenAsReferences[sectionId] = new GroupModel
-            {
-                Title = "Section 1",
-                Id = sectionId
-            };
+            //questionnaire.GroupsHierarchy = new List<GroupsHierarchyModel>
+            //{
+            //    new GroupsHierarchyModel
+            //    {
+            //        Title = "Section 1",
+            //        Id = sectionId,
+            //        Children = new List<GroupsHierarchyModel>
+            //        {
+            //            new GroupsHierarchyModel
+            //            {
+            //                Title = "Group 1",
+            //                Id = group1Id
+            //            },
+            //            new GroupsHierarchyModel
+            //            {
+            //                Title = "Roster 1",
+            //                Id = rosterId,
+            //                IsRoster = true
+            //            },
+            //            new GroupsHierarchyModel
+            //            {
+            //                Title = "Group 2",
+            //                Id = group2Id
+            //            }
+            //        }
+            //    }
+            //};
+            //questionnaire.GroupsWithFirstLevelChildrenAsReferences = new Dictionary<Guid, GroupModel>();
+            //questionnaire.GroupsWithFirstLevelChildrenAsReferences[rosterId] = new RosterModel
+            //{
+            //    Title = "Roster 1",
+            //    Id = rosterId
+            //};
+            //questionnaire.GroupsWithFirstLevelChildrenAsReferences[group1Id] = new GroupModel
+            //{
+            //    Title = "Group 1",
+            //    Id = group1Id
+            //};
+            //questionnaire.GroupsWithFirstLevelChildrenAsReferences[group2Id] = new GroupModel
+            //{
+            //    Title = "Group 2",
+            //    Id = group2Id
+            //};
+            //questionnaire.GroupsWithFirstLevelChildrenAsReferences[sectionId] = new GroupModel
+            //{
+            //    Title = "Section 1",
+            //    Id = sectionId
+            //};
 
             interview = Substitute.For<IStatefulInterview>();
             sectionIdentity = new Identity(sectionId, Empty.RosterVector);
@@ -83,7 +86,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
                 });
             interview.IsEnabled(Moq.It.IsAny<Identity>()).ReturnsForAnyArgs(true);
 
-            viewModel = CreateSectionsViewModel(questionnaire, interview);
+            var questionnaire = new Mock<IQuestionnaire>();
+
+            viewModel = CreateSectionsViewModel(questionnaire.Object, interview);
             viewModel.Init("", "", Create.NavigationState());
             viewModel.Sections[0].SectionIdentity = new Identity(sectionId, Empty.RosterVector);
         };
