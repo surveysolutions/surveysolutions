@@ -25,7 +25,8 @@ namespace WB.UI.Interviewer.ViewModel
             IAnswerToStringService answerToStringService,
             SideBarSectionsViewModel sectionsViewModel,
             BreadCrumbsViewModel breadCrumbsViewModel,
-            InterviewerActiveStageViewModel stageViewModel,
+            InterviewerActiveStageViewModel activeStageViewModel,
+            CompleteInterviewViewModel completeInterviewViewModel,
             NavigationState navigationState,
             AnswerNotifier answerNotifier,
             IViewModelNavigationService viewModelNavigationService,
@@ -33,7 +34,7 @@ namespace WB.UI.Interviewer.ViewModel
             GroupStateViewModel groupState,
             InterviewStateViewModel interviewState)
             : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
-                breadCrumbsViewModel, stageViewModel, navigationState, answerNotifier, groupState, interviewState, principal, viewModelNavigationService)
+                breadCrumbsViewModel, activeStageViewModel, completeInterviewViewModel, navigationState, answerNotifier, groupState, interviewState, principal, viewModelNavigationService)
         {
             this.interviewRepository = interviewRepository;
             this.viewModelNavigationService = viewModelNavigationService;

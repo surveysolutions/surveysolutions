@@ -29,12 +29,24 @@
                 local:MvxBind="Text CurrentStage.Name" />
     </android.support.v7.widget.Toolbar>
 
-    <MvxRecyclerView
+    <!--<fragment
+      class="Rock.Droid.Views.SubFrag"
+      android:id="@+id/interviewCurrentStep"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+        />-->
+      <FrameLayout
+        android:id="@+id/interviewCurrentStepFrame"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        />
+    
+<!--    <MvxRecyclerView
       style="@style/Interview_List"
       android:id="@+id/interviewEntitiesList"
       android:layout_below="@+id/prefilledQuestions_questionnaireTitle_holder"
       android:scrollbars="vertical"
-      local:MvxBind="ItemsSource CurrentStage.Items" />
+      local:MvxBind="ItemsSource CurrentStage.Items" />-->
 
   </LinearLayout>
   <LinearLayout style="@style/Interview_Sidebar">
