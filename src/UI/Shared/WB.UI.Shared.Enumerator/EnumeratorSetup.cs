@@ -22,6 +22,7 @@ using MvvmCross.Platform.Exceptions;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Converters;
 using WB.UI.Shared.Enumerator.CustomBindings;
@@ -78,7 +79,9 @@ namespace WB.UI.Shared.Enumerator
         {
             var viewModelViewLookup = new Dictionary<Type, Type>()
             {
-                {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)}
+                {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
+                {typeof (ActiveStageViewModel), typeof (InterviewEntitiesListFragment)},
+                {typeof (CompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();
