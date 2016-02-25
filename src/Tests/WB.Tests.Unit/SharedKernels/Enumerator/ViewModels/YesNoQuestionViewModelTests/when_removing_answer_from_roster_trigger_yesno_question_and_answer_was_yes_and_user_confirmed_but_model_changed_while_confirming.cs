@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Machine.Specifications;
@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             questionId = Create.Identity(questionGuid, Empty.RosterVector);
 
             var questionnaire = BuildDefaultQuestionnaire(questionId);
-            ((YesNoQuestionModel)questionnaire.Questions.First().Value).IsRosterSizeQuestion = true;
+            ((YesNoQuestionModel) questionnaire.Questions.First().Value).IsRosterSizeQuestion = true;
 
             var yesNoAnswer = Create.YesNoAnswer(questionGuid, Empty.RosterVector);
             yesNoAnswer.SetAnswers(new[]
@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             userInteractionServiceMock
                 .Setup(_ => _.ConfirmAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
                 .Returns(Task.FromResult(true))
-                .Callback(() => yesNoAnswer.SetAnswers(new[]
+                .Callback(() => yesNoAnswer.SetAnswers(new []
                 {
                     new AnsweredYesNoOption(3, true) // option 3 was set to yes while user was thinking on his answer
                 }));
@@ -67,7 +67,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
         It should_not_undo_checked_property_change = () => viewModel.Options.Last().Selected.ShouldBeNull();
 
-        It should_call_userInteractionService_for_reduce_roster_size = () =>
+        It should_call_userInteractionService_for_reduce_roster_size = () => 
             userInteractionServiceMock.Verify(s => s.ConfirmAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>()), Times.Once());
 
         It should_answer_question_with_updated_state_of_options = () =>
