@@ -193,7 +193,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationMessageIsTooLong, "WB0105", index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index)),
             Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationConditionIsEmpty, "WB0106", index => string.Format(VerificationMessages.WB0106_ValidationConditionIsEmpty, index)),
             Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationMessageIsEmpty, "WB0107", index => string.Format(VerificationMessages.WB0107_ValidationMessageIsEmpty, index)),
-
+            Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, CategoricalLinkedQuestionUsedInValidationExpression, "WB0063", index => string.Format(VerificationMessages.WB0063_CategoricalLinkedQuestionUsedInValidationExpression, index)),
             Warning<IGroup>(this.TooManyQuestionsInGroup, "WB0201", VerificationMessages.WB0201_LargeNumberOfQuestionsInGroup),
             Warning<IGroup>(this.GroupWithoutQuestions, "WB0202", VerificationMessages.WB0202_GroupWithoutQuestions),
 
