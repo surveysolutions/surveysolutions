@@ -85,8 +85,6 @@ namespace WB.Tests.Integration.InterviewTests
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
 
-            var questionnaire = Create.Questionnaire(questionnaireDocument);
-
             var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
                 =>  repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) ==new PlainQuestionnaire(questionnaireDocument,1));
 
