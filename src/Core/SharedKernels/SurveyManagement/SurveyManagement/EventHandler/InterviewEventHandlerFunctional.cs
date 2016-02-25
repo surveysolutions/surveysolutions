@@ -261,8 +261,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             });
         }
 
-        public InterviewEventHandlerFunctional(IReadSideRepositoryWriter<UserDocument> users,
-            IReadSideKeyValueStorage<InterviewData> interviewData, IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage)
+        public InterviewEventHandlerFunctional(
+            IReadSideRepositoryWriter<UserDocument> users,
+            IReadSideKeyValueStorage<InterviewData> interviewData, 
+            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage)
             : base(interviewData)
         {
             this.users = users;
