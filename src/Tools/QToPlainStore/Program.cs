@@ -9,7 +9,6 @@ using System.Data;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
 using Humanizer;
 using Main.Core.Documents;
@@ -29,6 +28,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
@@ -52,6 +52,7 @@ using WB.Infrastructure.Native.Storage.EventStore.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
+using ILogger = EventStore.ClientAPI.ILogger;
 
 namespace QToPlainStore
 {
@@ -86,6 +87,8 @@ namespace QToPlainStore
             [Option('p', "plainstore", Required = true, HelpText = "PostgreSql plain storage connection string.")]
             public string PGPlainConnection { get; set; }
 
+            [Option('e', "postgreseventstore", Required = false, HelpText = "Event store server ip.")]
+            public string PostgresEventStore { get; set; }
             [ParserState]
             public IParserState LastParserState { get; set; }
 
@@ -112,29 +115,39 @@ namespace QToPlainStore
             }
             else
             {
-                MigrateEvents(options.ServerIP, int.Parse(options.ServerTcpPort), int.Parse(options.ServerHttpPort), options.Login,
-                    options.Password, options.PGPlainConnection);
+
+
+                var logger = Mock.Of<WB.Core.GenericSubdomains.Portable.Services.ILogger>();
+                var serializer = new NewtonJsonSerializer(new JsonSerializerSettingsFactory());
+
+                var eventTypeResolver = CreateEventTypeResolver();
+
+                IStreamableEventStore eventStore;
+                if (string.IsNullOrEmpty(options.PostgresEventStore))
+                {
+                    var eventStoreSettings = new EventStoreSettings()
+                    {
+                        ServerIP = options.ServerIP,
+                        ServerTcpPort = int.Parse(options.ServerTcpPort),
+                        ServerHttpPort = int.Parse(options.ServerHttpPort),
+                        Login = options.Login,
+                        Password = options.Password,
+                        UseBson = false
+                    };
+
+                    eventStore = new WriteSideEventStore(new EventStoreConnectionProvider(eventStoreSettings), logger,
+                        eventStoreSettings, eventTypeResolver, serializer);
+                }
+                else
+                {
+                    eventStore=new PostgresEventStore(new PostgreConnectionSettings() {ConnectionString = options.PostgresEventStore }, eventTypeResolver, serializer);
+                }
+                MigrateEvents(eventStore, logger, serializer, options.PGPlainConnection);
             }
         }
 
-        private static void MigrateEvents(string serverip, int serverTcp, int serverHttp, string login, string password, string plainStorageConnection)
+        private static void MigrateEvents(IStreamableEventStore eventStore, WB.Core.GenericSubdomains.Portable.Services.ILogger logger, ISerializer serializer,  string plainStorageConnection)
         {
-            var eventStoreSettings = new EventStoreSettings()
-            {
-                ServerIP = serverip,
-                ServerTcpPort = serverTcp,
-                ServerHttpPort = serverHttp,
-                Login = login,
-                Password = password,
-                UseBson = false
-            };
-
-            var eventTypeResolver = CreateEventTypeResolver();
-
-            var logger = Mock.Of<WB.Core.GenericSubdomains.Portable.Services.ILogger>();
-            var serializer = new NewtonJsonSerializer(new JsonSerializerSettingsFactory());
-            var eventStore = new WriteSideEventStore(new EventStoreConnectionProvider(eventStoreSettings),
-                logger, eventStoreSettings, eventTypeResolver, serializer);
 
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
@@ -197,7 +210,7 @@ namespace QToPlainStore
             return cfg.BuildSessionFactory();
         }
 
-        private static void MoveQuestionnaireEventsToPlainStorage(WriteSideEventStore eventStore)
+        private static void MoveQuestionnaireEventsToPlainStorage(IStreamableEventStore eventStore)
         {
             var events = eventStore.GetAllEvents();
             var eventsCount = eventStore.CountOfAllEvents();
