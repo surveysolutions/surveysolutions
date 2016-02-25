@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
@@ -28,7 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<YesNoQuestionAnswered>
     {
         private readonly Guid userId;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IUserInteractionService userInteraction;
@@ -43,7 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public List<YesNoQuestionOptionViewModel> Options { get; set; }
 
         public YesNoQuestionViewModel(IPrincipal principal,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
+            IPlainQuestionnaireRepository questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry,
             QuestionStateViewModel<YesNoQuestionAnswered> questionStateViewModel,
@@ -76,18 +77,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
-            var questionModel = questionnaire.GetYesNoQuestion(entityIdentity.Id);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            //var questionModel = questionnaire.GetYesNoQuestion(entityIdentity.Id);
             var answerModel = interview.GetYesNoAnswer(entityIdentity);
 
-            this.areAnswersOrdered = questionModel.AreAnswersOrdered;
-            this.maxAllowedAnswers = questionModel.MaxAllowedAnswers;
-            this.isRosterSizeQuestion = questionModel.IsRosterSizeQuestion;
+            this.areAnswersOrdered = questionnaire.ShouldQuestionRecordAnswersOrder(entityIdentity.Id);
+            this.maxAllowedAnswers = questionnaire.GetMaxSelectedAnswerOptions(entityIdentity.Id);
+            this.isRosterSizeQuestion = questionnaire.ShouldQuestionSpecifyRosterSize(entityIdentity.Id);
             this.Identity = entityIdentity;
             this.interviewId = interview.Id;
 
-            this.Options = questionModel
-                .Options
+            this.Options = questionnaire
+                .GetAnswerOptionsAsValues(entityIdentity.Id)
+                .Select(x => new OptionModel {  Value = x, Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x)})
                 .Select(model => this.ToViewModel(model, answerModel))
                 .ToList();
 

@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             AnswerNotifier answerNotifier,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage,
+            IPlainQuestionnaireRepository questionnaireStorage,
             IPrincipal userIdentity, ILiteEventRegistry eventRegistry,
             IMvxMainThreadDispatcher mainThreadDispatcher, 
             IPlainQuestionnaireRepository questionnaireRepository)
@@ -50,13 +50,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionnaireRepository = questionnaireRepository;
         }
 
-        protected override void InitFromModel(QuestionnaireModel questionnaire)
+        protected override void InitFromModel(IQuestionnaire questionnaire)
         {
-            LinkedMultiOptionQuestionModel linkedQuestionModel =
-                questionnaire.GetLinkedMultiOptionQuestion(questionIdentity.Id);
-            this.maxAllowedAnswers = linkedQuestionModel.MaxAllowedAnswers;
-            this.areAnswersOrdered = linkedQuestionModel.AreAnswersOrdered;
-            this.linkedToQuestionId = linkedQuestionModel.LinkedToQuestionId;
+            this.maxAllowedAnswers = questionnaire.GetMaxSelectedAnswerOptions(questionIdentity.Id);
+            this.areAnswersOrdered = questionnaire.ShouldQuestionRecordAnswersOrder(questionIdentity.Id);
+            this.linkedToQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(questionIdentity.Id);
 
             this.answerNotifier.Init(this.interviewId.FormatGuid(), this.linkedToQuestionId);
             this.answerNotifier.QuestionAnswered += this.LinkedToQuestionAnswered;

@@ -5,12 +5,10 @@ using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -41,7 +39,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly List<Identity> listOfDisabledSectionBetweenCurrentSectionAndNextEnabledSection = new List<Identity>();
 
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
@@ -73,14 +70,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public GroupNavigationViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository,
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry,
             IInterviewViewModelFactory interviewViewModelFactory,
             ICommandService commandService, AnswerNotifier answerNotifier)
         {
             this.questionnaireRepository = questionnaireRepository;
-            this.questionnaireModelRepository = questionnaireModelRepository;
             this.interviewRepository = interviewRepository;
             this.eventRegistry = eventRegistry;
             this.interviewViewModelFactory = interviewViewModelFactory;

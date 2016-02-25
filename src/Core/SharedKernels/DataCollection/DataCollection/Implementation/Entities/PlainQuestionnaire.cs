@@ -279,13 +279,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public int? GetMaxSelectedAnswerOptions(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            bool questionTypeDoesNotSupportMaxSelectedAnswerOptions = question.QuestionType != QuestionType.MultyOption;
+            bool questionTypeDoesNotSupportMaxSelectedAnswerOptions = question.QuestionType != QuestionType.MultyOption && question.QuestionType != QuestionType.TextList;
 
-            if (questionTypeDoesNotSupportMaxSelectedAnswerOptions || !(question is IMultyOptionsQuestion))
+            if (questionTypeDoesNotSupportMaxSelectedAnswerOptions || !(question is IMultyOptionsQuestion || question is TextListQuestion))
                 throw new QuestionnaireException(
                     $"Cannot return maximum for selected answers for question with id '{questionId}' because it's type {question.QuestionType} does not support that parameter.");
 
-            return ((IMultyOptionsQuestion)question).MaxAllowedAnswers;
+            if (question is IMultyOptionsQuestion)
+                return ((IMultyOptionsQuestion)question).MaxAllowedAnswers;
+
+            return ((TextListQuestion)question).MaxAnswerCount;
         }
 
         public int GetMaxRosterRowCount() => Constants.MaxRosterRowCount;
@@ -554,6 +557,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             var singleQuestion = (this.GetQuestion(questionId) as SingleQuestion);
             return singleQuestion?.CascadeFromQuestionId != null;
+        }
+
+        public bool ShouldQuestionRecordAnswersOrder(Guid questionId)
+        {
+            var multiOptionsQuestion = (this.GetQuestion(questionId) as IMultyOptionsQuestion);
+            return multiOptionsQuestion?.AreAnswersOrdered == true;
+        }
+
+        public string GetTextQuestionMask(Guid questionId)
+        {
+            var textQuestion = (this.GetQuestion(questionId) as TextQuestion);
+            return textQuestion?.Mask;
         }
 
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)

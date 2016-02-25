@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -19,7 +17,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     public abstract class EnumeratorInterviewViewModel : BaseViewModel, IDisposable
     {
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         protected readonly NavigationState navigationState;
         private readonly AnswerNotifier answerNotifier;
@@ -30,7 +27,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         protected EnumeratorInterviewViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
             SideBarSectionsViewModel sectionsViewModel, 
@@ -44,7 +40,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IViewModelNavigationService viewModelNavigationService) : base(principal, viewModelNavigationService)
         {
             this.questionnaireRepository = questionnaireRepository;
-            this.questionnaireModelRepository = questionnaireModelRepository;
             this.interviewRepository = interviewRepository;
             this.navigationState = navigationState;
             this.answerNotifier = answerNotifier;
@@ -67,8 +62,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (this.interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             var interview = this.interviewRepository.Get(interviewId);
             if (interview == null) throw new Exception("Interview is null.");
-            var questionnaireModel = this.questionnaireModelRepository.GetById(interview.QuestionnaireId);
-            if (questionnaireModel == null) throw new Exception("questionnaire is null");
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
             if (questionnaire == null) throw new Exception("questionnaire is null. QuestionnaireId: " + interview.QuestionnaireId);
 
@@ -77,8 +70,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 .GetPrefilledQuestions()
                 .Select(questionId => new SideBarPrefillQuestion
                 {
-                    Question = questionnaireModel.Questions[questionId].Title,
-                    Answer = this.GetAnswer(interview, questionnaire, new QuestionnaireReferenceModel { Id = questionId, ModelType = questionnaireModel.Questions[questionId].GetType() }),
+                    Question = questionnaire.GetQuestionTitle(questionId),
+                    Answer = this.GetAnswer(interview, questionnaire, questionId),
                     StatsInvisible = questionnaire.GetQuestionType(questionId) == QuestionType.GpsCoordinates,
                 })
                 .ToList();
@@ -130,11 +123,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Status = this.interviewState.Status;
         }
 
-        private string GetAnswer(IStatefulInterview interview, IQuestionnaire questionnaire, QuestionnaireReferenceModel referenceToQuestion)
+        private string GetAnswer(IStatefulInterview interview, IQuestionnaire questionnaire, Guid referenceToQuestionId)
         {
-            var identityAsString = ConversionHelper.ConvertIdAndRosterVectorToString(referenceToQuestion.Id, new decimal[0]);
+            var identityAsString = ConversionHelper.ConvertIdAndRosterVectorToString(referenceToQuestionId, new decimal[0]);
             var interviewAnswer = interview.Answers.ContainsKey(identityAsString) ? interview.Answers[identityAsString] : null;
-            return this.answerToStringService.AnswerToUIString(referenceToQuestion.Id, interviewAnswer, interview, questionnaire);
+            return this.answerToStringService.AnswerToUIString(referenceToQuestionId, interviewAnswer, interview, questionnaire);
         }
 
         private GroupStatus status;

@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
@@ -28,7 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<MultipleOptionsQuestionAnswered>,
         IDisposable
     {
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPrincipal principal;
@@ -45,7 +46,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public MultiOptionQuestionViewModel(
             QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionStateViewModel,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
+            IPlainQuestionnaireRepository questionnaireRepository,
             ILiteEventRegistry eventRegistry,
             IStatefulInterviewRepository interviewRepository,
             IPrincipal principal,
@@ -76,16 +77,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.userId = this.principal.CurrentUserIdentity.UserId;
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
             this.interviewId = interview.Id;
-            QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
-            var questionModel = questionnaire.GetMultiOptionQuestion(entityIdentity.Id);
-
-            this.areAnswersOrdered = questionModel.AreAnswersOrdered;
-            this.maxAllowedAnswers = questionModel.MaxAllowedAnswers;
-            this.isRosterSizeQuestion = questionModel.IsRosterSizeQuestion;
+            this.areAnswersOrdered = questionnaire.ShouldQuestionRecordAnswersOrder(entityIdentity.Id);
+            this.maxAllowedAnswers = questionnaire.GetMaxSelectedAnswerOptions(entityIdentity.Id);
+            this.isRosterSizeQuestion = questionnaire.ShouldQuestionSpecifyRosterSize(entityIdentity.Id);
 
             MultiOptionAnswer existingAnswer = interview.GetMultiOptionAnswer(entityIdentity);
-            this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(questionModel.Options.Select((x, index) => this.ToViewModel(x, existingAnswer, index)).ToList());
+            this.Options = new ReadOnlyCollection<MultiOptionQuestionOptionViewModel>(
+                questionnaire
+                .GetAnswerOptionsAsValues(entityIdentity.Id)
+                .Select(x => new OptionModel { Value = x, Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x) })
+                .Select((x, index) => this.ToViewModel(x, existingAnswer, index))
+                .ToList());
         }
 
         public void Dispose()

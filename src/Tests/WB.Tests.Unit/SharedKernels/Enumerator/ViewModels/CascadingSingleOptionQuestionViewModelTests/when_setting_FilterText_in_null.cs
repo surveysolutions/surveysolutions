@@ -30,15 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
 
-            var cascadingQuestionModel = Mock.Of<CascadingSingleOptionQuestionModel>(_
-                => _.Id == questionIdentity.Id
-                   && _.Options == Options
-                   && _.CascadeFromQuestionId == parentIdentity.Id
-                   && _.RosterLevelDepthOfParentQuestion == 1);
-
-            var questionnaireModel = Mock.Of<QuestionnaireModel>(_ => _.Questions == new Dictionary<Guid, BaseQuestionModel> { { questionIdentity.Id, cascadingQuestionModel } });
-
-            var questionnaireRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(x => x.GetById(questionnaireId) == questionnaireModel);
+            var questionnaireRepository = SetupQuestionnaireRepositoryWithCascadingQuestion();
 
             cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
                 interviewRepository: interviewRepository,

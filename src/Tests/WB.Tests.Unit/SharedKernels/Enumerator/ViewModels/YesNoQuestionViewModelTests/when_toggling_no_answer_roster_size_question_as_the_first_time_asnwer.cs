@@ -1,17 +1,15 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using Nito.AsyncEx.Synchronous;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -26,25 +24,24 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             interviewIdAsString = "hello";
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Identity(questionGuid, Empty.RosterVector);
-
-            var questionnaire = Create.QuestionnaireModel(new BaseQuestionModel[] {
-                Create.YesNoQuestionModel(id : questionId.Id, options: new List<OptionModel>
-                {
-                    Create.OptionModel("item1", 1),
-                    Create.OptionModel( "item2", 2),
-                    Create.OptionModel("item3",  3),
-                    Create.OptionModel("item4", 4),
-                    Create.OptionModel("item5", 5),
-                })
-            });
-
-            ((YesNoQuestionModel)questionnaire.Questions.First().Value).IsRosterSizeQuestion = true;
+           
+            var questionnaire = Mock.Of<IQuestionnaire>(_ 
+                => _.ShouldQuestionRecordAnswersOrder(questionId.Id) == false
+                && _.GetMaxSelectedAnswerOptions(questionId.Id) == null
+                && _.ShouldQuestionSpecifyRosterSize(questionId.Id) == true
+                && _.GetAnswerOptionsAsValues(questionId.Id) == new decimal[] { 1, 2, 3, 4, 5}
+                && _.GetAnswerOptionTitle(questionId.Id, 1) == "item1"
+                && _.GetAnswerOptionTitle(questionId.Id, 2) == "item2"
+                && _.GetAnswerOptionTitle(questionId.Id, 3) == "item3"
+                && _.GetAnswerOptionTitle(questionId.Id, 4) == "item4"
+                && _.GetAnswerOptionTitle(questionId.Id, 5) == "item5"
+            );
 
             var yesNoAnswer = Create.YesNoAnswer(questionGuid, Empty.RosterVector);
            
             var interview = Mock.Of<IStatefulInterview>(x => x.GetYesNoAnswer(questionId) == yesNoAnswer);
 
-            var questionnaireStorage = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
+            var questionnaireStorage = new Mock<IPlainQuestionnaireRepository>();
             interviewRepository = new Mock<IStatefulInterviewRepository>();
 
             questionnaireStorage.SetReturnsDefault(questionnaire);
