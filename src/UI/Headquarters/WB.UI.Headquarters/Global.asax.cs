@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -24,6 +25,7 @@ using WB.UI.Shared.Web.Elmah;
 using WB.UI.Shared.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
+using WB.Core.SharedKernels.SurveyManagement.Web;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
 
 namespace WB.UI.Headquarters
@@ -40,6 +42,8 @@ namespace WB.UI.Headquarters
 
         private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Global>();
         private readonly IHealthCheckService healthCheckService = ServiceLocator.Current.GetInstance<IHealthCheckService>();
+
+        private static string ProductVersion => FileVersionInfo.GetVersionInfo(typeof(SurveyManagementWebModule).Assembly.Location).ProductVersion;
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
@@ -89,7 +93,8 @@ namespace WB.UI.Headquarters
 
         protected void Application_Start()
         {
-            this.logger.Info("Starting application.");
+            this.logger.Info($"Starting Headquarters {ProductVersion}");
+
             MvcHandler.DisableMvcResponseHeader = true;
 
             AppDomain current = AppDomain.CurrentDomain;
