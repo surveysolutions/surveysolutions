@@ -62,8 +62,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (questionnaireId == null) throw new ArgumentNullException("questionnaireId");
 
-            this.eventRegistry.Subscribe(this, interviewId);
+            this.interviewId = interviewId;
 
+            this.eventRegistry.Subscribe(this, interviewId);
             this.navigationState = navigationState;
             this.navigationState.ScreenChanged += this.OnScreenChanged;
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
