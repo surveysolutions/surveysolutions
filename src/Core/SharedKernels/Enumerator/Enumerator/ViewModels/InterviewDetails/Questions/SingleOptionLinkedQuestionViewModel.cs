@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         private readonly Guid userId;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage;
+        private readonly IPlainQuestionnaireRepository questionnaireStorage;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAnswerToStringService answerToStringService;
         private readonly ILiteEventRegistry eventRegistry;
@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public SingleOptionLinkedQuestionViewModel(
             IPrincipal principal,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage,
+            IPlainQuestionnaireRepository questionnaireStorage,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
             ILiteEventRegistry eventRegistry,
@@ -102,13 +102,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState.Init(interviewId, questionIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireStorage.GetById(interview.QuestionnaireId);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity);
 
             this.questionIdentity = questionIdentity;
             this.interviewId = interview.Id;
 
-            var questionModel = questionnaire.GetLinkedSingleOptionQuestion(this.questionIdentity.Id);
-            this.referencedQuestionId = questionModel.LinkedToQuestionId;
+            this.referencedQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(this.questionIdentity.Id);
 
             this.ReferencedAnswerNotifier.Init(interviewId, this.referencedQuestionId);
             this.ReferencedAnswerNotifier.QuestionAnswered += this.ReferencedQuestionAnswered;

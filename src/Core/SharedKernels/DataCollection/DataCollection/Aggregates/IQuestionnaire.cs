@@ -169,5 +169,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string GetQuestionInstruction(Guid questionId);
         bool IsQuestionFilteredCombobox(Guid questionId);
         bool IsQuestionCascading(Guid questionId);
+        bool ShouldQuestionRecordAnswersOrder(Guid questionId);
+        string GetTextQuestionMask(Guid questionId);
     }
 }

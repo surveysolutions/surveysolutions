@@ -2,6 +2,7 @@
 using MvvmCross.Test.Core;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -22,14 +23,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
             QuestionStateViewModel<TextListQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
             IPrincipal principal = null,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository = null,
+            IPlainQuestionnaireRepository questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
             
             IUserInteractionService userInteractionService = null)
         {
             return new TextListQuestionViewModel(
                 principal ?? Mock.Of<IPrincipal>(),
-                questionnaireRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
+                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 questionStateViewModel ?? Mock.Of<QuestionStateViewModel<TextListQuestionAnswered>>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),

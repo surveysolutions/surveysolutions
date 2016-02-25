@@ -3,9 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -23,7 +21,6 @@ namespace WB.UI.Interviewer.ViewModel
 
         public InterviewerInterviewViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
             SideBarSectionsViewModel sectionsViewModel,
@@ -35,7 +32,7 @@ namespace WB.UI.Interviewer.ViewModel
             IPrincipal principal,
             GroupStateViewModel groupState,
             InterviewStateViewModel interviewState)
-            : base(questionnaireRepository, questionnaireModelRepository, interviewRepository, answerToStringService, sectionsViewModel,
+            : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
                 breadCrumbsViewModel, stageViewModel, navigationState, answerNotifier, groupState, interviewState, principal, viewModelNavigationService)
         {
             this.interviewRepository = interviewRepository;

@@ -15,7 +15,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
         public static InterviewerQuestionnaireAccessor CreateInterviewerQuestionnaireAccessor(
             ISerializer serializer = null,
             IQuestionnaireModelBuilder questionnaireModelBuilder = null,
-            IAsyncPlainStorage<QuestionnaireModelView> questionnaireModelViewRepository = null,
             IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
             IAsyncPlainStorage<InterviewView> interviewViewRepository = null,
@@ -25,7 +24,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
             return new InterviewerQuestionnaireAccessor(
                 serializer: serializer ?? Mock.Of<ISerializer>(),
                 questionnaireModelBuilder: questionnaireModelBuilder ?? Mock.Of<IQuestionnaireModelBuilder>(),
-                questionnaireModelViewRepository: questionnaireModelViewRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireModelView>>(),
                 questionnaireViewRepository: questionnaireViewRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireView>>(),
                 plainQuestionnaireRepository: plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 interviewViewRepository: interviewViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewView>>(),

@@ -28,13 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(interviewId) == interview);
 
-            var cascadingQuestionModel = Mock.Of<IntegerNumericQuestionModel>(_
-                => _.Id == questionIdentity.Id
-                   && _.IsRosterSizeQuestion == true);
-
-            var questionnaireModel = Mock.Of<QuestionnaireModel>(_ => _.Questions == new Dictionary<Guid, BaseQuestionModel> { { questionIdentity.Id, cascadingQuestionModel } });
-
-            var questionnaireRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(x => x.GetById(questionnaireId) == questionnaireModel);
+            var questionnaireRepository = SetupQuestionnaireRepositoryWithNumericQuestion();
 
             integerModel = CreateIntegerQuestionViewModel(
                 interviewRepository: interviewRepository,

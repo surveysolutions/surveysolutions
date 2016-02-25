@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             //questionnaireModel.GroupsHierarchy = questionnaireDocument.Children.Cast<Group>().Select(x => this.BuildGroupsHierarchy(x, 0)).ToList();
 
-            questionnaireModel.Questions = questions.ToDictionary(x => x.PublicKey, x => CreateQuestionModel(x, questionnaireDocument, questionIdToRosterLevelDepth));
+            //questionnaireModel.Questions = questions.ToDictionary(x => x.PublicKey, x => CreateQuestionModel(x, questionnaireDocument, questionIdToRosterLevelDepth));
 
             return questionnaireModel;
         }

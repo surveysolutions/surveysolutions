@@ -9,9 +9,11 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -26,7 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
-        protected readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage;
+        protected readonly IPlainQuestionnaireRepository questionnaireStorage;
         private readonly IPrincipal userIdentity;
         protected readonly ILiteEventRegistry eventRegistry;
         protected readonly IMvxMainThreadDispatcher mainThreadDispatcher;
@@ -44,7 +46,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState,
             AnsweringViewModel answering,
             IStatefulInterviewRepository interviewRepository,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage,
+            IPlainQuestionnaireRepository questionnaireStorage,
             IPrincipal userIdentity,
             ILiteEventRegistry eventRegistry,
             IMvxMainThreadDispatcher mainThreadDispatcher)
@@ -69,10 +71,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.userId = this.userIdentity.CurrentUserIdentity.UserId;
             this.interview = this.interviewRepository.Get(interviewId);
             this.interviewId = this.interview.Id;
-            this.InitFromModel(this.questionnaireStorage.GetById(this.interview.QuestionnaireId));
+            this.InitFromModel(this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity));
             this.Options = new ObservableCollection<MultiOptionLinkedQuestionOptionViewModel>(this.CreateOptions());
         }
-        protected abstract void InitFromModel(QuestionnaireModel questionnaire);
+        protected abstract void InitFromModel(IQuestionnaire questionnaire);
         protected abstract IEnumerable<MultiOptionLinkedQuestionOptionViewModel> CreateOptions();
 
         public virtual void Dispose()

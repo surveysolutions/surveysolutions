@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
@@ -40,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             };
 
             var interviews = new Mock<IStatefulInterviewRepository>();
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
+            var questionnaires = new Mock<IPlainQuestionnaireRepository>();
 
             interviews.SetReturnsDefault(interview);
             questionnaires.SetReturnsDefault(questionnaire);

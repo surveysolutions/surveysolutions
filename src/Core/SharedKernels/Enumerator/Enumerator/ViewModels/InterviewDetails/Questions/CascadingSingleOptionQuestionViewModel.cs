@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -42,7 +43,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private readonly IPrincipal principal;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
         private Identity questionIdentity;
@@ -59,7 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public CascadingSingleOptionQuestionViewModel(
             IPrincipal principal,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
+            IPlainQuestionnaireRepository questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering, 
@@ -88,15 +89,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
-            var questionModel = questionnaire.GetQuestion<CascadingSingleOptionQuestionModel>(entityIdentity.Id);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+
+            var cascadingQuestionParentId = questionnaire.GetCascadingQuestionParentId(entityIdentity.Id);
+            if (!cascadingQuestionParentId.HasValue) throw new ArgumentNullException("parent of cascading question is missing");
+
             var answerModel = interview.GetSingleOptionAnswer(entityIdentity);
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
+            //entityIdentity.Id
+            var parentRosterVector = entityIdentity.RosterVector.Take(questionnaire.GetRosterLevelForEntity(cascadingQuestionParentId.Value)).ToArray();
 
-            var parentRosterVector = entityIdentity.RosterVector.Take(questionModel.RosterLevelDepthOfParentQuestion).ToArray();
-            this.parentQuestionIdentity = new Identity(questionModel.CascadeFromQuestionId, parentRosterVector);
+            this.parentQuestionIdentity = new Identity(cascadingQuestionParentId.Value, parentRosterVector);
 
             var parentAnswerModel = interview.GetSingleOptionAnswer(this.parentQuestionIdentity);
             if (parentAnswerModel.IsAnswered)
@@ -104,7 +109,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.answerOnParentQuestion = parentAnswerModel.Answer;
             }
 
-            this.Options = questionModel.Options.ToList();
+            this.Options = questionnaire
+                .GetAnswerOptionsAsValues(entityIdentity.Id)
+                .Select(x => new CascadingOptionModel
+                {
+                    Value = x,
+                    Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x),
+                    ParentValue = questionnaire.GetCascadingParentValue(entityIdentity.Id, x)
+                })
+                .ToList();
 
             if (answerModel.IsAnswered)
             {

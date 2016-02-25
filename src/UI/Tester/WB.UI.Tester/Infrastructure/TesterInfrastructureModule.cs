@@ -43,7 +43,6 @@ namespace WB.UI.Tester.Infrastructure
             this.Bind<ISnapshotStore>().To<InMemoryEventStore>().InSingletonScope();
 
             this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>().To<InMemoryKeyValueStorage<QuestionnaireDocument>>().InSingletonScope();
-            this.Bind<IPlainKeyValueStorage<QuestionnaireModel>>().To<InMemoryKeyValueStorage<QuestionnaireModel>>().InSingletonScope();
 
             this.Bind<ITraceListener>().To<MvxTraceListener>();
             this.Bind<ISQLitePlatform>().To<SQLitePlatformAndroid>();

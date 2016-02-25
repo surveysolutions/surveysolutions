@@ -2,10 +2,11 @@
 using MvvmCross.Test.Core;
 using Moq;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -24,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
         }
         
         public static IntegerQuestionViewModel CreateIntegerQuestionViewModel(
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository = null,
+            IPlainQuestionnaireRepository questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
             IUserInteractionService userInteractionService = null)
         {
@@ -35,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
 
             return new IntegerQuestionViewModel(
                 principal,
-                questionnaireRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
+                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 QuestionStateMock.Object,
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
@@ -50,6 +51,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
             QuestionStateMock = new Mock<QuestionStateViewModel<NumericIntegerQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
             AnsweringViewModelMock = new Mock<AnsweringViewModel> { DefaultValue = DefaultValue.Mock };
             EventRegistry = new Mock<ILiteEventRegistry>();
+        }
+
+        protected static IPlainQuestionnaireRepository SetupQuestionnaireRepositoryWithNumericQuestion(bool isRosterSize = true)
+        {
+            var questionnaire = Mock.Of<IQuestionnaire>(_
+                => _.ShouldQuestionSpecifyRosterSize(questionIdentity.Id) == isRosterSize
+            );
+            return Mock.Of<IPlainQuestionnaireRepository>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire);
         }
 
         protected static Identity questionIdentity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[] { 1, 2 });
