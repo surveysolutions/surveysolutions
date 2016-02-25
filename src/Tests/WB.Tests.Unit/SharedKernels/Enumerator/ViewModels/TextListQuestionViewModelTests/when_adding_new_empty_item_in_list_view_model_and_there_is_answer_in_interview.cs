@@ -6,6 +6,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
@@ -38,7 +39,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
 
             var questionnaireModel = Mock.Of<QuestionnaireModel>(_ => _.Questions == new Dictionary<Guid, BaseQuestionModel> { { questionIdentity.Id, textListQuestionModel } });
 
-            var questionnaireRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(x => x.GetById(questionnaireId) == questionnaireModel);
+            var questionnaireIdentity = Create.QuestionnaireIdentity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+            var questionnaireRepository = Unit.Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity,
+                _ => _.GetQuestionTitle(questionIdentity.Id) == "Title");
 
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);

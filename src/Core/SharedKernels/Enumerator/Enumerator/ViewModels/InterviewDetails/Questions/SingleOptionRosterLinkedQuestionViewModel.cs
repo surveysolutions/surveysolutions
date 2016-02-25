@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
@@ -33,13 +34,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         private readonly Guid userId;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
 
        public SingleOptionRosterLinkedQuestionViewModel(
             IPrincipal principal,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
+            IPlainQuestionnaireRepository questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry,
             IMvxMainThreadDispatcher mainThreadDispatcher,
@@ -102,9 +103,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionIdentity = questionIdentity;
             this.interviewId = interview.Id;
 
-            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
-            var questionModel = questionnaire.GetLinkedToRosterSingleOptionQuestion(questionIdentity.Id);
-            this.referencedRosterId = questionModel.LinkedToRosterId;
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            this.referencedRosterId = questionnaire.GetQuestionReferencedByLinkedQuestion(questionIdentity.Id);
 
             this.Options =
                 new ObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(

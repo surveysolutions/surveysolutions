@@ -6,14 +6,12 @@ using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.PictureChooser;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -28,7 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         private readonly Guid userId;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage;
+        private readonly IPlainQuestionnaireRepository questionnaireStorage;
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
         private readonly ILiteEventRegistry eventRegistry;
         private Guid interviewId;
@@ -41,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             IPlainInterviewFileStorage plainInterviewFileStorage,
             ILiteEventRegistry eventRegistry,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage,
+            IPlainQuestionnaireRepository questionnaireStorage,
             QuestionStateViewModel<PictureQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering)
         {
@@ -78,8 +76,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
             this.interviewId = interview.Id;
 
-            QuestionnaireModel questionnaire = this.questionnaireStorage.GetById(interview.QuestionnaireId);
-            this.variableName = questionnaire.GetMultimediaQuestion(entityIdentity.Id).Variable;
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity);
+            this.variableName = questionnaire.GetQuestionVariableName(entityIdentity.Id);
             MultimediaAnswer multimediaAnswer = interview.GetMultimediaAnswer(entityIdentity);
             if (multimediaAnswer.IsAnswered)
             {

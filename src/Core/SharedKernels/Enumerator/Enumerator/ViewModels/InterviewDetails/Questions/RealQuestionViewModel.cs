@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -25,7 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry liteEventRegistry;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private Identity questionIdentity;
         private string interviewId;
 
@@ -95,8 +96,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IPrincipal principal,
             IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<NumericRealQuestionAnswered> questionStateViewModel,
-            AnsweringViewModel answering, 
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository, ILiteEventRegistry liteEventRegistry)
+            AnsweringViewModel answering,
+            IPlainQuestionnaireRepository questionnaireRepository, ILiteEventRegistry liteEventRegistry)
         {
             this.principal = principal;
             this.interviewRepository = interviewRepository;
@@ -122,10 +123,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetRealNumericAnswer(entityIdentity);
 
-            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
-            var questionModel = questionnaire.GetRealNumericQuestion(entityIdentity.Id);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
-            this.CountOfDecimalPlaces = questionModel.CountOfDecimalPlaces;
+            this.CountOfDecimalPlaces = questionnaire.GetCountOfDecimalPlacesAllowedByQuestion(entityIdentity.Id);
             if (answerModel.IsAnswered)
             {
                 this.AnswerAsString = NullableDecimalToAnswerString(answerModel.Answer);

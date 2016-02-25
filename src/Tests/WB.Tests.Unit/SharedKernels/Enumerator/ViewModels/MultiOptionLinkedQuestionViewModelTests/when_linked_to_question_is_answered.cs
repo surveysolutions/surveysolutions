@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
@@ -19,18 +20,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             questionId = new Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), new decimal[] { 1 });
             linkedToQuestionId = new Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), new decimal[] { 1 });
 
-            var questionnaire = Create.QuestionnaireModel(new BaseQuestionModel[] {
-                    new TextQuestionModel
-                    {
-                        Id = linkedToQuestionId.Id
-                    },
-                    new LinkedMultiOptionQuestionModel
-                    {
-                        Id = questionId.Id,
-                        LinkedToQuestionId = linkedToQuestionId.Id
-                    }
-                });
-
+            //var questionnaire = Create.QuestionnaireModel(new BaseQuestionModel[] {
+            //        new TextQuestionModel
+            //        {
+            //            Id = linkedToQuestionId.Id
+            //        },
+            //        new LinkedMultiOptionQuestionModel
+            //        {
+            //            Id = questionId.Id,
+            //            LinkedToQuestionId = linkedToQuestionId.Id
+            //        }
+            //    });
+            var questionnaire = Mock.Of<IQuestionnaire>();
             interview = new Mock<IStatefulInterview>();
             interview.SetupGet(x => x.Answers).Returns(new Dictionary<string, BaseInterviewAnswer>());
             interview.Setup(x => x.FindAnswersOfReferencedQuestionForLinkedQuestion(linkedToQuestionId.Id, Moq.It.IsAny<Identity>()))

@@ -35,8 +35,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
                    && _.MaxAnswerCount == 5);
 
             var questionnaireModel = Mock.Of<QuestionnaireModel>(_ => _.Questions == new Dictionary<Guid, BaseQuestionModel>{ { questionIdentity.Id, textListQuestionModel } });
-            
-            var questionnaireRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(x => x.GetById(questionnaireId) == questionnaireModel);
+
+            var questionnaireIdentity = Create.QuestionnaireIdentity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+            var questionnaireRepository = Unit.Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity,
+                _ => _.GetQuestionTitle(questionIdentity.Id) == "Title");
 
             listModel = CreateTextListQuestionViewModel(
                 QuestionStateMock.Object, 

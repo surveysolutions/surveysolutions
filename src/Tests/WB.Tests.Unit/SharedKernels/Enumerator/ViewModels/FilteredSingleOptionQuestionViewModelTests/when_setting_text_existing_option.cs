@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
@@ -25,7 +23,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             interviewId = "interviewId";
             questionnaireId = "questionnaireId";
             userId = Guid.NewGuid();
-            questionIdentity = Create.Identity(Guid.NewGuid(), new decimal[0]);
 
             var singleOptionAnswer = Mock.Of<SingleOptionAnswer>(_ => _.Answer == 3);
 
@@ -45,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 
             var questionnaireModel = Mock.Of<QuestionnaireModel>(_ => _.Questions == new Dictionary<Guid, BaseQuestionModel> { { questionIdentity.Id, filteredSingleOptionQuestionModel } });
 
-            var questionnaireRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(x => x.GetById(questionnaireId) == questionnaireModel);
+            var questionnaireRepository = SetupQuestionnaireRepositoryWithFilteredQuestion();
 
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
@@ -77,7 +74,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
         private static FilteredSingleOptionQuestionViewModel viewModel;
         private static Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> questionStateMock;
         private static Mock<AnsweringViewModel> answeringViewModelMock;
-        private static Identity questionIdentity;
         private static string interviewId;
         private static string questionnaireId;
         private static Guid userId;

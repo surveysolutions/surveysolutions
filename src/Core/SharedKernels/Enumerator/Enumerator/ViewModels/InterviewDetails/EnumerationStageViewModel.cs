@@ -7,12 +7,10 @@ using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -53,7 +51,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ISubstitutionService substitutionService;
         readonly ILiteEventRegistry eventRegistry;
@@ -68,14 +65,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         IStatefulInterview interview;
         private IQuestionnaire questionnaire;
-        QuestionnaireModel questionnaireModel;
         string interviewId;
 
 
         public EnumerationStageViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
             IPlainQuestionnaireRepository questionnaireRepository,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository,
             IStatefulInterviewRepository interviewRepository,
             ISubstitutionService substitutionService,
             ILiteEventRegistry eventRegistry,
@@ -85,7 +80,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.questionnaireRepository = questionnaireRepository;
-            this.questionnaireModelRepository = questionnaireModelRepository;
             this.interviewRepository = interviewRepository;
             this.substitutionService = substitutionService;
             this.eventRegistry = eventRegistry;
@@ -104,7 +98,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.interviewId = interviewId;
             this.interview = this.interviewRepository.Get(interviewId);
             this.questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity);
-            this.questionnaireModel = this.questionnaireModelRepository.GetById(this.interview.QuestionnaireId);
 
             this.eventRegistry.Subscribe(this, interviewId);
             this.navigationState = navigationState;

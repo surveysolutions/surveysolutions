@@ -20,7 +20,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
         private readonly IInterviewerInterviewAccessor interviewFactory;
 
-        private readonly IAsyncPlainStorage<QuestionnaireModelView> questionnaireModelViewRepository;
         private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
 
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
@@ -29,7 +28,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public InterviewerQuestionnaireAccessor(
             ISerializer serializer,
             IQuestionnaireModelBuilder questionnaireModelBuilder,
-            IAsyncPlainStorage<QuestionnaireModelView> questionnaireModelViewRepository,
             IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IPlainQuestionnaireRepository plainQuestionnaireRepository,
             IAsyncPlainStorage<InterviewView> interviewViewRepository,
@@ -38,7 +36,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             this.serializer = serializer;
             this.questionnaireModelBuilder = questionnaireModelBuilder;
-            this.questionnaireModelViewRepository = questionnaireModelViewRepository;
             this.questionnaireViewRepository = questionnaireViewRepository;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.interviewViewRepository = interviewViewRepository;
@@ -56,11 +53,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             await Task.Run(() => this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId,
                         questionnaireIdentity.Version, serializedQuestionnaireDocument));
 
-            await this.questionnaireModelViewRepository.StoreAsync(new QuestionnaireModelView
-            {
-                Id = questionnaireId,
-                Model = questionnaireModel
-            });
             await this.questionnaireViewRepository.StoreAsync(new QuestionnaireView
             {
                 Id = questionnaireId,
@@ -76,7 +68,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
             await this.DeleteInterviewsByQuestionnaireAsync(questionnaireId);
             this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
-            await this.questionnaireModelViewRepository.RemoveAsync(questionnaireId);
             await this.questionnaireViewRepository.RemoveAsync(questionnaireId);
             await this.questionnaireAssemblyFileAccessor.RemoveAssemblyAsync(questionnaireIdentity);
         }

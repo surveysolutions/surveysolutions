@@ -626,7 +626,6 @@ namespace WB.Tests.Unit
         public static EnumerationStageViewModel EnumerationStageViewModel(
             IInterviewViewModelFactory interviewViewModelFactory = null,
             IPlainQuestionnaireRepository questionnaireRepository = null,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
             ISubstitutionService substitutionService = null,
             ILiteEventRegistry eventRegistry = null,
@@ -636,7 +635,6 @@ namespace WB.Tests.Unit
             => new EnumerationStageViewModel(
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
                 questionnaireRepository ?? Stub<IPlainQuestionnaireRepository>.WithNotEmptyValues,
-                questionnaireModelRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 substitutionService ?? Mock.Of<ISubstitutionService>(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
@@ -1933,15 +1931,18 @@ namespace WB.Tests.Unit
 
         public static QuestionnaireIdentity QuestionnaireIdentity()
         {
-            return new QuestionnaireIdentity(Guid.NewGuid(), 7);
+            return Create.QuestionnaireIdentity(Guid.NewGuid());
         }
 
-        public static QuestionnaireImportService QuestionnaireImportService(IPlainKeyValueStorage<QuestionnaireModel> plainKeyValueStorage = null)
+        public static QuestionnaireIdentity QuestionnaireIdentity(Guid questionnaireId)
         {
-            return new QuestionnaireImportService(plainKeyValueStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
-                Mock.Of<IPlainQuestionnaireRepository>(),
-                Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
-                Mock.Of<IQuestionnaireModelBuilder>());
+            return new QuestionnaireIdentity(questionnaireId, 7);
+        }
+
+        public static QuestionnaireImportService QuestionnaireImportService(IPlainQuestionnaireRepository plainKeyValueStorage = null)
+        {
+            return new QuestionnaireImportService(Mock.Of<IPlainQuestionnaireRepository>(),
+                Mock.Of<IQuestionnaireAssemblyFileAccessor>());
         }
 
         public static IPublishedEvent<QuestionnaireItemMoved> QuestionnaireItemMovedEvent(string itemId,
@@ -2131,7 +2132,7 @@ namespace WB.Tests.Unit
 
             return new SingleOptionLinkedQuestionViewModel(
                 Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(_ => _.GetById(It.IsAny<string>()) == questionnaireModel),
+                Mock.Of<IPlainQuestionnaireRepository>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>()) == questionnaireModel),
                 Mock.Of<IStatefulInterviewRepository>(_ => _.Get(It.IsAny<string>()) == interview),
                 Create.AnswerToStringService(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),

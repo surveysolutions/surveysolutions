@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -29,7 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private readonly IPrincipal principal; 
         private readonly ILiteEventRegistry liteEventRegistry;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IUserInteractionService userInteractionService;
         private Identity questionIdentity;
@@ -111,7 +112,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public IntegerQuestionViewModel(
             IPrincipal principal,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
+            IPlainQuestionnaireRepository questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<NumericIntegerQuestionAnswered> questionStateViewModel,
             IUserInteractionService userInteractionService,
@@ -142,8 +143,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetIntegerNumericAnswer(entityIdentity);
 
-            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
-            var questionModel = questionnaire.GetIntegerNumericQuestion(entityIdentity.Id);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            //var questionModel = questionnaire.GetIntegerNumericQuestion(entityIdentity.Id);
 
             if (answerModel.IsAnswered)
             {
@@ -151,7 +152,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.AnswerAsString = NullableIntToAnswerString(answer);
                 this.previousAnswer = Monads.Maybe(() => answer);
             }
-            this.isRosterSizeQuestion = questionModel.IsRosterSizeQuestion;
+            this.isRosterSizeQuestion = questionnaire.ShouldQuestionSpecifyRosterSize(entityIdentity.Id);
             this.answerMaxValue = RosterUpperBoundDefaultValue;
         }
 
