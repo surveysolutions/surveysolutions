@@ -19,8 +19,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
         Establish context = () =>
         {
             //var questionnaireModel = Mock.Of<QuestionnaireModel>(_ => _.GroupsWithFirstLevelChildrenAsReferences == listOfSection && _.GroupsHierarchy == sectionsHierarchy);
-            var questionnaire = Mock.Of<IQuestionnaire>();
-            var interview = Mock.Of<IStatefulInterview>(_ => _.IsEnabled(Moq.It.IsAny<Identity>()) == true);
+
+            var questionnaireIdentity = Create.QuestionnaireIdentity();
+            var questionnaire = Mock.Of<IQuestionnaire>(_
+                => _.GetAllSections() == listOfSections);
+            var interview = Mock.Of<IStatefulInterview>(_ 
+                => _.QuestionnaireIdentity == questionnaireIdentity
+                && _.IsEnabled(Moq.It.IsAny<Identity>()) == true);
 
             questionnaireRepositoryMock.SetReturnsDefault(questionnaire);
             interviewRepositoryMock
@@ -38,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
             sectionsModel.Sections.ShouldNotBeEmpty();
 
         It should_create_the_same_amount_of_sections_as_in_questionnaire_model_plus_complete_button = () =>
-            sectionsModel.Sections.Count.ShouldEqual(listOfSection.Count + 1);
+            sectionsModel.Sections.Count.ShouldEqual(listOfSections.Count + 1);
 
         static SideBarSectionsViewModel sectionsModel;
 
@@ -47,21 +52,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
         private static readonly NavigationState navigationState = Mock.Of<NavigationState>();
         private static readonly Mock<IPlainQuestionnaireRepository> questionnaireRepositoryMock = new Mock<IPlainQuestionnaireRepository>();
         private static readonly Mock<IStatefulInterviewRepository> interviewRepositoryMock = new Mock<IStatefulInterviewRepository>();
-
-        private static readonly Dictionary<Guid, GroupModel> listOfSection = new Dictionary<Guid, GroupModel> 
-        {
-            {Guid.Parse("11111111111111111111111111111111"), Create.GroupModel(Guid.Parse("11111111111111111111111111111111"),"Section 1")  },
-            {Guid.Parse("22222222222222222222222222222222"), Create.GroupModel(Guid.Parse("22222222222222222222222222222222"),"Section 2")  },
-            {Guid.Parse("33333333333333333333333333333333"), Create.GroupModel(Guid.Parse("33333333333333333333333333333333"),"Section 3")  },
-            {Guid.Parse("44444444444444444444444444444444"), Create.GroupModel(Guid.Parse("44444444444444444444444444444444"),"Section 4")  },
-        };
-
-        private static readonly List<GroupsHierarchyModel> sectionsHierarchy = new List<GroupsHierarchyModel>
-        {
-            CreateGroupsHierarchyModel(Guid.Parse("11111111111111111111111111111111"),"Section 1"),
-            CreateGroupsHierarchyModel(Guid.Parse("22222222222222222222222222222222"),"Section 2"),
-            CreateGroupsHierarchyModel(Guid.Parse("33333333333333333333333333333333"),"Section 3"),
-            CreateGroupsHierarchyModel(Guid.Parse("44444444444444444444444444444444"),"Section 4")
-        };
+        private static readonly List<Guid> listOfSections = new List<Guid> { Id.g1, Id.g2, Id.g3, Id.g4};
     }
 }

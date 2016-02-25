@@ -17,60 +17,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
     {
         Establish context = () =>
         {
-            //QuestionnaireModel questionnaire = Create.QuestionnaireModel();
-            var sectionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            rosterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            group1Id = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-            group2Id = Guid.Parse("11111111111111111111111111111111");
-            //questionnaire.GroupsHierarchy = new List<GroupsHierarchyModel>
-            //{
-            //    new GroupsHierarchyModel
-            //    {
-            //        Title = "Section 1",
-            //        Id = sectionId,
-            //        Children = new List<GroupsHierarchyModel>
-            //        {
-            //            new GroupsHierarchyModel
-            //            {
-            //                Title = "Group 1",
-            //                Id = group1Id
-            //            },
-            //            new GroupsHierarchyModel
-            //            {
-            //                Title = "Roster 1",
-            //                Id = rosterId,
-            //                IsRoster = true
-            //            },
-            //            new GroupsHierarchyModel
-            //            {
-            //                Title = "Group 2",
-            //                Id = group2Id
-            //            }
-            //        }
-            //    }
-            //};
-            //questionnaire.GroupsWithFirstLevelChildrenAsReferences = new Dictionary<Guid, GroupModel>();
-            //questionnaire.GroupsWithFirstLevelChildrenAsReferences[rosterId] = new RosterModel
-            //{
-            //    Title = "Roster 1",
-            //    Id = rosterId
-            //};
-            //questionnaire.GroupsWithFirstLevelChildrenAsReferences[group1Id] = new GroupModel
-            //{
-            //    Title = "Group 1",
-            //    Id = group1Id
-            //};
-            //questionnaire.GroupsWithFirstLevelChildrenAsReferences[group2Id] = new GroupModel
-            //{
-            //    Title = "Group 2",
-            //    Id = group2Id
-            //};
-            //questionnaire.GroupsWithFirstLevelChildrenAsReferences[sectionId] = new GroupModel
-            //{
-            //    Title = "Section 1",
-            //    Id = sectionId
-            //};
-
             interview = Substitute.For<IStatefulInterview>();
             sectionIdentity = new Identity(sectionId, Empty.RosterVector);
             addedInstanceIdentity = new Identity(rosterId, new[] {3m});
@@ -86,9 +32,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
                 });
             interview.IsEnabled(Moq.It.IsAny<Identity>()).ReturnsForAnyArgs(true);
 
-            var questionnaire = new Mock<IQuestionnaire>();
+            var questionnaire = Mock.Of<IQuestionnaire>(_ 
+                => _.GetAllSections() == listOfSections);
 
-            viewModel = CreateSectionsViewModel(questionnaire.Object, interview);
+            viewModel = CreateSectionsViewModel(questionnaire, interview);
             viewModel.Init("", "", Create.NavigationState());
             viewModel.Sections[0].SectionIdentity = new Identity(sectionId, Empty.RosterVector);
         };
@@ -109,12 +56,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
         It should_add_roster_into_a_tree = () => viewModel.Sections.First().Children.Count.ShouldEqual(5);
 
         static SideBarSectionsViewModel viewModel;
-        static Guid rosterId;
         static IStatefulInterview interview;
-        private static Guid group2Id;
-        private static Guid group1Id;
         private static Identity sectionIdentity;
         private static Identity addedInstanceIdentity;
+        private static Guid rosterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+        private static Guid group1Id = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+        private static Guid group2Id = Guid.Parse("11111111111111111111111111111111");
+        private static readonly Guid sectionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        private static readonly List<Guid> listOfSections = new List<Guid> { sectionId };
     }
 }
 

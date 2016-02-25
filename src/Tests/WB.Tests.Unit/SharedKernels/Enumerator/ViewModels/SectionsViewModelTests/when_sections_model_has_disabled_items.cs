@@ -18,23 +18,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
     {
         Establish context = () =>
         {
-            //var questionnaire = Create.QuestionnaireModel();
-            //questionnaire.GroupsHierarchy = new List<GroupsHierarchyModel>
-            //{
-            //    CreateGroupsHierarchyModel(sectionAId, "A"),
-            //    CreateGroupsHierarchyModel(sectionBId, "B"),
-            //    CreateGroupsHierarchyModel(sectionCId, "C"),
-            //    CreateGroupsHierarchyModel(sectionDId, "D")
-            //};
-
-            //questionnaire.GroupsWithFirstLevelChildrenAsReferences = new Dictionary<Guid, GroupModel>
-            //{
-            //    { sectionAId, new GroupModel { Id = sectionAId, Title = "A" }},
-            //    { sectionBId, new GroupModel { Id = sectionBId, Title = "B" }},
-            //    { sectionCId, new GroupModel { Id = sectionCId, Title = "C" }},
-            //    { sectionDId, new GroupModel { Id = sectionDId, Title = "D" }},
-            //};
-
             var interview = Substitute.For<IStatefulInterview>();
 
             interview.IsEnabled(Arg.Is<Identity>(x => x.Id == sectionAId)).Returns(true);
@@ -42,8 +25,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
             interview.IsEnabled(Arg.Is<Identity>(x => x.Id == sectionCId)).Returns(false);
             interview.IsEnabled(Arg.Is<Identity>(x => x.Id == sectionDId)).Returns(false);
 
-            var questionnaire = new Mock<IQuestionnaire>();
-            viewModel = CreateSectionsViewModel(questionnaire.Object, interview);
+            var questionnaire = Mock.Of<IQuestionnaire>(_ 
+                => _.GetAllSections() == listOfSections
+                && _.GetGroupTitle(sectionDId) == "D");
+
+            viewModel = CreateSectionsViewModel(questionnaire, interview);
             navigationState = Substitute.For<NavigationState>();
             viewModel.Init("", "", navigationState);
 
@@ -76,5 +62,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
         static readonly Guid sectionBId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         static readonly Guid sectionCId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         static readonly Guid sectionDId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+        private static readonly List<Guid> listOfSections = new List<Guid> { sectionAId, sectionBId, sectionCId, sectionDId };
     }
 }
