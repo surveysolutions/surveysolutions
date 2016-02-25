@@ -25,7 +25,7 @@
             </div>
             <div class="text-center">
                 @FileVersionInfo.GetVersionInfo(ViewContext.Controller.GetType().Assembly.Location).ProductVersion
-                @*@ViewContext.Controller.GetType().Assembly.GetName().Version*@
+
                 @if (AppSettings.IsDebugBuilded)
                 {
                     <span id="build-config">[.NET Debug]</span>

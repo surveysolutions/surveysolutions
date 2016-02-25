@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
 using System.Web;
 using System.Web.Http;
@@ -29,8 +30,12 @@ namespace WB.UI.Designer
 
         private ILogger logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<MvcApplication>();
 
+        private static string ProductVersion => FileVersionInfo.GetVersionInfo(typeof(MvcApplication).Assembly.Location).ProductVersion;
+
         protected void Application_Start()
         {
+            this.logger.Info($"Starting Designer {ProductVersion}");
+
             AppDomain.CurrentDomain.UnhandledException += this.CurrentUnhandledException;
 
             AreaRegistration.RegisterAllAreas();
