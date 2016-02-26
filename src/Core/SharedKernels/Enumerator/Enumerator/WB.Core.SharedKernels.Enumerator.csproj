@@ -94,9 +94,6 @@
     <Compile Include="Implementation\Services\SqlitePlainStorage.cs" />
     <Compile Include="Implementation\Services\SqliteSettings.cs" />
     <Compile Include="Implementation\Services\MvxTraceListener.cs" />
-    <Compile Include="Models\Questionnaire\Questions\LinkedToRosterMultiOptionQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\LinkedToRosterSingleOptionQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\YesNoQuestionModel.cs" />
     <Compile Include="Properties\UIResources.id-ID.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -122,29 +119,8 @@
     <Compile Include="Services\Infrastructure\Storage\IPlainStorageEntity.cs" />
     <Compile Include="Services\IRosterTitleSubstitutionService.cs" />
     <Compile Include="Implementation\Services\RosterTitleSubstitutionService.cs" />
-    <Compile Include="Models\Questionnaire\GroupModel.cs" />
-    <Compile Include="Models\Questionnaire\GroupReferenceModel.cs" />
-    <Compile Include="Models\Questionnaire\GroupsHierarchyModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\BaseQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\CascadingOptionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\CascadingSingleOptionQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\DateTimeQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\FilteredSingleOptionQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\GpsCoordinatesQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\IntegerNumericQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\LinkedMultiOptionQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\LinkedSingleOptionQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\MultimediaQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\MultiOptionQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\OptionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\QRBarcodeQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\RealNumericQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\SingleOptionQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\TextListQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\TextQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\QuestionnaireReferenceModel.cs" />
-    <Compile Include="Models\Questionnaire\RosterModel.cs" />
-    <Compile Include="Models\Questionnaire\StaticTextModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\CascadingOptionModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\OptionModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\UIResources.Designer.cs">
       <AutoGen>True</AutoGen>

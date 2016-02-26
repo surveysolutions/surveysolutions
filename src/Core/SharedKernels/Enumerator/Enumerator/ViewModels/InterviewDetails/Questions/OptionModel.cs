@@ -1,4 +1,4 @@
-namespace WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class OptionModel
     {

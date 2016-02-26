@@ -3,9 +3,7 @@ using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using MvvmCross.Plugins.Messenger;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -68,16 +66,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
             return CreateSectionsViewModel(questionnaireRepository: questionnaireRepository.Object,
                 interviewRepository: interviewsRepository.Object,
                 sideBarSectionViewModelsFactory: sideBarSectionViewModelsFactory);
-        }
-
-        protected static GroupsHierarchyModel CreateGroupsHierarchyModel(Guid id, string title)
-        {
-            return new GroupsHierarchyModel
-                   {
-                       Id = id,
-                       Title = title,
-                       IsRoster = false
-                   };
         }
     }
 }
