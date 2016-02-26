@@ -230,6 +230,7 @@
     <Compile Include="CustomBindings\MvxAutoCompleteTextViewResetTextBinding.cs" />
     <Compile Include="CustomBindings\MvxAutoCompleteTextViewShowPopupOnFocusBinding.cs" />
     <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
+    <Compile Include="CustomBindings\FrameLayoutCurrentScreenBinding.cs" />
     <Compile Include="CustomBindings\TextViewIsSelectedYesNoOptionColorBinding.cs" />
     <Compile Include="CustomBindings\TextViewBoldBinding.cs" />
     <Compile Include="CustomBindings\TextViewGroupInfoBinding.cs" />
