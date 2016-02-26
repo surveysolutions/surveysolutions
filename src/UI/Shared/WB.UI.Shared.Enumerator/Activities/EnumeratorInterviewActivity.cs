@@ -52,13 +52,13 @@ namespace WB.UI.Shared.Enumerator.Activities
             };
 
 
-            MvxFragment interviewEntitiesListFragment = new InterviewEntitiesListFragment();
-            var frameViewModel = this.ViewModel.CurrentStage;
-            interviewEntitiesListFragment.ViewModel = (ActiveStageViewModel)frameViewModel;
-
-            var trans = SupportFragmentManager.BeginTransaction();
-            trans.Replace(Resource.Id.interviewCurrentStepFrame, interviewEntitiesListFragment);
-            trans.Commit();
+//            MvxFragment interviewEntitiesListFragment = new InterviewEntitiesListFragment();
+//            var frameViewModel = this.ViewModel.CurrentStage;
+//            interviewEntitiesListFragment.ViewModel = (ActiveStageViewModel)frameViewModel;
+//
+//            var trans = SupportFragmentManager.BeginTransaction();
+//            trans.Replace(Resource.Id.interviewCurrentStepFrame, interviewEntitiesListFragment);
+//            trans.Commit();
         }
 
         protected override void OnStart()
