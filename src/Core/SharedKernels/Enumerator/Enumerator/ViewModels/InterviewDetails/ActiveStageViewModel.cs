@@ -53,19 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public ObservableRangeCollection<IInterviewEntityViewModel> Items
         {
-            get
-            {
-               /* if (this.navigationState.CurrentScreenType == ScreenType.Complete)
-                {
-                    var completionInterview = this.CompletionInterviewViewModel();
-                    completionInterview.Init(this.interviewId);
-                    return new ObservableRangeCollection<object>(completionInterview.ToEnumerable());
-                }
-                else*/
-                {
-                    return this.EnumerationStage.Items;
-                }
-            }
+            get { return this.EnumerationStage.Items; }
         }
 
         protected virtual CompleteInterviewViewModel CompletionInterviewViewModel()
