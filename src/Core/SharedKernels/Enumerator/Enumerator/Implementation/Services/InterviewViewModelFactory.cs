@@ -86,65 +86,74 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return groupWithoutNestedChildren.Select(questionnaireEntity => this.CreateInterviewEntityViewModel(
                 entityId: questionnaireEntity.Id,
                 rosterVector: questionnaireEntity.RosterVector,
-                entityModelType: GetQuestionModelType(questionnaireEntity.Id, questionnaire),
+                entityModelType: GetEntityModelType(questionnaireEntity.Id, questionnaire),
                 interviewId: interviewId,
                 navigationState: navigationState));
         }
 
         [Obsolete("Do not use it. It is for transition purpose only")]
-        private static Type GetQuestionModelType(Guid questionId, IQuestionnaire questionnaire)
+        private static Type GetEntityModelType(Guid entityId, IQuestionnaire questionnaire)
         {
-            var questionType = questionnaire.GetQuestionType(questionId);
-            switch (questionType)
+            if (questionnaire.HasGroup(entityId))
             {
-                case QuestionType.SingleOption:
-                    if (questionnaire.IsQuestionLinked(questionId))
-                    {
-                        return typeof (LinkedSingleOptionQuestionModel);
-                    }
-                    if (questionnaire.IsQuestionLinkedToRoster(questionId))
-                    {
-                        return typeof(LinkedToRosterSingleOptionQuestionModel);
-                    }
-                    if (questionnaire.IsQuestionFilteredCombobox(questionId))
-                    {
-                        return typeof(FilteredSingleOptionQuestionModel);
-                    }
-                    return questionnaire.IsQuestionCascading(questionId)
-                        ? typeof(CascadingSingleOptionQuestionModel) 
-                        : typeof(SingleOptionQuestionModel);
-
-                case QuestionType.MultyOption:
-                    if (questionnaire.IsQuestionYesNo(questionId))
-                    {
-                        return typeof(YesNoQuestionModel);
-                    }
-                    if (questionnaire.IsQuestionLinked(questionId))
-                    {
-                        return typeof(LinkedMultiOptionQuestionModel);
-                    }
-                    return questionnaire.IsQuestionLinkedToRoster(questionId)
-                        ? typeof(LinkedToRosterMultiOptionQuestionModel) 
-                        : typeof(MultiOptionQuestionModel);
-                case QuestionType.Numeric:
-                    return questionnaire.IsQuestionInteger(questionId)
-                        ? typeof(IntegerNumericQuestionModel) 
-                        : typeof(RealNumericQuestionModel);
-                case QuestionType.DateTime:
-                    return typeof(DateTimeQuestionModel);
-                case QuestionType.GpsCoordinates:
-                    return typeof(GpsCoordinatesQuestionModel);
-                case QuestionType.Text:
-                    return typeof(TextQuestionModel);
-                case QuestionType.TextList:
-                    return typeof(TextListQuestionModel);
-                case QuestionType.QRBarcode:
-                    return typeof(QRBarcodeQuestionModel);
-                case QuestionType.Multimedia:
-                    return typeof(MultimediaQuestionModel);
-                default:
-                    throw new ArgumentOutOfRangeException();
+                return questionnaire.IsRosterGroup(entityId) ? typeof (RosterModel) : typeof (GroupModel);
             }
+            if (questionnaire.HasQuestion(entityId))
+            {
+                var questionType = questionnaire.GetQuestionType(entityId);
+                switch (questionType)
+                {
+                    case QuestionType.SingleOption:
+                        if (questionnaire.IsQuestionLinked(entityId))
+                        {
+                            return typeof (LinkedSingleOptionQuestionModel);
+                        }
+                        if (questionnaire.IsQuestionLinkedToRoster(entityId))
+                        {
+                            return typeof (LinkedToRosterSingleOptionQuestionModel);
+                        }
+                        if (questionnaire.IsQuestionFilteredCombobox(entityId))
+                        {
+                            return typeof (FilteredSingleOptionQuestionModel);
+                        }
+                        return questionnaire.IsQuestionCascading(entityId)
+                            ? typeof (CascadingSingleOptionQuestionModel)
+                            : typeof (SingleOptionQuestionModel);
+
+                    case QuestionType.MultyOption:
+                        if (questionnaire.IsQuestionYesNo(entityId))
+                        {
+                            return typeof (YesNoQuestionModel);
+                        }
+                        if (questionnaire.IsQuestionLinked(entityId))
+                        {
+                            return typeof (LinkedMultiOptionQuestionModel);
+                        }
+                        return questionnaire.IsQuestionLinkedToRoster(entityId)
+                            ? typeof (LinkedToRosterMultiOptionQuestionModel)
+                            : typeof (MultiOptionQuestionModel);
+                    case QuestionType.Numeric:
+                        return questionnaire.IsQuestionInteger(entityId)
+                            ? typeof (IntegerNumericQuestionModel)
+                            : typeof (RealNumericQuestionModel);
+                    case QuestionType.DateTime:
+                        return typeof (DateTimeQuestionModel);
+                    case QuestionType.GpsCoordinates:
+                        return typeof (GpsCoordinatesQuestionModel);
+                    case QuestionType.Text:
+                        return typeof (TextQuestionModel);
+                    case QuestionType.TextList:
+                        return typeof (TextListQuestionModel);
+                    case QuestionType.QRBarcode:
+                        return typeof (QRBarcodeQuestionModel);
+                    case QuestionType.Multimedia:
+                        return typeof (MultimediaQuestionModel);
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
+            return typeof (StaticTextModel);
         }
 
         private IEnumerable<IInterviewEntityViewModel> GetPrefilledQuestionsImpl(string interviewId)
@@ -158,7 +167,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     this.CreateInterviewEntityViewModel(
                         entityId: questionId,
                         rosterVector: RosterVector.Empty,
-                        entityModelType: GetQuestionModelType(questionId, questionnaire),
+                        entityModelType: GetEntityModelType(questionId, questionnaire),
                         interviewId: interviewId,
                         navigationState: null));
         }
