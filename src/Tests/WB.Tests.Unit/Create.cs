@@ -97,8 +97,6 @@ using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -769,15 +767,6 @@ namespace WB.Tests.Unit
             });
         }
 
-        public static GroupModel GroupModel(Guid id, string title)
-        {
-            return new GroupModel
-            {
-                Id = id,
-                Title = title
-            };
-        }
-
         public static IPublishedEvent<GroupStoppedBeingARoster> GroupStoppedBeingARosterEvent(string groupId)
         {
             return ToPublishedEvent(new GroupStoppedBeingARoster(responsibleId: new Guid(), groupId: Guid.Parse(groupId)));
@@ -1263,15 +1252,6 @@ namespace WB.Tests.Unit
         public static LastInterviewStatus LastInterviewStatus(InterviewStatus status = InterviewStatus.ApprovedBySupervisor)
         {
             return new LastInterviewStatus("entry-id", status);
-        }
-
-        public static LinkedMultiOptionQuestionModel LinkedMultiOptionQuestionModel(Guid? questionId = null, Guid? linkedToQuestionId =null)
-        {
-            return new LinkedMultiOptionQuestionModel()
-            {
-                Id =  questionId ?? Guid.NewGuid(),
-                LinkedToQuestionId = linkedToQuestionId ?? Guid.NewGuid()
-            };
         }
 
         public static ILiteEventBus LiteEventBus(ILiteEventRegistry liteEventRegistry = null,
@@ -2426,23 +2406,6 @@ namespace WB.Tests.Unit
                     DateTime.Now, "tttt"));
         }
 
-        public static LinkedSingleOptionQuestionModel LinkedSingleOptionQuestionModel(Guid? questionId, Guid  linkedToQuestionId)
-        {
-            return new LinkedSingleOptionQuestionModel
-            {
-                Id = questionId ?? Guid.NewGuid(),
-                LinkedToQuestionId = linkedToQuestionId
-            };
-        }
-
-        public static TextQuestionModel TextQuestionModel(Guid? questionId)
-        {
-            return new TextQuestionModel
-            {
-                Id  = questionId ?? Guid.NewGuid()
-            };
-        }
-
         public static TimeSpanBetweenStatuses TimeSpanBetweenStatuses(Guid? interviewerId = null, Guid? supervisorId = null, DateTime? timestamp = null, TimeSpan? timeSpanWithPreviousStatus = null)
         {
             return new TimeSpanBetweenStatuses()
@@ -2639,25 +2602,6 @@ namespace WB.Tests.Unit
                 isYesNo: true,
                 questionId: questionId,
                 answers: answers ?? new decimal[] {});
-        }
-
-        public static YesNoQuestionModel YesNoQuestionModel(Guid id, bool areAnswersOrdered = true, int maxAllowedAnswers = 2, List<OptionModel> options = null)
-        {
-            return new YesNoQuestionModel
-            {
-                AreAnswersOrdered = areAnswersOrdered,
-                Id = id,
-                Instructions = "instructions",
-                Options = options ?? new List<OptionModel>
-                {
-                    Create.OptionModel("item1", 1),
-                    Create.OptionModel("item2", 2),
-                    Create.OptionModel("item3", 3),
-                    Create.OptionModel("item4", 4),
-                    Create.OptionModel("item5", 5),
-                },
-                MaxAllowedAnswers = maxAllowedAnswers
-            };
         }
 
         internal static class Command
