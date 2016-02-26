@@ -19,6 +19,7 @@ Please wait while data is being loaded from server...
             var versionsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ControlPanelApi", action = "GetVersions"})';
 
             $.getJSON(versionsUrl, function(data) {
+                $(".raw").text("");
                 $.each(data, function (key, val) {
                     $(".raw").text($(".raw").text() + key + ": " + val + "\n");
                 });

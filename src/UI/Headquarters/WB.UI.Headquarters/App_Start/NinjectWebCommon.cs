@@ -52,6 +52,7 @@ using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Implementation.Services;
 using WB.UI.Headquarters.Injections;
 using WB.UI.Headquarters.Services;
+using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
@@ -149,6 +150,7 @@ namespace WB.UI.Headquarters
                 new NLogLoggingModule(),
                 new QuestionnaireUpgraderModule(),
                 new FileInfrastructureModule(),
+                new ProductVersionModule(typeof(SurveyManagementWebModule).Assembly),
                 new HeadquartersRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
