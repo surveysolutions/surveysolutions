@@ -138,6 +138,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<TextView>("TextColor", (view) => new TextViewTextColorBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("UnderlinePressed", (view) => new TextViewUnderlinePressedBinding(view));
             registry.RegisterCustomBindingFactory<EditText>("TextChanged", (editText) => new EditTextChangedBinding(editText));
+            registry.RegisterCustomBindingFactory<FrameLayout>("CurrentScreen", (frameLayout) => new FrameLayoutCurrentScreenBinding(frameLayout));
             MvxAppCompatSetupHelper.FillTargetFactories(registry);
             base.FillTargetFactories(registry);
         }

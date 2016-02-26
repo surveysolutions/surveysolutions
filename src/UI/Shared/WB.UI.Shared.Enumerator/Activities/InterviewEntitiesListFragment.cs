@@ -1,7 +1,9 @@
 ﻿using Android.App;
 using Android.OS;
 using Android.Support.V7.Widget;
+using Android.Views;
 using MvvmCross.Binding.Droid.BindingContext;
+using MvvmCross.Droid.Support.V7.Fragging.Fragments;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Platform;
 using MvvmCross.Plugins.Messenger;
@@ -22,28 +24,31 @@ namespace WB.UI.Shared.Enumerator.Activities
         private InterviewEntityAdapter adapter;
 
 
-        /*protected override void OnCreate(Bundle savedInstanceState)
+        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            this.recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.interviewEntitiesList);
+            this.EnsureBindingContextIsSet(savedInstanceState);
+            var view = this.BindingInflate(ViewResourceId, container, false);
+            this.recyclerView = view.FindViewById<MvxRecyclerView>(Resource.Id.interviewEntitiesList);
 
-            this.layoutManager = new LinearLayoutManager(this);
+            this.layoutManager = new LinearLayoutManager(this.Context);
             this.recyclerView.SetLayoutManager(this.layoutManager);
             this.recyclerView.HasFixedSize = true;
 
             this.adapter = new InterviewEntityAdapter((IMvxAndroidBindingContext)this.BindingContext);
             this.recyclerView.Adapter = this.adapter;
 
-            base.OnCreate(savedInstanceState);
+            //return base.OnCreateView(inflater, container, savedInstanceState);
+            return view;
         }
 
-        protected override void OnStart()
+        public override void OnStart()
         {
             var messenger = Mvx.Resolve<IMvxMessenger>();
             this.scrollToAnchorSubscriptionToken = messenger.Subscribe<ScrollToAnchorMessage>(this.OnScrollToAnchorMessage);
             base.OnStart();
         }
 
-        protected override void OnStop()
+        public override void OnStop()
         {
             var messenger = Mvx.Resolve<IMvxMessenger>();
             messenger.Unsubscribe<ScrollToAnchorMessage>(this.scrollToAnchorSubscriptionToken);
@@ -60,6 +65,6 @@ namespace WB.UI.Shared.Enumerator.Activities
                 },
                 null);
             }
-        }*/
+        }
     }
 }
