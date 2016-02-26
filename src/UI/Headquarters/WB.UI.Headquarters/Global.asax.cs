@@ -43,6 +43,7 @@ namespace WB.UI.Headquarters
 
         private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Global>();
         private readonly IHealthCheckService healthCheckService = ServiceLocator.Current.GetInstance<IHealthCheckService>();
+        private readonly IProductVersionHistory productVersionHistory = ServiceLocator.Current.GetInstance<IProductVersionHistory>();
 
         private static string ProductVersion => ServiceLocator.Current.GetInstance<IProductVersion>().ToString();
 
@@ -95,6 +96,7 @@ namespace WB.UI.Headquarters
         protected void Application_Start()
         {
             this.logger.Info($"Starting Headquarters {ProductVersion}");
+            this.productVersionHistory.RegisterCurrentVersion();
 
             MvcHandler.DisableMvcResponseHeader = true;
 

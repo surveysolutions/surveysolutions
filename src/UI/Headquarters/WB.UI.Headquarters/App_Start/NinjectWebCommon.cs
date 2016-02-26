@@ -60,6 +60,7 @@ using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using WB.UI.Shared.Web.MembershipProvider.Settings;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
+using WB.UI.Shared.Web.Versions;
 using WebActivatorEx;
 using FilterScope = System.Web.Http.Filters.FilterScope;
 
@@ -132,7 +133,13 @@ namespace WB.UI.Headquarters
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
                 ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
-                MappingAssemblies = new List<Assembly> { typeof(SurveyManagementSharedKernelModule).Assembly, typeof(HeadquartersBoundedContextModule).Assembly, typeof(SynchronizationModule).Assembly }
+                MappingAssemblies = new List<Assembly>
+                {
+                    typeof(SurveyManagementSharedKernelModule).Assembly,
+                    typeof(HeadquartersBoundedContextModule).Assembly,
+                    typeof(SynchronizationModule).Assembly,
+                    typeof(ProductVersionModule).Assembly,
+                }
             };
 
             var cacheSettings = new ReadSideCacheSettings(
