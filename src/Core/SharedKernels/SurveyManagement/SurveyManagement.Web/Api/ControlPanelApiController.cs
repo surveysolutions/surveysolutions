@@ -33,6 +33,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly ITeamViewFactory teamViewFactory;
         private readonly MemoryCache cache = MemoryCache.Default;
         private readonly IProductVersion productVersion;
+        private readonly IProductVersionHistory productVersionHistory;
 
 
         public ControlPanelApiController(
@@ -40,13 +41,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
             ISynchronizationLogViewFactory synchronizationLogViewFactory,
             ITeamViewFactory teamViewFactory,
-            IProductVersion productVersion)
+            IProductVersion productVersion,
+            IProductVersionHistory productVersionHistory)
         {
             this.readSideAdministrationService = readSideAdministrationService;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.synchronizationLogViewFactory = synchronizationLogViewFactory;
             this.teamViewFactory = teamViewFactory;
             this.productVersion = productVersion;
+            this.productVersionHistory = productVersionHistory;
         }
 
         public InterviewDetailsSchedulerViewModel InterviewDetails()
@@ -81,7 +84,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             {
                 Product = this.productVersion.ToString(),
                 ReadSide_Application = readSideStatus.ReadSideApplicationVersion,
-                ReadSide_Database = readSideStatus.ReadSideDatabaseVersion ?? -1,
+                ReadSide_Database = readSideStatus.ReadSideDatabaseVersion,
+
+                History = this.productVersionHistory.GetHistory().ToDictionary(
+                    change => change.UpdateTimeUtc,
+                    change => change.ProductVersion)
             };
         }
 
