@@ -1967,19 +1967,6 @@ namespace WB.Tests.Unit
             return new QuestionnaireLevelLabels(levelName, variableLabels);
         }
 
-        public static QuestionnaireModel QuestionnaireModel(BaseQuestionModel[] questions = null)
-        {
-            return new QuestionnaireModel
-            {
-                Questions = questions != null ? questions.ToDictionary(question => question.Id, question => question) : new Dictionary<Guid, BaseQuestionModel>(),
-            };
-        }
-
-        public static QuestionnaireModelBuilder QuestionnaireModelBuilder()
-        {
-            return new QuestionnaireModelBuilder();
-        }
-
         public static QuestionnaireNameValidator QuestionnaireNameValidator(
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
         {
@@ -2120,19 +2107,19 @@ namespace WB.Tests.Unit
         }
 
         public static SingleOptionLinkedQuestionViewModel SingleOptionLinkedQuestionViewModel(
-            QuestionnaireModel questionnaireModel = null,
+            IQuestionnaire questionnaire = null,
             IStatefulInterview interview = null,
             ILiteEventRegistry eventRegistry = null,
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionState = null,
             AnsweringViewModel answering = null)
         {
             var userIdentity = Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid());
-            questionnaireModel = questionnaireModel ?? Mock.Of<QuestionnaireModel>();
+            questionnaire = questionnaire ?? Mock.Of<IQuestionnaire>();
             interview = interview ?? Mock.Of<IStatefulInterview>();
 
             return new SingleOptionLinkedQuestionViewModel(
                 Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity),
-                Mock.Of<IPlainQuestionnaireRepository>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>()) == questionnaireModel),
+                Mock.Of<IPlainQuestionnaireRepository>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>()) == questionnaire),
                 Mock.Of<IStatefulInterviewRepository>(_ => _.Get(It.IsAny<string>()) == interview),
                 Create.AnswerToStringService(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),

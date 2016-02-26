@@ -6,6 +6,7 @@ using Moq;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
@@ -35,13 +36,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                 x.Answers == new Dictionary<string, BaseInterviewAnswer>()
                 );
 
-            var questionnaire = Create.QuestionnaireModel();
-            questionnaire.Questions = new Dictionary<Guid, BaseQuestionModel>();
-            questionnaire.Questions.Add(questionId.Id, new LinkedMultiOptionQuestionModel
-            {
-                LinkedToQuestionId = linkedToQuestionId
-            });
-            questionnaire.Questions.Add(linkedToQuestionId, new TextQuestionModel());
+            var questionnaire = Mock.Of<IQuestionnaire>(_
+                => _.GetQuestionReferencedByLinkedQuestion(questionId.Id) == linkedToQuestionId
+                && _.ShouldQuestionRecordAnswersOrder(questionId.Id) == false);
 
             var interviews = new Mock<IStatefulInterviewRepository>();
             var questionnaires = new Mock<IPlainQuestionnaireRepository>();

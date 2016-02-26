@@ -18,12 +18,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
     {
         Establish context = () =>
         {
-            var questionnaire = Create.QuestionnaireModel(questions: new BaseQuestionModel[]
-            {
-                Create.LinkedSingleOptionQuestionModel(questionId, linkedToQuestionId),
-                Create.TextQuestionModel(linkedToQuestionId)
-            });
-            
+            var questionnaire = SetupQuestionnaireWithSingleOptionQuestionLinkedToTextQuestion(questionId, linkedToQuestionId);
+
             var answer = new LinkedSingleOptionAnswer();
 
             var answeredLinkedOption = new[] { 1m };
@@ -40,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                    && _.GetLinkedSingleOptionAnswer(questionIdentity) == answer);
 
             viewModel = Create.SingleOptionLinkedQuestionViewModel(
-                questionnaireModel: questionnaire,
+                questionnaire: questionnaire,
                 interview: interview);
 
             viewModel.Init(interviewId, questionIdentity, navigationState);

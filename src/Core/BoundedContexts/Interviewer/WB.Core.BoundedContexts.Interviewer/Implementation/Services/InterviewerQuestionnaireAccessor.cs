@@ -8,7 +8,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
@@ -16,7 +15,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     public class InterviewerQuestionnaireAccessor : IInterviewerQuestionnaireAccessor
     {
         private readonly ISerializer serializer;
-        private readonly IQuestionnaireModelBuilder questionnaireModelBuilder;
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
         private readonly IInterviewerInterviewAccessor interviewFactory;
 
@@ -27,7 +25,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public InterviewerQuestionnaireAccessor(
             ISerializer serializer,
-            IQuestionnaireModelBuilder questionnaireModelBuilder,
             IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IPlainQuestionnaireRepository plainQuestionnaireRepository,
             IAsyncPlainStorage<InterviewView> interviewViewRepository,
@@ -35,7 +32,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IInterviewerInterviewAccessor interviewFactory)
         {
             this.serializer = serializer;
-            this.questionnaireModelBuilder = questionnaireModelBuilder;
             this.questionnaireViewRepository = questionnaireViewRepository;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.interviewViewRepository = interviewViewRepository;
@@ -48,7 +44,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             var questionnaireId = questionnaireIdentity.ToString();
 
             var serializedQuestionnaireDocument = await Task.Run(() => this.serializer.Deserialize<QuestionnaireDocument>(questionnaireDocument));
-            var questionnaireModel = await Task.Run(() => this.questionnaireModelBuilder.BuildQuestionnaireModel(serializedQuestionnaireDocument));
 
             await Task.Run(() => this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId,
                         questionnaireIdentity.Version, serializedQuestionnaireDocument));

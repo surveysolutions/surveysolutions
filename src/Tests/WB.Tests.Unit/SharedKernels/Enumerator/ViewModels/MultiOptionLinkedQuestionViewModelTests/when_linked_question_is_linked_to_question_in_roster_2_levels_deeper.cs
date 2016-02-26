@@ -19,17 +19,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
     {
         Establish context = () =>
         {
-            var firstRosterTitleQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var secondRosterTitlQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             linkedQuestionId = new Identity(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), Empty.RosterVector);
 
-            //var questionnaireModel = Create.QuestionnaireModel(new BaseQuestionModel[]
-            //{
-            //    Create.TextQuestionModel(questionId: firstRosterTitleQuestionId),
-            //    Create.TextQuestionModel(questionId: secondRosterTitlQuestionId),
-            //    Create.LinkedMultiOptionQuestionModel(questionId: linkedQuestionId.Id, linkedToQuestionId: secondRosterTitlQuestionId)
-            //});
-            var questionnaire = Mock.Of<IQuestionnaire>();
+            var questionnaire = Mock.Of<IQuestionnaire>(_
+                => _.GetQuestionReferencedByLinkedQuestion(linkedQuestionId.Id) == secondRosterTitlQuestionId
+                && _.ShouldQuestionRecordAnswersOrder(linkedQuestionId.Id) == false);
+
             var interview = Substitute.For<IStatefulInterview>();
             interview.Answers.Returns(new ReadOnlyDictionary<string, BaseInterviewAnswer>(new Dictionary<string, BaseInterviewAnswer>()));
 
