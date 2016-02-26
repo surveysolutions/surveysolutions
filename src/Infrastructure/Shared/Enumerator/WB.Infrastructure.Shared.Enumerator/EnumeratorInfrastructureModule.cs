@@ -1,3 +1,4 @@
+using Flurl.Http;
 using Geolocator.Plugin;
 using Geolocator.Plugin.Abstractions;
 using ICSharpCode.SharpZipLib;
@@ -28,6 +29,9 @@ namespace WB.Infrastructure.Shared.Enumerator
             this.Bind<IGpsLocationService>().To<GpsLocationService>().InSingletonScope();
             this.Bind<IGeolocator>().ToMethod(context => CrossGeolocator.Current);
 
+            FlurlHttp.Configure(c => {
+                c.HttpClientFactory = new ModernHttpClientFactory();
+            });
         }
     }
 }
