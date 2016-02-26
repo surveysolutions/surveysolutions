@@ -5,6 +5,7 @@ using Android.Graphics;
 using Android.Support.V4.App;
 using Android.Widget;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Core.Views;
 using MvvmCross.Droid.Support.V7.Fragging.Fragments;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Droid.Platform;
@@ -15,25 +16,22 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class FrameLayoutCurrentScreenBinding : BaseBinding<FrameLayout, MvxViewModel>
     {
-        readonly Dictionary<Type, Func<MvxFragment>> mapViewModelToFragment = new Dictionary<Type, Func<MvxFragment>>()
-        {
-            { typeof(ActiveStageViewModel),        Mvx.Resolve<InterviewEntitiesListFragment> },
-            { typeof(CompleteInterviewViewModel),  Mvx.Resolve<CompleteInterviewFragment>     },
-        };
-
-
         public FrameLayoutCurrentScreenBinding(FrameLayout frameLayout)
             : base(frameLayout) {}
 
         protected override void SetValueToView(FrameLayout frameLayout, MvxViewModel frameViewModel)
         {
-            var viewModelType = frameViewModel.GetType();
-            Func<MvxFragment> frameResolver;
+            if (frameViewModel == null)
+                return;
 
-            if (!this.mapViewModelToFragment.TryGetValue(viewModelType, out frameResolver))
+            var viewModelType = frameViewModel.GetType();
+            var mvxViewFinder = Mvx.Resolve<IMvxViewsContainer>();
+            var fragmentType = mvxViewFinder.GetViewType(viewModelType);
+            MvxFragment mvxFragment = Mvx.Resolve(fragmentType) as MvxFragment;
+
+            if (mvxFragment == null)
                 throw new ArgumentException("Can't resolve frame for ViewModel: " + viewModelType);
 
-            MvxFragment mvxFragment = frameResolver.Invoke();
             mvxFragment.ViewModel = frameViewModel;
 
             IMvxAndroidCurrentTopActivity topActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>();

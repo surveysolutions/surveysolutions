@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
         }
 
-        public void Init(string interviewId, NavigationState navigationState)
+        public void Init(string interviewId, NavigationState navigationState, Identity groupId, Identity anchoredElementIdentity)
         {
             if (navigationState == null) throw new ArgumentNullException(nameof(navigationState));
             if (this.navigationState != null) throw new Exception("ViewModel already initialized");
@@ -100,40 +100,34 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.eventRegistry.Subscribe(this, interviewId);
             this.navigationState = navigationState;
             this.Items = new ObservableRangeCollection<IInterviewEntityViewModel>();
-            this.navigationState.ScreenChanged += this.OnScreenChanged;
+
+            InitGroupScreen(groupId, anchoredElementIdentity);
         }
 
-        private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
+        private void InitGroupScreen(Identity groupId, Identity anchoredElementIdentity)
         {
-            if (eventArgs.TargetScreen == ScreenType.Complete)
+            GroupModel @group = this.questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[groupId.Id];
+            this.CreateRegularGroupScreen(groupId, anchoredElementIdentity, @group);
+            if (!this.eventRegistry.IsSubscribed(this, this.interviewId))
             {
-                this.Items.OfType<IDisposable>().ForEach(x => x.Dispose());
-                this.Items.Clear();
-            }
-            else
-            {
-                this.CreateRegularGroupScreen(eventArgs, eventArgs.TargetGroup.Id);
-                if (!this.eventRegistry.IsSubscribed(this, this.interviewId))
-                {
-                    this.eventRegistry.Subscribe(this, this.interviewId);
-                }
+                this.eventRegistry.Subscribe(this, this.interviewId);
             }
         }
 
-        private void CreateRegularGroupScreen(ScreenChangedEventArgs eventArgs, Guid groupId)
+        private void CreateRegularGroupScreen(Identity groupId, Identity anchoredElementIdentity, GroupModel @group)
         {
             if (this.questionnaire.IsRosterGroup(groupId))
             {
                 string title = this.questionnaire.GetGroupTitle(groupId);
-                this.Name = this.substitutionService.GenerateRosterName(title, this.interview.GetRosterTitle(eventArgs.TargetGroup));
+                this.Name = this.substitutionService.GenerateRosterName(title, this.interview.GetRosterTitle(groupId));
             }
             else
             {
                 this.Name = this.questionnaire.GetGroupTitle(groupId); ;
             }
 
-            this.LoadFromModel(eventArgs.TargetGroup);
-            this.SendScrollToMessage(eventArgs.AnchoredElementIdentity);
+            this.LoadFromModel(groupId);
+            this.SendScrollToMessage(anchoredElementIdentity);
         }
 
         private void SendScrollToMessage(Identity scrollTo)
@@ -334,7 +328,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Dispose()
         {
             this.eventRegistry.Unsubscribe(this, interviewId);
-            this.navigationState.ScreenChanged -= this.OnScreenChanged;
+            //this.navigationState.ScreenChanged -= this.InitGroupScreen;
             var disposableItems = this.Items.OfType<IDisposable>().ToArray();
 
             foreach (var disposableItem in disposableItems)
