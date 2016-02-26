@@ -50,6 +50,7 @@ using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using WB.UI.Shared.Web.MembershipProvider.Settings;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
+using WB.UI.Shared.Web.Versions;
 using WB.UI.Supervisor.App_Start;
 using WB.UI.Supervisor.Code;
 using WB.UI.Supervisor.Controllers;
@@ -116,7 +117,13 @@ namespace WB.UI.Supervisor.App_Start
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings
             {
                 ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
-                MappingAssemblies = new List<Assembly> { typeof(SurveyManagementSharedKernelModule).Assembly, typeof(SupervisorBoundedContextModule).Assembly, typeof(SynchronizationModule).Assembly }
+                MappingAssemblies = new List<Assembly>
+                {
+                    typeof(SurveyManagementSharedKernelModule).Assembly,
+                    typeof(SupervisorBoundedContextModule).Assembly,
+                    typeof(SynchronizationModule).Assembly,
+                    typeof(ProductVersionModule).Assembly,
+                }
             };
 
             var readSideMaps = new List<Assembly> { typeof(SurveyManagementSharedKernelModule).Assembly, typeof(SupervisorBoundedContextModule).Assembly }; 

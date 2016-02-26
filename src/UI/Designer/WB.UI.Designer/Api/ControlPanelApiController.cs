@@ -24,6 +24,7 @@ namespace WB.UI.Designer.Api
         {
             return this.readSideAdministrationService.GetAllAvailableHandlers();
         }
+
         [NoTransaction]
         public ReadSideStatus GetReadSideStatus()
         {

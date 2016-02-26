@@ -43,7 +43,7 @@ using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
-
+using WB.UI.Shared.Web.Versions;
 using WebActivatorEx;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
@@ -105,7 +105,11 @@ namespace WB.UI.Designer.App_Start
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
                 ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
-                MappingAssemblies = new List<Assembly> { typeof(DesignerBoundedContextModule).Assembly}
+                MappingAssemblies = new List<Assembly>
+                {
+                    typeof(DesignerBoundedContextModule).Assembly,
+                    typeof(ProductVersionModule).Assembly,
+                }
             };
 
             var kernel = new StandardKernel(
