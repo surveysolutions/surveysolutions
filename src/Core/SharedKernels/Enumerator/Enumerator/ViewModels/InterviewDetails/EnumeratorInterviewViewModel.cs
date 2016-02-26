@@ -88,7 +88,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
             this.navigationState.ScreenChanged += this.OnScreenChanged;
-            await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(new Identity(questionnaire.GetAllSections().First(), new decimal[0])));
+            await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(new Identity(questionnaireModel.GroupsWithFirstLevelChildrenAsReferences.Keys.First(), new decimal[0])));
+
 
             this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
         }
@@ -103,10 +104,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
+            this.RaisePropertyChanged(() => this.CurrentStage);
+
+
             if (eventArgs.TargetScreen != ScreenType.Group)
             {
                 this.UpdateInterviewStatus(null, ScreenType.Complete);
-                this.ShowViewModel<CompleteInterviewViewModel>(new {interviewId = interviewId});
+                //this.ShowViewModel<CompleteInterviewViewModel>(new {interviewId = interviewId});
                 return;
             }
 
@@ -116,7 +120,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
 
             this.UpdateGroupStatus(eventArgs.TargetGroup);
-            this.ShowViewModel<ActiveStageViewModel>(new { interviewId = interviewId, navigationState = navigationState });
+            //this.ShowViewModel<ActiveStageViewModel>(new { interviewId = interviewId, navigationState = navigationState });
         }
 
         private void UpdateGroupStatus(Identity groupIdentity, ScreenType type = ScreenType.Group)

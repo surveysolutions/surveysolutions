@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<MvxRecyclerView
+<MvxRecyclerView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/Interview_List"
     android:id="@+id/interviewEntitiesList"
     android:layout_below="@+id/prefilledQuestions_questionnaireTitle_holder"
     android:scrollbars="vertical"
-    local:MvxBind="ItemsSource CurrentGroup.Items" />-->
-      
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:local="http://schemas.android.com/apk/res-auto"
-    style="@style/Interview_List"
-    android:id="@+id/testText"
-    android:text="test Text" />
+    local:MvxBind="ItemsSource Items" />
