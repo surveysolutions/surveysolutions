@@ -108,13 +108,14 @@ namespace WB.UI.Designer.Api
                 pageIndex: pageIndex,
                 pageSize: pageSize);
 
+            var isAdmin = this.userHelper.WebUser.IsAdmin;
             var questionnaires = questionnaireViews.Select(questionnaire => new QuestionnaireListItem()
             {
                 Id = questionnaire.QuestionnaireId,
                 Title = questionnaire.Title,
                 LastEntryDate = questionnaire.LastEntryDate,
                 Owner = questionnaire.Owner,
-                IsPublic = questionnaire.IsPublic || this.userHelper.WebUser.IsAdmin,
+                IsPublic = questionnaire.IsPublic || isAdmin,
                 IsShared = questionnaire.SharedPersons.Any(sharedPerson => sharedPerson == this.userHelper.WebUser.UserId)
             });
 
@@ -128,7 +129,7 @@ namespace WB.UI.Designer.Api
 
         private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)
         {
-            if (questionnaireView.IsPublic || questionnaireView.CreatedBy == this.userHelper.WebUser.UserId)
+            if (questionnaireView.IsPublic || questionnaireView.CreatedBy == this.userHelper.WebUser.UserId || this.userHelper.WebUser.IsAdmin)
                 return true;
 
             QuestionnaireSharedPersons questionnaireSharedPersons =
