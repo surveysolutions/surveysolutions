@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 
@@ -25,12 +26,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private EnumerationStageViewModel EnumerationStage { get; set; }
 
-        public void Init(string interviewId, NavigationState navigationState)
+        public void Init(string interviewId, NavigationState navigationState, Identity groupId, Identity anchoredElementIdentity)
         {
             this.interviewId = interviewId;
             this.navigationState = navigationState;
 
-            this.EnumerationStage.Init(interviewId, navigationState);
+            this.EnumerationStage.Init(interviewId, navigationState, groupId, anchoredElementIdentity);
 
             this.navigationState.ScreenChanged += this.OnScreenChanged;
 
