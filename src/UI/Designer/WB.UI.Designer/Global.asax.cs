@@ -16,6 +16,7 @@ using NConfig;
 using Elmah;
 using System.Web.Hosting;
 using System.Reflection;
+using WB.Core.Infrastructure.Versions;
 
 namespace WB.UI.Designer
 {
@@ -30,7 +31,7 @@ namespace WB.UI.Designer
 
         private ILogger logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<MvcApplication>();
 
-        private static string ProductVersion => FileVersionInfo.GetVersionInfo(typeof(MvcApplication).Assembly.Location).ProductVersion;
+        private static string ProductVersion => ServiceLocator.Current.GetInstance<IProductVersion>().ToString();
 
         protected void Application_Start()
         {

@@ -184,6 +184,7 @@
     <Compile Include="Transactions\ITransactionManagerProvider.cs" />
     <Compile Include="Transactions\ITransactionManagerProviderManager.cs" />
     <Compile Include="Transactions\TransactionManagerExtensions.cs" />
+    <Compile Include="Versions\IProductVersion.cs" />
     <Compile Include="WriteSide\IAggregateRootRepositoryWithCache.cs" />
   </ItemGroup>
   <ItemGroup>

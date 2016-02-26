@@ -6,6 +6,7 @@ using System.Web.Http;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
@@ -31,18 +32,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly ISynchronizationLogViewFactory synchronizationLogViewFactory;
         private readonly ITeamViewFactory teamViewFactory;
         private readonly MemoryCache cache = MemoryCache.Default;
+        private readonly IProductVersion productVersion;
 
 
         public ControlPanelApiController(
             IReadSideAdministrationService readSideAdministrationService,
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
             ISynchronizationLogViewFactory synchronizationLogViewFactory,
-            ITeamViewFactory teamViewFactory)
+            ITeamViewFactory teamViewFactory,
+            IProductVersion productVersion)
         {
             this.readSideAdministrationService = readSideAdministrationService;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.synchronizationLogViewFactory = synchronizationLogViewFactory;
             this.teamViewFactory = teamViewFactory;
+            this.productVersion = productVersion;
         }
 
         public InterviewDetailsSchedulerViewModel InterviewDetails()
@@ -68,27 +72,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             return incomingPackagesQueueLength;
         }
 
-        public IEnumerable<ReadSideEventHandlerDescription> GetAllAvailableHandlers()
-        {
-            return this.readSideAdministrationService.GetAllAvailableHandlers();
-        }
-
+        [NoTransaction]
         public dynamic GetVersions()
         {
+            var readSideStatus = this.readSideAdministrationService.GetRebuildStatus();
+
             return new
             {
-                A = 1,
-                B = 2,
-                C = 3,
+                Product = this.productVersion.ToString(),
+                ReadSide_Application = readSideStatus.ReadSideApplicationVersion,
+                ReadSide_Database = readSideStatus.ReadSideDatabaseVersion ?? -1,
             };
         }
 
+        public IEnumerable<ReadSideEventHandlerDescription> GetAllAvailableHandlers()
+            => this.readSideAdministrationService.GetAllAvailableHandlers();
+
         [NoTransaction]
-        public ReadSideStatus GetReadSideStatus()
-        {
-            ReadSideStatus readSideStatus = this.readSideAdministrationService.GetRebuildStatus();
-            return readSideStatus;
-        }
+        public ReadSideStatus GetReadSideStatus() => this.readSideAdministrationService.GetRebuildStatus();
 
         [HttpPost]
         public void RebuildReadSide(RebuildReadSideInputViewModel model)
@@ -109,10 +110,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpPost]
         [NoTransaction]
-        public void StopReadSideRebuilding()
-        {
-            this.readSideAdministrationService.StopAllViewsRebuilding();
-        }
+        public void StopReadSideRebuilding() => this.readSideAdministrationService.StopAllViewsRebuilding();
 
         [HttpPost]
         public SynchronizationLog GetSynchronizationLog(SynchronizationLogFilter filter)
