@@ -7,6 +7,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer;
+using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1;
 
 namespace WB.Tests.Unit
 {
@@ -14,13 +15,13 @@ namespace WB.Tests.Unit
     {
         internal static class Controller
         {
-            public static InterviewerQuestionnairesController InterviewerQuestionnaires(
+            public static QuestionnairesApiController InterviewerQuestionnaires(
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore = null,
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor = null,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null,
             ISerializer serializer = null)
             {
-                return new InterviewerQuestionnairesController(
+                return new QuestionnairesApiController(
                     questionnaireStore ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
                     questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
                     questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),

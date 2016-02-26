@@ -33,8 +33,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 interviewFileViewRepository: interviewFileViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewFileView>>(),
                 commandService: commandService ?? Mock.Of<ICommandService>(),
                 principal: principal ?? Mock.Of<IInterviewerPrincipal>(),
-                serializer: serializer ?? Mock.Of<ISerializer>(),
-                compressor: compressor ?? Mock.Of<IStringCompressor>(),
                 eventStore: eventStore ?? Mock.Of<IInterviewerEventStorage>(),
                 aggregateRootRepositoryWithCache: aggregateRootRepositoryWithCache ?? Mock.Of<IAggregateRootRepositoryWithCache>(),
                 snapshotStoreWithCache: snapshotStoreWithCache ?? Mock.Of<ISnapshotStoreWithCache>());

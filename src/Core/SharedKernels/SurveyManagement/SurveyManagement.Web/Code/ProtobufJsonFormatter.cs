@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 {
+    [Obsolete("Since v. 5.7")]
     public class ProtobufJsonFormatter : MediaTypeFormatter
     {
         private IProtobufSerializer serializer

@@ -377,7 +377,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             foreach (var completedInterview in completedInterviews)
             {
-                var jsonPackageByCompletedInterview = await this.interviewFactory.GetPackageByCompletedInterviewAsync(completedInterview.InterviewId);
+                var completedInterviewApiView = await this.interviewFactory.GetPackageByCompletedInterviewAsync(completedInterview.InterviewId);
                 this.SetProgressOperation(
                     InterviewerUIResources.Synchronization_Upload_Title_Format.FormatString(InterviewerUIResources.Synchronization_Upload_CompletedAssignments_Text),
                     InterviewerUIResources.Synchronization_Upload_Description_Format.FormatString(
@@ -388,7 +388,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 await this.synchronizationService.UploadInterviewAsync(
                     interviewId: completedInterview.InterviewId,
-                    content: jsonPackageByCompletedInterview,
+                    completedInterview: completedInterviewApiView,
                     onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                     token: this.Token);
 

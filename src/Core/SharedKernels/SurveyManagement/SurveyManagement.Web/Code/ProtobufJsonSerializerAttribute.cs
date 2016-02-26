@@ -3,6 +3,7 @@ using System.Web.Http.Controllers;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 {
+    [Obsolete("Since v. 5.7")]
     public class ProtobufJsonSerializerAttribute : Attribute, IControllerConfiguration
     {
         public void Initialize(HttpControllerSettings controllerSettings, HttpControllerDescriptor controllerDescriptor)

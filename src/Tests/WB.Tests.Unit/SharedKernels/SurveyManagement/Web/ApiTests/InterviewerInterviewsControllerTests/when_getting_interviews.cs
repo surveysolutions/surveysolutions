@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer;
+using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using It = Machine.Specifications.It;
 
@@ -61,7 +62,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
                 IsRejected = true
             }, 
         };
-        private static InterviewerInterviewsController controller;
+        private static InterviewsApiController controller;
         private static HttpResponseMessage response;
     }
 }
