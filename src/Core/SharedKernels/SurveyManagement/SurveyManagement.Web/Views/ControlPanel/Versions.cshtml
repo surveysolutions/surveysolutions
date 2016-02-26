@@ -1,0 +1,29 @@
+﻿@{
+    this.Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
+    this.ViewBag.Title = "Control Panel: Versions";
+}
+
+<h1 class="page-header">Versions</h1>
+
+<pre class="raw" style="height: 300px; overflow-y: scroll;">
+Please wait while data is being loaded from server...
+</pre>
+
+<div class="list"></div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(function() {
+
+            var versionsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ControlPanelApi", action = "GetVersions"})';
+
+            $.getJSON(versionsUrl, function(data) {
+                $.each(data, function (key, val) {
+                    $(".raw").text($(".raw").text() + key + ": " + val + "\n");
+                });
+            });
+
+        });
+    </script>
+}
