@@ -18,10 +18,21 @@ Please wait while data is being loaded from server...
 
             var versionsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ControlPanelApi", action = "GetVersions"})';
 
+            var writeLine = function(line) {
+                $(".raw").text($(".raw").text() + line + "\n");
+            }
+
             $.getJSON(versionsUrl, function(data) {
                 $(".raw").text("");
                 $.each(data, function (key, val) {
-                    $(".raw").text($(".raw").text() + key + ": " + val + "\n");
+                    if (val !== null && typeof val === 'object') {
+                        writeLine("[" + key + "]");
+                        $.each(val, function (subkey, subval) {
+                            writeLine("    " + subkey + " -> " + subval);
+                        });
+                    } else {
+                        writeLine(key + ": " + val);
+                    }
                 });
             });
 
