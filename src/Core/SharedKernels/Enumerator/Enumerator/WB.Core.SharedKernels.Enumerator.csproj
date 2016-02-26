@@ -91,11 +91,9 @@
     <Compile Include="Implementation\Services\IGpsLocationService.cs" />
     <Compile Include="Implementation\Services\InterviewViewModelFactory.cs" />
     <Compile Include="Implementation\Services\JsonSerializerSettingsFactory.cs" />
-    <Compile Include="Implementation\Services\QuestionnaireModelBuilder.cs" />
     <Compile Include="Implementation\Services\SqlitePlainStorage.cs" />
     <Compile Include="Implementation\Services\SqliteSettings.cs" />
     <Compile Include="Implementation\Services\MvxTraceListener.cs" />
-    <Compile Include="Models\Questionnaire\QuestionnaireModel.cs" />
     <Compile Include="Models\Questionnaire\Questions\LinkedToRosterMultiOptionQuestionModel.cs" />
     <Compile Include="Models\Questionnaire\Questions\LinkedToRosterSingleOptionQuestionModel.cs" />
     <Compile Include="Models\Questionnaire\Questions\YesNoQuestionModel.cs" />
@@ -122,7 +120,6 @@
     <Compile Include="Services\Infrastructure\QRBarcodeScanResult.cs" />
     <Compile Include="Services\Infrastructure\Storage\IAsyncPlainStorage.cs" />
     <Compile Include="Services\Infrastructure\Storage\IPlainStorageEntity.cs" />
-    <Compile Include="Services\IQuestionnaireModelBuilder.cs" />
     <Compile Include="Services\IRosterTitleSubstitutionService.cs" />
     <Compile Include="Implementation\Services\RosterTitleSubstitutionService.cs" />
     <Compile Include="Models\Questionnaire\GroupModel.cs" />
