@@ -73,6 +73,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             return this.readSideAdministrationService.GetAllAvailableHandlers();
         }
 
+        public dynamic GetVersions()
+        {
+            return new
+            {
+                A = 1,
+                B = 2,
+                C = 3,
+            };
+        }
+
         [NoTransaction]
         public ReadSideStatus GetReadSideStatus()
         {
