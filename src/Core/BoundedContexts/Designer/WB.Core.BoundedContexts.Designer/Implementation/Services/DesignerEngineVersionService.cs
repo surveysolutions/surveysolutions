@@ -83,7 +83,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             var countOfYesNoQuestions = questionnaireDocument.Find<IMultyOptionsQuestion>(q => q.YesNoView).Count();
             if (countOfYesNoQuestions > 0)
                 return version_11;
-           
+
+            var countOfLookupTables = questionnaireDocument.LookupTables.Count;
+            if (countOfLookupTables > 0)
+                return version_11;
+
             var countOfHiddenQuestions = questionnaireDocument.Find<IQuestion>(q => q.QuestionScope == QuestionScope.Hidden).Count();
             if (countOfHiddenQuestions > 0)
                 return version_10;
