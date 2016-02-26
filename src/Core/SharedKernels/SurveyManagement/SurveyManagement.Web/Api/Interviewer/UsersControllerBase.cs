@@ -1,5 +1,4 @@
-﻿using System.Web.Http;
-using Main.Core.Entities.SubEntities;
+using System.Web.Http;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
@@ -9,16 +8,13 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
-    [ApiBasicAuth(new[] { UserRoles.Operator })]
-    [RoutePrefix("api/interviewer/v1/users")]
-    [ProtobufJsonSerializer]
-    public class InterviewerUsersController : ApiController
+    public class UsersControllerBase : ApiController
     {
         private readonly IGlobalInfoProvider globalInfoProvider;
         private readonly IUserViewFactory userViewFactory;
         private readonly IUserWebViewFactory userInfoViewFactory;
 
-        public InterviewerUsersController(
+        public UsersControllerBase(
             IGlobalInfoProvider globalInfoProvider,
             IUserViewFactory userViewFactory,
             IUserWebViewFactory userInfoViewFactory)
@@ -27,10 +23,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             this.userViewFactory = userViewFactory;
             this.userInfoViewFactory = userInfoViewFactory;
         }
-
-        [HttpGet]
+        
         [WriteToSyncLog(SynchronizationLogType.GetInterviewer)]
-        public InterviewerApiView Current()
+        public virtual InterviewerApiView Current()
         {
             var user = this.userViewFactory.Load(new UserViewInputModel(this.globalInfoProvider.GetCurrentUser().Id));
 
@@ -40,10 +35,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
                 SupervisorId = user.Supervisor.Id
             };
         }
-
-        [HttpGet]
+        
         [WriteToSyncLog(SynchronizationLogType.HasInterviewerDevice)]
-        public bool HasDevice()
+        public virtual bool HasDevice()
         {
             var interviewerInfo = this.userInfoViewFactory.Load(new UserWebViewInputModel(this.globalInfoProvider.GetCurrentUser().Name, null));
             return !string.IsNullOrEmpty(interviewerInfo.DeviceId);

@@ -5,6 +5,7 @@ using Moq;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer;
+using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using It = Machine.Specifications.It;
 
@@ -28,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
             mockOfCommandService.Verify(x=>x.Execute(Moq.It.IsAny<MarkInterviewAsReceivedByInterviewer>(), Moq.It.IsAny<string>()), Times.Once);
         
         
-        private static InterviewerInterviewsController controller;
+        private static InterviewsApiController controller;
         private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Mock<ICommandService> mockOfCommandService = new Mock<ICommandService>();
     }

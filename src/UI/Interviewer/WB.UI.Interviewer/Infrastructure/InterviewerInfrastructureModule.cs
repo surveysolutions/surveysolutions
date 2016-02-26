@@ -72,8 +72,9 @@ namespace WB.UI.Interviewer.Infrastructure
                 kernel.Inject<IAsynchronousFileSystemAccessor>(), kernel.Inject<ILogger>(), 
                 AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies")));
 
-            this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
-            this.Bind<IProtobufSerializer>().To<ProtobufSerializer>();
+            this.Bind<JsonUtilsSettings>()
+                .ToConstant(new JsonUtilsSettings() {TypeNameHandling = TypeSerializationSettings.AllTypes});
+
             this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(
                 new JsonSerializerSettingsFactory(),
                 new Dictionary<string, string>()

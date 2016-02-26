@@ -185,13 +185,21 @@
     <Compile Include="Api\ControlPanelApiController.cs" />
     <Compile Include="Api\HealthCheckApiController.cs" />
     <Compile Include="Api\InterviewerSyncController.cs" />
-    <Compile Include="Api\Interviewer\InterviewerDevicesController.cs" />
-    <Compile Include="Api\Interviewer\InterviewerInterviewsController.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Api\Interviewer\InterviewerQuestionnairesController.cs" />
-    <Compile Include="Api\Interviewer\InterviewerController.cs" />
-    <Compile Include="Api\Interviewer\InterviewerUsersController.cs" />
+    <Compile Include="Api\Interviewer\InterviewerControllerBase.cs" />
+    <Compile Include="Api\Interviewer\DevicesControllerBase.cs" />
+    <Compile Include="Api\Interviewer\UsersControllerBase.cs" />
+    <Compile Include="Api\Interviewer\QuestionnairesControllerBase.cs" />
+    <Compile Include="Api\Interviewer\InterviewsControllerBase.cs" />
+    <Compile Include="Api\Interviewer\v1\InterviewerApiController.cs" />
+    <Compile Include="Api\Interviewer\v1\DevicesApiController.cs" />
+    <Compile Include="Api\Interviewer\v1\InterviewsApiController.cs" />
+    <Compile Include="Api\Interviewer\v1\QuestionnairesApiController.cs" />
+    <Compile Include="Api\Interviewer\v1\UsersApiController.cs" />
+    <Compile Include="Api\Interviewer\v2\InterviewerApiV2Controller.cs" />
+    <Compile Include="Api\Interviewer\v2\DevicesApiV2Controller.cs" />
+    <Compile Include="Api\Interviewer\v2\InterviewsApiV2Controller.cs" />
+    <Compile Include="Api\Interviewer\v2\QuestionnairesApiV2Controller.cs" />
+    <Compile Include="Api\Interviewer\v2\UsersApiV2Controller.cs" />
     <Compile Include="Api\InterviewsController.cs" />
     <Compile Include="Api\QuestionnairesController.cs" />
     <Compile Include="Api\UsersController.cs" />

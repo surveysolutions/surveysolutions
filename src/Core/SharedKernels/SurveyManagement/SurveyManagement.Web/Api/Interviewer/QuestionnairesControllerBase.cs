@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
-using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -19,17 +18,14 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
-    [ApiBasicAuth(new[] { UserRoles.Operator })]
-    [RoutePrefix("api/interviewer/v1/questionnaires")]
-    [ProtobufJsonSerializer]
-    public class InterviewerQuestionnairesController : ApiController
+    public class QuestionnairesControllerBase : ApiController
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore;
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly ISerializer serializer;
 
-        public InterviewerQuestionnairesController(
+        public QuestionnairesControllerBase(
             IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore,
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
@@ -40,11 +36,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.serializer = serializer;
         }
-
-        [HttpGet]
-        [Route("census")]
+        
         [WriteToSyncLog(SynchronizationLogType.GetCensusQuestionnaires)]
-        public HttpResponseMessage Census()
+        public virtual HttpResponseMessage Census()
         {
             var query = new QuestionnaireBrowseInputModel()
             {
@@ -62,20 +56,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             };
             return response;
         }
-
-        [HttpGet]
-        [Route("{id:guid}/{version:int}")]
+        
         [WriteToSyncLog(SynchronizationLogType.GetQuestionnaire)]
-        [Obsolete]
-        public HttpResponseMessage Get(Guid id, int version)
-        {
-            return Get(id, version, 11);
-        }
-
-        [HttpGet]
-        [Route("{id:guid}/{version:int}/{contentVersion:long}")]
-        [WriteToSyncLog(SynchronizationLogType.GetQuestionnaire)]
-        public HttpResponseMessage Get(Guid id, int version, long contentVersion)
+        public virtual HttpResponseMessage Get(Guid id, int version, long contentVersion)
         {
             var questionnaireDocumentVersioned = this.questionnaireStore.AsVersioned().Get(id.FormatGuid(), version);
 
@@ -84,7 +67,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 
             if (contentVersion < questionnaireDocumentVersioned.QuestionnaireContentVersion)
             {
-                return Request.CreateResponse(HttpStatusCode.UpgradeRequired);
+                return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
             }
 
             var resultValue = new QuestionnaireApiView
@@ -93,7 +76,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
                 AllowCensus = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version)).AllowCensusMode
             };
 
-            var response = Request.CreateResponse(resultValue);
+            var response = this.Request.CreateResponse(resultValue);
             response.Headers.CacheControl = new CacheControlHeaderValue()
             {
                 Public = true,
@@ -102,11 +85,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 
             return response;
         }
-
-        [HttpGet]
-        [Route("{id:guid}/{version:int}/assembly")]
+        
         [WriteToSyncLog(SynchronizationLogType.GetQuestionnaireAssembly)]
-        public HttpResponseMessage GetAssembly(Guid id, int version)
+        public virtual HttpResponseMessage GetAssembly(Guid id, int version)
         {
             if (!this.questionnareAssemblyFileAccessor.IsQuestionnaireAssemblyExists(id, version))
                 throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -125,18 +106,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 
             return response;
         }
-
-        [HttpPost]
-        [Route("{id:guid}/{version:int}/logstate")]
+        
         [WriteToSyncLog(SynchronizationLogType.QuestionnaireProcessed)]
-        public void LogQuestionnaireAsSuccessfullyHandled(Guid id, int version)
+        public virtual void LogQuestionnaireAsSuccessfullyHandled(Guid id, int version)
         {
         }
-
-        [HttpPost]
-        [Route("{id:guid}/{version:int}/assembly/logstate")]
+        
         [WriteToSyncLog(SynchronizationLogType.QuestionnaireAssemblyProcessed)]
-        public void LogQuestionnaireAssemblyAsSuccessfullyHandled(Guid id, int version)
+        public virtual void LogQuestionnaireAssemblyAsSuccessfullyHandled(Guid id, int version)
         {
         }
     }

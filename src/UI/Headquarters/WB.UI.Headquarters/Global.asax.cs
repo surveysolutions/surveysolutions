@@ -15,7 +15,7 @@ using Elmah;
 using EmbeddedResourceVirtualPathProvider;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
-
+using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters.Filters;
@@ -115,6 +115,11 @@ namespace WB.UI.Headquarters
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
+
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All
+            };
 
             try
             {

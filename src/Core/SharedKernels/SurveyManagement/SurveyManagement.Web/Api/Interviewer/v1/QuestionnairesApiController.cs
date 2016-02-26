@@ -1,0 +1,51 @@
+using System;
+using System.Net.Http;
+using System.Web.Http;
+using Main.Core.Entities.SubEntities;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code;
+
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
+{
+    [ApiBasicAuth(new[] { UserRoles.Operator })]
+    [ProtobufJsonSerializer]
+    [Obsolete("Since v. 5.7")]
+    public class QuestionnairesApiController : QuestionnairesControllerBase
+    {
+        public QuestionnairesApiController(
+            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore,
+            IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            ISerializer serializer) : base(
+                questionnaireStore: questionnaireStore,
+                questionnareAssemblyFileAccessor: questionnareAssemblyFileAccessor,
+                questionnaireBrowseViewFactory: questionnaireBrowseViewFactory,
+                serializer: serializer)
+        {
+        }
+
+        [HttpGet]
+        public override HttpResponseMessage Census() => base.Census();
+        
+        [HttpGet]
+        [WriteToSyncLog(SynchronizationLogType.GetQuestionnaire)]
+        public virtual HttpResponseMessage Get(Guid id, int version)
+        {
+            return this.Get(id, version, 11);
+        }
+
+        [HttpGet]
+        public override HttpResponseMessage Get(Guid id, int version, long contentVersion) => base.Get(id, version, contentVersion);
+        [HttpGet]
+        public override HttpResponseMessage GetAssembly(Guid id, int version) => base.GetAssembly(id, version);
+        [HttpPost]
+        public override void LogQuestionnaireAsSuccessfullyHandled(Guid id, int version) => base.LogQuestionnaireAsSuccessfullyHandled(id, version);
+        [HttpPost]
+        public override void LogQuestionnaireAssemblyAsSuccessfullyHandled(Guid id, int version) => base.LogQuestionnaireAssemblyAsSuccessfullyHandled(id, version);
+    }
+}

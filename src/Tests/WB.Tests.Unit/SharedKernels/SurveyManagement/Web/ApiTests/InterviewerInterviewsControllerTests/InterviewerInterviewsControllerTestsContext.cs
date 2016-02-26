@@ -5,6 +5,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer;
+using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.Synchronization;
 using WB.Core.Synchronization.MetaInfo;
@@ -14,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
 {
     internal class InterviewerInterviewsControllerTestsContext
     {
-        public static InterviewerInterviewsController CreateInterviewerInterviewsController(
+        public static InterviewsApiController CreateInterviewerInterviewsController(
             IPlainInterviewFileStorage plainInterviewFileStorage = null,
             IGlobalInfoProvider globalInfoProvider = null,
             IInterviewInformationFactory interviewsFactory = null,
@@ -24,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
             IMetaInfoBuilder metaBuilder = null,
             ISerializer serializer =  null)
         {
-            return new InterviewerInterviewsController(
+            return new InterviewsApiController(
                 plainInterviewFileStorage: plainInterviewFileStorage ?? Mock.Of<IPlainInterviewFileStorage>(),
                 globalInfoProvider: globalInfoProvider ?? Mock.Of<IGlobalInfoProvider>(),
                 interviewsFactory: interviewsFactory ?? Mock.Of<IInterviewInformationFactory>(),

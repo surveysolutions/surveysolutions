@@ -169,6 +169,10 @@
       <HintPath>..\..\..\..\packages\Quartz.2.3.3\lib\net40\Quartz.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SDammann.WebApi.Versioning, Version=2.7.0.0, Culture=neutral, PublicKeyToken=8e49016fcaf923da, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\SDammann.WebApi.Versioning.2.7.0.0\lib\net45\SDammann.WebApi.Versioning.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net" />
@@ -568,6 +572,7 @@
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\DataExportController.cs" />
     <Compile Include="Controllers\ApiUserController.cs" />
+    <Compile Include="Filters\TypedDirectRouteProvider.cs" />
     <Compile Include="Models\ChangeSettingsModel.cs" />
     <Compile Include="Models\ExportModel.cs" />
     <Compile Include="Controllers\ObserverController.cs" />

@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 principal: principal);
         };
 
-        Because of = () => interviewerInterviewAccessor.CreateInterviewAsync(interviewInfo, new InterviewDetailsApiView()).WaitAndUnwrapException();
+        Because of = () => interviewerInterviewAccessor.CreateInterviewAsync(interviewInfo, new InterviewerInterviewApiView()).WaitAndUnwrapException();
 
         It should_execute_CreateInterviewFromSynchronizationMetadata_command = () =>
             mockOfCommandService.Verify(x => x.ExecuteAsync(Moq.It.IsAny<CreateInterviewFromSynchronizationMetadata>(), null, Moq.It.IsAny<CancellationToken>()), Times.Once);

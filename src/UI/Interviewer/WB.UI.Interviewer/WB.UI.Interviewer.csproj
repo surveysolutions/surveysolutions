@@ -339,7 +339,6 @@
     <Compile Include="CustomBindings\ViewDrawableTargetBinding.cs" />
     <Compile Include="CustomControls\InterviewerDashboardAdapter.cs" />
     <Compile Include="Implementations\Services\InMemorySnapshotStoreWithCache.cs" />
-    <Compile Include="Implementations\Services\ProtobufSerializer.cs" />
     <Compile Include="Implementations\Services\StoredEvent.cs" />
     <Compile Include="Implementations\Services\TabletDiagnosticService.cs" />
     <Compile Include="Infrastructure\InterviewerInfrastructureModule.cs" />

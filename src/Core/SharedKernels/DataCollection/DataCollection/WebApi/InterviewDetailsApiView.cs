@@ -1,8 +1,24 @@
 using System;
 using System.Collections.Generic;
+using Main.Core.Events;
+using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 
 namespace WB.Core.SharedKernels.DataCollection.WebApi
 {
+    public class InterviewPackageApiView
+    {
+        public Guid InterviewId { get; set; }
+        public InterviewMetaInfo MetaInfo { get; set; } 
+        public AggregateRootEvent[] Events { get; set; }
+    }
+
+    public class InterviewerInterviewApiView
+    {
+        public AnsweredQuestionSynchronizationDto[] AnswersOnPrefilledQuestions { get; set; } 
+        public InterviewSynchronizationDto Details { get; set; }
+    }
+
     public class InterviewDetailsApiView
     {
         public List<InterviewAnswerOnPrefilledQuestionApiView> AnswersOnPrefilledQuestions { get; set; }

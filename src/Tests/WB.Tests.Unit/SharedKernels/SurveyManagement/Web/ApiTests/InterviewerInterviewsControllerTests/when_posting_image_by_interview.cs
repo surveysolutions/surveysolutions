@@ -4,6 +4,7 @@ using Moq;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer;
+using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerInterviewsControllerTests
@@ -22,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
             mockOflainInterviewFileStorage.Verify(x=>x.StoreInterviewBinaryDataAsync(interviewId, imageFileName, imageBytes), Times.Once);
         
         
-        private static InterviewerInterviewsController controller;
+        private static InterviewsApiController controller;
         private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static readonly string imageFileName = "image.png";
         private static readonly byte[] imageBytes = {1, 234, 21, 0, 54, 1, 66, 78};
