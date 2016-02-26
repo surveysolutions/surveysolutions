@@ -196,6 +196,7 @@
     <Compile Include="MembershipProvider\Settings\PasswordPolicyFactory.cs" />
     <Compile Include="Modules\NinjectModuleAdapter.cs" />
     <Compile Include="Modules\WebConfigurationModule.cs" />
+    <Compile Include="ProductVersionModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\ErrorMessages.Designer.cs">
       <AutoGen>True</AutoGen>

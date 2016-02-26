@@ -37,6 +37,7 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.CommandDeserialization;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Services;
+using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
@@ -122,7 +123,8 @@ namespace WB.UI.Designer.App_Start
                 new QuestionnaireVerificationModule(),
                 new MembershipModule(),
                 new MainModule(),
-                new FileInfrastructureModule()
+                new FileInfrastructureModule(),
+                new ProductVersionModule(typeof(MvcApplication).Assembly)
                 );
 
             kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(FilterScope.Controller)

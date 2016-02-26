@@ -18,6 +18,7 @@ using Microsoft.Practices.ServiceLocation;
 using NConfig;
 
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.DataAnnotations;
@@ -43,7 +44,7 @@ namespace WB.UI.Headquarters
         private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Global>();
         private readonly IHealthCheckService healthCheckService = ServiceLocator.Current.GetInstance<IHealthCheckService>();
 
-        private static string ProductVersion => FileVersionInfo.GetVersionInfo(typeof(SurveyManagementWebModule).Assembly.Location).ProductVersion;
+        private static string ProductVersion => ServiceLocator.Current.GetInstance<IProductVersion>().ToString();
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
