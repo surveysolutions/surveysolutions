@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
@@ -30,24 +31,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
 
             interview.Setup(x =>x.Answers)
                 .Returns(new Dictionary<string, BaseInterviewAnswer>());
-              
 
-            var questionnaire = Create.QuestionnaireModel();
-            var linkedMultiOptionQuestionModel = new LinkedMultiOptionQuestionModel
-            {
-                LinkedToQuestionId = linkedToQuestionId
-            };
-            questionnaire.Questions = new Dictionary<Guid, BaseQuestionModel>
-            {
-                {questionId.Id, linkedMultiOptionQuestionModel},
-                {linkedToQuestionId, new TextQuestionModel()}
-            };
+            var questionnaire = Mock.Of<IQuestionnaire>(_
+                => _.GetQuestionReferencedByLinkedQuestion(questionId.Id) == linkedToQuestionId
+                && _.ShouldQuestionRecordAnswersOrder(questionId.Id) == false);
+
+            var questionnaires = new Mock<IPlainQuestionnaireRepository>();
+            questionnaires.SetReturnsDefault(questionnaire);
 
             var interviews = new Mock<IStatefulInterviewRepository>();
-            var questionnaires = new Mock<IPlainQuestionnaireRepository>();
-
             interviews.SetReturnsDefault(interview.Object);
-            questionnaires.SetReturnsDefault(questionnaire);
 
             questionViewModel = CreateViewModel(interviewRepository: interviews.Object, questionnaireStorage: questionnaires.Object);
             questionViewModel.Init("interviewId", questionId, Create.NavigationState());

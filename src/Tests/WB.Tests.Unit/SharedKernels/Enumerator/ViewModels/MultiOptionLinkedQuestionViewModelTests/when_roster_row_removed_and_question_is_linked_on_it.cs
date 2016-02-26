@@ -19,17 +19,25 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             questionId = new Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Create.RosterVector(1));
             rosterId = new Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), Create.RosterVector(1));
 
-            var questionnaire = Mock.Of<IQuestionnaire>();
+            var questionnaire = Mock.Of<IQuestionnaire>(_
+                => _.GetRosterReferencedByLinkedQuestion(questionId.Id) == rosterId.Id
+            );
 
             var interview = Substitute.For<IStatefulInterview>();
             interview.FindReferencedRostersForLinkedQuestion(rosterId.Id, Arg.Any<Identity>())
-                 .Returns(new[] { Create.InterviewRoster(rosterId.Id, Create.RosterVector(1), "title"), Create.InterviewRoster(rosterId.Id, Create.RosterVector(2), "title2") });
+                 .Returns(new[] {
+                     Create.InterviewRoster(rosterId.Id, Create.RosterVector(1), "title"),
+                     Create.InterviewRoster(rosterId.Id, Create.RosterVector(2), "title2")
+                 });
 
             viewModel = CreateMultiOptionRosterLinkedQuestionViewModel(questionnaire, interview);
             viewModel.Init("interview", questionId, Create.NavigationState());
 
             interview.FindReferencedRostersForLinkedQuestion(rosterId.Id, Arg.Any<Identity>())
-                   .Returns(new[] { Create.InterviewRoster(rosterId.Id, Create.RosterVector(1), "title")});
+                   .Returns(new[]
+                   {
+                       Create.InterviewRoster(rosterId.Id, Create.RosterVector(1), "title")
+                   });
         };
 
         Because of = () =>
