@@ -104,23 +104,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
-            this.RaisePropertyChanged(() => this.CurrentStage);
-
-
             if (eventArgs.TargetScreen != ScreenType.Group)
             {
                 this.UpdateInterviewStatus(null, ScreenType.Complete);
-                //this.ShowViewModel<CompleteInterviewViewModel>(new {interviewId = interviewId});
-                return;
+            }
+            else
+            {
+                IStatefulInterview interview = this.interviewRepository.Get(this.navigationState.InterviewId);
+                IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(eventArgs.TargetGroup);
+
+                this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
+
+                this.UpdateGroupStatus(eventArgs.TargetGroup);
             }
 
-            IStatefulInterview interview = this.interviewRepository.Get(this.navigationState.InterviewId);
-            IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(eventArgs.TargetGroup);
-
-            this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
-
-            this.UpdateGroupStatus(eventArgs.TargetGroup);
-            //this.ShowViewModel<ActiveStageViewModel>(new { interviewId = interviewId, navigationState = navigationState });
+            this.RaisePropertyChanged(() => this.CurrentStage);
         }
 
         private void UpdateGroupStatus(Identity groupIdentity, ScreenType type = ScreenType.Group)
