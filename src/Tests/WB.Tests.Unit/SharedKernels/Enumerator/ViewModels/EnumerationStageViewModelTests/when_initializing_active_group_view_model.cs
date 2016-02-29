@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
             enumerationStage = Create.EnumerationStageViewModel(eventRegistry: eventRegistry.Object, interviewRepository: interviewRepositoryMock.Object);
         };
 
-        Because of = () => enumerationStage.Init(interviewId, navigationState.Object);
+        Because of = () => enumerationStage.Init(interviewId, navigationState.Object, null, null);
 
         It should_subscribe_view_model_for_events =
             () => eventRegistry.Verify(x => x.Subscribe(enumerationStage, interviewId), Times.Once);

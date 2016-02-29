@@ -8,6 +8,7 @@ using MvvmCross.Platform;
 using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -32,7 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly InterviewStateViewModel interviewState;
         protected string interviewId;
         private IStatefulInterview interview;
-        private QuestionnaireModel questionnaireModel;
+
 
         protected EnumeratorInterviewViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,
@@ -69,7 +70,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (this.interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             interview = this.interviewRepository.Get(interviewId);
             if (interview == null) throw new Exception("Interview is null.");
-            questionnaireModel = this.questionnaireModelRepository.GetById(interview.QuestionnaireId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
             if (questionnaire == null) throw new Exception("questionnaire is null. QuestionnaireId: " + interview.QuestionnaireId);
 
@@ -89,8 +89,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
             this.navigationState.ScreenChanged += this.OnScreenChanged;
-            await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(new Identity(questionnaireModel.GroupsWithFirstLevelChildrenAsReferences.Keys.First(), new decimal[0])));
-
+            await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(new Identity(questionnaire.GetAllSections().First(), new decimal[0])));
 
             this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
         }
