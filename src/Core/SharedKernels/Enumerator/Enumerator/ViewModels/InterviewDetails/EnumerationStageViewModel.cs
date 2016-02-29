@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
@@ -19,9 +18,10 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
+
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class EnumerationStageViewModel : MvxNotifyPropertyChanged,
+    public class EnumerationStageViewModel : MvxViewModel,
         ILiteEventHandler<RosterInstancesTitleChanged>,
         ILiteEventHandler<RosterInstancesAdded>,
         ILiteEventHandler<RosterInstancesRemoved>,
@@ -328,7 +328,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Dispose()
         {
             this.eventRegistry.Unsubscribe(this, interviewId);
-            //this.navigationState.ScreenChanged -= this.InitGroupScreen;
             var disposableItems = this.Items.OfType<IDisposable>().ToArray();
 
             foreach (var disposableItem in disposableItems)

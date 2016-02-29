@@ -12,7 +12,7 @@ using WB.UI.Shared.Enumerator.CustomControls;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
-    public class InterviewEntitiesListFragment : BaseFragment<ActiveStageViewModel>
+    public class InterviewEntitiesListFragment : BaseFragment<EnumerationStageViewModel>
     {
         protected override int ViewResourceId => Resource.Layout.interview_active_group;
 
