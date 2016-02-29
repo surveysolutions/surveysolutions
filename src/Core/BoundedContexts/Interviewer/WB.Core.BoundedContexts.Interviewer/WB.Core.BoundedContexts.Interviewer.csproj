@@ -172,7 +172,6 @@
     <Compile Include="Implementation\Services\InterviewerDashboardFactory.cs" />
     <Compile Include="Views\FinishInstallationViewModel.cs" />
     <Compile Include="Views\InterviewAnswerOnPrefilledQuestionView.cs" />
-    <Compile Include="Views\InterviewerActiveStageViewModel.cs" />
     <Compile Include="Views\InterviewerCompleteInterviewViewModel.cs" />
     <Compile Include="Views\InterviewGpsCoordinatesView.cs" />
     <Compile Include="Views\InterviewGpsLocationView.cs" />
