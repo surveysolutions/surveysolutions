@@ -80,7 +80,7 @@ namespace WB.UI.Shared.Enumerator
             var viewModelViewLookup = new Dictionary<Type, Type>()
             {
                 {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
-                {typeof (ActiveStageViewModel), typeof (InterviewEntitiesListFragment)},
+                {typeof (EnumerationStageViewModel), typeof (InterviewEntitiesListFragment)},
                 {typeof (CompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
             };
 

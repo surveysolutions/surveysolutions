@@ -138,7 +138,6 @@
     <Compile Include="Services\MaskText\Range.cs" />
     <Compile Include="Services\MaskText\RawText.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\ActiveStageViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\GpsLocation.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedToRosterQuestionViewModel.cs" />

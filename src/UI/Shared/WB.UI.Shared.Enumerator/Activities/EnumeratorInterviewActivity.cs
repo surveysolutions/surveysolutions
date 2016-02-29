@@ -50,15 +50,6 @@ namespace WB.UI.Shared.Enumerator.Activities
                 var viewModel = this.ViewModel;
                 viewModel.Sections.UpdateStatuses.Execute(null); // for some reason custom binding on drawerlayout is not working. 
             };
-
-
-//            MvxFragment interviewEntitiesListFragment = new InterviewEntitiesListFragment();
-//            var frameViewModel = this.ViewModel.CurrentStage;
-//            interviewEntitiesListFragment.ViewModel = (ActiveStageViewModel)frameViewModel;
-//
-//            var trans = SupportFragmentManager.BeginTransaction();
-//            trans.Replace(Resource.Id.interviewCurrentStepFrame, interviewEntitiesListFragment);
-//            trans.Commit();
         }
 
         protected override void OnStart()

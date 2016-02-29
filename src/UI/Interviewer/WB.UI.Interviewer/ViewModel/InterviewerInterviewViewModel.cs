@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -78,6 +79,22 @@ namespace WB.UI.Interviewer.ViewModel
             else
             {
                 await this.viewModelNavigationService.NavigateToDashboardAsync();
+            }
+        }
+
+        protected override MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
+        {
+            if (this.navigationState.CurrentScreenType == ScreenType.Complete)
+            {
+                var completeInterviewViewModel = Mvx.Resolve<InterviewerCompleteInterviewViewModel>();
+                completeInterviewViewModel.Init(this.interviewId);
+                return completeInterviewViewModel;
+            }
+            else
+            {
+                var activeStageViewModel = Mvx.Resolve<EnumerationStageViewModel>();
+                activeStageViewModel.Init(interviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
+                return activeStageViewModel;
             }
         }
     }

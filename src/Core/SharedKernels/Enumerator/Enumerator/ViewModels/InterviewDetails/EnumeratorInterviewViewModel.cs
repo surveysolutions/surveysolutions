@@ -6,10 +6,14 @@ using Main.Core.Entities.SubEntities;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Core;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -27,6 +31,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly GroupStateViewModel groupState;
         private readonly InterviewStateViewModel interviewState;
         protected string interviewId;
+        private IStatefulInterview interview;
+        private QuestionnaireModel questionnaireModel;
 
         protected EnumeratorInterviewViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,
@@ -61,8 +67,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public override async Task StartAsync()
         {
             if (this.interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            var interview = this.interviewRepository.Get(interviewId);
+            interview = this.interviewRepository.Get(interviewId);
             if (interview == null) throw new Exception("Interview is null.");
+            questionnaireModel = this.questionnaireModelRepository.GetById(interview.QuestionnaireId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
             if (questionnaire == null) throw new Exception("questionnaire is null. QuestionnaireId: " + interview.QuestionnaireId);
 
@@ -112,23 +119,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.UpdateGroupStatus(eventArgs.TargetGroup);
             }
 
+            this.CurrentStage.DisposeIfDisposable();
+            this.CurrentStage = UpdateCurrentScreenViewModel(eventArgs);
+            this.RaisePropertyChanged(() => this.CurrentStage);
+        }
 
-            CurrentStage.DisposeIfDisposable();
-
+        protected virtual MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
+        {
             if (this.navigationState.CurrentScreenType == ScreenType.Complete)
             {
                 var completeInterviewViewModel = Mvx.Resolve<CompleteInterviewViewModel>();
                 completeInterviewViewModel.Init(this.interviewId);
-                CurrentStage = completeInterviewViewModel;
+                return completeInterviewViewModel;
             }
             else
             {
-                var activeStageViewModel = Mvx.Resolve<ActiveStageViewModel>();
+                var activeStageViewModel = Mvx.Resolve<EnumerationStageViewModel>();
                 activeStageViewModel.Init(interviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
-                CurrentStage = activeStageViewModel;
+                return activeStageViewModel;
             }
-
-            this.RaisePropertyChanged(() => this.CurrentStage);
         }
 
         private void UpdateGroupStatus(Identity groupIdentity, ScreenType type = ScreenType.Group)
@@ -171,7 +180,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public IEnumerable<SideBarPrefillQuestion> PrefilledQuestions { get; set; }
 
         public MvxViewModel CurrentStage { get; private set; }
-
+        public string Title { get; private set; }
 
         public IEnumerable<SideBarPrefillQuestion> PrefilledQuestionsStats
         {
