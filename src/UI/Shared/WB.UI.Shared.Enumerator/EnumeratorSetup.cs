@@ -81,7 +81,6 @@ namespace WB.UI.Shared.Enumerator
             {
                 {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
                 {typeof (EnumerationStageViewModel), typeof (InterviewEntitiesListFragment)},
-                {typeof (CompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();
