@@ -104,26 +104,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             InitGroupScreen(groupId, anchoredElementIdentity);
         }
 
-        private void InitGroupScreen(Identity groupId, Identity anchoredElementIdentity)
+        private void InitGroupScreen(Identity groupId, Identity anchoredElementIdentity) 
         {
-            GroupModel @group = this.questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[groupId.Id];
-            this.CreateRegularGroupScreen(groupId, anchoredElementIdentity, @group);
+            this.CreateRegularGroupScreen(groupId, anchoredElementIdentity);
             if (!this.eventRegistry.IsSubscribed(this, this.interviewId))
             {
                 this.eventRegistry.Subscribe(this, this.interviewId);
             }
         }
 
-        private void CreateRegularGroupScreen(Identity groupId, Identity anchoredElementIdentity, GroupModel @group)
+        private void CreateRegularGroupScreen(Identity groupId, Identity anchoredElementIdentity)
         {
-            if (this.questionnaire.IsRosterGroup(groupId))
+            if (this.questionnaire.IsRosterGroup(groupId.Id))
             {
-                string title = this.questionnaire.GetGroupTitle(groupId);
+                string title = this.questionnaire.GetGroupTitle(groupId.Id);
                 this.Name = this.substitutionService.GenerateRosterName(title, this.interview.GetRosterTitle(groupId));
             }
             else
             {
-                this.Name = this.questionnaire.GetGroupTitle(groupId); ;
+                this.Name = this.questionnaire.GetGroupTitle(groupId.Id); ;
             }
 
             this.LoadFromModel(groupId);

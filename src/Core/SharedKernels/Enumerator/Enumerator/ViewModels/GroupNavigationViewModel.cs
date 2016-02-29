@@ -159,7 +159,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity);
 
-            int currentSectionIndex = questionnaire.GroupsHierarchy.FindIndex(x => x.Id == this.Identity.Id);
+            var sections = questionnaire.GetAllSections().ToList();
+
+            int currentSectionIndex = sections.FindIndex(x => x == this.Identity.Id);
             for (int sectionIndex = currentSectionIndex + 1; sectionIndex < sections.Count; sectionIndex++)
             {
                 var nextSectionIdentity = new Identity(sections[sectionIndex], RosterVector.Empty);

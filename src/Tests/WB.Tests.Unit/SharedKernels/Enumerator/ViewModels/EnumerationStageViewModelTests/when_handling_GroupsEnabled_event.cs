@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
                 interviewRepository: interviewRepository,
                 mvxMainThreadDispatcher: Stub.MvxMainThreadDispatcher());
 
-            viemModel.Init(interviewId, Create.NavigationState());
+            viemModel.Init(interviewId, Create.NavigationState(), null, null);
         };
 
         Because of = () =>
