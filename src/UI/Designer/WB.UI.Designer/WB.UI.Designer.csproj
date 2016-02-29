@@ -1246,6 +1246,7 @@
     <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\bower.json" />
     <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\LICENSE" />
+    <Content Include="Views\ControlPanel\Versions.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

@@ -20,31 +20,18 @@ namespace WB.UI.Designer.Controllers
             this.settingsProvider = settingsProvider;
         }
 
-        public ActionResult Settings()
-        {
-            IEnumerable<ApplicationSetting> settings = this.settingsProvider.GetSettings();
-            return this.View(settings);
-        }
+        public ActionResult Settings() => this.View(this.settingsProvider.GetSettings());
 
-        public ActionResult Index()
-        {
-            return this.View();
-        }
+        public ActionResult Index() => this.View();
 
-        public ActionResult NConfig()
-        {
-            return this.View();
-        }
+        public ActionResult NConfig() => this.View();
+
+        public ActionResult Versions() => this.View();
+
         [NoTransaction]
-        public ActionResult ReadSide()
-        {
-            return this.View();
-        }
+        public ActionResult ReadSide() => this.View();
 
-        public ActionResult MakeAdmin()
-        {
-            return this.View();
-        }
+        public ActionResult MakeAdmin() => this.View();
 
         [HttpPost]
         public ActionResult MakeAdmin(MakeAdminViewModel model)
