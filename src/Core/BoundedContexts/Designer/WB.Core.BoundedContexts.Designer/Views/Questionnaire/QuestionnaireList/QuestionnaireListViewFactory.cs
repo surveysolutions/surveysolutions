@@ -17,23 +17,27 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public IReadOnlyCollection<QuestionnaireListViewItem> GetUserQuestionnaires(Guid userId, bool isAdmin, int pageIndex = 1, int pageSize = 128)
         {
-            return questionnaireListViewItemStorage.Query(_ =>
-                this.FilterByQuestionnaires(_, userId, isAdmin).Select(x => new QuestionnaireListViewItem()
-                {
-                    IsPublic = x.IsPublic,
-                    LastEntryDate = x.LastEntryDate,
-                    Owner = x.CreatorName,
-                    QuestionnaireId = x.QuestionnaireId,
-                    Title = x.Title,
-                })
+            return questionnaireListViewItemStorage.Query(queryable
+                => FilterByQuestionnaires(queryable, userId, isAdmin)
+                    .Select(x => new QuestionnaireListViewItem
+                    {
+                        IsPublic = x.IsPublic,
+                        LastEntryDate = x.LastEntryDate,
+                        Owner = x.CreatorName,
+                        QuestionnaireId = x.QuestionnaireId,
+                        Title = x.Title,
+                        SharedPersons = x.SharedPersons,
+                    })
                     .Skip((pageIndex - 1)*pageSize)
                     .Take(pageSize)
                     .ToReadOnlyCollection());
         }
 
-        private IQueryable<QuestionnaireListViewItem> FilterByQuestionnaires(IQueryable<QuestionnaireListViewItem> _, Guid userId, bool isAdmin)
+        private static IQueryable<QuestionnaireListViewItem> FilterByQuestionnaires(
+            IQueryable<QuestionnaireListViewItem> queryable, Guid userId, bool isAdmin)
         {
-            var questionnaires = _.Where(x => x.IsDeleted == false);
+            var questionnaires = queryable.Where(x => x.IsDeleted == false);
+
             if (!isAdmin)
             {
                 questionnaires = questionnaires.Where(questionnaire =>
