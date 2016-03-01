@@ -1,9 +1,12 @@
+using System;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using It = Machine.Specifications.It;
@@ -15,11 +18,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
     {
         Establish context = () =>
         {
+            var interviewViewModelFactory = Mock.Of<IInterviewViewModelFactory>(f =>
+                f.GetNew<GroupNavigationViewModel>() == Mock.Of<GroupNavigationViewModel>());
+
             interviewRepositoryMock.Setup(x => x.Get(Moq.It.IsAny<string>())).Returns(Mock.Of<IStatefulInterview>());
-            enumerationStage = Create.EnumerationStageViewModel(eventRegistry: eventRegistry.Object, interviewRepository: interviewRepositoryMock.Object);
+            enumerationStage = Create.EnumerationStageViewModel(
+                eventRegistry: eventRegistry.Object, 
+                interviewRepository: interviewRepositoryMock.Object,
+                interviewViewModelFactory: interviewViewModelFactory
+                );
         };
 
-        Because of = () => enumerationStage.Init(interviewId, navigationState.Object, null, null);
+        Because of = () => enumerationStage.Init(interviewId, navigationState.Object, groupId, null);
 
         It should_subscribe_view_model_for_events =
             () => eventRegistry.Verify(x => x.Subscribe(enumerationStage, interviewId), Times.Once);
@@ -27,6 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
         static EnumerationStageViewModel enumerationStage;
 
         static readonly string interviewId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        static readonly Identity groupId = new Identity(Guid.NewGuid(), new decimal[0]);
 
         static readonly Mock<NavigationState> navigationState = new Mock<NavigationState>();
 
