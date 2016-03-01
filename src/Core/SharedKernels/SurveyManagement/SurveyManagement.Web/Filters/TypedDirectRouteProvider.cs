@@ -7,7 +7,7 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Routing;
 
-namespace WB.UI.Headquarters.Filters
+namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
 {
     public class TypedDirectRouteProvider : DefaultDirectRouteProvider
     {
