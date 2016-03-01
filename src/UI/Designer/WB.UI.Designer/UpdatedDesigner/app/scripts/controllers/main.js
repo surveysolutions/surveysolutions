@@ -95,11 +95,15 @@ angular.module('designerApp')
             };
            
             $scope.showVerificationErrors = function () {
+                if ($scope.verificationStatus.errors.length === 0)
+                    return;
                 $scope.verificationStatus.typeOfMessageToBeShown = ERROR;
                 $scope.verificationStatus.messagesToShow = $scope.verificationStatus.errors;
                 $scope.verificationStatus.visible = true;
             }
             $scope.showVerificationWarnings = function () {
+                if ($scope.verificationStatus.warnings.length === 0)
+                    return;
                 $scope.verificationStatus.typeOfMessageToBeShown = WARNING;
                 $scope.verificationStatus.messagesToShow = $scope.verificationStatus.warnings;
                 $scope.verificationStatus.visible = true;
