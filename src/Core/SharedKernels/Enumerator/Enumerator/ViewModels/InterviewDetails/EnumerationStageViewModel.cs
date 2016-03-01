@@ -97,16 +97,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.interview = this.interviewRepository.Get(interviewId);
             this.questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity);
 
-            this.eventRegistry.Subscribe(this, interviewId);
             this.navigationState = navigationState;
             this.Items = new ObservableRangeCollection<IInterviewEntityViewModel>();
 
-            InitGroupScreen(groupId, anchoredElementIdentity);
-        }
+            CreateRegularGroupScreen(groupId, anchoredElementIdentity);
 
-        private void InitGroupScreen(Identity groupId, Identity anchoredElementIdentity) 
-        {
-            this.CreateRegularGroupScreen(groupId, anchoredElementIdentity);
             if (!this.eventRegistry.IsSubscribed(this, this.interviewId))
             {
                 this.eventRegistry.Subscribe(this, this.interviewId);
