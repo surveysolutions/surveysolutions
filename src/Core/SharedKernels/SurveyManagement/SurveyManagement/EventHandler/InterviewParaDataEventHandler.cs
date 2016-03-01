@@ -53,7 +53,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewHistoryView, GroupsDisabled>,
         IUpdateHandler<InterviewHistoryView, GroupsEnabled>,
         IUpdateHandler<InterviewHistoryView, AnswerRemoved>,
-        IUpdateHandler<InterviewHistoryView, UnapprovedByHeadquarters>
+        IUpdateHandler<InterviewHistoryView, UnapprovedByHeadquarters>,
+        IUpdateHandler<InterviewHistoryView, InterviewReceivedByInterviewer>,
+        IUpdateHandler<InterviewHistoryView, InterviewReceivedBySupervisor>
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
@@ -600,6 +602,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 CreateCommentParameters(@event.Payload.Comment));
 
             return view;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewReceivedByInterviewer> @event)
+        {
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.ReceivedByInterviewer, null, @event.EventTimeStamp);
+
+            return state;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewReceivedBySupervisor> @event)
+        {
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.ReceivedBySupervisor, null, @event.EventTimeStamp);
+
+            return state;
         }
     }
 }
