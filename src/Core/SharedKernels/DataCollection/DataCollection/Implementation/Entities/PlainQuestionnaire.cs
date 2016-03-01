@@ -528,7 +528,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool ShouldBeHiddenIfDisabled(Guid entityId)
         {
-            var entity = this.GetEntityOrThrow(entityId);
+            IComposite entity = this.GetEntityOrThrow(entityId);
+
+            var question = entity as IQuestion;
+            if (question?.CascadeFromQuestionId != null)
+            {
+                return this.ShouldBeHiddenIfDisabled(question.CascadeFromQuestionId.Value);
+            }
+
             return (entity as IConditional)?.HideIfDisabled ?? false;
         }
 
