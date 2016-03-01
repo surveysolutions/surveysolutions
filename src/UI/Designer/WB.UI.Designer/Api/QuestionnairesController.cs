@@ -108,7 +108,7 @@ namespace WB.UI.Designer.Api
                 pageIndex: pageIndex,
                 pageSize: pageSize);
 
-            var questionnaires = questionnaireViews.Select(questionnaire => new QuestionnaireListItem()
+            var questionnaires = questionnaireViews.Select(questionnaire => new QuestionnaireListItem
             {
                 Id = questionnaire.QuestionnaireId,
                 Title = questionnaire.Title,
