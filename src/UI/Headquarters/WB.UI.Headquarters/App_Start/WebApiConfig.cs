@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Net.Http.Headers;
-using System.Reflection;
 using System.Web.Http;
-using System.Web.Http.Controllers;
-using System.Web.Http.Routing;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
+using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.API.Formatters;
-using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters

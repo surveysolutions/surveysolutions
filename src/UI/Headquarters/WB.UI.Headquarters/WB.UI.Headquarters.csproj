@@ -572,7 +572,6 @@
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\DataExportController.cs" />
     <Compile Include="Controllers\ApiUserController.cs" />
-    <Compile Include="Filters\TypedDirectRouteProvider.cs" />
     <Compile Include="Models\ChangeSettingsModel.cs" />
     <Compile Include="Models\ExportModel.cs" />
     <Compile Include="Controllers\ObserverController.cs" />
