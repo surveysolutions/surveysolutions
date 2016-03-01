@@ -31,6 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IAnswerToStringService answerToStringService;
         private readonly GroupStateViewModel groupState;
         private readonly InterviewStateViewModel interviewState;
+        protected readonly IInterviewViewModelFactory interviewViewModelFactory;
         protected string interviewId;
         private IStatefulInterview interview;
 
@@ -46,7 +47,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             GroupStateViewModel groupState, 
             InterviewStateViewModel interviewState,
             IPrincipal principal,
-            IViewModelNavigationService viewModelNavigationService) : base(principal, viewModelNavigationService)
+            IViewModelNavigationService viewModelNavigationService,
+            IInterviewViewModelFactory interviewViewModelFactory) : base(principal, viewModelNavigationService)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
@@ -55,6 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.answerToStringService = answerToStringService;
             this.groupState = groupState;
             this.interviewState = interviewState;
+            this.interviewViewModelFactory = interviewViewModelFactory;
 
             this.BreadCrumbs = breadCrumbsViewModel;
             this.Sections = sectionsViewModel;
@@ -127,13 +130,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             if (this.navigationState.CurrentScreenType == ScreenType.Complete)
             {
-                var completeInterviewViewModel = Mvx.Resolve<CompleteInterviewViewModel>();
+                var completeInterviewViewModel = interviewViewModelFactory.GetNew<CompleteInterviewViewModel>();
                 completeInterviewViewModel.Init(this.interviewId);
                 return completeInterviewViewModel;
             }
             else
             {
-                var activeStageViewModel = Mvx.Resolve<EnumerationStageViewModel>();
+                var activeStageViewModel = interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
                 activeStageViewModel.Init(interviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
                 return activeStageViewModel;
             }

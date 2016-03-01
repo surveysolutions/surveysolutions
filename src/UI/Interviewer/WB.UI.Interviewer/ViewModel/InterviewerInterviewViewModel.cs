@@ -31,9 +31,11 @@ namespace WB.UI.Interviewer.ViewModel
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
             GroupStateViewModel groupState,
-            InterviewStateViewModel interviewState)
+            InterviewStateViewModel interviewState,
+            IInterviewViewModelFactory interviewViewModelFactory)
             : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
-                breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, principal, viewModelNavigationService)
+                breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, principal, viewModelNavigationService,
+                interviewViewModelFactory)
         {
             this.interviewRepository = interviewRepository;
             this.viewModelNavigationService = viewModelNavigationService;
@@ -86,13 +88,13 @@ namespace WB.UI.Interviewer.ViewModel
         {
             if (this.navigationState.CurrentScreenType == ScreenType.Complete)
             {
-                var completeInterviewViewModel = Mvx.Resolve<InterviewerCompleteInterviewViewModel>();
+                var completeInterviewViewModel = interviewViewModelFactory.GetNew<InterviewerCompleteInterviewViewModel>();
                 completeInterviewViewModel.Init(this.interviewId);
                 return completeInterviewViewModel;
             }
             else
             {
-                var activeStageViewModel = Mvx.Resolve<EnumerationStageViewModel>();
+                var activeStageViewModel = interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
                 activeStageViewModel.Init(interviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
                 return activeStageViewModel;
             }
