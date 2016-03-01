@@ -227,6 +227,7 @@
     <Compile Include="Filters\ReplacePrincipal.cs" />
     <Compile Include="Filters\ObserverNotAllowedApiAttribute.cs" />
     <Compile Include="Filters\ReplacePrincipalWebApi.cs" />
+    <Compile Include="Filters\TypedDirectRouteProvider.cs" />
     <Compile Include="Models\Api\AssignChangeApiModel.cs" />
     <Compile Include="Models\Api\StatusChangeApiModel.cs" />
     <Compile Include="Models\CypherSettingsModel.cs" />
