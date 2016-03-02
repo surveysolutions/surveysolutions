@@ -24,6 +24,7 @@ Please wait while data is being loaded from server...
                 $(".raw").text("");
                 $.each(data, function(key, val) {
                     if (val !== null && typeof val === 'object') {
+                        writeLine("");
                         writeLine("[" + key + "]");
                         $.each(val, function(subkey, subval) {
                             if (subkey !== '$type') {

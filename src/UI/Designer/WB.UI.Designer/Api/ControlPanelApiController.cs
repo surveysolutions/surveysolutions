@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using WB.Core.Infrastructure;
@@ -15,6 +16,22 @@ namespace WB.UI.Designer.Api
     [LocalOrDevelopmentAccessOnly]
     public class ControlPanelApiController : ApiController
     {
+        public class VersionsInfo
+        {
+            public VersionsInfo(string product, int readSideApplication, int? readSideDatabase, Dictionary<DateTime, string> history)
+            {
+                this.Product = product;
+                this.ReadSide_Application = readSideApplication;
+                this.ReadSide_Database = readSideDatabase;
+                this.History = history;
+            }
+
+            public string Product { get; }
+            public int ReadSide_Application { get; }
+            public int? ReadSide_Database { get; }
+            public Dictionary<DateTime, string> History { get; }
+        }
+
         private readonly IProductVersion productVersion;
         private readonly IProductVersionHistory productVersionHistory;
         private readonly IReadSideAdministrationService readSideAdministrationService;
@@ -30,22 +47,18 @@ namespace WB.UI.Designer.Api
         }
 
         [NoTransaction]
-        public dynamic GetVersions()
+        public VersionsInfo GetVersions()
         {
             var readSideStatus = this.readSideAdministrationService.GetRebuildStatus();
 
-            return new
-            {
-                Product = this.productVersion.ToString(),
-                ReadSide_Application = readSideStatus.ReadSideApplicationVersion,
-                ReadSide_Database = readSideStatus.ReadSideDatabaseVersion,
-
-                History = this.productVersionHistory.GetHistory().ToDictionary(
+            return new VersionsInfo(
+                this.productVersion.ToString(),
+                readSideStatus.ReadSideApplicationVersion,
+                readSideStatus.ReadSideDatabaseVersion,
+                this.productVersionHistory.GetHistory().ToDictionary(
                     change => change.UpdateTimeUtc,
-                    change => change.ProductVersion)
-            };
+                    change => change.ProductVersion));
         }
-
 
         public IEnumerable<ReadSideEventHandlerDescription> GetAllAvailableHandlers()
         {
