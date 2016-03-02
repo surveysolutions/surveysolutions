@@ -356,7 +356,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             
             return
                 allAvailableLevelsByScope.ToDictionary(interviewLevel => interviewLevel.RosterVector,
-                    interviewLevel => CreateLinkedQuestionOption(interviewLevel.RosterRowTitles[referencedRoster.PublicKey], interviewLevel.RosterVector, questionRosterVector, referencedRosterScope, linkedQuestionRosterScope, interviewInfo));
+                    interviewLevel => CreateLinkedQuestionOption(
+                        interviewLevel.RosterRowTitles.ContainsKey(referencedRoster.PublicKey) ? interviewLevel.RosterRowTitles[referencedRoster.PublicKey] : null,
+                        interviewLevel.RosterVector, 
+                        questionRosterVector, 
+                        referencedRosterScope, 
+                        linkedQuestionRosterScope, 
+                        interviewInfo));
         }
 
         private IEnumerable<InterviewLevel> GetAllAvailableLevelsByScope(InterviewData interview, decimal[] questionRosterVector, ValueVector<Guid> referencedRosterScope, ValueVector<Guid> linkedQuestionRosterScope)
