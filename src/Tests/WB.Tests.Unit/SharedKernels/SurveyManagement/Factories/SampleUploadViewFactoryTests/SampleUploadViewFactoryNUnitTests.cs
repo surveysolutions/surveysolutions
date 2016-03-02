@@ -90,10 +90,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SampleUploadVie
             var questionnaireStorage = new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>();
 
             var prefilledTxtQuestion = Create.TextQuestion(preFilled: true, variable: prefiledQuestionVarName);
-            (questionnaireStorage)
+
+            questionnaireStorage
                 .Store(Create.QuestionnaireBrowseItem(
                     Create.QuestionnaireDocument(children:
-                    new IComposite[] { prefilledTxtQuestion, Create.TextQuestion(preFilled: true) })), new QuestionnaireIdentity(questionnaireId, 1));
+                    new IComposite[] { prefilledTxtQuestion, Create.TextQuestion(preFilled: true) })), new QuestionnaireIdentity(questionnaireId, 1).ToString());
 
             var exportStructure = Create.QuestionnaireExportStructure();
             var headerStructure = Create.HeaderStructureForLevel();
