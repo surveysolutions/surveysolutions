@@ -1,8 +1,10 @@
 using System;
+using System.Diagnostics;
 
 // ReSharper disable once CheckNamespace
 namespace WB.Core.SharedKernels.SurveySolutions.Api.Designer
 {
+    [DebuggerDisplay("{Title} | shared: {IsShared}, public: {IsPublic}")]
     public class QuestionnaireListItem
     {
         public string Id { get; set; }
