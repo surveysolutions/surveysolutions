@@ -133,10 +133,9 @@
             self.readyToUpdate(false);
             return;
         }
-        if (self.questionnaireVariables().length === 1) {
-            self.showPointsOnMap(180, 90, -180, -90, true);
-            self.readyToUpdate(true);
-        }
+
+        self.showPointsOnMap(180, 90, -180, -90, true);
+        self.readyToUpdate(true);
     });
   
     self.TotalCount = ko.observable();
