@@ -92,7 +92,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             var trimmedSearchText = (searchTerm ?? "").Trim();
 
             Func<QuestionnaireListItem, bool> emptyFilter = x => true;
-            Func<QuestionnaireListItem, bool> titleSearchFilter = x => x.Title.Contains(trimmedSearchText) || x.OwnerName.Contains(trimmedSearchText);
+            Func<QuestionnaireListItem, bool> titleSearchFilter = x => x.Title.Contains(trimmedSearchText) ||
+                    (x.OwnerName != null && x.OwnerName.Contains(trimmedSearchText));
             Func<QuestionnaireListItem, bool> searchFilter = string.IsNullOrEmpty(trimmedSearchText)
                 ? emptyFilter
                 : titleSearchFilter;
@@ -246,14 +247,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             this.IsPublicShowed = true;
 
-            this.SearchByLocalQuestionnaires();
+            this.SearchByLocalQuestionnaires(this.SearchText);
         }
 
         private void ShowMyQuestionnaires()
         {
             this.IsPublicShowed = false;
 
-            this.SearchByLocalQuestionnaires();
+            this.SearchByLocalQuestionnaires(this.SearchText);
         }
 
         private async Task LoadQuestionnaireAsync(QuestionnaireListItem selectedQuestionnaire)
