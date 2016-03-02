@@ -25,6 +25,8 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.Infrastructure.EventBus;
@@ -93,6 +95,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void Apply(LookupTableDeleted e)
         {
             this.lookupTableIds.Remove(e.LookupTableId);
+        }
+
+        internal void Apply(AttachmentAdded e)
+        {
+        }
+
+        internal void Apply(AttachmentUpdated e)
+        {
+        }
+
+        internal void Apply(AttachmentDeleted e)
+        {
         }
 
         internal void Apply(SharedPersonToQuestionnaireAdded e)
@@ -850,6 +864,25 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #endregion
 
+        #region Attachment command handlers
+
+        public void AddAttachment(AddAttachment command)
+        {
+            this.ApplyEvent(new AttachmentAdded(command.AttachmentId, command.ResponsibleId));
+        }
+        
+        public void UpdateAttachment(UpdateAttachment command)
+        {
+            this.ApplyEvent(new AttachmentUpdated(command.AttachmentId, command.AttachmentName, command.AttachmentFileName, command.ResponsibleId));
+        }
+
+        public void DeleteAttachment(DeleteAttachment command)
+        {
+            this.ApplyEvent(new AttachmentDeleted(command.AttachmentId, command.ResponsibleId));
+        }
+
+        #endregion
+
         #region Lookup table command handlers
 
         public void AddLookupTable(AddLookupTable command)
@@ -864,7 +897,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
             this.ApplyEvent(new LookupTableAdded(command.LookupTableId, command.LookupTableName, command.LookupTableFileName, command.ResponsibleId));
         }
-        
+
         public void UpdateLookupTable(UpdateLookupTable command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);

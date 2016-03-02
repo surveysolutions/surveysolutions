@@ -249,6 +249,10 @@
                         background: url(../i/designer-left-icons.png) 0 -250px no-repeat;
                     }
 
+                    &.left-menu-attachments {
+                        background: url(../i/designer-left-icons.png) 0 -150px no-repeat;
+                    }
+
                     &:hover {
                         background-color: #dbdfe2;
                     }
@@ -262,6 +266,7 @@
         }
 
         @macroses-panel-width: 85%;
+        @attachments-panel-width: 85%;
         @chapters-panel-width: 75%;
         @lookup-tables-panel-width: 75%;
         @divider-width: 275px;
@@ -311,6 +316,7 @@
                 right: 0;
                 bottom: 0;
                 background: url(../i/left-panel-shadow.png) repeat-y;
+
             }
 
             &.macroses .foldback-region {
@@ -324,6 +330,11 @@
 
             &.lookup-tables .foldback-region {
                 left: @lookup-tables-panel-width;
+            }
+
+            &.attachments .foldback-region {
+                left: @attachments-panel-width;
+                background: url(../i/left-panel-shadow-small.png) repeat-y;
             }
 
             .foldback-button {
@@ -342,6 +353,29 @@
                 &:hover {
                     background-position: -3px -55px;
                 }
+            }
+
+            a.delete-btn {
+                @delete-button-position: 10px;
+                @delete-button-size: 15px;
+                position: absolute;
+                top: @delete-button-position;
+                right: @delete-button-position;
+                display: block;
+                background: url("../i/cross-red.png") center center no-repeat;
+                width: @delete-button-size;
+                height: @delete-button-size;
+                .opacity(0.3);
+
+                &:hover {
+                    .opacity(1);
+                }
+            }
+
+            .actions {
+                margin-left: -6px;
+                margin-right: -6px;
+                position: relative;
             }
 
             &.unfolded {
@@ -458,28 +492,7 @@
                             background: @lookup-border-color;
                         }
 
-                        a.delete-btn {
-                            @delete-button-position: 10px;
-                            @delete-button-size: 15px;
-                            position: absolute;
-                            top: @delete-button-position;
-                            right: @delete-button-position;
-                            display: block;
-                            background: url("../i/cross-red.png") center center no-repeat;
-                            width: @delete-button-size;
-                            height: @delete-button-size;
-                            .opacity(0.3);
-
-                            &:hover {
-                                .opacity(1);
-                            }
-                        }
-
                         .actions {
-                            margin-left: -6px;
-                            margin-right: -6px;
-                            position: relative;
-
                             button, a.btn {
                                 background: @lookup-panel-table-item-bg;
 
@@ -507,6 +520,174 @@
                 }
             }
         }
+
+        .attachments-panel {
+            width: @attachments-panel-width;
+
+            @attachments-panel-padding-left: 20px;
+            @attachments-panel-table-item-bg: #fff;
+            @attachments-accent-color: #e004c9;
+            @attachments-border-color: #d9dde0;
+            @attachments-drop-box-color: #78838a;
+            @attachments-preview-width:120px;
+            @attachments-preview-height:100px;
+            @attachments-meta-color: #78838a;
+
+            .attachments {
+                height: 100%;
+
+                ul {
+                    margin: 0;
+                    padding: 0;
+                    list-style: none;
+                    padding-right: 30px;
+                    padding-left: @attachments-panel-padding-left;
+
+                    li {
+                        background: @attachments-panel-table-item-bg;
+                        margin-bottom: 7px;
+                        padding: 5px 10px 5px 10px;
+                        .border-left-radius(8px);
+                        .border-right-radius(8px);
+                        border: 2px solid @attachments-panel-table-item-bg;
+                        position: relative;
+                        z-index: 10;
+                        .lucida-console-font();
+
+                        &:hover {
+                            border: 2px solid @attachments-border-color;
+                        }
+                        .attachment{
+                            display: table;
+                        }
+                        .attachment-preview{
+                            display: table-cell;
+                            vertical-align: top;
+
+                            .attachment-preview-cover{
+                                height: @attachments-preview-height;
+                                width: @attachments-preview-width;
+                                overflow: hidden;
+
+                                img{
+                                    max-width:100%;
+                                    max-height:100%;
+                                }
+                            }
+                           
+                        }
+                        .attachment-content{
+                            display: table-cell; 
+                            vertical-align: top;
+
+                            .attachment-meta{
+                                  .georgia-font();
+                                  color: @attachments-meta-color;                               
+                                  font-size: 14px;
+                                  font-style: italic;
+                                  font-style: italic;
+                                  margin: 0;
+                                  margin-right: 20px;
+                            }
+                        }
+                       
+                        .drop-box {
+                            @lookup-panel-table-item-border-width: 2px;
+                            @lookup-panel-table-item-height: 30px;
+                            color: @attachments-drop-box-color;
+                            border: @lookup-panel-table-item-border-width dashed @attachments-drop-box-color;
+                            height: @lookup-panel-table-item-height;
+                            text-align: center;
+                            line-height: @lookup-panel-table-item-height - 2*@lookup-panel-table-item-border-width;
+                            display: none;
+                        }
+
+                        &.dragover .drop-box {
+                            display: block;
+                        }
+
+                        input, textarea {
+                            display: block;
+                            border: none;
+                            border-color: @attachments-panel-table-item-bg;
+                            box-shadow: none;
+                            .arial-font();
+                            padding-left: 0;
+                            padding-right: 0;
+                            border-radius: 0;
+                            .lucida-console-font();
+                            font-size: 14px;
+                        }
+
+                        input.table-name{
+                            width: @divider-width;
+                            color: @leftpanel-accent-color;
+                        }
+
+                        .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+                            background: @attachments-panel-table-item-bg;
+                        }
+
+                        input[type="text"],
+                        textarea {
+                            .placeholder-style() {
+                                .lucida-console-font();
+                                font-size: 14px;
+                                text-overflow: ellipsis;
+                            }
+
+                            &[placeholder] {
+                                .placeholder-style();
+                            }
+
+                            &::-moz-placeholder {
+                                .placeholder-style();
+                            }
+
+                            &:-ms-input-placeholder {
+                                .placeholder-style();
+                            }
+
+                            &::-webkit-input-placeholder {
+                                .placeholder-style();
+                            }
+                        }
+
+                        .actions {
+                            button, a.btn {
+                                background: @attachments-panel-table-item-bg;
+
+                                &:hover {
+                                    background: #e6e6e6;
+                                }
+                            }
+                            
+                            .permanent-actions{
+                                background: @attachments-panel-table-item-bg;
+                                -webkit-box-shadow: -30px 1px 25px 0px  @attachments-panel-table-item-bg;
+                                -moz-box-shadow: -30px 1px 25px 0px  @attachments-panel-table-item-bg;
+                                box-shadow: -30px 1px 25px 0px  @attachments-panel-table-item-bg;
+                                //bottom: 10px;
+                                //position: absolute;
+                                //right: 0;
+                                padding-left: 5px;
+                            }  
+                            
+                            &.dirty .permanent-actions{
+                                position: static;
+                            }
+                        }
+
+                        .divider {
+                            height: 2px;
+                            width: @divider-width;
+                            background: @attachments-border-color;
+                        }
+                    }
+                }
+            }
+        }
+
 
         .macros-panel {
             width: @macroses-panel-width;
@@ -622,28 +803,7 @@
                             margin-top: 5px;
                             border-radius: 0;
                         }
-
-                        a {
-                            @delete-button-position: 10px;
-                            @delete-button-size: 15px;
-                            position: absolute;
-                            top: @delete-button-position;
-                            right: @delete-button-position;
-                            display: block;
-                            background: url("../i/cross-red.png") center center no-repeat;
-                            width: @delete-button-size;
-                            height: @delete-button-size;
-                            .opacity(0.3);
-
-                            &:hover {
-                                .opacity(1);
-                            }
-                        }
-
-                        .actions {
-                            margin-left: -6px;
-                            margin-right: -6px;
-                        }
+                       
 
                         button {
                             background: @macroses-panel-macros-bg;
@@ -670,7 +830,7 @@
                     list-style: none;
                     margin: 0;
                     padding: 0;
-                    //overflow: hidden;
+                    
                     h3 {
                         padding-left: 18px;
                     }

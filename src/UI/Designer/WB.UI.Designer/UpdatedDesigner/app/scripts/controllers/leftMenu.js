@@ -3,64 +3,85 @@
         function ($rootScope, $scope) {
             'use strict';
 
-            $scope.isFoldedChapters = false;
-            $scope.isFoldedMacros = false;
-            $scope.isFoldedLookupTables = false;
+            $scope.isUnfoldedChapters = false;
+            $scope.isUnfoldedMacros = false;
+            $scope.isUnfoldedLookupTables = false;
+            $scope.isUnfoldedAttachments = false;
 
             var closeOpenPanelIfAny = function() {
-                if (!($scope.isFoldedChapters || $scope.isFoldedMacros || $scope.isFoldedLookupTables))
+                if (!($scope.isUnfoldedChapters || $scope.isUnfoldedMacros || $scope.isUnfoldedLookupTables || $scope.isUnfoldedAttachments))
                     return;
 
-                if ($scope.isFoldedChapters) {
+                if ($scope.isUnfoldedChapters) {
                     $rootScope.$broadcast("closeChaptersListRequested", {});
                 }
-                if ($scope.isFoldedMacros) {
+                if ($scope.isUnfoldedMacros) {
                     $rootScope.$broadcast("closeMacrosListRequested", {});
                 }
-                if ($scope.isFoldedLookupTables) {
+                if ($scope.isUnfoldedLookupTables) {
                     $rootScope.$broadcast("closeLookupTablesRequested", {});
+                }
+                if ($scope.isUnfoldedAttachments) {
+                    $rootScope.$broadcast("closeAttachmentsRequested", {});
                 }
             };
 
             var closeAllPanel = function () {
-                $scope.isFoldedMacros = false;
-                $scope.isFoldedChapters = false;
-                $scope.isFoldedLookupTables = false;
+                $scope.isUnfoldedMacros = false;
+                $scope.isUnfoldedChapters = false;
+                $scope.isUnfoldedLookupTables = false;
+                $scope.isUnfoldedAttachments = false;
             }
 
             $scope.unfoldChapters = function () {
-                if ($scope.isFoldedChapters)
+                if ($scope.isUnfoldedChapters)
                     return;
                 closeOpenPanelIfAny();
-                $scope.isFoldedChapters = true;
+                $scope.isUnfoldedChapters = true;
                 $rootScope.$broadcast("openChaptersList", {});
             };
 
             $scope.unfoldMacros = function () {
-                if ($scope.isFoldedMacros)
+                if ($scope.isUnfoldedMacros)
                     return;
 
                 closeOpenPanelIfAny();
-                $scope.isFoldedMacros = true;
+                $scope.isUnfoldedMacros = true;
                 $rootScope.$broadcast("openMacrosList", {});
             };
 
             $scope.unfoldLookupTables = function () {
-                if ($scope.isFoldedLookupTables)
+                if ($scope.isUnfoldedLookupTables)
                     return;
 
                 closeOpenPanelIfAny();
-                $scope.isFoldedLookupTables = true;
+                $scope.isUnfoldedLookupTables = true;
                 $rootScope.$broadcast("openLookupTables", {});
             };
 
+            $scope.unfoldAttachments = function () {
+                if ($scope.isUnfoldedAttachments)
+                    return;
+
+                closeOpenPanelIfAny();
+                $scope.isUnfoldedAttachments = true;
+                $rootScope.$broadcast("openAttachments", {});
+            };
+
+            $scope.$on('openChaptersList', function () {
+                $scope.isUnfoldedChapters = true;
+            });
 
             $scope.$on('openLookupTables', function () {
-                $scope.isFoldedLookupTables = true;
+                $scope.isUnfoldedLookupTables = true;
+            });
+
+            $scope.$on('openAttachments', function () {
+                $scope.isUnfoldedAttachments = true;
             });
 
             $scope.$on('openMacrosList', function () {
-                $scope.isFoldedMacros = true;
+                $scope.isUnfoldedMacros = true;
             });
 
             $scope.$on('closeChaptersList', function () {
@@ -72,6 +93,10 @@
             });
 
             $scope.$on('closeLookupTables', function () {
+                closeAllPanel();
+            });
+            
+            $scope.$on('closeAttachments', function () {
                 closeAllPanel();
             });
         });
