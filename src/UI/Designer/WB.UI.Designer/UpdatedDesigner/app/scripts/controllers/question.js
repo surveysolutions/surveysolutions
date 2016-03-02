@@ -86,7 +86,7 @@
 
                 $scope.setQuestionType(question.type);
 
-                $scope.setLinkSource(question.linkedToEntityId);
+                $scope.setLinkSource(question.linkedToEntityId, question.linkedFilterExpression);
                 $scope.setCascadeSource(question.cascadeFromQuestionId);
 
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = false;
@@ -137,6 +137,7 @@
                             itemId: $scope.activeQuestion.itemId,
                             type: $scope.activeQuestion.type,
                             linkedToEntityId: $scope.activeQuestion.linkedToEntityId,
+                            linkedFilterExpression: $scope.activeQuestion.linkedFilterExpression,
                             hasCondition: hasQuestionEnablementConditions($scope.activeQuestion),
                             hasValidation: hasQuestionValidations($scope.activeQuestion),
                             title: $scope.activeQuestion.title,
@@ -210,7 +211,7 @@
                 }
 
                 if (type !== "SingleOption" && type !== "MultyOption") {
-                    $scope.setLinkSource(null);
+                    $scope.setLinkSource(null,null);
                 }
 
                 $scope.questionForm.$setDirty();
@@ -364,6 +365,7 @@
                 } else {
                     $scope.activeQuestion.linkedToEntityId = null;
                     $scope.activeQuestion.linkedToEntity = null;
+                    $scope.activeQuestion.linkedFilterExpression = null;
                 }
             });
             $scope.$watch('activeQuestion.yesNoView', function (newValue) {
@@ -385,12 +387,13 @@
                 }
             });
 
-            $scope.setLinkSource = function (itemId) {
+            $scope.setLinkSource = function (itemId, linkedFilterExpression) {
                 $scope.activeQuestion.isLinked = !_.isEmpty(itemId);
 
                 if (itemId) {
                     $scope.activeQuestion.linkedToEntityId = itemId;
                     $scope.activeQuestion.linkedToEntity = _.find($scope.sourceOfLinkedEntities, { id: $scope.activeQuestion.linkedToEntityId });
+                    $scope.activeQuestion.linkedFilterExpression = linkedFilterExpression;
                     $scope.questionForm.$setDirty();
                 } 
             };

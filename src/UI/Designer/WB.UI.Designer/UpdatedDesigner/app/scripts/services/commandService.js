@@ -122,6 +122,7 @@
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
                         command.linkedToEntityId = question.linkedToEntityId;
+                        command.linkedFilterExpression = question.linkedFilterExpression;
                         command.isFilteredCombobox = question.isFilteredCombobox || false;
                         command.cascadeFromQuestionId = question.cascadeFromQuestionId;
                         command.enablementCondition = question.cascadeFromQuestionId ? '' : command.enablementCondition;
@@ -137,6 +138,7 @@
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
                         command.linkedToEntityId = question.linkedToEntityId;
+                        command.linkedFilterExpression = question.linkedFilterExpression;
                         command.yesNoView = question.yesNoView;
                         command.options = _.isEmpty(command.linkedToEntityId) ? question.options : null;
                         break;

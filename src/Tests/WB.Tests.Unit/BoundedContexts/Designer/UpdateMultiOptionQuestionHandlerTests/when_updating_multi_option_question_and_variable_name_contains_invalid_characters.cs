@@ -42,7 +42,8 @@ questionType: QuestionType.QRBarcode
                     , options: options,
                     linkedToEntityId: linkedToQuestionId,
                     areAnswersOrdered: areAnswersOrdered,
-                    maxAllowedAnswers: maxAllowedAnswers, yesNoView: yesNoView, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
+                    maxAllowedAnswers: maxAllowedAnswers, yesNoView: yesNoView, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
+                linkedFilterExpression: null));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

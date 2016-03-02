@@ -1745,7 +1745,8 @@ namespace WB.Tests.Unit
                 sourceQuestionnaireId: null,
                 maxAnswerCount: null,
                 countOfDecimalPlaces: null,
-                validationConditions: validationConditions
+                validationConditions: validationConditions,
+                linkedFilterExpression: null
             ));
         }
 

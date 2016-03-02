@@ -24,7 +24,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             bool areAnswersOrdered,
             int? maxAllowedAnswers,
             bool yesNoView,
-            List<ValidationCondition> validationConditions)
+            List<ValidationCondition> validationConditions,
+            string linkedFilterExpression)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
                 commonQuestionParameters: commonQuestionParameters,
@@ -35,6 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
                 .ForEach(x => x.Title = CommandUtils.SanitizeHtml(x.Title, removeAllTags: true));
             this.Options = options;
             this.LinkedToEntityId = linkedToEntityId;
+            this.LinkedFilterExpression = linkedFilterExpression;
             this.AreAnswersOrdered = areAnswersOrdered;
             this.MaxAllowedAnswers = maxAllowedAnswers;
             this.YesNoView = yesNoView;
@@ -45,6 +47,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
         public bool AreAnswersOrdered { get; set; }
 
         public Guid? LinkedToEntityId { get; set; }
+
+        public string LinkedFilterExpression { get; set; }
 
         public int? MaxAllowedAnswers { get; set; }
 

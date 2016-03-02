@@ -21,6 +21,7 @@ namespace Main.Core.Entities.SubEntities
         string ValidationMessage { get; set; }
         Guid? LinkedToQuestionId { get; set; }
         Guid? LinkedToRosterId { get; set; }
+        string LinkedFilterExpression { get; set; }
         Guid? CascadeFromQuestionId { get; set; }
         bool? IsFilteredCombobox { get; set; }
         IList<ValidationCondition> ValidationConditions { get; set; }
