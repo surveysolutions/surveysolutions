@@ -90,7 +90,9 @@ namespace Main.Core.Entities.SubEntities
         public Guid? CascadeFromQuestionId { get; set; }
 
         public Guid? LinkedToQuestionId { get; set; }
-        
+
+        public string LinkedFilterExpression { get; set; }
+
         public bool? IsFilteredCombobox { get; set; }
 
         public IList<ValidationCondition> ValidationConditions

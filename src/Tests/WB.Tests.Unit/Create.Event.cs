@@ -454,7 +454,8 @@ namespace WB.Tests.Unit
                     isFilteredCombobox: isFilteredCombobox,
                     cascadeFromQuestionId: cascadeFromQuestionId,
                     targetGroupKey: targetGroupKey,
-                    validationConditions: new List<ValidationCondition>());
+                    validationConditions: new List<ValidationCondition>(),
+                linkedFilterExpression: null);
             }
 
             public static QuestionChanged QuestionChanged(Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
@@ -490,7 +491,8 @@ namespace WB.Tests.Unit
                     isFilteredCombobox: isFilteredCombobox,
                     cascadeFromQuestionId: cascadeFromQuestionId,
                     targetGroupKey: Guid.NewGuid(),
-                    validationConditions: new List<ValidationCondition>());
+                    validationConditions: new List<ValidationCondition>(),
+                linkedFilterExpression: null);
             }
 
 
@@ -533,7 +535,8 @@ namespace WB.Tests.Unit
                     targetIndex: targetIndex,
                     maxAnswerCount: maxAnswerCount,
                     countOfDecimalPlaces: countOfDecimalPlaces,
-                    validationConditions: validationConditions ?? new List<ValidationCondition>());
+                    validationConditions: validationConditions ?? new List<ValidationCondition>(),
+                linkedFilterExpression: null);
             }
 
             public static IPublishedEvent<QuestionnaireDeleted> QuestionnaireDeleted(Guid? questionnaireId = null, long? version = null)

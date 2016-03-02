@@ -50,7 +50,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                 {
                     Expression = validationExpression,
                     Message = validationMessage
-                } });
+                } },
+                linkedFilterExpression: null);
 
         Cleanup stuff = () =>
         {
