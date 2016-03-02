@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
 
             var filesToArchive = new List<string>
             {
-                this.ddiMetadataFactory.CreateDDIMetadataFileForQuestionnaireInFolder(questionnaireId.QuestionnaireId, questionnaireId.Version, this.pathToDdiMetadata)
+                this.ddiMetadataFactory.CreateDDIMetadataFileForQuestionnaireInFolder(questionnaireId, this.pathToDdiMetadata)
             };
 
             this.archiveUtils.ZipFiles(filesToArchive, archiveFilePath);

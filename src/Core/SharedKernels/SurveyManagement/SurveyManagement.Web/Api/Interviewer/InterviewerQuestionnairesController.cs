@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         public HttpResponseMessage Get(Guid id, int version, long contentVersion)
         {
             var questionnaireDocumentVersioned = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
-            var questionnaireBrowseItem = this.readsideRepositoryWriter.AsVersioned().Get(id.FormatGuid(), version);
+            var questionnaireBrowseItem = this.readsideRepositoryWriter.GetById(new QuestionnaireIdentity(id, version).ToString());
 
             if (questionnaireDocumentVersioned == null || questionnaireBrowseItem==null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);

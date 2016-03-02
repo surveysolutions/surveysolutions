@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public string AddDataExport(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat, InterviewStatus? status)
         {
-            var questionnaireBrowseItem = questionnaires.AsVersioned().Get(questionnaire.QuestionnaireId.FormatGuid(), questionnaire.Version);
+            var questionnaireBrowseItem = this.questionnaires.GetById(questionnaire.ToString());
             if (questionnaireBrowseItem == null)
                 throw new ArgumentException($"Questionnaire {questionnaire} wasn't found");
 

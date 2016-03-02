@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire
 
         public SampleUploadView Load(SampleUploadViewInputModel input)
         {
-            var questionnaire = this.questionnaires.AsVersioned().Get(input.QuestionnaireId.FormatGuid(), input.Version);
+            var questionnaire = this.questionnaires.GetById(new QuestionnaireIdentity(input.QuestionnaireId, input.Version).ToString());
             if (questionnaire == null)
                 return null;
 
