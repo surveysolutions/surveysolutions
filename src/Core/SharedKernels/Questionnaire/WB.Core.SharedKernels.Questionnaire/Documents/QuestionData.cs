@@ -32,7 +32,8 @@ namespace Main.Core.Entities
             bool? isFilteredCombobox,
             Guid? cascadeFromQuestionId,
             bool? yesNoView,
-            IList<ValidationCondition> validationConditions)
+            IList<ValidationCondition> validationConditions,
+            string linkedFilterExpression)
         {
             this.PublicKey = publicKey;
             this.QuestionType = questionType;
@@ -49,6 +50,7 @@ namespace Main.Core.Entities
             this.Answers = answers;
             this.LinkedToQuestionId = linkedToQuestionId;
             this.LinkedToRosterId = linkedToRosterId;
+            this.LinkedFilterExpression = linkedFilterExpression;
             this.IsInteger = isInteger;
             this.CountOfDecimalPlaces = countOfDecimalPlaces;
 
@@ -80,6 +82,7 @@ namespace Main.Core.Entities
         public readonly Answer[] Answers;
         public readonly Guid? LinkedToQuestionId;
         public readonly Guid? LinkedToRosterId;
+        public readonly string LinkedFilterExpression;
         public readonly bool? IsInteger;
         public readonly int? CountOfDecimalPlaces;
 

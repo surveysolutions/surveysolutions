@@ -45,7 +45,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.CascadigOpti
             new Option[]{}, 
             null,
             false,
-            cascadeFromQuestionId: Guid.NewGuid(), validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
+            cascadeFromQuestionId: Guid.NewGuid(), validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
+                linkedFilterExpression: null));
 
         It should_not_allow_cascades_from_non_existing_question = () =>
         {
