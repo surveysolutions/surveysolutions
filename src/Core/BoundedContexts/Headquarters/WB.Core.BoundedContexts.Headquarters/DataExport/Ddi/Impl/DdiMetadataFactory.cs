@@ -48,10 +48,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
         }
 
-        public string CreateDDIMetadataFileForQuestionnaireInFolder(Guid questionnaireId, long questionnaireVersion, string basePath)
+        public string CreateDDIMetadataFileForQuestionnaireInFolder(QuestionnaireIdentity questionnaireId, string basePath)
         {
-            QuestionnaireDocument bigTemplateObject = this.GetQuestionnaireDocument(questionnaireId, questionnaireVersion);
-            QuestionnaireExportStructure questionnaireExportStructure = this.GetQuestionnaireExportStructure(questionnaireId, questionnaireVersion);
+            QuestionnaireDocument bigTemplateObject = this.GetQuestionnaireDocument(questionnaireId);
+            QuestionnaireExportStructure questionnaireExportStructure = this.GetQuestionnaireExportStructure(questionnaireId);
 
             if (questionnaireExportStructure == null || bigTemplateObject == null)
             {
@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
                         if (variableLabel.QuestionId.HasValue)
                         {
                             var questionItem =
-                                bigTemplateObject.FirstOrDefault<IQuestion>(q => q.PublicKey == variableLabel.QuestionId.Value);
+                                bigTemplateObject.Find<IQuestion>(variableLabel.QuestionId.Value);
 
                             if (questionItem == null)
                                 continue;
@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
                 }
 
                 var pathToWrite = this.fileSystemAccessor.CombinePath(basePath, ExportFileSettings.GetDDIFileName(
-                    $"{questionnaireId}_{questionnaireVersion}_ddi"));
+                    $"{questionnaireId.QuestionnaireId}_{questionnaireId.Version}_ddi"));
 
                 metadataWriter.SaveMetadataInFile(pathToWrite);
 
@@ -110,22 +110,21 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
             catch (Exception exc)
             {
                 this.logger.Error(
-                    $"Error on DDI metadata creation (questionnaireId:{questionnaireId}, questionnaireVersion:{questionnaireVersion}): ", exc);
+                    $"Error on DDI metadata creation (questionnaireId:{questionnaireId.QuestionnaireId}, questionnaireVersion:{questionnaireId.Version}): ", exc);
             }
 
             return string.Empty;
         }
 
-        private QuestionnaireExportStructure GetQuestionnaireExportStructure(Guid questionnaireId, long questionnaireVersion)
+        private QuestionnaireExportStructure GetQuestionnaireExportStructure(QuestionnaireIdentity questionnaireId)
         {
             return
-                this.questionnaireExportStructureStorage.GetById(
-                    new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString());
+                this.questionnaireExportStructureStorage.GetById(questionnaireId.ToString());
         }
 
-        private QuestionnaireDocument GetQuestionnaireDocument(Guid questionnaireId, long questionnaireVersion)
+        private QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireIdentity questionnaireId)
         {
-            return this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireId, questionnaireVersion);
+            return this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireId);
         }
 
         private DdiDataType GetDdiDataType(QuestionType questionType)

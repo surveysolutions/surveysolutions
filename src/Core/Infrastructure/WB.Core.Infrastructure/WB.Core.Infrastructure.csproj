@@ -157,8 +157,6 @@
     <Compile Include="PlainStorage\IPlainStorageAccessor.cs" />
     <Compile Include="PlainStorage\IPlainTransactionManager.cs" />
     <Compile Include="PlainStorage\PlainStorageAttribute.cs" />
-    <Compile Include="PlainStorage\PlainStorageExtensions.cs" />
-    <Compile Include="PlainStorage\PlainStorageVersionedWrapper.cs" />
     <Compile Include="ReadSide\ICacheableRepositoryWriter.cs" />
     <Compile Include="ReadSide\IReadSideAdministrationService.cs" />
     <Compile Include="ReadSide\IReadSideStatusService.cs" />

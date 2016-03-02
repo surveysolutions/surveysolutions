@@ -49,7 +49,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             ILogger logger,
             ITransactionManagerProvider transactionManager, 
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries,
-            InterviewDataExportSettings exportSettings, IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository)
+            InterviewDataExportSettings exportSettings, 
+            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
@@ -150,8 +151,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath)
         {
             QuestionnaireExportStructure questionnaireExportStructure =
-                this.questionnaireExportStructureRepository.GetById(
-                    new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version).ToString());
+                this.questionnaireExportStructureRepository.GetById(questionnaireIdentity.ToString());
 
             if (questionnaireExportStructure == null)
                 return;

@@ -54,8 +54,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             InterviewStatus? status = null)
         {
             var questionnaire =
-                this.questionnaireExportStructureRepository.GetById(
-                    new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version).ToString());
+                this.questionnaireExportStructureRepository.GetById(questionnaireIdentity.ToString());
 
             if (questionnaire == null)
                 return null;
