@@ -100,8 +100,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             var myQuestionnaires = this.localQuestionnaires
                 .Where(questionnaire =>
-                    searchFilter(questionnaire) &&
-                    (questionnaire.OwnerName == this.principal.CurrentUserIdentity.Name || questionnaire.IsShared))
+                    searchFilter(questionnaire)
+                    &&
+                    (
+                        string.Equals(questionnaire.OwnerName, this.principal.CurrentUserIdentity.Name, StringComparison.OrdinalIgnoreCase)
+                        ||
+                        questionnaire.IsShared
+                    ))
                 .ToList();
 
             var publicQuestionnaires = this.localQuestionnaires
