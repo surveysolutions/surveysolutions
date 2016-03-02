@@ -15,19 +15,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             this.questionnaireListViewItemStorage = questionnaireListViewItemStorage;
         }
 
-        public IReadOnlyCollection<QuestionnaireListViewItem> GetUserQuestionnaires(Guid userId, bool isAdmin, int pageIndex = 1, int pageSize = 128)
+        public IReadOnlyCollection<QuestionnaireListViewItem> GetUserQuestionnaires(
+            Guid userId, bool isAdmin, int pageIndex = 1, int pageSize = 128)
         {
             return questionnaireListViewItemStorage.Query(queryable
                 => FilterByQuestionnaires(queryable, userId, isAdmin)
-                    .Select(x => new QuestionnaireListViewItem
-                    {
-                        IsPublic = x.IsPublic,
-                        LastEntryDate = x.LastEntryDate,
-                        Owner = x.CreatorName,
-                        QuestionnaireId = x.QuestionnaireId,
-                        Title = x.Title,
-                        SharedPersons = x.SharedPersons,
-                    })
+                    .OrderBy(x => x.Title)
                     .Skip((pageIndex - 1)*pageSize)
                     .Take(pageSize)
                     .ToReadOnlyCollection());
@@ -36,17 +29,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         private static IQueryable<QuestionnaireListViewItem> FilterByQuestionnaires(
             IQueryable<QuestionnaireListViewItem> queryable, Guid userId, bool isAdmin)
         {
-            var questionnaires = queryable.Where(x => x.IsDeleted == false);
+            var notDeletedQuestionnaires = queryable.Where(x => x.IsDeleted == false);
 
-            if (!isAdmin)
-            {
-                questionnaires = questionnaires.Where(questionnaire =>
+            return isAdmin
+                ? notDeletedQuestionnaires
+                : notDeletedQuestionnaires.Where(questionnaire =>
                     questionnaire.CreatedBy == userId ||
                     questionnaire.SharedPersons.Any(person => person == userId) ||
                     questionnaire.IsPublic);
-            }
-
-            return questionnaires;
         }
 
         public QuestionnaireListView Load(QuestionnaireListInputModel input)

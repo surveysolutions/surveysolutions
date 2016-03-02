@@ -13,7 +13,7 @@ namespace WB.Infrastructure.Native.Storage.EventStore
 
         public EventStoreWriteSideModule(EventStoreSettings settings)
         {
-            if (settings == null) throw new ArgumentNullException("settings");
+            if (settings == null) throw new ArgumentNullException(nameof(settings));
             this.settings = settings;
         }
 
@@ -31,7 +31,7 @@ namespace WB.Infrastructure.Native.Storage.EventStore
 
         private IStreamableEventStore GetEventStore()
         {
-            return new WriteSideEventStore(new EventStoreConnectionProvider(this.settings), this.Kernel.Get<ILogger>(), this.settings, this.Kernel.Get<IEventTypeResolver>(), this.Kernel.Get<ISerializer>());
+            return new WriteSideEventStore(new EventStoreConnectionProvider(this.settings), this.Kernel.Get<ILoggerProvider>().GetFor<WriteSideEventStore>(), this.settings, this.Kernel.Get<IEventTypeResolver>(), this.Kernel.Get<ISerializer>());
         }
     }
 }
