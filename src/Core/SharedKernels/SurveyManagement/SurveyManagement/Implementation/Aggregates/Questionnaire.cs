@@ -69,7 +69,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
 
             this.plainQuestionnaireRepository.StoreQuestionnaire(this.EventSourceId, newVersion, document);
             this.questionnaireAssemblyFileAccessor.StoreAssembly(this.EventSourceId, newVersion, command.SupportingAssembly);
-            this.questionnaireBrowseItemStorage.AsVersioned().Store(new QuestionnaireBrowseItem((QuestionnaireDocument) command.Source, newVersion,command.AllowCensusMode, command.QuestionnaireContentVersion), this.EventSourceId.FormatGuid(), newVersion);
+            this.questionnaireBrowseItemStorage.Store(
+                new QuestionnaireBrowseItem((QuestionnaireDocument) command.Source, newVersion, command.AllowCensusMode,
+                    command.QuestionnaireContentVersion),
+                new QuestionnaireIdentity(this.EventSourceId, newVersion).ToString());
             
             var questionnaireEntityId = new QuestionnaireIdentity(command.QuestionnaireId, newVersion).ToString();
 
@@ -99,7 +102,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
 
             this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(command.QuestionnaireId, command.QuestionnaireVersion);
             
-            var browseItem = questionnaireBrowseItemStorage.AsVersioned().Get(EventSourceId.FormatGuid(), command.QuestionnaireVersion);
+            var browseItem = this.questionnaireBrowseItemStorage.GetById(new QuestionnaireIdentity(this.EventSourceId,command.QuestionnaireVersion).ToString());
             if (browseItem != null)
             {
                 browseItem.Disabled = true;
@@ -120,7 +123,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
                  "Questionnaire {0} ver {1} is not disabled.",
                  this.EventSourceId.FormatGuid(), command.QuestionnaireVersion));
 
-            var browseItem = questionnaireBrowseItemStorage.AsVersioned().Get(EventSourceId.FormatGuid(), command.QuestionnaireVersion);
+            var browseItem = questionnaireBrowseItemStorage.GetById(new QuestionnaireIdentity(this.EventSourceId, command.QuestionnaireVersion).ToString());
             if (browseItem != null)
             {
                 browseItem.IsDeleted = true;
@@ -170,9 +173,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
 
         private QuestionnaireBrowseItem GetQuestionnaireBrowseItem(Guid id, long version)
         {
-            return
-                this.questionnaireBrowseItemStorage.AsVersioned()
-                    .Get(id.FormatGuid(), version);
+            return this.questionnaireBrowseItemStorage.GetById(new QuestionnaireIdentity(id, version).ToString());
         }
     }
 }
