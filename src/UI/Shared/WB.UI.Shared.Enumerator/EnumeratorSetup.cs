@@ -105,6 +105,7 @@ namespace WB.UI.Shared.Enumerator
             registry.AddOrOverwrite("ViewOptionStyleBackground", new ViewOptionStyleBackgroundConverter());
             registry.AddOrOverwrite("SectionStyleBackground", new SectionStyleBackgroundConverter());
             registry.AddOrOverwrite("ToSpannableGroupTitle", new ToSpannableGroupTitleConverter());
+            registry.AddOrOverwrite("IsNotNull", new IsNotNullConverter());
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
