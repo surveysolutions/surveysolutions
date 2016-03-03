@@ -1489,7 +1489,7 @@ namespace WB.Tests.Unit
 
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = "numeric_question", string enablementCondition = null, 
             string validationExpression = null, QuestionScope scope = QuestionScope.Interviewer, bool isPrefilled = false,
-            bool hideIfDisabled = false, List<ValidationCondition> validationConditions = null)
+            bool hideIfDisabled = false, List<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null)
         {
             return new NumericQuestion
             {
@@ -1502,7 +1502,8 @@ namespace WB.Tests.Unit
                 ValidationExpression = validationExpression,
                 QuestionScope = scope,
                 Featured = isPrefilled,
-                ValidationConditions = validationConditions ?? new List<ValidationCondition>()
+                ValidationConditions = validationConditions ?? new List<ValidationCondition>(),
+                LinkedToRosterId = linkedToRosterId,
             };
         }
 
