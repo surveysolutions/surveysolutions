@@ -5,7 +5,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -32,7 +31,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             ISerializer serializer, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository, IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter)
+            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
+            IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter)
         {
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
