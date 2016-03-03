@@ -68,7 +68,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 AnswersOnPrefilledQuestions = interviewMetaInfo?.FeaturedQuestionsMeta
                     .Select(prefilledQuestion => new AnsweredQuestionSynchronizationDto(prefilledQuestion.PublicKey, new decimal[0], prefilledQuestion.Value, string.Empty))
                     .ToArray(),
-                Details = interviewDetails
+                Details = this.serializer.Serialize(interviewDetails, TypeSerializationSettings.AllTypes)
             });
 
             response.Headers.CacheControl = new CacheControlHeaderValue
@@ -91,7 +91,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 {
                     RootId = package.InterviewId,
                     MetaInfo = this.compressor.CompressString(this.serializer.Serialize(package.MetaInfo)),
-                    Content = this.compressor.CompressString(this.serializer.Serialize(package.Events)),
+                    Content = this.compressor.CompressString(package.Events),
                     IsCompressed = true,
                     ItemType = SyncItemType.Interview
                 }));

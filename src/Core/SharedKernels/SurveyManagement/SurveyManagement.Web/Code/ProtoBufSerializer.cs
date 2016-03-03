@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             ProtoBuf.Serializer.NonGeneric.Serialize(stream, value);
         }
 
-        public object DeserializeFromStream(Stream stream, Type type)
+        public object DeserializeFromStream(Stream stream, Type type, TypeSerializationSettings? typeSerializationSettings = null)
         {
             SerializerBuilder.Build(type);
             return ProtoBuf.Serializer.NonGeneric.Deserialize(type, stream);

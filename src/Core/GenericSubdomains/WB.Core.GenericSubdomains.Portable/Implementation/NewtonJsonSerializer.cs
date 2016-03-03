@@ -147,12 +147,12 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             }
         }
 
-        public object DeserializeFromStream(Stream stream, Type type)
+        public object DeserializeFromStream(Stream stream, Type type, TypeSerializationSettings? typeSerializationSettings = null)
         {
             using (var sr = new StreamReader(stream))
             using (var jsonTextReader = new JsonTextReader(sr))
             {
-                return this.GetSerializer(this.jsonUtilsSettings.TypeNameHandling).Deserialize(jsonTextReader, type);
+                return this.GetSerializer(typeSerializationSettings ?? this.jsonUtilsSettings.TypeNameHandling).Deserialize(jsonTextReader, type);
             }
         }
 

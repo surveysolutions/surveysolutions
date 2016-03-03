@@ -115,12 +115,7 @@ namespace WB.UI.Headquarters
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
-
-            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All
-            };
-
+            
             try
             {
                 var checkStatus = healthCheckService.Check();

@@ -169,7 +169,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                         current.Replace($"Main.Core.Events.User.{type}, Main.Core",
                             $"Main.Core.Events.User.{type}, WB.Core.SharedKernels.DataCollection"));
 
-            return this.serializer.Deserialize<Infrastructure.EventBus.IEvent>(replaceOldAssemblyNames);
+            return this.serializer.Deserialize<Infrastructure.EventBus.IEvent>(replaceOldAssemblyNames, TypeSerializationSettings.AllTypes);
         }
 
         public void Dispose()
