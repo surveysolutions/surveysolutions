@@ -3,10 +3,11 @@ using System.Net.Http;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
@@ -15,11 +16,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
     public class QuestionnairesApiV2Controller : QuestionnairesControllerBase
     {
         public QuestionnairesApiV2Controller(
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore,
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            ISerializer serializer) : base(
-                questionnaireStore: questionnaireStore,
+            ISerializer serializer,
+            IPlainQuestionnaireRepository plainQuestionnaireRepository,
+            IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter) : base(
+                plainQuestionnaireRepository: plainQuestionnaireRepository,
+                readsideRepositoryWriter: readsideRepositoryWriter,
                 questionnareAssemblyFileAccessor: questionnareAssemblyFileAccessor,
                 questionnaireBrowseViewFactory: questionnaireBrowseViewFactory,
                 serializer: serializer)
