@@ -123,7 +123,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.lookupTableService = lookupTableService;
         }
 
-        private IEnumerable<Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>>> AtomicVerifiers => new[]
+        private IEnumerable<Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>>> AtomicVerifiers
+            => this.ErrorsVerifiers.Concat(this.WarningsVerifiers);
+
+        private IEnumerable<Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
         {
             Verifier(NoQuestionsExist, "WB0001", VerificationMessages.WB0001_NoQuestions),               
             Verifier<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion, "WB0009", VerificationMessages.WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion),
@@ -194,9 +197,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationConditionIsEmpty, "WB0106", index => string.Format(VerificationMessages.WB0106_ValidationConditionIsEmpty, index)),
             Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationMessageIsEmpty, "WB0107", index => string.Format(VerificationMessages.WB0107_ValidationMessageIsEmpty, index)),
             Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, CategoricalLinkedQuestionUsedInValidationExpression, "WB0063", index => string.Format(VerificationMessages.WB0063_CategoricalLinkedQuestionUsedInValidationExpression, index)),
-            Warning<IGroup>(this.TooManyQuestionsInGroup, "WB0201", VerificationMessages.WB0201_LargeNumberOfQuestionsInGroup),
-            Warning<IGroup>(this.GroupWithoutQuestions, "WB0202", VerificationMessages.WB0202_GroupWithoutQuestions),
-            Warning<IGroup>(this.HasSingleQuestionInRoster, "WB0203", VerificationMessages.WB0203_RosterHasSingleQuetsion),
 
             MacrosVerifier(MacroHasEmptyName, "WB0014", VerificationMessages.WB0014_MacroHasEmptyName),
             MacrosVerifier(MacroHasInvalidName, "WB0010", VerificationMessages.WB0010_MacroHasInvalidName),
@@ -219,8 +219,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             ErrorsByLookupTablesWithDuplicateName,
             ErrorsByLookupTablesWithDuplicateVariableName,
             ErrorsByQuestionnaireEntitiesShareSameInternalId,
-            
-            this.VerifyAmountOfRosters
         };
 
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByQuestionnaireEntitiesShareSameInternalId(ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
