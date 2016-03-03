@@ -13,34 +13,27 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     {
         private const int MaxRecommendedAmountOfRosters = 20;
 
-        private IEnumerable<QuestionnaireVerificationMessage> VerifyAmountOfRosters(ReadOnlyQuestionnaireDocument document, VerificationState state)
+        private IEnumerable<Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>>> WarningsVerifiers => new[]
         {
-            var rosters = document.Find<IGroup>(q => q.IsRoster).ToArray();
+            Warning(LargeNumberOfRosters, "WB0200", VerificationMessages.WB0200_LargeNumberOfRostersIsCreated),
+            Warning<IGroup>(TooManyQuestionsInGroup, "WB0201", VerificationMessages.WB0201_LargeNumberOfQuestionsInGroup),
+            Warning<IGroup>(GroupWithoutQuestions, "WB0202", VerificationMessages.WB0202_GroupWithoutQuestions),
+            Warning<IGroup>(HasSingleQuestionInRoster, "WB0203", VerificationMessages.WB0203_RosterHasSingleQuetsion),
+        };
 
-            if (rosters.Length <= MaxRecommendedAmountOfRosters)
-                return Enumerable.Empty<QuestionnaireVerificationMessage>();
+        private static bool LargeNumberOfRosters(ReadOnlyQuestionnaireDocument questionnaire)
+            => questionnaire.Find<IGroup>(q => q.IsRoster).Count() > MaxRecommendedAmountOfRosters;
 
-            return new[]
-            {
-                QuestionnaireVerificationMessage.Warning("WB0200", VerificationMessages.WB0200_LargeNumberOfRostersIsCreated)
-            };
-        }
+        private static bool HasSingleQuestionInRoster(IGroup rosterGroup)
+            => rosterGroup.IsRoster
+            && rosterGroup.Children.OfType<IQuestion>().Count() == 1;
 
-        private bool HasSingleQuestionInRoster(IGroup rosterGroup)
-        {
-            return rosterGroup.IsRoster && rosterGroup.Children.OfType<IQuestion>().Count() == 1;
-        }
+        private static bool TooManyQuestionsInGroup(IGroup group)
+            => @group.Children.OfType<IQuestion>().Count() > 200;
 
-        private bool TooManyQuestionsInGroup(IGroup group)
-        {
-            return group.Children.OfType<IQuestion>().Count() > 200;
-        }
-
-
-        private bool GroupWithoutQuestions(IGroup group)
-        {
-            return !group.Children.OfType<IQuestion>().Any();
-        }
+        private static bool GroupWithoutQuestions(IGroup group)
+            => !@group.IsRoster
+            && !@group.Children.OfType<IQuestion>().Any();
 
         private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity, TSubEntity>(
             Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TSubEntity, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
@@ -57,6 +50,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 questionnaire
                     .Find<TEntity>(hasError)
                     .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, CreateReference(entity)));
+        }
+
+        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Warning(
+            Func<ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
+        {
+            return (questionnaire, state) =>
+                hasError(questionnaire)
+                    ? new[] { QuestionnaireVerificationMessage.Warning(code, message) }
+                    : Enumerable.Empty<QuestionnaireVerificationMessage>();
         }
     }
 }
