@@ -4,9 +4,9 @@ using Android.Graphics;
 using Android.Runtime;
 using Android.Util;
 using Android.Widget;
-using Cirrious.CrossCore;
-using Cirrious.CrossCore.Core;
-using Cirrious.MvvmCross.Binding.Droid.ResourceHelpers;
+using MvvmCross.Platform.Core;
+using MvvmCross.Binding.Droid.ResourceHelpers;
+using MvvmCross.Platform;
 using MvvmCross.Plugins.DownloadCache;
 
 namespace WB.UI.Shared.Enumerator.CustomControls

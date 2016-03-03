@@ -7,6 +7,7 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandlerTests
@@ -46,14 +47,21 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                 isPreFilled: isPreFilled,
                 scope: scope,
                 enablementCondition: enablementCondition,
-                validationExpression: validationExpression,
-                validationMessage: validationMessage,
+                hideIfDisabled: hideIfDisabled,
                 instructions: instructions,
                 responsibleId: responsibleId,
                 options: new_options,
-                linkedToQuestionId: linkedToQuestionId,
+                linkedToEntityId: linkedToQuestionId,
                 isFilteredCombobox: isFilteredCombobox,
-                cascadeFromQuestionId: сascadeFromQuestionId);
+                cascadeFromQuestionId: сascadeFromQuestionId, 
+                validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>
+                {
+                    new ValidationCondition
+                    {
+                        Message = validationMessage,
+                        Expression = validationExpression
+                    }
+                });
 
         private Cleanup stuff = () =>
         {
@@ -80,6 +88,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
             eventContext.GetSingleEvent<QuestionChanged>()
                 .ConditionExpression.ShouldEqual(enablementCondition);
 
+        It should_raise_QuestionChanged_event_with_hideIfDisabled_specified = () =>
+            eventContext.GetSingleEvent<QuestionChanged>()
+                .HideIfDisabled.ShouldEqual(hideIfDisabled);
+
         It should_raise_QuestionChanged_event_with_instructions_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
                 .Instructions.ShouldEqual(instructions);
@@ -94,11 +106,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
 
         It should_raise_QuestionChanged_event_with_validationExpression_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
-                .ValidationExpression.ShouldEqual(validationExpression);
+                .ValidationConditions.First().Expression.ShouldEqual(validationExpression);
 
         It should_raise_QuestionChanged_event_with_validationMessage_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
-                .ValidationMessage.ShouldEqual(validationMessage);
+                .ValidationConditions.First().Message.ShouldEqual(validationMessage);
 
         It should_raise_QuestionChanged_event_with_isFilteredCombobox_specified = () =>
             eventContext.GetSingleEvent<QuestionChanged>()
@@ -128,6 +140,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
         private static bool isPreFilled = false;
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static string enablementCondition = "some condition";
+        private static bool hideIfDisabled = true;
         private static string validationExpression = "some validation";
         private static string validationMessage = "validation message";
         private static Option[] old_options = new Option[] { new Option(Guid.NewGuid(), "1", "Option old 1"), new Option(Guid.NewGuid(), "2", "Option old 2"), };

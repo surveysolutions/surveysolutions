@@ -3,7 +3,7 @@ using Android.Graphics;
 using Android.Text;
 using Android.Text.Style;
 using Android.Widget;
-using Cirrious.MvvmCross.Binding;
+using MvvmCross.Binding;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels;

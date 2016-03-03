@@ -80,17 +80,17 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
         It should_WB0092_error_contains_reference_to_specified_child_cascading_question_id = () =>
             getWB0092Error().References.Single().Id.ShouldEqual(secondChildId);
 
-        private static QuestionnaireVerificationError getWB0091Error()
+        private static QuestionnaireVerificationMessage getWB0091Error()
         {
             return getQuestionnaireVerificationErrorByCode("WB0091");
         }
 
-        private static QuestionnaireVerificationError getWB0092Error()
+        private static QuestionnaireVerificationMessage getWB0092Error()
         {
             return getQuestionnaireVerificationErrorByCode("WB0092");
         }
 
-        private static QuestionnaireVerificationError getQuestionnaireVerificationErrorByCode(string code)
+        private static QuestionnaireVerificationMessage getQuestionnaireVerificationErrorByCode(string code)
         {
             return verificationErrors.FirstOrDefault(error => error.Code == code);
         }
@@ -100,7 +100,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;
         static Guid secondChildId;
-        static IEnumerable<QuestionnaireVerificationError> verificationErrors;
+        static IEnumerable<QuestionnaireVerificationMessage> verificationErrors;
     }
 }
 

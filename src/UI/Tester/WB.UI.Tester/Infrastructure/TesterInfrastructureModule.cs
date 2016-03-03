@@ -54,6 +54,7 @@ namespace WB.UI.Tester.Infrastructure
                 });
             this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SqlitePlainStorage<>)).InSingletonScope();
 
+            this.Bind<ILoggerProvider>().To<ServiceLocatorLoggerProvider>();
             this.Bind<ILogger>().To<XamarinInsightsLogger>().InSingletonScope();
 
             this.Bind<IRestServiceSettings>().To<TesterSettings>();

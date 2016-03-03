@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandlerTests
@@ -28,14 +29,17 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                 isPreFilled: false,
                 scope: QuestionScope.Interviewer,
                 enablementCondition: null,
-                validationExpression: "not empty validation expression",
-                validationMessage: null,
+                hideIfDisabled: false,
                 instructions: "intructions",
                 responsibleId: responsibleId,
                 options: null,
-                linkedToQuestionId: (Guid?)null,
+                linkedToEntityId: (Guid?)null,
                 isFilteredCombobox: false,
-                cascadeFromQuestionId: parentQuestionId));
+                cascadeFromQuestionId: parentQuestionId, 
+                validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>
+                {
+                    new ValidationCondition { }
+                }));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

@@ -48,12 +48,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interview.SynchronizeInterview(
                 userId,
-                new InterviewSynchronizationDto(interview.EventSourceId, InterviewStatus.RejectedBySupervisor, null, null, null, userId, questionnaireId,
-                    questionnaire.Version,
-                    new[] { new AnsweredQuestionSynchronizationDto(multyOptionRosterSizeId, new decimal[] {}, new decimal[] { 1 }, string.Empty) },
-                    new HashSet<InterviewItemId>(),
-                    new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
-                    new Dictionary<InterviewItemId, RosterSynchronizationDto[]>
+                 Create.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
+                    status: InterviewStatus.RejectedBySupervisor,
+                    userId: userId,
+                    questionnaireId: questionnaireId,
+                    questionnaireVersion: questionnaire.Version,
+                    answers: new[] { new AnsweredQuestionSynchronizationDto(multyOptionRosterSizeId, new decimal[] { }, new decimal[] { 1 }, string.Empty) },
+                    rosterGroupInstances: new Dictionary<InterviewItemId, RosterSynchronizationDto[]>
                     {
                         {
                             new InterviewItemId(rosterGroupId, new decimal[] {}),
@@ -63,7 +64,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                             }
                         }
                     },
-                    true));
+                    wasCompleted: true
+                    ));
 
             eventContext = new EventContext();
         };

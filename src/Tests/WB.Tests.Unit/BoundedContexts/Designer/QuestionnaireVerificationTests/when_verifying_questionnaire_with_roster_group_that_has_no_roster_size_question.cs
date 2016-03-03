@@ -22,24 +22,24 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
-            resultErrors.Count().ShouldEqual(1);
+        It should_return_1_message = () =>
+            verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_error_with_code__WB0009__ = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0009");
+        It should_return_message_with_code__WB0009__ = () =>
+            verificationMessages.Single().Code.ShouldEqual("WB0009");
 
-        It should_return_error_with_one_references = () =>
-            resultErrors.Single().References.Count().ShouldEqual(1);
+        It should_return_message_with_one_references = () =>
+            verificationMessages.Single().References.Count().ShouldEqual(1);
 
-        It should_return_error_reference_with_type_group = () =>
-            resultErrors.Single().References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
+        It should_return_message_reference_with_type_group = () =>
+            verificationMessages.Single().References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
 
-        It should_return_error_reference_with_id_of_rosterGroupId = () =>
-            resultErrors.Single().References.Single().Id.ShouldEqual(rosterGroupId);
+        It should_return_message_reference_with_id_of_rosterGroupId = () =>
+            verificationMessages.Single().References.Single().Id.ShouldEqual(rosterGroupId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid rosterGroupId;

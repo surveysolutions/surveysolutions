@@ -150,9 +150,6 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects
 
         private const string Empty = "Empty";
 
-        static ILogger Logger
-        {
-            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
-        }
+        static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<ValueVector<T>>();
     }
 }

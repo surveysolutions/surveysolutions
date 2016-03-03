@@ -58,27 +58,27 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
-            resultErrors.Count().ShouldEqual(1);
+        It should_return_1_message = () =>
+            verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_first_error_with_code__WB0019 = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0019");
+        It should_return_first_message_with_code__WB0019 = () =>
+            verificationMessages.Single().Code.ShouldEqual("WB0019");
 
-        It should_return_WB0019_error_with_2_references_on_questions = () =>
-            resultErrors.Single()
+        It should_return_WB0019_message_with_2_references_on_questions = () =>
+            verificationMessages.Single()
                 .References.ToList()
                 .ForEach(question => question.Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question));
 
-        It should_return_WB0019_error_with_first_reference_to_question_with_substitution_text = () =>
-            resultErrors.Single().References.ElementAt(0).Id.ShouldEqual(questionWithSubstitutionsIdFromLevel1);
+        It should_return_WB0019_message_with_first_reference_to_question_with_substitution_text = () =>
+            verificationMessages.Single().References.ElementAt(0).Id.ShouldEqual(questionWithSubstitutionsIdFromLevel1);
 
-        It should_return_WB0019_error_with_second_reference_to_question_that_used_as_substitution_question = () =>
-            resultErrors.Single().References.ElementAt(1).Id.ShouldEqual(questionFromLevel2);
+        It should_return_WB0019_message_with_second_reference_to_question_that_used_as_substitution_question = () =>
+            verificationMessages.Single().References.ElementAt(1).Id.ShouldEqual(questionFromLevel2);
 
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 

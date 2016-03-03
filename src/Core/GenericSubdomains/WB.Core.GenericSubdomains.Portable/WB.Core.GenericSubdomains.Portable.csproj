@@ -42,6 +42,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ActionUtils.cs" />
+    <Compile Include="CustomCollections\ConcurrentHashSet.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EventHandlerUtils.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="QueryableExtensions.cs" />
     <Compile Include="RosterVectorUtils.cs" />
     <Compile Include="Services\IJsonSerializerSettingsFactory.cs" />
+    <Compile Include="Services\ILoggerProvider.cs" />
     <Compile Include="Services\ISerializer.cs" />
     <Compile Include="Services\ILogger.cs" />
     <Compile Include="Services\INetworkService.cs" />
@@ -106,6 +108,7 @@
     <Compile Include="Services\ISubstitutionService.cs" />
     <Compile Include="Services\JsonUtilsSettings.cs" />
     <Compile Include="Services\SerializationType.cs" />
+    <Compile Include="Services\ServiceLocatorLoggerProvider.cs" />
     <Compile Include="Services\TypeSerializationSettings.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="SyncStatusCode.cs" />
@@ -144,8 +147,8 @@
       <HintPath>..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Newtonsoft.Json.7.0.1\lib\portable-net45+wp80+win8+wpa81+dnxcore50\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.8.0.2\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="PCLStorage, Version=0.9.6.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">

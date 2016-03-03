@@ -13,24 +13,24 @@ namespace WB.Tests.Unit.Applications.Designer.VerificationErrorsMapperTests
         Establish context = () =>
         {
             mapper = CreateVerificationErrorsMapper();
-            verificationErrors = CreateStaticTextVerificationError(Guid.Parse(staticTextId));
+            verificationMessages = CreateStaticTextVerificationError(Guid.Parse(staticTextId));
             document = CreateQuestionnaireDocumentWithStaticText(Guid.Parse(staticTextId), Guid.Parse(chapterId));
         };
 
         Because of = () =>
-            result = mapper.EnrichVerificationErrors(verificationErrors, document);
+            result = mapper.EnrichVerificationErrors(verificationMessages, document);
 
         It should_return_1_error = () => 
             result.Length.ShouldEqual(1);
 
         It should_return_error_with_same_Code_as_input_error_has = () =>
-            result.First().Code.ShouldEqual(verificationErrors.First().Code);
+            result.First().Code.ShouldEqual(verificationMessages.First().Code);
         
         It should_return_error_with_same_Message_as_input_error_has = () =>
-            result.First().Message.ShouldEqual(verificationErrors.First().Message);
+            result.First().Message.ShouldEqual(verificationMessages.First().Message);
         
         It should_return_error_with_same_References_count_as_input_error_has = () =>
-            result.First().References.Count.ShouldEqual(verificationErrors.First().References.Count());
+            result.First().References.Count.ShouldEqual(verificationMessages.First().References.Count());
 
         It should_return_error_with_IsGroupOfErrors_field_set_in_true = () =>
             result.First().IsGroupedMessage.ShouldBeTrue();
@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.Applications.Designer.VerificationErrorsMapperTests
             result.First().References.First().Title.ShouldEqual("static text");
         
         private static IVerificationErrorsMapper mapper;
-        private static QuestionnaireVerificationError[] verificationErrors;
+        private static QuestionnaireVerificationMessage[] verificationMessages;
         private static QuestionnaireDocument document;
         private static VerificationMessage[] result;
         private static string staticTextId = "11111111111111111111111111111111";

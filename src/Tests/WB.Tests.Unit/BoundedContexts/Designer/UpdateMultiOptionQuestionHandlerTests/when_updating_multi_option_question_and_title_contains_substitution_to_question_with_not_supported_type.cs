@@ -22,16 +22,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                 questionType : QuestionType.GpsCoordinates,
                 stataExportCaption : substitutionVariableName
             ));
-            questionnaire.Apply(new QRBarcodeQuestionAdded()
-            {
-                QuestionId = questionId,
-                ParentGroupId = chapterId,
-                Title = "old title",
-                VariableName = "old_variable_name",
-                Instructions = "old instructions",
-                EnablementCondition = "old condition",
-                ResponsibleId = responsibleId
-            });
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
+publicKey: questionId,
+groupPublicKey: chapterId,
+questionText: "old title",
+stataExportCaption: "old_variable_name",
+instructions: "old instructions",
+conditionExpression: "old condition",
+responsibleId: responsibleId,
+questionType: QuestionType.QRBarcode
+));
         };
 
         Because of = () =>
@@ -40,19 +40,17 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                     questionId: questionId,
                     title: titleWithSubstitution,
                     variableName: variableName,
-                variableLabel: null,
+                    variableLabel: null,
                     scope: scope,
                     enablementCondition: enablementCondition,
-                    validationExpression: validationExpression,
-                    validationMessage: validationMessage,
+                    hideIfDisabled: false,
                     instructions: instructions,
                     responsibleId: responsibleId
                     , options: options,
-                    linkedToQuestionId: linkedToQuestionId,
+                    linkedToEntityId: linkedToQuestionId,
                     areAnswersOrdered: areAnswersOrdered,
                     maxAllowedAnswers: maxAllowedAnswers,
-                    yesNoView: yesNoView
-                    ));
+                    yesNoView: yesNoView, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
@@ -73,8 +71,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
         private static string instructions = "intructions";
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static string enablementCondition = null;
-        private static string validationExpression = null;
-        private static string validationMessage = "";
         private static Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };
         private static Guid? linkedToQuestionId = (Guid?)null;
         private static bool areAnswersOrdered = false;

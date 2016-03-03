@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.DataCollection.V5;
+using WB.Core.SharedKernels.DataCollection.V6;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using It = Machine.Specifications.It;
 
@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             nestedRosterGroupId = Guid.Parse("22222222222222222222222222222222");
 
             int callOrder = 0;
-            interviewExpressionStateMock = new Mock<IInterviewExpressionStateV5>();
+            interviewExpressionStateMock = new Mock<IInterviewExpressionStateV6>();
             interviewExpressionStateMock.Setup(
                 x => x.AddRoster(Moq.It.IsAny<Guid>(), Moq.It.IsAny<decimal[]>(), Moq.It.IsAny<decimal>(), Moq.It.IsAny<int?>()))
                 .Callback<Guid, decimal[], decimal, int?>(
@@ -56,29 +56,33 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository,
                 expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
 
-            interviewSynchronizationDto =new InterviewSynchronizationDto(interview.EventSourceId, InterviewStatus.RejectedBySupervisor, null, null, null, userId, questionnaireId,
-                    questionnaire.Version,
-                    new AnsweredQuestionSynchronizationDto[0],
-                    new HashSet<InterviewItemId>(),
-                    new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
-                    new Dictionary<InterviewItemId, RosterSynchronizationDto[]>
-                    {
+            interviewSynchronizationDto =
+                Create.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
+                    status: InterviewStatus.RejectedBySupervisor,
+                    userId: userId,
+                    questionnaireId: questionnaireId,
+                    questionnaireVersion: questionnaire.Version,
+                    rosterGroupInstances:
+                        new Dictionary<InterviewItemId, RosterSynchronizationDto[]>
                         {
-                            new InterviewItemId(nestedRosterGroupId, new decimal[] {1}),
-                            new[]
                             {
-                                new RosterSynchronizationDto(nestedRosterGroupId, new decimal[] {1}, 1, null, string.Empty),
+                                new InterviewItemId(nestedRosterGroupId, new decimal[] {1}),
+                                new[]
+                                {
+                                    new RosterSynchronizationDto(nestedRosterGroupId, new decimal[] {1}, 1, null,
+                                        string.Empty),
+                                }
+                            },
+                            {
+                                new InterviewItemId(rosterGroupId, new decimal[] {}),
+                                new[]
+                                {
+                                    new RosterSynchronizationDto(rosterGroupId, new decimal[] {}, 1, null, string.Empty),
+                                }
                             }
                         },
-                        {
-                            new InterviewItemId(rosterGroupId, new decimal[] {}),
-                            new[]
-                            {
-                                new RosterSynchronizationDto(rosterGroupId, new decimal[] {}, 1, null, string.Empty),
-                            }
-                        }
-                    },
-                    true);
+                    wasCompleted: true
+                    );
 
             eventContext = new EventContext();
         };
@@ -114,6 +118,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid nestedRosterGroupId;
         private static InterviewSynchronizationDto interviewSynchronizationDto;
         private static Dictionary<Guid, int> rosterAddIndex = new Dictionary<Guid, int>(); 
-        private static Mock<IInterviewExpressionStateV5> interviewExpressionStateMock;
+        private static Mock<IInterviewExpressionStateV6> interviewExpressionStateMock;
     }
 }

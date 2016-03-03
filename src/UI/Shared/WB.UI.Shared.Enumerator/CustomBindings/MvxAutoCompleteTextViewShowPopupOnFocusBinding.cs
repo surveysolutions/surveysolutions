@@ -1,18 +1,18 @@
 ﻿using Android.Views;
 using Android.Widget;
-
-using Cirrious.MvvmCross.Binding;
-using Cirrious.MvvmCross.Binding.Droid.Views;
+using MvvmCross.Binding;
+using MvvmCross.Binding.Droid.Views;
+using MvvmCross.Droid.Support.V7.AppCompat.Widget;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
-    public class MvxAutoCompleteTextViewShowPopupOnFocusBinding : BaseBinding<MvxAutoCompleteTextView, object>
+    public class MvxAutoCompleteTextViewShowPopupOnFocusBinding : BaseBinding<MvxAppCompatAutoCompleteTextView, object>
     {
-        public MvxAutoCompleteTextViewShowPopupOnFocusBinding(MvxAutoCompleteTextView androidControl) : base(androidControl)
+        public MvxAutoCompleteTextViewShowPopupOnFocusBinding(MvxAppCompatAutoCompleteTextView androidControl) : base(androidControl)
         {
         }
 
-        protected override void SetValueToView(MvxAutoCompleteTextView view, object value) { }
+        protected override void SetValueToView(MvxAppCompatAutoCompleteTextView view, object value) { }
 
         public override MvxBindingMode DefaultMode { get { return MvxBindingMode.TwoWay;} }
 

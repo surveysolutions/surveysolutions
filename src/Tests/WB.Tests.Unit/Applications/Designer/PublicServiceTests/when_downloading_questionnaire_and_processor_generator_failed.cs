@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             var questionnaireViewFactory = CreateQuestionnaireViewFactory(questionnaireId);            
 
             var questionnaireVerifier = new Mock<IQuestionnaireVerifier>();
-            questionnaireVerifier.Setup(x => x.Verify(Moq.It.IsAny<QuestionnaireDocument>())).Returns(new List<QuestionnaireVerificationError>());
+            questionnaireVerifier.Setup(x => x.Verify(Moq.It.IsAny<QuestionnaireDocument>())).Returns(new List<QuestionnaireVerificationMessage>());
 
             var expressionProcessorGenerator = new Mock<IExpressionProcessorGenerator>();
             string assembly;

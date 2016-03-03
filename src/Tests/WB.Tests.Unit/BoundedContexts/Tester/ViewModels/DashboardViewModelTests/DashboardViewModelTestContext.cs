@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Cirrious.MvvmCross.Test.Core;
+using MvvmCross.Test.Core;
 
 using Moq;
 
@@ -58,7 +58,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 friendlyErrorMessageService: friendlyErrorMessageService,
                 userInteractionService: userInteractionService,
                 questionnaireListStorage: questionnaireListStorage,
-                dashboardLastUpdateStorage: dashboardLastUpdateStorage ?? localDashboardLastUpdateStorageMock.Object);
+                dashboardLastUpdateStorage: dashboardLastUpdateStorage ?? localDashboardLastUpdateStorageMock.Object,
+                logger: logger ?? Mock.Of<ILogger>());
         }
 
         protected static readonly Guid userId = Guid.Parse("ffffffffffffffffffffffffffffffff");

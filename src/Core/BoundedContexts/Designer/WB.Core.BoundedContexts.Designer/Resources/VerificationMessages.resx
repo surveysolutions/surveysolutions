@@ -250,13 +250,10 @@
     <value>Another question with the same variable name already exists.</value>
   </data>
   <data name="WB0063_CategoricalLinkedQuestionUsedInValidationExpression" xml:space="preserve">
-    <value>Categorical linked question cannot be used in validation condition.</value>
+    <value>Categorical linked question cannot be used in validation condition #{0}.</value>
   </data>
   <data name="WB0064_CategoricalLinkedQuestionUsedInEnablementCondition" xml:space="preserve">
     <value>Categorical linked question cannot be used in enabling condition.</value>
-  </data>
-  <data name="WB0065_QuestionHasValidationExpressionWithoutValidationMessage" xml:space="preserve">
-    <value>Error message is required if question has validation condition.</value>
   </data>
   <data name="WB0066_QuestionTypeIsNotAllowed" xml:space="preserve">
     <value>Question of this type is not supported.</value>
@@ -348,9 +345,6 @@
   <data name="WB0094_ConditionExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
     <value>Enabling condition has length more than 10,000 characters.</value>
   </data>
-  <data name="WB0095_ValidationExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
-    <value>Validation condition has length more than 10,000 characters.</value>
-  </data>
   <data name="WB0096_GeneralCompilationError" xml:space="preserve">
     <value>Error occurred during questionnaire compilation.</value>
   </data>
@@ -425,5 +419,23 @@
   </data>
   <data name="WB0052_LookupNameIsKeyword" xml:space="preserve">
     <value>Lookup table name cannot be a reserved word.</value>
+  </data>
+  <data name="WB0053_LinkedQuestionReferencesNotExistingRoster" xml:space="preserve">
+    <value>Roster which is the source of the link should exist.</value>
+  </data>
+  <data name="WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster" xml:space="preserve">
+    <value>Roster which is the source of the link is a roster, not a subsection.</value>
+  </data>
+  <data name="WB0105_ValidationMessageIsTooLong" xml:space="preserve">
+    <value>Validation error message #{0} is too long. It should be no longer than 250 characters.</value>
+  </data>
+  <data name="WB0104_ValidationConditionIsTooLong" xml:space="preserve">
+    <value>Validation condition #{0} is too long. It should be no longer than 10000 characters.</value>
+  </data>
+  <data name="WB0106_ValidationConditionIsEmpty" xml:space="preserve">
+    <value>Validation condition #{0} is empty.</value>
+  </data>
+  <data name="WB0107_ValidationMessageIsEmpty" xml:space="preserve">
+    <value>Validation error message #{0} is empty.</value>
   </data>
 </root>

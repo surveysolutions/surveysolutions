@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.ViewModels;
+using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
+using MvvmCross.Platform.Exceptions;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
@@ -226,7 +228,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             localInterviewer.Password = this.restCredentials.Password;
 
             await this.interviewersPlainStorage.StoreAsync(localInterviewer);
-            this.principal.SignIn(localInterviewer.Name, localInterviewer.Password, true);
+            await this.principal.SignInAsync(localInterviewer.Name, localInterviewer.Password, true);
         }
 
         private async Task<string> GetNewPasswordAsync()

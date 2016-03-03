@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 {
@@ -9,8 +10,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
     {
         public NewEditQuestionView()
         {
-            this.SourceOfLinkedQuestions = new List<DropdownQuestionView>();
+            this.SourceOfLinkedEntities = new List<DropdownQuestionView>();
             this.SourceOfSingleQuestions = new List<DropdownQuestionView>();
+            this.ValidationConditions = new List<ValidationCondition>();
         }
 
         public Guid Id { get; set; }
@@ -24,10 +26,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public string VariableName { get; set; }
         public string VariableLabel { get; set; }
         public string Title { get; set; }
-        public string ValidationExpression { get; set; }
-        public string ValidationMessage { get; set; }
+
+        public List<ValidationCondition> ValidationConditions { get; private set; }
+
         public QuestionType Type { get; set; }
-        public string LinkedToQuestionId { get; set; }
+        public string LinkedToEntityId { get; set; }
         public CategoricalOption[] Options { get; set; }
         public bool AreAnswersOrdered { get; set; }
         public int? MaxAllowedAnswers { get; set; }
@@ -39,7 +42,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public bool? IsFilteredCombobox { get; set; }
         public string CascadeFromQuestionId { get; set; }
 
-        public List<DropdownQuestionView> SourceOfLinkedQuestions { get; set; }
+        public List<DropdownQuestionView> SourceOfLinkedEntities { get; set; }
         public List<DropdownQuestionView> SourceOfSingleQuestions { get; set; }
 
         public QuestionnaireInfoFactory.SelectOption[] QuestionTypeOptions { get; set; }
@@ -48,5 +51,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public Breadcrumb[] Breadcrumbs { get; set; }
         public bool WereOptionsTruncated { get; set; }
         public int OptionsCount { get; set; }
+        public bool HideIfDisabled { get; set; }
     }
 }

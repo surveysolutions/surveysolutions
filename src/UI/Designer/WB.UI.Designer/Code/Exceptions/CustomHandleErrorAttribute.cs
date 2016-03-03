@@ -66,7 +66,7 @@ namespace WB.UI.Designer.Exceptions
             }
 
             // log the error 
-            var logger = ServiceLocator.Current.GetInstance<ILogger>();
+            var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<CustomHandleErrorAttribute>();
             logger.Error(filterContext.Exception.Message, filterContext.Exception);
 
             filterContext.ExceptionHandled = true;

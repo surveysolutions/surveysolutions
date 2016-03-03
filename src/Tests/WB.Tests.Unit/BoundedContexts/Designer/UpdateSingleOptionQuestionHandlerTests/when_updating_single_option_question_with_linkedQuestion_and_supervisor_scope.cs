@@ -25,16 +25,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                 questionText : "text question",
                 stataExportCaption : "source_of_linked_question"
             ));
-            questionnaire.Apply(new QRBarcodeQuestionAdded
-            {
-                QuestionId = questionId,
-                ParentGroupId = parentGroupId,
-                Title = "old title",
-                VariableName = "old_variable_name",
-                Instructions = "old instructions",
-                EnablementCondition = "old condition",
-                ResponsibleId = responsibleId
-            });
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
+publicKey: questionId,
+groupPublicKey: parentGroupId,
+questionText: "old title",
+stataExportCaption: "old_variable_name",
+instructions: "old instructions",
+conditionExpression: "old condition",
+responsibleId: responsibleId,
+questionType: QuestionType.QRBarcode
+));
             questionnaire.Apply(new NewGroupAdded { PublicKey = groupFromRosterId, ParentGroupPublicKey = rosterId });
         };
 
@@ -48,15 +48,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                     isPreFilled: isPreFilled,
                     scope: QuestionScope.Supervisor,
                     enablementCondition: enablementCondition,
-                    validationExpression: validationExpression,
-                    validationMessage: validationMessage,
+                    hideIfDisabled: false,
                     instructions: instructions,
                     responsibleId: responsibleId,
                     options: null,
-                    linkedToQuestionId: linkedToQuestionId,
+                    linkedToEntityId: linkedToQuestionId,
                     isFilteredCombobox: isFilteredCombobox,
-                    cascadeFromQuestionId: сascadeFromQuestionId
-                    ));
+                    cascadeFromQuestionId: сascadeFromQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
 
 
         It should_throw_QuestionnaireException = () =>
@@ -78,8 +76,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
         private static string title = "title";
         private static string instructions = "intructions";
         private static string enablementCondition = "";
-        private static string validationExpression = "";
-        private static string validationMessage = "";
         private static Guid linkedToQuestionId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         private static bool isFilteredCombobox = false;
         private static Guid? сascadeFromQuestionId = (Guid?)null;

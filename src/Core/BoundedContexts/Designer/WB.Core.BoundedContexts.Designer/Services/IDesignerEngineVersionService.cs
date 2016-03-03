@@ -7,6 +7,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
     {
         Version GetLatestSupportedVersion();
 
+        Version GetQuestionnaireContentVersion(QuestionnaireDocument questionnaireDocument);
+
         bool IsClientVersionSupported(Version clientVersion);
 
         bool IsQuestionnaireDocumentSupportedByClientVersion(QuestionnaireDocument questionnaireDocument, Version clientVersion);

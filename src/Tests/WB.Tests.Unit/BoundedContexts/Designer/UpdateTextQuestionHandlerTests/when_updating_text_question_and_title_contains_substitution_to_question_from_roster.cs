@@ -21,16 +21,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateTextQuestionHandlerTests
                 isInteger : true,
                 stataExportCaption : "roster_size_question"
             ));
-            questionnaire.Apply(new QRBarcodeQuestionAdded()
-            {
-                QuestionId = questionId,
-                ParentGroupId = chapterId,
-                Title = "old title",
-                VariableName = "old_variable_name",
-                Instructions = "old instructions",
-                EnablementCondition = "old condition",
-                ResponsibleId = responsibleId
-            });
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
+publicKey: questionId,
+groupPublicKey: chapterId,
+questionText: "old title",
+stataExportCaption: "old_variable_name",
+instructions: "old instructions",
+conditionExpression: "old condition",
+responsibleId: responsibleId,
+questionType: QuestionType.QRBarcode
+));
             questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId, ParentGroupPublicKey = chapterId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId: responsibleId, groupId: rosterId));
             questionnaire.Apply(new RosterChanged(responsibleId: responsibleId, groupId: rosterId){
@@ -53,16 +53,14 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateTextQuestionHandlerTests
                     questionId: questionId,
                     title: titleWithSubstitution,
                     variableName: variableName,
-                variableLabel: null,
+                    variableLabel: null,
                     isPreFilled: isPreFilled,
                     scope: scope,
                     enablementCondition: enablementCondition,
-                    validationExpression: validationExpression,
-                    validationMessage: validationMessage,
+                    hideIfDisabled: false,
                     instructions: instructions,
                      mask: null,
-                    responsibleId: responsibleId
-                    ));
+                    responsibleId: responsibleId, validationCoditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
@@ -87,7 +85,5 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateTextQuestionHandlerTests
         private static bool isPreFilled = false;
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static string enablementCondition = null;
-        private static string validationExpression = null;
-        private static string validationMessage = "";
     }
 }

@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Threading;
 using Java.Lang;
+using MvvmCross.Platform;
+using MvvmCross.Platform.Exceptions;
 using WB.Core.GenericSubdomains.Portable.Services;
 using Exception = System.Exception;
 
@@ -50,6 +52,7 @@ namespace WB.UI.Interviewer.Infrastructure.Logging
 
         public void Error(string message, Exception exception = null)
         {
+            Mvx.Error("Sync failed with exception {0}", exception != null ? exception.ToLongString(): "" );
             this.WriteLogMessage("Error", exception, message);
         }
 

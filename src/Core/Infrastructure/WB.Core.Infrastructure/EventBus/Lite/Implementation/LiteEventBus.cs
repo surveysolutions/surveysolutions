@@ -49,8 +49,8 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 
                 if (exceptions.Count > 0)
                 {
-                    var message = string.Format("{0} handler(s) failed to handle published event '{1}' by event source '{2}' with sequence '{3}'.", 
-                        exceptions.Count, uncommittedChange.EventIdentifier, uncommittedChange.EventSourceId, uncommittedChange.EventSequence);
+                    var message = string.Format("{0} handler(s) failed to handle published event '{1}' of type '{4} by event source '{2}' with sequence '{3}'.", 
+                        exceptions.Count, uncommittedChange.EventIdentifier, uncommittedChange.EventSourceId, uncommittedChange.EventSequence, uncommittedChange.Payload.GetType().Name);
                     throw new AggregateException(message, exceptions);
                 }
             }

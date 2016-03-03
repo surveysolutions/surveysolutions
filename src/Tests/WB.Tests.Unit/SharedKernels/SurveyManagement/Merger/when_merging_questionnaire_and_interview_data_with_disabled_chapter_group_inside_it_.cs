@@ -23,11 +23,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
     {
         Establish context = () =>
         {
-            merger = CreateMerger();
-
             var chapterId = Guid.Parse("44444444444444444444444444444444");
 
-            var questionnaireDocument = new QuestionnaireDocument
+            questionnaire = new QuestionnaireDocument
             {
                 Children = new List<IComposite>
                 {
@@ -66,15 +64,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
 
             answeredQuestion.Answer = 5;
-
-            questionnaire = CreateQuestionnaireWithVersion(questionnaireDocument);
-            questionnaireReferenceInfo = CreateQuestionnaireReferenceInfo();
-            questionnaireRosters = CreateQuestionnaireRosterStructure(questionnaireDocument);
+            
             user = Mock.Of<UserDocument>();
+            merger = CreateMerger(questionnaire);
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, questionnaireReferenceInfo, questionnaireRosters, user);
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight());
 
         It should_question_be_disabled = () =>
             ((InterviewQuestionView)mergeResult.Groups.FirstOrDefault(g => g.Id == nestedGroupId).Entities[0]).IsEnabled.ShouldEqual(false);
@@ -82,9 +78,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static InterviewDataAndQuestionnaireMerger merger;
         private static InterviewDetailsView mergeResult;
         private static InterviewData interview;
-        private static QuestionnaireDocumentVersioned questionnaire;
-        private static ReferenceInfoForLinkedQuestions questionnaireReferenceInfo;
-        private static QuestionnaireRosterStructure questionnaireRosters;
+        private static QuestionnaireDocument questionnaire;
         private static UserDocument user;
         private static Guid nestedGroupId = Guid.Parse("11111111111111111111111111111111");
         private static Guid questionInNestedGroupId = Guid.Parse("55555555555555555555555555555555");

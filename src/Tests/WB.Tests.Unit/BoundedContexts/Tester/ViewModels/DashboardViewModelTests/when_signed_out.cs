@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         Because of = () => viewModel.SignOutCommand.Execute();
 
-        It should_be_called_signout_method_of_principal_service = () => mockOfPrincipal.Verify(_=>_.SignOut(), Times.Once);
+        It should_be_called_signout_method_of_principal_service = () => mockOfPrincipal.Verify(_=>_.SignOutAsync(), Times.Once);
         It should_be_navigated_to_login_view_model = () => mockOfViewModelNavigationService.Verify(_ => _.NavigateToAsync<LoginViewModel>(), Times.Once);
         
         private static DashboardViewModel viewModel;

@@ -14,7 +14,7 @@ namespace WB.UI.Shared.Web.CommandDeserialization
 
         protected CommandDeserializer()
         {
-            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
+            this.logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<CommandDeserializer>();
         }
 
         public ICommand Deserialize(string commandType, string serializedCommand)

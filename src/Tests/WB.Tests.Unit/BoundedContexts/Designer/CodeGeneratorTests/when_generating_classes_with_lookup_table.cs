@@ -66,16 +66,16 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
             generatedClassContent[lookupTableClassName].ShouldContain("public static class LookupTables");
 
         It should_generate_class_for_Price = () =>
-            generatedClassContent[lookupTableClassName].ShouldContain("public class Price");
+            generatedClassContent[lookupTableClassName].ShouldContain("public class @Lookup__Price");
 
         It should_generate_class_constructor_for_Price = () =>
-            generatedClassContent[lookupTableClassName].ShouldContain("public Price(decimal rowcode, double? min,double? max)");
+            generatedClassContent[lookupTableClassName].ShouldContain("public @Lookup__Price(decimal rowcode, double? min,double? max)");
 
         It should_generate_lookup_table_price = () =>
-            generatedClassContent[lookupTableClassName].ShouldContain("public static Dictionary<decimal, Price> price");
+            generatedClassContent[lookupTableClassName].ShouldContain("public static Dictionary<decimal, @Lookup__Price> price");
 
         It should_generate_lookup_table_field_price = () =>
-            generatedClassContent[lookupTableClassName].ShouldContain("private static readonly Dictionary<decimal, Price> @__price  = new Dictionary<decimal, Price>()");
+            generatedClassContent[lookupTableClassName].ShouldContain("private static readonly Dictionary<decimal, @Lookup__Price> @__price  = new Dictionary<decimal, @Lookup__Price>()");
 
 
         private static Version version = new Version(11, 0, 0);

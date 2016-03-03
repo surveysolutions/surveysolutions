@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.ViewModels;
+using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -145,7 +145,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private async Task SaveAnswerAsync()
         {
             this.IsInProgress = true;
-            string errorMessage = null;
+
             try
             {
                 CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
@@ -159,18 +159,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             catch (Exception e)
             {
-                errorMessage = e.Message;
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_Timeout);
                 logger.Error(e.Message, e);
             }
             finally
             {
                 this.IsInProgress = false;
-            }
-
-            if (!string.IsNullOrEmpty(errorMessage))
-            {
-                await
-                    this.userInteractionService.AlertAsync((errorMessage));
             }
         }
 

@@ -20,7 +20,9 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
             command = string.Format(@"{{
                 ""questionnaireId"": ""{0}"",
                 ""questionId"": ""{1}"",
-                ""title"": ""{2}""
+                ""commonQuestionParameters"": {{
+                    ""title"": ""{2}""
+                }}
             }}", questionnaireId, questionId, title);
 
             deserializer = CreateCommandDeserializer();

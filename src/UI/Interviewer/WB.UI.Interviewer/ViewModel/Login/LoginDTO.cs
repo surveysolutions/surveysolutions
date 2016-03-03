@@ -1,5 +1,5 @@
 using System;
-using Cirrious.MvvmCross.Plugins.Sqlite;
+using SQLite.Net.Attributes;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.UI.Interviewer.ViewModel.Login

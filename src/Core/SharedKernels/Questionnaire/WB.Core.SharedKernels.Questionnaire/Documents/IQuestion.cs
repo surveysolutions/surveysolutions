@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.Composite;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace Main.Core.Entities.SubEntities
 {
@@ -19,8 +20,10 @@ namespace Main.Core.Entities.SubEntities
         string ValidationExpression { get; set; }
         string ValidationMessage { get; set; }
         Guid? LinkedToQuestionId { get; set; }
+        Guid? LinkedToRosterId { get; set; }
         Guid? CascadeFromQuestionId { get; set; }
         bool? IsFilteredCombobox { get; set; }
+        IList<ValidationCondition> ValidationConditions { get; set; }
         void AddAnswer(Answer answer);
         IEnumerable<string> GetVariablesUsedInTitle();
     }

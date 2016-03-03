@@ -121,8 +121,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\NConfig.1.0.16\lib\Net40\NConfig.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
@@ -261,6 +261,7 @@
     <Compile Include="Api\ControlPanelApiController.cs" />
     <Compile Include="Api\ExpressionGenerationController.cs" />
     <Compile Include="Api\QuestionnairesController.cs" />
+    <Compile Include="Api\QuestionnairesV12Controller.cs" />
     <Compile Include="Api\QuestionnairesV11Controller.cs" />
     <Compile Include="Api\QuestionnairesV10Controller.cs" />
     <Compile Include="Api\QuestionnairesV9Controller.cs" />
@@ -458,6 +459,7 @@
     <Content Include="UpdatedDesigner\app\scripts\controllers\lookupTables.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\macros.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\leftMenu.js" />
+    <Content Include="UpdatedDesigner\app\views\help-link.html" />
     <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.min.css">
       <DependentUpon>bootstrap-custom.css</DependentUpon>
     </Content>
@@ -846,6 +848,8 @@
     <Content Include="UpdatedDesigner\vendor\jquery-mousewheel\jquery.mousewheel.min.js" />
     <Content Include="UpdatedDesigner\vendor\jquery-mousewheel\LICENSE.txt" />
     <Content Include="UpdatedDesigner\vendor\jquery-mousewheel\README.md" />
+    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\jquery.scrollTo.js" />
+    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\jquery.scrollTo.min.js" />
     <Content Include="UpdatedDesigner\vendor\jquery\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\jquery\bower.json" />
     <Content Include="UpdatedDesigner\vendor\jquery\dist\jquery.js" />
@@ -1239,6 +1243,9 @@
     <Content Include="UpdatedDesigner\vendor\ng-file-upload\bower.json" />
     <Content Include="UpdatedDesigner\vendor\ng-file-upload\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\ng-file-upload\README.md" />
+    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\.bower.json" />
+    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\bower.json" />
+    <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\LICENSE" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

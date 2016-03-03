@@ -23,11 +23,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
 
-            questionnaire.Apply(Create.Event.NumericQuestionAdded
-            (
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
                 publicKey : rosterSizeQuestionId,
                 isInteger : true,
-                groupPublicKey : chapterId
+                groupPublicKey : chapterId,
+                questionType: QuestionType.Numeric
             ));
 
             AddGroup(questionnaire: questionnaire, groupId: groupId, parentGroupId: chapterId, condition: null, responsibleId: responsibleId,
@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         Because of = () =>
             exception = Catch.Exception(() =>
                 questionnaire.UpdateGroup(groupId: groupId, responsibleId: responsibleId, title: "title", variableName: null, rosterSizeQuestionId: null,
-                    description: null, condition: null, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question,
+                    description: null, condition: null, hideIfDisabled: false, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question,
                     rosterFixedTitles: null, rosterTitleQuestionId: null));
 
         It should_throw_QuestionnaireException = () =>

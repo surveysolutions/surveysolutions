@@ -45,6 +45,7 @@
     <Compile Include="AbstractInterviewExpressionState.cs" />
     <Compile Include="ConditionalState.cs" />
     <Compile Include="ConversionHelper.cs" />
+    <Compile Include="FailedValidationCondition.cs" />
     <Compile Include="IInterviewExpressionStateUpgrader.cs" />
     <Compile Include="IInterviewProperties.cs" />
     <Compile Include="InterviewExpressionStateExtensions.cs" />
@@ -85,6 +86,12 @@
     <Compile Include="V5\IExpressionExecutableV5.cs" />
     <Compile Include="V5\IInterviewExpressionStateV5.cs" />
     <Compile Include="V5\InterviewExpressionStateV4ToV5Adapter.cs" />
+    <Compile Include="V6\AbstractConditionalLevelInstanceV6.cs" />
+    <Compile Include="V6\AbstractInterviewExpressionStateV6.cs" />
+    <Compile Include="V6\IExpressionExecutableV6.cs" />
+    <Compile Include="V6\IInterviewExpressionStateV6.cs" />
+    <Compile Include="V6\InterviewExpressionStateV5ToV6Adapter.cs" />
+    <Compile Include="ValidationDescription.cs" />
     <Compile Include="ValidityChanges.cs" />
     <Compile Include="YesNoAnswers.cs" />
   </ItemGroup>
