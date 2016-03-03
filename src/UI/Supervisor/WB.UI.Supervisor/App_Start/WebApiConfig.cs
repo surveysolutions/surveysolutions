@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -87,6 +88,7 @@ namespace WB.UI.Supervisor.App_Start
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
 
             config.MessageHandlers.Add(new EnforceHttpsHandler());
+            config.MessageHandlers.Add(new DecompressionHandler());
         }
     }
 }

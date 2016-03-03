@@ -84,7 +84,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             try
             {
-                return await restClient.SendAsync(method, this.CreateJsonContent(request),
+                return await restClient.SendAsync(method, this.CreateCompressedJsonContent(request),
                     linkedCancellationTokenSource.Token);
             }
             catch (OperationCanceledException ex)
@@ -167,9 +167,12 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             return fileContent;
         }
 
-        private HttpContent CreateJsonContent(object data)
+        private HttpContent CreateCompressedJsonContent(object data)
         {
-            return data == null ? null : new CapturedStringContent(this.serializer.Serialize(data), Encoding.UTF8, "application/json");
+            return data == null
+                ? null
+                : new CompressedContent(
+                    new CapturedStringContent(this.serializer.Serialize(data), Encoding.UTF8, "application/json"), new GZipCompressor());
         }
 
         private async Task<T> ReceiveCompressedJsonWithProgressAsync<T>(Task<HttpResponseMessage> response,
