@@ -637,7 +637,7 @@
       <LastGenOutput>ExpressionMethodTemplate.cs</LastGenOutput>
       <TransformOnBuild>False</TransformOnBuild>
     </None>
-    <Compile Include="Implementation\Services\QuestionnaireVerifierWarnings.cs" />
+    <Compile Include="Implementation\Services\QuestionnaireVerifier.Warnings.cs" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
