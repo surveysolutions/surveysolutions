@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire
 {
-    public class QuestionnaireBrowseItem : IReadSideRepositoryEntity
+    public class QuestionnaireBrowseItem
     {
         public QuestionnaireBrowseItem()
         {
@@ -35,14 +35,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire
             this.AllowCensusMode = allowCensusMode;
         }
 
-        public QuestionnaireBrowseItem(QuestionnaireDocument doc, long version, bool allowCensusMode)
+        public QuestionnaireBrowseItem(QuestionnaireDocument doc, long version, bool allowCensusMode, long questionnaireContentVersion)
             : this(doc.PublicKey, version, doc.Title, doc.CreationDate, doc.LastEntryDate, doc.CreatedBy, doc.IsPublic, allowCensusMode)
         {
             this.FeaturedQuestions =
                 doc.Find<IQuestion>(q => q.Featured)
                    .Select(q => new FeaturedQuestionItem(q.PublicKey, q.QuestionText, q.StataExportCaption))
                    .ToList();
-
+            this.QuestionnaireContentVersion = questionnaireContentVersion;
             this.Id = string.Format("{0}${1}", doc.PublicKey.FormatGuid(), version);
         }
 
@@ -67,6 +67,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire
         public virtual bool AllowCensusMode { get; set; }
 
         public virtual bool Disabled { get; set; }
+
+        public virtual long QuestionnaireContentVersion { get; set; }
 
         public virtual IList<FeaturedQuestionItem> FeaturedQuestions { get; protected set; }
     }

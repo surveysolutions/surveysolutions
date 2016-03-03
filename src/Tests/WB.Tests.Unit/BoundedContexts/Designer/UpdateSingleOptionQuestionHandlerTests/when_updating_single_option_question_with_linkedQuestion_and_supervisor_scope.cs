@@ -54,7 +54,8 @@ questionType: QuestionType.QRBarcode
                     options: null,
                     linkedToEntityId: linkedToQuestionId,
                     isFilteredCombobox: isFilteredCombobox,
-                    cascadeFromQuestionId: сascadeFromQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
+                    cascadeFromQuestionId: сascadeFromQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
+                linkedFilterExpression: null));
 
 
         It should_throw_QuestionnaireException = () =>

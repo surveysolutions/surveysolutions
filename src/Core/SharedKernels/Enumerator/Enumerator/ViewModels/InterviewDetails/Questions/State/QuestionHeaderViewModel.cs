@@ -6,11 +6,12 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
@@ -25,12 +26,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set { this.title = value; this.RaisePropertyChanged(); }
         }
 
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry registry;
         private readonly ISubstitutionService substitutionService;
         private readonly IAnswerToStringService answerToStringService;
         private readonly IRosterTitleSubstitutionService rosterTitleSubstitutionService;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private Identity questionIdentity;
         private string interviewId;
 
@@ -40,11 +41,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (questionIdentity == null) throw new ArgumentNullException("questionIdentity");
 
             var interview = this.interviewRepository.Get(interviewId);
-            QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
-            var questionModel = questionnaire.Questions[questionIdentity.Id];
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
-            this.Title = questionModel.Title;
-            this.Instruction = questionModel.Instructions;
+            this.Title = questionnaire.GetQuestionTitle(questionIdentity.Id);
+            this.Instruction = questionnaire.GetQuestionInstruction(questionIdentity.Id);
             this.questionIdentity = questionIdentity;
             this.interviewId = interviewId;
 
@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected QuestionHeaderViewModel() { }
 
         public QuestionHeaderViewModel(
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
+            IPlainQuestionnaireRepository questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry registry,
             ISubstitutionService substitutionService,
@@ -78,30 +78,28 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (thisQuestionChanged)
             {
                 var interview = this.interviewRepository.Get(this.interviewId);
-                QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
+                IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
                 this.CalculateSubstitutions(questionnaire, interview);
             }
         }
 
-        private void CalculateSubstitutions(QuestionnaireModel questionnaire, IStatefulInterview interview)
+        private void CalculateSubstitutions(IQuestionnaire questionnaire, IStatefulInterview interview)
         {
-            BaseQuestionModel questionModel = questionnaire.Questions[this.questionIdentity.Id];
-
-            string questionTitle = questionModel.Title;
+            string questionTitle = questionnaire.GetQuestionTitle(this.questionIdentity.Id);
             if (this.substitutionService.ContainsRosterTitle(questionTitle))
             {
-                questionTitle = this.rosterTitleSubstitutionService.Substitute(questionModel.Title,
+                questionTitle = this.rosterTitleSubstitutionService.Substitute(questionTitle,
                     this.questionIdentity, this.interviewId);
             }
             string[] variablesToReplace = this.substitutionService.GetAllSubstitutionVariableNames(questionTitle);
 
             foreach (var variable in variablesToReplace)
             {
-                BaseQuestionModel substitutedQuestionModel = questionnaire.QuestionsByVariableNames[variable];
+                var substitutedQuestionId = questionnaire.GetQuestionIdByVariable(variable);
 
-                var baseInterviewAnswer = interview.FindBaseAnswerByOrDeeperRosterLevel(substitutedQuestionModel.Id, this.questionIdentity.RosterVector);
-                string answerString = baseInterviewAnswer != null ? this.answerToStringService.AnswerToUIString(substitutedQuestionModel, baseInterviewAnswer, interview, questionnaire) : null;
+                var baseInterviewAnswer = interview.FindBaseAnswerByOrDeeperRosterLevel(substitutedQuestionId, this.questionIdentity.RosterVector);
+                string answerString = baseInterviewAnswer != null ? this.answerToStringService.AnswerToUIString(substitutedQuestionId, baseInterviewAnswer, interview, questionnaire) : null;
 
                 questionTitle = this.substitutionService.ReplaceSubstitutionVariable(
                     questionTitle, variable, string.IsNullOrEmpty(answerString) ? this.substitutionService.DefaultSubstitutionText : answerString);

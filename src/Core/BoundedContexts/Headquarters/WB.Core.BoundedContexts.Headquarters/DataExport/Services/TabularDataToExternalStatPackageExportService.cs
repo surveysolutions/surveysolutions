@@ -11,8 +11,10 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
@@ -21,9 +23,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
     {
         private readonly ITransactionManagerProvider transactionManager;
         private readonly IFileSystemAccessor fileSystemAccessor;
-
         private readonly ILogger logger;
-        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter;
+        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository;
         private readonly ITabFileReader tabReader;
         private readonly IDatasetWriterFactory datasetWriterFactory;
         private readonly IDataQueryFactory dataQueryFactory;
@@ -32,14 +33,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public TabularDataToExternalStatPackageExportService(
             IFileSystemAccessor fileSystemAccessor,
-            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter,
             ITransactionManagerProvider transactionManager,
             ILogger logger,
             ITabFileReader tabReader,
             IDataQueryFactory dataQueryFactory,
-            IDatasetWriterFactory datasetWriterFactory, IQuestionnaireLabelFactory questionnaireLabelFactory)
+            IDatasetWriterFactory datasetWriterFactory, 
+            IQuestionnaireLabelFactory questionnaireLabelFactory,
+            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository)
         {
-            this.questionnaireExportStructureWriter = questionnaireExportStructureWriter;
             this.transactionManager = transactionManager;
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
@@ -47,6 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.tabReader = tabReader;
             this.datasetWriterFactory = datasetWriterFactory;
             this.questionnaireLabelFactory = questionnaireLabelFactory;
+            this.questionnaireExportStructureRepository = questionnaireExportStructureRepository;
             this.dataQueryFactory = dataQueryFactory;
         }
 
@@ -80,8 +82,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                 var questionnaireExportStructure =
                     this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
-                        this.questionnaireExportStructureWriter.AsVersioned()
-                            .Get(questionnaireId.FormatGuid(), questionnaireVersion));
+                        this.questionnaireExportStructureRepository.GetById(
+                            new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString()));
 
                 if (questionnaireExportStructure == null)
                     return new string[0];

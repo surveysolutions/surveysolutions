@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using Machine.Specifications;
+using Moq;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SideBarSectionViewModelTests
 {
@@ -15,11 +16,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SideBarSectionViewMo
     {
         Establish context = () =>
         {
-            rosterGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-
-            QuestionnaireModel questionnaire = Create.QuestionnaireModel();
-            questionnaire.GroupsWithFirstLevelChildrenAsReferences = new Dictionary<Guid, GroupModel>();
-            questionnaire.GroupsWithFirstLevelChildrenAsReferences[rosterGroupId] = new GroupModel { Title = "group title" };
+            var questionnaire = Mock.Of<IQuestionnaire>(_
+               => _.HasGroup(rosterGroupId) == true
+               && _.IsRosterGroup(rosterGroupId) == true
+               && _.GetGroupTitle(rosterGroupId) == "group title");
 
             var interview = Substitute.For<IStatefulInterview>();
 
@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SideBarSectionViewMo
 
         static SideBarSectionViewModel viewModel;
         static Identity sectionIdentity;
-        static Guid rosterGroupId;
+        static readonly Guid rosterGroupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     }
 }
 

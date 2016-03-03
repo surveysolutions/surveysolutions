@@ -119,7 +119,6 @@
     <Compile Include="Implementation\Services\InterviewerQuestionnaireAccessor.cs" />
     <Compile Include="Implementation\Services\QuestionnaireContentVersionProvider.cs" />
     <Compile Include="Implementation\Services\QuestionnaireKeyValueStorage.cs" />
-    <Compile Include="Implementation\Services\QuestionnaireModelKeyValueStorage.cs" />
     <Compile Include="Implementation\Storage\IInterviewerEventStorage.cs" />
     <Compile Include="Implementation\Storage\SqliteEventStorage.cs" />
     <Compile Include="Implementation\Services\SynchronizationException.cs" />
@@ -173,7 +172,6 @@
     <Compile Include="Implementation\Services\InterviewerDashboardFactory.cs" />
     <Compile Include="Views\FinishInstallationViewModel.cs" />
     <Compile Include="Views\InterviewAnswerOnPrefilledQuestionView.cs" />
-    <Compile Include="Views\InterviewerActiveStageViewModel.cs" />
     <Compile Include="Views\InterviewerCompleteInterviewViewModel.cs" />
     <Compile Include="Views\InterviewGpsCoordinatesView.cs" />
     <Compile Include="Views\InterviewGpsLocationView.cs" />
@@ -190,7 +188,6 @@
     <Compile Include="Views\Dashboard\DashboardItems\PrefilledQuestion.cs" />
     <Compile Include="Views\InterviewerIdentity.cs" />
     <Compile Include="Views\LoginViewModel.cs" />
-    <Compile Include="Views\QuestionnaireModelView.cs" />
     <Compile Include="Views\QuestionnaireDocumentView.cs" />
     <Compile Include="Views\ApplicationSettingsView.cs" />
     <Compile Include="Views\QuestionnaireView.cs" />

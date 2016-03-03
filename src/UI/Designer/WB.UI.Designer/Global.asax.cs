@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
 using System.Web;
 using System.Web.Http;
@@ -15,6 +16,7 @@ using NConfig;
 using Elmah;
 using System.Web.Hosting;
 using System.Reflection;
+using WB.Core.Infrastructure.Versions;
 
 namespace WB.UI.Designer
 {
@@ -28,9 +30,15 @@ namespace WB.UI.Designer
         const int TimedOutExceptionCode = -2147467259;
 
         private ILogger logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<MvcApplication>();
+        private readonly IProductVersionHistory productVersionHistory = ServiceLocator.Current.GetInstance<IProductVersionHistory>();
+
+        private static string ProductVersion => ServiceLocator.Current.GetInstance<IProductVersion>().ToString();
 
         protected void Application_Start()
         {
+            this.logger.Info($"Starting Designer {ProductVersion}");
+            this.productVersionHistory.RegisterCurrentVersion();
+
             AppDomain.CurrentDomain.UnhandledException += this.CurrentUnhandledException;
 
             AreaRegistration.RegisterAllAreas();

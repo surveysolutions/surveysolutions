@@ -10,7 +10,9 @@ using MvvmCross.Platform.Converters;
 using MvvmCross.Platform.IoC;
 using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.UI.Shared.Enumerator;
+using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Tester.Activities;
 using WB.UI.Tester.Converters;
 using WB.UI.Tester.Ninject;
@@ -44,6 +46,7 @@ namespace WB.UI.Tester
                 {typeof (LoginViewModel), typeof (LoginActivity)},
                 {typeof (InterviewViewModel), typeof (InterviewActivity)},
                 {typeof (DashboardViewModel), typeof (DashboardActivity)},
+                {typeof (CompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();

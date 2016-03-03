@@ -1,10 +1,12 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Mappings
 {
+    [PlainStorage]
     public class QuestionnaireBrowseItemMap : ClassMapping<QuestionnaireBrowseItem>
     {
         public QuestionnaireBrowseItemMap()
@@ -22,6 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.IsDeleted);
             Property(x => x.AllowCensusMode);
             Property(x => x.Disabled);
+            Property(x => x.QuestionnaireContentVersion);
 
             List(x => x.FeaturedQuestions, listMap =>
             {

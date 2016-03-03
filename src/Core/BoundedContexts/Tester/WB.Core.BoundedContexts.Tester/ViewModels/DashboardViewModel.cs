@@ -92,15 +92,21 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             var trimmedSearchText = (searchTerm ?? "").Trim();
 
             Func<QuestionnaireListItem, bool> emptyFilter = x => true;
-            Func<QuestionnaireListItem, bool> titleSearchFilter = x => x.Title.Contains(trimmedSearchText) || x.OwnerName.Contains(trimmedSearchText);
+            Func<QuestionnaireListItem, bool> titleSearchFilter = x => x.Title.Contains(trimmedSearchText) ||
+                    (x.OwnerName != null && x.OwnerName.Contains(trimmedSearchText));
             Func<QuestionnaireListItem, bool> searchFilter = string.IsNullOrEmpty(trimmedSearchText)
                 ? emptyFilter
                 : titleSearchFilter;
 
             var myQuestionnaires = this.localQuestionnaires
                 .Where(questionnaire =>
-                    searchFilter(questionnaire) &&
-                    (questionnaire.OwnerName == this.principal.CurrentUserIdentity.Name || questionnaire.IsShared))
+                    searchFilter(questionnaire)
+                    &&
+                    (
+                        string.Equals(questionnaire.OwnerName, this.principal.CurrentUserIdentity.Name, StringComparison.OrdinalIgnoreCase)
+                        ||
+                        questionnaire.IsShared
+                    ))
                 .ToList();
 
             var publicQuestionnaires = this.localQuestionnaires
@@ -246,14 +252,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             this.IsPublicShowed = true;
 
-            this.SearchByLocalQuestionnaires();
+            this.SearchByLocalQuestionnaires(this.SearchText);
         }
 
         private void ShowMyQuestionnaires()
         {
             this.IsPublicShowed = false;
 
-            this.SearchByLocalQuestionnaires();
+            this.SearchByLocalQuestionnaires(this.SearchText);
         }
 
         private async Task LoadQuestionnaireAsync(QuestionnaireListItem selectedQuestionnaire)

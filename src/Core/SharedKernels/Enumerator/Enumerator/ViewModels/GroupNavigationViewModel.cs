@@ -5,12 +5,10 @@ using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -19,7 +17,11 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
-    public class GroupNavigationViewModel : MvxNotifyPropertyChanged, ILiteEventHandler<GroupsEnabled>, ILiteEventHandler<GroupsDisabled>, IDisposable
+    public class GroupNavigationViewModel : MvxNotifyPropertyChanged,
+        IInterviewEntityViewModel,
+        ILiteEventHandler<GroupsEnabled>, 
+        ILiteEventHandler<GroupsDisabled>, 
+        IDisposable
     {
         private enum NavigationGroupType { Section, LastSection, InsideGroupOrRoster }
         public class GroupStatistics
@@ -35,13 +37,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private QuestionnaireIdentity questionnaireIdentity;
         private NavigationState navigationState;
 
-        private Identity currentGroupIdentity;
+        public Identity Identity { get; private set; }
         private Identity groupOrSectionToNavigateIdentity;
         private NavigationGroupType navigationGroupType;
         private readonly List<Identity> listOfDisabledSectionBetweenCurrentSectionAndNextEnabledSection = new List<Identity>();
 
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
@@ -73,14 +74,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public GroupNavigationViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository,
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry,
             IInterviewViewModelFactory interviewViewModelFactory,
             ICommandService commandService, AnswerNotifier answerNotifier)
         {
             this.questionnaireRepository = questionnaireRepository;
-            this.questionnaireModelRepository = questionnaireModelRepository;
             this.interviewRepository = interviewRepository;
             this.eventRegistry = eventRegistry;
             this.interviewViewModelFactory = interviewViewModelFactory;
@@ -91,7 +90,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public virtual void Init(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
             this.interviewId = interviewId;
-            this.currentGroupIdentity = groupIdentity;
+            this.Identity = groupIdentity;
             this.navigationState = navigationState;
 
             this.eventRegistry.Subscribe(this, interviewId);
@@ -128,10 +127,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity);
 
-            Guid parentId = questionnaire.GetParentGroup(this.currentGroupIdentity.Id).Value;
+            Guid parentId = questionnaire.GetParentGroup(this.Identity.Id).Value;
             int rosterLevelOfParent = questionnaire.GetRosterLevelForGroup(parentId);
 
-            RosterVector parentRosterVector = this.currentGroupIdentity.RosterVector.Shrink(rosterLevelOfParent);
+            RosterVector parentRosterVector = this.Identity.RosterVector.Shrink(rosterLevelOfParent);
 
             return new Identity(parentId, parentRosterVector);
         }
@@ -149,7 +148,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     break;
             }
 
-            this.groupState.Init(this.interviewId, this.currentGroupIdentity);
+            this.groupState.Init(this.interviewId, this.Identity);
             this.RaisePropertyChanged(() => this.GroupState);
         }
  
@@ -158,12 +157,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.groupOrSectionToNavigateIdentity = null;
             this.listOfDisabledSectionBetweenCurrentSectionAndNextEnabledSection.Clear();
 
-            var questionnaire = this.questionnaireModelRepository.GetById(this.QuestionnaireId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireIdentity);
 
-            int currentSectionIndex = questionnaire.GroupsHierarchy.FindIndex(x => x.Id == this.currentGroupIdentity.Id);
-            for (int sectionIndex = currentSectionIndex + 1; sectionIndex < questionnaire.GroupsHierarchy.Count; sectionIndex++)
+            var sections = questionnaire.GetAllSections().ToList();
+
+            int currentSectionIndex = sections.FindIndex(x => x == this.Identity.Id);
+            for (int sectionIndex = currentSectionIndex + 1; sectionIndex < sections.Count; sectionIndex++)
             {
-                var nextSectionIdentity = new Identity(questionnaire.GroupsHierarchy[sectionIndex].Id, RosterVector.Empty);
+                var nextSectionIdentity = new Identity(sections[sectionIndex], RosterVector.Empty);
 
                 if (!this.CanNavigateToSection(nextSectionIdentity))
                 {
@@ -213,7 +214,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 case NavigationGroupType.InsideGroupOrRoster:
                     await this.navigationState.NavigateToAsync(
                         NavigationIdentity.CreateForGroup(this.groupOrSectionToNavigateIdentity,
-                            anchoredElementIdentity: this.currentGroupIdentity));
+                            anchoredElementIdentity: this.Identity));
                     break;
                 case NavigationGroupType.Section:
                     await this.navigationState.NavigateToAsync(

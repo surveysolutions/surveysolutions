@@ -69,6 +69,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Elmah.MVC.2.1.1\lib\net40\Elmah.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="EventStore.ClientAPI.Embedded">
+      <HintPath>..\..\..\..\packages\EventStore.Client.Embedded.3.4.0\lib\net40\EventStore.ClientAPI.Embedded.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
@@ -456,6 +459,7 @@
     <Content Include="Scripts\viewmodels\pages\login.js" />
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
     <Content Include="Scripts\viewmodels\designer.framework.js" />
+    <Content Include="UpdatedDesigner\app\scripts\controllers\attachments.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\lookupTables.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\macros.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\leftMenu.js" />
@@ -1246,6 +1250,7 @@
     <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\bower.json" />
     <Content Include="UpdatedDesigner\vendor\jquery.scrollTo\LICENSE" />
+    <Content Include="Views\ControlPanel\Versions.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

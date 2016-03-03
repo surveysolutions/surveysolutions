@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport

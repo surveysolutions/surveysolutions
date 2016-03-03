@@ -81,7 +81,6 @@
     <Compile Include="Commands\Interview\RemoveAnswerCommand.cs" />
     <Compile Include="Commands\Interview\RepeatLastInterviewStatus.cs" />
     <Compile Include="Commands\Interview\SynchronizeInterviewEventsCommand.cs" />
-    <Compile Include="Commands\Questionnaire\DisableQuestionnaire.cs" />
     <Compile Include="Commands\User\ArchiveUserCommad.cs" />
     <Compile Include="Commands\User\LinkUserToDevice.cs" />
     <Compile Include="Commands\User\UnarchiveUserAndUpdateCommand.cs" />
@@ -125,9 +124,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\Interview\SynchronizeInterviewFromHeadquarters.cs" />
-    <Compile Include="Commands\Questionnaire\DeleteQuestionnaire.cs" />
-    <Compile Include="Commands\Questionnaire\QuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\RegisterPlainQuestionnaire.cs" />
     <Compile Include="Commands\User\ChangeUserCommand.cs" />
     <Compile Include="Commands\User\CreateUserCommand.cs" />
     <Compile Include="Commands\User\LockUserBySupervisorCommand.cs" />
@@ -185,7 +181,6 @@
     <Compile Include="Events\User\UserLockedBySupervisor.cs" />
     <Compile Include="Events\User\UserUnlocked.cs" />
     <Compile Include="Events\User\UserUnlockedBySupervisor.cs" />
-    <Compile Include="Factories\IQuestionnaireFactory.cs" />
     <Compile Include="Factories\IQuestionnaireRosterStructureFactory.cs" />
     <Compile Include="Implementation\Accessors\IQuestionnareAssemblyFileAccessor.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\AnswerChange.cs" />
@@ -196,10 +191,8 @@
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewChangeStructures.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewChanges.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewStateDependentOnAnswers.cs" />
-    <Compile Include="Implementation\Aggregates\Questionnaire.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\RosterCalculationData.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\RosterIdentity.cs" />
-    <Compile Include="Implementation\Aggregates\Snapshots\QuestionnaireState.cs" />
     <Compile Include="Commands\Interview\AnswerDateTimeQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerGeoLocationQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerSingleOptionLinkedQuestionCommand.cs" />
@@ -225,7 +218,6 @@
     <Compile Include="Commands\Interview\SetFlagToAnswerCommand.cs" />
     <Compile Include="Commands\Interview\SynchronizeInterviewCommand.cs" />
     <Compile Include="Commands\Interview\CreateInterviewFromSynchronizationMetadata.cs" />
-    <Compile Include="Commands\Questionnaire\ImportFromDesigner.cs" />
     <Compile Include="DataTransferObjects\Synchronization\AnsweredQuestionSynchronizationDto.cs" />
     <Compile Include="DataTransferObjects\Synchronization\InterviewSynchronizationDto.cs" />
     <Compile Include="Events\Interview\AnswerCommented.cs" />
@@ -266,7 +258,6 @@
     <Compile Include="Implementation\Aggregates\Snapshots\InterviewState.cs" />
     <Compile Include="Implementation\Entities\PlainQuestionnaire.cs" />
     <Compile Include="Implementation\Entities\QuestionnaireIdentity.cs" />
-    <Compile Include="Implementation\Factories\QuestionnaireFactory.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireRosterStructureFactory.cs" />
     <Compile Include="Implementation\Providers\InterviewExpressionStatePrototypeProvider.cs" />
     <Compile Include="Implementation\Repositories\InterviewSynchronizationFileStorage.cs" />
@@ -300,7 +291,6 @@
     </Compile>
     <Compile Include="Views\Questionnaire\QuestionDescription.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireBrowseInputModel.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDocumentVersioned.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireItemInputModel.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -346,6 +336,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Commands\Questionnaire\" />
     <Folder Include="Implementation\ReadSide\" />
     <Folder Include="Implementation\Services\" />
     <Folder Include="ValueObjects\Questionnaire\" />

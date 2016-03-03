@@ -16,12 +16,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class SqlitePlainStorage<TEntity> : IAsyncPlainStorage<TEntity> where TEntity: class, IPlainStorageEntity
     {
-        private readonly SQLiteAsyncConnection asyncStorage;
-        private readonly SQLiteConnectionWithLock storage;
+        protected readonly SQLiteAsyncConnection asyncStorage;
+        protected readonly SQLiteConnectionWithLock storage;
         private readonly ILogger logger;
 
-        public SqlitePlainStorage(ISQLitePlatform sqLitePlatform, ILogger logger,
-            IAsynchronousFileSystemAccessor fileSystemAccessor, ISerializer serializer,
+        public SqlitePlainStorage(ISQLitePlatform sqLitePlatform, 
+            ILogger logger,
+            IAsynchronousFileSystemAccessor fileSystemAccessor, 
+            ISerializer serializer,
             SqliteSettings settings)
         {
             var entityName = typeof(TEntity).Name;
@@ -38,6 +40,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.logger = logger;
             this.storage.CreateTable<TEntity>();
             this.storage.CreateIndex<TEntity>(entity => entity.Id);
+        }
+
+        public SqlitePlainStorage(SQLiteConnectionWithLock storage, ILogger logger)
+        {
+            this.storage = storage;
+            this.logger = logger;
+            this.storage.CreateTable<TEntity>();
+            this.asyncStorage = new SQLiteAsyncConnection(() => this.storage);
         }
 
         public virtual TEntity GetById(string id)

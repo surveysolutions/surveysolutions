@@ -106,7 +106,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTes
                 sourceQuestionId: Guid.NewGuid(), 
                 targetIndex: 0,
                 countOfDecimalPlaces: null,
-                validationConditions: new List<ValidationCondition>()
+                validationConditions: new List<ValidationCondition>(),
+                linkedFilterExpression:null
                 );
         }
     }

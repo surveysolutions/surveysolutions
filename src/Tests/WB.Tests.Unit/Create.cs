@@ -73,7 +73,6 @@ using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -98,8 +97,6 @@ using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -144,6 +141,8 @@ using designer::WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGen
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable.CustomCollections;
 using WB.Core.SharedKernels.NonConficltingNamespace;
+using WB.Core.SharedKernels.SurveyManagement.Commands;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 
 namespace WB.Tests.Unit
 {
@@ -552,12 +551,15 @@ namespace WB.Tests.Unit
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>());
         }
 
-        public static Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire DataCollectionQuestionnaire(
+        public static Core.SharedKernels.SurveyManagement.Implementation.Aggregates.Questionnaire DataCollectionQuestionnaire(
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null)
         {
-            return new Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire(
+            return new Core.SharedKernels.SurveyManagement.Implementation.Aggregates.Questionnaire(
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
-                Mock.Of<IQuestionnaireAssemblyFileAccessor>());
+                Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
+                new ReferenceInfoForLinkedQuestionsFactory(),
+                new QuestionnaireRosterStructureFactory(),
+                Mock.Of<IExportViewFactory>());
         }
 
         public static DateTimeQuestion DateTimeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
@@ -622,7 +624,6 @@ namespace WB.Tests.Unit
         public static EnumerationStageViewModel EnumerationStageViewModel(
             IInterviewViewModelFactory interviewViewModelFactory = null,
             IPlainQuestionnaireRepository questionnaireRepository = null,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
             ISubstitutionService substitutionService = null,
             ILiteEventRegistry eventRegistry = null,
@@ -632,7 +633,6 @@ namespace WB.Tests.Unit
             => new EnumerationStageViewModel(
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
                 questionnaireRepository ?? Stub<IPlainQuestionnaireRepository>.WithNotEmptyValues,
-                questionnaireModelRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 substitutionService ?? Mock.Of<ISubstitutionService>(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
@@ -765,15 +765,6 @@ namespace WB.Tests.Unit
             {
                 GroupPublicKey = Guid.Parse(groupId)
             });
-        }
-
-        public static GroupModel GroupModel(Guid id, string title)
-        {
-            return new GroupModel
-            {
-                Id = id,
-                Title = title
-            };
         }
 
         public static IPublishedEvent<GroupStoppedBeingARoster> GroupStoppedBeingARosterEvent(string groupId)
@@ -1263,15 +1254,6 @@ namespace WB.Tests.Unit
             return new LastInterviewStatus("entry-id", status);
         }
 
-        public static LinkedMultiOptionQuestionModel LinkedMultiOptionQuestionModel(Guid? questionId = null, Guid? linkedToQuestionId =null)
-        {
-            return new LinkedMultiOptionQuestionModel()
-            {
-                Id =  questionId ?? Guid.NewGuid(),
-                LinkedToQuestionId = linkedToQuestionId ?? Guid.NewGuid()
-            };
-        }
-
         public static ILiteEventBus LiteEventBus(ILiteEventRegistry liteEventRegistry = null,
             IEventStore eventStore = null)
         {
@@ -1337,13 +1319,13 @@ namespace WB.Tests.Unit
         public static MapReportDenormalizer MapReportDenormalizer(
             IReadSideRepositoryWriter<MapReportPoint> mapReportPointStorage = null,
             IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage = null,
-            IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> questionsInfoStorage = null,
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentStorage = null)
+            QuestionnaireQuestionsInfo questionnaireQuestionsInfo=null,
+            QuestionnaireDocument questionnaireDocument=null)
             => new MapReportDenormalizer(
                 interviewReferencesStorage ?? new TestInMemoryWriter<InterviewReferences>(),
-                questionsInfoStorage ?? new TestInMemoryWriter<QuestionnaireQuestionsInfo>(),
-                questionnaireDocumentStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
-                mapReportPointStorage ?? new TestInMemoryWriter<MapReportPoint>());
+                mapReportPointStorage ?? new TestInMemoryWriter<MapReportPoint>(),
+                Mock.Of<IPlainQuestionnaireRepository>(_=>_.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == questionnaireDocument),
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(_=>_.GetById(Moq.It.IsAny<string>())== questionnaireQuestionsInfo));
 
         public static MultimediaQuestion MultimediaQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer
@@ -1763,7 +1745,8 @@ namespace WB.Tests.Unit
                 sourceQuestionnaireId: null,
                 maxAnswerCount: null,
                 countOfDecimalPlaces: null,
-                validationConditions: validationConditions
+                validationConditions: validationConditions,
+                linkedFilterExpression: null
             ));
         }
 
@@ -1801,7 +1784,7 @@ namespace WB.Tests.Unit
 
         public static QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire)
         {
-            return new QuestionnaireBrowseItem(questionnaire, 1, false);
+            return new QuestionnaireBrowseItem(questionnaire, 1, false,1);
         }
 
         public static QuestionnaireChangeRecord QuestionnaireChangeRecord(
@@ -1882,16 +1865,6 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static QuestionnaireDocumentVersioned QuestionnaireDocumentVersioned(
-            QuestionnaireDocument questionnaireDocument, long? version = null)
-        {
-            return new QuestionnaireDocumentVersioned
-            {
-                Questionnaire = questionnaireDocument,
-                Version = version ?? 77,
-            };
-        }
-
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(params IComposite[] children)
         {
             return QuestionnaireDocumentWithOneChapter(null, children);
@@ -1939,15 +1912,18 @@ namespace WB.Tests.Unit
 
         public static QuestionnaireIdentity QuestionnaireIdentity()
         {
-            return new QuestionnaireIdentity(Guid.NewGuid(), 7);
+            return Create.QuestionnaireIdentity(Guid.NewGuid());
         }
 
-        public static QuestionnaireImportService QuestionnaireImportService(IPlainKeyValueStorage<QuestionnaireModel> plainKeyValueStorage = null)
+        public static QuestionnaireIdentity QuestionnaireIdentity(Guid questionnaireId)
         {
-            return new QuestionnaireImportService(plainKeyValueStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
-                Mock.Of<IPlainQuestionnaireRepository>(),
-                Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
-                Mock.Of<IQuestionnaireModelBuilder>());
+            return new QuestionnaireIdentity(questionnaireId, 7);
+        }
+
+        public static QuestionnaireImportService QuestionnaireImportService(IPlainQuestionnaireRepository plainKeyValueStorage = null)
+        {
+            return new QuestionnaireImportService(Mock.Of<IPlainQuestionnaireRepository>(),
+                Mock.Of<IQuestionnaireAssemblyFileAccessor>());
         }
 
         public static IPublishedEvent<QuestionnaireItemMoved> QuestionnaireItemMovedEvent(string itemId,
@@ -1972,24 +1948,11 @@ namespace WB.Tests.Unit
             return new QuestionnaireLevelLabels(levelName, variableLabels);
         }
 
-        public static QuestionnaireModel QuestionnaireModel(BaseQuestionModel[] questions = null)
-        {
-            return new QuestionnaireModel
-            {
-                Questions = questions != null ? questions.ToDictionary(question => question.Id, question => question) : new Dictionary<Guid, BaseQuestionModel>(),
-            };
-        }
-
-        public static QuestionnaireModelBuilder QuestionnaireModelBuilder()
-        {
-            return new QuestionnaireModelBuilder();
-        }
-
         public static QuestionnaireNameValidator QuestionnaireNameValidator(
-            IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
         {
             return new QuestionnaireNameValidator(
-                questionnaireBrowseItemStorage ?? Stub<IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem>>.WithNotEmptyValues);
+                questionnaireBrowseItemStorage ?? Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
         }
 
         public static IPlainQuestionnaireRepository QuestionnaireRepositoryStubWithOneQuestionnaire(
@@ -2125,29 +2088,27 @@ namespace WB.Tests.Unit
         }
 
         public static SingleOptionLinkedQuestionViewModel SingleOptionLinkedQuestionViewModel(
-            QuestionnaireModel questionnaireModel = null,
+            IQuestionnaire questionnaire = null,
             IStatefulInterview interview = null,
             ILiteEventRegistry eventRegistry = null,
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionState = null,
             AnsweringViewModel answering = null)
         {
             var userIdentity = Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid());
-            questionnaireModel = questionnaireModel ?? Mock.Of<QuestionnaireModel>();
+            questionnaire = questionnaire ?? Mock.Of<IQuestionnaire>();
             interview = interview ?? Mock.Of<IStatefulInterview>();
 
             return new SingleOptionLinkedQuestionViewModel(
-                Mock.Of<IPrincipal>(_
-                    => _.CurrentUserIdentity == userIdentity),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(_
-                    => _.GetById(It.IsAny<string>()) == questionnaireModel),
-                Mock.Of<IStatefulInterviewRepository>(_
-                    => _.Get(It.IsAny<string>()) == interview),
+                Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity),
+                Mock.Of<IPlainQuestionnaireRepository>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>()) == questionnaire),
+                Mock.Of<IStatefulInterviewRepository>(_ => _.Get(It.IsAny<string>()) == interview),
                 Create.AnswerToStringService(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 Stub.MvxMainThreadDispatcher(),
                 questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
                 answering ?? Mock.Of<AnsweringViewModel>(),
-                Mock.Of<AnswerNotifier>());
+                Mock.Of<AnswerNotifier>(),
+                Mock.Of<IPlainQuestionnaireRepository>());
         }
 
         public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null,
@@ -2446,23 +2407,6 @@ namespace WB.Tests.Unit
                     DateTime.Now, "tttt"));
         }
 
-        public static LinkedSingleOptionQuestionModel LinkedSingleOptionQuestionModel(Guid? questionId, Guid  linkedToQuestionId)
-        {
-            return new LinkedSingleOptionQuestionModel
-            {
-                Id = questionId ?? Guid.NewGuid(),
-                LinkedToQuestionId = linkedToQuestionId
-            };
-        }
-
-        public static TextQuestionModel TextQuestionModel(Guid? questionId)
-        {
-            return new TextQuestionModel
-            {
-                Id  = questionId ?? Guid.NewGuid()
-            };
-        }
-
         public static TimeSpanBetweenStatuses TimeSpanBetweenStatuses(Guid? interviewerId = null, Guid? supervisorId = null, DateTime? timestamp = null, TimeSpan? timeSpanWithPreviousStatus = null)
         {
             return new TimeSpanBetweenStatuses()
@@ -2659,25 +2603,6 @@ namespace WB.Tests.Unit
                 isYesNo: true,
                 questionId: questionId,
                 answers: answers ?? new decimal[] {});
-        }
-
-        public static YesNoQuestionModel YesNoQuestionModel(Guid id, bool areAnswersOrdered = true, int maxAllowedAnswers = 2, List<OptionModel> options = null)
-        {
-            return new YesNoQuestionModel
-            {
-                AreAnswersOrdered = areAnswersOrdered,
-                Id = id,
-                Instructions = "instructions",
-                Options = options ?? new List<OptionModel>
-                {
-                    Create.OptionModel("item1", 1),
-                    Create.OptionModel("item2", 2),
-                    Create.OptionModel("item3", 3),
-                    Create.OptionModel("item4", 4),
-                    Create.OptionModel("item5", 5),
-                },
-                MaxAllowedAnswers = maxAllowedAnswers
-            };
         }
 
         internal static class Command

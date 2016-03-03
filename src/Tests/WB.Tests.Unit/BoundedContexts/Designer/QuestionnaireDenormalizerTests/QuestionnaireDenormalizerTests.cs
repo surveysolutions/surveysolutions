@@ -148,7 +148,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                 isFilteredCombobox: isFilteredCombobox,
                 cascadeFromQuestionId: cascadeFromQuestionId,
                 targetGroupKey: Guid.NewGuid(),
-                    validationConditions: validationConditions ?? new List<ValidationCondition>());
+                    validationConditions: validationConditions ?? new List<ValidationCondition>(),
+                linkedFilterExpression: null);
         }
     }
 }

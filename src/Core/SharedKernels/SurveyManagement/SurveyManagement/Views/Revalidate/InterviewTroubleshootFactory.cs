@@ -3,6 +3,7 @@ using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -14,17 +15,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
         private readonly IInterviewDataAndQuestionnaireMerger merger;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewStore;
         private readonly IReadSideRepositoryReader<UserDocument> userStore;
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore;
+        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
         public InterviewTroubleshootFactory(IReadSideKeyValueStorage<InterviewData> interviewStore,
             IReadSideRepositoryReader<UserDocument> userStore,
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore,
-            IInterviewDataAndQuestionnaireMerger merger)
+            IInterviewDataAndQuestionnaireMerger merger, IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.merger = merger;
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.interviewStore = interviewStore;
             this.userStore = userStore;
-            this.questionnaireStore = questionnaireStore;
         }
 
         public InterviewTroubleshootView Load(InterviewTroubleshootInputModel input)
@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
             if (interview == null || interview.IsDeleted)
                 return null;
 
-            var questionnaire = this.questionnaireStore.AsVersioned().Get(interview.QuestionnaireId.FormatGuid(), interview.QuestionnaireVersion)?.Questionnaire;
+            var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireId, interview.QuestionnaireVersion);
             if (questionnaire == null)
                 throw new ArgumentException(
                     $"Questionnaire with id {interview.QuestionnaireId} and version {interview.QuestionnaireVersion} is missing.");

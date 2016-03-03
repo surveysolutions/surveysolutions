@@ -18,7 +18,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Interviewer.Implementations.Services;
@@ -31,7 +30,6 @@ namespace WB.UI.Interviewer.Infrastructure
     {
         public override void Load()
         {
-            this.Bind<IPlainKeyValueStorage<QuestionnaireModel>>().To<QuestionnaireModelKeyValueStorage>().InSingletonScope();
             this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>().To<QuestionnaireKeyValueStorage>().InSingletonScope();
 
  			this.Bind<IInterviewerQuestionnaireAccessor>().To<InterviewerQuestionnaireAccessor>();

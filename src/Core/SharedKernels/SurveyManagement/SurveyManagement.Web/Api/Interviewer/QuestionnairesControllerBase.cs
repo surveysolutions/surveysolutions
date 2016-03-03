@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -7,12 +7,14 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 
@@ -20,21 +22,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
     public class QuestionnairesControllerBase : ApiController
     {
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore;
+        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter;
         private readonly ISerializer serializer;
 
         public QuestionnairesControllerBase(
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore,
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            ISerializer serializer)
+            ISerializer serializer, 
+            IPlainQuestionnaireRepository plainQuestionnaireRepository, IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter)
         {
-            this.questionnaireStore = questionnaireStore;
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.serializer = serializer;
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.readsideRepositoryWriter = readsideRepositoryWriter;
         }
         
         [WriteToSyncLog(SynchronizationLogType.GetCensusQuestionnaires)]
@@ -60,19 +64,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         [WriteToSyncLog(SynchronizationLogType.GetQuestionnaire)]
         public virtual HttpResponseMessage Get(Guid id, int version, long contentVersion)
         {
-            var questionnaireDocumentVersioned = this.questionnaireStore.AsVersioned().Get(id.FormatGuid(), version);
+            var questionnaireDocumentVersioned = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
+            var questionnaireBrowseItem = this.readsideRepositoryWriter.GetById(new QuestionnaireIdentity(id, version).ToString());
 
-            if (questionnaireDocumentVersioned == null)
+            if (questionnaireDocumentVersioned == null || questionnaireBrowseItem==null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            if (contentVersion < questionnaireDocumentVersioned.QuestionnaireContentVersion)
+            if (contentVersion < questionnaireBrowseItem.QuestionnaireContentVersion)
             {
                 return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
             }
 
             var resultValue = new QuestionnaireApiView
             {
-                QuestionnaireDocument = this.serializer.Serialize(questionnaireDocumentVersioned.Questionnaire),
+                QuestionnaireDocument = this.serializer.Serialize(questionnaireDocumentVersioned),
                 AllowCensus = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version)).AllowCensusMode
             };
 

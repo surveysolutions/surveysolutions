@@ -3,8 +3,8 @@ using MvvmCross.Platform.Core;
 using Moq;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.SurveySolutions;
@@ -41,7 +41,7 @@ namespace WB.Tests.Unit
         {
             var sideBarSectionViewModelsFactory = new Mock<ISideBarSectionViewModelsFactory>();
             var sideBarSectionViewModel = new SideBarSectionViewModel(Mock.Of<IStatefulInterviewRepository>(),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
+                Mock.Of<IPlainQuestionnaireRepository>(),
                 Create.SubstitutionService(),
                 Create.LiteEventRegistry(),
                 Mock.Of < ISideBarSectionViewModelsFactory>(),

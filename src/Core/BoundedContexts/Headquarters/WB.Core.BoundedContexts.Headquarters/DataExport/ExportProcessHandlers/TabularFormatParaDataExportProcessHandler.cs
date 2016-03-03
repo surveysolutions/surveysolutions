@@ -7,10 +7,12 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -22,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly IStreamableEventStore eventStore;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
-        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader;
+        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage;
@@ -40,21 +42,21 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         public TabularFormatParaDataExportProcessHandler(IStreamableEventStore eventStore,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
             IReadSideRepositoryWriter<UserDocument> userReader,
-            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader,
             InterviewDataExportSettings interviewDataExportSettings,
             ITransactionManagerProvider transactionManagerProvider,
             IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage,
-            IDataExportProcessesService dataExportProcessesService, IParaDataAccessor paraDataAccessor)
+            IDataExportProcessesService dataExportProcessesService, IParaDataAccessor paraDataAccessor, 
+            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository)
         {
             this.eventStore = eventStore;
             this.interviewSummaryReader = interviewSummaryReader;
             this.userReader = userReader;
-            this.questionnaireReader = questionnaireReader;
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.transactionManagerProvider = transactionManagerProvider;
             this.lastPublishedEventPositionForHandlerStorage = lastPublishedEventPositionForHandlerStorage;
             this.dataExportProcessesService = dataExportProcessesService;
             this.paraDataAccessor = paraDataAccessor;
+            this.questionnaireExportStructureRepository = questionnaireExportStructureRepository;
         }
 
         public void ExportData(ParaDataExportProcessDetails dataExportProcessDetails)
@@ -63,8 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             var interviewParaDataEventHandler =
                 new InterviewParaDataEventHandler(this.paraDataAccessor, this.interviewSummaryReader, this.userReader,
-                    this.questionnaireReader,
-                    this.interviewDataExportSettings);
+                    this.interviewDataExportSettings, questionnaireExportStructureRepository);
 
             var interviewDenormalizerProgress =
                 this.TransactionManager.ExecuteInQueryTransaction(

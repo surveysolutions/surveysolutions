@@ -1,5 +1,6 @@
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -13,10 +14,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires
     public class AllUsersAndQuestionnairesFactory : IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
-        private readonly IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> questionnairesReader;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesReader;
 
         public AllUsersAndQuestionnairesFactory(
-            IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> questionnairesReader, 
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesReader, 
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader)
         {
             this.questionnairesReader = questionnairesReader;
@@ -34,7 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires
                             .Select(x => new UsersViewItem {UserId = x.Key.TeamLeadId, UserName = x.Key.TeamLeadName})
                             .OrderBy(x => x.UserName).ToList());
 
-            var questionnaires = this.questionnairesReader.Query(_ => _.Select(questionnaire => new TemplateViewItem
+            var questionnaires = this.questionnairesReader.Query(_ => _.Where(q=>!q.IsDeleted).Select(questionnaire => new TemplateViewItem
             {
                 TemplateId = questionnaire.QuestionnaireId,
                 TemplateName = questionnaire.Title,

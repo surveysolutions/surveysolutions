@@ -24,6 +24,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -101,7 +102,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<ICsvWriter>().To<CsvWriter>();
             this.Bind<IExportViewFactory>().To<ExportViewFactory>();
             this.Bind<IDataExportStatusReader>().To<DataExportStatusReader>();
-            this.Kernel.RegisterDenormalizer<QuestionnaireExportStructureDenormalizer>();
         }
     }
 }

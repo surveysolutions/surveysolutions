@@ -8,11 +8,12 @@ using Machine.Specifications;
 using Moq;
 using NSubstitute;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQuestionnaireTemplate;
 using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -40,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             interviewsToDeleteFactoryMock.Setup(x => x.Load(questionnaireId, questionnaireVersion))
                 .Returns(interviewQueue.Dequeue);
 
-            var questionnaireBrowseItemStorageMock = new Mock<IReadSideRepositoryReader<QuestionnaireBrowseItem>>();
+            var questionnaireBrowseItemStorageMock = new Mock<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
             var questionnaireBrowseItemQueue = new Queue<QuestionnaireBrowseItem>();
             questionnaireBrowseItemQueue.Enqueue(new QuestionnaireBrowseItem() { Disabled = false, QuestionnaireId = questionnaireId, Version = questionnaireVersion });
             questionnaireBrowseItemQueue.Enqueue(new QuestionnaireBrowseItem() { Disabled = true, QuestionnaireId = questionnaireId, Version = questionnaireVersion });
@@ -66,9 +67,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
 
         It should_once_execute_HardDeleteInterview_Command = () =>
             commandServiceMock.Verify(x => x.Execute(Moq.It.Is<HardDeleteInterview>(_ => _.InterviewId == interviewId && _.UserId == userId), Moq.It.IsAny<string>()), Times.Once);
-
-        It should_once_call_DeleteQuestionnaireDocument = () =>
-            plainQuestionnaireRepository.Verify(x => x.DeleteQuestionnaireDocument(questionnaireId, questionnaireVersion), Times.Once);
 
         private static async Task RunDeletes()
         {
