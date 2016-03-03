@@ -1,13 +1,17 @@
 using System;
 using System.Threading.Tasks;
 using Machine.Specifications;
+using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NSubstitute;
 using NSubstitute.Core;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using It = Machine.Specifications.It;
 using it = Moq.It;
@@ -18,10 +22,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
     {
         Establish context = () =>
         {
+            var questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 1);
+            var gpsQuestionId = Guid.Parse("11111111111111111111111111111111");
+
             dashboardItem = Create.InterviewView();
+            dashboardItem.QuestionnaireId = questionnaireIdentity.ToString();
             dashboardItem.GpsLocation = new InterviewGpsLocationView
             {
-              PrefilledQuestionId  = Guid.Parse("11111111111111111111111111111111")
+              PrefilledQuestionId  = gpsQuestionId
             };
 
             @event = Create.Event.GeoLocationQuestionAnswered(Create.Identity("11111111111111111111111111111111", RosterVector.Empty), answerLatitude, answerLongitude).ToPublishedEvent();
@@ -37,7 +45,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                 .Callback<InterviewView>((view) => dashboardItem = view)
                 .Returns(storeAsyncTask);
 
-            denormalizer = Create.DashboardDenormalizer(interviewViewRepository: interviewViewStorage);
+            var questionnaire = Mock.Of<IQuestionnaire>(q => q.IsPrefilled(gpsQuestionId) == true);
+            var plainQuestionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(r =>
+                r.GetQuestionnaire(questionnaireIdentity) == questionnaire);
+
+            denormalizer = Create.DashboardDenormalizer(interviewViewRepository: interviewViewStorage, plainQuestionnaireRepository: plainQuestionnaireRepository);
         };
 
         Because of = () =>

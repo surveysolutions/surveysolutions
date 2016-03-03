@@ -30,6 +30,8 @@ namespace Main.Core.Entities.SubEntities
 
         public string ConditionExpression { get; set; }
 
+        public bool HideIfDisabled { get; set; }
+
         public bool Enabled { get; set; }
 
         public string Description { get; set; }

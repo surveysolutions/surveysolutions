@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.DataTransferObjects;
@@ -43,6 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         private readonly ConcurrentDictionary<string, InterviewGroup> groups;
         private readonly ConcurrentDictionary<Identity, int?> sortIndexesOfRosterInstanses;
         private readonly ConcurrentDictionary<string, bool> notAnsweredQuestionsValidityStatus;
+        private readonly ConcurrentDictionary<string, IList<FailedValidationCondition>> notAnsweredFailedConditions;
         private readonly ConcurrentDictionary<string, bool> notAnsweredQuestionsEnablementStatus;
         private readonly ConcurrentDictionary<string, string> notAnsweredQuestionsInterviewerComments;
         private bool createdOnClient;
@@ -56,6 +58,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.notAnsweredQuestionsValidityStatus = new ConcurrentDictionary<string, bool>();
             this.notAnsweredQuestionsEnablementStatus = new ConcurrentDictionary<string, bool>();
             this.notAnsweredQuestionsInterviewerComments = new ConcurrentDictionary<string, string>();
+            this.notAnsweredFailedConditions = new ConcurrentDictionary<string, IList<FailedValidationCondition>>();
         }
 
         private void ResetCalculatedState()
@@ -102,7 +105,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             }
 
             @event.InterviewData.ValidAnsweredQuestions.ForEach(x => DeclareAnswerAsValid(x.Id, x.InterviewItemRosterVector));
-            @event.InterviewData.InvalidAnsweredQuestions.ForEach(x => DeclareAnswerAsInvalid(x.Id, x.InterviewItemRosterVector));
+            @event.InterviewData.FailedValidationConditions.ForEach(x => this.DeclareAnswerAsInvalid(x.Key.Id, x.Key.RosterVector, x.Value)); 
 
             @event.InterviewData.DisabledQuestions.ForEach(x => DisableQuestion(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.DisabledGroups.ForEach(x => DisableGroup(x.Id, x.InterviewItemRosterVector));
@@ -283,7 +286,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             base.Apply(@event);
             this.ResetCalculatedState();
 
-            @event.Questions.ForEach(x => this.DeclareAnswerAsInvalid(x.Id, x.RosterVector));
+            @event.FailedValidationConditions.ForEach(x => this.DeclareAnswerAsInvalid(x.Key.Id, x.Key.RosterVector, x.Value.ToList()));
         }
 
         public new void Apply(GroupsDisabled @event)
@@ -593,6 +596,23 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return answers;
         }
 
+        public IEnumerable<InterviewRoster> FindReferencedRostersForLinkedQuestion(Guid rosterId, Identity linkedQuestion)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            var rosterVectorToStartFrom = this.CalculateStartRosterVectorForAnswersOfLinkedToQuestion(rosterId, linkedQuestion, questionnaire);
+
+            IEnumerable<Identity> targetRosters = 
+                this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, new[] {rosterId}, rosterVectorToStartFrom, questionnaire).ToArray();
+
+            return
+                targetRosters
+                    .Select(this.GetRoster)
+                    .Where(r => !r.IsDisabled && !string.IsNullOrEmpty(r.Title))
+                    .OrderBy(r => sortIndexesOfRosterInstanses[new Identity(r.Id, r.RosterVector)] ?? r.RosterVector.Last())
+                    .ToArray();
+        }
+
         private void SaveAnswerFromAnswerDto(InterviewAnswerDto answerDto)
         {
             switch (answerDto.Type)
@@ -659,6 +679,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             if (answer != null)
             {
                 answer.IsValid = true;
+                answer.FailedValidations.Clear();
             }
             else
             {
@@ -666,17 +687,23 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             }
         }
 
-        private void DeclareAnswerAsInvalid(Guid id, RosterVector rosterVector)
+        private void DeclareAnswerAsInvalid(Guid id, RosterVector rosterVector, IList<FailedValidationCondition> value)
         {
             var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(id, rosterVector);
             var answer = this.GetExistingAnswerOrNull(questionKey);
             if (answer != null)
             {
                 answer.IsValid = false;
+                answer.FailedValidations.Clear();
+                foreach (var failedValidationCondition in value)
+                {
+                    answer.FailedValidations.Add(failedValidationCondition);
+                }
             }
             else
             {
                 this.notAnsweredQuestionsValidityStatus[questionKey] = false;
+                this.notAnsweredFailedConditions[questionKey] = value;
             }
         }
 
@@ -719,9 +746,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             var rosterIdentity = new Identity(rosterInstance.GroupId, GetFullRosterVector(rosterInstance));
 
             var rosterKey = ConversionHelper.ConvertIdentityToString(rosterIdentity);
-            var rosterParentKey = ConversionHelper.ConvertIdAndRosterVectorToString(
-                rosterInstance.GroupId,
-                rosterInstance.OuterRosterVector);
 
             this.groups[rosterKey] = new InterviewRoster
             {
@@ -734,20 +758,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         }
 
         private decimal[] CalculateStartRosterVectorForAnswersOfLinkedToQuestion(
-            Guid linkedToQuestionId, Identity linkedQuestion, IQuestionnaire questionnaire)
+            Guid linkedToEntityId, Identity linkedQuestion, IQuestionnaire questionnaire)
         {
-            Guid[] linkedToQuestionRosterSources = questionnaire.GetRosterSizeSourcesForQuestion(linkedToQuestionId);
-            Guid[] linkedQuestionRosterSources = questionnaire.GetRosterSizeSourcesForQuestion(linkedQuestion.Id);
+            Guid[] linkSourceRosterVector = questionnaire.GetRosterSizeSourcesForEntity(linkedToEntityId);
+            Guid[] linkedQuestionRosterSources = questionnaire.GetRosterSizeSourcesForEntity(linkedQuestion.Id);
 
             int commonRosterSourcesPartLength = Enumerable
-                .Zip(linkedToQuestionRosterSources, linkedQuestionRosterSources, AreEqual)
+                .Zip(linkSourceRosterVector, linkedQuestionRosterSources, AreEqual)
                 .TakeWhile(areEqual => areEqual)
                 .Count();
-
-            int linkedToQuestionRosterLevel = questionnaire.GetRosterLevelForQuestion(linkedToQuestionId);
+            
             int linkedQuestionRosterLevel = linkedQuestion.RosterVector.Length;
 
-            int targetRosterLevel = Math.Min(commonRosterSourcesPartLength, Math.Min(linkedToQuestionRosterLevel - 1, linkedQuestionRosterLevel));
+            int targetRosterLevel = Math.Min(commonRosterSourcesPartLength, Math.Min(linkSourceRosterVector.Length - 1, linkedQuestionRosterLevel));
 
             return linkedQuestion.RosterVector.Shrink(targetRosterLevel);
         }
@@ -756,8 +779,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            int grosterLevel = questionnaire.GetRosterLevelForGroup(rosterId);
-            var rosterVector = targetRosterVector.Shrink(grosterLevel);
+            int rosterLevel = questionnaire.GetRosterLevelForGroup(rosterId);
+            var rosterVector = targetRosterVector.Shrink(rosterLevel);
             var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterId, rosterVector);
 
             return this.groups.ContainsKey(rosterKey) ? this.groups[rosterKey] as InterviewRoster : null;
@@ -766,10 +789,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public IEnumerable<string> GetParentRosterTitlesWithoutLast(Guid questionId, RosterVector rosterVector)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            return GetParentRosterTitlesWithoutLast(questionnaire.GetRostersFromTopToSpecifiedQuestion(questionId), rosterVector);
+        }
 
-            IEnumerable<Guid> parentRosters = questionnaire.GetRostersFromTopToSpecifiedQuestion(questionId).WithoutLast();
+        public IEnumerable<string> GetParentRosterTitlesWithoutLastForRoster(Guid rosterId, RosterVector rosterVector)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            return GetParentRosterTitlesWithoutLast(questionnaire.GetRostersFromTopToSpecifiedGroup(rosterId), rosterVector);
+        }
 
-            foreach (var parentRosterId in parentRosters)
+        private IEnumerable<string> GetParentRosterTitlesWithoutLast(IEnumerable<Guid> parentRosters, RosterVector rosterVector)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            var parentRostersWithout = parentRosters.WithoutLast().ToArray();
+            foreach (var parentRosterId in parentRostersWithout)
             {
                 int parentRosterLevel = questionnaire.GetRosterLevelForGroup(parentRosterId);
                 var parentRosterVector = rosterVector.Shrink(parentRosterLevel);
@@ -973,6 +1006,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return interviewAnswerModel.IsValid;
         }
 
+        public IReadOnlyList<FailedValidationCondition> GetFailedValidationConditions(Identity questionId)
+        {
+            var convertIdentityToString = ConversionHelper.ConvertIdentityToString(questionId);
+            if (this.Answers.ContainsKey(convertIdentityToString))
+            {
+                return this.Answers[convertIdentityToString].FailedValidations.ToReadOnlyCollection();
+            }
+            if (this.notAnsweredFailedConditions.ContainsKey(convertIdentityToString))
+            {
+                return this.notAnsweredFailedConditions[convertIdentityToString].ToReadOnlyCollection();
+            }
+
+            return new List<FailedValidationCondition>();
+        } 
+
         public bool IsEnabled(Identity entityIdentity)
         {
             return GetOrCalculate(
@@ -1156,6 +1204,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 if (this.notAnsweredQuestionsValidityStatus.ContainsKey(questionKey))
                 {
                     question.IsValid = this.notAnsweredQuestionsValidityStatus[questionKey];
+                    if (!question.IsValid)
+                    {
+                        question.FailedValidations = this.notAnsweredFailedConditions[questionKey];
+                    }
                     bool removedItemValidityStatus;
                     this.notAnsweredQuestionsValidityStatus.TryRemove(questionKey, out removedItemValidityStatus);
                 }
@@ -1202,7 +1254,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         private static decimal[] GetFullRosterVector(RosterInstance instance)
         {
-            return instance.OuterRosterVector.Concat(new[] { instance.RosterInstanceId }).ToArray();
+            return instance.GetIdentity().RosterVector;
         }
 
         private BaseInterviewAnswer GetExistingAnswerOrNull(string questionKey)

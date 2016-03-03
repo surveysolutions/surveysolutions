@@ -1,14 +1,15 @@
 ﻿using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
-using Cirrious.MvvmCross.Binding;
-using Cirrious.MvvmCross.Binding.Droid.Views;
+using MvvmCross.Binding;
+using MvvmCross.Binding.Droid.Views;
+using MvvmCross.Droid.Support.V7.AppCompat.Widget;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
-    public class MvxAutoCompleteTextViewResetTextBinding : BaseBinding<MvxAutoCompleteTextView, string>
+    public class MvxAutoCompleteTextViewResetTextBinding : BaseBinding<MvxAppCompatAutoCompleteTextView, string>
     {
-        public MvxAutoCompleteTextViewResetTextBinding(MvxAutoCompleteTextView androidControl)
+        public MvxAutoCompleteTextViewResetTextBinding(MvxAppCompatAutoCompleteTextView androidControl)
             : base(androidControl)
         {
         }
@@ -18,7 +19,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             get { return MvxBindingMode.TwoWay; }
         }
 
-        protected override void SetValueToView(MvxAutoCompleteTextView control, string value)
+        protected override void SetValueToView(MvxAppCompatAutoCompleteTextView control, string value)
         {
             this.Target.ClearListSelection();
             this.Target.DismissDropDown();

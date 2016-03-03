@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         {
             var questionnaireExportStructure = (questionnaireDocument == null
                 ? null
-                : new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory(),
+                : new ExportViewFactory(
                     new QuestionnaireRosterStructureFactory(), Mock.Of<IFileSystemAccessor>(_ => _.MakeValidFileName(questionnaireDocument.Title) == questionnaireDocument.Title)).CreateQuestionnaireExportStructure(questionnaireDocument, 1));
             var questionnaireRosterStructure = (questionnaireDocument == null
                 ? null

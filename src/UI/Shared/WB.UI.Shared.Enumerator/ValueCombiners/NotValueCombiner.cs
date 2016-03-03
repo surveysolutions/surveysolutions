@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cirrious.CrossCore.Converters;
-using Cirrious.MvvmCross.Binding.Bindings.SourceSteps;
-using Cirrious.MvvmCross.Binding.Combiners;
-using Cirrious.MvvmCross.Binding.ExtensionMethods;
+using MvvmCross.Binding.Bindings.SourceSteps;
+using MvvmCross.Binding.Combiners;
+using MvvmCross.Binding.ExtensionMethods;
+using MvvmCross.Platform.Converters;
 
 namespace WB.UI.Shared.Enumerator.ValueCombiners
 {

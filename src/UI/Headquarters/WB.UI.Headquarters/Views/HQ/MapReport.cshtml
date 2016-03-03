@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "MapReport";
 }
+
 <div id="menu" class="col-sm-3 col-md-2 sidebar">
     <div id="report-builder">
         <div class="central-pane">
@@ -26,29 +27,19 @@
                             <select class="form-control" id="variable" data-bind="options: questionnaireVariables, value: selectedVariable, optionsText: 'Variable', optionsCaption : 'Select variable', enable : isVariablesEnabled"></select>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="controls">
-                            <button class="btn-block btn" id="showMarkersOnMap" data-bind="click: showPointsOnMap, enable : selectedVariable">Add markers on map</button>
+                    <div class="form-group" data-bind="visible: markerlimitReached">
+                        <div class="alert-warning">
+                            <span >Not all markers were loaded for current zoom level. Please zoom in and reload markers.</span>
                         </div>
-                    </div>
-                    <div class="currently-on-map" data-bind="visible: markersSetsInfo().length > 0">
-                        <h4>Currently on map</h4>
-                        <ul class="unstyled" data-bind="foreach: markersSetsInfo">
-                            <li>
-                                <button class="close" data-bind="click: $root.removeMarkersSet">&times;</button>
-                                <span data-bind="text: title"></span>
-                                (ver.&nbsp;<span data-bind="text: version"></span>, var. <span data-bind="text: variable"></span>)
-                                <span class="label"><span class="label" data-bind="text: count"></span>&nbsp;<span data-bind="visible: count == 1">point</span><span data-bind="visible: count > 1 || count == 0">points</span></span>
-                            </li>
-                        </ul>
                     </div>
                 </div>
             </div>
         </div>
         <div class="bottom-pane">
+
             <div class="row-fluid">
-                <div class="span12">
-                    <button class="btn-block btn btn-danger" data-bind="click: clearAllMarkers">Clear all markers</button>
+                <div class="span23">
+                    <button class="btn-block btn" id="reloadMarkersInBounds" data-bind="click: reloadMarkersInBounds, visible: readyToUpdate">Reload markers on map</button>
                 </div>
             </div>
         </div>
@@ -63,7 +54,7 @@
         </div>
     </script>
 </div>
-<div id="content">
+<div id="content" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <div id="map-canvas" class="google-maps" />
 </div>
 @section scripts

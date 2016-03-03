@@ -32,14 +32,14 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
             });
             var questionnaireView = CreateQuestionnaireView(questionnaireDocument);
 
-            verificationErrors = CreateQuestionnaireVerificationErrors(questionnaireDocument.Find<IComposite>(_ => true));
+            verificationMessages = CreateQuestionnaireVerificationErrors(questionnaireDocument.Find<IComposite>(_ => true));
 
             var questionnaireViewFactory = Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == questionnaireView);
             verifierMock = new Mock<IQuestionnaireVerifier>();
 
             verifierMock
                 .Setup(x => x.Verify(questionnaireDocument))
-                .Returns(verificationErrors);
+                .Returns(verificationMessages);
 
             controller = CreateQuestionnaireController(
                 questionnaireViewFactory: questionnaireViewFactory, 
@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
 
         private static QuestionnaireDocument questionnaireDocument; 
         private static Mock<IQuestionnaireVerifier> verifierMock ;
-        private static QuestionnaireVerificationError[] verificationErrors;
+        private static QuestionnaireVerificationMessage[] verificationMessages;
         private static QuestionnaireController controller;
         private static VerificationResult result;
         private static Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");

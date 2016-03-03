@@ -1,21 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Main.Core.Documents;
-using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTests
 {
@@ -89,6 +82,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTes
                 validationExpression: validationExpression,
                 responsibleId: Guid.NewGuid(),
                 conditionExpression: null,
+                hideIfDisabled: false,
                 featured:false,
                 instructions: null,
                 capital: false,
@@ -99,6 +93,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTes
                 answerOrder: null,
                 answers: null,
                 linkedToQuestionId: null,
+                linkedToRosterId: null,
                 isInteger: null,
                 areAnswersOrdered: null,
                 yesNoView: null,
@@ -110,7 +105,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTes
                 sourceQuestionnaireId: null,
                 sourceQuestionId: Guid.NewGuid(), 
                 targetIndex: 0,
-                countOfDecimalPlaces: null
+                countOfDecimalPlaces: null,
+                validationConditions: new List<ValidationCondition>()
                 );
         }
     }

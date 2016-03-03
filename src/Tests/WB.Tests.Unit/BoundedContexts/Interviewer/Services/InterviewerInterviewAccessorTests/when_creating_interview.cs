@@ -2,6 +2,7 @@
 using System.Threading;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -29,8 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 principal: principal);
         };
 
-        Because of = async () =>
-            await interviewerInterviewAccessor.CreateInterviewAsync(interviewInfo, new InterviewDetailsApiView());
+        Because of = () => interviewerInterviewAccessor.CreateInterviewAsync(interviewInfo, new InterviewDetailsApiView()).WaitAndUnwrapException();
 
         It should_execute_CreateInterviewFromSynchronizationMetadata_command = () =>
             mockOfCommandService.Verify(x => x.ExecuteAsync(Moq.It.IsAny<CreateInterviewFromSynchronizationMetadata>(), null, Moq.It.IsAny<CancellationToken>()), Times.Once);

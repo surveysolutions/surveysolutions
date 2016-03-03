@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.ViewModels;
+using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -12,7 +12,6 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
-using WB.UI.Interviewer.Activities;
 
 namespace WB.UI.Interviewer.ViewModel
 {
@@ -54,7 +53,7 @@ namespace WB.UI.Interviewer.ViewModel
         private IMvxCommand signOutCommand;
         public IMvxCommand SignOutCommand
         {
-            get { return this.signOutCommand ?? (this.signOutCommand = new MvxCommand(async () => await this.SignOut())); }
+            get { return this.signOutCommand ?? (this.signOutCommand = new MvxCommand(async () => await this.SignOutAsync())); }
         }
 
         public IMvxCommand NavigateToDiagnosticsPageCommand
@@ -62,9 +61,9 @@ namespace WB.UI.Interviewer.ViewModel
             get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>()); }
         }
 
-        private async Task SignOut()
+        private async Task SignOutAsync()
         {
-            this.principal.SignOut();
+            await this.principal.SignOutAsync();
             await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
         }
 

@@ -3,7 +3,6 @@ using System.Linq;
 using Machine.Specifications;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
-using WB.Core.SharedKernels.SurveyManagement.Views.Supervisor;
 using It = Machine.Specifications.It;
 
 

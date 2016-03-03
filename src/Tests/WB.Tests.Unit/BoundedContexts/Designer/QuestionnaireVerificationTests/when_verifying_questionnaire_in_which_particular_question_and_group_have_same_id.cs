@@ -29,32 +29,32 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
-            resultErrors.Count().ShouldEqual(1);
+        It should_return_1_message = () =>
+            verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_error_with_code_WB0102 = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0102");
+        It should_return_message_with_code_WB0102 = () =>
+            verificationMessages.Single().Code.ShouldEqual("WB0102");
 
-        It should_return_error_with_level_critical = () =>
-            resultErrors.Single().ErrorLevel.ShouldEqual(VerificationErrorLevel.General);
+        It should_return_message_with_level_critical = () =>
+            verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
-        It should_return_error_with_2_references = () =>
-            resultErrors.Single().References.Count.ShouldEqual(2);
+        It should_return_message_with_2_references = () =>
+            verificationMessages.Single().References.Count.ShouldEqual(2);
 
-        It should_return_error_with_reference_to_group = () =>
-            resultErrors.Single().References.ShouldContain(reference => reference.Type == QuestionnaireVerificationReferenceType.Group);
+        It should_return_message_with_reference_to_group = () =>
+            verificationMessages.Single().References.ShouldContain(reference => reference.Type == QuestionnaireVerificationReferenceType.Group);
 
-        It should_return_error_with_reference_to_question = () =>
-            resultErrors.Single().References.ShouldContain(reference => reference.Type == QuestionnaireVerificationReferenceType.Question);
+        It should_return_message_with_reference_to_question = () =>
+            verificationMessages.Single().References.ShouldContain(reference => reference.Type == QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_error_with_references_having_same_shared_id = () =>
-            resultErrors.Single().References.ShouldEachConformTo(reference => reference.Id == sharedId);
+        It should_return_message_with_references_having_same_shared_id = () =>
+            verificationMessages.Single().References.ShouldEachConformTo(reference => reference.Id == sharedId);
 
         private static QuestionnaireDocument questionnaire;
         private static QuestionnaireVerifier verifier;
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static Guid sharedId = Guid.Parse("11111111111111111111111111111111");
     }
 }

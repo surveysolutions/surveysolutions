@@ -71,7 +71,7 @@
             <!-- ko foreach:Items -->
             <tr>
                 <td>
-                    <a data-bind="attr: { href: $surveysUrl + '?interviewerId=' + ResponsibleId() }, text: Responsible"></a>
+                    <a data-bind="attr: { href: $surveysUrl + '?responsible=' + Responsible() }, text: Responsible"></a>
                 </td>
                 <td data-bind="template: { name: 'SupervisorAssignedCountTemplate' }"></td>
                 <td data-bind="template: { name: 'InterviewerAssignedCountTemplate' }"></td>

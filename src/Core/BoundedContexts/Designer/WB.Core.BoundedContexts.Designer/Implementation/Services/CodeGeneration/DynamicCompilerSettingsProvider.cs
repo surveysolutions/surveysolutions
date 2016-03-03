@@ -11,12 +11,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class DynamicCompilerSettingsProvider : IDynamicCompilerSettingsProvider
     {
-        readonly IDynamicCompilerSettingsGroup settingsGroup;
+        readonly ICompilerSettings settings;
         readonly IFileSystemAccessor fileSystemAccessor;
 
-        public DynamicCompilerSettingsProvider(IDynamicCompilerSettingsGroup settingsGroup, IFileSystemAccessor fileSystemAccessor)
+        public DynamicCompilerSettingsProvider(ICompilerSettings settings, IFileSystemAccessor fileSystemAccessor)
         {
-            this.settingsGroup = settingsGroup;
+            this.settings = settings;
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         IEnumerable<PortableExecutableReference> GetPathToAssemblies(string profileName)
         {
-            var list = settingsGroup.SettingsCollection.ToList();
+            var list = this.settings.SettingsCollection.ToList();
 
             IDynamicCompilerSettings setting = list.Single(i => i.Name == profileName);
 

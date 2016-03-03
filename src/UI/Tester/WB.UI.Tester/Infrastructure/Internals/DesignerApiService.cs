@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -15,14 +16,14 @@ namespace WB.UI.Tester.Infrastructure.Internals
     internal class DesignerApiService : IDesignerApiService
     {
         private readonly IRestService restService;
-        private readonly IUserIdentity userIdentity;
+        private readonly IPrincipal principal;
 
         public DesignerApiService(
             IRestService restService, 
             IPrincipal principal)
         {
             this.restService = restService;
-            this.userIdentity = principal.CurrentUserIdentity;
+            this.principal = principal;
         }
 
         public async Task<bool> Authorize(string login, string password)
@@ -33,12 +34,13 @@ namespace WB.UI.Tester.Infrastructure.Internals
                 {
                     Login = login,
                     Password = password
-                });
+                },
+                forceNoCache: true);
 
             return true;
         }
 
-        public async virtual Task<IList<QuestionnaireListItem>> GetQuestionnairesAsync(bool isPublic, CancellationToken token)
+        public async Task<IReadOnlyCollection<QuestionnaireListItem>> GetQuestionnairesAsync(CancellationToken token)
         {
             var pageIndex = 1;
             var serverQuestionnaires = new List<QuestionnaireListItem>();
@@ -46,12 +48,12 @@ namespace WB.UI.Tester.Infrastructure.Internals
             QuestionnaireListItem[] batchOfServerQuestionnaires;
             do
             {
-                batchOfServerQuestionnaires = await this.GetPageOfQuestionnairesAsync(isPublic: isPublic, pageIndex: pageIndex++, token: token);
+                batchOfServerQuestionnaires = await this.GetPageOfQuestionnairesAsync(pageIndex: pageIndex++, token: token);
                 serverQuestionnaires.AddRange(batchOfServerQuestionnaires);
 
             } while (batchOfServerQuestionnaires.Any());
 
-            return serverQuestionnaires;
+            return serverQuestionnaires.ToReadOnlyCollection();
         }
 
         public async Task<Questionnaire> GetQuestionnaireAsync(QuestionnaireListItem selectedQuestionnaire, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, CancellationToken token)
@@ -59,38 +61,39 @@ namespace WB.UI.Tester.Infrastructure.Internals
             Questionnaire downloadedQuestionnaire = null;
 
             downloadedQuestionnaire = await this.restService.GetAsync<Questionnaire>(
-                url: string.Format("questionnaires/{0}", selectedQuestionnaire.Id),
+                url: $"questionnaires/{selectedQuestionnaire.Id}",
                 credentials:
                     new RestCredentials
                     {
-                        Login = this.userIdentity.Name,
-                        Password = this.userIdentity.Password
+                        Login = this.principal.CurrentUserIdentity.Name,
+                        Password = this.principal.CurrentUserIdentity.Password
                     },
                 onDownloadProgressChanged: onDownloadProgressChanged, token: token);
 
             return downloadedQuestionnaire;
         }
 
-        private async Task<QuestionnaireListItem[]> GetPageOfQuestionnairesAsync(bool isPublic, int pageIndex, CancellationToken token)
+        private async Task<QuestionnaireListItem[]> GetPageOfQuestionnairesAsync(int pageIndex, CancellationToken token)
         {
-            var  batchOfServerQuestionnaires= await this.restService.GetAsync<Core.SharedKernels.SurveySolutions.Api.Designer.QuestionnaireListItem[]>(
+            var  batchOfServerQuestionnaires = await this.restService.GetAsync<Core.SharedKernels.SurveySolutions.Api.Designer.QuestionnaireListItem[]>(
                 url: "questionnaires",
                 token: token,
                 credentials: 
                     new RestCredentials
                     {
-                        Login = this.userIdentity.Name,
-                        Password = this.userIdentity.Password
+                        Login = this.principal.CurrentUserIdentity.Name,
+                        Password = this.principal.CurrentUserIdentity.Password
                     },
-                queryString: new { pageIndex = pageIndex, isPublic = isPublic });
+                queryString: new { pageIndex = pageIndex });
 
             return batchOfServerQuestionnaires.Select(questionnaireListItem => new QuestionnaireListItem()
             {
                 Id = questionnaireListItem.Id,
                 Title = questionnaireListItem.Title,
                 LastEntryDate = questionnaireListItem.LastEntryDate,
-                IsPublic = isPublic,
-                OwnerName = isPublic ? string.Empty : this.userIdentity.Name
+                IsPublic = questionnaireListItem.IsPublic,
+                OwnerName = questionnaireListItem.Owner,
+                IsShared = questionnaireListItem.IsShared
             }).ToArray();
         }
     }

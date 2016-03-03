@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Events;
@@ -13,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -148,7 +150,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task CreateInterviewAsync(InterviewApiView info, InterviewDetailsApiView details)
         {
-            var questionnaireView = await Task.FromResult(this.questionnaireRepository.GetById(info.QuestionnaireIdentity.ToString()));
+            var questionnaireView = this.questionnaireRepository.GetById(info.QuestionnaireIdentity.ToString());
 
             var answersOnPrefilledQuestions = details
                 .AnswersOnPrefilledQuestions?
@@ -170,30 +172,32 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 valid: true,
                 createdOnClient: questionnaireView.Census);
 
-            var synchronizeInterviewCommand = new SynchronizeInterviewCommand(
+            IList<KeyValuePair<Identity, IList<FailedValidationCondition>>> failedConditionsList =
+                this.serializer.Deserialize<IList<KeyValuePair<Identity, IList<FailedValidationCondition>>>>(details.FailedValidationConditions);
+
+           var synchronizeInterviewCommand = new SynchronizeInterviewCommand(
                 interviewId: info.Id,
                 userId: this.principal.CurrentUserIdentity.UserId,
-                sycnhronizedInterview: new InterviewSynchronizationDto
-                {
-                    Id = info.Id,
-                    Status = interviewStatus,
-                    Comments = details.LastSupervisorOrInterviewerComment,
-                    CreatedOnClient = questionnaireView.Census,
-                    QuestionnaireId = info.QuestionnaireIdentity.QuestionnaireId,
-                    QuestionnaireVersion = info.QuestionnaireIdentity.Version,
-                    RejectDateTime = details.RejectedDateTime,
-                    InterviewerAssignedDateTime = details.InterviewerAssignedDateTime,
-                    UserId = this.principal.CurrentUserIdentity.UserId,
-                    WasCompleted = details.WasCompleted,
-                    Answers = details.Answers?.Select(this.ToAnsweredQuestionSynchronizationDto).ToArray() ?? new AnsweredQuestionSynchronizationDto[0],
-                    DisabledGroups = new HashSet<InterviewItemId>(details.DisabledGroups?.Select(this.ToInterviewItemId) ?? new InterviewItemId[0]),
-                    DisabledQuestions = new HashSet<InterviewItemId>(details.DisabledQuestions?.Select(this.ToInterviewItemId) ?? new InterviewItemId[0]),
-                    InvalidAnsweredQuestions = new HashSet<InterviewItemId>(details.InvalidAnsweredQuestions?.Select(this.ToInterviewItemId) ?? new InterviewItemId[0]),
-                    ValidAnsweredQuestions = new HashSet<InterviewItemId>(details.ValidAnsweredQuestions?.Select(this.ToInterviewItemId) ?? new InterviewItemId[0]),
-                    RosterGroupInstances = details.RosterGroupInstances?.ToDictionary(roster => this.ToInterviewItemId(roster.Identity),
-                        roster => roster.Instances?.Select(this.ToRosterSynchronizationDto).ToArray() ?? new RosterSynchronizationDto[0]) ??
-                                           new Dictionary<InterviewItemId, RosterSynchronizationDto[]>()
-                });
+                sycnhronizedInterview: new InterviewSynchronizationDto(
+                    info.Id,
+                    interviewStatus,
+                    details.LastSupervisorOrInterviewerComment,
+                    details.RejectedDateTime,
+                    details.InterviewerAssignedDateTime,
+                    this.principal.CurrentUserIdentity.UserId,
+                    info.QuestionnaireIdentity.QuestionnaireId,
+                    info.QuestionnaireIdentity.Version,
+                    details.Answers?.Select(this.ToAnsweredQuestionSynchronizationDto).ToArray() ??new AnsweredQuestionSynchronizationDto[0],
+                    new HashSet<InterviewItemId>(details.DisabledGroups?.Select(this.ToInterviewItemId) ?? new InterviewItemId[0]),
+                    new HashSet<InterviewItemId>(details.DisabledQuestions?.Select(this.ToInterviewItemId) ?? new InterviewItemId[0]),
+                    new HashSet<InterviewItemId>(details.ValidAnsweredQuestions?.Select(this.ToInterviewItemId) ?? new InterviewItemId[0]),
+                    new HashSet<InterviewItemId>(details.InvalidAnsweredQuestions?.Select(this.ToInterviewItemId) ?? new InterviewItemId[0]),
+                    details.RosterGroupInstances?.ToDictionary(roster => this.ToInterviewItemId(roster.Identity), roster =>
+                            roster.Instances?.Select(this.ToRosterSynchronizationDto).ToArray() ??
+                            new RosterSynchronizationDto[0]) ?? new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),
+                    failedConditionsList,
+                    false)
+                );
 
             await this.commandService.ExecuteAsync(createInterviewFromSynchronizationMetadataCommand);
             await this.commandService.ExecuteAsync(synchronizeInterviewCommand);

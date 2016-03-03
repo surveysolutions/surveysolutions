@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         };
 
         Because of = () =>
-            questionnaire.AddGroupAndMoveIfNeeded(groupId, responsibleId, "title",null, rosterSizeQuestionId, null, null, null, false,
+            questionnaire.AddGroupAndMoveIfNeeded(groupId, responsibleId, "title",null, rosterSizeQuestionId, null, null, false, null, false,
                 RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
         Cleanup stuff = () =>

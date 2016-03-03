@@ -82,8 +82,13 @@ namespace WB.UI.Designer.App_Start
             // HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
 
-            var dynamicCompilerSettings = (IDynamicCompilerSettingsGroup)WebConfigurationManager.GetSection("dynamicCompilerSettingsGroup");
-            string appDataDirectory = HostingEnvironment.MapPath("~/App_Data");
+            var dynamicCompilerSettings = (ICompilerSettings)WebConfigurationManager.GetSection("dynamicCompilerSettingsGroup");
+
+            string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
+            if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
+            {
+                appDataDirectory = HostingEnvironment.MapPath(appDataDirectory);
+            }
 
             var cacheSettings = new ReadSideCacheSettings(
                 enableEsentCache: WebConfigurationManager.AppSettings.GetBool("Esent.Cache.Enabled", @default: true),

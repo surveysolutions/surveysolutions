@@ -36,6 +36,8 @@ namespace Main.Core.Documents
 
         public string ConditionExpression { get; set; }
 
+        public bool HideIfDisabled { get; set; }
+
         public DateTime CreationDate { get; set; }
 
         public DateTime LastEntryDate { get; set; }
@@ -227,11 +229,12 @@ namespace Main.Core.Documents
             }
         }
 
-        public void UpdateGroup(Guid groupId, string title, string variableName, string description, string conditionExpression)
+        public void UpdateGroup(Guid groupId, string title, string variableName, string description, string conditionExpression, bool hideIfDisabled)
         {
             this.UpdateGroup(groupId, group =>
             {
                 @group.ConditionExpression = conditionExpression;
+                @group.HideIfDisabled = hideIfDisabled;
                 @group.Description = description;
                 @group.VariableName = variableName;
                 @group.Update(title);
@@ -494,6 +497,14 @@ namespace Main.Core.Documents
             {
                 doc.Children.Add(composite.Clone());
             }
+            doc.Macros = new Dictionary<Guid, Macro>();
+            this.Macros.ForEach(x => doc.Macros.Add(x.Key, x.Value.Clone()));
+
+            doc.LookupTables = new Dictionary<Guid, LookupTable>();
+            this.LookupTables.ForEach(x => doc.LookupTables.Add(x.Key, x.Value.Clone()));
+
+            doc.SharedPersons = new List<Guid>();
+            this.SharedPersons.ForEach(x => doc.SharedPersons.Add(x));
 
             return doc;
         }

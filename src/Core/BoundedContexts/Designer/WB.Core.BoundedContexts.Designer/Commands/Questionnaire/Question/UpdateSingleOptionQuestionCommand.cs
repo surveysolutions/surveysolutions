@@ -1,44 +1,41 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
-    public class UpdateSingleOptionQuestionCommand : AbstractUpdateQuestionCommand
+    public class UpdateSingleOptionQuestionCommand : UpdateValidatableQuestionCommand
     {
         public UpdateSingleOptionQuestionCommand(
             Guid questionnaireId,
             Guid questionId,
-            string title,
-            string variableName, string variableLabel,
-            string enablementCondition,
-            string instructions,
             Guid responsibleId,
+            CommonQuestionParameters commonQuestionParameters,
             string validationExpression,
             string validationMessage,
             QuestionScope scope,
             bool isPreFilled,
             Option[] options,
-            Guid? linkedToQuestionId,
+            Guid? linkedToEntityId,
             bool isFilteredCombobox,
-            Guid? cascadeFromQuestionId)
+            Guid? cascadeFromQuestionId,
+            List<ValidationCondition> validationConditions)
             : base(
-                responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, enablementCondition: enablementCondition, 
-                instructions: instructions, variableLabel: variableLabel)
+                responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
+                commonQuestionParameters: commonQuestionParameters,
+                validationConditions: validationConditions)
         {
             this.IsPreFilled = isPreFilled;
             this.Scope = scope;
-            this.ValidationMessage = CommandUtils.SanitizeHtml(validationMessage, removeAllTags: true);
-            this.ValidationExpression = validationExpression;
-            if (options != null)
-                options
-                    .ToList()
-                    .ForEach(x => x.Title = CommandUtils.SanitizeHtml(x.Title, removeAllTags: true));
+            options?.ToList()
+                .ForEach(x => x.Title = CommandUtils.SanitizeHtml(x.Title, removeAllTags: true));
             this.Options = options;
-            this.LinkedToQuestionId = linkedToQuestionId;
+            this.LinkedToEntityId = linkedToEntityId;
             this.IsFilteredCombobox = isFilteredCombobox;
             this.CascadeFromQuestionId = cascadeFromQuestionId;
         }
@@ -49,13 +46,9 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 
         public QuestionScope Scope { get; set; }
 
-        public string ValidationMessage { get; set; }
-
-        public string ValidationExpression { get; set; }
-
         public bool IsPreFilled { get; set; }
 
-        public Guid? LinkedToQuestionId { get; set; }
+        public Guid? LinkedToEntityId { get; set; }
 
         public Option[] Options { get; set; }
     }

@@ -31,8 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                                                         //&& _.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new Guid[] { conditionallyInvalidQuestionId }
                                                         && _.GetCustomEnablementConditionForQuestion(conditionallyInvalidQuestionId) == enablementCondition
                                                         && _.HasQuestion(conditionallyInvalidQuestionId) == true
-                                                        && _.GetQuestionType(conditionallyInvalidQuestionId) == QuestionType.Text
-                                                        && _.IsCustomValidationDefined(conditionallyInvalidQuestionId) == true);
+                                                        && _.GetQuestionType(conditionallyInvalidQuestionId) == QuestionType.Text);
 
             //var expressionProcessor = new Mock<IExpressionProcessor>();
 

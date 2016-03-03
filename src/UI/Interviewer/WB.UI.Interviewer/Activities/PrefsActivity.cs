@@ -2,7 +2,7 @@ using System.Globalization;
 using Android.App;
 using Android.OS;
 using Android.Preferences;
-using Cirrious.CrossCore;
+using MvvmCross.Platform;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;

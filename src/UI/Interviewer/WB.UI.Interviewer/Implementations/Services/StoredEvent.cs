@@ -1,6 +1,6 @@
 using System;
-using Cirrious.MvvmCross.Plugins.Sqlite;
 using Newtonsoft.Json;
+using SQLite.Net.Attributes;
 
 namespace WB.UI.Interviewer.Implementations.Services
 {

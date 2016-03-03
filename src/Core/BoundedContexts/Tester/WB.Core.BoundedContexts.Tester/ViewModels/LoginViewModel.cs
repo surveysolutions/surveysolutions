@@ -1,5 +1,6 @@
 ﻿using System.Net;
-using Cirrious.MvvmCross.ViewModels;
+using System.Threading.Tasks;
+using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -57,10 +58,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public IMvxCommand LoginCommand
         {
-            get { return new MvxCommand(this.Login, () => !IsInProgress); }
+            get { return new MvxCommand(async () => await this.LoginAsync(), () => !IsInProgress); }
         }
 
-        private async void Login()
+        private async Task LoginAsync()
         {
             IsInProgress = true;
 
@@ -70,7 +71,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 if (await this.designerApiService.Authorize(login: LoginName, password: Password))
                 {
-                    this.principal.SignIn(userName: LoginName, password: Password, staySignedIn: StaySignedIn);
+                    await this.principal.SignInAsync(userName: this.LoginName, password: this.Password, staySignedIn: this.StaySignedIn);
                     await this.viewModelNavigationService.NavigateToAsync<DashboardViewModel>();   
                 }
             }

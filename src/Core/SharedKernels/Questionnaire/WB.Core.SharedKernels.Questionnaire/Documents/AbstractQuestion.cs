@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Main.Core.Entities.Composite;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.SharedKernels.NonConficltingNamespace;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 // ReSharper disable once CheckNamespace
 namespace Main.Core.Entities.SubEntities
@@ -13,6 +15,7 @@ namespace Main.Core.Entities.SubEntities
         protected AbstractQuestion()
         {
             this.Answers = new List<Answer>();
+            this.validationConditions = new List<ValidationCondition>();
         }
 
         protected AbstractQuestion(string text)
@@ -43,12 +46,15 @@ namespace Main.Core.Entities.SubEntities
 
         public string ConditionExpression { get; set; }
 
+        public bool HideIfDisabled { get; set; }
+
         public bool Featured { get; set; }
 
         public string Instructions { get; set; }
 
         
         private IComposite parent;
+        private IList<ValidationCondition> validationConditions;
 
         public IComposite GetParent()
         {
@@ -76,6 +82,8 @@ namespace Main.Core.Entities.SubEntities
 
         public string ValidationMessage { get; set; }
 
+        public Guid? LinkedToRosterId { get; set; }
+
         /// <summary>
         /// Id of parent question to cascade from 
         /// </summary>
@@ -84,7 +92,22 @@ namespace Main.Core.Entities.SubEntities
         public Guid? LinkedToQuestionId { get; set; }
         
         public bool? IsFilteredCombobox { get; set; }
-        
+
+        public IList<ValidationCondition> ValidationConditions
+        {
+            get
+            {
+                return this.validationConditions.ConcatWithOldConditionIfNotEmpty(ValidationExpression, ValidationMessage);
+            }
+            set
+            {
+                if (value != null)
+                {
+                    this.validationConditions = value;
+                }
+            }
+        }
+
         public abstract void AddAnswer(Answer answer);
 
         public virtual IComposite Clone()

@@ -25,6 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 rosterSizeQuestionId: null,
                 description: null,
                 condition: null,
+                hideIfDisabled: false,
                 parentGroupId: chapterId,
                 isRoster: true,
                 rosterSizeSource: RosterSizeSourceType.FixedTitles,

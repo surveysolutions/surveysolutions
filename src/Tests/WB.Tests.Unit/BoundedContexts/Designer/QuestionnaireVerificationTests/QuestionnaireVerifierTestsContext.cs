@@ -285,7 +285,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
                     && _.Name == "profile111")
             };
 
-            var defaultDynamicCompilerSettings = Mock.Of<IDynamicCompilerSettingsGroup>(_ => _.SettingsCollection == settings);
+            var defaultDynamicCompilerSettings = Mock.Of<ICompilerSettings>(_ => _.SettingsCollection == settings);
 
             return new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(),

@@ -4,15 +4,16 @@ using System.Linq;
 using System.Reflection;
 using Android.Content;
 using Android.Widget;
-using Cirrious.CrossCore;
-using Cirrious.CrossCore.Converters;
-using Cirrious.CrossCore.IoC;
-using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
-using Cirrious.MvvmCross.ViewModels;
-using Cirrious.MvvmCross.Views;
+using MvvmCross.Binding.Bindings.Target.Construction;
+using MvvmCross.Core.ViewModels;
+using MvvmCross.Core.Views;
+using MvvmCross.Platform;
+using MvvmCross.Platform.Converters;
+using MvvmCross.Platform.IoC;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Ninject;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -40,14 +41,33 @@ using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Ninject;
+using Xamarin;
 
 namespace WB.UI.Interviewer
 {
     public class Setup : EnumeratorSetup
     {
-        public Setup(Context applicationContext) : base(applicationContext){}
+        public Setup(Context applicationContext) : base(applicationContext)
+        {
+            InitializeLogger(applicationContext);
+        }
 
-        protected override Type StartupActivityType => typeof (SplashActivity);
+        private void InitializeLogger(Context applicationContext)
+        {
+            Insights.HasPendingCrashReport += (sender, isStartupCrash) =>
+            {
+                if (isStartupCrash)
+                {
+                    Insights.PurgePendingCrashReports().WaitAndUnwrapException();
+                }
+            };
+
+#if DEBUG
+            Insights.Initialize(Insights.DebugModeKey, applicationContext);
+#else
+            Insights.Initialize("20fe6ac44d54f5fed5370bc877d7ba7524f15363", applicationContext);
+#endif
+        }
 
         protected override void InitializeViewLookup()
         {
@@ -134,6 +154,7 @@ namespace WB.UI.Interviewer
             kernel.Bind<ISynchronizationService>().To<SynchronizationService>();
 
             kernel.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
+            kernel.Bind<IQuestionnaireContentVersionProvider>().To<QuestionnaireContentVersionProvider>().InSingletonScope();
 
             this.InitDashboard(kernel, cqrsEventBus);
             return kernel;
@@ -161,6 +182,7 @@ namespace WB.UI.Interviewer
 
             bus.RegisterHandler(dashboardeventHandler, typeof(GeoLocationQuestionAnswered));
             bus.RegisterHandler(dashboardeventHandler, typeof(QRBarcodeQuestionAnswered));
+            bus.RegisterHandler(dashboardeventHandler, typeof(YesNoQuestionAnswered));
 
             bus.RegisterHandler(dashboardeventHandler, typeof(AnswerRemoved));
         }

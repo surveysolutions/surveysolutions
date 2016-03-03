@@ -35,10 +35,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         /// <summary>Yes/No questions</summary>
         private readonly Version version_11 = new Version(11, 0, 0);
 
+        /// <summary>Multiple validation, linked on roster title question, hide questions by condition</summary>
+        private readonly Version version_12 = new Version(12, 0, 0);
+
 
         public Version GetLatestSupportedVersion()
         {
-            return version_11;
+            return version_12;
         }
 
         public bool IsClientVersionSupported(Version clientVersion)
@@ -54,20 +57,42 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public bool IsQuestionnaireDocumentSupportedByClientVersion(QuestionnaireDocument questionnaireDocument, Version clientVersion)
         {
-            if (clientVersion < version_11)
-            {
-                var countOfYesNoQuestions = questionnaireDocument.Find<IMultyOptionsQuestion>(q => q.YesNoView).Count();
+            var questionnaireContentVersion = this.GetQuestionnaireContentVersion(questionnaireDocument);
+            if (clientVersion < this.version_12 && questionnaireContentVersion == this.version_12)
+                return false;
 
-                if (countOfYesNoQuestions != 0)
-                    return false;
-            }
-            if (clientVersion == version_9)
-            {
-                var countOfHiddenQuestions = questionnaireDocument.Find<IQuestion>(q => q.QuestionScope == QuestionScope.Hidden).Count();
-             
-                return countOfHiddenQuestions == 0;
-            }
+            if (clientVersion < this.version_11 && questionnaireContentVersion == this.version_11)
+                return false;
+
+            if (clientVersion == this.version_9 && questionnaireContentVersion == this.version_10)
+                return false;
+
             return true;
+        }
+
+        public Version GetQuestionnaireContentVersion(QuestionnaireDocument questionnaireDocument)
+        {
+            var countOfQuestionsWithMultipleValidations = questionnaireDocument.Find<IQuestion>(q => q.ValidationConditions.Count() > 1).Count();
+            if (countOfQuestionsWithMultipleValidations > 0)
+                return version_12;
+
+            var countOfLinkedOnRosterQuestions = questionnaireDocument.Find<IQuestion>(q => q.LinkedToRosterId.HasValue).Count();
+            if (countOfLinkedOnRosterQuestions > 0)
+                return version_12;
+           
+            var countOfYesNoQuestions = questionnaireDocument.Find<IMultyOptionsQuestion>(q => q.YesNoView).Count();
+            if (countOfYesNoQuestions > 0)
+                return version_11;
+
+            var countOfLookupTables = questionnaireDocument.LookupTables.Count;
+            if (countOfLookupTables > 0)
+                return version_11;
+
+            var countOfHiddenQuestions = questionnaireDocument.Find<IQuestion>(q => q.QuestionScope == QuestionScope.Hidden).Count();
+            if (countOfHiddenQuestions > 0)
+                return version_10;
+
+            return this.version_9;
         }
     }
 }

@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 () =>
                     questionnaire.AddGroupAndMoveIfNeeded(groupId,
                 responsibleId: responsibleId, title: "New group", variableName: null, rosterSizeQuestionId: null, description: null,
-                condition: null, parentGroupId: parentGroupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question,
+                condition: null, hideIfDisabled: false, parentGroupId: parentGroupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question,
                 rosterFixedTitles: null,
                 rosterTitleQuestionId: null));
 

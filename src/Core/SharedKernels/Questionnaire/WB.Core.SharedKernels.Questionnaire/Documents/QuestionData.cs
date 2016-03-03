@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace Main.Core.Entities
 {
@@ -14,8 +15,7 @@ namespace Main.Core.Entities
             string stataExportCaption,
             string variableLabel,
             string conditionExpression,
-            string validationExpression,
-            string validationMessage,
+            bool hideIfDisabled,
             Order? answerOrder,
             bool featured,
             bool capital,
@@ -23,6 +23,7 @@ namespace Main.Core.Entities
             string mask,
             Answer[] answers,
             Guid? linkedToQuestionId,
+            Guid? linkedToRosterId,
             bool? isInteger,
             int? countOfDecimalPlaces,
             bool? areAnswersOrdered,
@@ -30,7 +31,8 @@ namespace Main.Core.Entities
             int? maxAnswerCount,
             bool? isFilteredCombobox,
             Guid? cascadeFromQuestionId,
-            bool? yesNoView)
+            bool? yesNoView,
+            IList<ValidationCondition> validationConditions)
         {
             this.PublicKey = publicKey;
             this.QuestionType = questionType;
@@ -39,14 +41,14 @@ namespace Main.Core.Entities
             this.StataExportCaption = stataExportCaption;
             this.VariableLabel = variableLabel;
             this.ConditionExpression = conditionExpression;
-            this.ValidationExpression = validationExpression;
-            this.ValidationMessage = validationMessage;
+            this.HideIfDisabled = hideIfDisabled;
             this.AnswerOrder = answerOrder;
             this.Featured = featured;
             this.Capital = capital;
             this.Instructions = instructions;
             this.Answers = answers;
             this.LinkedToQuestionId = linkedToQuestionId;
+            this.LinkedToRosterId = linkedToRosterId;
             this.IsInteger = isInteger;
             this.CountOfDecimalPlaces = countOfDecimalPlaces;
 
@@ -57,6 +59,7 @@ namespace Main.Core.Entities
             this.IsFilteredCombobox = isFilteredCombobox;
             this.CascadeFromQuestionId = cascadeFromQuestionId;
             this.YesNoView = yesNoView;
+            this.ValidationConditions = validationConditions ?? new List<ValidationCondition>();
         }
 
         public readonly Guid PublicKey;
@@ -66,6 +69,7 @@ namespace Main.Core.Entities
         public readonly string StataExportCaption;
         public readonly string VariableLabel;
         public readonly string ConditionExpression;
+        public readonly bool HideIfDisabled;
         public readonly string ValidationExpression;
         public readonly string ValidationMessage;
         public readonly Order? AnswerOrder;
@@ -75,6 +79,7 @@ namespace Main.Core.Entities
         public readonly string Mask;
         public readonly Answer[] Answers;
         public readonly Guid? LinkedToQuestionId;
+        public readonly Guid? LinkedToRosterId;
         public readonly bool? IsInteger;
         public readonly int? CountOfDecimalPlaces;
 
@@ -85,5 +90,7 @@ namespace Main.Core.Entities
         public readonly bool? IsFilteredCombobox;
         public readonly Guid? CascadeFromQuestionId;
         public readonly bool? YesNoView;
+
+        public IList<ValidationCondition> ValidationConditions { get; set; } 
     }
 }
