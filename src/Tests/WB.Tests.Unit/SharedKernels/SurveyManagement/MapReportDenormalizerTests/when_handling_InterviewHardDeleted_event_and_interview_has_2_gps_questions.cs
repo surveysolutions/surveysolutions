@@ -24,17 +24,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTest
                 Create.GpsCoordinateQuestion(variable: gpsVariable1),
                 Create.GpsCoordinateQuestion(variable: gpsVariable2),
             });
-
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentStorage = Setup.ReadSideKeyValueStorageWithSameEntityForAnyGet(
-                Create.QuestionnaireDocumentVersioned(questionnaireDocument: questionnaireDocument));
-
+            
             IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage = Setup.ReadSideKeyValueStorageWithSameEntityForAnyGet(
                 Create.InterviewReferences());
 
             denormalizer = Create.MapReportDenormalizer(
                 mapReportPointStorage: mapReportPointStorageMock.Object,
-                questionnaireDocumentStorage: questionnaireDocumentStorage,
-                interviewReferencesStorage: interviewReferencesStorage);
+                interviewReferencesStorage: interviewReferencesStorage,
+                questionnaireDocument: questionnaireDocument);
         };
 
         Because of = () =>

@@ -3,6 +3,7 @@ using System.Linq;
 using NHibernate.Criterion;
 using NHibernate.Linq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -13,9 +14,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 {
     public class QuestionnaireBrowseViewFactory : IQuestionnaireBrowseViewFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> reader;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> reader;
 
-        public QuestionnaireBrowseViewFactory(IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> reader)
+        public QuestionnaireBrowseViewFactory(IPlainStorageAccessor<QuestionnaireBrowseItem> reader)
         {
             this.reader = reader;
         }
@@ -33,11 +34,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                         query = query.Where(x => x.CreatedBy == input.CreatedBy);
                     }
 
-                    if (!input.IsAdminMode.Value)
-                    {
-                        query = query.Where(x => !x.IsDeleted);
-                    }
-
                     if (input.QuestionnaireId.HasValue)
                     {
                         query = query.Where(x => x.QuestionnaireId == input.QuestionnaireId.Value);
@@ -53,6 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                         query = query.Where(x => x.Title.ContainsIgnoreCaseSensitive(input.Filter));
                     }
                 }
+                else { query = query.Where(x => !x.IsDeleted); }
 
                 var queryResult = query.OrderUsingSortExpression(input.Order);
 

@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -50,6 +51,56 @@ namespace WB.UI.Designer.Api
             this.lookupTableService = lookupTableService;
         }
 
+        [Route("~/api/command/updateAttachment")]
+        [HttpPost]
+        public async Task<HttpResponseMessage> UpdateAttachment()
+        {
+            var commandType = typeof(UpdateAttachment).Name;
+            string fileParameterName = "file";
+            string commandParameterName = "command";
+
+            if (!this.Request.Content.IsMimeMultipartContent())
+            {
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+            }
+
+            var multipartStreamProvider = new MultipartMemoryStreamProvider();
+
+            UpdateAttachment updateLookupTableCommand;
+            try
+            {
+                await this.Request.Content.ReadAsMultipartAsync(multipartStreamProvider);
+
+                var multipartContents = multipartStreamProvider.Contents.Select(x => new
+                {
+                    ContentType = x.Headers.ContentDisposition.Name.Replace("\"", string.Empty),
+                    BinaryContent = x.ReadAsByteArrayAsync().Result,
+                    Content = x.ReadAsStringAsync().Result
+                }).ToList();
+
+                var fileStreamContent = multipartContents.Single(x => x.ContentType == fileParameterName);
+                var commandContent = multipartContents.Single(x => x.ContentType == commandParameterName);
+
+                updateLookupTableCommand = (UpdateAttachment)this.commandDeserializer.Deserialize(commandType, commandContent.Content);
+
+                if (fileStreamContent.BinaryContent != null)
+                {
+                   // save image here
+                }
+            }
+            catch (FormatException)
+            {
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, Resources.QuestionnaireController.SelectTabFile);
+            }
+            catch (ArgumentException e)
+            {
+                this.logger.Error(string.Format("Error on command of type ({0}) handling ", commandType), e);
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
+            }
+
+            return this.ProcessCommand(updateLookupTableCommand, commandType);
+        }
+
         [Route("~/api/command/updateLookupTable")]
         [HttpPost]
         public async Task<HttpResponseMessage> UpdateLookupTable()
@@ -73,7 +124,6 @@ namespace WB.UI.Designer.Api
                 var multipartContents = multipartStreamProvider.Contents.Select(x => new
                 {
                     ContentType = x.Headers.ContentDisposition.Name.Replace("\"", string.Empty),
-                    ContentName = (x.Headers.ContentDisposition.FileName ?? "").Trim('"'),
                     Content = x.ReadAsStringAsync().Result
                 }).ToList();
 

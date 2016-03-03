@@ -61,7 +61,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                         Message = validationMessage,
                         Expression = validationExpression
                     }
-                });
+                },
+                linkedFilterExpression: null);
 
         private Cleanup stuff = () =>
         {

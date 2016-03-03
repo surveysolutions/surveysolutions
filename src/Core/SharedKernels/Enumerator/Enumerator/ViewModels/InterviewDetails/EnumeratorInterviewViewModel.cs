@@ -3,11 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
-using WB.Core.Infrastructure.PlainStorage;
+using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
+using MvvmCross.Platform.Core;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -18,41 +25,41 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     public abstract class EnumeratorInterviewViewModel : BaseViewModel, IDisposable
     {
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         protected readonly NavigationState navigationState;
         private readonly AnswerNotifier answerNotifier;
         private readonly IAnswerToStringService answerToStringService;
         private readonly GroupStateViewModel groupState;
         private readonly InterviewStateViewModel interviewState;
+        protected readonly IInterviewViewModelFactory interviewViewModelFactory;
         protected string interviewId;
+        private IStatefulInterview interview;
+
 
         protected EnumeratorInterviewViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
             SideBarSectionsViewModel sectionsViewModel, 
             BreadCrumbsViewModel breadCrumbsViewModel,
-            ActiveStageViewModel stageViewModel, 
             NavigationState navigationState,
             AnswerNotifier answerNotifier,
             GroupStateViewModel groupState, 
             InterviewStateViewModel interviewState,
             IPrincipal principal,
-            IViewModelNavigationService viewModelNavigationService) : base(principal, viewModelNavigationService)
+            IViewModelNavigationService viewModelNavigationService,
+            IInterviewViewModelFactory interviewViewModelFactory) : base(principal, viewModelNavigationService)
         {
             this.questionnaireRepository = questionnaireRepository;
-            this.questionnaireModelRepository = questionnaireModelRepository;
             this.interviewRepository = interviewRepository;
             this.navigationState = navigationState;
             this.answerNotifier = answerNotifier;
             this.answerToStringService = answerToStringService;
             this.groupState = groupState;
             this.interviewState = interviewState;
+            this.interviewViewModelFactory = interviewViewModelFactory;
 
             this.BreadCrumbs = breadCrumbsViewModel;
-            this.CurrentStage = stageViewModel;
             this.Sections = sectionsViewModel;
         }
 
@@ -64,10 +71,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public override async Task StartAsync()
         {
             if (this.interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            var interview = this.interviewRepository.Get(interviewId);
+            interview = this.interviewRepository.Get(interviewId);
             if (interview == null) throw new Exception("Interview is null.");
-            var questionnaireModel = this.questionnaireModelRepository.GetById(interview.QuestionnaireId);
-            if (questionnaireModel == null) throw new Exception("questionnaire is null");
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
             if (questionnaire == null) throw new Exception("questionnaire is null. QuestionnaireId: " + interview.QuestionnaireId);
 
@@ -76,19 +81,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 .GetPrefilledQuestions()
                 .Select(questionId => new SideBarPrefillQuestion
                 {
-                    Question = questionnaireModel.Questions[questionId].Title,
-                    Answer = this.GetAnswer(interview, questionnaireModel, new QuestionnaireReferenceModel { Id = questionId, ModelType = questionnaireModel.Questions[questionId].GetType() }),
+                    Question = questionnaire.GetQuestionTitle(questionId),
+                    Answer = this.GetAnswer(interview, questionnaire, questionId),
                     StatsInvisible = questionnaire.GetQuestionType(questionId) == QuestionType.GpsCoordinates,
                 })
                 .ToList();
 
             this.BreadCrumbs.Init(interviewId, this.navigationState);
             this.Sections.Init(interview.QuestionnaireId, interviewId, this.navigationState);
-            this.CurrentStage.Init(interviewId, this.navigationState);
 
             this.navigationState.Init(interviewId: interviewId, questionnaireId: interview.QuestionnaireId);
             this.navigationState.ScreenChanged += this.OnScreenChanged;
-            await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(new Identity(questionnaireModel.GroupsWithFirstLevelChildrenAsReferences.Keys.First(), new decimal[0])));
+            await this.navigationState.NavigateToAsync(NavigationIdentity.CreateForGroup(new Identity(questionnaire.GetAllSections().First(), new decimal[0])));
 
             this.answerNotifier.QuestionAnswered += this.AnswerNotifierOnQuestionAnswered;
         }
@@ -106,15 +110,36 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (eventArgs.TargetScreen != ScreenType.Group)
             {
                 this.UpdateInterviewStatus(null, ScreenType.Complete);
-                return;
+            }
+            else
+            {
+                IStatefulInterview interview = this.interviewRepository.Get(this.navigationState.InterviewId);
+                IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(eventArgs.TargetGroup);
+
+                this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
+
+                this.UpdateGroupStatus(eventArgs.TargetGroup);
             }
 
-            IStatefulInterview interview = this.interviewRepository.Get(this.navigationState.InterviewId);
-            IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(eventArgs.TargetGroup);
+            this.CurrentStage.DisposeIfDisposable();
+            this.CurrentStage = UpdateCurrentScreenViewModel(eventArgs);
+            this.RaisePropertyChanged(() => this.CurrentStage);
+        }
 
-            this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
-
-            this.UpdateGroupStatus(eventArgs.TargetGroup);
+        protected virtual MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
+        {
+            if (this.navigationState.CurrentScreenType == ScreenType.Complete)
+            {
+                var completeInterviewViewModel = interviewViewModelFactory.GetNew<CompleteInterviewViewModel>();
+                completeInterviewViewModel.Init(this.interviewId);
+                return completeInterviewViewModel;
+            }
+            else
+            {
+                var activeStageViewModel = interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
+                activeStageViewModel.Init(interviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
+                return activeStageViewModel;
+            }
         }
 
         private void UpdateGroupStatus(Identity groupIdentity, ScreenType type = ScreenType.Group)
@@ -129,12 +154,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Status = this.interviewState.Status;
         }
 
-        private string GetAnswer(IStatefulInterview interview, QuestionnaireModel questionnaire, QuestionnaireReferenceModel referenceToQuestion)
+        private string GetAnswer(IStatefulInterview interview, IQuestionnaire questionnaire, Guid referenceToQuestionId)
         {
-            var identityAsString = ConversionHelper.ConvertIdAndRosterVectorToString(referenceToQuestion.Id, new decimal[0]);
+            var identityAsString = ConversionHelper.ConvertIdAndRosterVectorToString(referenceToQuestionId, new decimal[0]);
             var interviewAnswer = interview.Answers.ContainsKey(identityAsString) ? interview.Answers[identityAsString] : null;
-            var questionModel = questionnaire.Questions[referenceToQuestion.Id];
-            return this.answerToStringService.AnswerToUIString(questionModel, interviewAnswer, interview, questionnaire);
+            return this.answerToStringService.AnswerToUIString(referenceToQuestionId, interviewAnswer, interview, questionnaire);
         }
 
         private GroupStatus status;
@@ -153,12 +177,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         public BreadCrumbsViewModel BreadCrumbs { get; set; }
-        public ActiveStageViewModel CurrentStage { get; set; }
         public SideBarSectionsViewModel Sections { get; set; }
         public string QuestionnaireTitle { get; set; }
-        public IEnumerable<dynamic> PrefilledQuestions { get; set; }
+        public IEnumerable<SideBarPrefillQuestion> PrefilledQuestions { get; set; }
 
-        public IEnumerable<dynamic> PrefilledQuestionsStats
+        public MvxViewModel CurrentStage { get; private set; }
+        public string Title { get; private set; }
+
+        public IEnumerable<SideBarPrefillQuestion> PrefilledQuestionsStats
         {
             get { return PrefilledQuestions.Where(x => !x.StatsInvisible); }
 
@@ -168,7 +194,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.navigationState.ScreenChanged -= this.OnScreenChanged;
             this.answerNotifier.QuestionAnswered -= this.AnswerNotifierOnQuestionAnswered;
-            this.CurrentStage.Dispose();
+            this.CurrentStage.DisposeIfDisposable();
             this.answerNotifier.Dispose();
             this.BreadCrumbs.Dispose();
             this.Sections.Dispose();

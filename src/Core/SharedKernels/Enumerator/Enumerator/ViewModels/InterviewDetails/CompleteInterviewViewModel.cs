@@ -4,13 +4,14 @@ using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class CompleteInterviewViewModel : MvxNotifyPropertyChanged
+    public class CompleteInterviewViewModel : MvxViewModel
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IMvxMessenger messenger;
@@ -45,6 +46,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.UnansweredCount = questionsCount - this.AnsweredCount;
 
         }
+
+        public string Name => UIResources.Interview_Complete_Screen_Title;
 
         public int AnsweredCount { get; set; }
 

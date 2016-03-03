@@ -2,10 +2,9 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -23,20 +22,20 @@ namespace WB.UI.Interviewer.ViewModel
 
         public InterviewerInterviewViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
             SideBarSectionsViewModel sectionsViewModel,
             BreadCrumbsViewModel breadCrumbsViewModel,
-            InterviewerActiveStageViewModel stageViewModel,
             NavigationState navigationState,
             AnswerNotifier answerNotifier,
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
             GroupStateViewModel groupState,
-            InterviewStateViewModel interviewState)
-            : base(questionnaireRepository, questionnaireModelRepository, interviewRepository, answerToStringService, sectionsViewModel,
-                breadCrumbsViewModel, stageViewModel, navigationState, answerNotifier, groupState, interviewState, principal, viewModelNavigationService)
+            InterviewStateViewModel interviewState,
+            IInterviewViewModelFactory interviewViewModelFactory)
+            : base(questionnaireRepository, interviewRepository, answerToStringService, sectionsViewModel,
+                breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, principal, viewModelNavigationService,
+                interviewViewModelFactory)
         {
             this.interviewRepository = interviewRepository;
             this.viewModelNavigationService = viewModelNavigationService;
@@ -82,6 +81,22 @@ namespace WB.UI.Interviewer.ViewModel
             else
             {
                 await this.viewModelNavigationService.NavigateToDashboardAsync();
+            }
+        }
+
+        protected override MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
+        {
+            if (this.navigationState.CurrentScreenType == ScreenType.Complete)
+            {
+                var completeInterviewViewModel = interviewViewModelFactory.GetNew<InterviewerCompleteInterviewViewModel>();
+                completeInterviewViewModel.Init(this.interviewId);
+                return completeInterviewViewModel;
+            }
+            else
+            {
+                var activeStageViewModel = interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
+                activeStageViewModel.Init(interviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
+                return activeStageViewModel;
             }
         }
     }

@@ -15,7 +15,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
     {
         Establish context = () =>
         {
-            var storageAccessor = new TestAsyncPlainStorage<QuestionnaireListItem>(MyQuestionnaires.Union(PublicQuestionnaires));
+            var storageAccessor = new SqliteInmemoryStorage<QuestionnaireListItem>();
+            storageAccessor.StoreAsync(MyQuestionnaires.Union(PublicQuestionnaires)).WaitAndUnwrapException();
 
             viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessor);
         };
@@ -27,18 +28,27 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         static DashboardViewModel viewModel;
 
-        private static readonly string firstMyQuestionnaire = Guid.Parse("11111111111111111111111111111111").FormatGuid();
-        private static readonly string secondMyQuestionnaire = Guid.Parse("22222222222222222222222222222222").FormatGuid();
-        private static readonly IReadOnlyCollection<QuestionnaireListItem> MyQuestionnaires = new List<QuestionnaireListItem>
+        static readonly string firstMyQuestionnaire = Guid.Parse("11111111111111111111111111111111").FormatGuid();
+        static readonly string secondMyQuestionnaire = Guid.Parse("22222222222222222222222222222222").FormatGuid();
+        
+        static readonly IList<QuestionnaireListItem> MyQuestionnaires = new List<QuestionnaireListItem>
         {
-            new QuestionnaireListItem(){Id = firstMyQuestionnaire, IsPublic = false, OwnerName = userName},
-            new QuestionnaireListItem(){Id = secondMyQuestionnaire,  IsPublic = false, OwnerName = userName}
+            new QuestionnaireListItem() {Id = firstMyQuestionnaire, IsPublic = false, OwnerName = userName},
+            new QuestionnaireListItem() {Id = secondMyQuestionnaire, IsPublic = false, OwnerName = userName}
         };
 
-        private static readonly IReadOnlyCollection<QuestionnaireListItem> PublicQuestionnaires = new List<QuestionnaireListItem>
+        static readonly IList<QuestionnaireListItem> PublicQuestionnaires = new List<QuestionnaireListItem>
         {
-            new QuestionnaireListItem(){IsPublic = true},
-            new QuestionnaireListItem(){IsPublic = true}
+            new QuestionnaireListItem()
+            {
+                IsPublic = true,
+                Id = Guid.NewGuid().FormatGuid()
+            },
+            new QuestionnaireListItem()
+            {
+                IsPublic = true,
+                Id = Guid.NewGuid().FormatGuid()
+            }
         };
     }
 }

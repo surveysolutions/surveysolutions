@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
     {
         Establish context = () =>
         {
-            var questionnaire = SetupQuestionnaireModelWithSingleOptionQuestionLinkedToTextQuestion(questionId, linkedToQuestionId);
+            var questionnaire = SetupQuestionnaireWithSingleOptionQuestionLinkedToTextQuestion(questionId, linkedToQuestionId);
 
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.FindAnswersOfReferencedQuestionForLinkedQuestion(Moq.It.IsAny<Guid>(), Moq.It.IsAny<Identity>()) == new[]
@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                 && _.Answers == new Dictionary<string, BaseInterviewAnswer>());
 
             viewModel = Create.SingleOptionLinkedQuestionViewModel(
-                questionnaireModel: questionnaire,
+                questionnaire: questionnaire,
                 interview: interview);
 
             viewModel.Init(interviewId, questionIdentity, navigationState);

@@ -9,8 +9,8 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly AnswerNotifier answerNotifier;
 
         private string interviewId;
@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public GroupViewModel(
             IStatefulInterviewRepository interviewRepository,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
+            IPlainQuestionnaireRepository questionnaireRepository,
             EnablementViewModel enablement,
             AnswerNotifier answerNotifier,
             GroupStateViewModel groupState,
@@ -96,23 +96,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         {
             this.interviewId = interviewId;
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
             this.navigationState = navigationState;
             this.groupIdentity = groupIdentity;
 
             this.eventRegistry.Subscribe(this, interviewId);
             
-            GroupModel groupModel;
-            if (!questionnaire.GroupsWithFirstLevelChildrenAsReferences.TryGetValue(groupIdentity.Id, out groupModel))
+            if (!questionnaire.HasGroup(groupIdentity.Id))
                 throw new InvalidOperationException("Group with identity {0} don't found".FormatString(groupIdentity));
 
             this.Enablement.Init(interviewId, groupIdentity, navigationState);
             this.GroupState.Init(interviewId, groupIdentity);
 
-            this.Title = groupModel.Title;
+            this.Title = questionnaire.GetGroupTitle(groupIdentity.Id);
             this.RosterTitle = interview.GetRosterTitle(groupIdentity);
-            this.IsRoster = groupModel is RosterModel;
+            this.IsRoster = questionnaire.IsRosterGroup(groupIdentity.Id);
             
             if (groupWithAnswersToMonitor != null)
             {

@@ -31,6 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         public QuestionType Type { get; set; }
         public string LinkedToEntityId { get; set; }
+        public string LinkedFilterExpression { get; set; }
         public CategoricalOption[] Options { get; set; }
         public bool AreAnswersOrdered { get; set; }
         public int? MaxAllowedAnswers { get; set; }

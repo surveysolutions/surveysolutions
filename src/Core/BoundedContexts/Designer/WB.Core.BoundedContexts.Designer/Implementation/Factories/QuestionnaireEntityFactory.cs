@@ -39,6 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 data.Mask,
                 data.LinkedToQuestionId,
                 data.LinkedToRosterId,
+                data.LinkedFilterExpression,
                 data.QuestionType == QuestionType.AutoPropagate ? true : data.IsInteger,
                 data.CountOfDecimalPlaces,
                 data.AreAnswersOrdered,
@@ -140,6 +141,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             string mask,
             Guid? linkedToQuestionId,
             Guid? linkedToRosterId,
+            string linkedFilterExpression,
             bool? isInteger,
             int? countOfDecimalPlaces,
             bool? areAnswersOrdered,
@@ -165,6 +167,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             question.Capital = capital;
             question.LinkedToQuestionId = linkedToQuestionId;
             question.LinkedToRosterId = linkedToRosterId;
+            question.LinkedFilterExpression = linkedFilterExpression;
             question.IsFilteredCombobox = isFilteredCombobox;
             question.CascadeFromQuestionId = cascadeFromQuestionId;
             question.ValidationConditions = validationConditions;

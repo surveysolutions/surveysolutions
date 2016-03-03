@@ -6,6 +6,7 @@ using System.Web.Http;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
@@ -23,6 +24,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     [LocalOrDevelopmentAccessOnly]
     public class ControlPanelApiController : ApiController
     {
+        public class VersionsInfo
+        {
+            public VersionsInfo(string product, int readSideApplication, int? readSideDatabase, Dictionary<DateTime, string> history)
+            {
+                this.Product = product;
+                this.ReadSide_Application = readSideApplication;
+                this.ReadSide_Database = readSideDatabase;
+                this.History = history;
+            }
+
+            public string Product { get; }
+            public int ReadSide_Application { get; }
+            public int? ReadSide_Database { get; }
+            public Dictionary<DateTime, string> History { get; }
+        }
+
         private const string DEFAULTEMPTYQUERY = "";
         private const int DEFAULTPAGESIZE = 12;
 
@@ -31,18 +48,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly ISynchronizationLogViewFactory synchronizationLogViewFactory;
         private readonly ITeamViewFactory teamViewFactory;
         private readonly MemoryCache cache = MemoryCache.Default;
+        private readonly IProductVersion productVersion;
+        private readonly IProductVersionHistory productVersionHistory;
 
 
         public ControlPanelApiController(
             IReadSideAdministrationService readSideAdministrationService,
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
             ISynchronizationLogViewFactory synchronizationLogViewFactory,
-            ITeamViewFactory teamViewFactory)
+            ITeamViewFactory teamViewFactory,
+            IProductVersion productVersion,
+            IProductVersionHistory productVersionHistory)
         {
             this.readSideAdministrationService = readSideAdministrationService;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.synchronizationLogViewFactory = synchronizationLogViewFactory;
             this.teamViewFactory = teamViewFactory;
+            this.productVersion = productVersion;
+            this.productVersionHistory = productVersionHistory;
         }
 
         public InterviewDetailsSchedulerViewModel InterviewDetails()
@@ -68,17 +91,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             return incomingPackagesQueueLength;
         }
 
-        public IEnumerable<ReadSideEventHandlerDescription> GetAllAvailableHandlers()
+        [NoTransaction]
+        public VersionsInfo GetVersions()
         {
-            return this.readSideAdministrationService.GetAllAvailableHandlers();
+            var readSideStatus = this.readSideAdministrationService.GetRebuildStatus();
+
+            return new VersionsInfo(
+                this.productVersion.ToString(),
+                readSideStatus.ReadSideApplicationVersion,
+                readSideStatus.ReadSideDatabaseVersion,
+                this.productVersionHistory.GetHistory().ToDictionary(
+                    change => change.UpdateTimeUtc,
+                    change => change.ProductVersion));
         }
 
+        public IEnumerable<ReadSideEventHandlerDescription> GetAllAvailableHandlers()
+            => this.readSideAdministrationService.GetAllAvailableHandlers();
+
         [NoTransaction]
-        public ReadSideStatus GetReadSideStatus()
-        {
-            ReadSideStatus readSideStatus = this.readSideAdministrationService.GetRebuildStatus();
-            return readSideStatus;
-        }
+        public ReadSideStatus GetReadSideStatus() => this.readSideAdministrationService.GetRebuildStatus();
 
         [HttpPost]
         public void RebuildReadSide(RebuildReadSideInputViewModel model)
@@ -99,10 +130,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpPost]
         [NoTransaction]
-        public void StopReadSideRebuilding()
-        {
-            this.readSideAdministrationService.StopAllViewsRebuilding();
-        }
+        public void StopReadSideRebuilding() => this.readSideAdministrationService.StopAllViewsRebuilding();
 
         [HttpPost]
         public SynchronizationLog GetSynchronizationLog(SynchronizationLogFilter filter)

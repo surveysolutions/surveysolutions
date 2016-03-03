@@ -25,7 +25,38 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             var designerApiService = Mock.Of<IDesignerApiService>(
                 _ => _.GetQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(Questionnaires));
 
-            var storageAccessor = new TestAsyncPlainStorage<QuestionnaireListItem>(Questionnaires);
+            var storageAccessor = new SqliteInmemoryStorage<QuestionnaireListItem>();
+
+            storageAccessor.StoreAsync(new List<QuestionnaireListItem>
+            {
+                new QuestionnaireListItem
+                {
+                    IsPublic = false,
+                    OwnerName = userName,
+                    Id = Guid.NewGuid().FormatGuid()
+                },
+                new QuestionnaireListItem
+                {
+                    IsPublic = false,
+                    OwnerName = userName,
+                    Id = Guid.NewGuid().FormatGuid()
+                },
+                new QuestionnaireListItem
+                {
+                    IsPublic = true,
+                    Id = Guid.NewGuid().FormatGuid()
+                },
+                new QuestionnaireListItem
+                {
+                    IsPublic = true,
+                    Id = Guid.NewGuid().FormatGuid()
+                },
+                new QuestionnaireListItem
+                {
+                    IsPublic = true,
+                    Id = Guid.NewGuid().FormatGuid()
+                }
+            }).WaitAndUnwrapException();
 
             viewModel = CreateDashboardViewModel(designerApiService: designerApiService,
                 questionnaireListStorage: storageAccessor);

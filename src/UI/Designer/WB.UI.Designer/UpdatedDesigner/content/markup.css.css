@@ -7306,18 +7306,19 @@ input#edit-group-title {
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons label,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons label {
-    font-weight: normal;
-    display: block;
-    font-family: "Lucida Console", Monaco, monospace;
-    font-size: 14px;
-    color: #5d5d5d;
+  font-weight: normal;
+  display: block;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  color: #5d5d5d;
 }
-#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .linked-roster-source{
-    margin-left: 0px;
-    font-style: italic;
-    font-family: Georgia, serif;
-    font-weight: normal;
-    color: #2075bf;
+#roster-editor .dropdown-with-breadcrumbs-and-icons .linked-roster-source,
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .linked-roster-source {
+  margin-left: 0px;
+  font-style: italic;
+  font-family: Georgia, serif;
+  font-weight: normal;
+  color: #2075bf;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .btn-group,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .btn-group {
@@ -7365,15 +7366,16 @@ input#edit-group-title {
   font-family: Arial, Helvetica, sans-serif;
   border: none;
 }
-#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li{
-    padding-left: 5px;
-    padding-right: 5px;
+#roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li,
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li {
+  padding-left: 5px;
+  padding-right: 5px;
 }
-    #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a,
-    #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li span { 
-        padding-right: 5px;
-        padding-left: 5px;
-    }
+#roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li span,
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li span {
+  padding-right: 5px;
+  padding-left: 5px;
+}
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a {
   font-family: Arial, Helvetica, sans-serif;
@@ -7381,27 +7383,30 @@ input#edit-group-title {
   padding-bottom: 1px;
   color: #555555;
   position: relative;
-  margin-left: 10px;
   padding-right: 5px;
   padding-left: 5px;
+  margin-left: 10px;
 }
+#roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a.linked-question-source,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a.linked-question-source {
-    margin-left: 0px;
-    padding: 5px;
-    padding-left: 20px;
+  margin-left: 0px;
+  padding: 5px;
+  padding-left: 20px;
 }
-    #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a.linked-roster-source {
-        margin-left: 0px;
-        font-style: italic;
-        font-family: Georgia, serif;
-        font-weight: normal;
-        color: #2075bf;
-    }
+#roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a.linked-roster-source,
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a.linked-roster-source {
+  margin-left: 0px;
+  font-style: italic;
+  font-family: Georgia, serif;
+  font-weight: normal;
+  padding-right: 5px;
+  padding-left: 5px;
+  color: #2075bf;
+}
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a i,
-#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a i{
-    position: relative;
+#sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a i {
+  position: relative;
 }
-
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:after,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:after {
   display: block;
@@ -7415,7 +7420,7 @@ input#edit-group-title {
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:hover,
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .dropdown-menu li a:hover {
-  background:  #f1f2f3;
+  background: #f1f2f3;
   border-radius: 4px;
 }
 #roster-editor .dropdown-with-breadcrumbs-and-icons .dropdown-menu .dropdown-header,
@@ -7886,6 +7891,9 @@ textarea#edit-group-description {
 #designer-editor.container section#main #left-menu ul li a.left-menu-lookupTables {
   background: url(i/designer-left-icons.png) 0 -250px no-repeat;
 }
+#designer-editor.container section#main #left-menu ul li a.left-menu-attachments {
+  background: url(i/designer-left-icons.png) 0 -150px no-repeat;
+}
 #designer-editor.container section#main #left-menu ul li a:hover {
   background-color: #dbdfe2;
 }
@@ -7953,6 +7961,10 @@ textarea#edit-group-description {
 #designer-editor.container section#main .left-side-panel.lookup-tables .foldback-region {
   left: 75%;
 }
+#designer-editor.container section#main .left-side-panel.attachments .foldback-region {
+  left: 85%;
+  background: url(i/left-panel-shadow-small.png) repeat-y;
+}
 #designer-editor.container section#main .left-side-panel .foldback-button {
   display: none;
   position: absolute;
@@ -7967,6 +7979,30 @@ textarea#edit-group-description {
 }
 #designer-editor.container section#main .left-side-panel .foldback-button:hover {
   background-position: -3px -55px;
+}
+#designer-editor.container section#main .left-side-panel a.delete-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: block;
+  background: url("i/cross-red.png") center center no-repeat;
+  width: 15px;
+  height: 15px;
+  filter: alpha(opacity=30);
+  -webkit-opacity: 0.3;
+  -moz-opacity: 0.3;
+  opacity: 0.3;
+}
+#designer-editor.container section#main .left-side-panel a.delete-btn:hover {
+  filter: alpha(opacity=100);
+  -webkit-opacity: 1;
+  -moz-opacity: 1;
+  opacity: 1;
+}
+#designer-editor.container section#main .left-side-panel .actions {
+  margin-left: -6px;
+  margin-right: -6px;
+  position: relative;
 }
 #designer-editor.container section#main .left-side-panel.unfolded {
   left: 52px;
@@ -8068,30 +8104,6 @@ textarea#edit-group-description {
   width: 275px;
   background: #d9dde0;
 }
-#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li a.delete-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  display: block;
-  background: url("i/cross-red.png") center center no-repeat;
-  width: 15px;
-  height: 15px;
-  filter: alpha(opacity=30);
-  -webkit-opacity: 0.3;
-  -moz-opacity: 0.3;
-  opacity: 0.3;
-}
-#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li a.delete-btn:hover {
-  filter: alpha(opacity=100);
-  -webkit-opacity: 1;
-  -moz-opacity: 1;
-  opacity: 1;
-}
-#designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .actions {
-  margin-left: -6px;
-  margin-right: -6px;
-  position: relative;
-}
 #designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .actions button,
 #designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .actions a.btn {
   background: #fff;
@@ -8112,6 +8124,143 @@ textarea#edit-group-description {
 }
 #designer-editor.container section#main .lookup-tables-panel .lookup-tables ul li .actions.dirty .permanent-actions {
   position: static;
+}
+#designer-editor.container section#main .attachments-panel {
+  width: 85%;
+}
+#designer-editor.container section#main .attachments-panel .attachments {
+  height: 100%;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  padding-right: 30px;
+  padding-left: 20px;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul li {
+  background: #fff;
+  margin-bottom: 7px;
+  padding: 5px 10px 5px 10px;
+  border-bottom-left-radius: 8px;
+  border-top-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-top-right-radius: 8px;
+  border: 2px solid #fff;
+  position: relative;
+  z-index: 10;
+  font-family: "Lucida Console", Monaco, monospace;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul li:hover {
+  border: 2px solid #d9dde0;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul li .attachment {
+  display: table;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul li .attachment-preview {
+  display: table-cell;
+  vertical-align: top;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul li .attachment-preview .attachment-preview-cover {
+  height: 100px;
+  width: 120px;
+  overflow: hidden;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul li .attachment-preview .attachment-preview-cover img {
+  max-width: 100%;
+  max-height: 100%;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul li .attachment-content {
+  display: table-cell;
+  vertical-align: top;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul li .attachment-content .attachment-meta {
+  font-family: Georgia, serif;
+  color: #78838a;
+  font-size: 14px;
+  font-style: italic;
+  margin: 0;
+  margin-right: 20px;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul li .drop-box {
+  color: #78838a;
+  border: 2px dashed #78838a;
+  height: 30px;
+  text-align: center;
+  line-height: 26px;
+  display: none;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul li.dragover .drop-box {
+  display: block;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul li input,
+#designer-editor.container section#main .attachments-panel .attachments ul li textarea {
+  display: block;
+  border: none;
+  border-color: #fff;
+  box-shadow: none;
+  font-family: Arial, Helvetica, sans-serif;
+  padding-left: 0;
+  padding-right: 0;
+  border-radius: 0;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul li input.table-name {
+  width: 275px;
+  color: #e004c9;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul li .form-control[disabled],
+#designer-editor.container section#main .attachments-panel .attachments ul li .form-control[readonly],
+#designer-editor.container section#main .attachments-panel .attachments ul li fieldset[disabled] .form-control {
+  background: #fff;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul li input[type="text"][placeholder],
+#designer-editor.container section#main .attachments-panel .attachments ul li textarea[placeholder] {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  text-overflow: ellipsis;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul li input[type="text"]::-moz-placeholder,
+#designer-editor.container section#main .attachments-panel .attachments ul li textarea::-moz-placeholder {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  text-overflow: ellipsis;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul li input[type="text"]:-ms-input-placeholder,
+#designer-editor.container section#main .attachments-panel .attachments ul li textarea:-ms-input-placeholder {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  text-overflow: ellipsis;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul li input[type="text"]::-webkit-input-placeholder,
+#designer-editor.container section#main .attachments-panel .attachments ul li textarea::-webkit-input-placeholder {
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 14px;
+  text-overflow: ellipsis;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul li .actions button,
+#designer-editor.container section#main .attachments-panel .attachments ul li .actions a.btn {
+  background: #fff;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul li .actions button:hover,
+#designer-editor.container section#main .attachments-panel .attachments ul li .actions a.btn:hover {
+  background: #e6e6e6;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul li .actions .permanent-actions {
+  background: #fff;
+  -webkit-box-shadow: -30px 1px 25px 0px #fff;
+  -moz-box-shadow: -30px 1px 25px 0px #fff;
+  box-shadow: -30px 1px 25px 0px #fff;
+  padding-left: 5px;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul li .actions.dirty .permanent-actions {
+  position: static;
+}
+#designer-editor.container section#main .attachments-panel .attachments ul li .divider {
+  height: 2px;
+  width: 275px;
+  background: #d9dde0;
 }
 #designer-editor.container section#main .macros-panel {
   width: 85%;
@@ -8211,29 +8360,6 @@ textarea#edit-group-description {
   margin-bottom: 5px;
   margin-top: 5px;
   border-radius: 0;
-}
-#designer-editor.container section#main .macros-panel .macroses ul li a {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  display: block;
-  background: url("i/cross-red.png") center center no-repeat;
-  width: 15px;
-  height: 15px;
-  filter: alpha(opacity=30);
-  -webkit-opacity: 0.3;
-  -moz-opacity: 0.3;
-  opacity: 0.3;
-}
-#designer-editor.container section#main .macros-panel .macroses ul li a:hover {
-  filter: alpha(opacity=100);
-  -webkit-opacity: 1;
-  -moz-opacity: 1;
-  opacity: 1;
-}
-#designer-editor.container section#main .macros-panel .macroses ul li .actions {
-  margin-left: -6px;
-  margin-right: -6px;
 }
 #designer-editor.container section#main .macros-panel .macroses ul li button {
   background: #fff;

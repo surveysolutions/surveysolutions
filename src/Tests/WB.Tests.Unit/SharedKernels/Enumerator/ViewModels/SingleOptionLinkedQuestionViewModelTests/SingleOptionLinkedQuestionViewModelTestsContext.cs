@@ -1,18 +1,14 @@
 using System;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
+using Moq;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQuestionViewModelTests
 {
     internal class SingleOptionLinkedQuestionViewModelTestsContext
     {
-        protected static QuestionnaireModel SetupQuestionnaireModelWithSingleOptionQuestionLinkedToTextQuestion(Guid questionId, Guid linkedToQuestionId)
+        protected static IQuestionnaire SetupQuestionnaireWithSingleOptionQuestionLinkedToTextQuestion(Guid questionId, Guid linkedToQuestionId)
         {
-            return Create.QuestionnaireModel(questions: new BaseQuestionModel[]
-            {
-                new LinkedSingleOptionQuestionModel { Id = questionId, LinkedToQuestionId = linkedToQuestionId },
-                new TextQuestionModel { Id = linkedToQuestionId },
-            });
+            return Mock.Of<IQuestionnaire>(_ => _.GetQuestionReferencedByLinkedQuestion(questionId) == linkedToQuestionId);
         }
     }
 }

@@ -49,15 +49,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             get { return this.serviceLocator.GetInstance<IRevalidateInterviewsAdministrationService>(); }
         }
 
-        public ActionResult Index()
-        {
-            return this.View();
-        }
+        public ActionResult Index() => this.View();
 
-        public ActionResult NConfig()
-        {
-            return this.View();
-        }
+        public ActionResult NConfig() => this.View();
+
+        public ActionResult Versions() => this.View();
 
         public ActionResult IncomingDataWithErrors()
         {
@@ -76,10 +72,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [NoTransaction]
-        public ActionResult ReadSide()
-        {
-            return this.View();
-        }
+        public ActionResult ReadSide() => this.View();
 
         public ActionResult RepeatLastInterviewStatus(Guid? interviewId)
         {
@@ -131,20 +124,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         #endregion
 
-        public ActionResult InterviewDetails()
-        {
-            return this.View();
-        }
+        public ActionResult InterviewDetails() => this.View();
 
-        public ActionResult SynchronizationLog()
-        {
-            return this.View();
-        }
+        public ActionResult SynchronizationLog() => this.View();
 
-        public ActionResult EventStore()
-        {
-            return this.View();
-        }
+        public ActionResult EventStore() => this.View();
 
         public async Task<ActionResult> RunScavenge()
         {

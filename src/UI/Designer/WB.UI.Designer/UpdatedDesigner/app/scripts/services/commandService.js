@@ -30,6 +30,42 @@
                     return commandCall(type, command);
                 };
 
+                commandService.updateAttachment = function (questionnaireId, attachment) {
+                    blockUI.start();
+
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "attachmentId": attachment.itemId,
+                        "attachmentName": attachment.name,
+                        "attachmentFileName": attachment.fileName
+                    };
+
+                    return Upload.upload({
+                        url: urlBase + '/updateAttachment',
+                        data: { file: _.isNull(attachment.file) ? "" : attachment.file, "command": JSON.stringify(command) }
+                    }).success(function () {
+                        blockUI.stop();
+                    }).error(function () {
+                        blockUI.stop();
+                    });
+                };
+
+                commandService.addAttachment = function (questionnaireId, attachment) {
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "attachmentId": attachment.itemId
+                    };
+                    return commandCall("AddAttachment", command);
+                };
+
+                commandService.deleteAttachment = function (questionnaireId, itemId) {
+                    var command = {
+                        "questionnaireId": questionnaireId,
+                        "attachmentId": itemId
+                    };
+                    return commandCall("DeleteAttachment", command);
+                };
+
                 commandService.updateLookupTable = function (questionnaireId, lookupTable) {
                     blockUI.start();
 
@@ -122,6 +158,7 @@
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
                         command.linkedToEntityId = question.linkedToEntityId;
+                        command.linkedFilterExpression = question.linkedFilterExpression;
                         command.isFilteredCombobox = question.isFilteredCombobox || false;
                         command.cascadeFromQuestionId = question.cascadeFromQuestionId;
                         command.enablementCondition = question.cascadeFromQuestionId ? '' : command.enablementCondition;
@@ -137,6 +174,7 @@
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
                         command.linkedToEntityId = question.linkedToEntityId;
+                        command.linkedFilterExpression = question.linkedFilterExpression;
                         command.yesNoView = question.yesNoView;
                         command.options = _.isEmpty(command.linkedToEntityId) ? question.options : null;
                         break;

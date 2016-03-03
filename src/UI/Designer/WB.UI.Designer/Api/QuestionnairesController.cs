@@ -102,20 +102,19 @@ namespace WB.UI.Designer.Api
         [Route("")]
         public HttpResponseMessage Get([FromUri]int pageIndex = 1, [FromUri]int pageSize = 128)
         {
-            var questionnaireViews = this.viewFactory.GetUserQuestionnaires(
-                userId: this.userHelper.WebUser.UserId,
-                isAdmin: this.userHelper.WebUser.IsAdmin,
-                pageIndex: pageIndex,
-                pageSize: pageSize);
+            var userId = this.userHelper.WebUser.UserId;
+            var isAdmin = this.userHelper.WebUser.IsAdmin;
 
-            var questionnaires = questionnaireViews.Select(questionnaire => new QuestionnaireListItem()
+            var questionnaireViews = this.viewFactory.GetUserQuestionnaires(userId, isAdmin, pageIndex, pageSize);
+
+            var questionnaires = questionnaireViews.Select(questionnaire => new QuestionnaireListItem
             {
                 Id = questionnaire.QuestionnaireId,
                 Title = questionnaire.Title,
                 LastEntryDate = questionnaire.LastEntryDate,
-                Owner = questionnaire.Owner,
-                IsPublic = questionnaire.IsPublic || this.userHelper.WebUser.IsAdmin,
-                IsShared = questionnaire.SharedPersons.Any(sharedPerson => sharedPerson == this.userHelper.WebUser.UserId)
+                Owner = questionnaire.CreatorName,
+                IsPublic = questionnaire.IsPublic || isAdmin,
+                IsShared = questionnaire.SharedPersons.Any(sharedPerson => sharedPerson == userId)
             });
 
             var response = this.Request.CreateResponse(questionnaires);
@@ -128,7 +127,7 @@ namespace WB.UI.Designer.Api
 
         private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)
         {
-            if (questionnaireView.IsPublic || questionnaireView.CreatedBy == this.userHelper.WebUser.UserId)
+            if (questionnaireView.IsPublic || questionnaireView.CreatedBy == this.userHelper.WebUser.UserId || this.userHelper.WebUser.IsAdmin)
                 return true;
 
             QuestionnaireSharedPersons questionnaireSharedPersons =

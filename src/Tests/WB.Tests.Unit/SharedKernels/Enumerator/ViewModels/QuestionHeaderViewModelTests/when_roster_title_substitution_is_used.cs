@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using Machine.Specifications;
-using Main.Core.Documents;
-using Main.Core.Entities.Composite;
 using Moq;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -19,20 +16,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
     {
         Establish context = () =>
         {
-            var rosterTitleId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             substitutionTargetQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
-            QuestionnaireDocument questionnaire = Create.QuestionnaireDocument(children: new List<IComposite>
-            {
-                Create.Roster(rosterTitleQuestionId: rosterTitleId, 
-                            fixedTitles: new string[]{"one", "two"},
-                            children: new List<IComposite>
-                            {
-                                Create.TextQuestion(questionId: rosterTitleId, variable: "test"),
-                                Create.TextQuestion(questionId: substitutionTargetQuestionId, text: "uses %rostertitle%", variable:"subst")
-                            })
-               });
-            QuestionnaireModel model = Create.QuestionnaireModelBuilder().BuildQuestionnaireModel(questionnaire);
+            var questionnaireMock = Mock.Of<IQuestionnaire>(_
+               => _.GetQuestionTitle(substitutionTargetQuestionId) == "uses %rostertitle%"
+               && _.GetQuestionInstruction(substitutionTargetQuestionId) == "Instruction"
+               );
 
             var interview = Mock.Of<IStatefulInterview>();
 
@@ -41,8 +30,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             rosterTitleSubstitutionService.Setup(x => x.Substitute(Moq.It.IsAny<string>(), Moq.It.IsAny<Identity>(), Moq.It.IsAny<string>()))
                 .Returns<string, Identity, string>((title, id, interviewId) => title.Replace("%rostertitle%", rosterTitleAnswerValue));
 
-            var questionnaireRepository = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
-            questionnaireRepository.SetReturnsDefault(model);
+            var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
+            questionnaireRepository.SetReturnsDefault(questionnaireMock);
 
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
             interviewRepository.SetReturnsDefault(interview);
@@ -50,9 +39,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository.Object, rosterTitleSubstitutionService: rosterTitleSubstitutionService.Object);
         };
 
-        Because of = () => viewModel.Init("interview", new Identity(substitutionTargetQuestionId, new decimal[] { 1 }));
+        Because of = () => 
+            viewModel.Init("interview", new Identity(substitutionTargetQuestionId, Create.RosterVector(1)));
 
-        It should_substitute_roster_title_value = () => viewModel.Title.ShouldEqual(string.Format("uses {0}", rosterTitleAnswerValue));
+        It should_substitute_roster_title_value = () => 
+            viewModel.Title.ShouldEqual($"uses {rosterTitleAnswerValue}");
 
         static QuestionHeaderViewModel viewModel;
         static Guid substitutionTargetQuestionId;

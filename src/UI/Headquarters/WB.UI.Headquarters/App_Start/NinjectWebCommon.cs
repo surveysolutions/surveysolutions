@@ -52,6 +52,7 @@ using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Implementation.Services;
 using WB.UI.Headquarters.Injections;
 using WB.UI.Headquarters.Services;
+using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
@@ -59,6 +60,7 @@ using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using WB.UI.Shared.Web.MembershipProvider.Settings;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
+using WB.UI.Shared.Web.Versions;
 using WebActivatorEx;
 using FilterScope = System.Web.Http.Filters.FilterScope;
 
@@ -131,7 +133,13 @@ namespace WB.UI.Headquarters
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
                 ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
-                MappingAssemblies = new List<Assembly> { typeof(SurveyManagementSharedKernelModule).Assembly, typeof(HeadquartersBoundedContextModule).Assembly, typeof(SynchronizationModule).Assembly }
+                MappingAssemblies = new List<Assembly>
+                {
+                    typeof(SurveyManagementSharedKernelModule).Assembly,
+                    typeof(HeadquartersBoundedContextModule).Assembly,
+                    typeof(SynchronizationModule).Assembly,
+                    typeof(ProductVersionModule).Assembly,
+                }
             };
 
             var cacheSettings = new ReadSideCacheSettings(
@@ -149,6 +157,7 @@ namespace WB.UI.Headquarters
                 new NLogLoggingModule(),
                 new QuestionnaireUpgraderModule(),
                 new FileInfrastructureModule(),
+                new ProductVersionModule(typeof(SurveyManagementWebModule).Assembly),
                 new HeadquartersRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),

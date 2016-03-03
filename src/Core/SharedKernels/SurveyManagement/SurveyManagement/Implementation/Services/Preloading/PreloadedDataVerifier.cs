@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Properties;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
@@ -14,7 +11,12 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading
 {
@@ -32,27 +34,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             }
         }
 
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage;
-        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
-        private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
-
+      	private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+        private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly IUserViewFactory userViewFactory;
-        
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
 
         public PreloadedDataVerifier(
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage,
-            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage,
-            IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage,
             IPreloadedDataServiceFactory preloadedDataServiceFactory,
-            IUserViewFactory userViewFactory)
+            IUserViewFactory userViewFactory, 
+            IPlainQuestionnaireRepository plainQuestionnaireRepository,
+            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage, 
+            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage)
         {
-            this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
-            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
-            this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.userViewFactory = userViewFactory;
-
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
+            this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
         }
 
         public VerificationStatus VerifySample(Guid questionnaireId, long version, PreloadedDataByFile data)
@@ -144,18 +143,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         
         private IPreloadedDataService CreatePreloadedDataService(Guid questionnaireId, long version)
         {
-            var questionnaire = this.questionnaireDocumentVersionedStorage.AsVersioned().Get(questionnaireId.FormatGuid(), version);
-            var questionnaireExportStructure = this.questionnaireExportStructureStorage.AsVersioned().Get(questionnaireId.FormatGuid(), version);
-            var questionnaireRosterStructure = this.questionnaireRosterStructureStorage.AsVersioned().Get(questionnaireId.FormatGuid(), version);
+            var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireId, version);
+            var questionnaireExportStructure =
+                this.questionnaireExportStructureStorage.GetById(
+                    new QuestionnaireIdentity(questionnaireId, version).ToString());
+            var questionnaireRosterStructure = this.questionnaireRosterStructureStorage.GetById(
+                    new QuestionnaireIdentity(questionnaireId, version).ToString());
 
             if (questionnaireExportStructure == null || questionnaireRosterStructure == null || questionnaire == null)
             {
                 return null;
             }
 
-            questionnaire.Questionnaire.ConnectChildrenWithParent();
+            questionnaire.ConnectChildrenWithParent();
             return this.preloadedDataServiceFactory. CreatePreloadedDataService(questionnaireExportStructure,
-                questionnaireRosterStructure, questionnaire.Questionnaire);
+                questionnaireRosterStructure, questionnaire);
         }
 
         private IEnumerable<Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PreloadedDataVerificationError>>> AtomicVerifiers

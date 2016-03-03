@@ -11,9 +11,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
-using WB.Core.SharedKernels.DataCollection.Factories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
@@ -53,6 +51,8 @@ using WB.Core.Synchronization;
 using WB.Core.Synchronization.EventHandler;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.SharedKernels.SurveyManagement.Commands;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
 
 namespace WB.Core.SharedKernels.SurveyManagement
 {
@@ -93,8 +93,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .ResolvesIdFrom<QuestionnaireCommand>(command => command.QuestionnaireId)
                 .InitializesWith<ImportFromDesigner>(aggregate => aggregate.ImportFromDesigner, config => config.ValidatedBy<QuestionnaireNameValidator>())
                 .InitializesWith<RegisterPlainQuestionnaire>(aggregate => aggregate.RegisterPlainQuestionnaire)
-                .Handles<DeleteQuestionnaire>(aggregate => aggregate.DeleteQuestionnaire)
-                .Handles<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire);
+                .InitializesWith<DeleteQuestionnaire>(aggregate => aggregate.DeleteQuestionnaire)
+                .InitializesWith<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire);
 
             CommandRegistry
                 .Setup<User>()
@@ -194,8 +194,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
             this.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
 
             this.Bind(typeof(ITemporaryDataStorage<>)).To(typeof(FileTemporaryDataStorage<>)).WithConstructorArgument("rootPath", this.currentFolderPath);
-
-            this.Bind<IQuestionnaireCacheInitializer>().To<QuestionnaireCacheInitializer>();
+            
             this.Bind<InterviewDetailsDataLoaderSettings>().ToConstant(this.interviewDetailsDataLoaderSettings);
             this.Bind<InterviewDetailsBackgroundSchedulerTask>().ToSelf();
 
@@ -254,7 +253,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             
             this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepositoryWithCache>().InSingletonScope(); // has internal cache, so should be singleton
-            this.Bind<IQuestionnaireFactory>().To<QuestionnaireFactory>();
             this.Bind<IQuestionnaireRosterStructureFactory>().To<QuestionnaireRosterStructureFactory>();
 
             this.Bind<IPlainInterviewFileStorage>().To<PlainInterviewFileStorage>()

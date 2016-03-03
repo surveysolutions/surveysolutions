@@ -58,6 +58,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\libs\ddidotnet.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FluentAssertions">
       <HintPath>..\..\..\packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.dll</HintPath>
       <Private>True</Private>
@@ -174,6 +182,22 @@
       <HintPath>..\..\..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SQLite.Net, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\SQLite.Net.Core-PCL.3.1.1\lib\portable-win8+net45+wp8+wpa81+MonoAndroid1+MonoTouch1\SQLite.Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SQLite.Net.Async, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\SQLite.Net.Async-PCL.3.1.1\lib\portable-win8+net45+wp8+wpa81+MonoAndroid1+MonoTouch1\SQLite.Net.Async.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SQLite.Net.Platform.Generic, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\SQLite.Net-PCL.3.1.1\lib\net40\SQLite.Net.Platform.Generic.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SQLite.Net.Platform.Win32, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\SQLite.Net-PCL.3.1.1\lib\net4\SQLite.Net.Platform.Win32.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="StatData, Version=1.0.5592.33611, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\libs\StatData.dll</HintPath>
@@ -187,6 +211,18 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite, Version=1.0.99.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Data.SQLite.Core.1.0.99.0\lib\net46\System.Data.SQLite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.99.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Data.SQLite.EF6.1.0.99.0\lib\net46\System.Data.SQLite.EF6.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.99.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\System.Data.SQLite.Linq.1.0.99.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
@@ -375,6 +411,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_sending_command_with_HideIfDisabled_flag.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_group_without_questions_added.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_more_than_200_questions_added_to_one_group.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_roster_has_single_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_linked_question_referencing_on_group_which_is_not_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_linked_question_referencing_on_not_existing_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_question_with_empty_and_too_long_validation_messages_and_expressions.cs" />
@@ -614,6 +651,7 @@
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_checking_should_static_text_be_hidden_if_it_is_disabled.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_interviewer_underlying_questions_in_group.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_answer_types.cs" />
+    <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_parent_for_cascading_question_is_set_to_hide_if_disabled.cs" />
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_creating_YesNoAnswers_from_another_one.cs" />
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_creating_YesNoAnswers_with_all_codes_only.cs" />
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_indexing_YesNoAnswers_with_absent_option_code1.cs" />
@@ -624,8 +662,6 @@
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\YesNoAnswersTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_passing_yesno_question.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\MaskTextTests\when_removing_last_character.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\QuestionnaireModelBuilderTests\QuestionnaireModelBuilderTestContext.cs" />
-    <Compile Include="SharedKernels\Enumerator\Services\QuestionnaireModelBuilderTests\when_building_model_and_questionnaire_document_has_list_roster_without_max_value.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StatefulInterviewTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_determining_has_interview_a_group_and_group_is_in_roster_which_has_instance_with_id_equal_to_group_roster_vector.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_determining_has_interview_a_group_and_group_is_in_roster_which_has_instance_with_id_not_equal_to_group_roster_vector.cs" />
@@ -845,10 +881,6 @@
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireNameValidatorTests\when_validating_ImportFromDesigner_command_and_no_questionnaire_with_such_title_exists.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireNameValidatorTests\when_validating_ImportFromDesigner_command_and_other_questionnaire_with_such_title_already_exists.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireNameValidatorTests\when_validating_ImportFromDesigner_command_and_same_questionnaire_with_such_title_already_exists.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionsInfoDenormalizerTests\QuestionnaireQuestionsInfoDenormalizerTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionsInfoDenormalizerTests\when_importing_questionnaire_with_7_numeric_questions_in_all_roster_types_with_neted_groups.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionsInfoDenormalizerTests\when_questionnaire_deleted_event_recived.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionsInfoDenormalizerTests\when_template_imported_event_recived_with_version_set.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\CommentsExporterTests\when_getting_data_files_for_questionnaire_and_exported_cell_contains_new_line_symbol.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\InterviewActionsExporterTests\InterviewActionsExporterTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\CommentsExporterTests\CommentsExporterTestsContext.cs" />
@@ -861,7 +893,7 @@
     <Compile Include="SharedKernels\SurveyManagement\SupervisorsViewFactoryTests\when_need_sort_by_interviewers.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SupervisorsViewFactoryTests\when_searching_for_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\TeamViewFactoryTests\when_getting_all_supervisors.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\TestAsyncPlainStorage.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\SqliteInmemoryStorage.cs" />
     <Compile Include="SharedKernels\SurveyManagement\TeamViewFactoryTests\when_getting_all_not_locked_supervisors.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewerInterviewsFactoryTests\InterviewerInterviewsFactoryNUnitTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryTests\InterviewSummaryTestsContext.cs" />
@@ -943,7 +975,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_synchronizing_interview_events_but_for_interview_is_responsible_other_user.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_questions_affected_by_substitutions.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireAssemblyFileAccessorTests\when_storing_assembly_with_empty_content.cs" />
-    <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_creating_questionnaire_imported_from_designer_in_census_mode.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_import_questionnaire_and_base64string_of_assembly_is_empty.cs" />
     <Compile Include="SharedKernels\DataCollection\UserTests\UserTestContext.cs" />
     <Compile Include="SharedKernels\DataCollection\UserTests\when_archive_archived_user.cs" />
@@ -2083,13 +2114,6 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\InterviewSummaryEventHandlerUpdateAnswerTest.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_InterviewHardDeleted_event.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\when_handling_SynchronizationMetadataApplied_event_and_interview_was_created_on_capi.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\QuestionnaireExportStructureDenormalizerTests\when_QuestionnaireDeleted_event_recived.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\QuestionnaireExportStructureDenormalizerTests\when_TemplateImported_event_recived.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\QuestionnaireExportStructureDenormalizerTests\when_TemplateImported_event_recived_and_version_is_set.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\ReferenceInfoForLinkedQuestionsDenormalizerTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\when_importing_questionnaire_and_version_is_set.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\when_importing_questionnaire_with_fixed_roster_with_numeric_question_and_linked_.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\ReferenceInfoForLinkedQuestionsDenormalizerTests\when_questionnaire_deleted_event_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\UserDenormalizerTests\UserDenormalizerContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\UserDenormalizerTests\when_UserLockedBySupervisor_received.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\UserDenormalizerTests\when_UserLocked_received.cs" />
@@ -2228,11 +2252,6 @@
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_single_option_question_and_answer_cant_be_mapped_on_any_option.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_single_option_question_and_answer_cant_be_parsed.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_text_question.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireDenormalizerTests\QuestionnaireDenormalizerTestsContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireDenormalizerTests\when_PlainQuestionnaireRegistered_event_arrived.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireDenormalizerTests\when_questionnaire_is_deleted_and_all_interviews_deleted.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireDenormalizerTests\when_questionnaire_is_deleted_but_interviews_still_exists.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\QuestionnaireDenormalizerTests\when_TemplateImported_event_arrived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionInfoFactoryTests\QuestionnaireQuestionInfoFactoryTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionInfoFactoryTests\when_loading_list_of_all_questions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireQuestionInfoFactoryTests\when_loading_list_of_all_questions_and_questionnaire_is_absent.cs" />
@@ -2321,6 +2340,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Applications\Designer\CommandUtilsTests\" />
+    <Folder Include="SharedKernels\Enumerator\Services\QuestionnaireModelBuilderTests\" />
     <Folder Include="SharedKernels\SurveyManagement\Factories\ChangeStatusFactoryTests\" />
   </ItemGroup>
   <ItemGroup>
@@ -2439,7 +2459,9 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\packages\System.Data.SQLite.Core.1.0.99.0\build\net46\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\System.Data.SQLite.Core.1.0.99.0\build\net46\System.Data.SQLite.Core.targets'))" />
   </Target>
+  <Import Project="..\..\..\packages\System.Data.SQLite.Core.1.0.99.0\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\..\..\packages\System.Data.SQLite.Core.1.0.99.0\build\net46\System.Data.SQLite.Core.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -95,11 +95,15 @@ angular.module('designerApp')
             };
            
             $scope.showVerificationErrors = function () {
+                if ($scope.verificationStatus.errors.length === 0)
+                    return;
                 $scope.verificationStatus.typeOfMessageToBeShown = ERROR;
                 $scope.verificationStatus.messagesToShow = $scope.verificationStatus.errors;
                 $scope.verificationStatus.visible = true;
             }
             $scope.showVerificationWarnings = function () {
+                if ($scope.verificationStatus.warnings.length === 0)
+                    return;
                 $scope.verificationStatus.typeOfMessageToBeShown = WARNING;
                 $scope.verificationStatus.messagesToShow = $scope.verificationStatus.warnings;
                 $scope.verificationStatus.visible = true;
@@ -171,17 +175,12 @@ angular.module('designerApp')
                         chapterId: reference.chapterId,
                         itemId: reference.itemId
                     });
-
-                    if (!_.isNull(reference.failedValidationConditionIndex)) {
-                        _.defer(function() {
-                            $(".question-editor .form-holder").scrollTo("#validationCondition" + reference.failedValidationConditionIndex, 500, {
-                                easing: 'swing',
-                                offset: -10
-                            });
-                        });
-                    }
                 }
             };
+            
+            $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams) {
+                utilityService.scrollToValidationCondition(toParams.validationIndex);
+            });
 
             $scope.removeItemWithIdFromErrors = function (itemId) {
                 var errors = $scope.verificationStatus.errors;

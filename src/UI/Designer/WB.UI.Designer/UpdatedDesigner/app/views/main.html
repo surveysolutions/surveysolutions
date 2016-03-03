@@ -16,7 +16,7 @@
                 </div>
                 <div class="questionnarie-title-buttons">
                     <span class="text-muted">({{questionnaire.questionsCount}}Q, {{questionnaire.groupsCount}}S, {{questionnaire.rostersCount}}R)</span>
-                    <input id="verification-btn" type="button" class="btn" value="COMPILE" ng-click="verify()"/>
+                    <input id="verification-btn" type="button" class="btn" value="COMPILE" ng-click="verify()" />
                     <span ng-show="verificationStatus.warnings!=null && verificationStatus.errors!=null">
                         <span data-toggle="modal" ng-show="(verificationStatus.warnings.length + verificationStatus.errors.length) > 0" class="error-message ng-hide" ng-class="{'no-errors': verificationStatus.errors.length == 0}">
                             <a href="javascript:void(0);"
@@ -42,7 +42,7 @@
                             </a>
                         </span>
                         <span class="text-success" ng-show="(verificationStatus.warnings.length + verificationStatus.errors.length) === 0">OK</span>
-                    
+
                         <span class="text-success"><em>saved at <span>{{verificationStatus.time | date:'H:mm'}}</span></em></span>
                     </span>
                     <span class="error-message strong" ng-show="questionnaire.isReadOnlyForUser">Read Only</span>
@@ -101,7 +101,7 @@
             </div>
         </div>
     </div>
-    <div class="left-side-panel macroses" ng-class="{unfolded: isFolded }" ng-controller="MacrosCtrl" data-empty-place-holder-enabled="false">
+    <div class="left-side-panel macroses" ng-class="{unfolded: isFolded }" ng-controller="MacrosCtrl">
         <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
         <div class="left-side-panel-content macros-panel">
             <div class="foldback-button-region" ng-click="foldback();$event.stopPropagation()">
@@ -116,7 +116,7 @@
                         <ul ng-model="macros">
                             <li class="macros-panel-item" ng-repeat="macro in macros">
                                 <ng-form name="macroForm">
-                                    <a href ng-click="deleteMacro($index)" class="btn" tabindex="-1"></a>
+                                    <a href ng-click="deleteMacro($index)" class="btn delete-btn" tabindex="-1"></a>
                                     <div class="input-group macros-name">
                                         <span class="input-group-addon">$</span>
                                         <input focus-on-out="focusMacro{{macro.itemId}}" placeholder="macro name" maxlength="32" spellcheck="false" ng-model="macro.name" name="name" class="form-control" type="text" />
@@ -144,7 +144,7 @@
             </div>
         </div>
     </div>
-    <div class="left-side-panel lookup-tables" ng-class="{unfolded: isFolded }" ng-controller="LookupTablesCtrl" data-empty-place-holder-enabled="false">
+    <div class="left-side-panel lookup-tables" ng-class="{unfolded: isFolded }" ng-controller="LookupTablesCtrl">
         <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
         <div class="left-side-panel-content lookup-tables-panel">
             <div class="foldback-button-region" ng-click="foldback();$event.stopPropagation()">
@@ -152,7 +152,9 @@
             </div>
             <div class="lookup-tables">
                 <perfect-scrollbar class="scroller">
-                    <h3><span ng-show="lookupTables.length!=0">{{lookupTables.length}}</span> Lookup Table<span ng-show="lookupTables.length!=1">s</span>:</h3>
+                    <h3>
+                        <span ng-show="lookupTables.length!=0">{{lookupTables.length}}</span> Lookup Table<span ng-show="lookupTables.length!=1">s</span>:
+                    </h3>
                     <form role="form" name="lookupTablesForm" novalidate>
                         <ul ng-model="lookupTables">
                             <li class="lookup-table-panel-item" ng-repeat="table in lookupTables" ngf-drop="" ngf-change="fileSelected(table, $file, lookupTableForm)" ngf-max-size="1MB" accept=".tab,.txt" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
@@ -160,12 +162,12 @@
                                     <a href ng-click="deleteLookupTable($index)" class="btn delete-btn" tabindex="-1"></a>
                                     <input focus-on-out="focusLookupTable{{table.itemId}}" required="" placeholder="table name" maxlength="32" spellcheck="false" ng-model="table.name" name="name" class="form-control table-name" type="text" />
                                     <div class="divider"></div>
-                                    <input placeholder="file name" required="" spellcheck="false" ng-model="table.fileName" name="fileName" class="form-control" disabled="" type="text"/>
-                                    
-                                    <div  class="drop-box">
+                                    <input placeholder="file name" required="" spellcheck="false" ng-model="table.fileName" name="fileName" class="form-control" disabled="" type="text" />
+
+                                    <div class="drop-box">
                                         Drop File here
                                     </div>
-                                   
+
                                     <div class="actions clearfix" ng-class="{dirty: lookupTableForm.$dirty }">
                                         <div ng-show="lookupTableForm.$dirty" class="pull-left">
                                             <button type="submit" ng-disabled="lookupTableForm.$invalid" class="btn lighter-hover" ng-click="saveLookupTable(table, lookupTableForm);$event.stopPropagation()">Save</button>
@@ -189,12 +191,73 @@
                 </perfect-scrollbar>
             </div>
         </div>
+
+    </div>
+    <div class="left-side-panel attachments" ng-class="{unfolded: isFolded }" ng-controller="AttachmentsCtrl">
+        <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
+        <div class="left-side-panel-content attachments-panel">
+            <div class="foldback-button-region" ng-click="foldback();$event.stopPropagation()">
+                <div class="foldback-button"></div>
+            </div>
+            <div class="attachments">
+                <perfect-scrollbar class="scroller">
+                    <h3 ng-pluralize
+                        count="attachments.length"
+                        when="{
+                            '0': 'No Files Attachment to questionnaire',
+                            '1': '{} File Attachment ({{totalSize}}Mb total)',
+                            'other': '{} Files Attachments ({{totalSize}}Mb total)'}"></h3>
+                    <form role="form" name="attachmentsForm" novalidate>
+                        <ul ng-model="attachments">
+                            <li class="attachments-panel-item" ng-repeat="attachment in attachments" ngf-drop="" ngf-change="fileSelected(attachment, $file, attachmentForm)" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
+                                <ng-form name="attachmentForm">
+                                    <a href ng-click="deleteAttachment($index)" class="btn delete-btn" tabindex="-1"></a>
+                                    <div class="attachment">
+                                        <div class="attachment-preview">
+                                            <div class="attachment-preview-cover">
+                                                <img ngf-thumbnail="attachment.file || 'http://i.livescience.com/images/i/000/065/149/iFF/bananas.jpg'">
+                                            </div>
+                                        </div>
+                                        <div class="attachment-content">
+                                            <input focus-on-out="focusAttachment{{attachment.itemId}}" required="" placeholder="table name" maxlength="32" spellcheck="false" ng-model="attachment.name" name="name" class="form-control table-name" type="text" />
+                                            <div class="divider"></div>
+                                            <input class="form-control file-name" placeholder="file name" required="" spellcheck="false" ng-model="attachment.fileName" name="fileName" disabled="" type="text" />
+                                            <div class="drop-box">
+                                                Drop File here
+                                            </div>
+                                            <p class="attachment-meta" ng-show="attachment.hasUploadedFile">{{attachment.width}}&nbsp;&times;&nbsp;{{attachment.height}}&nbsp;px, format:&nbsp;{{attachment.format}}, size:&nbsp;{{formatBytes(attachment.sizeInBytes)}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="actions clearfix" ng-class="{dirty: attachmentForm.$dirty }">
+                                        <div ng-show="attachmentForm.$dirty" class="pull-left">
+                                            <button type="submit" ng-disabled="attachmentForm.$invalid" class="btn lighter-hover" ng-click="saveAttachment(attachment, attachmentForm);$event.stopPropagation()">Save</button>
+                                            <button type="button" class="btn lighter-hover" ng-click="cancel(attachment, attachmentForm);$event.stopPropagation()">Cancel</button>
+                                        </div>
+                                        <div class="permanent-actions pull-right clearfix">
+                                            <a href="{{downloadLookupFileBaseUrl + questionnaire.questionnaireId +'?fileId='+ attachment.itemId}}" ng-show="attachment.hasUploadedFile" class="btn btn-default pull-right" target="_blank">Download</a>
+                                            <button class="btn btn-default pull-right" ngf-select="" ngf-accept="'image/*'" ngf-change="fileSelected(attachment, $file, attachmentForm);$event.stopPropagation()" type="file">
+                                                <span ng-hide="attachment.hasUploadedFile">Select file</span>
+                                                <span ng-show="attachment.hasUploadedFile">Update file</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </ng-form>
+                            </li>
+                        </ul>
+                    </form>
+                    <div class="button-holder">
+                        <input type="button" class="btn lighter-hover" value="ADD NEW Attachment" ng-click="addNewAttachment()">
+                    </div>
+                </perfect-scrollbar>
+            </div>
+        </div>
     </div>
     <div id="left-menu" ng-controller="LeftMenuCtrl">
         <ul>
-            <li><a class="left-menu-chapters" ng-class="{unfolded: isFoldedChapters }" ng-click="unfoldChapters();"></a></li>
-            <li><a class="left-menu-macroses" ng-class="{unfolded: isFoldedMacros }" ng-click="unfoldMacros();"></a></li>
-            <li><a class="left-menu-lookupTables" ng-class="{unfolded: isFoldedLookupTables }" ng-click="unfoldLookupTables();"></a></li>
+            <li><a class="left-menu-chapters" ng-class="{unfolded: isUnfoldedChapters }" ng-click="unfoldChapters();"></a></li>
+            <li><a class="left-menu-macroses" ng-class="{unfolded: isUnfoldedMacros }" ng-click="unfoldMacros();"></a></li>
+            <li><a class="left-menu-lookupTables" ng-class="{unfolded: isUnfoldedLookupTables }" ng-click="unfoldLookupTables();"></a></li>
+            <li><a class="left-menu-attachments" ng-class="{unfolded: isUnfoldedAttachments }" ng-click="unfoldAttachments();"></a></li>
         </ul>
     </div>
 
@@ -225,7 +288,7 @@
                                         <span class="title">{{reference.title}}</span>
                                         <span ng-if="reference.type == 'Question' || reference.type == 'Roster' || reference.type == 'Macro'" class="variable" ng-bind="reference.variable">aaaa</span>
                                     </a>
-                                </li> 
+                                </li>
                             </ul>
                         </div>
                     </div>

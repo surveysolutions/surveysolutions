@@ -80,6 +80,9 @@
       <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.V7.AppCompat.4.0.0\lib\MonoAndroid403\MvvmCross.Droid.Support.V7.AppCompat.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MvvmCross.Droid.Support.V7.Fragging">
+      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.V7.Fragging.4.0.0\lib\MonoAndroid403\MvvmCross.Droid.Support.V7.Fragging.dll</HintPath>
+    </Reference>
     <Reference Include="MvvmCross.Droid.Support.V7.RecyclerView, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.V7.RecyclerView.4.0.0\lib\MonoAndroid403\MvvmCross.Droid.Support.V7.RecyclerView.dll</HintPath>
       <Private>True</Private>
@@ -190,7 +193,10 @@
   <ItemGroup>
     <Compile Include="Activities\ActivityExtensions.cs" />
     <Compile Include="Activities\BaseActivity.cs" />
+    <Compile Include="Activities\BaseFragment.cs" />
+    <Compile Include="Activities\CompleteInterviewFragment.cs" />
     <Compile Include="Activities\EnumeratorInterviewActivity.cs" />
+    <Compile Include="Activities\InterviewEntitiesListFragment.cs" />
     <Compile Include="Activities\MenuLocalizationHelper.cs" />
     <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
@@ -224,6 +230,7 @@
     <Compile Include="CustomBindings\MvxAutoCompleteTextViewResetTextBinding.cs" />
     <Compile Include="CustomBindings\MvxAutoCompleteTextViewShowPopupOnFocusBinding.cs" />
     <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
+    <Compile Include="CustomBindings\FrameLayoutCurrentScreenBinding.cs" />
     <Compile Include="CustomBindings\TextViewIsSelectedYesNoOptionColorBinding.cs" />
     <Compile Include="CustomBindings\TextViewBoldBinding.cs" />
     <Compile Include="CustomBindings\TextViewGroupInfoBinding.cs" />

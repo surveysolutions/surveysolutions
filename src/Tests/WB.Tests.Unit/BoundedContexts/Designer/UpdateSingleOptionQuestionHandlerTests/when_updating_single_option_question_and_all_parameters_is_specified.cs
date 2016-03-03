@@ -49,7 +49,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateSingleOptionQuestionHandl
                 validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>
                 {
                     new ValidationCondition {Expression = validationExpression, Message = validationMessage}
-                });
+                },
+                linkedFilterExpression: null);
 
         private Cleanup stuff = () =>
         {

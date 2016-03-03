@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Machine.Specifications;
@@ -6,11 +6,11 @@ using Moq;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -27,8 +27,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Identity(questionGuid, Empty.RosterVector);
 
-            var questionnaire = BuildDefaultQuestionnaire(questionId);
-            ((YesNoQuestionModel)questionnaire.Questions.First().Value).IsRosterSizeQuestion = true;
+            var questionnaire = Mock.Of<IQuestionnaire>(_
+                => _.ShouldQuestionRecordAnswersOrder(questionId.Id) == false
+                && _.GetMaxSelectedAnswerOptions(questionId.Id) == null
+                && _.ShouldQuestionSpecifyRosterSize(questionId.Id) == true
+                && _.GetAnswerOptionsAsValues(questionId.Id) == new decimal[] { 1, 2, 3, 4, 5 }
+                && _.GetAnswerOptionTitle(questionId.Id, 1) == "item1"
+                && _.GetAnswerOptionTitle(questionId.Id, 2) == "item2"
+                && _.GetAnswerOptionTitle(questionId.Id, 3) == "item3"
+                && _.GetAnswerOptionTitle(questionId.Id, 4) == "item4"
+                && _.GetAnswerOptionTitle(questionId.Id, 5) == "item5"
+            );
 
             var yesNoAnswer = Create.YesNoAnswer(questionGuid, Empty.RosterVector);
             yesNoAnswer.SetAnswers(new[]
@@ -38,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
             var interview = Mock.Of<IStatefulInterview>(x => x.GetYesNoAnswer(questionId) == yesNoAnswer);
 
-            var questionnaireStorage = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
+            var questionnaireStorage = new Mock<IPlainQuestionnaireRepository>();
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
 
             questionnaireStorage.SetReturnsDefault(questionnaire);
@@ -49,7 +58,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             userInteractionServiceMock
                 .Setup(_ => _.ConfirmAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
                 .Returns(Task.FromResult(true))
-                .Callback(() => yesNoAnswer.SetAnswers(new[]
+                .Callback(() => yesNoAnswer.SetAnswers(new []
                 {
                     new AnsweredYesNoOption(3, true) // option 3 was set to yes while user was thinking on his answer
                 }));
@@ -67,7 +76,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
         It should_not_undo_checked_property_change = () => viewModel.Options.Last().Selected.ShouldBeNull();
 
-        It should_call_userInteractionService_for_reduce_roster_size = () =>
+        It should_call_userInteractionService_for_reduce_roster_size = () => 
             userInteractionServiceMock.Verify(s => s.ConfirmAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>()), Times.Once());
 
         It should_answer_question_with_updated_state_of_options = () =>
