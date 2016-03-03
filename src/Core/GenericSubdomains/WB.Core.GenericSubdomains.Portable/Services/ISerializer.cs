@@ -20,6 +20,6 @@ namespace WB.Core.GenericSubdomains.Portable.Services
             SerializationType serializationType);
 
         object Deserialize(string payload, Type type, TypeSerializationSettings typeSerializationSettings);
-        object DeserializeFromStream(Stream stream, Type type);
+        object DeserializeFromStream(Stream stream, Type type, TypeSerializationSettings? typeSerializationSettings = null);
     }
 }

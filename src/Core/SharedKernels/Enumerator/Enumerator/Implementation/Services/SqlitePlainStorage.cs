@@ -28,8 +28,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, entityName + "-data.sqlite3");
             this.storage = new SQLiteConnectionWithLock(sqLitePlatform,
                 new SQLiteConnectionString(pathToDatabase, true, new BlobSerializerDelegate(
-                    serializer.SerializeToByteArray,
-                    (data, type) => serializer.DeserializeFromStream(new MemoryStream(data), type),
+                    (data) => serializer.SerializeToByteArray(data, TypeSerializationSettings.AllTypes, SerializationType.Json),
+                    (data, type) => serializer.DeserializeFromStream(new MemoryStream(data), type, TypeSerializationSettings.AllTypes),
                     (type) => true)))
             {
                 TraceListener = new MvxTraceListener($"{entityName}-SQL-Queries")

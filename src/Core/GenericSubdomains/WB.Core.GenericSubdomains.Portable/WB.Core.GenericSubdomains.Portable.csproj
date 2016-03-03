@@ -69,6 +69,11 @@
     <Compile Include="Implementation\RestCredentials.cs" />
     <Compile Include="Implementation\RestException.cs" />
     <Compile Include="Implementation\RestExceptionType.cs" />
+    <Compile Include="Implementation\Services\CompressedContent.cs" />
+    <Compile Include="Implementation\Services\Compressor.cs" />
+    <Compile Include="Implementation\Services\DecompressionHandler.cs" />
+    <Compile Include="Implementation\Services\DeflateCompressor.cs" />
+    <Compile Include="Implementation\Services\GZipCompressor.cs" />
     <Compile Include="Implementation\Services\RestService.cs" />
     <Compile Include="Implementation\Services\SubstitutionService.cs" />
     <Compile Include="Implementation\ServiceVariables\ServiceColumns.cs" />
@@ -95,6 +100,7 @@
     </Compile>
     <Compile Include="QueryableExtensions.cs" />
     <Compile Include="RosterVectorUtils.cs" />
+    <Compile Include="Services\DecompressionHandler.cs" />
     <Compile Include="Services\IJsonSerializerSettingsFactory.cs" />
     <Compile Include="Services\ILoggerProvider.cs" />
     <Compile Include="Services\ISerializer.cs" />

@@ -127,7 +127,7 @@ namespace WB.UI.Interviewer.Activities
             {
                 var interviewDetailsText = await interviewDetailsFile.ReadAllTextAsync();
                 var interviewSynchronizationDto =
-                    serializer.Deserialize<InterviewSynchronizationDto>(interviewDetailsText);
+                    serializer.Deserialize<InterviewSynchronizationDto>(interviewDetailsText, TypeSerializationSettings.AllTypes);
 
                 await commandService.ExecuteAsync(new SynchronizeInterviewCommand(
                     interviewId: Guid.Parse(interviewDetailsFile.Name),
@@ -201,7 +201,7 @@ namespace WB.UI.Interviewer.Activities
                 QuestionnaireId = new QuestionnaireIdentity(Guid.Parse(x.Survey), x.SurveyVersion).ToString(),
                 LastInterviewerOrSupervisorComment = x.Comments,
                 Status = (InterviewStatus)x.Status,
-                AnswersOnPrefilledQuestions = serializer.Deserialize<FeaturedItem[]>(x.Properties).Select(y => new InterviewAnswerOnPrefilledQuestionView
+                AnswersOnPrefilledQuestions = serializer.Deserialize<FeaturedItem[]>(x.Properties, TypeSerializationSettings.AllTypes).Select(y => new InterviewAnswerOnPrefilledQuestionView
                 {
                     QuestionId = y.PublicKey,
                     QuestionText = y.Title,
@@ -273,7 +273,7 @@ namespace WB.UI.Interviewer.Activities
                     {
                         QuestionnaireEntityTypeName = x.Id.Split('$')[0],
                         QuestionnaireId = x.Id = x.Id.Split('$')[1] + "$" + x.Id.Split('$')[2],
-                        Entity = serializer.Deserialize<object>(x.SerializedData)
+                        Entity = serializer.Deserialize<object>(x.SerializedData, TypeSerializationSettings.AllTypes)
                     }).ToList();
 
             var questionnaireModels =
