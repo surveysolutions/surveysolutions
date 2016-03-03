@@ -2,9 +2,9 @@
 using Android.Text;
 using Android.Text.Style;
 using Android.Widget;
-using Cirrious.CrossCore.Droid.Platform;
-using Cirrious.MvvmCross.Binding;
 using Microsoft.Practices.ServiceLocation;
+using MvvmCross.Binding;
+using MvvmCross.Platform.Droid.Platform;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 

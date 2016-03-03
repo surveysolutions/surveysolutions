@@ -1,8 +1,7 @@
-﻿using System;
-using Android.Text;
+﻿using Android.Text;
 using Android.Text.Style;
 using Android.Widget;
-using Cirrious.MvvmCross.Binding;
+using MvvmCross.Binding;
 using WB.UI.Shared.Enumerator.CustomBindings;
 
 namespace WB.UI.Interviewer.CustomBindings

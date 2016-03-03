@@ -32,13 +32,10 @@
             EnablementStates.Add(<#=question.StateName#>.ItemId, <#=question.StateName#>);
             <#
                                 
-            if(!string.IsNullOrWhiteSpace(question.Validation))
+            if(question.HasAnyValidation())
             {#>    
             ValidationExpressions.Add(new Identity(IdOf.<#= question.IdName#>, rosterVector), new Func<bool>[] {                             
-                
-                <#if(!string.IsNullOrWhiteSpace(question.Validation)) {#>  
-                    () => this.IsAnswerEmpty(<#=question.VariableName#>) || <#=question.ValidationMethodName#>() , 
-                <# }#>
+                () => this.IsAnswerEmpty(<#=question.VariableName#>) || <#=question.ValidationExpressions.FirstOrDefault(x=> !string.IsNullOrWhiteSpace(x.ValidationExpression)).ValidationMethodName#>()                 
             });             
             <# }#>
             AddUpdaterToMap(IdOf.<#=question.IdName#>, (<#=question.TypeName#> val) => {<#=question.MemberName#>  = val; });

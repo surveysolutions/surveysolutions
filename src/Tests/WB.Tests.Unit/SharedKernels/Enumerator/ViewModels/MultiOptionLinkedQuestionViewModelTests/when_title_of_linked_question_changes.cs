@@ -39,8 +39,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
 
             answerNotifier = Create.AnswerNotifier();
 
-            viewModel = CreateViewModel(questionnaire, interview.Object, answerNotifier);
-            viewModel.Init("interview", questionId, Create.NavigationState());
+            questionViewModel = CreateViewModel(questionnaire, interview.Object, answerNotifier);
+            questionViewModel.Init("interview", questionId, Create.NavigationState());
         };
 
         Because of = () =>
@@ -50,9 +50,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             answerNotifier.Handle(Create.Event.TextQuestionAnswered(linkedToQuestionId.Id, linkedToQuestionId.RosterVector, "changed"));
         };
 
-        It should_insert_new_option = () => viewModel.Options.First().Title.ShouldEqual("changed");
+        It should_insert_new_option = () => questionViewModel.Options.First().Title.ShouldEqual("changed");
 
-        static MultiOptionLinkedQuestionViewModel viewModel;
+        static MultiOptionLinkedToQuestionQuestionViewModel questionViewModel;
         static Identity questionId;
         static AnswerNotifier answerNotifier;
         static Identity linkedToQuestionId;

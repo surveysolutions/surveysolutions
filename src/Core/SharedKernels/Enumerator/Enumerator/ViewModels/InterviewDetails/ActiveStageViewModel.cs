@@ -1,5 +1,5 @@
 using System;
-using Cirrious.MvvmCross.ViewModels;
+using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     {
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
         private NavigationState navigationState;
-        string interviewId;
+        private string interviewId;
 
         public ActiveStageViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,

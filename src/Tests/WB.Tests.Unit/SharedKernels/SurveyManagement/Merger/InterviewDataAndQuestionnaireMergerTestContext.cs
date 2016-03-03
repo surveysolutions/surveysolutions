@@ -6,6 +6,9 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
@@ -41,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         }
 
         internal static void AddInterviewLevel(InterviewData interview, ValueVector<Guid> scopeVector,
-            decimal[] rosterVector, Dictionary<Guid, object> answeredQuestions,
+            decimal[] rosterVector, Dictionary<Guid, object> answeredQuestions = null,
             Dictionary<Guid, string> rosterTitles = null, int? sortIndex = null)
         {
             InterviewLevel rosterLevel;
@@ -55,16 +58,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                 rosterLevel = interview.Levels[levelKey];
                 rosterLevel.ScopeVectors.Add(scopeVector, sortIndex);
             }
+            if (answeredQuestions != null)
+                foreach (var answeredQuestion in answeredQuestions)
+                {
+                    if (!rosterLevel.QuestionsSearchCache.ContainsKey(answeredQuestion.Key))
+                        rosterLevel.QuestionsSearchCache.Add(answeredQuestion.Key,
+                            new InterviewQuestion(answeredQuestion.Key));
 
-            foreach (var answeredQuestion in answeredQuestions)
-            {
-                if (!rosterLevel.QuestionsSearchCache.ContainsKey(answeredQuestion.Key))
-                    rosterLevel.QuestionsSearchCache.Add(answeredQuestion.Key,
-                        new InterviewQuestion(answeredQuestion.Key));
-
-                var nestedQuestion = rosterLevel.QuestionsSearchCache[answeredQuestion.Key];
-                nestedQuestion.Answer = answeredQuestion.Value;
-            }
+                    var nestedQuestion = rosterLevel.QuestionsSearchCache[answeredQuestion.Key];
+                    nestedQuestion.Answer = answeredQuestion.Value;
+                }
 
             if (rosterTitles != null)
             {
@@ -186,9 +189,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             };
         }
 
-        internal static InterviewDataAndQuestionnaireMerger CreateMerger()
+        internal static InterviewDataAndQuestionnaireMerger CreateMerger(QuestionnaireDocument questionnaire)
         {
-            return new InterviewDataAndQuestionnaireMerger();
+            return new InterviewDataAndQuestionnaireMerger(
+                substitutionService: new SubstitutionService());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)

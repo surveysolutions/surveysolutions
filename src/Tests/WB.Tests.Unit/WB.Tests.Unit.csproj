@@ -42,30 +42,6 @@
     <Reference Include="AppDomainToolkit">
       <HintPath>..\..\..\packages\AppDomainToolkit.1.0.4.1\lib\net\AppDomainToolkit.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.CrossCore, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.CrossCore.4.0.0-beta7\lib\net45\Cirrious.CrossCore.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Cirrious.CrossCore.Wpf, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.CrossCore.4.0.0-beta7\lib\net45\Cirrious.CrossCore.Wpf.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Cirrious.MvvmCross, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.4.0.0-beta7\lib\net45\Cirrious.MvvmCross.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Cirrious.MvvmCross.Localization, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.CrossCore.4.0.0-beta7\lib\net45\Cirrious.MvvmCross.Localization.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Cirrious.MvvmCross.Test.Core, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.Tests.4.0.0-beta7\lib\net45\Cirrious.MvvmCross.Test.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Cirrious.MvvmCross.Wpf, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.MvvmCrossLibraries.4.0.0-beta7\lib\net45\Cirrious.MvvmCross.Wpf.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Common.Logging, Version=3.3.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Common.Logging.3.3.0\lib\net40\Common.Logging.dll</HintPath>
       <Private>True</Private>
@@ -131,21 +107,41 @@
       <HintPath>..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Moq, Version=4.2.1502.911, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Moq.4.2.1502.0911\lib\net40\Moq.dll</HintPath>
+    <Reference Include="Moq, Version=4.2.1510.2205, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Mvc.Mailer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\MvcMailer.4.5\lib\45\Mvc.Mailer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MvvmCross.Plugins.Messenger, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.HotTuna.Plugin.Messenger.4.0.0-beta7\lib\net45\MvvmCross.Plugins.Messenger.dll</HintPath>
+    <Reference Include="MvvmCross.Core, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Core.4.0.0\lib\net45\MvvmCross.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="MvvmCross.Platform, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Platform.4.0.0\lib\net45\MvvmCross.Platform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MvvmCross.Platform.Wpf, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Platform.4.0.0\lib\net45\MvvmCross.Platform.Wpf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MvvmCross.Plugins.Messenger, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Plugin.Messenger.4.0.0\lib\net45\MvvmCross.Plugins.Messenger.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MvvmCross.Test.Core, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Tests.4.0.0\lib\net45\MvvmCross.Test.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MvvmCross.Wpf, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MvvmCross.Core.4.0.0\lib\net45\MvvmCross.Wpf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -371,11 +367,27 @@
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_single_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_real_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_text_question.cs" />
+    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_hidden_question.cs" />
+    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_linked_on_roster_question.cs" />
+    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_question_with_multiple_validations.cs" />
+    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_yes_no_question.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CopyPasteTests\when_pasting_group_with_questions_into_group.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_sending_command_with_HideIfDisabled_flag.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_linked_question_referencing_on_group_which_is_not_roster.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_linked_question_referencing_on_not_existing_roster.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_question_with_empty_and_too_long_validation_messages_and_expressions.cs" />
+    <Compile Include="BoundedContexts\Designer\UpdateMultiOptionQuestionHandlerTests\when_updating_multi_option_question_that_is_linked_and_referencing_group_is_not_roster.cs" />
+    <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_GeoLocationQuestionAnswered_event_second_time.cs" />
+    <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_YesNoQuestionAnswered_event.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardFactoryTests\InterviewerDashboardFactoryTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardFactoryTests\when_getting_interviewer_dashboard.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerInterviewAccessorTests\InterviewerInterviewAccessorTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerInterviewAccessorTests\when_creating_interview.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerInterviewAccessorTests\when_removing_interview.cs" />
+    <Compile Include="BoundedContexts\Interviewer\Services\InterviewerPlainInterviewFileStorageTests\InterviewerPlainInterviewFileStorageTestsContext.cs" />
+    <Compile Include="BoundedContexts\Interviewer\Services\InterviewerPlainInterviewFileStorageTests\when_storing_interview_binary_data.cs" />
+    <Compile Include="BoundedContexts\Interviewer\Services\InterviewerPlainInterviewFileStorageTests\when_removing_interview_binary_data.cs" />
+    <Compile Include="BoundedContexts\Interviewer\Services\InterviewerPlainInterviewFileStorageTests\when_getting_interview_binary_data.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\InterviewerQuestionnaireAccessorTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\when_getting_census_questionnaire_identities.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\when_remove_questionnaire.cs" />
@@ -383,6 +395,11 @@
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerQuestionnaireAccessorTests\when_storing_questionnaire.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\QuestionnaireAssemblyFileAccessorTests\QuestionnaireAssemblyFileAccessorTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\QuestionnaireAssemblyFileAccessorTests\when_removing_questionnaire_assembly.cs" />
+    <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_init_and_local_storage_has_2_public_and_2_my_questionnaires.cs" />
+    <Compile Include="CreateViewModels.cs" />
+    <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\CensusQuestionnaireDashboardItemViewModelTestsContext.cs" />
+    <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\when_create_new_interview.cs" />
+    <Compile Include="BoundedContexts\Interviewer\ViewModels\CensusQuestionnaireDashboardItemViewModelTests\when_init.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_designer_historical_events_Json.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_hq_historical_events.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_designer_historical_events.cs" />
@@ -451,7 +468,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_updating_roster_group_by_fixed_titles_and_fixed_titles_contain_one_item.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_multi_option_question_has_an_option_with_negative_value.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_multi_option_yes_no_linked_question.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_contains_10_rosters.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_contains_21_rosters.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_contains_2_gps_prefilled_questions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_in_which_3_static_texts_have_same_id_and_2_rosters_have_same_other_id.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_in_which_particular_question_and_group_have_same_id.cs" />
@@ -517,7 +534,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_group_by_categorical_multy_question_with_max_allowed_answers_more_then_40.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_roster_group_by_categorical_multy_question_with_more_then_40_options.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_nested_group_level_11.cs" />
-    <Compile Include="BoundedContexts\Designer\UpdateGpsCoordinatesQuestionHandlerTests\when_updating_gps_coordinates_question_and_validation_contains_2_id_references_and_1_of_them_invalid.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_that_has_size_more_then_5MB.cs" />
     <Compile Include="BoundedContexts\Headquarters\UserBatchCreatorTests\UserBatchCreatorTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\UserPreloadingServiceTests\UserPreloadingServiceTests.cs" />
@@ -543,7 +559,6 @@
     <Compile Include="BoundedContexts\Tester\ViewModels\PrefilledQuestionsViewModelTests\PrefilledQuestionsViewModelTestContext.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\PrefilledQuestionsViewModelTests\when_opening_not_existed_interview.cs" />
     <Compile Include="Create.Event.cs" />
-    <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_FeaturedItem_list_with_json_utils.cs" />
     <Compile Include="GenericSubdomains\Utils\ObjectExtensionsTests\when_wrapping_value_with_initialized_lazy_class.cs" />
     <Compile Include="GenericSubdomains\Utils\ProgressAggregator\when_reporting_progress_from_two_progresses.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_2_functional_handlers_and_second_catch_non_critical_exception.cs" />
@@ -551,8 +566,13 @@
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_2_old_school_handlers_and_first_catch_non_critical_exception.cs" />
     <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsV4Tests.cs" />
     <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsV5Tests.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewAnswersCommandValidatorTests\when_responsible_supervisor_answer_on_supervisors_questions.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewAnswersCommandValidatorTests\when_not_responsible_supervisor_answer_on_supervisors_questions.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewExpressionStateStub.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\Validation\when_answering_question_with_multiple_failed_validation_conditions.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_integer_question_decreasing_roster_size_of_roster_with_nested_roster.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_single_option_linked_on_roster_title_question.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_single_option_linked_question_with_the_link_on_absent_roster_row.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_decreasing_roster_size_of_roster_with_nested_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_decreasing_roster_size_of_roster_with_nested_roster_with_empty_value.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question.cs" />
@@ -571,12 +591,15 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_qr_barcode_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_single_option_linked_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_single_option_question_received_by_interviewer.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_all_type_of_questions_and_interview_approved_by_hq.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_text_list_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_text_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_yes_no_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_assign_interview_on_same_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_comment_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_flag_question_received_by_interviewer.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_row_from_link_source_roster.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_row_from_multioption_link_source_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_set_flag_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_two_nested_rosters_linked_to_the_same_list_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_unapprove_by_headquarters.cs" />
@@ -585,7 +608,9 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_numeric_roster_size_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_textlist_roster_size_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\with_event_context.cs" />
+    <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_checking_should_static_text_be_hidden_if_it_is_disabled.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_interviewer_underlying_questions_in_group.cs" />
+    <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_answer_types.cs" />
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_creating_YesNoAnswers_from_another_one.cs" />
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_creating_YesNoAnswers_with_all_codes_only.cs" />
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_indexing_YesNoAnswers_with_absent_option_code1.cs" />
@@ -615,6 +640,7 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_finding_referenced_answers_for_linked_question_on_roster_level_3_and_referenced_answers_are_on_roster_level_1.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_finding_referenced_answers_for_linked_question_on_roster_level_3_and_referenced_answers_are_on_roster_level_2.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_finding_referenced_answers_for_linked_question_on_roster_level_3_and_referenced_answers_are_on_roster_level_3.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_finding_referenced_rows_for_linked_on_roster_question.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_count_of_invalid_questions_recursively.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_enabled_subgroups.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_question_answer.cs" />
@@ -640,8 +666,13 @@
     <Compile Include="SharedKernels\Enumerator\Services\RosterTitleSubstitutionServiceTests\RosterTitleSubstitutionServiceTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\RosterTitleSubstitutionServiceTests\when_replacing_roster_title.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_restoring_interview_state_from_sync_package_and_all_answers_are_null.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\ActiveGroupViewModelTests\EnumerationStageViewModelTestContext.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\ActiveGroupViewModelTests\when_initializing_active_group_view_model.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_synchronizing_interview_with_multiple_failed_validation_conditions.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_synchronizing_interview_with_no_failing_validation_conditions.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_handling_GroupsDisabled_event_with_2_groups_and_one_of_that_group_is_set_to_be_hidden_if_disabled_and_another_is_not.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_handling_GroupsEnabled_event.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_handling_QuestionsDisabled_event_with_2_questions_and_one_of_that_question_is_set_to_be_hidden_if_disabled_and_anothe___.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_handling_QuestionsEnabled_event.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\EnumerationStageViewModelTests\when_initializing_active_group_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\CascadingSingleOptionQuestionViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_creating_cascading_single_option_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\CascadingSingleOptionQuestionViewModelTests\when_handling_AnswersRemoved_for_cascading_question.cs" />
@@ -672,6 +703,7 @@
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_showed_public_questionnaires.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_load_questionnaire_and_previous_request_is_in_progress.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_signed_out.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredSingleOptionQuestionViewModelTests\when_setting_text_existing_option.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\IntegerQuestionViewModelTests\IntegerQuestionViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\IntegerQuestionViewModelTests\when_answering_numeric_question_with_negative_value.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\IntegerQuestionViewModelTests\when_answering_roster_size_numeric_question_with_big_value_and_question_has_no_set_MaxValue.cs" />
@@ -680,9 +712,12 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\IntegerQuestionViewModelTests\when_answering_roster_size_numeric_question_with_negative_value_and_question_was_answered.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\IntegerQuestionViewModelTests\when_answering_roster_size_numeric_question_with_negative_value_and_question_was_not_answered.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\MultiOptionLinkedQuestionViewModelTestsContext.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_answers_removed_event_received_by_linked_on_roster_question.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_handling_question_answered_event_on_sorted_multioption_question.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_initing_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_linked_question_is_linked_to_question_in_roster_2_levels_deeper.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_roster_row_removed_and_question_is_linked_on_it.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_roster_row_title_changed_and_question_is_linked_on_it.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_linked_to_question_is_answered.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_title_of_linked_question_changes.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_toggling_answer.cs" />
@@ -734,6 +769,8 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_interviewId_is_missing_interviewId.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_there_is_answer_in_interview.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_initializing_list_view_model_and_there_is_no_answers_in_interview.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\ValidityViewModelTests\when_question_became_invalid_and_has_more_then_one_validation.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\ValidityViewModelTests\when_question_became_invalid_and_has_single_validation_condition.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_handling_question_answered_event.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_handling_question_answered_event_when_ordered_functionality_is_enabled.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\YesNoQuestionViewModelTests\when_handling_question_answered_event_of_another_question.cs" />
@@ -767,18 +804,28 @@
     <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_load_quantity_report_for_interviewers_where_one_out_of_three_periods_is_in_future.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\SampleUploadViewFactoryTests\SampleUploadViewFactoryNUnitTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_interviewers_where_one_out_of_three_periods_is_in_future.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\InterviewerQuestionnairesControllerTests\when_getting_questionnaire_and_interviewer_content_version_is_less_then_in_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\InterviewersViewFactoryTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_hq_filtering_by_archived.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_loading_interviewers_for_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_supervisor_filtering.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_supervisor_try_see_other_supervisor_interviewers.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_hq_sorting_by_deviceId.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\InterviewQuestionViewTests\when_creating_view_for_question_with_multiple_failed_validation_conditions.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\InterviewQuestionViewTests\when_creating_view_for_supervisor_question_and_interview_approved_by_hq.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_answer_removed_from_gps_qestion.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_gps_question_answered.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_handling_InterviewDeleted_event_and_interview_has_2_gps_questions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_handling_InterviewHardDeleted_event_and_interview_has_2_gps_questions.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\MapReportTests\when_map_report_data_is_being_queried.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\MapReportTests\when_map_report_data_is_being_queried_and_bounds_are_inverted.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Merger\when_merging_questionnaire_and_interview_data_and_interview_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Merger\when_merging_questionnaire_and_interview_data_with_3_fixed_roster_rows.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Merger\when_merging_questionnaire_and_interview_with_question_linked_to_roster_and_answered_only_roster_size_question.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Merger\when_merging_questionnaire_and_interview_with_question_linked_to_roster.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_and_data_has_all_service_variables.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_with_valid_interviewer_responsible_name.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_with_locked_interviewer_by_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_where_integer_roster_size_question_has_answer_42.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_where_integer_roster_size_question_has_negative_answer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_answer_on_numeric_question_which_contains_comma.cs" />
@@ -944,10 +991,10 @@
     <Compile Include="SharedKernels\SurveyManagement\PeriodicStatusReportTests\when_request_speed_report_by_interviewers_for_user_in_hq_role.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PeriodicStatusReportTests\when_request_speed_report_by_interviewers_for_user_in_supervisor_role.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PeriodicStatusReportTests\when_request_speed_report_by_supervisors.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_non_supervisor_name.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_locked_supervisor_name.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_non_existing_supervisor_name.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_empty_supervisor_name.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_non_supervisor_or_interviewer_name.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_locked_responsible_name.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_non_existing_responsible_name.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_has_empty_responsible_name.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PeriodicStatusReportTests\PeriodicStatusReportControllerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PeriodicStatusReportTests\when_request_quantity_report_by_interviewers_for_user_in_hq_role.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PeriodicStatusReportTests\when_request_quantity_report_by_interviewers_for_user_in_supervisor_role.cs" />
@@ -1100,12 +1147,8 @@
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_NewQuestionAdded_event_received.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_NewQuestionAdded_event_received_and_parent_for_question_does_not_exist.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_NewQuestionnaireCreated_event_received.cs" />
-    <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_NumericQuestionAdded_event_received.cs" />
-    <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_NumericQuestionAdded_event_received_and_parent_for_question_does_not_exist.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_NumericQuestionChanged_event_received.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_NumericQuestionCloned_event_received.cs" />
-    <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_QRBarcodeQuestionAdded_event_received.cs" />
-    <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_QRBarcodeQuestionAdded_event_received_and_parent_for_question_does_not_exist.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_QRBarcodeQuestionCloned_event_received.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_QRBarcodeQuestionUpdated_event_received.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_QuestionChanged_event_received.cs" />
@@ -1122,8 +1165,6 @@
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_StaticTextUpdated_event_received.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_StaticTextUpdated_event_received_and_entity_does_not_exists.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_TemplateImported_event_received.cs" />
-    <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_TextListQuestionAdded_event_received.cs" />
-    <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_TextListQuestionAdded_event_received_and_parent_for_question_does_not_exist.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_TextListQuestionChanged_event_received.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewDenormalizerTests\when_TextListQuestionCloned_event_received.cs" />
     <Compile Include="BoundedContexts\Designer\ChapterInfoViewFactoryTests\ChapterInfoViewFactoryContext.cs" />
@@ -1157,7 +1198,6 @@
     <Compile Include="BoundedContexts\Designer\MoveStaticTextHandlerTests\when_moving_static_text_and_user_dont_have_permissions.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\PdfQuestionnaireDenormalizerTestContext.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_MultimediaQuestionUpdated_event.cs" />
-    <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionCloned_event.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionUpdated_event.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_QuestionCloned_event_with_validation_expression.cs" />
@@ -1166,7 +1206,6 @@
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_StaticTextCloned_event.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_StaticTextDeleted_event.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_StaticTextUpdated_event.cs" />
-    <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_TextListQuestionAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_TextListQuestionChanged_event.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireDenormalizerTests\when_handling_TextListQuestionCloned_event.cs" />
     <Compile Include="BoundedContexts\Designer\PdfQuestionnaireViewTests\PdfQuestionnaireViewTestsContext.cs" />
@@ -1194,7 +1233,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_GroupBecameARoster_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_GroupStoppedBeingARoster_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_MultimediaQuestionUpdated_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionCloned_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_QRBarcodeQuestionUpdated_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_RosterChanged_event.cs" />
@@ -1202,8 +1240,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_StaticTextCloned_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_StaticTextDeleted_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_StaticTextUpdated_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_TextListQuestionAdded_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_TextListQuestionAdded_event_and_max_answer_count_is_specified.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_TextListQuestionChanged_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_TextListQuestionChanged_event_and_max_value_is_specified.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireDenormalizerTests\when_handling_TextListQuestionCloned_event.cs" />
@@ -1520,10 +1556,8 @@
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_NewGroupAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_NewQuestionAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_NewQuestionnaireCreated_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_NumericQuestionAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_NumericQuestionChanged_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_NumericQuestionCloned_event.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_QRBarcodeQuestionAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_QRBarcodeQuestionCloned_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_QRBarcodeQuestionUpdated_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_QuestionChanged_event.cs" />
@@ -1541,7 +1575,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_StaticTextDeleted_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_StaticTextUpdated_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_TemplateImported_event_for_old_templates.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_TextListQuestionAdded_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_TextListQuestionChanged_event.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionsAndGroupsCollectionDenormalizerTests\when_handling_TextListQuestionCloned_event.cs" />
     <Compile Include="BoundedContexts\Designer\RoleProviderTests\RoleProviderTestsContext.cs" />
@@ -2235,6 +2268,11 @@
     <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\when_healthcheck_service_check_when_there_are_any_warnings.cs" />
     <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\when_healthcheck_service_check.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\ApiTestContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\InterviewerInterviewsControllerTests\InterviewerInterviewsControllerTestsContext.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\InterviewerInterviewsControllerTests\when_posting_image_by_interview.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\InterviewerInterviewsControllerTests\when_marking_interview_as_received.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\InterviewerInterviewsControllerTests\when_posting_sync_package.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\InterviewerInterviewsControllerTests\when_getting_interviews.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_healthcheck_controller_getstatus.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_healthcheck_controller_getverbosestatus.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_hqunapproving_interview.cs" />
@@ -2288,6 +2326,7 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <Compile Include="Create.Controller.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
@@ -2391,12 +2430,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <Import Project="..\..\..\packages\Siaqodb.5.0.0.7\build\net451\Siaqodb.targets" Condition="Exists('..\..\..\packages\Siaqodb.5.0.0.7\build\net451\Siaqodb.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\packages\Siaqodb.5.0.0.7\build\net451\Siaqodb.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Siaqodb.5.0.0.7\build\net451\Siaqodb.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

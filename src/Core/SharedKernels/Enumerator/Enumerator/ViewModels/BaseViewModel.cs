@@ -1,4 +1,4 @@
-using Cirrious.MvvmCross.ViewModels;
+using MvvmCross.Core.ViewModels;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {

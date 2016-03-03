@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerTests
@@ -15,24 +17,32 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerT
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new QRBarcodeQuestionAdded()
-            {
-                QuestionId = questionId,
-                ParentGroupId = chapterId,
-                Title = "old title",
-                VariableName = "old_variable_name",
-                Instructions = "old instructions",
-                EnablementCondition = "old condition",
-                ResponsibleId = responsibleId
-            });
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
+                publicKey: questionId,
+                groupPublicKey: chapterId,
+                questionText: "old title",
+                stataExportCaption: "old_variable_name",
+                instructions: "old instructions",
+                conditionExpression: "old condition",
+                responsibleId: responsibleId,
+                questionType: QuestionType.QRBarcode
+                ));
             eventContext = new EventContext();
         };
 
         Because of = () =>            
                 questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: "title",
                     variableName: "qr_barcode_question",
-                variableLabel: null, enablementCondition: condition, instructions: instructions,
-                    responsibleId: responsibleId, validationExpression: validation, validationMessage: validationMessage, scope: QuestionScope.Interviewer);
+                variableLabel: null, enablementCondition: condition, hideIfDisabled: hideIfDisabled, instructions: instructions,
+                    responsibleId: responsibleId, scope: QuestionScope.Interviewer, 
+                    validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>
+                    {
+                        new ValidationCondition
+                        {
+                            Expression = validation,
+                            Message = validationMessage
+                        }
+                    });
 
         Cleanup stuff = () =>
         {
@@ -59,17 +69,21 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerT
             eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
                 .EnablementCondition.ShouldEqual(condition);
 
+        It should_raise_QRBarcodeQuestionAdded_event_with_hideIfDisabled_specified = () =>
+            eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
+                .HideIfDisabled.ShouldEqual(hideIfDisabled);
+
         It should_raise_QRBarcodeQuestionAdded_event_with_instructions_specified = () =>
             eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
                 .Instructions.ShouldEqual(instructions);
 
         It should_raise_QRBarcodeQuestionAdded_event_with_validation_specified = () =>
            eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
-               .ValidationExpression.ShouldEqual(validation);
+               .ValidationConditions.First().Expression.ShouldEqual(validation);
 
         It should_raise_QRBarcodeQuestionAdded_event_with_validation_message_specified = () =>
          eventContext.GetSingleEvent<QRBarcodeQuestionUpdated>()
-             .ValidationMessage.ShouldEqual(validationMessage);
+             .ValidationConditions.First().Message.ShouldEqual(validationMessage);
 
         private static EventContext eventContext;
         private static Questionnaire questionnaire;
@@ -80,6 +94,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerT
         private static string title = "title";
         private static string instructions = "intructions";
         private static string condition = "condition";
+        private static bool hideIfDisabled = true;
         private static string validation = "validation";
         private static string validationMessage = "validationMessage";
     }

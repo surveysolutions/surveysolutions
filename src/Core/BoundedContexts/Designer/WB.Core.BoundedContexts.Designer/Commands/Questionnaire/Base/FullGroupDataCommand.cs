@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
     public abstract class FullGroupDataCommand : GroupCommand
     {
         protected FullGroupDataCommand(Guid questionnaireId, Guid groupId, Guid responsibleId,
-            string title, string variableName, Guid? rosterSizeQuestionId, string condition, bool isRoster,
+            string title, string variableName, Guid? rosterSizeQuestionId, string condition, bool hideIfDisabled, bool isRoster,
             RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] fixedRosterTitles, Guid? rosterTitleQuestionId)
             : base(questionnaireId, groupId, responsibleId)
         {
@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             this.RosterSizeQuestionId = rosterSizeQuestionId;
             this.RosterSizeSource = rosterSizeSource;
             this.Condition = condition;
+            this.HideIfDisabled = hideIfDisabled;
             this.FixedRosterTitles = fixedRosterTitles == null
                 ? null
                 : fixedRosterTitles
@@ -36,6 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
 
         public string Description { get; private set; }
 
-        public string Condition { get; set; }
+        public string Condition { get; private set; }
+        public bool HideIfDisabled { get; private set; }
     }
 }

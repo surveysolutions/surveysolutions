@@ -25,7 +25,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.ChapterInfoViewDenormalizerTest
                 denormalizer.Update(viewState,
                     Create.QRBarcodeQuestionClonedEvent(questionId: questionId, parentGroupId: chapterId,
                         questionVariable: questionVariable, questionTitle: questionTitle,
-                        questionConditionExpression: questionConditionExpression, sourceQuestionId: sourceQuestionId));
+                        questionConditionExpression: questionConditionExpression, 
+                        sourceQuestionId: sourceQuestionId));
 
         It should_groupInfoView_first_chapter_items_not_be_null = () =>
             ((GroupInfoView)viewState.Items[0]).Items.ShouldNotBeNull();

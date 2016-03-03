@@ -11,7 +11,7 @@
     "tests"
   ],
   "dependencies": {
-    "ace-builds": "1.2.0",
+    "ace-builds": "^1.2.3",
     "angular": "1.4.7",
     "angular-animate": "1.4.7",
     "angular-block-ui": "0.2.2",
@@ -36,7 +36,7 @@
     "jquery-cookie": "~1.4.1",
     "jquery-mousewheel": "~3.1.12",
     "jquery-placeholder": "~2.1.1",
-    "jquery.scrollTo": "~1.4.14",
+    "jquery.scrollTo": "^2.1.2",
     "json3": "~3.3.2",
     "lodash": "3.4.0",
     "ng-context-menu": "~1.0.1",

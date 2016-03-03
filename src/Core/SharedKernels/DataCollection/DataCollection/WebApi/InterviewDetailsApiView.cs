@@ -20,6 +20,8 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public List<RosterApiView> RosterGroupInstances { get; set; }
 
         public bool WasCompleted { get; set; }
+
+        public string FailedValidationConditions { get; set; }
     }
 
     public class InterviewAnswerApiView

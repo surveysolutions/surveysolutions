@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
         {
             QuestionTemplateModel question = model.AllQuestions.Single(x => x.Id == Id.gA);
             question.VariableName.ShouldEqual("multi");
-            question.Validation.ShouldEqual("multi validation");
+            question.ValidationExpressions.FirstOrDefault().ValidationExpression.ShouldEqual("multi validation");
             question.Condition.ShouldEqual("multi condition");
             question.IsMultiOptionYesNoQuestion.ShouldBeFalse();
             question.AllMultioptionYesNoCodes.ShouldBeNull();

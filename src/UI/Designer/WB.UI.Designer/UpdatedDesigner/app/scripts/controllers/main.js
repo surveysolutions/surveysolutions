@@ -167,12 +167,24 @@ angular.module('designerApp')
                     $rootScope.$broadcast("openLookupTables", { focusOn: reference.itemId });
                 }
                 else {
-                    $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
-                        chapterId: reference.chapterId,
-                        itemId: reference.itemId
-                    });
+                    if (!_.isNull(reference.failedValidationConditionIndex)) {
+                        $state.go('questionnaire.chapter.' + reference.type.toLowerCase() + ".validation", {
+                            chapterId: reference.chapterId,
+                            itemId: reference.itemId,
+                            validationIndex: reference.failedValidationConditionIndex
+                        });
+                    } else {
+                        $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
+                            chapterId: reference.chapterId,
+                            itemId: reference.itemId
+                        });
+                    }
                 }
             };
+
+            $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams) {
+                utilityService.scrollToValidationCondition(toParams.validationIndex);
+            });
 
             $scope.removeItemWithIdFromErrors = function (itemId) {
                 var errors = $scope.verificationStatus.errors;
@@ -291,13 +303,8 @@ angular.module('designerApp')
                 renderer.setShowGutter(false);
                 renderer.setPadding(12);
 
-                editor.commands.addCommand({
-                    name: "replace",
-                    bindKey: { win: "Tab|Shift-Tab", mac: "Tab" },
-                    exec: function (editor) {
-                        editor.blur();
-                    }
-                });
+                editor.$blockScrolling = Infinity;
+                editor.commands.bindKey("tab", null);
             };
 
             $rootScope.$on('$stateChangeSuccess',

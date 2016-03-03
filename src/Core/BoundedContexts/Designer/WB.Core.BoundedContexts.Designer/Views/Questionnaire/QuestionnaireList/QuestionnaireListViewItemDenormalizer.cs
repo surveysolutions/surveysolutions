@@ -27,7 +27,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         IEventHandler<NewQuestionAdded>,
         IEventHandler<QuestionCloned>,
         IEventHandler<QuestionChanged>,
-        IEventHandler<NumericQuestionAdded>,
         IEventHandler<NumericQuestionCloned>,
         IEventHandler<NumericQuestionChanged>,
         IEventHandler<GroupDeleted>,
@@ -35,10 +34,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         IEventHandler<GroupBecameARoster>,
         IEventHandler<RosterChanged>,
         IEventHandler<GroupStoppedBeingARoster>,
-        IEventHandler<TextListQuestionAdded>,
         IEventHandler<TextListQuestionCloned>,
         IEventHandler<TextListQuestionChanged>,
-        IEventHandler<QRBarcodeQuestionAdded>,
         IEventHandler<QRBarcodeQuestionUpdated>,
         IEventHandler<QRBarcodeQuestionCloned>,
         IEventHandler<MultimediaQuestionUpdated>,
@@ -259,11 +256,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
         }
 
-        public void Handle(IPublishedEvent<NumericQuestionAdded> evnt)
-        {
-            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
-        }
-
         public void Handle(IPublishedEvent<NumericQuestionCloned> evnt)
         {
             UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
@@ -299,22 +291,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
         }
 
-        public void Handle(IPublishedEvent<TextListQuestionAdded> evnt)
-        {
-            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
-        }
-
         public void Handle(IPublishedEvent<TextListQuestionCloned> evnt)
         {
             UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
         }
 
         public void Handle(IPublishedEvent<TextListQuestionChanged> evnt)
-        {
-            UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
-        }
-
-        public void Handle(IPublishedEvent<QRBarcodeQuestionAdded> evnt)
         {
             UpdateLastEntryDate(evnt.EventSourceId, evnt.EventTimeStamp);
         }

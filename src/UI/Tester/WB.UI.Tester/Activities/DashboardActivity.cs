@@ -31,12 +31,6 @@ namespace WB.UI.Tester.Activities
             recyclerView.SetLayoutManager(layoutManager);
         }
 
-        protected override void OnRestoreInstanceState(Bundle savedInstanceState)
-        {
-            base.OnRestoreInstanceState(savedInstanceState);
-            ViewModel.RestartLoadServerQuestionnairesIfNeeded();
-        }
-
         public override void OnBackPressed()
         {
         }

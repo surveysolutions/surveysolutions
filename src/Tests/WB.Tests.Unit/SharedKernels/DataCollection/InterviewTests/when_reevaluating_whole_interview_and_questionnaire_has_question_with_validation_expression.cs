@@ -32,8 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionaire = Mock.Of<IQuestionnaire>(_ =>
                                                         /*_.GetAllQuestionsWithNotEmptyValidationExpressions() == new Guid[] { conditionallyInvalidQuestionId }
                                                         && */_.HasQuestion(conditionallyInvalidQuestionId)==true
-                                                        && _.GetQuestionType(conditionallyInvalidQuestionId)==QuestionType.Text
-                                                        && _.IsCustomValidationDefined(conditionallyInvalidQuestionId) == true);
+                                                        && _.GetQuestionType(conditionallyInvalidQuestionId)==QuestionType.Text);
 
             //var expressionProcessor = new Mock<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>();
 

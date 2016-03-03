@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
             }
             catch (Exception exc)
             {
-                ServiceLocator.Current.GetInstance<ILogger>().Error("Export job failed", exc);
+                ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<ExportJob>().Error("Export job failed", exc);
             }
             finally
             {

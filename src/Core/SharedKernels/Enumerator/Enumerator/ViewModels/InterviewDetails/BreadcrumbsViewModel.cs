@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Cirrious.MvvmCross.ViewModels;
+using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -73,8 +74,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private static Identity GetChangedRosterIdentity(ChangedRosterInstanceTitleDto changedRosterInstance)
         {
             var changedRosterInstanceIdentity = new Identity(changedRosterInstance.RosterInstance.GroupId,
-                changedRosterInstance.RosterInstance.OuterRosterVector.Concat(
-                    changedRosterInstance.RosterInstance.RosterInstanceId.ToEnumerable()).ToArray());
+                changedRosterInstance.RosterInstance.GetIdentity().RosterVector);
             return changedRosterInstanceIdentity;
         }
 

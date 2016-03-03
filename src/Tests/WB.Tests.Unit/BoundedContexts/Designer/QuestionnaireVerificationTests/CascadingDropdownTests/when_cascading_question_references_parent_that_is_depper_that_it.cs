@@ -67,7 +67,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
         static Guid childCascadedComboboxId;
         static Guid parentSingleOptionQuestionId;
         static QuestionnaireVerifier verifier;
-        static IEnumerable<QuestionnaireVerificationError> verificationErrors;
+        static IEnumerable<QuestionnaireVerificationMessage> verificationErrors;
     }
 }
 

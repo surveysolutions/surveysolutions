@@ -31,6 +31,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                                          IEventHandler<DateTimeQuestionAnswered>,
                                          IEventHandler<GeoLocationQuestionAnswered>,
                                          IEventHandler<QRBarcodeQuestionAnswered>,
+                                         IEventHandler<YesNoQuestionAnswered>,
 
                                          IEventHandler<AnswersRemoved>,
 
@@ -264,9 +265,52 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private void AnswerQuestion(Guid interviewId, Guid questionId, object answer, DateTime answerTimeUtc)
         {
+            this.AnswerOnPrefilledQuestion(interviewId, questionId, answer, answerTimeUtc);
+            this.SetStartedDateTimeOnFirstAnswer(interviewId, answerTimeUtc);
+        }
+
+        private readonly HashSet<Guid> interviewsWithExistedStartedDateTime = new HashSet<Guid>();
+
+        private void SetStartedDateTimeOnFirstAnswer(Guid interviewId, DateTime answerTimeUtc)
+        {
+            if (interviewsWithExistedStartedDateTime.Contains(interviewId))
+                return;
+
             var interviewView = this.interviewViewRepository.GetById(interviewId.FormatGuid());
 
             if (interviewView == null) return;
+
+            interviewsWithExistedStartedDateTime.Add(interviewId);
+
+            if (!interviewView.StartedDateTime.HasValue)
+            {
+                interviewView.StartedDateTime = answerTimeUtc;
+            }
+
+            this.interviewViewRepository.StoreAsync(interviewView).Wait();
+        }
+
+        private readonly Dictionary<Guid, QuestionnaireIdentity> mapInterviewIdToQuestionnaireIdentity = new Dictionary<Guid, QuestionnaireIdentity>();
+
+        private void AnswerOnPrefilledQuestion(Guid interviewId, Guid questionId, object answer, DateTime answerTimeUtc)
+        {
+            QuestionnaireIdentity questionnaireIdentity;
+            if (this.mapInterviewIdToQuestionnaireIdentity.TryGetValue(interviewId, out questionnaireIdentity))
+            {
+                var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity);
+                if (!questionnaire.IsPrefilled(questionId))
+                    return;
+            }
+
+            var interviewView = this.interviewViewRepository.GetById(interviewId.FormatGuid());
+            if (interviewView == null) return;
+
+            if (questionnaireIdentity == null)
+            {
+                questionnaireIdentity = QuestionnaireIdentity.Parse(interviewView.QuestionnaireId);
+                this.mapInterviewIdToQuestionnaireIdentity.Add(interviewId, questionnaireIdentity);
+            }
+            
 
             if (questionId == interviewView.GpsLocation.PrefilledQuestionId)
             {
@@ -287,16 +331,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 if (prefilledQuestion != null)
                 {
-                    var questionnaire = this.questionnaireRepository.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(interviewView.QuestionnaireId));
-                    var questionnairePrefilledQuestion = questionnaire.FirstOrDefault<IQuestion>(question => question.PublicKey == questionId);
+                    var questionnaire =
+                        this.questionnaireRepository.GetQuestionnaireDocument(
+                            QuestionnaireIdentity.Parse(interviewView.QuestionnaireId));
+                    var questionnairePrefilledQuestion =
+                        questionnaire.FirstOrDefault<IQuestion>(question => question.PublicKey == questionId);
 
-                    prefilledQuestion.Answer = AnswerUtils.AnswerToString(answer, GetPrefilledCategoricalQuestionOptionText(questionnairePrefilledQuestion));
+                    prefilledQuestion.Answer = AnswerUtils.AnswerToString(answer,
+                        GetPrefilledCategoricalQuestionOptionText(questionnairePrefilledQuestion));
                 }
-            }
-
-            if (!interviewView.StartedDateTime.HasValue)
-            {
-                interviewView.StartedDateTime = answerTimeUtc;
             }
 
             this.interviewViewRepository.StoreAsync(interviewView).Wait();
@@ -330,6 +373,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public void Handle(IPublishedEvent<DateTimeQuestionAnswered> evnt)
         {
             this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.Payload.AnswerTimeUtc);
+        }
+
+        public void Handle(IPublishedEvent<YesNoQuestionAnswered> evnt)
+        {
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.AnsweredOptions, evnt.Payload.AnswerTimeUtc);
         }
 
         public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)

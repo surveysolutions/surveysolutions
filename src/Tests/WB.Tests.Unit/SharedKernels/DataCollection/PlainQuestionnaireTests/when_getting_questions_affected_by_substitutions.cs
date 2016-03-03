@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 {
-    internal class when_getting_questions_affected_by_substitutions : PlainQuestionnaireTestsContext
+    internal class when_getting_questions_affected_by_substitutions
     {
         Establish context = () =>
         {
@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                         })
                 });
 
-            plainQuestionnaire = CreatePlainQuestionnaire(questionnaire);
+            plainQuestionnaire = Create.PlainQuestionnaire(document: questionnaire);
         };  
 
         Because of = () => affectedQuestions = plainQuestionnaire.GetSubstitutedQuestions(rosterTitleid);

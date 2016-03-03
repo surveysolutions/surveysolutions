@@ -156,7 +156,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(groupId: firstGroup, responsibleId: responsibleId, isRoster: false);
 
             questionnaire.AddGroupAndMoveIfNeeded(secondGroup,
-                responsibleId: responsibleId, title: "Second group", variableName: null, rosterSizeQuestionId: null, description: null, condition: null,
+                responsibleId: responsibleId, title: "Second group", variableName: null, rosterSizeQuestionId: null, description: null, 
+                condition: null, hideIfDisabled: false,
                 parentGroupId: null, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             return questionnaire;
@@ -164,11 +165,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
         public static void AddGroup(Questionnaire questionnaire, Guid groupId, Guid? parentGroupId, string condition, Guid responsibleId,
             Guid? rosterSizeQuestionId = null, bool isRoster = false, RosterSizeSourceType rosterSizeSource = RosterSizeSourceType.Question,
-           FixedRosterTitleItem[] rosterFixedTitles = null, Guid? rosterTitleQuestionId = null)
+           FixedRosterTitleItem[] rosterFixedTitles = null, Guid? rosterTitleQuestionId = null, bool hideIfDisabled = false)
         {
             questionnaire.AddGroupAndMoveIfNeeded(groupId,
                 responsibleId: responsibleId, title: "New group", variableName: null, rosterSizeQuestionId: rosterSizeQuestionId, description: null,
-                condition: condition, parentGroupId: parentGroupId, isRoster: isRoster, rosterSizeSource: rosterSizeSource,
+                condition: condition, hideIfDisabled: hideIfDisabled, parentGroupId: parentGroupId, isRoster: isRoster, rosterSizeSource: rosterSizeSource,
                 rosterFixedTitles: rosterFixedTitles,
                 rosterTitleQuestionId: rosterTitleQuestionId);
         }
@@ -178,7 +179,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             Questionnaire questionnaire = CreateQuestionnaireWithOneRosterGroup(groupId: autoGroupPublicKey,
                 responsibleId: responsibleId);
 
-            questionnaire.AddGroupAndMoveIfNeeded(secondGroup, responsibleId, "Second group",null, null, null, null, null, isRoster: false,
+            questionnaire.AddGroupAndMoveIfNeeded(secondGroup, responsibleId, "Second group",null, null, null, null, false, null, isRoster: false,
                 rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             return questionnaire;
@@ -305,7 +306,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 responsibleId: responsibleId);
 
             questionnaire.AddGroupAndMoveIfNeeded(Guid.NewGuid(),
-                responsibleId: responsibleId, title: "New group", variableName: null, rosterSizeQuestionId: null, description: null, condition: null,
+                responsibleId: responsibleId, title: "New group", variableName: null, rosterSizeQuestionId: null, description: null, 
+                condition: null, hideIfDisabled: false,
                 parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             return questionnaire;
@@ -319,14 +321,14 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
             Guid rosterSizeQuestionId = Guid.NewGuid();
             questionnaire.AddGroupAndMoveIfNeeded(regularGroupId, responsibleId: responsibleId, title: "regularGroup", variableName: null, rosterSizeQuestionId: null,
-                description: null, condition: null, parentGroupId: chapterId, isRoster: false,
+                description: null, condition: null, hideIfDisabled: false, parentGroupId: chapterId, isRoster: false,
                 rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
             questionnaire.AddMultiOptionQuestion(rosterSizeQuestionId, regularGroupId, "rosterSizeQuestion",
                 "rosterSizeQuestion", null, QuestionScope.Interviewer, "", "", "", "", responsibleId,
                 new[] { new Option(Guid.NewGuid(), "1", "opt1"), new Option(Guid.NewGuid(), "2", "opt2") }, null,
                 false, null, false);
             questionnaire.AddGroupAndMoveIfNeeded(rosterGroupId, responsibleId: responsibleId, title: "autoPropagateGroup", variableName: null,
-                rosterSizeQuestionId: rosterSizeQuestionId, description: null, condition: null, parentGroupId: chapterId, isRoster: true,
+                rosterSizeQuestionId: rosterSizeQuestionId, description: null, condition: null, hideIfDisabled: false, parentGroupId: chapterId, isRoster: true,
                 rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
             return questionnaire;

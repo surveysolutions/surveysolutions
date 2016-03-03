@@ -20,7 +20,9 @@ namespace WB.Tests.Unit
             SetupServiceLocator();
         }
 
-        public void OnAssemblyComplete() {}
+        public void OnAssemblyComplete()
+        {
+        }
 
         public static void SetupServiceLocator()
         {

@@ -37,10 +37,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
             stataGeneratedContent.ShouldContain(string.Format("insheet using \"{0}.tab\", tab\r\n", dataFileName));
 
         It should_contain_stata_id_variable_on_ids_label_mapping = () =>
-           stataGeneratedContent.ShouldContain(string.Format("label values id lid"));
+           stataGeneratedContent.ShouldContain(string.Format("label values Id lId"));
 
         It should_contain_label_definition_for_id = () =>
-            stataGeneratedContent.ShouldContain(string.Format("label define lid 1 `\"t1\"' 2 `\"t2\"'"));
+            stataGeneratedContent.ShouldContain(string.Format("label define lId 1 `\"t1\"' 2 `\"t2\"'"));
 
         private static StataEnvironmentContentService stataEnvironmentContentService;
         private static HeaderStructureForLevel oneQuestionHeaderStructureForLevel;

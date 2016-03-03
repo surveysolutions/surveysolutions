@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             var imageView =
                 this.imageViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName)
-                    .FirstOrDefault();
+                    .SingleOrDefault();
 
             if (imageView == null) return null;
 
@@ -44,25 +44,40 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task StoreInterviewBinaryDataAsync(Guid interviewId, string fileName, byte[] data)
         {
-            string FileId = Guid.NewGuid().FormatGuid();
-            await this.fileViewStorage.StoreAsync(new InterviewFileView
+            var imageView =
+             this.imageViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName)
+                 .SingleOrDefault();
+
+            if (imageView == null)
             {
-                Id = FileId,
-                File = data
-            }).ConfigureAwait(false);
-                
-            await this.imageViewStorage.StoreAsync(new InterviewMultimediaView
+                string fileId = Guid.NewGuid().FormatGuid();
+                await this.fileViewStorage.StoreAsync(new InterviewFileView
+                {
+                    Id = fileId,
+                    File = data
+                }).ConfigureAwait(false);
+
+                await this.imageViewStorage.StoreAsync(new InterviewMultimediaView
+                {
+                    Id = Guid.NewGuid().FormatGuid(),
+                    InterviewId = interviewId,
+                    FileId = fileId,
+                    FileName = fileName
+                }).ConfigureAwait(false);
+            }
+            else
             {
-                Id = Guid.NewGuid().FormatGuid(),
-                InterviewId = interviewId,
-                FileId = FileId,
-                FileName = fileName
-            }).ConfigureAwait(false);
+                await this.fileViewStorage.StoreAsync(new InterviewFileView
+                {
+                    Id = imageView.FileId,
+                    File = data
+                }).ConfigureAwait(false);
+            }
         }
 
         public void RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
-            var imageView = this.imageViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName).FirstOrDefault();
+            var imageView = this.imageViewStorage.Where(image => image.InterviewId == interviewId && image.FileName == fileName).SingleOrDefault();
 
             if (imageView == null) return;
 

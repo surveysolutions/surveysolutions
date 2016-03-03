@@ -22,6 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<SingleOptionQuestionAnswered>,
         ILiteEventHandler<TextListQuestionAnswered>,
         ILiteEventHandler<AnswerRemoved>,
+        ILiteEventHandler<YesNoQuestionAnswered>,
         IDisposable
     {
         private readonly ILiteEventRegistry registry;
@@ -141,10 +142,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.RaiseEventIfNeeded(@event);
         }
 
+        public void Handle(YesNoQuestionAnswered @event)
+        {
+            this.RaiseEventIfNeeded(@event);
+        }
+
         protected virtual void OnSomeQuestionAnswered()
         {
             var handler = this.QuestionAnswered;
-            if (handler != null) handler(this, EventArgs.Empty);
+            handler?.Invoke(this, EventArgs.Empty);
         }
 
         public void Handle(AnswerRemoved @event)

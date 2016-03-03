@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using Cirrious.CrossCore.Converters;
+using MvvmCross.Platform.Converters;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 

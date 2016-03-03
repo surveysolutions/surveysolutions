@@ -137,6 +137,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         {
                             LinkedToQuestionId = singleQuestion.LinkedToQuestionId.Value
                         };
+                    }else if (singleQuestion.LinkedToRosterId.HasValue)
+                    {
+                        questionModel = new LinkedToRosterSingleOptionQuestionModel
+                        {
+                            LinkedToRosterId = singleQuestion.LinkedToRosterId.Value
+                        };
                     }
                     else
                     {
@@ -156,7 +162,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                                 {
                                     CascadeFromQuestionId = singleQuestion.CascadeFromQuestionId.Value,
                                     Options = singleQuestion.Answers.Select(ToCascadingOptionModel).ToList(),
-                                    RosterLevelDepthOfParentQuestion = questionIdToRosterLevelDeep[singleQuestion.CascadeFromQuestionId.Value],
+                                    RosterLevelDepthOfParentQuestion =
+                                        questionIdToRosterLevelDeep[singleQuestion.CascadeFromQuestionId.Value],
                                 };
                             }
                             else
@@ -186,6 +193,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         questionModel = new LinkedMultiOptionQuestionModel
                         {
                             LinkedToQuestionId = multiQuestion.LinkedToQuestionId.Value,
+                            MaxAllowedAnswers = multiQuestion.MaxAllowedAnswers,
+                            AreAnswersOrdered = multiQuestion.AreAnswersOrdered
+                        };
+                    }
+                    else if(multiQuestion.LinkedToRosterId.HasValue)
+                    {
+                        questionModel = new LinkedToRosterMultiOptionQuestionModel
+                        {
+                            LinkedToRosterId = multiQuestion.LinkedToRosterId.Value,
                             MaxAllowedAnswers = multiQuestion.MaxAllowedAnswers,
                             AreAnswersOrdered = multiQuestion.AreAnswersOrdered
                         };

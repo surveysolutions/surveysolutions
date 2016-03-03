@@ -94,7 +94,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Threading
                             }
                             catch (Exception e)
                             {
-                                var logger = ServiceLocator.Current.GetInstance<ILogger>();
+                                var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetForType(typeof(AsyncQuestionnaireUpdater));
                                 logger.Error(e.Message, e);
                             }
 

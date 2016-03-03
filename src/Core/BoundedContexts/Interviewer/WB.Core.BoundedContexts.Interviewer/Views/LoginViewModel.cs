@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.ViewModels;
+using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             var userName = this.UserName;
             var hashedPassword = this.passwordHasher.Hash(this.Password);
 
-            this.IsUserValid = this.principal.SignIn(userName, hashedPassword, true);
+            this.IsUserValid = await this.principal.SignInAsync(userName, hashedPassword, true);
 
             if (!this.IsUserValid)
             {

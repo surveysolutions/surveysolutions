@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
@@ -11,16 +9,14 @@ using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Preferences;
 using Android.Widget;
-using Cirrious.CrossCore;
-using Cirrious.MvvmCross.Droid.Views;
-using Cirrious.MvvmCross.Plugins.Sqlite;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using MvvmCross.Droid.Views;
+using MvvmCross.Platform;
 using PCLStorage;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.ViewModel.Dashboard;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -42,7 +38,9 @@ using Environment = System.Environment;
 #warning do not remove "Sqo" namespace
 #warning if after all the warning you intend to remove the namespace anyway, please remove NuGet packages SiaqoDB and SiaqoDbProtable also
 using Sqo;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
+using SQLite.Net;
+using SQLite.Net.Attributes;
+using SQLite.Net.Platform.XamarinAndroid;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
@@ -76,7 +74,7 @@ namespace WB.UI.Interviewer.Activities
         {
             var settings = Mvx.Resolve<IAsyncPlainStorage<ApplicationSettingsView>>();
             if (settings.FirstOrDefault() != null) return;
-            
+
             await RestoreApplicationSettingsAsync();
             await RestoreInterviewerAsync();
             await Task.Run(this.RestoreInterviewsAsync);
@@ -171,8 +169,8 @@ namespace WB.UI.Interviewer.Activities
         {
             InterviewerIdentity oldInterviewer;
 
-            #warning we must keep this code as long as at least one 5.1.0-5.3.* version exist
-            #warning do not remove this code
+#warning we must keep this code as long as at least one 5.1.0-5.3.* version exist
+#warning do not remove this code
             SiaqodbConfigurator.EncryptedDatabase = false;
 
             using (var oldInterviewersRepository = new Siaqodb(AndroidPathUtils.GetPathToSubfolderInLocalDirectory("database")))
@@ -199,11 +197,11 @@ namespace WB.UI.Interviewer.Activities
                 CompletedDateTime = x.CompletedDateTime,
                 StartedDateTime = x.StartedDateTime,
                 RejectedDateTime = x.RejectedDateTime,
-                Census =  x.CreatedOnClient ?? false,
+                Census = x.CreatedOnClient ?? false,
                 QuestionnaireId = new QuestionnaireIdentity(Guid.Parse(x.Survey), x.SurveyVersion).ToString(),
                 LastInterviewerOrSupervisorComment = x.Comments,
                 Status = (InterviewStatus)x.Status,
-                AnswersOnPrefilledQuestions = serializer.Deserialize<FeaturedItem[]>(x.Properties).Select(y=>new InterviewAnswerOnPrefilledQuestionView
+                AnswersOnPrefilledQuestions = serializer.Deserialize<FeaturedItem[]>(x.Properties).Select(y => new InterviewAnswerOnPrefilledQuestionView
                 {
                     QuestionId = y.PublicKey,
                     QuestionText = y.Title,
@@ -218,13 +216,13 @@ namespace WB.UI.Interviewer.Activities
                         Longitude = x.GpsLocationLongitude.Value
                     } : null
                 },
-                CanBeDeleted = x.JustInitilized ?? false 
+                CanBeDeleted = x.JustInitilized ?? false
             }));
         }
 
         private async Task RestoreEventStreamsAsync()
         {
-            var pathToEventStreams = PortablePath.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal),"EventStore");
+            var pathToEventStreams = PortablePath.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "EventStore");
             var eventViewRepository = Mvx.Resolve<IInterviewerEventStorage>();
 
             var eventStreamsFolder = await FileSystem.Current.GetFolderFromPathAsync(pathToEventStreams);
@@ -280,13 +278,13 @@ namespace WB.UI.Interviewer.Activities
 
             var questionnaireModels =
                 questionnaireDocumentsAndModels.Where(x => x.QuestionnaireEntityTypeName == "QuestionnaireModel")
-                    .Select(x => new {QuestionnaireId = x.QuestionnaireId, Model = (QuestionnaireModel) x.Entity})
+                    .Select(x => new { QuestionnaireId = x.QuestionnaireId, Model = (QuestionnaireModel)x.Entity })
                     .ToList();
             var questionnaireDocuments =
                 questionnaireDocumentsAndModels.Where(x => x.QuestionnaireEntityTypeName == "QuestionnaireDocument")
-                    .Select(x => new {QuestionnaireId = x.QuestionnaireId, Document = (QuestionnaireDocument) x.Entity})
+                    .Select(x => new { QuestionnaireId = x.QuestionnaireId, Document = (QuestionnaireDocument)x.Entity })
                     .ToList();
-            
+
             foreach (var questionnaireDocument in questionnaireDocuments)
             {
                 var questionnaireModel = questionnaireModels.FirstOrDefault(x => x.QuestionnaireId == questionnaireDocument.QuestionnaireId)?.Model ??
@@ -331,8 +329,8 @@ namespace WB.UI.Interviewer.Activities
 
             await questionnaireModelViewRepository.StoreAsync(new QuestionnaireModelView
             {
-              Id  = questionnaireId,
-              Model = questionnaireModel
+                Id = questionnaireId,
+                Model = questionnaireModel
             });
 
             await questionnaireDocumentViewRepository.StoreAsync(new QuestionnaireDocumentView
@@ -352,7 +350,7 @@ namespace WB.UI.Interviewer.Activities
             var communicationBufferSize = GetAppSettings(SettingsNames.BufferSize, string.Empty);
             var gpsResponseTimeoutInSec = GetAppSettings(SettingsNames.GpsReceiveTimeoutSec, string.Empty);
 
-            if(!string.IsNullOrEmpty(endpoint))
+            if (!string.IsNullOrEmpty(endpoint))
                 await settings.SetEndpointAsync(endpoint);
 
             if (!string.IsNullOrEmpty(communicationBufferSize))
@@ -375,11 +373,8 @@ namespace WB.UI.Interviewer.Activities
 
         private IEnumerable<TView> GetSqlLiteEntities<TView>(string dbName, string subFolder = "") where TView : class, new()
         {
-            Cirrious.MvvmCross.Plugins.Sqlite.PluginLoader.Instance.EnsureLoaded();
-            var connectionFactory = Mvx.GetSingleton<ISQLiteConnectionFactory>();
-
-            using (var connection = connectionFactory.Create(
-                PortablePath.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), subFolder, dbName)))
+            var databasePath = PortablePath.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), subFolder, dbName);
+            using (var connection = new SQLiteConnection(new SQLitePlatformAndroid(), databasePath))
             {
                 connection.CreateTable<TView>();
                 return connection.Table<TView>().ToList();

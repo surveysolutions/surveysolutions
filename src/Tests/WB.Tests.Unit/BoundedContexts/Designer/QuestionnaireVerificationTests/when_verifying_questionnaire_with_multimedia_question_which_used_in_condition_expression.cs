@@ -36,30 +36,30 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
-            resultErrors.Count().ShouldEqual(1);
+        It should_return_1_message = () =>
+            verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_error_with_code__WB0082 = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0082");
+        It should_return_message_with_code__WB0082 = () =>
+            verificationMessages.Single().Code.ShouldEqual("WB0082");
 
-        It should_return_error_with_2_references = () =>
-            resultErrors.Single().References.Count().ShouldEqual(2);
+        It should_return_message_with_2_references = () =>
+            verificationMessages.Single().References.Count().ShouldEqual(2);
 
-        It should_return_first_error_reference_with_type_Question = () =>
-            resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+        It should_return_first_message_reference_with_type_Question = () =>
+            verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_first_error_reference_with_id_of_questionWhichUsesMultimediaInConditionExpression = () =>
-            resultErrors.Single().References.First().Id.ShouldEqual(questionWhichUsesMultimediaInConditionExpression);
+        It should_return_first_message_reference_with_id_of_questionWhichUsesMultimediaInConditionExpression = () =>
+            verificationMessages.Single().References.First().Id.ShouldEqual(questionWhichUsesMultimediaInConditionExpression);
 
-        It should_return_second_error_reference_with_type_Question = () =>
-            resultErrors.Single().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+        It should_return_second_message_reference_with_type_Question = () =>
+            verificationMessages.Single().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_second_error_reference_with_id_of_multimediaQuestionId = () =>
-            resultErrors.Single().References.Last().Id.ShouldEqual(multimediaQuestionId);
+        It should_return_second_message_reference_with_id_of_multimediaQuestionId = () =>
+            verificationMessages.Single().References.Last().Id.ShouldEqual(multimediaQuestionId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 

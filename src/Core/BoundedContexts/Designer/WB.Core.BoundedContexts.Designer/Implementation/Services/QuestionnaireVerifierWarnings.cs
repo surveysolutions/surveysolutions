@@ -11,16 +11,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     {
         private const int MaxRecommendedAmountOfRosters = 20;
 
-        private IEnumerable<QuestionnaireVerificationError> VerifyAmountOfRosters(CachedQuestionnaireDocument document, VerificationState state)
+        private IEnumerable<QuestionnaireVerificationMessage> VerifyAmountOfRosters(ReadOnlyQuestionnaireDocument document, VerificationState state)
         {
             var rosters = document.Find<IGroup>(q => q.IsRoster).ToArray();
 
             if (rosters.Length <= MaxRecommendedAmountOfRosters)
-                return Enumerable.Empty<QuestionnaireVerificationError>();
+                return Enumerable.Empty<QuestionnaireVerificationMessage>();
 
             return new[]
             {
-                new QuestionnaireVerificationError("WB0200", VerificationMessages.WB0200_LargeNumberOfRostersIsCreated, VerificationErrorLevel.Warning)
+                QuestionnaireVerificationMessage.Warning("WB0200", VerificationMessages.WB0200_LargeNumberOfRostersIsCreated)
             };
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Supervisor.Factories;
@@ -12,11 +13,9 @@ using WB.Core.SharedKernels.DataCollection.V4.CustomFunctions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
@@ -24,15 +23,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
     internal class ExportViewFactory : IExportViewFactory
     {
         private const string GeneratedTitleExportFormat = "{0}__{1}";
-
-        private readonly IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory;
+        
         private readonly IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
-        public ExportViewFactory(IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory,
+        public ExportViewFactory(
             IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory, IFileSystemAccessor fileSystemAccessor)
         {
-            this.referenceInfoForLinkedQuestionsFactory = referenceInfoForLinkedQuestionsFactory;
             this.questionnaireRosterStructureFactory = questionnaireRosterStructureFactory;
             this.fileSystemAccessor = fileSystemAccessor;
         }
@@ -49,19 +46,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             var questionnaireLevelStructure = this.questionnaireRosterStructureFactory.CreateQuestionnaireRosterStructure(questionnaire,
                 version);
 
-            var referenceInfoForLinkedQuestions =
-                this.referenceInfoForLinkedQuestionsFactory.CreateReferenceInfoForLinkedQuestions(questionnaire, version);
-
             result.HeaderToLevelMap.Add(new ValueVector<Guid>(),
                 this.BuildHeaderByTemplate(questionnaire, new ValueVector<Guid>(), questionnaireLevelStructure,
-                    referenceInfoForLinkedQuestions,
                     maxValuesForRosterSizeQuestions));
 
             foreach (var rosterScopeDescription in questionnaireLevelStructure.RosterScopes)
             {
                 result.HeaderToLevelMap.Add(rosterScopeDescription.Key,
-                    this.BuildHeaderByTemplate(questionnaire, rosterScopeDescription.Key, questionnaireLevelStructure,
-                        referenceInfoForLinkedQuestions, maxValuesForRosterSizeQuestions));
+                    this.BuildHeaderByTemplate(questionnaire, rosterScopeDescription.Key, questionnaireLevelStructure, maxValuesForRosterSizeQuestions));
             }
 
             return result;
@@ -225,7 +217,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         protected HeaderStructureForLevel CreateHeaderStructureForLevel(
             string levelTitle,
             IEnumerable<IGroup> groupsInLevel,
-            ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,
+            QuestionnaireDocument questionnaire,
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions,
             ValueVector<Guid> levelVector)
         {
@@ -237,7 +229,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
             foreach (var rootGroup in groupsInLevel)
             {
-                this.FillHeaderWithQuestionsInsideGroup(headerStructureForLevel, rootGroup, referenceInfoForLinkedQuestions,
+                this.FillHeaderWithQuestionsInsideGroup(headerStructureForLevel, rootGroup, questionnaire,
                     maxValuesForRosterSizeQuestions);
             }
 
@@ -253,7 +245,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             if (question is IMultyOptionsQuestion)
             {
                 var multioptionQuestion = (IMultyOptionsQuestion) question;
-                if (multioptionQuestion.LinkedToQuestionId.HasValue)
+                if (multioptionQuestion.LinkedToQuestionId.HasValue || multioptionQuestion.LinkedToRosterId.HasValue)
                 {
                     exportedHeaderItem.QuestionSubType = QuestionSubtype.MultyOption_Linked;
                 }
@@ -324,7 +316,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
         private static bool IsQuestionLinked(IQuestion question)
         {
-            return question.LinkedToQuestionId.HasValue;
+            return question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue;
         }
 
         private void ThrowIfQuestionIsNotMultiSelectOrTextList(IQuestion question)
@@ -372,7 +364,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         }
 
         private HeaderStructureForLevel BuildHeaderByTemplate(QuestionnaireDocument questionnaire, ValueVector<Guid> levelVector,
-            QuestionnaireRosterStructure questionnaireLevelStructure, ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,
+            QuestionnaireRosterStructure questionnaireLevelStructure,
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
             var rootGroups = this.GetRootGroupsForLevel(questionnaire, questionnaireLevelStructure, levelVector);
@@ -383,7 +375,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             var firstRootGroup = rootGroups.First();
             var levelTitle = firstRootGroup.VariableName ?? this.fileSystemAccessor.MakeValidFileName(firstRootGroup.Title);
 
-            var structures = this.CreateHeaderStructureForLevel(levelTitle, rootGroups, referenceInfoForLinkedQuestions,
+            var structures = this.CreateHeaderStructureForLevel(levelTitle, rootGroups, questionnaire,
                 maxValuesForRosterSizeQuestions, levelVector);
 
             if (questionnaireLevelStructure.RosterScopes.ContainsKey(levelVector) &&
@@ -423,7 +415,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         }
 
         private void FillHeaderWithQuestionsInsideGroup(HeaderStructureForLevel headerStructureForLevel, IGroup @group,
-            ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,
+            QuestionnaireDocument questionnaire,
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
             if (@group.RosterSizeSource == RosterSizeSourceType.FixedTitles && headerStructureForLevel.LevelLabels == null)
@@ -440,24 +432,24 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 {
                     if (this.IsQuestionMultiOption(question))
                     {
-                        if (question.LinkedToQuestionId.HasValue)
-                            this.AddHeadersForLinkedMultiOptions(headerStructureForLevel.HeaderItems, question,
-                                referenceInfoForLinkedQuestions, maxValuesForRosterSizeQuestions);
-                        else this.AddHeadersForMultiOptions(headerStructureForLevel.HeaderItems, question, referenceInfoForLinkedQuestions);
+                        if (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue)
+                            this.AddHeadersForLinkedMultiOptions(headerStructureForLevel.HeaderItems, question, questionnaire, maxValuesForRosterSizeQuestions);
+
+                        else this.AddHeadersForMultiOptions(headerStructureForLevel.HeaderItems, question, questionnaire);
                     }
                     else if (this.IsQuestionTextList(question))
                     {
                         this.AddHeadersForTextList(headerStructureForLevel.HeaderItems, question,
-                            referenceInfoForLinkedQuestions);
+                            questionnaire);
                     }
                     else
                     {
                         if (question is GpsCoordinateQuestion)
                             this.AddHeadersForGpsQuestion(headerStructureForLevel.HeaderItems, question,
-                                referenceInfoForLinkedQuestions);
+                                questionnaire);
                         else
                             this.AddHeaderForSingleColumnExportQuestion(headerStructureForLevel.HeaderItems, question,
-                                referenceInfoForLinkedQuestions);
+                                questionnaire);
                     }
                     continue;
                 }
@@ -467,7 +459,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 {
                     if (innerGroup.IsRoster)
                         continue;
-                    this.FillHeaderWithQuestionsInsideGroup(headerStructureForLevel, innerGroup, referenceInfoForLinkedQuestions,
+                    this.FillHeaderWithQuestionsInsideGroup(headerStructureForLevel, innerGroup, questionnaire,
                         maxValuesForRosterSizeQuestions);
                 }
             }
@@ -484,47 +476,47 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         }
 
         private void AddHeadersForLinkedMultiOptions(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question,
-            ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,
+            QuestionnaireDocument questionnaire,
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
             headerItems.Add(question.PublicKey,
                 this.CreateExportedHeaderItem(question,
-                    this.GetRosterSizeForLinkedQuestion(question, referenceInfoForLinkedQuestions, maxValuesForRosterSizeQuestions),
-                    this.GetLengthOfRosterVectorWhichNeedToBeExported(question, referenceInfoForLinkedQuestions)));
+                    this.GetRosterSizeForLinkedQuestion(question, questionnaire, maxValuesForRosterSizeQuestions),
+                    this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }
 
         protected void AddHeaderForSingleColumnExportQuestion(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question,
-            ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions)
+            QuestionnaireDocument questionnaire)
         {
             headerItems.Add(question.PublicKey,
                 this.CreateExportedHeaderItem(question,
-                    this.GetLengthOfRosterVectorWhichNeedToBeExported(question, referenceInfoForLinkedQuestions)));
+                    this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }
 
         protected void AddHeadersForMultiOptions(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question,
-            ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions)
+            QuestionnaireDocument questionnaire)
         {
             headerItems.Add(question.PublicKey,
                 this.CreateExportedHeaderItem(question, question.Answers.Count,
-                    this.GetLengthOfRosterVectorWhichNeedToBeExported(question, referenceInfoForLinkedQuestions)));
+                    this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }
 
         protected void AddHeadersForTextList(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question,
-            ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions)
+            QuestionnaireDocument questionnaire)
         {
             var textListQuestion = question as ITextListQuestion;
             var maxCount = (textListQuestion == null ? null : textListQuestion.MaxAnswerCount) ?? TextListQuestion.MaxAnswerCountLimit;
             headerItems.Add(question.PublicKey,
                 this.CreateExportedHeaderItem(question, maxCount,
-                    this.GetLengthOfRosterVectorWhichNeedToBeExported(question, referenceInfoForLinkedQuestions)));
+                    this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }
 
         protected void AddHeadersForGpsQuestion(IDictionary<Guid, ExportedHeaderItem> headerItems, IQuestion question,
-            ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions)
+            QuestionnaireDocument questionnaire)
         {
             var gpsColumns = GeoPosition.PropertyNames;
             var gpsQuestionExportHeader = this.CreateExportedHeaderItem(question,
-                this.GetLengthOfRosterVectorWhichNeedToBeExported(question, referenceInfoForLinkedQuestions));
+                this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire));
             gpsQuestionExportHeader.ColumnNames = new string[gpsColumns.Length];
             gpsQuestionExportHeader.Titles = new string[gpsColumns.Length];
 
@@ -539,27 +531,59 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             headerItems.Add(question.PublicKey, gpsQuestionExportHeader);
         }
 
-        private int GetRosterSizeForLinkedQuestion(IQuestion question, ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions,
+        private int GetRosterSizeForLinkedQuestion(IQuestion question, QuestionnaireDocument questionnaire,
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
-            var rosterSizeQuestionId =
-                referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions[question.PublicKey].ReferencedQuestionRosterScope.Last();
-            
+            Guid rosterSizeQuestionId =
+                this.GetRosterSizeSourcesForEntity(GetReferencedByLinkedQuestionEntity(question, questionnaire)).Last();
+
             if (!maxValuesForRosterSizeQuestions.ContainsKey(rosterSizeQuestionId))
                 return SharedKernels.SurveySolutions.Documents.Constants.MaxRosterRowCount;
-            
+
             return maxValuesForRosterSizeQuestions[rosterSizeQuestionId];
         }
 
-        private int? GetLengthOfRosterVectorWhichNeedToBeExported(IQuestion question,
-            ReferenceInfoForLinkedQuestions referenceInfoForLinkedQuestions)
+        private IComposite GetReferencedByLinkedQuestionEntity(IQuestion question, QuestionnaireDocument questionnaire)
         {
-            if (!referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions.ContainsKey(question.PublicKey))
+            if (question.LinkedToQuestionId.HasValue)
+            {
+                return questionnaire.Find<IQuestion>(question.LinkedToQuestionId.Value);
+            }
+
+            if (question.LinkedToRosterId.HasValue)
+            {
+                return questionnaire.Find<IGroup>(question.LinkedToRosterId.Value);
+            }
+            return null;
+        }
+
+        public ValueVector<Guid> GetRosterSizeSourcesForEntity(IComposite entity)
+        {
+            var rosterSizes = new List<Guid>();
+            while (!(entity is IQuestionnaireDocument))
+            {
+                var group = entity as IGroup;
+                if (group != null)
+                {
+                    if (group.IsRoster)
+                        rosterSizes.Add(group.RosterSizeQuestionId ?? group.PublicKey);
+
+                }
+                entity = entity.GetParent();
+            }
+            rosterSizes.Reverse();
+            return rosterSizes.ToArray();
+        }
+
+        private int? GetLengthOfRosterVectorWhichNeedToBeExported(IQuestion question, QuestionnaireDocument questionnaire)
+        {
+            var referencedByLinkedQuestionEntity = GetReferencedByLinkedQuestionEntity(question, questionnaire);
+            if (referencedByLinkedQuestionEntity == null)
                 return null;
+
             return
-                this.GetLengthOfRosterVectorWhichNeedToBeExported(
-                    referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions[question.PublicKey].LinkedQuestionRosterScope,
-                    referenceInfoForLinkedQuestions.ReferencesOnLinkedQuestions[question.PublicKey].ReferencedQuestionRosterScope);
+                this.GetLengthOfRosterVectorWhichNeedToBeExported(this.GetRosterSizeSourcesForEntity(question),
+                this.GetRosterSizeSourcesForEntity(referencedByLinkedQuestionEntity));
         }
 
         private int GetLengthOfRosterVectorWhichNeedToBeExported(ValueVector<Guid> scopeOfLinkedQuestion,

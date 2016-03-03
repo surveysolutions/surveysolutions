@@ -1,14 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
 {
     public class NumericQuestionChanged : AbstractNumericQuestionDataEvent
     {
-        public NumericQuestionChanged(Guid responsibleId, string conditionExpression, bool featured, string instructions, bool capital, Guid publicKey, 
+        public NumericQuestionChanged(Guid responsibleId, string conditionExpression, bool hideIfDisabled, bool featured, string instructions, bool capital, Guid publicKey, 
             string questionText, QuestionScope questionScope, string stataExportCaption, string variableLabel, string validationExpression, string validationMessage, 
-            bool? isInteger, int? countOfDecimalPlaces) : base(responsibleId, conditionExpression, featured, instructions, capital, publicKey, questionText, 
-                questionScope, stataExportCaption, variableLabel, validationExpression, validationMessage, isInteger, countOfDecimalPlaces)
+            bool? isInteger, int? countOfDecimalPlaces, List<ValidationCondition> validationConditions) : base(responsibleId, conditionExpression, hideIfDisabled, featured, instructions, capital, publicKey, questionText, 
+                questionScope, stataExportCaption, variableLabel, validationExpression, validationMessage, isInteger, countOfDecimalPlaces, validationConditions)
         {
         }
     }

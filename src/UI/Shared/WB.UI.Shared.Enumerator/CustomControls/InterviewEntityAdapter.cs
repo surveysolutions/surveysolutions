@@ -7,10 +7,10 @@ using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
-using Cirrious.CrossCore;
-using Cirrious.CrossCore.Droid.Platform;
-using Cirrious.MvvmCross.Binding.Droid.BindingContext;
+using MvvmCross.Binding.Droid.BindingContext;
 using MvvmCross.Droid.Support.V7.RecyclerView;
+using MvvmCross.Platform;
+using MvvmCross.Platform.Droid.Platform;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -37,8 +37,10 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (MultimedaQuestionViewModel), Resource.Layout.interview_question_multimedia},
             {typeof (SingleOptionQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (SingleOptionLinkedQuestionViewModel), Resource.Layout.interview_question_single_option},
+            {typeof (SingleOptionRosterLinkedQuestionViewModel), Resource.Layout.interview_question_single_option},
             {typeof (MultiOptionQuestionViewModel), Resource.Layout.interview_question_multi_option},
-            {typeof (MultiOptionLinkedQuestionViewModel), Resource.Layout.interview_question_multi_option},
+            {typeof (MultiOptionLinkedToQuestionQuestionViewModel), Resource.Layout.interview_question_multi_option},
+            {typeof (MultiOptionLinkedToRosterQuestionViewModel), Resource.Layout.interview_question_multi_option},
             {typeof (DateTimeQuestionViewModel), Resource.Layout.interview_question_datetime},
             {typeof (FilteredSingleOptionQuestionViewModel), Resource.Layout.interview_question_filtered_single_option },
             {typeof (CascadingSingleOptionQuestionViewModel), Resource.Layout.interview_question_cascading_single_option },
@@ -113,14 +115,6 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         private View CreateEmptyView(Context context)
         {
             return new View(context);
-        }
-
-        protected override void OnItemsSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            using (var handler = new Handler(Looper.MainLooper))
-            {
-                handler.Post(() => this.NotifyDataSetChanged(e));
-            }
         }
 
         public override void OnViewDetachedFromWindow(Object holder)

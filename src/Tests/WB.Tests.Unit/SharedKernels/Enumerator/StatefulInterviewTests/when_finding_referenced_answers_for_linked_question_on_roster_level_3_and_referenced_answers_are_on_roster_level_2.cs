@@ -21,11 +21,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 => _.HasQuestion(linkedQuestionId) == true
                 && _.GetRosterLevelForQuestion(linkedQuestionId) == linkedQuestionRosters.Length
                 && _.GetRostersFromTopToSpecifiedQuestion(linkedQuestionId) == linkedQuestionRosters
-                && _.GetRosterSizeSourcesForQuestion(linkedQuestionId) == linkedQuestionRosters
+                && _.GetRosterSizeSourcesForEntity(linkedQuestionId) == linkedQuestionRosters
                 && _.HasQuestion(referencedQuestionId) == true
                 && _.GetRosterLevelForQuestion(referencedQuestionId) == referencedQuestionRosters.Length
                 && _.GetRostersFromTopToSpecifiedQuestion(referencedQuestionId) == referencedQuestionRosters
-                && _.GetRosterSizeSourcesForQuestion(referencedQuestionId) == referencedQuestionRosters);
+                && _.GetRosterSizeSourcesForEntity(referencedQuestionId) == referencedQuestionRosters);
 
             interview = Create.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 

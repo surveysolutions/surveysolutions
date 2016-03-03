@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
             });
         }
 
-        protected static IPublishedEvent<NewGroupAdded> CreateNewGroupAddedEvent(Guid groupId, Guid parentGroupId, string enablementCondition, string description, string title)
+        protected static IPublishedEvent<NewGroupAdded> CreateNewGroupAddedEvent(Guid groupId, Guid parentGroupId, string enablementCondition, string description, string title, bool hideIfDisabled)
         {
             return ToPublishedEvent(new NewGroupAdded
             {
@@ -66,11 +66,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
                 GroupText = title,
                 ParentGroupPublicKey = parentGroupId,
                 Description = description,
-                ConditionExpression = enablementCondition
+                ConditionExpression = enablementCondition,
+                HideIfDisabled = hideIfDisabled
             });
         }
 
-        protected static IPublishedEvent<GroupCloned> CreateGroupClonedEvent(Guid groupId, Guid parentGroupId, string enablementCondition, string description, string title)
+        protected static IPublishedEvent<GroupCloned> CreateGroupClonedEvent(Guid groupId, Guid parentGroupId, string enablementCondition, string description, string title, bool hideIfDisabled)
         {
             return ToPublishedEvent(new GroupCloned
             {
@@ -78,7 +79,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
                 GroupText = title,
                 ParentGroupPublicKey = parentGroupId,
                 Description = description,
-                ConditionExpression = enablementCondition
+                ConditionExpression = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
             });
         }
 
@@ -144,26 +146,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
                 });
         }
 
-        protected static IPublishedEvent<NumericQuestionAdded> CreateNumericQuestionAddedEvent(
-            Guid questionId, Guid? parentGroupId = null)
-        {
-            return ToPublishedEvent(Create.Event.NumericQuestionAdded
-            (
-                publicKey : questionId,
-                groupPublicKey : parentGroupId ?? Guid.NewGuid()
-            ));
-        }
-
-        protected static IPublishedEvent<QRBarcodeQuestionAdded> CreateQRBarcodeQuestionAddedEvent(
-            Guid questionId, Guid parentGroupId)
-        {
-            return ToPublishedEvent(new QRBarcodeQuestionAdded
-            {
-                QuestionId = questionId,
-                ParentGroupId = parentGroupId
-            });
-        }
-
         protected static IPublishedEvent<StaticTextAdded> CreateStaticTextAddedEvent(Guid entityId, Guid parentId, string text = null)
         {
             return ToPublishedEvent(new StaticTextAdded
@@ -171,16 +153,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
                 EntityId = entityId,
                 ParentId = parentId,
                 Text = text
-            });
-        }
-
-        protected static IPublishedEvent<TextListQuestionAdded> CreateTextListQuestionAddedEvent(
-            Guid questionId, Guid parentGroupId)
-        {
-            return ToPublishedEvent(new TextListQuestionAdded
-            {
-                PublicKey = questionId,
-                GroupId = parentGroupId
             });
         }
 
@@ -319,18 +291,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
             return ToPublishedEvent(new QuestionnaireCloned
             {
                 QuestionnaireDocument = questionnaireDocument ?? new QuestionnaireDocument()
-            });
-        }
-
-
-        protected static IPublishedEvent<TextListQuestionAdded> CreateTextListQuestionAddedEvent(
-            Guid questionId, Guid? parentGroupId = null, int? maxAnswerCount = null)
-        {
-            return ToPublishedEvent(new TextListQuestionAdded
-            {
-                PublicKey = questionId,
-                GroupId = parentGroupId ?? Guid.NewGuid(),
-                MaxAnswerCount = maxAnswerCount
             });
         }
 

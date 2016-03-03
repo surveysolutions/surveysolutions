@@ -36,7 +36,10 @@
 
         <div class="form-group enabling-group">
             <div class="enabling-group-marker"></div>
-            <label for="edit-group-condition">Enabling condition <help key="conditionExpression"/></label><br>
+            <label for="edit-group-condition">Enabling condition <help key="conditionExpression"/></label>
+            <input id="cb-hideIfDisabled" type="checkbox" class="wb-checkbox" ng-model="activeRoster.hideIfDisabled" />
+            <label for="cb-hideIfDisabled"><span></span>Hide if disabled</label>
+            <br>
             <div class="pseudo-form-control">
                 <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded }" ng-model="activeRoster.enablementCondition"></div>
             </div>

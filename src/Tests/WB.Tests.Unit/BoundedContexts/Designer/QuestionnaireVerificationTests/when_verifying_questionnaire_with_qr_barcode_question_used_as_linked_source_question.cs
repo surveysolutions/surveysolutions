@@ -51,28 +51,28 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
-            resultErrors.Count().ShouldEqual(1);
+        It should_return_1_message = () =>
+            verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_error_with_code__WB0012 = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0012");
+        It should_return_message_with_code__WB0012 = () =>
+            verificationMessages.Single().Code.ShouldEqual("WB0012");
 
-        It should_return_error_with_2_references = () =>
-            resultErrors.Single().References.Count().ShouldEqual(2);
+        It should_return_message_with_2_references = () =>
+            verificationMessages.Single().References.Count().ShouldEqual(2);
 
-        private It should_return_error_reference_with_type_Question = () =>
-            resultErrors.Single()
+        private It should_return_message_reference_with_type_Question = () =>
+            verificationMessages.Single()
                 .References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_error_reference_with_id_of_multiQuestionLinkedToQRBarcodeQuestionId = () =>
-            resultErrors.Single().References.ElementAt(0).Id.ShouldEqual(multiQuestionLinkedToQRBarcodeQuestionId);
+        It should_return_message_reference_with_id_of_multiQuestionLinkedToQRBarcodeQuestionId = () =>
+            verificationMessages.Single().References.ElementAt(0).Id.ShouldEqual(multiQuestionLinkedToQRBarcodeQuestionId);
 
-        It should_return_error_reference_with_id_of_qrBarcodeQuestionId = () =>
-            resultErrors.Single().References.ElementAt(1).Id.ShouldEqual(qrBarcodeQuestionId);
+        It should_return_message_reference_with_id_of_qrBarcodeQuestionId = () =>
+            verificationMessages.Single().References.ElementAt(1).Id.ShouldEqual(qrBarcodeQuestionId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 

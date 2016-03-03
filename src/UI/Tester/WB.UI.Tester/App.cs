@@ -1,4 +1,4 @@
-using Cirrious.MvvmCross.ViewModels;
+using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 
 namespace WB.UI.Tester

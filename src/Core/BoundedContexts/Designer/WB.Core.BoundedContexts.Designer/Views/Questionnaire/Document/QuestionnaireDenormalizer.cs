@@ -30,7 +30,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<NewQuestionAdded>,
         IEventHandler<QuestionCloned>,
         IEventHandler<QuestionChanged>,
-        IEventHandler<NumericQuestionAdded>,
         IEventHandler<NumericQuestionCloned>,
         IEventHandler<NumericQuestionChanged>,
         IEventHandler<GroupDeleted>,
@@ -43,11 +42,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<TemplateImported>,
         IEventHandler<QuestionnaireCloned>,
 
-        IEventHandler<TextListQuestionAdded>,
         IEventHandler<TextListQuestionCloned>,
         IEventHandler<TextListQuestionChanged>,
 
-        IEventHandler<QRBarcodeQuestionAdded>,
         IEventHandler<QRBarcodeQuestionUpdated>,
         IEventHandler<QRBarcodeQuestionCloned>,
 
@@ -336,11 +333,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         }
         #endregion
 
-        public void Handle(IPublishedEvent<NumericQuestionAdded> evnt)
-        {
-            AddQuestion(evnt, evnt.Payload.GroupPublicKey,EventConverter.NumericQuestionAddedToQuestionData(evnt));
-        }
-
         public void Handle(IPublishedEvent<NumericQuestionCloned> evnt)
         {
             NumericQuestionCloned e = evnt.Payload;
@@ -350,11 +342,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         public void Handle(IPublishedEvent<NumericQuestionChanged> evnt)
         {
             UpdateQuestion(evnt, EventConverter.NumericQuestionChangedToQuestionData(evnt));
-        }
-
-        public void Handle(IPublishedEvent<TextListQuestionAdded> evnt)
-        {
-            AddQuestion(evnt, evnt.Payload.GroupId, EventConverter.TextListQuestionAddedToQuestionData(evnt));
         }
 
         public void Handle(IPublishedEvent<TextListQuestionCloned> evnt)
@@ -385,7 +372,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 evnt.Payload.GroupPublicKey,
                 evnt.Payload.GroupText, evnt.Payload.VariableName,
                 evnt.Payload.Description,
-                evnt.Payload.ConditionExpression);
+                evnt.Payload.ConditionExpression,
+                evnt.Payload.HideIfDisabled);
 
             this.UpdateQuestionnaire(evnt, item);
         }
@@ -471,11 +459,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         public void Handle(IPublishedEvent<QuestionnaireCloned> evnt)
         {
             this.AddNewQuestionnaire(evnt.Payload.QuestionnaireDocument);
-        }
-
-        public void Handle(IPublishedEvent<QRBarcodeQuestionAdded> evnt)
-        {
-            AddQuestion(evnt, evnt.Payload.ParentGroupId,EventConverter.QRBarcodeQuestionAddedToQuestionData(evnt));
         }
 
         public void Handle(IPublishedEvent<QRBarcodeQuestionUpdated> evnt)

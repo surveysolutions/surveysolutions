@@ -33,7 +33,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         IEventHandler<NewQuestionAdded>,
         IEventHandler<QuestionCloned>,
         IEventHandler<QuestionChanged>,
-        IEventHandler<NumericQuestionAdded>,
         IEventHandler<NumericQuestionCloned>,
         IEventHandler<NumericQuestionChanged>,
         IEventHandler<GroupDeleted>,
@@ -46,11 +45,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         IEventHandler<TemplateImported>,
         IEventHandler<QuestionnaireCloned>,
 
-        IEventHandler<TextListQuestionAdded>,
         IEventHandler<TextListQuestionCloned>,
         IEventHandler<TextListQuestionChanged>,
 
-        IEventHandler<QRBarcodeQuestionAdded>,
         IEventHandler<QRBarcodeQuestionUpdated>,
         IEventHandler<QRBarcodeQuestionCloned>,
 
@@ -313,16 +310,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             questionnaireStateTackerStorage.Store(questionnaire, evnt.EventSourceId);
         }
 
-        public void Handle(IPublishedEvent<NumericQuestionAdded> evnt)
-        {
-            var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
-            AddOrUpdateQuestionState(evnt.EventSourceId, evnt.Payload.PublicKey, questionTitle);
-
-            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
-                QuestionnaireActionType.Add, QuestionnaireItemType.Question, evnt.Payload.PublicKey,
-                questionTitle, evnt.EventSequence);
-        }
-
         public void Handle(IPublishedEvent<NumericQuestionCloned> evnt)
         {
             var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
@@ -345,16 +332,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 questionTitle, evnt.EventSequence);
         }
 
-        public void Handle(IPublishedEvent<TextListQuestionAdded> evnt)
-        {
-            var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
-            AddOrUpdateQuestionState(evnt.EventSourceId, evnt.Payload.PublicKey, questionTitle);
-
-            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
-                QuestionnaireActionType.Add, QuestionnaireItemType.Question, evnt.Payload.PublicKey,
-                questionTitle, evnt.EventSequence);
-        }
-
         public void Handle(IPublishedEvent<TextListQuestionCloned> evnt)
         {
             var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
@@ -374,16 +351,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
             AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
                 QuestionnaireActionType.Update, QuestionnaireItemType.Question, evnt.Payload.PublicKey,
-                questionTitle, evnt.EventSequence);
-        }
-
-        public void Handle(IPublishedEvent<QRBarcodeQuestionAdded> evnt)
-        {
-            var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
-            AddOrUpdateQuestionState(evnt.EventSourceId, evnt.Payload.QuestionId, questionTitle);
-
-            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
-                QuestionnaireActionType.Add, QuestionnaireItemType.Question, evnt.Payload.QuestionId,
                 questionTitle, evnt.EventSequence);
         }
 
