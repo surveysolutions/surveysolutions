@@ -1044,5 +1044,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0202_GroupWithoutQuestions", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster group contains only one question. Consider grouping with other rosters. For fixed roster, consider presenting as a set of independent qustions.
+        /// </summary>
+        internal static string WB0203_RosterHasSingleQuetsion {
+            get {
+                return ResourceManager.GetString("WB0203_RosterHasSingleQuetsion", resourceCulture);
+            }
+        }
     }
 }

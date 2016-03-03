@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
@@ -55,7 +56,11 @@ namespace WB.UI.Designer.CommandDeserialization
                      //Lookup table commands
                     { "AddLookupTable", typeof (AddLookupTable) },
                     { "UpdateLookupTable", typeof (UpdateLookupTable) },
-                    { "DeleteLookupTable", typeof (DeleteLookupTable) }
+                    { "DeleteLookupTable", typeof (DeleteLookupTable) },
+                     //Attachment commands
+                    { "AddAttachment", typeof (AddAttachment) },
+                    { "UpdateAttachment", typeof (UpdateAttachment) },
+                    { "DeleteAttachment", typeof (DeleteAttachment) }
                 };
             }
         }

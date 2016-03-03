@@ -36,6 +36,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsQuestionLinked(Guid questionId);
 
+        Guid GetQuestionIdByVariable(string variable);
+
         string GetQuestionTitle(Guid questionId);
 
         string GetQuestionVariableName(Guid questionId);
@@ -164,5 +166,10 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string GetValidationMessage(Guid questionId, int conditionIndex);
 
         bool HasMoreThanOneValidationRule(Guid questionId);
+        string GetQuestionInstruction(Guid questionId);
+        bool IsQuestionFilteredCombobox(Guid questionId);
+        bool IsQuestionCascading(Guid questionId);
+        bool ShouldQuestionRecordAnswersOrder(Guid questionId);
+        string GetTextQuestionMask(Guid questionId);
     }
 }

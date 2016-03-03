@@ -109,6 +109,35 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                         })
                 .OrderBy(x => x.Name)
                 .ToList();
+
+            questionnaireInfoView.Attachments = new List<AttachmentView> { 
+                       new AttachmentView
+                       {
+                           ItemId = Guid.NewGuid().FormatGuid(),
+                           Name = "bananas",
+                           FileName = "babanas.jpg",
+                           Format = "image/jpeg",
+                           Height = 300,
+                           Width = 500,
+                           LastUpdated = new DateTime(2016, 2, 14, 14, 14, 14),
+                           SizeInBytes = 53
+                       },
+                       new AttachmentView
+                       {
+                           ItemId = Guid.NewGuid().FormatGuid(),
+                           Name = "christmas",
+                           FileName = "christmas.jpg",
+                           Format = "image/jpeg",
+                           Height = 300,
+                           Width = 500,
+                           LastUpdated = new DateTime(2016, 1, 07, 07, 07, 07),
+                           SizeInBytes = 47
+                       }
+                }
+               .OrderBy(x => x.Name)
+               .ToList();
+
+
             return questionnaireInfoView;
         }
     }

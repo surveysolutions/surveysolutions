@@ -25,14 +25,6 @@ namespace WB.Tests.Unit
 {
     internal static class Setup
     {
-        public static IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> QuestionnaireReadSideKeyValueStorage(QuestionnaireDocument questionnaire = null)
-        {
-            var questionnaireMock = new Mock<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>();
-            questionnaireMock.Setup(_ => _.GetById(Moq.It.IsAny<string>()))
-                .Returns(new QuestionnaireDocumentVersioned() { Questionnaire = questionnaire ?? new QuestionnaireDocument() });
-            return questionnaireMock.Object;
-        }
-
         public static void InstanceToMockedServiceLocator<TInstance>(TInstance instance)
         {
             Mock.Get(ServiceLocator.Current)

@@ -5,11 +5,9 @@ using System.Linq;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -21,7 +19,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<RosterInstancesTitleChanged>,IDisposable
     {
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly ISubstitutionService substitutionService;
@@ -30,13 +27,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public BreadCrumbsViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository,
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry,
             ISubstitutionService substitutionService)
         {
             this.questionnaireRepository = questionnaireRepository;
-            this.questionnaireModelRepository = questionnaireModelRepository;
             this.interviewRepository = interviewRepository;
             this.eventRegistry = eventRegistry;
             this.substitutionService = substitutionService;
@@ -56,7 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Handle(RosterInstancesTitleChanged @event)
         {
             var interview = this.interviewRepository.Get(this.interviewId);
-            var questionnaire = this.questionnaireModelRepository.GetById(interview.QuestionnaireId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
             foreach (var changedRosterInstance in @event.ChangedInstances)
             {
@@ -65,7 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 if (breadCrumb != null)
                 {
-                    var groupTitle = questionnaire.GroupsWithFirstLevelChildrenAsReferences[changedRosterInstance.RosterInstance.GroupId].Title;
+                    var groupTitle = questionnaire.GetGroupTitle(changedRosterInstance.RosterInstance.GroupId);
                     breadCrumb.Text = this.GenerateRosterTitle(groupTitle, changedRosterInstance.Title);
                 }
             }
@@ -93,7 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private void BuildBreadCrumbs(Identity newGroupIdentity)
         {
             var interview = this.interviewRepository.Get(this.interviewId);
-            var questionnaireModel = this.questionnaireModelRepository.GetById(interview.QuestionnaireId);
+            var questionnaireModel = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
             ReadOnlyCollection<Guid> parentIds = questionnaire.GetParentsStartingFromTop(newGroupIdentity.Id);
@@ -102,7 +97,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             int metRosters = 0;
             foreach (Guid parentId in parentIds)
             {
-                var groupTitle = questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[parentId].Title;
+                var groupTitle = questionnaireModel.GetGroupTitle(parentId);
 
                 if (questionnaire.IsRosterGroup(parentId))
                 {

@@ -16,6 +16,7 @@ namespace WB.Infrastructure.Native.Storage.Esent.Implementation
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly IReadSideStorage<TEntity> storage;
+        private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ReadSideCacheSettings cacheSettings;
 
         private bool isCacheUsed = false;
@@ -23,33 +24,20 @@ namespace WB.Infrastructure.Native.Storage.Esent.Implementation
 
         private readonly Dictionary<string, TEntity> memoryCache = new Dictionary<string, TEntity>();
         private PersistentDictionary<string, string> esentCache;
-        private readonly string esentCacheFolder;
 
         public EsentCachedReadSideStorage(IReadSideStorage<TEntity> storage, IFileSystemAccessor fileSystemAccessor, ReadSideCacheSettings cacheSettings)
         {
             this.storage = storage;
+            this.fileSystemAccessor = fileSystemAccessor;
             this.cacheSettings = cacheSettings;
-
-            this.esentCacheFolder = Path.Combine(cacheSettings.EsentCacheFolder, typeof(TEntity).Name);
-
-            if (!fileSystemAccessor.IsDirectoryExists(this.esentCacheFolder))
-            {
-                fileSystemAccessor.CreateDirectory(this.esentCacheFolder);
-            }
-
-            if (!fileSystemAccessor.IsWritePermissionExists(this.esentCacheFolder))
-            {
-                throw new ArgumentException($"Error initializing ESENT persistent dictionary because there are problems with write access to folder {this.esentCacheFolder}");
-            }
-
-            PersistentDictionaryFile.DeleteFiles(this.esentCacheFolder);
-            this.esentCache = new PersistentDictionary<string, string>(this.esentCacheFolder);
         }
 
-        public string GetReadableStatus()
-            => $"{this.storage.GetReadableStatus()}  |  cache {(this.isCacheUsed ? "enabled" : "disabled")}  |  memory ⇄ ESENT → storage : {this.memoryCache.Count:N0} ⇄ {this.esentCache.Count:N0} → {this.entitiesSentToStorage:N0}";
-
         public Type ViewType => typeof(TEntity);
+
+        private string EsentCacheFolder => Path.Combine(this.cacheSettings.EsentCacheFolder, this.ViewType.Name);
+
+        public string GetReadableStatus()
+            => $"{this.storage.GetReadableStatus()}  |  cache {(this.isCacheUsed ? "enabled" : "disabled")}  |  memory ⇄ ESENT → storage : {this.memoryCache.Count:N0} ⇄ {this.esentCache?.Count.ToString("N0") ?? "N/A"} → {this.entitiesSentToStorage:N0}";
 
         public bool IsCacheEnabled => this.isCacheUsed;
 
@@ -57,6 +45,8 @@ namespace WB.Infrastructure.Native.Storage.Esent.Implementation
 
         public void EnableCache()
         {
+            this.InitializeEsentCache();
+
             this.isCacheUsed = true;
 
             this.entitiesSentToStorage = 0;
@@ -71,6 +61,24 @@ namespace WB.Infrastructure.Native.Storage.Esent.Implementation
             this.MoveEntitiesFromEsentToStorage();
 
             this.isCacheUsed = false;
+        }
+
+        private void InitializeEsentCache()
+        {
+            if (!this.fileSystemAccessor.IsDirectoryExists(this.EsentCacheFolder))
+            {
+                this.fileSystemAccessor.CreateDirectory(this.EsentCacheFolder);
+            }
+
+            if (!this.fileSystemAccessor.IsWritePermissionExists(this.EsentCacheFolder))
+            {
+                throw new ArgumentException(
+                    $"Error initializing ESENT persistent dictionary because there are problems with write access to folder {this.EsentCacheFolder}");
+            }
+
+            PersistentDictionaryFile.DeleteFiles(this.EsentCacheFolder);
+
+            this.esentCache = new PersistentDictionary<string, string>(this.EsentCacheFolder);
         }
 
         public TEntity GetById(string id)
@@ -208,8 +216,8 @@ namespace WB.Infrastructure.Native.Storage.Esent.Implementation
             }
 
             this.esentCache.Dispose();
-            PersistentDictionaryFile.DeleteFiles(this.esentCacheFolder);
-            this.esentCache = new PersistentDictionary<string, string>(this.esentCacheFolder);
+            PersistentDictionaryFile.DeleteFiles(this.EsentCacheFolder);
+            this.esentCache = null;
         }
 
         public void Dispose()

@@ -10,6 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             Type = QuestionType.SingleOption;
         }
         public Guid? LinkedToEntityId { get; set; }
+        public string LinkedFilterExpression { get; set; }
         public CategoricalOption[] Options { get; set; }
         public override QuestionType Type { get; set; }
         public bool? IsFilteredCombobox { get; set; }

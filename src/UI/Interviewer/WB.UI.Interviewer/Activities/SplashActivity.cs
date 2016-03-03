@@ -9,8 +9,6 @@ using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Preferences;
 using Android.Widget;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using MvvmCross.Droid.Views;
 using MvvmCross.Platform;
 using PCLStorage;
@@ -23,8 +21,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Shared.Enumerator;
@@ -79,7 +75,6 @@ namespace WB.UI.Interviewer.Activities
             await RestoreInterviewerAsync();
             await Task.Run(this.RestoreInterviewsAsync);
             await Task.Run(this.RestoreQuestionnairesAsync);
-            await Task.Run(this.RestoreQuestionnaireModelsAndDocumentsAsync);
             await Task.Run(this.RestoreEventStreamsAsync);
             await Task.Run(this.RestoreInterviewDetailsAsync);
             await Task.Run(this.RestoreInterviewImagesAsync);
@@ -260,40 +255,6 @@ namespace WB.UI.Interviewer.Activities
             }));
         }
 
-        private async Task RestoreQuestionnaireModelsAndDocumentsAsync()
-        {
-            var serializer = Mvx.Resolve<ISerializer>();
-            var questionnaireModelBuilder = Mvx.Resolve<IQuestionnaireModelBuilder>();
-
-            var questionnaires = this.GetSqlLiteEntities<PlainStorageRow>("PlainStore");
-
-            var questionnaireDocumentsAndModels = questionnaires.Select(
-                x =>
-                    new
-                    {
-                        QuestionnaireEntityTypeName = x.Id.Split('$')[0],
-                        QuestionnaireId = x.Id = x.Id.Split('$')[1] + "$" + x.Id.Split('$')[2],
-                        Entity = serializer.Deserialize<object>(x.SerializedData, TypeSerializationSettings.AllTypes)
-                    }).ToList();
-
-            var questionnaireModels =
-                questionnaireDocumentsAndModels.Where(x => x.QuestionnaireEntityTypeName == "QuestionnaireModel")
-                    .Select(x => new { QuestionnaireId = x.QuestionnaireId, Model = (QuestionnaireModel)x.Entity })
-                    .ToList();
-            var questionnaireDocuments =
-                questionnaireDocumentsAndModels.Where(x => x.QuestionnaireEntityTypeName == "QuestionnaireDocument")
-                    .Select(x => new { QuestionnaireId = x.QuestionnaireId, Document = (QuestionnaireDocument)x.Entity })
-                    .ToList();
-
-            foreach (var questionnaireDocument in questionnaireDocuments)
-            {
-                var questionnaireModel = questionnaireModels.FirstOrDefault(x => x.QuestionnaireId == questionnaireDocument.QuestionnaireId)?.Model ??
-                    questionnaireModelBuilder.BuildQuestionnaireModel(questionnaireDocument.Document);
-
-                await this.FixCompleteScreenAndStoreQuestionnaireAsync(questionnaireDocument.QuestionnaireId, questionnaireModel, questionnaireDocument.Document);
-            }
-        }
-
         [Obsolete]
         public class PlainStorageRow
         {
@@ -302,44 +263,6 @@ namespace WB.UI.Interviewer.Activities
 
             public string SerializedData { get; set; }
         }
-
-        public async Task FixCompleteScreenAndStoreQuestionnaireAsync(string questionnaireId, QuestionnaireModel questionnaireModel, QuestionnaireDocument questionnaireDocument)
-        {
-            var questionnaireDocumentViewRepository = Mvx.Resolve<IAsyncPlainStorage<QuestionnaireDocumentView>>();
-            var questionnaireModelViewRepository = Mvx.Resolve<IAsyncPlainStorage<QuestionnaireModelView>>();
-
-            if (questionnaireModel?.GroupsHierarchy != null && !questionnaireModel.GroupsHierarchy.Any())
-            {
-                var lastGroupInHierarchy = questionnaireModel.GroupsHierarchy.Last();
-
-                if (lastGroupInHierarchy.Title == UIResources.Interview_Complete_Screen_Title &&
-                    !lastGroupInHierarchy.Children.Any())
-                {
-                    questionnaireModel.GroupsHierarchy.Remove(lastGroupInHierarchy);
-
-                    var groupInQuestionnaireDocument =
-                    questionnaireDocument.Children.OfType<IGroup>().FirstOrDefault(g => g.PublicKey == lastGroupInHierarchy.Id);
-
-                    if (groupInQuestionnaireDocument != null)
-                    {
-                        questionnaireDocument.Children.Remove(groupInQuestionnaireDocument);
-                    }
-                }
-            }
-
-            await questionnaireModelViewRepository.StoreAsync(new QuestionnaireModelView
-            {
-                Id = questionnaireId,
-                Model = questionnaireModel
-            });
-
-            await questionnaireDocumentViewRepository.StoreAsync(new QuestionnaireDocumentView
-            {
-                Id = questionnaireId,
-                Document = questionnaireDocument
-            });
-        }
-
 
         private static async Task RestoreApplicationSettingsAsync()
         {

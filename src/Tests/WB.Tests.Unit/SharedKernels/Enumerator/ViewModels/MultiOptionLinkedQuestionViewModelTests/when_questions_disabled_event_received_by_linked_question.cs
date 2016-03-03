@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using It = Machine.Specifications.It;
@@ -28,19 +27,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                 x.Answers == new Dictionary<string, BaseInterviewAnswer>()
             );
 
-            var questionnaire = Create.QuestionnaireModel();
-            var linkedMultiOptionQuestionModel = new LinkedMultiOptionQuestionModel
-            {
-                LinkedToQuestionId = linkedToQuestionId
-            };
-            questionnaire.Questions = new Dictionary<Guid, BaseQuestionModel>
-            {
-                {questionId.Id, linkedMultiOptionQuestionModel},
-                {linkedToQuestionId, new TextQuestionModel()}
-            };
+            var questionnaire = Mock.Of<IQuestionnaire>(_
+                => _.GetQuestionReferencedByLinkedQuestion(questionId.Id) == linkedToQuestionId
+                && _.ShouldQuestionRecordAnswersOrder(questionId.Id) == false);
 
             var interviews = new Mock<IStatefulInterviewRepository>();
-            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
+            var questionnaires = new Mock<IPlainQuestionnaireRepository>();
 
             interviews.SetReturnsDefault(interview);
             questionnaires.SetReturnsDefault(questionnaire);

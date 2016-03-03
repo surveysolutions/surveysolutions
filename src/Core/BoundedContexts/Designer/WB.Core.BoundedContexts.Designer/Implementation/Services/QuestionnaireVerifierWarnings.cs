@@ -26,6 +26,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             };
         }
 
+        private bool HasSingleQuestionInRoster(IGroup rosterGroup)
+        {
+            return rosterGroup.IsRoster && rosterGroup.Children.OfType<IQuestion>().Count() == 1;
+        }
+
         private bool TooManyQuestionsInGroup(IGroup group)
         {
             return group.Children.OfType<IQuestion>().Count() > 200;

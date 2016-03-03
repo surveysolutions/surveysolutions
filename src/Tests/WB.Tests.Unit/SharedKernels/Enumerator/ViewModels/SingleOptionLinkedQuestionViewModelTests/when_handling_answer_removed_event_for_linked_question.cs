@@ -7,7 +7,6 @@ using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using It = Machine.Specifications.It;
@@ -18,12 +17,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
     {
         Establish context = () =>
         {
-            var questionnaire = Create.QuestionnaireModel(questions: new BaseQuestionModel[]
-            {
-                Create.LinkedSingleOptionQuestionModel(questionId, linkedToQuestionId),
-                Create.TextQuestionModel(linkedToQuestionId)
-            });
-            
+            var questionnaire = SetupQuestionnaireWithSingleOptionQuestionLinkedToTextQuestion(questionId, linkedToQuestionId);
+
             var answer = new LinkedSingleOptionAnswer();
 
             var answeredLinkedOption = new[] { 1m };
@@ -40,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                    && _.GetLinkedSingleOptionAnswer(questionIdentity) == answer);
 
             viewModel = Create.SingleOptionLinkedQuestionViewModel(
-                questionnaireModel: questionnaire,
+                questionnaire: questionnaire,
                 interview: interview);
 
             viewModel.Init(interviewId, questionIdentity, navigationState);

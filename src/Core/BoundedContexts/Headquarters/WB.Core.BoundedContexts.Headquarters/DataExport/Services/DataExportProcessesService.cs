@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
@@ -16,11 +15,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
     internal class DataExportProcessesService : IDataExportProcessesService
     {
         private readonly ConcurrentDictionary<string, IDataExportProcessDetails> processes = new ConcurrentDictionary<string, IDataExportProcessDetails>();
-        private readonly IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaires;
 
-        public DataExportProcessesService(IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaires)
+        private IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
+
+        public DataExportProcessesService()
         {
-            this.questionnaires = questionnaires;
         }
 
         public IDataExportProcessDetails GetAndStartOldestUnprocessedDataExport()
@@ -41,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public string AddDataExport(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat, InterviewStatus? status)
         {
-            var questionnaireBrowseItem = questionnaires.AsVersioned().Get(questionnaire.QuestionnaireId.FormatGuid(), questionnaire.Version);
+            var questionnaireBrowseItem = this.questionnaires.GetById(questionnaire.ToString());
             if (questionnaireBrowseItem == null)
                 throw new ArgumentException($"Questionnaire {questionnaire} wasn't found");
 

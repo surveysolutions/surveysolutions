@@ -9,13 +9,13 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -32,7 +32,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         IDisposable
     {
         private readonly Guid userId;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
+        private readonly IPlainQuestionnaireRepository questionnaireStorage;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAnswerToStringService answerToStringService;
         private readonly ILiteEventRegistry eventRegistry;
@@ -40,14 +41,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public SingleOptionLinkedQuestionViewModel(
             IPrincipal principal,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireStorage,
+            IPlainQuestionnaireRepository questionnaireStorage,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
             ILiteEventRegistry eventRegistry,
             IMvxMainThreadDispatcher mainThreadDispatcher,
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
-            AnswerNotifier referencedAnswerNotifier)
+            AnswerNotifier referencedAnswerNotifier, 
+            IPlainQuestionnaireRepository questionnaireRepository)
         {
             if (principal == null) throw new ArgumentNullException("principal");
             if (questionnaireStorage == null) throw new ArgumentNullException("questionnaireStorage");
@@ -65,6 +67,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
             this.ReferencedAnswerNotifier = referencedAnswerNotifier;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
         private Identity questionIdentity;
@@ -97,18 +100,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState.Init(interviewId, questionIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireStorage.GetById(interview.QuestionnaireId);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity);
 
             this.questionIdentity = questionIdentity;
             this.interviewId = interview.Id;
 
-            var questionModel = questionnaire.GetLinkedSingleOptionQuestion(this.questionIdentity.Id);
-            this.referencedQuestionId = questionModel.LinkedToQuestionId;
+            this.referencedQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(this.questionIdentity.Id);
 
             this.ReferencedAnswerNotifier.Init(interviewId, this.referencedQuestionId);
             this.ReferencedAnswerNotifier.QuestionAnswered += this.ReferencedQuestionAnswered;
 
-            var options = this.GenerateOptionsFromModel(interview, questionnaire);
+            var options = this.GenerateOptionsFromModel(interview, this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity));
             this.Options = new ObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(options);
 
             this.eventRegistry.Subscribe(this, interviewId);
@@ -126,17 +128,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private List<SingleOptionLinkedQuestionOptionViewModel> GenerateOptionsFromModel(IStatefulInterview interview, QuestionnaireModel questionnaire)
+        private List<SingleOptionLinkedQuestionOptionViewModel> GenerateOptionsFromModel(IStatefulInterview interview, IQuestionnaire questionnaire)
         {
             var linkedAnswerModel = interview.GetLinkedSingleOptionAnswer(this.questionIdentity);
 
             IEnumerable<BaseInterviewAnswer> referencedQuestionAnswers =
                 interview.FindAnswersOfReferencedQuestionForLinkedQuestion(this.referencedQuestionId, this.questionIdentity);
 
-            var referencedQuestion = questionnaire.Questions[this.referencedQuestionId];
-
             var options = referencedQuestionAnswers
-                .Select(referencedAnswer => this.GenerateOptionViewModelOrNull(referencedAnswer, referencedQuestion, linkedAnswerModel, interview, questionnaire))
+                .Select(referencedAnswer => this.GenerateOptionViewModelOrNull(referencedAnswer, this.referencedQuestionId, linkedAnswerModel, interview, questionnaire))
                 .Where(optionOrNull => optionOrNull != null)
                 .ToList();
 
@@ -217,7 +217,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
 
             IStatefulInterview interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
-            var questionnaire = this.questionnaireStorage.GetById(interview.QuestionnaireId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
             var optionsToUpdate = this.GenerateOptionsFromModel(interview, questionnaire);
             this.mainThreadDispatcher.RequestMainThreadAction(() =>
@@ -279,7 +279,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void ReferencedQuestionAnswered(object sender, EventArgs e)
         {
             IStatefulInterview interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
-            QuestionnaireModel questionnaire = this.questionnaireStorage.GetById(interview.QuestionnaireId);
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
             var actualOptions = this.GenerateOptionsFromModel(interview, questionnaire);
 
@@ -320,13 +320,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private SingleOptionLinkedQuestionOptionViewModel GenerateOptionViewModelOrNull(
-            BaseInterviewAnswer referencedAnswer, BaseQuestionModel referencedQuestion,
-            LinkedSingleOptionAnswer linkedAnswerModel, IStatefulInterview interview, QuestionnaireModel questionnaire)
+            BaseInterviewAnswer referencedAnswer, Guid referencedQuestionId,
+            LinkedSingleOptionAnswer linkedAnswerModel, IStatefulInterview interview, IQuestionnaire questionnaire)
         {
             if (referencedAnswer == null)
                 return null;
 
-            var title = this.GenerateOptionTitle(referencedQuestion, referencedAnswer, interview, questionnaire);
+            var title = this.GenerateOptionTitle(referencedQuestionId, referencedAnswer, interview, questionnaire);
 
             var isSelected =
                 linkedAnswerModel != null &&
@@ -351,9 +351,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return optionViewModel;
         }
 
-        private string GenerateOptionTitle(BaseQuestionModel referencedQuestion, BaseInterviewAnswer referencedAnswer, IStatefulInterview interview, QuestionnaireModel questionnaire)
+        private string GenerateOptionTitle(Guid referencedQuestionId, BaseInterviewAnswer referencedAnswer, IStatefulInterview interview, IQuestionnaire questionnaire)
         {
-            string answerAsTitle = this.answerToStringService.AnswerToUIString(referencedQuestion, referencedAnswer, interview, questionnaire);
+            string answerAsTitle = this.answerToStringService.AnswerToUIString(referencedQuestionId, referencedAnswer, interview, questionnaire);
 
             int currentRosterLevel = this.questionIdentity.RosterVector.Length;
 

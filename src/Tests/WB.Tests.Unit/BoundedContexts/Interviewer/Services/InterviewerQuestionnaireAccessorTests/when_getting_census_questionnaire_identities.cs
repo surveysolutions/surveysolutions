@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using System.Linq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -14,7 +15,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
     {
         Establish context = () =>
         {
-            var questionnaireAsyncPlainStorage = new TestAsyncPlainStorage<QuestionnaireView>(emulatedStorageQuestionnaires);
+            var questionnaireAsyncPlainStorage = new SqliteInmemoryStorage<QuestionnaireView>();
+            questionnaireAsyncPlainStorage.StoreAsync(emulatedStorageQuestionnaires).WaitAndUnwrapException();
             interviewerQuestionnaireAccessor = CreateInterviewerQuestionnaireAccessor(questionnaireViewRepository: questionnaireAsyncPlainStorage);
         };
 

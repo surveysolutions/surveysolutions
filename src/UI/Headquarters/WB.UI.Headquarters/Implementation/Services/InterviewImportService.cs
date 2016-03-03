@@ -19,12 +19,13 @@ using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.UI.Headquarters.Implementation.Services
 {
     public class InterviewImportService : IInterviewImportService
     {
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentRepository;
+        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly ICommandService commandService;
         private readonly ITransactionManagerProvider transactionManager;
         private readonly ILogger logger;
@@ -33,37 +34,36 @@ namespace WB.UI.Headquarters.Implementation.Services
         private readonly IInterviewImportDataParsingService interviewImportDataParsingService;
 
         public InterviewImportService(
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentRepository,
             ICommandService commandService,
             ITransactionManagerProvider transactionManager,
             ILogger logger,
             SampleImportSettings sampleImportSettings, 
             IPreloadedDataRepository preloadedDataRepository, 
-            IInterviewImportDataParsingService interviewImportDataParsingService)
+            IInterviewImportDataParsingService interviewImportDataParsingService, 
+            IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
-            this.questionnaireDocumentRepository = questionnaireDocumentRepository;
             this.commandService = commandService;
             this.transactionManager = transactionManager;
             this.logger = logger;
             this.sampleImportSettings = sampleImportSettings;
             this.preloadedDataRepository = preloadedDataRepository;
             this.interviewImportDataParsingService = interviewImportDataParsingService;
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
         }
 
         public void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId,
             Guid? supervisorId, Guid headquartersId)
         {
-            QuestionnaireDocumentVersioned bigTemplateObject =
-                this.transactionManager.GetTransactionManager()
-                    .ExecuteInQueryTransaction(() => this.questionnaireDocumentRepository.AsVersioned()
-                        .Get(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version));
+            var bigTemplateObject =
+                this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId,
+                    questionnaireIdentity.Version);
 
             this.Status = new InterviewImportStatus
             {
                 QuestionnaireId = questionnaireIdentity.QuestionnaireId,
                 InterviewImportProcessId = interviewImportProcessId,
                 QuestionnaireVersion = questionnaireIdentity.Version,
-                QuestionnaireTitle = bigTemplateObject.Questionnaire.Title,
+                QuestionnaireTitle = bigTemplateObject.Title,
                 StartedDateTime = DateTime.Now,
                 CreatedInterviewsCount = 0,
                 ElapsedTime = 0,

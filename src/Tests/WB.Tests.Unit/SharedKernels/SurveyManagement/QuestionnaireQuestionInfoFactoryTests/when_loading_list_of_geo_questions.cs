@@ -22,8 +22,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireQuestionInfo
     {
         private Establish context = () =>
         {
-            questionnaireDocumentReaderMock = new Mock<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>();
-
             var questionnaire = new QuestionnaireDocument()
             {
                 Children = new List<IComposite>()
@@ -39,11 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireQuestionInfo
                 }
             };
 
-            var questionnaireVersioned = Mock.Of<QuestionnaireDocumentVersioned>(x => x.Questionnaire == questionnaire && x.Version == version);
-
-            questionnaireDocumentReaderMock.Setup(x => x.GetById(questionnaireId.FormatGuid() + "$" + version)).Returns(questionnaireVersioned);
-
-            factory = CreateQuestionnaireQuestionInfoFactory(questionnaireStore: questionnaireDocumentReaderMock.Object);
+            factory = CreateQuestionnaireQuestionInfoFactory(questionnaire);
 
             input = CreateQuestionnaireQuestionInfoInputModel(questionnaireId: questionnaireId, version: version,
                 questionType: QuestionType.GpsCoordinates);
@@ -69,6 +63,5 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireQuestionInfo
         private static QuestionnaireQuestionInfoFactory factory;
         private static QuestionnaireQuestionInfoInputModel input;
         private static QuestionnaireQuestionInfoView view;
-        private static Mock<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>> questionnaireDocumentReaderMock;
     }
 }

@@ -44,6 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 var multioptionQuestionView = ((MultiOptionDetailsView)questionView);
                 multioptionQuestionView.LinkedToEntityId = multioptionQuestion.LinkedToQuestionId ??
                                                            multioptionQuestion.LinkedToRosterId;
+                multioptionQuestionView.LinkedFilterExpression = multioptionQuestion.LinkedFilterExpression;
                 multioptionQuestionView.AreAnswersOrdered = multioptionQuestion.AreAnswersOrdered;
                 multioptionQuestionView.YesNoView = multioptionQuestion.YesNoView;
                 multioptionQuestionView.MaxAllowedAnswers = multioptionQuestion.MaxAllowedAnswers;
@@ -57,6 +58,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 var singleoptionQuestionView = ((SingleOptionDetailsView)questionView);
                 singleoptionQuestionView.LinkedToEntityId = singleoptionQuestion.LinkedToQuestionId ??
                                                             singleoptionQuestion.LinkedToRosterId;
+                singleoptionQuestionView.LinkedFilterExpression = singleoptionQuestion.LinkedFilterExpression;
                 singleoptionQuestionView.IsFilteredCombobox = singleoptionQuestion.IsFilteredCombobox;
                 singleoptionQuestionView.CascadeFromQuestionId = singleoptionQuestion.CascadeFromQuestionId;
                 singleoptionQuestionView.Options = this.CreateCategoricalOptions(singleoptionQuestion.Answers);

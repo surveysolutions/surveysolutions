@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
@@ -61,7 +62,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
         IEventHandler<LookupTableAdded>,
         IEventHandler<LookupTableUpdated>,
-        IEventHandler<LookupTableDeleted>
+        IEventHandler<LookupTableDeleted>,
+
+        IEventHandler<AttachmentAdded>,
+        IEventHandler<AttachmentUpdated>,
+        IEventHandler<AttachmentDeleted>
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage;
         private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
@@ -572,6 +577,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
             document.LookupTables.Remove(evnt.Payload.LookupTableId);
 
+            this.UpdateQuestionnaire(evnt, document);
+        }
+
+        public void Handle(IPublishedEvent<AttachmentAdded> evnt)
+        {
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
+            this.UpdateQuestionnaire(evnt, document);
+        }
+
+        public void Handle(IPublishedEvent<AttachmentUpdated> evnt)
+        {
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
+            this.UpdateQuestionnaire(evnt, document);
+        }
+
+        public void Handle(IPublishedEvent<AttachmentDeleted> evnt)
+        {
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
             this.UpdateQuestionnaire(evnt, document);
         }
     }

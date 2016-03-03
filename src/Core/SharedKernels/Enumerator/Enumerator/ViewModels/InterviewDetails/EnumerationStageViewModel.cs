@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -21,9 +18,10 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
+
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class EnumerationStageViewModel : MvxNotifyPropertyChanged,
+    public class EnumerationStageViewModel : MvxViewModel,
         ILiteEventHandler<RosterInstancesTitleChanged>,
         ILiteEventHandler<RosterInstancesAdded>,
         ILiteEventHandler<RosterInstancesRemoved>,
@@ -40,8 +38,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             set { this.name = value; this.RaisePropertyChanged(); }
         }
 
-        private ObservableRangeCollection<dynamic> items;
-        public ObservableRangeCollection<dynamic> Items
+        private ObservableRangeCollection<IInterviewEntityViewModel> items;
+        public ObservableRangeCollection<IInterviewEntityViewModel> Items
         {
             get { return this.items; }
             set
@@ -53,7 +51,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ISubstitutionService substitutionService;
         readonly ILiteEventRegistry eventRegistry;
@@ -68,14 +65,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         IStatefulInterview interview;
         private IQuestionnaire questionnaire;
-        QuestionnaireModel questionnaireModel;
         string interviewId;
 
 
         public EnumerationStageViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
             IPlainQuestionnaireRepository questionnaireRepository,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository,
             IStatefulInterviewRepository interviewRepository,
             ISubstitutionService substitutionService,
             ILiteEventRegistry eventRegistry,
@@ -85,7 +80,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.questionnaireRepository = questionnaireRepository;
-            this.questionnaireModelRepository = questionnaireModelRepository;
             this.interviewRepository = interviewRepository;
             this.substitutionService = substitutionService;
             this.eventRegistry = eventRegistry;
@@ -94,9 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
         }
 
-        public bool ShouldRemoveDisabledEntities => true;
-
-        public void Init(string interviewId, NavigationState navigationState)
+        public void Init(string interviewId, NavigationState navigationState, Identity groupId, Identity anchoredElementIdentity)
         {
             if (navigationState == null) throw new ArgumentNullException(nameof(navigationState));
             if (this.navigationState != null) throw new Exception("ViewModel already initialized");
@@ -104,47 +96,32 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.interviewId = interviewId;
             this.interview = this.interviewRepository.Get(interviewId);
             this.questionnaire = this.questionnaireRepository.GetQuestionnaire(this.interview.QuestionnaireIdentity);
-            this.questionnaireModel = this.questionnaireModelRepository.GetById(this.interview.QuestionnaireId);
 
-            this.eventRegistry.Subscribe(this, interviewId);
             this.navigationState = navigationState;
-            this.Items = new ObservableRangeCollection<dynamic>();
-            this.navigationState.ScreenChanged += this.OnScreenChanged;
-        }
+            this.Items = new ObservableRangeCollection<IInterviewEntityViewModel>();
 
-        private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
-        {
-            if (eventArgs.TargetScreen == ScreenType.Complete)
-            {
-                this.Items.OfType<IDisposable>().ForEach(x => x.Dispose());
-                this.Items.Clear();
-            }
-            else
-            {
-                GroupModel @group = this.questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[eventArgs.TargetGroup.Id];
+            CreateRegularGroupScreen(groupId, anchoredElementIdentity);
 
-                this.CreateRegularGroupScreen(eventArgs, @group);
-                if (!this.eventRegistry.IsSubscribed(this, this.interviewId))
-                {
-                    this.eventRegistry.Subscribe(this, this.interviewId);
-                }
+            if (!this.eventRegistry.IsSubscribed(this, this.interviewId))
+            {
+                this.eventRegistry.Subscribe(this, this.interviewId);
             }
         }
 
-        private void CreateRegularGroupScreen(ScreenChangedEventArgs eventArgs, GroupModel @group)
+        private void CreateRegularGroupScreen(Identity groupId, Identity anchoredElementIdentity)
         {
-            if (@group is RosterModel)
+            if (this.questionnaire.IsRosterGroup(groupId.Id))
             {
-                string title = @group.Title;
-                this.Name = this.substitutionService.GenerateRosterName(title, this.interview.GetRosterTitle(eventArgs.TargetGroup));
+                string title = this.questionnaire.GetGroupTitle(groupId.Id);
+                this.Name = this.substitutionService.GenerateRosterName(title, this.interview.GetRosterTitle(groupId));
             }
             else
             {
-                this.Name = @group.Title;
+                this.Name = this.questionnaire.GetGroupTitle(groupId.Id); ;
             }
 
-            this.LoadFromModel(eventArgs.TargetGroup);
-            this.SendScrollToMessage(eventArgs.AnchoredElementIdentity);
+            this.LoadFromModel(groupId);
+            this.SendScrollToMessage(anchoredElementIdentity);
         }
 
         private void SendScrollToMessage(Identity scrollTo)
@@ -184,7 +161,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 {
                     interviewItemViewModel.Dispose();
                 }
-                this.mvxMainThreadDispatcher.RequestMainThreadAction(() => this.Items.Reset(interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<dynamic>())));
+                this.mvxMainThreadDispatcher.RequestMainThreadAction(() => this.Items.Reset(interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<IInterviewEntityViewModel>())));
             }
             finally
             {
@@ -198,8 +175,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 if (this.navigationState.CurrentGroup.Equals(rosterInstance.RosterInstance.GetIdentity()))
                 {
-                    GroupModel group = this.questionnaireModel.GroupsWithFirstLevelChildrenAsReferences[this.navigationState.CurrentGroup.Id];
-                    this.Name = this.substitutionService.GenerateRosterName(@group.Title,
+                    this.Name = this.substitutionService.GenerateRosterName(
+                        this.questionnaire.GetGroupTitle(this.navigationState.CurrentGroup.Id),
                         this.interview.GetRosterTitle(this.navigationState.CurrentGroup));
                 }
             }
@@ -265,7 +242,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                             var existingIdentities =
                                 this.Items
-                                    .OfType<IInterviewEntityViewModel>()
                                     .Select(entity => entity.Identity)
                                     .ToHashSet();
 
@@ -301,7 +277,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                         var itemsToRemove = this
                             .Items
-                            .OfType<IInterviewEntityViewModel>()
                             .Where(item => identitiesToRemove.Contains(item.Identity))
                             .ToList();
 
@@ -347,7 +322,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Dispose()
         {
             this.eventRegistry.Unsubscribe(this, interviewId);
-            this.navigationState.ScreenChanged -= this.OnScreenChanged;
             var disposableItems = this.Items.OfType<IDisposable>().ToArray();
 
             foreach (var disposableItem in disposableItems)

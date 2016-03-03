@@ -19,18 +19,17 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using QuestionnaireDeleted = WB.Core.SharedKernels.DataCollection.Events.Questionnaire.QuestionnaireDeleted;
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
@@ -455,7 +454,8 @@ namespace WB.Tests.Unit
                     isFilteredCombobox: isFilteredCombobox,
                     cascadeFromQuestionId: cascadeFromQuestionId,
                     targetGroupKey: targetGroupKey,
-                    validationConditions: new List<ValidationCondition>());
+                    validationConditions: new List<ValidationCondition>(),
+                linkedFilterExpression: null);
             }
 
             public static QuestionChanged QuestionChanged(Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
@@ -491,7 +491,8 @@ namespace WB.Tests.Unit
                     isFilteredCombobox: isFilteredCombobox,
                     cascadeFromQuestionId: cascadeFromQuestionId,
                     targetGroupKey: Guid.NewGuid(),
-                    validationConditions: new List<ValidationCondition>());
+                    validationConditions: new List<ValidationCondition>(),
+                linkedFilterExpression: null);
             }
 
 
@@ -534,7 +535,8 @@ namespace WB.Tests.Unit
                     targetIndex: targetIndex,
                     maxAnswerCount: maxAnswerCount,
                     countOfDecimalPlaces: countOfDecimalPlaces,
-                    validationConditions: validationConditions ?? new List<ValidationCondition>());
+                    validationConditions: validationConditions ?? new List<ValidationCondition>(),
+                linkedFilterExpression: null);
             }
 
             public static IPublishedEvent<QuestionnaireDeleted> QuestionnaireDeleted(Guid? questionnaireId = null, long? version = null)
