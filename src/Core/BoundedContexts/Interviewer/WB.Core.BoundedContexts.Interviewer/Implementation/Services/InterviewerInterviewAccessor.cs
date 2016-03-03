@@ -36,6 +36,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IInterviewerEventStorage eventStore;
         private readonly IAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache;
         private readonly ISnapshotStoreWithCache snapshotStoreWithCache;
+        private readonly ISerializer serializer;
 
         public InterviewerInterviewAccessor(
             IAsyncPlainStorage<QuestionnaireView> questionnaireRepository,
@@ -46,7 +47,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IInterviewerPrincipal principal,
             IInterviewerEventStorage eventStore,
             IAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache,
-            ISnapshotStoreWithCache snapshotStoreWithCache)
+            ISnapshotStoreWithCache snapshotStoreWithCache,
+            ISerializer serializer)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewViewRepository = interviewViewRepository;
@@ -57,6 +59,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.eventStore = eventStore;
             this.aggregateRootRepositoryWithCache = aggregateRootRepositoryWithCache;
             this.snapshotStoreWithCache = snapshotStoreWithCache;
+            this.serializer = serializer;
         }
 
         public async Task RemoveInterviewAsync(Guid interviewId)
@@ -114,7 +117,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return new InterviewPackageApiView
             {
                 InterviewId = interview.InterviewId,
-                Events = eventsToSend,
+                Events = this.serializer.Serialize(eventsToSend),
                 MetaInfo = metadata
             };
         }
@@ -142,6 +145,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             var questionnaireView = this.questionnaireRepository.GetById(info.QuestionnaireIdentity.ToString());
 
             var interviewStatus = info.IsRejected ? InterviewStatus.RejectedBySupervisor :  InterviewStatus.InterviewerAssigned;
+            var interviewDetails = this.serializer.Deserialize<InterviewSynchronizationDto>(details.Details, TypeSerializationSettings.AllTypes);
 
             var createInterviewFromSynchronizationMetadataCommand = new CreateInterviewFromSynchronizationMetadata(
                 interviewId: info.Id,
@@ -150,32 +154,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 questionnaireVersion: info.QuestionnaireIdentity.Version,
                 status: interviewStatus,
                 featuredQuestionsMeta: details.AnswersOnPrefilledQuestions ?? new AnsweredQuestionSynchronizationDto[0],
-                comments: details.Details.Comments,
-                rejectedDateTime: details.Details.RejectDateTime,
-                interviewerAssignedDateTime: details.Details.InterviewerAssignedDateTime,
+                comments: interviewDetails.Comments,
+                rejectedDateTime: interviewDetails.RejectDateTime,
+                interviewerAssignedDateTime: interviewDetails.InterviewerAssignedDateTime,
                 valid: true,
                 createdOnClient: questionnaireView.Census);
 
            var synchronizeInterviewCommand = new SynchronizeInterviewCommand(
                 interviewId: info.Id,
                 userId: this.principal.CurrentUserIdentity.UserId,
-                sycnhronizedInterview: new InterviewSynchronizationDto(
-                    info.Id,
-                    interviewStatus,
-                    details.Details.Comments,
-                    details.Details.RejectDateTime,
-                    details.Details.InterviewerAssignedDateTime,
-                    this.principal.CurrentUserIdentity.UserId,
-                    info.QuestionnaireIdentity.QuestionnaireId,
-                    info.QuestionnaireIdentity.Version,
-                    details.Details.Answers ?? new AnsweredQuestionSynchronizationDto[0],
-                    details.Details.DisabledGroups ?? new HashSet<InterviewItemId>(),
-                    details.Details.DisabledQuestions ?? new HashSet<InterviewItemId>(),
-                    details.Details.ValidAnsweredQuestions ?? new HashSet<InterviewItemId>(),
-                    details.Details.InvalidAnsweredQuestions ?? new HashSet<InterviewItemId>(),
-                    details.Details.RosterGroupInstances ?? new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),
-                    details.Details.FailedValidationConditions ?? new List<KeyValuePair<Identity, IList<FailedValidationCondition>>>(),
-                    false)
+                sycnhronizedInterview: interviewDetails
                 );
 
             await this.commandService.ExecuteAsync(createInterviewFromSynchronizationMetadataCommand);

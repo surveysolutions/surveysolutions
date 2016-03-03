@@ -73,7 +73,7 @@ namespace WB.UI.Interviewer.Infrastructure
                 AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies")));
 
             this.Bind<JsonUtilsSettings>()
-                .ToConstant(new JsonUtilsSettings() {TypeNameHandling = TypeSerializationSettings.AllTypes});
+                .ToConstant(new JsonUtilsSettings() {TypeNameHandling = TypeSerializationSettings.ObjectsOnly});
 
             this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(
                 new JsonSerializerSettingsFactory(),

@@ -10,13 +10,13 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
     {
         public Guid InterviewId { get; set; }
         public InterviewMetaInfo MetaInfo { get; set; } 
-        public AggregateRootEvent[] Events { get; set; }
+        public string Events { get; set; }
     }
 
     public class InterviewerInterviewApiView
     {
         public AnsweredQuestionSynchronizationDto[] AnswersOnPrefilledQuestions { get; set; } 
-        public InterviewSynchronizationDto Details { get; set; }
+        public string Details { get; set; }
     }
 
     public class InterviewDetailsApiView

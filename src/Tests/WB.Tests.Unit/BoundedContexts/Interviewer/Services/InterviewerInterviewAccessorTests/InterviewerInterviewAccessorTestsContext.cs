@@ -35,7 +35,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 principal: principal ?? Mock.Of<IInterviewerPrincipal>(),
                 eventStore: eventStore ?? Mock.Of<IInterviewerEventStorage>(),
                 aggregateRootRepositoryWithCache: aggregateRootRepositoryWithCache ?? Mock.Of<IAggregateRootRepositoryWithCache>(),
-                snapshotStoreWithCache: snapshotStoreWithCache ?? Mock.Of<ISnapshotStoreWithCache>());
+                snapshotStoreWithCache: snapshotStoreWithCache ?? Mock.Of<ISnapshotStoreWithCache>(),
+                serializer: serializer ?? Mock.Of<ISerializer>());
         }
     }
 }
