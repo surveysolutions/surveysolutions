@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using AppDomainToolkit;
 using Machine.Specifications;
@@ -40,20 +41,20 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
                 state.AddRoster(rosterId, new decimal[0], 2, null);
                 state.AddRoster(rosterId, new decimal[0], 3, null);
 
-                return new InvokeResults() {LinkedQuestionFilterResults = state.ProcessLinkedQuestionFilters()};
+                var filterResults = state.ProcessLinkedQuestionFilters();
+                return new InvokeResults()
+                {
+                    CountOfEnabledOptions = filterResults.Count(r => r.Enabled),
+                    CountOfDisabledOptions = filterResults.Count(r => !r.Enabled)
+                };
             });
+        
 
-        It should_return_3_filters = () =>
-            results.LinkedQuestionFilterResults.Count.ShouldEqual(3);
+        It should_result_contain_1_disabled_option = () =>
+            results.CountOfDisabledOptions.ShouldEqual(1);
 
-        It should_result_of_first_filter_be_false = () =>
-            results.LinkedQuestionFilterResults[0].Enabled.ShouldBeFalse();
-
-        It should_result_of_second_filter_be_true = () =>
-            results.LinkedQuestionFilterResults[1].Enabled.ShouldBeTrue();
-
-        It should_result_of_third_filter_be_true = () =>
-           results.LinkedQuestionFilterResults[2].Enabled.ShouldBeTrue();
+        It should_result_contain_2_enabled_option = () =>
+             results.CountOfEnabledOptions.ShouldEqual(2);
 
         Cleanup stuff = () =>
         {
@@ -67,7 +68,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
         [Serializable]
         public class InvokeResults
         {
-            public List<LinkedQuestionFilterResult> LinkedQuestionFilterResults { get; set; }
+            public int CountOfEnabledOptions { get; set; }
+            public int CountOfDisabledOptions { get; set; }
         }
     }
 }
