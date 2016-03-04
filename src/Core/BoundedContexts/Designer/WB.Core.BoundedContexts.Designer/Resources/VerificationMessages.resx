@@ -459,4 +459,7 @@
   <data name="WB0210_CategoricalQuestionHasManyOptions" xml:space="preserve">
     <value>Single-choice question has too many categories, consider changing to combo box.</value>
   </data>
+  <data name="WB0211_QuestionnaireHasNoGpsQuestion" xml:space="preserve">
+    <value>Questionnaire contains no GPS questions. Consider adding a GPS question.</value>
+  </data>
 </root>

@@ -1089,5 +1089,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0210_CategoricalQuestionHasManyOptions", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire contains no GPS questions. Consider adding a GPS question..
+        /// </summary>
+        internal static string WB0211_QuestionnaireHasNoGpsQuestion {
+            get {
+                return ResourceManager.GetString("WB0211_QuestionnaireHasNoGpsQuestion", resourceCulture);
+            }
+        }
     }
 }
