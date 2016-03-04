@@ -947,7 +947,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max number of answers for roster size question cannot be greater then 40..
+        ///   Looks up a localized string similar to Max number of answers for roster size question cannot be greater than 40..
         /// </summary>
         internal static string WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen40 {
             get {
@@ -1028,7 +1028,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section contains more than 200 questions, consider splitting into sub-sections.
+        ///   Looks up a localized string similar to Section contains more than 200 questions, consider splitting into sub-sections..
         /// </summary>
         internal static string WB0201_LargeNumberOfQuestionsInGroup {
             get {
@@ -1037,7 +1037,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section contains no questions. Consider removing the empty section .
+        ///   Looks up a localized string similar to Section contains no questions. Consider removing the empty section..
         /// </summary>
         internal static string WB0202_GroupWithoutQuestions {
             get {
@@ -1046,7 +1046,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster group contains only one question. Consider grouping with other rosters. For fixed roster, consider presenting as a set of independent qustions.
+        ///   Looks up a localized string similar to Roster group contains only one question. Consider grouping with other rosters. For fixed roster, consider presenting as a set of independent qustions..
         /// </summary>
         internal static string WB0203_RosterHasSingleQuestion {
             get {
@@ -1073,11 +1073,20 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enablement condition is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList()).
+        ///   Looks up a localized string similar to Enablement condition is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList())..
         /// </summary>
         internal static string WB0209_LongEnablementCondition {
             get {
                 return ResourceManager.GetString("WB0209_LongEnablementCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Single-choice question has too many categories, consider changing to combo box..
+        /// </summary>
+        internal static string WB0210_CategoricalQuestionHasManyOptions {
+            get {
+                return ResourceManager.GetString("WB0210_CategoricalQuestionHasManyOptions", resourceCulture);
             }
         }
     }
