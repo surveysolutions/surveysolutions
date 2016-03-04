@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
             questionniareToSerialize.LookupTables.ShouldBeNull();
         };*/
 
-        private static QuestionnaireDocument questionniareToSerialize;
+        //private static QuestionnaireDocument questionniareToSerialize;
         private static ImportV2Controller importController;
         private static DownloadQuestionnaireRequest request;
         private static Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");
