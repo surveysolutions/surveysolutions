@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         }
         
         [WriteToSyncLog(SynchronizationLogType.GetQuestionnaire)]
-        public virtual HttpResponseMessage Get(Guid id, int version, long contentVersion)
+        protected HttpResponseMessage Get(Guid id, int version, long contentVersion, bool useInOldSerializationFormat)
         {
             var questionnaireDocumentVersioned = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
             var questionnaireBrowseItem = this.readsideRepositoryWriter.GetById(new QuestionnaireIdentity(id, version).ToString());
@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 
             var resultValue = new QuestionnaireApiView
             {
-                QuestionnaireDocument = this.serializer.Serialize(questionnaireDocumentVersioned),
+                QuestionnaireDocument = this.serializer.Serialize(questionnaireDocumentVersioned, useInOldSerializationFormat ? SerializationBinderSettings.NewToOld: SerializationBinderSettings.OldToNew),
                 AllowCensus = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version)).AllowCensusMode
             };
 

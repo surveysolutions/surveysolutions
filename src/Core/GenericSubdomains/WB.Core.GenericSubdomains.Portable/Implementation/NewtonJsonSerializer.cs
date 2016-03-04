@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable.Services;
-using Newtonsoft.Json.Bson;
 
 namespace WB.Core.GenericSubdomains.Portable.Implementation
 {
@@ -55,32 +54,35 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
         {
             return this.Serialize(item, this.jsonUtilsSettings.TypeNameHandling);
 
-            //this.SerializeToByteArray(SerializeToByteArray);
+        }
+
+        public string Serialize(object item, SerializationBinderSettings binderSettings)
+        {
+            return this.Serialize(item, this.jsonUtilsSettings.TypeNameHandling, binderSettings);
+
+        }
+
+        private string Serialize(object item, TypeSerializationSettings typeSerializationSettings, SerializationBinderSettings binderSettings)
+        {
+            var jsonSerializerSettings = this.jsonSerializerSettingsFactory.GetJsonSerializerSettings(typeSerializationSettings, binderSettings);
+            return JsonConvert.SerializeObject(item, jsonSerializerSettings);
         }
 
         public string Serialize(object item, TypeSerializationSettings typeSerializationSettings)
         {
-            var jsonSerializerSettings = this.jsonSerializerSettingsFactory.GetJsonSerializerSettings(typeSerializationSettings);
-            return JsonConvert.SerializeObject(item, jsonSerializerSettings);
+            return this.Serialize(item, typeSerializationSettings, SerializationBinderSettings.OldToNew);
         }
 
-        public byte[] SerializeToByteArray(object item, TypeSerializationSettings typeSerializationSettings, SerializationType serializationType = SerializationType.Json)
+        public byte[] SerializeToByteArray(object item, TypeSerializationSettings typeSerializationSettings)
         {
             var serializer = this.GetSerializer(typeSerializationSettings);
-
             var output = new MemoryStream();
 
-            if(serializationType == SerializationType.Bson)
-                serializer.Serialize(new BsonWriter(output), item);
-            else
+            using (var sw = new StreamWriter(output))
             {
-                using (var sw = new StreamWriter(output))
-                {
-                    serializer.Serialize(new JsonTextWriter(sw), item);
-                }
-                //sw.Flush();
+                serializer.Serialize(new JsonTextWriter(sw), item);
             }
-                
+            
             return output.ToArray();
         }
 
@@ -127,22 +129,15 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             }
         }
 
-        public object Deserialize(byte[] payload, Type objectType, TypeSerializationSettings typeSerializationSettings, SerializationType serializationType = SerializationType.Json)
+        public object Deserialize(byte[] payload, Type objectType, TypeSerializationSettings typeSerializationSettings)
         {
             var serializer = JsonSerializer.Create(this.jsonSerializerSettingsFactory.GetJsonSerializerSettings(typeSerializationSettings));
 
             using (MemoryStream ms = new MemoryStream(payload))
             {
-                if (serializationType == SerializationType.Bson)
+                using (var sr = new StreamReader(ms))
                 {
-                    return serializer.Deserialize(new BsonReader(ms), objectType);
-                }
-                else
-                {
-                    using (var sr = new StreamReader(ms))
-                    {
-                        return serializer.Deserialize(new JsonTextReader(sr), objectType);
-                    }
+                    return serializer.Deserialize(new JsonTextReader(sr), objectType);
                 }
             }
         }

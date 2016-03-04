@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
         It should_throw_HttpResponseException_with_explanation_in_ReasonPhrase = () =>
             exception.Response.ReasonPhrase.ShouldContain("You have an obsolete version of the Headquarters application. Please contact support@mysurvey.solutions to request an update.");
 
-        private static ImportController importController;
+        private static ImportV2Controller importController;
         private static HttpResponseException exception;
         private static DownloadQuestionnaireRequest request;
         private static Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");

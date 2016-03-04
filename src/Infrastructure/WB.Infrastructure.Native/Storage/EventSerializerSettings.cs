@@ -15,5 +15,17 @@ namespace WB.Infrastructure.Native.Storage
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
             Converters = new JsonConverter[] { new StringEnumConverter() }
         };
+
+
+        internal static readonly JsonSerializerSettings BackwardCompatibleJsonSerializerSettings = new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore,
+            DefaultValueHandling = DefaultValueHandling.Ignore,
+            MissingMemberHandling = MissingMemberHandling.Ignore,
+            TypeNameHandling = TypeNameHandling.Auto,
+            ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            Converters = new JsonConverter[] { new StringEnumConverter() },
+            Binder = new OldToNewAssemblyRedirectSerializationBinder()
+        };
     }
 }

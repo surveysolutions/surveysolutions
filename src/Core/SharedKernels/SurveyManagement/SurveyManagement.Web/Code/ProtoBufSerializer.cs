@@ -59,12 +59,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             return ProtoBuf.Serializer.NonGeneric.Deserialize(type, stream);
         }
 
-        public byte[] SerializeToByteArray(object item, TypeSerializationSettings typeSerializationSettings, SerializationType serializationType)
+        public byte[] SerializeToByteArray(object item, TypeSerializationSettings typeSerializationSettings)
         {
             throw new NotImplementedException();
         }
 
-        public object Deserialize(byte[] payload, Type objectType, TypeSerializationSettings typeSerializationSettings, SerializationType serializationType)
+        public object Deserialize(byte[] payload, Type objectType, TypeSerializationSettings typeSerializationSettings)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string Serialize(object item, SerializationBinderSettings binderSettings)
         {
             throw new NotImplementedException();
         }

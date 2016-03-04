@@ -263,12 +263,10 @@
     <Compile Include="Api\CommandController.cs" />
     <Compile Include="Api\ControlPanelApiController.cs" />
     <Compile Include="Api\ExpressionGenerationController.cs" />
+    <Compile Include="Api\ImportControllerBase.cs" />
+    <Compile Include="Api\V2\ImportV2Controller.cs" />
     <Compile Include="Api\QuestionnairesController.cs" />
-    <Compile Include="Api\QuestionnairesV12Controller.cs" />
-    <Compile Include="Api\QuestionnairesV11Controller.cs" />
-    <Compile Include="Api\QuestionnairesV10Controller.cs" />
-    <Compile Include="Api\QuestionnairesV9Controller.cs" />
-    <Compile Include="Api\QuestionnairesV8Controller.cs" />
+    <Compile Include="Api\QuestionnairesObsoleteController.cs" />
     <Compile Include="Api\TesterController.cs" />
     <Compile Include="Api\ImportController.cs" />
     <Compile Include="Api\QuestionnaireController.cs" />

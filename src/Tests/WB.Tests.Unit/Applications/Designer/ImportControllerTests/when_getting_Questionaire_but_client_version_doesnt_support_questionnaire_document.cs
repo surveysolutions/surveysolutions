@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
         It should_throw_HttpResponseException_with_explanation_in_ReasonPhrase = () =>
                exception.Response.ReasonPhrase.ToLower().ToSeparateWords().ShouldContain("questionnaire", "contains", "functionality", "not", "supported", "update");
 
-        private static ImportController importController;
+        private static ImportV2Controller importController;
         private static HttpResponseException exception;
         private static DownloadQuestionnaireRequest request;
         private static Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");

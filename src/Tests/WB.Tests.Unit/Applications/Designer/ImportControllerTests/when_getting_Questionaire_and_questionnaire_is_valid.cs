@@ -79,7 +79,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
         };
 
         private static QuestionnaireDocument questionniareToSerialize;
-        private static ImportController importController;
+        private static ImportV2Controller importController;
         private static DownloadQuestionnaireRequest request;
         private static Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");
         private static Guid userId = Guid.Parse("33333333333333333333333333333333");
