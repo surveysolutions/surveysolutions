@@ -22,6 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<IGroup>(EmptyRoster, "WB0204", VerificationMessages.WB0204_EmptyRoster),
             Warning(TooManyQuestions, "WB0205", VerificationMessages.WB0205_TooManyQuestions),
             Warning(FewSectionsManyQuestions, "WB0206", VerificationMessages.WB0206_FewSectionsManyQuestions),
+            Warning<IGroup>(FixedRosterContains3OrLessItems, "WB0207", VerificationMessages.WB0207_FixedRosterContains3OrLessItems),
             Warning<IQuestion>(HasLongEnablementCondition, "WB0209", VerificationMessages.WB0209_LongEnablementCondition),
             Warning<IQuestion>(CategoricalQuestionHasALotOfOptions, "WB0210", VerificationMessages.WB0210_CategoricalQuestionHasManyOptions),
             Warning(HasNoGpsQuestions, "WB0211", VerificationMessages.WB0211_QuestionnaireHasNoGpsQuestion),
@@ -55,7 +56,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool FewSectionsManyQuestions(ReadOnlyQuestionnaireDocument questionnaire)
             => questionnaire.Find<IQuestion>().Count() > 100
-            && questionnaire.Find<IGroup>(group => group.GetParent().GetParent() != null).Count() < 3;
+            && questionnaire.Find<IGroup>(IsNotChapterOrRoot).Count() < 3;
 
         private static bool HasSingleQuestionInRoster(IGroup rosterGroup)
             => rosterGroup.IsRoster
@@ -68,9 +69,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             => !group.IsRoster
             && !group.Children.OfType<IQuestion>().Any();
 
+        private static bool FixedRosterContains3OrLessItems(IGroup group)
+            => IsFixedRoster(group)
+            && GetDescendants(group).Count() <= 3;
+
         private static bool EmptyRoster(IGroup group)
             => group.IsRoster
             && !group.Children.Any();
+
+        private static bool IsNotChapterOrRoot(IGroup group) => group.GetParent().GetParent() != null;
+
+        private static bool IsFixedRoster(IGroup group) => group.IsRoster && (group.FixedRosterTitles?.Any() ?? false);
+
+        private static IEnumerable<IComposite> GetDescendants(IGroup group) => group.Children.TreeToEnumerable(_ => _.Children);
 
         private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity, TSubEntity>(
             Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TSubEntity, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
