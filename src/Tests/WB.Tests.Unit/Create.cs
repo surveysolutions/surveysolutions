@@ -2125,7 +2125,8 @@ namespace WB.Tests.Unit
         }
 
         public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null,
-            Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title=null, bool hideIfDisabled = false)
+            Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title=null, bool hideIfDisabled = false, string linkedFilterExpression=null,
+            Guid? linkedToRosterId=null)
         {
             return new SingleQuestion
             {
@@ -2137,8 +2138,10 @@ namespace WB.Tests.Unit
                 ValidationExpression = validationExpression,
                 QuestionType = QuestionType.SingleOption,
                 LinkedToQuestionId = linkedToQuestionId,
+                LinkedToRosterId = linkedToRosterId,
                 CascadeFromQuestionId = cascadeFromQuestionId,
-                Answers = (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Answer(a.ToString(), a)).ToList()
+                Answers = (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Answer(a.ToString(), a)).ToList(),
+                LinkedFilterExpression= linkedFilterExpression
             };
         }
 
