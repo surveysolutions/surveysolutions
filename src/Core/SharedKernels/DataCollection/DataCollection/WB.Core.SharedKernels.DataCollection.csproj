@@ -283,6 +283,7 @@
     <Compile Include="ValueObjects\Interview\InterviewItemId.cs" />
     <Compile Include="ValueObjects\Interview\QuestionState.cs" />
     <Compile Include="ValueObjects\ValueVector.cs" />
+    <Compile Include="Views\BinaryData\AttachmentContentType.cs" />
     <Compile Include="Views\BinaryData\InterviewBinaryDataDescriptor.cs" />
     <Compile Include="Views\BinaryData\Attachment.cs" />
     <Compile Include="Views\DeviceInfo.cs" />
