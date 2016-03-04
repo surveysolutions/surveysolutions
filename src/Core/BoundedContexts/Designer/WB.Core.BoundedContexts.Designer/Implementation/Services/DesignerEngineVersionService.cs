@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public Version GetLatestSupportedVersion()
         {
-            return version_12;
+            return version_13;
         }
 
         public bool IsClientVersionSupported(Version clientVersion)
