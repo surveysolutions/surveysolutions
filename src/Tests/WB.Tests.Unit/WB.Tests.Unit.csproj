@@ -411,6 +411,7 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_sending_command_with_HideIfDisabled_flag.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_group_without_questions_added.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_more_than_200_questions_added_to_one_group.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_empty_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_roster_has_single_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_linked_question_referencing_on_group_which_is_not_roster.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_questionnaire_with_linked_question_referencing_on_not_existing_roster.cs" />
@@ -2337,6 +2338,7 @@
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Stub.cs" />
     <Compile Include="TestPlainStorage.cs" />
+    <Compile Include="VerifierExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Applications\Designer\CommandUtilsTests\" />

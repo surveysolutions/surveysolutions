@@ -444,7 +444,10 @@
   <data name="WB0202_GroupWithoutQuestions" xml:space="preserve">
     <value>Section contains no questions. Consider removing the empty section </value>
   </data>
-  <data name="WB0203_RosterHasSingleQuetsion" xml:space="preserve">
+  <data name="WB0203_RosterHasSingleQuestion" xml:space="preserve">
     <value>Roster group contains only one question. Consider grouping with other rosters. For fixed roster, consider presenting as a set of independent qustions</value>
+  </data>
+  <data name="WB0204_EmptyRoster" xml:space="preserve">
+    <value>Roster is empty. Remove it if it is not needed.</value>
   </data>
 </root>
