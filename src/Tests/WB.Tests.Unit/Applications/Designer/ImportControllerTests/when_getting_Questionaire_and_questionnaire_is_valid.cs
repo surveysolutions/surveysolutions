@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
 
             var serializerMock = new Mock<ISerializer>();
             serializerMock
-                .Setup(x => x.Serialize(Moq.It.IsAny<QuestionnaireDocument>()))
+                .Setup(x => x.Serialize(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny <bool>()))
                 .Returns((QuestionnaireDocument q) =>
                 {
                     questionniareToSerialize = q;
