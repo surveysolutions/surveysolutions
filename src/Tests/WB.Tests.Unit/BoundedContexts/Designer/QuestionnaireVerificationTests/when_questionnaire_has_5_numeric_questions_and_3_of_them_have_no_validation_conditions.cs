@@ -1,20 +1,24 @@
 using System.Collections.Generic;
-using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    internal class when_questionnaire_has_1001_questions : QuestionnaireVerifierTestsContext
+    internal class when_questionnaire_has_5_numeric_questions_and_3_of_them_have_no_validation_conditions : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
-            questionnaire = Create.QuestionnaireDocumentWithOneChapter(
-                children: Enumerable.Range(1, 1001).Select(_ => Create.TextQuestion()).ToArray<IComposite>());
+            questionnaire = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.NumericIntegerQuestion(validationConditions: new [] { Create.ValidationCondition() }),
+                Create.NumericRealQuestion(validationConditions: new [] { Create.ValidationCondition() }),
+                Create.NumericIntegerQuestion(),
+                Create.NumericRealQuestion(),
+                Create.NumericIntegerQuestion(),
+            });
 
             verifier = CreateQuestionnaireVerifier();
         };
@@ -22,8 +26,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Because of = () =>
             messages = verifier.Verify(questionnaire);
 
-        It should_return_warning_WB0205 = () =>
-            messages.ShouldContainWarning("WB0205");
+        It should_return_warning_WB0208 = () =>
+            messages.ShouldContainWarning("WB0208");
 
         private static QuestionnaireDocument questionnaire;
         private static QuestionnaireVerifier verifier;
