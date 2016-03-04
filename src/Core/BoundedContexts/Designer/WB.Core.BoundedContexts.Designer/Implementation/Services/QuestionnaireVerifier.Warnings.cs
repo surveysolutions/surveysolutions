@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool HasLongEnablementCondition(IQuestion question)
         {
-            return !(string.IsNullOrEmpty(question.ConditionExpression) && question.ConditionExpression.Length > 200);
+            return !string.IsNullOrEmpty(question.ConditionExpression) && question.ConditionExpression.Length > 200;
         }
 
         private static bool LargeNumberOfRosters(ReadOnlyQuestionnaireDocument questionnaire)
