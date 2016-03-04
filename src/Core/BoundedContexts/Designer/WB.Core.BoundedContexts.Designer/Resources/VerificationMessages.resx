@@ -464,6 +464,9 @@
   </data>
   <data name="WB0206_FewSectionsManyQuestions" xml:space="preserve">
     <value>Questionnaire contains more than 100 questions but only one or two sections. Group questions into sections to simplify navigation and improve performance.</value>
+    </data>
+  <data name="WB0212_LongValidationCondition" xml:space="preserve">
+    <value>Validation condition #{0} is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList()).</value>
   </data>
   <data name="WB0207_FixedRosterContains3OrLessQuestions" xml:space="preserve">
     <value>Fixed roster contains 3 or less questions. Consider using sub-sections and a series of questions. Rosters complicate structure of exported data.</value>
