@@ -148,10 +148,12 @@ namespace WB.UI.Designer.Api
             questionnaire.Macros = null;
             questionnaire.LookupTables = null;
             questionnaire.SharedPersons = null;
-            
+
+            var serializationBinder = useOld ? SerializationBinderSettings.NewToOld : SerializationBinderSettings.OldToNew;
+
             return new QuestionnaireCommunicationPackage
             {
-                Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaire, useOld ? SerializationBinderSettings.NewToOld: SerializationBinderSettings.OldToNew)), // use binder to serialize to the old namespaces and assembly
+                Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaire, serializationBinder)), // use binder to serialize to the old namespaces and assembly
                 QuestionnaireAssembly = resultAssembly,
                 QuestionnaireContentVersion = questionnaireContentVersion.Major
             };
