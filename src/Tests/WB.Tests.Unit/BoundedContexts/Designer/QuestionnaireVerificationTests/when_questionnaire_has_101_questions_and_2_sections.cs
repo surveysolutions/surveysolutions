@@ -8,12 +8,16 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    internal class when_questionnaire_has_1001_question : QuestionnaireVerifierTestsContext
+    internal class when_questionnaire_has_101_questions_and_2_sections : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
-            questionnaire = Create.QuestionnaireDocumentWithOneChapter(
-                children: Enumerable.Range(1, 1001).Select(_ => Create.TextQuestion()).ToArray<IComposite>());
+            questionnaire = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.Section(),
+                Create.Section(
+                    children: Enumerable.Range(1, 101).Select(_ => Create.TextQuestion()).ToArray<IComposite>()),
+            });
 
             verifier = CreateQuestionnaireVerifier();
         };
@@ -21,8 +25,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Because of = () =>
             messages = verifier.Verify(questionnaire);
 
-        It should_return_warning_WB0205 = () =>
-            messages.ShouldContainWarning("WB0205");
+        It should_return_warning_WB0206 = () =>
+            messages.ShouldContainWarning("WB0206");
 
         private static QuestionnaireDocument questionnaire;
         private static QuestionnaireVerifier verifier;
