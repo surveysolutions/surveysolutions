@@ -13,7 +13,7 @@ namespace WB.UI.Headquarters.Filters
         {
             if (!LegacyOptions.SupervisorFunctionsEnabled)
             {
-                var interviewerDevicesController = filterContext.ControllerContext.Controller as DevicesApiController;
+                var interviewerDevicesController = filterContext.ControllerContext.Controller as DevicesApiV1Controller;
 
                 if (interviewerDevicesController != null)
                 {
