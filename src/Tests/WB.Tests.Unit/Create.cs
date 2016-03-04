@@ -2006,11 +2006,11 @@ namespace WB.Tests.Unit
 
         public static RoslynExpressionProcessor RoslynExpressionProcessor() => new RoslynExpressionProcessor();
 
-        public static Group FixedRoster(Guid? rosterId = null, IEnumerable<IComposite> children = null)
+        public static Group FixedRoster(Guid? rosterId = null, IEnumerable<string> fixedTitles = null, IEnumerable<IComposite> children = null)
             => Create.Roster(
                 rosterId: rosterId,
                 children: children,
-                fixedTitles: new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
+                fixedTitles: fixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
 
         public static Group Roster(
             Guid? rosterId = null, 

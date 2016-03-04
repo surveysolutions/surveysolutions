@@ -420,8 +420,8 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_5_numeric_questions_and_2_of_them_have_no_validation_conditions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_5_numeric_questions_and_3_of_them_have_no_validation_conditions.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_empty_roster.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_fixed_roster_with_3_descendants.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_fixed_roster_with_4_descendants.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_fixed_roster_with_3_items.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_fixed_roster_with_4_items.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_no_gps_question.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_101_questions_and_no_sections.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionniare_has_long_enablement_condition.cs" />

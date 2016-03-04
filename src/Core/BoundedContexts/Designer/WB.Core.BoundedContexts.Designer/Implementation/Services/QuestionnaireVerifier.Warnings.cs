@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool FixedRosterContains3OrLessItems(IGroup group)
             => IsFixedRoster(group)
-            && GetDescendants(group).Count() <= 3;
+            && group.FixedRosterTitles.Length <= 3;
 
         private static bool EmptyRoster(IGroup group)
             => group.IsRoster
