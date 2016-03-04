@@ -22,7 +22,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning(TooManyQuestions, "WB0205", VerificationMessages.WB0205_TooManyQuestions),
             Warning<IQuestion>(HasLongEnablementCondition, "WB0209", VerificationMessages.WB0209_LongEnablementCondition),
             Warning<IQuestion>(CategoricalQuestionHasALotOfOptions, "WB0210", VerificationMessages.WB0210_CategoricalQuestionHasManyOptions),
+            Warning(HasNoGpsQuestions, "WB0211", VerificationMessages.WB0211_QuestionnaireHasNoGpsQuestion),
         };
+
+        private static bool HasNoGpsQuestions(ReadOnlyQuestionnaireDocument questionnaire)
+            => !questionnaire.Find<IQuestion>(q => q.QuestionType == QuestionType.GpsCoordinates).Any();
 
         private static bool CategoricalQuestionHasALotOfOptions(IQuestion question)
         {

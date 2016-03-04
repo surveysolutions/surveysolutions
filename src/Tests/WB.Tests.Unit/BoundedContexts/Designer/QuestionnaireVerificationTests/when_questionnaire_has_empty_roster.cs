@@ -29,9 +29,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_put_reference_to_empty_roster_to_message_WB0204 = () =>
             messages.GetWarning("WB0204").References.Single().Id.ShouldEqual(rosterId);
 
-        private static QuestionnaireDocument questionnaire;
-        private static QuestionnaireVerifier verifier;
-        private static IEnumerable<QuestionnaireVerificationMessage> messages;
-        private static Guid rosterId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        static QuestionnaireDocument questionnaire;
+        static QuestionnaireVerifier verifier;
+        static IEnumerable<QuestionnaireVerificationMessage> messages;
+        static Guid rosterId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     }
 }
