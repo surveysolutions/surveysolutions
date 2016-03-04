@@ -1,0 +1,152 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="WB.Core.SharedKernels.DataCollection" #> 
+<#@ include file="SharedTemplateV7.tt"#>
+
+internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV7<<#=this.Model.TypeName#>>, IExpressionExecutableV7
+{
+	public <#=Model.TypeName#>(
+		decimal[] rosterVector, 
+		Identity[] rosterKey, 
+		Func<Identity[], Guid, IEnumerable<IExpressionExecutableV7>> getInstances, 
+		Dictionary<Guid, Guid[]> conditionalDependencies,
+		Dictionary<Guid, Guid[]> structureDependencies, 
+		IInterviewProperties interviewProperties)
+		: base(rosterVector, rosterKey, getInstances, conditionalDependencies, structureDependencies, interviewProperties)
+	{
+<#
+	GroupsStatesInLevelConstructor(Model.Groups);
+	QuestionsStatesInLevelConstructor(Model.Questions);
+	RostersStatesInLevelConstructor(Model.Rosters);
+#>
+<#
+	foreach (var method in Model.ConditionMethodsSortedByExecutionOrder)
+    {
+#> 
+		_conditionExpressions.Add(Verifier(<#= method.ConditionMethodName#>, <#=method.StateName#>.ItemId, <#= method.StateName#>));                        
+<#
+	} 
+#>
+	}		 
+
+	public override IExpressionExecutableV7 CopyMembers(Func<Identity[], Guid, IEnumerable<IExpressionExecutableV7>> getInstances)
+	{
+		var level = new <#=Model.TypeName#>(this.RosterVector, this.RosterKey, getInstances, ConditionalDependencies, StructuralDependencies, this.Quest)
+		{
+			ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
+			InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
+			InvalidAnsweredFailedValidations = new Dictionary<Guid, IReadOnlyList<FailedValidationCondition>>(this.InvalidAnsweredFailedValidations),
+<#
+	QuestionsCopyOperatorsInCopyMembers(Model.Questions);
+#>
+		};
+				 
+		ConditionalDependencies = new Dictionary<Guid, Guid[]>(this.ConditionalDependencies);
+		StructuralDependencies = new Dictionary<Guid, Guid[]>(this.StructuralDependencies);
+
+		foreach (var state in level.EnablementStates)
+		{
+			var originalState = this.EnablementStates[state.Key];
+			state.Value.PreviousState = originalState.PreviousState;
+			state.Value.State = originalState.State;
+		}
+			
+		return level;
+	}
+	
+<#
+	LookupTablesDefenitions(LookupTables);
+	QuestionsStateDefenitions(Model.Questions);
+
+#>
+
+<#
+	foreach (var @roster in Model.Rosters) 
+    {
+#>
+	public RosterRowList<<#=@roster.TypeName#>> <#=@roster.VariableName#>
+	{
+		get 
+		{
+			var rosters = this.GetInstances(new Identity[0], IdOf.<#=@roster.RosterScopeName#>.Last());
+			return  new RosterRowList<<#=@roster.TypeName#>>(rosters);
+		}
+	}
+<# 
+	}
+#>
+	// groups condition states
+<#
+	foreach (var @group in Model.Groups) 
+	{ 
+#>
+	private ConditionalState <#= @group.StateName#> = new ConditionalState(IdOf.<#=@group.IdName#>, ItemType.Group);
+<# 
+	}
+#>
+		
+	private readonly IList<Action> _conditionExpressions = new List<Action>();
+
+	protected override IEnumerable<Action> ConditionExpressions
+	{
+		get
+		{
+			return _conditionExpressions;
+		}
+	}
+
+	public void CalculateValidationChanges(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInvalid)
+	{
+		this.Validate(out questionsToBeValid, out questionsToBeInvalid); 
+	}			
+	
+	public ValidityChanges ProcessValidationExpressions() 
+	{ 
+		return this.ExecuteValidations();
+	}
+
+	public void SetParent(IExpressionExecutableV7 parentLevel)			
+	{
+	}	
+	public void SetParent(IExpressionExecutableV6 parentLevel)			
+	{
+	}	
+	public void SetParent(IExpressionExecutableV5 parentLevel)			
+	{
+	}
+
+	public void SetParent(IExpressionExecutableV2 parentLevel)			
+	{
+	}
+
+	public void SetParent(IExpressionExecutable parentLevel)			
+	{			
+	}
+
+	IExpressionExecutableV7 IExpressionExecutableV7.GetParent()
+	{
+		return null;
+	}
+	IExpressionExecutableV6 IExpressionExecutableV6.GetParent()
+	{
+		return null;
+	}
+	IExpressionExecutableV5 IExpressionExecutableV5.GetParent()
+	{
+		return null;
+	}
+
+	IExpressionExecutableV2 IExpressionExecutableV2.GetParent()
+	{
+		return null;
+	}
+
+	IExpressionExecutable IExpressionExecutable.GetParent()
+	{
+		return null;
+	}
+}

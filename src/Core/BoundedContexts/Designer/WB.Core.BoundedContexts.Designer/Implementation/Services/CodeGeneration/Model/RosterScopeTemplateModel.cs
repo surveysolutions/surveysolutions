@@ -10,15 +10,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             List<GroupTemplateModel> groups, 
             List<RosterTemplateModel> rosters, 
             List<RosterTemplateModel> rostersInScope, 
-            List<ConditionMethodAndState> conditionMethodsSortedByExecutionOrder)
+            List<ConditionMethodAndState> conditionMethodsSortedByExecutionOrder,
+            List<LinkedQuestionFilterExpressionModel> linkedQuestionFilterExpressions)
         {
-            this.TypeName = typeName;
+            TypeName = typeName;
             Questions = questions;
             Groups = groups;
             Rosters = rosters;
             ConditionMethodsSortedByExecutionOrder = conditionMethodsSortedByExecutionOrder;
             RostersInScope = rostersInScope;
             ParentTypeName = rostersInScope[0].ParentTypeName;
+            LinkedQuestionFilterExpressions = linkedQuestionFilterExpressions;
         }
 
         public string TypeName { set; get; }
@@ -38,5 +40,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string ParentTypeName { set; get; }
 
         public List<RosterTemplateModel> RostersInScope { set; get; }
+
+        public List<LinkedQuestionFilterExpressionModel> LinkedQuestionFilterExpressions { get; set; }
     }
 }

@@ -10,6 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Questions = new List<QuestionTemplateModel>();
             this.Groups = new List<GroupTemplateModel>();
             this.Rosters = new List<RosterTemplateModel>();
+            this.LinkedQuestionFilterExpressions=new List<LinkedQuestionFilterExpressionModel>();
         }
 
         public string Conditions { set; get; }
@@ -22,5 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string StateName => CodeGenerator.PrivateFieldsPrefix + VariableName + CodeGenerator.StateSuffix;
         public string IdName => CodeGenerator.PrivateFieldsPrefix + VariableName + CodeGenerator.IdSuffix;
         public string ConditionsMethodName => CodeGenerator.EnablementPrefix + VariableName;
+
+        public List<LinkedQuestionFilterExpressionModel> LinkedQuestionFilterExpressions { get; set; }
     }
 }

@@ -208,6 +208,7 @@
     <Compile Include="Events\Questionnaire\Macros\MacroDeleted.cs" />
     <Compile Include="Events\Questionnaire\Macros\MacroUpdated.cs" />
     <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\LinkedQuestionFilterExpressionModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\ValidationExpressionModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\InterviewExpressionStateTemplateV6.cs">
       <DependentUpon>InterviewExpressionStateTemplateV6.tt</DependentUpon>
@@ -227,10 +228,33 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\RosterScopeTemplateV6.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V7\Templates\InterviewExpressionStateTemplateV7.cs">
+      <DependentUpon>InterviewExpressionStateTemplateV7.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V7\Templates\InterviewExpressionStateTemplateV7.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V7\Templates\QuestionnaireLevelTemplateV7.cs">
+      <DependentUpon>QuestionnaireLevelTemplateV7.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V7\Templates\QuestionnaireLevelTemplateV7.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V7\Templates\RosterScopeTemplateV7.cs">
+      <DependentUpon>RosterScopeTemplateV7.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V7\Templates\RosterScopeTemplateV7.Extended.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\SharedTemplateV6.cs">
       <DependentUpon>SharedTemplateV6.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V7\Templates\SharedTemplateV7.cs">
+      <DependentUpon>SharedTemplateV7.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Implementation\Services\QuestionnaireDocumentExtensions.cs" />
     <Compile Include="Implementation\Services\QuestionTemplateModelExtensions.cs" />
@@ -638,6 +662,10 @@
       <TransformOnBuild>False</TransformOnBuild>
     </None>
     <Compile Include="Implementation\Services\QuestionnaireVerifier.Warnings.cs" />
+    <None Include="Implementation\Services\CodeGeneration\V7\Templates\SharedTemplateV7.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>SharedTemplateV7.cs</LastGenOutput>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -717,6 +745,18 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>LookupTablesTemplateV5.cs</LastGenOutput>
     </Content>
+    <None Include="Implementation\Services\CodeGeneration\V7\Templates\QuestionnaireLevelTemplateV7.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>QuestionnaireLevelTemplateV7.cs</LastGenOutput>
+    </None>
+    <None Include="Implementation\Services\CodeGeneration\V7\Templates\InterviewExpressionStateTemplateV7.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>InterviewExpressionStateTemplateV7.cs</LastGenOutput>
+    </None>
+    <None Include="Implementation\Services\CodeGeneration\V7\Templates\RosterScopeTemplateV7.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>RosterScopeTemplateV7.cs</LastGenOutput>
+    </None>
     <None Include="Implementation\Services\CodeGeneration\V6\Templates\SharedTemplateV6.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>SharedTemplateV6.cs</LastGenOutput>
