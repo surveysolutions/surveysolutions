@@ -11,29 +11,32 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     internal partial class QuestionnaireVerifier : IQuestionnaireVerifier
     {
-        private const int MaxRecommendedAmountOfRosters = 20;
-
         private IEnumerable<Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>>> WarningsVerifiers => new[]
         {
             Warning(LargeNumberOfRosters, "WB0200", VerificationMessages.WB0200_LargeNumberOfRostersIsCreated),
             Warning<IGroup>(TooManyQuestionsInGroup, "WB0201", VerificationMessages.WB0201_LargeNumberOfQuestionsInGroup),
             Warning<IGroup>(GroupWithoutQuestions, "WB0202", VerificationMessages.WB0202_GroupWithoutQuestions),
-            Warning<IGroup>(HasSingleQuestionInRoster, "WB0203", VerificationMessages.WB0203_RosterHasSingleQuetsion),
+            Warning<IGroup>(HasSingleQuestionInRoster, "WB0203", VerificationMessages.WB0203_RosterHasSingleQuestion),
+            Warning<IGroup>(EmptyRoster, "WB0204", VerificationMessages.WB0204_EmptyRoster),
         };
 
         private static bool LargeNumberOfRosters(ReadOnlyQuestionnaireDocument questionnaire)
-            => questionnaire.Find<IGroup>(q => q.IsRoster).Count() > MaxRecommendedAmountOfRosters;
+            => questionnaire.Find<IGroup>(q => q.IsRoster).Count() > 20;
 
         private static bool HasSingleQuestionInRoster(IGroup rosterGroup)
             => rosterGroup.IsRoster
             && rosterGroup.Children.OfType<IQuestion>().Count() == 1;
 
         private static bool TooManyQuestionsInGroup(IGroup group)
-            => @group.Children.OfType<IQuestion>().Count() > 200;
+            => group.Children.OfType<IQuestion>().Count() > 200;
 
         private static bool GroupWithoutQuestions(IGroup group)
-            => !@group.IsRoster
-            && !@group.Children.OfType<IQuestion>().Any();
+            => !group.IsRoster
+            && !group.Children.OfType<IQuestion>().Any();
+
+        private static bool EmptyRoster(IGroup group)
+            => group.IsRoster
+            && !group.Children.Any();
 
         private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity, TSubEntity>(
             Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TSubEntity, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
