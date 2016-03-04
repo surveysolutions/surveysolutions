@@ -135,6 +135,7 @@ namespace WB.UI.Designer.App_Start
                 .WhenControllerHas<ApiValidationAntiForgeryTokenAttribute>()
                 .WithConstructorArgument("tokenVerifier", new ApiValidationAntiForgeryTokenVerifier());
 
+            kernel.Unbind<IEventSerializerSettingsFactory>();
             kernel.Bind<IEventSerializerSettingsFactory>().To<BackwardCompatibleEventSerializerSettingsFactory>();
 
             kernel.Bind<ISettingsProvider>().To<DesignerSettingsProvider>().InSingletonScope();

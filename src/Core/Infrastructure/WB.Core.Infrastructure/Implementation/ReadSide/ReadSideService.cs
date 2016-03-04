@@ -445,10 +445,12 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                         this.StoreReadSideVersion();
                     }
 
-                    UpdateStatusMessage(isPartialRebuild
-                        ? "Rebuild specific views succeeded."
-                        : "Rebuild all views succeeded.");
-                    logger.Info(isPartialRebuild ? "Rebuild specific views succeeded." : "Rebuild all views succeeded.");
+                    var finishMessage = this.FailedEventsCount > 0
+                        ? $"Rebuild {(isPartialRebuild ? "specific" : "all")} views finished with {this.FailedEventsCount} failed event(s)."
+                        : $"Rebuild {(isPartialRebuild ? "specific" : "all")} views succeeded.";
+
+                    UpdateStatusMessage(finishMessage);
+                    logger.Info(finishMessage);
                 }
             }
             catch (OperationCanceledException exception)
