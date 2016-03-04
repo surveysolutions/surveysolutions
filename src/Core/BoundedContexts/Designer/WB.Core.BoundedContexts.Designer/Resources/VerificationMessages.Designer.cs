@@ -1073,7 +1073,33 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enablement condition is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList())..
+        ///   Looks up a localized string similar to Questionnaire contains more than 100 questions but only one or two sections. Group questions into sections to simplify navigation and improve performance..
+        /// </summary>
+        internal static string WB0206_FewSectionsManyQuestions {
+            get {
+                return ResourceManager.GetString("WB0206_FewSectionsManyQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fixed roster contains 3 or less questions. Consider using sub-sections and a series of questions. Rosters complicate structure of exported data..
+        /// </summary>
+        internal static string WB0207_FixedRosterContains3OrLessQuestions {
+            get {
+                return ResourceManager.GetString("WB0207_FixedRosterContains3OrLessQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Most numeric questions can have validation conditions. Add validation conditions to improve data quality..
+        /// </summary>
+        internal static string WB0208_MoreThan50PercentsNumericQuestionsWithoutValidationConditions {
+            get {
+                return ResourceManager.GetString("WB0208_MoreThan50PercentsNumericQuestionsWithoutValidationConditions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// </summary>
         internal static string WB0209_LongEnablementCondition {
             get {
