@@ -40,20 +40,20 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
                 state.AddRoster(rosterId, new decimal[0], 2, null);
                 state.AddRoster(rosterId, new decimal[0], 3, null);
 
-                return state.ProcessLinkedQuestionFilters();
+                return new InvokeResults() {LinkedQuestionFilterResults = state.ProcessLinkedQuestionFilters()};
             });
 
         It should_return_3_filters = () =>
-            results.Count.ShouldEqual(3);
+            results.LinkedQuestionFilterResults.Count.ShouldEqual(3);
 
         It should_result_of_first_filter_be_false = () =>
-            results[0].Enabled.ShouldBeFalse();
+            results.LinkedQuestionFilterResults[0].Enabled.ShouldBeFalse();
 
         It should_result_of_second_filter_be_true = () =>
-            results[1].Enabled.ShouldBeTrue();
+            results.LinkedQuestionFilterResults[1].Enabled.ShouldBeTrue();
 
         It should_result_of_third_filter_be_true = () =>
-           results[2].Enabled.ShouldBeTrue();
+           results.LinkedQuestionFilterResults[2].Enabled.ShouldBeTrue();
 
         Cleanup stuff = () =>
         {
@@ -62,13 +62,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
         };
 
         private static AppDomainContext appDomainContext;
-        private static List<LinkedQuestionFilterResult> results;
+        private static InvokeResults results;
 
         [Serializable]
         public class InvokeResults
         {
-            public int ValidQuestionsCount { get; set; }
-            public int InvalidQuestionsCount { get; set; }
+            public List<LinkedQuestionFilterResult> LinkedQuestionFilterResults { get; set; }
         }
     }
 }
