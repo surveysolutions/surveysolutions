@@ -1082,11 +1082,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed roster contains 3 or less questions. Consider using sub-sections and a series of questions. Rosters complicate structure of exported data..
+        ///   Looks up a localized string similar to Fixed roster contains 3 or less items. Consider using sub-sections and a series of questions. Rosters complicate structure of exported data..
         /// </summary>
-        internal static string WB0207_FixedRosterContains3OrLessQuestions {
+        internal static string WB0207_FixedRosterContains3OrLessItems {
             get {
-                return ResourceManager.GetString("WB0207_FixedRosterContains3OrLessQuestions", resourceCulture);
+                return ResourceManager.GetString("WB0207_FixedRosterContains3OrLessItems", resourceCulture);
             }
         }
         
@@ -1100,6 +1100,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enablement condition is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList())..
         /// </summary>
         internal static string WB0209_LongEnablementCondition {
             get {

@@ -468,8 +468,8 @@
   <data name="WB0212_LongValidationCondition" xml:space="preserve">
     <value>Validation condition #{0} is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList()).</value>
   </data>
-  <data name="WB0207_FixedRosterContains3OrLessQuestions" xml:space="preserve">
-    <value>Fixed roster contains 3 or less questions. Consider using sub-sections and a series of questions. Rosters complicate structure of exported data.</value>
+  <data name="WB0207_FixedRosterContains3OrLessItems" xml:space="preserve">
+    <value>Fixed roster contains 3 or less items. Consider using sub-sections and a series of questions. Rosters complicate structure of exported data.</value>
   </data>
   <data name="WB0208_MoreThan50PercentsNumericQuestionsWithoutValidationConditions" xml:space="preserve">
     <value>Most numeric questions can have validation conditions. Add validation conditions to improve data quality.</value>
