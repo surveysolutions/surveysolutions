@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
         }
 
         [HttpGet]
-        public override HttpResponseMessage Get(Guid id, int version, long contentVersion) => base.Get(id, version, contentVersion);
+        public HttpResponseMessage Get(Guid id, int version, long contentVersion) => base.Get(id, version, contentVersion, true);
         [HttpGet]
         public override HttpResponseMessage GetAssembly(Guid id, int version) => base.GetAssembly(id, version);
         [HttpPost]

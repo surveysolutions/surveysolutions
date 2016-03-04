@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
     [Subject(typeof(ImportController))]
     internal class ImportControllerTestContext
     {
-        protected static ImportController CreateImportController(
+        protected static ImportV2Controller CreateImportController(
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory = null,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory = null,
             IMembershipUserService membershipUserService = null,
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
             ISerializer serializer=null,
             IStringCompressor zipUtils = null)
         {
-            return new ImportController(zipUtils ?? Mock.Of<IStringCompressor>(),
+            return new ImportV2Controller(zipUtils ?? Mock.Of<IStringCompressor>(),
                 membershipUserService ?? Mock.Of<IMembershipUserService>(),
                 Mock.Of<IQuestionnaireListViewFactory>(),
                 questionnaireViewFactory ?? Mock.Of<IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>>(),

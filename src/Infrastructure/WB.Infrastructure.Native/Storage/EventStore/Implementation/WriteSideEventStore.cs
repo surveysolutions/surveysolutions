@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
@@ -19,7 +18,6 @@ using Nito.AsyncEx.Synchronous;
 using WB.Core.GenericSubdomains.Portable;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
-using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
 {
@@ -37,7 +35,7 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
         readonly TimeSpan defaultTimeout = TimeSpan.FromSeconds(30000);
         readonly ILogger logger;
         readonly EventStoreSettings settings;
-        private readonly ISerializer serializer;
+        private readonly IEventSerializerSettingsFactory eventSerializerSettingsFactory;
 
         bool disposed;
         static object lockObject = new Object();
@@ -45,14 +43,14 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
         public WriteSideEventStore(IEventStoreConnectionProvider connectionProvider,
             ILogger logger,
             EventStoreSettings settings, IEventTypeResolver eventTypeResolver,
-            ISerializer serializer)
+            IEventSerializerSettingsFactory eventSerializerSettingsFactory)
         {
             this.logger = logger;
             this.settings = settings;
             this.eventTypeResolver = eventTypeResolver;
             this.ConfigureEventStore();
             this.connection = connectionProvider.Open();
-            this.serializer = serializer;
+            this.eventSerializerSettingsFactory = eventSerializerSettingsFactory;
 
             using (var cancellationTokenSource = new CancellationTokenSource())
             {
@@ -123,8 +121,6 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
             var totalCountOfEvents = this.CountOfAllEvents();
             if (!position.HasValue)
                 return totalCountOfEvents;
-
-
 
             var eventSlicesAfter = this.GetEventsAfterPosition(position);
 
@@ -255,11 +251,13 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
                 IEvent eventData;
 
                 Type resolvedEventType = this.eventTypeResolver.ResolveType(resolvedEvent.Event.EventType.ToPascalCase());
+                var meta = Encoding.GetString(resolvedEvent.Event.Metadata);
+                metadata = JsonConvert.DeserializeObject<EventMetada>(meta, this.eventSerializerSettingsFactory.GetJsonSerializerSettings());
 
-                metadata = this.serializer.Deserialize(resolvedEvent.Event.Metadata, typeof(EventMetada), TypeSerializationSettings.Event, SerializationType.Json) as EventMetada;
-                
-                eventData = this.serializer.Deserialize(resolvedEvent.Event.Data, resolvedEventType, TypeSerializationSettings.Event, resolvedEvent.Event.IsJson ? SerializationType.Json : SerializationType.Bson) as IEvent;
-                
+                eventData = JsonConvert.DeserializeObject(Encoding.GetString(resolvedEvent.Event.Data),
+                        resolvedEventType,
+                        this.eventSerializerSettingsFactory.GetJsonSerializerSettings()) as IEvent;
+
                 var committedEvent = new CommittedEvent(Guid.NewGuid(),
                     metadata.Origin,
                     resolvedEvent.Event.EventId,
@@ -290,17 +288,16 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
                 GlobalSequence = globalSequence
             };
 
-            var eventMetadataBytes = this.serializer.SerializeToByteArray(eventMetada, 
-                TypeSerializationSettings.Event, 
-                SerializationType.Json);
 
-            var eventDataBytes = this.serializer.SerializeToByteArray(@event.Payload, 
-                    TypeSerializationSettings.Event,
-                    this.settings.UseBson ? SerializationType.Bson : SerializationType.Json);
+            var metaData = JsonConvert.SerializeObject(eventMetada);
+            var eventMetadataBytes = Encoding.GetBytes(metaData);
+            
+            var eventString = JsonConvert.SerializeObject(@event.Payload, Formatting.Indented, this.eventSerializerSettingsFactory.GetJsonSerializerSettings());
+            var eventDataBytes = Encoding.GetBytes(eventString);
             
             var eventData = new EventData(@event.EventIdentifier,
                 @event.Payload.GetType().Name.ToCamelCase(),
-                !this.settings.UseBson,
+                true,
                 eventDataBytes,
                 eventMetadataBytes);
 
@@ -383,7 +380,7 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
                     if (!IsSystemEventOrFromDeletedStream(@event))
                     {
                         var meta = Encoding.GetString(@event.Event.Metadata);
-                        var metadata = this.serializer.Deserialize<EventMetada>(meta, TypeSerializationSettings.Event);
+                        var metadata = JsonConvert.DeserializeObject<EventMetada>(meta, this.eventSerializerSettingsFactory.GetJsonSerializerSettings());
                         lastUsedGlobalSequence = metadata.GlobalSequence;
                         return;
                     }

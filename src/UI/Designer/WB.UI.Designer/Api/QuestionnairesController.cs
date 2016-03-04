@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.UI.Designer.Api.Attributes;
@@ -20,7 +17,7 @@ using QuestionnaireListItem = WB.Core.SharedKernels.SurveySolutions.Api.Designer
 namespace WB.UI.Designer.Api
 {
     [ApiBasicAuth]
-    [RoutePrefix("api/v13/questionnaires")]
+    [RoutePrefix("api/v14/questionnaires")]
     public class QuestionnairesController : ApiController
     {
         //temporary fix
@@ -49,7 +46,7 @@ namespace WB.UI.Designer.Api
             this.viewFactory = viewFactory;
         }
 
-        [Route("~/api/v13/login")]
+        [Route("~/api/v14/login")]
         [HttpGet]
         public void Login()
         {

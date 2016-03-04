@@ -5,7 +5,6 @@
         ObjectsOnly = 0,
         AllTypes = 1,
         None = 2,
-        Auto = 3,
-        Event = 4
+        Auto = 3
     }
 }

@@ -119,6 +119,7 @@
     <Compile Include="Implementation\Services\InterviewerQuestionnaireAccessor.cs" />
     <Compile Include="Implementation\Services\QuestionnaireContentVersionProvider.cs" />
     <Compile Include="Implementation\Services\QuestionnaireKeyValueStorage.cs" />
+    <Compile Include="Implementation\Storage\EventSerializerSettings.cs" />
     <Compile Include="Implementation\Storage\IInterviewerEventStorage.cs" />
     <Compile Include="Implementation\Storage\SqliteEventStorage.cs" />
     <Compile Include="Implementation\Services\SynchronizationException.cs" />
