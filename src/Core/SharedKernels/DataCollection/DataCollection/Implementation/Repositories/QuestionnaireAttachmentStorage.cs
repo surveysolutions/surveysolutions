@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Main.Core.Documents;
+using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
@@ -8,24 +11,54 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 {
     public class QuestionnaireAttachmentStorage : IQuestionnaireAttachmentStorage
     {
-        public void Store(Attachment attachment, byte[] attachmentData)
+        private readonly IPlainKeyValueStorage<Attachment> repository;
+        private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly string attachmentDirectoryPath;
+
+        private readonly string AttachmentDirectoryName = "Attachments";
+
+        public QuestionnaireAttachmentStorage(IPlainKeyValueStorage<Attachment> repository,
+            IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath)
         {
-            throw new NotImplementedException();
+            this.repository = repository;
+            this.fileSystemAccessor = fileSystemAccessor;
+
+            this.attachmentDirectoryPath = this.fileSystemAccessor.CombinePath(rootDirectoryPath, AttachmentDirectoryName);
+
+            if (!this.fileSystemAccessor.IsDirectoryExists(this.attachmentDirectoryPath))
+                this.fileSystemAccessor.CreateDirectory(this.attachmentDirectoryPath);
+        }
+
+        public Task StoreAsync(Attachment attachment, byte[] attachmentData)
+        {
+            this.repository.Store(attachment, attachment.Id);
+
+            var attachmentFilePath = this.GetPathToFile(attachment.Id);
+            fileSystemAccessor.WriteAllBytes(attachmentFilePath, attachmentData);
+            return Task.FromResult(true);
         }
 
         public Task<Attachment> GetAttachmentAsync(string attachmentId)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(this.repository.GetById(attachmentId));
         }
 
-        public Task<IEnumerable<Attachment>> GetAttachmentsByQuestionnaireAsync(Guid questionnaireId)
-        {
-            throw new NotImplementedException();
-        }
+//        public Task<IEnumerable<Attachment>> GetAttachmentsByQuestionnaireAsync(Guid questionnaireId)
+//        {
+//            throw new NotImplementedException();
+//        }
 
         public Task<byte[]> GetAttachmentContentAsync(string attachmentId)
         {
-            throw new NotImplementedException();
+            var filePath = this.GetPathToFile(attachmentId);
+            if (!fileSystemAccessor.IsFileExists(filePath))
+                return null;
+            return Task.FromResult(fileSystemAccessor.ReadAllBytes(filePath));
+        }
+
+        private string GetPathToFile(string fileName)
+        {
+            return fileSystemAccessor.CombinePath(attachmentDirectoryPath, fileName);
         }
     }
 }

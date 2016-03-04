@@ -6,13 +6,8 @@
 
         public string Name { get; set; }
 
-        public ContentType Type { get; set; }
+        public AttachmentContentType Type { get; set; }
 
-        public int Size { get; set; }
-    }
-
-    public enum ContentType
-    {
-        Image,
+        public long Size { get; set; }
     }
 }
