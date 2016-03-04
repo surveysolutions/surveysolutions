@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
 {
     internal class InterviewerInterviewsControllerTestsContext
     {
-        public static InterviewsApiController CreateInterviewerInterviewsController(
+        public static InterviewsApiV1Controller CreateInterviewerInterviewsController(
             IPlainInterviewFileStorage plainInterviewFileStorage = null,
             IGlobalInfoProvider globalInfoProvider = null,
             IInterviewInformationFactory interviewsFactory = null,
@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
             IMetaInfoBuilder metaBuilder = null,
             ISerializer serializer =  null)
         {
-            return new InterviewsApiController(
+            return new InterviewsApiV1Controller(
                 plainInterviewFileStorage: plainInterviewFileStorage ?? Mock.Of<IPlainInterviewFileStorage>(),
                 globalInfoProvider: globalInfoProvider ?? Mock.Of<IGlobalInfoProvider>(),
                 interviewsFactory: interviewsFactory ?? Mock.Of<IInterviewInformationFactory>(),

@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
             mockOflainInterviewFileStorage.Verify(x=>x.StoreInterviewBinaryDataAsync(interviewId, imageFileName, imageBytes), Times.Once);
         
         
-        private static InterviewsApiController controller;
+        private static InterviewsApiV1Controller controller;
         private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static readonly string imageFileName = "image.png";
         private static readonly byte[] imageBytes = {1, 234, 21, 0, 54, 1, 66, 78};

@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
                 IsRejected = true
             }, 
         };
-        private static InterviewsApiController controller;
+        private static InterviewsApiV1Controller controller;
         private static HttpResponseMessage response;
     }
 }
