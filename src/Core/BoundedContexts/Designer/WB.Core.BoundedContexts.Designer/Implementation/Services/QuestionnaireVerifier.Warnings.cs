@@ -20,6 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<IGroup>(HasSingleQuestionInRoster, "WB0203", VerificationMessages.WB0203_RosterHasSingleQuestion),
             Warning<IGroup>(EmptyRoster, "WB0204", VerificationMessages.WB0204_EmptyRoster),
             Warning(TooManyQuestions, "WB0205", VerificationMessages.WB0205_TooManyQuestions),
+            Warning(FewSectionsManyQuestions, "WB0206", VerificationMessages.WB0206_FewSectionsManyQuestions),
             Warning<IQuestion>(HasLongEnablementCondition, "WB0209", VerificationMessages.WB0209_LongEnablementCondition),
             Warning<IQuestion>(CategoricalQuestionHasALotOfOptions, "WB0210", VerificationMessages.WB0210_CategoricalQuestionHasManyOptions),
             Warning(HasNoGpsQuestions, "WB0211", VerificationMessages.WB0211_QuestionnaireHasNoGpsQuestion),
@@ -43,6 +44,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool TooManyQuestions(ReadOnlyQuestionnaireDocument questionnaire)
             => questionnaire.Find<IQuestion>().Count() > 1000;
+
+        private static bool FewSectionsManyQuestions(ReadOnlyQuestionnaireDocument questionnaire)
+            => questionnaire.Find<IQuestion>().Count() > 100
+            && questionnaire.Find<IGroup>(group => group.GetParent().GetParent() != null).Count() < 3;
 
         private static bool HasSingleQuestionInRoster(IGroup rosterGroup)
             => rosterGroup.IsRoster

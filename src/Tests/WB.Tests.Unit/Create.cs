@@ -232,6 +232,11 @@ namespace WB.Tests.Unit
                 children: children);
         }
 
+        public static Group Section(string title = "Section X", Guid? sectionId = null, IEnumerable<IComposite> children = null)
+            => Create.Group(
+                title: title,
+                groupId: sectionId,
+                children: children);
 
         public static CodeGenerationSettings CodeGenerationSettings()
         {

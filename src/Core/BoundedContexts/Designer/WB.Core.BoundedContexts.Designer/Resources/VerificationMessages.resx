@@ -462,4 +462,13 @@
   <data name="WB0211_QuestionnaireHasNoGpsQuestion" xml:space="preserve">
     <value>Questionnaire contains no GPS questions. Consider adding a GPS question.</value>
   </data>
+  <data name="WB0206_FewSectionsManyQuestions" xml:space="preserve">
+    <value>Questionnaire contains more than 100 questions but only one or two sections. Group questions into sections to simplify navigation and improve performance.</value>
+  </data>
+  <data name="WB0207_FixedRosterContains3OrLessQuestions" xml:space="preserve">
+    <value>Fixed roster contains 3 or less questions. Consider using sub-sections and a series of questions. Rosters complicate structure of exported data.</value>
+  </data>
+  <data name="WB0208_MoreThan50PercentsNumericQuestionsWithoutValidationConditions" xml:space="preserve">
+    <value>Most numeric questions can have validation conditions. Add validation conditions to improve data quality.</value>
+  </data>
 </root>
