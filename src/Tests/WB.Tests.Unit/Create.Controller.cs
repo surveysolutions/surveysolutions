@@ -21,7 +21,7 @@ namespace WB.Tests.Unit
     {
         internal static class Controller
         {
-            public static QuestionnairesApiController InterviewerQuestionnaires(
+            public static QuestionnairesApiV1Controller InterviewerQuestionnaires(
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor = null,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null,
             ISerializer serializer = null,
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit
             QuestionnaireBrowseItem questionnaireBrowseItem=null
             )
             {
-                return new QuestionnairesApiController(
+                return new QuestionnairesApiV1Controller(
                     questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
                     questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
                     serializer ?? Mock.Of<ISerializer>(),

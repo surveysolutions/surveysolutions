@@ -15,9 +15,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
     [ApiBasicAuth(new[] { UserRoles.Operator })]
     [ProtobufJsonSerializer]
     [Obsolete("Since v. 5.7")]
-    public class DevicesApiController : DevicesControllerBase
+    public class DevicesApiV1Controller : DevicesControllerBase
     {
-        public DevicesApiController(
+        public DevicesApiV1Controller(
             IGlobalInfoProvider globalInfoProvider,
             IUserWebViewFactory userInfoViewFactory,
             ISyncProtocolVersionProvider syncVersionProvider,

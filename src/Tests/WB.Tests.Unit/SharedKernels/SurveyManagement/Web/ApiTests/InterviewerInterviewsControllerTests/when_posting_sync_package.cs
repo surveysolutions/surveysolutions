@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
             mockOfIncomingSyncPackagesQueue.Verify(x=>x.Enqueue(interviewId, package), Times.Once);
         
         
-        private static InterviewsApiController controller;
+        private static InterviewsApiV1Controller controller;
         private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static readonly string package = "package content";
         private static readonly Mock<IIncomingSyncPackagesQueue> mockOfIncomingSyncPackagesQueue = new Mock<IIncomingSyncPackagesQueue>();

@@ -12,9 +12,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
     [ApiBasicAuth(new[] { UserRoles.Operator })]
     [ProtobufJsonSerializer]
     [Obsolete("Since v. 5.7")]
-    public class UsersApiController : UsersControllerBase
+    public class UsersApiV1Controller : UsersControllerBase
     {
-        public UsersApiController(
+        public UsersApiV1Controller(
             IGlobalInfoProvider globalInfoProvider,
             IUserViewFactory userViewFactory,
             IUserWebViewFactory userInfoViewFactory) : base(

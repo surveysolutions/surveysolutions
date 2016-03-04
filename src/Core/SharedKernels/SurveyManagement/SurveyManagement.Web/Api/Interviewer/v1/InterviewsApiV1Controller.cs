@@ -30,9 +30,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
     [ApiBasicAuth(new[] { UserRoles.Operator })]
     [ProtobufJsonSerializer]
     [Obsolete("Since v. 5.7")]
-    public class InterviewsApiController : InterviewsControllerBase
+    public class InterviewsApiV1Controller : InterviewsControllerBase
     {
-        public InterviewsApiController(
+        public InterviewsApiV1Controller(
             IPlainInterviewFileStorage plainInterviewFileStorage,
             IGlobalInfoProvider globalInfoProvider,
             IInterviewInformationFactory interviewsFactory,
