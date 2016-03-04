@@ -37,7 +37,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 
         public bool IsSubscribed(ILiteEventHandler handler, string eventSourceId)
         {
-            if (handler == null) throw new ArgumentNullException("handler");
+            if (handler == null) throw new ArgumentNullException(nameof(handler));
             return handlers.Values.Any(x => x.Any(handlerRef =>
             {
                 ILiteEventHandler subsribedHandler;
