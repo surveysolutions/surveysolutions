@@ -1472,7 +1472,7 @@ namespace WB.Tests.Unit
 
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = "numeric_question", string enablementCondition = null, 
             string validationExpression = null, QuestionScope scope = QuestionScope.Interviewer, bool isPrefilled = false,
-            bool hideIfDisabled = false, List<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null)
+            bool hideIfDisabled = false, IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null)
         {
             return new NumericQuestion
             {
@@ -1485,7 +1485,7 @@ namespace WB.Tests.Unit
                 ValidationExpression = validationExpression,
                 QuestionScope = scope,
                 Featured = isPrefilled,
-                ValidationConditions = validationConditions ?? new List<ValidationCondition>(),
+                ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 LinkedToRosterId = linkedToRosterId,
             };
         }
@@ -1533,7 +1533,7 @@ namespace WB.Tests.Unit
             ));
         }
 
-        public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null)
+        public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, IEnumerable<ValidationCondition> validationConditions = null)
         {
             return new NumericQuestion
             {
@@ -1542,6 +1542,7 @@ namespace WB.Tests.Unit
                 StataExportCaption = variable,
                 IsInteger = false,
                 ConditionExpression = enablementCondition,
+                ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 ValidationExpression = validationExpression
             };
         }
@@ -2720,7 +2721,7 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static ValidationCondition ValidationCondition(string expression, string message)
+        public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")
         {
             return new ValidationCondition(expression, message);
         }

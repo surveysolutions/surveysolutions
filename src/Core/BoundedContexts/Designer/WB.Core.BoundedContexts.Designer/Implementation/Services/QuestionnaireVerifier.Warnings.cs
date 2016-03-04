@@ -23,6 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning(TooManyQuestions, "WB0205", VerificationMessages.WB0205_TooManyQuestions),
             Warning(FewSectionsManyQuestions, "WB0206", VerificationMessages.WB0206_FewSectionsManyQuestions),
             Warning<IGroup>(FixedRosterContains3OrLessItems, "WB0207", VerificationMessages.WB0207_FixedRosterContains3OrLessItems),
+            Warning(MoreThanHalfNumericQuestionsWithoutValidationConditions, "WB0208", VerificationMessages.WB0208_MoreThan50PercentsNumericQuestionsWithoutValidationConditions),
             Warning<IQuestion>(HasLongEnablementCondition, "WB0209", VerificationMessages.WB0209_LongEnablementCondition),
             Warning<IQuestion>(CategoricalQuestionHasALotOfOptions, "WB0210", VerificationMessages.WB0210_CategoricalQuestionHasManyOptions),
             Warning(HasNoGpsQuestions, "WB0211", VerificationMessages.WB0211_QuestionnaireHasNoGpsQuestion),
@@ -58,6 +59,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             => questionnaire.Find<IQuestion>().Count() > 100
             && questionnaire.Find<IGroup>(IsNotChapterOrRoot).Count() < 3;
 
+        private static bool MoreThanHalfNumericQuestionsWithoutValidationConditions(ReadOnlyQuestionnaireDocument questionnaire)
+            => questionnaire.Find<IQuestion>(IsNumericWithoutValidation).Count() > 0.5 * questionnaire.Find<IQuestion>().Count();
+
         private static bool HasSingleQuestionInRoster(IGroup rosterGroup)
             => rosterGroup.IsRoster
             && rosterGroup.Children.OfType<IQuestion>().Count() == 1;
@@ -80,6 +84,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool IsNotChapterOrRoot(IGroup group) => group.GetParent().GetParent() != null;
 
         private static bool IsFixedRoster(IGroup group) => group.IsRoster && (group.FixedRosterTitles?.Any() ?? false);
+
+        private static bool IsNumericWithoutValidation(IQuestion question)
+            => question.QuestionType == QuestionType.Numeric
+            && !question.ValidationConditions.Any();
 
         private static IEnumerable<IComposite> GetDescendants(IGroup group) => group.Children.TreeToEnumerable(_ => _.Children);
 
