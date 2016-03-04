@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Machine.Specifications;
@@ -6,6 +7,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.Infrastructure.EventBus;
 using WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStateTests;
 
@@ -89,6 +91,13 @@ namespace WB.Tests.Unit
         public static void ShouldContainGroup(this QuestionnaireDocument questionnaireDocument, Expression<Func<IGroup, bool>> condition)
         {
             questionnaireDocument.GetAllGroups().ShouldContain(condition);
+        }
+
+        public static void ShouldContainWarning(this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
+        {
+            verificationMessages.ShouldContain(message
+                => message.MessageLevel == VerificationMessageLevel.Warning
+                && message.Code == code);
         }
     }
 }
