@@ -1443,20 +1443,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 entity.PublicKey);
         }
 
-        private static QuestionnaireVerificationReference CreateReferenceWithIndex(IComposite entity, int? conditionIndex = null)
-        {
-            return new QuestionnaireVerificationReference(
-                entity is IGroup
-                    ? QuestionnaireVerificationReferenceType.Group
-                    : (entity is IStaticText
-                        ? QuestionnaireVerificationReferenceType.StaticText
-                        : QuestionnaireVerificationReferenceType.Question),
-                entity.PublicKey)
-            {
-                FailedValidationConditionIndex = conditionIndex
-            };
-        }
-
         private static bool CategoricalMultianswerQuestionIsFeatured(IMultyOptionsQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
         {
             return IsPreFilledQuestion(question);
