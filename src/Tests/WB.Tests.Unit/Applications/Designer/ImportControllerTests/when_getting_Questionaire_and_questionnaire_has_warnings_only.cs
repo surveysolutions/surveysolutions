@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
         It should_return_not_null_responce = () =>
             questionnaireCommunicationPackage.ShouldNotBeNull();
 
-        private static ImportController importController;
+        private static ImportV2Controller importController;
         private static DownloadQuestionnaireRequest request;
         private static readonly Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");
         private static readonly Guid userId = Guid.Parse("33333333333333333333333333333333");

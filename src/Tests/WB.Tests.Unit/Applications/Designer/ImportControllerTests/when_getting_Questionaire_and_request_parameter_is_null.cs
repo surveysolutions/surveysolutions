@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Applications.Designer.ImportControllerTests
         It should_throw_ArgumentNullException = () =>
             exception.ShouldNotBeNull();
 
-        private static ImportController importController;
+        private static ImportV2Controller importController;
         private static ArgumentNullException exception;
     }
 }

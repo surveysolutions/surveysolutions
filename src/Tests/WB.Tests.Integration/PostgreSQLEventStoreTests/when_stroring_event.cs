@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Moq;
 using Machine.Specifications;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.UI.Designer.Providers.CQRS.Accounts.Events;
-using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
+using WB.Infrastructure.Native.Storage;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 {
@@ -20,7 +21,6 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 
             int sequenceCounter = 1;
             var eventTypeResolver = new EventTypeResolver();
-            var serializer = new NewtonJsonSerializer(new JsonSerializerSettingsFactory());
             eventTypeResolver.RegisterEventDataType(typeof(AccountRegistered));
             eventTypeResolver.RegisterEventDataType(typeof(AccountConfirmed));
             eventTypeResolver.RegisterEventDataType(typeof(AccountLocked));
@@ -49,7 +49,10 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 DateTime.UtcNow,
                 new AccountLocked()));
 
-            eventStore = new PostgresEventStore(new PostgreConnectionSettings { ConnectionString = connectionStringBuilder.ConnectionString }, eventTypeResolver, serializer);
+            eventStore = new PostgresEventStore(
+                new PostgreConnectionSettings { ConnectionString = connectionStringBuilder.ConnectionString }, 
+                eventTypeResolver,
+                Mock.Of<IEventSerializerSettingsFactory>());
         };
 
         Because of = () => eventStore.Store(events);

@@ -19,8 +19,6 @@ namespace WB.Infrastructure.Native.Storage.EventStore
         /// </summary>
         public bool InitializeProjections { get; set; }
 
-        public bool UseBson { get; set; }
-
         public string Login { get; set; }
 
         public string Password { get; set; }

@@ -13,6 +13,7 @@ using WB.Infrastructure.Native.Storage.EventStore.Implementation;
 using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 using It = Machine.Specifications.It;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Integration.EventStoreTests
 {
@@ -25,7 +26,6 @@ namespace WB.Tests.Integration.EventStoreTests
 
             int sequenceCounter = 1;
             var eventTypeResolver = new EventTypeResolver();
-            var serializer = new NewtonJsonSerializer(new JsonSerializerSettingsFactory());
             eventTypeResolver.RegisterEventDataType(typeof(AccountRegistered));
             eventTypeResolver.RegisterEventDataType(typeof(AccountConfirmed));
             eventTypeResolver.RegisterEventDataType(typeof(AccountLocked));
@@ -53,7 +53,7 @@ namespace WB.Tests.Integration.EventStoreTests
 
             WriteSideEventStorage = new WriteSideEventStore(ConnectionProvider, Mock.Of<ILogger>(),
             new EventStoreSettings {
-            InitializeProjections = false}, eventTypeResolver, serializer);
+            InitializeProjections = false}, eventTypeResolver, Mock.Of<IEventSerializerSettingsFactory>());
             WriteSideEventStorage.Store(events);
         };
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Ncqrs.Eventing;
+using Newtonsoft.Json;
 using SQLite.Net;
 using SQLite.Net.Interop;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -17,7 +18,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         private readonly ISerializer serializer;
         private readonly SQLiteConnectionWithLock connection;
         private ILogger logger;
-
+        
         public SqliteEventStorage(ISQLitePlatform sqLitePlatform, 
             ILogger logger,
             IAsynchronousFileSystemAccessor fileSystemAccessor,
@@ -152,24 +153,38 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 EventSourceId = evt.EventSourceId,
                 EventSequence = evt.EventSequence,
                 DateTimeUtc = evt.EventTimeStamp,
-                JsonEvent = this.serializer.Serialize(evt.Payload, TypeSerializationSettings.AllTypes)
+
+                JsonEvent = JsonConvert.SerializeObject(evt.Payload, EventSerializerSettings.JsonSerializerSettings)
+                //JsonEvent = this.serializer.Serialize(evt.Payload, TypeSerializationSettings.AllTypes)
             };
         }
 
         private Infrastructure.EventBus.IEvent ToEvent(string json)
         {
-            var replaceOldAssemblyNames = json.Replace("Main.Core.Events.AggregateRootEvent, Main.Core", "Main.Core.Events.AggregateRootEvent, WB.Core.Infrastructure");
+            //move to binder
+            var replaceOldAssemblyNames = json.Replace("Main.Core.Events.AggregateRootEvent, Main.Core", 
+                "Main.Core.Events.AggregateRootEvent, WB.Core.Infrastructure");
+
+            replaceOldAssemblyNames = replaceOldAssemblyNames.Replace("WB.UI.Capi", "WB.Core.BoundedContexts.Interviewer");
+
             replaceOldAssemblyNames =
                 new[]
                 {
-                    "NewUserCreated", "UserChanged", "UserLocked", "UserLockedBySupervisor", "UserUnlocked",
+                    "NewUserCreated",
+                    "UserChanged",
+                    "UserLocked",
+                    "UserLockedBySupervisor",
+                    "UserUnlocked",
                     "UserUnlockedBySupervisor"
+
                 }.Aggregate(replaceOldAssemblyNames,
                     (current, type) =>
                         current.Replace($"Main.Core.Events.User.{type}, Main.Core",
                             $"Main.Core.Events.User.{type}, WB.Core.SharedKernels.DataCollection"));
 
-            return this.serializer.Deserialize<Infrastructure.EventBus.IEvent>(replaceOldAssemblyNames, TypeSerializationSettings.AllTypes);
+            return JsonConvert.DeserializeObject<Infrastructure.EventBus.IEvent>(replaceOldAssemblyNames, EventSerializerSettings.JsonSerializerSettings);
+
+            //return this.serializer.Deserialize<Infrastructure.EventBus.IEvent>(replaceOldAssemblyNames);
         }
 
         public void Dispose()

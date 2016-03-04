@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, entityName + "-data.sqlite3");
             this.storage = new SQLiteConnectionWithLock(sqLitePlatform,
                 new SQLiteConnectionString(pathToDatabase, true, new BlobSerializerDelegate(
-                    (data) => serializer.SerializeToByteArray(data, TypeSerializationSettings.AllTypes, SerializationType.Json),
+                    (data) => serializer.SerializeToByteArray(data, TypeSerializationSettings.AllTypes),
                     (data, type) => serializer.DeserializeFromStream(new MemoryStream(data), type, TypeSerializationSettings.AllTypes),
                     (type) => true)))
             {

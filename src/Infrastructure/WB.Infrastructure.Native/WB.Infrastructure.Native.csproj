@@ -165,6 +165,8 @@
     <Compile Include="Logging\NLogLogger.cs" />
     <Compile Include="Logging\NLogLoggerProvider.cs" />
     <Compile Include="Logging\NLogLoggingModule.cs" />
+    <Compile Include="Storage\OldToNewAssemblyRedirectSerializationBinder.cs" />
+    <Compile Include="Storage\BackwardCompatibleEventSerializerSettingsFactory.cs" />
     <Compile Include="Storage\Esent\Implementation\EsentCachedReadSideStorage.cs" />
     <Compile Include="Storage\EventSerializerSettings.cs" />
     <Compile Include="Storage\EventStore\EventStoreSettings.cs" />
@@ -176,6 +178,9 @@
     <Compile Include="Storage\EventStore\Implementation\EventStoreLogger.cs" />
     <Compile Include="Storage\EventStore\IEventStoreConnectionProvider.cs" />
     <Compile Include="Storage\EventStore\Implementation\WriteSideEventStore.cs" />
+    <Compile Include="Storage\DefaultEventSerializerSettingsFactory.cs" />
+    <Compile Include="Storage\IEventSerializerSettingsFactory.cs" />
+    <Compile Include="Storage\KeyValueSerializerSettings.cs" />
     <Compile Include="Storage\Postgre\Implementation\PostgresKeyValueStorageWithCache.cs" />
     <Compile Include="Threading\IsolatedThreadExtensions.cs" />
     <Compile Include="Storage\Postgre\Implementation\PostgresEventStore.cs" />

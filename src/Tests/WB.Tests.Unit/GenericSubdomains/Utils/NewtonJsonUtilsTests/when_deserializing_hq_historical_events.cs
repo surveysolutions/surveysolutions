@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
         };
 
         Because of = () =>
-            data.ForEach(x => result.Add(_jsonSerializer.Deserialize(x.Item2, eventTypeResolver.ResolveType(x.Item1.ToPascalCase()), TypeSerializationSettings.Event)));
+            data.ForEach(x => result.Add(_jsonSerializer.Deserialize(x.Item2, eventTypeResolver.ResolveType(x.Item1.ToPascalCase()), TypeSerializationSettings.Auto)));
 
         It should_return_not_null_result = () =>
             result.Count.ShouldEqual(2);

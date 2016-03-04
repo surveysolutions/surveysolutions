@@ -153,7 +153,7 @@ namespace WB.UI.Supervisor.App_Start
                 new SupervisorBoundedContextModule(headquartersSettings, schedulerSettings));
 
             kernel.Bind<ISettingsProvider>().To<SupervisorSettingsProvider>();
-
+            kernel.Bind<IEventSerializerSettingsFactory>().To<BackwardCompatibleEventSerializerSettingsFactory>();
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
 
             var interviewCountLimitString = WebConfigurationManager.AppSettings["Limits.MaxNumberOfInterviews"];

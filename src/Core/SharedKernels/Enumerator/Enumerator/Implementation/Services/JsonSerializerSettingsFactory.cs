@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.DataCollection.Utils;
+using System.Reflection;
+using Main.Core.Documents;
+using System.Linq;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
@@ -12,15 +13,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
     {
         private readonly Dictionary<TypeSerializationSettings, JsonSerializerSettings> jsonSerializerSettingsByTypeNameHandling;
         private Dictionary<string, string> assemblyRemappings = new Dictionary<string, string>();
+        
+        private OldToNewAssemblyRedirectSerializationBinder oldToNewBinder = new OldToNewAssemblyRedirectSerializationBinder();
 
-        public JsonSerializerSettingsFactory(Dictionary<string, string> assemblyRemappings = null)
+        public JsonSerializerSettingsFactory()
         {
-            this.assemblyRemappings = assemblyRemappings;
-
-            var binder = assemblyRemappings != null && assemblyRemappings.Count > 0 
-                ? new AssemblyRedirectSerializationBinder(assemblyRemappings) 
-                : new DefaultSerializationBinder();
-
             jsonSerializerSettingsByTypeNameHandling =
                new Dictionary<TypeSerializationSettings, JsonSerializerSettings>()
                 {
@@ -29,8 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         {
                             TypeNameHandling = TypeNameHandling.All,
                             NullValueHandling = NullValueHandling.Ignore,
-                            FloatParseHandling = FloatParseHandling.Decimal,
-                            Binder = binder
+                            FloatParseHandling = FloatParseHandling.Decimal
                         }
                     },
                     {
@@ -39,8 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                             TypeNameHandling = TypeNameHandling.Objects,
                             NullValueHandling = NullValueHandling.Ignore,
                             FloatParseHandling = FloatParseHandling.Decimal,
-                            Formatting = Formatting.None,
-                            Binder = binder
+                            Formatting = Formatting.None
                         }
                     },
                     {
@@ -49,11 +44,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                             TypeNameHandling = TypeNameHandling.None,
                             NullValueHandling = NullValueHandling.Ignore,
                             FloatParseHandling = FloatParseHandling.Decimal,
-                            Formatting = Formatting.None,
-                            Binder = binder
+                            Formatting = Formatting.None
                         }
                     },
-
                     {
                         TypeSerializationSettings.Auto, new JsonSerializerSettings()
                         {
@@ -62,46 +55,88 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                             DefaultValueHandling = DefaultValueHandling.Ignore,
                             MissingMemberHandling = MissingMemberHandling.Ignore,
                             NullValueHandling = NullValueHandling.Ignore,
-                            Formatting = Formatting.None,
-                            Binder = binder
+                            Formatting = Formatting.None
                         }
-                   },
-                    {
-                        TypeSerializationSettings.Event, new JsonSerializerSettings
-                        {
-                            NullValueHandling = NullValueHandling.Ignore,
-                            DefaultValueHandling = DefaultValueHandling.Ignore,
-                            MissingMemberHandling = MissingMemberHandling.Ignore,
-                            TypeNameHandling = TypeNameHandling.Auto,
-                            ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                            Converters = new JsonConverter[] { new StringEnumConverter() }
-                        }
-                    }
+                   }
                 };
         }
 
         public JsonSerializerSettings GetJsonSerializerSettings(TypeSerializationSettings typeSerialization)
         {
-            return jsonSerializerSettingsByTypeNameHandling[typeSerialization];
+            return this.GetJsonSerializerSettings(typeSerialization, SerializationBinderSettings.OldToNew);
         }
 
-        private class AssemblyRedirectSerializationBinder : DefaultSerializationBinder
+        public JsonSerializerSettings GetJsonSerializerSettings(TypeSerializationSettings typeSerialization, SerializationBinderSettings binderSettings)
         {
-            private Dictionary<string, string> assemblyNamesMapping = new Dictionary<string, string>();
-
-            public AssemblyRedirectSerializationBinder() { }
-
-            public AssemblyRedirectSerializationBinder(Dictionary<string, string> assemblyNamesMapping)
+            var settings = jsonSerializerSettingsByTypeNameHandling[typeSerialization];
+            switch (binderSettings)
             {
-                this.assemblyNamesMapping = assemblyNamesMapping;
+                case SerializationBinderSettings.OldToNew:
+                    settings.Binder = this.oldToNewBinder;
+                    break;
+            }
+
+            return settings;
+        }
+
+        private class OldToNewAssemblyRedirectSerializationBinder : DefaultSerializationBinder
+        {
+            private const string oldAssemblyNameToRedirect = "Main.Core";
+            private readonly string targetAssemblyName = "WB.Core.SharedKernels.Questionnaire";
+            private readonly Dictionary<string, string> typesMap = new Dictionary<string, string>();
+            private readonly Dictionary<Type, string> typeToName = new Dictionary<Type, string>();
+
+            private const string oldAssemblyGenericReplacePattern = ", Main.Core]";
+            private const string newAssemblyGenericReplacePattern = ", WB.Core.SharedKernels.Questionnaire]";
+
+            public OldToNewAssemblyRedirectSerializationBinder()
+            {
+                typesMap = new Dictionary<string, string>();
+                var assembly = typeof(QuestionnaireDocument).GetTypeInfo().Assembly;
+                
+                foreach (var typeInfo in assembly.DefinedTypes)
+                {
+                    if (typesMap.ContainsKey(typeInfo.Name))
+                        throw new InvalidOperationException("Assembly contains more then one type with same name.");
+
+                    typesMap[typeInfo.Name] = typeInfo.FullName;
+                    typeToName[typeInfo.AsType()] = typeInfo.Name;
+                }
             }
 
             public override Type BindToType(string assemblyName, string typeName)
             {
-                if (this.assemblyNamesMapping.ContainsKey(assemblyName))
-                    assemblyName = this.assemblyNamesMapping[assemblyName];
+                if (String.Equals(assemblyName, oldAssemblyNameToRedirect, StringComparison.Ordinal) ||
+                    String.IsNullOrEmpty(assemblyName))
+                {
+                    assemblyName = targetAssemblyName;
+                    string fullTypeName;
+
+                    if (typesMap.TryGetValue(typeName.Split('.').Last(), out fullTypeName))
+                        typeName = fullTypeName;
+                }
+                else
+                {
+                    //generic replace
+                    typeName = typeName.Replace(oldAssemblyGenericReplacePattern, newAssemblyGenericReplacePattern);
+                }
 
                 return base.BindToType(assemblyName, typeName);
+            }
+
+            public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
+            {
+                string name;
+                if (typeToName.TryGetValue(serializedType, out name))
+                {
+                    assemblyName = null;
+                    typeName = serializedType.Name;
+                }
+                else
+                {
+                    assemblyName = serializedType.GetTypeInfo().Assembly.FullName;
+                    typeName = serializedType.FullName;
+                }
             }
         }
     }
