@@ -1062,5 +1062,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0204_EmptyRoster", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire has more than 1000 questions. It might be difficult to administer it..
+        /// </summary>
+        internal static string WB0205_TooManyQuestions {
+            get {
+                return ResourceManager.GetString("WB0205_TooManyQuestions", resourceCulture);
+            }
+        }
     }
 }

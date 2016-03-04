@@ -450,4 +450,7 @@
   <data name="WB0204_EmptyRoster" xml:space="preserve">
     <value>Roster is empty. Remove it if it is not needed.</value>
   </data>
+  <data name="WB0205_TooManyQuestions" xml:space="preserve">
+    <value>Questionnaire has more than 1000 questions. It might be difficult to administer it.</value>
+  </data>
 </root>
