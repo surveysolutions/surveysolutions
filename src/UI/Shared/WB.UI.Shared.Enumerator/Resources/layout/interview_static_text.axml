@@ -10,11 +10,9 @@
       <TextView
           style="@style/Interview_Question_Title"
           local:MvxBind="Html StaticText" />
-      <ImageView style="@style/Interview_Question_Multimedia_Picture"
-          android:scaleType="centerCrop"
-          android:adjustViewBounds="true"
-          local:MvxBind="Bitmap Attachment,Converter=InMemoryImageValueWithDefault; 
-                         Visible IsNotNull(Image);"/>
+      
+      <include layout="@layout/interview__attachment" />
+
     </LinearLayout>
   </LinearLayout>
   <View

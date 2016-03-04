@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    style="@style/Interview_QuestionWithDivider"
+    local:MvxBind="HideKeyboardOnClick .">
+
+  <ImageView style="@style/Interview_Question_Multimedia_Picture"
+          android:scaleType="centerCrop"
+          android:adjustViewBounds="true"
+          local:MvxBind="Bitmap Attachment,Converter=InMemoryImageValueWithDefault; 
+                         Visible IsNotNull(Attachment);"/>
+  
+</LinearLayout>
