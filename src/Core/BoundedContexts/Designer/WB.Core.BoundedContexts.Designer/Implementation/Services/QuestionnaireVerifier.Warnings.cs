@@ -18,10 +18,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<IGroup>(GroupWithoutQuestions, "WB0202", VerificationMessages.WB0202_GroupWithoutQuestions),
             Warning<IGroup>(HasSingleQuestionInRoster, "WB0203", VerificationMessages.WB0203_RosterHasSingleQuestion),
             Warning<IGroup>(EmptyRoster, "WB0204", VerificationMessages.WB0204_EmptyRoster),
+            Warning(TooManyQuestions, "WB0205", VerificationMessages.WB0205_TooManyQuestions),
         };
 
         private static bool LargeNumberOfRosters(ReadOnlyQuestionnaireDocument questionnaire)
             => questionnaire.Find<IGroup>(q => q.IsRoster).Count() > 20;
+
+        private static bool TooManyQuestions(ReadOnlyQuestionnaireDocument questionnaire)
+            => questionnaire.Find<IQuestion>().Count() > 1000;
 
         private static bool HasSingleQuestionInRoster(IGroup rosterGroup)
             => rosterGroup.IsRoster
