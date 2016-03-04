@@ -1071,5 +1071,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0205_TooManyQuestions", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enablement condition is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList()).
+        /// </summary>
+        internal static string WB0209_LongEnablementCondition {
+            get {
+                return ResourceManager.GetString("WB0209_LongEnablementCondition", resourceCulture);
+            }
+        }
     }
 }
