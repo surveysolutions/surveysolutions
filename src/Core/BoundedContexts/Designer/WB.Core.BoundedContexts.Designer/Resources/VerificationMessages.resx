@@ -361,7 +361,7 @@
     <value>Max number of answers for roster size question cannot be empty when question has more than 40 options.</value>
   </data>
   <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen40" xml:space="preserve">
-    <value>Max number of answers for roster size question cannot be greater then 40.</value>
+    <value>Max number of answers for roster size question cannot be greater than 40.</value>
   </data>
   <data name="WB0101_GroupHasLevelDepthMoreThan10" xml:space="preserve">
     <value>Sub-section can have no more than 10 parent sub-sections.</value>
@@ -439,13 +439,13 @@
     <value>Validation error message #{0} is empty.</value>
   </data>
   <data name="WB0201_LargeNumberOfQuestionsInGroup" xml:space="preserve">
-    <value>Section contains more than 200 questions, consider splitting into sub-sections</value>
+    <value>Section contains more than 200 questions, consider splitting into sub-sections.</value>
   </data>
   <data name="WB0202_GroupWithoutQuestions" xml:space="preserve">
-    <value>Section contains no questions. Consider removing the empty section </value>
+    <value>Section contains no questions. Consider removing the empty section.</value>
   </data>
   <data name="WB0203_RosterHasSingleQuestion" xml:space="preserve">
-    <value>Roster group contains only one question. Consider grouping with other rosters. For fixed roster, consider presenting as a set of independent qustions</value>
+    <value>Roster group contains only one question. Consider grouping with other rosters. For fixed roster, consider presenting as a set of independent qustions.</value>
   </data>
   <data name="WB0204_EmptyRoster" xml:space="preserve">
     <value>Roster is empty. Remove it if it is not needed.</value>
@@ -454,6 +454,9 @@
     <value>Questionnaire has more than 1000 questions. It might be difficult to administer it.</value>
   </data>
   <data name="WB0209_LongEnablementCondition" xml:space="preserve">
-    <value>Enablement condition is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList())</value>
+    <value>Enablement condition is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList()).</value>
+  </data>
+  <data name="WB0210_CategoricalQuestionHasManyOptions" xml:space="preserve">
+    <value>Single-choice question has too many categories, consider changing to combo box.</value>
   </data>
 </root>

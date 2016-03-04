@@ -21,7 +21,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<IGroup>(EmptyRoster, "WB0204", VerificationMessages.WB0204_EmptyRoster),
             Warning(TooManyQuestions, "WB0205", VerificationMessages.WB0205_TooManyQuestions),
             Warning<IQuestion>(HasLongEnablementCondition, "WB0209", VerificationMessages.WB0209_LongEnablementCondition),
+            Warning<IQuestion>(CategoricalQuestionHasALotOfOptions, "WB0210", VerificationMessages.WB0210_CategoricalQuestionHasManyOptions),
         };
+
+        private static bool CategoricalQuestionHasALotOfOptions(IQuestion question)
+        {
+            return question.QuestionType == QuestionType.SingleOption && question.Answers.Count > 30;
+        }
 
         private static bool HasLongEnablementCondition(IQuestion question)
         {
