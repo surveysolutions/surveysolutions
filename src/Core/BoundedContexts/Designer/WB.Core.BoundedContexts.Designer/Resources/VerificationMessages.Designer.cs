@@ -1124,5 +1124,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0211_QuestionnaireHasNoGpsQuestion", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation condition #{0} is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList())..
+        /// </summary>
+        internal static string WB0212_LongValidationCondition {
+            get {
+                return ResourceManager.GetString("WB0212_LongValidationCondition", resourceCulture);
+            }
+        }
     }
 }
