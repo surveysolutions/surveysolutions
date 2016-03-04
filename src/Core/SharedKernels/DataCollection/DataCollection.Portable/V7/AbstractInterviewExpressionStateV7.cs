@@ -53,7 +53,144 @@ namespace WB.Core.SharedKernels.DataCollection.V7
 
             return siblingRosters;
         }
+        protected override IExpressionExecutable GetRosterByIdAndVector(Guid questionId, decimal[] rosterVector)
+        {
+            var parentsMap = this.GetParentsMap();
+            if (!parentsMap.ContainsKey(questionId))
+                return null;
 
+            var rosterKey = Util.GetRosterKey(parentsMap[questionId], rosterVector);
+            var rosterStringKey = Util.GetRosterStringKey(rosterKey);
+            return this.InterviewScopes.ContainsKey(rosterStringKey) ? this.InterviewScopes[rosterStringKey] : null;
+        }
+
+        public new void SaveAllCurrentStatesAsPrevious()
+        {
+            foreach (var interviewScopeKvpValue in this.InterviewScopes.Values.OrderBy(x => x.GetLevel()))
+            {
+                interviewScopeKvpValue.SaveAllCurrentStatesAsPrevious();
+            }
+        }
+
+        public new ValidityChanges ProcessValidationExpressions()
+        {
+            ValidityChanges changes = new ValidityChanges();
+
+            foreach (var interviewScopeKvpValue in this.InterviewScopes.Values)
+            {
+                changes.AppendChanges(interviewScopeKvpValue.ProcessValidationExpressions());
+            }
+
+            return changes;
+        }
+
+        public new EnablementChanges ProcessEnablementConditions()
+        {
+            var questionsToBeEnabled = new List<Identity>();
+            var questionsToBeDisabled = new List<Identity>();
+            var groupsToBeEnabled = new List<Identity>();
+            var groupsToBeDisabled = new List<Identity>();
+
+            //order by scope depth starting from top
+            //conditionally lower scope could depend only from upper scope
+            foreach (var interviewScopeKvpValue in this.InterviewScopes.Values.OrderBy(x => x.GetLevel()))
+            {
+                List<Identity> questionsToBeEnabledArray;
+                List<Identity> questionsToBeDisabledArray;
+                List<Identity> groupsToBeEnabledArray;
+                List<Identity> groupsToBeDisabledArray;
+
+                interviewScopeKvpValue.CalculateConditionChanges(out questionsToBeEnabledArray, out questionsToBeDisabledArray, out groupsToBeEnabledArray,
+                    out groupsToBeDisabledArray);
+
+                questionsToBeEnabled.AddRange(questionsToBeEnabledArray);
+                questionsToBeDisabled.AddRange(questionsToBeDisabledArray);
+                groupsToBeEnabled.AddRange(groupsToBeEnabledArray);
+                groupsToBeDisabled.AddRange(groupsToBeDisabledArray);
+            }
+
+            return new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
+        }
+
+        public override void AddRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, int? sortIndex)
+        {
+            if (!HasParentScropeRosterId(rosterId))
+            {
+                return;
+            }
+
+            decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
+            Guid[] rosterScopeIds = GetParentRosterScopeIds(rosterId);
+            var rosterIdentityKey = Util.GetRosterKey(rosterScopeIds, rosterVector);
+            string rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);
+
+            if (this.InterviewScopes.ContainsKey(rosterStringKey))
+            {
+                return;
+            }
+
+            var rosterParentIdentityKey = outerRosterVector.Length == 0
+                ? Util.GetRosterKey(new[] { GetQuestionnaireId() }, new decimal[0])
+                : Util.GetRosterKey(rosterScopeIds.Shrink(), outerRosterVector);
+
+            var parent = this.InterviewScopes[Util.GetRosterStringKey(rosterParentIdentityKey)];
+
+            var rosterLevel = parent.CreateChildRosterInstance(rosterId, rosterVector, rosterIdentityKey);
+            rosterLevel.SetInterviewProperties(this.InterviewProperties);
+
+            this.InterviewScopes.Add(rosterStringKey, rosterLevel);
+            this.SetSiblings(rosterIdentityKey, rosterStringKey);
+        }
+
+        public new void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId,
+           string rosterTitle)
+        {
+            if (!HasParentScropeRosterId(rosterId))
+            {
+                return;
+            }
+
+            decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
+            var rosterIdentityKey = Util.GetRosterKey(GetParentRosterScopeIds(rosterId), rosterVector);
+            var rosterStringKey = Util.GetRosterStringKey(rosterIdentityKey);
+
+            var rosterLevel = this.InterviewScopes[rosterStringKey] as IRosterLevel;
+            if (rosterLevel != null)
+                rosterLevel.SetRowName(rosterTitle);
+        }
+
+        public override void RemoveRoster(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId)
+        {
+            if (!HasParentScropeRosterId(rosterId))
+            {
+                return;
+            }
+
+            decimal[] rosterVector = Util.GetRosterVector(outerRosterVector, rosterInstanceId);
+            var rosterIdentityKey = Util.GetRosterKey(GetParentRosterScopeIds(rosterId), rosterVector);
+
+            var dependentRosters = this.InterviewScopes.Keys.Where(x => x.StartsWith(Util.GetRosterStringKey((rosterIdentityKey)))).ToArray();
+
+            foreach (var rosterKey in dependentRosters)
+            {
+                this.InterviewScopes.Remove(rosterKey);
+                foreach (var siblings in this.SiblingRosters.Values)
+                {
+                    siblings.Remove(rosterKey);
+                }
+            }
+        }
+
+     /*   void IInterviewExpressionStateV7.ApplyFailedValidations(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
+        {
+            foreach (var failedValidationCondition in failedValidationConditions)
+            {
+                var targetLevel = this.GetRosterByIdAndVector(failedValidationCondition.Key.Id, failedValidationCondition.Key.RosterVector);
+                if (targetLevel == null) return;
+
+                (targetLevel as IExpressionExecutableV7).ApplyFailedValidations(failedValidationCondition.Key.Id, failedValidationCondition.Value);
+            }
+        }*/
         #endregion
 
         public List<LinkedQuestionFilterResult> ProcessLinkedQuestionFilters()

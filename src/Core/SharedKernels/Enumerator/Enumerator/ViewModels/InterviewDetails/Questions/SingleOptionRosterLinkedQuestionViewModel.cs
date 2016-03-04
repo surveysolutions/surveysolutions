@@ -103,7 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewId = interview.Id;
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
-            this.referencedRosterId = questionnaire.GetQuestionReferencedByLinkedQuestion(questionIdentity.Id);
+            this.referencedRosterId = questionnaire.GetRosterReferencedByLinkedQuestion(questionIdentity.Id);
 
             this.Options =
                 new ObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(
