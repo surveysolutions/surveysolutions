@@ -28,8 +28,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
         It should_reference_to_question_with_long_condition = () => 
             errors.GetWarning("WB0212").References.First().Id.ShouldEqual(questionId);
 
-        It should_reference_to_long_condition = () =>
-            errors.GetWarning("WB0212").References.First().FailedValidationConditionIndex.ShouldEqual(1);
+        //It should_reference_to_long_condition = () => // KP-6826
+        //    errors.GetWarning("WB0212").References.First().FailedValidationConditionIndex.ShouldEqual(1);
 
         static QuestionnaireDocument questionnaire;
         static IEnumerable<QuestionnaireVerificationMessage> errors;
