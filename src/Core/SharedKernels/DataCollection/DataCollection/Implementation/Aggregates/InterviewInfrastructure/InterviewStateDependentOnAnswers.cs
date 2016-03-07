@@ -55,6 +55,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.AnswersSupportedInExpressions = new ConcurrentDictionary<string, object>();
             this.LinkedSingleOptionAnswersBuggy = new ConcurrentDictionary<string, Tuple<Identity, RosterVector>>();
             this.LinkedMultipleOptionsAnswers = new ConcurrentDictionary<string, Tuple<Identity, RosterVector[]>>();
+            this.LinkedQuestionOptions=new ConcurrentDictionary<string, RosterVector[]>();
             this.TextListAnswers = new ConcurrentDictionary<string, Tuple<decimal, string>[]>();
 
             this.AnsweredQuestions = new ConcurrentHashSet<string>();
@@ -70,6 +71,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public ConcurrentDictionary<string, object> AnswersSupportedInExpressions { set; get; }
         public ConcurrentDictionary<string, Tuple<Identity, RosterVector>> LinkedSingleOptionAnswersBuggy { set; get; }
         public ConcurrentDictionary<string, Tuple<Identity, RosterVector[]>> LinkedMultipleOptionsAnswers { set; get; }
+        public ConcurrentDictionary<string, RosterVector[]> LinkedQuestionOptions { set; get; }
         public ConcurrentDictionary<string, Tuple<decimal, string>[]> TextListAnswers { set; get; }
         public ConcurrentHashSet<string> AnsweredQuestions { set; get; }
         public ConcurrentHashSet<string> DisabledGroups { set; get; }
@@ -109,6 +111,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                 new RosterInstance(r.GroupId, r.OuterRosterVector, r.RosterInstanceId),
                                 changes.AnswerAsRosterTitle)).ToArray());
             }
+            if (changes.LinkedQuestionOptionsChanges != null)
+            {
+                ApplyLinkedOptionQuestionChanges(changes.LinkedQuestionOptionsChanges);
+            }
         }
 
         public void ApplyRosterData(RosterCalculationData rosterCalculationData)
@@ -138,6 +144,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.RemoveAnswers(rosterCalculationData.AnswersToRemoveByDecreasedRosterSize);
             }
             rosterCalculationData.RosterInstantiatesFromNestedLevels.ForEach(this.ApplyRosterData);
+        }
+
+        public void ApplyLinkedOptionQuestionChanges(LinkedQuestionOptionsChanges linkedQuestionOptionsChanges)
+        {
+            this.LinkedQuestionOptions = new ConcurrentDictionary<string, RosterVector[]>();
+            var linkedQuestionEnabledOptionsGroupedByQuestionKey = linkedQuestionOptionsChanges.OptionsDeclaredEnabled
+                .Select(o => new
+                {
+                    questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(o.LinkedQuestionId,
+                        o.RosterVector),
+                    rosterVector = o.RosterVector
+                }).GroupBy(x => x.questionKey);
+
+            foreach (var linkedQuestionEnabledOptionGroupedByQuestionKey in linkedQuestionEnabledOptionsGroupedByQuestionKey)
+            {
+                this.LinkedQuestionOptions.AddOrUpdate(linkedQuestionEnabledOptionGroupedByQuestionKey.Key,
+                    linkedQuestionEnabledOptionGroupedByQuestionKey.Select(o => o.rosterVector).ToArray(), (k, v) => v);
+            }
+            
         }
 
         public void ApplyEnablementChanges(EnablementChanges enablementChanges)

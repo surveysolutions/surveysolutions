@@ -89,8 +89,10 @@
     <Compile Include="DataTransferObjects\AnswerType.cs" />
     <Compile Include="Events\Interview\AnswerRemoved.cs" />
     <Compile Include="Events\Interview\Dtos\AnsweredYesNoOption.cs" />
+    <Compile Include="Events\Interview\Dtos\ChangedLinkedOptions.cs" />
     <Compile Include="Events\Interview\InterviewReceivedByInterviewer.cs" />
     <Compile Include="Events\Interview\InterviewReceivedBySupervisor.cs" />
+    <Compile Include="Events\Interview\LinkedOptionsChanged.cs" />
     <Compile Include="Events\Interview\UnapprovedByHeadquarters.cs" />
     <Compile Include="Events\Interview\SubstitutionTitlesChanged.cs" />
     <Compile Include="Events\Interview\YesNoQuestionAnswered.cs" />
