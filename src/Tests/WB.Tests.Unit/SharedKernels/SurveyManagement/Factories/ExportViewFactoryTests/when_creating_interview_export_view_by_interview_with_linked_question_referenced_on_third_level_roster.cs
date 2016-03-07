@@ -67,19 +67,22 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
             var textListQuestion = interview.Levels["#"].QuestionsSearchCache[linkedQuestionId];
 
-            textListQuestion.Answer = new decimal[] { 0, 0 };
+            textListQuestion.Answer = new decimal[] { 0.1m , 0.4m };
             exportViewFactory = CreateExportViewFactory();
         };
 
         Because of = () =>
-             result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(questionnarie, 1),
-                interview);
+        {
+            result =
+                exportViewFactory.CreateInterviewDataExportView(
+                    exportViewFactory.CreateQuestionnaireExportStructure(questionnarie, 1), interview);
+        };
 
         It should_linked_question_have_one_answer = () =>
            GetLevel(result, new Guid[0]).Records[0].GetQuestions()[0].Answers.Length.ShouldEqual(1);
 
         It should_linked_question_have_first_answer_be_equal_to_0 = () =>
-           GetLevel(result, new Guid[0]).Records[0].GetQuestions()[0].Answers[0].ShouldEqual("[0|0]");
+           GetLevel(result, new Guid[0]).Records[0].GetQuestions()[0].Answers[0].ShouldEqual("[0.1|0.4]");
 
         private static InterviewDataExportView result;
         private static Guid rosterId;
