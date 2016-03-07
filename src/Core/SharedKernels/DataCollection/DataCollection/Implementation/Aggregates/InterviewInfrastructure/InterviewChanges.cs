@@ -11,7 +11,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<Identity> answersForLinkedQuestionsToRemove,
             List<RosterIdentity> rosterInstancesWithAffectedTitles, 
             string answerAsRosterTitle,
-            List<Identity> changedQuestionTitles)
+            List<Identity> changedQuestionTitles,
+            LinkedQuestionOptionsChanges linkedQuestionOptionsChanges)
         {
             this.AnswerAsRosterTitle = answerAsRosterTitle;
             this.ChangedQuestionTitles = changedQuestionTitles;
@@ -23,6 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.RosterCalculationData = rosterCalculationData;
             this.AnswersForLinkedQuestionsToRemove = answersForLinkedQuestionsToRemove;
             this.RosterInstancesWithAffectedTitles = rosterInstancesWithAffectedTitles;
+            this.LinkedQuestionOptionsChanges = linkedQuestionOptionsChanges;
         }
 
         public string AnswerAsRosterTitle { set; get; }
@@ -31,6 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public List<AnswerChange> InterviewByAnswerChanges { set; get; }
         public EnablementChanges EnablementChanges { set; get; }
         public ValidityChanges ValidityChanges { set; get; }
+        public LinkedQuestionOptionsChanges LinkedQuestionOptionsChanges { set; get; }
         public RosterCalculationData RosterCalculationData { set; get; }
         public List<Identity> AnswersForLinkedQuestionsToRemove { set; get; }
         public List<RosterIdentity> RosterInstancesWithAffectedTitles { set; get; }

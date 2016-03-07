@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.V6;
+using WB.Core.SharedKernels.DataCollection.V7;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using It = Machine.Specifications.It;
 
@@ -77,7 +78,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             //answer on numeric question
             enablementQueue.Enqueue(new EnablementChanges(new List<Identity>(), new List<Identity>(), new List<Identity>(), new List<Identity>()));
 
-            interviewExpressionState = new Mock<IInterviewExpressionStateV6>();
+            interviewExpressionState = new Mock<IInterviewExpressionStateV7>();
             interviewExpressionState.Setup(x => x.ProcessEnablementConditions()).Returns(enablementQueue.Dequeue);
             interviewExpressionState.Setup(x => x.Clone()).Returns(interviewExpressionState.Object);
 
@@ -125,6 +126,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid multyOptionRosterSizeId;
         private static Guid numericQuestionInsideRoster;
         private static Guid rosterGroupId;
-        private static Mock<IInterviewExpressionStateV6> interviewExpressionState;
+        private static Mock<IInterviewExpressionStateV7> interviewExpressionState;
     }
 }
