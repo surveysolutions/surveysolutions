@@ -32,6 +32,7 @@ using AccountAR = WB.Core.BoundedContexts.Designer.Aggregates.AccountAR;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 
 namespace WB.Core.BoundedContexts.Designer
 {
@@ -75,7 +76,8 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IDesignerEngineVersionService>().To<DesignerEngineVersionService>().InSingletonScope();
             this.Bind<ICodeGenerator>().To<CodeGenerator>();
             this.Bind<ILookupTableService>().To<LookupTableService>();
-            
+            this.Bind<IAttachmentService>().To<AttachmentService>();
+
             this.Kernel.RegisterFactory<QuestionnaireListViewFactory>();
             this.Kernel.RegisterFactory<QuestionnaireViewFactory>();
             this.Kernel.RegisterFactory<ChapterInfoViewFactory>();

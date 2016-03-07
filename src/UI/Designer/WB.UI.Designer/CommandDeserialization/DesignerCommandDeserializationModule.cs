@@ -1,5 +1,12 @@
-﻿using Ninject.Modules;
+﻿using System.Linq;
+using System.Web.Mvc;
+using Ninject.Modules;
+using Ninject.Web.Mvc.FilterBindingSyntax;
+using Ninject.Web.WebApi.FilterBindingSyntax;
+using WB.UI.Designer.Code;
+using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.CommandDeserialization;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Designer.CommandDeserialization
 {
