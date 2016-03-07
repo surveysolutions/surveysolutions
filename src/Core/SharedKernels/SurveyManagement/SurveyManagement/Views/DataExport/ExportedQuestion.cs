@@ -14,6 +14,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
     {
         private static CultureInfo exportCulture = CultureInfo.InvariantCulture;
         private static string exportDatetimeFormat = "o";
+        private const string DefaultDelimiter = "|";
 
         public ExportedQuestion()
         {
@@ -90,7 +91,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 
         private string AnswerToStringValue(object answer, ExportedHeaderItem header)
         {
-            const string DefaultDelimiter = "|";
             if (answer == null)
                 return string.Empty;
 
@@ -104,15 +104,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 
                     if (shrinkedArrayOfAnswers.Length == 1)
                     {
-                        return ConvertToString(shrinkedArrayOfAnswers[0]);
+                        return ConvertAnswerToString(shrinkedArrayOfAnswers[0]);
                     }
 
-                    return string.Format("[{0}]", string.Join(DefaultDelimiter, shrinkedArrayOfAnswers));
+                    return string.Format("[{0}]", string.Join(DefaultDelimiter, shrinkedArrayOfAnswers.Select(x => ConvertAnswerToString(x)).ToArray()));
                 }
-                return string.Join(DefaultDelimiter, arrayOfObject);
+                return string.Join(DefaultDelimiter, arrayOfObject.Select(x => ConvertAnswerToString(x)).ToArray());
             }
             
-            return ConvertToString(answer);
+            return ConvertAnswerToString(answer);
         }
 
 
@@ -197,7 +197,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
             }
         }
 
-        private string ConvertToString(object obj)
+        private string ConvertAnswerToString(object obj)
         {
             var formattable = obj as IFormattable;
             if (formattable != null)
