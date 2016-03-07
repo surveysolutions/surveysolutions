@@ -52,6 +52,7 @@
     <Compile Include="InterviewExpressionStateExtensions.cs" />
     <Compile Include="InterviewExpressionStateUpgrader.cs" />
     <Compile Include="InterviewProperties.cs" />
+    <Compile Include="LinkedQuestionOptionsChanges.cs" />
     <Compile Include="QuestionnaireVersion.cs" />
     <Compile Include="RosterVector.cs" />
     <Compile Include="V2\CustomFunctions\AbstractConditionalLevelInstanceFunctions.cs" />
