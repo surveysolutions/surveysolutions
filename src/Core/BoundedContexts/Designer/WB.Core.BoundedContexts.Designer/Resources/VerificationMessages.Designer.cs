@@ -1046,7 +1046,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster group contains only one question. Consider grouping with other rosters. For fixed roster, consider presenting as a set of independent qustions..
+        ///   Looks up a localized string similar to Roster group contains only one question. Consider grouping with other rosters. For fixed roster, consider presenting as a set of independent questions..
         /// </summary>
         internal static string WB0203_RosterHasSingleQuestion {
             get {
@@ -1069,6 +1069,33 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0205_TooManyQuestions {
             get {
                 return ResourceManager.GetString("WB0205_TooManyQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire contains more than 100 questions but only one or two sections. Group questions into sections to simplify navigation and improve performance..
+        /// </summary>
+        internal static string WB0206_FewSectionsManyQuestions {
+            get {
+                return ResourceManager.GetString("WB0206_FewSectionsManyQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fixed roster contains 3 or less items. Consider using sub-sections and a series of questions. Rosters complicate structure of exported data..
+        /// </summary>
+        internal static string WB0207_FixedRosterContains3OrLessItems {
+            get {
+                return ResourceManager.GetString("WB0207_FixedRosterContains3OrLessItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Most numeric questions can have validation conditions. Add validation conditions to improve data quality..
+        /// </summary>
+        internal static string WB0208_MoreThan50PercentsNumericQuestionsWithoutValidationConditions {
+            get {
+                return ResourceManager.GetString("WB0208_MoreThan50PercentsNumericQuestionsWithoutValidationConditions", resourceCulture);
             }
         }
         
@@ -1096,6 +1123,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0211_QuestionnaireHasNoGpsQuestion {
             get {
                 return ResourceManager.GetString("WB0211_QuestionnaireHasNoGpsQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation condition #{0} is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList())..
+        /// </summary>
+        internal static string WB0212_LongValidationCondition {
+            get {
+                return ResourceManager.GetString("WB0212_LongValidationCondition", resourceCulture);
             }
         }
     }

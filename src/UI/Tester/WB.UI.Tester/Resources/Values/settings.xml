@@ -5,5 +5,5 @@
   <integer name="GpsReceiveTimeoutSec">30</integer>
   <integer name="GpsDesiredAccuracy">50</integer>
   <bool name="AcceptUnsignedSslCertificate">false</bool>
-  <string name="DesignerEndpoint">https://solutions.worldbank.org/api/v14</string>
+  <string name="DesignerEndpoint">https://solutions.worldbank.org/api/v15</string>
 </resources>

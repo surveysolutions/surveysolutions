@@ -17,12 +17,12 @@ using QuestionnaireListItem = WB.Core.SharedKernels.SurveySolutions.Api.Designer
 namespace WB.UI.Designer.Api
 {
     [ApiBasicAuth]
-    [RoutePrefix("api/v14/questionnaires")]
+    [RoutePrefix("api/v15/questionnaires")]
     public class QuestionnairesController : ApiController
     {
         //temporary fix
         //api version should not be used as version for compilation
-        internal static readonly Version ApiVersion = new Version(12, 0, 0);
+        internal static readonly Version ApiVersion = new Version(13, 0, 0);
 
         private readonly IMembershipUserService userHelper;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
@@ -46,7 +46,7 @@ namespace WB.UI.Designer.Api
             this.viewFactory = viewFactory;
         }
 
-        [Route("~/api/v14/login")]
+        [Route("~/api/v15/login")]
         [HttpGet]
         public void Login()
         {

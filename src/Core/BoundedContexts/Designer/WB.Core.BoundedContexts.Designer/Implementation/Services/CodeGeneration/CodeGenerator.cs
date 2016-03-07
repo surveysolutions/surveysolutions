@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Te
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V2.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V6.Templates;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V7.Templates;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.Infrastructure.FileSystem;
@@ -147,7 +148,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV5(expressionStateModel).TransformText()
             };
 
-            return new CodeGenerationSettings(
+            if (version.Major == 12)
+                return new CodeGenerationSettings(
                    additionInterfaces: new[] { "IInterviewExpressionStateV6" },
                    namespaces: new[]
                    {
@@ -161,8 +163,27 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         "WB.Core.SharedKernels.DataCollection.V6"
                    },
                    isLookupTablesFeatureSupported: true)
+                {
+                    ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV6(expressionStateModel).TransformText()
+                };
+
+            return new CodeGenerationSettings(
+                   additionInterfaces: new[] { "IInterviewExpressionStateV7" },
+                   namespaces: new[]
+                   {
+                        "WB.Core.SharedKernels.DataCollection.V2",
+                        "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                        "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
+                        "WB.Core.SharedKernels.DataCollection.V4",
+                        "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
+                        "WB.Core.SharedKernels.DataCollection.V5",
+                        "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions",
+                        "WB.Core.SharedKernels.DataCollection.V6",
+                        "WB.Core.SharedKernels.DataCollection.V7"
+                   },
+                   isLookupTablesFeatureSupported: true)
             {
-                ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV6(expressionStateModel).TransformText()
+                ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV7(expressionStateModel).TransformText()
             };
 
         }

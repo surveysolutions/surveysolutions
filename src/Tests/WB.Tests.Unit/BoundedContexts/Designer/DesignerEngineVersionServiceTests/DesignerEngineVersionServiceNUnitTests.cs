@@ -78,5 +78,18 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.DesignerEngineVersionServiceTes
 
             Assert.That(result, Is.EqualTo(new Version(11, 0, 0)));
         }
+
+        [Test]
+        public void GetQuestionnaireContentVersion_When_questionnaire_filtered_linked_question_Then_version_13_should_be_returned
+          ()
+        {
+            var designerEngineVersionService =
+                this.CreateDesignerEngineVersionService();
+            var questionnaire = Create.QuestionnaireDocument(children:new [] {Create.SingleOptionQuestion(linkedFilterExpression:"aaa") });
+            var result =
+                designerEngineVersionService.GetQuestionnaireContentVersion(questionnaire);
+
+            Assert.That(result, Is.EqualTo(new Version(13, 0, 0)));
+        }
     }
 }

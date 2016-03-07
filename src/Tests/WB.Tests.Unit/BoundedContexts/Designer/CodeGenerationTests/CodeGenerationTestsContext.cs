@@ -423,12 +423,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
             return questionnaireDocument;
         }
 
-        public static IInterviewExpressionState GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
+        public static IInterviewExpressionState GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument, Version version=null)
         {
             var expressionProcessorGenerator = CreateExpressionProcessorGenerator();
 
             string resultAssembly;
-            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, new Version(9, 0, 0), out resultAssembly);
+            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument,version?? new Version(9, 0, 0), out resultAssembly);
 
             var filePath = Path.GetTempFileName();
 
