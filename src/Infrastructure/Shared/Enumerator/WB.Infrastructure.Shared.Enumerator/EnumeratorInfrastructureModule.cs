@@ -6,6 +6,8 @@ using Microsoft.Practices.ServiceLocation;
 using Ninject.Modules;
 using NinjectAdapter;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Infrastructure.Shared.Enumerator.Internals;
@@ -32,6 +34,9 @@ namespace WB.Infrastructure.Shared.Enumerator
             FlurlHttp.Configure(c => {
                 c.HttpClientFactory = new ModernHttpClientFactory();
             });
+
+            this.Bind<IQuestionnaireAttachmentStorage>().To<QuestionnaireAttachmentStorage>()
+                .InSingletonScope().WithConstructorArgument("rootDirectoryPath", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data"));
         }
     }
 }

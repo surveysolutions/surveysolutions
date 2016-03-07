@@ -217,6 +217,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public string GetGroupTitle(Guid groupId) => this.GetGroupOrThrow(groupId).Title;
 
         public string GetStaticText(Guid staticTextId) => this.GetStaticTextOrThrow(staticTextId).Text;
+        public string GetAttachmentIdForEntity(Guid entityId)
+        {
+            throw new NotImplementedException();
+        }
 
         public Guid? GetCascadingQuestionParentId(Guid questionId) => this.GetQuestionOrThrow(questionId).CascadeFromQuestionId;
 
