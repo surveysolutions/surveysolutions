@@ -190,11 +190,11 @@
     <Compile Include="Api\Interviewer\UsersControllerBase.cs" />
     <Compile Include="Api\Interviewer\QuestionnairesControllerBase.cs" />
     <Compile Include="Api\Interviewer\InterviewsControllerBase.cs" />
-    <Compile Include="Api\Interviewer\v1\InterviewerApiController.cs" />
-    <Compile Include="Api\Interviewer\v1\DevicesApiController.cs" />
-    <Compile Include="Api\Interviewer\v1\InterviewsApiController.cs" />
-    <Compile Include="Api\Interviewer\v1\QuestionnairesApiController.cs" />
-    <Compile Include="Api\Interviewer\v1\UsersApiController.cs" />
+    <Compile Include="Api\Interviewer\v1\InterviewerApiV1Controller.cs" />
+    <Compile Include="Api\Interviewer\v1\DevicesApiV1Controller.cs" />
+    <Compile Include="Api\Interviewer\v1\InterviewsApiV1Controller.cs" />
+    <Compile Include="Api\Interviewer\v1\QuestionnairesApiV1Controller.cs" />
+    <Compile Include="Api\Interviewer\v1\UsersApiV1Controller.cs" />
     <Compile Include="Api\Interviewer\v2\InterviewerApiV2Controller.cs" />
     <Compile Include="Api\Interviewer\v2\DevicesApiV2Controller.cs" />
     <Compile Include="Api\Interviewer\v2\InterviewsApiV2Controller.cs" />

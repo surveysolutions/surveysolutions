@@ -22,8 +22,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.Kernel.Bind<IEventStore>().ToMethod(context => context.Kernel.Get<IStreamableEventStore>());
             this.Kernel.Bind<IEventStoreApiService>().To<NullIEventStoreApiService>();
 
-            this.Kernel.Bind<IEventSerializerSettingsFactory>().To<DefaultEventSerializerSettingsFactory>();
-            
+            this.Kernel.Bind<IEventSerializerSettingsFactory>().To<BackwardCompatibleEventSerializerSettingsFactory>();
         }
 
         private IStreamableEventStore GetEventStore()

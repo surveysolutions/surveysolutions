@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewerQuestionnaires
             response.StatusCode.ShouldEqual(HttpStatusCode.UpgradeRequired);
 
         private static HttpResponseMessage response;
-        private static QuestionnairesApiController controller;
+        private static QuestionnairesApiV1Controller controller;
         private static readonly int InterviewerQuestionnaireContentVersion = 7;
         private static readonly int HqQuestionnaireContentVersion = 12;
     }

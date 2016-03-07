@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         It should_return_warning_WB0204 = () =>
             messages.ShouldContainWarning("WB0204");
 
-        It should_return_put_reference_to_empty_roster_to_message_WB0204 = () =>
+        It should_put_reference_to_empty_roster_to_message_WB0204 = () =>
             messages.GetWarning("WB0204").References.Single().Id.ShouldEqual(rosterId);
 
         static QuestionnaireDocument questionnaire;

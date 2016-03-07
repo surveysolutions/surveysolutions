@@ -166,8 +166,6 @@ namespace WB.UI.Headquarters
                 new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, cacheSettings, mappingAssemblies)
             );
 
-            kernel.Unbind<IEventSerializerSettingsFactory>();
-            kernel.Bind<IEventSerializerSettingsFactory>().To<BackwardCompatibleEventSerializerSettingsFactory>();
             var eventStoreModule = ModulesFactory.GetEventStoreModule();
 
             var interviewCountLimitString = WebConfigurationManager.AppSettings["Limits.MaxNumberOfInterviews"];

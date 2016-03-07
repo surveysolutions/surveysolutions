@@ -38,10 +38,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         /// <summary>Multiple validation, linked on roster title question, hide questions by condition</summary>
         private readonly Version version_12 = new Version(12, 0, 0);
 
+        /// <summary>Filtered linked questions</summary>
+        private readonly Version version_13 = new Version(13, 0, 0);
+
 
         public Version GetLatestSupportedVersion()
         {
-            return version_12;
+            return version_13;
         }
 
         public bool IsClientVersionSupported(Version clientVersion)
@@ -58,6 +61,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public bool IsQuestionnaireDocumentSupportedByClientVersion(QuestionnaireDocument questionnaireDocument, Version clientVersion)
         {
             var questionnaireContentVersion = this.GetQuestionnaireContentVersion(questionnaireDocument);
+
+            if (clientVersion < this.version_13 && questionnaireContentVersion == this.version_13)
+                return false;
+
             if (clientVersion < this.version_12 && questionnaireContentVersion == this.version_12)
                 return false;
 
@@ -72,6 +79,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public Version GetQuestionnaireContentVersion(QuestionnaireDocument questionnaireDocument)
         {
+            var countOfQuestionsWithFilteredLinkedQuestions =
+                questionnaireDocument.Find<IQuestion>(q => !string.IsNullOrEmpty(q.LinkedFilterExpression)).Count();
+            if (countOfQuestionsWithFilteredLinkedQuestions > 0)
+                return version_13;
+
             var countOfQuestionsWithMultipleValidations = questionnaireDocument.Find<IQuestion>(q => q.ValidationConditions.Count() > 1).Count();
             if (countOfQuestionsWithMultipleValidations > 0)
                 return version_12;

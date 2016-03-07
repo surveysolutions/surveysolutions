@@ -232,6 +232,11 @@ namespace WB.Tests.Unit
                 children: children);
         }
 
+        public static Group Section(string title = "Section X", Guid? sectionId = null, IEnumerable<IComposite> children = null)
+            => Create.Group(
+                title: title,
+                groupId: sectionId,
+                children: children);
 
         public static CodeGenerationSettings CodeGenerationSettings()
         {
@@ -1467,7 +1472,7 @@ namespace WB.Tests.Unit
 
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = "numeric_question", string enablementCondition = null, 
             string validationExpression = null, QuestionScope scope = QuestionScope.Interviewer, bool isPrefilled = false,
-            bool hideIfDisabled = false, List<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null)
+            bool hideIfDisabled = false, IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null)
         {
             return new NumericQuestion
             {
@@ -1480,7 +1485,7 @@ namespace WB.Tests.Unit
                 ValidationExpression = validationExpression,
                 QuestionScope = scope,
                 Featured = isPrefilled,
-                ValidationConditions = validationConditions ?? new List<ValidationCondition>(),
+                ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 LinkedToRosterId = linkedToRosterId,
             };
         }
@@ -1528,7 +1533,7 @@ namespace WB.Tests.Unit
             ));
         }
 
-        public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null)
+        public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, IEnumerable<ValidationCondition> validationConditions = null)
         {
             return new NumericQuestion
             {
@@ -1537,6 +1542,7 @@ namespace WB.Tests.Unit
                 StataExportCaption = variable,
                 IsInteger = false,
                 ConditionExpression = enablementCondition,
+                ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 ValidationExpression = validationExpression
             };
         }
@@ -2000,6 +2006,12 @@ namespace WB.Tests.Unit
 
         public static RoslynExpressionProcessor RoslynExpressionProcessor() => new RoslynExpressionProcessor();
 
+        public static Group FixedRoster(Guid? rosterId = null, IEnumerable<string> fixedTitles = null, IEnumerable<IComposite> children = null)
+            => Create.Roster(
+                rosterId: rosterId,
+                children: children,
+                fixedTitles: fixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
+
         public static Group Roster(
             Guid? rosterId = null, 
             string title = "Roster X", 
@@ -2113,7 +2125,8 @@ namespace WB.Tests.Unit
         }
 
         public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null,
-            Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title=null, bool hideIfDisabled = false)
+            Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title=null, bool hideIfDisabled = false, string linkedFilterExpression=null,
+            Guid? linkedToRosterId=null)
         {
             return new SingleQuestion
             {
@@ -2125,8 +2138,10 @@ namespace WB.Tests.Unit
                 ValidationExpression = validationExpression,
                 QuestionType = QuestionType.SingleOption,
                 LinkedToQuestionId = linkedToQuestionId,
+                LinkedToRosterId = linkedToRosterId,
                 CascadeFromQuestionId = cascadeFromQuestionId,
-                Answers = (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Answer(a.ToString(), a)).ToList()
+                Answers = (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Answer(a.ToString(), a)).ToList(),
+                LinkedFilterExpression= linkedFilterExpression
             };
         }
 
@@ -2709,7 +2724,7 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static ValidationCondition ValidationCondition(string expression, string message)
+        public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")
         {
             return new ValidationCondition(expression, message);
         }
