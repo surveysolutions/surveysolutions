@@ -43,11 +43,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             return Task.FromResult(this.repository.GetById(attachmentId));
         }
 
-//        public Task<IEnumerable<Attachment>> GetAttachmentsByQuestionnaireAsync(Guid questionnaireId)
-//        {
-//            throw new NotImplementedException();
-//        }
-
         public Task<byte[]> GetAttachmentContentAsync(string attachmentId)
         {
             var filePath = this.GetPathToFile(attachmentId);
