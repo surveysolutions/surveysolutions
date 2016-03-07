@@ -188,21 +188,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             foreach (var headerItem in headerStructureForLevel.HeaderItems.Values)
             {
                 var question = interviewLevel.QuestionsSearchCache.ContainsKey(headerItem.PublicKey) ? interviewLevel.QuestionsSearchCache[headerItem.PublicKey] : null;
-                ExportedQuestion exportedQuestion = null;
-                if (question == null)
-                {
-                    var answers = new List<string>();
-                    for (int i = 0; i < headerItem.ColumnNames.Length; i++)
-                    {
-                        answers.Add(string.Empty);
-                    }
-                    exportedQuestion = new ExportedQuestion(headerItem.QuestionType, answers.ToArray());
-                }
-                else
-                {
-                    exportedQuestion = new ExportedQuestion(question, headerItem);
-                }
-
+                ExportedQuestion exportedQuestion = new ExportedQuestion(question, headerItem);
+                
                 result.Add(exportedQuestion);
             }
             return result.Select(x => x.Answers).ToArray();
