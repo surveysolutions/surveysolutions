@@ -193,12 +193,34 @@ namespace WB.Core.SharedKernels.DataCollection.V7
         }*/
         #endregion
 
-        public List<LinkedQuestionFilterResult> ProcessLinkedQuestionFilters()
+        public LinkedQuestionOptionsChanges ProcessLinkedQuestionFilters()
         {
-            var result = new List<LinkedQuestionFilterResult>();
+            var result = new LinkedQuestionOptionsChanges();
             foreach (var interviewScopeKvpValue in this.InterviewScopes.Values)
             {
-                result.AddRange(interviewScopeKvpValue.ExecuteLinkedQuestionFilters());
+                var linkedQuestionFilterResults = interviewScopeKvpValue.ExecuteLinkedQuestionFilters();
+                var enabledLinkedQuestionOptions =
+                    linkedQuestionFilterResults.Where(o => o.Enabled)
+                        .Select(
+                            o =>
+                                new LinkedQuestionOption()
+                                {
+                                    LinkedQuestionId = o.LinkedQuestionId,
+                                    RosterVector = o.RosterKey.First().RosterVector
+                                })
+                        .ToArray();
+                var disabledLinkedQuestionOptions =
+                 linkedQuestionFilterResults.Where(o => !o.Enabled)
+                     .Select(
+                         o =>
+                             new LinkedQuestionOption()
+                             {
+                                 LinkedQuestionId = o.LinkedQuestionId,
+                                 RosterVector = o.RosterKey.First().RosterVector
+                             })
+                     .ToArray();
+                result.OptionsDeclaredEnabled.AddRange(enabledLinkedQuestionOptions);
+                result.OptionsDeclaredDisabled.AddRange(disabledLinkedQuestionOptions);
             }
             return result;
         }

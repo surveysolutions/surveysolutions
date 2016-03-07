@@ -44,8 +44,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
                 var filterResults = state.ProcessLinkedQuestionFilters();
                 return new InvokeResults()
                 {
-                    CountOfEnabledOptions = filterResults.Count(r => r.Enabled),
-                    CountOfDisabledOptions = filterResults.Count(r => !r.Enabled)
+                    CountOfEnabledOptions = filterResults.OptionsDeclaredEnabled.Count,
+                    CountOfDisabledOptions = filterResults.OptionsDeclaredDisabled.Count
                 };
             });
         
