@@ -29,7 +29,8 @@ namespace WB.Tests.Unit.Applications.Designer.CommandApiControllerTests
                 logger ?? Mock.Of<ILogger>(),
                 commandInflater ?? Mock.Of<ICommandInflater>(),
                 commandPostprocessor ?? Mock.Of<ICommandPostprocessor>(),
-                Mock.Of<ILookupTableService>());
+                Mock.Of<ILookupTableService>(),
+                Mock.Of<IAttachmentService>());
 
             controller.Request = httpRequestMessage ?? new HttpRequestMessage(HttpMethod.Post, "https://localhost");
             controller.Request.SetConfiguration(httpConfiguration ??  new HttpConfiguration());

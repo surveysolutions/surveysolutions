@@ -71,18 +71,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage;
         private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
         private readonly ILookupTableService lookupTableService;
+        private readonly IAttachmentService attachmentService;
         private readonly ILogger logger;
 
         public QuestionnaireDenormalizer(
             IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage,
             IQuestionnaireEntityFactory questionnaireEntityFactory, 
             ILogger logger, 
-            ILookupTableService lookupTableService)
+            ILookupTableService lookupTableService, 
+            IAttachmentService attachmentService)
         {
             this.documentStorage = documentStorage;
             this.questionnaireEntityFactory = questionnaireEntityFactory;
             this.logger = logger;
             this.lookupTableService = lookupTableService;
+            this.attachmentService = attachmentService;
         }
 
         public override object[] Writers
@@ -583,18 +586,27 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         public void Handle(IPublishedEvent<AttachmentAdded> evnt)
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
+            document.Attachments[evnt.Payload.AttachmentId] = new Attachment();
             this.UpdateQuestionnaire(evnt, document);
         }
 
         public void Handle(IPublishedEvent<AttachmentUpdated> evnt)
         {
+            this.attachmentService.UpdateAttachmentName(evnt.Payload.AttachmentId, evnt.Payload.AttachmentName);
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
+            document.Attachments[evnt.Payload.AttachmentId] = new Attachment
+            {
+                Name = evnt.Payload.AttachmentName,
+                FileName = evnt.Payload.AttachmentFileName
+            };
             this.UpdateQuestionnaire(evnt, document);
         }
 
         public void Handle(IPublishedEvent<AttachmentDeleted> evnt)
         {
+            this.attachmentService.DeleteAttachment(evnt.Payload.AttachmentId);
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
+            document.Attachments.Remove(evnt.Payload.AttachmentId);
             this.UpdateQuestionnaire(evnt, document);
         }
     }

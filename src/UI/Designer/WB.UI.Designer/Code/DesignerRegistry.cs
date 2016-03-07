@@ -28,6 +28,11 @@ namespace WB.UI.Designer.Code
             this.BindHttpFilter<ApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller)
                  .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(NoTransactionAttribute)).Any());
 
+            this.BindFilter<PlainTransactionFilter>(FilterScope.First, 0)
+                .WhenActionMethodHasNo<NoTransactionAttribute>();
+            this.BindHttpFilter<PlainApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller)
+                .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(NoTransactionAttribute)).Any());
+
             this.Bind<ICommandInflater>().To<CommandInflater>();
             this.Bind<ICommandPostprocessor>().To<CommandPostprocessor>();
             this.Bind<IQuestionnaireHelper>().To<QuestionnaireHelper>();

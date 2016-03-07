@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
@@ -16,16 +17,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         private readonly IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersons;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
         private readonly IReadSideRepositoryReader<AccountDocument> accountsDocumentReader;
+        private readonly IAttachmentService attachmentService;
 
         public QuestionnaireInfoViewFactory(IReadSideKeyValueStorage<QuestionnaireInfoView> questionnaireStorage,
             IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersons,
             IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
-            IReadSideRepositoryReader<AccountDocument> accountsDocumentReader)
+            IReadSideRepositoryReader<AccountDocument> accountsDocumentReader,
+            IAttachmentService attachmentService)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.sharedPersons = sharedPersons;
             this.questionnaireDocumentReader = questionnaireDocumentReader;
             this.accountsDocumentReader = accountsDocumentReader;
+            this.attachmentService = attachmentService;
         }
 
         public QuestionnaireInfoView Load(string questionnaireId, Guid personId)
@@ -99,9 +103,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
             questionnaireInfoView.LookupTables = questionnaireDocument
                 .LookupTables
-                .Select(
-                    x =>
-                        new LookupTableView
+                .Select(x => new LookupTableView
                         {
                             ItemId = x.Key.FormatGuid(),
                             Name = x.Value.TableName ?? "",
@@ -110,33 +112,22 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 .OrderBy(x => x.Name)
                 .ToList();
 
-            questionnaireInfoView.Attachments = new List<AttachmentView> { 
-                       new AttachmentView
-                       {
-                           ItemId = Guid.NewGuid().FormatGuid(),
-                           Name = "bananas",
-                           FileName = "babanas.jpg",
-                           Format = "image/jpeg",
-                           Height = 300,
-                           Width = 500,
-                           LastUpdated = new DateTime(2016, 2, 14, 14, 14, 14),
-                           SizeInBytes = 53
-                       },
-                       new AttachmentView
-                       {
-                           ItemId = Guid.NewGuid().FormatGuid(),
-                           Name = "christmas",
-                           FileName = "christmas.jpg",
-                           Format = "image/jpeg",
-                           Height = 300,
-                           Width = 500,
-                           LastUpdated = new DateTime(2016, 1, 07, 07, 07, 07),
-                           SizeInBytes = 47
-                       }
-                }
-               .OrderBy(x => x.Name)
-               .ToList();
+            var dbAttachments = this.attachmentService.GetAttachmentsForQuestionnaire(questionnaireId).ToList();
 
+            questionnaireInfoView.Attachments = (from qAttachment in questionnaireDocument.Attachments
+                join dbAttachment in dbAttachments on qAttachment.Key.FormatGuid() equals dbAttachment.ItemId into groupJoin
+                from subAttachment in groupJoin.DefaultIfEmpty()
+                select new AttachmentView
+                {
+                    ItemId = qAttachment.Key.FormatGuid(),
+                    Name = qAttachment.Value.Name,
+                    FileName = qAttachment.Value.FileName,
+                    SizeInBytes = subAttachment?.SizeInBytes,
+                    LastUpdated = subAttachment?.LastUpdated,
+                    Meta = subAttachment?.Meta
+                })
+                .OrderBy(x => x.Name)
+                .ToList();
 
             return questionnaireInfoView;
         }

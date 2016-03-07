@@ -1771,7 +1771,8 @@ namespace WB.Tests.Unit
                 expressionProcessor ?? Mock.Of<IExpressionProcessor>(),
                 Create.SubstitutionService(),
                 Create.KeywordsProvider(),
-                Mock.Of<ILookupTableService>());
+                Mock.Of<ILookupTableService>(),
+                Mock.Of<IAttachmentService>());
         }
 
         public static IPublishedEvent<QuestionnaireAssemblyImported> QuestionnaireAssemblyImported(Guid questionnaireId, long version)

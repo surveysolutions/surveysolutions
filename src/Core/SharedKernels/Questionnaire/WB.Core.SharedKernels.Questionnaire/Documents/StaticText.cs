@@ -6,10 +6,11 @@ namespace Main.Core.Entities.SubEntities
 {
     public class StaticText : IStaticText
     {
-        public StaticText(Guid publicKey, string text)
+        public StaticText(Guid publicKey, string text, string attachmentName = null)
         {
             this.PublicKey = publicKey;
             this.Text = text;
+            this.AttachmentName = attachmentName;
         }
 
         public List<IComposite> Children
@@ -61,5 +62,7 @@ namespace Main.Core.Entities.SubEntities
         public Guid PublicKey { get; private set; }
 
         public string Text { get; set; }
+
+        public string AttachmentName { get; set; }
     }
 }

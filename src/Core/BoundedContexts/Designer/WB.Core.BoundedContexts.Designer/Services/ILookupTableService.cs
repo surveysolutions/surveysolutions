@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 
 namespace WB.Core.BoundedContexts.Designer.Services

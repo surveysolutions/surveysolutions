@@ -215,11 +215,11 @@
                                     <div class="attachment">
                                         <div class="attachment-preview">
                                             <div class="attachment-preview-cover">
-                                                <img ngf-thumbnail="attachment.file || 'http://i.livescience.com/images/i/000/065/149/iFF/bananas.jpg'">
+                                                <img ngf-thumbnail="attachment.file || '{{downloadLookupFileBaseUrl + attachment.itemId}}'">
                                             </div>
                                         </div>
                                         <div class="attachment-content">
-                                            <input focus-on-out="focusAttachment{{attachment.itemId}}" required="" placeholder="table name" maxlength="32" spellcheck="false" ng-model="attachment.name" name="name" class="form-control table-name" type="text" />
+                                            <input focus-on-out="focusAttachment{{attachment.itemId}}" required="" placeholder="attachment name" maxlength="32" spellcheck="false" ng-model="attachment.name" name="name" class="form-control table-name" type="text" />
                                             <div class="divider"></div>
                                             <input class="form-control file-name" placeholder="file name" required="" spellcheck="false" ng-model="attachment.fileName" name="fileName" disabled="" type="text" />
                                             <div class="drop-box">
@@ -234,7 +234,7 @@
                                             <button type="button" class="btn lighter-hover" ng-click="cancel(attachment, attachmentForm);$event.stopPropagation()">Cancel</button>
                                         </div>
                                         <div class="permanent-actions pull-right clearfix">
-                                            <a href="{{downloadLookupFileBaseUrl + questionnaire.questionnaireId +'?fileId='+ attachment.itemId}}" ng-show="attachment.hasUploadedFile" class="btn btn-default pull-right" target="_blank">Download</a>
+                                            <a href="{{downloadLookupFileBaseUrl + attachment.itemId}}" ng-show="attachment.hasUploadedFile" class="btn btn-default pull-right" target="_blank">Download</a>
                                             <button class="btn btn-default pull-right" ngf-select="" ngf-accept="'image/*'" ngf-change="fileSelected(attachment, $file, attachmentForm);$event.stopPropagation()" type="file">
                                                 <span ng-hide="attachment.hasUploadedFile">Select file</span>
                                                 <span ng-show="attachment.hasUploadedFile">Update file</span>

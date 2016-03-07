@@ -38,6 +38,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         /// <summary>Multiple validation, linked on roster title question, hide questions by condition</summary>
         private readonly Version version_12 = new Version(12, 0, 0);
 
+        /// <summary>Attachments: Images in static texts.</summary>
         /// <summary>Filtered linked questions</summary>
         private readonly Version version_13 = new Version(13, 0, 0);
 
@@ -79,6 +80,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public Version GetQuestionnaireContentVersion(QuestionnaireDocument questionnaireDocument)
         {
+            var countOfStaticTextsWithAttachment = questionnaireDocument.Find<StaticText>(q => !string.IsNullOrWhiteSpace(q.AttachmentName)).Count();
+            if (countOfStaticTextsWithAttachment > 0)
+                return version_13;
+
             var countOfQuestionsWithFilteredLinkedQuestions =
                 questionnaireDocument.Find<IQuestion>(q => !string.IsNullOrEmpty(q.LinkedFilterExpression)).Count();
             if (countOfQuestionsWithFilteredLinkedQuestions > 0)

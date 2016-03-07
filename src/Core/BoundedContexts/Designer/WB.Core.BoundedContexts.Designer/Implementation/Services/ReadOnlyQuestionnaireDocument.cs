@@ -33,6 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public Dictionary<Guid, Macro> Macros => this.Questionnaire.Macros;
         public Dictionary<Guid, LookupTable> LookupTables => this.Questionnaire.LookupTables;
+        public Dictionary<Guid, Attachment> Attachments => this.Questionnaire.Attachments;
         public string Title => this.Questionnaire.Title;
         public Guid PublicKey => this.Questionnaire.PublicKey;
 

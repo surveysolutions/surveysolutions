@@ -98,6 +98,7 @@
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -208,6 +209,8 @@
     <Compile Include="Events\Questionnaire\Macros\MacroDeleted.cs" />
     <Compile Include="Events\Questionnaire\Macros\MacroUpdated.cs" />
     <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
+    <Compile Include="Implementation\Services\AttachmentService\AttachmentService.cs" />
+    <Compile Include="Implementation\Services\AttachmentService\AttachmentType.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\LinkedQuestionFilterExpressionModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\ValidationExpressionModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\InterviewExpressionStateTemplateV6.cs">
@@ -359,6 +362,7 @@
     <Compile Include="Implementation\Services\LookupTableService\LookupTableContentFile.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableRow.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableService.cs" />
+    <Compile Include="Services\IAttachmentService.cs" />
     <Compile Include="Services\ILookupTableService.cs" />
     <Compile Include="Services\IMacrosSubstitutionService.cs" />
     <Compile Include="Implementation\Services\KeywordsProvider.cs" />
@@ -778,6 +782,7 @@
     <Analyzer Include="..\..\..\..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\..\..\..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
   <Import Project="..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

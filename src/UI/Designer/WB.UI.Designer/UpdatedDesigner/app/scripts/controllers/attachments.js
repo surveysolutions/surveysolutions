@@ -3,7 +3,7 @@
         function ($rootScope, $scope, $state, hotkeys, commandService, utilityService, confirmService, Upload) {
             'use strict';
 
-            $scope.downloadLookupFileBaseUrl = '../../Questionnaire/Image/';
+            $scope.downloadLookupFileBaseUrl = '../../attachment/';
             var hideAttachmentsPane = 'ctrl+l';
 
             if (hotkeys.get(hideAttachmentsPane) !== false) {
@@ -24,11 +24,15 @@
                 attachment.itemId = attachmentDto.itemId;
                 attachment.name = attachmentDto.name;
                 attachment.fileName = attachmentDto.fileName;
-                attachment.format = attachmentDto.format;
-                attachment.height = attachmentDto.height,
-                attachment.width = attachmentDto.width,
-                attachment.lastUpdated = attachmentDto.lastUpdated,
-                attachment.sizeInBytes = attachmentDto.sizeInBytes,
+
+                if (!_.isUndefined(attachmentDto.meta) && !_.isNull(attachmentDto.meta)) {
+                    attachment.format = attachmentDto.meta.format;
+                    attachment.height = attachmentDto.meta.height;
+                    attachment.width = attachmentDto.meta.width;
+                }
+
+                attachment.lastUpdated = attachmentDto.lastUpdated;
+                attachment.sizeInBytes = attachmentDto.sizeInBytes;
                 
                 attachment.file = null;
                 attachment.hasUploadedFile = !_.isEmpty(attachmentDto.fileName);
