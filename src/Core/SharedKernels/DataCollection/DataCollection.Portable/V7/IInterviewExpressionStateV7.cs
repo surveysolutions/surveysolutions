@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection.V7
 {
     public interface IInterviewExpressionStateV7: IInterviewExpressionStateV6
     {
-        List<LinkedQuestionFilterResult> ProcessLinkedQuestionFilters();
+        LinkedQuestionOptionsChanges ProcessLinkedQuestionFilters();
         new IInterviewExpressionStateV7 Clone();
     }
 }

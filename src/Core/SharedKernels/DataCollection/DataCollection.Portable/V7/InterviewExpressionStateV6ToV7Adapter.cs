@@ -140,9 +140,9 @@ namespace WB.Core.SharedKernels.DataCollection.V7
             this.interviewExpressionState.SaveAllCurrentStatesAsPrevious(); 
         }
 
-        public List<LinkedQuestionFilterResult> ProcessLinkedQuestionFilters()
+        public LinkedQuestionOptionsChanges ProcessLinkedQuestionFilters()
         {
-           return new List<LinkedQuestionFilterResult>();
+           return new LinkedQuestionOptionsChanges();
         }
 
         public IInterviewExpressionState Clone()
