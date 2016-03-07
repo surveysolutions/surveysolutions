@@ -16,9 +16,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
     [ApiBasicAuth(new[] { UserRoles.Operator })]
     [ProtobufJsonSerializer]
     [Obsolete("Since v. 5.7")]
-    public class QuestionnairesApiController : QuestionnairesControllerBase
+    public class QuestionnairesApiV1Controller : QuestionnairesControllerBase
     {
-        public QuestionnairesApiController(
+        public QuestionnairesApiV1Controller(
             IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             ISerializer serializer,

@@ -11,9 +11,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
 {
     [ProtobufJsonSerializer]
     [Obsolete("Since v. 5.7")]
-    public class InterviewerApiController : InterviewerControllerBase
+    public class InterviewerApiV1Controller : InterviewerControllerBase
     {
-        public InterviewerApiController(
+        public InterviewerApiV1Controller(
             IFileSystemAccessor fileSystemAccessor,
             ITabletInformationService tabletInformationService,
             IUserViewFactory userViewFactory,

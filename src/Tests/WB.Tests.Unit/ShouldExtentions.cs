@@ -93,11 +93,19 @@ namespace WB.Tests.Unit
             questionnaireDocument.GetAllGroups().ShouldContain(condition);
         }
 
-        public static void ShouldContainWarning(this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
+        public static void ShouldContainWarning(
+            this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
         {
             verificationMessages.ShouldContain(message
                 => message.MessageLevel == VerificationMessageLevel.Warning
                 && message.Code == code);
+        }
+
+        public static void ShouldNotContainMessage(
+            this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
+        {
+            verificationMessages.ShouldNotContain(message
+                => message.Code == code);
         }
     }
 }
