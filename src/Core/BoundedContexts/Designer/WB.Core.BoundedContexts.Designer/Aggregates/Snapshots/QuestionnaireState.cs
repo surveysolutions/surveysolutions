@@ -15,5 +15,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates.Snapshots
         public HashSet<Guid> ReadOnlyUsers { get; set; }
         public HashSet<Guid> MacroIds { get; set; }
         public HashSet<Guid> LookupTableIds { get; set; }
+        public HashSet<Guid> AttachmentIds { get; set; }
     }
 }

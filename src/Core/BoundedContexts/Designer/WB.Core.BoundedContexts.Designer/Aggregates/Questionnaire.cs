@@ -66,6 +66,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private HashSet<Guid> readOnlyUsers=new HashSet<Guid>();
         private HashSet<Guid> macroIds = new HashSet<Guid>();
         private HashSet<Guid> lookupTableIds = new HashSet<Guid>();
+        private HashSet<Guid> attachmentIds = new HashSet<Guid>();
 
         private bool wasExpressionsMigrationPerformed = false;
 
@@ -99,6 +100,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         internal void Apply(AttachmentAdded e)
         {
+            this.attachmentIds.Add(e.AttachmentId);
         }
 
         internal void Apply(AttachmentUpdated e)
@@ -107,6 +109,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         internal void Apply(AttachmentDeleted e)
         {
+            this.attachmentIds.Remove(e.AttachmentId);
         }
 
         internal void Apply(SharedPersonToQuestionnaireAdded e)
@@ -179,6 +182,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (e.QuestionnaireDocument.LookupTables != null)
             {
                 this.lookupTableIds = e.QuestionnaireDocument.LookupTables.Select(x => x.Key).ToHashSet();
+            }
+            if (e.QuestionnaireDocument.Attachments != null)
+            {
+                this.attachmentIds = e.QuestionnaireDocument.Attachments.Select(x => x.Key).ToHashSet();
             }
         }
 
@@ -690,7 +697,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 WasExpressionsMigrationPerformed = wasExpressionsMigrationPerformed,
                 ReadOnlyUsers = this.readOnlyUsers,
                 MacroIds = this.macroIds,
-                LookupTableIds = this.lookupTableIds
+                LookupTableIds = this.lookupTableIds,
+                AttachmentIds = this.attachmentIds
             };
         }
 
@@ -701,6 +709,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.readOnlyUsers = snapshot.ReadOnlyUsers;
             this.macroIds = snapshot.MacroIds;
             this.lookupTableIds = snapshot.LookupTableIds;
+            this.attachmentIds = snapshot.AttachmentIds;
         }
 
         private static int? DetermineActualMaxValueForNumericQuestion(bool isAutopropagating, int? legacyMaxValue, int? actualMaxValue)
@@ -719,6 +728,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly ISubstitutionService substitutionService;
         private readonly IKeywordsProvider variableNameValidator;
         private readonly ILookupTableService lookupTableService;
+        private readonly IAttachmentService attachmentService;
 
         #endregion
 
@@ -729,7 +739,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IExpressionProcessor expressionProcessor, 
             ISubstitutionService substitutionService, 
             IKeywordsProvider variableNameValidator, 
-            ILookupTableService lookupTableService)
+            ILookupTableService lookupTableService, 
+            IAttachmentService attachmentService)
         {
             this.questionnaireEntityFactory = questionnaireEntityFactory;
             this.logger = logger;
@@ -738,6 +749,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.substitutionService = substitutionService;
             this.variableNameValidator = variableNameValidator;
             this.lookupTableService = lookupTableService;
+            this.attachmentService = attachmentService;
         }
 
         #region Questionnaire command handlers
@@ -795,6 +807,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 {
                     lookupTableService.CloneLookupTable(document.PublicKey, lookupTable.Key, lookupTableName, this.EventSourceId, lookupTable.Key);
                 }
+            }
+
+            foreach (var attachment in document.Attachments)
+            {
+                this.attachmentService.CloneAttachmentMeta(attachment.Key);
             }
 
             ApplyEvent(new QuestionnaireCloned
@@ -868,16 +885,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void AddAttachment(AddAttachment command)
         {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             this.ApplyEvent(new AttachmentAdded(command.AttachmentId, command.ResponsibleId));
         }
         
         public void UpdateAttachment(UpdateAttachment command)
         {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             this.ApplyEvent(new AttachmentUpdated(command.AttachmentId, command.AttachmentName, command.AttachmentFileName, command.ResponsibleId));
         }
 
         public void DeleteAttachment(DeleteAttachment command)
         {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             this.ApplyEvent(new AttachmentDeleted(command.AttachmentId, command.ResponsibleId));
         }
 

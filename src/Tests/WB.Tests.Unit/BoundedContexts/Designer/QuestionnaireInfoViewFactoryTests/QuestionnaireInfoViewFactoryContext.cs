@@ -1,5 +1,6 @@
 ﻿using Main.Core.Documents;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
@@ -24,7 +25,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoViewFactoryTes
                 new QuestionnaireInfoViewFactory(repository ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireInfoView>>(),
                                                 sharedWith ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireSharedPersons>>(),
                                                 documentReader ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(x => x.GetById(It.IsAny<string>()) == new QuestionnaireDocument()),
-                                                accountsDocumentReader ?? Mock.Of<IReadSideRepositoryReader<AccountDocument>>());
+                                                accountsDocumentReader ?? Mock.Of<IReadSideRepositoryReader<AccountDocument>>(),
+                                                Mock.Of<IAttachmentService>());
         }
     }
 }

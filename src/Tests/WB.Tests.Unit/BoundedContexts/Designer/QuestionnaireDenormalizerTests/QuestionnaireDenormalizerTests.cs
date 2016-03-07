@@ -66,7 +66,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
         private static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(Mock<IReadSideKeyValueStorage<QuestionnaireDocument>> storageStub)
         {
             #warning: we shouldn't use CompleteQuestionFactory here?
-            var denormalizer = new QuestionnaireDenormalizer(storageStub.Object, new QuestionnaireEntityFactory(), Mock.Of<ILogger>(), Mock.Of<ILookupTableService>());
+            var denormalizer = new QuestionnaireDenormalizer(
+                storageStub.Object, 
+                new QuestionnaireEntityFactory(), 
+                Mock.Of<ILogger>(), 
+                Mock.Of<ILookupTableService>(),
+                Mock.Of<IAttachmentService>());
 
             return denormalizer;
         }

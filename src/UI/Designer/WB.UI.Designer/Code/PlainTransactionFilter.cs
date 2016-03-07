@@ -3,7 +3,7 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
 using ActionFilterAttribute = System.Web.Mvc.ActionFilterAttribute;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
+namespace WB.UI.Designer.Code
 {
     public class PlainTransactionFilter : ActionFilterAttribute
     {
