@@ -4,10 +4,11 @@ using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.V4;
 using WB.Core.SharedKernels.DataCollection.V5;
 using WB.Core.SharedKernels.DataCollection.V6;
+using WB.Core.SharedKernels.DataCollection.V7;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public class InterviewExpressionStateForPreloading : IInterviewExpressionStateV6
+    public class InterviewExpressionStateForPreloading : IInterviewExpressionStateV7
     {
         public InterviewExpressionStateForPreloading()
         {
@@ -113,7 +114,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         }
 
-       
+        IInterviewExpressionStateV7 IInterviewExpressionStateV7.Clone()
+        {
+            return new InterviewExpressionStateForPreloading();
+        }
+
 
         public void SetInterviewProperties(IInterviewProperties properties)
         {
@@ -126,6 +131,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void UpdateYesNoAnswer(Guid questionId, decimal[] propagationVector, YesNoAnswersOnly answers)
         {
+        }
+
+        public LinkedQuestionOptionsChanges ProcessLinkedQuestionFilters()
+        {
+            return new LinkedQuestionOptionsChanges(new List<LinkedQuestionOption>(),new List<LinkedQuestionOption>() );
         }
 
         IInterviewExpressionStateV6 IInterviewExpressionStateV6.Clone()
