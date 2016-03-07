@@ -9,7 +9,6 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
     {
         Task StoreAsync(Attachment attachment, byte[] attachmentData);
         Task<Attachment> GetAttachmentAsync(string attachmentId);
-//        Task<IEnumerable<Attachment>> GetAttachmentsByQuestionnaireAsync(Guid questionnaireId);
         Task<byte[]> GetAttachmentContentAsync(string attachmentId);
     }
 }

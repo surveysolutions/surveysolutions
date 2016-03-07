@@ -3,7 +3,9 @@ using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -12,12 +14,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
+        public readonly AttachmentViewModel Attachment;
+
         public StaticTextViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,
-            IStatefulInterviewRepository interviewRepository)
+            IStatefulInterviewRepository interviewRepository,
+            AttachmentViewModel attachmentViewModel)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
+            this.Attachment = attachmentViewModel;
         }
 
         public Identity Identity => this.questionIdentity;
@@ -31,6 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
             this.questionIdentity = entityIdentity;
+            this.Attachment.Init(interviewId, entityIdentity);
 
             this.StaticText = questionnaire.GetStaticText(entityIdentity.Id);
         }
@@ -43,5 +50,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             get { return this.staticText; }
             set { this.staticText = value; this.RaisePropertyChanged(); }
         }
+
+
     }
 }
