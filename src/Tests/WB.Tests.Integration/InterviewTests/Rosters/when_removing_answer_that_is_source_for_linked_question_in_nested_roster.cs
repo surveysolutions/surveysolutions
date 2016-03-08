@@ -101,6 +101,8 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                     result.AnswerForLinkedQuestionWasCleared = eventContext.AnyEvent<AnswersRemoved>(q => q.Questions.Any(x => x.Id == linkedId));
                     result.AnswerForLinkedQuestionOutsideRosterWasCleared = eventContext.AnyEvent<AnswersRemoved>(q => q.Questions.Any(x => x.Id == linkedOutsideId));
+                    result.OptionsForLinkedQuestionWasUpdated = eventContext.AnyEvent<LinkedOptionsChanged>(q => q.ChangedLinkedQuestions.Any(x => x.QuestionId.Id == linkedId));
+                    result.OptionsForLinkedQuestionOutsideRosterWasUpdated = eventContext.AnyEvent<LinkedOptionsChanged>(q => q.ChangedLinkedQuestions.Any(x => x.QuestionId.Id == linkedOutsideId));
                 }
 
                 return result;
@@ -111,6 +113,12 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
         It should_remove_answer_for_linked_question_outside_roster = () =>
             results.AnswerForLinkedQuestionOutsideRosterWasCleared.ShouldBeTrue();
+
+        It should_update_options_for_linked_question_outside_roster = () =>
+            results.OptionsForLinkedQuestionOutsideRosterWasUpdated.ShouldBeTrue();
+
+        It should_update_options_for_linked_question_in_roster = () =>
+          results.OptionsForLinkedQuestionWasUpdated.ShouldBeTrue();
 
         Cleanup stuff = () =>
         {
@@ -126,6 +134,8 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         {
             public bool AnswerForLinkedQuestionOutsideRosterWasCleared { get; set; }
             public bool AnswerForLinkedQuestionWasCleared { get; set; }
+            public bool OptionsForLinkedQuestionOutsideRosterWasUpdated { get; set; }
+            public bool OptionsForLinkedQuestionWasUpdated { get; set; }
         }
     }
 }

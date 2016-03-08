@@ -366,7 +366,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         if (parentGroup != null && parentGroup.IsRoster)
                         {
                             return
-                                new LinkedQuestionFilterExpressionModel(q.LinkedFilterExpression ?? "true",
+                                new LinkedQuestionFilterExpressionModel(
+                                    $"IsAnswered({linkedQuestionSource.StataExportCaption})&&({q.LinkedFilterExpression ?? "true"})",
                                     $"FilterForLinkedQuestion_{q.StataExportCaption}",
                                     parentGroup.VariableName, parentGroup.PublicKey, q.PublicKey);
                         }
@@ -382,7 +383,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     if (linkedQuestionRosterSource == null)
                         return null;
                     return
-                        new LinkedQuestionFilterExpressionModel(q.LinkedFilterExpression ?? "true",
+                        new LinkedQuestionFilterExpressionModel($"!string.IsNullOrEmpty(@rowname)&&({q.LinkedFilterExpression ?? "true"})",
                             $"FilterForLinkedQuestion_{q.StataExportCaption}",
                             linkedQuestionRosterSource.VariableName, linkedQuestionRosterSource.PublicKey, q.PublicKey);
                 }).Where(q => q != null));
