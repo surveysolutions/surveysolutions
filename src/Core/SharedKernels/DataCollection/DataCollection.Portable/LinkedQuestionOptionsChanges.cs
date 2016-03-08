@@ -5,26 +5,17 @@ namespace WB.Core.SharedKernels.DataCollection
 {
     public class LinkedQuestionOptionsChanges
     {
-        internal LinkedQuestionOptionsChanges() : this(new List<LinkedQuestionOption>(), new List<LinkedQuestionOption>()) { }
-        public LinkedQuestionOptionsChanges(List<LinkedQuestionOption> optionsDeclaredEnabled, List<LinkedQuestionOption> optionsDeclaredDisabled)
+        internal LinkedQuestionOptionsChanges() : this(new Dictionary<Guid, RosterVector[]>()) { }
+        public LinkedQuestionOptionsChanges(Dictionary<Guid, RosterVector[]> linkedQuestionOptions)
         {
-            this.OptionsDeclaredEnabled = optionsDeclaredEnabled;
-            this.OptionsDeclaredDisabled = optionsDeclaredDisabled;
+            this.LinkedQuestionOptions = linkedQuestionOptions;
         }
 
-        public List<LinkedQuestionOption> OptionsDeclaredEnabled { get; private set; }
-        public List<LinkedQuestionOption> OptionsDeclaredDisabled { get; private set; }
+        public Dictionary<Guid, RosterVector[]> LinkedQuestionOptions { get; private set; }
 
         public void Clear()
         {
-            this.OptionsDeclaredEnabled.Clear();
-            this.OptionsDeclaredDisabled.Clear();
+            this.LinkedQuestionOptions.Clear();
         }
-    }
-
-    public class LinkedQuestionOption
-    {
-        public Guid LinkedQuestionId { get; set; }
-        public RosterVector RosterVector { get; set; }
     }
 }
