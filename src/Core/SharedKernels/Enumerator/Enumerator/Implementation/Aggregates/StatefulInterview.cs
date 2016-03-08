@@ -757,24 +757,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.sortIndexesOfRosterInstanses[rosterIdentity] = rosterInstance.SortIndex;
         }
 
-        private decimal[] CalculateStartRosterVectorForAnswersOfLinkedToQuestion(
-            Guid linkedToEntityId, Identity linkedQuestion, IQuestionnaire questionnaire)
-        {
-            Guid[] linkSourceRosterVector = questionnaire.GetRosterSizeSourcesForEntity(linkedToEntityId);
-            Guid[] linkedQuestionRosterSources = questionnaire.GetRosterSizeSourcesForEntity(linkedQuestion.Id);
-
-            int commonRosterSourcesPartLength = Enumerable
-                .Zip(linkSourceRosterVector, linkedQuestionRosterSources, AreEqual)
-                .TakeWhile(areEqual => areEqual)
-                .Count();
-            
-            int linkedQuestionRosterLevel = linkedQuestion.RosterVector.Length;
-
-            int targetRosterLevel = Math.Min(commonRosterSourcesPartLength, Math.Min(linkSourceRosterVector.Length - 1, linkedQuestionRosterLevel));
-
-            return linkedQuestion.RosterVector.Shrink(targetRosterLevel);
-        }
-
         public InterviewRoster FindRosterByOrDeeperRosterLevel(Guid rosterId, RosterVector targetRosterVector)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
@@ -1272,11 +1254,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         private static TValue GetOrCalculate<TKey, TValue>(TKey key, Func<TKey, TValue> calculateValue, ConcurrentDictionary<TKey, TValue> calculatedValues)
         {
             return calculatedValues.GetOrAdd(key, calculateValue);
-        }
-
-        private static bool AreEqual(Guid first, Guid second)
-        {
-            return first == second;
         }
     }
 }
