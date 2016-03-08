@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         QuestionnaireAttachment GetAttachment(Guid attachmentId);
         IEnumerable<AttachmentView> GetAttachmentsForQuestionnaire(string questionnaireId);
         void CloneAttachmentMeta(Guid sourceAttachmentId);
-        void UpdateAttachmentName(Guid attachmentId, string name);
+        void UpdateAttachmentName(Guid questionnaireId, Guid attachmentId, string name);
         void DeleteAttachment(Guid attachmentId);
     }
 }
