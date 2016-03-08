@@ -143,6 +143,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             var attachmentsForQuestionnaire = attachmentsMeta.Select(x => new AttachmentView
             {
                 ItemId = x.AttachmentId,
+                Type = x.Type.ToString(),
                 Name = x.Name,
                 FileName = x.FileName,
                 SizeInBytes = x.Size,
