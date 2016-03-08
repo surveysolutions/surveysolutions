@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Ncqrs.Eventing;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using SQLite.Net;
 using SQLite.Net.Interop;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -142,7 +143,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 eventSequence: storedEvent.EventSequence,
                 eventTimeStamp: storedEvent.DateTimeUtc,
                 globalSequence: -1,
-                payload: this.ToEvent(storedEvent.JsonEvent));
+                payload: JsonConvert.DeserializeObject<Infrastructure.EventBus.IEvent>(storedEvent.JsonEvent));
         }
 
         private EventView ToStoredEvent(UncommittedEvent evt)
@@ -153,43 +154,55 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 EventSourceId = evt.EventSourceId,
                 EventSequence = evt.EventSequence,
                 DateTimeUtc = evt.EventTimeStamp,
-
-                JsonEvent = JsonConvert.SerializeObject(evt.Payload, EventSerializerSettings.JsonSerializerSettings)
-                //JsonEvent = this.serializer.Serialize(evt.Payload, TypeSerializationSettings.AllTypes)
+                JsonEvent = JsonConvert.SerializeObject(evt.Payload, JsonSerializerSettings)
             };
-        }
-
-        private Infrastructure.EventBus.IEvent ToEvent(string json)
-        {
-            //move to binder
-            var replaceOldAssemblyNames = json.Replace("Main.Core.Events.AggregateRootEvent, Main.Core", 
-                "Main.Core.Events.AggregateRootEvent, WB.Core.Infrastructure");
-
-            replaceOldAssemblyNames = replaceOldAssemblyNames.Replace("WB.UI.Capi", "WB.Core.BoundedContexts.Interviewer");
-
-            replaceOldAssemblyNames =
-                new[]
-                {
-                    "NewUserCreated",
-                    "UserChanged",
-                    "UserLocked",
-                    "UserLockedBySupervisor",
-                    "UserUnlocked",
-                    "UserUnlockedBySupervisor"
-
-                }.Aggregate(replaceOldAssemblyNames,
-                    (current, type) =>
-                        current.Replace($"Main.Core.Events.User.{type}, Main.Core",
-                            $"Main.Core.Events.User.{type}, WB.Core.SharedKernels.DataCollection"));
-
-            return JsonConvert.DeserializeObject<Infrastructure.EventBus.IEvent>(replaceOldAssemblyNames, EventSerializerSettings.JsonSerializerSettings);
-
-            //return this.serializer.Deserialize<Infrastructure.EventBus.IEvent>(replaceOldAssemblyNames);
         }
 
         public void Dispose()
         {
             this.connection.Dispose();
+        }
+
+        private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.Auto, //TypeNameHandling.All,
+            NullValueHandling = NullValueHandling.Ignore,
+            FloatParseHandling = FloatParseHandling.Decimal,
+            Binder = new OldToNewTypesRedirectSerializationBinder()
+        };
+
+        private class OldToNewTypesRedirectSerializationBinder : DefaultSerializationBinder
+        {
+            public override Type BindToType(string assemblyName, string typeName)
+            {
+                var oldCapiAssemblyName = "WB.UI.Capi";
+                var newCapiAssemblyName = "WB.Core.BoundedContexts.Interviewer";
+
+                var oldMainCoreAssemblyName = "Main.Core";
+
+                if (String.Equals(assemblyName, oldCapiAssemblyName, StringComparison.Ordinal) )
+                {
+                    assemblyName = newCapiAssemblyName;
+                }
+                else if (String.Equals(assemblyName, oldMainCoreAssemblyName, StringComparison.Ordinal))
+                {
+                    if (oldMainCoreTypeMap.ContainsKey(typeName))
+                        assemblyName = oldMainCoreTypeMap[typeName];
+                }
+
+                return base.BindToType(assemblyName, typeName);
+            }
+
+            private readonly Dictionary<string, string> oldMainCoreTypeMap = new Dictionary<string, string>()
+            {
+                {"Main.Core.Events.AggregateRootEvent", "WB.Core.Infrastructure"},
+                {"Main.Core.Events.User.NewUserCreated", "WB.Core.SharedKernels.DataCollection"},
+                {"Main.Core.Events.User.UserChanged", "WB.Core.SharedKernels.DataCollection"},
+                {"Main.Core.Events.User.UserLocked", "WB.Core.SharedKernels.DataCollection"},
+                {"Main.Core.Events.User.UserLockedBySupervisor", "WB.Core.SharedKernels.DataCollection"},
+                {"Main.Core.Events.User.UserUnlocked", "WB.Core.SharedKernels.DataCollection"},
+                {"Main.Core.Events.User.UserUnlockedBySupervisor", "WB.Core.SharedKernels.DataCollection"},
+            };
         }
     }
 }
