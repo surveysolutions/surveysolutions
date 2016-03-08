@@ -1068,7 +1068,7 @@
     <Content Include="UpdatedDesigner\app\scripts\services\utilityService.js" />
     <Content Include="UpdatedDesigner\app\scripts\services\verificationService.js" />
     <Content Include="UpdatedDesigner\app\views\confirm.html" />
-    <Content Include="UpdatedDesigner\app\views\static-text.html" />
+    <Content Include="UpdatedDesigner\app\views\static-text.v1.html" />
     <Content Include="UpdatedDesigner\app\views\group.html" />
     <Content Include="UpdatedDesigner\app\views\itemBreadcrumbs.html" />
     <Content Include="UpdatedDesigner\app\views\share.html" />
@@ -1193,7 +1193,7 @@
     <Content Include="UpdatedDesigner\content\markup.css.css">
       <DependentUpon>markup.css.less</DependentUpon>
     </Content>
-    <Content Include="UpdatedDesigner\app\views\main.html" />
+    <Content Include="UpdatedDesigner\app\views\main.v1.html" />
     <Content Include="UpdatedDesigner\app\views\question.html" />
     <Content Include="UpdatedDesigner\app\views\roster.html" />
     <Content Include="UpdatedDesigner\gulpfile.js" />
