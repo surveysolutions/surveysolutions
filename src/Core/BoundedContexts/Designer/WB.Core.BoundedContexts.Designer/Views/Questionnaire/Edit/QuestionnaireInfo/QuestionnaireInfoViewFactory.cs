@@ -120,6 +120,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 select new AttachmentView
                 {
                     ItemId = qAttachment.Key.FormatGuid(),
+                    Type = subAttachment?.Type,
                     Name = qAttachment.Value.Name,
                     FileName = qAttachment.Value.FileName,
                     SizeInBytes = subAttachment?.SizeInBytes,

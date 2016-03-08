@@ -10,5 +10,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public object Meta { get; set; }
         public long? SizeInBytes { get; set; }
         public DateTime? LastUpdated { get; set; }
+        public string Type { get; set; }
     }
 }

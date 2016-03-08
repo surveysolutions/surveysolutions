@@ -84,14 +84,14 @@ namespace WB.UI.Designer.Api
                 var fileStreamContent = new
                 {
                     BinaryContent = multipartContents[fileParameterName].ReadAsByteArrayAsync().Result,
-                    ContentType = multipartContents[fileParameterName].Headers.ContentType.MediaType
+                    ContentType = multipartContents[fileParameterName].Headers.ContentType?.MediaType
                 };
 
                 var commandContent = multipartContents[commandParameterName].ReadAsStringAsync().Result;
 
                 updateAttachment = (UpdateAttachment)this.commandDeserializer.Deserialize(commandType, commandContent);
 
-                if (fileStreamContent.BinaryContent != null)
+                if (fileStreamContent.BinaryContent?.Length > 0)
                 {
                     // save image here
                     this.attachmentService.SaveAttachmentContent(
