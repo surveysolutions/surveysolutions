@@ -55,6 +55,12 @@ namespace WB.Core.SharedKernels.DataCollection.V7
         public List<LinkedQuestionFilterResult> ExecuteLinkedQuestionFilters()
         {
             var result=new List<LinkedQuestionFilterResult>();
+
+            var rosterStatesFromScope = this.EnablementStates.Where(r => this.RosterKey.Any(k => k.Id == r.Key)).Select(r=>r.Value.State).ToArray();
+
+            if (rosterStatesFromScope.All(s => s == State.Disabled))
+                return result;
+
             foreach (var linkedQuestionFilter in this.LinkedQuestionFilters)
             {
                 result.Add(new LinkedQuestionFilterResult()
