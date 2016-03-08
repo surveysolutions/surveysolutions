@@ -16,7 +16,11 @@
             });
 
             $scope.attachments = [];
-            $scope.totalSize = 18;
+            $scope.totalSize = function() {
+                return _.reduce($scope.attachments, function (sum, attachment) {
+                    return sum + (attachment.sizeInBytes || 0);
+                }, 0);
+            };
 
             var dataBind = function (attachment, attachmentDto) {
                 attachment.initialAttachment = angular.copy(attachmentDto);
@@ -91,6 +95,7 @@
                 attachment.fileName = attachment.file.name;
                 attachment.format = file.type;
                 attachment.sizeInBytes = file.size;
+                attachment.type = "Image";
                 
                 Upload.imageDimensions(file).then(function(dimensions) {
                     attachment.height = dimensions.height;

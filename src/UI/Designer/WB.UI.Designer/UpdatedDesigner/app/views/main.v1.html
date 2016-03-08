@@ -205,8 +205,8 @@
                         count="attachments.length"
                         when="{
                             '0': 'No Files Attachment to questionnaire',
-                            '1': '{} File Attachment ({{totalSize}}Mb total)',
-                            'other': '{} Files Attachments ({{totalSize}}Mb total)'}"></h3>
+                            '1': '{} File Attachment ({{formatBytes(totalSize())}} total)',
+                            'other': '{} Files Attachments ({{formatBytes(totalSize())}} total)'}"></h3>
                     <form role="form" name="attachmentsForm" novalidate>
                         <ul ng-model="attachments">
                             <li class="attachments-panel-item" ng-repeat="attachment in attachments" ngf-drop="" ngf-change="fileSelected(attachment, $file, attachmentForm)" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">

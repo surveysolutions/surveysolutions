@@ -7637,6 +7637,9 @@ textarea#edit-group-description {
   height: 37px;
   min-height: 37px;
 }
+#static-text-editor #edit-static-attachment-name {
+  color: #e004c9;
+}
 #loading-logo {
   width: 52px;
   height: 75px;
