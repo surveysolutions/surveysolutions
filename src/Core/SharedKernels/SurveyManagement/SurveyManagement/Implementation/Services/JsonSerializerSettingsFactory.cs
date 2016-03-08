@@ -82,21 +82,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             return settings;
         }
 
-        private class NewToOldAssemblyRedirectSerializationBinder : DefaultSerializationBinder
+        private class MainCoreAssemblyRedirectSerializationBaseBinder : DefaultSerializationBinder
         {
-            private string oldAssemblyNameToRedirect = "Main.Core";
-            private string targetAssemblyName = "WB.Core.SharedKernels.Questionnaire";
+            protected string oldAssemblyNameToRedirect = "Main.Core";
+            protected string targetAssemblyName = "WB.Core.SharedKernels.Questionnaire";
 
-            private const string oldAssemblyGenericReplacePattern = ", Main.Core]";
-            private const string newAssemblyGenericReplacePattern = ", WB.Core.SharedKernels.Questionnaire]";
+            protected const string oldAssemblyGenericReplacePattern = ", Main.Core]";
+            protected const string newAssemblyGenericReplacePattern = ", WB.Core.SharedKernels.Questionnaire]";
 
-            private readonly Dictionary<string, string> typesMap = new Dictionary<string, string>();
-            private readonly Dictionary<Type, string> typeToName = new Dictionary<Type, string>();
+            protected readonly Dictionary<string, string> typesMap = new Dictionary<string, string>();
+            protected readonly Dictionary<Type, string> typeToName = new Dictionary<Type, string>();
 
-            public NewToOldAssemblyRedirectSerializationBinder()
+            public MainCoreAssemblyRedirectSerializationBaseBinder()
             {
                 var assembly = typeof(QuestionnaireDocument).Assembly;
-                //targetAssemblyName = assembly.FullName;
 
                 foreach (var type in assembly.GetTypes().Where(t => t.IsPublic))
                 {
@@ -106,9 +105,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                     typesMap[type.Name] = type.FullName;
                     typeToName[type] = type.Name;
                 }
-
             }
+        }
 
+        private class NewToOldAssemblyRedirectSerializationBinder : MainCoreAssemblyRedirectSerializationBaseBinder
+        {
             public override Type BindToType(string assemblyName, string typeName)
             {
                 if (String.Equals(assemblyName, targetAssemblyName, StringComparison.Ordinal) ||
@@ -128,12 +129,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                     assemblyName = oldAssemblyNameToRedirect;
 
                     string fullTypeName;
-                    if (oldTypesMap.TryGetValue(typeShortName, out fullTypeName))
-                        typeName = fullTypeName;
-                    else
-                    {
-                        typeName = serializedType.FullName;
-                    }
+                    typeName = oldTypesMap.TryGetValue(typeShortName, out fullTypeName) ? fullTypeName : serializedType.FullName;
+                    
                 }
                 else
                 {
@@ -142,7 +139,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                 }
             }
 
-            private Dictionary<string, string> oldTypesMap = new Dictionary<string, string>()
+            private readonly Dictionary<string, string> oldTypesMap = new Dictionary<string, string>()
         {
             {"ValidationConditionsBackwardCompatibility", "WB.Core.SharedKernels.NonConficltingNamespace.ValidationConditionsBackwardCompatibility"},
             {"ValidationCondition", "WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition"},
@@ -193,35 +190,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
         };
         }
 
-        private class OldToNewAssemblyRedirectSerializationBinder : DefaultSerializationBinder
+        private class OldToNewAssemblyRedirectSerializationBinder : MainCoreAssemblyRedirectSerializationBaseBinder
         {
-            private const string oldAssemblyNameToRedirect = "Main.Core";
-            private readonly string targetAssemblyName = "WB.Core.SharedKernels.Questionnaire";
-            private readonly Dictionary<string, string> typesMap = new Dictionary<string, string>();
-            private readonly Dictionary<Type, string> typeToName = new Dictionary<Type, string>();
-
-            private const string oldAssemblyGenericReplacePattern = ", Main.Core]";
-            private const string newAssemblyGenericReplacePattern = ", WB.Core.SharedKernels.Questionnaire]";
-
-            //namespaces replace
-
-
-            public OldToNewAssemblyRedirectSerializationBinder()
-            {
-                typesMap = new Dictionary<string, string>();
-                var assembly = typeof(QuestionnaireDocument).Assembly;
-                //targetAssemblyName = assembly.FullName;
-
-                foreach (var type in assembly.GetTypes().Where(t => t.IsPublic))
-                {
-                    if (typesMap.ContainsKey(type.Name))
-                        throw new InvalidOperationException("Assembly contains more then one type with same name.");
-
-                    typesMap[type.Name] = type.FullName;
-                }
-
-            }
-
             public override Type BindToType(string assemblyName, string typeName)
             {
                 //direct type mapping
