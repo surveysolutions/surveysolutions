@@ -35,7 +35,7 @@
         $stateProvider
             .state('questionnaire', {
                 url: "/{questionnaireId}",
-                templateUrl: "views/main.html",
+                templateUrl: "views/main.v1.html",
                 controller: 'MainCtrl'
             }).state('questionnaire.chapter', {
                 url: "/chapter/{chapterId}",
@@ -74,7 +74,7 @@
                 url: "/static-text/{itemId}",
                 views: {
                     '': {
-                        templateUrl: 'views/static-text.html',
+                        templateUrl: 'views/static-text.v1.html',
                         controller: 'StaticTextCtrl'
                     }
                 }
