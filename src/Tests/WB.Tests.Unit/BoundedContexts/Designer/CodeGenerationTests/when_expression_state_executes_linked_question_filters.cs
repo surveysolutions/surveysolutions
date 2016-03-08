@@ -41,6 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
                 state.UpdateRosterTitle(rosterId, new decimal[0], 1, "1");
                 state.AddRoster(rosterId, new decimal[0], 2, null);
                 state.UpdateRosterTitle(rosterId, new decimal[0], 2, "2");
+                state.DisableGroups(new[] { new Identity(rosterId, new decimal[] {2}) });
                 state.AddRoster(rosterId, new decimal[0], 3, null);
                 state.UpdateRosterTitle(rosterId, new decimal[0], 3, "3");
 
@@ -51,8 +52,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
                 };
             });
         
-        It should_result_contain_2_enabled_option = () =>
-             results.CountOfOptions.ShouldEqual(2);
+        It should_result_contain_1_available_option = () =>
+             results.CountOfOptions.ShouldEqual(1);
 
         Cleanup stuff = () =>
         {
