@@ -38,31 +38,31 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
             result = deserializer.Deserialize(type, command);
 
         It should_return_NewUpdateGroupCommand = () =>
-            result.ShouldBeOfExactType<UpdateGroupCommand>();
+            result.ShouldBeOfExactType<UpdateGroup>();
 
         It should_return_same_title_in_NewUpdateGroupCommand = () =>
-            ((UpdateGroupCommand)result).Title.ShouldEqual(sanitizedTitle);
+            ((UpdateGroup)result).Title.ShouldEqual(sanitizedTitle);
 
         It should_return_same_questionnaire_id_in_NewUpdateGroupCommand = () =>
-            ((UpdateGroupCommand)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
+            ((UpdateGroup)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
 
         It should_return_same_group_id_in_NewUpdateGroupCommand = () =>
-            ((UpdateGroupCommand)result).GroupId.ShouldEqual(Guid.Parse(groupId));
+            ((UpdateGroup)result).GroupId.ShouldEqual(Guid.Parse(groupId));
 
         It should_return_2_fixed_roster_titles = () =>
-            ((UpdateGroupCommand)result).FixedRosterTitles.Count().ShouldEqual(2);
+            ((UpdateGroup)result).FixedRosterTitles.Count().ShouldEqual(2);
 
         It should_return_sanizited_first_fixed_title = () =>
-            ((UpdateGroupCommand)result).FixedRosterTitles[0].Title.ShouldEqual("привет, Мир!");
+            ((UpdateGroup)result).FixedRosterTitles[0].Title.ShouldEqual("привет, Мир!");
 
         It should_return_sanizited_second_fixed_title = () =>
-            ((UpdateGroupCommand)result).FixedRosterTitles[1].Title.ShouldEqual("hi, Hello!");
+            ((UpdateGroup)result).FixedRosterTitles[1].Title.ShouldEqual("hi, Hello!");
         
         It should_return_first_fixed_roster_title_value_1_0 = () =>
-            ((UpdateGroupCommand)result).FixedRosterTitles[0].Value.ShouldEqual("1");
+            ((UpdateGroup)result).FixedRosterTitles[0].Value.ShouldEqual("1");
 
         It should_return_second_fixed_roster_title_value_2_0 = () =>
-            ((UpdateGroupCommand)result).FixedRosterTitles[1].Value.ShouldEqual("2");
+            ((UpdateGroup)result).FixedRosterTitles[1].Value.ShouldEqual("2");
 
 
         private static ICommand result;

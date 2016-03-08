@@ -19,15 +19,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
         {
             InitializePreviousState();
 
-            questionnaireEntityFactoryMock = new Mock<IQuestionnaireEntityFactory>();
-            questionnaireEntityFactoryMock
-                .Setup(x => x.CreateStaticText(Moq.It.IsAny<Guid>(), Moq.It.IsAny<string>()))
-                .Returns((Guid entityId, string text) => new StaticText(publicKey: entityId, text: text));
-
+            questionnaireEntityFactoryMock = Setup.QuestionnaireEntityFactoryWithStaticText();
+          
             evnt = CreateStaticTextAddedEvent(entityId:staticTextId, parentId: g4Id, text: staticText);
 
-            denormalizer = CreateQuestionnaireInfoDenormalizer(
-                questionnaireEntityFactory: questionnaireEntityFactoryMock.Object);
+            denormalizer = CreateQuestionnaireInfoDenormalizer(questionnaireEntityFactory: questionnaireEntityFactoryMock.Object);
         };
 
         Because of = () =>

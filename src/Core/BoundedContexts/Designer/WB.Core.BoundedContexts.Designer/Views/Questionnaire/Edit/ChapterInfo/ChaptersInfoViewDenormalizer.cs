@@ -289,16 +289,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         public GroupInfoView Update(GroupInfoView state, IPublishedEvent<StaticTextAdded> @event)
         {
-            this.AddStaticText(questionnaire: state, parentId: @event.Payload.ParentId.FormatGuid(),
-                entityId: @event.Payload.EntityId.FormatGuid(), text: @event.Payload.Text);
+            this.AddStaticText(
+                questionnaire: state, 
+                parentId: @event.Payload.ParentId.FormatGuid(),
+                entityId: @event.Payload.EntityId.FormatGuid(), 
+                text: @event.Payload.Text,
+                attachmentName: null);
 
             return state;
         }
 
         public GroupInfoView Update(GroupInfoView state, IPublishedEvent<StaticTextCloned> @event)
         {
-            this.AddStaticText(questionnaire: state, parentId: @event.Payload.ParentId.FormatGuid(),
-                entityId: @event.Payload.EntityId.FormatGuid(), text: @event.Payload.Text,
+            this.AddStaticText(
+                questionnaire: state, 
+                parentId: @event.Payload.ParentId.FormatGuid(),
+                entityId: @event.Payload.EntityId.FormatGuid(), 
+                text: @event.Payload.Text,
+                attachmentName: @event.Payload.AttachmentName,
                 orderIndex: @event.Payload.TargetIndex);
 
             return state;
@@ -306,8 +314,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         public GroupInfoView Update(GroupInfoView state, IPublishedEvent<StaticTextUpdated> @event)
         {
-            this.UpdateStaticText(questionnaire: state, entityId: @event.Payload.EntityId.FormatGuid(),
-                text: @event.Payload.Text);
+            this.UpdateStaticText(
+                questionnaire: state, 
+                entityId: @event.Payload.EntityId.FormatGuid(),
+                text: @event.Payload.Text,
+                attachmentName: @event.Payload.AttachmentName);
 
             return state;
         }
@@ -501,7 +512,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             questionView.LinkedFilterExpression = linkedFilterExpression;
         }
 
-        private void AddStaticText(GroupInfoView questionnaire, string parentId, string entityId, string text,
+        private void AddStaticText(GroupInfoView questionnaire, string parentId, string entityId, string text, string attachmentName,
             int? orderIndex = null)
         {
             var groupView = this.FindGroup(questionnaireOrGroup: questionnaire, groupId: parentId);
@@ -513,7 +524,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             var staticTextInfoView = new StaticTextInfoView()
             {
                 ItemId = entityId,
-                Text = text
+                Text = text,
+                AttachmentName = attachmentName
             };
 
             if (orderIndex.HasValue)
@@ -526,7 +538,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             }
         }
 
-        private void UpdateStaticText(GroupInfoView questionnaire, string entityId, string text)
+        private void UpdateStaticText(GroupInfoView questionnaire, string entityId, string text, string attachmentName)
         {
             var staticTextInfoView = this.FindStaticText(questionnaireOrGroup: questionnaire, entityId: entityId);
 
@@ -534,6 +546,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 return;
 
             staticTextInfoView.Text = text;
+            staticTextInfoView.AttachmentName = attachmentName;
         }
 
         private void AddGroup(GroupInfoView questionnaire, string parentGroupId, string groupId, string groupTitle, string variableName,
@@ -612,7 +625,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                     this.AddStaticText(questionnaire: currentState,
                         parentId: staticTextChild.GetParent().PublicKey.FormatGuid(),
                         entityId: staticTextChild.PublicKey.FormatGuid(),
-                        text: staticTextChild.Text);
+                        text: staticTextChild.Text,
+                        attachmentName: staticTextChild.AttachmentName);
 
                     continue;
                 }

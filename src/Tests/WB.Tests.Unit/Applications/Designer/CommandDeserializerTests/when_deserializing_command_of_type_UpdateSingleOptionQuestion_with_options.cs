@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
             result = deserializer.Deserialize(type, command);
 
         It should_return_UpdateSingleOptionQuestionCommand = () =>
-            result.ShouldBeOfExactType<UpdateSingleOptionQuestionCommand>();
+            result.ShouldBeOfExactType<UpdateSingleOptionQuestion>();
 
         private static ICommand result;
         private static CommandDeserializer deserializer;

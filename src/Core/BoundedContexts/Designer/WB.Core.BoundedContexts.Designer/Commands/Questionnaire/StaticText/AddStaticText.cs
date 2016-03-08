@@ -4,9 +4,9 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText
 {
     [Serializable]
-    public class AddStaticTextCommand : QuestionnaireEntityAddCommand
+    public class AddStaticText : QuestionnaireEntityAddCommand
     {
-        public AddStaticTextCommand(Guid questionnaireId, Guid entityId, string text, Guid responsibleId, Guid parentId, int? index = null)
+        public AddStaticText(Guid questionnaireId, Guid entityId, string text, Guid responsibleId, Guid parentId, int? index = null)
             : base(responsibleId: responsibleId, questionnaireId: questionnaireId, entityId: entityId, parentId: parentId)
         {
             this.Index = index;

@@ -36,19 +36,19 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
             result = deserializer.Deserialize(type, command);
 
         It should_return_NewUpdateGroupCommand = () =>
-            result.ShouldBeOfExactType<UpdateGroupCommand>();
+            result.ShouldBeOfExactType<UpdateGroup>();
 
         It should_return_same_title_in_NewUpdateGroupCommand = () =>
-            ((UpdateGroupCommand)result).Title.ShouldEqual(sanitizedTitle);
+            ((UpdateGroup)result).Title.ShouldEqual(sanitizedTitle);
 
         It should_return_same_questionnaire_id_in_NewUpdateGroupCommand = () =>
-            ((UpdateGroupCommand)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
+            ((UpdateGroup)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
 
         It should_return_same_group_id_in_NewUpdateGroupCommand = () =>
-            ((UpdateGroupCommand)result).GroupId.ShouldEqual(Guid.Parse(groupId));
+            ((UpdateGroup)result).GroupId.ShouldEqual(Guid.Parse(groupId));
 
         It should_return_0_fixed_roster_titles = () =>
-            ((UpdateGroupCommand)result).FixedRosterTitles.Count().ShouldEqual(0);
+            ((UpdateGroup)result).FixedRosterTitles.Count().ShouldEqual(0);
 
         private static ICommand result;
         private static CommandDeserializer deserializer;

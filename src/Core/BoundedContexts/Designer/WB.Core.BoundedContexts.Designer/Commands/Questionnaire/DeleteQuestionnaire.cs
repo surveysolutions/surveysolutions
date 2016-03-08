@@ -4,9 +4,9 @@ using Ncqrs.Commanding;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 {
     [Serializable]
-    public class DeleteQuestionnaireCommand : CommandBase
+    public class DeleteQuestionnaire : CommandBase
     {
-        public DeleteQuestionnaireCommand(Guid questionnaireId)
+        public DeleteQuestionnaire(Guid questionnaireId)
         {
             this.QuestionnaireId = questionnaireId;
         }

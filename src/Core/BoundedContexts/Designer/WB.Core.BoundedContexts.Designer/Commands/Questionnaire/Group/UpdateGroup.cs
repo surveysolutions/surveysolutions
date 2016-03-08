@@ -6,9 +6,9 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
 {
     [Serializable]
-    public class UpdateGroupCommand : FullGroupDataCommand
+    public class UpdateGroup : FullGroupDataCommand
     {
-        public UpdateGroupCommand(Guid questionnaireId, Guid groupId, Guid responsibleId,
+        public UpdateGroup(Guid questionnaireId, Guid groupId, Guid responsibleId,
             string title, string variableName, Guid? rosterSizeQuestionId, string condition, bool hideIfDisabled, bool isRoster,
             RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] fixedRosterTitles, Guid? rosterTitleQuestionId)
             : base(

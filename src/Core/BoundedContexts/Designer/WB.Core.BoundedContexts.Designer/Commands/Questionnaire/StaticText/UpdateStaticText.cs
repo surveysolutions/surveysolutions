@@ -4,14 +4,16 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText
 {
     [Serializable]
-    public class UpdateStaticTextCommand : QuestionnaireEntityCommand
+    public class UpdateStaticText : QuestionnaireEntityCommand
     {
-        public UpdateStaticTextCommand(Guid questionnaireId, Guid entityId, string text, Guid responsibleId)
+        public UpdateStaticText(Guid questionnaireId, Guid entityId, string text, string attachmentName, Guid responsibleId)
             : base(responsibleId: responsibleId, questionnaireId: questionnaireId, entityId: entityId)
         {
             this.Text = CommandUtils.SanitizeHtml(text);
+            this.AttachmentName = attachmentName;
         }
 
         public string Text { get; set; }
+        public string AttachmentName { get; set; }
     }
 }

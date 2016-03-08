@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Applications.Designer.CommandPostProcessorTests
 
             accountRepository.Setup(x => x.GetUserNameByEmail(receiverEmail)).Returns(receiverName);
 
-            command = new AddSharedPersonToQuestionnaireCommand(questoinnaireId, actionUserId, receiverEmail, ShareType.Edit, responsibleId);
+            command = new AddSharedPersonToQuestionnaire(questoinnaireId, actionUserId, receiverEmail, ShareType.Edit, responsibleId);
 
             var logger = new Mock<ILogger>();
 

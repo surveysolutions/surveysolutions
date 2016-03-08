@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
@@ -8,33 +8,28 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
-    public class UpdateTextQuestionCommand : UpdateValidatableQuestionCommand
+    public class UpdateTextListQuestion : UpdateValidatableQuestionCommand
     {
-        public UpdateTextQuestionCommand(
-            Guid questionnaireId,
-            Guid questionId,
+        public UpdateTextListQuestion(Guid questionnaireId, 
+            Guid questionId, 
             Guid responsibleId,
             CommonQuestionParameters commonQuestionParameters,
-            string mask,
+            int? maxAnswerCount,
             string validationExpression,
             string validationMessage,
             QuestionScope scope,
-            bool isPreFilled,
             List<ValidationCondition> validationConditions)
             : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
                 commonQuestionParameters: commonQuestionParameters,
                 validationConditions: validationConditions)
         {
-            this.IsPreFilled = isPreFilled;
+            this.MaxAnswerCount = maxAnswerCount;
             this.Scope = scope;
-            this.Mask = mask;
         }
 
+        public int? MaxAnswerCount { get; private set; }
+
         public QuestionScope Scope { get; set; }
-
-        public string Mask { get; set; }
-
-        public bool IsPreFilled { get; set; }
     }
 }

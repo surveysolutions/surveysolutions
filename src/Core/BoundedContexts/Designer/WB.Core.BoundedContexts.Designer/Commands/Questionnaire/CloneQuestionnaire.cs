@@ -5,9 +5,9 @@ using Ncqrs.Commanding;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 {
     [Serializable]
-    public class CloneQuestionnaireCommand : CommandBase
+    public class CloneQuestionnaire : CommandBase
     {
-        public CloneQuestionnaireCommand(Guid publicKey, string title, Guid createdBy, bool isPublic, IQuestionnaireDocument doc)
+        public CloneQuestionnaire(Guid publicKey, string title, Guid createdBy, bool isPublic, IQuestionnaireDocument doc)
             : base(publicKey)
         {
             this.PublicKey = publicKey;

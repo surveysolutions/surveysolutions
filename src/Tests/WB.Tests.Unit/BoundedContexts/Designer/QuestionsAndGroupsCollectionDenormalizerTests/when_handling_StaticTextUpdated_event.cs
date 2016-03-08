@@ -17,15 +17,11 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
         {
             InitializePreviousState();
 
-            questionnaireEntityFactoryMock = new Mock<IQuestionnaireEntityFactory>();
-            questionnaireEntityFactoryMock
-                .Setup(x => x.CreateStaticText(Moq.It.IsAny<Guid>(), Moq.It.IsAny<string>()))
-                .Returns((Guid entityId, string text) => new StaticText(publicKey: entityId, text: text));
+            questionnaireEntityFactoryMock = Setup.QuestionnaireEntityFactoryWithStaticText();
 
-            evnt = CreateStaticTextUpdatedEvent(entityId:st2Id, text: newText);
+            evnt = CreateStaticTextUpdatedEvent(entityId:st2Id, text: newText, attachmentName: attachment);
 
-            denormalizer = CreateQuestionnaireInfoDenormalizer(
-                questionnaireEntityFactory: questionnaireEntityFactoryMock.Object);
+            denormalizer = CreateQuestionnaireInfoDenormalizer(questionnaireEntityFactory: questionnaireEntityFactoryMock.Object);
         };
 
         Because of = () =>
@@ -43,6 +39,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
         It should_return_static_text_N2_with_text_equals__to_newText = () =>
             newState.StaticTexts.Single(x => x.Id == st2Id).Text.ShouldEqual(newText);
 
+        It should_return_static_text_N2_with_attachment_name_equals__to_attachment = () =>
+            newState.StaticTexts.Single(x => x.Id == st2Id).AttachmentName.ShouldEqual(attachment);
+
         It should_return_static_text_N2_with_parent_id_equals_g3Id = () =>
             newState.StaticTexts.Single(x => x.Id == st2Id).ParentGroupId.ShouldEqual(g4Id);
 
@@ -57,5 +56,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
         private static QuestionsAndGroupsCollectionView newState = null;
         private static Mock<IQuestionnaireEntityFactory> questionnaireEntityFactoryMock;
         private static string newText = "New text";
+        private static string attachment = "bananas";
     }
 }

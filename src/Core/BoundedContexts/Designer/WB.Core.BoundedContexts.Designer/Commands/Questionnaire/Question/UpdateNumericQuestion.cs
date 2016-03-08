@@ -8,9 +8,9 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
-    public class UpdateNumericQuestionCommand : UpdateValidatableQuestionCommand
+    public class UpdateNumericQuestion : UpdateValidatableQuestionCommand
     {
-        public UpdateNumericQuestionCommand(
+        public UpdateNumericQuestion(
             Guid questionnaireId,
             Guid questionId,
             Guid responsibleId,

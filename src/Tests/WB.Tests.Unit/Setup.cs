@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
@@ -165,6 +167,33 @@ namespace WB.Tests.Unit
                 => _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == isClientVersionSupported
                 && _.IsQuestionnaireDocumentSupportedByClientVersion(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>()) == isQuestionnaireVersionSupported
                 && _.GetQuestionnaireContentVersion(Moq.It.IsAny<QuestionnaireDocument>()) == version);
+        }
+
+        public static Mock<IQuestionnaireEntityFactory> QuestionnaireEntityFactoryWithStaticText(Guid? entityId = null, string text = null, string attachmentName = null)
+        {
+            var staticText = Create.StaticText(entityId, text, attachmentName);
+
+            var questionnaireEntityFactoryMock = new Mock<IQuestionnaireEntityFactory>();
+            if (!entityId.HasValue)
+            {
+                questionnaireEntityFactoryMock
+                   .Setup(x => x.CreateStaticText(Moq.It.IsAny<Guid>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
+                   .Returns((Guid id, string t, string a) => Create.StaticText(id, t, a));
+            }
+            else if (string.IsNullOrWhiteSpace(attachmentName))
+            {
+                questionnaireEntityFactoryMock
+                    .Setup(x => x.CreateStaticText(entityId.Value, text, Moq.It.IsAny<string>()))
+                    .Returns(staticText);
+            }
+            else
+            {
+                questionnaireEntityFactoryMock
+                   .Setup(x => x.CreateStaticText(entityId.Value, text, attachmentName))
+                   .Returns(staticText);
+            }
+
+            return questionnaireEntityFactoryMock;
         }
     }
 }

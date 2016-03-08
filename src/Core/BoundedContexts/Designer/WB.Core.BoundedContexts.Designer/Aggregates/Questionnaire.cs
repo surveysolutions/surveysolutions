@@ -31,6 +31,7 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 
 namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
@@ -663,7 +664,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         internal void Apply(StaticTextAdded e)
         {
-            var staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, text: e.Text);
+            var staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, text: e.Text, attachmentName: null);
 
             this.innerDocument.Add(c: staticText, parent: e.ParentId, parentPropagationKey: null);
         }
@@ -671,14 +672,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void Apply(StaticTextUpdated e)
         {
             var oldStaticText = this.innerDocument.Find<IStaticText>(e.EntityId);
-            var newStaticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, text: e.Text);
+            var newStaticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, text: e.Text, attachmentName: e.AttachmentName);
 
             this.innerDocument.ReplaceEntity(oldStaticText, newStaticText);
         }
 
         internal void Apply(StaticTextCloned e)
         {
-            var staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, text: e.Text);
+            var staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, text: e.Text, attachmentName: e.AttachmentName);
 
             this.innerDocument.Insert(e.TargetIndex, staticText, e.ParentId);
         }
@@ -1290,6 +1291,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         SourceQuestionnaireId = sourceQuestionnaireId,
                         TargetIndex = itemTargetIndex,
                         Text = staticText.Text,
+                        AttachmentName = staticText.AttachmentName,
                         ResponsibleId = responsibleId
                     });
                     continue;
@@ -1500,7 +1502,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return questionCloned;
         }
 
-        public void AddDefaultTypeQuestionAdnMoveIfNeeded(AddDefaultTypeQuestionCommand command)
+        public void AddDefaultTypeQuestionAdnMoveIfNeeded(AddDefaultTypeQuestion command)
         {
             this.ThrowDomainExceptionIfQuestionAlreadyExists(command.QuestionId);
             var parentGroup = this.GetGroupById(command.ParentGroupId);
@@ -2164,18 +2166,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        public void UpdateStaticText(Guid entityId, string text, Guid responsibleId)
+        public void UpdateStaticText(UpdateStaticText command)
         {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             
-            this.ThrowDomainExceptionIfEntityDoesNotExists(entityId);
-            this.ThrowDomainExceptionIfStaticTextIsEmpty(text);
+            this.ThrowDomainExceptionIfEntityDoesNotExists(command.EntityId);
+            this.ThrowDomainExceptionIfStaticTextIsEmpty(command.Text);
 
-            this.ApplyEvent(new StaticTextUpdated()
+            this.ApplyEvent(new StaticTextUpdated
             {
-                EntityId = entityId,
-                Text = text,
-                ResponsibleId = responsibleId
+                EntityId = command.EntityId,
+                Text = command.Text,
+                AttachmentName = command.AttachmentName,
+                ResponsibleId = command.ResponsibleId
             });
         }
 
@@ -2260,45 +2263,45 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region CopyPaste command handler
         
-        public void PasteAfter(PasteAfterCommand pasteAfterCommand)
+        public void PasteAfter(PasteAfter pasteAfter)
         {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(pasteAfterCommand.ResponsibleId);
-            this.ThrowDomainExceptionIfEntityDoesNotExists(pasteAfterCommand.ItemToPasteAfterId);
-            this.ThrowDomainExceptionIfEntityAlreadyExists(pasteAfterCommand.EntityId);
-            ThrowDomainExceptionIfEntityDoesNotExists(pasteAfterCommand.SourceDocument, pasteAfterCommand.SourceItemId);
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(pasteAfter.ResponsibleId);
+            this.ThrowDomainExceptionIfEntityDoesNotExists(pasteAfter.ItemToPasteAfterId);
+            this.ThrowDomainExceptionIfEntityAlreadyExists(pasteAfter.EntityId);
+            ThrowDomainExceptionIfEntityDoesNotExists(pasteAfter.SourceDocument, pasteAfter.SourceItemId);
 
             this.innerDocument.ConnectChildrenWithParent();
-            pasteAfterCommand.SourceDocument.ConnectChildrenWithParent();
+            pasteAfter.SourceDocument.ConnectChildrenWithParent();
 
-            var itemToInsertAfter = this.innerDocument.Find<IComposite>(pasteAfterCommand.ItemToPasteAfterId);
+            var itemToInsertAfter = this.innerDocument.Find<IComposite>(pasteAfter.ItemToPasteAfterId);
             var targetToPasteIn = itemToInsertAfter.GetParent();
-            var entityToInsert = pasteAfterCommand.SourceDocument.Find<IComposite>(pasteAfterCommand.SourceItemId);
+            var entityToInsert = pasteAfter.SourceDocument.Find<IComposite>(pasteAfter.SourceItemId);
             var targetIndex = targetToPasteIn.Children.IndexOf(itemToInsertAfter) + 1;
 
             this.CheckDepthInvariants(targetToPasteIn, entityToInsert);
 
-            this.GeneratePasteEvents(pasteAfterCommand.EntityId, pasteAfterCommand.ResponsibleId, 
-                pasteAfterCommand.SourceDocument, entityToInsert, targetToPasteIn, targetIndex);
+            this.GeneratePasteEvents(pasteAfter.EntityId, pasteAfter.ResponsibleId, 
+                pasteAfter.SourceDocument, entityToInsert, targetToPasteIn, targetIndex);
         }
 
-        public void PasteInto(PasteIntoCommand pasteIntoCommand)
+        public void PasteInto(PasteInto pasteInto)
         {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(pasteIntoCommand.ResponsibleId);
-            this.ThrowDomainExceptionIfEntityAlreadyExists(pasteIntoCommand.EntityId);
-            ThrowDomainExceptionIfEntityDoesNotExists(pasteIntoCommand.SourceDocument, pasteIntoCommand.SourceItemId);
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(pasteInto.ResponsibleId);
+            this.ThrowDomainExceptionIfEntityAlreadyExists(pasteInto.EntityId);
+            ThrowDomainExceptionIfEntityDoesNotExists(pasteInto.SourceDocument, pasteInto.SourceItemId);
 
             this.innerDocument.ConnectChildrenWithParent();
-            pasteIntoCommand.SourceDocument.ConnectChildrenWithParent();
+            pasteInto.SourceDocument.ConnectChildrenWithParent();
 
-            this.ThrowDomainExceptionIfGroupDoesNotExist(pasteIntoCommand.ParentId);
+            this.ThrowDomainExceptionIfGroupDoesNotExist(pasteInto.ParentId);
 
-            var entityToInsert = pasteIntoCommand.SourceDocument.Find<IComposite>(pasteIntoCommand.SourceItemId);
-            var targetToPasteIn = this.GetGroupById(pasteIntoCommand.ParentId);
+            var entityToInsert = pasteInto.SourceDocument.Find<IComposite>(pasteInto.SourceItemId);
+            var targetToPasteIn = this.GetGroupById(pasteInto.ParentId);
             var targetIndex = targetToPasteIn.Children.Count();
 
             this.CheckDepthInvariants(targetToPasteIn, entityToInsert);
 
-            this.GeneratePasteEvents(pasteIntoCommand.EntityId, pasteIntoCommand.ResponsibleId, pasteIntoCommand.SourceDocument, entityToInsert, targetToPasteIn, targetIndex);
+            this.GeneratePasteEvents(pasteInto.EntityId, pasteInto.ResponsibleId, pasteInto.SourceDocument, entityToInsert, targetToPasteIn, targetIndex);
         }
 
         private void CheckDepthInvariants(IComposite targetToPasteIn, IComposite entityToInsert)
@@ -2369,6 +2372,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     SourceQuestionnaireId = sourceDocument.PublicKey,
                     TargetIndex = targetIndex,
                     Text = entityToInsertAsStaticText.Text,
+                    AttachmentName = entityToInsertAsStaticText.AttachmentName,
                     ResponsibleId = responsibleId
                 });
 

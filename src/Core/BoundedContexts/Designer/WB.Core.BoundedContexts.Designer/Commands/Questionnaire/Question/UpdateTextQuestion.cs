@@ -1,33 +1,39 @@
 using System;
+using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
-using System.Collections.Generic;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
-    public class UpdateDateTimeQuestionCommand : UpdateValidatableQuestionCommand
+    public class UpdateTextQuestion : UpdateValidatableQuestionCommand
     {
-        public UpdateDateTimeQuestionCommand(
+        public UpdateTextQuestion(
             Guid questionnaireId,
             Guid questionId,
             Guid responsibleId,
             CommonQuestionParameters commonQuestionParameters,
+            string mask,
+            string validationExpression,
+            string validationMessage,
             QuestionScope scope,
             bool isPreFilled,
             List<ValidationCondition> validationConditions)
-             : base(
+            : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
                 commonQuestionParameters: commonQuestionParameters,
                 validationConditions: validationConditions)
         {
             this.IsPreFilled = isPreFilled;
             this.Scope = scope;
+            this.Mask = mask;
         }
 
         public QuestionScope Scope { get; set; }
+
+        public string Mask { get; set; }
 
         public bool IsPreFilled { get; set; }
     }
