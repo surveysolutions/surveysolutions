@@ -86,10 +86,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             }
         }
 
-        public void UpdateAttachmentName(Guid attachmentId, string name)
+        public void UpdateAttachmentName(Guid questionnaireId, Guid attachmentId, string name)
         {
             var formattedAttachmentId = attachmentId.FormatGuid();
-            var attachmentMeta = this.attachmentMetaStorage.GetById(formattedAttachmentId);
+            var attachmentMeta = this.attachmentMetaStorage.GetById(formattedAttachmentId) ?? new AttachmentMeta
+            {
+                AttachmentId = formattedAttachmentId,
+                QuestionnaireId = questionnaireId.FormatGuid()
+            };
             attachmentMeta.Name = name;
             this.attachmentMetaStorage.Store(attachmentMeta, formattedAttachmentId);
         }
@@ -240,9 +244,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
    
 
     [PlainStorage]
-    public class QuestionnaireAttachmentMap : ClassMapping<AttachmentMeta>
+    public class QuestionnaireAttachmentMetaMap : ClassMapping<AttachmentMeta>
     {
-        public QuestionnaireAttachmentMap()
+        public QuestionnaireAttachmentMetaMap()
         {
             Id(x => x.AttachmentId, idMap =>
             {
@@ -250,6 +254,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                 idMap.Column("Id");
             });
 
+            Property(x => x.Name);
             Property(x => x.FileName);
             Property(x => x.LastUpdateDate);
             Property(x => x.QuestionnaireId);
@@ -260,7 +265,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             Property(x => x.AttachmentContentId);
         }
     }
-
 
     [PlainStorage]
     public class QuestionnaireAttachmentContentMap : ClassMapping<AttachmentContent>
