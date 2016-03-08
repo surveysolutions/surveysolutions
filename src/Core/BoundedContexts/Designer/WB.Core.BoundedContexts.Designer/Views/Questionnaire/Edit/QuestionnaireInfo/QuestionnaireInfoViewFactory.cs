@@ -112,7 +112,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 .OrderBy(x => x.Name)
                 .ToList();
 
-            var dbAttachments = this.attachmentService.GetAttachmentsForQuestionnaire(questionnaireId).ToList();
+            var dbAttachments = this.attachmentService.GetAttachmentsForQuestionnaire(questionnaireDocument.PublicKey).ToList();
 
             questionnaireInfoView.Attachments = (from qAttachment in questionnaireDocument.Attachments
                 join dbAttachment in dbAttachments on qAttachment.Key.FormatGuid() equals dbAttachment.ItemId into groupJoin

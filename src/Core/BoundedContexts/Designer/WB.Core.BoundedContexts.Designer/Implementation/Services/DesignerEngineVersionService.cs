@@ -38,8 +38,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         /// <summary>Multiple validation, linked on roster title question, hide questions by condition</summary>
         private readonly Version version_12 = new Version(12, 0, 0);
 
-        /// <summary>Attachments: Images in static texts.</summary>
-        /// <summary>Filtered linked questions</summary>
+        /// <summary>
+        /// Attachments: Images in static texts.
+        /// Filtered linked questions
+        /// </summary>
         private readonly Version version_13 = new Version(13, 0, 0);
 
 
