@@ -135,7 +135,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public LinkedQuestionOptionsChanges ProcessLinkedQuestionFilters()
         {
-            return new LinkedQuestionOptionsChanges(new List<LinkedQuestionOption>(),new List<LinkedQuestionOption>() );
+            return new LinkedQuestionOptionsChanges(new Dictionary<Guid, RosterVector[]>());
         }
 
         IInterviewExpressionStateV6 IInterviewExpressionStateV6.Clone()
