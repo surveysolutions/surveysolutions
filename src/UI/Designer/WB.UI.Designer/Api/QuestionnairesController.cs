@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -30,13 +31,15 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireListViewFactory viewFactory;
+        private readonly IAttachmentService attachmentService;
 
         public QuestionnairesController(IMembershipUserService userHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
-            IQuestionnaireListViewFactory viewFactory)
+            IQuestionnaireListViewFactory viewFactory, 
+            IAttachmentService attachmentService)
         {
             this.userHelper = userHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
@@ -44,12 +47,20 @@ namespace WB.UI.Designer.Api
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.viewFactory = viewFactory;
+            this.attachmentService = attachmentService;
         }
 
         [Route("~/api/v15/login")]
         [HttpGet]
         public void Login()
         {
+        }
+
+        [Route("~/api/v15/attachments/{id:Guid}")]
+        [HttpGet]
+        public List<string> Attachments(Guid id)
+        {
+            return attachmentService.GetAttachmentsForQuestionnaire(id).Select(x => x.ItemId).ToList();
         }
 
         [Route("{id:Guid}")]
