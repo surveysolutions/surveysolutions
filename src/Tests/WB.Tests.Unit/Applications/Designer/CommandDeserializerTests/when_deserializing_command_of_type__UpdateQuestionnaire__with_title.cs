@@ -29,13 +29,13 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
             result = deserializer.Deserialize(commandType, command);
 
         It should_return_NewUpdateGroupCommand = () =>
-            result.ShouldBeOfExactType<UpdateQuestionnaireCommand>();
+            result.ShouldBeOfExactType<UpdateQuestionnaire>();
 
         It should_return_same_title_in_NewUpdateGroupCommand = () =>
-            ((UpdateQuestionnaireCommand)result).Title.ShouldEqual(sanitizedTitle);
+            ((UpdateQuestionnaire)result).Title.ShouldEqual(sanitizedTitle);
 
         It should_return_same_questionnaire_id_in_NewUpdateGroupCommand = () =>
-            ((UpdateQuestionnaireCommand)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
+            ((UpdateQuestionnaire)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
 
         private static ICommand result;
         private static CommandDeserializer deserializer;

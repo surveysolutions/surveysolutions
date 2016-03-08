@@ -4,9 +4,9 @@ using Ncqrs.Commanding;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 {
-    public class ImportQuestionnaireCommand : CommandBase
+    public class ImportQuestionnaire : CommandBase
     {
-        public ImportQuestionnaireCommand(Guid createdBy, IQuestionnaireDocument source)
+        public ImportQuestionnaire(Guid createdBy, IQuestionnaireDocument source)
             : base(source.PublicKey)
         {
             CreatedBy = createdBy;

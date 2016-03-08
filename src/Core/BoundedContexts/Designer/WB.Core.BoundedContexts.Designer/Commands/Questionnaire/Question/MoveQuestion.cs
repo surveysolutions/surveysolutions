@@ -4,9 +4,9 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
-    public class MoveQuestionCommand : QuestionCommand
+    public class MoveQuestion : QuestionCommand
     {
-        public MoveQuestionCommand(Guid questionnaireId, Guid questionId, Guid targetGroupId, int targetIndex, Guid responsibleId)
+        public MoveQuestion(Guid questionnaireId, Guid questionId, Guid targetGroupId, int targetIndex, Guid responsibleId)
             : base(questionnaireId, questionId, responsibleId)
         {
             this.TargetGroupId = targetGroupId;

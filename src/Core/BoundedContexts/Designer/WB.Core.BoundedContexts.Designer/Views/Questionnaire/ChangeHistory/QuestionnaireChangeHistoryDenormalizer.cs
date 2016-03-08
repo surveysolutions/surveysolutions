@@ -389,7 +389,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public void Handle(IPublishedEvent<StaticTextAdded> evnt)
         {
             var staticTextTitle = evnt.Payload.Text;
-            AddOrUpdateStaticTextState(evnt.EventSourceId, evnt.Payload.EntityId, staticTextTitle);
+            this.AddOrUpdateStaticTextState(evnt.EventSourceId, evnt.Payload.EntityId, staticTextTitle);
 
             AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
                 QuestionnaireActionType.Add, QuestionnaireItemType.StaticText, evnt.Payload.EntityId,
@@ -399,7 +399,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public void Handle(IPublishedEvent<StaticTextUpdated> evnt)
         {
             var staticTextTitle = evnt.Payload.Text;
-            AddOrUpdateStaticTextState(evnt.EventSourceId, evnt.Payload.EntityId, staticTextTitle);
+            this.AddOrUpdateStaticTextState(evnt.EventSourceId, evnt.Payload.EntityId, staticTextTitle);
 
             AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
                 QuestionnaireActionType.Update, QuestionnaireItemType.StaticText, evnt.Payload.EntityId,
@@ -409,7 +409,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public void Handle(IPublishedEvent<StaticTextCloned> evnt)
         {
             var staticTextTitle = evnt.Payload.Text;
-            AddOrUpdateStaticTextState(evnt.EventSourceId, evnt.Payload.EntityId, staticTextTitle);
+            this.AddOrUpdateStaticTextState(evnt.EventSourceId, evnt.Payload.EntityId, staticTextTitle);
 
             AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
                 QuestionnaireActionType.Clone, QuestionnaireItemType.StaticText, evnt.Payload.EntityId,
@@ -660,7 +660,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         private void AddOrUpdateStaticTextState(Guid questionnaireId, Guid itemId, string itemTitle)
         {
             AddOrUpdateQuestionnaireStateItem(questionnaireId, itemId, itemTitle,
-                (s, id, title) => s.StaticTextState[id] = title);
+                (s, id, title) => { s.StaticTextState[id] = title;});
         }
 
         private void AddOrUpdateQuestionnaireStateItem(Guid questionnaireId, Guid itemId, string itemTitle,

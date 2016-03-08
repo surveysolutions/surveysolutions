@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
                 }));
             eventContext = new EventContext();
 
-            command = new PasteIntoCommand(
+            command = new PasteInto(
                 questionnaireId: questionnaireId,
                 entityId: targetId,
                 sourceItemId: level1QuestionId,
@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.Clone
         private static string stataExportCaption = "varrr";
         private static QuestionnaireDocument doc;
 
-        private static PasteIntoCommand command;
+        private static PasteInto command;
     }
 }
 

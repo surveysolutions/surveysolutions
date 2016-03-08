@@ -16,10 +16,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
     {
         Establish context = () =>
         {
-            questionnaireEntityFactory = new Mock<IQuestionnaireEntityFactory>();
-
-            questionnaireEntityFactory.Setup(x => x.CreateStaticText(entityId, text))
-                .Returns(CreateStaticText(entityId: entityId, text: text));
+            questionnaireEntityFactory = Setup.QuestionnaireEntityFactoryWithStaticText(entityId, text, attachment);
 
             var questionnaireDocument = CreateQuestionnaireDocument(new[]
             {
@@ -47,10 +44,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
         };
 
         Because of = () =>
-            denormalizer.Handle(CreateStaticTextUpdatedEvent(entityId: entityId, text: text));
+            denormalizer.Handle(CreateStaticTextUpdatedEvent(entityId: entityId, text: text, attachmentName: attachment));
 
         It should_call_CreateStaticText_in_questionnaireEntityFactory_only_ones = () =>
-            questionnaireEntityFactory.Verify(x => x.CreateStaticText(entityId, text), Times.Once);
+            questionnaireEntityFactory.Verify(x => x.CreateStaticText(entityId, text, attachment), Times.Once);
 
         It should__static_text_be_in_questionnaire_document_view = () =>
             GetExpectedStaticText().ShouldNotBeNull();
@@ -67,6 +64,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
         It should_text_be_equal_specified_text = () =>
             GetExpectedStaticText().Text.ShouldEqual(text);
 
+        It should_AttachmentName_be_equal_specified_attachment = () =>
+            GetExpectedStaticText().AttachmentName.ShouldEqual(attachment);
+
         private static IStaticText GetExpectedStaticText()
         {
             return GetEntityById<IStaticText>(document: questionnaireView, entityId: entityId);
@@ -78,5 +78,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");
         private static Guid parentId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static string text = "some text";
+        private static string attachment = "bananas";
     }
 }

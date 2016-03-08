@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
         {
             questionnaireEntityFactory = new Mock<IQuestionnaireEntityFactory>();
 
-            questionnaireEntityFactory.Setup(x => x.CreateStaticText(targetEntityId, text))
+            questionnaireEntityFactory.Setup(x => x.CreateStaticText(targetEntityId, text, it.IsAny<string>()))
                 .Returns(CreateStaticText(entityId: targetEntityId, text: text));
 
 
@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                 sourceEntityId: sourceEntityId, parentId: parentId, targetIndex: targetIndex, text: text));
 
         It should_call_CreateStaticText_in_questionnaireEntityFactory_only_ones = () =>
-           questionnaireEntityFactory.Verify(x => x.CreateStaticText(targetEntityId, text), Times.Once);
+           questionnaireEntityFactory.Verify(x => x.CreateStaticText(targetEntityId, text, it.IsAny<string>()), Times.Once);
 
         It should__static_text_be_in_questionnaire_document_view = () =>
             GetExpectedStaticText().ShouldNotBeNull();

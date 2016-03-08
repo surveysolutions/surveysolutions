@@ -4,9 +4,9 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
-    public class AddDefaultTypeQuestionCommand : QuestionCommand
+    public class AddDefaultTypeQuestion : QuestionCommand
     {
-        public AddDefaultTypeQuestionCommand(
+        public AddDefaultTypeQuestion(
             Guid questionnaireId,
             Guid questionId,
             Guid parentGroupId,

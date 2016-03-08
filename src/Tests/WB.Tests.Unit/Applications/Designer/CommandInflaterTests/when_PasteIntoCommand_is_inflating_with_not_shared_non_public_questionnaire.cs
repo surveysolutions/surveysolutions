@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Applications.Designer.CommandPostProcessorTests
             var documentStorage = Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(storage
                     => storage.GetById(it.IsAny<string>()) == questionnaire);
 
-            command = new PasteIntoCommand(questoinnaireId, entityId, pasteAfterId, questoinnaireId, entityId, actionUserId);
+            command = new PasteInto(questoinnaireId, entityId, pasteAfterId, questoinnaireId, entityId, actionUserId);
 
             commandInflater = CreateCommandInflater(membershipUserService, documentStorage);
         };
@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.Applications.Designer.CommandPostProcessorTests
         private static Exception exception;
 
         private static CommandInflater commandInflater;
-        private static PasteIntoCommand command;
+        private static PasteInto command;
         private static Guid questoinnaireId = Guid.Parse("13333333333333333333333333333333");
 
         private static Guid entityId = Guid.Parse("23333333333333333333333333333333");

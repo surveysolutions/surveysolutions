@@ -5,5 +5,6 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
     public class StaticTextUpdated : QuestionnaireEntityEvent
     {  
         public string Text { get; set; }
+        public string AttachmentName { get; set; }
     }
 }

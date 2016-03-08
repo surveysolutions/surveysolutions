@@ -78,7 +78,7 @@ namespace WB.UI.Designer.Controllers
                         this.zipUtils.DecompressGZip<QuestionnaireDocumentWithLookUpTables>(CreateStreamCopy(uploadFile.InputStream));
                     if (document != null)
                     {
-                        this.commandService.Execute(new ImportQuestionnaireCommand(this.UserHelper.WebUser.UserId,
+                        this.commandService.Execute(new ImportQuestionnaire(this.UserHelper.WebUser.UserId,
                             document.QuestionnaireDocument));
                         foreach (var lookupTable in document.LookupTables)
                         {
@@ -94,7 +94,7 @@ namespace WB.UI.Designer.Controllers
                     var document = this.zipUtils.DecompressGZip<QuestionnaireDocument>(CreateStreamCopy(uploadFile.InputStream));
                     if (document != null)
                     {
-                        this.commandService.Execute(new ImportQuestionnaireCommand(this.UserHelper.WebUser.UserId, document));
+                        this.commandService.Execute(new ImportQuestionnaire(this.UserHelper.WebUser.UserId, document));
                         return this.RedirectToAction("Index", "Questionnaire");
                     }
                 }

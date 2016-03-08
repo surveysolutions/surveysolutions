@@ -140,7 +140,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             IPublishedEvent<StaticTextAdded> @event)
         {
             IStaticText staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: @event.Payload.EntityId,
-                text: @event.Payload.Text);
+                text: @event.Payload.Text, attachmentName: null);
             return this.UpdateStateWithAddedStaticText(state, @event.Payload.ParentId, staticText);
         }
 
@@ -148,7 +148,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             IPublishedEvent<StaticTextUpdated> @event)
         {
             IStaticText staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: @event.Payload.EntityId,
-                text: @event.Payload.Text);
+                text: @event.Payload.Text, attachmentName: @event.Payload.AttachmentName);
             return this.UpdateStateWithUpdatedStaticText(state, staticText);
         }
 
@@ -156,7 +156,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             IPublishedEvent<StaticTextCloned> @event)
         {
             IStaticText staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: @event.Payload.EntityId,
-                text: @event.Payload.Text);
+                text: @event.Payload.Text, attachmentName: @event.Payload.AttachmentName);
             return this.UpdateStateWithAddedStaticText(state, @event.Payload.ParentId, staticText);
         }
 
@@ -435,7 +435,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 {
                     Id = staticText.PublicKey,
                     ParentGroupId = staticText.GetParent().PublicKey,
-                    Text = staticText.Text
+                    Text = staticText.Text,
+                    AttachmentName = staticText.AttachmentName
                 }).ToList();
 
             var questionCollection = new QuestionsAndGroupsCollectionView
@@ -525,7 +526,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             {
                 Id = staticText.PublicKey,
                 ParentGroupId = parentId,
-                Text = staticText.Text
+                Text = staticText.Text,
+                AttachmentName = staticText.AttachmentName
             };
 
             currentState.StaticTexts.Add(staticTextDetailsView);
@@ -553,7 +555,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             {
                 Id = staticText.PublicKey,
                 ParentGroupId = oldstaticTextDetailsView.ParentGroupId,
-                Text = staticText.Text
+                Text = staticText.Text,
+                AttachmentName = staticText.AttachmentName
             };
             UpdateBreadcrumbs(currentState, staticTextDetailsView, staticTextDetailsView.ParentGroupId);
             currentState.StaticTexts.Add(staticTextDetailsView);

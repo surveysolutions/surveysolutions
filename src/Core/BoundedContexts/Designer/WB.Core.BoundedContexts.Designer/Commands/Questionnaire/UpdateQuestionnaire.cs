@@ -4,9 +4,9 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
 {
     [Serializable]
-    public class UpdateQuestionnaireCommand : QuestionnaireCommand
+    public class UpdateQuestionnaire : QuestionnaireCommand
     {
-        public UpdateQuestionnaireCommand(Guid questionnaireId, string title, bool isPublic, Guid responsibleId)
+        public UpdateQuestionnaire(Guid questionnaireId, string title, bool isPublic, Guid responsibleId)
             : base(questionnaireId, responsibleId)
         {
             this.Title = CommandUtils.SanitizeHtml(title);

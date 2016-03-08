@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Applications.Designer.CommandPostProcessorTests
 
             accountRepository.Setup(x => x.GetUserNameByEmail(receiverEmail)).Returns(receiverName);
 
-            command = new RemoveSharedPersonFromQuestionnaireCommand(questoinnaireId, actionUserId, receiverEmail, responsibleId);
+            command = new RemoveSharedPersonFromQuestionnaire(questoinnaireId, actionUserId, receiverEmail, responsibleId);
 
             var logger = new Mock<ILogger>();
 

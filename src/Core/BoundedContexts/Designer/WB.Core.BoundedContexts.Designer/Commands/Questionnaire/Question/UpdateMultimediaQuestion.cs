@@ -5,9 +5,9 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
-    public class UpdateMultimediaQuestionCommand: AbstractUpdateQuestionCommand
+    public class UpdateMultimediaQuestion: AbstractUpdateQuestionCommand
     {
-        public UpdateMultimediaQuestionCommand(Guid questionnaireId, 
+        public UpdateMultimediaQuestion(Guid questionnaireId, 
             Guid questionId, 
             Guid responsibleId,
             CommonQuestionParameters commonQuestionParameters,
