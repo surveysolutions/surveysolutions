@@ -146,23 +146,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             rosterCalculationData.RosterInstantiatesFromNestedLevels.ForEach(this.ApplyRosterData);
         }
 
-        public void ApplyLinkedOptionQuestionChanges(LinkedQuestionOptionsChanges linkedQuestionOptionsChanges)
+        public void ApplyLinkedOptionQuestionChanges(ChangedLinkedOptions[] linkedQuestionOptionsChanges)
         {
-            this.LinkedQuestionOptions = new ConcurrentDictionary<string, RosterVector[]>();
-            var linkedQuestionEnabledOptionsGroupedByQuestionKey = linkedQuestionOptionsChanges.OptionsDeclaredEnabled
-                .Select(o => new
-                {
-                    questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(o.LinkedQuestionId,
-                        o.RosterVector),
-                    rosterVector = o.RosterVector
-                }).GroupBy(x => x.questionKey);
+      //      this.LinkedQuestionOptions = new ConcurrentDictionary<string, RosterVector[]>();
 
-            foreach (var linkedQuestionEnabledOptionGroupedByQuestionKey in linkedQuestionEnabledOptionsGroupedByQuestionKey)
+            foreach (var linkedQuestionOptionsChange in linkedQuestionOptionsChanges)
             {
-                this.LinkedQuestionOptions.AddOrUpdate(linkedQuestionEnabledOptionGroupedByQuestionKey.Key,
-                    linkedQuestionEnabledOptionGroupedByQuestionKey.Select(o => o.rosterVector).ToArray(), (k, v) => v);
+                var questionKey =
+                    ConversionHelper.ConvertIdAndRosterVectorToString(linkedQuestionOptionsChange.QuestionId.Id,
+                        linkedQuestionOptionsChange.QuestionId.RosterVector);
+
+                var newLinkedQuestionOptions = linkedQuestionOptionsChange.Options.ToArray();
+
+                this.LinkedQuestionOptions.AddOrUpdate(questionKey, linkedQuestionOptionsChange.Options.ToArray(), (k, v) => newLinkedQuestionOptions);
             }
-            
         }
 
         public void ApplyEnablementChanges(EnablementChanges enablementChanges)

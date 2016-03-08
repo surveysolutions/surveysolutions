@@ -390,8 +390,6 @@
     <Compile Include="Bootstrap\MessengerPluginBootstrap.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_ends_with_underscore.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGenerationTests\when_expression_state_executes_linked_question_filters.cs" />
-    <Compile Include="BoundedContexts\Designer\CodeGenerationTests\when_expression_state_executes_linked_question_filters_for_the_second_time.cs" />
-    <Compile Include="BoundedContexts\Designer\CodeGenerationTests\when_expression_state_executes_linked_question_filters_for_the_second_time_and_option_get_enabled.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_filtered_linked_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_fixed_roster.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_gps_question.cs" />
