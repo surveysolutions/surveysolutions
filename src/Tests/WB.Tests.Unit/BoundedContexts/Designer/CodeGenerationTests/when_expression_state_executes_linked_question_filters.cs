@@ -44,17 +44,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
                 var filterResults = state.ProcessLinkedQuestionFilters();
                 return new InvokeResults()
                 {
-                    CountOfEnabledOptions = filterResults.OptionsDeclaredEnabled.Count,
-                    CountOfDisabledOptions = filterResults.OptionsDeclaredDisabled.Count
+                    CountOfOptions = filterResults.LinkedQuestionOptions.Count()
                 };
             });
         
-
-        It should_result_contain_1_disabled_option = () =>
-            results.CountOfDisabledOptions.ShouldEqual(1);
-
         It should_result_contain_2_enabled_option = () =>
-             results.CountOfEnabledOptions.ShouldEqual(2);
+             results.CountOfOptions.ShouldEqual(2);
 
         Cleanup stuff = () =>
         {
@@ -68,8 +63,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
         [Serializable]
         public class InvokeResults
         {
-            public int CountOfEnabledOptions { get; set; }
-            public int CountOfDisabledOptions { get; set; }
+            public int CountOfOptions { get; set; }
         }
     }
 }

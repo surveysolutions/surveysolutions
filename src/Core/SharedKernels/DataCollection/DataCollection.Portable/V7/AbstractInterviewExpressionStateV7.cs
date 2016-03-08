@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.V4;
 using WB.Core.SharedKernels.DataCollection.V5;
@@ -13,9 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection.V7
         public AbstractInterviewExpressionStateV7()
         {
         }
-
-        protected Dictionary<Identity, LinkedOptionConditionalState> LinkedQuestionOptionsEnablementStates =
-            new Dictionary<Identity, LinkedOptionConditionalState>();
+        
         #region methods using InterviewScopes should be overriden
         public new Dictionary<string, IExpressionExecutableV7> InterviewScopes = new Dictionary<string, IExpressionExecutableV7>();
 
@@ -71,11 +70,6 @@ namespace WB.Core.SharedKernels.DataCollection.V7
             foreach (var interviewScopeKvpValue in this.InterviewScopes.Values.OrderBy(x => x.GetLevel()))
             {
                 interviewScopeKvpValue.SaveAllCurrentStatesAsPrevious();
-            }
-            foreach (var linkedQuestionOptionsEnablementState in this.LinkedQuestionOptionsEnablementStates.Values)
-            {
-                linkedQuestionOptionsEnablementState.PreviousState = linkedQuestionOptionsEnablementState.State;
-                linkedQuestionOptionsEnablementState.State = State.Unknown;
             }
         }
 
@@ -193,70 +187,24 @@ namespace WB.Core.SharedKernels.DataCollection.V7
         public LinkedQuestionOptionsChanges ProcessLinkedQuestionFilters()
         {
             var result = new LinkedQuestionOptionsChanges();
+
+            var filterResults=new List<LinkedQuestionFilterResult>();
+
             foreach (var interviewScopeKvpValue in this.InterviewScopes.Values)
             {
-                var linkedQuestionFilterResults = interviewScopeKvpValue.ExecuteLinkedQuestionFilters();
-                var enabledLinkedQuestionOptions =
-                    linkedQuestionFilterResults.Where(o=>o.Enabled).Where(o => IsOptionInOtherState(o, State.Enabled))
-                        .Select(
-                            o =>
-                                new LinkedQuestionOption()
-                                {
-                                    LinkedQuestionId = o.LinkedQuestionId,
-                                    RosterVector = o.RosterKey.First().RosterVector
-                                })
-                        .ToArray();
-                var disabledLinkedQuestionOptions =
-                 linkedQuestionFilterResults.Where(o => !o.Enabled).Where(o=> IsOptionInOtherState(o, State.Disabled))
-                     .Select(
-                         o =>
-                             new LinkedQuestionOption()
-                             {
-                                 LinkedQuestionId = o.LinkedQuestionId,
-                                 RosterVector = o.RosterKey.First().RosterVector
-                             })
-                     .ToArray();
-                result.OptionsDeclaredEnabled.AddRange(enabledLinkedQuestionOptions);
-                result.OptionsDeclaredDisabled.AddRange(disabledLinkedQuestionOptions);
+                filterResults.AddRange(interviewScopeKvpValue.ExecuteLinkedQuestionFilters());
+            }
+            var linkedQuestionOptionsGroupedByQuestionId = filterResults.GroupBy(x => x.LinkedQuestionId);
+            foreach (var linkedQuestionOptions in linkedQuestionOptionsGroupedByQuestionId)
+            {
+                var linkedQuestionId = linkedQuestionOptions.Key;
+
+                var newOptionSet =
+                    linkedQuestionOptions.Where(o => o.Enabled).Select(o => o.RosterKey.First().RosterVector).ToArray();
+                
+                result.LinkedQuestionOptions.Add(linkedQuestionId, newOptionSet);
             }
             return result;
-        }
-
-        private bool IsOptionInOtherState(LinkedQuestionFilterResult linkedQuestionFilterResult, State state)
-        {
-            var identity = new Identity(linkedQuestionFilterResult.LinkedQuestionId, linkedQuestionFilterResult.RosterKey.First().RosterVector);
-            if (!this.LinkedQuestionOptionsEnablementStates.ContainsKey(identity))
-                return true;
-            if (this.LinkedQuestionOptionsEnablementStates[identity].PreviousState == state)
-                return false;
-            return true;
-        }
-
-        public void EnableLinkedQuestionOptions(Identity[] options)
-        {
-            foreach (var identity in options)
-            {
-                if (!this.LinkedQuestionOptionsEnablementStates.ContainsKey(identity))
-                {
-                    this.LinkedQuestionOptionsEnablementStates[identity] = new LinkedOptionConditionalState()
-                    {
-                        OptionIdentity = identity
-                    };
-                }
-                this.LinkedQuestionOptionsEnablementStates[identity].State = State.Enabled;
-            }
-        }
-
-        public void DisableLinkedQuestionOptions(Identity[] options)
-        {
-            foreach (var identity in options)
-            {
-                if (!this.LinkedQuestionOptionsEnablementStates.ContainsKey(identity))
-                {
-                    this.LinkedQuestionOptionsEnablementStates[identity] = new LinkedOptionConditionalState() { OptionIdentity = identity };
-                }
-                this.LinkedQuestionOptionsEnablementStates[identity].State = State.Disabled;
-            }
         }
 
         IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone()
