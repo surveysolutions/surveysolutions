@@ -8164,11 +8164,11 @@ textarea#edit-group-description {
 #designer-editor.container section#main .attachments-panel .attachments ul li .attachment-preview .attachment-preview-cover {
   height: 100px;
   width: 120px;
+  margin-right: 10px;
   overflow: hidden;
 }
 #designer-editor.container section#main .attachments-panel .attachments ul li .attachment-preview .attachment-preview-cover img {
   max-width: 100%;
-  max-height: 100%;
 }
 #designer-editor.container section#main .attachments-panel .attachments ul li .attachment-content {
   display: table-cell;
@@ -9148,6 +9148,9 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
 }
 #main .ace-github .ace_marker-layer .ace_bracket {
   margin-top: 0;
+}
+.attachment-preview-window .modal-body img {
+  max-width: 100%;
 }
 #verify-popover {
   display: none;

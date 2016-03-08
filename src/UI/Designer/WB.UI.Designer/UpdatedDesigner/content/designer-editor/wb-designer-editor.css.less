@@ -567,11 +567,11 @@
                             .attachment-preview-cover{
                                 height: @attachments-preview-height;
                                 width: @attachments-preview-width;
+                                margin-right: 10px;
                                 overflow: hidden;
 
                                 img{
                                     max-width:100%;
-                                    max-height:100%;
                                 }
                             }
                            
@@ -1627,4 +1627,10 @@ li.chapter-panel-item {
 
 #main .ace-github .ace_marker-layer .ace_bracket {
     margin-top: 0;
+}
+
+.attachment-preview-window{
+    .modal-body img{
+        max-width: 100%;
+    }
 }

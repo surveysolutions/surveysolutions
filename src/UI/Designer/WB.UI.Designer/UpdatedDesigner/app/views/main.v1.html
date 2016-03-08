@@ -215,7 +215,7 @@
                                     <div class="attachment">
                                         <div class="attachment-preview">
                                             <div class="attachment-preview-cover">
-                                                <img ngf-thumbnail="attachment.file || '{{downloadLookupFileBaseUrl + attachment.itemId}}'">
+                                                <img ng-if="attachment.hasUploadedFile || attachment.file!=null" ng-click="previewAttachment(attachment)" ngf-thumbnail="attachment.file || '{{downloadLookupFileBaseUrl + attachment.itemId}}'">
                                             </div>
                                         </div>
                                         <div class="attachment-content">
@@ -225,7 +225,7 @@
                                             <div class="drop-box">
                                                 Drop File here
                                             </div>
-                                            <p class="attachment-meta" ng-show="attachment.hasUploadedFile">{{attachment.width}}&nbsp;&times;&nbsp;{{attachment.height}}&nbsp;px, format:&nbsp;{{attachment.format}}, size:&nbsp;{{formatBytes(attachment.sizeInBytes)}}</p>
+                                            <p class="attachment-meta" ng-if="attachment.hasUploadedFile" ng-include="attachment.type + '-attachment-info-template.html'"></p>
                                         </div>
                                     </div>
                                     <div class="actions clearfix" ng-class="{dirty: attachmentForm.$dirty }">
@@ -263,6 +263,10 @@
 
     <div class="questionnaire-tree" ui-view></div>
 </section>
+
+<script type="text/ng-template" id="Image-attachment-info-template.html">
+    {{attachment.width}}&nbsp;&times;&nbsp;{{attachment.height}}&nbsp;px, format:&nbsp;{{attachment.format}}, size:&nbsp;{{formatBytes(attachment.sizeInBytes)}}
+</script>
 
 <div id="verification-modal" ng-show="verificationStatus.visible" ng-class="verificationStatus.typeOfMessageToBeShown">
     <div class="modal-content">

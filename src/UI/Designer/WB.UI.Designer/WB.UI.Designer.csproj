@@ -470,6 +470,7 @@
     <Content Include="UpdatedDesigner\app\scripts\controllers\macros.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\leftMenu.js" />
     <Content Include="UpdatedDesigner\app\views\help-link.html" />
+    <Content Include="UpdatedDesigner\app\views\attachment-preview.html" />
     <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.min.css">
       <DependentUpon>bootstrap-custom.css</DependentUpon>
     </Content>

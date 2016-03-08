@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('AttachmentsCtrl',
-        function ($rootScope, $scope, $state, hotkeys, commandService, utilityService, confirmService, Upload) {
+        function ($rootScope, $scope, $state, hotkeys, commandService, utilityService, confirmService, Upload, $modal) {
             'use strict';
 
             $scope.downloadLookupFileBaseUrl = '../../attachment/';
@@ -22,6 +22,7 @@
                 attachment.initialAttachment = angular.copy(attachmentDto);
 
                 attachment.itemId = attachmentDto.itemId;
+                attachment.type = attachmentDto.type;
                 attachment.name = attachmentDto.name;
                 attachment.fileName = attachmentDto.fileName;
 
@@ -125,6 +126,32 @@
                     }
                 });
             };
+
+            $scope.previewAttachment = function (attachment) {
+                var baseURL = $scope.downloadLookupFileBaseUrl;
+                var modalInstance = $modal.open({
+                    templateUrl: 'views/attachment-preview.html',
+                    controller: function ($scope, attachment) {
+                        $scope.attachment = attachment;
+
+                        $scope.cancel = function () {
+                            modalInstance.dismiss();
+                        };
+
+                        $scope.attachmentUrl = function() {
+                            return baseURL + $scope.attachment.itemId;
+                        }
+                       
+                    },
+                    windowClass: 'attachment-preview-window',
+                    resolve:
+                    {
+                        attachment: function () {
+                            return attachment;
+                        }
+                    }
+                });
+            }
 
             $scope.foldback = function () {
                 $scope.isFolded = false;
