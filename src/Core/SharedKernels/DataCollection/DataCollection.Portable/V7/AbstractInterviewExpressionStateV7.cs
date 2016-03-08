@@ -14,6 +14,8 @@ namespace WB.Core.SharedKernels.DataCollection.V7
         {
         }
 
+        protected Dictionary<Identity, LinkedOptionConditionalState> LinkedQuestionOptionsEnablementStates =
+            new Dictionary<Identity, LinkedOptionConditionalState>();
         #region methods using InterviewScopes should be overriden
         public new Dictionary<string, IExpressionExecutableV7> InterviewScopes = new Dictionary<string, IExpressionExecutableV7>();
 
@@ -69,6 +71,11 @@ namespace WB.Core.SharedKernels.DataCollection.V7
             foreach (var interviewScopeKvpValue in this.InterviewScopes.Values.OrderBy(x => x.GetLevel()))
             {
                 interviewScopeKvpValue.SaveAllCurrentStatesAsPrevious();
+            }
+            foreach (var linkedQuestionOptionsEnablementState in this.LinkedQuestionOptionsEnablementStates.Values)
+            {
+                linkedQuestionOptionsEnablementState.PreviousState = linkedQuestionOptionsEnablementState.State;
+                linkedQuestionOptionsEnablementState.State = State.Unknown;
             }
         }
 
@@ -181,16 +188,6 @@ namespace WB.Core.SharedKernels.DataCollection.V7
             }
         }
 
-     /*   void IInterviewExpressionStateV7.ApplyFailedValidations(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
-        {
-            foreach (var failedValidationCondition in failedValidationConditions)
-            {
-                var targetLevel = this.GetRosterByIdAndVector(failedValidationCondition.Key.Id, failedValidationCondition.Key.RosterVector);
-                if (targetLevel == null) return;
-
-                (targetLevel as IExpressionExecutableV7).ApplyFailedValidations(failedValidationCondition.Key.Id, failedValidationCondition.Value);
-            }
-        }*/
         #endregion
 
         public LinkedQuestionOptionsChanges ProcessLinkedQuestionFilters()
@@ -200,7 +197,7 @@ namespace WB.Core.SharedKernels.DataCollection.V7
             {
                 var linkedQuestionFilterResults = interviewScopeKvpValue.ExecuteLinkedQuestionFilters();
                 var enabledLinkedQuestionOptions =
-                    linkedQuestionFilterResults.Where(o => o.Enabled)
+                    linkedQuestionFilterResults.Where(o=>o.Enabled).Where(o => IsOptionInOtherState(o, State.Enabled))
                         .Select(
                             o =>
                                 new LinkedQuestionOption()
@@ -210,7 +207,7 @@ namespace WB.Core.SharedKernels.DataCollection.V7
                                 })
                         .ToArray();
                 var disabledLinkedQuestionOptions =
-                 linkedQuestionFilterResults.Where(o => !o.Enabled)
+                 linkedQuestionFilterResults.Where(o => !o.Enabled).Where(o=> IsOptionInOtherState(o, State.Disabled))
                      .Select(
                          o =>
                              new LinkedQuestionOption()
@@ -223,6 +220,43 @@ namespace WB.Core.SharedKernels.DataCollection.V7
                 result.OptionsDeclaredDisabled.AddRange(disabledLinkedQuestionOptions);
             }
             return result;
+        }
+
+        private bool IsOptionInOtherState(LinkedQuestionFilterResult linkedQuestionFilterResult, State state)
+        {
+            var identity = new Identity(linkedQuestionFilterResult.LinkedQuestionId, linkedQuestionFilterResult.RosterKey.First().RosterVector);
+            if (!this.LinkedQuestionOptionsEnablementStates.ContainsKey(identity))
+                return true;
+            if (this.LinkedQuestionOptionsEnablementStates[identity].PreviousState == state)
+                return false;
+            return true;
+        }
+
+        public void EnableLinkedQuestionOptions(Identity[] options)
+        {
+            foreach (var identity in options)
+            {
+                if (!this.LinkedQuestionOptionsEnablementStates.ContainsKey(identity))
+                {
+                    this.LinkedQuestionOptionsEnablementStates[identity] = new LinkedOptionConditionalState()
+                    {
+                        OptionIdentity = identity
+                    };
+                }
+                this.LinkedQuestionOptionsEnablementStates[identity].State = State.Enabled;
+            }
+        }
+
+        public void DisableLinkedQuestionOptions(Identity[] options)
+        {
+            foreach (var identity in options)
+            {
+                if (!this.LinkedQuestionOptionsEnablementStates.ContainsKey(identity))
+                {
+                    this.LinkedQuestionOptionsEnablementStates[identity] = new LinkedOptionConditionalState() { OptionIdentity = identity };
+                }
+                this.LinkedQuestionOptionsEnablementStates[identity].State = State.Disabled;
+            }
         }
 
         IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone()

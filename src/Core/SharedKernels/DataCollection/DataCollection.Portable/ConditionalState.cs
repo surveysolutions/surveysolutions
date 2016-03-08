@@ -32,4 +32,11 @@ namespace WB.Core.SharedKernels.DataCollection
         public State State { get; set; }
         public State PreviousState { get; set; }
     }
+
+    public class LinkedOptionConditionalState
+    {
+        public Identity OptionIdentity { get; set; }
+        public State State { get; set; }
+        public State PreviousState { get; set; }
+    }
 }
