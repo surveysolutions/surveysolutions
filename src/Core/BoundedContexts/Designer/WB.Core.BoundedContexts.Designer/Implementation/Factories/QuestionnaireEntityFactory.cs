@@ -12,9 +12,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
 {
     internal class QuestionnaireEntityFactory : IQuestionnaireEntityFactory
     {
-        public IStaticText CreateStaticText(Guid entityId, string text)
+        public IStaticText CreateStaticText(Guid entityId, string text, string attachmentName)
         {
-            return new StaticText(publicKey: entityId, text: System.Web.HttpUtility.HtmlDecode(text));
+            return new StaticText(publicKey: entityId, text: System.Web.HttpUtility.HtmlDecode(text), attachmentName: attachmentName);
         }
 
         public IQuestion CreateQuestion(QuestionData data)

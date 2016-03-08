@@ -138,6 +138,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.Synchronization.SyncStorage;
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
 using designer::WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V6.Templates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable.CustomCollections;
 using WB.Core.SharedKernels.NonConficltingNamespace;
@@ -2202,9 +2203,10 @@ namespace WB.Tests.Unit
 
         public static StaticText StaticText(
             Guid? staticTextId = null,
-            string text = "Static Text X")
+            string text = "Static Text X",
+            string attachmentName = null)
         {
-            return new StaticText(staticTextId ?? Guid.NewGuid(), text);
+            return new StaticText(staticTextId ?? Guid.NewGuid(), text, attachmentName);
         }
 
         public static IPublishedEvent<StaticTextAdded> StaticTextAddedEvent(string entityId = null, string parentId = null, string text = null)
@@ -2686,6 +2688,11 @@ namespace WB.Tests.Unit
             internal static UpdateMacro UpdateMacro(Guid questionnaireId, Guid macroId, string name, string content, string description, Guid? userId)
             {
                 return new UpdateMacro(questionnaireId, macroId, name, content, description, userId ?? Guid.NewGuid());
+            }
+
+            public static UpdateStaticText UpdateStaticText(Guid questionnaireId, Guid entityId, string text, string attachmentName, Guid responsibleId)
+            {
+                return new UpdateStaticText(questionnaireId, entityId, text, attachmentName, responsibleId);
             }
         }
 

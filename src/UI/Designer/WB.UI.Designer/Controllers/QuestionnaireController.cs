@@ -86,7 +86,7 @@ namespace WB.UI.Designer.Controllers
                 {
                     var questionnaireId = Guid.NewGuid();
 
-                    this.commandService.Execute(new CloneQuestionnaireCommand(questionnaireId, model.Title, UserHelper.WebUser.UserId, model.IsPublic, sourceModel.Source));
+                    this.commandService.Execute(new CloneQuestionnaire(questionnaireId, model.Title, UserHelper.WebUser.UserId, model.IsPublic, sourceModel.Source));
 
                     return this.RedirectToAction("Open", "App", new { id = questionnaireId });
                 }
@@ -126,7 +126,7 @@ namespace WB.UI.Designer.Controllers
                 try
                 {
                     this.commandService.Execute(
-                        new CreateQuestionnaireCommand(
+                        new CreateQuestionnaire(
                             questionnaireId: questionnaireId,
                             text: model.Title,
                             createdBy: UserHelper.WebUser.UserId,
@@ -155,7 +155,7 @@ namespace WB.UI.Designer.Controllers
             }
             else
             {
-                this.commandService.Execute(new DeleteQuestionnaireCommand(model.PublicKey));
+                this.commandService.Execute(new DeleteQuestionnaire(model.PublicKey));
                 this.Success(string.Format("Questionnaire \"{0}\" successfully deleted", model.Title));
             }
 
@@ -287,7 +287,7 @@ namespace WB.UI.Designer.Controllers
         public JsonResult ApplyOptions()
         {
             var commandResult = this.ExecuteCommand(
-                new UpdateFilteredComboboxOptionsCommand(
+                new UpdateFilteredComboboxOptions(
                         Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
                         this.questionWithOptionsViewModel.QuestionId,
                         this.UserHelper.WebUser.UserId,
@@ -299,7 +299,7 @@ namespace WB.UI.Designer.Controllers
         public JsonResult ApplyCascadingOptions()
         {
             var commandResult = this.ExecuteCommand(
-                new UpdateCascadingComboboxOptionsCommand(
+                new UpdateCascadingComboboxOptions(
                         Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
                         this.questionWithOptionsViewModel.QuestionId,
                         this.UserHelper.WebUser.UserId,

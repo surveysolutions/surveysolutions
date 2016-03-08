@@ -17,11 +17,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
         {
             InitializePreviousState();
 
-            questionnaireEntityFactoryMock = new Mock<IQuestionnaireEntityFactory>();
-            questionnaireEntityFactoryMock
-                .Setup(x => x.CreateStaticText(Moq.It.IsAny<Guid>(), Moq.It.IsAny<string>()))
-                .Returns((Guid entityId, string text) => new StaticText(entityId, text));
-
+            questionnaireEntityFactoryMock = Setup.QuestionnaireEntityFactoryWithStaticText();
+            
             evnt = CreateStaticTextClonedEvent(entityId: newStaticTextId, parentId: g3Id, sourceEntityId: st1Id);
 
             denormalizer = CreateQuestionnaireInfoDenormalizer(questionnaireEntityFactory: questionnaireEntityFactoryMock.Object);

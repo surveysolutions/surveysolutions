@@ -5,9 +5,9 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
-    public class UpdateCascadingComboboxOptionsCommand : QuestionCommand
+    public class UpdateCascadingComboboxOptions : QuestionCommand
     {
-        public UpdateCascadingComboboxOptionsCommand(
+        public UpdateCascadingComboboxOptions(
             Guid questionnaireId,
             Guid questionId,
             Guid responsibleId,

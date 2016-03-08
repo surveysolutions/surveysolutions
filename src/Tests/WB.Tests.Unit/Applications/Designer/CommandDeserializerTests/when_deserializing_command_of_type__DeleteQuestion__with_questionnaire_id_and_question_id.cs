@@ -28,13 +28,13 @@ namespace WB.Tests.Unit.Applications.Designer.CommandDeserializerTests
             result = deserializer.Deserialize(type, command);
 
         It should_return_NewDeleteQuestionCommand = () =>
-            result.ShouldBeOfExactType<DeleteQuestionCommand>();
+            result.ShouldBeOfExactType<DeleteQuestion>();
 
         It should_return_same_questionnaire_id_in_NewDeleteQuestionCommand = () =>
-            ((DeleteQuestionCommand)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
+            ((DeleteQuestion)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
 
         It should_return_same_question_id_in_NewDeleteQuestionCommand = () =>
-            ((DeleteQuestionCommand)result).QuestionId.ShouldEqual(Guid.Parse(questionId));
+            ((DeleteQuestion)result).QuestionId.ShouldEqual(Guid.Parse(questionId));
 
         private static ICommand result;
         private static CommandDeserializer deserializer;

@@ -191,12 +191,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
             });
         }
 
-        protected static IPublishedEvent<StaticTextUpdated> CreateStaticTextUpdatedEvent(Guid entityId, string text = null)
+        protected static IPublishedEvent<StaticTextUpdated> CreateStaticTextUpdatedEvent(Guid entityId, string text = null, string attachmentName = null)
         {
-            return ToPublishedEvent(new StaticTextUpdated()
+            return ToPublishedEvent(new StaticTextUpdated
             {
                 EntityId = entityId,
-                Text = text
+                Text = text,
+                AttachmentName = attachmentName
             });
         }
 
@@ -210,14 +211,15 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
         }
 
         protected static IPublishedEvent<StaticTextCloned> CreateStaticTextClonedEvent(Guid entityId, Guid parentId,
-            Guid? sourceEntityId = null, string text = null)
+            Guid? sourceEntityId = null, string text = null, string attachmentName = null)
         {
             return ToPublishedEvent(new StaticTextCloned
             {
                 EntityId = entityId,
                 SourceEntityId = sourceEntityId ?? Guid.NewGuid(),
                 ParentId = parentId,
-                Text = text
+                Text = text,
+                AttachmentName = attachmentName
             });
         }
 

@@ -349,12 +349,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             });
         }
 
-        protected static IPublishedEvent<StaticTextUpdated> CreateStaticTextUpdatedEvent(Guid entityId, string text = null)
+        protected static IPublishedEvent<StaticTextUpdated> CreateStaticTextUpdatedEvent(Guid entityId, string text = null, string attachmentName = null)
         {
             return ToPublishedEvent(new StaticTextUpdated()
             {
                 EntityId = entityId,
-                Text = text
+                Text = text,
+                AttachmentName = attachmentName
             });
         }
 

@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
 
@@ -17,10 +18,17 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateStaticTextHandlerTests
             questionnaire.Apply(new StaticTextAdded() { EntityId = entityId, ParentId = chapterId });
 
             eventContext = new EventContext();
+
+            command = Create.Command.UpdateStaticText(
+                questionnaire.EventSourceId,
+                entityId: entityId,
+                text: text,
+                attachmentName: "",
+                responsibleId: responsibleId);
         };
 
         Because of = () =>            
-                questionnaire.UpdateStaticText(entityId: entityId, text: text, responsibleId: responsibleId);
+                questionnaire.UpdateStaticText(command);
 
         Cleanup stuff = () =>
         {
@@ -37,6 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateStaticTextHandlerTests
         It should_raise_StaticTextUpdated_event_with_Text_specified = () =>
             eventContext.GetSingleEvent<StaticTextUpdated>().Text.ShouldEqual(text);
 
+        private static UpdateStaticText command;
         private static EventContext eventContext;
         private static Questionnaire questionnaire;
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");

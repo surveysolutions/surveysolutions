@@ -291,14 +291,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 return;
             }
 
-            var staticText = questionnaireEntityFactory.CreateStaticText(entityId: entityId, text: text);
+            var staticText = questionnaireEntityFactory.CreateStaticText(entityId: entityId, text: text, attachmentName: null);
 
             questionnaireDocument.Add(staticText, parentId, null);
 
             this.UpdateQuestionnaire(evnt, questionnaireDocument);
         }
 
-        private void UpdateStaticText(IPublishableEvent evnt, Guid entityId, string text)
+        private void UpdateStaticText(IPublishableEvent evnt, Guid entityId, string text, string attachmentName)
         {
             QuestionnaireDocument questionnaireDocument = this.documentStorage.GetById(evnt.EventSourceId);
             if (questionnaireDocument == null)
@@ -312,14 +312,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 return;
             }
 
-            var newStaticText = this.questionnaireEntityFactory.CreateStaticText(entityId: entityId, text: text);
+            var newStaticText = this.questionnaireEntityFactory.CreateStaticText(entityId: entityId, text: text, attachmentName: attachmentName);
 
             questionnaireDocument.ReplaceEntity(oldStaticText, newStaticText);
 
             this.UpdateQuestionnaire(evnt, questionnaireDocument);
         }
 
-        private void CloneStaticText(IPublishableEvent evnt, Guid entityId, Guid parentId, int targetIndex, string text)
+        private void CloneStaticText(IPublishableEvent evnt, Guid entityId, Guid parentId, int targetIndex, string text, string attachmentName)
         {
             QuestionnaireDocument questionnaireDocument = this.documentStorage.GetById(evnt.EventSourceId);
             if (questionnaireDocument == null)
@@ -333,7 +333,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
                 return;
             }
 
-            var staticText = questionnaireEntityFactory.CreateStaticText(entityId: entityId, text: text);
+            var staticText = questionnaireEntityFactory.CreateStaticText(entityId: entityId, text: text, attachmentName: attachmentName);
 
             questionnaireDocument.Insert(index: targetIndex, c: staticText, parent: parentId);
 
@@ -493,13 +493,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
         public void Handle(IPublishedEvent<StaticTextUpdated> evnt)
         {
-            this.UpdateStaticText(evnt: evnt, entityId: evnt.Payload.EntityId, text: evnt.Payload.Text);
+            this.UpdateStaticText(evnt: evnt, entityId: evnt.Payload.EntityId, text: evnt.Payload.Text, attachmentName: evnt.Payload.AttachmentName);
         }
 
         public void Handle(IPublishedEvent<StaticTextCloned> evnt)
         {
             this.CloneStaticText(evnt: evnt, entityId: evnt.Payload.EntityId, parentId: evnt.Payload.ParentId,
-                targetIndex: evnt.Payload.TargetIndex, text: evnt.Payload.Text);
+                targetIndex: evnt.Payload.TargetIndex, text: evnt.Payload.Text, attachmentName: evnt.Payload.AttachmentName);
         }
 
         public void Handle(IPublishedEvent<StaticTextDeleted> evnt)

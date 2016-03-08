@@ -17,10 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDen
         {
             InitializePreviousState();
 
-            questionnaireEntityFactoryMock = new Mock<IQuestionnaireEntityFactory>();
-            questionnaireEntityFactoryMock
-                .Setup(x => x.CreateStaticText(Moq.It.IsAny<Guid>(), Moq.It.IsAny<string>()))
-                .Returns((Guid entityId, string text) => new StaticText(entityId, text));
+            questionnaireEntityFactoryMock = Setup.QuestionnaireEntityFactoryWithStaticText();
 
             evnt = CreateStaticTextDeletedEvent(entityId: st1Id);
 

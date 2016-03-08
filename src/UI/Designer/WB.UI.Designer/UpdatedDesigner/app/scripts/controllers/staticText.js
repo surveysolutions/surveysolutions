@@ -28,6 +28,11 @@
                 $scope.activeStaticText.breadcrumbs = result.breadcrumbs;
                 $scope.activeStaticText.itemId = $state.params.itemId;
                 $scope.activeStaticText.text = result.text;
+                $scope.activeStaticText.attachmentName = result.attachmentName;
+
+                if (!_.isNull($scope.staticTextForm) && !_.isUndefined($scope.staticTextForm)) {
+                    $scope.staticTextForm.$setPristine();
+                }
             };
 
             $scope.loadStaticText = function () {

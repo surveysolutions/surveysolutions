@@ -34,14 +34,14 @@ namespace WB.UI.Designer.Code.Implementation
         {
             try
             {
-                var addSharedPersonCommand = command as AddSharedPersonToQuestionnaireCommand;
+                var addSharedPersonCommand = command as AddSharedPersonToQuestionnaire;
                 if (addSharedPersonCommand != null)
                 {
                     this.HandleNotifications(ShareChangeType.Share, addSharedPersonCommand.Email, addSharedPersonCommand.QuestionnaireId, addSharedPersonCommand.ShareType);
                     return;
                 }
 
-                var removeSharedPersonCommand = command as RemoveSharedPersonFromQuestionnaireCommand;
+                var removeSharedPersonCommand = command as RemoveSharedPersonFromQuestionnaire;
                 if (removeSharedPersonCommand != null)
                 {
                     this.HandleNotifications(ShareChangeType.StopShare, removeSharedPersonCommand.Email, removeSharedPersonCommand.QuestionnaireId, ShareType.Edit);
