@@ -592,7 +592,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
         public void Handle(IPublishedEvent<AttachmentUpdated> evnt)
         {
-            this.attachmentService.UpdateAttachmentName(evnt.Payload.AttachmentId, evnt.Payload.AttachmentName);
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
             document.Attachments[evnt.Payload.AttachmentId] = new Attachment
             {
