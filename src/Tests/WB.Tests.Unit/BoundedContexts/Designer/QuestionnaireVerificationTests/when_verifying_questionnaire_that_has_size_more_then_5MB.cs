@@ -24,22 +24,22 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () => 
-            errors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
         
-        It should_return_1_error = () =>
-            errors.Count().ShouldEqual(1);
+        It should_return_1_message = () =>
+            verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_error_with_code__WB0098 = () =>
-            errors.Single().Code.ShouldEqual("WB0098");
+        It should_return_message_with_code__WB0098 = () =>
+            verificationMessages.Single().Code.ShouldEqual("WB0098");
 
         It should_return_WB0098_error_with_appropriate_message = () =>
-            errors.Single().Message.ShouldNotBeEmpty();
+            verificationMessages.Single().Message.ShouldNotBeEmpty();
         
 
 
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;
-        static IEnumerable<QuestionnaireVerificationError> errors;
+        static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
     }
 }

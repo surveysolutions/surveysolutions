@@ -21,20 +21,20 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
             questionnaireDocument = CreateQuestionnaireDocument();
             var questionnaireView = CreateQuestionnaireView(questionnaireDocument);
 
-            verificationErrors =  new QuestionnaireVerificationError[]
+            verificationMessages =  new QuestionnaireVerificationMessage[]
             {
-                Create.VerificationError("error1", "message1", VerificationErrorLevel.General, Create.VerificationReference(Guid.NewGuid())),
-                Create.VerificationError("error2", "message2", VerificationErrorLevel.General, Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Group)),
+                Create.VerificationError("error1", "message1", Create.VerificationReference(Guid.NewGuid())),
+                Create.VerificationError("error2", "message2", Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Group)),
             };
 
-            verificationWarnings = new QuestionnaireVerificationError[]
+            verificationWarnings = new QuestionnaireVerificationMessage[]
             {
-                Create.VerificationError("code1", "message3", VerificationErrorLevel.Warning, Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Roster)),
-                Create.VerificationError("code2", "message4", VerificationErrorLevel.Warning, Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Group)),
-                Create.VerificationError("code3", "message5", VerificationErrorLevel.Warning, Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Question))
+                Create.VerificationWarning("code1", "message3", Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Roster)),
+                Create.VerificationWarning("code2", "message4", Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Group)),
+                Create.VerificationWarning("code3", "message5", Create.VerificationReference(Guid.NewGuid(), QuestionnaireVerificationReferenceType.Question))
             };
 
-            var allVerificationErrors = verificationErrors.Union(verificationWarnings);
+            var allVerificationErrors = verificationMessages.Union(verificationWarnings);
 
             mappedAndEnrichedVerificationErrors = new VerificationMessage[]
             {
@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
             errorsMapperMock = new Mock<IVerificationErrorsMapper>();
 
             errorsMapperMock
-                .Setup(x => x.EnrichVerificationErrors(verificationErrors, questionnaireDocument))
+                .Setup(x => x.EnrichVerificationErrors(verificationMessages, questionnaireDocument))
                 .Returns(mappedAndEnrichedVerificationErrors);
 
             errorsMapperMock
@@ -79,9 +79,9 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
             verifierMock.Verify(x => x.Verify(questionnaireDocument), Times.Once);
 
         It should_call_errors_mapper_once = () =>
-            errorsMapperMock.Verify(x => x.EnrichVerificationErrors(verificationErrors, questionnaireDocument), Times.Once);
+            errorsMapperMock.Verify(x => x.EnrichVerificationErrors(verificationMessages, questionnaireDocument), Times.Once);
 
-        It should_return_errors_created_by_mapper_as_action_result = () =>
+        It should_return_messages_created_by_mapper_as_action_result = () =>
             result.Errors.ShouldEqual(mappedAndEnrichedVerificationErrors);
 
         It should_return_warnings_created_by_mapper_as_action_result = () =>
@@ -90,8 +90,8 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
         private static QuestionnaireDocument questionnaireDocument; 
         private static Mock<IQuestionnaireVerifier> verifierMock ;
         private static Mock<IVerificationErrorsMapper> errorsMapperMock;
-        private static QuestionnaireVerificationError[] verificationErrors;
-        private static QuestionnaireVerificationError[] verificationWarnings;
+        private static QuestionnaireVerificationMessage[] verificationMessages;
+        private static QuestionnaireVerificationMessage[] verificationWarnings;
         private static QuestionnaireController controller;
         private static VerificationMessage[] mappedAndEnrichedVerificationErrors;
         private static VerificationMessage[] mappedAndEnrichedVerificationWarnings;

@@ -626,8 +626,10 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         {
             using (GlobalStopwatcher.Scope("Disable caches"))
             {
-                UpdateStatusMessage("Disabling cache in repository writers.");
+                this.logger.Info("Starting Disabling cache in repository writers.");
 
+                UpdateStatusMessage("Disabling cache in repository writers.");
+                
                 var writers = handlers.SelectMany(x => x.Writers.OfType<ICacheableRepositoryWriter>())
                     .Distinct()
                     .ToArray();
@@ -641,6 +643,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                     using (GlobalStopwatcher.Scope("Disable cache", storageEntityName))
                     {
+                        this.logger.Info($"Disabling cache for {storageEntityName}");
+
                         entitiesInProgress.TryAdd(storageEntityName, Unit.Value);
                         UpdateStatusMessage($"Disabling cache for {string.Join(", ", entitiesInProgress.Keys)}.");
 
@@ -715,7 +719,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 EventHandlerExceptionDelegate eventHandlerExceptionDelegate = (nonCriticalEventHandlerException) =>
                 {
                     string message =
-                        $"Failed to publish event {this.processedEventsCount + 1} of {this.totalEventsToRebuildCount} ({@event.EventIdentifier})";
+                        $"Failed to publish event {this.processedEventsCount + 1} of {this.totalEventsToRebuildCount} - {eventTypeName} ({@event.EventIdentifier.FormatGuid()})";
                     this.SaveErrorForStatusReport(
                         $"{nonCriticalEventHandlerException.EventHandlerType.Name}.{nonCriticalEventHandlerException.EventType.Name}: {message}",
                         nonCriticalEventHandlerException);
@@ -733,7 +737,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 catch (Exception exception)
                 {
                     string message =
-                        $"Failed to publish event {this.processedEventsCount + 1} of {this.totalEventsToRebuildCount} ({@event.EventIdentifier})";
+                        $"Failed to publish event {this.processedEventsCount + 1} of {this.totalEventsToRebuildCount} - {eventTypeName} ({@event.EventIdentifier.FormatGuid()})";
                     this.SaveErrorForStatusReport(message, exception);
                     this.logger.Error(message, exception);
 

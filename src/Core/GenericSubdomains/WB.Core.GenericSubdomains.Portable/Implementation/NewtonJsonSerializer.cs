@@ -60,9 +60,10 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
 
         public string Serialize(object item, TypeSerializationSettings typeSerializationSettings)
         {
-            return JsonConvert.SerializeObject(item, jsonSerializerSettingsFactory.GetJsonSerializerSettings(typeSerializationSettings));
+            var jsonSerializerSettings = this.jsonSerializerSettingsFactory.GetJsonSerializerSettings(typeSerializationSettings);
+            return JsonConvert.SerializeObject(item, jsonSerializerSettings);
         }
-        
+
         public byte[] SerializeToByteArray(object item, TypeSerializationSettings typeSerializationSettings, SerializationType serializationType = SerializationType.Json)
         {
             var serializer = this.GetSerializer(typeSerializationSettings);

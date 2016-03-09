@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Cirrious.MvvmCross.ViewModels;
+using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxCommand SignOutCommand
         {
-            get { return new MvxCommand(async () => await this.SignOut()); }
+            get { return new MvxCommand(async () => await this.SignOutAsync()); }
         }
 
         public IMvxCommand NavigateToLoginCommand
@@ -68,9 +68,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 this.interviewerSettings.GetDeviceTechnicalInformation());
         }
 
-        private async Task SignOut()
+        private async Task SignOutAsync()
         {
-            this.principal.SignOut();
+            await this.principal.SignOutAsync();
             await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
         }
     }

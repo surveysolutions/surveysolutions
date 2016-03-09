@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Android.Content;
-using Cirrious.CrossCore;
-using Cirrious.CrossCore.Converters;
-using Cirrious.CrossCore.IoC;
-using Cirrious.MvvmCross.ViewModels;
-using Cirrious.MvvmCross.Views;
+using MvvmCross.Core.ViewModels;
+using MvvmCross.Core.Views;
+using MvvmCross.Platform;
+using MvvmCross.Platform.Converters;
+using MvvmCross.Platform.IoC;
 using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Tester.Activities;
 using WB.UI.Tester.Converters;
-using WB.UI.Tester.Infrastructure.Internals.Settings;
 using WB.UI.Tester.Ninject;
 using Xamarin;
-
 
 namespace WB.UI.Tester
 {
@@ -36,8 +34,6 @@ namespace WB.UI.Tester
         {
             return NinjectIoCAdapterSetup.CreateIocProvider();
         }
-
-        protected override Type StartupActivityType => typeof(SplashActivity);
 
         protected override void InitializeViewLookup()
         {
@@ -80,10 +76,11 @@ namespace WB.UI.Tester
                 }
             };
 
-            string xamarinInsightsKey = TesterSettings.IsDebug
-                ? "f4aa9cb599d509b96cb2ac2d36ca9f66caafd85f"     // Tester Dev
-                : "42692ba29c8395f41cf92fc810d365a4ec0c98d7";    // Tester Release
-            Insights.Initialize(xamarinInsightsKey, applicationContext);
+#if DEBUG
+            Insights.Initialize(Insights.DebugModeKey, applicationContext);
+#else
+            Insights.Initialize("42692ba29c8395f41cf92fc810d365a4ec0c98d7", applicationContext);
+#endif
         }
     }
 }

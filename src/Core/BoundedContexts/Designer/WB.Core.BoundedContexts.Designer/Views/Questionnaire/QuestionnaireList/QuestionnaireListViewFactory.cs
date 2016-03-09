@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
@@ -12,6 +13,30 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         public QuestionnaireListViewFactory(IQueryableReadSideRepositoryReader<QuestionnaireListViewItem> questionnaireListViewItemStorage)
         {
             this.questionnaireListViewItemStorage = questionnaireListViewItemStorage;
+        }
+
+        public IReadOnlyCollection<QuestionnaireListViewItem> GetUserQuestionnaires(
+            Guid userId, bool isAdmin, int pageIndex = 1, int pageSize = 128)
+        {
+            return questionnaireListViewItemStorage.Query(queryable
+                => FilterByQuestionnaires(queryable, userId, isAdmin)
+                    .OrderBy(x => x.Title)
+                    .Skip((pageIndex - 1)*pageSize)
+                    .Take(pageSize)
+                    .ToReadOnlyCollection());
+        }
+
+        private static IQueryable<QuestionnaireListViewItem> FilterByQuestionnaires(
+            IQueryable<QuestionnaireListViewItem> queryable, Guid userId, bool isAdmin)
+        {
+            var notDeletedQuestionnaires = queryable.Where(x => x.IsDeleted == false);
+
+            return isAdmin
+                ? notDeletedQuestionnaires
+                : notDeletedQuestionnaires.Where(questionnaire =>
+                    questionnaire.CreatedBy == userId ||
+                    questionnaire.SharedPersons.Any(person => person == userId) ||
+                    questionnaire.IsPublic);
         }
 
         public QuestionnaireListView Load(QuestionnaireListInputModel input)

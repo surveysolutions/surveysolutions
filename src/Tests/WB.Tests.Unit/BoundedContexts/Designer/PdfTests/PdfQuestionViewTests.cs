@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.PdfTests
 {
@@ -31,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfTests
             group.AddChild(pdfQuestion);
             
             // Act
-            var transformedValidation = pdfQuestion.GetReadableValidationExpression();
+            var transformedValidation = pdfQuestion.GetReadableValidationExpression(pdfQuestion.ValidationConditions.First());
 
             // Assert
             Assert.That(transformedValidation, Is.EqualTo(expectedValidationExpression));
@@ -50,7 +52,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfTests
             group.AddChild(pdfQuestion);
 
             // Act
-            var transformedValidation = pdfQuestion.GetReadableValidationExpression();
+            var transformedValidation = pdfQuestion.GetReadableValidationExpression(pdfQuestion.ValidationConditions.First());
 
             // Assert
             Assert.That(transformedValidation, Is.Null);
@@ -73,7 +75,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfTests
             group.AddChild(pdfQuestion);
 
             // Act
-            var transformedValidation = pdfQuestion.GetReadableValidationExpression();
+            var transformedValidation = pdfQuestion.GetReadableValidationExpression(pdfQuestion.ValidationConditions.First());
 
             // Assert
             Assert.That(transformedValidation, Is.EqualTo(expectedValidationExpression));
@@ -187,7 +189,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.PdfTests
                 QuestionType = PdfQuestionType.Text,
                 Answers = new List<PdfAnswerView>(),
                 VariableName = stataCaption,
-                ValidationExpression = validationExpression,
+                ValidationConditions =  new List<ValidationCondition> {new ValidationCondition(validationExpression, String.Empty)},
                 ConditionExpression = conditionExpression
             };
 

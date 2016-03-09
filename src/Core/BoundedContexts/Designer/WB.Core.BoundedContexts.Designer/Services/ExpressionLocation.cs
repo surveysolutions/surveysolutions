@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Linq.Expressions;
-
-using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Designer.Services
 {
@@ -13,6 +10,8 @@ namespace WB.Core.BoundedContexts.Designer.Services
         public ExpressionLocationItemType ItemType { set; get; }
 
         public ExpressionLocationType ExpressionType { set; get; }
+
+        public int? ExpressionPosition { set; get; }
 
         public ExpressionLocation()
         {
@@ -48,13 +47,14 @@ namespace WB.Core.BoundedContexts.Designer.Services
             };
         }
 
-        public static ExpressionLocation QuestionValidation(Guid questionId)
+        public static ExpressionLocation QuestionValidation(Guid questionId, int? position)
         {
             return new ExpressionLocation
             {
                 ItemType = ExpressionLocationItemType.Question,
                 ExpressionType = ExpressionLocationType.Validation,
-                Id = questionId
+                Id = questionId,
+                ExpressionPosition = position
             };
         }
 
@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         public ExpressionLocation(string stringValue)
         {
             string[] expressionLocation = stringValue.Split(':');
-            if (expressionLocation.Length != 3)
+            if (expressionLocation.Length != 3 && expressionLocation.Length != 4)
                 throw new ArgumentException("stringValue");
 
             ItemType =
@@ -97,11 +97,18 @@ namespace WB.Core.BoundedContexts.Designer.Services
             ExpressionType =
                 (ExpressionLocationType) Enum.Parse(typeof (ExpressionLocationType), expressionLocation[1], true);
             Id = Guid.Parse(expressionLocation[2]);
+
+            if (expressionLocation.Length == 4)
+                ExpressionPosition = int.Parse(expressionLocation[3]);
         }
 
         public override string ToString()
         {
-            return String.Format("{0}:{1}:{2}", ItemType, ExpressionType, Id);
+            var result = String.Format("{0}:{1}:{2}", ItemType, ExpressionType, Id);
+            if(this.ExpressionPosition.HasValue)
+                result = String.Format("{0}:{1}", result, this.ExpressionPosition);
+
+            return result;
         }
 
         public string Key => this.ToString();

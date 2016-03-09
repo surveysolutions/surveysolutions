@@ -31,24 +31,24 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
-            resultErrors.Count().ShouldEqual(1);
+        It should_return_1_message = () =>
+            verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_error_with_code_WB0067 = () =>
-            resultErrors.First().Code.ShouldEqual("WB0067");
+        It should_return_message_with_code_WB0067 = () =>
+            verificationMessages.First().Code.ShouldEqual("WB0067");
 
-        It should_return_error_with_one_references = () =>
-            resultErrors.First().References.Count().ShouldEqual(1);
+        It should_return_message_with_one_references = () =>
+            verificationMessages.First().References.Count().ShouldEqual(1);
 
-        It should_return_error_with_one_references_with_Group_type = () =>
-            resultErrors.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
+        It should_return_message_with_one_references_with_Group_type = () =>
+            verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
 
-        It should_return_error_with_one_references_with_id_equals_rosterId = () =>
-            resultErrors.First().References.First().Id.ShouldEqual(rosterId);
+        It should_return_message_with_one_references_with_id_equals_rosterId = () =>
+            verificationMessages.First().References.First().Id.ShouldEqual(rosterId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

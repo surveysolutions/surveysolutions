@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using Android.App;
 using Android.Text;
 using Android.Widget;
-using Cirrious.CrossCore;
-using Cirrious.CrossCore.Droid.Platform;
+using MvvmCross.Platform;
+using MvvmCross.Platform.Droid.Platform;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Activities;
 

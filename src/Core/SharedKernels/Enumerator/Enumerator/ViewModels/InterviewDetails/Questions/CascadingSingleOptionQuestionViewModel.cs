@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.ViewModels;
+using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
@@ -266,7 +266,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             foreach (CascadingOptionModel model in this.Options.Where(x => x.ParentValue == this.answerOnParentQuestion.Value))
             {
-                var index = model.Title.IndexOf(textHint, StringComparison.CurrentCultureIgnoreCase);
+                var index = model.Title.IndexOf(textHint, StringComparison.OrdinalIgnoreCase);
                 if (index >= 0)
                 {
                     yield return this.CreateFormattedOptionModel(model, textHint);

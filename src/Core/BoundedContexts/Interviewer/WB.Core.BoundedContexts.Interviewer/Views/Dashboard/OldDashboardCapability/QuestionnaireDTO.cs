@@ -1,5 +1,5 @@
 using System;
-using Cirrious.MvvmCross.Plugins.Sqlite;
+using SQLite.Net.Attributes;
 
 namespace WB.UI.Interviewer.ViewModel.Dashboard
 {

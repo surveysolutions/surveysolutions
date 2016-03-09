@@ -12,6 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         public string Variable { get; set; }
         public string LinkedToQuestionId { get; set; }
+        public string LinkedToRosterId { get; set; }
         public QuestionType Type { get; set; }
 
         public bool HasCondition { get; set; }

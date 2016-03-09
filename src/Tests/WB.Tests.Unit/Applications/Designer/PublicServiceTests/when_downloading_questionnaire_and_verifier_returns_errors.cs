@@ -7,9 +7,6 @@ using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.SurveySolutions;
 using WB.UI.Designer.WebServices;
 using WB.UI.Designer.WebServices.Questionnaire;
 using It = Machine.Specifications.It;
@@ -29,7 +26,7 @@ namespace WB.Tests.Unit.Applications.Designer.PublicServiceTests
             var questionnaireViewFactory = CreateQuestionnaireViewFactory(questionnaireId);            
 
             var questionnaireVerifier = new Mock<IQuestionnaireVerifier>();
-            questionnaireVerifier.Setup(x => x.Verify(Moq.It.IsAny<QuestionnaireDocument>())).Returns(new List<QuestionnaireVerificationError>() { new QuestionnaireVerificationError("test", "t1", VerificationErrorLevel.General, new QuestionnaireVerificationReference[0]) });
+            questionnaireVerifier.Setup(x => x.Verify(Moq.It.IsAny<QuestionnaireDocument>())).Returns(new List<QuestionnaireVerificationMessage>() { Create.VerificationError("test", "t1", new QuestionnaireVerificationReference[0]) });
 
             service = CreatePublicService(questionnaireVerifier: questionnaireVerifier.Object,
                 questionnaireViewFactory: questionnaireViewFactory, isClientVersionSupported: true);

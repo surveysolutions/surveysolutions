@@ -12,11 +12,9 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
-using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
@@ -84,12 +82,12 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireApiControllerTests
             return new NewEditStaticTextView();
         }
 
-        internal static QuestionnaireVerificationError[] CreateQuestionnaireVerificationErrors(IEnumerable<IComposite> questionnaireItems)
+        internal static QuestionnaireVerificationMessage[] CreateQuestionnaireVerificationErrors(IEnumerable<IComposite> questionnaireItems)
         {
             return
                 questionnaireItems.Select(
                     questionnaireItem =>
-                        new QuestionnaireVerificationError("aaa", "aaaa", VerificationErrorLevel.General,
+                        Create.VerificationError("aaa", "aaaa",
                             new QuestionnaireVerificationReference[1]
                             {
                                 new QuestionnaireVerificationReference(QuestionnaireVerificationReferenceType.Question,

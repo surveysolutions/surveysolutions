@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cirrious.MvvmCross.ViewModels;
+using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
@@ -211,8 +211,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private IEnumerable<FilteredComboboxItemViewModel> GetSuggestionsList(string searchFor)
         {
-            
-
             foreach (var model in this.Options)
             {
                 if (model.Text.IsNullOrEmpty())
@@ -220,7 +218,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 if (searchFor != null)
                 {
-                    var startIndexOfSearchedText = model.Text.IndexOf(searchFor, StringComparison.CurrentCultureIgnoreCase);
+                    //Insert and IndexOf with culture specific search cannot be used together 
+                    //http://stackoverflow.com/questions/4923187/string-indexof-and-replace
+                    var startIndexOfSearchedText = model.Text.IndexOf(searchFor, StringComparison.OrdinalIgnoreCase);
                     if (startIndexOfSearchedText >= 0)
                     {
                         yield return new FilteredComboboxItemViewModel

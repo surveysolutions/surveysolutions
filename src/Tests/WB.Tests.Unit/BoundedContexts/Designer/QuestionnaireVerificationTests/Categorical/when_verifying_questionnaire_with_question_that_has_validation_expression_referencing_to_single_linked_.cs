@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.Categorical
@@ -17,40 +18,27 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
     {
         Establish context = () =>
         {
-            var linkedSourceQuestionId = Guid.Parse("33333333333333333333333333333333");
-            questionnaire = CreateQuestionnaireDocument(
-                new Group()
-                {
-                    IsRoster = true,
-                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
-                    VariableName = "a",
-                    RosterFixedTitles = new[] {"fixed title 1", "fixed title 2" },
-                    Children =
+            var variableOfLinkedQuestion = "linked";
+
+            questionnaire = Create.QuestionnaireDocument(id: Id.g1, children: Create.Group(groupId: Id.g2, children: new List<IComposite>
+            {
+                Create.Roster(rosterId: Id.g3, 
+                    rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
+                    variable: "a",
+                    fixedRosterTitles: new[] { Create.FixedRosterTitle(1, "fixed title 1"), Create.FixedRosterTitle(3, "fixed title 3") },
+                    children: new List<IComposite>
                     {
-                        new TextQuestion()
-                        {
-                            PublicKey = linkedSourceQuestionId,
-                            QuestionType = QuestionType.Text,
-                            StataExportCaption = "var"
-                        }
-                    }
-                },
-                new SingleQuestion()
-                {
-                    PublicKey = categoricalQuestionId,
-                    StataExportCaption = "var1",
-                    LinkedToQuestionId = linkedSourceQuestionId
-                }, 
-                new NumericQuestion
-                {
-                    PublicKey = questionWithValidationExpressionId,
-                    ValidationExpression = "some validation",
-                    ValidationMessage = "some message",
-                    StataExportCaption = "var2"
-                });
+                        Create.TextQuestion(questionId: LinkedSourceQuestionId, variable: "v")
+                    }),
+                Create.SingleQuestion(id: categoricalQuestionId, variable: variableOfLinkedQuestion, linkedToQuestionId: LinkedSourceQuestionId),
+                Create.NumericIntegerQuestion(
+                    id: questionWithValidationExpressionId, 
+                    variable: "v2",
+                    validationConditions: new List<ValidationCondition> { Create.ValidationCondition(validationWithLinkedQuestion, "some message") })
+            }));
 
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
-                => processor.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()) == new[] { categoricalQuestionId.ToString() });
+                => processor.GetIdentifiersUsedInExpression(validationWithLinkedQuestion) == new[] { variableOfLinkedQuestion });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor);
         };
@@ -58,32 +46,28 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
+        It should_return_1_message = () =>
             resultErrors.Count().ShouldEqual(1);
 
-        It should_return_error_with_code__WB0063__ = () =>
+        It should_return_message_with_code__WB0063__ = () =>
             resultErrors.Single().Code.ShouldEqual("WB0063");
 
-        It should_return_error_with_two_references = () =>
-            resultErrors.Single().References.Count().ShouldEqual(2);
+        It should_return_message_with_1_references = () =>
+            resultErrors.Single().References.Count().ShouldEqual(1);
 
-        It should_return_first_error_reference_with_type_Question = () =>
+        It should_return_message_reference_with_type_Question = () =>
             resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_first_error_reference_with_id_of_question_with_validation_expression = () =>
+        It should_return_message_reference_with_id_of_question_with_validation_expression = () =>
             resultErrors.Single().References.First().Id.ShouldEqual(questionWithValidationExpressionId);
 
-        It should_return_second_error_reference_with_type_Question = () =>
-            ShouldExtensionMethods.ShouldEqual(resultErrors.Single().References.Second().Type, QuestionnaireVerificationReferenceType.Question);
-
-        It should_return_second_error_reference_with_id_of_categorical_multi_answers_question = () =>
-            ShouldExtensionMethods.ShouldEqual(resultErrors.Single().References.Second().Id, categoricalQuestionId);
-
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
-
-        private static Guid questionWithValidationExpressionId = Guid.Parse("10000000000000000000000000000000");
-        private static Guid categoricalQuestionId = Guid.Parse("12222222222222222222222222222222");
+        private static readonly Guid LinkedSourceQuestionId = Id.g4;
+        private static readonly Guid categoricalQuestionId = Id.g5;
+        private static readonly Guid questionWithValidationExpressionId = Id.g6;
+        private static readonly string validationWithLinkedQuestion = "some validation";
+        
     }
 }

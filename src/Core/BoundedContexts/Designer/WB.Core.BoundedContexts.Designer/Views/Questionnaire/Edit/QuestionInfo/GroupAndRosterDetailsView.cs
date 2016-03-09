@@ -10,6 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         public string Title { get; set; }
 
         public string EnablementCondition { get; set; }
+        public bool HideIfDisabled { get; set; }
         public Guid? RosterSizeQuestionId { get; set; }
         public bool IsRoster { get; set; }
         public RosterSizeSourceType RosterSizeSourceType { get; set; }

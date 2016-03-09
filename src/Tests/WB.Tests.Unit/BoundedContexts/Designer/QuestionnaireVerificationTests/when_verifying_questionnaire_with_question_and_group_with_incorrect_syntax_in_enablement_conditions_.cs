@@ -34,30 +34,30 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
-        It should_return_2_errors = () =>
-            resultErrors.Count().ShouldEqual(2);
+        It should_return_2_messages = () =>
+            verificationMessages.Count().ShouldEqual(2);
 
         It should_return_each_error_with_code__WB0003__ = () =>
-            resultErrors.ShouldEachConformTo(error=> error.Code == "WB0003");
+            verificationMessages.ShouldEachConformTo(error=> error.Code == "WB0003");
 
         It should_return_each_error_with_single_reference = () =>
-            resultErrors.ShouldEachConformTo(error=> error.References.Count() == 1);
+            verificationMessages.ShouldEachConformTo(error=> error.References.Count() == 1);
 
         It should_return_first_error_referencing_with_type_of_question = () =>
-            resultErrors.ElementAt(0).References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.ElementAt(0).References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         It should_return_second_error_referencing_with_type_of_group = () =>
-            resultErrors.ElementAt(1).References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
+            verificationMessages.ElementAt(1).References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
 
         It should_return_first_error_referencing_with_specified_question_id = () =>
-            resultErrors.ElementAt(0).References.Single().Id.ShouldEqual(questionId);
+            verificationMessages.ElementAt(0).References.Single().Id.ShouldEqual(questionId);
 
         It should_return_second_error_referencing_with_specified_question_id = () =>
-            resultErrors.ElementAt(1).References.Single().Id.ShouldEqual(groupId);
+            verificationMessages.ElementAt(1).References.Single().Id.ShouldEqual(groupId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");

@@ -8,7 +8,7 @@
         //prefix to identify parent record
         public const string ParentId = "ParentId";
 
-        public const string ResponsibleColumnName = "responsible";
+        public const string ResponsibleColumnName = "_responsible";
 
         //system generated
 

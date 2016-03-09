@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
         {
             QuestionTemplateModel question = model.AllQuestions.Single(x => x.Id == Id.gA);
             question.VariableName.ShouldEqual("singleCombo");
-            question.Validation.ShouldEqual("singleCombo validation");
+            question.ValidationExpressions.FirstOrDefault().ValidationExpression.ShouldEqual("singleCombo validation");
             question.Condition.ShouldEqual("singleCombo condition");
             question.IsMultiOptionYesNoQuestion.ShouldEqual(false);
             question.AllMultioptionYesNoCodes.ShouldBeNull();

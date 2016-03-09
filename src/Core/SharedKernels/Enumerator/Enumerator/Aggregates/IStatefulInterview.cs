@@ -57,6 +57,8 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         bool IsValid(Identity identity);
 
+        IReadOnlyList<FailedValidationCondition> GetFailedValidationConditions(Identity questionId);
+
         bool IsEnabled(Identity entityIdentity);
 
         bool WasAnswered(Identity entityIdentity);
@@ -73,9 +75,13 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         IEnumerable<BaseInterviewAnswer> FindAnswersOfReferencedQuestionForLinkedQuestion(Guid referencedQuestionId, Identity linkedQuestion);
 
+        IEnumerable<InterviewRoster> FindReferencedRostersForLinkedQuestion(Guid rosterId, Identity linkedQuestion);
+
         InterviewRoster FindRosterByOrDeeperRosterLevel(Guid rosterId, RosterVector targetRosterVector);
 
         IEnumerable<string> GetParentRosterTitlesWithoutLast(Guid questionId, RosterVector rosterVector);
+
+        IEnumerable<string> GetParentRosterTitlesWithoutLastForRoster(Guid rosterId, RosterVector rosterVector);
 
         int CountInterviewerQuestionsInGroupRecursively(Identity groupIdentity);
 

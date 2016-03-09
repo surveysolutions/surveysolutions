@@ -56,13 +56,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         int GetMaxRosterRowCount();
 
-        bool IsCustomValidationDefined(Guid questionId);
-
         bool IsQuestion(Guid entityId);
 
         bool IsInterviewierQuestion(Guid questionId);
-
-        string GetCustomValidationExpression(Guid questionId);
 
         ReadOnlyCollection<Guid> GetPrefilledQuestions();
 
@@ -90,7 +86,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetFixedRosterGroups(Guid? parentRosterId = null);
 
-        Guid[] GetRosterSizeSourcesForQuestion(Guid questionId);
+        Guid[] GetRosterSizeSourcesForEntity(Guid entityId);
 
         int GetRosterLevelForQuestion(Guid questionId);
 
@@ -111,7 +107,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetAllUnderlyingChildRosters(Guid groupId);
 
         Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId);
-        
+
+        Guid GetRosterReferencedByLinkedQuestion(Guid linkedQuestionId);
+
+        bool IsQuestionLinkedToRoster(Guid questionId);
+
         bool IsQuestionInteger(Guid questionId);
 
         bool IsQuestionYesNo(Guid questionId);
@@ -158,5 +158,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         ReadOnlyCollection<Guid> GetChildEntityIds(Guid groupId);
 
         ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId);
+        bool IsPrefilled(Guid questionId);
+        bool ShouldBeHiddenIfDisabled(Guid entityId);
+
+        string GetValidationMessage(Guid questionId, int conditionIndex);
+
+        bool HasMoreThanOneValidationRule(Guid questionId);
     }
 }

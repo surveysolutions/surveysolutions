@@ -29,22 +29,22 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () => 
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
-        It should_return_1_errors = () => 
-            resultErrors.Count().ShouldEqual(1);
+        It should_return_1_message = () => 
+            verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_error_with_code__WB0021__ = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0021");
+        It should_return_message_with_code__WB0021__ = () =>
+            verificationMessages.Single().Code.ShouldEqual("WB0021");
 
-        It should_return_error_with_level_general = () =>
-            resultErrors.Single().ErrorLevel.ShouldEqual(VerificationErrorLevel.General);
+        It should_return_message_with_level_general = () =>
+            verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
 
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
 
         private static Guid multyOptionsQuestionId = Guid.Parse("10000000000000000000000000000000");
     }

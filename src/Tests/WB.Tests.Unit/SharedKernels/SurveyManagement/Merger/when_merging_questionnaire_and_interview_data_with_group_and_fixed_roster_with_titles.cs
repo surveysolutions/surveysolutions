@@ -19,17 +19,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
     {
         Establish context = () =>
         {
-            merger = CreateMerger();
-            var questionnaireDocument = CreateQuestionnaireDocumentWithGroupAndFixedRoster(groupId, groupTitle, fixedRosterId, fixedRosterTitle, rosterFixedTitles);
+            questionnaire = CreateQuestionnaireDocumentWithGroupAndFixedRoster(groupId, groupTitle, fixedRosterId, fixedRosterTitle, rosterFixedTitles);
             interview = CreateInterviewDataForQuestionnaireWithGroupAndFixedRoster(interviewId, groupId, groupTitle, fixedRosterId, fixedRosterTitle, rosterFixedTitles);
-            questionnaire = CreateQuestionnaireWithVersion(questionnaireDocument);
-            questionnaireReferenceInfo = CreateQuestionnaireReferenceInfo();
-            questionnaireRosters = CreateQuestionnaireRosterStructureWithOneFixedRoster(fixedRosterId);
+            
             user = Mock.Of<UserDocument>();
+            merger = CreateMerger(questionnaire);
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, questionnaireReferenceInfo, questionnaireRosters, user);
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight());
 
         It should_create_3_group_screens_plus_questionnaire_screen_ = () =>
             mergeResult.Groups.Count.ShouldEqual(3+1);
@@ -49,9 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static InterviewDataAndQuestionnaireMerger merger;
         private static InterviewDetailsView mergeResult;
         private static InterviewData interview;
-        private static QuestionnaireDocumentVersioned questionnaire;
-        private static ReferenceInfoForLinkedQuestions questionnaireReferenceInfo;
-        private static QuestionnaireRosterStructure questionnaireRosters;
+        private static QuestionnaireDocument questionnaire;
         private static UserDocument user;
         private static Guid groupId = Guid.Parse("11111111111111111111111111111111");
         private static Guid fixedRosterId = Guid.Parse("22222222222222222222222222222222");

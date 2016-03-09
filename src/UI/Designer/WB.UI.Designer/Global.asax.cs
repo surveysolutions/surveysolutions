@@ -13,6 +13,8 @@ using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Elmah;
 using NConfig;
 using Elmah;
+using System.Web.Hosting;
+using System.Reflection;
 
 namespace WB.UI.Designer
 {
@@ -25,8 +27,12 @@ namespace WB.UI.Designer
 
         const int TimedOutExceptionCode = -2147467259;
 
+        private ILogger logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<MvcApplication>();
+
         protected void Application_Start()
         {
+            AppDomain.CurrentDomain.UnhandledException += this.CurrentUnhandledException;
+
             AreaRegistration.RegisterAllAreas();
 
             GlobalConfiguration.Configure(WebApiConfig.Register);
@@ -42,6 +48,11 @@ namespace WB.UI.Designer
             //BundleTable.EnableOptimizations = true;
         }
 
+        private void CurrentUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            logger.Fatal("UnhandledException occurred.", (Exception)e.ExceptionObject);
+        }
+
         protected void Application_Error(object sender, EventArgs e)
         {
             var httpContext = ((MvcApplication)sender).Context;
@@ -49,7 +60,6 @@ namespace WB.UI.Designer
             var ex = Server.GetLastError();
             var httpEx = ex as HttpException;
 
-            var logger = ServiceLocator.Current.GetInstance<ILogger>();
             if (!(httpEx != null && httpEx.GetHttpCode() == 404))
             {
                 logger.Error("Unexpected error occurred", ex);
@@ -132,6 +142,37 @@ namespace WB.UI.Designer
         protected void Application_PostAuthorizeRequest()
         {
             HttpContext.Current.SetSessionStateBehavior(System.Web.SessionState.SessionStateBehavior.Required);
+        }
+
+        protected void Application_End()
+        {
+            this.logger.Info("Ending application.");
+            this.logger.Info("ShutdownReason: " + HostingEnvironment.ShutdownReason.ToString());
+
+            if (HostingEnvironment.ShutdownReason == ApplicationShutdownReason.HostingEnvironment)
+            {
+                var httpRuntimeType = typeof(HttpRuntime);
+                var httpRuntime = httpRuntimeType.InvokeMember(
+                    "_theRuntime",
+                    BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.GetField,
+                    null, null, null) as HttpRuntime;
+
+                var shutDownMessage = httpRuntimeType.InvokeMember(
+                    "_shutDownMessage",
+                    BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField,
+                    null, httpRuntime, null) as string;
+
+                string shutDownStack = httpRuntimeType.InvokeMember("_shutDownStack",
+                    BindingFlags.NonPublic
+                    | BindingFlags.Instance
+                    | BindingFlags.GetField,
+                    null,
+                    httpRuntime,
+                    null) as string;
+
+                this.logger.Info("ShutDownMessage: " + shutDownMessage);
+                this.logger.Info("ShutDownStack: " + shutDownStack);
+            }
         }
     }
 }

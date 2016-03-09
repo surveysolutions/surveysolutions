@@ -25,12 +25,12 @@ void QuestionsStatesInLevelConstructor(List<QuestionTemplateModel> questions)
 #>
 		EnablementStates.Add(<#=question.StateName#>.ItemId, <#=question.StateName#>);
 <#+
-		bool hasAnyValidation = !string.IsNullOrWhiteSpace(question.Validation);					   
-		if(hasAnyValidation)
+						   
+		if(question.HasAnyValidation())
 		{
 #>
 		ValidationExpressions.Add(new Identity(IdOf.<#= question.IdName#>, rosterVector), new Func<bool>[] {							 
-				() => this.IsAnswerEmpty(<#=question.VariableName#>) || <#=question.ValidationMethodName#>() , 
+				() => this.IsAnswerEmpty(<#=question.VariableName#>) || <#=question.ValidationExpressions.FirstOrDefault(x=> !string.IsNullOrWhiteSpace(x.ValidationExpression)).ValidationMethodName#>() 
 		}); 
 
 <#+ 

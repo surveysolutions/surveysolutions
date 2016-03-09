@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionDetailsFactoryTests
             questionView = (SingleOptionDetailsView)viewMapper.Map(question, parentGroupId);
 
         It should_set_LinkedToQuestionId_in_linkedToQuestionId = () =>
-            questionView.LinkedToQuestionId.ShouldEqual(linkedToQuestionId);
+            questionView.LinkedToEntityId.ShouldEqual(linkedToQuestionId);
 
         It should_set_Options_titles_in_specified_values__1__2__ = () =>
             questionView.Options.Select(x => x.Title).ShouldContainOnly("1", "2");
@@ -78,10 +78,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionDetailsFactoryTests
             questionView.Title.ShouldEqual(title);
 
         It should_set_ValidationExpressiont_in_validationExpression = () =>
-            questionView.ValidationExpression.ShouldEqual(validationExpression);
+            questionView.ValidationConditions.First().Expression.ShouldEqual(validationExpression);
 
         It should_set_ValidationMessaget_in_validationMessage = () =>
-            questionView.ValidationMessage.ShouldEqual(validationMessage);
+            questionView.ValidationConditions.First().Message.ShouldEqual(validationMessage);
 
         It should_set_IsFilteredCombobox_to_true = () =>
            questionView.IsFilteredCombobox.ShouldEqual(isFilteredCombobox);

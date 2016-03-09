@@ -2,6 +2,7 @@
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -24,8 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
                 plainQuestionnaireRepository: mockOfPlainQuestionnaireRepository.Object);
         };
 
-        Because of = async () =>
-            await interviewerQuestionnaireAccessor.StoreQuestionnaireAsync(questionnaireIdentity, questionnaireDocumentAsString, isCensusQuestionnaire);
+        Because of = () => interviewerQuestionnaireAccessor.StoreQuestionnaireAsync(questionnaireIdentity, questionnaireDocumentAsString, isCensusQuestionnaire).WaitAndUnwrapException();
 
         It should_store_questionnaire_document_view_to_plain_storage = () =>
             mockOfPlainQuestionnaireRepository.Verify(x => x.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, Moq.It.IsAny<QuestionnaireDocument>()), Times.Once);

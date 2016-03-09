@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using Cirrious.CrossCore.Core;
+using MvvmCross.Platform.Core;
 using Microsoft.Practices.ServiceLocation;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels

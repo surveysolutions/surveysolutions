@@ -22,9 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
     {
         Establish context = () =>
         {
-            merger = CreateMerger();
-
-            var questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
+            questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 new NumericQuestion()
                 {
                     PublicKey = rosterSizeQuestionId,
@@ -74,14 +72,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             AddInterviewLevel(interview, new ValueVector<Guid> { rosterSizeQuestionId, rosterSizeQuestionId }, new decimal[] { 0, 1 },
                 new Dictionary<Guid, object> { { questionInNestedRosterId, 2 } });
             
-            questionnaire = CreateQuestionnaireWithVersion(questionnaireDocument);
-            questionnaireReferenceInfo = CreateQuestionnaireReferenceInfo();
-            questionnaireRosters = CreateQuestionnaireRosterStructure(questionnaireDocument);
             user = Mock.Of<UserDocument>();
+
+            merger = CreateMerger(questionnaire);
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, questionnaireReferenceInfo, questionnaireRosters, user);
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight());
 
         It should_create_5_group_screens = () =>
             mergeResult.Groups.Count.ShouldEqual(5);
@@ -114,9 +111,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static InterviewDataAndQuestionnaireMerger merger;
         private static InterviewDetailsView mergeResult;
         private static InterviewData interview;
-        private static QuestionnaireDocumentVersioned questionnaire;
-        private static ReferenceInfoForLinkedQuestions questionnaireReferenceInfo;
-        private static QuestionnaireRosterStructure questionnaireRosters;
+        private static QuestionnaireDocument questionnaire;
         private static UserDocument user;
         private static Guid nestedRosterId = Guid.Parse("11111111111111111111111111111111");
         private static Guid questionInNestedRosterId = Guid.Parse("55555555555555555555555555555555");

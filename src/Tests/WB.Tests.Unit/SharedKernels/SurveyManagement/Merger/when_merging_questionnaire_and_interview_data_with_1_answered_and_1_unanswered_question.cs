@@ -21,9 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
     {
         Establish context = () =>
         {
-            merger = CreateMerger();
-            
-            var questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
+            questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 new Group(nestedGroupTitle)
                 {
                     PublicKey = nestedGroupId,
@@ -53,15 +51,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             var answeredQuestion = interview.Levels["#"].QuestionsSearchCache[answeredQuestionId];
 
             answeredQuestion.Answer = 5;
-
-            questionnaire = CreateQuestionnaireWithVersion(questionnaireDocument);
-            questionnaireReferenceInfo = CreateQuestionnaireReferenceInfo();
-            questionnaireRosters = CreateQuestionnaireRosterStructure(questionnaireDocument);
+            
             user = Mock.Of<UserDocument>();
+
+            merger = CreateMerger(questionnaire);
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, questionnaireReferenceInfo, questionnaireRosters, user);
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight());
 
         It should_answered_question_be_enabled = () =>
             GetAnsweredQuestion().IsEnabled.ShouldBeTrue();
@@ -93,9 +90,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static InterviewDataAndQuestionnaireMerger merger;
         private static InterviewDetailsView mergeResult;
         private static InterviewData interview;
-        private static QuestionnaireDocumentVersioned questionnaire;
-        private static ReferenceInfoForLinkedQuestions questionnaireReferenceInfo;
-        private static QuestionnaireRosterStructure questionnaireRosters;
+        private static QuestionnaireDocument questionnaire;
         private static UserDocument user;
         private static Guid nestedGroupId = Guid.Parse("11111111111111111111111111111111");
         private static Guid answeredQuestionId = Guid.Parse("55555555555555555555555555555555");

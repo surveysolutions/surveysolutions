@@ -1,66 +1,58 @@
 ﻿using System;
-using IHS.MvvmCross.Plugins.Keychain;
+using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using ISettings = Cheesebaron.MvxPlugins.Settings.Interfaces.ISettings;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Security
 {
     internal class TesterPrincipal : IPrincipal
     {
-        public const string ServiceParameterName = "authentication";
-        private const string UserNameParameterName = "authenticatedUser";
-
-        private readonly IKeychain securityService;
-        private readonly ISettings settingsService;
+        private readonly IAsyncPlainStorage<TesterUserIdentity> usersStorage;
+        private readonly IAsyncPlainStorage<QuestionnaireListItem> questionnairesStorage;
+        private readonly IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage;
 
         private TesterUserIdentity currentUserIdentity;
-        public bool IsAuthenticated { get; private set; }
-        public IUserIdentity CurrentUserIdentity { get { return this.currentUserIdentity; } }
 
-        public TesterPrincipal(IKeychain securityService, ISettings settingsService)
+        public bool IsAuthenticated => this.currentUserIdentity != null;
+        public IUserIdentity CurrentUserIdentity => this.currentUserIdentity;
+
+        public TesterPrincipal(IAsyncPlainStorage<TesterUserIdentity> usersStorage,
+            IAsyncPlainStorage<QuestionnaireListItem> questionnairesStorage,
+            IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage)
         {
-            this.securityService = securityService;
-            this.settingsService = settingsService;
+            this.usersStorage = usersStorage;
+            this.questionnairesStorage = questionnairesStorage;
+            this.dashboardLastUpdateStorage = dashboardLastUpdateStorage;
 
-            this.InitializeIdentity();
+            this.currentUserIdentity = usersStorage.FirstOrDefault();
         }
 
-        private void InitializeIdentity()
+        public async Task<bool> SignInAsync(string userName, string password, bool staySignedIn)
         {
-            var userName = this.settingsService.GetValue(UserNameParameterName, string.Empty);
-
-            this.IsAuthenticated = !string.IsNullOrEmpty(userName);
-            this.currentUserIdentity = new TesterUserIdentity()
+            this.currentUserIdentity = new TesterUserIdentity
             {
-                UserId = Guid.NewGuid(),
                 Name = userName,
-                Password = this.securityService.GetPassword(ServiceParameterName, userName)
+                Password = password,
+                UserId = Guid.NewGuid(),
+                Id = userName
             };
-        }
 
-        public bool SignIn(string usernName, string password, bool staySignedIn)
-        {
             if (staySignedIn)
             {
-                this.settingsService.AddOrUpdateValue(UserNameParameterName, usernName);
-                this.securityService.SetPassword(password, ServiceParameterName, usernName);
+                await this.usersStorage.StoreAsync(this.currentUserIdentity).ConfigureAwait(false);
             }
-
-            this.IsAuthenticated = true;
-            this.currentUserIdentity.Name = usernName;
-            this.currentUserIdentity.Password = password;
 
             return this.IsAuthenticated;
         }
 
-        public void SignOut()
+        public async Task SignOutAsync()
         {
-            this.settingsService.DeleteValue(UserNameParameterName);
-            this.securityService.DeleteAccount(ServiceParameterName, this.currentUserIdentity.Name);
+            await this.usersStorage.RemoveAsync(this.usersStorage.LoadAll()).ConfigureAwait(false);
+            await this.dashboardLastUpdateStorage.RemoveAsync(this.dashboardLastUpdateStorage.LoadAll()).ConfigureAwait(false);
+            await this.questionnairesStorage.RemoveAsync(this.questionnairesStorage.LoadAll()).ConfigureAwait(false);
 
-            this.IsAuthenticated = false;
-            this.currentUserIdentity.Name = string.Empty;
-            this.currentUserIdentity.Password = string.Empty;
+            this.currentUserIdentity = null;
         }
     }
 }

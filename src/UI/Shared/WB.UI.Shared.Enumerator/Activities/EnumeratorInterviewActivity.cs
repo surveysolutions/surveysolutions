@@ -4,8 +4,8 @@ using Android.Support.V4.Widget;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
-using Cirrious.CrossCore;
-using Cirrious.MvvmCross.Binding.Droid.BindingContext;
+using MvvmCross.Binding.Droid.BindingContext;
+using MvvmCross.Platform;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -63,11 +63,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.recyclerView.HasFixedSize = true;
 
             this.adapter = new InterviewEntityAdapter((IMvxAndroidBindingContext)this.BindingContext);
-
-            var oldSource = this.recyclerView.Adapter.ItemsSource;
-            this.recyclerView.Adapter.ItemsSource = null;
             this.recyclerView.Adapter = this.adapter;
-            this.recyclerView.Adapter.ItemsSource = oldSource;
         }
 
         protected override void OnStart()

@@ -8,16 +8,10 @@ namespace WB.UI.Designer
 {
     public class DesignerSettingsProvider : SettingsProvider
     {
-        protected override List<string> settingsToSkip
+        protected override List<string> settingsToSkip => new List<string>(base.settingsToSkip)
         {
-            get
-            {
-                return new List<string>(base.settingsToSkip)
-                       {
-                           "ReCaptchaPrivateKey"
-                       };
-            }
-        }
+            "ReCaptchaPrivateKey"
+        };
 
         public override IEnumerable<ApplicationSetting> GetSettings()
         {
@@ -26,7 +20,7 @@ namespace WB.UI.Designer
                 yield return applicationSetting;
             }
 
-            var dynamicCompilerSettings = (IDynamicCompilerSettingsGroup)WebConfigurationManager.GetSection("dynamicCompilerSettingsGroup");
+            var dynamicCompilerSettings = (ICompilerSettings)WebConfigurationManager.GetSection("dynamicCompilerSettingsGroup");
 
             //int esentCacheSize = ;
             //var hqSettings = (HeadquartersSettings)WebConfigurationManager.GetSection("dynamicCompilerSettingsGroup/settings");

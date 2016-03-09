@@ -27,6 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     return UIResources.ErrorMessage_Unauthorized;
 
                 case HttpStatusCode.ServiceUnavailable:
+                case HttpStatusCode.NotAcceptable:
                     var isMaintenance = ex.Message.Contains("maintenance");
 
                     if (!isMaintenance) this.logger.Warn("Server error", ex);

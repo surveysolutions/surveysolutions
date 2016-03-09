@@ -532,6 +532,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Roster which is the source of the link should exist..
+        /// </summary>
+        internal static string WB0053_LinkedQuestionReferencesNotExistingRoster {
+            get {
+                return ResourceManager.GetString("WB0053_LinkedQuestionReferencesNotExistingRoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Roster should have deeper or the same roster level as it&apos;s roster size question..
         /// </summary>
         internal static string WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster {
@@ -613,7 +622,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categorical linked question cannot be used in validation condition..
+        ///   Looks up a localized string similar to Categorical linked question cannot be used in validation condition #{0}..
         /// </summary>
         internal static string WB0063_CategoricalLinkedQuestionUsedInValidationExpression {
             get {
@@ -627,15 +636,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0064_CategoricalLinkedQuestionUsedInEnablementCondition {
             get {
                 return ResourceManager.GetString("WB0064_CategoricalLinkedQuestionUsedInEnablementCondition", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error message is required if question has validation condition..
-        /// </summary>
-        internal static string WB0065_QuestionHasValidationExpressionWithoutValidationMessage {
-            get {
-                return ResourceManager.GetString("WB0065_QuestionHasValidationExpressionWithoutValidationMessage", resourceCulture);
             }
         }
         
@@ -910,15 +910,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation condition has length more than 10,000 characters..
-        /// </summary>
-        internal static string WB0095_ValidationExpresssionHasLengthMoreThan10000Characters {
-            get {
-                return ResourceManager.GetString("WB0095_ValidationExpresssionHasLengthMoreThan10000Characters", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Error occurred during questionnaire compilation..
         /// </summary>
         internal static string WB0096_GeneralCompilationError {
@@ -979,6 +970,51 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0102_QuestionnaireEntitiesShareSameInternalId {
             get {
                 return ResourceManager.GetString("WB0102_QuestionnaireEntitiesShareSameInternalId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster which is the source of the link is a roster, not a subsection..
+        /// </summary>
+        internal static string WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster {
+            get {
+                return ResourceManager.GetString("WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation condition #{0} is too long. It should be no longer than 10000 characters..
+        /// </summary>
+        internal static string WB0104_ValidationConditionIsTooLong {
+            get {
+                return ResourceManager.GetString("WB0104_ValidationConditionIsTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation error message #{0} is too long. It should be no longer than 250 characters..
+        /// </summary>
+        internal static string WB0105_ValidationMessageIsTooLong {
+            get {
+                return ResourceManager.GetString("WB0105_ValidationMessageIsTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation condition #{0} is empty..
+        /// </summary>
+        internal static string WB0106_ValidationConditionIsEmpty {
+            get {
+                return ResourceManager.GetString("WB0106_ValidationConditionIsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation error message #{0} is empty..
+        /// </summary>
+        internal static string WB0107_ValidationMessageIsEmpty {
+            get {
+                return ResourceManager.GetString("WB0107_ValidationMessageIsEmpty", resourceCulture);
             }
         }
         

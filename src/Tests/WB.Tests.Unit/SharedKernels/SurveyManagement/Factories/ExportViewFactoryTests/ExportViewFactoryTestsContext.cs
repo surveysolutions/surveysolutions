@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         protected static ExportViewFactory CreateExportViewFactory(
             IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory = null)
         {
-            return new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory(), questionnaireRosterStructureFactory ?? new QuestionnaireRosterStructureFactory(), Mock.Of<IFileSystemAccessor>());
+            return new ExportViewFactory(questionnaireRosterStructureFactory ?? new QuestionnaireRosterStructureFactory(), Mock.Of<IFileSystemAccessor>());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)

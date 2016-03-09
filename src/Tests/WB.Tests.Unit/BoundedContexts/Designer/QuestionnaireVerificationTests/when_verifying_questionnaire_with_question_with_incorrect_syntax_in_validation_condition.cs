@@ -28,24 +28,24 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire).ToList();
 
-        It should_return_1_error = () =>
-            resultErrors.Count().ShouldEqual(1);
+        It should_return_1_message = () =>
+            verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_error_with_code__WB0002__ = () =>
-            resultErrors.First().Code.ShouldEqual("WB0002");
+        It should_return_message_with_code__WB0002__ = () =>
+            verificationMessages.First().Code.ShouldEqual("WB0002");
 
-        It should_return_error_with_single_reference = () =>
-            resultErrors.First().References.Count().ShouldEqual(1);
+        It should_return_message_with_single_reference = () =>
+            verificationMessages.First().References.Count().ShouldEqual(1);
 
-        It should_return_error_referencing_with_type_of_question = () =>
-            resultErrors.First().References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+        It should_return_message_referencing_with_type_of_question = () =>
+            verificationMessages.First().References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_error_referencing_with_specified_question_id = () =>
-            resultErrors.First().References.Single().Id.ShouldEqual(questionId);
+        It should_return_message_referencing_with_specified_question_id = () =>
+            verificationMessages.First().References.Single().Id.ShouldEqual(questionId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static List<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");

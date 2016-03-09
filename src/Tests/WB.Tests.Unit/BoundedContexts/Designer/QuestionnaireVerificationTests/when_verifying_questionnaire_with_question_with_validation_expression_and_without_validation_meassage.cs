@@ -11,9 +11,9 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    internal class when_verifying_questionnaire_with_question_with_validation_expression_and_without_validation_meassage : QuestionnaireVerifierTestsContext
+    internal class when_verifying_questionnaire_with_question_with_validation_expression_and_without_validation_message : QuestionnaireVerifierTestsContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             questionId = Guid.Parse("1111CCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
@@ -29,24 +29,24 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
-        It should_return_3_errors = () =>
-            resultErrors.Count().ShouldEqual(1);
+        It should_return_1_message = () =>
+            verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_errors_each_with_code__WB0002__ = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0065");
+        It should_return_messages_each_with_code__WB00107__ = () =>
+            verificationMessages.Single().Code.ShouldEqual("WB0107");
 
-        It should_return_errors_each_having_single_reference = () =>
-            resultErrors.Single().References.Count().ShouldEqual(1);
+        It should_return_messages_each_having_single_reference = () =>
+            verificationMessages.Single().References.Count().ShouldEqual(1);
 
-        It should_return_errors_each_referencing_question = () =>
-            resultErrors.Single().References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+        It should_return_messages_each_referencing_question = () =>
+            verificationMessages.Single().References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_error_referencing_first_incorrect_question = () =>
-            resultErrors.Single().References.Single().Id.ShouldEqual(questionId);
+        It should_return_message_referencing_first_incorrect_question = () =>
+            verificationMessages.Single().References.Single().Id.ShouldEqual(questionId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionId;

@@ -22,13 +22,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionChanged>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionCloned>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QuestionDeleted>
-        , IUpdateHandler<QuestionsAndGroupsCollectionView, NumericQuestionAdded>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, NumericQuestionChanged>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, NumericQuestionCloned>
-        , IUpdateHandler<QuestionsAndGroupsCollectionView, TextListQuestionAdded>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, TextListQuestionChanged>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, TextListQuestionCloned>
-        , IUpdateHandler<QuestionsAndGroupsCollectionView, QRBarcodeQuestionAdded>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QRBarcodeQuestionUpdated>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, QRBarcodeQuestionCloned>
         , IUpdateHandler<QuestionsAndGroupsCollectionView, MultimediaQuestionUpdated>
@@ -92,13 +89,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
-            IPublishedEvent<NumericQuestionAdded> @event)
-        {
-            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.NumericQuestionAddedToQuestionData(@event));
-            return this.UpdateStateWithAddedQuestion(state, @event.Payload.GroupPublicKey, question);
-        }
-
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
             IPublishedEvent<NumericQuestionChanged> @event)
         {
             IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.NumericQuestionChangedToQuestionData(@event));
@@ -113,13 +103,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
-            IPublishedEvent<TextListQuestionAdded> @event)
-        {
-            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.TextListQuestionAddedToQuestionData(@event));
-            return this.UpdateStateWithAddedQuestion(state, @event.Payload.GroupId, question);
-        }
-
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
             IPublishedEvent<TextListQuestionCloned> @event)
         {
             IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.TextListQuestionClonedToQuestionData(@event));
@@ -131,13 +114,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         {
             IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.TextListQuestionChangedToQuestionData(@event));
             return this.UpdateStateWithUpdatedQuestion(state, question);
-        }
-
-        public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
-            IPublishedEvent<QRBarcodeQuestionAdded> @event)
-        {
-            IQuestion question = this.questionnaireEntityFactory.CreateQuestion(EventConverter.QRBarcodeQuestionAddedToQuestionData(@event));
-            return this.UpdateStateWithAddedQuestion(state, @event.Payload.ParentGroupId, question);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
@@ -253,13 +229,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<NewGroupAdded> @event)
         {
             return UpdateStateWithAddedGroup(state, @event.Payload.PublicKey, @event.Payload.GroupText, @event.Payload.VariableName, @event.Payload.Description,
-                @event.Payload.ConditionExpression, @event.Payload.ParentGroupPublicKey ?? Guid.Empty);
+                @event.Payload.ConditionExpression, @event.Payload.HideIfDisabled, @event.Payload.ParentGroupPublicKey ?? Guid.Empty);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<GroupCloned> @event)
         {
             return UpdateStateWithAddedGroup(state, @event.Payload.PublicKey, @event.Payload.GroupText, @event.Payload.VariableName, @event.Payload.Description,
-                @event.Payload.ConditionExpression, @event.Payload.ParentGroupPublicKey ?? Guid.Empty);
+                @event.Payload.ConditionExpression, @event.Payload.HideIfDisabled, @event.Payload.ParentGroupPublicKey ?? Guid.Empty);
         }
 
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state, IPublishedEvent<GroupDeleted> @event)
@@ -349,6 +325,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
 
             group.Title = @event.Payload.GroupText;
             group.EnablementCondition = @event.Payload.ConditionExpression;
+            group.HideIfDisabled = @event.Payload.HideIfDisabled;
             group.VariableName = @event.Payload.VariableName;
 
             return state;
@@ -448,6 +425,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                     RosterTitleQuestionId = g.RosterTitleQuestionId,
                     ParentGroupId = g.GetParent().PublicKey == questionnaire.PublicKey ? Guid.Empty : g.GetParent().PublicKey,
                     EnablementCondition = g.ConditionExpression,
+                    HideIfDisabled = g.HideIfDisabled,
                     VariableName = g.VariableName
                 })
                 .ToList();
@@ -475,7 +453,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         }
 
         private static QuestionsAndGroupsCollectionView UpdateStateWithAddedGroup(QuestionsAndGroupsCollectionView currentState,
-            Guid groupId, string title,string variableName, string description, string enablementCondition, Guid parentGroupId)
+            Guid groupId, string title,string variableName, string description, string enablementCondition, bool hideIfDisabled, Guid parentGroupId)
         {
             if (currentState == null)
             {
@@ -489,6 +467,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 ParentGroupId = parentGroupId,
                 IsRoster = false,
                 EnablementCondition = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
                 ParentGroupsIds = new Guid[0],
                 RosterScopeIds = new Guid[0],
                 VariableName = variableName

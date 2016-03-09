@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.V5;
+using WB.Core.SharedKernels.DataCollection.V6;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection
 {
-    internal class InterviewExpressionStateStub : AbstractInterviewExpressionStateV5, IInterviewExpressionStateV5
+    internal class InterviewExpressionStateStub : AbstractInterviewExpressionStateV6, IInterviewExpressionStateV6
     {
         public override Dictionary<Guid, Guid[]> GetParentsMap()
         {

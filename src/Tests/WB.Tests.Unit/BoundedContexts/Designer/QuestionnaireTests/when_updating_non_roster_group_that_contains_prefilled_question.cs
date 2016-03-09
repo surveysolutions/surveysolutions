@@ -18,10 +18,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(Create.Event.NumericQuestionAdded(publicKey: rosterSizeQuestionId, isInteger:true, groupPublicKey: chapterId));
+            questionnaire.Apply(Create.Event.NumericQuestionAdded(
+                publicKey: rosterSizeQuestionId, isInteger:true, groupPublicKey: chapterId));
             
             questionnaire.Apply(new NewGroupAdded { PublicKey = rosterId });
-            questionnaire.Apply(Create.Event.NumericQuestionAdded(publicKey: prefilledQuestionId, isInteger: true, groupPublicKey: rosterId, featured:true));
+            questionnaire.Apply(Create.Event.NumericQuestionAdded(
+                publicKey: prefilledQuestionId, isInteger: true, groupPublicKey: rosterId, featured:true));
             
             eventContext = new EventContext();
         };
@@ -30,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             exception =
                 Catch.Exception(
                     () =>
-                        questionnaire.UpdateGroup(rosterId, responsibleId, "title",null, rosterSizeQuestionId, null, null, isRoster: true,
+                        questionnaire.UpdateGroup(rosterId, responsibleId, "title",null, rosterSizeQuestionId, null, null, hideIfDisabled: false, isRoster: true,
                             rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null));
 
         Cleanup stuff = () =>

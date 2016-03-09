@@ -43,10 +43,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormaliz
                     RosterTitleQuestionId = null
                 },
                 new GroupStoppedBeingARoster(Guid.NewGuid(), Guid.NewGuid()),
-                new TextListQuestionAdded(),
                 new TextListQuestionCloned(),
                 new TextListQuestionChanged(),
-                new QRBarcodeQuestionAdded(),
                 new QRBarcodeQuestionUpdated(),
                 new QRBarcodeQuestionCloned(),
                 new MultimediaQuestionUpdated(),
