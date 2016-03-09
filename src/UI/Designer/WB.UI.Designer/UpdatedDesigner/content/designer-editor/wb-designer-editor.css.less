@@ -536,14 +536,14 @@
             .attachments {
                 height: 100%;
 
-                ul {
+                div.attachment-list {
                     margin: 0;
                     padding: 0;
                     list-style: none;
                     padding-right: 30px;
                     padding-left: @attachments-panel-padding-left;
 
-                    li {
+                    div.attachments-panel-item {
                         background: @attachments-panel-table-item-bg;
                         margin-bottom: 7px;
                         padding: 5px 10px 5px 10px;
@@ -553,6 +553,19 @@
                         position: relative;
                         z-index: 10;
                         .lucida-console-font();
+                        
+                        &.has-error{
+                            border-color: @common-dark-red-color;
+
+                            &:hover {
+                                border-color: @common-dark-red-color;
+                            }
+                        }
+
+                        .error-message{
+                            color: @common-dark-red-color;
+                            margin: 0;
+                        }
 
                         &:hover {
                             border: 2px solid @attachments-border-color;

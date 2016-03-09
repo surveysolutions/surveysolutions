@@ -208,9 +208,9 @@
                             '1': '{} File Attachment ({{formatBytes(totalSize())}} total)',
                             'other': '{} Files Attachments ({{formatBytes(totalSize())}} total)'}"></h3>
                     <form role="form" name="attachmentsForm" novalidate>
-                        <ul ng-model="attachments">
-                            <li class="attachments-panel-item" ng-repeat="attachment in attachments" ngf-drop="" ngf-change="fileSelected(attachment, $file, attachmentForm)" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
-                                <ng-form name="attachmentForm">
+                        <div class="attachment-list">
+                            <ng-form name="attachmentForm" ng-repeat="attachment in attachments">
+                                <div class="attachments-panel-item" ng-class="{'has-error': attachmentForm.name.$error.pattern}" ngf-drop="" ngf-change="fileSelected(attachment, $file, attachmentForm)" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
                                     <a href ng-click="deleteAttachment($index)" class="btn delete-btn" tabindex="-1"></a>
                                     <div class="attachment">
                                         <div class="attachment-preview">
@@ -219,8 +219,20 @@
                                             </div>
                                         </div>
                                         <div class="attachment-content">
-                                            <input focus-on-out="focusAttachment{{attachment.itemId}}" required="" placeholder="attachment name" maxlength="32" spellcheck="false" ng-model="attachment.name" name="name" class="form-control table-name" type="text" />
+                                            <input focus-on-out="focusAttachment{{attachment.itemId}}"
+                                                    ng-pattern="/^[\w\-]+$/"
+                                                    required=""
+                                                    placeholder="attachment name"
+                                                    maxlength="32"
+                                                    spellcheck="false"
+                                                    ng-model="attachment.name"
+                                                    name="name"
+                                                    class="form-control table-name"
+                                                    type="text" />
                                             <div class="divider"></div>
+                                            <p class="error-message ng-cloak" ng-show="attachmentForm.name.$error.pattern">
+                                                Invalid attachment name.
+                                            </p>
                                             <input class="form-control file-name" placeholder="file name" required="" spellcheck="false" ng-model="attachment.fileName" name="fileName" disabled="" type="text" />
                                             <div class="drop-box">
                                                 Drop File here
@@ -241,9 +253,9 @@
                                             </button>
                                         </div>
                                     </div>
-                                </ng-form>
-                            </li>
-                        </ul>
+                                </div>
+                            </ng-form>
+                        </div>
                     </form>
                     <div class="button-holder">
                         <input type="button" class="btn lighter-hover" value="ADD NEW Attachment" ng-click="addNewAttachment()">

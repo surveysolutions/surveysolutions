@@ -8134,14 +8134,14 @@ textarea#edit-group-description {
 #designer-editor.container section#main .attachments-panel .attachments {
   height: 100%;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list {
   margin: 0;
   padding: 0;
   list-style: none;
   padding-right: 30px;
   padding-left: 20px;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul li {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item {
   background: #fff;
   margin-bottom: 7px;
   padding: 5px 10px 5px 10px;
@@ -8154,30 +8154,40 @@ textarea#edit-group-description {
   z-index: 10;
   font-family: "Lucida Console", Monaco, monospace;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul li:hover {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item.has-error {
+  border-color: #a94442;
+}
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item.has-error:hover {
+  border-color: #a94442;
+}
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .error-message {
+  color: #a94442;
+  margin: 0;
+}
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item:hover {
   border: 2px solid #d9dde0;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul li .attachment {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .attachment {
   display: table;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul li .attachment-preview {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .attachment-preview {
   display: table-cell;
   vertical-align: top;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul li .attachment-preview .attachment-preview-cover {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .attachment-preview .attachment-preview-cover {
   height: 100px;
   width: 120px;
   margin-right: 10px;
   overflow: hidden;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul li .attachment-preview .attachment-preview-cover img {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .attachment-preview .attachment-preview-cover img {
   max-width: 100%;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul li .attachment-content {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .attachment-content {
   display: table-cell;
   vertical-align: top;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul li .attachment-content .attachment-meta {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .attachment-content .attachment-meta {
   font-family: Georgia, serif;
   color: #78838a;
   font-size: 14px;
@@ -8185,7 +8195,7 @@ textarea#edit-group-description {
   margin: 0;
   margin-right: 20px;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul li .drop-box {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .drop-box {
   color: #78838a;
   border: 2px dashed #78838a;
   height: 30px;
@@ -8193,11 +8203,11 @@ textarea#edit-group-description {
   line-height: 26px;
   display: none;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul li.dragover .drop-box {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item.dragover .drop-box {
   display: block;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul li input,
-#designer-editor.container section#main .attachments-panel .attachments ul li textarea {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item input,
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item textarea {
   display: block;
   border: none;
   border-color: #fff;
@@ -8209,58 +8219,58 @@ textarea#edit-group-description {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 14px;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul li input.table-name {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item input.table-name {
   width: 275px;
   color: #e004c9;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul li .form-control[disabled],
-#designer-editor.container section#main .attachments-panel .attachments ul li .form-control[readonly],
-#designer-editor.container section#main .attachments-panel .attachments ul li fieldset[disabled] .form-control {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .form-control[disabled],
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .form-control[readonly],
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item fieldset[disabled] .form-control {
   background: #fff;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul li input[type="text"][placeholder],
-#designer-editor.container section#main .attachments-panel .attachments ul li textarea[placeholder] {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item input[type="text"][placeholder],
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item textarea[placeholder] {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 14px;
   text-overflow: ellipsis;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul li input[type="text"]::-moz-placeholder,
-#designer-editor.container section#main .attachments-panel .attachments ul li textarea::-moz-placeholder {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item input[type="text"]::-moz-placeholder,
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item textarea::-moz-placeholder {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 14px;
   text-overflow: ellipsis;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul li input[type="text"]:-ms-input-placeholder,
-#designer-editor.container section#main .attachments-panel .attachments ul li textarea:-ms-input-placeholder {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item input[type="text"]:-ms-input-placeholder,
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item textarea:-ms-input-placeholder {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 14px;
   text-overflow: ellipsis;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul li input[type="text"]::-webkit-input-placeholder,
-#designer-editor.container section#main .attachments-panel .attachments ul li textarea::-webkit-input-placeholder {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item input[type="text"]::-webkit-input-placeholder,
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item textarea::-webkit-input-placeholder {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 14px;
   text-overflow: ellipsis;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul li .actions button,
-#designer-editor.container section#main .attachments-panel .attachments ul li .actions a.btn {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .actions button,
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .actions a.btn {
   background: #fff;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul li .actions button:hover,
-#designer-editor.container section#main .attachments-panel .attachments ul li .actions a.btn:hover {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .actions button:hover,
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .actions a.btn:hover {
   background: #e6e6e6;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul li .actions .permanent-actions {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .actions .permanent-actions {
   background: #fff;
   -webkit-box-shadow: -30px 1px 25px 0px #fff;
   -moz-box-shadow: -30px 1px 25px 0px #fff;
   box-shadow: -30px 1px 25px 0px #fff;
   padding-left: 5px;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul li .actions.dirty .permanent-actions {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .actions.dirty .permanent-actions {
   position: static;
 }
-#designer-editor.container section#main .attachments-panel .attachments ul li .divider {
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .divider {
   height: 2px;
   width: 275px;
   background: #d9dde0;
