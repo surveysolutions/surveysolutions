@@ -729,6 +729,11 @@ namespace WB.Tests.Unit
                     return new TemplateImported { Source = questionnaireDocument };
                 }
             }
+
+            public static LinkedOptionsChanged LinkedOptionsChanged(ChangedLinkedOptions[] options = null)
+            {
+                return new LinkedOptionsChanged(options ?? new ChangedLinkedOptions[] {});
+            }
         }
     }
 }

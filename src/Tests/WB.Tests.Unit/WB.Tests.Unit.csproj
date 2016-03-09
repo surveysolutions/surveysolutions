@@ -818,6 +818,8 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_handling_answer_removed_event.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_handling_answer_removed_event_for_linked_question.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_initializing.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_linked_options_chagned.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_linked_options_changed_for_other_question.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_selecting_first_option.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\TextListQuestionViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_adding_new_empty_item_in_list_view_model_and_there_is_answer_in_interview.cs" />
