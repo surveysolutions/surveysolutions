@@ -98,6 +98,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         ReadOnlyCollection<Guid> GetAllQuestions();
 
+        ReadOnlyCollection<Guid> GetAllGroups();
+
         IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId);
 
         ReadOnlyCollection<Guid> GetAllUnderlyingInterviewerQuestions(Guid groupId);
