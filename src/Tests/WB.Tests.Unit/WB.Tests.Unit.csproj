@@ -644,6 +644,7 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_count_of_invalid_questions_recursively.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_enabled_subgroups.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_question_answer.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_republishing_states_and_interview_has_1_disabled_and_1_enabled_questions_in_fixed_roster_with_3_instances.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_republishing_states_and_interview_has_3_disabled_and_2_enabled_questions_outside_of_rosters.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_restoring_interview_state_from_sync_package.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\AnswerToStringServiceTestsContext.cs" />
