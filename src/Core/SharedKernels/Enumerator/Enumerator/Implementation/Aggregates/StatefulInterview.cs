@@ -59,6 +59,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.notAnsweredQuestionsEnablementStatus = new ConcurrentDictionary<string, bool>();
             this.notAnsweredQuestionsInterviewerComments = new ConcurrentDictionary<string, string>();
             this.notAnsweredFailedConditions = new ConcurrentDictionary<string, IList<FailedValidationCondition>>();
+
+            this.ResetCalculatedState();
         }
 
         private void ResetCalculatedState()
@@ -245,6 +247,26 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.ResetCalculatedState();
             this.CommentQuestion(@event.QuestionId, @event.RosterVector, @event.Comment);
         }
+
+
+        #region Command handlers
+
+        public void RepublishStates()
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            ReadOnlyCollection<Guid> allQuestions = questionnaire.GetAllQuestions();
+            ReadOnlyCollection<Identity> allQuestionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestions, RosterVector.Empty, questionnaire).ToReadOnlyCollection();
+
+            var enabledQuestions = allQuestionInstances.Where(question => this.IsEnabled(question)).ToArray();
+            var disabledQuestions = allQuestionInstances.Where(question => !this.IsEnabled(question)).ToArray();
+
+            this.ApplyEvent(new QuestionsEnabled(enabledQuestions));
+            this.ApplyEvent(new QuestionsDisabled(disabledQuestions));
+        }
+
+        #endregion
+
 
         #region Group and question status and validity
 
