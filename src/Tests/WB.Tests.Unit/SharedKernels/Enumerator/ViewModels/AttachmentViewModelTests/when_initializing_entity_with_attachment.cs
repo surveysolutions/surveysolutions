@@ -31,10 +31,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
             interviewRepository.SetReturnsDefault(interview);
 
-            attachment = Mock.Of<Attachment>(a => a.Type == AttachmentContentType.Image);
+            attachmentMetadata = Mock.Of<AttachmentMetadata>(a => a.Type == AttachmentContentType.Image);
             attachmentContent = new byte[]{ 1, 2, 3 };
             var attachmentStorage = Mock.Of<IQuestionnaireAttachmentStorage>(s =>
-                s.GetAttachmentAsync(attachmentId) == Task.FromResult(attachment)
+                s.GetAttachmentAsync(attachmentId) == Task.FromResult(attachmentMetadata)
                 && s.GetAttachmentContentAsync(attachmentId) == Task.FromResult(attachmentContent));
 
             viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository.Object, attachmentStorage);
@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
 
         static AttachmentViewModel viewModel;
         private static Guid entityId;
-        private static Attachment attachment;
+        private static AttachmentMetadata attachmentMetadata;
         private static byte[] attachmentContent;
     }
 }

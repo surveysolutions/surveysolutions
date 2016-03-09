@@ -287,7 +287,7 @@
     <Compile Include="ValueObjects\ValueVector.cs" />
     <Compile Include="Views\BinaryData\AttachmentContentType.cs" />
     <Compile Include="Views\BinaryData\InterviewBinaryDataDescriptor.cs" />
-    <Compile Include="Views\BinaryData\Attachment.cs" />
+    <Compile Include="Views\BinaryData\AttachmentMetadata.cs" />
     <Compile Include="Views\DeviceInfo.cs" />
     <Compile Include="Views\FileDescription.cs" />
     <Compile Include="Views\Interview\InterviewTextListAnswer.cs" />

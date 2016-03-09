@@ -51,6 +51,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\Designer\AttachmentDto.cs" />
     <Compile Include="Api\Designer\Questionnaire.cs" />
     <Compile Include="Api\Designer\QuestionnaireListItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

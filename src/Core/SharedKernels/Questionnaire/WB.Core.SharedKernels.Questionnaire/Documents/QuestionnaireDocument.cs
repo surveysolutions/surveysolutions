@@ -581,5 +581,10 @@ namespace Main.Core.Documents
                 triggeredGroup.RosterSizeQuestionId = rosterSizeQuestionId;
             }
         }
+
+        public IEnumerable<string> GetAllAttachmentIds()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
