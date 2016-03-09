@@ -307,6 +307,25 @@
                     padding-top: 24px;
                     border-top: 2px solid @selected-panel-border-color;
                 }
+
+                .empty-list {
+                    margin: 8px;
+                    padding-left: 20px;
+                    padding-top: 10px;
+                    border-top: 2px solid @selected-panel-border-color;
+                    padding-right: 30%;
+                    color: @selected-panel-grey-color;
+
+                    p:first-child{
+                        font-weight: bold;
+                        color: darken(@selected-panel-grey-color, 15%);
+                    }
+                    
+                }
+
+                .variable-name{
+                    color: @leftpanel-accent-color;
+                }
             }
 
             .foldback-region {

@@ -7946,6 +7946,21 @@ textarea#edit-group-description {
 #designer-editor.container section#main .left-side-panel .left-side-panel-content .button-holder .btn {
   background: #e5e8ea;
 }
+#designer-editor.container section#main .left-side-panel .left-side-panel-content .empty-list {
+  margin: 8px;
+  padding-left: 20px;
+  padding-top: 10px;
+  border-top: 2px solid #dbdfe2;
+  padding-right: 30%;
+  color: #7e898f;
+}
+#designer-editor.container section#main .left-side-panel .left-side-panel-content .empty-list p:first-child {
+  font-weight: bold;
+  color: #596267;
+}
+#designer-editor.container section#main .left-side-panel .left-side-panel-content .variable-name {
+  color: #e004c9;
+}
 #designer-editor.container section#main .left-side-panel .foldback-region {
   position: absolute;
   top: 0;

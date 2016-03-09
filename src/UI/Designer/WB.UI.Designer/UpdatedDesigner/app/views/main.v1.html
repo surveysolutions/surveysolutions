@@ -112,6 +112,11 @@
                     <h3>
                         <span ng-show="macros.length!=0">{{macros.length}}</span> Macro<span ng-show="macros.length!=1">s</span>:
                     </h3>
+                    <div class="empty-list" ng-show="macros.length == 0">
+                        <p>Use this tab to define macro substitutions.</p>
+                        <p>A macro is a named expression that can be used in enabling conditions and validation expressions. A macro consists of name and content. </p>
+                        <p>To use a macro in an expression, refer to it by its <span class="variable-name">$macroname</span></p>
+                    </div>
                     <form role="form" name="macrosForm" novalidate>
                         <ul ng-model="macros">
                             <li class="macros-panel-item" ng-repeat="macro in macros">
@@ -155,6 +160,11 @@
                     <h3>
                         <span ng-show="lookupTables.length!=0">{{lookupTables.length}}</span> Lookup Table<span ng-show="lookupTables.length!=1">s</span>:
                     </h3>
+                    <div class="empty-list" ng-show="lookupTables.length == 0">
+                        <p>Use this tab to define lookup tables.</p>
+                        <p>A lookup table provides reference information that may be queried by a key and used in enabling conditions and validation expressions.</p>
+                        <p>A lookup table consists of a name and the lookup file, which may contain multiple tab-delimited columns of numeric values.</p>
+                    </div>
                     <form role="form" name="lookupTablesForm" novalidate>
                         <ul ng-model="lookupTables">
                             <li class="lookup-table-panel-item" ng-repeat="table in lookupTables" ngf-drop="" ngf-change="fileSelected(table, $file, lookupTableForm)" ngf-max-size="1MB" accept=".tab,.txt" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
@@ -207,6 +217,14 @@
                             '0': 'No Files Attachment to questionnaire',
                             '1': '{} File Attachment ({{formatBytes(totalSize())}} total)',
                             'other': '{} Files Attachments ({{formatBytes(totalSize())}} total)'}"></h3>
+                    <div class="empty-list" ng-show="attachments.length == 0">
+                        <p>Use this tab to upload multimedia files that may be referenced in the questionnaire.</p>
+                        <p>To avoid slow synchronization we recommend combined size of all attached files not to exceed 2MB.
+                            For supported file types, formats, and dimensions <a href="http://docs.mysurvey.solutions/attachments.pdf">click here</a></p>
+                        <p>To refer to an attachment in the questionnaire add a static text element and
+specify the attachment <span class="variable-name">name</span> in its attachment property.
+                        </p>
+                    </div>
                     <form role="form" name="attachmentsForm" novalidate>
                         <div class="attachment-list">
                             <ng-form name="attachmentForm" ng-repeat="attachment in attachments">
