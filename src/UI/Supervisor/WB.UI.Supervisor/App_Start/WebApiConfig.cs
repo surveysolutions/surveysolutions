@@ -18,9 +18,8 @@ namespace WB.UI.Supervisor.App_Start
         public static void Register(HttpConfiguration config)
         {
             config.MapHttpAttributeRoutes();
-            config.TypedRoute("api/interviewer/v1/latestversion", c => c.Action<InterviewerApiV1Controller>(x => x.GetLatestVersion()));
             config.TypedRoute("api/interviewer/v1", c => c.Action<InterviewerApiV1Controller>(x => x.Get()));
-            config.TypedRoute("api/interviewer/v1/latesversion", c => c.Action<InterviewerApiV1Controller>(x => x.GetLatestVersion()));
+            config.TypedRoute("api/interviewer/v1/latestversion", c => c.Action<InterviewerApiV1Controller>(x => x.GetLatestVersion()));
             config.TypedRoute("api/interviewer/v1/tabletInfo", c => c.Action<InterviewerApiV1Controller>(x => x.PostTabletInformation(Param.Any<TabletInformationPackage>())));
             config.TypedRoute("api/interviewer/v1/devices/current/{id}/{version}", c => c.Action<DevicesApiV1Controller>(x => x.CanSynchronize(Param.Any<string>(), Param.Any<int>())));
             config.TypedRoute("api/interviewer/v1/devices/link/{id}/{version:int}", c => c.Action<DevicesApiV1Controller>(x => x.LinkCurrentInterviewerToDevice(Param.Any<string>(), Param.Any<int>())));
@@ -43,7 +42,7 @@ namespace WB.UI.Supervisor.App_Start
 
 
             config.TypedRoute("api/interviewer/v2", c => c.Action<InterviewerApiV2Controller>(x => x.Get()));
-            config.TypedRoute("api/interviewer/v2/latesversion", c => c.Action<InterviewerApiV2Controller>(x => x.GetLatestVersion()));
+            config.TypedRoute("api/interviewer/v2/latestversion", c => c.Action<InterviewerApiV2Controller>(x => x.GetLatestVersion()));
             config.TypedRoute("api/interviewer/v2/tabletInfo", c => c.Action<InterviewerApiV2Controller>(x => x.PostTabletInformation(Param.Any<TabletInformationPackage>())));
             config.TypedRoute("api/interviewer/v2/devices/current/{id}/{version}", c => c.Action<DevicesApiV2Controller>(x => x.CanSynchronize(Param.Any<string>(), Param.Any<int>())));
             config.TypedRoute("api/interviewer/v2/devices/link/{id}/{version:int}", c => c.Action<DevicesApiV2Controller>(x => x.LinkCurrentInterviewerToDevice(Param.Any<string>(), Param.Any<int>())));
