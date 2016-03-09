@@ -466,6 +466,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public ReadOnlyCollection<Guid> GetAllQuestions()
             => this.AllQuestions.Select(question => question.PublicKey).ToReadOnlyCollection();
 
+        public ReadOnlyCollection<Guid> GetAllGroups()
+            => this.AllGroups.Select(question => question.PublicKey).ToReadOnlyCollection();
+
         public IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId)
             => this.cacheOfUnderlyingQuestions.GetOrUpdate(groupId, this.GetAllUnderlyingQuestionsImpl);
 
