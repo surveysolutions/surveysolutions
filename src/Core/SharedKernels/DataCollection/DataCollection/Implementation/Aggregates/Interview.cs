@@ -2982,6 +2982,41 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return interviewChanges;
         }
 
+        private List<Identity> GetAnswersToRemoveIfRosterInstancesAreRemoved(IReadOnlyInterviewStateDependentOnAnswers state,
+          IEnumerable<Guid> rosterIds, List<decimal> rosterInstanceIdsBeingRemoved, decimal[] nearestToOuterRosterVector,
+          IQuestionnaire questionnaire)
+        {
+            if (rosterInstanceIdsBeingRemoved.Count == 0)
+                return new List<Identity>();
+
+            var answersToRemoveIfRosterInstancesAreRemoved = rosterIds
+                .SelectMany(rosterId => this.GetAnswersToRemoveIfRosterInstancesAreRemoved(state, rosterId, rosterInstanceIdsBeingRemoved, nearestToOuterRosterVector, questionnaire))
+                .ToList();
+
+            return answersToRemoveIfRosterInstancesAreRemoved;
+        }
+
+        private IEnumerable<Identity> GetAnswersToRemoveIfRosterInstancesAreRemoved(IReadOnlyInterviewStateDependentOnAnswers state,
+           Guid rosterId, List<decimal> rosterInstanceIdsBeingRemoved, decimal[] nearestToOuterRosterVector,
+           IQuestionnaire questionnaire)
+        {
+            int indexOfRosterInRosterVector = GetIndexOfRosterInRosterVector(rosterId, questionnaire);
+
+            IEnumerable<Guid> underlyingQuestionIds = questionnaire.GetAllUnderlyingQuestions(rosterId);
+
+            IEnumerable<Identity> underlyingQuestionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
+                underlyingQuestionIds, nearestToOuterRosterVector, questionnaire);
+
+            IEnumerable<Identity> underlyingQuestionsBeingRemovedByRemovedRosterInstances = (
+                from question in underlyingQuestionInstances
+                where state.WasQuestionAnswered(question)
+                where rosterInstanceIdsBeingRemoved.Contains(question.RosterVector[indexOfRosterInRosterVector])
+                select question
+                ).ToList();
+
+            return underlyingQuestionsBeingRemovedByRemovedRosterInstances;
+        }
+
         private IInterviewExpressionStateV7 PrepareExpressionProcessorStateForCalculations()
         {
             IInterviewExpressionStateV7 expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
@@ -3434,6 +3469,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<decimal> rosterInstanceIdsBeingRemoved = rosterInstancesToRemove.Select(instance => instance.RosterInstanceId).ToList();
 
+            List<Identity> answersToRemoveByDecreasedRosterSize = this.GetAnswersToRemoveIfRosterInstancesAreRemoved(state,
+             rosterIds, rosterInstanceIdsBeingRemoved, nearestToOuterRosterVector, questionnaire);
+
+
             List<Identity> disabledAnswersToEnableByDecreasedRosterSize = GetDisabledAnswersToEnableByDecreasedRosterSize(state,
                 rosterIds, rosterInstanceIdsBeingRemoved, nearestToOuterRosterVector, questionnaire);
 
@@ -3441,7 +3480,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterInstancesToRemove, questionnaire);
             
             return new RosterCalculationData(rosterInstancesToAdd, rosterInstancesToRemove, rosterInstancesToChange,
-                new List<Identity>(), disabledAnswersToEnableByDecreasedRosterSize, disabledGroupsToEnableByDecreasedRosterSize,
+                answersToRemoveByDecreasedRosterSize, disabledAnswersToEnableByDecreasedRosterSize, disabledGroupsToEnableByDecreasedRosterSize,
                 rosterTitles, rosterInstancesFromNestedLevels);
         }
 
@@ -3529,6 +3568,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var listOfRosterInstanceIdsForRemove = new List<RosterIdentity>();
 
+            List<Identity> answersToRemoveByDecreasedRosterSize = new List<Identity>();
+
             var rosterInstantiatesFromNestedLevels = new List<RosterCalculationData>();
             foreach (var nestedRosterId in nestedRosterIds)
             {
@@ -3545,6 +3586,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     listOfRosterInstanceIdsForRemove.Add(rosterIdForDelete);
 
+                    answersToRemoveByDecreasedRosterSize.AddRange(
+                   this.GetAnswersToRemoveIfRosterInstancesAreRemoved(
+                       state,
+                       rosterIdForDelete.GroupId,
+                       new List<decimal> { rosterIdForDelete.RosterInstanceId },
+                       rosterIdForDelete.OuterRosterVector,
+                       questionnaire));
+
                     rosterInstantiatesFromNestedLevels.Add(this.CalculateNestedRostersDataForDelete(state, questionnaire, nestedRosterId,
                         new List<decimal> { rosterIdForDelete.RosterInstanceId }, outerVectorForExtend));
                 }
@@ -3560,7 +3609,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 new List<RosterIdentity>(), 
                 listOfRosterInstanceIdsForRemove, 
                 new List<RosterIdentity>(),
-                new List<Identity>(), 
+                answersToRemoveByDecreasedRosterSize, 
                 disabledAnswersToEnableByDecreasedRosterSize,
                 disabledGroupsToEnableByDecreasedRosterSize,
                 new Dictionary<decimal, string>(),
