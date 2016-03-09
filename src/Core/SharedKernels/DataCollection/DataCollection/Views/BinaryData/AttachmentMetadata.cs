@@ -1,6 +1,6 @@
 ﻿namespace WB.Core.SharedKernels.DataCollection.Views.BinaryData
 {
-    public class Attachment
+    public class AttachmentMetadata
     {
         public string Id { get; set; }
 
