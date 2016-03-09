@@ -73,6 +73,11 @@ namespace WB.UI.Tester.Infrastructure.Internals
             return downloadedQuestionnaire;
         }
 
+        public Task<AttachmentDto> GetQuestionnaireAttachmentAsync(string attachmentId)
+        {
+            throw new NotImplementedException();
+        }
+
         private async Task<QuestionnaireListItem[]> GetPageOfQuestionnairesAsync(int pageIndex, CancellationToken token)
         {
             var  batchOfServerQuestionnaires = await this.restService.GetAsync<Core.SharedKernels.SurveySolutions.Api.Designer.QuestionnaireListItem[]>(

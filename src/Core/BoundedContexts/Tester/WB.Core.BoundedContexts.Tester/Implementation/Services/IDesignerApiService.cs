@@ -13,5 +13,6 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
         Task<bool> Authorize(string login, string password);
         Task<IReadOnlyCollection<QuestionnaireListItem>> GetQuestionnairesAsync(CancellationToken token);
         Task<Questionnaire> GetQuestionnaireAsync(QuestionnaireListItem selectedQuestionnaire, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, CancellationToken token);
+        Task<AttachmentDto> GetQuestionnaireAttachmentAsync(string attachmentId);
     }
 }

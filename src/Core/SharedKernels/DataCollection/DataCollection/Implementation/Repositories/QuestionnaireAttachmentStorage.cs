@@ -11,13 +11,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 {
     public class QuestionnaireAttachmentStorage : IQuestionnaireAttachmentStorage
     {
-        private readonly IPlainKeyValueStorage<Attachment> repository;
+        private readonly IPlainKeyValueStorage<AttachmentMetadata> repository;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string attachmentDirectoryPath;
 
         private readonly string AttachmentDirectoryName = "Attachments";
 
-        public QuestionnaireAttachmentStorage(IPlainKeyValueStorage<Attachment> repository,
+        public QuestionnaireAttachmentStorage(IPlainKeyValueStorage<AttachmentMetadata> repository,
             IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath)
         {
             this.repository = repository;
@@ -29,16 +29,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                 this.fileSystemAccessor.CreateDirectory(this.attachmentDirectoryPath);
         }
 
-        public Task StoreAsync(Attachment attachment, byte[] attachmentData)
+        public Task StoreAsync(AttachmentMetadata attachmentMetadata, byte[] attachmentData)
         {
-            this.repository.Store(attachment, attachment.Id);
+            this.repository.Store(attachmentMetadata, attachmentMetadata.Id);
 
-            var attachmentFilePath = this.GetPathToFile(attachment.Id);
+            var attachmentFilePath = this.GetPathToFile(attachmentMetadata.Id);
             fileSystemAccessor.WriteAllBytes(attachmentFilePath, attachmentData);
             return Task.FromResult(true);
         }
 
-        public Task<Attachment> GetAttachmentAsync(string attachmentId)
+        public Task<AttachmentMetadata> GetAttachmentAsync(string attachmentId)
         {
             return Task.FromResult(this.repository.GetById(attachmentId));
         }

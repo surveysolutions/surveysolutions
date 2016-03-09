@@ -17,6 +17,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -39,6 +40,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage;
         private readonly IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage;
         private readonly ILogger logger;
+        private readonly IQuestionnaireAttachmentStorage attachmentStorage;
 
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
@@ -52,7 +54,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IUserInteractionService userInteractionService,
             IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage, 
             IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage,
-            ILogger logger) : base(principal, viewModelNavigationService)
+            ILogger logger,
+            IQuestionnaireAttachmentStorage attachmentStorage) : base(principal, viewModelNavigationService)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
@@ -63,6 +66,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.questionnaireListStorage = questionnaireListStorage;
             this.dashboardLastUpdateStorage = dashboardLastUpdateStorage;
             this.logger = logger;
+            this.attachmentStorage = attachmentStorage;
             this.friendlyErrorMessageService = friendlyErrorMessageService;
         }
 
@@ -288,6 +292,18 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     var questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111-1111-1111-1111-111111111111"), 1);
                     var questionnaireDocument = questionnairePackage.Document;
                     var supportingAssembly = questionnairePackage.Assembly;
+
+                    var attachmentIds = questionnaireDocument.GetAllAttachmentIds();
+
+                    foreach (var attachmentId in attachmentIds)
+                    {
+                        var attachment = await attachmentStorage.GetAttachmentAsync(attachmentId);
+                        if (attachment == null)
+                        {
+                            var attachmentDto = await this.designerApiService.GetQuestionnaireAttachmentAsync(attachmentId);
+                            await this.attachmentStorage.StoreAsync(attachmentDto.Metadata, attachmentDto.Content);
+                        }
+                    }
 
                     questionnaireDocument.PublicKey = questionnaireIdentity.QuestionnaireId;
 
