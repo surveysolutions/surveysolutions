@@ -256,13 +256,25 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             ReadOnlyCollection<Guid> allQuestions = questionnaire.GetAllQuestions();
-            ReadOnlyCollection<Identity> allQuestionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestions, RosterVector.Empty, questionnaire).ToReadOnlyCollection();
+            ReadOnlyCollection<Identity> allQuestionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
+                this.interviewState, allQuestions, RosterVector.Empty, questionnaire).ToReadOnlyCollection();
 
             var enabledQuestions = allQuestionInstances.Where(question => this.IsEnabled(question)).ToArray();
             var disabledQuestions = allQuestionInstances.Where(question => !this.IsEnabled(question)).ToArray();
 
-            this.ApplyEvent(new QuestionsEnabled(enabledQuestions));
-            this.ApplyEvent(new QuestionsDisabled(disabledQuestions));
+            ReadOnlyCollection<Guid> allGroups = questionnaire.GetAllGroups();
+            ReadOnlyCollection<Identity> allGroupInstances = this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(
+                this.interviewState, allGroups, RosterVector.Empty, questionnaire).ToReadOnlyCollection();
+
+            var enabledGroups = allGroupInstances.Where(group => this.IsEnabled(group)).ToArray();
+            var disabledGroups = allGroupInstances.Where(group => !this.IsEnabled(group)).ToArray();
+
+
+            if (enabledQuestions.Length > 0) this.ApplyEvent(new QuestionsEnabled(enabledQuestions));
+            if (disabledQuestions.Length > 0) this.ApplyEvent(new QuestionsDisabled(disabledQuestions));
+
+            if (enabledGroups.Length > 0) this.ApplyEvent(new GroupsEnabled(enabledGroups));
+            if (disabledGroups.Length > 0) this.ApplyEvent(new GroupsDisabled(disabledGroups));
         }
 
         #endregion
