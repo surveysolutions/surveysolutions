@@ -2193,8 +2193,8 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static StatefulInterview StatefulInterview(Guid? questionnaireId = null, Guid? userId = null,
-            IPlainQuestionnaireRepository questionnaireRepository = null)
+        public static StatefulInterview StatefulInterview(Guid? questionnaireId = null, long? questionnaireVersion = null,
+            Guid? userId = null, IPlainQuestionnaireRepository questionnaireRepository = null)
         {
             questionnaireId = questionnaireId ?? Guid.NewGuid();
             var statefulInterview = new StatefulInterview(
@@ -2202,10 +2202,10 @@ namespace WB.Tests.Unit
                 questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues)
             {
-                QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, 1),
+                QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, questionnaireVersion ?? 1),
             };
 
-            statefulInterview.Apply(new InterviewCreated(userId ?? Guid.NewGuid(), questionnaireId.Value, 1));
+            statefulInterview.Apply(new InterviewCreated(userId ?? Guid.NewGuid(), questionnaireId.Value, questionnaireVersion ?? 1));
 
             return statefulInterview;
         }
