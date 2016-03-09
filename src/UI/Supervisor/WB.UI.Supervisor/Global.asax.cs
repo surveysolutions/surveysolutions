@@ -42,7 +42,7 @@ namespace WB.UI.Supervisor
             SetupNConfig();
         }
 
-        private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
+        private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<MvcApplication>();
         private readonly IHealthCheckService healthCheckService = ServiceLocator.Current.GetInstance<IHealthCheckService>();
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)

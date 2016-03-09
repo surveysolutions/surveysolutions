@@ -100,7 +100,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (string.IsNullOrWhiteSpace(command.SupportingAssembly))
             {
-                throw new QuestionnaireException(string.Format("Cannot import questionnaire. Assembly file is empty. QuestionnaireId: {0}", this.EventSourceId));
+                throw new QuestionnaireException($"Cannot import questionnaire. Assembly file is empty. QuestionnaireId: {this.EventSourceId}");
             }
 
             var newVersion = GetNextVersion();
@@ -113,7 +113,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 Source = document,
                 AllowCensusMode = command.AllowCensusMode,
                 Version = newVersion,
-                ResponsibleId = command.CreatedBy
+                ResponsibleId = command.CreatedBy,
+                ContentVersion = command.QuestionnaireContentVersion
             });
 
             //this.ApplyEvent(new QuestionnaireAssemblyImported { Version = newVersion });

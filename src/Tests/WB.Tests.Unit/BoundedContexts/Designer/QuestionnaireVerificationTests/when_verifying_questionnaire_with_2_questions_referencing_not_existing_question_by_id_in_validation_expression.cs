@@ -51,29 +51,29 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
-        It should_return_2_errors = () =>
-            resultErrors.Count().ShouldEqual(2);
+        It should_return_2_messages = () =>
+            verificationMessages.Count().ShouldEqual(2);
 
-        It should_return_errors_each_with_code__WB0004__ = () =>
-            resultErrors.ShouldEachConformTo(error
+        It should_return_messages_each_with_code__WB0004__ = () =>
+            verificationMessages.ShouldEachConformTo(error
                 => error.Code == "WB0004");
 
-        It should_return_errors_each_having_single_reference = () =>
-            resultErrors.ShouldEachConformTo(error
+        It should_return_messages_each_having_single_reference = () =>
+            verificationMessages.ShouldEachConformTo(error
                 => error.References.Count() == 1);
 
-        It should_return_errors_each_referencing_question = () =>
-            resultErrors.ShouldEachConformTo(error
+        It should_return_messages_each_referencing_question = () =>
+            verificationMessages.ShouldEachConformTo(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_error_referencing_first_incorrect_question = () =>
-            resultErrors.ShouldContain(error
+        It should_return_message_referencing_first_incorrect_question = () =>
+            verificationMessages.ShouldContain(error
                 => error.References.Single().Id == firstIncorrectQuestionId);
 
-        It should_return_error_referencing_second_incorrect_question = () =>
-            resultErrors.ShouldContain(error
+        It should_return_message_referencing_second_incorrect_question = () =>
+            verificationMessages.ShouldContain(error
                 => error.References.Single().Id == secondIncorrectQuestionId);
 
         private static Guid firstIncorrectQuestionId;
@@ -81,6 +81,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         private static Guid textQuestionId;
         private static QuestionnaireDocument questionnaire;
         private static QuestionnaireVerifier verifier;
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
     }
 }

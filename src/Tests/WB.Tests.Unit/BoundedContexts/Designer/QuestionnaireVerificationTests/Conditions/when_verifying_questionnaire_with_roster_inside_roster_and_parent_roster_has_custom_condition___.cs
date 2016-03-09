@@ -67,7 +67,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
         Because of = () =>
             resultErrors = verifier.Verify(questionnaire);
 
-        It should_return_2_errors = () =>
+        It should_return_2_messages = () =>
             resultErrors.Count().ShouldEqual(2);
 
         It should_return_first_error_with_code__WB0046 = () =>
@@ -106,7 +106,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
         It should_return__second_error_second_reference_with_id_of_underDeeperPropagationLevelQuestionId = () =>
             resultErrors.ElementAt(1).References.Last().Id.ShouldEqual(underDeeperRosterLevelQuestionId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 

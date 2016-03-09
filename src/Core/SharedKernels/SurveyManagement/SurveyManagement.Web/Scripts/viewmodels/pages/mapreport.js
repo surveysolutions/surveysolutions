@@ -3,6 +3,10 @@
 
     var self = this;
 
+    self.IsShowRequestIndicator(true);
+
+    self.markersLimit = 50000;
+
     self.questionnaireUrl = questionnaireUrl;
     self.questionsUrl = questionsUrl;
     self.mapReportUrl = mapReportUrl;
@@ -30,6 +34,7 @@
                 style: google.maps.ZoomControlStyle.LARGE,
                 position: google.maps.ControlPosition.TOP_RIGHT
             },
+            minZoom:3,
             scaleControl: true,
             streetViewControl: false
         };
@@ -52,6 +57,7 @@
         function error() {
             var center = new google.maps.LatLng(38.895111, -77.036667); // Washington
             centerMap(center);
+            
         }
 
         function centerMap(center) {
@@ -68,6 +74,9 @@
     self.selectedVersion = ko.observable();
     self.selectedVariable = ko.observable();
 
+    self.markerlimitReached = ko.observable(false);
+    self.readyToUpdate = ko.observable(false);
+
     self.questionnaireVersions = ko.computed(function () {
         return self.selectedQuestionnaire() ? self.selectedQuestionnaire().Versions.sort() : null;
     });
@@ -78,8 +87,8 @@
 
     self.selectedQuestionnaire.subscribe(function () {
         if (!_.isUndefined(self.selectedQuestionnaire()) && self.selectedQuestionnaire().Versions.length === 1) {
+            self.selectedVersion(undefined);
             self.selectedVersion(self.selectedQuestionnaire().Versions[0]);
-            self.selectedVersion.valueHasMutated();
         } else {
             self.selectedVersion(undefined);
         }
@@ -92,7 +101,7 @@
         self.questionnaireVariables([]);
         self.isVariablesEnabled(false);
         self.selectedVariable(undefined);
-
+        
         if (_.isUndefined(value))
             return;
 
@@ -113,16 +122,20 @@
                 self.isVariablesEnabled(false);
                 self.ShowNotification("No Geo Location question", "There are no any Geo Locations in chosen questionnaire");
             }
-        });
+        }, true);
     });
 
     self.selectedVariable.subscribe(function (value) {
-        if (_.isUndefined(value))
-            return;
 
-        if (self.questionnaireVariables().length === 1) {
-            self.showPointsOnMap();
+        self.clearAllMarkers();
+
+        if (_.isUndefined(value)) {
+            self.readyToUpdate(false);
+            return;
         }
+
+        self.showPointsOnMap(180, 90, -180, -90, true);
+        self.readyToUpdate(true);
     });
   
     self.TotalCount = ko.observable();
@@ -147,23 +160,25 @@
             if (self.questionnaires.length === 1) {
                 self.selectedQuestionnaire(self.questionnaires()[0]);
             }
-        });
+        }, true);
     };
 
     self.interviewDetailsTooltip = new InfoBubble();
-    self.markers = {};
-    self.markersSetsInfo = ko.observableArray([]);
-    self.showPointsOnMap = function () {
+    self.markers = [];
+
+    self.showPointsOnMap = function (northEastCornerLongtitude, northEastCornerLatitude, southWestCornerLongtitude, southWestCornerLatitude, extendBounds) {
 
         var key = self.selectedVariable().Variable + "-" + self.selectedQuestionnaire().QuestionnaireId + "-" + self.selectedVersion();
-      
-        if (self.markers[key]) {
 
-        } else {
-            var params = {
+        var params = {
                 Variable: self.selectedVariable().Variable,
                 QuestionnaireId: self.selectedQuestionnaire().QuestionnaireId,
-                QuestionnaireVersion: self.selectedVersion()
+                QuestionnaireVersion: self.selectedVersion(),
+
+                NorthEastCornerLongtitude: northEastCornerLongtitude,
+                NorthEastCornerLatitude: northEastCornerLatitude,
+                SouthWestCornerLongtitude: southWestCornerLongtitude,
+                SouthWestCornerLatitude: southWestCornerLatitude
             };
 
             self.SendRequest(self.mapReportUrl, params, function (data) {
@@ -174,9 +189,12 @@
                     return;
                 }
 
-                var bounds = new google.maps.LatLngBounds();
+                if (mapPoints.length >= self.markersLimit) {
+                    self.ShowNotification(input.settings.messages.notifyMarkersLimitReachedTitle, input.settings.messages.notifyNoMarkersLimitReachedText);
+                    self.markerlimitReached(true);
+                }
 
-                var markers = [];
+                var bounds = new google.maps.LatLngBounds();
 
                 for (var i = 0; i < mapPoints.length; i++) {
                     var mapPoint = mapPoints[i];
@@ -187,7 +205,7 @@
                         var marker = new google.maps.Marker({
                             position: new google.maps.LatLng(points[0] * 1, points[1] * 1)
                         });
-                        marker.interviewId = mapPoint.InterviewId;
+                        marker.interviewId = mapPoint.Id;
                         
                         google.maps.event.addListener(marker, 'click', function () {
                             var marker = this;
@@ -205,51 +223,38 @@
                                 self.interviewDetailsTooltip.open(self.map, marker);
                             });
                         });
-                        markers.push(marker);
-                        bounds.extend(marker.getPosition());
+                        self.markers.push(marker);
+                        if (extendBounds)
+                            bounds.extend(marker.getPosition());
                     }
                 }
 
-                self.mapClusterer.addMarkers(markers);
-                self.markers[key] = markers;
-                self.map.fitBounds(bounds);
-
-                self.markersSetsInfo.push({
-                    id: key,
-                    variable: self.selectedVariable().Variable,
-                    version: self.selectedVersion(),
-                    title: self.selectedQuestionnaire().Title,
-                    questionnaireId: self.selectedQuestionnaire().QuestionnaireId,
-                    count: markers.length
-                });
+                self.mapClusterer.addMarkers(self.markers);
+                if (extendBounds)
+                    self.map.fitBounds(bounds);
+                
             }, true);
-        }
-    };
-    self.removeMarkersSet = function (markerSet) {
-        var key = markerSet.id;
-        for (var i = 0; i < self.markers[key].length; i++) {
-            self.mapClusterer.removeMarker(self.markers[key][i]);
-        }
-        self.markers[key].length = 0;
-        delete self.markers[key];
 
-        self.markersSetsInfo.remove(markerSet);
-        self.interviewDetailsTooltip.close();
     };
-
+    
     self.clearAllMarkers = function() {
-        for (var markersKey in self.markers) {
-            for (var i = 0; i < self.markers[markersKey].length; i++) {
-                self.markers[markersKey][i].setMap(null);
+        for (var i = 0; i < self.markers.length; i++) {
+                self.markers[i].setMap(null);
             }
-            self.markers[markersKey].length = 0;
-           
-        }
-        self.markers = {};
+            
+        self.markers = [];
         self.mapClusterer.clearMarkers();
-        self.markersSetsInfo.removeAll();
         self.interviewDetailsTooltip.close();
+        self.markerlimitReached(false);
     };
+
+    self.reloadMarkersInBounds = function () {
+        self.clearAllMarkers();
+        var bounds = self.map.getBounds();
+
+        self.showPointsOnMap(bounds.getNorthEast().lng(), bounds.getNorthEast().lat(), bounds.getSouthWest().lng(), bounds.getSouthWest().lat(), false);
+    };
+
     $('body').addClass('map-report');
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.MapReport, Supervisor.VM.BasePage);

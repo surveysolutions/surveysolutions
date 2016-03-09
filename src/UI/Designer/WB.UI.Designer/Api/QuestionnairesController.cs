@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -19,12 +20,12 @@ using QuestionnaireListItem = WB.Core.SharedKernels.SurveySolutions.Api.Designer
 namespace WB.UI.Designer.Api
 {
     [ApiBasicAuth]
-    [RoutePrefix("api/v12/questionnaires")]
+    [RoutePrefix("api/v13/questionnaires")]
     public class QuestionnairesController : ApiController
     {
         //temporary fix
         //api version should not be used as version for compilation
-        internal static readonly Version ApiVersion = new Version(11, 0, 0);
+        internal static readonly Version ApiVersion = new Version(12, 0, 0);
 
         private readonly IMembershipUserService userHelper;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
@@ -32,14 +33,13 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireListViewFactory viewFactory;
-        private readonly IDesignerEngineVersionService engineVersionService;
 
         public QuestionnairesController(IMembershipUserService userHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
-            IQuestionnaireListViewFactory viewFactory, IDesignerEngineVersionService engineVersionService)
+            IQuestionnaireListViewFactory viewFactory)
         {
             this.userHelper = userHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
@@ -47,10 +47,9 @@ namespace WB.UI.Designer.Api
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.viewFactory = viewFactory;
-            this.engineVersionService = engineVersionService;
         }
 
-        [Route("~/api/v12/login")]
+        [Route("~/api/v13/login")]
         [HttpGet]
         public void Login()
         {
@@ -70,7 +69,7 @@ namespace WB.UI.Designer.Api
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
 
-            if (this.questionnaireVerifier.Verify(questionnaireView.Source).Any(x => x.ErrorLevel != VerificationErrorLevel.Warning))
+            if (this.questionnaireVerifier.Verify(questionnaireView.Source).Any(x => x.MessageLevel > VerificationMessageLevel.Warning))
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
             }
@@ -101,26 +100,29 @@ namespace WB.UI.Designer.Api
         }
 
         [Route("")]
-        public IEnumerable<QuestionnaireListItem> Get([FromUri]int pageIndex = 1, [FromUri]int pageSize = 128, [FromUri]string sortBy = "", [FromUri]string filter = "", [FromUri]bool isPublic = false)
+        public HttpResponseMessage Get([FromUri]int pageIndex = 1, [FromUri]int pageSize = 128)
         {
-            var questionnaireListView = this.viewFactory.Load(new QuestionnaireListInputModel
-            {
-                ViewerId = this.userHelper.WebUser.UserId,
-                IsAdminMode = this.userHelper.WebUser.IsAdmin,
-                IsPublic = isPublic,
-                Page = pageIndex,
-                PageSize = pageSize,
-                Order = string.IsNullOrEmpty(sortBy) ? "LastEntryDate DESC" : sortBy,
-                Filter = filter
-            });
+            var userId = this.userHelper.WebUser.UserId;
+            var isAdmin = this.userHelper.WebUser.IsAdmin;
 
-            return questionnaireListView.Items.Select(questionnaire => new QuestionnaireListItem()
+            var questionnaireViews = this.viewFactory.GetUserQuestionnaires(userId, isAdmin, pageIndex, pageSize);
+
+            var questionnaires = questionnaireViews.Select(questionnaire => new QuestionnaireListItem
             {
-                Id = questionnaire.PublicId.FormatGuid(),
+                Id = questionnaire.QuestionnaireId,
                 Title = questionnaire.Title,
                 LastEntryDate = questionnaire.LastEntryDate,
-                Owner = questionnaire.Owner
+                Owner = questionnaire.CreatorName,
+                IsPublic = questionnaire.IsPublic || isAdmin,
+                IsShared = questionnaire.SharedPersons.Any(sharedPerson => sharedPerson == userId)
             });
+
+            var response = this.Request.CreateResponse(questionnaires);
+            response.Headers.CacheControl = new CacheControlHeaderValue
+            {
+                NoCache = true
+            };
+            return response;
         }
 
         private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)

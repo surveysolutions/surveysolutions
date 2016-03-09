@@ -9,11 +9,11 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group
     public class AddGroupCommand : FullGroupDataCommand
     {
         public AddGroupCommand(Guid questionnaireId, Guid groupId, Guid responsibleId,
-            string title, string variableName, Guid? rosterSizeQuestionId, string condition,
+            string title, string variableName, Guid? rosterSizeQuestionId, string condition, bool hideIfDisabled,
             Guid? parentGroupId, bool isRoster, RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] fixedRosterTitles, Guid? rosterTitleQuestionId,
             int? index = null)
             : base(
-                questionnaireId, groupId, responsibleId, title, variableName, rosterSizeQuestionId, condition, isRoster, rosterSizeSource,
+                questionnaireId, groupId, responsibleId, title, variableName, rosterSizeQuestionId, condition, hideIfDisabled, isRoster, rosterSizeSource,
                 fixedRosterTitles, rosterTitleQuestionId)
         {
             this.ParentGroupId = parentGroupId;

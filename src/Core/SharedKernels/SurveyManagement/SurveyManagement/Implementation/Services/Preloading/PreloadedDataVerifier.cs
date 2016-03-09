@@ -771,7 +771,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private IEnumerable<PreloadedDataVerificationError> ErrorsBySupervisorName(PreloadedDataByFile[] allLevels,
             IPreloadedDataService preloadedDataService)
         {
-            return ErrorsByResposibleName(allLevels, preloadedDataService, false);
+            return ErrorsByResposibleName(allLevels, preloadedDataService, true);
         }
         private IEnumerable<PreloadedDataVerificationError> ErrorsByResposibleName(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService, bool acceptInterviewers)
         {
@@ -852,8 +852,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 supervisorCache.Add(userNameLowerCase, null);
                 return null;
             }
-            
-            var item = new Tuple<bool, bool>(user.IsLockedByHQ, user.IsSupervisor() || (acceptInterviewers && user.Roles.Any(role => role == UserRoles.Operator)));
+
+            var item = new Tuple<bool, bool>(user.IsLockedByHQ || user.IsLockedBySupervisor,
+                user.IsSupervisor() || (acceptInterviewers && user.Roles.Any(role => role == UserRoles.Operator)));
+
             supervisorCache.Add(userNameLowerCase, item);
             return item;
         }

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -9,8 +10,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public class InterviewerPrincipal : IInterviewerPrincipal
     {
-        private const string UserNameParameterName = "authenticatedUser";
-        
         private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
 
         public bool IsAuthenticated => this.currentUserIdentity != null;
@@ -24,21 +23,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.interviewersPlainStorage = interviewersPlainStorage;
         }
 
-        public bool SignIn(string userName, string password, bool staySignedIn)
+        public async Task<bool> SignInAsync(string userName, string password, bool staySignedIn)
         {
-            var localInterviewer = this.interviewersPlainStorage
-                .Where(interviewer => interviewer.Password == password) // db query
-                .Where(interviewer => string.Equals(interviewer.Name, userName, StringComparison.OrdinalIgnoreCase)) // memory query
-                .FirstOrDefault();
-            
+            var localInterviewers = await this.interviewersPlainStorage
+                .WhereAsync(interviewer => interviewer.Password == password); // db query
+
+            var localInterviewer = localInterviewers // memory query
+                .FirstOrDefault(interviewer => string.Equals(interviewer.Name, userName, StringComparison.OrdinalIgnoreCase));
+
             this.currentUserIdentity = localInterviewer;
 
             return this.IsAuthenticated;
         }
 
-        public void SignOut()
+        public Task SignOutAsync()
         {
             this.currentUserIdentity = null;
+            return Task.FromResult(true);
         }
     }
 }

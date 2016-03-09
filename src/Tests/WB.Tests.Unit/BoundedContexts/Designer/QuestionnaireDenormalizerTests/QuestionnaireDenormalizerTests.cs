@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Moq;
-using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
@@ -12,9 +12,8 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
@@ -61,8 +60,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             Assert.That(evnt.ConditionExpression, Is.EqualTo(question.ConditionExpression));
             Assert.That(evnt.Instructions, Is.EqualTo(question.Instructions));
             Assert.That(evnt.StataExportCaption, Is.EqualTo(question.StataExportCaption));
-            Assert.That(evnt.ValidationExpression, Is.EqualTo(question.ValidationExpression));
-            Assert.That(evnt.ValidationMessage, Is.EqualTo(question.ValidationMessage));
+            Assert.That(evnt.ValidationConditions, Is.EqualTo(question.ValidationConditions));
         }
 
         private static QuestionnaireDenormalizer CreateQuestionnaireDenormalizer(Mock<IReadSideKeyValueStorage<QuestionnaireDocument>> storageStub)
@@ -104,8 +102,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                     answers : null,
                     instructions : "Answer this question, please",
                     stataExportCaption : "name",
-                    validationExpression : "[this]!=''",
-                    validationMessage : "Empty names is invalid answer"
+                    validationConditions: new List<ValidationCondition> { new ValidationCondition("[this]!=''", "Empty names is invalid answer") }
                 );
         }
 
@@ -119,7 +116,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
         public static QuestionChanged CreateQuestionChanged(Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
             string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string validationExpression = null, string validationMessage = null,
             QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
-            QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null)
+            QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null,
+            Guid? cascadeFromQuestionId = null, string conditionExpression = null, bool hideIfDisabled = false, Order? answerOrder = null,
+            IList<ValidationCondition> validationConditions = null)
         {
             return new QuestionChanged(
                 publicKey: publicKey,
@@ -130,6 +129,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                 featured: featured,
                 questionScope: questionScope,
                 conditionExpression: conditionExpression,
+                hideIfDisabled: hideIfDisabled,
                 validationExpression: validationExpression,
                 validationMessage: validationMessage,
                 instructions: instructions,
@@ -140,13 +140,15 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
                 answerOrder: answerOrder,
                 answers: answers,
                 linkedToQuestionId: null,
+                linkedToRosterId: null,
                 areAnswersOrdered: null,
                 yesNoView: null,
                 maxAllowedAnswers: null,
                 mask: null,
                 isFilteredCombobox: isFilteredCombobox,
                 cascadeFromQuestionId: cascadeFromQuestionId,
-                targetGroupKey: Guid.NewGuid());
+                targetGroupKey: Guid.NewGuid(),
+                    validationConditions: validationConditions ?? new List<ValidationCondition>());
         }
     }
 }

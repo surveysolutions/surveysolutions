@@ -3,7 +3,7 @@ using Android.Content;
 using Android.Net;
 using Android.Net.Wifi;
 using Android.Telephony;
-using Cirrious.CrossCore.Droid.Platform;
+using MvvmCross.Platform.Droid.Platform;
 using MvvmCross.Plugins.Network.Reachability;
 using WB.Core.GenericSubdomains.Portable.Services;
 

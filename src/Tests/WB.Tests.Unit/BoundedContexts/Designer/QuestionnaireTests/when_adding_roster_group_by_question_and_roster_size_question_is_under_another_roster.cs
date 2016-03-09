@@ -23,7 +23,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
             questionnaire.Apply(new NewGroupAdded { PublicKey = anotherRosterId });
             questionnaire.Apply(new GroupBecameARoster(responsibleId, anotherRosterId));
-            questionnaire.Apply(Create.Event.NumericQuestionAdded ( publicKey : rosterSizeQuestionId, isInteger : true, groupPublicKey : anotherRosterId ));
+            questionnaire.Apply(Create.Event.NewQuestionAdded(
+                publicKey : rosterSizeQuestionId, isInteger : true, groupPublicKey : anotherRosterId,
+                questionType: QuestionType.Numeric));
 
             eventContext = new EventContext();
         };
@@ -35,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
         };
 
         Because of = () =>
-                questionnaire.AddGroupAndMoveIfNeeded(groupId, responsibleId, "title",null, rosterSizeQuestionId, null, null, anotherRosterId, true,
+                questionnaire.AddGroupAndMoveIfNeeded(groupId, responsibleId, "title",null, rosterSizeQuestionId, null, null, false, anotherRosterId, true,
                     RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
         It should_raise_NewGroupAdded_event = () =>

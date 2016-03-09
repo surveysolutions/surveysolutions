@@ -99,15 +99,18 @@
                     var command = {
                         questionnaireId: questionnaireId,
                         questionId: question.itemId,
-                        title: question.title,
                         type: question.type,
-                        variableName: question.variable,
-                        variableLabel: question.variableLabel,
                         mask: question.mask,
-                        enablementCondition: question.enablementCondition,
-                        validationExpression: question.validationExpression,
-                        validationMessage: question.validationMessage,
-                        instructions: question.instructions
+                        validationConditions: question.validationConditions,
+
+                        commonQuestionParameters : {
+                            title: question.title,
+                            variableName: question.variable,
+                            variableLabel: question.variableLabel,
+                            enablementCondition: question.enablementCondition,
+                            hideIfDisabled: question.hideIfDisabled,
+                            instructions: question.instructions,
+                        }
                     };
 
                     var isPrefilledScopeSelected = question.questionScope == 'Prefilled';
@@ -118,7 +121,7 @@
                     case "SingleOption":
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
-                        command.linkedToQuestionId = question.linkedToQuestionId;
+                        command.linkedToEntityId = question.linkedToEntityId;
                         command.isFilteredCombobox = question.isFilteredCombobox || false;
                         command.cascadeFromQuestionId = question.cascadeFromQuestionId;
                         command.enablementCondition = question.cascadeFromQuestionId ? '' : command.enablementCondition;
@@ -133,9 +136,9 @@
                     case "MultyOption":
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
-                        command.linkedToQuestionId = question.linkedToQuestionId;
+                        command.linkedToEntityId = question.linkedToEntityId;
                         command.yesNoView = question.yesNoView;
-                        command.options = _.isEmpty(command.linkedToQuestionId) ? question.options : null;
+                        command.options = _.isEmpty(command.linkedToEntityId) ? question.options : null;
                         break;
                     case "Numeric":
                         command.isInteger = question.isInteger;
@@ -162,6 +165,7 @@
                         "groupId": chapter.itemId,
                         "title": chapter.title,
                         "condition": "",
+                        "hideIfDisabled": false,
                         "isRoster": false,
                         "rosterSizeQuestionId": null,
                         "rosterSizeSource": "Question",
@@ -180,6 +184,7 @@
                         "groupId": group.itemId,
                         "title": group.title,
                         "condition": "",
+                        "hideIfDisabled": false,
                         "isRoster": false,
                         "rosterSizeQuestionId": null,
                         "rosterSizeSource": "Question",
@@ -198,6 +203,7 @@
                         "groupId": group.itemId,
                         "title": group.title,
                         "condition": "",
+                        "hideIfDisabled": false,
                         "isRoster": true,
                         "rosterSizeQuestionId": null,
                         "rosterSizeSource": "FixedTitles",
@@ -228,6 +234,7 @@
                         "groupId": group.itemId,
                         "title": group.title,
                         "condition": group.enablementCondition,
+                        "hideIfDisabled": group.hideIfDisabled,
                         "isRoster": false,
                         "rosterSizeQuestionId": null,
                         "rosterSizeSource": "Question",
@@ -247,6 +254,7 @@
                         "title": incomingRoster.title,
                         "description": incomingRoster.description,
                         "condition": incomingRoster.enablementCondition,
+                        "hideIfDisabled": incomingRoster.hideIfDisabled,
                         "variableName": incomingRoster.variableName,
                         "isRoster": true
                     };

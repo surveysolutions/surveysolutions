@@ -25,8 +25,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
     {
         Establish context = () =>
         {
-            merger = CreateMerger();
-
             questionWithSubstitutionId = Guid.Parse("11111111111111111111111111111111");
             nestedRosterId = Guid.Parse("20000000000000000000000000000000");
 
@@ -34,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             substitutionReferenceQuestionId = Guid.Parse("33333333333333333333333333333333");
             parentRosterId = Guid.Parse("30000000000000000000000000000000");
 
-            questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
+            questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 new Group()
                 {
                     PublicKey = parentRosterId,
@@ -94,14 +92,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                 new Dictionary<Guid, object>(),
                 new Dictionary<Guid, string>() { { nestedRosterId, "b" } });
            
-            questionnaire = CreateQuestionnaireWithVersion(questionnaireDocument);
-            questionnaireReferenceInfo = CreateQuestionnaireReferenceInfo(questionnaireDocument);
-            questionnaireRosters = CreateQuestionnaireRosterStructure(questionnaireDocument);
             user = Mock.Of<UserDocument>();
+            merger = CreateMerger(questionnaire);
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, questionnaireReferenceInfo, questionnaireRosters, user);
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight());
 
 
         It should_title_of_question_in_first_row_of_first_roster_has_rostertitle_replaced_with_a = () =>
@@ -120,9 +116,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static InterviewDataAndQuestionnaireMerger merger;
         private static InterviewDetailsView mergeResult;
         private static InterviewData interview;
-        private static QuestionnaireDocumentVersioned questionnaire;
-        private static ReferenceInfoForLinkedQuestions questionnaireReferenceInfo;
-        private static QuestionnaireRosterStructure questionnaireRosters;
+        private static QuestionnaireDocument questionnaire;
         private static UserDocument user;
 
         private static Guid nestedRosterId;
@@ -130,6 +124,5 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static Guid questionWithSubstitutionId;
         private static Guid interviewId;
         private static Guid parentRosterId;
-        private static QuestionnaireDocument questionnaireDocument;
     }
 }

@@ -57,6 +57,7 @@
                 
                 $scope.activeQuestion.enablementCondition = question.enablementCondition;
                 $scope.activeQuestion.validationExpression = question.validationExpression;
+                $scope.activeQuestion.hideIfDisabled = question.hideIfDisabled;
                 $scope.activeQuestion.validationMessage = question.validationMessage;
                 $scope.activeQuestion.allQuestionScopeOptions = question.allQuestionScopeOptions;
                 $scope.activeQuestion.instructions = question.instructions;
@@ -65,6 +66,8 @@
                 $scope.activeQuestion.areAnswersOrdered = question.areAnswersOrdered;
                 $scope.activeQuestion.yesNoView = question.yesNoView;
                 $scope.activeQuestion.isFilteredCombobox = question.isFilteredCombobox;
+
+                $scope.activeQuestion.validationConditions = question.validationConditions;
 
                 var options = question.options || [];
                 _.each(options, function(option) {
@@ -83,7 +86,7 @@
 
                 $scope.setQuestionType(question.type);
 
-                $scope.setLinkSource(question.linkedToQuestionId);
+                $scope.setLinkSource(question.linkedToEntityId);
                 $scope.setCascadeSource(question.cascadeFromQuestionId);
 
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = false;
@@ -98,7 +101,7 @@
             var dataBind = function (result) {
                 dictionnaires.allQuestionScopeOptions = result.allQuestionScopeOptions;
 
-                $scope.sourceOfLinkedQuestions = result.sourceOfLinkedQuestions;
+                $scope.sourceOfLinkedEntities = result.sourceOfLinkedEntities;
                 $scope.sourceOfSingleQuestions = result.sourceOfSingleQuestions;
                 
                 bindQuestion(result);
@@ -109,6 +112,7 @@
                     .success(function (result) {
                         $scope.initialQuestion = angular.copy(result);
                         dataBind(result);
+                        utilityService.scrollToValidationCondition($state.params.validationIndex);
                     });
             };
 
@@ -119,9 +123,7 @@
             };
 
             var hasQuestionValidations = function(question) {
-                return $scope.doesQuestionSupportValidations() &&
-                    question.validationExpression !== null &&
-                    /\S/.test(question.validationExpression);
+                return $scope.doesQuestionSupportValidations() && question.validationConditions.length > 0;
             };
 
             $scope.saveQuestion = function (callback) {
@@ -133,12 +135,13 @@
 
                         $rootScope.$emit('questionUpdated', {
                             itemId: $scope.activeQuestion.itemId,
+                            type: $scope.activeQuestion.type,
+                            linkedToEntityId: $scope.activeQuestion.linkedToEntityId,
+                            hasCondition: hasQuestionEnablementConditions($scope.activeQuestion),
+                            hasValidation: hasQuestionValidations($scope.activeQuestion),
                             title: $scope.activeQuestion.title,
                             variable: $scope.activeQuestion.variable,
-                            type: $scope.activeQuestion.type,
-                            linkedToQuestionId: $scope.activeQuestion.linkedToQuestionId,
-                            hasCondition: hasQuestionEnablementConditions($scope.activeQuestion),
-                            hasValidation: hasQuestionValidations($scope.activeQuestion)
+                            hideIfDisabled: $scope.activeQuestion.hideIfDisabled
                         });
 
                         var notIsFilteredCombobox = !$scope.activeQuestion.isFilteredCombobox;
@@ -294,6 +297,22 @@
                 $scope.questionForm.$setDirty();
             };
 
+            $scope.removeValidationCondition = function(index) {
+                $scope.activeQuestion.validationConditions.splice(index, 1);
+                $scope.questionForm.$setDirty();
+            }
+
+            $scope.addValidationCondition = function() {
+                $scope.activeQuestion.validationConditions.push({
+                    expression: '',
+                    message: ''
+                });
+                $scope.questionForm.$setDirty();
+                _.defer(function () {
+                    $(".question-editor .form-holder").scrollTo({ top: '+=200px', left: "+=0" }, 250);
+                });
+            }
+
             $scope.showOptionsInTextarea = function () {
                 $scope.activeQuestion.stringifiedOptions = optionsService.stringifyOptions($scope.activeQuestion.options);
                 $scope.activeQuestion.useListAsOptionsEditor = false;
@@ -343,8 +362,8 @@
                 if (newValue) {
                     $scope.activeQuestion.yesNoView = false;
                 } else {
-                    $scope.activeQuestion.linkedToQuestionId = null;
-                    $scope.activeQuestion.linkedToQuestion = null;
+                    $scope.activeQuestion.linkedToEntityId = null;
+                    $scope.activeQuestion.linkedToEntity = null;
                 }
             });
             $scope.$watch('activeQuestion.yesNoView', function (newValue) {
@@ -370,8 +389,8 @@
                 $scope.activeQuestion.isLinked = !_.isEmpty(itemId);
 
                 if (itemId) {
-                    $scope.activeQuestion.linkedToQuestionId = itemId;
-                    $scope.activeQuestion.linkedToQuestion = _.find($scope.sourceOfLinkedQuestions, { id: $scope.activeQuestion.linkedToQuestionId });
+                    $scope.activeQuestion.linkedToEntityId = itemId;
+                    $scope.activeQuestion.linkedToEntity = _.find($scope.sourceOfLinkedEntities, { id: $scope.activeQuestion.linkedToEntityId });
                     $scope.questionForm.$setDirty();
                 } 
             };

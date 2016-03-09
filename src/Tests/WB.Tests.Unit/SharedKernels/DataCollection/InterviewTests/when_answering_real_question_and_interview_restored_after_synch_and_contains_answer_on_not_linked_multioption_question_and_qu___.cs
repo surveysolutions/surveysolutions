@@ -59,12 +59,20 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             interview.SynchronizeInterview(userId,
-                new InterviewSynchronizationDto(interview.EventSourceId, InterviewStatus.RejectedBySupervisor, null, null, null, userId, questionnaireId,
-                    questionnaireMock.Object.Version,
-                    new[] { new AnsweredQuestionSynchronizationDto(multyOptionAnsweredQuestionId, new decimal[0], new decimal[] { 1 }, string.Empty) },
-                    new HashSet<InterviewItemId>(),
-                    new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
-                    new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), true));
+                Create.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
+                    status: InterviewStatus.RejectedBySupervisor,
+                    userId: userId,
+                    questionnaireId: questionnaireId,
+                    questionnaireVersion: questionnaireMock.Object.Version,
+                    answers:
+                        new[]
+                        {
+                            new AnsweredQuestionSynchronizationDto(multyOptionAnsweredQuestionId, new decimal[0],
+                                new decimal[] {1}, string.Empty)
+                        },
+                    wasCompleted: true
+                    ));
+
 
             eventContext = new EventContext();
         };

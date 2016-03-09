@@ -34,6 +34,9 @@
 .icon-text {
   background-position-y: -30px;
 }
+.icon-roster {
+    background-position: 0 -30px;
+}
 .icon-singleoption {
   background-position-y: -60px;
 }

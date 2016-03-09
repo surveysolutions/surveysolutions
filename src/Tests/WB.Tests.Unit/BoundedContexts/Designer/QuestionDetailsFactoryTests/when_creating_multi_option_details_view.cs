@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionDetailsFactoryTests
             questionView = (MultiOptionDetailsView)viewMapper.Map(question, parentGroupId);
 
         It should_set_LinkedToQuestionId_in_linkedToQuestionId = () =>
-            questionView.LinkedToQuestionId.ShouldEqual(linkedToQuestionId);
+            questionView.LinkedToEntityId.ShouldEqual(linkedToQuestionId);
 
         It should_set_MaxAllowedAnswers_in_maxAllowedAnswers = () =>
             questionView.MaxAllowedAnswers.ShouldEqual(maxAllowedAnswers);
@@ -85,10 +85,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionDetailsFactoryTests
             questionView.Title.ShouldEqual(title);
 
         It should_set_ValidationExpressiont_in_validationExpression = () =>
-            questionView.ValidationExpression.ShouldEqual(validationExpression);
+            questionView.ValidationConditions.First().Expression.ShouldEqual(validationExpression);
 
         It should_set_ValidationMessaget_in_validationMessage = () =>
-            questionView.ValidationMessage.ShouldEqual(validationMessage);
+            questionView.ValidationConditions.First().Message.ShouldEqual(validationMessage);
 
         private static IQuestion question;
         private static Guid parentGroupId = Guid.Parse("11111111111111111111111111111111");

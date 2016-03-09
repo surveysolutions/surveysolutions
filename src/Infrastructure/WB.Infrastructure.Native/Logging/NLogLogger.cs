@@ -9,13 +9,14 @@ namespace WB.Infrastructure.Native.Logging
         private readonly Logger logger;
 
         public NLogLogger()
-        {
-            this.logger = LogManager.GetLogger("");
-        }
+            : this(string.Empty) {}
 
         public NLogLogger(Type type)
+            : this(type.FullName) {}
+
+        public NLogLogger(string name)
         {
-            this.logger = LogManager.GetLogger(type.FullName);
+            this.logger = LogManager.GetLogger(name);
         }
 
         public void Debug(string message, Exception exception = null)

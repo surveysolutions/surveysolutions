@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
         private static QuestionsAndGroupsCollectionView questionnaireView;
         private static Mock<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>> questionDetailsReaderMock = new Mock<IReadSideKeyValueStorage<QuestionsAndGroupsCollectionView>>();
         private static string questionnaireId = "11111111111111111111111111111111";
-        private static Guid groupId = g2Id;
+        private static Guid groupId = multiOptionRoster;
         private static Mock<IExpressionProcessor> expressionProcessorMock = new Mock<IExpressionProcessor>();
     }
 }

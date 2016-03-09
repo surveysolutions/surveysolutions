@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -6,6 +7,8 @@ using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateNumericQuestionHandlerTests
@@ -29,8 +32,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateNumericQuestionHandlerTes
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => questionnaire.UpdateNumericQuestion(questionId, "title", rosterTitle,null, false, QuestionScope.Interviewer, null, null, null, null,
-                responsibleId: responsibleId, isInteger: false, countOfDecimalPlaces: null));
+            exception = Catch.Exception(() => questionnaire.UpdateNumericQuestion(questionId, "title", rosterTitle,null, false, QuestionScope.Interviewer, null, false, null,
+                responsibleId: responsibleId, isInteger: false, countOfDecimalPlaces: null, validationConditions: new List<ValidationCondition>()));
 
         Cleanup stuff = () =>
         {

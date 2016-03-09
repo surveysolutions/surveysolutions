@@ -26,9 +26,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
     {
         Establish context = () =>
         {
-            merger = CreateMerger();
-
-
             linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
             sourceForLinkedQuestionId = Guid.Parse("11111111111111111111111111111111");
             firstLevelRosterId = Guid.Parse("10000000000000000000000000000000");
@@ -37,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
             interviewId = Guid.Parse("43333333333333333333333333333333");
 
-            questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new Group()
+            questionnaire = CreateQuestionnaireDocumentWithOneChapter(new Group()
             {
                 PublicKey = firstLevelRosterId,
                 IsRoster = true,
@@ -78,16 +75,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                 new Dictionary<Guid, object> { { sourceForLinkedQuestionId, 12 } }, new Dictionary<Guid, string>() { { secondLevelRosterId, "roster12" } });
             AddInterviewLevel(interview, new ValueVector<Guid> { firstLevelRosterId, secondLevelRosterId }, new decimal[] { 1, 0 },
                 new Dictionary<Guid, object> { { sourceForLinkedQuestionId, 21 } }, new Dictionary<Guid, string>() { { secondLevelRosterId, "roster21" } });
-
-
-            questionnaire = CreateQuestionnaireWithVersion(questionnaireDocument);
-            questionnaireReferenceInfo = CreateQuestionnaireReferenceInfo(questionnaireDocument);
-            questionnaireRosters = CreateQuestionnaireRosterStructure(questionnaireDocument);
+            
             user = Mock.Of<UserDocument>();
+            merger = CreateMerger(questionnaire);
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, questionnaireReferenceInfo, questionnaireRosters, user);
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight());
 
 
         It should_linked_in_first_row_has_2_options = () =>
@@ -109,9 +103,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static InterviewDataAndQuestionnaireMerger merger;
         private static InterviewDetailsView mergeResult;
         private static InterviewData interview;
-        private static QuestionnaireDocumentVersioned questionnaire;
-        private static ReferenceInfoForLinkedQuestions questionnaireReferenceInfo;
-        private static QuestionnaireRosterStructure questionnaireRosters;
+        private static QuestionnaireDocument questionnaire;
         private static UserDocument user;
 
         private static Guid firstLevelRosterId;
@@ -119,6 +111,5 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static Guid secondLevelRosterId;
         private static Guid sourceForLinkedQuestionId;
         private static Guid interviewId;
-        private static QuestionnaireDocument questionnaireDocument;
     }
 }

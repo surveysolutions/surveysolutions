@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.Enumerator;
 
@@ -5,6 +6,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 {
     public interface IInterviewerSettings : IEnumeratorSettings
     {
+        Version GetSupportedQuestionnaireContentVersion();
         string GetDeviceId();
         string GetApplicationVersionName();
         string GetDeviceTechnicalInformation();

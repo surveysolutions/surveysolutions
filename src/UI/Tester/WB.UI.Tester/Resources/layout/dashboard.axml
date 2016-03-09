@@ -24,7 +24,7 @@
     <MvxLinearLayout style="@style/Dashboard_SearchView_Container"
                      local:MvxBind="Visible IsSearchVisible;">
       <EditText style="@style/Dashboard_SearchView_FilterInput"
-          local:MvxBind="Text SearchText; SetFocus IsSearchVisible" />
+          local:MvxBind="Text SearchText; SetFocus IsSearchVisible; TextChanged SearchCommand" />
       <ImageButton style="@style/Dashboard_SearchView_DeleteButton"
         local:MvxBind="Click ClearSearchCommand;"/>
     </MvxLinearLayout>

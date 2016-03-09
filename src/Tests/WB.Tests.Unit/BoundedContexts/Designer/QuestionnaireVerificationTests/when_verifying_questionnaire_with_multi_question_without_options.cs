@@ -30,12 +30,12 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
         It should_not_return_error_with_code__WB0072__and__WB0073 = () =>
-            resultErrors.Select(x => x.Code).ShouldNotContain("WB0072", "WB0073");
+            verificationMessages.Select(x => x.Code).ShouldNotContain("WB0072", "WB0073");
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 

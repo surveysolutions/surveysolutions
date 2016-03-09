@@ -21,10 +21,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
         }
 
-        public virtual event ScreenChanged ScreenChanged;
+        public virtual event GroupChanged ScreenChanged;
         public virtual event BeforeGroupChanged BeforeScreenChanged;
 
-        private bool isNavigationStarted = false;
+        private bool isNavigationStarted;
         public virtual string InterviewId { get; private set; }
         public virtual string QuestionnaireId { get; private set; }
         public virtual Identity CurrentGroup { get; private set; }
@@ -51,8 +51,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public void Init(string interviewId, string questionnaireId)
         {
-            if (interviewId == null) throw new ArgumentNullException("interviewId");
-            if (questionnaireId == null) throw new ArgumentNullException("questionnaireId");
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
+            if (questionnaireId == null) throw new ArgumentNullException(nameof(questionnaireId));
 
             this.InterviewId = interviewId;
             this.QuestionnaireId = questionnaireId;
@@ -130,7 +130,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private void NavigateBack(Action navigateToIfHistoryIsEmpty)
         {
             if (navigateToIfHistoryIsEmpty == null) 
-                throw new ArgumentNullException("navigateToIfHistoryIsEmpty");
+                throw new ArgumentNullException(nameof(navigateToIfHistoryIsEmpty));
 
             // remove current group from stack
             if (this.navigationStack.Count != 0)
@@ -177,12 +177,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     TargetScreen = navigationIdentity.TargetScreen
                 };
 
-                this.ScreenChanged(screenChangedEventArgs);
+                this.ScreenChanged?.Invoke(screenChangedEventArgs);
             }
         }
     }
 
     public delegate void BeforeGroupChanged(BeforeScreenChangedEventArgs eventArgs);
 
-    public delegate void ScreenChanged(ScreenChangedEventArgs eventArgs);
+    public delegate void GroupChanged(ScreenChangedEventArgs eventArgs);
 }

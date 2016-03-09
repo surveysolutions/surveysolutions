@@ -45,6 +45,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             object queryString = null, 
             object request = null,
             RestCredentials credentials = null,
+            bool forceNoCache = false,
             CancellationToken? userCancellationToken = null)
         {
             if (!this.IsValidHostAddress(this.restServiceSettings.Endpoint))
@@ -71,8 +72,15 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 .WithTimeout(this.restServiceSettings.Timeout)
                 .WithHeader("Accept-Encoding", "gzip,deflate");
 
+            if (forceNoCache)
+            {
+                restClient.WithHeader("Cache-Control", "no-cache");
+            }
+
             if (credentials != null)
+            {
                 restClient.WithBasicAuth(credentials.Login, credentials.Password);
+            }
 
             try
             {
@@ -110,10 +118,10 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             }
         }
 
-        public async Task GetAsync(string url, object queryString = null, RestCredentials credentials = null, CancellationToken? token = null)
+        public async Task GetAsync(string url, object queryString, RestCredentials credentials, bool forceNoCache, CancellationToken? token)
         {
             await this.ExecuteRequestAsync(url: url, queryString: queryString, credentials: credentials,
-                    method: HttpMethod.Get, userCancellationToken: token);
+                    method: HttpMethod.Get, forceNoCache: forceNoCache, userCancellationToken: token);
         }
 
         public async Task PostAsync(string url, object request = null, RestCredentials credentials = null,
@@ -155,7 +163,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             var restResponse = await this.ReceiveBytesWithProgressAsync(response: response, token: token ?? default(CancellationToken),
                         onDownloadProgressChanged: onDownloadProgressChanged);
 
-            return restResponse.Response;
+            var fileContent = this.GetDecompressedContentFromHttpResponseMessage(restResponse);
+            return fileContent;
         }
 
         private HttpContent CreateJsonContent(object data)
@@ -246,10 +255,25 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
         private T GetDecompressedJsonFromHttpResponseMessage<T>(RestResponse restResponse)
         {
-            var responseContent = restResponse.Response;
-
             if (restResponse.ContentType != RestContentType.Json)
                 throw new RestException(message: Resources.CheckServerSettings, statusCode: HttpStatusCode.Redirect);
+
+            try
+            {
+                var responseContent = GetDecompressedContentFromHttpResponseMessage(restResponse);
+                return this.serializer.Deserialize<T>(responseContent);
+            }
+            catch (JsonDeserializationException ex)
+            {
+                throw new RestException(message: Resources.UpdateRequired, statusCode: HttpStatusCode.UpgradeRequired, innerException: ex);
+            }
+
+
+        }
+
+        private byte[] GetDecompressedContentFromHttpResponseMessage(RestResponse restResponse)
+        {
+            var responseContent = restResponse.Response;
 
             switch (restResponse.ContentCompressionType)
             {
@@ -261,15 +285,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                     break;
             }
 
-            try
-            {
-                return this.serializer.Deserialize<T>(responseContent);
-            }
-            catch (JsonDeserializationException ex)
-            {
-                throw new RestException(message: Resources.UpdateRequired, statusCode: HttpStatusCode.UpgradeRequired, innerException: ex);
-            }
-
+            return responseContent;
         }
 
         private bool IsValidHostAddress(string url)

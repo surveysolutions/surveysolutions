@@ -14,10 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection.Accessors
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string pathToStore;
 
-        private static ILogger Logger
-        {
-            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
-        }
+        private static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<QuestionnaireAssemblyFileAccessor>();
 
         public QuestionnaireAssemblyFileAccessor(IFileSystemAccessor fileSystemAccessor, string folderPath, string assemblyDirectoryName)
         {

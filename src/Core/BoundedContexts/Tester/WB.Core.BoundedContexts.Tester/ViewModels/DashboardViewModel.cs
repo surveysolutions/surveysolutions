@@ -1,23 +1,22 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.ViewModels;
 using Humanizer;
+using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -36,9 +35,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IQuestionnaireImportService questionnaireImportService;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IUserInteractionService userInteractionService;
-        private readonly List<QuestionnaireListItem> questionnaireListStorageCache = new List<QuestionnaireListItem>();
+        private IReadOnlyCollection<QuestionnaireListItem> localQuestionnaires = new List<QuestionnaireListItem>();
         private readonly IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage;
         private readonly IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage;
+        private readonly ILogger logger;
 
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
@@ -51,7 +51,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IFriendlyErrorMessageService friendlyErrorMessageService,
             IUserInteractionService userInteractionService,
             IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage, 
-            IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage)
+            IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage,
+            ILogger logger)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
@@ -61,66 +62,69 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.userInteractionService = userInteractionService;
             this.questionnaireListStorage = questionnaireListStorage;
             this.dashboardLastUpdateStorage = dashboardLastUpdateStorage;
+            this.logger = logger;
             this.friendlyErrorMessageService = friendlyErrorMessageService;
         }
 
-        public async void Init()
+        public async Task Init()
         {
-            questionnaireListStorageCache.AddRange(this.questionnaireListStorage
-                .Where(questionnaire => questionnaire.OwnerName == this.principal.CurrentUserIdentity.Name || questionnaire.IsPublic == true));
-
-            if (!questionnaireListStorageCache.Any())
+            this.localQuestionnaires = this.questionnaireListStorage.LoadAll();
+            
+            if (!localQuestionnaires.Any())
             {
                 await LoadServerQuestionnairesAsync();
             }
             else
             {
-                this.LoadFilteredListFromLocalStorage(null);
+                this.SearchByLocalQuestionnaires();
             }
 
             this.ShowEmptyQuestionnaireListText = true;
             this.IsSearchVisible = false;
 
-            var lastUpdate = this.dashboardLastUpdateStorage.Where(x => x.Id == this.principal.CurrentUserIdentity.Name).FirstOrDefault();
+            var lastUpdate = this.dashboardLastUpdateStorage.GetById(this.principal.CurrentUserIdentity.Name);
 
-            this.UpdateLastUpdateDate(lastUpdate == null ? (DateTime?)null : lastUpdate.LastUpdateDate);
+            this.HumanizeLastUpdateDate(lastUpdate?.LastUpdateDate);
         }
        
-        private void LoadFilteredListFromLocalStorage(string searchTerm)
+        private void SearchByLocalQuestionnaires(string searchTerm = null)
         {
             var trimmedSearchText = (searchTerm ?? "").Trim();
 
             Func<QuestionnaireListItem, bool> emptyFilter = x => true;
-            Func<QuestionnaireListItem, bool> titleSearchFilter = x => x.Title.Contains(trimmedSearchText);
+            Func<QuestionnaireListItem, bool> titleSearchFilter = x => x.Title.Contains(trimmedSearchText) || x.OwnerName.Contains(trimmedSearchText);
             Func<QuestionnaireListItem, bool> searchFilter = string.IsNullOrEmpty(trimmedSearchText)
                 ? emptyFilter
                 : titleSearchFilter;
 
-            var myQuestionnaireListItems = questionnaireListStorageCache
-                .Where(questionnaire => questionnaire.OwnerName == this.principal.CurrentUserIdentity.Name)
-                .Where(searchFilter)
+            var myQuestionnaires = this.localQuestionnaires
+                .Where(questionnaire =>
+                    searchFilter(questionnaire)
+                    &&
+                    (
+                        string.Equals(questionnaire.OwnerName, this.principal.CurrentUserIdentity.Name, StringComparison.OrdinalIgnoreCase)
+                        ||
+                        questionnaire.IsShared
+                    ))
                 .ToList();
 
-            var publicQuestionnaireListItems = questionnaireListStorageCache
-                .Where(questionnaire => questionnaire.IsPublic)
-                .Where(searchFilter)
+            var publicQuestionnaires = this.localQuestionnaires
+                .Where(questionnaire => searchFilter(questionnaire) && questionnaire.IsPublic)
                 .ToList();
 
-            this.myQuestionnaires = this.HightlightSearchTermInFilteredList(
-                myQuestionnaireListItems,
-                trimmedSearchText);
-            this.publicQuestionnaires = this.HightlightSearchTermInFilteredList(
-                publicQuestionnaireListItems,
-                trimmedSearchText);
+            var selectedQuestionnaires = this.IsPublicShowed ? publicQuestionnaires : myQuestionnaires;
 
-            this.MyQuestionnairesCount = this.myQuestionnaires.Count;
-            this.PublicQuestionnairesCount = this.publicQuestionnaires.Count;
+            this.MyQuestionnairesCount = myQuestionnaires.Count;
+            this.PublicQuestionnairesCount = publicQuestionnaires.Count;
 
-            if (!IsPublicShowed) this.ShowMyQuestionnaires();
-            else this.ShowPublicQuestionnaires();
+            this.IsListEmpty = !selectedQuestionnaires.Any();
+
+            this.Questionnaires = selectedQuestionnaires
+                .Select(questionnaire => ToDashboardQuestionnaire(questionnaire, searchTerm))
+                .OrderByDescending(questionnaire => questionnaire.LastEntryDate)
+                .ToList();
         }
 
-        private bool loadServerQuestionnairesProcessIsCanceled=false;
         private string humanizedLastUpdateDate;
         public string HumanizedLastUpdateDate
         {
@@ -128,14 +132,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             set { this.humanizedLastUpdateDate = value; RaisePropertyChanged(); }
         }
 
-        private ObservableCollection<QuestionnaireListItem> questionnaires = new ObservableCollection<QuestionnaireListItem>();
-        public ObservableCollection<QuestionnaireListItem> Questionnaires
+        private IList<QuestionnaireListItem> questionnaires = new List<QuestionnaireListItem>();
+        public IList<QuestionnaireListItem> Questionnaires
         {
             get { return this.questionnaires; }
-            set { 
-                this.questionnaires = value; 
-                RaisePropertyChanged(); 
-            }
+            set { this.questionnaires = value; RaisePropertyChanged(); }
         }
 
         private bool showEmptyQuestionnaireListText;
@@ -192,17 +193,38 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             get { return this.isListEmpty; }
             set { this.isListEmpty = value; RaisePropertyChanged(); }
         }
+        
+        public IMvxCommand ClearSearchCommand => new MvxCommand(this.ClearSearch);
 
-        private IMvxCommand clearSearchCommand;
-        public IMvxCommand ClearSearchCommand
+        public IMvxCommand ShowSearchCommand => new MvxCommand(this.ShowSearch);
+
+        public IMvxCommand SearchCommand => new MvxCommand<string>(this.SearchByLocalQuestionnaires);
+
+        public IMvxCommand SignOutCommand => new MvxCommand(async () => await this.SignOutAsync());
+
+        private IMvxCommand loadQuestionnaireCommand;
+
+        public IMvxCommand LoadQuestionnaireCommand => this.loadQuestionnaireCommand ??
+                                                       (this.loadQuestionnaireCommand = new MvxCommand<QuestionnaireListItem>(
+                                                               async (questionnaire) => await this.LoadQuestionnaireAsync(questionnaire), (item) => !this.IsInProgress));
+
+        private IMvxCommand refreshQuestionnairesCommand;
+
+        public IMvxCommand RefreshQuestionnairesCommand => this.refreshQuestionnairesCommand ??
+                                                           (this.refreshQuestionnairesCommand =
+                                                               new MvxCommand(async () => await this.LoadServerQuestionnairesAsync(), () => !this.IsInProgress));
+        
+        public IMvxCommand ShowMyQuestionnairesCommand => new MvxCommand(this.ShowMyQuestionnaires);
+        public IMvxCommand ShowPublicQuestionnairesCommand => new MvxCommand(this.ShowPublicQuestionnaires);
+
+        private string searchText;
+        public string SearchText
         {
-            get { return clearSearchCommand ?? (clearSearchCommand = new MvxCommand(this.ClearSearch)); }
+            get { return this.searchText; }
+            set { this.searchText = value; RaisePropertyChanged(); }
         }
 
-        public IMvxCommand ShowSearchCommand
-        {
-            get { return new MvxCommand(this.ShowSearch); }
-        }
+        private bool isListEmpty;
 
         private void ShowSearch()
         {
@@ -217,80 +239,26 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IsSearchVisible = false;
         }
 
-        private IMvxCommand signOutCommand;
-        public IMvxCommand SignOutCommand
-        {
-            get { return signOutCommand ?? (signOutCommand = new MvxCommand(async () => await this.SignOutAsync())); }
-        }
-
-        private IMvxCommand loadQuestionnaireCommand;
-        public IMvxCommand LoadQuestionnaireCommand
-        {
-            get { return loadQuestionnaireCommand ?? 
-                (loadQuestionnaireCommand = new MvxCommand<QuestionnaireListItem>(async (questionnaire) => await this.LoadQuestionnaireAsync(questionnaire), 
-               (item) => !this.IsInProgress)); }
-        }
-
-        private IMvxCommand refreshQuestionnairesCommand;
-        public IMvxCommand RefreshQuestionnairesCommand
-        {
-            get { return refreshQuestionnairesCommand ?? (refreshQuestionnairesCommand = new MvxCommand(async () => await this.LoadServerQuestionnairesAsync(), () => !this.IsInProgress)); }
-        }
-
-        private IMvxCommand showMyQuestionnairesCommand;
-        public IMvxCommand ShowMyQuestionnairesCommand
-        {
-            get { return showMyQuestionnairesCommand ?? (showMyQuestionnairesCommand = new MvxCommand(this.ShowMyQuestionnaires)); }
-        }
-
-        private IMvxCommand showPublicQuestionnairesCommand;
-        public IMvxCommand ShowPublicQuestionnairesCommand
-        {
-            get { return showPublicQuestionnairesCommand ?? (showPublicQuestionnairesCommand = new MvxCommand(this.ShowPublicQuestionnaires)); }
-        }
-
-        private string searchText;
-        public string SearchText
-        {
-            get { return this.searchText; }
-            set {  
-                this.searchText = value;
-                RaisePropertyChanged(); 
-                LoadFilteredListFromLocalStorage(searchText);
-            }
-        }
-
-        private List<QuestionnaireListItem> myQuestionnaires;
-        private List<QuestionnaireListItem> publicQuestionnaires;
-
-        private bool isListEmpty;
-
         private async Task SignOutAsync()
         {
-            this.principal.SignOut();
+            this.CancelLoadServerQuestionnaires();
+
+            await this.principal.SignOutAsync();
             await this.viewModelNavigationService.NavigateToAsync<LoginViewModel>();
         }
 
         private void ShowPublicQuestionnaires()
         {
-            this.ChangeQuestionnairesList(this.publicQuestionnaires);
-
             this.IsPublicShowed = true;
+
+            this.SearchByLocalQuestionnaires();
         }
 
         private void ShowMyQuestionnaires()
         {
-            this.ChangeQuestionnairesList(this.myQuestionnaires);
-
             this.IsPublicShowed = false;
-        }
 
-        private void ChangeQuestionnairesList(List<QuestionnaireListItem> questionnaireListItems)
-        {
-            this.Questionnaires.Clear();
-            questionnaireListItems.ForEach(x => this.Questionnaires.Add(x));
-            this.RaisePropertyChanged(() => this.Questionnaires);
-            IsListEmpty = !this.Questionnaires.Any();
+            this.SearchByLocalQuestionnaires();
         }
 
         private async Task LoadQuestionnaireAsync(QuestionnaireListItem selectedQuestionnaire)
@@ -301,7 +269,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_CheckConnectionToServer;
 
-            string errorMessage = null;
             try
             {
                 var questionnairePackage = await this.designerApiService.GetQuestionnaireAsync(
@@ -344,6 +311,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 if (ex.Type == RestExceptionType.RequestCanceledByUser)
                     return;
 
+                string errorMessage;
                 switch (ex.StatusCode)
                 {
                     case HttpStatusCode.Forbidden:
@@ -360,131 +328,102 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         break;
                 }
 
-                if (string.IsNullOrEmpty(errorMessage))
-                    throw;
+                if (!string.IsNullOrEmpty(errorMessage))
+                    await this.userInteractionService.AlertAsync(errorMessage);
+                else throw;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return;
+                this.logger.Error("Import questionaire exception. ", ex);
             }
             finally
             {
                 this.IsInProgress = false;   
             }
-
-            if (!string.IsNullOrEmpty(errorMessage))
-                await this.userInteractionService.AlertAsync(errorMessage);
         }
 
         private async Task LoadServerQuestionnairesAsync()
         {
             this.IsInProgress = true;
             this.tokenSource = new CancellationTokenSource();
-            string errorMessage = null;
             try
             {
-                ClearSearch();
+                this.ClearSearch();
 
-                await this.questionnaireListStorage.RemoveAsync(this.myQuestionnaires);
-                await this.questionnaireListStorage.RemoveAsync(this.publicQuestionnaires);
-                questionnaireListStorageCache.Clear();
+                await this.questionnaireListStorage.RemoveAsync(this.localQuestionnaires);
 
-                var loadedMyQuestionnaires =
-                    await this.designerApiService.GetQuestionnairesAsync(isPublic: false, token: tokenSource.Token);
-                var loadedPublicQuestionnaires =
-                    await this.designerApiService.GetQuestionnairesAsync(isPublic: true, token: tokenSource.Token);
+                this.localQuestionnaires = await this.designerApiService.GetQuestionnairesAsync(token: tokenSource.Token);
+                
+                await this.questionnaireListStorage.StoreAsync(this.localQuestionnaires);
 
-                questionnaireListStorageCache.AddRange(loadedMyQuestionnaires);
-                questionnaireListStorageCache.AddRange(loadedPublicQuestionnaires);
+                var lastUpdateDate = DateTime.UtcNow;
+                this.HumanizeLastUpdateDate(lastUpdateDate);
 
-                await this.questionnaireListStorage.StoreAsync(questionnaireListStorageCache);
-
-                var lastUpdateDate = DateTime.Now;
-
-                UpdateLastUpdateDate(lastUpdateDate);
-
-                await this.dashboardLastUpdateStorage.RemoveAsync(this.principal.CurrentUserIdentity.Name);
                 await this.dashboardLastUpdateStorage.StoreAsync(new DashboardLastUpdate
                 {
                     Id = this.principal.CurrentUserIdentity.Name,
                     LastUpdateDate = lastUpdateDate
                 });
 
-                LoadFilteredListFromLocalStorage(null);
+                this.SearchByLocalQuestionnaires();
             }
             catch (RestException ex)
             {
                 if (ex.Type == RestExceptionType.RequestCanceledByUser)
                     return;
 
-                errorMessage = this.friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(ex);
+                var errorMessage = this.friendlyErrorMessageService.GetFriendlyErrorMessageByRestException(ex);
 
-                if (string.IsNullOrEmpty(errorMessage))
-                    throw;
+                if (!string.IsNullOrEmpty(errorMessage))
+                    await this.userInteractionService.AlertAsync(errorMessage);
+                else throw;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return;
+                this.logger.Error("Load questionaire list exception. ", ex);
             }
             finally
             {
                 this.IsInProgress = false;
             }
-
-            if (!string.IsNullOrEmpty(errorMessage))
-                await this.userInteractionService.AlertAsync(errorMessage);
         }
 
-        private void UpdateLastUpdateDate(DateTime? lastUpdate)
+        private void HumanizeLastUpdateDate(DateTime? lastUpdate)
         {
             this.HumanizedLastUpdateDate = lastUpdate.HasValue
-                ? string.Format(TesterUIResources.Dashboard_LastUpdated, lastUpdate.Value.Humanize(utcDate: false))
+                ? string.Format(TesterUIResources.Dashboard_LastUpdated, lastUpdate.Value.Humanize(utcDate: true, dateToCompareAgainst: DateTime.UtcNow))
                 : TesterUIResources.Dashboard_HaveNotBeenUpdated;
         }
 
-        private List<QuestionnaireListItem> HightlightSearchTermInFilteredList(List<QuestionnaireListItem> questionnaireListItems, string searchTerm)
+        private QuestionnaireListItem ToDashboardQuestionnaire(QuestionnaireListItem x, string searchTerm)
         {
-            if (searchTerm.IsNullOrEmpty() || !questionnaireListItems.Any())
-            {
-                return questionnaireListItems;
-            }
-
-            return questionnaireListItems.Select(x => HightlightTitleInListItem(x, searchTerm)).ToList();
-        }
-
-        private static QuestionnaireListItem HightlightTitleInListItem(QuestionnaireListItem x, string searchTerm)
-        {
-            var index = x.Title.IndexOf(searchTerm, StringComparison.CurrentCultureIgnoreCase);
-
-            var title = index >= 0
-                ? Regex.Replace(x.Title, searchTerm, "<b>" + searchTerm + "</b>", RegexOptions.IgnoreCase)
-                : x.Title;
-
             return new QuestionnaireListItem
                    {
                        Id = x.Id,
-                       IsPublic = x.IsPublic,
+                       IsPublic = this.IsPublicShowed,
                        LastEntryDate = x.LastEntryDate,
                        OwnerName = x.OwnerName,
-                       Title = title
-                   };
+                       Title = ToDashboardTitle(x.Title, searchTerm)
+            };
+        }
+
+        private static string ToDashboardTitle(string questionnaireTitle, string searchTerm)
+        {
+            if (string.IsNullOrEmpty(searchTerm)) return questionnaireTitle;
+
+            var index = questionnaireTitle.IndexOf(searchTerm, StringComparison.CurrentCultureIgnoreCase);
+
+            var title = index >= 0
+                ? Regex.Replace(questionnaireTitle, searchTerm, "<b>" + searchTerm + "</b>", RegexOptions.IgnoreCase)
+                : questionnaireTitle;
+            return title;
         }
 
         public void CancelLoadServerQuestionnaires()
         {
-            if (tokenSource != null && !tokenSource.IsCancellationRequested && IsInProgress)
+            if (tokenSource != null && !tokenSource.IsCancellationRequested)
             {
                 this.tokenSource.Cancel();
-                this.loadServerQuestionnairesProcessIsCanceled = true;
-            }
-        }
-
-        public async void RestartLoadServerQuestionnairesIfNeeded()
-        {
-            if (loadServerQuestionnairesProcessIsCanceled)
-            {
-                await LoadServerQuestionnairesAsync();
-                loadServerQuestionnairesProcessIsCanceled = false;
             }
         }
     }

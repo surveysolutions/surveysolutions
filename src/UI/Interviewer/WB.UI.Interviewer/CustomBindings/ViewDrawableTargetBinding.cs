@@ -1,5 +1,5 @@
 ﻿using Android.Views;
-using Cirrious.MvvmCross.Binding;
+using MvvmCross.Binding;
 using WB.UI.Shared.Enumerator.CustomBindings;
 
 namespace WB.UI.Interviewer.CustomBindings

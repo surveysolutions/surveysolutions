@@ -70,5 +70,15 @@ namespace WB.Core.SharedKernels.Enumerator.Models.Questionnaire
         {
             return (T)this.Questions[questionId];
         }
+
+        public LinkedToRosterSingleOptionQuestionModel GetLinkedToRosterSingleOptionQuestion(Guid questionId)
+        {
+            return this.GetQuestion<LinkedToRosterSingleOptionQuestionModel>(questionId);
+        }
+
+        public LinkedToRosterMultiOptionQuestionModel GetLinkedToRosterMultiOptionQuestionModel(Guid questionId)
+        {
+            return this.GetQuestion<LinkedToRosterMultiOptionQuestionModel>(questionId);
+        }
     }
 }

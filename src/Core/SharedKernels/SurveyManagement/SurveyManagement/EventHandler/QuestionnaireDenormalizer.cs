@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -13,7 +12,9 @@ using WB.Core.SharedKernels.SurveyManagement.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
-    public class QuestionnaireDenormalizer : BaseDenormalizer, IEventHandler<TemplateImported>, IEventHandler<PlainQuestionnaireRegistered>, 
+    public class QuestionnaireDenormalizer : BaseDenormalizer, 
+        IEventHandler<TemplateImported>, 
+        IEventHandler<PlainQuestionnaireRegistered>, 
         IEventHandler<QuestionnaireDeleted>
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> documentStorage;
@@ -46,7 +47,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             long version = evnt.Payload.Version ?? evnt.EventSequence;
             QuestionnaireDocument questionnaireDocument = evnt.Payload.Source;
 
-            this.StoreQuestionnaire(id, version, questionnaireDocument, evnt.Payload.AllowCensusMode, evnt.EventTimeStamp);
+            this.StoreQuestionnaire(id, version, questionnaireDocument, evnt.Payload.ContentVersion ?? 1);
         }
 
         public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
@@ -56,7 +57,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             QuestionnaireDocument questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
 
-            this.StoreQuestionnaire(id, version, questionnaireDocument, evnt.Payload.AllowCensusMode, evnt.EventTimeStamp);
+            this.StoreQuestionnaire(id, version, questionnaireDocument, 1);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
@@ -64,7 +65,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.documentStorage.AsVersioned().Remove(evnt.EventSourceId.FormatGuid(), evnt.Payload.QuestionnaireVersion);
         }
 
-        private void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument, bool allowCensusMode, DateTime timestamp)
+        private void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument, long questionnaireContentVersion)
         {
             var document = questionnaireDocument.Clone() as QuestionnaireDocument;
             if (document == null)
@@ -73,7 +74,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             this.questionnaireCacheInitializer.InitializeQuestionnaireDocumentWithCaches(document);
 
             this.documentStorage.AsVersioned().Store(
-                new QuestionnaireDocumentVersioned() { Questionnaire = document, Version = version },
+                new QuestionnaireDocumentVersioned() { Questionnaire = document, Version = version, QuestionnaireContentVersion = questionnaireContentVersion },
                 id.FormatGuid(), version);
         }
     }
