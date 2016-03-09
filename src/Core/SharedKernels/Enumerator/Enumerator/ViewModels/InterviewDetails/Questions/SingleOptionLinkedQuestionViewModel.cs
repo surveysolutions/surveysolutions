@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Platform.Core;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
@@ -12,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
@@ -25,10 +27,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class SingleOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel,
-        ILiteEventHandler<AnswersRemoved>,
-        ILiteEventHandler<AnswerRemoved>,
-        ILiteEventHandler<QuestionsDisabled>,
-        ILiteEventHandler<QuestionsEnabled>,
+        //ILiteEventHandler<AnswersRemoved>,
+        //ILiteEventHandler<AnswerRemoved>,
+        //ILiteEventHandler<QuestionsDisabled>,
+        //ILiteEventHandler<QuestionsEnabled>,
+        ILiteEventHandler<LinkedOptionsChanged>,
         IDisposable
     {
         private readonly Guid userId;
@@ -250,6 +253,40 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.QuestionState.IsAnswered = false;
             }
             RemoveOptionIfQuestionIsSourceofTheLink(@event.QuestionId, @event.RosterVector);
+        }
+
+        public void Handle(LinkedOptionsChanged @event)
+        {
+            ChangedLinkedOptions changedLinkedQuestion = @event.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId == this.Identity);
+
+            if (changedLinkedQuestion != null)
+            {
+                IStatefulInterview interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
+                IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+
+                List<SingleOptionLinkedQuestionOptionViewModel> newOptions = new List<SingleOptionLinkedQuestionOptionViewModel>();
+
+                foreach (var linkedOptionToShow in changedLinkedQuestion.Options)
+                {
+                    BaseInterviewAnswer referencedAnswer =
+                        interview.FindBaseAnswerByOrDeeperRosterLevel(this.referencedQuestionId, linkedOptionToShow);
+
+                    SingleOptionLinkedQuestionOptionViewModel optionViewModel =
+                        this.GenerateOptionViewModelOrNull(referencedAnswer,
+                            this.referencedQuestionId,
+                            interview.GetLinkedSingleOptionAnswer(this.Identity),
+                            interview,
+                            questionnaire);
+
+                    if (optionViewModel != null)
+                    {
+                        newOptions.Add(optionViewModel);
+                    }
+                }
+
+                this.Options.Clear();
+                newOptions.ForEach(this.Options.Add);
+            }
         }
 
         private void RemoveOptionIfQuestionIsSourceofTheLink(Guid removedQuestionId,
