@@ -61,6 +61,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Uploaded file &apos;{0}&apos; is not image.
+        /// </summary>
+        internal static string Attachments_uploaded_file_is_not_image {
+            get {
+                return ResourceManager.GetString("Attachments_uploaded_file_is_not_image", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question can&apos;t be linked and cascading at the same time..
         /// </summary>
         internal static string CantBeLinkedAndCascadingAtSameTime {
