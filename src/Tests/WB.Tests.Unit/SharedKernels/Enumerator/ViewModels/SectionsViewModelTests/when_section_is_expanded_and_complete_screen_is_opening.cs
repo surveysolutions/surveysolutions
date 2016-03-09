@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
 
         Because of = () =>
         {
-            navigationState.ScreenChanged += Raise.Event<ScreenChanged>(new ScreenChangedEventArgs { TargetScreen = ScreenType.Complete });
+            navigationState.ScreenChanged += Raise.Event<GroupChanged>(new ScreenChangedEventArgs { TargetScreen = ScreenType.Complete });
         };
 
         It should_collapse_previous_group = () => 

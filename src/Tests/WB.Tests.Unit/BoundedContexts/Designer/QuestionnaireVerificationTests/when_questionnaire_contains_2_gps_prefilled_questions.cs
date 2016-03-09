@@ -21,33 +21,33 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            verificationErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
-            verificationErrors.Count().ShouldEqual(1);
+        It should_return_1_message = () =>
+            verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_error_with_code_WB0006 = () =>
-            verificationErrors.First().Code.ShouldEqual("WB0006");
+        It should_return_message_with_code_WB0006 = () =>
+            verificationMessages.First().Code.ShouldEqual("WB0006");
 
-        It should_return_error_with_two_references = () =>
-            verificationErrors.First().References.Count().ShouldEqual(2);
+        It should_return_message_with_two_references = () =>
+            verificationMessages.First().References.Count().ShouldEqual(2);
 
-        It should_return_error_with_first_reference_with_Question_type = () =>
-            verificationErrors.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+        It should_return_message_with_first_reference_with_Question_type = () =>
+            verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_error_with_first_reference_with_id_equals_gpsQuestion1 = () =>
-            verificationErrors.First().References.First().Id.ShouldEqual(gpsQuestion1);
+        It should_return_message_with_first_reference_with_id_equals_gpsQuestion1 = () =>
+            verificationMessages.First().References.First().Id.ShouldEqual(gpsQuestion1);
 
-        It should_return_error_with_second_reference_with_Question_type = () =>
-        verificationErrors.First().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+        It should_return_message_with_second_reference_with_Question_type = () =>
+        verificationMessages.First().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_error_with_second_reference_with_id_equals_gpsQuestion2 = () =>
-            verificationErrors.First().References.Last().Id.ShouldEqual(gpsQuestion2);
+        It should_return_message_with_second_reference_with_id_equals_gpsQuestion2 = () =>
+            verificationMessages.First().References.Last().Id.ShouldEqual(gpsQuestion2);
 
         static QuestionnaireDocument questionnaire;
         static Guid gpsQuestion1 = Guid.Parse("99999999999999999999999999999999");
         static Guid gpsQuestion2 = Guid.Parse("88888888888888888888888888888888");
         static QuestionnaireVerifier verifier;
-        static IEnumerable<QuestionnaireVerificationError> verificationErrors;
+        static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
     }
 }

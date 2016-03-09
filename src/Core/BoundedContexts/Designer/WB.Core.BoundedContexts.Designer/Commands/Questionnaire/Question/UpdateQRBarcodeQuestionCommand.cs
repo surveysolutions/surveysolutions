@@ -1,31 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
-    public class UpdateQRBarcodeQuestionCommand : AbstractUpdateQuestionCommand
+    public class UpdateQRBarcodeQuestionCommand : UpdateValidatableQuestionCommand
     {
-        public UpdateQRBarcodeQuestionCommand(Guid questionnaireId, Guid questionId, string title, string variableName,
-            string variableLabel,
-            string enablementCondition, string instructions, Guid responsibleId,
+        public UpdateQRBarcodeQuestionCommand(Guid questionnaireId, 
+            Guid questionId, 
+            Guid responsibleId,
+            CommonQuestionParameters commonQuestionParameters,
             string validationExpression,
             string validationMessage,
-            QuestionScope scope)
+            QuestionScope scope,
+            List<ValidationCondition> validationConditions)
             : base(
-                responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, enablementCondition: enablementCondition,
-                instructions: instructions, variableLabel: variableLabel)
+                responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
+                commonQuestionParameters: commonQuestionParameters,
+                
+                validationConditions: validationConditions)
         {
-            this.ValidationMessage = CommandUtils.SanitizeHtml(validationMessage, removeAllTags: true);
-            this.ValidationExpression = validationExpression;
             this.Scope = scope;
         }
-        public string ValidationMessage { get; set; }
-
         public QuestionScope Scope { get; set; }
-
-        public string ValidationExpression { get; set; }
     }
 }

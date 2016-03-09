@@ -1,24 +1,39 @@
 ﻿extern alias designer;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
+using Moq;
+using MvvmCross.Plugins.Messenger;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using NHibernate.Bytecode;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Events.User;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
+using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using QuestionnaireDeleted = WB.Core.SharedKernels.DataCollection.Events.Questionnaire.QuestionnaireDeleted;
+using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
 
 namespace WB.Tests.Unit
 {
@@ -26,6 +41,11 @@ namespace WB.Tests.Unit
     {
         internal static class Event
         {
+            public static ImportFromDesigner ImportFromDesigner(Guid responsibleId, QuestionnaireDocument questionnaire, bool allowCensus, string assembly, long contentVersion)
+            {
+                return new ImportFromDesigner(responsibleId, questionnaire, allowCensus, assembly, contentVersion);
+            }
+
             public static NewGroupAdded AddGroup(Guid groupId, Guid? parentId = null, string variableName = null)
             {
                 return new NewGroupAdded
@@ -61,6 +81,37 @@ namespace WB.Tests.Unit
                     isInteger: null);
             }
 
+            public static NewQuestionAdded NumericQuestionAdded(Guid publicKey, Guid groupPublicKey,
+             bool? isInteger = null,
+             string stataExportCaption = null,
+             string questionText = null,
+             string variableLabel = null,
+             bool featured = false,
+             string conditionExpression = null,
+             string validationExpression = null,
+             string validationMessage = null,
+             string instructions = null,
+             Guid? responsibleId = null,
+             int? countOfDecimalPlaces = null,
+             QuestionScope? questionScope = null)
+            {
+                return Create.Event.NewQuestionAdded(publicKey: publicKey,
+                    groupPublicKey: groupPublicKey,
+                    questionText: questionText,
+                    stataExportCaption: stataExportCaption,
+                    variableLabel: variableLabel,
+                    featured: featured,
+                    questionScope: questionScope ?? QuestionScope.Interviewer,
+                    conditionExpression: conditionExpression,
+                    validationExpression: validationExpression,
+                    validationMessage: validationMessage,
+                    instructions: instructions,
+                    responsibleId: responsibleId ?? Guid.NewGuid(),
+                    capital: false,
+                    isInteger: isInteger,
+                    questionType:QuestionType.Numeric);
+            }
+
             public static AnswersDeclaredInvalid AnswersDeclaredInvalid(Guid? id = null, decimal[] rosterVector = null)
             {
                 var identities = new[]
@@ -68,6 +119,11 @@ namespace WB.Tests.Unit
                     new Identity(id ?? Guid.NewGuid(), rosterVector ?? new decimal[0]),
                 };
                 return new AnswersDeclaredInvalid(identities);
+            }
+
+            public static AnswersDeclaredInvalid AnswersDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedConditions)
+            {
+                return new AnswersDeclaredInvalid(failedConditions);
             }
 
             public static AnswersRemoved AnswersRemoved(params Identity[] questions)
@@ -96,6 +152,8 @@ namespace WB.Tests.Unit
                 return new GroupBecameARoster(Guid.NewGuid(), rosterId);
             }
 
+            public static GroupsDisabled GroupsDisabled(Identity[] groups) => new GroupsDisabled(groups);
+
             public static GroupsDisabled GroupsDisabled(Guid? id = null, decimal[] rosterVector = null)
             {
                 var identities = new[]
@@ -104,6 +162,8 @@ namespace WB.Tests.Unit
                 };
                 return new GroupsDisabled(identities);
             }
+
+            public static GroupsEnabled GroupsEnabled(Identity[] groups) => new GroupsEnabled(groups);
 
             public static GroupsEnabled GroupsEnabled(Guid? id = null, decimal[] rosterVector = null)
             {
@@ -228,7 +288,7 @@ namespace WB.Tests.Unit
             string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string variableLabel = null, string validationExpression = null, string validationMessage = null,
             QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
             QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
-            string mask = null, int? maxAllowedAnswers = null, bool? yesNoView = null, bool? areAnswersOrdered = null)
+            string mask = null, int? maxAllowedAnswers = null, bool? yesNoView = null, bool? areAnswersOrdered = null, bool hideIfDisabled = false)
             {
                 return new NewQuestionAdded(
                     publicKey: publicKey,
@@ -239,6 +299,7 @@ namespace WB.Tests.Unit
                     featured: featured,
                     questionScope: questionScope,
                     conditionExpression: conditionExpression,
+                    hideIfDisabled: hideIfDisabled,
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
@@ -254,7 +315,8 @@ namespace WB.Tests.Unit
                     maxAllowedAnswers: maxAllowedAnswers,
                     mask: mask,
                     isFilteredCombobox: isFilteredCombobox,
-                    cascadeFromQuestionId: cascadeFromQuestionId);
+                    cascadeFromQuestionId: cascadeFromQuestionId,
+                    validationConditions: new List<ValidationCondition>());
             }
 
             public static IPublishedEvent<NewUserCreated> NewUserCreated(Guid userId, 
@@ -276,38 +338,6 @@ namespace WB.Tests.Unit
                 }.ToPublishedEvent(eventSourceId: userId, eventId: eventId);
             }
 
-            public static NumericQuestionAdded NumericQuestionAdded(Guid publicKey, Guid groupPublicKey,
-                bool? isInteger = null,
-                string stataExportCaption = null,
-                string questionText = null,
-                string variableLabel = null,
-                bool featured = false,
-                string conditionExpression = null,
-                string validationExpression = null,
-                string validationMessage = null,
-                string instructions = null,
-                Guid? responsibleId = null,
-                int? countOfDecimalPlaces = null,
-                QuestionScope? questionScope = null)
-            {
-                return new NumericQuestionAdded(
-                    publicKey: publicKey,
-                    groupPublicKey: groupPublicKey,
-                    questionText: questionText,
-                    stataExportCaption: stataExportCaption,
-                    variableLabel: variableLabel,
-                    featured: featured,
-                    questionScope: questionScope ?? QuestionScope.Interviewer,
-                    conditionExpression: conditionExpression,
-                    validationExpression: validationExpression,
-                    validationMessage: validationMessage,
-                    instructions: instructions,
-                    responsibleId: responsibleId ?? Guid.NewGuid(),
-                    capital: false,
-                    isInteger: isInteger,
-                    countOfDecimalPlaces: countOfDecimalPlaces);
-            }
-
             public static NumericQuestionChanged NumericQuestionChanged(
                 Guid publicKey,
                 bool? isInteger = null,
@@ -319,7 +349,8 @@ namespace WB.Tests.Unit
                 string validationExpression = null,
                 string validationMessage = null,
                 string instructions = null,
-                Guid? responsibleId = null)
+                Guid? responsibleId = null,
+                bool hideIfDisabled = false)
             {
                 return new NumericQuestionChanged(
                     publicKey: publicKey,
@@ -329,13 +360,15 @@ namespace WB.Tests.Unit
                     featured: featured,
                     questionScope: QuestionScope.Interviewer,
                     conditionExpression: conditionExpression,
+                    hideIfDisabled: hideIfDisabled,
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
                     responsibleId: responsibleId.HasValue ? responsibleId.Value : Guid.NewGuid(),
                     capital: false,
                     isInteger: isInteger,
-                    countOfDecimalPlaces: null);
+                    countOfDecimalPlaces: null,
+                    validationConditions: new List<ValidationCondition>());
             }
 
             public static NumericQuestionCloned NumericQuestionCloned(Guid publicKey,
@@ -352,7 +385,9 @@ namespace WB.Tests.Unit
                 string instructions = null,
                 Guid? responsibleId = null,
                 int targetIndex = 0,
-                QuestionScope scope = QuestionScope.Interviewer)
+                QuestionScope scope = QuestionScope.Interviewer,
+                IList<ValidationCondition> validationConditions = null,
+                bool hideIfDisabled = false)
             {
                 return new NumericQuestionCloned(
                     publicKey: publicKey,
@@ -363,6 +398,7 @@ namespace WB.Tests.Unit
                     featured: featured,
                     questionScope: scope,
                     conditionExpression: conditionExpression,
+                    hideIfDisabled: hideIfDisabled,
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
@@ -372,7 +408,8 @@ namespace WB.Tests.Unit
                     countOfDecimalPlaces: null,
                     sourceQuestionnaireId: null,
                     sourceQuestionId: sourceQuestionId,
-                    targetIndex: targetIndex);
+                    targetIndex: targetIndex,
+                    validationConditions: validationConditions ?? new List<ValidationCondition>());
             }
 
             public static QuestionChanged QuestionChanged(Guid questionId, string variableName, QuestionType questionType)
@@ -387,7 +424,8 @@ namespace WB.Tests.Unit
             public static QuestionChanged QuestionChanged(Guid publicKey, Guid targetGroupKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
                 string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string validationExpression = null, string validationMessage = null,
                 QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
-                QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null)
+                QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
+                bool hideIfDisabled = false)
             {
                 return new QuestionChanged(
                     publicKey: publicKey,
@@ -398,6 +436,7 @@ namespace WB.Tests.Unit
                     featured: featured,
                     questionScope: questionScope,
                     conditionExpression: conditionExpression,
+                    hideIfDisabled: hideIfDisabled,
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
@@ -408,13 +447,15 @@ namespace WB.Tests.Unit
                     answerOrder: answerOrder,
                     answers: answers,
                     linkedToQuestionId: null,
+                    linkedToRosterId: null,
                     areAnswersOrdered: null,
                     yesNoView: null,
                     maxAllowedAnswers: null,
                     mask: null,
                     isFilteredCombobox: isFilteredCombobox,
                     cascadeFromQuestionId: cascadeFromQuestionId,
-                    targetGroupKey: targetGroupKey);
+                    targetGroupKey: targetGroupKey,
+                    validationConditions: new List<ValidationCondition>());
             }
 
             public static QuestionChanged QuestionChanged(Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
@@ -431,6 +472,7 @@ namespace WB.Tests.Unit
                     featured: featured,
                     questionScope: questionScope,
                     conditionExpression: conditionExpression,
+                    hideIfDisabled: false,
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
@@ -441,13 +483,15 @@ namespace WB.Tests.Unit
                     answerOrder: answerOrder,
                     answers: answers,
                     linkedToQuestionId: null,
+                    linkedToRosterId: null,
                     areAnswersOrdered: null,
                     yesNoView: null,
                     maxAllowedAnswers: null,
                     mask: null,
                     isFilteredCombobox: isFilteredCombobox,
                     cascadeFromQuestionId: cascadeFromQuestionId,
-                    targetGroupKey: Guid.NewGuid());
+                    targetGroupKey: Guid.NewGuid(),
+                    validationConditions: new List<ValidationCondition>());
             }
 
 
@@ -455,7 +499,8 @@ namespace WB.Tests.Unit
                 string stataExportCaption = null, Guid? linkedToQuestionId = null, string variableLabel = null, bool capital = false, string validationExpression = null, string validationMessage = null,
                 QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
                 QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
-                Guid? sourceQuestionnaireId = null, int targetIndex = 0, int? maxAnswerCount = null, int? countOfDecimalPlaces = null)
+                Guid? sourceQuestionnaireId = null, int targetIndex = 0, int? maxAnswerCount = null, int? countOfDecimalPlaces = null,
+                IList<ValidationCondition> validationConditions = null)
             {
                 return new QuestionCloned(
                     publicKey: publicKey,
@@ -466,6 +511,7 @@ namespace WB.Tests.Unit
                     featured: featured,
                     questionScope: questionScope,
                     conditionExpression: conditionExpression,
+                    hideIfDisabled: false,
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
@@ -475,7 +521,8 @@ namespace WB.Tests.Unit
                     questionType: questionType,
                     answerOrder: answerOrder,
                     answers: answers,
-                    linkedToQuestionId: null,
+                    linkedToQuestionId: null, 
+                    linkedToRosterId: null,
                     areAnswersOrdered: null,
                     yesNoView: null,
                     maxAllowedAnswers: null,
@@ -486,7 +533,8 @@ namespace WB.Tests.Unit
                     sourceQuestionId: sourceQuestionId,
                     targetIndex: targetIndex,
                     maxAnswerCount: maxAnswerCount,
-                    countOfDecimalPlaces: countOfDecimalPlaces);
+                    countOfDecimalPlaces: countOfDecimalPlaces,
+                    validationConditions: validationConditions ?? new List<ValidationCondition>());
             }
 
             public static IPublishedEvent<QuestionnaireDeleted> QuestionnaireDeleted(Guid? questionnaireId = null, long? version = null)
@@ -499,15 +547,13 @@ namespace WB.Tests.Unit
                 return questionnaireDeleted;
             }
 
-            public static QuestionsDisabled QuestionsDisabled(Guid? id = null, decimal[] rosterVector = null)
-            {
-                var identities = new[]
-                {
-                    new Identity(id ?? Guid.NewGuid(), rosterVector ?? new decimal[0]), 
-                };
-                return new QuestionsDisabled(identities);
-            }
+            public static QuestionsDisabled QuestionsDisabled(Identity[] questions) => new QuestionsDisabled(questions);
 
+            public static QuestionsDisabled QuestionsDisabled(Guid? id = null, decimal[] rosterVector = null)
+                => Create.Event.QuestionsDisabled(new[]
+                {
+                    Create.Identity(id ?? Guid.NewGuid(), rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty),
+                });
 
             public static QuestionsEnabled QuestionsEnabled(Guid? id = null, decimal[] rosterVector = null)
             {
@@ -676,9 +722,9 @@ namespace WB.Tests.Unit
 
             internal static class Designer
             {
-                public static designer::Main.Core.Events.Questionnaire.TemplateImported TemplateImported(QuestionnaireDocument questionnaireDocument)
+                public static TemplateImported TemplateImported(QuestionnaireDocument questionnaireDocument)
                 {
-                    return new designer::Main.Core.Events.Questionnaire.TemplateImported { Source = questionnaireDocument };
+                    return new TemplateImported { Source = questionnaireDocument };
                 }
             }
         }

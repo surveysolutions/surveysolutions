@@ -39,6 +39,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.DesignerEngineVersionServiceTes
             var designerEngineVersionService =
                 this.CreateDesignerEngineVersionService();
 
+            var expressionsEngineVersionService = Setup.DesignerEngineVersionService();
+
             var result =
                 designerEngineVersionService.IsQuestionnaireDocumentSupportedByClientVersion(
                     Create.QuestionnaireDocument(), new Version(9, 0, 0));
@@ -61,6 +63,20 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.DesignerEngineVersionServiceTes
                         new IComposite[] {Create.TextQuestion(scope: QuestionScope.Hidden)}), new Version(9, 0, 0));
 
             Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void GetQuestionnaireContentVersion_When_questionnaire_contains_lookup_tables_Then_version_11_should_be_returned
+           ()
+        {
+            var designerEngineVersionService =
+                this.CreateDesignerEngineVersionService();
+            var questionnaire = Create.QuestionnaireDocument();
+            questionnaire.LookupTables.Add(Guid.Empty, Create.LookupTable("test"));
+            var result =
+                designerEngineVersionService.GetQuestionnaireContentVersion(questionnaire);
+
+            Assert.That(result, Is.EqualTo(new Version(11, 0, 0)));
         }
     }
 }

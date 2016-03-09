@@ -8,5 +8,6 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Questionnaire
     {
         public QuestionnaireDocument Questionnaire { get; set; }
         public long Version { get; set; }
+        public long QuestionnaireContentVersion { get; set; }
     }
 }

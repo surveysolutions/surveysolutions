@@ -109,7 +109,7 @@ namespace WB.UI.Designer.Api
 
             var questionnaireErrors = questionnaireVerifier.Verify(questionnaireView.Source).ToArray();
 
-            if (questionnaireErrors.Any(x => x.ErrorLevel!=VerificationErrorLevel.Warning))
+            if (questionnaireErrors.Any(x => x.MessageLevel > VerificationMessageLevel.Warning))
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
                 {
@@ -117,13 +117,15 @@ namespace WB.UI.Designer.Api
                 });
             }
 
+            var questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
+
             GenerationResult generationResult;
             string resultAssembly;
             try
             {
                 generationResult =
                     this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
-                        questionnaireView.Source, supportedClientVersion,
+                        questionnaireView.Source, questionnaireContentVersion,
                         out resultAssembly);
             }
             catch (Exception)
@@ -149,12 +151,16 @@ namespace WB.UI.Designer.Api
                 });
             }
 
-            var questionnaire = questionnaireView.Source;
+            var questionnaire = questionnaireView.Source.Clone();
             questionnaire.Macros = null;
+            questionnaire.LookupTables = null;
+            questionnaire.SharedPersons = null;
+            
             return new QuestionnaireCommunicationPackage
             {
                 Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaire)),
-                QuestionnaireAssembly = resultAssembly
+                QuestionnaireAssembly = resultAssembly,
+                QuestionnaireContentVersion = questionnaireContentVersion.Major
             };
         }
         

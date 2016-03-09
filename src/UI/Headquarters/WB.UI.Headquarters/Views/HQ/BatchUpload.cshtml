@@ -67,7 +67,7 @@
                     <br />
                     <div class="control-group">
                         <div class="controls">
-                            @Html.TextBoxFor(m => m.File, new { type = "file", accept = ".tab, .txt", @class = "prefilled-file-upload" })
+                            @Html.TextBoxFor(m => m.File, new { type = "file", accept = ".tab, .txt, .zip", @class = "prefilled-file-upload" })
                             @Html.ValidationMessageFor(x => x.File)
                         </div>
                     </div>

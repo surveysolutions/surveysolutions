@@ -5,26 +5,31 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
     [DebuggerDisplay("{Title} ({Id})")]
     public class InterviewQuestionView : InterviewEntityView
     {
-        public InterviewQuestionView(IQuestion question, InterviewQuestion answeredQuestion, Dictionary<Guid, string> variablesMap, Dictionary<string, string> answersForTitleSubstitution, bool isParentGroupDisabled, decimal[] rosterVector)
+        public InterviewQuestionView(IQuestion question, 
+            InterviewQuestion answeredQuestion, 
+            Dictionary<string, string> answersForTitleSubstitution, 
+            bool isParentGroupDisabled, 
+            decimal[] rosterVector,
+            InterviewStatus interviewStatus)
         {
             this.Id = question.PublicKey;
             this.RosterVector = rosterVector;
             this.Title = GetTitleWithSubstitutedVariables(question, answersForTitleSubstitution);
             this.QuestionType = question.QuestionType;
             this.IsFeatured = question.Featured;
-            this.ValidationMessage = question.ValidationMessage;
-            this.ValidationExpression = this.ReplaceGuidsWithVariables(question.ValidationExpression, variablesMap);
             this.Variable = question.StataExportCaption;
             this.IsValid = true;
             this.IsEnabled = (question.QuestionScope == QuestionScope.Supervisor) || (answeredQuestion == null) && !isParentGroupDisabled;
-            this.IsReadOnly = question.QuestionScope != QuestionScope.Supervisor;
+            this.IsReadOnly = !(question.QuestionScope == QuestionScope.Supervisor && interviewStatus < InterviewStatus.ApprovedByHeadquarters);
             this.Scope = question.QuestionScope;
 
             if (question.Answers != null)
@@ -54,7 +59,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                     YesNoQuestion = categoricalMultiQuestion.YesNoView,
                     AreAnswersOrdered = categoricalMultiQuestion.AreAnswersOrdered,
                     MaxAllowedAnswers = categoricalMultiQuestion.MaxAllowedAnswers,
-                    IsLinked = categoricalMultiQuestion.LinkedToQuestionId.HasValue
+                    IsLinked = (categoricalMultiQuestion.LinkedToQuestionId.HasValue|| categoricalMultiQuestion.LinkedToRosterId.HasValue)
                 };
             }
 
@@ -65,7 +70,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 {
                     IsFilteredCombobox = categoricalSingleQuestion.IsFilteredCombobox ?? false,
                     IsCascade = categoricalSingleQuestion.CascadeFromQuestionId.HasValue,
-                    IsLinked = categoricalSingleQuestion.LinkedToQuestionId.HasValue
+                    IsLinked = (categoricalSingleQuestion.LinkedToQuestionId.HasValue|| categoricalSingleQuestion.LinkedToRosterId.HasValue)
                 };
             }
 
@@ -111,10 +116,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             bool shouldBeValidByConvention = !this.IsEnabled;
 
             this.IsValid = shouldBeValidByConvention || !answeredQuestion.IsInvalid();
-            this.AnswerString = FormatAnswerAsString(answeredQuestion.Answer, question);
+            this.AnswerString = FormatAnswerAsString(answeredQuestion.Answer);
+
+            this.FailedValidationMessages = answeredQuestion.FailedValidationConditions.Select(x => question.ValidationConditions[x.FailedConditionIndex]).ToList();
         }
 
-        private string FormatAnswerAsString(object answer, IQuestion question)
+        public List<ValidationCondition> FailedValidationMessages { get; private set; }
+
+        private string FormatAnswerAsString(object answer)
         {
             if (answer == null) return "";
             switch (QuestionType)
@@ -173,21 +182,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             return title;
         }
 
-        private string ReplaceGuidsWithVariables(string expression, Dictionary<Guid, string> variablesMap)
-        {
-            if (string.IsNullOrWhiteSpace(expression))
-                return expression;
-
-            string expression1 = expression;
-
-            foreach (var pair in variablesMap)
-            {
-                expression1 = expression1.Replace(string.Format("[{0}]", pair.Key), string.Format("[{0}]", pair.Value));
-            }
-
-            return expression1;
-        }
-
         public string AnswerString { get; private set; }
 
         public decimal[] RosterVector { get; set; }
@@ -209,8 +203,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public bool IsEnabled { get; set; }
         public bool IsReadOnly { get; set; }
         public bool IsFlagged { get; set; }
-        public string ValidationExpression { get; set; }
-        public string ValidationMessage { get; set; }
 
         public int[] PropagationVector { get; set; }
 

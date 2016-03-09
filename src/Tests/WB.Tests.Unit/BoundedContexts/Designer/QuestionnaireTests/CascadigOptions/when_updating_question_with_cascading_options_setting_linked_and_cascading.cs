@@ -44,15 +44,13 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.CascadigOpti
             false,
             QuestionScope.Interviewer,
             null,
-            null,
-            null,
+            false,
             null,
             actorId,
             new Option[]{}, 
             parentQuestionId,
             false,
-            cascadeFromQuestionId: parentQuestionId
-            ));
+            cascadeFromQuestionId: parentQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
 
         It should_not_allow_to_set_both_linked_and_cascading_qestion_at_the_same_time = () =>
         {

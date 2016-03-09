@@ -52,8 +52,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.CascadigOpti
             false,
             QuestionScope.Interviewer,
             null,
-            null,
-            null,
+            false,
             null,
             actorId,
             new[]
@@ -64,8 +63,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.CascadigOpti
             }, 
             null,
             false,
-            cascadeFromQuestionId: parentQuestionId
-            );
+            cascadeFromQuestionId: parentQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>());
 
         private Cleanup stuff = () =>
         {

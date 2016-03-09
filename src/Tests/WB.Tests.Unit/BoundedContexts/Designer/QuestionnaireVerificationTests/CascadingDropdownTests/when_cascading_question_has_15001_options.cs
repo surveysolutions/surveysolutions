@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
         It should_return_WB0088_error = () => verificationErrors.First().Code.ShouldEqual("WB0088");
 
         It should_return_error_with_level_general = () =>
-            verificationErrors.First().ErrorLevel.ShouldEqual(VerificationErrorLevel.General);
+            verificationErrors.First().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
         It should_return_error_with_reference_to_question = () =>
             verificationErrors.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
         static Guid parentSingleOptionQuestionId;
         static Guid childCascadedComboboxId;
         static QuestionnaireVerifier verifier;
-        static IEnumerable<QuestionnaireVerificationError> verificationErrors;
+        static IEnumerable<QuestionnaireVerificationMessage> verificationErrors;
     }
 }
 

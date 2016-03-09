@@ -8,7 +8,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
 {
     internal class TesterSettings : IEnumeratorSettings
     {
-        private const string DesignerEndpointParameterName = "DesignerEndpointV12";
+        private const string DesignerEndpointParameterName = "DesignerEndpointV13";
         private const string HttpResponseTimeoutParameterName = "HttpResponseTimeout";
         private const string BufferSizeParameterName = "BufferSize";
         private const string AcceptUnsignedSslCertificateParameterName = "AcceptUnsignedSslCertificate";
@@ -86,18 +86,6 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
                 }
 
                 return defValue;
-            }
-        }
-
-        public static bool IsDebug
-        {
-            get
-            {
-#if DEBUG
-                return true;
-#else
-                return false;
-#endif
             }
         }
     }

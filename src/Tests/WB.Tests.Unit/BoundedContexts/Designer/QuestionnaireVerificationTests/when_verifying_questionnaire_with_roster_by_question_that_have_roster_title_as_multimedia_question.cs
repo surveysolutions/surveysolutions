@@ -46,30 +46,30 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
-            resultErrors.Count().ShouldEqual(1);
+        It should_return_1_message = () =>
+            verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_error_with_code__WB0035__ = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0083");
+        It should_return_message_with_code__WB0035__ = () =>
+            verificationMessages.Single().Code.ShouldEqual("WB0083");
 
-        It should_return_error_with_2_references = () =>
-            resultErrors.Single().References.Count().ShouldEqual(2);
+        It should_return_message_with_2_references = () =>
+            verificationMessages.Single().References.Count().ShouldEqual(2);
 
-        It should_return_first_error_reference_with_type_group = () =>
-            resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
+        It should_return_first_message_reference_with_type_group = () =>
+            verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
 
-        It should_return_first_error_reference_with_id_rosterId = () =>
-           resultErrors.Single().References.First().Id.ShouldEqual(rosterId);
+        It should_return_first_message_reference_with_id_rosterId = () =>
+           verificationMessages.Single().References.First().Id.ShouldEqual(rosterId);
 
-        It should_return_second_error_reference_with_type_group = () =>
-           ShouldExtensionMethods.ShouldEqual(resultErrors.Single().References.Second().Type, QuestionnaireVerificationReferenceType.Question);
+        It should_return_second_message_reference_with_type_group = () =>
+           ShouldExtensionMethods.ShouldEqual(verificationMessages.Single().References.Second().Type, QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_second_error_reference_with_id_rosterTitleMultimediaQuestionId = () =>
-           ShouldExtensionMethods.ShouldEqual(resultErrors.Single().References.Second().Id, rosterTitleMultimediaQuestionId);
+        It should_return_second_message_reference_with_id_rosterTitleMultimediaQuestionId = () =>
+           ShouldExtensionMethods.ShouldEqual(verificationMessages.Single().References.Second().Id, rosterTitleMultimediaQuestionId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid rosterId = Guid.Parse("10000000000000000000000000000000");

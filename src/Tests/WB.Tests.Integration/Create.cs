@@ -14,6 +14,7 @@ using NHibernate.Transform;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
@@ -38,6 +39,7 @@ using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Integration
 {
@@ -51,7 +53,9 @@ namespace WB.Tests.Integration
             return new CodeGenerator(
                 macrosSubstitutionService ?? DefaultMacrosSubstitutionService(),
                 expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
-                lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>());
+                lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>(),
+                Mock.Of<IFileSystemAccessor>(),
+                Mock.Of<ICompilerSettings>());
         }
 
         public static IMacrosSubstitutionService DefaultMacrosSubstitutionService()
@@ -275,6 +279,18 @@ namespace WB.Tests.Integration
             };
         }
 
+        public static NumericQuestion NumericIntegerQuestion(Guid id, string variable, IList<ValidationCondition> validationExpression)
+        {
+            return new NumericQuestion
+            {
+                QuestionType = QuestionType.Numeric,
+                PublicKey = id,
+                StataExportCaption = variable,
+                IsInteger = true,
+                ValidationConditions = validationExpression?? new List<ValidationCondition>()
+            };
+        }
+
         public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, 
             string validationExpression = null, Guid? cascadeFromQuestionId = null, List<Answer> options = null)
         {
@@ -393,7 +409,7 @@ namespace WB.Tests.Integration
                 Mock.Of<IPlainQuestionnaireRepository>(),
                 Mock.Of<IQuestionnaireAssemblyFileAccessor>());
 
-            questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), questionnaireDocument, false, "base64 string of assembly"));
+            questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), questionnaireDocument, false, "base64 string of assembly", 1));
 
             return questionnaire;
         }

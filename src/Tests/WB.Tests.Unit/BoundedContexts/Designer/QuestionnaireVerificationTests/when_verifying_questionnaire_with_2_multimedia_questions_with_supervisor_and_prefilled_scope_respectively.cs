@@ -31,39 +31,39 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
-        It should_return_2_errors = () =>
-            resultErrors.Count().ShouldEqual(2);
+        It should_return_2_messages = () =>
+            verificationMessages.Count().ShouldEqual(2);
 
         It should_return_first_error_with_code__WB0078 = () =>
-            resultErrors.First().Code.ShouldEqual("WB0078");
+            verificationMessages.First().Code.ShouldEqual("WB0078");
 
-        It should_return_error_with_level_general = () =>
-            resultErrors.First().ErrorLevel.ShouldEqual(VerificationErrorLevel.General);
+        It should_return_message_with_level_general = () =>
+            verificationMessages.First().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
 
         It should_return_first_error_with_1_references = () =>
-            resultErrors.First().References.Count().ShouldEqual(1);
+            verificationMessages.First().References.Count().ShouldEqual(1);
 
-        It should_return_first_error_reference_with_type_Question = () =>
-            resultErrors.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+        It should_return_first_message_reference_with_type_Question = () =>
+            verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_first_error_reference_with_id_of_supervisorQuestionId = () =>
-            resultErrors.First().References.First().Id.ShouldEqual(supervisorQuestionId);
+        It should_return_first_message_reference_with_id_of_supervisorQuestionId = () =>
+            verificationMessages.First().References.First().Id.ShouldEqual(supervisorQuestionId);
 
         It should_return_second_error_with_code__WB0078 = () =>
-            resultErrors.Last().Code.ShouldEqual("WB0078");
+            verificationMessages.Last().Code.ShouldEqual("WB0078");
 
         It should_return_second_error_with_1_references = () =>
-            resultErrors.Last().References.Count().ShouldEqual(1);
+            verificationMessages.Last().References.Count().ShouldEqual(1);
 
-        It should_return_second_error_reference_with_type_Question = () =>
-            resultErrors.Last().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+        It should_return_second_message_reference_with_type_Question = () =>
+            verificationMessages.Last().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_second_error_reference_with_id_of_hqQuestionId = () =>
-            resultErrors.Last().References.First().Id.ShouldEqual(hqQuestionId);
+        It should_return_second_message_reference_with_id_of_hqQuestionId = () =>
+            verificationMessages.Last().References.First().Id.ShouldEqual(hqQuestionId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 

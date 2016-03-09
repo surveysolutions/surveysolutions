@@ -164,7 +164,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             switch (questionType)
             {
                 case QuestionType.SingleOption:
-                    return IsQuestionLinked(questionId)
+                    return IsQuestionLinked(questionId) || IsQuestionLinkedToRoster(questionId)
                         ? AnswerType.RosterVector
                         : AnswerType.OptionCode;
 
@@ -172,7 +172,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     return
                         IsQuestionYesNo(questionId)
                             ? AnswerType.YesNoArray
-                            : IsQuestionLinked(questionId)
+                            : IsQuestionLinked(questionId) || IsQuestionLinkedToRoster(questionId)
                                 ? AnswerType.RosterVectorArray
                                 : AnswerType.OptionCodeArray;
 
@@ -285,13 +285,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public int GetMaxRosterRowCount() => Constants.MaxRosterRowCount;
 
-        public bool IsCustomValidationDefined(Guid questionId)
-        {
-            var validationExpression = this.GetCustomValidationExpression(questionId);
-
-            return IsExpressionDefined(validationExpression);
-        }
-
         public bool IsQuestion(Guid entityId) => this.HasQuestion(entityId);
 
         public bool IsInterviewierQuestion(Guid questionId)
@@ -300,8 +293,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             return question != null && question.QuestionScope == QuestionScope.Interviewer && !question.Featured;
         }
-
-        public string GetCustomValidationExpression(Guid questionId) => this.GetQuestionOrThrow(questionId).ValidationExpression;
 
         public ReadOnlyCollection<Guid> GetPrefilledQuestions()
             => this
@@ -417,14 +408,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .ToList();
         }
 
-        public Guid[] GetRosterSizeSourcesForQuestion(Guid questionId)
+        public Guid[] GetRosterSizeSourcesForEntity(Guid entityId)
         {
-            this.ThrowIfQuestionDoesNotExist(questionId);
+            var entity = GetEntityOrThrow(entityId);
+            var rosterSizes=new List<Guid>();
+            while (entity != this.innerDocument)
+            {
+                var group= entity as IGroup;
+                if (group != null)
+                {
+                    if (IsRosterGroup(group))
+                        rosterSizes.Add(this.GetRosterSource(group.PublicKey));
 
-            return this
-                .GetRostersFromTopToSpecifiedQuestion(questionId)
-                .Select(this.GetRosterSource)
-                .ToArray();
+                }
+                entity = entity.GetParent();
+            }
+            rosterSizes.Reverse();
+            return rosterSizes.ToArray();
         }
 
         public int GetRosterLevelForQuestion(Guid questionId)
@@ -512,6 +512,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     .Select(question => question.PublicKey)
                     .ToReadOnlyCollection());
 
+        public bool IsPrefilled(Guid questionId)
+        {
+            var question = this.GetQuestionOrThrow(questionId);
+            return question.Featured;
+        }
+
+        public bool ShouldBeHiddenIfDisabled(Guid entityId)
+        {
+            var entity = this.GetEntityOrThrow(entityId);
+            return (entity as IConditional)?.HideIfDisabled ?? false;
+        }
+
+        public string GetValidationMessage(Guid questionId, int conditionIndex)
+        {
+            return this.GetQuestion(questionId).ValidationConditions[conditionIndex].Message;
+        }
+
+        public bool HasMoreThanOneValidationRule(Guid questionId)
+        {
+            return this.GetQuestion(questionId).ValidationConditions.Count > 1;
+        }
+
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
         {
             if (!this.cacheOfUnderlyingGroupsAndRosters.ContainsKey(groupId))
@@ -541,11 +563,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IQuestion linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);
 
             if (!linkedQuestion.LinkedToQuestionId.HasValue)
-                throw new QuestionnaireException(string.Format(
-                    "Cannot return id of referenced question because specified question {0} is not linked.",
-                    FormatQuestionForException(linkedQuestion)));
+                throw new QuestionnaireException($"Cannot return id of referenced question because specified question {FormatQuestionForException(linkedQuestion)} is not linked.");
 
             return linkedQuestion.LinkedToQuestionId.Value;
+        }
+
+        public Guid GetRosterReferencedByLinkedQuestion(Guid linkedQuestionId)
+        {
+            IQuestion linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);
+
+            if (!linkedQuestion.LinkedToRosterId.HasValue)
+                throw new QuestionnaireException($"Cannot return id of referenced roster because specified question {FormatQuestionForException(linkedQuestion)} is not linked.");
+
+            return linkedQuestion.LinkedToRosterId.Value;
+        }
+
+        public bool IsQuestionLinkedToRoster(Guid linkedQuestionId)
+        {
+            IQuestion linkedQuestion = this.GetQuestionOrThrow(linkedQuestionId);
+
+            return linkedQuestion.LinkedToRosterId.HasValue;
         }
 
         public bool IsQuestionInteger(Guid questionId)

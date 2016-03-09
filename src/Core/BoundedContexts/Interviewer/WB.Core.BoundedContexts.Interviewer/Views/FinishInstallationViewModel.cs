@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.ViewModels;
+using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -166,7 +166,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 
                 await this.interviewersPlainStorage.StoreAsync(interviewerIdentity);
 
-                this.principal.SignIn(restCredentials.Login, restCredentials.Password, true);
+                await this.principal.SignInAsync(restCredentials.Login, restCredentials.Password, true);
                 await this.viewModelNavigationService.NavigateToDashboardAsync();
             }
             catch (SynchronizationException ex)

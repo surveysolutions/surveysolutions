@@ -92,7 +92,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var supportedVersion = this.supportedVersionProvider.GetSupportedQuestionnaireVersion();
 
-                var docSource = await this.restService.PostAsync<QuestionnaireCommunicationPackage>(
+                var questionnairePackage = await this.restService.PostAsync<QuestionnaireCommunicationPackage>(
                     url: "questionnaire",
                     credentials: designerUserCredentials,
                     request: new DownloadQuestionnaireRequest()
@@ -106,12 +106,16 @@ namespace WB.UI.Headquarters.Controllers
                         }
                     });
 
-                var document = this.zipUtils.DecompressString<QuestionnaireDocument>(docSource.Questionnaire);
+                var questionnaire = this.zipUtils.DecompressString<QuestionnaireDocument>(questionnairePackage.Questionnaire);
+                var questionnaireContentVersion = questionnairePackage.QuestionnaireContentVersion;
+                var questionnaireAssembly = questionnairePackage.QuestionnaireAssembly;
 
-                var supportingAssembly = docSource.QuestionnaireAssembly;
-
-                this.CommandService.Execute(new ImportFromDesigner(this.GlobalInfo.GetCurrentUser().Id, document,
-                    request.AllowCensusMode, supportingAssembly));
+                this.CommandService.Execute(new ImportFromDesigner(
+                    this.GlobalInfo.GetCurrentUser().Id, 
+                    questionnaire,
+                    request.AllowCensusMode, 
+                    questionnaireAssembly,
+                    questionnaireContentVersion));
 
                 return new QuestionnaireVerificationResponse();
             }

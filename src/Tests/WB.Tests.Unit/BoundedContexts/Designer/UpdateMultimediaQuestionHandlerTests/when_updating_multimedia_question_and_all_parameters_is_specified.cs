@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultimediaQuestionHandler
         Because of = () =>
                 questionnaire.UpdateMultimediaQuestion(questionId: questionId, title: "title",
                     variableName: "multimedia_question",
-                    variableLabel: variableName, enablementCondition: condition, instructions: instructions,
+                    variableLabel: variableName, enablementCondition: condition, hideIfDisabled: hideIfDisabled, instructions: instructions,
                     responsibleId: responsibleId, scope: QuestionScope.Interviewer);
 
         Cleanup stuff = () =>
@@ -64,6 +64,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultimediaQuestionHandler
             eventContext.GetSingleEvent<MultimediaQuestionUpdated>()
                 .EnablementCondition.ShouldEqual(condition);
 
+        It should_raise_MultimediaQuestionUpdated_event_with_hideIfDisabled_specified = () =>
+            eventContext.GetSingleEvent<MultimediaQuestionUpdated>()
+                .HideIfDisabled.ShouldEqual(hideIfDisabled);
+
         It should_raise_MultimediaQuestionUpdated_event_with_instructions_specified = () =>
             eventContext.GetSingleEvent<MultimediaQuestionUpdated>()
                 .Instructions.ShouldEqual(instructions);
@@ -77,5 +81,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultimediaQuestionHandler
         private static string title = "title";
         private static string instructions = "intructions";
         private static string condition = "condition";
+        private static bool hideIfDisabled = true;
     }
 }

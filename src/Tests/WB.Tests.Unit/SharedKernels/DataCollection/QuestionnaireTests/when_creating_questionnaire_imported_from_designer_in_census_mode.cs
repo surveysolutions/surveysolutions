@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         };
 
         Because of = () =>
-            questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), questionnaireDocument, true, "assembly body"));
+            questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), questionnaireDocument, true, "assembly body", 1));
 
         It should_raise_1_TemplateImported_event = () =>
           eventContext.GetEvents<TemplateImported>().Count(@event => @event.Source == questionnaireDocument && @event.AllowCensusMode && @event.Version == 1).ShouldEqual(1);

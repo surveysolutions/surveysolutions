@@ -12,5 +12,6 @@ namespace WB.Core.BoundedContexts.Tester.Views
         public DateTime LastEntryDate { get; set; }
         public bool IsPublic { get; set; }
         public string OwnerName { get; set; }
+        public bool IsShared { get; set; }
     }
 }

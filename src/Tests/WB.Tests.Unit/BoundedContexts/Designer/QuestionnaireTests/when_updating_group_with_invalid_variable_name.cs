@@ -28,6 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
                 rosterSizeQuestionId: null,
                 description: null,
                 condition: null,
+                hideIfDisabled: false,
                 isRoster: true,
                 rosterSizeSource: RosterSizeSourceType.FixedTitles,
                 rosterFixedTitles: new[] { new FixedRosterTitleItem("1", "1"), new FixedRosterTitleItem("2", "2") },

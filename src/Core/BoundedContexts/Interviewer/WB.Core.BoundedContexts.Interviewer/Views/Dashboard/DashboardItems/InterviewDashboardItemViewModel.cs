@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.ViewModels;
+using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
@@ -189,8 +189,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             get { return new MvxCommand(async () => await this.LoadInterview()); }
         }
 
+        private bool isInterviewLoadingInProgress = false;
+
         public async Task LoadInterview()
         {
+            if (this.isInterviewLoadingInProgress)
+                return;
+
+            this.isInterviewLoadingInProgress = true;
+
             if (this.Status == DashboardInterviewStatus.Completed)
             {
                 var isReopen = await this.userInteractionService.ConfirmAsync(
@@ -200,6 +207,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
                 if (!isReopen)
                 {
+                    this.isInterviewLoadingInProgress = false;
                     return;
                 }
 
@@ -222,6 +230,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 {
                     await this.viewModelNavigationService.NavigateToInterviewAsync(interviewIdString);
                 }
+
+                this.isInterviewLoadingInProgress = false;
             });
         }
 

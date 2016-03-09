@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             var contentFilePath = this.fileSystemAccessor.CombinePath(basePath,
                 this.GetEnvironmentContentFileName(questionnaireLevelLabels.LevelName));
 
-            this.fileSystemAccessor.WriteAllText(contentFilePath, doContent.ToString().ToLower());
+            this.fileSystemAccessor.WriteAllText(contentFilePath, doContent.ToString());
         }
 
         private string GetEnvironmentContentFileName(string levelName)

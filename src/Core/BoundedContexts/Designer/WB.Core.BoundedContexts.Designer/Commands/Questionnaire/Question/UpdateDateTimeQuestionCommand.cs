@@ -1,39 +1,33 @@
 using System;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using System.Collections.Generic;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 {
     [Serializable]
-    public class UpdateDateTimeQuestionCommand : AbstractUpdateQuestionCommand
+    public class UpdateDateTimeQuestionCommand : UpdateValidatableQuestionCommand
     {
         public UpdateDateTimeQuestionCommand(
             Guid questionnaireId,
             Guid questionId,
-            string title,
-            string variableName, string variableLabel,
-            string enablementCondition,
-            string instructions,
             Guid responsibleId,
-            string validationExpression,
-            string validationMessage,
+            CommonQuestionParameters commonQuestionParameters,
             QuestionScope scope,
-            bool isPreFilled)
-            : base(
-                responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, title: title,
-                variableName: variableName, enablementCondition: enablementCondition, instructions: instructions,variableLabel:variableLabel)
+            bool isPreFilled,
+            List<ValidationCondition> validationConditions)
+             : base(
+                responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
+                commonQuestionParameters: commonQuestionParameters,
+                validationConditions: validationConditions)
         {
             this.IsPreFilled = isPreFilled;
             this.Scope = scope;
-            this.ValidationMessage = CommandUtils.SanitizeHtml(validationMessage, removeAllTags: true);
-            this.ValidationExpression = validationExpression;
         }
 
         public QuestionScope Scope { get; set; }
-
-        public string ValidationMessage { get; set; }
-
-        public string ValidationExpression { get; set; }
 
         public bool IsPreFilled { get; set; }
     }

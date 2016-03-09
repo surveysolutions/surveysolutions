@@ -30,15 +30,14 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
                     variableLabel: null,
                     scope: scope,
                     enablementCondition: enablementCondition,
-                    validationExpression: validationExpression,
-                    validationMessage: validationMessage,
+                    hideIfDisabled: false,
                     instructions: instructions,
                     responsibleId: responsibleId, 
                     options: options,
-                    linkedToQuestionId: linkedToQuestionId,
+                    linkedToEntityId: linkedToQuestionId,
                     areAnswersOrdered: false,
                     maxAllowedAnswers: 5,
-                    yesNoView: false));
+                    yesNoView: false, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
@@ -56,8 +55,6 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandle
         private static string title = "title";
         private static string instructions = "instructions";
         private static string enablementCondition = "";
-        private static string validationExpression = "";
-        private static string validationMessage = "";
         private static Option[] options;
         
         private static QuestionScope scope = QuestionScope.Interviewer;

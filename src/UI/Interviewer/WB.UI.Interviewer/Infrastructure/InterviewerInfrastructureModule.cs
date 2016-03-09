@@ -40,27 +40,32 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepositoryWithCache>().InSingletonScope();
             this.Bind<IPlainInterviewFileStorage>().To<InterviewerPlainInterviewFileStorage>();
 
-            this.Bind<IInterviewerEventStorage, IEventStore>().To<SqliteEventStorage>().InSingletonScope();
-
-            this.Bind<ITraceListener>().To<MvxTraceListener>();
+            this.Bind<IInterviewerEventStorage, IEventStore>()
+                .To<SqliteEventStorage>()
+                .InSingletonScope()
+                .WithConstructorArgument("traceListener", new MvxTraceListener("EventStore-SQL-Queries"));
+            
             this.Bind<ISQLitePlatform>().To<SQLitePlatformAndroid>();
             this.Bind<SqliteSettings>().ToConstant(
                 new SqliteSettings()
                 {
                     PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")
                 });
-            this.Bind(typeof(IAsyncPlainStorage<>)).To(typeof(SqlitePlainStorage<>)).InSingletonScope();
+            this.Bind(typeof (IAsyncPlainStorage<>))
+                .To(typeof (SqlitePlainStorage<>))
+                .InSingletonScope();
 
             this.Bind<InterviewerPrincipal>().To<InterviewerPrincipal>().InSingletonScope();
             this.Bind<IPrincipal>().ToMethod<IPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
             this.Bind<IInterviewerPrincipal>().ToMethod<IInterviewerPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
-            
-            this.Bind<ILogger>().ToConstant(new FileLogger(AndroidPathUtils.GetPathToFileInLocalSubDirectory("logs", "errors.log")));
+
+            this.Bind<ILoggerProvider>().To<ServiceLocatorLoggerProvider>();
+            this.Bind<ILogger>().ToConstant(new FileLogger(AndroidPathUtils.GetPathToLogFile()));
 
             this.Bind<IBackupRestoreService>()
                 .To<BackupRestoreService>()
                 .WithConstructorArgument("privateStorage", AndroidPathUtils.GetPathToLocalDirectory())
-                .WithConstructorArgument("crashFilePath", AndroidPathUtils.GetPathToCrashFile());
+                .WithConstructorArgument("logFilePath", AndroidPathUtils.GetPathToLogFile());
 
             this.Bind<IQuestionnaireAssemblyFileAccessor>().ToConstructor(
                 kernel => new InterviewerQuestionnaireAssemblyFileAccessor(kernel.Inject<IFileSystemAccessor>(), 

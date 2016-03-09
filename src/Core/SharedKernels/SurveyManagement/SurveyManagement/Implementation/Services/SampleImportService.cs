@@ -35,10 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
         private readonly ITransactionManagerProvider transactionManager;
         private readonly SampleImportSettings sampleImportSettings;
 
-        private static ILogger Logger
-        {
-            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
-        }
+        private static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<SampleImportService>();
 
         public SampleImportService(IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage,
             IPreloadedDataServiceFactory preloadedDataServiceFactory,

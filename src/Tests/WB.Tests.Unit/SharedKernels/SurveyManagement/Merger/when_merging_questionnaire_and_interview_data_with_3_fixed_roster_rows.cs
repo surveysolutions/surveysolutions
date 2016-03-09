@@ -21,14 +21,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
     {
         Establish context = () =>
         {
-            merger = CreateMerger();
 
             rosterId = Guid.Parse("20000000000000000000000000000000");
             var rosterSizeQuestionId = Guid.Parse("33333333333333333333333333333333");
 
             interviewId = Guid.Parse("43333333333333333333333333333333");
 
-            questionnaireDocument =
+            questionnaire =
                 Create.QuestionnaireDocument(children:
                     new []
                     {
@@ -50,15 +49,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                 rosterVector: new decimal[] {0},
                 answeredQuestions: new Dictionary<Guid, object>(),
                 rosterTitles: new Dictionary<Guid, string>() {{rosterId, "1"}}, sortIndex: 1);
-
-            questionnaire = CreateQuestionnaireWithVersion(questionnaireDocument);
-            questionnaireReferenceInfo = CreateQuestionnaireReferenceInfo(questionnaireDocument);
-            questionnaireRosters = CreateQuestionnaireRosterStructure(questionnaireDocument);
+            
             user = Mock.Of<UserDocument>();
+            merger = CreateMerger(questionnaire);
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, questionnaireReferenceInfo, questionnaireRosters, user);
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight());
 
         It should_return_3_fixed_roster_rows = () =>
             mergeResult.Groups.Count(g => g.Id==rosterId).ShouldEqual(3);
@@ -75,13 +72,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static InterviewDataAndQuestionnaireMerger merger;
         private static InterviewDetailsView mergeResult;
         private static InterviewData interview;
-        private static QuestionnaireDocumentVersioned questionnaire;
-        private static ReferenceInfoForLinkedQuestions questionnaireReferenceInfo;
-        private static QuestionnaireRosterStructure questionnaireRosters;
+        private static QuestionnaireDocument questionnaire;
         private static UserDocument user;
 
         private static Guid rosterId;
         private static Guid interviewId;
-        private static QuestionnaireDocument questionnaireDocument;
     }
 }

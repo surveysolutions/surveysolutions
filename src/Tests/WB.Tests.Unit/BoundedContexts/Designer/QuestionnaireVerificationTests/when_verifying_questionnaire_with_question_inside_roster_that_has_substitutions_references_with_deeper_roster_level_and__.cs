@@ -63,30 +63,30 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         };
 
         Because of = () =>
-            resultErrors = verifier.Verify(questionnaire);
+            verificationMessages = verifier.Verify(questionnaire);
 
-        It should_return_1_error = () =>
-            resultErrors.Count().ShouldEqual(1);
+        It should_return_1_message = () =>
+            verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_error_with_code__WB0019 = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0019");
+        It should_return_message_with_code__WB0019 = () =>
+            verificationMessages.Single().Code.ShouldEqual("WB0019");
 
-        It should_return_error_with_two_references = () =>
-            resultErrors.Single().References.Count().ShouldEqual(2);
+        It should_return_message_with_two_references = () =>
+            verificationMessages.Single().References.Count().ShouldEqual(2);
 
-        It should_return_first_error_reference_with_type_Question = () =>
-            resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+        It should_return_first_message_reference_with_type_Question = () =>
+            verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_first_error_reference_with_id_of_underDeeperPropagationLevelQuestionId = () =>
-            resultErrors.Single().References.First().Id.ShouldEqual(questionWithSubstitutionsId);
+        It should_return_first_message_reference_with_id_of_underDeeperPropagationLevelQuestionId = () =>
+            verificationMessages.Single().References.First().Id.ShouldEqual(questionWithSubstitutionsId);
 
-        It should_return_last_error_reference_with_type_Question = () =>
-            resultErrors.Single().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+        It should_return_last_message_reference_with_type_Question = () =>
+            verificationMessages.Single().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
-        It should_return_last_error_reference_with_id_of_underDeeperPropagationLevelQuestionVariableName = () =>
-            resultErrors.Single().References.Last().Id.ShouldEqual(underDeeperRosterLevelQuestionId);
+        It should_return_last_message_reference_with_id_of_underDeeperPropagationLevelQuestionVariableName = () =>
+            verificationMessages.Single().References.Last().Id.ShouldEqual(underDeeperRosterLevelQuestionId);
 
-        private static IEnumerable<QuestionnaireVerificationError> resultErrors;
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
 

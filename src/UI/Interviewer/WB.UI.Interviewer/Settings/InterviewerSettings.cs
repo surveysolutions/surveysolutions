@@ -7,7 +7,6 @@ using PCLStorage;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -21,6 +20,7 @@ namespace WB.UI.Interviewer.Settings
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly ISyncProtocolVersionProvider syncProtocolVersionProvider;
+        private readonly IQuestionnaireContentVersionProvider questionnaireContentVersionProvider;
         private readonly IFileSystemAccessor fileSystemAccessor;
         
         private readonly string backupFolder;
@@ -29,6 +29,7 @@ namespace WB.UI.Interviewer.Settings
         public InterviewerSettings(
             IAsyncPlainStorage<ApplicationSettingsView> settingsStorage, 
             ISyncProtocolVersionProvider syncProtocolVersionProvider, 
+            IQuestionnaireContentVersionProvider questionnaireContentVersionProvider,
             IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
             IAsyncPlainStorage<InterviewView> interviewViewRepository, 
             IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository, 
@@ -38,6 +39,7 @@ namespace WB.UI.Interviewer.Settings
         {
             this.settingsStorage = settingsStorage;
             this.syncProtocolVersionProvider = syncProtocolVersionProvider;
+            this.questionnaireContentVersionProvider = questionnaireContentVersionProvider;
             this.interviewersPlainStorage = interviewersPlainStorage;
             this.interviewViewRepository = interviewViewRepository;
             this.questionnaireViewRepository = questionnaireViewRepository;
@@ -62,6 +64,11 @@ namespace WB.UI.Interviewer.Settings
         public bool AcceptUnsignedSslCertificate => false;
         public int GpsReceiveTimeoutSec => this.CurrentSettings.GpsResponseTimeoutInSec;
         public double GpsDesiredAccuracy => this.CurrentSettings.GpsDesiredAccuracy.GetValueOrDefault((double)Application.Context.Resources.GetInteger(Resource.Integer.GpsDesiredAccuracy));
+
+        public Version GetSupportedQuestionnaireContentVersion()
+        {
+            return questionnaireContentVersionProvider.GetSupportedQuestionnaireContentVersion();
+        }
 
         public string GetDeviceId()
         {

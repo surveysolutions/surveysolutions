@@ -1,4 +1,5 @@
 ﻿@model WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf.PdfQuestionView
+@using System.Linq
 @using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
 
@@ -9,7 +10,8 @@
         {
             <a href="#@("c" + Model.ItemNumber)" id="@("cq" + Model.ItemNumber)">[c @Model.ItemNumber]</a>
         }
-        @if (!string.IsNullOrEmpty(Model.ValidationExpression))
+        
+        @if (Model.ValidationConditions.Any())
         {
             <a href="#@("v" + Model.ItemNumber)" id="@("vq" + Model.ItemNumber)">[v @Model.ItemNumber]</a>
         }

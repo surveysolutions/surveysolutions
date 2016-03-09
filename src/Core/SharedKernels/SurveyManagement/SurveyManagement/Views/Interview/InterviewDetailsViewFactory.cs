@@ -5,10 +5,10 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
@@ -17,30 +17,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     {
         private readonly IReadSideKeyValueStorage<InterviewData> interviewStore;
         private readonly IReadSideRepositoryReader<UserDocument> userStore;
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore;
-        private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructures;
-        private readonly IReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions> questionnaireReferenceInfoForLinkedQuestions;
         private readonly IInterviewDataAndQuestionnaireMerger merger;
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
+        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore;
 
         public InterviewDetailsViewFactory(IReadSideKeyValueStorage<InterviewData> interviewStore,
             IReadSideRepositoryReader<UserDocument> userStore,
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore,
-            IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructures,
-            IReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions> questionnaireReferenceInfoForLinkedQuestions,
             IInterviewDataAndQuestionnaireMerger merger,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
-            IIncomingSyncPackagesQueue incomingSyncPackagesQueue)
+            IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
+            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore)
         {
             this.interviewStore = interviewStore;
             this.userStore = userStore;
-            this.questionnaireStore = questionnaireStore;
-            this.questionnaireRosterStructures = questionnaireRosterStructures;
-            this.questionnaireReferenceInfoForLinkedQuestions = questionnaireReferenceInfoForLinkedQuestions;
             this.merger = merger;
             this.changeStatusFactory = changeStatusFactory;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
+            this.questionnaireStore = questionnaireStore;
         }
 
         public DetailsViewModel GetInterviewDetails(Guid interviewId, Guid? currentGroupId, decimal[] currentGroupRosterVector, InterviewDetailsFilter? filter)
@@ -50,22 +44,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             if (interview == null || interview.IsDeleted)
                 return null;
 
-            QuestionnaireDocumentVersioned questionnaire = this.questionnaireStore.AsVersioned().Get(interview.QuestionnaireId.FormatGuid(), interview.QuestionnaireVersion);
-
-            if (questionnaire == null)
-                throw new ArgumentException(string.Format("Questionnaire with id {0} and version {1} is missing.", interview.QuestionnaireId, interview.QuestionnaireVersion));
-
-            var questionnaireReferenceInfo = this.questionnaireReferenceInfoForLinkedQuestions.AsVersioned().Get(interview.QuestionnaireId.FormatGuid(), interview.QuestionnaireVersion);
-
-            var questionnaireRosters = this.questionnaireRosterStructures.AsVersioned().Get(interview.QuestionnaireId.FormatGuid(), interview.QuestionnaireVersion);
-
             var user = this.userStore.GetById(interview.ResponsibleId);
             if (user == null)
-                throw new ArgumentException(string.Format("User with id {0} is not found.", interview.ResponsibleId));
+                throw new ArgumentException($"User with id {interview.ResponsibleId} is not found.");
 
-            var interviewDetailsView = merger.Merge(interview, questionnaire, questionnaireReferenceInfo, questionnaireRosters, user);
+            var questionnaire = this.questionnaireStore.GetById(
+                new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion).ToString())?.Questionnaire;
 
-            var questionViews = interviewDetailsView.Groups.SelectMany(group => group.Entities).OfType<InterviewQuestionView>();
+            if (questionnaire == null)
+                throw new ArgumentException(
+                    $"Questionnaire with id {interview.QuestionnaireId} and version {interview.QuestionnaireVersion} is missing.");
+
+            var interviewDetailsView = merger.Merge(interview, questionnaire, user.GetUseLight());
+
+            var questionViews = interviewDetailsView.Groups.SelectMany(group => group.Entities).OfType<InterviewQuestionView>().ToList();
             var detailsStatisticView = new DetailsStatisticView()
             {
                 AnsweredCount = questionViews.Count(question => this.IsQuestionInFilter(InterviewDetailsFilter.Answered, question)),
@@ -85,7 +77,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
             foreach (var interviewGroupView in interviewDetailsView.Groups)
             {
-                if (currentGroup != null && currentGroup.ParentId.HasValue)
+                if (currentGroup?.ParentId != null)
                 {
                     if (interviewGroupView.Id == currentGroup.Id &&
                         interviewGroupView.RosterVector.SequenceEqual(currentGroup.RosterVector) ||

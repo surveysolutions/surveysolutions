@@ -26,9 +26,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
     {
         Establish context = () =>
         {
-            merger = CreateMerger();
-
-
             linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
             sourceForLinkedQuestionId = Guid.Parse("11111111111111111111111111111111");
             firstLevelRosterId = Guid.Parse("10000000000000000000000000000000");
@@ -37,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             parallelLevelRosterId = Guid.Parse("20000000000000000000000000000000");
             interviewId = Guid.Parse("43333333333333333333333333333333");
 
-            questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new Group()
+            questionnaire = CreateQuestionnaireDocumentWithOneChapter(new Group()
             {
                 PublicKey = firstLevelRosterId,
                 IsRoster = true,
@@ -100,14 +97,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             AddInterviewLevel(interview, new ValueVector<Guid> { parallelLevelRosterId }, new decimal[] { 1 }, new Dictionary<Guid, object>(),
                new Dictionary<Guid, string>() { { parallelLevelRosterId, "paralel roster2" } });
 
-            questionnaire = CreateQuestionnaireWithVersion(questionnaireDocument);
-            questionnaireReferenceInfo = CreateQuestionnaireReferenceInfo(questionnaireDocument);
-            questionnaireRosters = CreateQuestionnaireRosterStructure(questionnaireDocument);
             user = Mock.Of<UserDocument>();
+
+            merger = CreateMerger(questionnaire);
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, questionnaireReferenceInfo, questionnaireRosters, user);
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight());
 
         It should_linked_in_first_row_has_3_options = () =>
             GetQuestion(mergeResult, linkedQuestionId, new decimal[] { 0 }).Options.Count().ShouldEqual(3);
@@ -128,9 +124,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static InterviewDataAndQuestionnaireMerger merger;
         private static InterviewDetailsView mergeResult;
         private static InterviewData interview;
-        private static QuestionnaireDocumentVersioned questionnaire;
-        private static ReferenceInfoForLinkedQuestions questionnaireReferenceInfo;
-        private static QuestionnaireRosterStructure questionnaireRosters;
+        private static QuestionnaireDocument questionnaire;
         private static UserDocument user;
 
         private static Guid firstLevelRosterId;
@@ -139,6 +133,5 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static Guid sourceForLinkedQuestionId;
         private static Guid interviewId;
         private static Guid parallelLevelRosterId;
-        private static QuestionnaireDocument questionnaireDocument;
     }
 }
