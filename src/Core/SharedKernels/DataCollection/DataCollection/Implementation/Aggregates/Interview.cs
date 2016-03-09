@@ -2536,12 +2536,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 => isRoster(groupId, groupOuterRosterVector)
                     ? rosterInstanceIds
                     : state.GetRosterInstanceIds(groupId, groupOuterRosterVector));
-            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
-                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
-                    alteredState,
-                    enablementChanges.GroupsToBeDisabled,
-                    enablementChanges.QuestionsToBeDisabled,
-                    questionnaire);
 
             var interviewByAnswerChange = new List<AnswerChange>
             {
@@ -2554,11 +2548,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                CreateChangedLinkedOptions(expressionProcessorState.ProcessLinkedQuestionFilters(), this.interviewState,
                    questionnaire).ToArray();
 
+            var answersForLinkedQuestionsToRemove = AnswersForLinkedQuestionsToRemove(this.interviewState, changedLinkedOptions);
+
             return new InterviewChanges(interviewByAnswerChange,
                 enablementChanges,
                 validationChanges,
                 rosterCalculationData,
-                answersForLinkedQuestionsToRemoveByDisabling,
+                answersForLinkedQuestionsToRemove,
                 rosterInstancesWithAffectedTitles,
                 AnswerUtils.AnswerToString(answer),
                 substitutionChanges,
@@ -2629,13 +2625,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 => isRoster(groupId, groupOuterRosterVector)
                     ? rosterInstanceIds
                     : state.GetRosterInstanceIds(groupId, groupOuterRosterVector));
-            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
-                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
-                    alteredState,
-                    enablementChanges.GroupsToBeDisabled,
-                    enablementChanges.QuestionsToBeDisabled,
-                    questionnaire);
-
 
             var interviewByAnswerChange = new List<AnswerChange>
             {
@@ -2648,11 +2637,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
               CreateChangedLinkedOptions(expressionProcessorState.ProcessLinkedQuestionFilters(), this.interviewState,
                   questionnaire).ToArray();
 
+            var answersForLinkedQuestionsToRemove = AnswersForLinkedQuestionsToRemove(this.interviewState, changedLinkedOptions);
+
             return new InterviewChanges(interviewByAnswerChange, 
                 enablementChanges, 
                 validationChanges,
                 rosterCalculationData,
-                answersForLinkedQuestionsToRemoveByDisabling, 
+                answersForLinkedQuestionsToRemove, 
                 rosterInstancesWithAffectedTitles, 
                 answerFormattedAsRosterTitle,
                 substitutionChanges, 
@@ -2720,13 +2711,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 => isRoster(groupId, groupOuterRosterVector)
                     ? rosterInstanceIds
                     : state.GetRosterInstanceIds(groupId, groupOuterRosterVector));
-            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
-                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
-                    alteredState,
-                    enablementChanges.GroupsToBeDisabled,
-                    enablementChanges.QuestionsToBeDisabled,
-                    questionnaire);
-
 
             var interviewByAnswerChange = new List<AnswerChange>
             {
@@ -2739,12 +2723,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
               CreateChangedLinkedOptions(expressionProcessorState.ProcessLinkedQuestionFilters(), this.interviewState,
                   questionnaire).ToArray();
 
+            var answersForLinkedQuestionsToRemove = AnswersForLinkedQuestionsToRemove(this.interviewState, changedLinkedOptions);
             return new InterviewChanges(
                 interviewByAnswerChange,
                 enablementChanges,
                 validationChanges,
                 rosterCalculationData,
-                answersForLinkedQuestionsToRemoveByDisabling,
+                answersForLinkedQuestionsToRemove,
                 rosterInstancesWithAffectedTitles,
                 answerFormattedAsRosterTitle,
                 substitutionChanges,
@@ -2968,23 +2953,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 => isRoster(groupId, groupOuterRosterVector)
                     ? rosterInstanceIds
                     : state.GetRosterInstanceIds(groupId, groupOuterRosterVector));
-            List<Identity> answersForLinkedQuestionsToRemoveByDisabling =
-                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
-                    alteredState,
-                    enablementChanges.GroupsToBeDisabled,
-                    enablementChanges.QuestionsToBeDisabled,
-                    questionnaire);
-
-            IEnumerable<Identity> answersForLinkedQuestionsToRemoveByEmptyAnswer = this
-                .GetAnswersForLinkedQuestionsToRemoveBecauseOfRemovedQuestionAnswers(
-                    state,
-                    new Identity(questionId, rosterVector).ToEnumerable(),
-                    questionnaire);
-
-
-            List<Identity> answersForLinkedQuestionsToRemove = Enumerable
-                .Union(answersForLinkedQuestionsToRemoveByEmptyAnswer, answersForLinkedQuestionsToRemoveByDisabling)
-                .ToList();
 
             var interviewByAnswerChange = new List<AnswerChange>
             {
@@ -2996,6 +2964,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var changedLinkedOptions =
                CreateChangedLinkedOptions(expressionProcessorState.ProcessLinkedQuestionFilters(), this.interviewState,
                questionnaire).ToArray();
+
+            var answersForLinkedQuestionsToRemove = AnswersForLinkedQuestionsToRemove(this.interviewState, changedLinkedOptions);
 
             var interviewChanges= new InterviewChanges(interviewByAnswerChange,
                 enablementChanges,
@@ -3045,25 +3015,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
             ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
 
-            IEnumerable<Identity> answersForLinkedQuestionsToRemoveByEmptyAnswer =
-                isNewAnswerEmpty
-                    ? this.GetAnswersForLinkedQuestionsToRemoveBecauseOfRemovedQuestionAnswers(
-                        state,
-                        new Identity(questionId, rosterVector).ToEnumerable(), 
-                        questionnaire)
-                    : Enumerable.Empty<Identity>();
-
-            List<Identity> answersForLinkedQuestionsToRemoveByDisabling = this
-                .GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
-                    state,
-                    enablementChanges.GroupsToBeDisabled,
-                    enablementChanges.QuestionsToBeDisabled,
-                    questionnaire);
-
-            List<Identity> answersForLinkedQuestionsToRemove = Enumerable
-                .Union(answersForLinkedQuestionsToRemoveByEmptyAnswer, answersForLinkedQuestionsToRemoveByDisabling)
-                .ToList();
-
             var interviewByAnswerChange = new List<AnswerChange>
             {
                 new AnswerChange(answerChangeType, userId, questionId, rosterVector, answerTime, answer)
@@ -3075,6 +3026,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 CreateChangedLinkedOptions(expressionProcessorState.ProcessLinkedQuestionFilters(), this.interviewState,
                     questionnaire).ToArray();
 
+            var answersForLinkedQuestionsToRemove = AnswersForLinkedQuestionsToRemove(this.interviewState, changedLinkedOptions);
+
             return new InterviewChanges(
                 interviewByAnswerChange,
                 enablementChanges,
@@ -3084,6 +3037,43 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterInstancesWithAffectedTitles,
                 answerFormattedAsRosterTitle,
                 substitutedQuestions, changedLinkedOptions);
+        }
+
+        private List<Identity> AnswersForLinkedQuestionsToRemove(InterviewStateDependentOnAnswers currentState, ChangedLinkedOptions[] linkedOptionChanges)
+        {
+            var answersToRemove = new List<Identity>();
+            foreach (Tuple<Identity, RosterVector> linkedSingleOptionAnswer in currentState.LinkedSingleOptionAnswersBuggy.Values)
+            {
+                var linkedQuestion = linkedSingleOptionAnswer.Item1;
+                var linkedQuestionSelectedOption = new RosterVector(linkedSingleOptionAnswer.Item2);
+                var changedOptions = linkedOptionChanges.FirstOrDefault(q => q.QuestionId == linkedQuestion);
+                if (changedOptions != null)
+                {
+                    if (!changedOptions.Options.Contains(linkedQuestionSelectedOption))
+                        answersToRemove.Add(linkedQuestion);
+                }
+            }
+            var allLinkedMultipleOptionsAnswers = currentState.LinkedMultipleOptionsAnswers;
+
+            foreach (Tuple<Identity, RosterVector[]> linkedMultipleOptionsAnswer in allLinkedMultipleOptionsAnswers.Values)
+            {
+                var linkedQuestion = linkedMultipleOptionsAnswer.Item1;
+                RosterVector[] linkedQuestionSelectedOptions = linkedMultipleOptionsAnswer.Item2;
+
+                var changedOptions = linkedOptionChanges.FirstOrDefault(q => q.QuestionId == linkedQuestion);
+                if (changedOptions != null)
+                {
+                    foreach (var linkedQuestionSelectedOption in linkedQuestionSelectedOptions)
+                    {
+                        if (!changedOptions.Options.Contains(linkedQuestionSelectedOption))
+                        {
+                            answersToRemove.Add(linkedQuestion);
+                            break;
+                        }
+                    }
+                }
+            }
+            return answersToRemove;
         }
 
         private IEnumerable<ChangedLinkedOptions> CreateChangedLinkedOptions(LinkedQuestionOptionsChanges conditionExecutionResult, InterviewStateDependentOnAnswers currentState, IQuestionnaire questionnaire)
@@ -3444,17 +3434,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             List<decimal> rosterInstanceIdsBeingRemoved = rosterInstancesToRemove.Select(instance => instance.RosterInstanceId).ToList();
 
-            List<Identity> answersToRemoveByDecreasedRosterSize = this.GetAnswersToRemoveIfRosterInstancesAreRemoved(state,
-                rosterIds, rosterInstanceIdsBeingRemoved, nearestToOuterRosterVector, questionnaire);
-
             List<Identity> disabledAnswersToEnableByDecreasedRosterSize = GetDisabledAnswersToEnableByDecreasedRosterSize(state,
                 rosterIds, rosterInstanceIdsBeingRemoved, nearestToOuterRosterVector, questionnaire);
 
             List<Identity> disabledGroupsToEnableByDecreasedRosterSize = GetDisabledGroupsToEnableByDecreasedRosterSize(state,
                 rosterInstancesToRemove, questionnaire);
-
+            
             return new RosterCalculationData(rosterInstancesToAdd, rosterInstancesToRemove, rosterInstancesToChange,
-                answersToRemoveByDecreasedRosterSize, disabledAnswersToEnableByDecreasedRosterSize, disabledGroupsToEnableByDecreasedRosterSize,
+                new List<Identity>(), disabledAnswersToEnableByDecreasedRosterSize, disabledGroupsToEnableByDecreasedRosterSize,
                 rosterTitles, rosterInstancesFromNestedLevels);
         }
 
@@ -3542,8 +3529,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var listOfRosterInstanceIdsForRemove = new List<RosterIdentity>();
 
-            List<Identity> answersToRemoveByDecreasedRosterSize = new List<Identity>();
-
             var rosterInstantiatesFromNestedLevels = new List<RosterCalculationData>();
             foreach (var nestedRosterId in nestedRosterIds)
             {
@@ -3560,14 +3545,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     listOfRosterInstanceIdsForRemove.Add(rosterIdForDelete);
 
-                    answersToRemoveByDecreasedRosterSize.AddRange(
-                        this.GetAnswersToRemoveIfRosterInstancesAreRemoved(
-                            state,
-                            rosterIdForDelete.GroupId,
-                            new List<decimal> { rosterIdForDelete.RosterInstanceId },
-                            rosterIdForDelete.OuterRosterVector,
-                            questionnaire));
-
                     rosterInstantiatesFromNestedLevels.Add(this.CalculateNestedRostersDataForDelete(state, questionnaire, nestedRosterId,
                         new List<decimal> { rosterIdForDelete.RosterInstanceId }, outerVectorForExtend));
                 }
@@ -3583,7 +3560,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 new List<RosterIdentity>(), 
                 listOfRosterInstanceIdsForRemove, 
                 new List<RosterIdentity>(),
-                answersToRemoveByDecreasedRosterSize, 
+                new List<Identity>(), 
                 disabledAnswersToEnableByDecreasedRosterSize,
                 disabledGroupsToEnableByDecreasedRosterSize,
                 new Dictionary<decimal, string>(),
@@ -4131,20 +4108,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private List<Identity> GetAnswersToRemoveIfRosterInstancesAreRemoved(IReadOnlyInterviewStateDependentOnAnswers state,
-            IEnumerable<Guid> rosterIds, List<decimal> rosterInstanceIdsBeingRemoved, decimal[] nearestToOuterRosterVector,
-            IQuestionnaire questionnaire)
-        {
-            if (rosterInstanceIdsBeingRemoved.Count == 0)
-                return new List<Identity>();
-
-            var answersToRemoveIfRosterInstancesAreRemoved = rosterIds
-                .SelectMany(rosterId => this.GetAnswersToRemoveIfRosterInstancesAreRemoved(state, rosterId, rosterInstanceIdsBeingRemoved, nearestToOuterRosterVector, questionnaire))
-                .ToList();
-
-            return answersToRemoveIfRosterInstancesAreRemoved;
-        }
-
         private List<Identity> GetDisabledGroupsToEnableByDecreasedRosterSize(
             IReadOnlyInterviewStateDependentOnAnswers state,
             List<RosterIdentity> rosterIdentities, 
@@ -4209,38 +4172,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                  }).ToList();
         }
 
-
-        private IEnumerable<Identity> GetAnswersToRemoveIfRosterInstancesAreRemoved(IReadOnlyInterviewStateDependentOnAnswers state,
-            Guid rosterId, List<decimal> rosterInstanceIdsBeingRemoved, decimal[] nearestToOuterRosterVector,
-            IQuestionnaire questionnaire)
-        {
-            int indexOfRosterInRosterVector = GetIndexOfRosterInRosterVector(rosterId, questionnaire);
-
-            IEnumerable<Guid> underlyingQuestionIds = questionnaire.GetAllUnderlyingQuestions(rosterId);
-
-            IEnumerable<Identity> underlyingQuestionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state,
-                underlyingQuestionIds, nearestToOuterRosterVector, questionnaire);
-
-            IEnumerable<Identity> underlyingQuestionsBeingRemovedByRemovedRosterInstances = (
-                from question in underlyingQuestionInstances
-                where state.WasQuestionAnswered(question)
-                where rosterInstanceIdsBeingRemoved.Contains(question.RosterVector[indexOfRosterInRosterVector])
-                select question
-                ).ToList();
-         
-            IEnumerable<Identity> linkedQuestionsWithNoLongerValidAnswersBecauseOfSelectedOptionBeingRemoved =
-                this.GetAnswersForLinkedQuestionsToRemoveBecauseOfRemovedQuestionAnswers(state,
-                    underlyingQuestionsBeingRemovedByRemovedRosterInstances, questionnaire);
-
-            IEnumerable<Identity> linkedQuestionsWithNoLongerValidAnswersBecauseOfRosterRowBeingRemoved =
-        this.GetAnswersForLinkedQuestionsToRemoveBecauseOfRemovedRow(state, questionnaire,
-            rosterId, rosterInstanceIdsBeingRemoved, nearestToOuterRosterVector);
-            return Enumerable.Concat(Enumerable.Concat(
-                underlyingQuestionsBeingRemovedByRemovedRosterInstances,
-                linkedQuestionsWithNoLongerValidAnswersBecauseOfSelectedOptionBeingRemoved),
-                linkedQuestionsWithNoLongerValidAnswersBecauseOfRosterRowBeingRemoved);
-        }
-
         private static IEnumerable<decimal> GetRosterInstanceIdsBeingAdded(IEnumerable<decimal> existingRosterInstanceIds, IEnumerable<decimal> newRosterInstanceIds)
         {
             return newRosterInstanceIds.Where(newRosterInstanceId => !existingRosterInstanceIds.Contains(newRosterInstanceId)).ToList();
@@ -4249,148 +4180,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         private static IEnumerable<decimal> GetRosterInstanceIdsBeingRemoved(IEnumerable<decimal> existingRosterInstanceIds, IEnumerable<decimal> newRosterInstanceIds)
         {
             return existingRosterInstanceIds.Where(existingRosterInstanceId => !newRosterInstanceIds.Contains(existingRosterInstanceId)).ToList();
-        }
-
-        private IEnumerable<Identity> GetAnswersForLinkedQuestionsToRemoveBecauseOfRemovedQuestionAnswers(
-            IReadOnlyInterviewStateDependentOnAnswers state,
-            IEnumerable<Identity> questionsToRemove, IQuestionnaire questionnaire)
-        {
-            bool nothingGoingToBeRemoved = !questionsToRemove.Any();
-            if (nothingGoingToBeRemoved)
-                return Enumerable.Empty<Identity>();
-
-            return this.GetAnswersForLinkedQuestionsToRemoveBecauseOfReferencedAnswersGoingToDisappear(state, questionnaire,
-                isQuestionAnswerGoingToDisappear: 
-                    question => questionsToRemove.Any(questionToRemove => question == questionToRemove));
-        }
-
-        private List<Identity> GetAnswersForLinkedQuestionsToRemoveBecauseOfDisabledGroupsOrQuestions(
-            IReadOnlyInterviewStateDependentOnAnswers state,
-            IEnumerable<Identity> groupsToBeDisabled, IEnumerable<Identity> questionsToBeDisabled, IQuestionnaire questionnaire)
-        {
-            bool nothingGoingToBeDisabled = !groupsToBeDisabled.Any() && !questionsToBeDisabled.Any();
-            if (nothingGoingToBeDisabled)
-                return new List<Identity>();
-
-            return this.GetAnswersForLinkedQuestionsToRemoveBecauseOfReferencedAnswersGoingToDisappear(state, questionnaire,
-                isQuestionAnswerGoingToDisappear:
-                    question => IsQuestionGoingToBeDisabled(question, groupsToBeDisabled, questionsToBeDisabled, questionnaire));
-        }
-        private List<Identity> GetAnswersForLinkedQuestionsToRemoveBecauseOfRemovedRow(
-          IReadOnlyInterviewStateDependentOnAnswers state,
-          IQuestionnaire questionnaire, Guid rosterId, List<decimal> rosterInstanceIdsBeingRemoved, decimal[] nearestToOuterRosterVector)
-        {
-            var answersToRemove = new List<Identity>();
-            var rosterVectorsToRemove =
-                rosterInstanceIdsBeingRemoved.Select(x => nearestToOuterRosterVector.Union(new[] {x}).ToArray())
-                    .ToArray();
-            foreach (Tuple<Identity, RosterVector> linkedSingleOptionAnswer in state.GetAllLinkedToRosterSingleOptionAnswers(questionnaire))
-            {
-                var linkedQuestion = linkedSingleOptionAnswer.Item1;
-                decimal[] linkedQuestionSelectedOption = linkedSingleOptionAnswer.Item2;
-
-                var linkedToRoster = questionnaire.GetRosterReferencedByLinkedQuestion(linkedQuestion.Id);
-                if(linkedToRoster!= rosterId)
-                    continue;
-
-                if (rosterVectorsToRemove.Any(x => x.SequenceEqual(linkedQuestionSelectedOption)))
-                {
-                    answersToRemove.Add(linkedQuestion);
-                }
-            }
-
-            var allLinkedMultipleOptionsAnswers = state.GetAllLinkedToRosterMultipleOptionsAnswers(questionnaire);
-
-            foreach (Tuple<Identity, RosterVector[]> linkedMultipleOptionsAnswer in allLinkedMultipleOptionsAnswers)
-            {
-                var linkedQuestion = linkedMultipleOptionsAnswer.Item1;
-                RosterVector[] linkedQuestionSelectedOptions = linkedMultipleOptionsAnswer.Item2;
-
-                var linkedToRoster = questionnaire.GetRosterReferencedByLinkedQuestion(linkedQuestion.Id);
-                if (linkedToRoster != rosterId)
-                    continue;
-
-                foreach (var linkedQuestionSelectedOption in linkedQuestionSelectedOptions)
-                {
-                    if (rosterVectorsToRemove.Any(x => x.SequenceEqual(linkedQuestionSelectedOption)))
-                    {
-                        answersToRemove.Add(linkedQuestion);
-                        break;
-                    }
-                }
-            }
-
-            return answersToRemove;
-        }
-        private List<Identity> GetAnswersForLinkedQuestionsToRemoveBecauseOfReferencedAnswersGoingToDisappear(
-            IReadOnlyInterviewStateDependentOnAnswers state,
-            IQuestionnaire questionnaire,
-            Func<Identity, bool> isQuestionAnswerGoingToDisappear)
-        {
-            var answersToRemove = new List<Identity>();
-
-            foreach (Tuple<Identity, RosterVector> linkedSingleOptionAnswer in state.GetAllLinkedSingleOptionAnswers(questionnaire))
-            {
-                var linkedQuestion = linkedSingleOptionAnswer.Item1;
-                decimal[] linkedQuestionSelectedOption = linkedSingleOptionAnswer.Item2;
-
-                IEnumerable<Identity> questionsReferencedByLinkedQuestion =
-                    this.GetQuestionsReferencedByLinkedQuestion(state, linkedQuestion, questionnaire);
-
-                Identity questionSelectedAsAnswer =
-                    questionsReferencedByLinkedQuestion
-                        .SingleOrDefault(
-                            question => AreEqualRosterVectors(linkedQuestionSelectedOption, question.RosterVector));
-
-                bool isSelectedOptionGoingToDisappear = questionSelectedAsAnswer != null &&
-                    isQuestionAnswerGoingToDisappear(questionSelectedAsAnswer);
-                if (isSelectedOptionGoingToDisappear)
-                {
-                    answersToRemove.Add(linkedQuestion);
-                }
-            }
-
-            var allLinkedMultipleOptionsAnswers = state.GetAllLinkedMultipleOptionsAnswers(questionnaire);
-
-            foreach (Tuple<Identity, RosterVector[]> linkedMultipleOptionsAnswer in allLinkedMultipleOptionsAnswers)
-            {
-                var linkedQuestion = linkedMultipleOptionsAnswer.Item1;
-                RosterVector[] linkedQuestionSelectedOptions = linkedMultipleOptionsAnswer.Item2;
-
-                IEnumerable<Identity> questionsReferencedByLinkedQuestion =
-                    this.GetQuestionsReferencedByLinkedQuestion(state, linkedQuestion, questionnaire);
-
-                IEnumerable<Identity> questionsSelectedAsAnswers =
-                    questionsReferencedByLinkedQuestion
-                        .Where(
-                            question => linkedQuestionSelectedOptions.Any(
-                                selectedOption => AreEqualRosterVectors(selectedOption, question.RosterVector)));
-
-                bool isSomeOfSelectedOptionsGoingToDisappear = questionsSelectedAsAnswers.Any(isQuestionAnswerGoingToDisappear);
-                if (isSomeOfSelectedOptionsGoingToDisappear)
-                {
-                    answersToRemove.Add(linkedQuestion);
-                }
-            }
-
-            return answersToRemove;
-        }
-
-        private IEnumerable<Identity> GetQuestionsReferencedByLinkedQuestion(IReadOnlyInterviewStateDependentOnAnswers state,
-            Identity linkedQuestion, IQuestionnaire questionnaire)
-        {
-            Guid referencedQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(linkedQuestion.Id);
-
-            var rosterScopesForReferencedQuestion = questionnaire.GetRosterGroupsByRosterSizeQuestion(referencedQuestionId);
-            var rosterScopeForLinkedQuestion = questionnaire.GetRosterGroupsByRosterSizeQuestion(linkedQuestion.Id);
-
-            var commonRosterVectorBaseLength = rosterScopesForReferencedQuestion.Intersect(rosterScopeForLinkedQuestion).Count();
-
-            var baseOfRosterVectorOfReferencedQuestion = new RosterVector(linkedQuestion.RosterVector.Take(commonRosterVectorBaseLength));
-
-            var referencedQuestionIdentities = GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state, referencedQuestionId, baseOfRosterVectorOfReferencedQuestion, questionnaire);
-
-            return referencedQuestionIdentities;
         }
 
         private bool IsQuestionGoingToBeDisabled(Identity question,
