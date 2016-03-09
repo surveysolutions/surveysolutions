@@ -73,7 +73,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionnaireRepository = questionnaireRepository;
         }
 
-        private Identity questionIdentity;
         private Guid interviewId;
         private Guid referencedQuestionId;
         private ObservableCollection<SingleOptionLinkedQuestionOptionViewModel> options;
@@ -93,22 +92,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public AnsweringViewModel Answering { get; private set; }
         public AnswerNotifier ReferencedAnswerNotifier { get; private set; }
 
-        public Identity Identity { get { return this.questionIdentity; } }
+        public Identity Identity { get; private set; }
 
         public void Init(string interviewId, Identity questionIdentity, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException("interviewId");
-            if (questionIdentity == null) throw new ArgumentNullException("questionIdentity");
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
+            if (questionIdentity == null) throw new ArgumentNullException(nameof(questionIdentity));
 
             this.QuestionState.Init(interviewId, questionIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity);
 
-            this.questionIdentity = questionIdentity;
+            this.Identity = questionIdentity;
             this.interviewId = interview.Id;
 
-            this.referencedQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(this.questionIdentity.Id);
+            this.referencedQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(this.Identity.Id);
 
             this.ReferencedAnswerNotifier.Init(interviewId, this.referencedQuestionId);
             this.ReferencedAnswerNotifier.QuestionAnswered += this.ReferencedQuestionAnswered;
@@ -133,13 +132,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private List<SingleOptionLinkedQuestionOptionViewModel> GenerateOptionsFromModel(IStatefulInterview interview, IQuestionnaire questionnaire)
         {
-            var linkedAnswerModel = interview.GetLinkedSingleOptionAnswer(this.questionIdentity);
+            var linkedAnswerModel = interview.GetLinkedSingleOptionAnswer(this.Identity);
 
             IEnumerable<BaseInterviewAnswer> referencedQuestionAnswers =
-                interview.FindAnswersOfReferencedQuestionForLinkedQuestion(this.referencedQuestionId, this.questionIdentity);
+                interview.FindAnswersOfReferencedQuestionForLinkedQuestion(this.referencedQuestionId, this.Identity);
 
             var options = referencedQuestionAnswers
-                .Select(referencedAnswer => this.GenerateOptionViewModelOrNull(referencedAnswer, this.referencedQuestionId, linkedAnswerModel, interview, questionnaire))
+                .Select(referencedAnswer => this.GenerateOptionViewModelOrNull(referencedAnswer, linkedAnswerModel, interview, questionnaire))
                 .Where(optionOrNull => optionOrNull != null)
                 .ToList();
 
@@ -158,7 +157,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.Answering.SendRemoveAnswerCommandAsync(
                     new RemoveAnswerCommand(this.interviewId,
                         this.userId,
-                        this.questionIdentity,
+                        this.Identity,
                         DateTime.UtcNow));
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
@@ -176,8 +175,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var command = new AnswerSingleOptionLinkedQuestionCommand(
                 this.interviewId,
                 this.userId,
-                this.questionIdentity.Id,
-                this.questionIdentity.RosterVector,
+                this.Identity.Id,
+                this.Identity.RosterVector,
                 DateTime.UtcNow,
                 selectedOption.RosterVector);
 
@@ -244,7 +243,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(AnswerRemoved @event)
         {
-            if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
+            if (this.Identity.Equals(@event.QuestionId, @event.RosterVector))
             {
                 foreach (var option in this.Options.Where(option => option.Selected))
                 {
@@ -264,28 +263,43 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 IStatefulInterview interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
                 IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
-                List<SingleOptionLinkedQuestionOptionViewModel> newOptions = new List<SingleOptionLinkedQuestionOptionViewModel>();
-
-                foreach (var linkedOptionToShow in changedLinkedQuestion.Options)
+                for (int i = 0; i < changedLinkedQuestion.Options.Length; i++)
                 {
+                    var targetRosterVector = changedLinkedQuestion.Options[i];
                     BaseInterviewAnswer referencedAnswer =
-                        interview.FindBaseAnswerByOrDeeperRosterLevel(this.referencedQuestionId, linkedOptionToShow);
+                       interview.FindBaseAnswerByOrDeeperRosterLevel(this.referencedQuestionId, targetRosterVector);
 
                     SingleOptionLinkedQuestionOptionViewModel optionViewModel =
-                        this.GenerateOptionViewModelOrNull(referencedAnswer,
-                            this.referencedQuestionId,
-                            interview.GetLinkedSingleOptionAnswer(this.Identity),
-                            interview,
-                            questionnaire);
-
-                    if (optionViewModel != null)
+                           this.GenerateOptionViewModelOrNull(referencedAnswer,
+                               interview.GetLinkedSingleOptionAnswer(this.Identity),
+                               interview,
+                               questionnaire);
+                    if (i < this.Options.Count)
                     {
-                        newOptions.Add(optionViewModel);
+                        if (!targetRosterVector.Equals(this.Options[i].RosterVector))
+                        {
+                            this.Options.Insert(i, optionViewModel);
+                        }
+                    }
+                    else
+                    {
+                        this.Options.Add(optionViewModel);
                     }
                 }
 
-                this.Options.Clear();
-                newOptions.ForEach(this.Options.Add);
+                if (this.Options.Count > changedLinkedQuestion.Options.Length)
+                {
+                    var itemsToRemove = this.Options.Select((item, index) => new { index, item}).Where(x => x.index >= changedLinkedQuestion.Options.Length)
+                                                    .ToList();
+
+                    itemsToRemove.ForEach(option => {
+                        option.item.BeforeSelected -= this.OptionSelected;
+                        option.item.AnswerRemoved -= this.RemoveAnswer;
+                        this.Options.Remove(option.item);
+                    });
+                }
+
+                this.RaisePropertyChanged(() => HasOptions);
             }
         }
 
@@ -357,13 +371,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private SingleOptionLinkedQuestionOptionViewModel GenerateOptionViewModelOrNull(
-            BaseInterviewAnswer referencedAnswer, Guid referencedQuestionId,
-            LinkedSingleOptionAnswer linkedAnswerModel, IStatefulInterview interview, IQuestionnaire questionnaire)
+            BaseInterviewAnswer referencedAnswer,
+            LinkedSingleOptionAnswer linkedAnswerModel, 
+            IStatefulInterview interview, 
+            IQuestionnaire questionnaire)
         {
             if (referencedAnswer == null)
                 return null;
 
-            var title = this.GenerateOptionTitle(referencedQuestionId, referencedAnswer, interview, questionnaire);
+            var title = this.GenerateOptionTitle(this.referencedQuestionId, referencedAnswer, interview, questionnaire);
 
             var isSelected =
                 linkedAnswerModel != null &&
@@ -392,7 +408,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             string answerAsTitle = this.answerToStringService.AnswerToUIString(referencedQuestionId, referencedAnswer, interview, questionnaire);
 
-            int currentRosterLevel = this.questionIdentity.RosterVector.Length;
+            int currentRosterLevel = this.Identity.RosterVector.Length;
 
             IEnumerable<string> parentRosterTitlesWithoutLastOneAndFirstKnown =
                 interview
