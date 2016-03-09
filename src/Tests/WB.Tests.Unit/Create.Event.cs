@@ -589,6 +589,20 @@ namespace WB.Tests.Unit
                 return new RosterInstancesAdded(instances);
             }
 
+            public static RosterInstancesAdded RosterInstancesAdded(Guid rosterId, params RosterVector[] fullRosterVectors)
+            {
+                AddedRosterInstance[] instances =
+                    fullRosterVectors
+                        .Select(fullRosterVector => new AddedRosterInstance(
+                            rosterId,
+                            outerRosterVector: fullRosterVector.Take(fullRosterVector.Length - 1).ToArray(),
+                            rosterInstanceId: fullRosterVector.Last(),
+                            sortIndex: null))
+                        .ToArray();
+
+                return new RosterInstancesAdded(instances);
+            }
+
             public static RosterInstancesAdded RosterInstancesAdded(Guid? rosterGroupId = null,
                 decimal[] rosterVector = null,
                 decimal? rosterInstanceId = null,
