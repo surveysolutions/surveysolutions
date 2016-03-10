@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using System.Security.Cryptography;
 using Microsoft.Practices.ServiceLocation;
-using NHibernate.Mapping.ByCode;
-using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService
 {
@@ -135,6 +134,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             };
         }
 
+        public IEnumerable<QuestionnaireAttachmentMeta> GetBriefAttachmentsMetaForQuestionnaire(Guid questionnaireId)
+        {
+            var formattedQuestionnaireId = questionnaireId.FormatGuid();
+            var attachmentsMeta = this.attachmentMetaStorage.Query(_ => _
+                .Where(x => x.QuestionnaireId == formattedQuestionnaireId)
+                .Select(x => new { AttachmentId = x.AttachmentId, AttachmentContentId = x.AttachmentContentId })
+                .ToList());
+           
+            return attachmentsMeta.Select(x => new QuestionnaireAttachmentMeta
+            {
+                AttachmentId = Guid.Parse(x.AttachmentId),
+                AttachmentContentId = x.AttachmentContentId
+            });
+        }
+
         public IEnumerable<AttachmentView> GetAttachmentsForQuestionnaire(Guid questionnaireId)
         {
             var formattedQuestionnaireId = questionnaireId.FormatGuid();
@@ -156,8 +170,26 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             return attachmentsForQuestionnaire;
         }
 
-        public void CloneAttachmentMeta(Guid sourceAttachmentId)
+        public void CloneAttachmentMeta(Guid sourceAttachmentId, Guid newAttachmentId)
         {
+            var formattedSourceAttachmentId = sourceAttachmentId.FormatGuid();
+            var formattedNewAttachmentId = sourceAttachmentId.FormatGuid();
+
+            var storedAttachmentMeta = this.attachmentMetaStorage.GetById(formattedSourceAttachmentId);
+            var clonedAttachmentMeta = new AttachmentMeta
+            {
+                AttachmentId = formattedNewAttachmentId,
+                QuestionnaireId = storedAttachmentMeta.QuestionnaireId,
+                Name = storedAttachmentMeta.Name,
+                FileName = storedAttachmentMeta.FileName,
+                Size = storedAttachmentMeta.Size,
+                Meta = storedAttachmentMeta.Meta,
+                Type = storedAttachmentMeta.Type,
+                ContentType = storedAttachmentMeta.ContentType,
+                LastUpdateDate = storedAttachmentMeta.LastUpdateDate,
+                AttachmentContentId = storedAttachmentMeta.AttachmentContentId,
+            };
+            this.attachmentMetaStorage.Store(clonedAttachmentMeta, formattedNewAttachmentId);
         }
 
         private string GetHash(byte[] binaryContent)
@@ -205,82 +237,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                     throw new FormatException(string.Format(ExceptionMessages.Attachments_uploaded_file_is_not_image, fileName), e);
                 }
             }
-        }
-    }
-
-    public class QuestionnaireAttachment
-    {
-        public virtual string AttachmentId { get; set; }
-        public virtual string FileName { get; set; }
-        public virtual string ContentType { get; set; }
-        public virtual string AttachmentContentId { get; set; }
-        public virtual byte[] Content { get; set; }
-    }
-
-    public class ImageAttachmentMeta
-    {
-        public int Height { get; set; }
-        public int Width { get; set; }
-        public ImageFormat Format { get; set; }
-    }
-
-    public class AttachmentMeta
-    {
-        public virtual string AttachmentId { get; set; }
-        public virtual string QuestionnaireId { get; set; }
-        public virtual string Name { get; set; }
-        public virtual string FileName { get; set; }
-        public virtual long Size { get; set; }
-        public virtual string Meta { get; set; }
-        public virtual AttachmentType Type { get; set; }
-        public virtual string ContentType { get; set; }
-        public virtual DateTime LastUpdateDate { get; set; }
-        public virtual string AttachmentContentId { get; set; }
-    }
-
-    public class AttachmentContent
-    {
-        public virtual string AttachmentContentId { get; set; }
-        public virtual byte[] Content { get; set; }
-    }
-
-   
-
-    [PlainStorage]
-    public class QuestionnaireAttachmentMetaMap : ClassMapping<AttachmentMeta>
-    {
-        public QuestionnaireAttachmentMetaMap()
-        {
-            Id(x => x.AttachmentId, idMap =>
-            {
-                idMap.Generator(Generators.Assigned);
-                idMap.Column("Id");
-            });
-
-            Property(x => x.Name);
-            Property(x => x.FileName);
-            Property(x => x.LastUpdateDate);
-            Property(x => x.QuestionnaireId);
-            Property(x => x.Size);
-
-            Property(x => x.Meta);
-            Property(x => x.Type);
-            Property(x => x.AttachmentContentId);
-        }
-    }
-
-    [PlainStorage]
-    public class QuestionnaireAttachmentContentMap : ClassMapping<AttachmentContent>
-    {
-        public QuestionnaireAttachmentContentMap()
-        {
-            Id(x => x.AttachmentContentId, idMap =>
-            {
-                idMap.Generator(Generators.Assigned);
-                idMap.Column("Id");
-            });
-
-            Property(x => x.Content);
         }
     }
 }
