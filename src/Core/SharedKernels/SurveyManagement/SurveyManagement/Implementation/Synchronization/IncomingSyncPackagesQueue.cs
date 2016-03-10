@@ -91,9 +91,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                         this.syncSettings.IncomingCapiPackageFileNameExtension)).Any();
         }
 
-        public string DeQueue()
+        public string DeQueue(int skip)
         {
-            var pathToPackage = fileSystemAccessor.GetFilesInDirectory(incomingUnprocessedPackagesDirectory).FirstOrDefault();
+            var pathToPackage = fileSystemAccessor.GetFilesInDirectory(incomingUnprocessedPackagesDirectory).Skip(skip).FirstOrDefault();
 
             if (string.IsNullOrEmpty(pathToPackage) || !fileSystemAccessor.IsFileExists(pathToPackage))
                 return null;
