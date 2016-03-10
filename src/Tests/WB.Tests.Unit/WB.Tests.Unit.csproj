@@ -815,8 +815,6 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\SideBarSectionViewModelTests\SideBarSectionViewModelTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SideBarSectionViewModelTests\when_roster_title_changed.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\SingleOptionLinkedQuestionViewModelTestsContext.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_handling_answer_removed_event.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_handling_answer_removed_event_for_linked_question.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_initializing.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_linked_options_chagned_and_some_existing_were_answered.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_linked_options_chagned.cs" />
