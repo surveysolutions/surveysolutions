@@ -51,6 +51,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             viewModel.Init(interviewId, linkedQuestionId, Create.NavigationState());
 
             viewModel.Options.First().Selected = true;
+
+            interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)
+                 .Returns(new List<BaseInterviewAnswer>
+                 {
+                      Create.TextAnswer("one",
+                        questionId: linkSourceQuestionId.Id,
+                        rosterVector: Create.RosterVector(1)),
+                 });
         };
 
         Because of = () => viewModel.Handle(Create.Event.LinkedOptionsChanged(eventData));
