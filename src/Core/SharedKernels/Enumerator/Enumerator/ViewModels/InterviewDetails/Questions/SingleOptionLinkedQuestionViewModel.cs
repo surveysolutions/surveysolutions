@@ -263,43 +263,49 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 IStatefulInterview interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
                 IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
-                for (int i = 0; i < changedLinkedQuestion.Options.Length; i++)
+                this.mainThreadDispatcher.RequestMainThreadAction(() =>
                 {
-                    var targetRosterVector = changedLinkedQuestion.Options[i];
-                    BaseInterviewAnswer referencedAnswer =
-                       interview.FindBaseAnswerByOrDeeperRosterLevel(this.referencedQuestionId, targetRosterVector);
-
-                    SingleOptionLinkedQuestionOptionViewModel optionViewModel =
-                           this.GenerateOptionViewModelOrNull(referencedAnswer,
-                               interview.GetLinkedSingleOptionAnswer(this.Identity),
-                               interview,
-                               questionnaire);
-                    if (i < this.Options.Count)
+                    for (int i = 0; i < changedLinkedQuestion.Options.Length; i++)
                     {
-                        if (!targetRosterVector.Equals(this.Options[i].RosterVector))
+                        var targetRosterVector = changedLinkedQuestion.Options[i];
+                        BaseInterviewAnswer referencedAnswer =
+                            interview.FindBaseAnswerByOrDeeperRosterLevel(this.referencedQuestionId, targetRosterVector);
+
+                        SingleOptionLinkedQuestionOptionViewModel optionViewModel =
+                            this.GenerateOptionViewModelOrNull(referencedAnswer,
+                                interview.GetLinkedSingleOptionAnswer(this.Identity),
+                                interview,
+                                questionnaire);
+                        if (i < this.Options.Count)
                         {
-                            this.Options.Insert(i, optionViewModel);
+                            if (!targetRosterVector.Equals(this.Options[i].RosterVector))
+                            {
+                                this.Options.Insert(i, optionViewModel);
+                            }
+                        }
+                        else
+                        {
+                            this.Options.Add(optionViewModel);
                         }
                     }
-                    else
+
+                    if (this.Options.Count > changedLinkedQuestion.Options.Length)
                     {
-                        this.Options.Add(optionViewModel);
+                        var itemsToRemove =
+                            this.Options.Select((item, index) => new {index, item})
+                                .Where(x => x.index >= changedLinkedQuestion.Options.Length)
+                                .ToList();
+
+                        itemsToRemove.ForEach(option =>
+                        {
+                            option.item.BeforeSelected -= this.OptionSelected;
+                            option.item.AnswerRemoved -= this.RemoveAnswer;
+                            this.Options.Remove(option.item);
+                        });
                     }
-                }
 
-                if (this.Options.Count > changedLinkedQuestion.Options.Length)
-                {
-                    var itemsToRemove = this.Options.Select((item, index) => new { index, item}).Where(x => x.index >= changedLinkedQuestion.Options.Length)
-                                                    .ToList();
-
-                    itemsToRemove.ForEach(option => {
-                        option.item.BeforeSelected -= this.OptionSelected;
-                        option.item.AnswerRemoved -= this.RemoveAnswer;
-                        this.Options.Remove(option.item);
-                    });
-                }
-
-                this.RaisePropertyChanged(() => HasOptions);
+                    this.RaisePropertyChanged(() => HasOptions);
+                });
             }
         }
 
