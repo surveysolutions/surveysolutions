@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.Applications.Designer.CommandPostProcessorTests
 
             var logger = new Mock<ILogger>();
 
-            commandPostprocessor = new CommandPostprocessor(membershipUserService, recipientNotifier.Object, accountRepository.Object, documentStorage, logger.Object);
+            commandPostprocessor = Create.CommandPostprocessor(membershipUserService, recipientNotifier.Object, accountRepository.Object, documentStorage, logger.Object);
         };
 
         Because of = () =>

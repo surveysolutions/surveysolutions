@@ -144,6 +144,10 @@ using WB.Core.GenericSubdomains.Portable.CustomCollections;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
+using WB.UI.Designer.Code;
+using WB.UI.Designer.Code.Implementation;
+using WB.UI.Shared.Web.Membership;
+using WB.UI.Shared.Web.MembershipProvider.Accounts;
 
 namespace WB.Tests.Unit
 {
@@ -2735,6 +2739,25 @@ namespace WB.Tests.Unit
         public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")
         {
             return new ValidationCondition(expression, message);
+        }
+
+        public static CommandPostprocessor CommandPostprocessor(
+            IMembershipUserService membershipUserService, 
+            IRecipientNotifier recipientNotifier, 
+            IAccountRepository accountRepository, 
+            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage, 
+            ILogger logger,
+            IAttachmentService attachmentService = null,
+            ILookupTableService lookupTableService = null)
+        {
+             return new CommandPostprocessor(
+                membershipUserService,
+                recipientNotifier,
+                accountRepository,
+                documentStorage,
+                logger,
+                attachmentService ?? Mock.Of<IAttachmentService>(),
+                lookupTableService ?? Mock.Of<ILookupTableService>());
         }
     }
 }
