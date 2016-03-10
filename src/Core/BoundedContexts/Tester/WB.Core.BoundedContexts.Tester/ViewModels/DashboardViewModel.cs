@@ -276,6 +276,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             try
             {
+                await this.DownloadQuestionnaireAttachments(selectedQuestionnaire);
+
                 var questionnairePackage = await this.designerApiService.GetQuestionnaireAsync(
                     selectedQuestionnaire: selectedQuestionnaire,
                     onDownloadProgressChanged: (downloadProgress) =>
@@ -292,18 +294,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     var questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111-1111-1111-1111-111111111111"), 1);
                     var questionnaireDocument = questionnairePackage.Document;
                     var supportingAssembly = questionnairePackage.Assembly;
-
-                    var attachmentIds = questionnaireDocument.GetAllAttachmentIds();
-
-                    foreach (var attachmentId in attachmentIds)
-                    {
-                        var attachment = await attachmentStorage.GetAttachmentAsync(attachmentId);
-                        if (attachment == null)
-                        {
-                            var attachmentDto = await this.designerApiService.GetQuestionnaireAttachmentAsync(attachmentId);
-                            await this.attachmentStorage.StoreAsync(attachmentDto.Metadata, attachmentDto.Content);
-                        }
-                    }
 
                     questionnaireDocument.PublicKey = questionnaireIdentity.QuestionnaireId;
 
@@ -351,11 +341,40 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
             catch (Exception ex)
             {
-                this.logger.Error("Import questionaire exception. ", ex);
+                this.logger.Error("Import questionnaire exception. ", ex);
             }
             finally
             {
                 this.IsInProgress = false;   
+            }
+        }
+
+        private async Task DownloadQuestionnaireAttachments(QuestionnaireListItem selectedQuestionnaire)
+        {
+            var attachmentIds = await this.designerApiService.GetQuestionnaireAttachmentIdsAsync(
+                selectedQuestionnaire: selectedQuestionnaire,
+                onDownloadProgressChanged: (downloadProgress) =>
+                {
+                    this.ProgressIndicator = string.Format(TesterUIResources.ImportQuestionnaireAttachments_DownloadProgress,
+                        downloadProgress);
+                },
+                token: this.tokenSource.Token);
+
+            foreach (var attachmentId in attachmentIds)
+            {
+                var isExists = await this.attachmentStorage.IsExistAttachmentContent(attachmentId);
+                if (!isExists)
+                {
+                    var attachmentContent = await this.designerApiService.GetQuestionnaireAttachmentAsync(attachmentId,
+                                        onDownloadProgressChanged: (downloadProgress) =>
+                                        {
+                                            this.ProgressIndicator = string.Format(TesterUIResources.ImportQuestionnaireAttachments_DownloadProgress,
+                                                downloadProgress);
+                                        },
+                                        token: this.tokenSource.Token);
+
+                    await this.attachmentStorage.StoreAttachmentContentAsync(attachmentId, attachmentContent);
+                }
             }
         }
 

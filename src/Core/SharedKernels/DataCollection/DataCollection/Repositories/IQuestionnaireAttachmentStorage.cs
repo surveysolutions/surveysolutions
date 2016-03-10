@@ -7,8 +7,10 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
 {
     public interface IQuestionnaireAttachmentStorage
     {
-        Task StoreAsync(AttachmentMetadata attachmentMetadata, byte[] attachmentData);
-        Task<AttachmentMetadata> GetAttachmentAsync(string attachmentId);
+        Task StoreAttachmentContentAsync(string attachmentId, byte[] attachmentData);
+//        Task StoreAsync(AttachmentMetadata attachmentMetadata, byte[] attachmentData);
+//        Task<AttachmentMetadata> GetAttachmentAsync(string attachmentId);
         Task<byte[]> GetAttachmentContentAsync(string attachmentId);
+        Task<bool> IsExistAttachmentContent(string attachmentId);
     }
 }

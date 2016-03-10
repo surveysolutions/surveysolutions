@@ -49,6 +49,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string GetAttachmentIdForEntity(Guid entityId);
 
+        Attachment GetAttachment(string attachmentId);
+
         Guid? GetCascadingQuestionParentId(Guid questionId);
 
         IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId);

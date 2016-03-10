@@ -143,6 +143,15 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Downloading questionnaire attachments -  {0}%.
+        /// </summary>
+        public static string ImportQuestionnaireAttachments_DownloadProgress {
+            get {
+                return ResourceManager.GetString("ImportQuestionnaireAttachments_DownloadProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Designer web application is not accessible at this moment. Check connection setting or try again later.
         /// </summary>
         public static string Login_Error_NotFound {
