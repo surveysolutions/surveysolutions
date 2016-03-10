@@ -119,6 +119,7 @@
     <Compile Include="Services\Infrastructure\Storage\IPlainStorageEntity.cs" />
     <Compile Include="Services\IRosterTitleSubstitutionService.cs" />
     <Compile Include="Implementation\Services\RosterTitleSubstitutionService.cs" />
+    <Compile Include="Utils\ObservableCollectionExtensions.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\AttachmentViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\CascadingOptionModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\OptionModel.cs" />
