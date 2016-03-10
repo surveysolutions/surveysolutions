@@ -509,6 +509,9 @@ namespace Main.Core.Documents
             doc.SharedPersons = new List<Guid>();
             this.SharedPersons.ForEach(x => doc.SharedPersons.Add(x));
 
+            doc.Attachments = new List<Attachment>();
+            this.Attachments.ForEach(x => doc.Attachments.Add(x.Clone()));
+
             return doc;
         }
 
