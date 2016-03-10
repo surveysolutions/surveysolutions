@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using Microsoft.Practices.ServiceLocation;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
+using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Portable;
@@ -45,6 +46,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                 oldHashOfBinaryContent = storedAttachmentMeta.AttachmentContentId;
             }
 
+            var attachmentTypeSpecificMeta = BuildAttachmentMeta(type, binaryContent, fileName);
+
             var countOfNewAttachmentContentReferences = this.attachmentMetaStorage.Query(_ => _.Count(x => x.AttachmentContentId == hashOfBinaryContent));
             if (countOfNewAttachmentContentReferences == 0)
             {
@@ -56,8 +59,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
                 this.attachmentContentStorage.Store(attachmentContent, hashOfBinaryContent);
             }
-
-            var attachmentTypeSpecificMeta = BuildAttachmentMeta(type, binaryContent);
 
             var attachmentMeta = storedAttachmentMeta ?? new AttachmentMeta
             {
@@ -175,17 +176,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             return null;
         }
 
-        private string BuildAttachmentMeta(AttachmentType type, byte[] binaryContent)
+        private string BuildAttachmentMeta(AttachmentType type, byte[] binaryContent, string fileName)
         {
             if (type == AttachmentType.Image)
             {
-                var meta = GetImageMeta(binaryContent);
+                var meta = GetImageMeta(binaryContent, fileName);
                 return this.serializer.Serialize(meta, TypeSerializationSettings.None);
             }
             return string.Empty;
         }
 
-        public ImageAttachmentMeta GetImageMeta(byte[] binaryContent)
+        public ImageAttachmentMeta GetImageMeta(byte[] binaryContent, string fileName)
         {
             using (var stream = new MemoryStream(binaryContent))
             {
@@ -199,9 +200,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                         Format = image.RawFormat
                     };
                 }
-                catch (ArgumentException)
+                catch (ArgumentException e)
                 {
-                    return null;
+                    throw new FormatException(string.Format(ExceptionMessages.Attachments_uploaded_file_is_not_image, fileName), e);
                 }
             }
         }
