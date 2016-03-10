@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
 namespace WB.UI.Tester.Infrastructure.Internals
@@ -73,9 +74,40 @@ namespace WB.UI.Tester.Infrastructure.Internals
             return downloadedQuestionnaire;
         }
 
-        public Task<AttachmentDto> GetQuestionnaireAttachmentAsync(string attachmentId)
+        public async Task<byte[]> GetQuestionnaireAttachmentAsync(string attachmentId,
+            Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, 
+            CancellationToken token)
         {
-            throw new NotImplementedException();
+            var attachmentContent = await this.restService.DownloadFileAsync(
+                url: $"attachment/{attachmentId}",
+                credentials:
+                    new RestCredentials
+                    {
+                        Login = this.principal.CurrentUserIdentity.Name,
+                        Password = this.principal.CurrentUserIdentity.Password
+                    },
+                onDownloadProgressChanged: onDownloadProgressChanged,
+                token: token);
+
+            return attachmentContent;
+        }
+
+        public async Task<string[]> GetQuestionnaireAttachmentIdsAsync(QuestionnaireListItem selectedQuestionnaire, 
+            Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged,
+            CancellationToken token)
+        {
+            var attachmentsIds = await this.restService.GetAsync<string[]>(
+                url: $"attachments/{selectedQuestionnaire.Id}",
+                credentials:
+                    new RestCredentials
+                    {
+                        Login = this.principal.CurrentUserIdentity.Name,
+                        Password = this.principal.CurrentUserIdentity.Password
+                    },
+                onDownloadProgressChanged: onDownloadProgressChanged, 
+                token: token);
+
+            return attachmentsIds;
         }
 
         private async Task<QuestionnaireListItem[]> GetPageOfQuestionnairesAsync(int pageIndex, CancellationToken token)

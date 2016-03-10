@@ -11,16 +11,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 {
     public class QuestionnaireAttachmentStorage : IQuestionnaireAttachmentStorage
     {
-        private readonly IPlainKeyValueStorage<AttachmentMetadata> repository;
+        //private readonly IPlainKeyValueStorage<AttachmentMetadata> repository;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string attachmentDirectoryPath;
 
         private readonly string AttachmentDirectoryName = "Attachments";
 
-        public QuestionnaireAttachmentStorage(IPlainKeyValueStorage<AttachmentMetadata> repository,
+        public QuestionnaireAttachmentStorage(//IPlainKeyValueStorage<AttachmentMetadata> repository,
             IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath)
         {
-            this.repository = repository;
+            //this.repository = repository;
             this.fileSystemAccessor = fileSystemAccessor;
 
             this.attachmentDirectoryPath = this.fileSystemAccessor.CombinePath(rootDirectoryPath, AttachmentDirectoryName);
@@ -29,19 +29,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                 this.fileSystemAccessor.CreateDirectory(this.attachmentDirectoryPath);
         }
 
-        public Task StoreAsync(AttachmentMetadata attachmentMetadata, byte[] attachmentData)
+        public Task StoreAttachmentContentAsync(string attachmentId, byte[] attachmentData)
         {
-            this.repository.Store(attachmentMetadata, attachmentMetadata.Id);
-
-            var attachmentFilePath = this.GetPathToFile(attachmentMetadata.Id);
+            var attachmentFilePath = this.GetPathToFile(attachmentId);
             fileSystemAccessor.WriteAllBytes(attachmentFilePath, attachmentData);
             return Task.FromResult(true);
         }
 
-        public Task<AttachmentMetadata> GetAttachmentAsync(string attachmentId)
-        {
-            return Task.FromResult(this.repository.GetById(attachmentId));
-        }
+//        public Task StoreAsync(AttachmentMetadata attachmentMetadata, byte[] attachmentData)
+//        {
+//            this.repository.Store(attachmentMetadata, attachmentMetadata.Id);
+//
+//            var attachmentFilePath = this.GetPathToFile(attachmentMetadata.Id);
+//            fileSystemAccessor.WriteAllBytes(attachmentFilePath, attachmentData);
+//            return Task.FromResult(true);
+//        }
+//
+//        public Task<AttachmentMetadata> GetAttachmentAsync(string attachmentId)
+//        {
+//            return Task.FromResult(this.repository.GetById(attachmentId));
+//        }
 
         public Task<byte[]> GetAttachmentContentAsync(string attachmentId)
         {
@@ -49,6 +56,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             if (!fileSystemAccessor.IsFileExists(filePath))
                 return null;
             return Task.FromResult(fileSystemAccessor.ReadAllBytes(filePath));
+        }
+
+        public Task<bool> IsExistAttachmentContent(string attachmentId)
+        {
+            var attachmentFilePath = this.GetPathToFile(attachmentId);
+            var fileExists = this.fileSystemAccessor.IsFileExists(attachmentFilePath);
+            return Task.FromResult(fileExists);
         }
 
         private string GetPathToFile(string fileName)

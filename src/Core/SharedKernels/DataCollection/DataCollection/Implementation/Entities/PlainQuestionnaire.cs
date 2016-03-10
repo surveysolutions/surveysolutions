@@ -219,7 +219,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public string GetStaticText(Guid staticTextId) => this.GetStaticTextOrThrow(staticTextId).Text;
         public string GetAttachmentIdForEntity(Guid entityId)
         {
-            throw new NotImplementedException();
+            var staticText = this.GetStaticTextOrThrow(entityId);
+            var attachmentKeyValuePair = this.innerDocument.Attachments.Single(kv => kv.Value.Name == staticText.AttachmentName);
+            return attachmentKeyValuePair.Key.ToString();
+        }
+
+        public Attachment GetAttachment(string attachmentId)
+        {
+            return this.innerDocument.Attachments[Guid.Parse(attachmentId)];
         }
 
         public Guid? GetCascadingQuestionParentId(Guid questionId) => this.GetQuestionOrThrow(questionId).CascadeFromQuestionId;

@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
@@ -17,7 +18,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireAttachmentStorage attachmentStorage;
 
-        private AttachmentMetadata attachmentMetadata;
+        //private AttachmentMetadata attachmentMetadata;
+        private string attachmentId;
+        private Attachment attachment;
 
         public AttachmentViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,
@@ -38,16 +41,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var interview = this.interviewRepository.Get(interviewId);
             IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
-            var attachmentId = questionnaire.GetAttachmentIdForEntity(entityIdentity.Id);
+            attachmentId = questionnaire.GetAttachmentIdForEntity(entityIdentity.Id);
 
             if (attachmentId != null)
             {
-                this.attachmentMetadata = await this.attachmentStorage.GetAttachmentAsync(attachmentId);
+                attachment = questionnaire.GetAttachment(this.attachmentId);
+                //this.attachmentMetadata = await this.attachmentStorage.GetAttachmentAsync(attachmentId);
                 this.AttachmentContent = await this.attachmentStorage.GetAttachmentContentAsync(attachmentId);
             }
         }
 
-        public bool IsImage => this.attachmentMetadata != null && this.attachmentMetadata.Type == AttachmentContentType.Image;
+        public bool IsImage
+        {
+            get { return this.attachment != null && this.attachment.FileName.Contains(".jpg"); }
+        }
 
         public byte[] AttachmentContent { get; set; }
     }
