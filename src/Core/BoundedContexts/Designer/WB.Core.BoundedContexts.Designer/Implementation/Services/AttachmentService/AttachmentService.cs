@@ -101,16 +101,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
         public void DeleteAttachment(Guid attachmentId)
         {
             var formattedAttachmentId = attachmentId.FormatGuid();
-            var storedAttachmentMeta = this.attachmentMetaStorage.GetById(formattedAttachmentId);
-            this.attachmentMetaStorage.Remove(formattedAttachmentId);
-
-            if (storedAttachmentMeta != null)
+            try
             {
-                var countOfAttachmentContentReferences = this.attachmentMetaStorage.Query(_ => _.Count(x => x.AttachmentContentId == storedAttachmentMeta.AttachmentContentId));
-                if (countOfAttachmentContentReferences == 0)
+                var storedAttachmentMeta = this.attachmentMetaStorage.GetById(formattedAttachmentId);
+            
+                this.attachmentMetaStorage.Remove(formattedAttachmentId);
+
+                if (storedAttachmentMeta != null)
                 {
-                    this.attachmentContentStorage.Remove(storedAttachmentMeta.AttachmentContentId);
+                    var countOfAttachmentContentReferences = this.attachmentMetaStorage.Query(_ => _.Count(x => x.AttachmentContentId == storedAttachmentMeta.AttachmentContentId));
+                    if (countOfAttachmentContentReferences == 0)
+                    {
+                        this.attachmentContentStorage.Remove(storedAttachmentMeta.AttachmentContentId);
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
         }
 
