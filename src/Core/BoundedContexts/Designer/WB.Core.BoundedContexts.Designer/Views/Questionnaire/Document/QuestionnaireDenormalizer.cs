@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -9,9 +8,7 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -71,22 +68,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
     {
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage;
         private readonly IQuestionnaireEntityFactory questionnaireEntityFactory;
-        private readonly ILookupTableService lookupTableService;
-        private readonly IAttachmentService attachmentService;
         private readonly ILogger logger;
 
         public QuestionnaireDenormalizer(
             IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage,
             IQuestionnaireEntityFactory questionnaireEntityFactory, 
-            ILogger logger, 
-            ILookupTableService lookupTableService, 
-            IAttachmentService attachmentService)
+            ILogger logger)
         {
             this.documentStorage = documentStorage;
             this.questionnaireEntityFactory = questionnaireEntityFactory;
             this.logger = logger;
-            this.lookupTableService = lookupTableService;
-            this.attachmentService = attachmentService;
         }
 
         public override object[] Writers
@@ -574,8 +565,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
         public void Handle(IPublishedEvent<LookupTableDeleted> evnt)
         {
-            this.lookupTableService.DeleteLookupTableContent(evnt.EventSourceId, evnt.Payload.LookupTableId);
-
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
 
             document.LookupTables.Remove(evnt.Payload.LookupTableId);
@@ -586,7 +575,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         public void Handle(IPublishedEvent<AttachmentAdded> evnt)
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
-            AddOrUpdateAttachment(document, evnt.Payload.AttachmentId, new Attachment());
+            AddOrUpdateAttachment(document, evnt.Payload.AttachmentId, new Attachment
+            {
+                AttachmentId = evnt.Payload.AttachmentId
+            });
             this.UpdateQuestionnaire(evnt, document);
         }
 
@@ -595,6 +587,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
             AddOrUpdateAttachment(document, evnt.Payload.AttachmentId, new Attachment
             {
+                AttachmentId = evnt.Payload.AttachmentId,
                 Name = evnt.Payload.AttachmentName,
                 FileName = evnt.Payload.AttachmentFileName
             });
@@ -603,7 +596,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
         public void Handle(IPublishedEvent<AttachmentDeleted> evnt)
         {
-            this.attachmentService.DeleteAttachment(evnt.Payload.AttachmentId);
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
             document.Attachments.RemoveAll(x => x.AttachmentId == evnt.Payload.AttachmentId);
             this.UpdateQuestionnaire(evnt, document);
