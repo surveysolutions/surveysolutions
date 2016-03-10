@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -25,46 +27,74 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             this.brokenSyncPackagesStorage = brokenSyncPackagesStorage;
         }
 
-        public void ProcessNextSyncPackage()
+        public void ProcessNextSyncPackageBatchInParallel(int batchSize, int MaxDegreeOfParallelism = 1)
         {
-            IncomingSyncPackage syncPackage = null;
-            try
-            {
-                syncPackage = incomingSyncPackagesQueue.DeQueue();
-            }
-            catch (IncomingSyncPackageException e)
-            {
-                brokenSyncPackagesStorage.StoreUnhandledPackage(e.PathToPackage, e.InterviewId, e.InnerException);
+            List<string> batchPackagePathes = new List<string>();
 
-                incomingSyncPackagesQueue.DeleteSyncItem(e.PathToPackage);
-            }
-
-            if (syncPackage == null)
+            for (int i = 0; i < batchSize; i++)
             {
-                return;
-            }
-
-            try
-            {
-                var command = new SynchronizeInterviewEventsCommand(syncPackage.InterviewId,
-                    syncPackage.ResponsibleId,
-                    syncPackage.QuestionnaireId,
-                    syncPackage.QuestionnaireVersion,
-                    syncPackage.EventsToSynchronize,
-                    syncPackage.InterviewStatus,
-                    syncPackage.CreatedOnClient);
-                commandService.Execute(command, syncPackage.Origin);
-            }
-            catch (Exception e)
-            {
-                logger.Error(
-                    $"package '{syncPackage.PathToPackage}' wasn't processed. Reason: '{e.Message}'",
-                    e);
-                brokenSyncPackagesStorage.StoreUnhandledPackage(syncPackage.PathToPackage, syncPackage.InterviewId,
-                    e);
+                try
+                {
+                    var syncPackage = incomingSyncPackagesQueue.DeQueue();
+                    if (syncPackage == null)
+                        break;
+                    batchPackagePathes.Add(syncPackage);
+                }
+                catch (IncomingSyncPackageException e)
+                {
+                    brokenSyncPackagesStorage.StoreUnhandledPackage(e.PathToPackage, e.InterviewId, e.InnerException);
+                    incomingSyncPackagesQueue.DeleteSyncItem(e.PathToPackage);
+                }
             }
 
-            incomingSyncPackagesQueue.DeleteSyncItem(syncPackage.PathToPackage);
+            if (batchPackagePathes.Count > 0)
+            {
+                Parallel.ForEach(batchPackagePathes,
+                   new ParallelOptions
+                   {
+                       MaxDegreeOfParallelism = MaxDegreeOfParallelism
+                   },
+                   syncPackagePath => {
+                       IncomingSyncPackage syncPackage = null;
+                       try
+                       {
+                           syncPackage = this.incomingSyncPackagesQueue.GetSyncItem(syncPackagePath);
+                       }
+                       catch (IncomingSyncPackageException e)
+                       {
+                           brokenSyncPackagesStorage.StoreUnhandledPackage(e.PathToPackage, e.InterviewId, e.InnerException);
+
+                           incomingSyncPackagesQueue.DeleteSyncItem(e.PathToPackage);
+                       }
+
+                       if (syncPackage == null)
+                       {
+                           return;
+                       }
+
+                       try
+                       {
+                           var command = new SynchronizeInterviewEventsCommand(syncPackage.InterviewId,
+                               syncPackage.ResponsibleId,
+                               syncPackage.QuestionnaireId,
+                               syncPackage.QuestionnaireVersion,
+                               syncPackage.EventsToSynchronize,
+                               syncPackage.InterviewStatus,
+                               syncPackage.CreatedOnClient);
+                           commandService.Execute(command, syncPackage.Origin);
+                       }
+                       catch (Exception e)
+                       {
+                           logger.Error(
+                               $"package '{syncPackage.PathToPackage}' wasn't processed. Reason: '{e.Message}'",
+                               e);
+                           brokenSyncPackagesStorage.StoreUnhandledPackage(syncPackage.PathToPackage, syncPackage.InterviewId,
+                               e);
+                       }
+
+                       incomingSyncPackagesQueue.DeleteSyncItem(syncPackage.PathToPackage);
+                   });
+            }
         }
     }
 }

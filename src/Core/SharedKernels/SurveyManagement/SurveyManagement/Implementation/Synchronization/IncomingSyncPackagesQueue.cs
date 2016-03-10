@@ -62,43 +62,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             }
         }
 
-        public IncomingSyncPackage DeQueue()
-        {
-            var pathToPackage = fileSystemAccessor.GetFilesInDirectory(incomingUnprocessedPackagesDirectory).FirstOrDefault();
-
-            if (string.IsNullOrEmpty(pathToPackage) || !fileSystemAccessor.IsFileExists(pathToPackage))
-                return null;
-
-            Guid? interviewId = null;
-            try
-            {
-                var policy = SetupRetryPolicyForPackage(pathToPackage);
-        
-                var fileContent = policy.Execute(() => fileSystemAccessor.ReadAllText(pathToPackage));
-
-                var syncItem = this.serializer.Deserialize<SyncItem>(fileContent);
-
-                interviewId = syncItem.RootId;
-
-                var meta =
-                    this.serializer.Deserialize<InterviewMetaInfo>(archiver.DecompressString(syncItem.MetaInfo));
-
-                var eventsToSync =
-                    this.serializer.Deserialize<AggregateRootEvent[]>(archiver.DecompressString(syncItem.Content))
-                        .Select(e => e.Payload)
-                        .ToArray();
-
-                return new IncomingSyncPackage(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
-                        meta.TemplateVersion, (InterviewStatus)meta.Status, eventsToSync, meta.CreatedOnClient ?? false, syncSettings.Origin, pathToPackage);
-            }
-            catch (Exception e)
-            {
-                var message = string.Format("package '{0}' wasn't parsed. Reason: '{1}'", pathToPackage, e.Message);
-                logger.Error(message, e);
-                throw new IncomingSyncPackageException(message, e, interviewId, pathToPackage);
-            }
-        }
-
         private ContextualPolicy SetupRetryPolicyForPackage(string pathToPackage)
         {
             return Policy
@@ -126,6 +89,48 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                 this.fileSystemAccessor.GetFilesInDirectory(this.incomingUnprocessedPackagesDirectory,
                     string.Format("*{0}*{1}", interviewId.FormatGuid(),
                         this.syncSettings.IncomingCapiPackageFileNameExtension)).Any();
+        }
+
+        public string DeQueue()
+        {
+            var pathToPackage = fileSystemAccessor.GetFilesInDirectory(incomingUnprocessedPackagesDirectory).FirstOrDefault();
+
+            if (string.IsNullOrEmpty(pathToPackage) || !fileSystemAccessor.IsFileExists(pathToPackage))
+                return null;
+
+            return pathToPackage;
+        }
+
+        public IncomingSyncPackage GetSyncItem(string pathToPackage)
+        {
+            Guid? interviewId = null;
+            try
+            {
+                var policy = SetupRetryPolicyForPackage(pathToPackage);
+
+                var fileContent = policy.Execute(() => fileSystemAccessor.ReadAllText(pathToPackage));
+
+                var syncItem = this.serializer.Deserialize<SyncItem>(fileContent);
+
+                interviewId = syncItem.RootId;
+
+                var meta =
+                    this.serializer.Deserialize<InterviewMetaInfo>(archiver.DecompressString(syncItem.MetaInfo));
+
+                var eventsToSync =
+                    this.serializer.Deserialize<AggregateRootEvent[]>(archiver.DecompressString(syncItem.Content))
+                        .Select(e => e.Payload)
+                        .ToArray();
+
+                return new IncomingSyncPackage(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
+                        meta.TemplateVersion, (InterviewStatus)meta.Status, eventsToSync, meta.CreatedOnClient ?? false, syncSettings.Origin, pathToPackage);
+            }
+            catch (Exception e)
+            {
+                var message = string.Format("package '{0}' wasn't parsed. Reason: '{1}'", pathToPackage, e.Message);
+                logger.Error(message, e);
+                throw new IncomingSyncPackageException(message, e, interviewId, pathToPackage);
+            }
         }
     }
 }
