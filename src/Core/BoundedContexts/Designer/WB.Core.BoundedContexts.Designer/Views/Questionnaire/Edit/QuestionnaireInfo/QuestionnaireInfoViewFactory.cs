@@ -115,14 +115,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             var dbAttachments = this.attachmentService.GetAttachmentsForQuestionnaire(questionnaireDocument.PublicKey).ToList();
 
             questionnaireInfoView.Attachments = (from qAttachment in questionnaireDocument.Attachments
-                join dbAttachment in dbAttachments on qAttachment.Key.FormatGuid() equals dbAttachment.ItemId into groupJoin
+                join dbAttachment in dbAttachments on qAttachment.AttachmentId.FormatGuid() equals dbAttachment.ItemId into groupJoin
                 from subAttachment in groupJoin.DefaultIfEmpty()
                 select new AttachmentView
                 {
-                    ItemId = qAttachment.Key.FormatGuid(),
+                    ItemId = qAttachment.AttachmentId.FormatGuid(),
                     Type = subAttachment?.Type,
-                    Name = qAttachment.Value.Name,
-                    FileName = qAttachment.Value.FileName,
+                    Name = qAttachment.Name,
+                    FileName = qAttachment.FileName,
                     SizeInBytes = subAttachment?.SizeInBytes,
                     LastUpdated = subAttachment?.LastUpdated,
                     Meta = subAttachment?.Meta

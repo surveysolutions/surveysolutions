@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -536,7 +537,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             document.Macros[macroId].Description = evnt.Payload.Description;
 
             this.UpdateQuestionnaire(evnt, document);
-
         }
 
         public void Handle(IPublishedEvent<MacroDeleted> evnt)
@@ -586,18 +586,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         public void Handle(IPublishedEvent<AttachmentAdded> evnt)
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
-            document.Attachments[evnt.Payload.AttachmentId] = new Attachment();
+            AddOrUpdateAttachment(document, evnt.Payload.AttachmentId, new Attachment());
             this.UpdateQuestionnaire(evnt, document);
         }
 
         public void Handle(IPublishedEvent<AttachmentUpdated> evnt)
         {
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
-            document.Attachments[evnt.Payload.AttachmentId] = new Attachment
+            AddOrUpdateAttachment(document, evnt.Payload.AttachmentId, new Attachment
             {
                 Name = evnt.Payload.AttachmentName,
                 FileName = evnt.Payload.AttachmentFileName
-            };
+            });
             this.UpdateQuestionnaire(evnt, document);
         }
 
@@ -605,8 +605,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         {
             this.attachmentService.DeleteAttachment(evnt.Payload.AttachmentId);
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
-            document.Attachments.Remove(evnt.Payload.AttachmentId);
+            document.Attachments.RemoveAll(x => x.AttachmentId == evnt.Payload.AttachmentId);
             this.UpdateQuestionnaire(evnt, document);
+        }
+
+        private void AddOrUpdateAttachment(QuestionnaireDocument document, Guid attachmentId, Attachment attachment)
+        {
+            document.Attachments.RemoveAll(x => x.AttachmentId == attachmentId);
+            document.Attachments.Add(attachment);
         }
     }
 }
