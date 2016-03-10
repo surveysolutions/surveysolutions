@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         private readonly ILogger logger;
         private readonly ISerializer serializer;
         private readonly IArchiveUtils archiver;
-        private readonly MemoryCache cache = MemoryCache.Default;
+        private readonly MemoryCache cache = new MemoryCache(nameof(IncomingSyncPackagesQueue));
         private readonly object cacheLockObject = new object();
 
         public IncomingSyncPackagesQueue(IFileSystemAccessor fileSystemAccessor, 
