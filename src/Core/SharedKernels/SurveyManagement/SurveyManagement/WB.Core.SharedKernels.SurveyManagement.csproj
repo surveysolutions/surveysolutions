@@ -143,6 +143,8 @@
     <Compile Include="Mappings\InterviewCommentariesMap.cs" />
     <Compile Include="Mappings\InterviewDataExportViewMap.cs" />
     <Compile Include="Mappings\MapReportAnswersCollectionMap.cs" />
+    <Compile Include="Mappings\QuestionnaireAttachmentContentMap.cs" />
+    <Compile Include="Mappings\QuestionnaireAttachmentMap.cs" />
     <Compile Include="Mappings\SynchronizationLogItemMap.cs" />
     <Compile Include="Properties\CommandValidatorsMessages.Designer.cs">
       <DependentUpon>CommandValidatorsMessages.resx</DependentUpon>
@@ -150,8 +152,11 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Services\AndroidPackageInfo.cs" />
+    <Compile Include="Implementation\Services\QuestionnaireAttachmentService.cs" />
+    <Compile Include="Services\QuestionnaireAttachmentType.cs" />
     <Compile Include="Services\Export\ITabularFormatExportService.cs" />
     <Compile Include="Services\IAndroidPackageReader.cs" />
+    <Compile Include="Services\IQuestionnaireAttachmentService.cs" />
     <Compile Include="Services\ISynchronizationLogViewFactory.cs" />
     <Compile Include="Services\Preloading\IInterviewImportDataParsingService.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
@@ -364,6 +369,8 @@
     <Compile Include="Views\Preloading\QuestionnairePreloadingDataInputModel.cs" />
     <Compile Include="Views\Preloading\QuestionnairePreloadingDataItem.cs" />
     <Compile Include="Views\Preloading\QuestionnairePreloadingDataViewFactory.cs" />
+    <Compile Include="Views\QuestionnaireAttachments\QuestionnaireAttachment.cs" />
+    <Compile Include="Views\QuestionnaireAttachments\QuestionnaireAttachmentContent.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireAndVersionsItem.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireBrowseItem.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireBrowseView.cs" />
