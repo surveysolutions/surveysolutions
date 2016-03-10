@@ -800,7 +800,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 clonedDocument.SharedPersons.Clear();
             }
 
-            foreach (var lookupTable in document.LookupTables)
+            foreach (var lookupTable in clonedDocument.LookupTables)
             {
                 var lookupTableName = lookupTable.Value.TableName;
 
@@ -810,10 +810,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 }
             }
 
-            foreach (var attachment in document.Attachments)
+            foreach (var attachment in clonedDocument.Attachments)
             {
                 var newAttachmentId = Guid.NewGuid();
-                this.attachmentService.CloneAttachmentMeta(attachment.AttachmentId, newAttachmentId);
+                this.attachmentService.CloneAttachmentMeta(attachment.AttachmentId, newAttachmentId, clonedDocument.PublicKey);
                 attachment.AttachmentId = newAttachmentId;
             }
 

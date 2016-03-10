@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         QuestionnaireAttachment GetAttachment(Guid attachmentId);
         IEnumerable<AttachmentView> GetAttachmentsForQuestionnaire(Guid questionnaireId);
         IEnumerable<QuestionnaireAttachmentMeta> GetBriefAttachmentsMetaForQuestionnaire(Guid questionnaireId);
-        void CloneAttachmentMeta(Guid sourceAttachmentId, Guid newAttachmentId);
+        void CloneAttachmentMeta(Guid sourceAttachmentId, Guid newAttachmentId, Guid newQuestionnaireId);
         void UpdateAttachmentName(Guid questionnaireId, Guid attachmentId, string name);
         void DeleteAttachment(Guid attachmentId);
     }
