@@ -96,7 +96,8 @@
                 attachment.format = file.type;
                 attachment.sizeInBytes = file.size;
                 attachment.type = "Image";
-                
+                attachment.hasUploadedFile = !_.isEmpty(attachment.fileName);
+
                 Upload.imageDimensions(file).then(function(dimensions) {
                     attachment.height = dimensions.height;
                     attachment.width = dimensions.width;
