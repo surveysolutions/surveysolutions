@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.
             IList<ValidationCondition> validation = new List<ValidationCondition>();
             questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             validation.Add(new ValidationCondition("self > 3", "rule1"));
-            validation.Add(new ValidationCondition(new string('*', 201), "rule1"));
+            validation.Add(new ValidationCondition(new string('*', 501), "rule1"));
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(Create.Question(
                 questionId: questionId,
                 validationConditions: validation));
