@@ -9,9 +9,8 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
+namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
-    [Ignore("temporary ignore in order to fix build, will be unignored later when invariants will updated")]
     internal class when_remove_row_from_link_source_roster : InterviewTestsContext
     {
         Establish context = () =>
@@ -26,14 +25,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 children: new IComposite[]
                 {
 
-                    Create.NumericIntegerQuestion(id: rosterSizeQuestionId),
-                    Create.Roster(rosterId: rosterId, variable: "ros", rosterSizeSourceType:RosterSizeSourceType.Question, rosterSizeQuestionId:rosterSizeQuestionId),
-                    Create.SingleQuestion(id: linkedQuestionId, linkedToRosterId: rosterId)
+                    Create.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "num"),
+                    Create.Roster(id: rosterId, variable: "ros", rosterSizeSourceType:RosterSizeSourceType.Question, rosterSizeQuestionId:rosterSizeQuestionId),
+                    Create.SingleQuestion(id: linkedQuestionId, linkedToRosterId: rosterId, variable: "link")
                 });
 
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, new PlainQuestionnaire(questionnaire, 1));
-
-            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview = SetupInterview(questionnaireDocument: questionnaire);
             interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, new decimal[0],
                 DateTime.Now, 2);
             interview.AnswerSingleOptionLinkedQuestion(userId, linkedQuestionId, new decimal[0], DateTime.Now,
