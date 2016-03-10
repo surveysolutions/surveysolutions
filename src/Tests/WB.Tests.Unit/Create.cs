@@ -659,10 +659,11 @@ namespace WB.Tests.Unit
             return new ExportedQuestion() {Answers = new string[0]};
         }
 
+        public static FailedValidationCondition FailedValidationCondition(int? failedConditionIndex = null)
+            => new FailedValidationCondition(failedConditionIndex ?? 1117);
+
         public static FileSystemIOAccessor FileSystemIOAccessor()
-        {
-            return new FileSystemIOAccessor();
-        }
+            => new FileSystemIOAccessor();
 
         public static FixedRosterTitle FixedRosterTitle(decimal value, string title)
         {
