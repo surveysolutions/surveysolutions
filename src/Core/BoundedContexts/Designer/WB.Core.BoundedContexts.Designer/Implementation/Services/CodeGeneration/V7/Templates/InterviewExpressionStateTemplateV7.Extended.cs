@@ -1,4 +1,7 @@
-﻿using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V6.Templates;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V7.Templates
@@ -24,6 +27,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return new RosterScopeTemplateV7(
                 rosterGroup,
                 this.QuestionnaireStructure.LookupTables);
+        }
+
+        protected Dictionary<Guid, Guid> GetLinkedQuestionIdWithSourceRosterIdPairs()
+        {
+            return
+                this.QuestionnaireStructure.AllRosters.SelectMany(r => r.LinkedQuestionFilterExpressions)
+                    .ToDictionary(l => l.LinkedQuestionId, l => l.RosterId);
         }
     }
 }
