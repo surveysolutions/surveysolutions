@@ -59,14 +59,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 
                 this.ValidateStreamVersion(eventStream);
 
-                var storedEvents = eventStream.Select(this.ToStoredEvent).ToList();
+                List<EventView> storedEvents = eventStream.Select(this.ToStoredEvent).ToList();
                 foreach (var @event in storedEvents)
                 {
                     connection.Insert(@event);
                 }
 
                 this.connection.Commit();
-                return new CommittedEventStream(eventStream.SourceId, storedEvents.Select(this.ToCommitedEvent));
+                return new CommittedEventStream(eventStream.SourceId, eventStream.Select(this.ToCommitedEvent));
             }
             catch
             {
@@ -143,7 +143,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 eventSequence: storedEvent.EventSequence,
                 eventTimeStamp: storedEvent.DateTimeUtc,
                 globalSequence: -1,
-                payload: JsonConvert.DeserializeObject<Infrastructure.EventBus.IEvent>(storedEvent.JsonEvent));
+                payload: JsonConvert.DeserializeObject<Infrastructure.EventBus.IEvent>(storedEvent.JsonEvent, JsonSerializerSettings));
+        }
+
+        private CommittedEvent ToCommitedEvent(UncommittedEvent storedEvent)
+        {
+            return new CommittedEvent(
+                commitId: storedEvent.EventSourceId,
+                origin: string.Empty,
+                eventIdentifier: storedEvent.EventIdentifier,
+                eventSourceId: storedEvent.EventSourceId,
+                eventSequence: storedEvent.EventSequence,
+                eventTimeStamp: storedEvent.EventTimeStamp,
+                globalSequence: -1,
+                payload: storedEvent.Payload);
         }
 
         private EventView ToStoredEvent(UncommittedEvent evt)
@@ -165,7 +178,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 
         private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
         {
-            TypeNameHandling = TypeNameHandling.Auto, //TypeNameHandling.All,
+            TypeNameHandling = TypeNameHandling.All,
             NullValueHandling = NullValueHandling.Ignore,
             FloatParseHandling = FloatParseHandling.Decimal,
             Binder = new OldToNewTypesRedirectSerializationBinder()
