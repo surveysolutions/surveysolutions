@@ -18,6 +18,8 @@ namespace WB.Core.SharedKernels.DataCollection.V7
         #region methods using InterviewScopes should be overriden
         public new Dictionary<string, IExpressionExecutableV7> InterviewScopes = new Dictionary<string, IExpressionExecutableV7>();
 
+        protected Dictionary<Guid, Guid> linkedQuestionIdWithSourceRosterIdPairs=new Dictionary<Guid, Guid>();
+
         public AbstractInterviewExpressionStateV7(Dictionary<string, IExpressionExecutableV7> interviewScopes,
             Dictionary<string, List<string>> siblingRosters, IInterviewProperties interviewProperties)
         {
@@ -203,6 +205,14 @@ namespace WB.Core.SharedKernels.DataCollection.V7
                     linkedQuestionOptions.Where(o => o.Enabled).Select(o => o.RosterKey.First().RosterVector).ToArray();
                 
                 result.LinkedQuestionOptions.Add(linkedQuestionId, newOptionSet);
+            }
+            var linkedQuestionsToDoubleCheck =
+                linkedQuestionIdWithSourceRosterIdPairs.Where(
+                    pair => result.LinkedQuestionOptions.All(l => l.Key != pair.Key)).ToArray();
+            foreach (var linkedQuestionIdWithSourceRosterIdPair in linkedQuestionsToDoubleCheck)
+            {
+                if(!this.InterviewScopes.Values.Any(scope=>scope.GetRosterKey().Any(r=>r.Id== linkedQuestionIdWithSourceRosterIdPair.Value)))
+                    result.LinkedQuestionOptions.Add(linkedQuestionIdWithSourceRosterIdPair.Key, new RosterVector[0]);
             }
             return result;
         }
