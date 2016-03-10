@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    internal class when_republishing_states_and_interview_has_2_disabled_and_2_enabled_instances_of_fixed_roster
+    internal class when_completing_interview_and_interview_has_2_disabled_and_2_enabled_instances_of_fixed_roster
     {
         Establish context = () =>
         {
@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         };
 
         Because of = () =>
-            interview.RepublishStates();
+            interview.Complete(Guid.NewGuid(), string.Empty, DateTime.UtcNow);
 
         It should_raise_GroupsDisabled_event = () =>
             eventContext.ShouldContainEvent<GroupsDisabled>();

@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         };
 
         Because of = () =>
-            denormalizer.Handle(Create.Event.InterviewStatusChanged(interviewId, InterviewStatus.SupervisorAssigned));
+            denormalizer.Handle(Create.Event.Published.InterviewStatusChanged(interviewId, InterviewStatus.SupervisorAssigned));
 
         It should_not_store_any_sync_package = () =>
             interviewPackageStorageWriterMock.Verify(
