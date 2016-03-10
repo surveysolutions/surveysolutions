@@ -1,5 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -8,7 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
+namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
     internal class when_answering_single_option_linked_question_with_the_link_on_absent_roster_row : InterviewTestsContext
     {
@@ -16,18 +17,22 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         {
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
 
-            var questionnaire = Mock.Of<IQuestionnaire>
-                (_
-                    => 
+            var triggerQuestionId = Guid.NewGuid();
+            var titleQuestionId = Guid.NewGuid();
+            var questionnaireDocument = Create.QuestionnaireDocument(id: questionnaireId, children: new IComposite[]
+            {
+                Create.SingleQuestion(id: linkedToQuestionId, linkedToQuestionId: linkedToQuestionId,
+                    variable: "link_single"),
+                Integration.Create.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
+                Create.Roster(id: Guid.NewGuid(), rosterSizeSourceType: RosterSizeSourceType.Question,
+                    rosterSizeQuestionId: triggerQuestionId, rosterTitleQuestionId: titleQuestionId, variable: "ros1",
+                    children: new IComposite[]
+                    {
+                        Create.NumericRealQuestion(id: titleQuestionId, variable: "link_source")
+                    })
+            });
 
-                        _.HasQuestion(linkedToQuestionId) == true
-                       && _.GetQuestionType(linkedToQuestionId) == QuestionType.SingleOption
-                       && _.GetQuestionReferencedByLinkedQuestion(linkedToQuestionId) == linkedToQuestionId
-                       && _.IsQuestionLinkedToRoster(linkedToQuestionId)==true
-                );
-            IPlainQuestionnaireRepository questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
-
-            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview = SetupInterview(questionnaireDocument: questionnaireDocument);
         };
 
         Because of = () =>
@@ -38,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
            exception.ShouldBeOfExactType<InterviewException>();
 
         It should_throw_exception_with_message_containting__type_QRBarcode_expected__ = () =>
-             new[] { "answer", "linked", "roster" }.ShouldEachConformTo(
+             new[] { "answer", "linked", "options" }.ShouldEachConformTo(
                     keyword => exception.Message.ToLower().TrimEnd('.').Contains(keyword));
 
 

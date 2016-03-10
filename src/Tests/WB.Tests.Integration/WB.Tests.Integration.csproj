@@ -255,6 +255,16 @@
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_all_questions_and_groups_and_rosters_have_empty_enablement_conditions.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_question_has_conditions_referencin_random.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_question_group_and_roster_have_not_empty_enablement_conditions_and_other_question_group_and_roster_have_empty_enablement_conditions.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_multiple_options_question_which_links_to_text_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_datetime_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_integer_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_real_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_text_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_on_roster_title_question.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_question_with_the_link_on_absent_roster_row.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_remove_answer_from_link_source_question.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_remove_row_from_link_source_roster.cs" />
+    <Compile Include="InterviewTests\LinkedQuestions\when_remove_row_from_multioption_link_source_roster.cs" />
     <Compile Include="InterviewTests\Rosters\when_decreasing_roster_row_count_and_linked_question_has_reference_on_it.cs" />
     <Compile Include="InterviewTests\Rosters\when_removing_answer_that_is_source_for_linked_question_in_nested_roster.cs" />
     <Compile Include="InterviewTests\Rosters\when_removing_answer_that_is_source_for_linked_question_in_other_roster.cs" />
