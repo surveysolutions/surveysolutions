@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.Caching;
 using Main.Core.Events;
 using Polly;
 using WB.Core.GenericSubdomains.Portable;
@@ -22,6 +23,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         private readonly ILogger logger;
         private readonly ISerializer serializer;
         private readonly IArchiveUtils archiver;
+        private readonly MemoryCache cache = MemoryCache.Default;
+        private readonly object cacheLockObject = new object();
 
         public IncomingSyncPackagesQueue(IFileSystemAccessor fileSystemAccessor, 
             SyncSettings syncSettings, 
@@ -52,15 +55,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             this.fileSystemAccessor.WriteAllText(fullPathToSyncPackage, item);
         }
 
-        public int QueueLength
-        {
-            get
-            {
-                return
-                    this.fileSystemAccessor.GetFilesInDirectory(this.incomingUnprocessedPackagesDirectory,
-                        string.Format("*{0}", this.syncSettings.IncomingCapiPackageFileNameExtension)).Count();
-            }
-        }
+        public int QueueLength =>
+            this.GetCachedFilesInIncomingDirectory()
+                .Count(filename => filename.EndsWith(this.syncSettings.IncomingCapiPackageFileNameExtension));
 
         private ContextualPolicy SetupRetryPolicyForPackage(string pathToPackage)
         {
@@ -81,19 +78,49 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         public void DeleteSyncItem(string syncItemPath)
         {
             fileSystemAccessor.DeleteFile(syncItemPath);
+
+            var cachedFilesInIncomingDirectory = this.GetCachedFilesInIncomingDirectory();
+
+            cachedFilesInIncomingDirectory.Remove(syncItemPath);
+
+            this.cache.Set("incomingPackagesFileNames", cachedFilesInIncomingDirectory, DateTime.Now.AddMinutes(5));
+        }
+
+        private HashSet<string> GetCachedFilesInIncomingDirectory()
+        {
+            object cachedFileNames = this.cache.Get("incomingPackagesFileNames");
+
+            if (cachedFileNames == null)
+            {
+                lock (this.cacheLockObject)
+                {
+                    cachedFileNames = this.cache.Get("incomingPackagesFileNames");
+
+                    if (cachedFileNames == null)
+                    {
+                        HashSet<string> filenames = this.fileSystemAccessor.GetFilesInDirectory(this.incomingUnprocessedPackagesDirectory).ToHashSet();
+
+                        this.cache.Set("incomingPackagesFileNames", filenames, DateTime.Now.AddMinutes(5));
+
+                        cachedFileNames = filenames;
+                    }
+                }
+            }
+
+            return (HashSet<string>) cachedFileNames;
         }
 
         public bool HasPackagesByInterviewId(Guid interviewId)
         {
             return
-                this.fileSystemAccessor.GetFilesInDirectory(this.incomingUnprocessedPackagesDirectory,
-                    string.Format("*{0}*{1}", interviewId.FormatGuid(),
-                        this.syncSettings.IncomingCapiPackageFileNameExtension)).Any();
+                this.GetCachedFilesInIncomingDirectory().Any(filename
+                    => filename.Contains(interviewId.FormatGuid())
+                       && filename.EndsWith(this.syncSettings.IncomingCapiPackageFileNameExtension));
         }
 
         public string DeQueue(int skip)
         {
-            var pathToPackage = fileSystemAccessor.GetFilesInDirectory(incomingUnprocessedPackagesDirectory).Skip(skip).FirstOrDefault();
+            var pathToPackage = this.GetCachedFilesInIncomingDirectory().Skip(skip).FirstOrDefault();
 
             if (string.IsNullOrEmpty(pathToPackage) || !fileSystemAccessor.IsFileExists(pathToPackage))
                 return null;
