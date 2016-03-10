@@ -31,16 +31,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             interview.AssignInterviewer(supervisorId, userId, DateTime.Now);
-            interview.Complete(userId, string.Empty, DateTime.Now);
+            interview.Apply(Create.Event.InterviewStatusChanged(status: InterviewStatus.Completed));
             interview.Approve(userId, string.Empty, DateTime.Now);
 
             eventContext = new EventContext();
         };
 
-        private Because of = () =>
+        Because of = () =>
             interview.HqApprove(userId, string.Empty);
 
-        private It should_raise_two_events = () =>
+        It should_raise_two_events = () =>
             eventContext.Events.Count().ShouldEqual(2);
 
         It should_raise_InterviewApprovedByHQ_event = () =>

@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             interview = CreateInterview(questionnaireRepository: questionnaireRepositoryMock.Object);
 
             interview.AssignInterviewer(supervisorId, userId, DateTime.Now);
-            interview.Complete(userId, string.Empty, DateTime.Now);
+            interview.Apply(Create.Event.InterviewStatusChanged(status: InterviewStatus.Completed));
             interview.Approve(userId, string.Empty, DateTime.Now);
 
             eventContext = new EventContext();

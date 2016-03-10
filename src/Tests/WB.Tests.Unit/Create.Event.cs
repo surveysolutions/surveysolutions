@@ -212,15 +212,8 @@ namespace WB.Tests.Unit
             public static InterviewReceivedBySupervisor InterviewReceivedBySupervisor()
                 => new InterviewReceivedBySupervisor();
 
-            public static IPublishedEvent<InterviewStatusChanged> InterviewStatusChanged(
-                Guid interviewId, 
-                InterviewStatus status, 
-                string comment = "hello",
-                Guid? eventId = null)
-            {
-                return new InterviewStatusChanged(status, comment)
-                    .ToPublishedEvent(eventSourceId: interviewId, eventId: eventId);
-            }
+            public static InterviewStatusChanged InterviewStatusChanged(InterviewStatus status, string comment = "hello")
+                => new InterviewStatusChanged(status, comment);
 
             public static InterviewSynchronized InterviewSynchronized(InterviewSynchronizationDto synchronizationDto)
             {
@@ -732,6 +725,11 @@ namespace WB.Tests.Unit
 
                 public static IPublishedEvent<InterviewHardDeleted> InterviewHardDeleted(Guid? interviewId = null)
                     => Create.Event.InterviewHardDeleted().ToPublishedEvent(eventSourceId: interviewId);
+
+
+                public static IPublishedEvent<InterviewStatusChanged> InterviewStatusChanged(
+                    Guid interviewId, InterviewStatus status, string comment = "hello", Guid? eventId = null)
+                    => Create.Event.InterviewStatusChanged(status, comment).ToPublishedEvent(eventSourceId: interviewId, eventId: eventId);
             }
 
             internal static class Designer

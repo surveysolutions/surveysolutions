@@ -6,6 +6,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
@@ -251,8 +252,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         #region Command handlers
 
-        public void RepublishStates()
+        public void Complete(Guid userId, string comment, DateTime completeTime)
         {
+            ThrowIfInterviewHardDeleted();
+            this.ThrowIfInterviewStatusIsNotOneOfExpected(
+                InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
+
+
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             ReadOnlyCollection<Guid> allQuestions = questionnaire.GetAllQuestions();
@@ -269,12 +275,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             var enabledGroups = allGroupInstances.Where(group => this.IsEnabled(group)).ToArray();
             var disabledGroups = allGroupInstances.Where(group => !this.IsEnabled(group)).ToArray();
 
+            bool isInterviewInvalid = this.HasInvalidAnswers();
+
 
             if (enabledQuestions.Length > 0) this.ApplyEvent(new QuestionsEnabled(enabledQuestions));
             if (disabledQuestions.Length > 0) this.ApplyEvent(new QuestionsDisabled(disabledQuestions));
 
             if (enabledGroups.Length > 0) this.ApplyEvent(new GroupsEnabled(enabledGroups));
             if (disabledGroups.Length > 0) this.ApplyEvent(new GroupsDisabled(disabledGroups));
+
+            this.ApplyEvent(new InterviewCompleted(userId, completeTime, comment));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
+
+            this.ApplyEvent(isInterviewInvalid
+                ? new InterviewDeclaredInvalid() as IEvent
+                : new InterviewDeclaredValid());
         }
 
         #endregion

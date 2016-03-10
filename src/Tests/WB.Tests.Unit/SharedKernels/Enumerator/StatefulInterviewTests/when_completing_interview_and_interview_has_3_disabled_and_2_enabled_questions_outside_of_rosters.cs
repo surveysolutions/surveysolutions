@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    internal class when_republishing_states_and_interview_has_3_disabled_and_2_enabled_questions_outside_of_rosters
+    internal class when_completing_interview_and_interview_has_3_disabled_and_2_enabled_questions_outside_of_rosters
     {
         Establish context = () =>
         {
@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         };
 
         Because of = () =>
-            interview.RepublishStates();
+            interview.Complete(Guid.NewGuid(), string.Empty, DateTime.UtcNow);
 
         It should_raise_QuestionsDisabled_event = () =>
             eventContext.ShouldContainEvent<QuestionsDisabled>();
