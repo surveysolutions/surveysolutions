@@ -105,9 +105,9 @@ namespace WB.UI.Designer.Api
                 this.attachmentService.UpdateAttachmentName(updateAttachment.QuestionnaireId, updateAttachment.AttachmentId, updateAttachment.AttachmentName);
 
             }
-            catch (FormatException)
+            catch (FormatException e)
             {
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, Resources.QuestionnaireController.SelectTabFile);
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
             }
             catch (ArgumentException e)
             {
