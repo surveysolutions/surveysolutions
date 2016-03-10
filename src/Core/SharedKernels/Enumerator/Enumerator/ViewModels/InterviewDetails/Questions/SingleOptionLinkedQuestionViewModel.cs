@@ -27,10 +27,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class SingleOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel,
-        //ILiteEventHandler<AnswersRemoved>,
-        //ILiteEventHandler<AnswerRemoved>,
-        //ILiteEventHandler<QuestionsDisabled>,
-        //ILiteEventHandler<QuestionsEnabled>,
         ILiteEventHandler<LinkedOptionsChanged>,
         IDisposable
     {
@@ -202,56 +198,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 this.QuestionState.Validity.ProcessException(ex);
             }
-        }
-
-        public void Handle(QuestionsDisabled @event)
-        {
-            foreach (var question in @event.Questions)
-            {
-                RemoveOptionIfQuestionIsSourceofTheLink(question.Id, question.RosterVector);
-            }
-        }
-
-        public void Handle(QuestionsEnabled @event)
-        {
-            var optionListShouldBeUpdated = @event.Questions.Any(x => x.Id == this.referencedQuestionId);
-            if (!optionListShouldBeUpdated)
-                return;
-
-            IStatefulInterview interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
-
-            var optionsToUpdate = this.GenerateOptionsFromModel(interview, questionnaire);
-            this.mainThreadDispatcher.RequestMainThreadAction(() =>
-            {
-                this.Options.Clear();
-                foreach (var option in optionsToUpdate)
-                {
-                    this.Options.Add(option);
-                }
-                this.RaisePropertyChanged(() => this.HasOptions);
-            });
-        }
-
-        public void Handle(AnswersRemoved @event)
-        {
-            foreach (var question in @event.Questions)
-            {
-                RemoveOptionIfQuestionIsSourceofTheLink(question.Id, question.RosterVector);
-            }
-        }
-
-        public void Handle(AnswerRemoved @event)
-        {
-            if (this.Identity.Equals(@event.QuestionId, @event.RosterVector))
-            {
-                foreach (var option in this.Options.Where(option => option.Selected))
-                {
-                    option.Selected = false;
-                }
-                this.QuestionState.IsAnswered = false;
-            }
-            RemoveOptionIfQuestionIsSourceofTheLink(@event.QuestionId, @event.RosterVector);
         }
 
         public void Handle(LinkedOptionsChanged @event)
