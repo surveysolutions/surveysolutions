@@ -1028,7 +1028,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section/Roster/Group contains more than 200 questions, consider splitting into sub-sections..
+        ///   Looks up a localized string similar to Section or Roster contains more than 200 questions, consider splitting into sub-sections..
         /// </summary>
         internal static string WB0201_LargeNumberOfQuestionsInGroup {
             get {
