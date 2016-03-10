@@ -266,7 +266,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 this.interviewState, allQuestions, RosterVector.Empty, questionnaire).ToReadOnlyCollection();
 
             var validQuestions = allQuestionInstances.Where(question => this.IsValid(question)).ToArray();
-            var invalidQuestions = allQuestionInstances.Where(question => !this.IsValid(question)).ToArray();
+            var invalidQuestions = allQuestionInstances.Where(question => !this.IsValid(question)).ToDictionary(
+                question => question,
+                question => this.GetFailedValidationConditions(question));
 
             var enabledQuestions = allQuestionInstances.Where(question => this.IsEnabled(question)).ToArray();
             var disabledQuestions = allQuestionInstances.Where(question => !this.IsEnabled(question)).ToArray();
@@ -282,7 +284,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
 
             if (validQuestions.Length > 0) this.ApplyEvent(new AnswersDeclaredValid(validQuestions));
-            if (invalidQuestions.Length > 0) this.ApplyEvent(new AnswersDeclaredInvalid(invalidQuestions));
+            if (invalidQuestions.Count > 0) this.ApplyEvent(new AnswersDeclaredInvalid(invalidQuestions));
 
             if (enabledQuestions.Length > 0) this.ApplyEvent(new QuestionsEnabled(enabledQuestions));
             if (disabledQuestions.Length > 0) this.ApplyEvent(new QuestionsDisabled(disabledQuestions));
