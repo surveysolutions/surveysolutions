@@ -6,7 +6,7 @@ namespace WB.Core.Synchronization
     {
         void Enqueue(Guid interviewId, string item);
         int QueueLength { get; }
-        string DeQueue();
+        string DeQueue(int skip);
         void DeleteSyncItem(string syncItemPath);
         IncomingSyncPackage GetSyncItem(string syncItemPath);
         bool HasPackagesByInterviewId(Guid interviewId);

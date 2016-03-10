@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             {
                 try
                 {
-                    var syncPackage = incomingSyncPackagesQueue.DeQueue();
+                    var syncPackage = incomingSyncPackagesQueue.DeQueue(i);
                     if (syncPackage == null)
                         break;
                     batchPackagePathes.Add(syncPackage);
