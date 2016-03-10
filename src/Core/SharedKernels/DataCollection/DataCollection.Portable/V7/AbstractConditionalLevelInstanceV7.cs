@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.DataCollection.V7
 
             var rosterStatesFromScope = this.EnablementStates.Where(r => this.RosterKey.Any(k => k.Id == r.Key)).Select(r=>r.Value.State).ToArray();
 
-            if (rosterStatesFromScope.All(s => s == State.Disabled))
+            if (rosterStatesFromScope.Length >0 && rosterStatesFromScope.All(s => s == State.Disabled))
                 return result;
 
             foreach (var linkedQuestionFilter in this.LinkedQuestionFilters)

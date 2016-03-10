@@ -139,8 +139,8 @@
       <HintPath>..\..\..\packages\Nito.AsyncEx.3.0.0\lib\net45\Nito.AsyncEx.Enlightenment.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Npgsql, Version=3.0.3.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Npgsql.3.0.3\lib\net45\Npgsql.dll</HintPath>
+    <Reference Include="Npgsql, Version=3.0.5.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Npgsql.3.0.5\lib\net45\Npgsql.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework">
@@ -255,6 +255,7 @@
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_all_questions_and_groups_and_rosters_have_empty_enablement_conditions.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_question_has_conditions_referencin_random.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_question_group_and_roster_have_not_empty_enablement_conditions_and_other_question_group_and_roster_have_empty_enablement_conditions.cs" />
+    <Compile Include="InterviewTests\Rosters\when_decreasing_roster_row_count_and_linked_question_has_reference_on_it.cs" />
     <Compile Include="InterviewTests\Rosters\when_removing_answer_that_is_source_for_linked_question_in_nested_roster.cs" />
     <Compile Include="InterviewTests\Rosters\when_removing_answer_that_is_source_for_linked_question_in_other_roster.cs" />
     <Compile Include="InterviewTests\Rosters\when_removing_answer_that_is_source_for_linked_question_in_other_roster_and_they_in_different_roster_branches.cs" />

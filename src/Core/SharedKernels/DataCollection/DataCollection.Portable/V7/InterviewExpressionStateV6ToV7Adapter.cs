@@ -145,16 +145,6 @@ namespace WB.Core.SharedKernels.DataCollection.V7
             throw new NotImplementedException();
         }
 
-        public void EnableLinkedQuestionOptions(Identity[] options)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DisableLinkedQuestionOptions(Identity[] options)
-        {
-            throw new NotImplementedException();
-        }
-
         public IInterviewExpressionState Clone()
         {
             return ((IInterviewExpressionStateV7)this.interviewExpressionState).Clone();
