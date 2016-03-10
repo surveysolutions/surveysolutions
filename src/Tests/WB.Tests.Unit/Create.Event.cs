@@ -113,33 +113,25 @@ namespace WB.Tests.Unit
             }
 
             public static AnswersDeclaredInvalid AnswersDeclaredInvalid(Guid? id = null, decimal[] rosterVector = null)
-            {
-                var identities = new[]
+                => Create.Event.AnswersDeclaredInvalid(questions: new[]
                 {
                     new Identity(id ?? Guid.NewGuid(), rosterVector ?? new decimal[0]),
-                };
-                return new AnswersDeclaredInvalid(identities);
-            }
+                });
+
+            public static AnswersDeclaredInvalid AnswersDeclaredInvalid(Identity[] questions)
+                => new AnswersDeclaredInvalid(questions);
 
             public static AnswersDeclaredInvalid AnswersDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedConditions)
-            {
-                return new AnswersDeclaredInvalid(failedConditions);
-            }
+                => new AnswersDeclaredInvalid(failedConditions);
 
             public static AnswersRemoved AnswersRemoved(params Identity[] questions)
-            {
-                return new AnswersRemoved(questions);
-            }
+                => new AnswersRemoved(questions);
 
             public static AnswerRemoved AnswerRemoved(Identity question)
-            {
-                return new AnswerRemoved(Guid.NewGuid(), question.Id, question.RosterVector, DateTime.Now);
-            }
+                => new AnswerRemoved(Guid.NewGuid(), question.Id, question.RosterVector, DateTime.Now);
 
             public static ExpressionsMigratedToCSharp ExpressionsMigratedToCSharpEvent()
-            {
-                return new ExpressionsMigratedToCSharp();
-            }
+                => new ExpressionsMigratedToCSharp();
 
             public static GeoLocationQuestionAnswered GeoLocationQuestionAnswered(Identity question, double latitude, double longitude)
             {
