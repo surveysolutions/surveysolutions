@@ -56,13 +56,6 @@ namespace WB.UI.Designer.Api
         {
         }
 
-        [Route("~/api/v15/attachments/{id:Guid}")]
-        [HttpGet]
-        public List<string> Attachments(Guid id)
-        {
-            return attachmentService.GetAttachmentsForQuestionnaire(id).Select(x => x.ItemId).ToList();
-        }
-
         [Route("{id:Guid}")]
         public Questionnaire Get(Guid id)
         {
@@ -97,13 +90,18 @@ namespace WB.UI.Designer.Api
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
             }
 
-            var questionnaire = questionnaireView.Source;
+            var questionnaire = questionnaireView.Source.Clone();
             questionnaire.Macros = null;
+
+            var attachmentMeta = attachmentService.GetBriefAttachmentsMetaForQuestionnaire(id)
+                .Where(x => questionnaire.Attachments.Any(a => a.AttachmentId == x.AttachmentId))
+                .ToArray();
 
             return new Questionnaire
             {
                 Document = questionnaire,
-                Assembly = resultAssembly
+                Assembly = resultAssembly,
+                AttachmentsMeta = attachmentMeta
             };
         }
 
