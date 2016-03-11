@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -31,6 +33,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         {
             List<string> batchPackagePathes = new List<string>();
 
+            var logkey = DateTime.Now.ToString("s");
+
+            Stopwatch stopwatch = Stopwatch.StartNew();
+
             for (int i = 0; i < batchSize; i++)
             {
                 try
@@ -47,6 +53,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                 }
             }
 
+            this.logger.Info($"Sync_{logkey}: Received {batchPackagePathes.Count} packages for procession. Took {stopwatch.Elapsed:g}.");
+            stopwatch.Restart();
+
             if (batchPackagePathes.Count > 0)
             {
                 Parallel.ForEach(batchPackagePathes,
@@ -55,10 +64,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                        MaxDegreeOfParallelism = MaxDegreeOfParallelism
                    },
                    syncPackagePath => {
+                       Stopwatch innerwatch = Stopwatch.StartNew();
+
                        IncomingSyncPackage syncPackage = null;
                        try
                        {
                            syncPackage = this.incomingSyncPackagesQueue.GetSyncItem(syncPackagePath);
+
+                           this.logger.Info($"Sync_inner_{logkey}: Read {Path.GetFileName(syncPackagePath)}. Took {innerwatch.Elapsed:g}.");
+                           innerwatch.Restart();
                        }
                        catch (IncomingSyncPackageException e)
                        {
@@ -82,6 +96,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                                syncPackage.InterviewStatus,
                                syncPackage.CreatedOnClient);
                            commandService.Execute(command, syncPackage.Origin);
+
+                           this.logger.Info($"Sync_inner_{logkey}: Executed command for {Path.GetFileName(syncPackagePath)}. Took {innerwatch.Elapsed:g}.");
+                           innerwatch.Restart();
                        }
                        catch (Exception e)
                        {
@@ -90,11 +107,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                                e);
                            brokenSyncPackagesStorage.StoreUnhandledPackage(syncPackage.PathToPackage, syncPackage.InterviewId,
                                e);
+
+                           this.logger.Info($"Sync_inner_{logkey}: Failed executed command for {Path.GetFileName(syncPackagePath)}. Took {innerwatch.Elapsed:g}.");
+                           innerwatch.Restart();
                        }
 
                        incomingSyncPackagesQueue.DeleteSyncItem(syncPackage.PathToPackage);
+
+                       this.logger.Info($"Sync_inner_{logkey}: Deleted {Path.GetFileName(syncPackagePath)}. Took {innerwatch.Elapsed:g}.");
+                       innerwatch.Stop();
                    });
             }
+
+            this.logger.Info($"Sync_{logkey}: Processed {batchPackagePathes.Count} packages. Took {stopwatch.Elapsed:g}.");
+            stopwatch.Stop();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Caching;
@@ -60,7 +61,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 
             string fullPathToSyncPackage = this.fileSystemAccessor.CombinePath(subfolderPath, syncPackageFileName);
 
+            Stopwatch innerwatch = Stopwatch.StartNew();
             this.fileSystemAccessor.WriteAllText(fullPathToSyncPackage, item);
+            this.logger.Info($"Sync_inner2_{syncPackageFileName}: WriteAllText {syncPackageFileName}. Took {innerwatch.Elapsed:g}.");
+            innerwatch.Stop();
 
             var cachedFilesInIncomingDirectory = this.GetCachedFilesInIncomingDirectory();
 
@@ -82,9 +86,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                     retryAttempt => TimeSpan.FromSeconds(syncSettings.RetryIntervalInSeconds),
                     (exception, retryCount, context) =>
                     {
-                        logger.Warn(
-                            string.Format("package '{0}' failed to open with error '{1}'", pathToPackage, exception.Message),
-                            exception);
+                        logger.Warn($"package '{pathToPackage}' failed to open with error '{exception.Message}'", exception);
                     }
                 );
         }
@@ -165,7 +167,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             {
                 var policy = SetupRetryPolicyForPackage(pathToPackage);
 
+                Stopwatch innerwatch = Stopwatch.StartNew();
                 var fileContent = policy.Execute(() => fileSystemAccessor.ReadAllText(pathToPackage));
+                this.logger.Info($"Sync_inner2_{Path.GetFileName(pathToPackage)}: ReadAllText {Path.GetFileName(pathToPackage)}. Took {innerwatch.Elapsed:g}.");
+                innerwatch.Stop();
 
                 var syncItem = this.serializer.Deserialize<SyncItem>(fileContent);
 

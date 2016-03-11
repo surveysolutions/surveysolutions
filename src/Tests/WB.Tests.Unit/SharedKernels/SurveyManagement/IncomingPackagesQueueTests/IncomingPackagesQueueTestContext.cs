@@ -19,7 +19,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
                 new SyncSettings(AppDataDirectory, IncomingCapiPackagesWithErrorsDirectoryName,
                     IncomingCapiPackageFileNameExtension, IncomingCapiPackagesDirectoryName, "",3,1), Mock.Of<ILogger>(), serializer: serializer ?? Mock.Of<ISerializer>(),
                 archiver: archiver ?? Mock.Of<IArchiveUtils>());
-
         }
 
         protected static Mock<IFileSystemAccessor> CreateDefaultFileSystemAccessorMock()
