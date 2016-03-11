@@ -340,7 +340,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\CopyPasteTests\when_pasting_group_with_questions_into_group.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireTests\when_sending_command_with_HideIfDisabled_flag.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_categorical_question_has_more_than_30_options.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_question_has_long_validation_condition.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_group_without_questions_added.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_more_than_200_questions_added_to_one_group.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_1001_questions.cs" />
@@ -812,19 +811,6 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_question_that_has_enablement_condition_referencing_to_single_not_linked.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_question_that_has_validation_expression_referencing_to_multi_not_linked.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Categorical\when_verifying_questionnaire_with_question_that_has_validation_expression_referencing_to_single_not_linked_.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifing_question_with_two_referenes_to_non_existing_other_questions.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_2_rosters_inside_roster_and_question_from_first_child_roster_has_custom_condition_.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_2_rosters_inside_roster_and_question_from_first_child_roster_has_custom_condition__.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_2_rosters_inside_roster_and_question_from_first_child_roster_has_custom_condition___.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_group_inside_roster_that_has_condition_referencing_question_with_deeper_roster_level_.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_group_inside_roster_that_has_condition_referencing_question_with_deeper_roster_level__.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_group_that_has_custom_condition_referencing_question_with_deeper_roster_level.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_question_inside_roster_that_has_custom_condition_referencing_question_with_deeper_level.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_question_inside_roster_that_has_custom_condition_referencing_question_with_deeper_lev__.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_question_that_has_custom_condition_referencing_question_with_deeper_roster_level.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_roster_inside_roster_and_parent_roster_has_custom_condition___.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_roster_inside_roster_that_has_custom_condition_referencing_question_with_same_roster_level.cs" />
-    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\Conditions\when_verifying_questionnaire_with_roster_that_has_custom_condition_referencing_question_with_same_roster_level.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\QuestionnaireVerifierTestsContext.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_validating_questionnaire_with_empty_variable_names.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_verifying_empty_questionnaire.cs" />
