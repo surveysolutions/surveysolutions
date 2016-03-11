@@ -14,6 +14,5 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
         Task<IReadOnlyCollection<QuestionnaireListItem>> GetQuestionnairesAsync(CancellationToken token);
         Task<Questionnaire> GetQuestionnaireAsync(QuestionnaireListItem selectedQuestionnaire, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, CancellationToken token);
         Task<byte[]> GetQuestionnaireAttachmentAsync(string attachmentId, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, CancellationToken token);
-        Task<string[]> GetQuestionnaireAttachmentIdsAsync(QuestionnaireListItem selectedQuestionnaire, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, CancellationToken token);
     }
 }
