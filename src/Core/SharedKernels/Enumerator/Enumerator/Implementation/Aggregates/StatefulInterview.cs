@@ -582,12 +582,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public IEnumerable<BaseInterviewAnswer> FindAnswersOfReferencedQuestionForLinkedQuestion(Guid referencedQuestionId, Identity linkedQuestion)
         {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-
-            var rosterVectorToStartFrom = this.CalculateStartRosterVectorForAnswersOfLinkedToQuestion(referencedQuestionId, linkedQuestion, questionnaire);
+            var linkedQuestionOptions = this.interviewState.LinkedQuestionOptions[ConversionHelper.ConvertIdentityToString(linkedQuestion)];
 
             IEnumerable<Identity> targetQuestions =
-               this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, referencedQuestionId, rosterVectorToStartFrom, questionnaire);
+                linkedQuestionOptions.Select(x => new Identity(referencedQuestionId, x));
 
             var answers = targetQuestions
                 .Select(this.GetExistingAnswerOrNull)
