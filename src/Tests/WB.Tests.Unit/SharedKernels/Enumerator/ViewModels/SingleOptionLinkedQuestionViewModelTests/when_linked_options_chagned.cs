@@ -35,10 +35,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             IStatefulInterview interview = Substitute.For<IStatefulInterview>();
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)
                     .Returns(new List<BaseInterviewAnswer> { Create.TextAnswer(linkedOptionTextInInterview) });
-            interview.FindBaseAnswerByOrDeeperRosterLevel(linkSourceQuestionId.Id, Create.RosterVector(1))
-                     .Returns(Create.TextAnswer("one"));
-            interview.FindBaseAnswerByOrDeeperRosterLevel(linkSourceQuestionId.Id, Create.RosterVector(2))
-                     .Returns(Create.TextAnswer("two"));
 
             IQuestionnaire questionnaire = Substitute.For<IQuestionnaire>();
             questionnaire.GetQuestionReferencedByLinkedQuestion(linkedQuestionId.Id)
@@ -46,6 +42,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
 
             viewModel = Create.SingleOptionLinkedQuestionViewModel(interview: interview, questionnaire: questionnaire);
             viewModel.Init(interviewId, linkedQuestionId, Create.NavigationState());
+
+            interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)
+                  .Returns(new List<BaseInterviewAnswer>
+                  {
+                      Create.TextAnswer("one"),
+                      Create.TextAnswer("two")
+                  });
         };
 
         Because of = () => viewModel.Handle(Create.Event.LinkedOptionsChanged(eventData));

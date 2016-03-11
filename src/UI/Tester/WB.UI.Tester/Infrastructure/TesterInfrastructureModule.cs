@@ -24,6 +24,7 @@ using WB.UI.Tester.Infrastructure.Internals.Storage;
 using SQLite.Net.Interop;
 using SQLite.Net.Platform.XamarinAndroid;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
+using WB.Infrastructure.Shared.Enumerator.Internals;
 
 namespace WB.UI.Tester.Infrastructure
 {

@@ -8,7 +8,6 @@ using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -69,9 +68,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             var denormalizer = new QuestionnaireDenormalizer(
                 storageStub.Object, 
                 new QuestionnaireEntityFactory(), 
-                Mock.Of<ILogger>(), 
-                Mock.Of<ILookupTableService>(),
-                Mock.Of<IAttachmentService>());
+                Mock.Of<ILogger>());
 
             return denormalizer;
         }

@@ -34,24 +34,19 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpGet]
-        public override void Login() { base.Login(); }
+        public override void Login() 
+            => base.Login(); 
 
         [HttpPost]
         public override PagedQuestionnaireCommunicationPackage PagedQuestionnaireList(QuestionnaireListRequest request)
-        {
-            return base.PagedQuestionnaireList(request);
-        }
-
+            => base.PagedQuestionnaireList(request);
+        
         [HttpGet]
         public override QuestionnaireListCommunicationPackage QuestionnaireList()
-        {
-            return base.QuestionnaireList();
-        }
-
+            => base.QuestionnaireList();
+        
         [HttpPost]
         public QuestionnaireCommunicationPackage Questionnaire(DownloadQuestionnaireRequest request)
-        {
-            return base.Questionnaire(request, true);
-        }
+            => base.Questionnaire(request, true);
     }
 }

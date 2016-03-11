@@ -45,6 +45,7 @@ using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Integration
 {
@@ -197,6 +198,17 @@ namespace WB.Tests.Integration
                 return new RosterInstancesAdded(rosterInstances);
             }
 
+            public static RosterInstancesAdded RosterInstancesAdded(Guid? rosterGroupId = null,
+                decimal[] rosterVector = null,
+                decimal? rosterInstanceId = null,
+                int? sortIndex = null)
+            {
+                return new RosterInstancesAdded(new[]
+                {
+                    new AddedRosterInstance(rosterGroupId ?? Guid.NewGuid(), rosterVector ?? new decimal[0], rosterInstanceId ?? 0.0m, sortIndex)
+                });
+            }
+
             public static RosterInstancesRemoved RosterInstancesRemoved(params RosterInstance[] rosterInstances)
             {
                 return new RosterInstancesRemoved(rosterInstances);
@@ -232,7 +244,7 @@ namespace WB.Tests.Integration
         }
 
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null, 
-            IEnumerable<Answer> answers = null, Guid? linkedToQuestionId = null, string variable = null)
+            IEnumerable<Answer> answers = null, Guid? linkedToQuestionId = null, string variable = null, Guid? linkedToRosterId=null)
         {
             return new MultyOptionsQuestion
             {
@@ -240,7 +252,8 @@ namespace WB.Tests.Integration
                 PublicKey = id ?? Guid.NewGuid(),
                 Answers = linkedToQuestionId.HasValue ? null : new List<Answer>(answers ?? new Answer[] {}),
                 LinkedToQuestionId = linkedToQuestionId,
-                StataExportCaption = variable
+                StataExportCaption = variable,
+                LinkedToRosterId = linkedToRosterId
             };
         }
 
@@ -297,7 +310,7 @@ namespace WB.Tests.Integration
         }
 
         public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, 
-            string validationExpression = null, Guid? cascadeFromQuestionId = null, List<Answer> options = null)
+            string validationExpression = null, Guid? cascadeFromQuestionId = null, List<Answer> options = null, Guid? linkedToQuestionId = null, Guid? linkedToRosterId=null)
         {
             return new SingleQuestion
             {
@@ -307,7 +320,9 @@ namespace WB.Tests.Integration
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 Answers = options ?? new List<Answer>(),
-                CascadeFromQuestionId = cascadeFromQuestionId
+                CascadeFromQuestionId = cascadeFromQuestionId,
+                LinkedToQuestionId = linkedToQuestionId,
+                LinkedToRosterId = linkedToRosterId
             };
         }
 

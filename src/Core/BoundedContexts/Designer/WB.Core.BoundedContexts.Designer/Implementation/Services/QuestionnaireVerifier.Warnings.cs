@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool HasLongValidationCondition(ValidationCondition condition)
         {
-            return !string.IsNullOrEmpty(condition.Expression) && condition.Expression.Length > 200;
+            return !string.IsNullOrEmpty(condition.Expression) && condition.Expression.Length > 500;
         }
 
         private static bool HasNoGpsQuestions(ReadOnlyQuestionnaireDocument questionnaire)
@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool HasLongEnablementCondition(IQuestion question)
         {
-            return !string.IsNullOrEmpty(question.ConditionExpression) && question.ConditionExpression.Length > 200;
+            return !string.IsNullOrEmpty(question.ConditionExpression) && question.ConditionExpression.Length > 500;
         }
 
         private static bool LargeNumberOfRosters(ReadOnlyQuestionnaireDocument questionnaire)

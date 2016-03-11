@@ -1,8 +1,6 @@
-﻿using System.Linq;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Ninject.Modules;
 using Ninject.Web.Mvc.FilterBindingSyntax;
-using Ninject.Web.WebApi.FilterBindingSyntax;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Designer.Code;
@@ -10,11 +8,9 @@ using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Exceptions;
 using WB.UI.Shared.Web.Membership;
 using IRecipientNotifier = WB.UI.Designer.Code.IRecipientNotifier;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
-using WB.UI.Shared.Web.Attributes;
-using WB.UI.Shared.Web.Filters;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.UI.Designer
 {

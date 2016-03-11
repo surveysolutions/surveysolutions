@@ -51,8 +51,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 
             eventStore = new PostgresEventStore(
                 new PostgreConnectionSettings { ConnectionString = connectionStringBuilder.ConnectionString }, 
-                eventTypeResolver,
-                Mock.Of<IEventSerializerSettingsFactory>());
+                eventTypeResolver);
         };
 
         Because of = () => eventStore.Store(events);

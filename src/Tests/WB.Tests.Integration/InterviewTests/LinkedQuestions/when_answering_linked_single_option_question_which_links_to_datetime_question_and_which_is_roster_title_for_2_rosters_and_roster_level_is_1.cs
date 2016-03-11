@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
@@ -13,7 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
+namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
     internal class when_answering_linked_single_option_question_which_links_to_datetime_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1 : InterviewTestsContext
     {
@@ -40,24 +43,27 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var linkedOption3Answer = new DateTime(2014, 5, 9);
             linkedOption2TextInvariantCulture = "3/8/2014";
 
+            var triggerQuestionId = Guid.NewGuid();
+            var questionnaireDocument = Create.QuestionnaireDocument(id: questionnaireId, children: new IComposite[]
+            {
+                Integration.Create.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
+                Create.Roster(id: rosterAId, rosterSizeSourceType: RosterSizeSourceType.Question,
+                    rosterSizeQuestionId: triggerQuestionId, rosterTitleQuestionId: questionId, variable: "ros1",
+                    children: new IComposite[]
+                    {
+                        Create.SingleQuestion(id: questionId, linkedToQuestionId: linkedToQuestionId,
+                            variable: "link_single")
+                    }),
+                Create.Roster(id: rosterBId, rosterSizeSourceType: RosterSizeSourceType.Question,
+                    rosterSizeQuestionId: triggerQuestionId, variable: "ros2", rosterTitleQuestionId: questionId),
+                Create.Roster(id: linkedToRosterId, variable: "ros3",
+                    children: new IComposite[]
+                    {
+                        Create.DateTimeQuestion(id: linkedToQuestionId, variable: "link_source")
+                    })
+            });
 
-            var questionnaire = Mock.Of<IQuestionnaire>
-            (_
-                => _.HasQuestion(linkedToQuestionId) == true
-                && _.GetQuestionType(linkedToQuestionId) == QuestionType.DateTime
-                && _.GetRostersFromTopToSpecifiedQuestion(linkedToQuestionId) == new[] { linkedToRosterId }
-
-                && _.HasQuestion(questionId) == true
-                && _.GetQuestionType(questionId) == QuestionType.SingleOption
-                && _.GetQuestionReferencedByLinkedQuestion(questionId) == linkedToQuestionId
-                && _.GetRostersFromTopToSpecifiedQuestion(questionId) == new[] { rosterAId }
-                && _.DoesQuestionSpecifyRosterTitle(questionId) == true
-                && _.GetRostersAffectedByRosterTitleQuestion(questionId) == new[] { rosterAId, rosterBId }
-            );
-
-            IPlainQuestionnaireRepository questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
-
-            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview = SetupInterview(questionnaireDocument: questionnaireDocument);
             interview.Apply(Create.Event.RosterInstancesAdded(linkedToRosterId, emptyRosterVector, linkedOption1Vector[0], sortIndex: null));
             interview.Apply(Create.Event.RosterInstancesAdded(linkedToRosterId, emptyRosterVector, linkedOption2Vector[0], sortIndex: null));
             interview.Apply(Create.Event.RosterInstancesAdded(linkedToRosterId, emptyRosterVector, linkedOption3Vector[0], sortIndex: null));
@@ -66,6 +72,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.Apply(new DateTimeQuestionAnswered(userId, linkedToQuestionId, linkedOption3Vector, DateTime.Now, linkedOption3Answer));
             interview.Apply(Create.Event.RosterInstancesAdded(rosterAId, emptyRosterVector, rosterInstanceId, sortIndex: null));
             interview.Apply(Create.Event.RosterInstancesAdded(rosterBId, emptyRosterVector, rosterInstanceId, sortIndex: null));
+
+            interview.Apply(new LinkedOptionsChanged(new[]
+            {
+                new ChangedLinkedOptions(new Identity(questionId, rosterVector), new RosterVector[]
+                {
+                    linkedOption1Vector, linkedOption2Vector, linkedOption3Vector
+                })
+            }));
 
             eventContext = new EventContext();
         };

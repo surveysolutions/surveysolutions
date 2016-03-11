@@ -21,15 +21,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private static readonly object lockObject = new object();
         private readonly IEventTypeResolver eventTypeResolver;
         private static int BatchSize = 4096;
-        private readonly IEventSerializerSettingsFactory eventSerializerSettingsFactory;
-
+        
         public PostgresEventStore(PostgreConnectionSettings connectionSettings, 
-            IEventTypeResolver eventTypeResolver,
-            IEventSerializerSettingsFactory eventSerializerSettingsFactory)
+            IEventTypeResolver eventTypeResolver)
         {
             this.connectionSettings = connectionSettings;
             this.eventTypeResolver = eventTypeResolver;
-            this.eventSerializerSettingsFactory = eventSerializerSettingsFactory;
         }
 
         public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)
@@ -116,7 +113,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     foreach (var @event in eventStream)
                     {
                         var eventString = JsonConvert.SerializeObject(@event.Payload, Formatting.Indented,
-                            this.eventSerializerSettingsFactory.GetJsonSerializerSettings());
+                            EventSerializerSettings.BackwardCompatibleJsonSerializerSettings);
                         var nextSequnce = this.GetNextSequnce();
 
                         writer.StartRow();
@@ -276,7 +273,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
             string eventType = (string) npgsqlDataReader["eventtype"];
             var resolvedEventType = this.eventTypeResolver.ResolveType(eventType);
-            IEvent typedEvent = JsonConvert.DeserializeObject(value, resolvedEventType, this.eventSerializerSettingsFactory.GetJsonSerializerSettings()) as IEvent;
+            IEvent typedEvent = JsonConvert.DeserializeObject(value, resolvedEventType, EventSerializerSettings.BackwardCompatibleJsonSerializerSettings) as IEvent;
 
             var origin = npgsqlDataReader["origin"];
 

@@ -633,8 +633,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewExpressionStateStub.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Validation\when_answering_question_with_multiple_failed_validation_conditions.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_integer_question_decreasing_roster_size_of_roster_with_nested_roster.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_single_option_linked_on_roster_title_question.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_single_option_linked_question_with_the_link_on_absent_roster_row.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_decreasing_roster_size_of_roster_with_nested_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_decreasing_roster_size_of_roster_with_nested_roster_with_empty_value.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_yesno_question.cs" />
@@ -651,7 +649,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_supervisor_integer_question_and_interviewer_received_interview.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_numeric_integer_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_qr_barcode_question_received_by_interviewer.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_single_option_linked_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_single_option_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_on_all_type_of_questions_and_interview_approved_by_hq.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_text_list_question_received_by_interviewer.cs" />
@@ -660,12 +657,9 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_assign_interview_on_same_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_comment_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_flag_question_received_by_interviewer.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_row_from_link_source_roster.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_row_from_multioption_link_source_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_set_flag_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_two_nested_rosters_linked_to_the_same_list_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_unapprove_by_headquarters.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_link_source_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_link_source_question_of_multi_option_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_numeric_roster_size_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_textlist_roster_size_question.cs" />
@@ -1971,11 +1965,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_datetime_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_answer_is__08_Mar_2011__.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_geolocation_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_integer_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_answer_is_7.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_linked_multiple_options_question_which_links_to_text_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_linked_single_option_question_which_links_to_datetime_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_linked_single_option_question_which_links_to_integer_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_linked_single_option_question_which_links_to_real_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_linked_single_option_question_which_links_to_text_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_multiple_options_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_options_are_X_Y_Z_and_selected_ar___.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_picture_question_and_answer_is_specified.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_propagating_question_with_2_and_previous_answer_was_4_and_there_were_answers_given_to_propagated_questions_with_indexes_1___.cs" />
