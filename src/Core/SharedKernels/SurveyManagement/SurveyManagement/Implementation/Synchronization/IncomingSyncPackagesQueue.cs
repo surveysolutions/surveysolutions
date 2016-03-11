@@ -50,8 +50,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             if (string.IsNullOrWhiteSpace(item))
                 throw new ArgumentException("Sync Item is not set.");
 
-            string syncPackageFileName = string.Format("{0}-{1}.{2}", DateTime.Now.Ticks, interviewId.FormatGuid(), this.syncSettings.IncomingCapiPackageFileNameExtension);
-            string fullPathToSyncPackage = this.fileSystemAccessor.CombinePath(this.incomingUnprocessedPackagesDirectory, syncPackageFileName);
+            string syncPackageFileName = $"{DateTime.Now.Ticks}-{interviewId.FormatGuid()}.{this.syncSettings.IncomingCapiPackageFileNameExtension}";
+
+            string subfolderName = $"{interviewId.FormatGuid()}".Substring(0, 2);
+            string subfolderPath = this.fileSystemAccessor.CombinePath(this.incomingUnprocessedPackagesDirectory, subfolderName);
+
+            if (!fileSystemAccessor.IsDirectoryExists(subfolderPath))
+                fileSystemAccessor.CreateDirectory(subfolderPath);
+
+            string fullPathToSyncPackage = this.fileSystemAccessor.CombinePath(subfolderPath, syncPackageFileName);
 
             this.fileSystemAccessor.WriteAllText(fullPathToSyncPackage, item);
 
@@ -105,8 +112,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 
                     if (cachedFileNames == null)
                     {
-                        var filenames = new ConcurrentHashSet<string>(
-                            this.fileSystemAccessor.GetFilesInDirectory(this.incomingUnprocessedPackagesDirectory));
+                        var filenames = new ConcurrentHashSet<string>(this.GetFilesInIncomingDirectoryImpl());
 
                         this.cache.Set("incomingPackagesFileNames", filenames, DateTime.Now.AddMinutes(5));
 
@@ -116,6 +122,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             }
 
             return (ConcurrentHashSet<string>) cachedFileNames;
+        }
+
+        private IEnumerable<string> GetFilesInIncomingDirectoryImpl()
+        {
+            foreach (string filename in this.fileSystemAccessor.GetFilesInDirectory(this.incomingUnprocessedPackagesDirectory))
+            {
+                yield return filename;
+            }
+
+            foreach (string subfolder in this.fileSystemAccessor.GetDirectoriesInDirectory(this.incomingUnprocessedPackagesDirectory))
+            {
+                foreach (string filename in this.fileSystemAccessor.GetFilesInDirectory(subfolder))
+                {
+                    yield return filename;
+                }
+            }
         }
 
         public bool HasPackagesByInterviewId(Guid interviewId)
@@ -128,7 +150,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 
         public string DeQueue(int skip)
         {
-            var pathToPackage = this.GetCachedFilesInIncomingDirectory().OrderBy(x => x).Skip(skip).FirstOrDefault();
+            var pathToPackage = this.GetCachedFilesInIncomingDirectory().OrderBy(this.fileSystemAccessor.GetFileName).Skip(skip).FirstOrDefault();
 
             if (string.IsNullOrEmpty(pathToPackage) || !fileSystemAccessor.IsFileExists(pathToPackage))
                 return null;
