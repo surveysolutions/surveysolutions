@@ -13,23 +13,20 @@ namespace WB.UI.Designer.Filters
 {
     public class CamelCaseAttribute : ActionFilterAttribute
     {
-        private static JsonMediaTypeFormatter _camelCasingFormatter = new JsonMediaTypeFormatter();
+        private static readonly JsonMediaTypeFormatter CamelCasingFormatter = new JsonMediaTypeFormatter();
 
         static CamelCaseAttribute()
         {
-            _camelCasingFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            _camelCasingFormatter.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+            CamelCasingFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            CamelCasingFormatter.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
         }
 
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
         {
-            ObjectContent content = actionExecutedContext.Response.Content as ObjectContent;
-            if (content != null)
+            ObjectContent content = actionExecutedContext.Response?.Content as ObjectContent;
+            if (content?.Formatter is JsonFormatter)
             {
-                if (content.Formatter is JsonFormatter)
-                {
-                    actionExecutedContext.Response.Content = new ObjectContent(content.ObjectType, content.Value, _camelCasingFormatter);
-                }
+                actionExecutedContext.Response.Content = new ObjectContent(content.ObjectType, content.Value, CamelCasingFormatter);
             }
         }
     }
