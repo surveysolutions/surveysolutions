@@ -18,6 +18,8 @@ using Nito.AsyncEx.Synchronous;
 using WB.Core.GenericSubdomains.Portable;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
+using System.IO;
+using Newtonsoft.Json.Bson;
 
 namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
 {
@@ -251,9 +253,21 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
                 var meta = Encoding.GetString(resolvedEvent.Event.Metadata);
                 metadata = JsonConvert.DeserializeObject<EventMetada>(meta, EventSerializerSettings.BackwardCompatibleJsonSerializerSettings);
 
-                eventData = JsonConvert.DeserializeObject(Encoding.GetString(resolvedEvent.Event.Data),
+                if (resolvedEvent.Event.IsJson)
+                {
+                    eventData = JsonConvert.DeserializeObject(Encoding.GetString(resolvedEvent.Event.Data),
                         resolvedEventType,
                         EventSerializerSettings.BackwardCompatibleJsonSerializerSettings) as IEvent;
+                }
+                else
+                {
+                    var dataStream = new MemoryStream(resolvedEvent.Event.Data);
+                    dataStream.Seek(0, SeekOrigin.Begin);
+                    BsonReader dataReader = new BsonReader(dataStream);
+
+                    JsonSerializer serializer = JsonSerializer.Create(EventSerializerSettings.BackwardCompatibleJsonSerializerSettings);
+                    eventData = serializer.Deserialize(dataReader, resolvedEventType) as IEvent;
+                }
 
                 var committedEvent = new CommittedEvent(Guid.NewGuid(),
                     metadata.Origin,
