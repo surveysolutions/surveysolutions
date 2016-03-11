@@ -36,10 +36,6 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Designer.Models;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
@@ -331,9 +327,6 @@ namespace WB.Tests.Unit
             });
         }
 
-        public static Identity Identity(Guid id, RosterVector rosterVector
-            ) => new Identity(id, rosterVector);
-
         public static KeywordsProvider KeywordsProvider()
         {
             return new KeywordsProvider(Create.SubstitutionService());
@@ -461,16 +454,6 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static NavigationState NavigationState(IStatefulInterviewRepository interviewRepository = null)
-        {
-            var result = new NavigationState(
-                Mock.Of<ICommandService>(),
-                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                Mock.Of<IUserInteractionService>(),
-                Mock.Of<IUserInterfaceStateService>());
-            return result;
-        }
-
         public static IPublishedEvent<NewGroupAdded> NewGroupAddedEvent(string groupId, string parentGroupId = null,
             string groupTitle = null)
         {
@@ -568,19 +551,6 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static Group NumericRoster(Guid? rosterId, string variable, Guid? rosterSizeQuestionId, params IComposite[] children)
-        {
-            Group group = Create.Group(
-                groupId: rosterId,
-                title: "Roster X",
-                variable: variable,
-                children: children);
-
-            group.IsRoster = true;
-            group.RosterSizeSource = RosterSizeSourceType.Question;
-            group.RosterSizeQuestionId = rosterSizeQuestionId;
-            return group;
-        }
 
         public static Answer Option(string value = null, string text = null, string parentValue = null, Guid? id = null)
         {

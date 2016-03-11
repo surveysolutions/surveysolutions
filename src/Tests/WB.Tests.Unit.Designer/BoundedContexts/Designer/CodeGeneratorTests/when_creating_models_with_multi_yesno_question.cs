@@ -7,7 +7,6 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
-using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
 {
@@ -52,7 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
             question.Condition.ShouldEqual("multiYesNo condition");
             question.IsMultiOptionYesNoQuestion.ShouldBeTrue();
             question.AllMultioptionYesNoCodes.ShouldContainOnly("1", "2");
-            question.TypeName.ShouldEqual(typeof(YesNoAnswers).Name);
+            question.TypeName.ShouldEqual("YesNoAnswers");
             question.RosterScopeName.ShouldEqual(CodeGenerator.QuestionnaireScope);
             question.ParentScopeTypeName.ShouldEqual(CodeGenerator.QuestionnaireTypeName);
         };

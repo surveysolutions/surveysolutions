@@ -2,7 +2,6 @@
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using NHibernate.Util;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionTypeConverterTests

@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Web.UI.WebControls;
-using FluentAssertions;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;

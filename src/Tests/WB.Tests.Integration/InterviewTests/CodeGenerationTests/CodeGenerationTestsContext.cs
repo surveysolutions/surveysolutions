@@ -7,9 +7,6 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-
-using Microsoft.Practices.ServiceLocation;
-
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -17,9 +14,8 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
-using WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
+namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
     internal class CodeGenerationTestsContext
     {
