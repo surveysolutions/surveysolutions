@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
-        public readonly AttachmentViewModel Attachment;
+        public AttachmentViewModel Attachment { get; set; }
 
         public StaticTextViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,

@@ -1,5 +1,6 @@
 ﻿using System;
 using MvvmCross.Core.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -19,7 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IQuestionnaireAttachmentStorage attachmentStorage;
 
         //private AttachmentMetadata attachmentMetadata;
-        private string attachmentId;
+        private Guid? attachmentId;
         private Attachment attachment;
 
         public AttachmentViewModel(
@@ -43,17 +44,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             attachmentId = questionnaire.GetAttachmentIdForEntity(entityIdentity.Id);
 
-            if (attachmentId != null)
+            if (attachmentId.HasValue)
             {
-                attachment = questionnaire.GetAttachment(this.attachmentId);
+                attachment = questionnaire.GetAttachment(this.attachmentId.Value);
                 //this.attachmentMetadata = await this.attachmentStorage.GetAttachmentAsync(attachmentId);
-                this.AttachmentContent = await this.attachmentStorage.GetAttachmentContentAsync(attachmentId);
+                this.AttachmentContent = await this.attachmentStorage.GetAttachmentContentAsync(attachmentId.FormatGuid());
             }
         }
 
         public bool IsImage
         {
-            get { return this.attachment != null && this.attachment.FileName.Contains(".jpg"); }
+            get { return this.attachment != null /*&& this.attachment.FileName.Contains(".jpg")*/; }
         }
 
         public byte[] AttachmentContent { get; set; }
