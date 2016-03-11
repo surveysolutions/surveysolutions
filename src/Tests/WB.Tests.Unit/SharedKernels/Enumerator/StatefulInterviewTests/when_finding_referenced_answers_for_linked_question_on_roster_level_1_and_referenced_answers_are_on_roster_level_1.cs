@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
@@ -14,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         {
             linkedQuestionRosterVector = new[] { 1m };
             var linkedQuestionRosters = new[] { referencedRoster1 };
-
+            linkedQuestionIdentity = Create.Identity(linkedQuestionId, linkedQuestionRosterVector);
             var referencedQuestionRosters = new[] { referencedRoster1 };
 
             IPlainQuestionnaireRepository questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
@@ -29,11 +30,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             interview = Create.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
-            FillInterviewWithInstancesForOneRosterAndAnswersToTextQuestionInThatRoster(interview, referencedRoster1, referencedQuestionId);
+            FillInterviewWithInstancesForOneRosterAndAnswersToTextQuestionInThatRoster(interview, referencedRoster1, referencedQuestionId, linkedQuestionIdentity);
         };
 
         Because of = () =>
-            result = interview.FindAnswersOfReferencedQuestionForLinkedQuestion(referencedQuestionId, Create.Identity(linkedQuestionId, linkedQuestionRosterVector));
+            result = interview.FindAnswersOfReferencedQuestionForLinkedQuestion(referencedQuestionId, linkedQuestionIdentity);
 
         It should_return_all_answers = () =>
             result.Cast<TextAnswer>().Select(answer => answer.Answer)
@@ -46,5 +47,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         private static decimal[] linkedQuestionRosterVector;
         private static Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid referencedRoster1 = Guid.Parse("00000000000000001111111111111111");
+        private static Identity linkedQuestionIdentity;
     }
 }

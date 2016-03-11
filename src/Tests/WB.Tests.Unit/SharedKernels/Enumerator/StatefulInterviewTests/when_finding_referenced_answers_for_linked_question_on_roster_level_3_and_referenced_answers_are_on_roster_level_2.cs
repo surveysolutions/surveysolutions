@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
+    [Ignore("KP-6821")]
     internal class when_finding_referenced_answers_for_linked_question_on_roster_level_3_and_referenced_answers_are_on_roster_level_2 : StatefulInterviewTestsContext
     {
         Establish context = () =>
