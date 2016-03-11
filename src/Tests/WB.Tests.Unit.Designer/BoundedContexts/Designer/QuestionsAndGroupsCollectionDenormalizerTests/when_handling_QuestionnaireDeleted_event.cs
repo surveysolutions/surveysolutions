@@ -3,7 +3,7 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDenormalizerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionsAndGroupsCollectionDenormalizerTests
 {
     internal class when_handling_QuestionnaireDeleted_event : QuestionsAndGroupsCollectionViewInitializer
     {

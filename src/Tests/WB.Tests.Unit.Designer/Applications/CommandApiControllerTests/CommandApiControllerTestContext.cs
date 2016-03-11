@@ -8,7 +8,7 @@ using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
 using WB.UI.Shared.Web.CommandDeserialization;
 
-namespace WB.Tests.Unit.Applications.CommandApiControllerTests
+namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
 {
     internal class CommandApiControllerTestContext
     {

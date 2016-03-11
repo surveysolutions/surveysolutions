@@ -1,13 +1,10 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Events.Questionnaire;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
-using Ncqrs;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.CreateQuestionnaireCommandTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CreateQuestionnaireCommandTests
 {
     [Subject(typeof (Questionnaire))]
     internal class when_creating_new_questionnaire

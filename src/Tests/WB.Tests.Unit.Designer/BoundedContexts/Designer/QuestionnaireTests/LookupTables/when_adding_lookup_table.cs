@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.LookupTables
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTests.LookupTables
 {
     internal class when_adding_lookup_table : QuestionnaireTestsContext
     {

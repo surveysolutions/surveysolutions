@@ -3,7 +3,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Shared.Web.CommandDeserialization;
 
-namespace WB.Tests.Unit.Applications.CommandDeserializerTests
+namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
 {
     internal class when_deserializing_command_of_type_UpdateSingleOptionQuestion_with_options : CommandDeserializerTestsContext
     {

@@ -7,7 +7,7 @@ using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.UI.Designer.Code;
 
-namespace WB.Tests.Unit.Applications.VerificationErrorsMapperTests
+namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
 {
     internal class VerificationErrorsMapperTestContext
     {

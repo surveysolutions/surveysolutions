@@ -16,7 +16,7 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers;
 using WB.UI.Shared.Web.Membership;
 
-namespace WB.Tests.Unit.Applications.QuestionnaireControllerTests
+namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 {
     internal class QuestionnaireControllerTestContext
     {

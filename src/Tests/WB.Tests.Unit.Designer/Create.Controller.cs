@@ -1,4 +1,4 @@
-﻿namespace WB.Tests.Unit
+﻿namespace WB.Tests.Unit.Designer
 {
     internal static partial class Create
     {

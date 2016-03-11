@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTests
 {
     internal class when_moving_roster_nested_group_with_numeric_question_with_title_which_contains_roster_title_as_substitution_to_group : QuestionnaireTestsContext
     {

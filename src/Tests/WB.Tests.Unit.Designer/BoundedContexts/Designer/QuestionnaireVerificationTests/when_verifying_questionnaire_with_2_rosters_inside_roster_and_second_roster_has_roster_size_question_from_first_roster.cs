@@ -9,7 +9,7 @@ using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
     internal class when_verifying_questionnaire_with_2_rosters_inside_roster_and_second_roster_has_roster_size_question_from_first_roster : QuestionnaireVerifierTestsContext
     {

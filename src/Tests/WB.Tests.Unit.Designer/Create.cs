@@ -1,20 +1,19 @@
 ﻿extern alias designer;
-
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
-using Moq;
-using Ncqrs.Eventing.ServiceModel.Bus;
-using System.Collections.Generic;
-
 using Microsoft.Practices.ServiceLocation;
+using Moq;
 using Ncqrs;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -22,39 +21,37 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernels.NonConficltingNamespace;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.UI.Designer.Code;
+using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Models;
+using WB.UI.Shared.Web.Membership;
+using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
 using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion;
 using QuestionnaireView = WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireView;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
-using WB.Core.SharedKernels.QuestionnaireEntities;
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
-using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
-using WB.Core.SharedKernels.NonConficltingNamespace;
-using WB.UI.Designer.Code;
-using WB.UI.Designer.Code.Implementation;
-using WB.UI.Shared.Web.Membership;
-using WB.UI.Shared.Web.MembershipProvider.Accounts;
 
-namespace WB.Tests.Unit
+namespace WB.Tests.Unit.Designer
 {
     internal static partial class Create
     {

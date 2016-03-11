@@ -6,7 +6,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTests
 {
     internal class when_deleting_roster_group_with_linked_source_question : QuestionnaireTestsContext
     {

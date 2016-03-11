@@ -12,7 +12,7 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.Models;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Applications.QuestionnaireApiControllerTests
+namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 {
     internal class when_verifying_questionnaire_and_where_is_verification_errors : QuestionnaireApiControllerTestContext
     {

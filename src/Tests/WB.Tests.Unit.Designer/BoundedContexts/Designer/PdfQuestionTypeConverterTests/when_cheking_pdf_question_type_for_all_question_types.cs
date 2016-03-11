@@ -1,10 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionTypeConverterTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfQuestionTypeConverterTests
 {
     public class when_cheking_pdf_question_type_for_all_question_types : PdfQuestionTypeConverterTestsContext
     {

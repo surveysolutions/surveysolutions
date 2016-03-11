@@ -4,7 +4,7 @@ using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.AccountRepositoryTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountRepositoryTests
 {
     [Subject(typeof(CQRSAccountRepository))]
     internal class AccountRepositoryTestsContext

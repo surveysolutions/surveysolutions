@@ -2,7 +2,7 @@
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.ChapterInfoViewDenormalizerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewDenormalizerTests
 {
     internal class when_NewQuestionAdded_event_received_and_parent_for_question_does_not_exist : ChaptersInfoViewDenormalizerTestContext
     {

@@ -4,9 +4,9 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
+using WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTests;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateCascadingComboboxOptionsHandlerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateCascadingComboboxOptionsHandlerTests
 {
     internal class when_updating_cascading_combobox_options_with_1_duplicated_option : QuestionnaireTestsContext
     {

@@ -14,7 +14,7 @@ using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using It = Machine.Specifications.It;
 using it = Moq.It;
 
-namespace WB.Tests.Unit.Applications.CommandPostProcessorTests
+namespace WB.Tests.Unit.Designer.Applications.CommandPostProcessorTests
 {
     internal class when_command_prostprocessor_handles_RemoveSharedPersonFromQuestionnaireCommand : CommandPostProcessorTestsContext
     {

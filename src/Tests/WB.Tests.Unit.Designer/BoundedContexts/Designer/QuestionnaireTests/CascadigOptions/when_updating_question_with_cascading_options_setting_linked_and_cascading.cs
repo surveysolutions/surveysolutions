@@ -1,11 +1,10 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.CascadigOptions
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTests.CascadigOptions
 {
     internal class when_updating_question_with_cascading_options_setting_linked_and_cascading : QuestionnaireTestsContext
     {

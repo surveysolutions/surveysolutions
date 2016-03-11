@@ -5,7 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using NUnit.Framework;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 {
     [TestFixture]
     internal class QuestionnaireDocumentTests

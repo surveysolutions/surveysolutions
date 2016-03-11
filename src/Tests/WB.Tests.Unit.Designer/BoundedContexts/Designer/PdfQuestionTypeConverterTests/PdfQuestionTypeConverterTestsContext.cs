@@ -4,7 +4,7 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionTypeConverterTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfQuestionTypeConverterTests
 {
     public class PdfQuestionTypeConverterTestsContext
     {

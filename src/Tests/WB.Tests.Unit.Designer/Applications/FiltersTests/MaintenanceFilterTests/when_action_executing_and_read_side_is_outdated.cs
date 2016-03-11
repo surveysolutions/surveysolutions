@@ -5,7 +5,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Filters;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Applications.FiltersTests.MaintenanceFilterTests
+namespace WB.Tests.Unit.Designer.Applications.FiltersTests.MaintenanceFilterTests
 {
     internal class when_action_executing_and_read_side_is_outdated : MaintenanceFilterTestsContext
     {

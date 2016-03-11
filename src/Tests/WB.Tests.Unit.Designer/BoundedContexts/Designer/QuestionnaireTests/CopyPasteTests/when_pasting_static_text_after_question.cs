@@ -7,7 +7,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.CopyPasteTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTests.CopyPasteTests
 {
     internal class when_pasting_static_text_after_question : QuestionnaireTestsContext
     {

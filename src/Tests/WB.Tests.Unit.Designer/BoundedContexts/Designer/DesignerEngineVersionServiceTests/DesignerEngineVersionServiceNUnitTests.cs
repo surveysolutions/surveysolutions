@@ -4,7 +4,7 @@ using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.DesignerEngineVersionServiceTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionServiceTests
 {
     [TestFixture]
     internal class DesignerEngineVersionServiceNUnitTests

@@ -1,7 +1,7 @@
 using System;
 using AppDomainToolkit;
 
-namespace WB.Tests.Unit
+namespace WB.Tests.Unit.Designer
 {
     internal static class Execute
     {

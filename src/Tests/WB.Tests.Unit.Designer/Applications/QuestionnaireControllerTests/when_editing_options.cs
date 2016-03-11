@@ -9,7 +9,7 @@ using Moq;
 using WB.UI.Designer.Controllers;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Applications.QuestionnaireControllerTests
+namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 {
     internal class when_editing_options : QuestionnaireControllerTestContext
     {

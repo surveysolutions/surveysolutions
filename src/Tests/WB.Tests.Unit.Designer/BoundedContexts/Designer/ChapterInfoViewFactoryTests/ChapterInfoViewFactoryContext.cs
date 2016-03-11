@@ -3,7 +3,7 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.ChapterInfoViewFactoryTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactoryTests
 {
     internal class ChapterInfoViewFactoryContext
     {

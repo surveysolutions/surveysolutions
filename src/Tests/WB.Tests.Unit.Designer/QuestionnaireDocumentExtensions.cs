@@ -5,7 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 
-namespace WB.Tests.Unit
+namespace WB.Tests.Unit.Designer
 {
     internal static class QuestionnaireDocumentExtensions
     {

@@ -11,7 +11,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.Categorical
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests.Categorical
 {
     internal class when_verifying_questionnaire_with_group_that_has_enablement_condition_referencing_to_categirocal_single_linked_question : QuestionnaireVerifierTestsContext
     {

@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Emit;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests
 {
     internal class when_generating_assembly_as_string_with_error : InterviewCompilerTestsContext
     {

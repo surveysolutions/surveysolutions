@@ -1,17 +1,14 @@
 ﻿extern alias designer;
-
 using System;
 using Main.Core.Documents;
 using Main.Core.Events.Questionnaire;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
-using Ncqrs;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTests
 {
     internal class ImportQuestionnaireTests : QuestionnaireTestsContext
     {

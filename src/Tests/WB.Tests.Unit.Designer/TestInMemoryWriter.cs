@@ -5,7 +5,7 @@ using System.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
-namespace WB.Tests.Unit
+namespace WB.Tests.Unit.Designer
 {
     internal class TestInMemoryWriter<T> : IReadSideRepositoryWriter<T>,
         IReadSideKeyValueStorage<T>,

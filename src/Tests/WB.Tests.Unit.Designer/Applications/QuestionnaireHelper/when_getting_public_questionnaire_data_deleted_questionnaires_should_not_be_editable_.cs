@@ -7,7 +7,7 @@ using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Membership;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Applications.QuestionnaireHelper
+namespace WB.Tests.Unit.Designer.Applications.QuestionnaireHelper
 {
     internal class when_getting_public_questionnaire_data_deleted_questionnaires_should_not_be_editable_ : QuestionnaireHelperTestContext
     {

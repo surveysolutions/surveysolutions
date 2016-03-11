@@ -6,7 +6,7 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTests
 {
     internal class when_moving_group_from_roster_with_roster_title_question_to_roster_that_has_different_roster_size_question_than_source_group : QuestionnaireTestsContext
     {

@@ -1,11 +1,9 @@
 ﻿using System;
 using Machine.Specifications;
-using Main.Core.Events.Questionnaire;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Portable;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoViewDenormalizerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewDenormalizerTests
 {
     internal class when_chapter_moved : QuestionnaireInfoViewDenormalizerTestContext
     {

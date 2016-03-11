@@ -5,9 +5,9 @@ using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
+using WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTests;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultiOptionQuestionHandlerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuestionHandlerTests
 {
     internal class when_updating_multi_option_question_with_not_null_linkedQuestion_and_with_options : QuestionnaireTestsContext
     {

@@ -8,7 +8,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 {
     internal class when_creating_models_with_multi_yesno_question : CodeGeneratorTestsContext
     {

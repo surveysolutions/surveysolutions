@@ -1,15 +1,12 @@
 ﻿using System;
-using Main.Core.Documents;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.UI.Designer.Providers.CQRS.Accounts;
 using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.AccountDenormalizerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountDenormalizerTests
 {
     internal class AccountDenormalizerTestsContext
     {

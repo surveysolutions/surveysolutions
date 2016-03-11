@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
-using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.Categorical
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests.Categorical
 {
     internal class when_verifying_questionnaire_with_multi_option_question_has_an_option_with_negative_value : QuestionnaireVerifierTestsContext
     {

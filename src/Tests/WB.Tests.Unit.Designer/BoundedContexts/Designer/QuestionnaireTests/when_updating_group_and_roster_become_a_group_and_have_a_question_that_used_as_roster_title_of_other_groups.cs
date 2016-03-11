@@ -3,10 +3,9 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTests
 {
     internal class when_updating_group_and_roster_become_a_group_and_have_a_question_that_used_as_roster_title_of_other_groups :
         QuestionnaireTestsContext

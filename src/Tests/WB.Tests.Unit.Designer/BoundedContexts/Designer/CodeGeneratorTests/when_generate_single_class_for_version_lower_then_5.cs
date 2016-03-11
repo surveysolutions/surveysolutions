@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Data;
 using Machine.Specifications;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using Main.Core.Documents;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 {
     internal class when_generate_single_class_for_version_lower_then_5 : CodeGeneratorTestsContext
     {

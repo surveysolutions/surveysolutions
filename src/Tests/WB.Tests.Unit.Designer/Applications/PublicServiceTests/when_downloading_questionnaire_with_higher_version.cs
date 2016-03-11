@@ -5,7 +5,7 @@ using WB.UI.Designer.WebServices;
 using WB.UI.Designer.WebServices.Questionnaire;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Applications.PublicServiceTests
+namespace WB.Tests.Unit.Designer.Applications.PublicServiceTests
 {
     internal class when_downloading_questionnaire_with_higher_version : PublicServiceTestContext
     {

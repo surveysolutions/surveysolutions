@@ -1,7 +1,7 @@
 ﻿using System;
 using Main.Core.Documents;
 
-namespace WB.Tests.Unit.Applications.CommandPostProcessorTests
+namespace WB.Tests.Unit.Designer.Applications.CommandPostProcessorTests
 {
     internal class CommandPostProcessorTestsContext
     {

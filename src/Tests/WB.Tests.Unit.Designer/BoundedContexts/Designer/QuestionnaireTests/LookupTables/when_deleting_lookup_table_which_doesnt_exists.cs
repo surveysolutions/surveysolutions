@@ -1,14 +1,10 @@
 using System;
 using Machine.Specifications;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
-using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.LookupTables
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTests.LookupTables
 {
     internal class when_deleting_lookup_table_which_doesnt_exists : QuestionnaireTestsContext
     {

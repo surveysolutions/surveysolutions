@@ -4,10 +4,9 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.Infrastructure.PlainStorage;
-
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.LookupTableServiceTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTests
 {
     internal class when_saving_lookup_table_with_bigger_or_smaller_anount_of_data_columns_than_in_header
     {

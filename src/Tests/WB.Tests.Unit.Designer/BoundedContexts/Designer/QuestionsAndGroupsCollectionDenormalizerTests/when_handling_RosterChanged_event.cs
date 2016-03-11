@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
@@ -11,7 +10,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDenormalizerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionsAndGroupsCollectionDenormalizerTests
 {
     internal class when_handling_RosterChanged_event : QuestionsAndGroupsCollectionViewInitializer
     {

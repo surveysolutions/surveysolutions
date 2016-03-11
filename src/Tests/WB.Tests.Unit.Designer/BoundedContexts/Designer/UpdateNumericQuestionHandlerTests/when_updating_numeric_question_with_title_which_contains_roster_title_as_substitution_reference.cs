@@ -4,13 +4,11 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.SharedKernels.QuestionnaireEntities;
-using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
+using WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTests;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateNumericQuestionHandlerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateNumericQuestionHandlerTests
 {
     internal class when_updating_numeric_question_with_title_which_contains_roster_title_as_substitution_reference : QuestionnaireTestsContext
     {

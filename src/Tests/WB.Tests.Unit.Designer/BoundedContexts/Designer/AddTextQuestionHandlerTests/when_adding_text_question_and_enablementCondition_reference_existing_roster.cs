@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
@@ -7,10 +6,10 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
-using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
+using WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTests;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandlerTests
 {
     internal class when_adding_text_question_and_enablementCondition_reference_existing_roster : QuestionnaireTestsContext
     {

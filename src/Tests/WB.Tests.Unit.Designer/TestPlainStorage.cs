@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Core.Infrastructure.PlainStorage;
 
-namespace WB.Tests.Unit
+namespace WB.Tests.Unit.Designer
 {
     internal class TestPlainStorage<T> : IPlainStorageAccessor<T> where T : class
     {
@@ -16,7 +16,7 @@ namespace WB.Tests.Unit
 
         public T GetById(object id)
         {
-            if (!entites.ContainsKey(id))
+            if (!this.entites.ContainsKey(id))
                 return null;
             return this.entites[id];
         }

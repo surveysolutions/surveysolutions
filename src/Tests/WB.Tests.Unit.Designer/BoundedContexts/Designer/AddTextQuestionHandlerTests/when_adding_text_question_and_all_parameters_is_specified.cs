@@ -3,9 +3,9 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
+using WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTests;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.AddTextQuestionHandlerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandlerTests
 {
     internal class when_adding_text_question_and_all_parameters_is_specified : QuestionnaireTestsContext
     {

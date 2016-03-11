@@ -1,11 +1,9 @@
 using System;
-
 using Machine.Specifications;
-
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Resources;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.LookupTableServiceTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTests
 {
     internal class when_saving_lookup_table_with_non_convertable_to_integer_rowcode_value
     {

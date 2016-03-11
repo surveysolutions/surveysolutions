@@ -4,7 +4,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.CommandDeserialization;
 
-namespace WB.Tests.Unit.Applications.CommandDeserializerTests
+namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
 {
     internal class when_deserializing_command_of_type__DeleteGroup__with_questionnaire_id_and_group_id : CommandDeserializerTestsContext
     {

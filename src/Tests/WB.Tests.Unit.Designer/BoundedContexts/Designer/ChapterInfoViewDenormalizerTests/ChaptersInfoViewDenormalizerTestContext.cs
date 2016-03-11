@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.ChapterInfoViewDenormalizerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewDenormalizerTests
 {
     internal class ChaptersInfoViewDenormalizerTestContext
     {

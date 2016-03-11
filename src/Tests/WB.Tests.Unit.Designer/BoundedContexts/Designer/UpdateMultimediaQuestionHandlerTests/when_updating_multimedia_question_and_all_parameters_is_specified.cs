@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
-using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
+using WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTests;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.UpdateMultimediaQuestionHandlerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultimediaQuestionHandlerTests
 {
     internal class when_updating_multimedia_question_and_all_parameters_is_specified : QuestionnaireTestsContext
     {

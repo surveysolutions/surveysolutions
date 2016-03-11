@@ -1,8 +1,6 @@
-﻿using System.Text;
-using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+﻿using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionDetailsFactoryTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionDetailsFactoryTests
 {
     internal class QuestionDetailsFactoryTestContext
     {

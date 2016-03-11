@@ -1,6 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Main.Core.Entities;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Moq;
@@ -11,10 +12,8 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 using it = Moq.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 {
-    using Main.Core.Entities;
-
     internal class when_updating_question_by_id_and_there_are_3_questions_with_same_id : QuestionnaireDenormalizerTestsContext
     {
         Establish context = () =>

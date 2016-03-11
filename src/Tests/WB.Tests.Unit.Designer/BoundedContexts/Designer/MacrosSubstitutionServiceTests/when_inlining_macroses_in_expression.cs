@@ -3,7 +3,7 @@ using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.MacrosSubstitutionServiceTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MacrosSubstitutionServiceTests
 {
     internal class when_inlining_macroses_in_expression
     {

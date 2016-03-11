@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace WB.Tests.Unit
+namespace WB.Tests.Unit.Designer
 {
     internal static class EnumerableExtensions
     {
