@@ -602,8 +602,8 @@
     <EmbeddedResource Include="Views\Shared\ApiUserCreateForm.cshtml" />
     <EmbeddedResource Include="Views\Shared\ApiUserEditForm.cshtml" />
     <EmbeddedResource Include="Views\Interviewers\Index.cshtml" />
+    <EmbeddedResource Include="Views\ControlPanel\BrokenInterviewPackages.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\Versions.cshtml" />
-    <EmbeddedResource Include="Views\Interview\AttachmentPartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
@@ -708,6 +708,7 @@
     <EmbeddedResource Include="Scripts\viewmodels\pages\periodicstatusreport.js" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Scripts\viewmodels\pages\controlpanel\brokeninterviewpackages.js" />
     <EmbeddedResource Include="Scripts\viewmodels\pages\interviewers.js" />
     <EmbeddedResource Include="Scripts\viewmodels\pages\tabletinfo.js" />
     <EmbeddedResource Include="Scripts\knockout\ko.spin.js" />

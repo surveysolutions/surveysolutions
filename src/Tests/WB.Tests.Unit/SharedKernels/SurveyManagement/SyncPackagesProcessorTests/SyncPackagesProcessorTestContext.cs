@@ -5,6 +5,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.Synchronization;
 
@@ -13,11 +14,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTest
     internal class SyncPackagesProcessorTestContext
     {
         protected static SyncPackagesProcessor CreateSyncPackagesProcessor(
-            ICommandService commandService = null,  IIncomingSyncPackagesQueue incomingSyncPackagesQueue = null, IBrokenSyncPackagesStorage brokenSyncPackagesStorage=null)
+            ICommandService commandService = null,  IInterviewPackagesService incomingSyncPackagesQueue = null, IBrokenSyncPackagesStorage brokenSyncPackagesStorage=null)
         {
             return new SyncPackagesProcessor(logger: Mock.Of<ILogger>(),
                 commandService: commandService ?? Mock.Of<ICommandService>(),
-                incomingSyncPackagesQueue: incomingSyncPackagesQueue ?? Mock.Of<IIncomingSyncPackagesQueue>(),
+                interviewPackagesService: incomingSyncPackagesQueue ?? Mock.Of<IInterviewPackagesService>(),
                 brokenSyncPackagesStorage: brokenSyncPackagesStorage??Mock.Of<IBrokenSyncPackagesStorage>());
         }
 

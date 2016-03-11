@@ -8,6 +8,7 @@ using WB.Core.Infrastructure.Implementation.ReadSide;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views.BrokenInterviewPackages;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
@@ -44,9 +45,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private const int DEFAULTPAGESIZE = 12;
 
         private readonly IReadSideAdministrationService readSideAdministrationService;
-        private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
+        private readonly IInterviewPackagesService incomingSyncPackagesQueue;
         private readonly ISynchronizationLogViewFactory synchronizationLogViewFactory;
         private readonly ITeamViewFactory teamViewFactory;
+        private readonly IBrokenInterviewPackagesViewFactory brokenInterviewPackagesViewFactory;
         private readonly MemoryCache cache = MemoryCache.Default;
         private readonly IProductVersion productVersion;
         private readonly IProductVersionHistory productVersionHistory;
@@ -54,9 +56,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         public ControlPanelApiController(
             IReadSideAdministrationService readSideAdministrationService,
-            IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
+            IInterviewPackagesService incomingSyncPackagesQueue,
             ISynchronizationLogViewFactory synchronizationLogViewFactory,
             ITeamViewFactory teamViewFactory,
+            IBrokenInterviewPackagesViewFactory brokenInterviewPackagesViewFactory,
             IProductVersion productVersion,
             IProductVersionHistory productVersionHistory)
         {
@@ -64,6 +67,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.synchronizationLogViewFactory = synchronizationLogViewFactory;
             this.teamViewFactory = teamViewFactory;
+            this.brokenInterviewPackagesViewFactory = brokenInterviewPackagesViewFactory;
             this.productVersion = productVersion;
             this.productVersionHistory = productVersionHistory;
         }
@@ -148,6 +152,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public SynchronizationLogDevicesView SyncLogDevices(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
         {
             return this.synchronizationLogViewFactory.GetDevices(pageSize: pageSize, searchBy: query);
+        }
+
+        [HttpPost]
+        public BrokenInterviewPackagesView GetBrokenInterviewPackages(BrokenInterviewPackageFilter filter)
+        {
+            return this.brokenInterviewPackagesViewFactory.GetFilteredItems(filter);
+        }
+
+        [HttpGet]
+        public BrokenInterviewPackageExceptionTypesView GetBrokenInterviewPackageExceptionTypes(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
+        {
+            return this.brokenInterviewPackagesViewFactory.GetExceptionTypes(pageSize: pageSize, searchBy: query);
         }
     }
 }

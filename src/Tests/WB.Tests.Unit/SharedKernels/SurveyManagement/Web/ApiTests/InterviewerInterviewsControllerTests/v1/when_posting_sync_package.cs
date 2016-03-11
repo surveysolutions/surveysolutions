@@ -1,6 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1;
 using WB.Core.Synchronization;
 using It = Machine.Specifications.It;
@@ -24,6 +25,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
         private static InterviewsApiV1Controller controller;
         private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static readonly string package = "package content";
-        private static readonly Mock<IIncomingSyncPackagesQueue> mockOfIncomingSyncPackagesQueue = new Mock<IIncomingSyncPackagesQueue>();
+        private static readonly Mock<IInterviewPackagesService> mockOfIncomingSyncPackagesQueue = new Mock<IInterviewPackagesService>();
     }
 }

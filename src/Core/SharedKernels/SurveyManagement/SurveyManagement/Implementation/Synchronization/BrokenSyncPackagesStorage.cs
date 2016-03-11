@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -11,6 +9,7 @@ using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 {
+    [Obsolete("Since v 5.8")]
     internal class BrokenSyncPackagesStorage : IBrokenSyncPackagesStorage
     {
         private readonly IFileSystemAccessor fileSystemAccessor;

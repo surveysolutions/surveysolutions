@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.Synchronization;
 
@@ -21,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         private readonly IInterviewSynchronizationDtoFactory synchronizationDtoFactory;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDataRepository;
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> interviewStatusesFactory;
-        private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
+        private readonly IInterviewPackagesService incomingSyncPackagesQueue;
 
         public InterviewerInterviewsFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> reader,
@@ -29,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             IInterviewSynchronizationDtoFactory synchronizationDtoFactory,
             IReadSideKeyValueStorage<InterviewData> interviewDataRepository,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> interviewStatusesFactory,
-            IIncomingSyncPackagesQueue incomingSyncPackagesQueue)
+            IInterviewPackagesService incomingSyncPackagesQueue)
         {
             this.reader = reader;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;

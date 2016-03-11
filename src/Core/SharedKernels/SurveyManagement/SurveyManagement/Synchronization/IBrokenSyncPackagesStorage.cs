@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Synchronization
 {
+    [Obsolete("Since v 5.8")]
     public interface IBrokenSyncPackagesStorage
     {
         IEnumerable<string> GetListOfUnhandledPackages();
