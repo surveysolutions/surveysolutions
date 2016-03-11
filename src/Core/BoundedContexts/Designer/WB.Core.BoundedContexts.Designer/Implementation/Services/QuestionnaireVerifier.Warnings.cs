@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning(FewSectionsManyQuestions, "WB0206", VerificationMessages.WB0206_FewSectionsManyQuestions),
             Warning<IGroup>(FixedRosterContains3OrLessItems, "WB0207", VerificationMessages.WB0207_FixedRosterContains3OrLessItems),
             Warning(MoreThanHalfNumericQuestionsWithoutValidationConditions, "WB0208", VerificationMessages.WB0208_MoreThan50PercentsNumericQuestionsWithoutValidationConditions),
-            Warning<IQuestion>(HasLongEnablementCondition, "WB0209", VerificationMessages.WB0209_LongEnablementCondition),
+            Warning<IComposite>(HasLongEnablementCondition, "WB0209", VerificationMessages.WB0209_LongEnablementCondition),
             Warning<IQuestion>(CategoricalQuestionHasALotOfOptions, "WB0210", VerificationMessages.WB0210_CategoricalQuestionHasManyOptions),
             Warning(HasNoGpsQuestions, "WB0211", VerificationMessages.WB0211_QuestionnaireHasNoGpsQuestion),
 
@@ -44,9 +44,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return question.QuestionType == QuestionType.SingleOption && question.Answers.Count > 30;
         }
 
-        private static bool HasLongEnablementCondition(IQuestion question)
+        private bool HasLongEnablementCondition(IComposite groupOrQuestion)
         {
-            return !string.IsNullOrEmpty(question.ConditionExpression) && question.ConditionExpression.Length > 500;
+            var customEnablementCondition = GetCustomEnablementCondition(groupOrQuestion);
+
+            if (string.IsNullOrEmpty(customEnablementCondition))
+                return false;
+
+            var exceeded = customEnablementCondition.Length > 500;
+            return exceeded;
         }
 
         private static bool LargeNumberOfRosters(ReadOnlyQuestionnaireDocument questionnaire)
@@ -89,8 +95,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             => question.QuestionType == QuestionType.Numeric
             && !question.ValidationConditions.Any();
 
-        private static IEnumerable<IComposite> GetDescendants(IGroup group) => group.Children.TreeToEnumerable(_ => _.Children);
-
         private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity, TSubEntity>(
             Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TSubEntity, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
             where TEntity : class, IComposite
@@ -118,6 +122,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         }
 
         private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity>(
+            Func<TEntity, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
+            where TEntity : class, IComposite
+        {
+            return (questionnaire, state) =>
+               questionnaire
+                   .Find<TEntity>(x => hasError(x, questionnaire))
+                   .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, CreateReference(entity)));
+        }
+
+        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity>(
            Func<TEntity, bool> hasError, string code, string message)
            where TEntity : class, IComposite
         {
@@ -135,8 +149,5 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     ? new[] { QuestionnaireVerificationMessage.Warning(code, message) }
                     : Enumerable.Empty<QuestionnaireVerificationMessage>();
         }
-
-
-   
     }
 }
