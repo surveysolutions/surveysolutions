@@ -1,7 +1,7 @@
 ﻿using Machine.Specifications;
 using WB.UI.Shared.Web.MembershipProvider.Roles;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.RoleProviderTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.RoleProviderTests
 {
     [Subject(typeof(RoleProvider))]
     internal class RoleProviderTestsContext

@@ -3,7 +3,7 @@ using System.Linq;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireViewTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfQuestionnaireViewTests
 {
     internal class when_adding_group_and_root_id_is_used_as_parent_id : PdfQuestionnaireViewTestsContext
     {

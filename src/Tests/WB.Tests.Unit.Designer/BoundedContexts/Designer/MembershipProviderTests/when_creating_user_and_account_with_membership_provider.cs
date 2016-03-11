@@ -7,7 +7,7 @@ using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using It = Machine.Specifications.It;
 using it = Moq.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.MembershipProviderTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MembershipProviderTests
 {
 
     internal class when_creating_user_and_account_with_membership_provider : MembershipProviderTestsContext

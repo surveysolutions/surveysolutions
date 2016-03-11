@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Machine.Specifications;
-using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
@@ -9,7 +8,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTests
 {
     internal class when_handling_QuestionnaireCloned_event_with_question_contains_validation_expression : PdfQuestionnaireDenormalizerTestContext
     {

@@ -8,9 +8,8 @@ using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
-using it = Moq.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 {
     internal class when_handling_StaticTextUpdated_event : QuestionnaireDenormalizerTestsContext
     {

@@ -2,7 +2,7 @@
 using Machine.Specifications;
 using WB.UI.Shared.Web.CommandDeserialization;
 
-namespace WB.Tests.Unit.Applications.CommandDeserializerTests
+namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
 {
     internal class when_deserializing_command_of_unknown_type : CommandDeserializerTestsContext
     {

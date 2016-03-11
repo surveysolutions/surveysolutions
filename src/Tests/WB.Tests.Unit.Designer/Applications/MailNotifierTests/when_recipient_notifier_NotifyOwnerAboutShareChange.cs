@@ -11,7 +11,7 @@ using WB.UI.Designer.Models;
 using it = Moq.It;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Applications.MailNotifierTests
+namespace WB.Tests.Unit.Designer.Applications.MailNotifierTests
 {
     internal class when_recipient_notifier_NotifyOwnerAboutShareChange
     {

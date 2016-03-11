@@ -5,11 +5,10 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.UI.Designer.Providers.CQRS.Accounts;
 using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.AccountDenormalizerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountDenormalizerTests
 {
     internal class when_handling_AccountRegistered_event_and_user_name_equals__ADMIN__ : AccountDenormalizerTestsContext
     {

@@ -4,7 +4,7 @@ using Machine.Specifications;
 using WB.UI.Designer.Api;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Applications.QuestionnaireApiControllerTests
+namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 {
     internal class when_getting_edit_question_info_and_question_is_absent : QuestionnaireApiControllerTestContext
     {

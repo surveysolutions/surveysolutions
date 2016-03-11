@@ -7,7 +7,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.InterviewCompilerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests
 {
     internal class InterviewCompilerTestsContext
     {

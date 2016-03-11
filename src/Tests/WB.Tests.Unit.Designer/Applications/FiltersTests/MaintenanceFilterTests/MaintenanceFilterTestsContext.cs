@@ -7,7 +7,7 @@ using Moq;
 using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Filters;
 
-namespace WB.Tests.Unit.Applications.FiltersTests.MaintenanceFilterTests
+namespace WB.Tests.Unit.Designer.Applications.FiltersTests.MaintenanceFilterTests
 {
     internal class MaintenanceFilterTestsContext
     {

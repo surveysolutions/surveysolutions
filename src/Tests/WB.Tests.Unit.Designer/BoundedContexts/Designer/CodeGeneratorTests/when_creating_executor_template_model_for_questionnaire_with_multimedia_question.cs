@@ -9,7 +9,7 @@ using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 {
     internal class when_creating_executor_template_model_for_questionnaire_with_multimedia_question : CodeGeneratorTestsContext
     {

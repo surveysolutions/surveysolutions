@@ -2,7 +2,7 @@
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoViewDenormalizerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewDenormalizerTests
 {
     internal class when_NewGroupAdded_event_received_and_new_group_inside_chapter : QuestionnaireInfoViewDenormalizerTestContext
     {

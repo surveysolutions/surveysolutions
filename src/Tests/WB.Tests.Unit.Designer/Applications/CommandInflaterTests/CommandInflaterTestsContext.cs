@@ -6,7 +6,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Shared.Web.Membership;
 
-namespace WB.Tests.Unit.Applications.CommandInflaterTests
+namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
 {
     internal class CommandInflaterTestsContext
     {

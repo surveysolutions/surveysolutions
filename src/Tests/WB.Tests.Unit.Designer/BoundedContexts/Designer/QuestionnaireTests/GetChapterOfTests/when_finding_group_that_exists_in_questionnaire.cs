@@ -6,7 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests.GetChapterOfTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTests.GetChapterOfTests
 {
     [Subject(typeof(Questionnaire))]
     internal class when_finding_group_that_exists_in_questionnaire

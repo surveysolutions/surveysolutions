@@ -3,8 +3,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 
-
-namespace WB.Tests.Unit.BoundedContexts.Designer.KeywordsProviderTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.KeywordsProviderTests
 {
     internal class KeywordsProviderTestContext
     {

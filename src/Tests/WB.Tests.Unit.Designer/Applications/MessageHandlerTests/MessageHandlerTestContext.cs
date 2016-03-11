@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WB.UI.Designer.Code.MessageHandlers;
 
-namespace WB.Tests.Unit.Applications.MessageHandlerTests
+namespace WB.Tests.Unit.Designer.Applications.MessageHandlerTests
 {
     internal class MessageHandlerTestContext
     {

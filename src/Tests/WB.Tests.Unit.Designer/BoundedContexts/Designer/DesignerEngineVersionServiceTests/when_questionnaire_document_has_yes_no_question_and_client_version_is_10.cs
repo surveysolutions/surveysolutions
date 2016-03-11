@@ -6,7 +6,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Services;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.DesignerEngineVersionServiceTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionServiceTests
 {
     internal class when_questionnaire_document_has_yes_no_question_and_client_version_is_10
     {

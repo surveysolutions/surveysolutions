@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.PdfTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfTests
 {
     [TestFixture]
     internal class PdfQuestionViewTests

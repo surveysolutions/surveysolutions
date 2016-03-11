@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.UI.Shared.Web.Membership;
 
-namespace WB.Tests.Unit.Applications.QuestionnaireHelper
+namespace WB.Tests.Unit.Designer.Applications.QuestionnaireHelper
 {
     internal class QuestionnaireHelperTestContext
     {

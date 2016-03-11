@@ -3,7 +3,7 @@ using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.AccountTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountTests
 {
     internal class when_updating_account : AccountTestsContext
     {

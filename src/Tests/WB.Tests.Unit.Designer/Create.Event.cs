@@ -10,7 +10,7 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
-namespace WB.Tests.Unit
+namespace WB.Tests.Unit.Designer
 {
     internal static partial class Create
     {

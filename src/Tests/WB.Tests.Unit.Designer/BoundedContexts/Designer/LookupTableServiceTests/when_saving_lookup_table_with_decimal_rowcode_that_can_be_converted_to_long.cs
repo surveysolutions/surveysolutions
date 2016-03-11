@@ -1,14 +1,12 @@
 using System;
 using System.Linq;
-
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.Infrastructure.PlainStorage;
-
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.LookupTableServiceTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTests
 {
     internal class when_saving_lookup_table_with_decimal_rowcode_that_can_be_converted_to_long
     {

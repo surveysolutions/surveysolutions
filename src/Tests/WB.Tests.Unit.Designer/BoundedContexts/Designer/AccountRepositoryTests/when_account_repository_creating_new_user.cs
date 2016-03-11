@@ -6,7 +6,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.AccountRepositoryTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountRepositoryTests
 {
 
     internal class when_account_repository_creating_new_user: AccountRepositoryTestsContext

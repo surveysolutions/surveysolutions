@@ -3,12 +3,10 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
-
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 {
     internal class when_generate_single_class_for_version_10_with_questionnaire_with_roster : CodeGeneratorTestsContext
     {

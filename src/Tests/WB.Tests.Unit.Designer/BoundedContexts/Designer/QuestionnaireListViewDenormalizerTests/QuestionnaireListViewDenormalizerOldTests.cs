@@ -1,5 +1,4 @@
 ﻿extern alias designer;
-
 using System;
 using System.Linq;
 using Main.Core.Documents;
@@ -14,7 +13,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormalizerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireListViewDenormalizerTests
 {
     [TestFixture]
     internal class QuestionnaireListViewDenormalizerOldTests
@@ -31,8 +30,8 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormaliz
 
             TestInMemoryWriter<QuestionnaireListViewItem> questionnaireStorage = new TestInMemoryWriter<QuestionnaireListViewItem>();
 
-            QuestionnaireListViewItemDenormalizer target = CreateQuestionnaireDenormalizer(questionnaireStorage: questionnaireStorage);
-            var eventToPublish = CreateEvent(new QuestionnaireCloned() { QuestionnaireDocument = document }, DateTime.Now);
+            QuestionnaireListViewItemDenormalizer target = this.CreateQuestionnaireDenormalizer(questionnaireStorage: questionnaireStorage);
+            var eventToPublish = this.CreateEvent(new QuestionnaireCloned() { QuestionnaireDocument = document }, DateTime.Now);
             // act
             target.Handle(eventToPublish);
 
@@ -66,9 +65,9 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormaliz
             TestInMemoryWriter<QuestionnaireListViewItem> questionnaireStorage = new TestInMemoryWriter<QuestionnaireListViewItem>();
             questionnaireStorage.Store(oldView, questionnaireId.FormatGuid());
 
-            QuestionnaireListViewItemDenormalizer target = CreateQuestionnaireDenormalizer(questionnaireStorage: questionnaireStorage);
+            QuestionnaireListViewItemDenormalizer target = this.CreateQuestionnaireDenormalizer(questionnaireStorage: questionnaireStorage);
             // act
-            target.Handle(CreateEvent(CreateTemplateImportedEvent(documentReplacement)));
+            target.Handle(this.CreateEvent(this.CreateTemplateImportedEvent(documentReplacement)));
 
             // assert
             var questionnaireListViewItem = questionnaireStorage.GetById(questionnaireId.FormatGuid());
@@ -98,7 +97,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireListViewDenormaliz
 
         private QuestionnaireListViewItemDenormalizer CreateQuestionnaireDenormalizer(IReadSideRepositoryWriter<QuestionnaireListViewItem> questionnaireStorage = null)
         {
-            return new QuestionnaireListViewItemDenormalizer(questionnaireStorage ?? questionnaireStorageMock.Object, Mock.Of<IReadSideRepositoryWriter<AccountDocument>>(
+            return new QuestionnaireListViewItemDenormalizer(questionnaireStorage ?? this.questionnaireStorageMock.Object, Mock.Of<IReadSideRepositoryWriter<AccountDocument>>(
                             _ => _.GetById(It.IsAny<string>()) == new AccountDocument() { UserName = "nastya" }));
         }
 

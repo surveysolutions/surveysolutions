@@ -11,7 +11,7 @@ using WB.UI.Shared.Web.Membership;
 using DownloadQuestionnaireRequest = WB.UI.Designer.WebServices.Questionnaire.DownloadQuestionnaireRequest;
 using QuestionnaireVersion = WB.Core.SharedKernels.DataCollection.QuestionnaireVersion;
 
-namespace WB.Tests.Unit.Applications.PublicServiceTests
+namespace WB.Tests.Unit.Designer.Applications.PublicServiceTests
 {
     internal class PublicServiceTestContext
     {

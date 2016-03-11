@@ -1,19 +1,14 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities;
-using Moq;
-using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
-using It = Machine.Specifications.It;
-using it = Moq.It;
 using Main.DenormalizerStorage;
+using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 {
     extern alias designer;
 

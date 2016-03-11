@@ -7,7 +7,7 @@ using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
     [Subject(typeof(QuestionnaireVerifier), "WB0062")]
     internal class when_validating_questionnaire_with_empty_variable_names : QuestionnaireVerifierTestsContext

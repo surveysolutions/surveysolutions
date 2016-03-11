@@ -3,7 +3,7 @@ using WB.UI.Designer.WebServices;
 using WB.UI.Designer.WebServices.Questionnaire;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Applications.PublicServiceTests
+namespace WB.Tests.Unit.Designer.Applications.PublicServiceTests
 {
     internal class when_service_and_response_objects_have_specific_namespace : PublicServiceTestContext
     {

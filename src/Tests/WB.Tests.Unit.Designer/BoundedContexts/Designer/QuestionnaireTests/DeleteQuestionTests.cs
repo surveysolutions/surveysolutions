@@ -1,15 +1,13 @@
 ﻿using System;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
-using Ncqrs;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Services;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTests
 {
     [TestFixture]
     internal class DeleteQuestionTests : QuestionnaireTestsContext
