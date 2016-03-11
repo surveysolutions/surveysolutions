@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             //attachmentMetadata = Mock.Of<Attachment>(a => a.Type == AttachmentContentType.Image);
             attachmentContent = new byte[]{ 1, 2, 3 };
             var attachmentStorage = Mock.Of<IQuestionnaireAttachmentStorage>(s =>
-                && s.GetAttachmentContentAsync(attachmentId) == Task.FromResult(attachmentContent));
+                /*&&*/ s.GetAttachmentContentAsync(attachmentId) == Task.FromResult(attachmentContent));
 
             viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository.Object, attachmentStorage);
         };

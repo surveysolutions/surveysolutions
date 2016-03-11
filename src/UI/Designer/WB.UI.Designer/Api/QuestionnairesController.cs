@@ -63,6 +63,13 @@ namespace WB.UI.Designer.Api
             return attachmentService.GetAttachmentsForQuestionnaire(id).Select(x => x.ItemId).ToList();
         }
 
+        [Route("~/api/v15/attachment/{id:Guid}")]
+        [HttpGet]
+        public byte[] Attachment(Guid id)
+        {
+            return attachmentService.GetAttachment(id).Content;
+        }
+
         [Route("{id:Guid}")]
         public Questionnaire Get(Guid id)
         {
