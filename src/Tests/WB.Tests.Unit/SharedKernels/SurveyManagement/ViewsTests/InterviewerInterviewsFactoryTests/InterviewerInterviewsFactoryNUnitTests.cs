@@ -7,6 +7,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.Synchronization;
@@ -167,7 +168,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null,
             IInterviewSynchronizationDtoFactory synchronizationDtoFactory = null,
             InterviewData interviewData = null,
-            IIncomingSyncPackagesQueue incomingSyncPackagesQueue = null,
+            IInterviewPackagesService incomingSyncPackagesQueue = null,
             params CommentedStatusHistroyView[] statusHistory)
         {
             interviewData = interviewData ?? Create.InterviewData();
@@ -179,7 +180,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
                     synchronizationDtoFactory ?? Mock.Of<IInterviewSynchronizationDtoFactory>(),
                     Mock.Of<IReadSideKeyValueStorage<InterviewData>>(_=>_.GetById(Moq.It.IsAny<string>())==interviewData),
                     Mock.Of<IViewFactory<ChangeStatusInputModel, ChangeStatusView>>(_=>_.Load(Moq.It.IsAny<ChangeStatusInputModel>())== changeStatusView),
-                    incomingSyncPackagesQueue ?? Mock.Of<IIncomingSyncPackagesQueue>());
+                    incomingSyncPackagesQueue ?? Mock.Of<IInterviewPackagesService>());
         }
     }
 }
