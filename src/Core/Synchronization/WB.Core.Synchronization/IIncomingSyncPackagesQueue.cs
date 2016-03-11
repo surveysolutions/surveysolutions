@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace WB.Core.Synchronization
 {
@@ -10,5 +11,6 @@ namespace WB.Core.Synchronization
         void DeleteSyncItem(string syncItemPath);
         IncomingSyncPackage GetSyncItem(string syncItemPath);
         bool HasPackagesByInterviewId(Guid interviewId);
+        List<string> DeQueueMany(int count);
     }
 }

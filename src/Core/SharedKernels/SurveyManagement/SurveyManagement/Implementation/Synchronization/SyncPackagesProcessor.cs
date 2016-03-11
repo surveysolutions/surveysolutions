@@ -31,34 +31,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 
         public void ProcessNextSyncPackageBatchInParallel(int batchSize, int MaxDegreeOfParallelism = 1)
         {
-            List<string> batchPackagePathes = new List<string>();
 
             var logkey = DateTime.Now.ToString("s");
 
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            for (int i = 0; i < batchSize; i++)
-            {
-                try
-                {
-                    var syncPackage = incomingSyncPackagesQueue.DeQueue(i);
-                    if (syncPackage == null)
-                        break;
-                    batchPackagePathes.Add(syncPackage);
-                }
-                catch (IncomingSyncPackageException e)
-                {
-                    brokenSyncPackagesStorage.StoreUnhandledPackage(e.PathToPackage, e.InterviewId, e.InnerException);
-                    incomingSyncPackagesQueue.DeleteSyncItem(e.PathToPackage);
-                }
-            }
+            var packagePathes = incomingSyncPackagesQueue.DeQueueMany(batchSize);
 
-            this.logger.Info($"Sync_{logkey}: Received {batchPackagePathes.Count} packages for procession. Took {stopwatch.Elapsed:g}.");
+            this.logger.Info($"Sync_{logkey}: Received {packagePathes.Count} packages for procession. Took {stopwatch.Elapsed:g}.");
             stopwatch.Restart();
 
-            if (batchPackagePathes.Count > 0)
+            if (packagePathes.Count > 0)
             {
-                Parallel.ForEach(batchPackagePathes,
+                Parallel.ForEach(packagePathes,
                    new ParallelOptions
                    {
                        MaxDegreeOfParallelism = MaxDegreeOfParallelism
@@ -119,7 +104,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                    });
             }
 
-            this.logger.Info($"Sync_{logkey}: Processed {batchPackagePathes.Count} packages. Took {stopwatch.Elapsed:g}.");
+            this.logger.Info($"Sync_{logkey}: Processed {packagePathes.Count} packages. Took {stopwatch.Elapsed:g}.");
             stopwatch.Stop();
         }
     }

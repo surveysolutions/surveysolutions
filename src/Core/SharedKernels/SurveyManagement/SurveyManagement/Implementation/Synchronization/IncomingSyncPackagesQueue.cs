@@ -114,7 +114,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 
                     if (cachedFileNames == null)
                     {
-                        var filenames = new ConcurrentHashSet<string>(this.GetFilesInIncomingDirectoryImpl());
+                        var filenames = new ConcurrentHashSet<string>(this.GetFilesInIncomingDirectoryImpl().ToList());
 
                         this.cache.Set("incomingPackagesFileNames", filenames, DateTime.Now.AddMinutes(5));
 
@@ -152,10 +152,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 
         public string DeQueue(int skip)
         {
-            var pathToPackage = this.GetCachedFilesInIncomingDirectory().OrderBy(this.fileSystemAccessor.GetFileName).Skip(skip).FirstOrDefault();
+            var cachedFilesInIncomingDirectory = this.GetCachedFilesInIncomingDirectory().ToList();
+            this.logger.Info($"Current queue length is {cachedFilesInIncomingDirectory.Count}");
 
-            if (string.IsNullOrEmpty(pathToPackage) || !fileSystemAccessor.IsFileExists(pathToPackage))
-                return null;
+            var pathToPackage = cachedFilesInIncomingDirectory.OrderBy(this.fileSystemAccessor.GetFileName).Skip(skip).FirstOrDefault();
+
+            return pathToPackage;
+        }
+
+        public List<string> DeQueueMany(int count)
+        {
+            var cachedFilesInIncomingDirectory = this.GetCachedFilesInIncomingDirectory().ToList();
+            this.logger.Info($"Current queue length is {cachedFilesInIncomingDirectory.Count}");
+
+            var pathToPackage = cachedFilesInIncomingDirectory.OrderBy(this.fileSystemAccessor.GetFileName).Take(count).ToList();
 
             return pathToPackage;
         }
