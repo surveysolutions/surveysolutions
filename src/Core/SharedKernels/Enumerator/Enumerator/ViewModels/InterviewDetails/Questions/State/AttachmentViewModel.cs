@@ -20,7 +20,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IQuestionnaireAttachmentStorage attachmentStorage;
 
         //private AttachmentMetadata attachmentMetadata;
-        private Attachment attachment;
 
         public AttachmentViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,
