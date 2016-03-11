@@ -23,6 +23,7 @@ using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Interviewer.Infrastructure.Logging;
 using IPrincipal = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IPrincipal;
+using WB.Infrastructure.Shared.Enumerator.Internals;
 
 namespace WB.UI.Interviewer.Infrastructure
 {

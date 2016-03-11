@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using WB.Core.GenericSubdomains.Portable.Services;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
+namespace WB.Infrastructure.Native.Storage
 {
     public class JsonSerializerSettingsFactory : IJsonSerializerSettingsFactory
     {
@@ -93,7 +93,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             protected readonly Dictionary<string, string> typesMap = new Dictionary<string, string>();
             protected readonly Dictionary<Type, string> typeToName = new Dictionary<Type, string>();
 
-            public MainCoreAssemblyRedirectSerializationBaseBinder()
+            protected MainCoreAssemblyRedirectSerializationBaseBinder()
             {
                 var assembly = typeof(QuestionnaireDocument).Assembly;
 

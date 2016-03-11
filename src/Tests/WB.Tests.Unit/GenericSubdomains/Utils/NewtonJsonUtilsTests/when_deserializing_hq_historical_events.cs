@@ -4,12 +4,12 @@ using Machine.Specifications;
 using System.Collections.Generic;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable;
 
 using datacollectionalias = datacollection::Main.Core.Events.Questionnaire;
 using System;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
 {
