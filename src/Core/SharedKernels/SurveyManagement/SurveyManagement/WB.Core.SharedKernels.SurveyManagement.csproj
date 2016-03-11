@@ -133,18 +133,21 @@
     <Compile Include="Implementation\Factories\OldschoolChartStatisticsDataProvider.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireBrowseViewFactory.cs" />
     <Compile Include="Implementation\Services\AndroidPackageReader.cs" />
+    <Compile Include="Implementation\Services\BrokenInterviewPackagesViewFactory.cs" />
     <Compile Include="Implementation\Services\DecimalToHeaderConverter.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\ReadSideHealthChecker.cs" />
     <Compile Include="Implementation\Services\Preloading\InterviewImportDataParsingService.cs" />
     <Compile Include="Implementation\Services\QuestionnaireNameValidator.cs" />
     <Compile Include="Implementation\Services\InterviewAnswersCommandValidator.cs" />
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
+    <Compile Include="Implementation\Synchronization\InterviewPackagesService.cs" />
     <Compile Include="Mappings\CumulativeReportStatusChangeMap.cs" />
     <Compile Include="Mappings\InterviewCommentariesMap.cs" />
     <Compile Include="Mappings\InterviewDataExportViewMap.cs" />
     <Compile Include="Mappings\MapReportAnswersCollectionMap.cs" />
     <Compile Include="Mappings\AttachmentContentMap.cs" />
     <Compile Include="Mappings\SynchronizationLogItemMap.cs" />
+    <Compile Include="Mappings\InterviewPackageMap.cs" />
     <Compile Include="Properties\CommandValidatorsMessages.Designer.cs">
       <DependentUpon>CommandValidatorsMessages.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -154,7 +157,9 @@
     <Compile Include="Implementation\Services\AttachmentContentService.cs" />
     <Compile Include="Services\Export\ITabularFormatExportService.cs" />
     <Compile Include="Services\IAndroidPackageReader.cs" />
+    <Compile Include="Services\IBrokenInterviewPackagesViewFactory.cs" />
     <Compile Include="Services\IAttachmentContentService.cs" />
+    <Compile Include="Services\IInterviewPackagesService.cs" />
     <Compile Include="Services\ISynchronizationLogViewFactory.cs" />
     <Compile Include="Services\Preloading\IInterviewImportDataParsingService.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
@@ -273,6 +278,10 @@
     <Compile Include="ValueObjects\PreloadedData\VerificationStatus.cs" />
     <Compile Include="ValueObjects\ValueParsingResult.cs" />
     <Compile Include="Views\BaseInterviewGridItem.cs" />
+    <Compile Include="Views\BrokenInterviewPackages\BrokenInterviewPackagesView.cs" />
+    <Compile Include="Views\BrokenInterviewPackages\BrokenInterviewPackageFilter.cs" />
+    <Compile Include="Views\BrokenInterviewPackages\BrokenInterviewPackageView.cs" />
+    <Compile Include="Views\BrokenInterviewPackages\BrokenInterviewPackageExceptionTypesView.cs" />
     <Compile Include="Views\ChangeStatus\ChangeStatusFactory.cs" />
     <Compile Include="Views\ChangeStatus\ChangeStatusInputModel.cs" />
     <Compile Include="Views\ChangeStatus\ChangeStatusView.cs" />
@@ -313,6 +322,7 @@
     <Compile Include="Implementation\Factories\ChartStatisticsViewFactory.cs" />
     <Compile Include="Views\InterviewHistory\InterviewHistoryView.cs" />
     <Compile Include="Views\InterviewHistory\InterviewDataExportSettings.cs" />
+    <Compile Include="Views\InterviewPackage.cs" />
     <Compile Include="Views\Interviews\ChartStatisticsView.cs" />
     <Compile Include="Views\Interviews\TeamInterviewsFactory.cs" />
     <Compile Include="Views\Interviews\TeamInterviewsInputModel.cs" />

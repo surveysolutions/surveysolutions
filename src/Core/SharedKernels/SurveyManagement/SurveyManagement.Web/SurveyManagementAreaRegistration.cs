@@ -175,6 +175,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                 }
             },
             {
+                "~/js/brokeninterviewpackages", new[]
+                {
+                   "~/Scripts/bootstrap-datepicker.js",
+                    "~/Scripts/ko.datepicker.js",
+                    "~/Scripts/bootstrap3-typeahead.js",
+                    "~/Scripts/components/typeahead-extended.js",
+                    "~/Scripts/knockout/ko.typeahead.js",
+                    "~/Scripts/spin.js",
+                    "~/Scripts/knockout/ko.spin.js",
+                    "~/Scripts/viewmodels/pages/controlpanel/brokeninterviewpackages.js"
+                }
+            },
+            {
                 "~/js/import-interviews", new[]
                 {
                     "~/Scripts/bootbox.min.js",

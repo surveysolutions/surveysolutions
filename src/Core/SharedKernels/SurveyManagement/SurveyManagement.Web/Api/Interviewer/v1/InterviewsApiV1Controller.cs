@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
@@ -36,7 +37,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
             IPlainInterviewFileStorage plainInterviewFileStorage,
             IGlobalInfoProvider globalInfoProvider,
             IInterviewInformationFactory interviewsFactory,
-            IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
+            IInterviewPackagesService incomingSyncPackagesQueue,
             ICommandService commandService,
             IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader,
             IMetaInfoBuilder metaBuilder,

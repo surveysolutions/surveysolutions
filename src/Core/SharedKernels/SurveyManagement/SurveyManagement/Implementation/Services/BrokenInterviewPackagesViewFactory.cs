@@ -1,0 +1,84 @@
+﻿using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views;
+using WB.Core.SharedKernels.SurveyManagement.Views.BrokenInterviewPackages;
+
+namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
+{
+    internal class BrokenInterviewPackagesViewFactory : IBrokenInterviewPackagesViewFactory
+    {
+        private readonly IPlainStorageAccessor<BrokenInterviewPackage> plainStorageAccessor;
+        public BrokenInterviewPackagesViewFactory(IPlainStorageAccessor<BrokenInterviewPackage> plainStorageAccessor)
+        {
+            this.plainStorageAccessor = plainStorageAccessor;
+        }
+
+        public BrokenInterviewPackagesView GetFilteredItems(BrokenInterviewPackageFilter filter)
+        {
+            return this.plainStorageAccessor.Query(queryable =>
+            {
+                IQueryable<BrokenInterviewPackage> query = queryable;
+
+                if (!string.IsNullOrEmpty(filter.ExceptionType))
+                {
+                    query = query.Where(x => x.ExceptionType == filter.ExceptionType);
+                }
+
+                if (filter.ToProcessingDateTime.HasValue)
+                {
+                    query = query.Where(x => x.ProcessingDate <= filter.ToProcessingDateTime.Value.AddDays(1));
+                }
+
+                if (filter.FromProcessingDateTime.HasValue)
+                {
+                    query = query.Where(x => x.ProcessingDate >= filter.FromProcessingDateTime);
+                }
+
+                if (filter.SortOrder == null)
+                {
+                    filter.SortOrder = new[] { new OrderRequestItem() { Field = "ProcessingDate", Direction = OrderDirection.Desc } };
+                }
+
+                var totalCount = query.LongCount();
+
+                var items = query.OrderUsingSortExpression(filter.SortOrder.GetOrderRequestString())
+                    .Skip((filter.PageIndex - 1)*filter.PageSize)
+                    .Take(filter.PageSize)
+                    .Select(package => new BrokenInterviewPackageView
+                    {
+                        Id = package.Id,
+                        InterviewId = package.InterviewId,
+                        IncomingDate = package.IncomingDate,
+                        ProcessingDate = package.ProcessingDate,
+                        ExceptionType = package.ExceptionType,
+                        ExceptionMessage = package.ExceptionMessage,
+                        ExceptionStackTrace = package.ExceptionStackTrace
+                    })
+                    .ToList();
+
+                return new BrokenInterviewPackagesView() { Items = items, TotalCount = totalCount };
+            });
+        }
+
+        public BrokenInterviewPackageExceptionTypesView GetExceptionTypes(int pageSize, string searchBy)
+        {
+            return this.plainStorageAccessor.Query(queryable =>
+            {
+                var query = queryable;
+
+                if (!string.IsNullOrEmpty(searchBy))
+                    query = queryable.Where(x => x.ExceptionType.ToLower().Contains(searchBy.ToLower()));
+
+                var exceptionTypesByQuery = query.GroupBy(x => x.ExceptionType).Where(x => x.Count() > 0).Select(x => x.Key).ToList();
+
+                return new BrokenInterviewPackageExceptionTypesView
+                {
+                    ExceptionTypes = exceptionTypesByQuery.Take(pageSize),
+                    TotalCountByQuery = exceptionTypesByQuery.Count()
+                };
+            });
+        }
+    }
+}

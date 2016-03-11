@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         private readonly IPlainStorageAccessor<UserDocument> userStore;
         private readonly IInterviewDataAndQuestionnaireMerger merger;
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
-        private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
+        private readonly IInterviewPackagesService incomingSyncPackagesQueue;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IAttachmentContentService attachmentContentService;
 
@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             IPlainStorageAccessor<UserDocument> userStore,
             IInterviewDataAndQuestionnaireMerger merger,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
-            IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
+            IInterviewPackagesService incomingSyncPackagesQueue,
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore,
             IAttachmentContentService attachmentContentService)

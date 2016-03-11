@@ -10,15 +10,20 @@ using Polly;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.CustomCollections;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 {
-    internal class IncomingSyncPackagesQueue : IIncomingSyncPackagesQueue
+    [Obsolete("Since v 5.8")]
+    internal class IncomingSyncPackagesQueue : InterviewPackagesService
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string incomingUnprocessedPackagesDirectory;
@@ -28,51 +33,39 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         private readonly IArchiveUtils archiver;
         private readonly MemoryCache cache = new MemoryCache(nameof(IncomingSyncPackagesQueue));
         private readonly object cacheLockObject = new object();
-
-        public IncomingSyncPackagesQueue(IFileSystemAccessor fileSystemAccessor, 
-            SyncSettings syncSettings, 
-            ILogger logger, 
-            ISerializer serializer, 
-            IArchiveUtils archiver)
+        private readonly IBrokenSyncPackagesStorage brokenSyncPackagesStorage;
+        private readonly ICommandService commandService;
+        
+        public IncomingSyncPackagesQueue(IFileSystemAccessor fileSystemAccessor,
+            SyncSettings syncSettings,
+            ILogger logger,
+            ISerializer serializer,
+            IArchiveUtils archiver,
+            IBrokenSyncPackagesStorage brokenSyncPackagesStorage,
+            IPlainStorageAccessor<InterviewPackage> interviewPackageStorage,
+            IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage,
+            ICommandService commandService) : base(
+                interviewPackageStorage: interviewPackageStorage,
+                brokenInterviewPackageStorage: brokenInterviewPackageStorage,
+                logger: logger,
+                serializer: serializer,
+                archiver: archiver,
+                syncSettings: syncSettings,
+                commandService: commandService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.syncSettings = syncSettings;
             this.logger = logger;
             this.serializer = serializer;
             this.archiver = archiver;
+            this.brokenSyncPackagesStorage = brokenSyncPackagesStorage;
+            this.commandService = commandService;
             this.incomingUnprocessedPackagesDirectory = fileSystemAccessor.CombinePath(syncSettings.AppDataDirectory,
                 syncSettings.IncomingUnprocessedPackagesDirectoryName);
-
-            if (!fileSystemAccessor.IsDirectoryExists(this.incomingUnprocessedPackagesDirectory))
-                fileSystemAccessor.CreateDirectory(this.incomingUnprocessedPackagesDirectory);
         }
 
-        public void Enqueue(Guid interviewId, string item)
-        {
-            if (string.IsNullOrWhiteSpace(item))
-                throw new ArgumentException("Sync Item is not set.");
-
-            string syncPackageFileName = $"{DateTime.Now.Ticks}-{interviewId.FormatGuid()}.{this.syncSettings.IncomingCapiPackageFileNameExtension}";
-
-            string subfolderName = $"{interviewId.FormatGuid()}".Substring(0, 2);
-            string subfolderPath = this.fileSystemAccessor.CombinePath(this.incomingUnprocessedPackagesDirectory, subfolderName);
-
-            if (!fileSystemAccessor.IsDirectoryExists(subfolderPath))
-                fileSystemAccessor.CreateDirectory(subfolderPath);
-
-            string fullPathToSyncPackage = this.fileSystemAccessor.CombinePath(subfolderPath, syncPackageFileName);
-
-            Stopwatch innerwatch = Stopwatch.StartNew();
-            this.fileSystemAccessor.WriteAllText(fullPathToSyncPackage, item);
-            this.logger.Debug($"Sync package {syncPackageFileName}: WriteAllText {syncPackageFileName}. Took {innerwatch.Elapsed:g}.");
-            innerwatch.Stop();
-
-            this.GetCachedFilesInIncomingDirectory().Add(fullPathToSyncPackage);
-        }
-
-        public int QueueLength =>
-            this.GetCachedFilesInIncomingDirectory()
-                .Count(filename => filename.EndsWith(this.syncSettings.IncomingCapiPackageFileNameExtension));
+        public override int QueueLength => this.GetCachedFilesInIncomingDirectory()
+            .Count(filename => filename.EndsWith(this.syncSettings.IncomingCapiPackageFileNameExtension)) + base.QueueLength;
 
         private ContextualPolicy SetupRetryPolicyForPackage(string pathToPackage)
         {
@@ -88,11 +81,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                 );
         }
 
-        public void DeleteSyncItem(string syncItemPath)
+        public override bool HasPackagesByInterviewId(Guid interviewId)
         {
-            fileSystemAccessor.DeleteFile(syncItemPath);
-
-            this.GetCachedFilesInIncomingDirectory().Remove(syncItemPath);
+            return base.HasPackagesByInterviewId(interviewId) ||
+                   this.GetCachedFilesInIncomingDirectory()
+                       .Any(filename => filename.Contains(interviewId.FormatGuid()) &&
+                                        filename.EndsWith(this.syncSettings.IncomingCapiPackageFileNameExtension));
         }
 
         private ConcurrentHashSet<string> GetCachedFilesInIncomingDirectory()
@@ -135,33 +129,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             }
         }
 
-        public bool HasPackagesByInterviewId(Guid interviewId)
-        {
-            return
-                this.GetCachedFilesInIncomingDirectory().Any(filename =>
-                    filename.Contains(interviewId.FormatGuid()) &&
-                    filename.EndsWith(this.syncSettings.IncomingCapiPackageFileNameExtension));
-        }
-
-        public IReadOnlyCollection<string> GetTopSyncItemsAsFileNames(int count)
+        public override IReadOnlyCollection<string> GetTopSyncItemsAsFileNames(int count)
         {
             var cachedFilesInIncomingDirectory = this.GetCachedFilesInIncomingDirectory().ToList();
             this.logger.Debug($"Current queue length: {cachedFilesInIncomingDirectory.Count}");
 
-            var pathToPackage = cachedFilesInIncomingDirectory.OrderBy(this.fileSystemAccessor.GetFileName).Take(count).ToList();
+            var packagesFromFileStorage = cachedFilesInIncomingDirectory.OrderBy(this.fileSystemAccessor.GetFileName).Take(count).ToList();
 
-            return pathToPackage;
+            return packagesFromFileStorage.Count == 0 ? base.GetTopSyncItemsAsFileNames(count) : packagesFromFileStorage;
         }
 
-        public IncomingSyncPackage GetSyncItem(string pathToPackage)
+        public override void ProcessPackage(string pathToPackage)
         {
             Guid? interviewId = null;
+            string fileContent = null;
             try
             {
+                if (!this.fileSystemAccessor.IsFileExists(pathToPackage))
+                {
+                    base.ProcessPackage(pathToPackage);
+                    return;
+                }
+
                 var policy = SetupRetryPolicyForPackage(pathToPackage);
 
+
                 Stopwatch innerwatch = Stopwatch.StartNew();
-                var fileContent = policy.Execute(() => fileSystemAccessor.ReadAllText(pathToPackage));
+                fileContent = policy.Execute(() => fileSystemAccessor.ReadAllText(pathToPackage));
                 this.logger.Debug($"GetSyncItem {Path.GetFileName(pathToPackage)}: ReadAllText {Path.GetFileName(pathToPackage)}. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Stop();
 
@@ -169,22 +163,35 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 
                 interviewId = syncItem.RootId;
 
-                var meta =
-                    this.serializer.Deserialize<InterviewMetaInfo>(archiver.DecompressString(syncItem.MetaInfo));
+                var meta = this.serializer.Deserialize<InterviewMetaInfo>(archiver.DecompressString(syncItem.MetaInfo));
 
-                var eventsToSync =
-                    this.serializer.Deserialize<AggregateRootEvent[]>(archiver.DecompressString(syncItem.Content))
-                        .Select(e => e.Payload)
-                        .ToArray();
+                var eventsToSync = this.serializer
+                    .Deserialize<AggregateRootEvent[]>(archiver.DecompressString(syncItem.Content))
+                    .Select(e => e.Payload)
+                    .ToArray();
 
-                return new IncomingSyncPackage(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
-                        meta.TemplateVersion, (InterviewStatus)meta.Status, eventsToSync, meta.CreatedOnClient ?? false, syncSettings.Origin, pathToPackage);
+                this.commandService.Execute(new SynchronizeInterviewEventsCommand(
+                    interviewId: meta.PublicKey,
+                    userId: meta.ResponsibleId,
+                    questionnaireId: meta.TemplateId,
+                    questionnaireVersion: meta.TemplateVersion,
+                    interviewStatus: (InterviewStatus) meta.Status,
+                    createdOnClient: meta.CreatedOnClient ?? false,
+                    synchronizedEvents: eventsToSync), syncSettings.Origin);
             }
             catch (Exception e)
             {
-                var message = string.Format("package '{0}' wasn't parsed. Reason: '{1}'", pathToPackage, e.Message);
-                this.logger.Error(message, e);
-                throw new IncomingSyncPackageException(message, e, interviewId, pathToPackage);
+                this.logger.Error($"package '{pathToPackage}' wasn't parsed. Reason: '{e.Message}'", e);
+
+                if (interviewId.HasValue && !string.IsNullOrEmpty(fileContent))
+                    base.Enqueue(interviewId.Value, fileContent);
+                else
+                    this.brokenSyncPackagesStorage.StoreUnhandledPackage(pathToPackage, interviewId, e);
+            }
+            finally
+            {
+                this.fileSystemAccessor.DeleteFile(pathToPackage);
+                this.GetCachedFilesInIncomingDirectory().Remove(pathToPackage);
             }
         }
     }

@@ -130,6 +130,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public ActionResult SynchronizationLog() => this.View();
 
         public ActionResult EventStore() => this.View();
+        public ActionResult BrokenInterviewPackages() => this.View();
 
         public async Task<ActionResult> RunScavenge()
         {
