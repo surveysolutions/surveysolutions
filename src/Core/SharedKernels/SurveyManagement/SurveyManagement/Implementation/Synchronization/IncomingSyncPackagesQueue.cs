@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.Synchronization;
 
@@ -53,6 +54,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             string fullPathToSyncPackage = this.fileSystemAccessor.CombinePath(this.incomingUnprocessedPackagesDirectory, syncPackageFileName);
 
             this.fileSystemAccessor.WriteAllText(fullPathToSyncPackage, item);
+
+            var cachedFilesInIncomingDirectory = this.GetCachedFilesInIncomingDirectory();
+
+            cachedFilesInIncomingDirectory.Add(fullPathToSyncPackage);
+
+            this.cache.Set("incomingPackagesFileNames", cachedFilesInIncomingDirectory, DateTime.Now.AddMinutes(5));
         }
 
         public int QueueLength =>
@@ -86,7 +93,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             this.cache.Set("incomingPackagesFileNames", cachedFilesInIncomingDirectory, DateTime.Now.AddMinutes(5));
         }
 
-        private HashSet<string> GetCachedFilesInIncomingDirectory()
+        private ConcurrentHashSet<string> GetCachedFilesInIncomingDirectory()
         {
             object cachedFileNames = this.cache.Get("incomingPackagesFileNames");
 
@@ -98,7 +105,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 
                     if (cachedFileNames == null)
                     {
-                        HashSet<string> filenames = this.fileSystemAccessor.GetFilesInDirectory(this.incomingUnprocessedPackagesDirectory).ToHashSet();
+                        var filenames = new ConcurrentHashSet<string>(
+                            this.fileSystemAccessor.GetFilesInDirectory(this.incomingUnprocessedPackagesDirectory));
 
                         this.cache.Set("incomingPackagesFileNames", filenames, DateTime.Now.AddMinutes(5));
 
@@ -107,15 +115,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                 }
             }
 
-            return (HashSet<string>) cachedFileNames;
+            return (ConcurrentHashSet<string>) cachedFileNames;
         }
 
         public bool HasPackagesByInterviewId(Guid interviewId)
         {
             return
-                this.GetCachedFilesInIncomingDirectory().Any(filename
-                    => filename.Contains(interviewId.FormatGuid())
-                       && filename.EndsWith(this.syncSettings.IncomingCapiPackageFileNameExtension));
+                this.GetCachedFilesInIncomingDirectory().Any(filename =>
+                    filename.Contains(interviewId.FormatGuid()) &&
+                    filename.EndsWith(this.syncSettings.IncomingCapiPackageFileNameExtension));
         }
 
         public string DeQueue(int skip)
