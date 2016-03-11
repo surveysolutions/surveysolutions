@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool IsImage
         {
-            get { return this.attachment != null /*&& this.attachment.FileName.Contains(".jpg")*/; }
+            get { return this.AttachmentContent != null /*&& this.attachment.FileName.Contains(".jpg")*/; }
         }
 
         public byte[] AttachmentContent { get; set; }

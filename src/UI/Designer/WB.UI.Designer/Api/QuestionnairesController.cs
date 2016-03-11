@@ -58,9 +58,10 @@ namespace WB.UI.Designer.Api
 
         [Route("~/api/v15/attachment/{id:Guid}")]
         [HttpGet]
-        public byte[] Attachment(Guid id)
+        public string Attachment(Guid id)
         {
-            return attachmentService.GetAttachment(id).Content;
+            return Convert.ToBase64String(attachmentService.GetAttachment(id).Content);
+            //return attachmentService.GetAttachment(id).Content;
         }
 
         [Route("{id:Guid}")]
