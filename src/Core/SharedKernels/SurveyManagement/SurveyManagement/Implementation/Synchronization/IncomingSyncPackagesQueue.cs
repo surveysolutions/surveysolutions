@@ -128,7 +128,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 
         public string DeQueue(int skip)
         {
-            var pathToPackage = this.GetCachedFilesInIncomingDirectory().Skip(skip).FirstOrDefault();
+            var pathToPackage = this.GetCachedFilesInIncomingDirectory().OrderBy(x => x).Skip(skip).FirstOrDefault();
 
             if (string.IsNullOrEmpty(pathToPackage) || !fileSystemAccessor.IsFileExists(pathToPackage))
                 return null;
