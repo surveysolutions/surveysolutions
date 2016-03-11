@@ -7,7 +7,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Shared.Web.MembershipProvider.Roles;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.RoleRepositoryTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.RoleRepositoryTests
 {
     internal class when_adding_role_to_user_with_role_repository : RoleRepositoryTestsContext
     {

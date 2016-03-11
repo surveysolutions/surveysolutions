@@ -1,7 +1,7 @@
 using Moq;
 using WB.Core.SharedKernels.SurveySolutions;
 
-namespace WB.Tests.Unit
+namespace WB.Tests.Unit.Designer
 {
     internal static class Stub<T>
         where T : class

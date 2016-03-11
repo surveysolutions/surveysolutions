@@ -3,7 +3,7 @@ using System.Linq;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.RoslynExpressionProcessorTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.RoslynExpressionProcessorTests
 {
     internal class when_getting_identifiers_from_different_expressions
     {

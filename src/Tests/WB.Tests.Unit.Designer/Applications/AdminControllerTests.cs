@@ -20,7 +20,7 @@ using WB.UI.Designer.Controllers;
 using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Membership;
 
-namespace WB.Tests.Unit.Applications
+namespace WB.Tests.Unit.Designer.Applications
 {
     [TestFixture]
     internal class AdminControllerTests

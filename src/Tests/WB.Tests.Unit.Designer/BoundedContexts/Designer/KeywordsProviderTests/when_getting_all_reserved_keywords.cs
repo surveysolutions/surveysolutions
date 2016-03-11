@@ -4,7 +4,7 @@ using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.KeywordsProviderTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.KeywordsProviderTests
 {
     internal class when_getting_all_reserved_keywords : KeywordsProviderTestContext
     {

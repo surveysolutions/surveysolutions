@@ -3,9 +3,9 @@ using Machine.Specifications;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
-using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
+using WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTests;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.AddStaticTextHandlerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddStaticTextHandlerTests
 {
     internal class when_adding_static_text_to_chapter : QuestionnaireTestsContext
     {

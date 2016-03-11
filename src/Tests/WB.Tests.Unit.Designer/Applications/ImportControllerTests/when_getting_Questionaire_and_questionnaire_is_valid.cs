@@ -12,7 +12,7 @@ using WB.UI.Designer.Api;
 using WB.UI.Shared.Web.Membership;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Applications.ImportControllerTests
+namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
 {
     internal class when_getting_Questionaire_and_questionnaire_is_valid : ImportControllerTestContext
     {

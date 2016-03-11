@@ -5,7 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireEntityFactoryTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireEntityFactoryTests
 {
     internal class when_QuestionnaireEntityFactory_creates_question_with_QuestionType_equals__QRBarcode__ : QuestionnaireEntityFactoryTestContext
     {

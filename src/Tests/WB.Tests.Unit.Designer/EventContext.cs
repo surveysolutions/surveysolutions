@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
 
-namespace WB.Tests.Unit
+namespace WB.Tests.Unit.Designer
 {
     internal class EventContext : IDisposable
     {

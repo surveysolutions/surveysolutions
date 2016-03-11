@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireChangeHistoryDenormalizerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHistoryDenormalizerTests
 {
     internal class when_questionnaire_imported : QuestionnaireChangeHistoryDenormalizerTestContext
     {

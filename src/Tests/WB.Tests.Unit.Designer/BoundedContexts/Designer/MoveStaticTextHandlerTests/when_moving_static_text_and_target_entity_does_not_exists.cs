@@ -4,9 +4,9 @@ using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-using WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests;
+using WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTests;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.MoveStaticTextHandlerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MoveStaticTextHandlerTests
 {
     internal class when_moving_static_text_and_target_entity_does_not_exists : QuestionnaireTestsContext
     {

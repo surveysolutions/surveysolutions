@@ -10,7 +10,7 @@ using WB.UI.Shared.Web.Membership;
 using It = Machine.Specifications.It;
 using it = Moq.It;
 
-namespace WB.Tests.Unit.Applications.CommandInflaterTests
+namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
 {
     internal class when_PasteIntoCommand_is_inflating_with_shared_non_public_questionnaire_but_shared : CommandInflaterTestsContext
     {

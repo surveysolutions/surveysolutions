@@ -5,7 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionDetailsFactoryTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionDetailsFactoryTests
 {
     internal class when_creating_text_question_details_view : QuestionDetailsFactoryTestContext
     {

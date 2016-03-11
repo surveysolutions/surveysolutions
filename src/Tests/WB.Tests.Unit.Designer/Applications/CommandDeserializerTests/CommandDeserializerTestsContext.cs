@@ -1,6 +1,6 @@
 ﻿using WB.UI.Designer.CommandDeserialization;
 
-namespace WB.Tests.Unit.Applications.CommandDeserializerTests
+namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
 {
     internal class CommandDeserializerTestsContext
     {

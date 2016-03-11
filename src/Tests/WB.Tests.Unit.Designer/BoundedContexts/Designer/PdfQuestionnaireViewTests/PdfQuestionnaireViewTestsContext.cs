@@ -1,4 +1,4 @@
-﻿namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireViewTests
+﻿namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfQuestionnaireViewTests
 {
     internal class PdfQuestionnaireViewTestsContext {}
 }

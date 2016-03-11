@@ -1,7 +1,7 @@
 ﻿using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.ChapterInfoViewDenormalizerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewDenormalizerTests
 {
     internal class when_NewGroupAdded_event_received_and_parent_of_group_does_not_exists : ChaptersInfoViewDenormalizerTestContext
     {

@@ -2,7 +2,7 @@
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.AccountTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountTests
 {
     [Subject(typeof(AccountAR))]
     internal class AccountTestsContext

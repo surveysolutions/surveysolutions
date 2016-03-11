@@ -13,7 +13,7 @@ using WB.UI.Designer.Api.Attributes;
 using WB.UI.Shared.Web.Membership;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Applications.AttributesTests
+namespace WB.Tests.Unit.Designer.Applications.AttributesTests
 {
     internal class when_api_basic_auth_attribute_handles_on_authorization_and_user_not_approved : AttributesTestContext
     {

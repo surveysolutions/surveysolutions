@@ -6,7 +6,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Mo
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.Infrastructure.EventBus;
 
-namespace WB.Tests.Unit
+namespace WB.Tests.Unit.Designer
 {
     internal static class ShouldExtensions
     {

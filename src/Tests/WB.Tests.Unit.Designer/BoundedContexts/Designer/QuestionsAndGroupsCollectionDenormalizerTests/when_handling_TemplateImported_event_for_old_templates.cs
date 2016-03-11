@@ -1,5 +1,4 @@
 extern alias designer;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,17 +7,15 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Main.Core.Events.Questionnaire;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using It = Machine.Specifications.It;
 
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionsAndGroupsCollectionDenormalizerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionsAndGroupsCollectionDenormalizerTests
 {
     internal class when_handling_TemplateImported_event_for_old_templates : QuestionsAndGroupsCollectionDenormalizerTestContext
     {

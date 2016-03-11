@@ -6,12 +6,12 @@ using Moq;
 using Ncqrs;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
-using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 
-namespace WB.Tests.Unit
+namespace WB.Tests.Unit.Designer
 {
     public class AssemblyContext : IAssemblyContext
     {

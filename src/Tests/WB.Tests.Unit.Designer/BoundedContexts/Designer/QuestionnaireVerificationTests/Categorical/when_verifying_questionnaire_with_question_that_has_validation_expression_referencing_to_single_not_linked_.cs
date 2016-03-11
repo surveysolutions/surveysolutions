@@ -10,7 +10,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests.Categorical
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests.Categorical
 {
     internal class when_verifying_questionnaire_with_question_that_has_validation_expression_referencing_to_categorical_single_not_linked_question : QuestionnaireVerifierTestsContext
     {

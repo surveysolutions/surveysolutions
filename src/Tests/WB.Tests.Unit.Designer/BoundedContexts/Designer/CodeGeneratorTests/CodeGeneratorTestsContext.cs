@@ -2,7 +2,7 @@
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGeneratorTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 {
     internal class CodeGeneratorTestsContext
     {

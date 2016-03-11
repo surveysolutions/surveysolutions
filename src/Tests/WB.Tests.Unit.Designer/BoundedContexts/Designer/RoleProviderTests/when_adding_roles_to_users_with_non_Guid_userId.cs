@@ -6,7 +6,7 @@ using Moq;
 using WB.UI.Shared.Web.MembershipProvider.Roles;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.RoleProviderTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.RoleProviderTests
 {
 
     internal class when_adding_roles_to_users_with_non_Guid_userId : RoleProviderTestsContext

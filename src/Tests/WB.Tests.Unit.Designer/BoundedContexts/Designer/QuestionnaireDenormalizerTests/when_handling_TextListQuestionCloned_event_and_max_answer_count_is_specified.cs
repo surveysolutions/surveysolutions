@@ -2,7 +2,6 @@
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities;
-using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
@@ -12,7 +11,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 using it = Moq.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 {
     internal class when_handling_TextListQuestionCloned_event_and_max_answer_count_is_specified : QuestionnaireDenormalizerTestsContext
     {

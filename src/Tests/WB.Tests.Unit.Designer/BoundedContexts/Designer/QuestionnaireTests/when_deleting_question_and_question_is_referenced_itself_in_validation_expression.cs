@@ -1,11 +1,9 @@
 using System;
-
 using Machine.Specifications;
-
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTests
 {
     internal class when_deleting_question_and_question_is_referenced_itself_in_validation_expression : QuestionnaireTestsContext
     {

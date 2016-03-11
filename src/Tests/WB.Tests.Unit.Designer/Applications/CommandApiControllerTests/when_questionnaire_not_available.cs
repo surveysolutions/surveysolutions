@@ -8,7 +8,7 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Applications.CommandApiControllerTests
+namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
 {
     internal class when_questionnaire_not_available : CommandApiControllerTestContext
     {

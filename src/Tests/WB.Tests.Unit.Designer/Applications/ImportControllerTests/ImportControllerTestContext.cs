@@ -10,7 +10,7 @@ using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
 using WB.UI.Shared.Web.Membership;
 
-namespace WB.Tests.Unit.Applications.ImportControllerTests
+namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
 {
     [Subject(typeof(ImportController))]
     internal class ImportControllerTestContext

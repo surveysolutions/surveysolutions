@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Moq.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireInfoViewDenormalizerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewDenormalizerTests
 {
     [Subject(typeof(QuestionnaireInfoViewDenormalizer))]
     internal class QuestionnaireInfoViewDenormalizerTestContext

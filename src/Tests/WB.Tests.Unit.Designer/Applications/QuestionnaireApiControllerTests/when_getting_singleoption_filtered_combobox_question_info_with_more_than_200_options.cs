@@ -5,7 +5,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.UI.Designer.Api;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Applications.QuestionnaireApiControllerTests
+namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 {
     internal class when_getting_singleoption_filtered_combobox_question_info_with_more_than_200_options : QuestionnaireApiControllerTestContext
     {

@@ -3,7 +3,7 @@ using System.Web.Http;
 using Machine.Specifications;
 using WB.UI.Designer.Api;
 
-namespace WB.Tests.Unit.Applications.QuestionnaireApiControllerTests
+namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 {
     internal class when_getting_absent_chapter : QuestionnaireApiControllerTestContext
     {

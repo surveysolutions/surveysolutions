@@ -8,7 +8,7 @@ using It = Machine.Specifications.It;
 using MembershipProvider = WB.UI.Shared.Web.MembershipProvider.Accounts.MembershipProvider;
 using it = Moq.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.MembershipProviderTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MembershipProviderTests
 {
 
     internal class when_updating_user_with_email_that_used_by_another_user_with_membership_provider : MembershipProviderTestsContext

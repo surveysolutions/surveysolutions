@@ -7,7 +7,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Api;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Applications.QuestionnaireApiControllerTests
+namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 {
     internal class when_getting_all_broken_dependencies_after_group_deleting : QuestionnaireApiControllerTestContext
     {

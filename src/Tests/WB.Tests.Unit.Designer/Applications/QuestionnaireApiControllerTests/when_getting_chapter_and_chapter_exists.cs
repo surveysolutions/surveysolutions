@@ -4,7 +4,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.UI.Designer.Api;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.Applications.QuestionnaireApiControllerTests
+namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
 {
     internal class when_getting_chapter_and_chapter_exists : QuestionnaireApiControllerTestContext
     {

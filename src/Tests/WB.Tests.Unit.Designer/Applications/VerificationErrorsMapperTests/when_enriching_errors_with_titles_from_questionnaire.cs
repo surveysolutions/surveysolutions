@@ -6,7 +6,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Models;
 
-namespace WB.Tests.Unit.Applications.VerificationErrorsMapperTests
+namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
 {
     internal class when_enriching_errors_with_titles_from_questionnaire : VerificationErrorsMapperTestContext
     {

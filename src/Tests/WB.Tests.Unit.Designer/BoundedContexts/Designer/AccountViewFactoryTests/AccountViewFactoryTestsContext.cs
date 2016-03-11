@@ -2,7 +2,7 @@
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.AccountViewFactoryTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountViewFactoryTests
 {
     internal class AccountViewFactoryTestsContext
     {

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 
-namespace WB.Tests.Unit
+namespace WB.Tests.Unit.Designer
 {
     internal static class VerifierExtensions
     {

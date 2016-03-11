@@ -6,7 +6,7 @@ using Main.Core.Entities.Composite;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.DesignerEngineVersionServiceTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionServiceTests
 {
     internal class when_questionnaire_document_has_question_with_multiple_validations
     {

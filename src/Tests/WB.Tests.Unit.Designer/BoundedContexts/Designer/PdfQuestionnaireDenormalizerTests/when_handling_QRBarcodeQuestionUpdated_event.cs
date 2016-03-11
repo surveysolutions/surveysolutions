@@ -1,12 +1,11 @@
 ﻿using System;
 using Machine.Specifications;
-using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfQuestionnaireDenormalizerTests
 {
     internal class when_handling_QRBarcodeQuestionUpdated_event : PdfQuestionnaireDenormalizerTestContext
     {

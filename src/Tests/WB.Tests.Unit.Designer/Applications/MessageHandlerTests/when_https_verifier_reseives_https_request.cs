@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading;
 using Machine.Specifications;
 
-namespace WB.Tests.Unit.Applications.MessageHandlerTests
+namespace WB.Tests.Unit.Designer.Applications.MessageHandlerTests
 {
     internal class when_https_verifier_reseives_https_request : MessageHandlerTestContext
     {
