@@ -52,7 +52,8 @@ namespace WB.UI.Designer.Controllers
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             ILogger logger,
             IQuestionnaireInfoFactory questionnaireInfoFactory,
-            IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory, ILookupTableService lookupTableService, 
+            IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory, 
+            ILookupTableService lookupTableService, 
             ICommandPostprocessor commandPostprocessor)
             : base(userHelper)
         {
