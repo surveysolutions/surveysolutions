@@ -181,10 +181,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             TypeNameHandling = TypeNameHandling.All,
             NullValueHandling = NullValueHandling.Ignore,
             FloatParseHandling = FloatParseHandling.Decimal,
-            Binder = new OldToNewTypesRedirectSerializationBinder()
+            Binder = new CapiAndMainCoreToInterviewerAndSharedKernelsBinder()
         };
 
-        private class OldToNewTypesRedirectSerializationBinder : DefaultSerializationBinder
+        private class CapiAndMainCoreToInterviewerAndSharedKernelsBinder : DefaultSerializationBinder
         {
             public override Type BindToType(string assemblyName, string typeName)
             {

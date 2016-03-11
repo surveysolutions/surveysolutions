@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Documents;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using WB.Core.GenericSubdomains.Portable.Services;
-using System.Linq;
-using Main.Core.Documents;
 
-namespace WB.Core.BoundedContexts.Designer.Implementation.Services
+namespace WB.Infrastructure.Native.Storage
 {
     public class JsonSerializerSettingsFactory : IJsonSerializerSettingsFactory
     {
@@ -18,9 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public JsonSerializerSettingsFactory()
         {
-            
-
-            jsonSerializerSettingsByTypeNameHandling =
+            this.jsonSerializerSettingsByTypeNameHandling =
                new Dictionary<TypeSerializationSettings, JsonSerializerSettings>()
                 {
                     {
@@ -46,7 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                             TypeNameHandling = TypeNameHandling.None,
                             NullValueHandling = NullValueHandling.Ignore,
                             FloatParseHandling = FloatParseHandling.Decimal,
-                            Formatting = Formatting.None
+                            Formatting = Formatting.None,
                         }
                     },
 
@@ -63,7 +61,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 };
         }
 
-        public JsonSerializerSettings GetJsonSerializerSettings(TypeSerializationSettings typeSerialization, SerializationBinderSettings binderSettings = SerializationBinderSettings.OldToNew)
+        public JsonSerializerSettings GetJsonSerializerSettings(TypeSerializationSettings typeSerialization)
+        {
+            return this.GetJsonSerializerSettings(typeSerialization, SerializationBinderSettings.OldToNew);
+        }
+
+        public JsonSerializerSettings GetJsonSerializerSettings(TypeSerializationSettings typeSerialization, SerializationBinderSettings binderSettings)
         {
             var settings = jsonSerializerSettingsByTypeNameHandling[typeSerialization];
             switch (binderSettings)
@@ -90,7 +93,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             protected readonly Dictionary<string, string> typesMap = new Dictionary<string, string>();
             protected readonly Dictionary<Type, string> typeToName = new Dictionary<Type, string>();
 
-            public MainCoreAssemblyRedirectSerializationBaseBinder()
+            protected MainCoreAssemblyRedirectSerializationBaseBinder()
             {
                 var assembly = typeof(QuestionnaireDocument).Assembly;
 
@@ -122,7 +125,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             {
                 string typeShortName;
                 if (typeToName.TryGetValue(serializedType, out typeShortName))
-                { 
+                {
                     assemblyName = oldAssemblyNameToRedirect;
 
                     string fullTypeName;
@@ -191,6 +194,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             public override Type BindToType(string assemblyName, string typeName)
             {
+                //direct type mapping
                 if (String.Equals(assemblyName, oldAssemblyNameToRedirect, StringComparison.Ordinal) ||
                     String.IsNullOrEmpty(assemblyName))
                 {
@@ -211,8 +215,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
             {
-                //generic types are not changed
-                //on load assembly is reroute but not namespace
                 string name;
                 if (typeToName.TryGetValue(serializedType, out name))
                 {

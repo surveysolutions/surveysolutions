@@ -45,6 +45,7 @@ using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Integration
 {

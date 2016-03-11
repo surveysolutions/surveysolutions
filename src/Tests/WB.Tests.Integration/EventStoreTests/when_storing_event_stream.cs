@@ -52,8 +52,7 @@ namespace WB.Tests.Integration.EventStoreTests
                 ConnectionProvider, 
                 Mock.Of<ILogger>(), 
                 new EventStoreSettings { InitializeProjections = false }, 
-                eventTypeResolver,
-                Mock.Of<IEventSerializerSettingsFactory>());
+                eventTypeResolver);
         };
 
         Because of = () => WriteSideEventStorage.Store(events);

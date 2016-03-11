@@ -361,7 +361,6 @@
       <DependentUpon>SharedTemplateV5.tt</DependentUpon>
     </Compile>
     <Compile Include="Implementation\Services\DesignerEngineVersionService.cs" />
-    <Compile Include="Implementation\Services\JsonSerializerSettingsFactory.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableContent.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableContentFile.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableRow.cs" />

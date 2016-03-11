@@ -90,7 +90,6 @@
     <Compile Include="Implementation\Services\FriendlyErrorMessageService.cs" />
     <Compile Include="Implementation\Services\IGpsLocationService.cs" />
     <Compile Include="Implementation\Services\InterviewViewModelFactory.cs" />
-    <Compile Include="Implementation\Services\JsonSerializerSettingsFactory.cs" />
     <Compile Include="Implementation\Services\SqlitePlainStorage.cs" />
     <Compile Include="Implementation\Services\SqliteSettings.cs" />
     <Compile Include="Implementation\Services\MvxTraceListener.cs" />
