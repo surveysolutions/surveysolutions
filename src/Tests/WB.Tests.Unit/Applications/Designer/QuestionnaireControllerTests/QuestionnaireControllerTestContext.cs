@@ -37,7 +37,8 @@ namespace WB.Tests.Unit.Applications.Designer.QuestionnaireControllerTests
                 logger ?? Mock.Of<ILogger>(),
                 questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),
                 Mock.Of<IQuestionnaireChangeHistoryFactory>(),
-                Mock.Of<ILookupTableService>());
+                Mock.Of<ILookupTableService>(),
+                Mock.Of<ICommandPostprocessor>());
         }
 
         protected static void SetControllerContextWithSession(Controller controller, string key, object value)
