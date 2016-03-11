@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                    });
             }
 
-            this.logger.Info($"Sync_{logkey}: Processed {packagePathes.Count} packages. Took {stopwatch.Elapsed:g}.");
+            this.logger.Warn($"Sync_{logkey}: Processed {packagePathes.Count} packages. Took {stopwatch.Elapsed:g}.");
         }
 
         private void ProcessSinglePackage(string syncPackagePath, string logkey)
