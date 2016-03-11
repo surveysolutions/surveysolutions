@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net.Mime;
 using System.Security.Cryptography;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Resources;
@@ -101,24 +100,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
         public void DeleteAttachment(Guid attachmentId)
         {
             var formattedAttachmentId = attachmentId.FormatGuid();
-            try
-            {
-                var storedAttachmentMeta = this.attachmentMetaStorage.GetById(formattedAttachmentId);
+            var storedAttachmentMeta = this.attachmentMetaStorage.GetById(formattedAttachmentId);
             
-                this.attachmentMetaStorage.Remove(formattedAttachmentId);
+            this.attachmentMetaStorage.Remove(formattedAttachmentId);
 
-                if (storedAttachmentMeta != null)
-                {
-                    var countOfAttachmentContentReferences = this.attachmentMetaStorage.Query(_ => _.Count(x => x.AttachmentContentId == storedAttachmentMeta.AttachmentContentId));
-                    if (countOfAttachmentContentReferences == 0)
-                    {
-                        this.attachmentContentStorage.Remove(storedAttachmentMeta.AttachmentContentId);
-                    }
-                }
-            }
-            catch (Exception e)
+            if (storedAttachmentMeta != null)
             {
-                throw e;
+                var countOfAttachmentContentReferences = this.attachmentMetaStorage.Query(_ => _.Count(x => x.AttachmentContentId == storedAttachmentMeta.AttachmentContentId));
+                if (countOfAttachmentContentReferences == 0)
+                {
+                    this.attachmentContentStorage.Remove(storedAttachmentMeta.AttachmentContentId);
+                }
             }
         }
 
@@ -184,16 +176,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             return attachmentsForQuestionnaire;
         }
 
-        public void CloneAttachmentMeta(Guid sourceAttachmentId, Guid newAttachmentId)
+        public void CloneAttachmentMeta(Guid sourceAttachmentId, Guid newAttachmentId, Guid newQuestionnaireId)
         {
             var formattedSourceAttachmentId = sourceAttachmentId.FormatGuid();
-            var formattedNewAttachmentId = sourceAttachmentId.FormatGuid();
+            var formattedNewAttachmentId = newAttachmentId.FormatGuid();
 
             var storedAttachmentMeta = this.attachmentMetaStorage.GetById(formattedSourceAttachmentId);
             var clonedAttachmentMeta = new AttachmentMeta
             {
                 AttachmentId = formattedNewAttachmentId,
-                QuestionnaireId = storedAttachmentMeta.QuestionnaireId,
+                QuestionnaireId = newQuestionnaireId.FormatGuid(),
                 Name = storedAttachmentMeta.Name,
                 FileName = storedAttachmentMeta.FileName,
                 Size = storedAttachmentMeta.Size,
