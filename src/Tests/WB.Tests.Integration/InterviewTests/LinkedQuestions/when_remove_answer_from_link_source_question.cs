@@ -9,9 +9,8 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
+namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
-    [Ignore("temporary ignore in order to fix build, will be unignored later when invariants will updated")]
     internal class when_remove_answer_from_link_source_question : InterviewTestsContext
     {
         Establish context = () =>
@@ -25,17 +24,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             QuestionnaireDocument questionnaire = Create.QuestionnaireDocument(id: questionnaireId,
                 children: new IComposite[]
                 {
-                    Create.Roster(rosterId: rosterId, variable: "ros", fixedTitles: new[] {"1", "2"},
+                    Create.Roster(id: rosterId, variable: "ros", fixedTitles: new[] {"1", "2"},
                         children: new IComposite[]
                         {
-                            Create.TextQuestion(questionId: sourceOfLinkQuestionId)
+                            Create.TextQuestion(id: sourceOfLinkQuestionId, variable:"txt")
                         }),
-                    Create.SingleQuestion(id: linkedQuestionId, linkedToQuestionId: sourceOfLinkQuestionId)
+                    Create.SingleQuestion(id: linkedQuestionId, linkedToQuestionId: sourceOfLinkQuestionId, variable:"link")
                 });
 
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, new PlainQuestionnaire(questionnaire, 1));
-
-            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview = SetupInterview(questionnaireDocument: questionnaire);
             interview.AnswerTextQuestion(userId, sourceOfLinkQuestionId, new decimal[] {0},
                 DateTime.Now, "a");
             interview.AnswerSingleOptionLinkedQuestion(userId, linkedQuestionId, new decimal[0], DateTime.Now,

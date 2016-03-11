@@ -41,19 +41,26 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                         rosterVector: Create.RosterVector(2))
                   });
 
-            interview.FindBaseAnswerByOrDeeperRosterLevel(linkSourceQuestionId.Id, Create.RosterVector(1))
-                     .Returns(Create.TextAnswer("one"));
-            interview.FindBaseAnswerByOrDeeperRosterLevel(linkSourceQuestionId.Id, Create.RosterVector(2))
-                     .Returns(Create.TextAnswer("two"));
-            interview.FindBaseAnswerByOrDeeperRosterLevel(linkSourceQuestionId.Id, Create.RosterVector(3))
-                    .Returns(Create.TextAnswer("three"));
-
             IQuestionnaire questionnaire = SetupQuestionnaireWithSingleOptionQuestionLinkedToTextQuestion(linkedQuestionId.Id, linkSourceQuestionId.Id);
 
             viewModel = Create.SingleOptionLinkedQuestionViewModel(interview: interview, questionnaire: questionnaire);
             viewModel.Init(interviewId, linkedQuestionId, Create.NavigationState());
 
             viewModel.Options.First().Selected = true;
+
+            interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)
+                 .Returns(new List<BaseInterviewAnswer>
+                 {
+                      Create.TextAnswer("one",
+                        questionId: linkSourceQuestionId.Id,
+                        rosterVector: Create.RosterVector(1)),
+                      Create.TextAnswer("two",
+                        questionId: linkSourceQuestionId.Id,
+                        rosterVector: Create.RosterVector(2)),
+                        Create.TextAnswer("three",
+                        questionId: linkSourceQuestionId.Id,
+                        rosterVector: Create.RosterVector(3))
+                 });
         };
 
         Because of = () => viewModel.Handle(Create.Event.LinkedOptionsChanged(eventData));

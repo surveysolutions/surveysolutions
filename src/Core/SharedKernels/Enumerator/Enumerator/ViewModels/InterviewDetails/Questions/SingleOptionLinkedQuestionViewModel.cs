@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
@@ -211,44 +212,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 this.mainThreadDispatcher.RequestMainThreadAction(() =>
                 {
-                    for (int i = 0; i < changedLinkedQuestion.Options.Length; i++)
+                    var newOptions = this.GenerateOptionsFromModel(interview, questionnaire);
+                    var removedItems = this.Options.SynchronizeWith(newOptions, (s, t) => s.RosterVector.Identical(t.RosterVector));
+                    removedItems.ForEach(option =>
                     {
-                        var targetRosterVector = changedLinkedQuestion.Options[i];
-                        BaseInterviewAnswer referencedAnswer =
-                            interview.FindBaseAnswerByOrDeeperRosterLevel(this.referencedQuestionId, targetRosterVector);
-
-                        SingleOptionLinkedQuestionOptionViewModel optionViewModel =
-                            this.GenerateOptionViewModelOrNull(referencedAnswer,
-                                interview.GetLinkedSingleOptionAnswer(this.Identity),
-                                interview,
-                                questionnaire);
-                        if (i < this.Options.Count)
-                        {
-                            if (!targetRosterVector.Equals(this.Options[i].RosterVector))
-                            {
-                                this.Options.Insert(i, optionViewModel);
-                            }
-                        }
-                        else
-                        {
-                            this.Options.Add(optionViewModel);
-                        }
-                    }
-
-                    if (this.Options.Count > changedLinkedQuestion.Options.Length)
-                    {
-                        var itemsToRemove =
-                            this.Options.Select((item, index) => new {index, item})
-                                .Where(x => x.index >= changedLinkedQuestion.Options.Length)
-                                .ToList();
-
-                        itemsToRemove.ForEach(option =>
-                        {
-                            option.item.BeforeSelected -= this.OptionSelected;
-                            option.item.AnswerRemoved -= this.RemoveAnswer;
-                            this.Options.Remove(option.item);
-                        });
-                    }
+                        option.BeforeSelected -= this.OptionSelected;
+                        option.AnswerRemoved -= this.RemoveAnswer;
+                    });
 
                     this.RaisePropertyChanged(() => HasOptions);
                 });

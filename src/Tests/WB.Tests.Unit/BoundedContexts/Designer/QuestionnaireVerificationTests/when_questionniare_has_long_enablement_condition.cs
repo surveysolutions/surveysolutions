@@ -15,15 +15,10 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         {
             questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-            StringBuilder enablementCondition = new StringBuilder(201);
-            for (int i = 0; i < 201; i++)
-            {
-                enablementCondition.Append(i);
-            }
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 Create.Question(
                     questionId: questionId,
-                    enablementCondition: enablementCondition.ToString()));
+                    enablementCondition: new string('*', 501)));
 
             verifier = CreateQuestionnaireVerifier();
         };

@@ -7,7 +7,7 @@ using System.Reflection;
 using Main.Core.Documents;
 using System.Linq;
 
-namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
+namespace WB.Infrastructure.Shared.Enumerator.Internals
 {
     public class JsonSerializerSettingsFactory : IJsonSerializerSettingsFactory
     {

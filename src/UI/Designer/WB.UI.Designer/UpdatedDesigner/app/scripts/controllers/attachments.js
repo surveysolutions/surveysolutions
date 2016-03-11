@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('AttachmentsCtrl',
-        function ($rootScope, $scope, $state, hotkeys, commandService, utilityService, confirmService, Upload, $modal) {
+        function ($rootScope, $scope, $state, hotkeys, commandService, utilityService, confirmService, Upload, $modal, notificationService) {
             'use strict';
 
             $scope.downloadLookupFileBaseUrl = '../../attachment/';
@@ -91,17 +91,23 @@
                 if (_.isUndefined(file) || _.isNull(file)) {
                     return;
                 }
-                attachment.file = file;
-                attachment.fileName = attachment.file.name;
-                attachment.format = file.type;
-                attachment.sizeInBytes = file.size;
-                attachment.type = "Image";
-                
-                Upload.imageDimensions(file).then(function(dimensions) {
+
+                Upload.imageDimensions(file).then(function (dimensions) {
                     attachment.height = dimensions.height;
                     attachment.width = dimensions.width;
-                });
-                attachmentForm.$setDirty();
+
+                    attachment.file = file;
+                    attachment.fileName = attachment.file.name;
+                    attachment.format = file.type;
+                    attachment.sizeInBytes = file.size;
+                    attachment.type = "Image";
+                    attachment.hasUploadedFile = !_.isEmpty(attachment.fileName);
+
+                    attachmentForm.$setDirty();
+                })
+               .catch(function () {
+                   notificationService.error('Chosen file is not image');
+               });
             }
 
             $scope.saveAttachment = function (attachment, form) {

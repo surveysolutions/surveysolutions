@@ -33,14 +33,30 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 				IdOf.conditionalDependencies, 
 				IdOf.structuralDependencies, 
 				this.InterviewProperties);
-			this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);				
+			this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);		
+			
+				<#
+			foreach (var linkedQuestionIdWithSourceRosterIdPair in GetLinkedQuestionIdWithSourceRosterIdPairs())
+			{
+#>
+				linkedQuestionIdWithSourceRosterIdPairs.Add(Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Key#>"),Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Value#>"));
+<# 
+			}
+#>		
 		}
 
 		public <#=QuestionnaireStructure.ClassName#>(
 			Dictionary<string, IExpressionExecutableV7> interviewScopes, 
 			Dictionary<string, List<string>> siblingRosters, 
 			IInterviewProperties interviewProperties)
-		 :base(interviewScopes, siblingRosters, interviewProperties){}
+		 :base(interviewScopes, siblingRosters, interviewProperties){		<#
+			foreach (var linkedQuestionIdWithSourceRosterIdPair in GetLinkedQuestionIdWithSourceRosterIdPairs())
+			{
+#>
+				linkedQuestionIdWithSourceRosterIdPairs.Add(Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Key#>"),Guid.Parse("<#=linkedQuestionIdWithSourceRosterIdPair.Value#>"));
+<# 
+			}
+#>		}
 
 		protected override bool HasParentScropeRosterId(Guid rosterId){
 			return IdOf.parentScopeMap.ContainsKey(rosterId);
@@ -65,7 +81,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 		public override Dictionary<Guid, Guid[]> GetParentsMap() 
 		{
 			return IdOf.parentScopeMap;
-		}
+		}	
 	}
 		//generate QuestionnaireLevel
 <#	

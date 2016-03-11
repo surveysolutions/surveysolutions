@@ -53,7 +53,7 @@ namespace WB.Tests.Integration.EventStoreTests
 
             WriteSideEventStorage = new WriteSideEventStore(ConnectionProvider, Mock.Of<ILogger>(),
             new EventStoreSettings {
-            InitializeProjections = false}, eventTypeResolver, Mock.Of<IEventSerializerSettingsFactory>());
+            InitializeProjections = false}, eventTypeResolver);
             WriteSideEventStorage.Store(events);
         };
 

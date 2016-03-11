@@ -90,7 +90,6 @@
     <Compile Include="Implementation\Services\FriendlyErrorMessageService.cs" />
     <Compile Include="Implementation\Services\IGpsLocationService.cs" />
     <Compile Include="Implementation\Services\InterviewViewModelFactory.cs" />
-    <Compile Include="Implementation\Services\JsonSerializerSettingsFactory.cs" />
     <Compile Include="Implementation\Services\SqlitePlainStorage.cs" />
     <Compile Include="Implementation\Services\SqliteSettings.cs" />
     <Compile Include="Implementation\Services\MvxTraceListener.cs" />
@@ -119,6 +118,7 @@
     <Compile Include="Services\Infrastructure\Storage\IPlainStorageEntity.cs" />
     <Compile Include="Services\IRosterTitleSubstitutionService.cs" />
     <Compile Include="Implementation\Services\RosterTitleSubstitutionService.cs" />
+    <Compile Include="Utils\ObservableCollectionExtensions.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\AttachmentViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\CascadingOptionModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\OptionModel.cs" />

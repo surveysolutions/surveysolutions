@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
@@ -13,9 +16,9 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
+namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
-    internal class when_answering_linked_single_option_question_which_links_to_integer_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1 : InterviewTestsContext
+    internal class when_answering_linked_single_option_question_which_links_to_text_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1 : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -35,45 +38,51 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var linkedOption1Vector = new decimal[] { 0 };
             linkedOption2Vector = new decimal[] { 1 };
             var linkedOption3Vector = new decimal[] { 2 };
-            int linkedOption1Answer = 6;
-            int linkedOption2Answer = 30000;
-            int linkedOption3Answer = -11;
-            linkedOption2TextInvariantCulture = "30000";
+            var linkedOption1Text = "linked option 1";
+            linkedOption2Text = "linked option 2";
+            var linkedOption3Text = "linked option 3";
 
+            var triggerQuestionId = Guid.NewGuid();
+            var questionnaireDocument = Create.QuestionnaireDocument(id: questionnaireId, children: new IComposite[]
+            {
+                Integration.Create.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
+                Create.Roster(id: rosterAId, rosterSizeSourceType: RosterSizeSourceType.Question,
+                    rosterSizeQuestionId: triggerQuestionId, rosterTitleQuestionId: questionId, variable: "ros1",
+                    children: new IComposite[]
+                    {
+                        Create.SingleQuestion(id: questionId, linkedToQuestionId: linkedToQuestionId,
+                            variable: "link_single")
+                    }),
+                Create.Roster(id: rosterBId, rosterSizeSourceType: RosterSizeSourceType.Question,
+                    rosterSizeQuestionId: triggerQuestionId, variable: "ros2", rosterTitleQuestionId: questionId),
+                Create.Roster(id: linkedToRosterId, variable: "ros3",
+                    children: new IComposite[]
+                    {
+                        Create.TextQuestion(id: linkedToQuestionId, variable: "link_source"),
+                    })
+            });
 
-            var questionnaire = Mock.Of<IQuestionnaire>
-            (_
-                => _.HasQuestion(linkedToQuestionId) == true
-                && _.GetQuestionType(linkedToQuestionId) == QuestionType.Numeric
-                && _.IsQuestionInteger(linkedToQuestionId) == true
-                && _.GetRostersFromTopToSpecifiedQuestion(linkedToQuestionId) == new[] { linkedToRosterId }
-
-                && _.HasQuestion(questionId) == true
-                && _.GetQuestionType(questionId) == QuestionType.SingleOption
-                && _.GetQuestionReferencedByLinkedQuestion(questionId) == linkedToQuestionId
-                && _.GetRostersFromTopToSpecifiedQuestion(questionId) == new[] { rosterAId }
-                && _.DoesQuestionSpecifyRosterTitle(questionId) == true
-                && _.GetRostersAffectedByRosterTitleQuestion(questionId) == new[] { rosterAId, rosterBId }
-            );
-
-
-            IPlainQuestionnaireRepository questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
-
-            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview = SetupInterview(questionnaireDocument: questionnaireDocument);
             interview.Apply(Create.Event.RosterInstancesAdded(linkedToRosterId, emptyRosterVector, linkedOption1Vector[0], sortIndex: null));
             interview.Apply(Create.Event.RosterInstancesAdded(linkedToRosterId, emptyRosterVector, linkedOption2Vector[0], sortIndex: null));
             interview.Apply(Create.Event.RosterInstancesAdded(linkedToRosterId, emptyRosterVector, linkedOption3Vector[0], sortIndex: null));
-            interview.Apply(new NumericIntegerQuestionAnswered(userId, linkedToQuestionId, linkedOption1Vector, DateTime.Now, linkedOption1Answer));
-            interview.Apply(new NumericIntegerQuestionAnswered(userId, linkedToQuestionId, linkedOption2Vector, DateTime.Now, linkedOption2Answer));
-            interview.Apply(new NumericIntegerQuestionAnswered(userId, linkedToQuestionId, linkedOption3Vector, DateTime.Now, linkedOption3Answer));
+            interview.Apply(new TextQuestionAnswered(userId, linkedToQuestionId, linkedOption1Vector, DateTime.Now, linkedOption1Text));
+            interview.Apply(new TextQuestionAnswered(userId, linkedToQuestionId, linkedOption2Vector, DateTime.Now, linkedOption2Text));
+            interview.Apply(new TextQuestionAnswered(userId, linkedToQuestionId, linkedOption3Vector, DateTime.Now, linkedOption3Text));
             interview.Apply(Create.Event.RosterInstancesAdded(rosterAId, emptyRosterVector, rosterInstanceId, sortIndex: null));
             interview.Apply(Create.Event.RosterInstancesAdded(rosterBId, emptyRosterVector, rosterInstanceId, sortIndex: null));
-
+            interview.Apply(new LinkedOptionsChanged(new[]
+            {
+                new ChangedLinkedOptions(new Identity(questionId, rosterVector), new RosterVector[]
+                {
+                    linkedOption1Vector, linkedOption2Vector, linkedOption3Vector
+                })
+            }));
             eventContext = new EventContext();
         };
 
         Because of = () =>
-            interview.AnswerSingleOptionLinkedQuestion( userId, questionId, rosterVector, DateTime.Now, linkedOption2Vector);
+            interview.AnswerSingleOptionLinkedQuestion(userId, questionId, rosterVector, DateTime.Now, linkedOption2Vector);
 
         Cleanup stuff = () =>
         {
@@ -99,10 +108,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.GetEvents<RosterInstancesTitleChanged>()
                 .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.RosterInstance.RosterInstanceId == rosterVector.Last()));
 
-        It should_set_title_to_invariant_culture_formatted_value_assigned_to_corresponding_linked_to_question_in_all_RosterRowTitleChanged_events = () =>
+        It should_set_title_to_text_assigned_to_corresponding_linked_to_question_in_all_RosterRowTitleChanged_events = () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>()
-                .SelectMany(@event => @event.ChangedInstances.Select(x=>x.Title))
-                .ShouldEachConformTo(title => title == linkedOption2TextInvariantCulture);
+                .SelectMany(@event => @event.ChangedInstances.Select(x => x.Title))
+                .ShouldEachConformTo(title => title == linkedOption2Text);
 
         private static EventContext eventContext;
         private static Interview interview;
@@ -113,6 +122,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid rosterAId;
         private static Guid rosterBId;
         private static decimal[] linkedOption2Vector;
-        private static string linkedOption2TextInvariantCulture;
+        private static string linkedOption2Text;
     }
 }

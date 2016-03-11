@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable;
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
 using System;
 using System.Text;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
 {
