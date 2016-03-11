@@ -18,10 +18,15 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
+using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
@@ -276,8 +281,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             try
             {
-                await this.DownloadQuestionnaireAttachments(selectedQuestionnaire);
-
                 var questionnairePackage = await this.designerApiService.GetQuestionnaireAsync(
                     selectedQuestionnaire: selectedQuestionnaire,
                     onDownloadProgressChanged: (downloadProgress) =>
@@ -289,6 +292,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                 if (questionnairePackage != null)
                 {
+                    await this.DownloadQuestionnaireAttachments(questionnairePackage.AttachmentsMeta);
+
                     this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_StoreQuestionnaire;
 
                     var questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111-1111-1111-1111-111111111111"), 1);
@@ -349,21 +354,24 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
         }
 
-        private async Task DownloadQuestionnaireAttachments(QuestionnaireListItem selectedQuestionnaire)
+        private async Task DownloadQuestionnaireAttachments(QuestionnaireAttachmentMeta[] attachmentMetas)
         {
-            var attachmentIds = await this.designerApiService.GetQuestionnaireAttachmentIdsAsync(
-                selectedQuestionnaire: selectedQuestionnaire,
-                onDownloadProgressChanged: (downloadProgress) =>
-                {
-                    this.ProgressIndicator = string.Format(TesterUIResources.ImportQuestionnaireAttachments_DownloadProgress,
-                        downloadProgress);
-                },
-                token: this.tokenSource.Token);
-
-            foreach (var attachmentId in attachmentIds)
+            foreach (var attachmentMeta in attachmentMetas)
             {
-                var isExists = await this.attachmentStorage.IsExistAttachmentContent(attachmentId);
-                if (!isExists)
+                var attachmentId = attachmentMeta.AttachmentId.FormatGuid();
+                var attachmentContentId = attachmentMeta.AttachmentContentId;
+
+                var attachmentMetadata = new AttachmentMetadata()
+                {
+                    Id = attachmentId,
+                    AttachmentContentId = attachmentContentId,
+                    ContentType = attachmentMeta.ContentType,
+                };
+
+                await this.attachmentStorage.StoreAsync(attachmentMetadata);
+
+                var isExistsContent = await this.attachmentStorage.IsExistAttachmentContentAsync(attachmentId);
+                if (!isExistsContent)
                 {
                     var attachmentContent = await this.designerApiService.GetQuestionnaireAttachmentAsync(attachmentId,
                                         onDownloadProgressChanged: (downloadProgress) =>
@@ -416,7 +424,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
             catch (Exception ex)
             {
-                this.logger.Error("Load questionaire list exception. ", ex);
+                this.logger.Error("Load questionnaire list exception. ", ex);
             }
             finally
             {

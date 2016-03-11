@@ -20,7 +20,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IQuestionnaireAttachmentStorage attachmentStorage;
 
         //private AttachmentMetadata attachmentMetadata;
-        private Guid? attachmentId;
         private Attachment attachment;
 
         public AttachmentViewModel(
@@ -42,13 +41,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var interview = this.interviewRepository.Get(interviewId);
             IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
-            attachmentId = questionnaire.GetAttachmentIdForEntity(entityIdentity.Id);
+            var attachment = questionnaire.GetAttachmentIdForEntity(entityIdentity.Id);
 
-            if (attachmentId.HasValue)
+            if (attachment != null)
             {
-                attachment = questionnaire.GetAttachment(this.attachmentId.Value);
                 //this.attachmentMetadata = await this.attachmentStorage.GetAttachmentAsync(attachmentId);
-                this.AttachmentContent = await this.attachmentStorage.GetAttachmentContentAsync(attachmentId.FormatGuid());
+                this.AttachmentContent = await this.attachmentStorage.GetAttachmentContentAsync(attachment.AttachmentId.FormatGuid());
             }
         }
 

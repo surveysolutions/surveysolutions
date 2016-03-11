@@ -47,9 +47,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string GetStaticText(Guid staticTextId);
 
-        Guid? GetAttachmentIdForEntity(Guid entityId);
-
-        Attachment GetAttachment(Guid attachmentId);
+        Attachment GetAttachmentIdForEntity(Guid entityId);
 
         Guid? GetCascadingQuestionParentId(Guid questionId);
 

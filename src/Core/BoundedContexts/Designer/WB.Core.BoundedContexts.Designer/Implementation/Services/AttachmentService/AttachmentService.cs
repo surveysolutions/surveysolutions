@@ -147,14 +147,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             var formattedQuestionnaireId = questionnaireId.FormatGuid();
             var attachmentsMeta = this.attachmentMetaStorage.Query(_ => _
                 .Where(x => x.QuestionnaireId == formattedQuestionnaireId)
-                .Select(x => new { AttachmentId = x.AttachmentId, AttachmentContentId = x.AttachmentContentId })
+                .Select(x => new QuestionnaireAttachmentMeta
+                {
+                    AttachmentId = Guid.Parse(x.AttachmentId),
+                    AttachmentContentId = x.AttachmentContentId,
+                    ContentType = x.ContentType,
+                })
                 .ToList());
            
-            return attachmentsMeta.Select(x => new QuestionnaireAttachmentMeta
-            {
-                AttachmentId = Guid.Parse(x.AttachmentId),
-                AttachmentContentId = x.AttachmentContentId
-            });
+            return attachmentsMeta;
         }
 
         public IEnumerable<AttachmentView> GetAttachmentsForQuestionnaire(Guid questionnaireId)
