@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
+namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
     internal class when_expression_state_processes_validation_expressions : CodeGenerationTestsContext
     {

@@ -4,7 +4,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.SharedKernels.DataCollection;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
+namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
     internal class when_generating_assembly_and_questionnaire_has_validation_containing_self : CodeGenerationTestsContext
     {

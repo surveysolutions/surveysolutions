@@ -215,6 +215,41 @@ namespace WB.Tests.Integration
             }
         }
 
+        public static Group NumericRoster(Guid? rosterId, string variable, Guid? rosterSizeQuestionId, params IComposite[] children)
+        {
+            Group group = Create.Group(
+                id: rosterId,
+                title: "Roster X",
+                variable: variable,
+                children: children);
+
+            group.IsRoster = true;
+            group.RosterSizeSource = RosterSizeSourceType.Question;
+            group.RosterSizeQuestionId = rosterSizeQuestionId;
+            return group;
+        }
+
+        public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null,
+            Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title = null, bool hideIfDisabled = false, string linkedFilterExpression = null,
+            Guid? linkedToRosterId = null)
+        {
+            return new SingleQuestion
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                StataExportCaption = variable ?? "single_option_question",
+                QuestionText = title ?? "SO Question",
+                ConditionExpression = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
+                ValidationExpression = validationExpression,
+                QuestionType = QuestionType.SingleOption,
+                LinkedToQuestionId = linkedToQuestionId,
+                LinkedToRosterId = linkedToRosterId,
+                CascadeFromQuestionId = cascadeFromQuestionId,
+                Answers = (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Answer(a.ToString(), a)).ToList(),
+                LinkedFilterExpression = linkedFilterExpression
+            };
+        }
+
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
         {
             return new QuestionnaireDocument

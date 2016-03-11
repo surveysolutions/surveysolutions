@@ -3,9 +3,6 @@ using System.Linq;
 
 using Machine.Specifications;
 using Moq;
-
-using NHibernate.Util;
-
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.Infrastructure.PlainStorage;
 

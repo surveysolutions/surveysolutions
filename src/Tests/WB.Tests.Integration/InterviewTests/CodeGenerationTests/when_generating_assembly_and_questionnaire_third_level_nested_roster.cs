@@ -6,7 +6,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.BoundedContexts.Designer.Services;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
+namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
     internal class when_generating_assembly_and_questionnaire_third_level_nested_roster : CodeGenerationTestsContext
     {
