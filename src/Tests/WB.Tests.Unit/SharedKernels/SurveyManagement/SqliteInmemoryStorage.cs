@@ -6,7 +6,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using JsonSerializerSettingsFactory = WB.Core.SharedKernels.SurveyManagement.Implementation.Services.JsonSerializerSettingsFactory;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement
 {

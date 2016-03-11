@@ -1,8 +1,7 @@
 ﻿using Machine.Specifications;
 using Main.Core.Documents;
-using System.Collections.Generic;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
 {

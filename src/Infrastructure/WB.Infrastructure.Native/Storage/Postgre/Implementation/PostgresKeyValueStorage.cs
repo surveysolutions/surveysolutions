@@ -43,7 +43,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
             if (queryResult != null)
             {
-                return JsonConvert.DeserializeObject<TEntity>(queryResult, KeyValueSerializerSettings.BackwardCompatibleJsonSerializerSettings);
+                return JsonConvert.DeserializeObject<TEntity>(queryResult, BackwardCompatibleJsonSerializerSettings);
             }
 
             return null;
@@ -93,7 +93,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     : $"INSERT INTO {this.tableName} VALUES(:id, :value)";
 
                 var parameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) { Value = id };
-                string serializedValue = JsonConvert.SerializeObject(view, Formatting.None, KeyValueSerializerSettings.BackwardCompatibleJsonSerializerSettings);
+                string serializedValue = JsonConvert.SerializeObject(view, Formatting.None, BackwardCompatibleJsonSerializerSettings);
                 var valueParameter = new NpgsqlParameter("value", NpgsqlDbType.Json) { Value = serializedValue };
 
                 upsertCommand.Parameters.Add(parameter);
@@ -153,7 +153,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     {
                         writer.StartRow();
                         writer.Write(item.Item2, NpgsqlDbType.Text); // write Id
-                        var serializedValue = JsonConvert.SerializeObject(item.Item1, Formatting.None, KeyValueSerializerSettings.BackwardCompatibleJsonSerializerSettings);
+                        var serializedValue = JsonConvert.SerializeObject(item.Item1, Formatting.None, BackwardCompatibleJsonSerializerSettings);
                         writer.Write(serializedValue, NpgsqlDbType.Json); // write value
                     }
                 }
@@ -187,5 +187,14 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 }
             }
         }
+
+        private static readonly JsonSerializerSettings BackwardCompatibleJsonSerializerSettings = new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.Auto,
+            DefaultValueHandling = DefaultValueHandling.Ignore,
+            MissingMemberHandling = MissingMemberHandling.Ignore,
+            NullValueHandling = NullValueHandling.Ignore,
+            Binder = new OldToNewAssemblyRedirectSerializationBinder()
+        };
     }
 }

@@ -38,25 +38,29 @@ namespace WB.Tests.Integration.InterviewTests
                             {
                                 PublicKey = numericQuestionId,
                                 IsInteger = true,
-                                QuestionType = QuestionType.Numeric
+                                QuestionType = QuestionType.Numeric,
+                                StataExportCaption = "num"
                             },
                             new Group
                             {
                                 IsRoster = true,
                                 RosterSizeQuestionId = numericQuestionId, 
                                 PublicKey = propagatableGroupId,
+                                VariableName = "ros",
                                 Children = new List<IComposite>
                                 {
                                     new TextQuestion
                                     {
                                         PublicKey = referencedQuestionId,
                                         QuestionType = QuestionType.Text,
+                                        StataExportCaption = "txt"
                                     },
                                     new Group
                                     {
                                         IsRoster = true,
                                         RosterSizeQuestionId = numericQuestionId, 
                                         PublicKey = propagatableGroupId1,
+                                        VariableName = "ros2",
                                         Children = new List<IComposite>
                                         {
                                             new MultyOptionsQuestion
@@ -64,6 +68,7 @@ namespace WB.Tests.Integration.InterviewTests
                                                 PublicKey = linkedQuestionId,
                                                 QuestionType = QuestionType.MultyOption,
                                                 LinkedToQuestionId = referencedQuestionId,
+                                                StataExportCaption = "link_mul"
                                             }
                                         }
                                     }
@@ -74,7 +79,7 @@ namespace WB.Tests.Integration.InterviewTests
                 }
             };
 
-            interview = SetupInterviewFromQuestionnaireDocumentRegisteringAllNeededDependencies(questionnaireDocument);
+            interview = SetupInterview(questionnaireDocument);
             interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, new decimal[] { }, answerTime, 3);
             interview.AnswerTextQuestion(userId, referencedQuestionId, new decimal[] { 0 }, answerTime, "A");
             interview.AnswerTextQuestion(userId, referencedQuestionId, new decimal[] { 2 }, answerTime, "C");

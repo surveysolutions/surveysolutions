@@ -209,8 +209,12 @@
     <Compile Include="Events\Questionnaire\Macros\MacroDeleted.cs" />
     <Compile Include="Events\Questionnaire\Macros\MacroUpdated.cs" />
     <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
+    <Compile Include="Implementation\Services\AttachmentService\AttachmentContent.cs" />
+    <Compile Include="Implementation\Services\AttachmentService\AttachmentMeta.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentService.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentType.cs" />
+    <Compile Include="Implementation\Services\AttachmentService\ImageAttachmentMeta.cs" />
+    <Compile Include="Implementation\Services\AttachmentService\QuestionnaireAttachment.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\LinkedQuestionFilterExpressionModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\ValidationExpressionModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\InterviewExpressionStateTemplateV6.cs">
@@ -357,7 +361,6 @@
       <DependentUpon>SharedTemplateV5.tt</DependentUpon>
     </Compile>
     <Compile Include="Implementation\Services\DesignerEngineVersionService.cs" />
-    <Compile Include="Implementation\Services\JsonSerializerSettingsFactory.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableContent.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableContentFile.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableRow.cs" />
@@ -642,6 +645,10 @@
     <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
       <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>
       <Name>WB.Core.SharedKernels.Questionnaire</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

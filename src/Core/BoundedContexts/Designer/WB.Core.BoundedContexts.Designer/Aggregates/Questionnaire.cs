@@ -186,7 +186,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
             if (e.QuestionnaireDocument.Attachments != null)
             {
-                this.attachmentIds = e.QuestionnaireDocument.Attachments.Select(x => x.Key).ToHashSet();
+                this.attachmentIds = e.QuestionnaireDocument.Attachments.Select(x => x.AttachmentId).ToHashSet();
             }
         }
 
@@ -812,7 +812,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             foreach (var attachment in document.Attachments)
             {
-                this.attachmentService.CloneAttachmentMeta(attachment.Key);
+                var newAttachmentId = Guid.NewGuid();
+                this.attachmentService.CloneAttachmentMeta(attachment.AttachmentId, newAttachmentId);
+                attachment.AttachmentId = newAttachmentId;
             }
 
             ApplyEvent(new QuestionnaireCloned

@@ -120,7 +120,6 @@ namespace WB.Core.GenericSubdomains.Portable
         /// <remarks>
         /// This operator uses deferred execution and streams its results (buckets and bucket content).
         /// </remarks>
-
         public static IEnumerable<TResult> Batch<TSource, TResult>(this IEnumerable<TSource> source, int size,
             Func<IEnumerable<TSource>, TResult> resultSelector)
         {

@@ -14,7 +14,6 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
@@ -43,9 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireDenormalizerTests
             return new QuestionnaireDenormalizer(
                 documentStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocument>>(),
                 questionnaireEntityFactory ?? Mock.Of<IQuestionnaireEntityFactory>(),
-                logger ?? Mock.Of<ILogger>(), 
-                Mock.Of<ILookupTableService>(),
-                Mock.Of<IAttachmentService>());
+                logger ?? Mock.Of<ILogger>());
         }
 
         protected static T GetEntityById<T>(QuestionnaireDocument document, Guid entityId)
