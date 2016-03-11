@@ -10,59 +10,57 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 {
     public class QuestionnaireAttachmentStorage : IQuestionnaireAttachmentStorage
     {
-        private readonly IAsyncPlainStorage<AttachmentMetadata> repository;
-        private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly string attachmentDirectoryPath;
+        private readonly IAsyncPlainStorage<AttachmentMetadata> attachmentMetadataRepository;
+        private readonly IAsyncPlainStorage<AttachmentContent> attachmentContentRepository;
 
-        private readonly string AttachmentDirectoryName = "Attachments";
-
-        public QuestionnaireAttachmentStorage(IAsyncPlainStorage<AttachmentMetadata> repository,
-            IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath)
+        public QuestionnaireAttachmentStorage(IAsyncPlainStorage<AttachmentMetadata> attachmentMetadataRepository,
+            IAsyncPlainStorage<AttachmentContent> attachmentContentRepository)
         {
-            this.repository = repository;
-            this.fileSystemAccessor = fileSystemAccessor;
-
-            this.attachmentDirectoryPath = this.fileSystemAccessor.CombinePath(rootDirectoryPath, this.AttachmentDirectoryName);
-
-            if (!this.fileSystemAccessor.IsDirectoryExists(this.attachmentDirectoryPath))
-                this.fileSystemAccessor.CreateDirectory(this.attachmentDirectoryPath);
+            this.attachmentMetadataRepository = attachmentMetadataRepository;
+            this.attachmentContentRepository = attachmentContentRepository;
         }
 
-        public Task StoreAttachmentContentAsync(string attachmentId, byte[] attachmentData)
+        public async Task StoreAttachmentContentAsync(string attachmentId, byte[] attachmentData)
         {
-            var attachmentFilePath = this.GetPathToFile(attachmentId);
-            this.fileSystemAccessor.WriteAllBytes(attachmentFilePath, attachmentData);
-            return Task.FromResult(true);
+            await this.attachmentContentRepository.StoreAsync(new AttachmentContent()
+            {
+                Id = attachmentId,
+                Content = attachmentData
+            });
         }
 
         public async Task StoreAsync(AttachmentMetadata attachmentMetadata)
         {
-            await this.repository.StoreAsync(attachmentMetadata);
+            await this.attachmentMetadataRepository.StoreAsync(attachmentMetadata);
         }
         
         public Task<AttachmentMetadata> GetAttachmentAsync(string attachmentId)
         {
-            return Task.FromResult(this.repository.GetById(attachmentId));
+            return Task.FromResult(this.attachmentMetadataRepository.GetById(attachmentId));
         }
 
         public Task<byte[]> GetAttachmentContentAsync(string attachmentId)
         {
-            var filePath = this.GetPathToFile(attachmentId);
-            if (!this.fileSystemAccessor.IsFileExists(filePath))
+            var attachmentMetadata = this.attachmentMetadataRepository.GetById(attachmentId);
+            if (attachmentMetadata == null)
                 return null;
-            return Task.FromResult(this.fileSystemAccessor.ReadAllBytes(filePath));
+
+            var attachmentContent = this.attachmentContentRepository.GetById(attachmentMetadata.AttachmentContentId);
+            if (attachmentContent == null)
+                return null;
+            return Task.FromResult(attachmentContent.Content);
         }
 
-        public Task<bool> IsExistAttachmentContentAsync(string attachmentId)
+        public Task<bool> IsExistAttachmentContentAsync(string attachmentContentId)
         {
-            var attachmentFilePath = this.GetPathToFile(attachmentId);
-            var fileExists = this.fileSystemAccessor.IsFileExists(attachmentFilePath);
+            var attachmentContent = this.attachmentContentRepository.GetById(attachmentContentId);
+            var fileExists = attachmentContent != null;
             return Task.FromResult(fileExists);
         }
 
-        private string GetPathToFile(string fileName)
-        {
-            return this.fileSystemAccessor.CombinePath(this.attachmentDirectoryPath, fileName);
-        }
+//        public Task Clear()
+//        {
+//            attachmentMetadataRepository.RemoveAsync()
+//        }
     }
 }
