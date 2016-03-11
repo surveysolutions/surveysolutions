@@ -6,5 +6,6 @@ namespace WB.Core.SharedKernels.SurveySolutions.Api.Designer
     {
         public Guid AttachmentId { get; set; }
         public string AttachmentContentId { get; set; }
+        public string ContentType { get; set; }
     }
 }
