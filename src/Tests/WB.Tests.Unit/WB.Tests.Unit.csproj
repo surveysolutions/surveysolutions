@@ -699,6 +699,7 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_count_of_invalid_questions_recursively.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_enabled_subgroups.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_question_answer.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_options_for_linked_question_changed.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_restoring_interview_state_from_sync_package.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\AnswerToStringServiceTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_passing_linked_single_option_question.cs" />

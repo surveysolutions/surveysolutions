@@ -225,30 +225,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private void RemoveOptionIfQuestionIsSourceofTheLink(Guid removedQuestionId,
-            decimal[] removedQuestionRosterVector)
-        {
-            if (removedQuestionId != this.referencedQuestionId)
-                return;
-
-            this.mainThreadDispatcher.RequestMainThreadAction(() =>
-            {
-                //please DO NOT move query for the option to delete outside RequestMainThreadAction. 
-                //mvvmcross executes this code in UI theread with some delay
-                //The movement could cause inconsistency and "Collection was modified; enumeration operation may not execute" exception
-                var optionToRemove =
-                    this.Options.SingleOrDefault(
-                        option => option.RosterVector.SequenceEqual(removedQuestionRosterVector));
-
-                if (optionToRemove != null)
-                {
-                    this.Options.Remove(optionToRemove);
-
-                    this.RaisePropertyChanged(() => this.HasOptions);
-                }
-            });
-        }
-
         private void ReferencedQuestionAnswered(object sender, EventArgs e)
         {
             IStatefulInterview interview = this.interviewRepository.Get(this.interviewId.FormatGuid());

@@ -14,25 +14,33 @@ namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
         Establish context = () =>
         {
             questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            groupId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(
+                Create.Group(groupId: groupId,
+                    enablementCondition: new string('*', 501)),
                 Create.Question(
                     questionId: questionId,
-                    enablementCondition: new string('*', 501)));
+                    enablementCondition: new string('*', 501))
+                );
 
             verifier = CreateQuestionnaireVerifier();
         };
 
         Because of = () => errors = verifier.Verify(questionnaire);
 
-        It should_produce_WB0205_warning = () => errors.ShouldContainWarning("WB0209");
+        It should_produce_WB0205_warning = () => errors.Count(x => x.Code == "WB0209").ShouldEqual(2);
 
         It should_reference_wrong_question = () => 
-            errors.Single(x => x.Code == "WB0209").References.ShouldContainOnly(Create.VerificationReference(id: questionId));
+            errors.Where(x => x.Code == "WB0209").First().References.ShouldContain(Create.VerificationReference(id: groupId, type: QuestionnaireVerificationReferenceType.Group));
+
+        It should_reference_wrong_group = () =>
+            errors.Where(x => x.Code == "WB0209").Second().References.ShouldContain(Create.VerificationReference(id: questionId));
 
         static Guid questionId;
         static QuestionnaireVerifier verifier;
         static QuestionnaireDocument questionnaire;
         static IEnumerable<QuestionnaireVerificationMessage> errors;
+        static Guid groupId;
     }
 }

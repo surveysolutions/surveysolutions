@@ -72,10 +72,31 @@ namespace WB.UI.Designer.Code.Implementation
                 {
                     this.lookupTableService.DeleteLookupTableContent(deleteLookupTable.QuestionnaireId, deleteLookupTable.LookupTableId);
                 }
+
+                var deleteQuestionnaire = command as DeleteQuestionnaire;
+                if (deleteQuestionnaire != null)
+                {
+                    DeleteAccompanyingDataOnQuestionnaireRemove(deleteQuestionnaire.QuestionnaireId);
+                }
             }
             catch (Exception exc)
             {
                 logger.Error("Error on command post-processing", exc);
+            }
+        }
+
+        private void DeleteAccompanyingDataOnQuestionnaireRemove(Guid questionnaireId)
+        {
+            var questionnaire = this.questionnaireDocumentReader.GetById(questionnaireId);
+
+            foreach (var attachment in questionnaire.Attachments)
+            {
+                attachmentService.DeleteAttachment(attachment.AttachmentId);
+            }
+
+            foreach (var lookupTable in questionnaire.LookupTables)
+            {
+                this.lookupTableService.DeleteLookupTableContent(questionnaireId, lookupTable.Key);
             }
         }
 

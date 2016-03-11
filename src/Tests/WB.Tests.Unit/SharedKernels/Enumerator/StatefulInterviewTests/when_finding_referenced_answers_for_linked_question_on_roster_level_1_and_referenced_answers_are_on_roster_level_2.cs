@@ -2,18 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
+    [Ignore("KP-6821")]
     internal class when_finding_referenced_answers_for_linked_question_on_roster_level_1_and_referenced_answers_are_on_roster_level_2 : StatefulInterviewTestsContext
     {
         Establish context = () =>
         {
             linkedQuestionRosterVector = new[] { 1m };
             var linkedQuestionRosters = new[] { referencedRoster1 };
+            linkedQuestionIdentity = Create.Identity(linkedQuestionId, linkedQuestionRosterVector);
 
             var referencedQuestionRosters = new[] { referencedRoster1, referencedRoster2 };
 
@@ -29,11 +32,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             interview = Create.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
-            FillInterviewWithInstancesForTwoNestedRostersAndAnswersToTextQuestionInLastRoster(interview, referencedRoster1, referencedRoster2, referencedQuestionId);
+            FillInterviewWithInstancesForTwoNestedRostersAndAnswersToTextQuestionInLastRoster(interview, 
+                referencedRoster1, referencedRoster2, referencedQuestionId, linkedQuestionIdentity);
         };
 
         Because of = () =>
-            result = interview.FindAnswersOfReferencedQuestionForLinkedQuestion(referencedQuestionId, Create.Identity(linkedQuestionId, linkedQuestionRosterVector));
+            result = interview.FindAnswersOfReferencedQuestionForLinkedQuestion(referencedQuestionId, linkedQuestionIdentity);
 
         It should_return_answers_with_roster_vector_starting_with_linked_question_roster_vector = () =>
             result.Cast<TextAnswer>().Select(answer => answer.Answer)
@@ -47,5 +51,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         private static Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static Guid referencedRoster1 = Guid.Parse("00000000000000001111111111111111");
         private static Guid referencedRoster2 = Guid.Parse("00000000000000002222222222222222");
+        private static Identity linkedQuestionIdentity;
     }
 }
