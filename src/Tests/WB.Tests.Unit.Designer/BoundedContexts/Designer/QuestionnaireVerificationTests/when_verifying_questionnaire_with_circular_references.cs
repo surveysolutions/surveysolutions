@@ -1,0 +1,81 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Machine.Specifications;
+using Main.Core.Documents;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
+using Moq;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
+using It = Machine.Specifications.It;
+
+namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireVerificationTests
+{
+    internal class when_verifying_questionnaire_with_circular_references : QuestionnaireVerifierTestsContext
+    {
+        private Establish context = () =>
+        {
+            var groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var question1Id = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+            var question2Id = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+
+            questionnaire = CreateQuestionnaireDocument(new IComposite[]
+            {
+                new Group
+                {
+                    PublicKey = groupId,
+                    IsRoster = false,
+                    Children = new List<IComposite>
+                    {
+                        new TextQuestion
+                        {
+                            PublicKey = question1Id,
+                            ConditionExpression = "[b]>0",
+                            StataExportCaption = "a"
+                        },
+                        new TextQuestion
+                        {
+                            PublicKey = question2Id,
+                            ConditionExpression = "[a]>0",
+                            StataExportCaption = "b"
+                        }
+                    }
+                }
+            });
+
+            var expressionProcessor = new Mock<IExpressionProcessor>();
+
+            expressionProcessor
+                .Setup(x => x.GetIdentifiersUsedInExpression("[a]>0"))
+                .Returns(new[] { question1Id.ToString() });
+
+            expressionProcessor
+                .Setup(x => x.GetIdentifiersUsedInExpression("[b]>0"))
+                .Returns(new[] { question2Id.ToString()});
+
+            verifier = CreateQuestionnaireVerifier(expressionProcessor.Object);
+        };
+
+        Because of = () =>
+            verificationMessages = verifier.CheckForErrors(questionnaire);
+
+        It should_return_2_messages = () =>
+            verificationMessages.Count().ShouldEqual(2);
+
+        It should_return_message_with_code__WB0056 = () =>
+            verificationMessages.First().Code.ShouldEqual("WB0056");
+
+        It should_return_message_with_level_general = () =>
+            verificationMessages.First().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
+
+        It should_return_message_with_two_references = () =>
+            verificationMessages.First().References.Count().ShouldEqual(2);
+
+        private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
+        private static QuestionnaireVerifier verifier;
+        private static QuestionnaireDocument questionnaire;
+    }
+}
