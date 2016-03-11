@@ -12,7 +12,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.Inte
 
         public void Execute(IJobExecutionContext context)
         {
-            this.SyncPackagesProcessor.ProcessNextSyncPackageBatchInParallel(InterviewDetailsDataLoaderSettings.SynchronizationBatchCount);
+            this.SyncPackagesProcessor.ProcessNextSyncPackageBatchInParallel(
+                this.InterviewDetailsDataLoaderSettings.SynchronizationBatchCount, 
+                this.InterviewDetailsDataLoaderSettings.SynchronizationParallelExecutorsCount);
         }
     }
 }

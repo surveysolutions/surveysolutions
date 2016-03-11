@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -29,9 +30,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             this.brokenSyncPackagesStorage = brokenSyncPackagesStorage;
         }
 
-        public void ProcessNextSyncPackageBatchInParallel(int batchSize, int MaxDegreeOfParallelism = 1)
+        public void ProcessNextSyncPackageBatchInParallel(int batchSize, int maxDegreeOfParallelism)
         {
-
             var logkey = DateTime.Now.ToString("s");
 
             Stopwatch stopwatch = Stopwatch.StartNew();
@@ -43,69 +43,83 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 
             if (packagePathes.Count > 0)
             {
-                Parallel.ForEach(packagePathes,
+                Parallel.ForEach(packagePathes.Select((path, index) => new { path, index }),
                    new ParallelOptions
                    {
-                       MaxDegreeOfParallelism = MaxDegreeOfParallelism
+                       MaxDegreeOfParallelism = maxDegreeOfParallelism
                    },
-                   syncPackagePath => {
-                       Stopwatch innerwatch = Stopwatch.StartNew();
-
-                       IncomingSyncPackage syncPackage = null;
+                   x => 
+                   {
                        try
                        {
-                           syncPackage = this.incomingSyncPackagesQueue.GetSyncItem(syncPackagePath);
-
-                           this.logger.Info($"Sync_inner_{logkey}: Read {Path.GetFileName(syncPackagePath)}. Took {innerwatch.Elapsed:g}.");
-                           innerwatch.Restart();
-                       }
-                       catch (IncomingSyncPackageException e)
-                       {
-                           brokenSyncPackagesStorage.StoreUnhandledPackage(e.PathToPackage, e.InterviewId, e.InnerException);
-
-                           incomingSyncPackagesQueue.DeleteSyncItem(e.PathToPackage);
-                       }
-
-                       if (syncPackage == null)
-                       {
-                           return;
-                       }
-
-                       try
-                       {
-                           var command = new SynchronizeInterviewEventsCommand(syncPackage.InterviewId,
-                               syncPackage.ResponsibleId,
-                               syncPackage.QuestionnaireId,
-                               syncPackage.QuestionnaireVersion,
-                               syncPackage.EventsToSynchronize,
-                               syncPackage.InterviewStatus,
-                               syncPackage.CreatedOnClient);
-                           commandService.Execute(command, syncPackage.Origin);
-
-                           this.logger.Info($"Sync_inner_{logkey}: Executed command for {Path.GetFileName(syncPackagePath)}. Took {innerwatch.Elapsed:g}.");
-                           innerwatch.Restart();
+                           this.ProcessSinglePackage(x.path, $"#{x.index}_{logkey}");
                        }
                        catch (Exception e)
                        {
-                           logger.Error(
-                               $"package '{syncPackage.PathToPackage}' wasn't processed. Reason: '{e.Message}'",
-                               e);
-                           brokenSyncPackagesStorage.StoreUnhandledPackage(syncPackage.PathToPackage, syncPackage.InterviewId,
-                               e);
-
-                           this.logger.Info($"Sync_inner_{logkey}: Failed executed command for {Path.GetFileName(syncPackagePath)}. Took {innerwatch.Elapsed:g}.");
-                           innerwatch.Restart();
+                           this.logger.Error($"Failed to process package {x.path}.", e);
                        }
-
-                       incomingSyncPackagesQueue.DeleteSyncItem(syncPackage.PathToPackage);
-
-                       this.logger.Info($"Sync_inner_{logkey}: Deleted {Path.GetFileName(syncPackagePath)}. Took {innerwatch.Elapsed:g}.");
-                       innerwatch.Stop();
                    });
             }
 
             this.logger.Info($"Sync_{logkey}: Processed {packagePathes.Count} packages. Took {stopwatch.Elapsed:g}.");
-            stopwatch.Stop();
+        }
+
+        private void ProcessSinglePackage(string syncPackagePath, string logkey)
+        {
+            Stopwatch innerwatch = Stopwatch.StartNew();
+
+            IncomingSyncPackage syncPackage = null;
+            try
+            {
+                syncPackage = this.incomingSyncPackagesQueue.GetSyncItem(syncPackagePath);
+
+                this.logger.Info($"Sync_inner_{logkey}: Read {Path.GetFileName(syncPackagePath)}. Took {innerwatch.Elapsed:g}.");
+                innerwatch.Restart();
+            }
+            catch (IncomingSyncPackageException e)
+            {
+                this.brokenSyncPackagesStorage.StoreUnhandledPackage(e.PathToPackage, e.InterviewId, e.InnerException);
+
+                this.incomingSyncPackagesQueue.DeleteSyncItem(e.PathToPackage);
+            }
+
+            if (syncPackage == null)
+            {
+                return;
+            }
+
+            try
+            {
+                var command = new SynchronizeInterviewEventsCommand(syncPackage.InterviewId,
+                    syncPackage.ResponsibleId,
+                    syncPackage.QuestionnaireId,
+                    syncPackage.QuestionnaireVersion,
+                    syncPackage.EventsToSynchronize,
+                    syncPackage.InterviewStatus,
+                    syncPackage.CreatedOnClient);
+                this.commandService.Execute(command, syncPackage.Origin);
+
+                this.logger.Info(
+                    $"Sync_inner_{logkey}: Executed command for {Path.GetFileName(syncPackagePath)}. Took {innerwatch.Elapsed:g}.");
+                innerwatch.Restart();
+            }
+            catch (Exception e)
+            {
+                this.logger.Error(
+                    $"package '{syncPackage.PathToPackage}' wasn't processed. Reason: '{e.Message}'",
+                    e);
+                this.brokenSyncPackagesStorage.StoreUnhandledPackage(syncPackage.PathToPackage, syncPackage.InterviewId,
+                    e);
+
+                this.logger.Info(
+                    $"Sync_inner_{logkey}: Failed executed command for {Path.GetFileName(syncPackagePath)}. Took {innerwatch.Elapsed:g}.");
+                innerwatch.Restart();
+            }
+
+            this.incomingSyncPackagesQueue.DeleteSyncItem(syncPackage.PathToPackage);
+
+            this.logger.Info($"Sync_inner_{logkey}: Deleted {Path.GetFileName(syncPackagePath)}. Took {innerwatch.Elapsed:g}.");
+            innerwatch.Stop();
         }
     }
 }
