@@ -3,13 +3,10 @@ using System.Linq;
 using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
+namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
     internal class when_generating_assembly_and_questionnaire_has_error_in_expressions : CodeGenerationTestsContext
     {

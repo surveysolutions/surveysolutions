@@ -6,10 +6,10 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Designer.WebServices;
 using WB.UI.Shared.Web.Membership;
 using DownloadQuestionnaireRequest = WB.UI.Designer.WebServices.Questionnaire.DownloadQuestionnaireRequest;
+using QuestionnaireVersion = WB.Core.SharedKernels.DataCollection.QuestionnaireVersion;
 
 namespace WB.Tests.Unit.Applications.PublicServiceTests
 {
@@ -44,7 +44,8 @@ namespace WB.Tests.Unit.Applications.PublicServiceTests
                     new QuestionnaireVersion(
                         supportedExpressionsEngineVersion.Major,
                         supportedExpressionsEngineVersion.Minor,
-                        supportedExpressionsEngineVersion.Build),
+                        supportedExpressionsEngineVersion.Build
+                    ),
                 QuestionnaireId = questionnaireId
             };
         }

@@ -5,7 +5,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Services;
 
-namespace WB.Tests.Unit.BoundedContexts.Designer.CodeGenerationTests
+namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
     internal class when_generating_assembly_and_questionnaire_has_question_condition_containing_self : CodeGenerationTestsContext
     {

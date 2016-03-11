@@ -4,13 +4,10 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
-using Microsoft.Practices.ServiceLocation;
-using Moq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 
 namespace WB.Tests.Unit.BoundedContexts.Designer.QuestionnaireTests
 {
