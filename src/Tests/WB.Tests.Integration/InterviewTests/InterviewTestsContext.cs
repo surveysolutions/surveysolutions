@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.DataCollection.V6;
 using WB.Core.SharedKernels.DataCollection.V7;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using It = Moq.It;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Integration.InterviewTests
 {

@@ -135,7 +135,6 @@
     <Compile Include="Implementation\Services\DecimalToHeaderConverter.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\ReadSideHealthChecker.cs" />
     <Compile Include="Implementation\Services\Preloading\InterviewImportDataParsingService.cs" />
-    <Compile Include="Implementation\Services\JsonSerializerSettingsFactory.cs" />
     <Compile Include="Implementation\Services\QuestionnaireNameValidator.cs" />
     <Compile Include="Implementation\Services\InterviewAnswersCommandValidator.cs" />
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
