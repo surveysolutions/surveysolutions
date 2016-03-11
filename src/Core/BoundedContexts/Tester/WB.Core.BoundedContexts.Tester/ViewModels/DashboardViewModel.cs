@@ -370,7 +370,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                 await this.attachmentStorage.StoreAsync(attachmentMetadata);
 
-                var isExistsContent = await this.attachmentStorage.IsExistAttachmentContentAsync(attachmentId);
+                var isExistsContent = false;//await this.attachmentStorage.IsExistAttachmentContentAsync(attachmentContentId);
                 if (!isExistsContent)
                 {
                     var attachmentContent = await this.designerApiService.GetQuestionnaireAttachmentAsync(attachmentId,
@@ -381,7 +381,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                                         },
                                         token: this.tokenSource.Token);
 
-                    await this.attachmentStorage.StoreAttachmentContentAsync(attachmentId, attachmentContent);
+                    await this.attachmentStorage.StoreAttachmentContentAsync(attachmentContentId, attachmentContent);
                 }
             }
         }
