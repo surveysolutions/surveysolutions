@@ -142,7 +142,7 @@ namespace WB.Core.SharedKernels.DataCollection.V7
 
         public LinkedQuestionOptionsChanges ProcessLinkedQuestionFilters()
         {
-            throw new NotImplementedException();
+            throw new FilteredLinkedQuestionsNotImplementedException();
         }
 
         public IInterviewExpressionState Clone()
