@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 
@@ -20,14 +19,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
         private IPlainStorageAccessor<AttachmentContent> attachmentContentStorage => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<AttachmentContent>>();
         private IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<AttachmentMeta>>();
 
-
-        private readonly ISerializer serializer;
-
-        public AttachmentService(ISerializer serializer)
-        {
-            this.serializer = serializer;
-        }
-
         public void SaveAttachmentContent(Guid questionnaireId, Guid attachmentId, AttachmentType type, string contentType, byte[] binaryContent, string fileName)
         {
             var formattedAttachmentId = attachmentId.FormatGuid();
@@ -37,22 +28,26 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
             if (storedAttachmentMeta != null)
             {
-                var sameFileWasUploaded = hashOfBinaryContent == storedAttachmentMeta.AttachmentContentId;
+                var sameFileWasUploaded = hashOfBinaryContent == storedAttachmentMeta.AttachmentContentHash;
                 if (sameFileWasUploaded)
                     return;
 
-                oldHashOfBinaryContent = storedAttachmentMeta.AttachmentContentId;
+                oldHashOfBinaryContent = storedAttachmentMeta.AttachmentContentHash;
             }
 
-            var attachmentTypeSpecificMeta = BuildAttachmentMeta(type, binaryContent, fileName);
+            var attachmentDetails = BuildAttachmentMeta(type, binaryContent, fileName);
 
-            var countOfNewAttachmentContentReferences = this.attachmentMetaStorage.Query(_ => _.Count(x => x.AttachmentContentId == hashOfBinaryContent));
+            var countOfNewAttachmentContentReferences = this.attachmentMetaStorage.Query(_ => _.Count(x => x.AttachmentContentHash == hashOfBinaryContent));
             if (countOfNewAttachmentContentReferences == 0)
             {
                 var attachmentContent = new AttachmentContent
                 {
-                    AttachmentContentId = hashOfBinaryContent,
-                    Content = binaryContent
+                    AttachmentContentHash = hashOfBinaryContent,
+                    Content = binaryContent,
+                    Type = type,
+                    ContentType = contentType,
+                    Details = attachmentDetails,
+                    Size = binaryContent.LongLength
                 };
 
                 this.attachmentContentStorage.Store(attachmentContent, hashOfBinaryContent);
@@ -63,21 +58,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                 AttachmentId = formattedAttachmentId,
                 QuestionnaireId = questionnaireId.FormatGuid()
             };
-
-            attachmentMeta.Type = type;
-            attachmentMeta.ContentType = contentType;
-            attachmentMeta.LastUpdateDate = DateTime.Now;
-            attachmentMeta.Meta = attachmentTypeSpecificMeta;
+           
+            attachmentMeta.LastUpdateDate = DateTime.UtcNow;
             attachmentMeta.FileName = fileName;
-            attachmentMeta.Size = binaryContent.LongLength;
-            attachmentMeta.AttachmentContentId = hashOfBinaryContent;
+            attachmentMeta.AttachmentContentHash = hashOfBinaryContent;
 
             this.attachmentMetaStorage.Store(attachmentMeta, attachmentId);
 
             var attachmentHadContentBeforeThisUpload = !string.IsNullOrWhiteSpace(oldHashOfBinaryContent);
             if (attachmentHadContentBeforeThisUpload)
             {
-                var countOfOldAttachmentContentReferences = this.attachmentMetaStorage.Query(_ => _.Count(x => x.AttachmentContentId == oldHashOfBinaryContent));
+                var countOfOldAttachmentContentReferences = this.attachmentMetaStorage.Query(_ => _.Count(x => x.AttachmentContentHash == oldHashOfBinaryContent));
                 if (countOfOldAttachmentContentReferences == 0)
                 {
                     this.attachmentContentStorage.Remove(oldHashOfBinaryContent);
@@ -106,10 +97,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
             if (storedAttachmentMeta != null)
             {
-                var countOfAttachmentContentReferences = this.attachmentMetaStorage.Query(_ => _.Count(x => x.AttachmentContentId == storedAttachmentMeta.AttachmentContentId));
+                var countOfAttachmentContentReferences = this.attachmentMetaStorage.Query(_ => _.Count(x => x.AttachmentContentHash == storedAttachmentMeta.AttachmentContentHash));
                 if (countOfAttachmentContentReferences == 0)
                 {
-                    this.attachmentContentStorage.Remove(storedAttachmentMeta.AttachmentContentId);
+                    this.attachmentContentStorage.Remove(storedAttachmentMeta.AttachmentContentHash);
                 }
             }
         }
@@ -122,15 +113,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             if (meta == null)
                 return null;
 
-            var content = attachmentContentStorage.GetById(meta.AttachmentContentId);
+            var content = attachmentContentStorage.GetById(meta.AttachmentContentHash);
 
             return new QuestionnaireAttachment
             {
                 AttachmentId = formattedAttachmentId,
                 FileName = meta.FileName,
                 Content = content.Content,
-                AttachmentContentId = content.AttachmentContentId,
-                ContentType = meta.ContentType
+                AttachmentContentId = content.AttachmentContentHash,
+                ContentType = content.ContentType
             };
         }
 
@@ -142,16 +133,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                 .Select(x => new 
                 {
                     AttachmentId = Guid.Parse(x.AttachmentId),
-                    AttachmentContentId = x.AttachmentContentId,
-                    //ContentType = x.ContentType,
+                    AttachmentContentHash = x.AttachmentContentHash
                 })
                 .ToList());
            
             return attachmentsMeta.Select(x => new QuestionnaireAttachmentMeta
             {
                 AttachmentId = x.AttachmentId,
-                AttachmentContentId = x.AttachmentContentId,
-                //ContentType = x.ContentType,
+                AttachmentContentHash = x.AttachmentContentHash
             });
         }
 
@@ -162,16 +151,33 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                 .Where(x => x.QuestionnaireId == formattedQuestionnaireId)
                 .ToList());
 
-            var attachmentsForQuestionnaire = attachmentsMeta.Select(x => new AttachmentView
-            {
-                ItemId = x.AttachmentId,
-                Type = x.Type.ToString(),
-                Name = x.Name,
-                FileName = x.FileName,
-                SizeInBytes = x.Size,
-                LastUpdated = x.LastUpdateDate,
-                Meta = ParseAttachmentMeta(x.Type, x.Meta)
-            });
+            var hashes = attachmentsMeta.Select(x => x.AttachmentContentHash).ToHashSet();
+
+            var attachmentContentDetails = this.attachmentContentStorage.Query(_ => _
+                .Where(x => hashes.Contains(x.AttachmentContentHash))
+                .Select(x => new AttachmentContent
+                {
+                    AttachmentContentHash = x.AttachmentContentHash,
+                    Size = x.Size,
+                    Details = x.Details,
+                    Type = x.Type,
+                    ContentType = x.ContentType
+                })
+                .ToList());
+
+            var attachmentsForQuestionnaire = from meta in attachmentsMeta
+                                              join details in attachmentContentDetails on meta.AttachmentContentHash equals details.AttachmentContentHash
+                                              select new AttachmentView
+                                              {
+                                                  ItemId = meta.AttachmentId,
+                                                  Name = meta.Name,
+                                                  FileName = meta.FileName,
+                                                  LastUpdated = meta.LastUpdateDate,
+
+                                                  Type = details.Type.ToString(),
+                                                  SizeInBytes = details.Size,
+                                                  Details = details.Details
+                                              };
 
             return attachmentsForQuestionnaire;
         }
@@ -188,54 +194,43 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                 QuestionnaireId = newQuestionnaireId.FormatGuid(),
                 Name = storedAttachmentMeta.Name,
                 FileName = storedAttachmentMeta.FileName,
-                Size = storedAttachmentMeta.Size,
-                Meta = storedAttachmentMeta.Meta,
-                Type = storedAttachmentMeta.Type,
-                ContentType = storedAttachmentMeta.ContentType,
                 LastUpdateDate = storedAttachmentMeta.LastUpdateDate,
-                AttachmentContentId = storedAttachmentMeta.AttachmentContentId,
+                AttachmentContentHash = storedAttachmentMeta.AttachmentContentHash,
             };
             this.attachmentMetaStorage.Store(clonedAttachmentMeta, formattedNewAttachmentId);
         }
 
         private string GetHash(byte[] binaryContent)
         {
-            MD5 md5 = MD5.Create();
-            byte[] hash = md5.ComputeHash(binaryContent);
+            byte[] hash;
+            using (SHA1CryptoServiceProvider sha1 = new SHA1CryptoServiceProvider())
+            {
+                hash = sha1.ComputeHash(binaryContent);
+            }
             return BitConverter.ToString(hash).Replace("-", string.Empty);
         }
 
-        private object ParseAttachmentMeta(AttachmentType type, string meta)
+        private AttachmentDetails BuildAttachmentMeta(AttachmentType type, byte[] binaryContent, string fileName)
         {
             if (type == AttachmentType.Image)
             {
-                return this.serializer.Deserialize<ImageAttachmentMeta>(meta, TypeSerializationSettings.None);
+                return GetImageMeta(binaryContent, fileName);
             }
             return null;
         }
 
-        private string BuildAttachmentMeta(AttachmentType type, byte[] binaryContent, string fileName)
-        {
-            if (type == AttachmentType.Image)
-            {
-                var meta = GetImageMeta(binaryContent, fileName);
-                return this.serializer.Serialize(meta, TypeSerializationSettings.None);
-            }
-            return string.Empty;
-        }
-
-        public ImageAttachmentMeta GetImageMeta(byte[] binaryContent, string fileName)
+        public AttachmentDetails GetImageMeta(byte[] binaryContent, string fileName)
         {
             using (var stream = new MemoryStream(binaryContent))
             {
                 try
                 {
                     var image = Image.FromStream(stream);
-                    return new ImageAttachmentMeta
+                    return new AttachmentDetails
                     {
                         Height = image.Size.Height,
                         Width = image.Size.Height,
-                        Format = image.RawFormat
+                        Format = new ImageFormatConverter().ConvertToString(image.RawFormat)
                     };
                 }
                 catch (ArgumentException e)
