@@ -11,7 +11,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTests
 {
-    [Ignore]
+    [Ignore("temp parallelism test")]
     internal class when_enqueue_1000_files_and_then_get_length : IncomingPackagesQueueTestContext
     {
         Establish context = () =>
