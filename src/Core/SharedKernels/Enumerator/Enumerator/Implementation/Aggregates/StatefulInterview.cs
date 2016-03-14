@@ -582,7 +582,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public IEnumerable<BaseInterviewAnswer> FindAnswersOfReferencedQuestionForLinkedQuestion(Guid referencedQuestionId, Identity linkedQuestion)
         {
-            var linkedQuestionOptions = this.interviewState.LinkedQuestionOptions[ConversionHelper.ConvertIdentityToString(linkedQuestion)];
+            var stringKey = ConversionHelper.ConvertIdentityToString(linkedQuestion);
+            if (!this.interviewState.LinkedQuestionOptions.ContainsKey(stringKey))
+                return Enumerable.Empty<BaseInterviewAnswer>();
+
+            var linkedQuestionOptions = this.interviewState.LinkedQuestionOptions[stringKey];
 
             IEnumerable<Identity> targetQuestions =
                 linkedQuestionOptions.Select(x => new Identity(referencedQuestionId, x));
