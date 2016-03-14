@@ -61,7 +61,6 @@ namespace WB.UI.Designer.Api
         public string Attachment(Guid id)
         {
             return Convert.ToBase64String(attachmentService.GetAttachment(id).Content);
-            //return attachmentService.GetAttachment(id).Content;
         }
 
         [Route("{id:Guid}")]

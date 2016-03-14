@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content.PM;
 using MvvmCross.Droid.Views;
@@ -5,6 +6,8 @@ using MvvmCross.Platform;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.UI.Tester.Activities
 {
@@ -18,6 +21,8 @@ namespace WB.UI.Tester.Activities
 
         protected override async void TriggerFirstNavigate()
         {
+            await ClearAttachmentStorage();
+
             IPrincipal principal = Mvx.Resolve<IPrincipal>();
             IViewModelNavigationService viewModelNavigationService = Mvx.Resolve<IViewModelNavigationService>();
 
@@ -29,6 +34,15 @@ namespace WB.UI.Tester.Activities
             {
                 await viewModelNavigationService.NavigateToAsync<LoginViewModel>();
             }
+        }
+
+        private async Task ClearAttachmentStorage()
+        {
+            var attachmentMetadataRemover = Mvx.Resolve<IAsyncPlainStorageRemover<AttachmentMetadata>>();
+            await attachmentMetadataRemover.DeleteAllAsync();
+
+            var attachmentContentRemover = Mvx.Resolve<IAsyncPlainStorageRemover<AttachmentContent>>();
+            await attachmentContentRemover.DeleteAllAsync();
         }
     }
 }

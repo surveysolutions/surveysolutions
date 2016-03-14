@@ -11,11 +11,11 @@ using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelTests
 {
-    [Ignore("temp")]
     internal class when_initializing_entity_without_attachment : AttachmentViewModelTestContext
     {
         Establish context = () =>
@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
             var questionnaireMock = Mock.Of<IQuestionnaire>(_
-                => _.GetAttachmentIdForEntity(entityId) == null);
+                => _.GetAttachmentIdForEntity(entityId) == (Attachment)null);
             var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
             questionnaireRepository.SetReturnsDefault(questionnaireMock);
 
