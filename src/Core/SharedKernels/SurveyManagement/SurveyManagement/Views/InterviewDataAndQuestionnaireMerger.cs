@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views
 {
@@ -40,7 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             }
         }
 
-        public InterviewDetailsView Merge(InterviewData interview, IQuestionnaireDocument questionnaire, UserLight responsible)
+        public InterviewDetailsView Merge(InterviewData interview, IQuestionnaireDocument questionnaire, UserLight responsible, InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)
         {
             questionnaire.ConnectChildrenWithParent();
             
@@ -74,7 +75,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                                 depth: currentGroup.Value,
                                 interviewLevel: rosterGroup.Value,
                                 upperInterviewLevels: new List<InterviewLevel>() {rootLevel},
-                                interviewInfo: interviewInfo);
+                                interviewInfo: interviewInfo,
+                                interviewLinkedQuestionOptions: interviewLinkedQuestionOptions);
 
                             interviewGroups.AddRange(completedRosterGroups);
                         }
@@ -87,7 +89,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                             depth:  currentGroup.Value,
                             interviewLevel: rootLevel,
                             upperInterviewLevels: new List<InterviewLevel>(), 
-                            interviewInfo: interviewInfo));
+                            interviewInfo: interviewInfo,
+                            interviewLinkedQuestionOptions: interviewLinkedQuestionOptions));
 
                     foreach (var group in currentGroup.Key.Children.OfType<IGroup>().Reverse())
                     {
@@ -124,11 +127,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
         }
 
         private IEnumerable<InterviewGroupView> GetCompletedRosterGroups(IGroup currentGroup, int depth, InterviewLevel interviewLevel,
-            List<InterviewLevel> upperInterviewLevels, InterviewInfoInternal interviewInfo)
+            List<InterviewLevel> upperInterviewLevels, InterviewInfoInternal interviewInfo,
+            InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)
         {
             var result = new List<InterviewGroupView>
             {
-                this.GetCompletedGroup(currentGroup, depth, interviewLevel, upperInterviewLevels, interviewInfo)
+                this.GetCompletedGroup(currentGroup, depth, interviewLevel, upperInterviewLevels, interviewInfo,interviewLinkedQuestionOptions)
             };
 
             foreach (var nestedGroup in currentGroup.Children.OfType<IGroup>())
@@ -146,7 +150,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                         foreach (var rosterGroup in rosterLevels)
                         {
                             var completedRosterGroups = this.GetCompletedRosterGroups(nestedGroup, depth + 1,
-                                rosterGroup.Value, upperInterviewLevels.Union(new[] {interviewLevel}).ToList(), interviewInfo);
+                                rosterGroup.Value, upperInterviewLevels.Union(new[] {interviewLevel}).ToList(), interviewInfo, interviewLinkedQuestionOptions);
 
                             result.AddRange(completedRosterGroups);
                         }
@@ -154,7 +158,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                 }
                 else
                 {
-                    result.AddRange(GetCompletedRosterGroups(nestedGroup, depth + 1, interviewLevel, upperInterviewLevels, interviewInfo));    
+                    result.AddRange(GetCompletedRosterGroups(nestedGroup, depth + 1, interviewLevel, upperInterviewLevels, interviewInfo, interviewLinkedQuestionOptions));    
                 }
                 
             }
@@ -166,7 +170,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             int depth, 
             InterviewLevel interviewLevel, 
             List<InterviewLevel> upperInterviewLevels,
-            InterviewInfoInternal interviewInfo)
+            InterviewInfoInternal interviewInfo,
+            InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)
         {
             Guid nearestParentRosterId = GetNearestParentRosterId(interviewInfo.Questionnaire, currentGroup.PublicKey);
             var rosterTitleFromLevel = interviewLevel.RosterRowTitles.ContainsKey(nearestParentRosterId)
@@ -195,19 +200,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                 {
                     var answeredQuestion = interviewLevel.QuestionsSearchCache.ContainsKey(question.PublicKey) ? interviewLevel.QuestionsSearchCache[question.PublicKey] : null;
 
-                    var answersForTitleSubstitution = GetAnswersForTitleSubstitution(question, interviewLevel, upperInterviewLevels, rosterTitleFromLevel, interviewInfo);
+                    var answersForTitleSubstitution = GetAnswersForTitleSubstitution(question, interviewLevel, upperInterviewLevels, rosterTitleFromLevel, interviewInfo, interviewLinkedQuestionOptions);
 
                     bool isQuestionsParentGroupDisabled = interviewLevel.DisabledGroups != null && IsQuestionParentGroupDisabled(disabledGroups, currentGroup);
 
                     if (question.LinkedToQuestionId.HasValue)
                         interviewEntity = new InterviewLinkedQuestionView(question, answeredQuestion,
                             answersForTitleSubstitution,
-                            GetAvailableOptions(question, interviewLevel.RosterVector, interviewInfo),
+                            GetAvailableOptions(question, interviewLevel.RosterVector, interviewInfo, interviewLinkedQuestionOptions),
                             isQuestionsParentGroupDisabled, interviewLevel.RosterVector, interviewInfo.Interview.Status);
                     else if (question.LinkedToRosterId.HasValue)
                         interviewEntity = new InterviewLinkedQuestionView(question, answeredQuestion,
                             answersForTitleSubstitution,
-                            GetAvailableOptionsForQuestionLinkedOnRoster(question, interviewLevel.RosterVector, interviewInfo),
+                            GetAvailableOptionsForQuestionLinkedOnRoster(question, interviewLevel.RosterVector, interviewInfo, interviewLinkedQuestionOptions),
                             isQuestionsParentGroupDisabled, interviewLevel.RosterVector, interviewInfo.Interview.Status);
                     else
                         interviewEntity = new InterviewQuestionView(question,
@@ -236,20 +241,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             InterviewLevel currentInterviewLevel, 
             List<InterviewLevel> upperInterviewLevels, 
             string rosterTitle, 
-            InterviewInfoInternal interviewInfo)
+            InterviewInfoInternal interviewInfo, InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)
         {
             return question.GetVariablesUsedInTitle()
                 .Select(variableName => new
                 {
                     Variable = variableName,
-                    Answer = this.GetAnswerForTitleSubstitution(variableName, currentInterviewLevel, upperInterviewLevels, rosterTitle, interviewInfo),
+                    Answer = this.GetAnswerForTitleSubstitution(variableName, currentInterviewLevel, upperInterviewLevels, rosterTitle, interviewInfo, interviewLinkedQuestionOptions),
                 })
                 .Where(x => x.Answer != null)
                 .ToDictionary(x => x.Variable, x => x.Answer);
         }
 
         private string GetAnswerForTitleSubstitution(string variableName, 
-            InterviewLevel currentInterviewLevel, List<InterviewLevel> upperInterviewLevels, string rosterTitle, InterviewInfoInternal interviewInfo)
+            InterviewLevel currentInterviewLevel, List<InterviewLevel> upperInterviewLevels, string rosterTitle, InterviewInfoInternal interviewInfo, InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)
         {
             if (variableName == this.substitutionService.RosterTitleSubstitutionReference)
             {
@@ -271,10 +276,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             if (interviewQuestion.IsDisabled())
                 return null;
 
-            return GetFormattedAnswerForTitleSubstitution(interviewQuestion, interviewInfo);
+            return GetFormattedAnswerForTitleSubstitution(interviewQuestion, interviewInfo, interviewLinkedQuestionOptions);
         }
 
-        private string GetFormattedAnswerForTitleSubstitution(InterviewQuestion interviewQuestion, InterviewInfoInternal interviewInfo)
+        private string GetFormattedAnswerForTitleSubstitution(InterviewQuestion interviewQuestion, InterviewInfoInternal interviewInfo, InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)
         {
             if (interviewQuestion.Answer == null)
                 return null;
@@ -306,8 +311,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                     decimal[] selectedRosterVector = ((IEnumerable) interviewQuestion.Answer).OfType<decimal>().ToArray();
 
                     Dictionary<decimal[], string> availableOptions = question.LinkedToQuestionId.HasValue
-                        ? GetAvailableOptions(question, selectedRosterVector, interviewInfo)
-                        : GetAvailableOptionsForQuestionLinkedOnRoster(question, selectedRosterVector, interviewInfo);
+                        ? GetAvailableOptions(question, selectedRosterVector, interviewInfo, interviewLinkedQuestionOptions)
+                        : GetAvailableOptionsForQuestionLinkedOnRoster(question, selectedRosterVector, interviewInfo, interviewLinkedQuestionOptions);
 
                     KeyValuePair<decimal[], string> selectedOption = availableOptions.SingleOrDefault(option => option.Key.SequenceEqual(selectedRosterVector));
 
@@ -329,31 +334,82 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             return currentInterviewLevel.QuestionsSearchCache.ContainsKey(questionId)? currentInterviewLevel.QuestionsSearchCache[questionId] : null;
         }
 
-        private Dictionary<decimal[], string> GetAvailableOptions(IQuestion questionId, decimal[] questionRosterVector, InterviewInfoInternal interviewInfo)
+        private Dictionary<decimal[], string> GetAvailableOptions(IQuestion questionId, decimal[] questionRosterVector, InterviewInfoInternal interviewInfo, InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)
         {
             var referencedQuestion = interviewInfo.Questionnaire.Find<IQuestion>(questionId.LinkedToQuestionId.Value);
             var referencedRosterScope = GetRosterSizeSourcesForEntity(referencedQuestion);
             var linkedQuestionRosterScope = GetRosterSizeSourcesForEntity(questionId);
 
-            IEnumerable<InterviewLevel> allAvailableLevelsByScope = GetAllAvailableLevelsByScope(interviewInfo.Interview, questionRosterVector, referencedRosterScope, linkedQuestionRosterScope);
+            var questionStringKey=new Identity(questionId.PublicKey, questionRosterVector).ToString();
 
-            IDictionary<decimal[], InterviewQuestion> allLinkedQuestions =
-                allAvailableLevelsByScope.ToDictionary(interviewLevel => interviewLevel.RosterVector,
-                interviewLevel => interviewLevel.QuestionsSearchCache.ContainsKey(referencedQuestion.PublicKey) ?interviewLevel.QuestionsSearchCache[referencedQuestion.PublicKey] : null);
+            IDictionary<RosterVector, InterviewQuestion> allLinkedQuestions = null;
+
+            if (interviewLinkedQuestionOptions!=null && interviewLinkedQuestionOptions.LinkedQuestionOptions.ContainsKey(questionStringKey))
+            {
+                var options = interviewLinkedQuestionOptions.LinkedQuestionOptions[questionStringKey];
+
+                allLinkedQuestions = options.ToDictionary(option => option,
+                    option =>
+                    {
+                        var interviewLevel= interviewInfo.Interview.Levels.Values.FirstOrDefault(
+                            x =>
+                                x.RosterVector.SequenceEqual(option) &&
+                                x.ScopeVectors.ContainsKey(referencedRosterScope));
+                        if (interviewLevel == null)
+                            return null;
+                        return interviewLevel.QuestionsSearchCache.ContainsKey(referencedQuestion.PublicKey)
+                            ? interviewLevel.QuestionsSearchCache[referencedQuestion.PublicKey]
+                            : null;
+
+                    });
+            }
+            else
+            {
+
+                IEnumerable<InterviewLevel> allAvailableLevelsByScope =
+                    GetAllAvailableLevelsByScope(interviewInfo.Interview, questionRosterVector, referencedRosterScope,
+                        linkedQuestionRosterScope);
+
+                allLinkedQuestions =
+                    allAvailableLevelsByScope.ToDictionary(interviewLevel => new RosterVector(interviewLevel.RosterVector),
+                        interviewLevel =>
+                            interviewLevel.QuestionsSearchCache.ContainsKey(referencedQuestion.PublicKey)
+                                ? interviewLevel.QuestionsSearchCache[referencedQuestion.PublicKey]
+                                : null);
+            }
 
             return allLinkedQuestions.Where(question => question.Value != null && !question.Value.IsDisabled() && question.Value.Answer != null)
-                .ToDictionary(question => question.Key,
+                .ToDictionary(question => question.Key.ToArray(),
                     question => CreateLinkedQuestionOption(question.Value.Answer.ToString(), question.Key, questionRosterVector, referencedRosterScope, linkedQuestionRosterScope, interviewInfo));
         }
 
-        private Dictionary<decimal[], string> GetAvailableOptionsForQuestionLinkedOnRoster(IQuestion question, decimal[] questionRosterVector, InterviewInfoInternal interviewInfo)
+        private Dictionary<decimal[], string> GetAvailableOptionsForQuestionLinkedOnRoster(IQuestion question, decimal[] questionRosterVector, InterviewInfoInternal interviewInfo, InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)
         {
             var referencedRoster = interviewInfo.Questionnaire.Find<IGroup>(question.LinkedToRosterId.Value);
             var referencedRosterScope = GetRosterSizeSourcesForEntity(referencedRoster);
             var linkedQuestionRosterScope = GetRosterSizeSourcesForEntity(question);
-            IEnumerable<InterviewLevel> allAvailableLevelsByScope = GetAllAvailableLevelsByScope(
-                interviewInfo.Interview, questionRosterVector, referencedRosterScope, linkedQuestionRosterScope);
-            
+
+            var questionStringKey = new Identity(question.PublicKey, questionRosterVector).ToString();
+
+            IEnumerable<InterviewLevel> allAvailableLevelsByScope = null;
+            if (interviewLinkedQuestionOptions != null &&  interviewLinkedQuestionOptions.LinkedQuestionOptions.ContainsKey(questionStringKey))
+            {
+                var options = interviewLinkedQuestionOptions.LinkedQuestionOptions[questionStringKey];
+
+                allAvailableLevelsByScope = options.Select(option =>
+                {
+                    return interviewInfo.Interview.Levels.Values.FirstOrDefault(
+                        x =>
+                            x.RosterVector.SequenceEqual(option) &&
+                            x.ScopeVectors.ContainsKey(referencedRosterScope));
+                });
+            }
+            else
+            {
+                allAvailableLevelsByScope= GetAllAvailableLevelsByScope(
+                    interviewInfo.Interview, questionRosterVector, referencedRosterScope, linkedQuestionRosterScope);
+            }
+
             return
                 allAvailableLevelsByScope.ToDictionary(interviewLevel => interviewLevel.RosterVector,
                     interviewLevel => CreateLinkedQuestionOption(

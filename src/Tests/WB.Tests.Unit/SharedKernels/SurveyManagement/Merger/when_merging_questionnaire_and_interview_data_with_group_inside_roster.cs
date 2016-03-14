@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight());
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null);
 
         It should_create_6_group_screens = () =>
             mergeResult.Groups.Count.ShouldEqual(6);

@@ -122,6 +122,7 @@
     <Compile Include="Commands\ImportFromDesigner.cs" />
     <Compile Include="Commands\QuestionnaireCommand.cs" />
     <Compile Include="Commands\RegisterPlainQuestionnaire.cs" />
+    <Compile Include="EventHandler\LinkedOptionsDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireQuestionsInfo.cs" />
     <Compile Include="EventHandler\InterviewExportedCommentariesDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewReferencesDenormalizer.cs" />
@@ -335,6 +336,7 @@
     <Compile Include="Views\Interview\InterviewBrief.cs" />
     <Compile Include="Views\Interview\InterviewCommentedStatus.cs" />
     <Compile Include="Views\Interview\InterviewData.cs" />
+    <Compile Include="Views\Interview\InterviewLinkedQuestionOptions.cs" />
     <Compile Include="Views\Interview\InterviewReferences.cs" />
     <Compile Include="Views\Interview\InterviewDetailsInputModel.cs" />
     <Compile Include="Views\Interview\InterviewDetailsViewFactory.cs" />

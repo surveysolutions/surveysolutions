@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight());
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null);
 
         It should_question_be_disabled = () =>
             ((InterviewQuestionView)mergeResult.Groups.FirstOrDefault(g => g.Id == nestedGroupId).Entities[0]).IsEnabled.ShouldEqual(false);
