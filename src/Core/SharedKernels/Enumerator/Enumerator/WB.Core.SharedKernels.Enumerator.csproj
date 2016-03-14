@@ -117,6 +117,7 @@
     <Compile Include="Services\Infrastructure\IUserIdentity.cs" />
     <Compile Include="Services\Infrastructure\QRBarcodeScanResult.cs" />
     <Compile Include="Services\Infrastructure\Storage\IAsyncPlainStorage.cs" />
+    <Compile Include="Services\Infrastructure\Storage\IAsyncPlainStorageRemover.cs" />
     <Compile Include="Services\Infrastructure\Storage\IPlainStorageEntity.cs" />
     <Compile Include="Services\IRosterTitleSubstitutionService.cs" />
     <Compile Include="Implementation\Services\RosterTitleSubstitutionService.cs" />

@@ -11,19 +11,21 @@ using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelTests
 {
-    [Ignore("temp")]
     internal class when_initializing_entity_with_attachment : AttachmentViewModelTestContext
     {
         Establish context = () =>
         {
             entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var attachmentId = "aaaa";
+            var attachmentContentId = "cccccc";
             var attachment = new Attachment();
+            var attachmentMetadata = new AttachmentMetadata() { AttachmentContentId = attachmentContentId };
 
             var questionnaireMock = Mock.Of<IQuestionnaire>(_
                 => _.GetAttachmentIdForEntity(entityId) == attachment);
@@ -34,10 +36,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
             interviewRepository.SetReturnsDefault(interview);
 
-            //attachmentMetadata = Mock.Of<Attachment>(a => a.Type == AttachmentContentType.Image);
             attachmentContent = new byte[]{ 1, 2, 3 };
             var attachmentStorage = Mock.Of<IQuestionnaireAttachmentStorage>(s =>
-                /*&&*/ s.GetAttachmentContentAsync(attachmentId) == Task.FromResult(attachmentContent));
+                s.GetAttachmentAsync(attachmentId) == Task.FromResult(attachmentMetadata)
+                && s.GetAttachmentContentAsync(attachmentContentId) == Task.FromResult(attachmentContent));
 
             viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository.Object, attachmentStorage);
         };
@@ -50,7 +52,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
 
         static AttachmentViewModel viewModel;
         private static Guid entityId;
-        //private static Attachment attachmentMetadata;
         private static byte[] attachmentContent;
     }
 }

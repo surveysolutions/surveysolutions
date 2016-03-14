@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.Enumerator.Repositories
         Task StoreAttachmentContentAsync(string attachmentId, byte[] attachmentData);
         Task StoreAsync(AttachmentMetadata attachmentMetadata);
         Task<AttachmentMetadata> GetAttachmentAsync(string attachmentId);
-        Task<byte[]> GetAttachmentContentAsync(string attachmentId);
-        Task<bool> IsExistAttachmentContentAsync(string attachmentId);
+        Task<byte[]> GetAttachmentContentAsync(string attachmentContentId);
+        Task<bool> IsExistAttachmentContentAsync(string attachmentContentId);
     }
 }

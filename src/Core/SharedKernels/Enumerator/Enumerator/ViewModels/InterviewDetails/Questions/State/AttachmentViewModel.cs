@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
@@ -19,7 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireAttachmentStorage attachmentStorage;
 
-        //private AttachmentMetadata attachmentMetadata;
+        private AttachmentMetadata attachmentMetadata;
 
         public AttachmentViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,
@@ -44,14 +45,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (attachment != null)
             {
-                //this.attachmentMetadata = await this.attachmentStorage.GetAttachmentAsync(attachmentId);
-                this.AttachmentContent = await this.attachmentStorage.GetAttachmentContentAsync(attachment.AttachmentId.FormatGuid());
+                this.attachmentMetadata = await this.attachmentStorage.GetAttachmentAsync(attachment.AttachmentId.FormatGuid());
+                this.AttachmentContent = await this.attachmentStorage.GetAttachmentContentAsync(attachmentMetadata.AttachmentContentId);
             }
         }
 
         public bool IsImage
         {
-            get { return this.AttachmentContent != null /*&& this.attachment.FileName.Contains(".jpg")*/; }
+            get { return this.attachmentMetadata != null /*&& this.attachmentMetadata.ContentType.Contains(".jpg")*/; }
         }
 
         public byte[] AttachmentContent { get; set; }
