@@ -28,6 +28,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class SingleOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel,
+        ILiteEventHandler<AnswersRemoved>,
+        ILiteEventHandler<AnswerRemoved>,
         ILiteEventHandler<LinkedOptionsChanged>,
         IDisposable
     {
@@ -198,6 +200,32 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
 
                 this.QuestionState.Validity.ProcessException(ex);
+            }
+        }
+
+
+        public void Handle(AnswersRemoved @event)
+        {
+            foreach (var question in @event.Questions)
+            {
+                if (this.Identity.Equals(question.Id, question.RosterVector))
+                {
+                    foreach (var option in this.Options.Where(option => option.Selected))
+                    {
+                        option.Selected = false;
+                    }
+                }
+            }
+        }
+
+        public void Handle(AnswerRemoved @event)
+        {
+            if (this.Identity.Equals(@event.QuestionId, @event.RosterVector))
+            {
+                foreach (var option in this.Options.Where(option => option.Selected))
+                {
+                    option.Selected = false;
+                }
             }
         }
 

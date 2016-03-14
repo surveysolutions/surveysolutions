@@ -149,7 +149,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 InvokeOnMainThread(() =>
                 {
-                    this.QuestionState.IsAnswered = false;
                     this.ResetTextInEditor = string.Empty;
                     this.DefaultText = null;
                 });
