@@ -103,7 +103,6 @@ namespace WB.UI.Designer.Api
                         updateAttachment.AttachmentFileName);
                 }
                 this.attachmentService.UpdateAttachmentName(updateAttachment.QuestionnaireId, updateAttachment.AttachmentId, updateAttachment.AttachmentName);
-
             }
             catch (FormatException e)
             {
