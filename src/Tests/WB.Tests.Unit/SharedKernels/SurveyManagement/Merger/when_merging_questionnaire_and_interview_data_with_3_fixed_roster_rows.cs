@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight());
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null);
 
         It should_return_3_fixed_roster_rows = () =>
             mergeResult.Groups.Count(g => g.Id==rosterId).ShouldEqual(3);
