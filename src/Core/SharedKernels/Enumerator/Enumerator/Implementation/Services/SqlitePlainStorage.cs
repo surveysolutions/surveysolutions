@@ -14,7 +14,8 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    public class SqlitePlainStorage<TEntity> : IAsyncPlainStorage<TEntity> where TEntity: class, IPlainStorageEntity
+    public class SqlitePlainStorage<TEntity> : IAsyncPlainStorage<TEntity>, IAsyncPlainStorageRemover<TEntity>
+        where TEntity: class, IPlainStorageEntity
     {
         protected readonly SQLiteAsyncConnection asyncStorage;
         protected readonly SQLiteConnectionWithLock storage;
@@ -144,6 +145,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             TResult result = default(TResult);
             await this.asyncStorage.RunInTransactionAsync(connection => result = function.Invoke(connection.Table<TEntity>()));
             return result;
+        }
+
+        public async Task DeleteAllAsync()
+        {
+            await this.asyncStorage.DeleteAllAsync<TEntity>();
         }
 
         public void Dispose()

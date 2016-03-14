@@ -39,13 +39,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             return Task.FromResult(this.attachmentMetadataRepository.GetById(attachmentId));
         }
 
-        public Task<byte[]> GetAttachmentContentAsync(string attachmentId)
+        public Task<byte[]> GetAttachmentContentAsync(string attachmentContentId)
         {
-            var attachmentMetadata = this.attachmentMetadataRepository.GetById(attachmentId);
-            if (attachmentMetadata == null)
-                return null;
-
-            var attachmentContent = this.attachmentContentRepository.GetById(attachmentMetadata.AttachmentContentId);
+            var attachmentContent = this.attachmentContentRepository.GetById(attachmentContentId);
             if (attachmentContent == null)
                 return null;
             return Task.FromResult(attachmentContent.Content);
@@ -57,10 +53,5 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             var fileExists = attachmentContent != null;
             return Task.FromResult(fileExists);
         }
-
-//        public Task Clear()
-//        {
-//            attachmentMetadataRepository.RemoveAsync()
-//        }
     }
 }
