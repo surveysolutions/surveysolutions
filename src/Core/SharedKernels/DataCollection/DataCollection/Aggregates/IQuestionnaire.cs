@@ -37,6 +37,10 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsQuestionLinked(Guid questionId);
 
+        Guid[] GetQuestionsLinkedOnRoster();
+
+        Guid[] GetQuestionsLinkedOnQuestion();
+
         Guid GetQuestionIdByVariable(string variable);
 
         string GetQuestionTitle(Guid questionId);
