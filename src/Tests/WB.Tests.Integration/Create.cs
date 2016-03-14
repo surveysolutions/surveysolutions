@@ -265,7 +265,9 @@ namespace WB.Tests.Integration
             };
         }
 
-        public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = null, string enablementCondition = null, 
+        public static NumericQuestion NumericIntegerQuestion(Guid? id = null, 
+            string variable = null,
+            string enablementCondition = null, 
             string validationExpression = null)
         {
             return new NumericQuestion
