@@ -2126,7 +2126,6 @@ namespace WB.Tests.Unit
                 Stub.MvxMainThreadDispatcher(),
                 questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
                 answering ?? Mock.Of<AnsweringViewModel>(),
-                Mock.Of<AnswerNotifier>(),
                 Mock.Of<IPlainQuestionnaireRepository>());
         }
 

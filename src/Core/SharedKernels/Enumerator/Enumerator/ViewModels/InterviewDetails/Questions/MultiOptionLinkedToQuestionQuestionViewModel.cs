@@ -19,7 +19,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class MultiOptionLinkedToQuestionQuestionViewModel : MultiOptionLinkedQuestionViewModel,
         ILiteEventHandler<LinkedOptionsChanged>
     {
-        private readonly AnswerNotifier answerNotifier;
         private readonly IAnswerToStringService answerToStringService;
         private Guid linkedToQuestionId;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
@@ -28,7 +27,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public MultiOptionLinkedToQuestionQuestionViewModel(
             QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState,
             AnsweringViewModel answering,
-            AnswerNotifier answerNotifier,
             IStatefulInterviewRepository interviewRepository,
             IAnswerToStringService answerToStringService,
             IPlainQuestionnaireRepository questionnaireStorage,
@@ -39,7 +37,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 questionState, answering, interviewRepository, questionnaireStorage, userIdentity, eventRegistry,
                 mainThreadDispatcher)
         {
-            this.answerNotifier = answerNotifier;
             this.answerToStringService = answerToStringService;
             this.questionnaireRepository = questionnaireRepository;
         }
@@ -49,8 +46,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.maxAllowedAnswers = questionnaire.GetMaxSelectedAnswerOptions(questionIdentity.Id);
             this.areAnswersOrdered = questionnaire.ShouldQuestionRecordAnswersOrder(questionIdentity.Id);
             this.linkedToQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(questionIdentity.Id);
-
-            this.answerNotifier.Init(this.interviewId.FormatGuid(), this.linkedToQuestionId);
         }
 
         protected override IEnumerable<MultiOptionLinkedQuestionOptionViewModel> CreateOptions()
