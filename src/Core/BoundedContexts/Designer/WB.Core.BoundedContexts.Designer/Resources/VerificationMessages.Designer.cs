@@ -151,11 +151,38 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Linked question filter expression has length more than 10,000 characters..
+        /// </summary>
+        internal static string WB00108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters {
+            get {
+                return ResourceManager.GetString("WB00108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Categorical linked question cannot be used in linked question filter expression..
+        /// </summary>
+        internal static string WB00109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion {
+            get {
+                return ResourceManager.GetString("WB00109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Linked question references a nonexistent question..
         /// </summary>
         internal static string WB0011_LinkedQuestionReferencesNotExistingQuestion {
             get {
                 return ResourceManager.GetString("WB0011_LinkedQuestionReferencesNotExistingQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter expression has a syntax error..
+        /// </summary>
+        internal static string WB00110_LinkedQuestionFilterExpresssionHasIncorrectSyntax {
+            get {
+                return ResourceManager.GetString("WB00110_LinkedQuestionFilterExpresssionHasIncorrectSyntax", resourceCulture);
             }
         }
         

@@ -464,7 +464,7 @@
   </data>
   <data name="WB0206_FewSectionsManyQuestions" xml:space="preserve">
     <value>Questionnaire contains more than 100 questions but only one or two sections. Group questions into sections to simplify navigation and improve performance.</value>
-    </data>
+  </data>
   <data name="WB0212_LongValidationCondition" xml:space="preserve">
     <value>Validation condition #{0} is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList()).</value>
   </data>
@@ -473,5 +473,14 @@
   </data>
   <data name="WB0208_MoreThan50PercentsNumericQuestionsWithoutValidationConditions" xml:space="preserve">
     <value>Most numeric questions can have validation conditions. Add validation conditions to improve data quality.</value>
+  </data>
+  <data name="WB00108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>Linked question filter expression has length more than 10,000 characters.</value>
+  </data>
+  <data name="WB00109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion" xml:space="preserve">
+    <value>Categorical linked question cannot be used in linked question filter expression.</value>
+  </data>
+  <data name="WB00110_LinkedQuestionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+    <value>Filter expression has a syntax error.</value>
   </data>
 </root>

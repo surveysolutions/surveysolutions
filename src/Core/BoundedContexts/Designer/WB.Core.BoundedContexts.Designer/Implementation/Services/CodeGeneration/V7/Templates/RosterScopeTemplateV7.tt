@@ -50,7 +50,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV7<
 	foreach (var linkedQuestionFilterExpression in Model.LinkedQuestionFilterExpressions) 
     {
 #>
-LinkedQuestionFilters.Add(Guid.Parse("<#= linkedQuestionFilterExpression.LinkedQuestionId#>"), <#= linkedQuestionFilterExpression.FilterForLinkedQuestionMethodName#>);		                      
+    LinkedQuestionFilters.Add(IdOf.<#=linkedQuestionFilterExpression.LinkedQuestionVariableName#>, <#= linkedQuestionFilterExpression.FilterForLinkedQuestionMethodName#>);		                      
 <#
 	}
 #>
@@ -78,17 +78,6 @@ LinkedQuestionFilters.Add(Guid.Parse("<#= linkedQuestionFilterExpression.LinkedQ
 		this.@rowname = rosterRowName;
 	}
 
-<#
-	foreach (var linkedQuestionFilterExpression in Model.LinkedQuestionFilterExpressions) 
-    {
-#>
-		public bool <#= linkedQuestionFilterExpression.FilterForLinkedQuestionMethodName#>(){
-		
-		return <#= linkedQuestionFilterExpression.FilterExpression#>;}
-		                      
-<#
-	}
-#>
 
 	public RosterRowList<<#=this.Model.TypeName#>> @roster
 	{
