@@ -100,7 +100,7 @@
     </Compile>
     <Compile Include="QueryableExtensions.cs" />
     <Compile Include="RosterVectorUtils.cs" />
-    <Compile Include="Services\DecompressionHandler.cs" />
+    <Compile Include="Services\ICompressor.cs" />
     <Compile Include="Services\IJsonSerializerSettingsFactory.cs" />
     <Compile Include="Services\ILoggerProvider.cs" />
     <Compile Include="Services\ISerializer.cs" />
