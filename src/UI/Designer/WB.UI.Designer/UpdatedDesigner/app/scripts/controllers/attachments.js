@@ -30,10 +30,10 @@
                 attachment.name = attachmentDto.name;
                 attachment.fileName = attachmentDto.fileName;
 
-                if (!_.isUndefined(attachmentDto.meta) && !_.isNull(attachmentDto.meta)) {
-                    attachment.format = attachmentDto.meta.format;
-                    attachment.height = attachmentDto.meta.height;
-                    attachment.width = attachmentDto.meta.width;
+                if (!_.isUndefined(attachmentDto.details) && !_.isNull(attachmentDto.details)) {
+                    attachment.format = attachmentDto.details.format;
+                    attachment.height = attachmentDto.details.height;
+                    attachment.width = attachmentDto.details.width;
                 }
 
                 attachment.lastUpdated = attachmentDto.lastUpdated;
