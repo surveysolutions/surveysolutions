@@ -82,6 +82,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             public bool HasExceededLimitByValidationExpresssionCharactersLength { get; set; }
             public bool HasExceededLimitByConditionExpresssionCharactersLength { get; set; }
+            public bool HasExceededLimitByLinkedQuestionFilterExpressionCharactersLength { get; set; }
         }
 
         private struct EntityVerificationResult<TReferencedEntity>
@@ -192,6 +193,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier(QuestionnaireTitleHasInvalidCharacters, "WB0097", VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
             Verifier(QuestionnaireHasSizeMoreThan5MB, "WB0098", size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size)),
             Verifier<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10),
+            Verifier<IQuestion>(LinkedQuestionFilterExpressionHasLengthMoreThan10000Characters, "WB0108", VerificationMessages.WB00108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters),
+            Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInFilterExpression, "WB0109", VerificationMessages.WB00109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion),
             Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationConditionIsTooLong, "WB0104", index => string.Format(VerificationMessages.WB0104_ValidationConditionIsTooLong, index)),
             Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationMessageIsTooLong, "WB0105", index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index)),
             Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationConditionIsEmpty, "WB0106", index => string.Format(VerificationMessages.WB0106_ValidationConditionIsEmpty, index)),
@@ -307,6 +310,23 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return exceeded;
         }
 
+        private bool LinkedQuestionFilterExpressionHasLengthMoreThan10000Characters(IQuestion question, VerificationState state, ReadOnlyQuestionnaireDocument questionnaire)
+        {
+            if (!(question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue))
+                return false;
+            
+            if (string.IsNullOrEmpty(question.LinkedFilterExpression))
+                return false;
+
+            var substituteMacroses = this.macrosSubstitutionService.InlineMacros(question.LinkedFilterExpression, questionnaire.Macros.Values);
+
+            var exceeded = substituteMacroses.Length > MaxExpressionLength;
+
+            state.HasExceededLimitByLinkedQuestionFilterExpressionCharactersLength |= exceeded;
+
+            return exceeded;
+        }
+
         private static bool CascadingQuestionHasValidationExpresssion(SingleQuestion question)
         {
             return question.CascadeFromQuestionId.HasValue && !string.IsNullOrWhiteSpace(question.ValidationExpression);
@@ -317,10 +337,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return question.CascadeFromQuestionId.HasValue && !string.IsNullOrWhiteSpace(question.ConditionExpression);
         }
 
-        private IEnumerable<QuestionnaireVerificationMessage> ErrorsByConditionAndValidationExpressions(
+        private IEnumerable<QuestionnaireVerificationMessage> ErrorsByConditionAndValidationExpressionsAndLinkedQuestionsFilters(
             QuestionnaireDocument questionnaire, VerificationState state)
         {
-            if (state.HasExceededLimitByConditionExpresssionCharactersLength || state.HasExceededLimitByValidationExpresssionCharactersLength)
+            if (state.HasExceededLimitByConditionExpresssionCharactersLength || 
+                state.HasExceededLimitByValidationExpresssionCharactersLength || 
+                state.HasExceededLimitByLinkedQuestionFilterExpressionCharactersLength)
                 yield break;
 
             var compilationResult = GetCompilationResult(questionnaire);
@@ -550,7 +572,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (verificationMessages.Any(e => e.MessageLevel == VerificationMessageLevel.Critical))
                 return verificationMessages;
 
-            return verificationMessages.Concat(ErrorsByConditionAndValidationExpressions(questionnaire, state));
+            return verificationMessages.Concat(ErrorsByConditionAndValidationExpressionsAndLinkedQuestionsFilters(questionnaire, state));
         }
 
         private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> MacrosVerifier(
@@ -1084,7 +1106,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool LinkedQuestionIsInterviewersOnly(IQuestion question)
         {
-            if (!(question.LinkedToQuestionId.HasValue|| question.LinkedToRosterId.HasValue))
+            if (!(question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue))
                 return false;
 
             return question.QuestionScope != QuestionScope.Interviewer || IsPreFilledQuestion(question);
@@ -1218,6 +1240,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             var verificationResult = this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(question, validationCondition.Expression, questionnaire, isReferencedQuestionIncorrect: IsCategoricalLinkedQuestion);
             return verificationResult.HasErrors;
+        }
+
+        private EntityVerificationResult<IComposite> CategoricalLinkedQuestionUsedInFilterExpression(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
+        {
+            if (!(question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue))
+                new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            if (string.IsNullOrEmpty(question.LinkedFilterExpression))
+                new EntityVerificationResult<IComposite> { HasErrors = false };
+
+            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(question, question.LinkedFilterExpression,
+                questionnaire, isReferencedQuestionIncorrect: IsCategoricalLinkedQuestion);
         }
 
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByLinkedQuestions(
@@ -1586,25 +1620,32 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static QuestionnaireVerificationMessage CreateExpressionSyntaxError(ExpressionLocation expressionLocation)
         {
-            if(expressionLocation.ExpressionType == ExpressionLocationType.General)
+            if (expressionLocation.ExpressionType != ExpressionLocationType.General)
             {
-                return QuestionnaireVerificationMessage.Error("WB0096", VerificationMessages.WB0096_GeneralCompilationError);
+                var reference = new QuestionnaireVerificationReference(
+                    expressionLocation.ItemType == ExpressionLocationItemType.Question
+                        ? QuestionnaireVerificationReferenceType.Question
+                        : QuestionnaireVerificationReferenceType.Group, expressionLocation.Id);
+
+                if (expressionLocation.ExpressionType == ExpressionLocationType.Validation)
+                {
+                    reference.FailedValidationConditionIndex = expressionLocation.ExpressionPosition;
+                    return QuestionnaireVerificationMessage.Error("WB0002",
+                        VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, reference);
+                }
+                else if (expressionLocation.ExpressionType == ExpressionLocationType.Condition)
+                {
+                    return QuestionnaireVerificationMessage.Error("WB0003",
+                        VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax, reference);
+                }
+                else if (expressionLocation.ExpressionType == ExpressionLocationType.Filter)
+                {
+                    return QuestionnaireVerificationMessage.Error("WB0110",
+                        VerificationMessages.WB00110_LinkedQuestionFilterExpresssionHasIncorrectSyntax, reference);
+                }
             }
 
-            var reference = new QuestionnaireVerificationReference(
-                expressionLocation.ItemType == ExpressionLocationItemType.Question ? 
-                    QuestionnaireVerificationReferenceType.Question : 
-                    QuestionnaireVerificationReferenceType.Group, expressionLocation.Id);
-
-            if(expressionLocation.ExpressionType == ExpressionLocationType.Validation)
-            {
-                reference.FailedValidationConditionIndex = expressionLocation.ExpressionPosition;
-                return QuestionnaireVerificationMessage.Error("WB0002", VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, reference);
-            }
-            else 
-            {
-                return QuestionnaireVerificationMessage.Error("WB0003", VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax, reference);
-            }
+            return QuestionnaireVerificationMessage.Error("WB0096", VerificationMessages.WB0096_GeneralCompilationError);
         }
 
 
