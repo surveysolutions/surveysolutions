@@ -2008,7 +2008,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new AnswersDeclaredValid(validityChanges.AnswersDeclaredValid.ToArray()));
             }
 
-            if (validityChanges.AnswersDeclaredInvalid.Any())
+            if (validityChanges.FailedValidationConditions.Any())
             {
                 this.ApplyEvent(new AnswersDeclaredInvalid(validityChanges.FailedValidationConditions));
             }

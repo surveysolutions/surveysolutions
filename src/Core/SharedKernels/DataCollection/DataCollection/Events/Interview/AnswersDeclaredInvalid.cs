@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             var dictionary  = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
             foreach (var question in questions)
             {
-                dictionary.Add(question, new List<FailedValidationCondition>());
+                dictionary.Add(question, new List<FailedValidationCondition> {new FailedValidationCondition(0)});
             }
 
             this.FailedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>(dictionary);
