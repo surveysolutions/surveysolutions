@@ -46,6 +46,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.settings = settings;
         }
 
+
+        public static string GetQuestionIdName(string variableName)
+        {
+            return PrivateFieldsPrefix + variableName + IdSuffix;
+        }
+
         public Dictionary<string, string> Generate(QuestionnaireDocument questionnaire, Version targetVersion)
         {
             CodeGenerationSettings codeGenerationSettings = this.CreateCodeGenerationSettingsBasedOnEngineVersion(targetVersion);

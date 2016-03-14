@@ -47,6 +47,16 @@ namespace WB.Core.BoundedContexts.Designer.Services
             };
         }
 
+        public static ExpressionLocation LinkedQuestionFilter(Guid questionId)
+        {
+            return new ExpressionLocation
+            {
+                ItemType = ExpressionLocationItemType.Question,
+                ExpressionType = ExpressionLocationType.Filter,
+                Id = questionId
+            };
+        }
+
         public static ExpressionLocation QuestionValidation(Guid questionId, int? position)
         {
             return new ExpressionLocation
@@ -91,11 +101,9 @@ namespace WB.Core.BoundedContexts.Designer.Services
             if (expressionLocation.Length != 3 && expressionLocation.Length != 4)
                 throw new ArgumentException("stringValue");
 
-            ItemType =
-                (ExpressionLocationItemType)
-                    Enum.Parse(typeof (ExpressionLocationItemType), expressionLocation[0], true);
-            ExpressionType =
-                (ExpressionLocationType) Enum.Parse(typeof (ExpressionLocationType), expressionLocation[1], true);
+            ItemType = (ExpressionLocationItemType)Enum.Parse(typeof (ExpressionLocationItemType), expressionLocation[0], true);
+
+            ExpressionType = (ExpressionLocationType) Enum.Parse(typeof (ExpressionLocationType), expressionLocation[1], true);
             Id = Guid.Parse(expressionLocation[2]);
 
             if (expressionLocation.Length == 4)
