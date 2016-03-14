@@ -641,6 +641,7 @@
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_invalid_timestamp_as_an_answer_on_gps_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_only_altitude_as_an_answer_on_gps_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_building_answer_from_string_array_for_yesno_qustion.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_datetime_question_in_iso_format.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireNameValidatorTests\when_validating_ImportFromDesigner_command_and_no_questionnaire_with_such_title_exists.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireNameValidatorTests\when_validating_ImportFromDesigner_command_and_other_questionnaire_with_such_title_already_exists.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireNameValidatorTests\when_validating_ImportFromDesigner_command_and_same_questionnaire_with_such_title_already_exists.cs" />

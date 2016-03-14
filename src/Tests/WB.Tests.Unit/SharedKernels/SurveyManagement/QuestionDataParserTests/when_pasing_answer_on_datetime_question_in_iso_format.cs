@@ -6,11 +6,11 @@ using Main.Core.Entities.SubEntities.Question;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 {
-    internal class when_pasing_answer_on_datetime_question : QuestionDataParserTestContext
+    internal class when_pasing_answer_on_datetime_question_in_iso_format : QuestionDataParserTestContext
     {
         private Establish context = () =>
         {
-            answer = "4/28/2014 12:00 AM";
+            answer = "2016-02-02T17:04:41";
             questionDataParser = CreateQuestionDataParser();
             question = new DateTimeQuestion()
             {
@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
                 parsingResult =
                     questionDataParser.TryParse(answer,questionVarName, question, out parcedValue);
 
-        private It should_result_be_equal_to_4_28_2014 = () =>
-            parcedValue.ShouldEqual(DateTime.Parse("4/28/2014 12:00 AM", CultureInfo.InvariantCulture.DateTimeFormat));
+        private It should_result_be_equal_to_2016_02_02T17_04_41 = () =>
+            parcedValue.ShouldEqual(DateTime.Parse("2016-02-02T17:04:41", CultureInfo.InvariantCulture.DateTimeFormat));
     }
 }
