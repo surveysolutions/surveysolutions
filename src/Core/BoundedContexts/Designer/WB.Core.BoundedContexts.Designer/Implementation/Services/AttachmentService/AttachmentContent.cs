@@ -6,8 +6,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 {
     public class AttachmentContent
     {
-        public virtual string AttachmentContentId { get; set; }
+        public virtual string AttachmentContentHash { get; set; }
         public virtual byte[] Content { get; set; }
+        public virtual long Size { get; set; }
+        public virtual AttachmentDetails Details { get; set; }
+        public virtual AttachmentType Type { get; set; }
+        public virtual string ContentType { get; set; }
     }
 
     [PlainStorage]
@@ -15,13 +19,28 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
     {
         public QuestionnaireAttachmentContentMap()
         {
-            this.Id(x => x.AttachmentContentId, idMap =>
+            this.Id(x => x.AttachmentContentHash, idMap =>
             {
                 idMap.Generator(Generators.Assigned);
                 idMap.Column("Id");
             });
 
-            this.Property(x => x.Content);
+            this.Property(x => x.Content, ptp => { ptp.Lazy(true);  });
+
+            this.Property(x => x.Size);
+
+            this.Property(x => x.Type);
+
+            this.Property(x => x.ContentType);
+
+            Component(x => x.Details, cmp =>
+            {
+                cmp.Property(x => x.Format, ptp => ptp.Column("AttachmentFormat"));
+
+                cmp.Property(x => x.Height, ptp => ptp.Column("AttachmentHeight"));
+
+                cmp.Property(x => x.Width, ptp => ptp.Column("AttachmentWidth"));
+            });
         }
     }
 }
