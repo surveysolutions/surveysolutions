@@ -17,7 +17,8 @@ namespace WB.UI.Supervisor.App_Start
     {
         public static void Register(HttpConfiguration config)
         {
-            config.MapHttpAttributeRoutes();
+            config.MapHttpAttributeRoutes(new TypedDirectRouteProvider());
+
             config.TypedRoute("api/interviewer/v1", c => c.Action<InterviewerApiV1Controller>(x => x.Get()));
             config.TypedRoute("api/interviewer/v1/latestversion", c => c.Action<InterviewerApiV1Controller>(x => x.GetLatestVersion()));
             config.TypedRoute("api/interviewer/v1/tabletInfo", c => c.Action<InterviewerApiV1Controller>(x => x.PostTabletInformation(Param.Any<TabletInformationPackage>())));
