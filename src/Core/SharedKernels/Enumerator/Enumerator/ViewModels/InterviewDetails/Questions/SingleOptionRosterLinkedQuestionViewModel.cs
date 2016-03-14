@@ -268,7 +268,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(RosterInstancesTitleChanged @event)
         {
-            var optionListShouldBeUpdated = @event.ChangedInstances.Any(x => x.RosterInstance.GroupId == this.questionIdentity.Id);
+            var optionListShouldBeUpdated = @event.ChangedInstances.Any(x => x.RosterInstance.GroupId == this.referencedRosterId);
             if (optionListShouldBeUpdated)
             {
                 this.RefreshOptionsListFromModel();

@@ -518,7 +518,6 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_initing_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_linked_question_is_linked_to_question_in_roster_2_levels_deeper.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_roster_row_title_changed_and_question_is_linked_on_it.cs" />
-    <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_title_of_linked_question_changes.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedQuestionViewModelTests\when_toggling_answer.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionQuestionViewModelTests\MultiOptionQuestionViewModelTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionQuestionViewModelTests\when_handling_question_answered_event.cs" />
