@@ -217,6 +217,19 @@
     <Compile Include="InterviewTests\CascadingDropdowns\when_reanswering_categorical_parent_cascading_question.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_reanswering_numeric_question_that_can_turn_off_cascading_chain.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_remove_answer_from_parent_cascading_question.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\CodeGenerationTestsContext.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_executes_linked_question_filters.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_processes_condition_expressions.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_processes_condition_expressions_on_nested_roster.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_processes_condition_expressions_on_roster.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_processes_condition_expressions_on_scope_roster.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_processes_validation_expressions.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_generating_assembly_and_questionnaire_has_error_in_expressions.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_generating_assembly_and_questionnaire_has_question_condition_containing_self.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_generating_assembly_and_questionnaire_has_roster_with_corner_naming.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_generating_assembly_and_questionnaire_has_validation_containing_self.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_generating_assembly_and_questionnaire_third_level_nested_roster.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_generating_assembly_with_evaluatorgenerator.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_datetime_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_w___.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_group_GB_with_question_B_and_disabled_B_disables_question_C.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_on_questionnaire_level_with_multiple_conditions.cs" />
@@ -277,6 +290,7 @@
     <Compile Include="PostgreSQLEventStoreTests\with_postgres_db.cs" />
     <Compile Include="PostgreSQLTests\when_storing_entity_into_key_value_storage.cs" />
     <Compile Include="PostgreSQLTests\with_postgres_db.cs" />
+    <Compile Include="QuestionnaireDocumentExtensions.cs" />
     <Compile Include="ResourcesTranslationTests\ResourcesTranslationTestsContext.cs" />
     <Compile Include="ResourcesTranslationTests\when_checking_availability_of_resources_in_Russian_comparing_to_English.cs" />
     <Compile Include="ResourcesTranslationTests\when_checking_that_translated_resources_have_same_string_format_elements_as_original.cs" />
