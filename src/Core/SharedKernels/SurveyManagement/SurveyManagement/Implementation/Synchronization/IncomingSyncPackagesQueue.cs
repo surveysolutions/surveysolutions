@@ -66,11 +66,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             this.logger.Info($"Sync_inner2_{syncPackageFileName}: WriteAllText {syncPackageFileName}. Took {innerwatch.Elapsed:g}.");
             innerwatch.Stop();
 
-            var cachedFilesInIncomingDirectory = this.GetCachedFilesInIncomingDirectory();
-
-            cachedFilesInIncomingDirectory.Add(fullPathToSyncPackage);
-
-            this.cache.Set("incomingPackagesFileNames", cachedFilesInIncomingDirectory, DateTime.Now.AddMinutes(5));
+            this.GetCachedFilesInIncomingDirectory().Add(fullPathToSyncPackage);
         }
 
         public int QueueLength =>
@@ -95,11 +91,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         {
             fileSystemAccessor.DeleteFile(syncItemPath);
 
-            var cachedFilesInIncomingDirectory = this.GetCachedFilesInIncomingDirectory();
-
-            cachedFilesInIncomingDirectory.Remove(syncItemPath);
-
-            this.cache.Set("incomingPackagesFileNames", cachedFilesInIncomingDirectory, DateTime.Now.AddMinutes(5));
+            this.GetCachedFilesInIncomingDirectory().Remove(syncItemPath);
         }
 
         private ConcurrentHashSet<string> GetCachedFilesInIncomingDirectory()
