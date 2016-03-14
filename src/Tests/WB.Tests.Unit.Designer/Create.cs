@@ -1271,5 +1271,15 @@ namespace WB.Tests.Unit.Designer
                 attachmentService ?? Mock.Of<IAttachmentService>(),
                 lookupTableService ?? Mock.Of<ILookupTableService>());
         }
+
+        public static Attachment Attachment(Guid? attachmentId = null, string name = "attachment", string fileName = "image.png")
+        {
+            return new Attachment
+            {
+                AttachmentId = attachmentId??Guid.NewGuid(),
+                Name = name,
+                FileName = fileName
+            };
+        }
     }
 }
