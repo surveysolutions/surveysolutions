@@ -600,17 +600,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public IEnumerable<InterviewRoster> FindReferencedRostersForLinkedQuestion(Guid rosterId, Identity linkedQuestion)
         {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+             var stringKey = ConversionHelper.ConvertIdentityToString(linkedQuestion);
+            if (!this.interviewState.LinkedQuestionOptions.ContainsKey(stringKey))
+                return Enumerable.Empty<InterviewRoster>();
 
-            var rosterVectorToStartFrom = this.CalculateStartRosterVectorForAnswersOfLinkedToQuestion(rosterId, linkedQuestion, questionnaire);
-
-            IEnumerable<Identity> targetRosters = 
-                this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, new[] {rosterId}, rosterVectorToStartFrom, questionnaire).ToArray();
+            RosterVector[] targetRosters = this.interviewState.LinkedQuestionOptions[stringKey];
 
             return
                 targetRosters
-                    .Select(this.GetRoster)
-                    .Where(r => !r.IsDisabled && !string.IsNullOrEmpty(r.Title))
+                    .Select(x => this.GetRoster(new Identity(rosterId, x)))
                     .OrderBy(r => sortIndexesOfRosterInstanses[new Identity(r.Id, r.RosterVector)] ?? r.RosterVector.Last())
                     .ToArray();
         }
