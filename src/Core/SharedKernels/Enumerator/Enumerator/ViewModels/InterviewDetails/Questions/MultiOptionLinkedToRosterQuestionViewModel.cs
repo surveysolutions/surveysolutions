@@ -4,20 +4,20 @@ using System.Linq;
 using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class MultiOptionLinkedToRosterQuestionViewModel : MultiOptionLinkedQuestionViewModel,
+        ILiteEventHandler<LinkedOptionsChanged>,
         ILiteEventHandler<AnswersRemoved>,
-        ILiteEventHandler<RosterInstancesRemoved>,
         ILiteEventHandler<RosterInstancesTitleChanged>
     {
         private Guid linkedToRosterId;
@@ -104,6 +104,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return string.IsNullOrEmpty(rosterPrefixes) ? referencedRoster.Title : string.Join(": ", rosterPrefixes, referencedRoster.Title);
         }
 
+        public void Handle(LinkedOptionsChanged @event)
+        {
+            var optionListShouldBeUpdated = @event.ChangedLinkedQuestions.Any(x => x.QuestionId.Id == this.Identity.Id);
+            if (optionListShouldBeUpdated)
+            {
+                this.RefreshOptionsFromModel();
+            }
+        }
+
+        public void Handle(RosterInstancesTitleChanged @event)
+        {
+            var optionListShouldBeUpdated = @event.ChangedInstances.Any(x => x.RosterInstance.GroupId == this.questionIdentity.Id);
+            if (optionListShouldBeUpdated)
+            {
+                this.RefreshOptionsFromModel();
+            }
+        }
+
         public void Handle(AnswersRemoved @event)
         {
             foreach (var question in @event.Questions)
@@ -114,41 +132,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     {
                         option.Checked = false;
                     }
-                    this.QuestionState.IsAnswered = false;
                 }
             }
         }
 
-        public void Handle(RosterInstancesRemoved @event)
+        private void RefreshOptionsFromModel()
         {
-            var optionListShouldBeUpdated = @event.Instances.Any(x => x.GroupId == this.linkedToRosterId);
-            var optionsToUpdate = this.CreateOptions().ToArray();
-            if (optionListShouldBeUpdated)
-                this.mainThreadDispatcher.RequestMainThreadAction(() =>
-                {
-                    this.Options.Clear();
-                    foreach (var singleOptionLinkedQuestionOptionViewModel in optionsToUpdate)
-                    {
-                        this.Options.Add(singleOptionLinkedQuestionOptionViewModel);
-                    }
-                    this.RaisePropertyChanged(() => this.HasOptions);
-                });
-        }
-
-        public void Handle(RosterInstancesTitleChanged @event)
-        {
-            var optionListShouldBeUpdated = @event.ChangedInstances.Any(x => x.RosterInstance.GroupId == linkedToRosterId);
-            var optionsToUpdate = this.CreateOptions().ToArray();
-            if (optionListShouldBeUpdated)
-                this.mainThreadDispatcher.RequestMainThreadAction(() =>
-                {
-                    this.Options.Clear();
-                    foreach (var singleOptionLinkedQuestionOptionViewModel in optionsToUpdate)
-                    {
-                        this.Options.Add(singleOptionLinkedQuestionOptionViewModel);
-                    }
-                    this.RaisePropertyChanged(() => this.HasOptions);
-                });
+            var newOptions = this.CreateOptions();
+            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.Value.Identical(t.Value) && s.Title == t.Title);
+                this.RaisePropertyChanged(() => this.HasOptions);
+            });
         }
     }
 }
