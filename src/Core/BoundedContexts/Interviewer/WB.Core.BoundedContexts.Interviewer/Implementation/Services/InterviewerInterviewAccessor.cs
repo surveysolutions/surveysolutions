@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Events;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
@@ -141,11 +142,37 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             List<CommittedEvent> storedEvents = this.eventStore.ReadFrom(interviewId, 0, int.MaxValue).ToList();
 
             AggregateRootEvent[] eventsToSend = storedEvents
-                .Where(storedEvent=>!(storedEvent.Payload is InterviewAnswersFromSyncPackageRestored || storedEvent.Payload is InterviewOnClientCreated || storedEvent.Payload is InterviewSynchronized))
+                .Where(storedEvent => !ShouldNotSendEventInSyncPackage(storedEvent))
                 .Select(storedEvent => new AggregateRootEvent(storedEvent))
                 .ToArray();
 
             return eventsToSend;
+        }
+
+        private static bool ShouldNotSendEventInSyncPackage(CommittedEvent storedEvent)
+            => IsInterviewerOnly(storedEvent.Payload)
+            || IsCalculatedButNotAggregating(storedEvent);
+
+        private static bool IsInterviewerOnly(IEvent eventPayload)
+            => eventPayload is InterviewAnswersFromSyncPackageRestored
+            || eventPayload is InterviewOnClientCreated
+            || eventPayload is InterviewSynchronized;
+
+        private static bool IsCalculatedButNotAggregating(CommittedEvent storedEvent)
+            => IsCalculated(storedEvent.Payload)
+            && !IsAggregating(storedEvent);
+
+        private static bool IsCalculated(IEvent eventPayload)
+            => eventPayload is AnswersDeclaredValid
+            || eventPayload is AnswersDeclaredInvalid
+            || eventPayload is QuestionsEnabled
+            || eventPayload is QuestionsDisabled
+            || eventPayload is GroupsEnabled
+            || eventPayload is GroupsDisabled;
+
+        private static bool IsAggregating(CommittedEvent storedEvent)
+        {
+            return false;
         }
 
         public async Task CreateInterviewAsync(InterviewApiView info, InterviewDetailsApiView details)
