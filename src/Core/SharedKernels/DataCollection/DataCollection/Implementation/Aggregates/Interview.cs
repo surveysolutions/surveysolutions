@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected InterviewStatus status;
 
         private IInterviewExpressionStateV7 expressionProcessorStatePrototype = null;
-        private IInterviewExpressionStateV7 ExpressionProcessorStatePrototype
+        protected IInterviewExpressionStateV7 ExpressionProcessorStatePrototype
         {
             get
             {
@@ -3189,12 +3189,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             new ChangedRosterInstanceTitleDto(
                                 new RosterInstance(r.GroupId, r.OuterRosterVector, r.RosterInstanceId), answerAsRosterTitle)).ToArray());
             }
-
-            foreach (var interviewByAnswerChange in interviewByAnswerChanges)
+            if (interviewByAnswerChanges != null)
             {
-                string questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(interviewByAnswerChange.QuestionId, interviewByAnswerChange.RosterVector);
-                updatedState.AnswersSupportedInExpressions[questionKey] = interviewByAnswerChange.Answer;
-                updatedState.AnsweredQuestions.Add(questionKey);
+                foreach (var interviewByAnswerChange in interviewByAnswerChanges)
+                {
+                    string questionKey =
+                        ConversionHelper.ConvertIdAndRosterVectorToString(interviewByAnswerChange.QuestionId,
+                            interviewByAnswerChange.RosterVector);
+                    updatedState.AnswersSupportedInExpressions[questionKey] = interviewByAnswerChange.Answer;
+                    updatedState.AnsweredQuestions.Add(questionKey);
+                }
             }
 
             var result = new Dictionary<Guid, RosterVector[]>();
@@ -3232,7 +3236,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return result;
         }
 
-        private IEnumerable<ChangedLinkedOptions> CreateChangedLinkedOptions(
+        protected IEnumerable<ChangedLinkedOptions> CreateChangedLinkedOptions(
             IInterviewExpressionStateV7 interviewExpressionState, 
             InterviewStateDependentOnAnswers currentState, 
             IQuestionnaire questionnaire,
