@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
+using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -94,10 +95,12 @@ namespace WB.UI.Designer.Api
                 if (fileStreamContent.BinaryContent?.Length > 0)
                 {
                     // save image here
+                    AttachmentType attachmentType = GetAttachmentTypeByRequestMediaType(fileStreamContent.ContentType);
+
                     this.attachmentService.SaveAttachmentContent(
                         updateAttachment.QuestionnaireId, 
                         updateAttachment.AttachmentId,
-                        AttachmentType.Image,
+                        attachmentType,
                         fileStreamContent.ContentType,
                         fileStreamContent.BinaryContent,
                         updateAttachment.AttachmentFileName);
@@ -115,6 +118,14 @@ namespace WB.UI.Designer.Api
             }
 
             return this.ProcessCommand(updateAttachment, commandType);
+        }
+
+        private AttachmentType GetAttachmentTypeByRequestMediaType(string contentType)
+        {
+            if (contentType.StartsWith("image/"))
+                return AttachmentType.Image;
+
+            throw new FormatException(ExceptionMessages.Attachments_Unsupported_content);
         }
 
         [Route("~/api/command/updateLookupTable")]
