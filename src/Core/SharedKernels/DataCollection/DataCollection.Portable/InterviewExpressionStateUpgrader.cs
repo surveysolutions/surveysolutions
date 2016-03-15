@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection
             var stateV2 = state as IInterviewExpressionStateV2 ?? new InterviewExpressionStateV1ToV2Adapter(state);
             var stateV4 = stateV2 as IInterviewExpressionStateV4 ?? new InterviewExpressionStateV2ToV4Adapter(stateV2);
             var stateV5 = stateV4 as IInterviewExpressionStateV5 ?? new InterviewExpressionStateV4ToV5Adapter(stateV4);
-            var stateV6 = stateV4 as IInterviewExpressionStateV6 ?? new InterviewExpressionStateV5ToV6Adapter(stateV5);
+            var stateV6 = stateV5 as IInterviewExpressionStateV6 ?? new InterviewExpressionStateV5ToV6Adapter(stateV5);
 
             return new InterviewExpressionStateV6ToV7Adapter(stateV6) ;
         }
