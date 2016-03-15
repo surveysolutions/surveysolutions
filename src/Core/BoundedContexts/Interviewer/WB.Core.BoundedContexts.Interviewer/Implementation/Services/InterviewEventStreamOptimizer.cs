@@ -14,21 +14,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public IReadOnlyCollection<CommittedEvent> RemoveEventsNotNeededToBeSent(
             IReadOnlyCollection<CommittedEvent> interviewEvents)
         {
-            return interviewEvents.Where(storedEvent => !ShouldNotSendEvent(storedEvent)).ToReadOnlyCollection();
+            return interviewEvents.Where(@event => !ShouldNotSendEvent(@event)).ToReadOnlyCollection();
         }
 
-        private static bool ShouldNotSendEvent(CommittedEvent storedEvent)
-            => IsInterviewerOnly(storedEvent.Payload)
-            || IsCalculatedButNotAggregating(storedEvent);
+        private static bool ShouldNotSendEvent(CommittedEvent committedEvent)
+            => IsInterviewerOnly(committedEvent.Payload)
+            || IsCalculatedButNotAggregating(committedEvent);
 
         private static bool IsInterviewerOnly(IEvent eventPayload)
             => eventPayload is InterviewAnswersFromSyncPackageRestored
             || eventPayload is InterviewOnClientCreated
             || eventPayload is InterviewSynchronized;
 
-        private static bool IsCalculatedButNotAggregating(CommittedEvent storedEvent)
-            => IsCalculated(storedEvent.Payload)
-            && !IsAggregating(storedEvent);
+        private static bool IsCalculatedButNotAggregating(CommittedEvent committedEvent)
+            => IsCalculated(committedEvent.Payload)
+            && !IsAggregating(committedEvent);
 
         private static bool IsCalculated(IEvent eventPayload)
             => eventPayload is AnswersDeclaredValid
@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             || eventPayload is GroupsEnabled
             || eventPayload is GroupsDisabled;
 
-        private static bool IsAggregating(CommittedEvent storedEvent)
+        private static bool IsAggregating(CommittedEvent committedEvent)
             => false;
     }
 }
