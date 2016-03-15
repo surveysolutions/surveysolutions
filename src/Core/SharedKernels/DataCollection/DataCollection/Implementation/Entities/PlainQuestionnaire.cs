@@ -236,7 +236,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (staticText == null)
                 return null;
 
-            var attachment = this.innerDocument.Attachments.Single(kv => kv.Name == staticText.AttachmentName);
+            var attachment = this.innerDocument.Attachments.SingleOrDefault(kv => kv.Name == staticText.AttachmentName);
             return attachment;
         }
 
