@@ -181,7 +181,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (@event.QuestionId == this.questionIdentity.Id &&
                @event.RosterVector.SequenceEqual(this.questionIdentity.RosterVector))
             {
-                this.QuestionState.IsAnswered = false;
                 this.AnswerAsString = "";
             }
         }

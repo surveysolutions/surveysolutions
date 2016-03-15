@@ -125,7 +125,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                     FileName = qAttachment.FileName,
                     SizeInBytes = subAttachment?.SizeInBytes,
                     LastUpdated = subAttachment?.LastUpdated,
-                    Meta = subAttachment?.Meta
+                    Details = subAttachment?.Details
                 })
                 .OrderBy(x => x.Name)
                 .ToList();

@@ -11,6 +11,7 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
@@ -1229,6 +1230,22 @@ namespace WB.Tests.Unit.Designer
             {
                 return new UpdateStaticText(questionnaireId, entityId, text, attachmentName, responsibleId);
             }
+
+            public static AddAttachment AddAttachment(Guid questionnaireId, Guid attachmentId, Guid responsibleId)
+            {
+                return new AddAttachment(questionnaireId, attachmentId, responsibleId);
+            }
+
+            public static UpdateAttachment UpdateAttachment(Guid questionnaireId, Guid attachmentId, Guid responsibleId, string attachmentName,
+                string attachmentFileName)
+            {
+                return new UpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, attachmentFileName);
+            }
+
+            public static DeleteAttachment DeleteAttachment(Guid questionnaireId, Guid attachmentId, Guid responsibleId)
+            {
+                return new DeleteAttachment(questionnaireId, attachmentId, responsibleId);
+            }
         }
       
         public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")
@@ -1253,6 +1270,16 @@ namespace WB.Tests.Unit.Designer
                 logger,
                 attachmentService ?? Mock.Of<IAttachmentService>(),
                 lookupTableService ?? Mock.Of<ILookupTableService>());
+        }
+
+        public static Attachment Attachment(Guid? attachmentId = null, string name = "attachment", string fileName = "image.png")
+        {
+            return new Attachment
+            {
+                AttachmentId = attachmentId??Guid.NewGuid(),
+                Name = name,
+                FileName = fileName
+            };
         }
     }
 }

@@ -28,6 +28,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class SingleOptionLinkedQuestionViewModel : MvxNotifyPropertyChanged, 
         IInterviewEntityViewModel,
+        ILiteEventHandler<AnswersRemoved>,
+        ILiteEventHandler<AnswerRemoved>,
         ILiteEventHandler<LinkedOptionsChanged>,
         IDisposable
     {
@@ -47,8 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             ILiteEventRegistry eventRegistry,
             IMvxMainThreadDispatcher mainThreadDispatcher,
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionStateViewModel,
-            AnsweringViewModel answering,
-            AnswerNotifier referencedAnswerNotifier, 
+            AnsweringViewModel answering, 
             IPlainQuestionnaireRepository questionnaireRepository)
         {
             if (principal == null) throw new ArgumentNullException("principal");
@@ -66,7 +67,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
-            this.ReferencedAnswerNotifier = referencedAnswerNotifier;
             this.questionnaireRepository = questionnaireRepository;
         }
 
@@ -87,7 +87,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
-        public AnswerNotifier ReferencedAnswerNotifier { get; private set; }
 
         public Identity Identity { get; private set; }
 
@@ -105,9 +104,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewId = interview.Id;
 
             this.referencedQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(this.Identity.Id);
-
-            this.ReferencedAnswerNotifier.Init(interviewId, this.referencedQuestionId);
-            this.ReferencedAnswerNotifier.QuestionAnswered += this.ReferencedQuestionAnswered;
 
             var options = this.GenerateOptionsFromModel(interview, this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity));
             this.Options = new ObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(options);
@@ -201,6 +197,32 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+
+        public void Handle(AnswersRemoved @event)
+        {
+            foreach (var question in @event.Questions)
+            {
+                if (this.Identity.Equals(question.Id, question.RosterVector))
+                {
+                    foreach (var option in this.Options.Where(option => option.Selected))
+                    {
+                        option.Selected = false;
+                    }
+                }
+            }
+        }
+
+        public void Handle(AnswerRemoved @event)
+        {
+            if (this.Identity.Equals(@event.QuestionId, @event.RosterVector))
+            {
+                foreach (var option in this.Options.Where(option => option.Selected))
+                {
+                    option.Selected = false;
+                }
+            }
+        }
+
         public void Handle(LinkedOptionsChanged @event)
         {
             ChangedLinkedOptions changedLinkedQuestion = @event.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId == this.Identity);
@@ -223,44 +245,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.RaisePropertyChanged(() => HasOptions);
                 });
             }
-        }
-
-        private void ReferencedQuestionAnswered(object sender, EventArgs e)
-        {
-            IStatefulInterview interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
-            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
-
-            var actualOptions = this.GenerateOptionsFromModel(interview, questionnaire);
-
-            this.mainThreadDispatcher.RequestMainThreadAction(() =>
-            {
-                List<SingleOptionLinkedQuestionOptionViewModel> optionsToRemove = this
-                    .Options
-                    .Where(existingOption => !actualOptions.Any(actualOption => AreOptionsReferencingSameAnswer(actualOption, existingOption)))
-                    .ToList();
-
-                foreach (SingleOptionLinkedQuestionOptionViewModel optionToRemove in optionsToRemove)
-                {
-                    this.Options.Remove(optionToRemove);
-                }
-
-                for (int actualOptionIndex = 0; actualOptionIndex < actualOptions.Count; actualOptionIndex++)
-                {
-                    var actualOption = actualOptions[actualOptionIndex];
-                    var existingOption = this.Options.SingleOrDefault(option => AreOptionsReferencingSameAnswer(option, actualOption));
-
-                    if (existingOption != null)
-                    {
-                        existingOption.Title = actualOption.Title;
-                    }
-                    else
-                    {
-                        this.Options.Insert(actualOptionIndex, actualOption);
-                    }
-                }
-
-                this.RaisePropertyChanged(() => this.HasOptions);
-            });
         }
 
         private static bool AreOptionsReferencingSameAnswer(SingleOptionLinkedQuestionOptionViewModel option1, SingleOptionLinkedQuestionOptionViewModel option2)
