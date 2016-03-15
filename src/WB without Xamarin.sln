@@ -105,6 +105,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Questionnaire", "Questionna
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.Questionnaire", "Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj", "{D6616C1D-7C3A-4576-B82B-098721CD4417}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tests.Unit.Designer", "Tests\WB.Tests.Unit.Designer\WB.Tests.Unit.Designer.csproj", "{6F9898A0-BC15-49AB-88C3-1DFA76BA9ECB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -244,6 +246,12 @@ Global
 		{D6616C1D-7C3A-4576-B82B-098721CD4417}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
 		{D6616C1D-7C3A-4576-B82B-098721CD4417}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6616C1D-7C3A-4576-B82B-098721CD4417}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F9898A0-BC15-49AB-88C3-1DFA76BA9ECB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F9898A0-BC15-49AB-88C3-1DFA76BA9ECB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F9898A0-BC15-49AB-88C3-1DFA76BA9ECB}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F9898A0-BC15-49AB-88C3-1DFA76BA9ECB}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{6F9898A0-BC15-49AB-88C3-1DFA76BA9ECB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F9898A0-BC15-49AB-88C3-1DFA76BA9ECB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -290,5 +298,6 @@ Global
 		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF} = {27286D23-04D1-475F-A9AE-E799855896E5}
 		{84C73772-4C66-43DF-95D6-8CA44DF0DA62} = {14B7074A-492F-485E-8DEE-F1997AB95D95}
 		{D6616C1D-7C3A-4576-B82B-098721CD4417} = {84C73772-4C66-43DF-95D6-8CA44DF0DA62}
+		{6F9898A0-BC15-49AB-88C3-1DFA76BA9ECB} = {D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}
 	EndGlobalSection
 EndGlobal
