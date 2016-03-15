@@ -37,7 +37,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 compressor: compressor ?? Mock.Of<IStringCompressor>(),
                 eventStore: eventStore ?? Mock.Of<IInterviewerEventStorage>(),
                 aggregateRootRepositoryWithCache: aggregateRootRepositoryWithCache ?? Mock.Of<IAggregateRootRepositoryWithCache>(),
-                snapshotStoreWithCache: snapshotStoreWithCache ?? Mock.Of<ISnapshotStoreWithCache>());
+                snapshotStoreWithCache: snapshotStoreWithCache ?? Mock.Of<ISnapshotStoreWithCache>(),
+                eventStreamOptimizer: Mock.Of<IInterviewEventStreamOptimizer>());
         }
     }
 }

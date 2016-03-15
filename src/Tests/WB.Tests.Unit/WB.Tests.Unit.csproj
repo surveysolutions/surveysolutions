@@ -383,6 +383,7 @@
     <Compile Include="BoundedContexts\Interviewer\DashboardFactoryTests\when_getting_interviewer_dashboard.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerInterviewAccessorTests\InterviewerInterviewAccessorTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerInterviewAccessorTests\when_creating_interview.cs" />
+    <Compile Include="BoundedContexts\Interviewer\Services\InterviewerInterviewAccessorTests\when_removing_events_not_needed_to_be_sent.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerInterviewAccessorTests\when_removing_interview.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerPlainInterviewFileStorageTests\InterviewerPlainInterviewFileStorageTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerPlainInterviewFileStorageTests\when_storing_interview_binary_data.cs" />

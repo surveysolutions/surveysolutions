@@ -287,10 +287,10 @@ namespace WB.Tests.Unit
         }
 
         public static CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, IEvent payload = null,
-            Guid? eventIdentifier = null, int eventSequence = 1)
+            Guid? eventIdentifier = null, int eventSequence = 1, Guid? commitId = null)
         {
             return new CommittedEvent(
-                Guid.Parse("33330000333330000003333300003333"),
+                commitId ?? Guid.NewGuid(),
                 origin,
                 eventIdentifier ?? Guid.Parse("44440000444440000004444400004444"),
                 eventSourceId ?? Guid.Parse("55550000555550000005555500005555"),
@@ -2793,5 +2793,8 @@ namespace WB.Tests.Unit
         {
             return new ValidationCondition(expression, message);
         }
+
+        public static InterviewEventStreamOptimizer InterviewEventStreamOptimizer()
+            => new InterviewEventStreamOptimizer();
     }
 }
