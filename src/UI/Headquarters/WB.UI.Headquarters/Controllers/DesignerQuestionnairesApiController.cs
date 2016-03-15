@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Template;
@@ -26,6 +27,8 @@ namespace WB.UI.Headquarters.Controllers
     [ApiValidationAntiForgeryToken]
     public class DesignerQuestionnairesApiController : BaseApiController
     {
+        private readonly IQuestionnaireAttachmentService questionnaireAttachmentService;
+
         internal RestCredentials designerUserCredentials
         {
             get { return this.getDesignerUserCredentials(this.GlobalInfo); }
@@ -39,20 +42,24 @@ namespace WB.UI.Headquarters.Controllers
 
         public DesignerQuestionnairesApiController(
             ISupportedVersionProvider supportedVersionProvider,
-            ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger, IRestService restService)
-            : this(supportedVersionProvider, commandService, globalInfo, zipUtils, logger, GetDesignerUserCredentials, restService)
+            ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger, IRestService restService,
+            IQuestionnaireAttachmentService questionnaireAttachmentService)
+            : this(supportedVersionProvider, commandService, globalInfo, zipUtils, logger, GetDesignerUserCredentials, restService, questionnaireAttachmentService)
         {
+            
         }
 
         internal DesignerQuestionnairesApiController(ISupportedVersionProvider supportedVersionProvider,
             ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger,
-            Func<IGlobalInfoProvider, RestCredentials> getDesignerUserCredentials, IRestService restService)
+            Func<IGlobalInfoProvider, RestCredentials> getDesignerUserCredentials, IRestService restService,
+            IQuestionnaireAttachmentService questionnaireAttachmentService)
             : base(commandService, globalInfo, logger)
         {
             this.zipUtils = zipUtils;
             this.getDesignerUserCredentials = getDesignerUserCredentials;
             this.supportedVersionProvider = supportedVersionProvider;
             this.restService = restService;
+            this.questionnaireAttachmentService = questionnaireAttachmentService;
         }
 
         private static RestCredentials GetDesignerUserCredentials(IGlobalInfoProvider globalInfoProvider)
@@ -109,7 +116,18 @@ namespace WB.UI.Headquarters.Controllers
                 var questionnaire = this.zipUtils.DecompressString<QuestionnaireDocument>(questionnairePackage.Questionnaire);
                 var questionnaireContentVersion = questionnairePackage.QuestionnaireContentVersion;
                 var questionnaireAssembly = questionnairePackage.QuestionnaireAssembly;
+                var questionnaireAttachments = questionnairePackage.Attachments;
 
+                foreach (var questionnaireAttachment in questionnaireAttachments)
+                {
+                    var attachment = await this.restService.DownloadFileAsync(
+                        url: $"attachments/{questionnaireAttachment.AttachmentId}",
+                        credentials: designerUserCredentials);
+
+                    this.questionnaireAttachmentService.SaveAttachment(questionnaireAttachment.AttachmentContentHash,
+                        questionnaireAttachment.ContentType, attachment);
+                }
+                
                 this.CommandService.Execute(new ImportFromDesigner(
                     this.GlobalInfo.GetCurrentUser().Id, 
                     questionnaire,
