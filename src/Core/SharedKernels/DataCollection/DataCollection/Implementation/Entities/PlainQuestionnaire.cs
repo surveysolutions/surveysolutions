@@ -114,6 +114,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
+        private IEnumerable<IQuestion> AllQuestions => this.QuestionCache.Values;
+
+        private IEnumerable<IGroup> AllGroups => this.GroupCache.Values;
+
         #endregion
 
         public PlainQuestionnaire(QuestionnaireDocument document, Func<long> getVersion, Guid? responsibleId)
@@ -373,7 +377,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (!this.DoesQuestionSupportRoster(questionId))
                 return Enumerable.Empty<Guid>();
 
-            return this.GetAllGroups().Where(x => x.RosterSizeQuestionId == questionId && x.IsRoster).Select(x => x.PublicKey);
+            return this.AllGroups.Where(x => x.RosterSizeQuestionId == questionId && x.IsRoster).Select(x => x.PublicKey);
         }
 
         public int? GetListSizeForListQuestion(Guid questionId)
@@ -418,14 +422,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (parentRosterId.HasValue)
             {
                 var nestedRosters = this.GetNestedRostersOfGroupById(parentRosterId.Value);
-                return this.GetAllGroups()
+                return this.AllGroups
                     .Where(x => nestedRosters.Contains(x.PublicKey) && x.RosterSizeSource == RosterSizeSourceType.FixedTitles)
                     .Select(x => x.PublicKey)
                     .ToList();
             }
 
-            return this
-                .GetAllGroups()
+            return this.AllGroups
                 .Where(x
                     => x.IsRoster
                     && x.RosterSizeSource == RosterSizeSourceType.FixedTitles
@@ -485,6 +488,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             return IsRosterGroup(@group);
         }
+
+        public ReadOnlyCollection<Guid> GetAllQuestions()
+            => this.AllQuestions.Select(question => question.PublicKey).ToReadOnlyCollection();
+
+        public ReadOnlyCollection<Guid> GetAllGroups()
+            => this.AllGroups.Select(question => question.PublicKey).ToReadOnlyCollection();
 
         public IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId)
             => this.cacheOfUnderlyingQuestions.GetOrUpdate(groupId, this.GetAllUnderlyingQuestionsImpl);
@@ -816,7 +825,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private Dictionary<string, HashSet<Guid>> GetAllSubstitutionReferences()
         {
             var referenceOccurences = new Dictionary<string, HashSet<Guid>>();
-            foreach (var question in this.GetAllQuestions())
+            foreach (var question in this.AllQuestions)
             {
                 var substitutedVariableNames = this.SubstitutionService.GetAllSubstitutionVariableNames(question.QuestionText);
 
@@ -873,7 +882,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     : null;
 
             IEnumerable<Guid> rostersAffectedByCurrentDomain =
-                from @group in this.GetAllGroups()
+                from @group in this.AllGroups
                 where this.IsRosterGroup(@group.PublicKey) && @group.RosterTitleQuestionId == questionId
                 select @group.PublicKey;
 
@@ -917,10 +926,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .Select(group => group.PublicKey)
                 .ToList();
         }
-
-        private IEnumerable<IGroup> GetAllGroups() => this.GroupCache.Values;
-
-        private IEnumerable<IQuestion> GetAllQuestions() => this.QuestionCache.Values;
 
         private int GetRosterLevelForQuestion(Guid questionId, Func<Guid, IEnumerable<Guid>> getAllParentGroupsForQuestion,
             Func<Guid, bool> isRosterGroup)
