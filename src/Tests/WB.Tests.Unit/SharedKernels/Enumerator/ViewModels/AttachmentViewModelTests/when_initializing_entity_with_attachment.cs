@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             var attachmentMetadata = new AttachmentMetadata() { AttachmentContentId = attachmentContentId };
 
             var questionnaireMock = Mock.Of<IQuestionnaire>(_
-                => _.GetAttachmentIdForEntity(entityId) == attachment);
+                => _.GetAttachmentForEntity(entityId) == attachment);
             var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
             questionnaireRepository.SetReturnsDefault(questionnaireMock);
 
