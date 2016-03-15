@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -22,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
         Establish context = () =>
         {
             entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var attachmentId = "aaaa";
+            var attachmentId = Guid.Parse("BBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAA").FormatGuid();
             var attachmentContentId = "cccccc";
             var attachment = new Attachment();
             var attachmentMetadata = new AttachmentMetadata() { AttachmentContentId = attachmentContentId };
