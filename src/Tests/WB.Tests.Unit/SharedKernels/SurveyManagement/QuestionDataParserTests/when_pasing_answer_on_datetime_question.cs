@@ -8,7 +8,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 {
     internal class when_pasing_answer_on_datetime_question : QuestionDataParserTestContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             answer = "4/28/2014 12:00 AM";
             questionDataParser = CreateQuestionDataParser();
@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
             };
         };
 
-        private Because of =
+        Because of =
             () =>
                 parsingResult =
                     questionDataParser.TryParse(answer,questionVarName, question, out parcedValue);
