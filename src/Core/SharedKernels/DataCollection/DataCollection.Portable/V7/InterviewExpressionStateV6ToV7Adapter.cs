@@ -142,7 +142,12 @@ namespace WB.Core.SharedKernels.DataCollection.V7
 
         public LinkedQuestionOptionsChanges ProcessLinkedQuestionFilters()
         {
-            throw new FilteredLinkedQuestionsNotImplementedException();
+            throw new NotSupportedException("linked questions are not supported by versions lower then V7");
+        }
+
+        public bool AreLinkedQuestionsSupported()
+        {
+            return false;
         }
 
         public IInterviewExpressionState Clone()

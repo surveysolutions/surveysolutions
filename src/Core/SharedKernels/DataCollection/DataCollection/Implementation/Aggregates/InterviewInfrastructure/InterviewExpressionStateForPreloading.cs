@@ -114,6 +114,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         }
 
+        public bool AreLinkedQuestionsSupported()
+        {
+            return true;
+        }
+
         IInterviewExpressionStateV7 IInterviewExpressionStateV7.Clone()
         {
             return new InterviewExpressionStateForPreloading();
