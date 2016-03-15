@@ -1,4 +1,4 @@
-﻿using Main.Core.Documents;
+﻿using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 
 namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
 {
@@ -7,5 +7,6 @@ namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
         public string Questionnaire { get; set; }
         public string QuestionnaireAssembly { get; set; }
         public long QuestionnaireContentVersion { get; set; }
+        public QuestionnaireAttachmentMeta[] Attachments { get; set; }
     }
 }

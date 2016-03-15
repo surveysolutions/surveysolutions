@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Code;
@@ -20,19 +19,16 @@ namespace WB.UI.Designer.Api
 {
     public class ImportControllerBase : ApiController
     {
-        private IStringCompressor zipUtils;
-        private IMembershipUserService userHelper;
-        private IQuestionnaireListViewFactory viewFactory;
-        private IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
-        private IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
-        private IQuestionnaireVerifier questionnaireVerifier;
-        private IExpressionProcessorGenerator expressionProcessorGenerator;
-        private IQuestionnaireHelper questionnaireHelper;
-        private IDesignerEngineVersionService engineVersionService;
-        private ISerializer serializer;
+        private readonly IMembershipUserService userHelper;
+        private readonly IQuestionnaireListViewFactory viewFactory;
+        private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
+        private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
+        private readonly IQuestionnaireVerifier questionnaireVerifier;
+        private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
+        private readonly IQuestionnaireHelper questionnaireHelper;
+        protected readonly IDesignerEngineVersionService engineVersionService;
 
         public ImportControllerBase(
-            IStringCompressor zipUtils,
             IMembershipUserService userHelper,
             IQuestionnaireListViewFactory viewFactory,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
@@ -40,10 +36,8 @@ namespace WB.UI.Designer.Api
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
             IQuestionnaireHelper questionnaireHelper, 
-            IDesignerEngineVersionService engineVersionService, 
-            ISerializer serializer)
+            IDesignerEngineVersionService engineVersionService)
         {
-            this.zipUtils = zipUtils;
             this.userHelper = userHelper;
             this.viewFactory = viewFactory;
             this.questionnaireViewFactory = questionnaireViewFactory;
@@ -52,66 +46,12 @@ namespace WB.UI.Designer.Api
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.questionnaireHelper = questionnaireHelper;
             this.engineVersionService = engineVersionService;
-            this.serializer = serializer;
         }
 
         public virtual void Login() { }
 
-        public QuestionnaireCommunicationPackage Questionnaire(DownloadQuestionnaireRequest request, bool useOld)
+        protected string GetQuestionnaireAssemblyOrThrow(QuestionnaireView questionnaireView, Version questionnaireContentVersion)
         {
-            if (request == null) throw new ArgumentNullException("request");
-
-            var questionnaireView =
-                this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(request.QuestionnaireId));
-            if (questionnaireView == null)
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound)
-                {
-                    ReasonPhrase = string.Format(ErrorMessages.TemplateNotFound, request.QuestionnaireId)
-                });
-            }
-
-            if (!this.ValidateAccessPermissions(questionnaireView))
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden)
-                {
-                    ReasonPhrase = ErrorMessages.User_Not_authorized
-                });
-            }
-
-            var supportedClientVersion = new Version(request.SupportedVersion.Major,
-                request.SupportedVersion.Minor,
-                request.SupportedVersion.Patch);
-
-            if (!this.engineVersionService.IsClientVersionSupported(supportedClientVersion))
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
-                {
-                    ReasonPhrase =
-                        string.Format(ErrorMessages.OldClientPleaseUpdate, supportedClientVersion)
-                });
-            }
-
-            if (!this.engineVersionService.IsQuestionnaireDocumentSupportedByClientVersion(questionnaireView.Source, supportedClientVersion))
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
-                {
-                    ReasonPhrase = string.Format(ErrorMessages.YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate, questionnaireView.Title)
-                });
-            }
-
-            var questionnaireErrors = this.questionnaireVerifier.CheckForErrors(questionnaireView.Source).ToArray();
-
-            if (questionnaireErrors.Any(x => x.MessageLevel > VerificationMessageLevel.Warning))
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
-                {
-                    ReasonPhrase = ErrorMessages.Questionnaire_verification_failed
-                });
-            }
-
-            var questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
-
             GenerationResult generationResult;
             string resultAssembly;
             try
@@ -140,23 +80,74 @@ namespace WB.UI.Designer.Api
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
                 {
-                    ReasonPhrase = string.Format(ErrorMessages.YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate, questionnaireView.Title)
+                    ReasonPhrase =
+                        string.Format(
+                            ErrorMessages
+                                .YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate,
+                            questionnaireView.Title)
+                });
+            }
+            return resultAssembly;
+        }
+
+        protected void CheckInvariantsAndThrowIfInvalid(DownloadQuestionnaireRequest request, QuestionnaireView questionnaireView)
+        {
+            var supportedClientVersion = new Version(request.SupportedVersion.Major,
+                request.SupportedVersion.Minor,
+                request.SupportedVersion.Patch);
+
+            if (!this.engineVersionService.IsClientVersionSupported(supportedClientVersion))
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
+                {
+                    ReasonPhrase = string.Format(ErrorMessages.OldClientPleaseUpdate, supportedClientVersion)
                 });
             }
 
-            var questionnaire = questionnaireView.Source.Clone();
-            questionnaire.Macros = null;
-            questionnaire.LookupTables = null;
-            questionnaire.SharedPersons = null;
-
-            var serializationBinder = useOld ? SerializationBinderSettings.NewToOld : SerializationBinderSettings.OldToNew;
-
-            return new QuestionnaireCommunicationPackage
+            if (
+                !this.engineVersionService.IsQuestionnaireDocumentSupportedByClientVersion(questionnaireView.Source,
+                    supportedClientVersion))
             {
-                Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaire, serializationBinder)), // use binder to serialize to the old namespaces and assembly
-                QuestionnaireAssembly = resultAssembly,
-                QuestionnaireContentVersion = questionnaireContentVersion.Major
-            };
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
+                {
+                    ReasonPhrase =
+                        string.Format(
+                            ErrorMessages
+                                .YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate,
+                            questionnaireView.Title)
+                });
+            }
+
+            var questionnaireErrors = this.questionnaireVerifier.CheckForErrors(questionnaireView.Source).ToArray();
+
+            if (questionnaireErrors.Any(x => x.MessageLevel > VerificationMessageLevel.Warning))
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed)
+                {
+                    ReasonPhrase = ErrorMessages.Questionnaire_verification_failed
+                });
+            }
+        }
+
+        protected QuestionnaireView GetQuestionnaireViewOrThrow(DownloadQuestionnaireRequest request)
+        {
+            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(request.QuestionnaireId));
+            if (questionnaireView == null)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    ReasonPhrase = string.Format(ErrorMessages.TemplateNotFound, request.QuestionnaireId)
+                });
+            }
+
+            if (!this.ValidateAccessPermissions(questionnaireView))
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden)
+                {
+                    ReasonPhrase = ErrorMessages.User_Not_authorized
+                });
+            }
+            return questionnaireView;
         }
 
         public virtual PagedQuestionnaireCommunicationPackage PagedQuestionnaireList(QuestionnaireListRequest request)

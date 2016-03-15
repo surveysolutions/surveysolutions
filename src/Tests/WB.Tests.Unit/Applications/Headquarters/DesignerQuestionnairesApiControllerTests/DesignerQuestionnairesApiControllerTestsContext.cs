@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
         protected static DesignerQuestionnairesApiController CreateDesignerQuestionnairesApiController(
             ICommandService commandService = null, IGlobalInfoProvider globalInfo = null, IStringCompressor zipUtils = null,
             ILogger logger = null, Func<IGlobalInfoProvider, RestCredentials> getDesignerUserCredentials = null, IRestService restService = null,
-            ISupportedVersionProvider supportedVersionProvider = null)
+            ISupportedVersionProvider supportedVersionProvider = null, IQuestionnaireAttachmentService questionnaireAttachmentService = null)
         {
             return new DesignerQuestionnairesApiController(
                 supportedVersionProvider ?? new Mock<ISupportedVersionProvider> { DefaultValue = DefaultValue.Mock }.Object,
@@ -25,8 +25,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
                 zipUtils ?? new Mock<IStringCompressor> { DefaultValue = DefaultValue.Mock }.Object,
                 logger ?? Mock.Of<ILogger>(),
                 getDesignerUserCredentials ?? (_ => new Mock<RestCredentials> { DefaultValue = DefaultValue.Mock }.Object),
-                restService ?? Mock.Of<IRestService>()
-               );
+                restService ?? Mock.Of<IRestService>(),
+                questionnaireAttachmentService ?? Mock.Of<IQuestionnaireAttachmentService>());
         }
     }
 }

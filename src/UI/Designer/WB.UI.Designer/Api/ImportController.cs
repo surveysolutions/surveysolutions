@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
@@ -15,6 +16,9 @@ namespace WB.UI.Designer.Api
     [ApiBasicAuth]
     public class ImportController : ImportControllerBase
     {
+        private readonly IStringCompressor zipUtils;
+        private readonly ISerializer serializer;
+
         public ImportController(
             IStringCompressor zipUtils,
             IMembershipUserService userHelper,
@@ -26,11 +30,11 @@ namespace WB.UI.Designer.Api
             IQuestionnaireHelper questionnaireHelper,
             IDesignerEngineVersionService engineVersionService,
             ISerializer serializer)
-            : base(
-                zipUtils, userHelper, viewFactory, questionnaireViewFactory, sharedPersonsViewFactory,
-                questionnaireVerifier, expressionProcessorGenerator, questionnaireHelper, engineVersionService,
-                serializer)
+            : base(userHelper, viewFactory, questionnaireViewFactory, sharedPersonsViewFactory,
+                questionnaireVerifier, expressionProcessorGenerator, questionnaireHelper, engineVersionService)
         {
+            this.zipUtils = zipUtils;
+            this.serializer = serializer;
         }
 
         [HttpGet]
@@ -47,6 +51,29 @@ namespace WB.UI.Designer.Api
         
         [HttpPost]
         public QuestionnaireCommunicationPackage Questionnaire(DownloadQuestionnaireRequest request)
-            => base.Questionnaire(request, true);
+        {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+
+            var questionnaireView = this.GetQuestionnaireViewOrThrow(request);
+
+            this.CheckInvariantsAndThrowIfInvalid(request, questionnaireView);
+
+            var questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
+
+            var resultAssembly = this.GetQuestionnaireAssemblyOrThrow(questionnaireView, questionnaireContentVersion);
+
+            var questionnaire = questionnaireView.Source.Clone();
+            questionnaire.Macros = null;
+            questionnaire.LookupTables = null;
+            questionnaire.SharedPersons = null;
+            questionnaire.Attachments = null;
+
+            return new QuestionnaireCommunicationPackage
+            {
+                Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaire, SerializationBinderSettings.NewToOld)), // use binder to serialize to the old namespaces and assembly
+                QuestionnaireAssembly = resultAssembly,
+                QuestionnaireContentVersion = questionnaireContentVersion.Major
+            };
+        }
     }
 }
