@@ -16,6 +16,7 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -183,6 +184,12 @@ namespace WB.Tests.Unit
                 return new InterviewerAssigned(userId, interviewerId, DateTime.Now)
                         .ToPublishedEvent(eventSourceId: interviewId);
             }
+
+            public static InterviewCompleted InteviewCompleted()
+                => new InterviewCompleted(
+                    Guid.NewGuid(),
+                    DateTime.UtcNow,
+                    "comment");
 
             public static InterviewFromPreloadedDataCreated InterviewFromPreloadedDataCreated(Guid? questionnaireId = null, long? questionnaireVersion = null)
                 => new InterviewFromPreloadedDataCreated(
