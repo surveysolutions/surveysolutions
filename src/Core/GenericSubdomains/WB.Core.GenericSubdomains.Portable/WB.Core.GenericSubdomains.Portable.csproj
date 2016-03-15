@@ -69,6 +69,7 @@
     <Compile Include="Implementation\RestCredentials.cs" />
     <Compile Include="Implementation\RestException.cs" />
     <Compile Include="Implementation\RestExceptionType.cs" />
+    <Compile Include="Implementation\RestFile.cs" />
     <Compile Include="Implementation\Services\CompressedContent.cs" />
     <Compile Include="Implementation\Services\Compressor.cs" />
     <Compile Include="Implementation\Services\DecompressionHandler.cs" />

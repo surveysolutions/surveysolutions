@@ -153,7 +153,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 onDownloadProgressChanged: onDownloadProgressChanged);
         }
 
-        public async Task<byte[]> DownloadFileAsync(string url,
+        public async Task<RestFile> DownloadFileAsync(string url,
             Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, RestCredentials credentials = null,
             CancellationToken? token = null)
         {
@@ -164,7 +164,9 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                         onDownloadProgressChanged: onDownloadProgressChanged);
 
             var fileContent = this.GetDecompressedContentFromHttpResponseMessage(restResponse);
-            return fileContent;
+
+            return new RestFile(content: fileContent, contentType: restResponse.RawContentType,
+                contentHash: restResponse.ETag, contentLength: restResponse.Length, fileName: restResponse.FileName);
         }
 
         private HttpContent CreateCompressedJsonContent(object data)
@@ -228,7 +230,11 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             {
                 Response = responseContent,
                 ContentType = this.GetContentType(responseMessage.Content.Headers.ContentType.MediaType),
-                ContentCompressionType = this.GetContentCompressionType(responseMessage.Content.Headers)
+                ContentCompressionType = this.GetContentCompressionType(responseMessage.Content.Headers),
+                RawContentType = responseMessage.Content?.Headers?.ContentType?.MediaType,
+                Length = responseMessage.Content?.Headers?.ContentLength,
+                ETag = responseMessage.Headers?.ETag?.Tag.Trim('"'),
+                FileName = responseMessage.Content?.Headers?.ContentDisposition?.FileName
             };
         }
 
@@ -302,6 +308,10 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             public byte[] Response { get; set; }
             public RestContentType ContentType { get; set; }
             public RestContentCompressionType ContentCompressionType { get; set; }
+            public string RawContentType { get; set; }
+            public long? Length { get; set; }
+            public string ETag { get; set; }
+            public string FileName { get; set; }
         }
 
         internal enum RestContentType{ Unknown, Json }
