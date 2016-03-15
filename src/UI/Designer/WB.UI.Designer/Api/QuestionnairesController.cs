@@ -116,11 +116,15 @@ namespace WB.UI.Designer.Api
                 .Where(x => questionnaire.Attachments.Any(a => a.AttachmentId == x.AttachmentId))
                 .ToArray();
 
+            foreach (var attachment in questionnaire.Attachments)
+            {
+                attachment.ContentId = attachmentMeta.Single(x => x.AttachmentId == attachment.AttachmentId).AttachmentContentHash;
+            }
+
             return new Questionnaire
             {
                 Document = questionnaire,
-                Assembly = resultAssembly,
-                AttachmentsMeta = attachmentMeta
+                Assembly = resultAssembly
             };
         }
 
