@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace WB.Core.SharedKernels.DataCollection
@@ -10,10 +11,14 @@ namespace WB.Core.SharedKernels.DataCollection
         {
             this.AnswersDeclaredValid = answersDeclaredValid ?? new List<Identity>();
             this.AnswersDeclaredInvalid = answersDeclaredInvalid ?? new List<Identity>();
-            this.FailedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
+
+            IReadOnlyList<FailedValidationCondition> singleFailedValidationList = new[] { new FailedValidationCondition(0) };
+            this.FailedValidationConditions = this.AnswersDeclaredInvalid.ToDictionary(q => q, q => singleFailedValidationList);
         }
 
-        public ValidityChanges(List<Identity> answersDeclaredValid, List<Identity> answersDeclaredInvalid, IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
+        public ValidityChanges(List<Identity> answersDeclaredValid, 
+            List<Identity> answersDeclaredInvalid, 
+            IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
             :this(answersDeclaredValid,answersDeclaredInvalid)
         {
             this.FailedValidationConditions = failedValidationConditions ?? new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();

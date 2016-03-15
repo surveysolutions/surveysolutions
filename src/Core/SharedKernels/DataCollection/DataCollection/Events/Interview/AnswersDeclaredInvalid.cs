@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         {
             this.Questions = questions;
 
-            var dictionary  = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
+            var dictionary = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
             foreach (var question in questions)
             {
                 dictionary.Add(question, new List<FailedValidationCondition>());
