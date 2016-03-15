@@ -1,7 +1,7 @@
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.SurveyManagement.Views.QuestionnaireAttachments;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Mappings
 {
@@ -10,20 +10,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
     {
         public QuestionnaireAttachmentMap()
         {
-            this.Id(x => x.Id, idMap =>
+            this.Id(x => x.AttachmentHash, idMap =>
             {
-                idMap.Generator(Generators.Guid);
+                idMap.Generator(Generators.Assigned);
                 idMap.Column("Id");
             });
 
-            this.Property(x => x.AttachmentId);
-            this.Component(x => x.QuestionnairetIdentity, cm =>
-            {
-                cm.Property(c =>c.QuestionnaireId);
-                cm.Property(c=>c.Version);
-            });
-            this.Property(x => x.AttachmentType);
-            this.Property(x => x.AttachmentContentType);
+            this.Property(x => x.ContentType);
+            this.Property(x => x.Content);
         }
     }
 }
