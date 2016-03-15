@@ -19,6 +19,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
         private IPlainStorageAccessor<AttachmentContent> attachmentContentStorage => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<AttachmentContent>>();
         private IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<AttachmentMeta>>();
 
+        internal Func<MemoryStream, Image> ImageFromStream = stream => Image.FromStream(stream);
+
         public void SaveAttachmentContent(Guid questionnaireId, Guid attachmentId, AttachmentType type, string contentType, byte[] binaryContent, string fileName)
         {
             var formattedAttachmentId = attachmentId.FormatGuid();
@@ -63,7 +65,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             attachmentMeta.FileName = fileName;
             attachmentMeta.AttachmentContentHash = hashOfBinaryContent;
 
-            this.attachmentMetaStorage.Store(attachmentMeta, attachmentId);
+            this.attachmentMetaStorage.Store(attachmentMeta, formattedAttachmentId);
 
             var attachmentHadContentBeforeThisUpload = !string.IsNullOrWhiteSpace(oldHashOfBinaryContent);
             if (attachmentHadContentBeforeThisUpload)
@@ -74,18 +76,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                     this.attachmentContentStorage.Remove(oldHashOfBinaryContent);
                 }
             }
-        }
-
-        public void UpdateAttachmentName(Guid questionnaireId, Guid attachmentId, string name)
-        {
-            var formattedAttachmentId = attachmentId.FormatGuid();
-            var attachmentMeta = this.attachmentMetaStorage.GetById(formattedAttachmentId) ?? new AttachmentMeta
-            {
-                AttachmentId = formattedAttachmentId,
-                QuestionnaireId = questionnaireId.FormatGuid()
-            };
-            attachmentMeta.Name = name;
-            this.attachmentMetaStorage.Store(attachmentMeta, formattedAttachmentId);
         }
 
         public void DeleteAttachment(Guid attachmentId)
@@ -120,7 +110,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                 AttachmentId = formattedAttachmentId,
                 FileName = meta.FileName,
                 Content = content.Content,
-                AttachmentContentId = content.AttachmentContentHash,
+                AttachmentContentId = meta.AttachmentContentHash,
                 ContentType = content.ContentType
             };
         }
@@ -170,7 +160,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                                               select new AttachmentView
                                               {
                                                   ItemId = meta.AttachmentId,
-                                                  Name = meta.Name,
                                                   FileName = meta.FileName,
                                                   LastUpdated = meta.LastUpdateDate,
 
@@ -192,7 +181,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             {
                 AttachmentId = formattedNewAttachmentId,
                 QuestionnaireId = newQuestionnaireId.FormatGuid(),
-                Name = storedAttachmentMeta.Name,
                 FileName = storedAttachmentMeta.FileName,
                 LastUpdateDate = storedAttachmentMeta.LastUpdateDate,
                 AttachmentContentHash = storedAttachmentMeta.AttachmentContentHash,
@@ -225,11 +213,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             {
                 try
                 {
-                    var image = Image.FromStream(stream);
+                    var image = ImageFromStream(stream);
                     return new AttachmentDetails
                     {
                         Height = image.Size.Height,
-                        Width = image.Size.Height,
+                        Width = image.Size.Width,
                         Format = new ImageFormatConverter().ConvertToString(image.RawFormat)
                     };
                 }

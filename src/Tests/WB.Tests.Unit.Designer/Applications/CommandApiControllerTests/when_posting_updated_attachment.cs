@@ -19,7 +19,6 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
             var updateAttachmentCommand = Create.Command.UpdateAttachment(questionnaireId, attachmentId, responsibleId, name, fileName);
 
             attachmentServiceMock.Setup(x => x.SaveAttachmentContent(questionnaireId, attachmentId, AttachmentType.Image, "image/png", fileBytes, fileName)).Verifiable();
-            attachmentServiceMock.Setup(x => x.UpdateAttachmentName(questionnaireId, attachmentId, name)).Verifiable();
 
             var serializedUpdateAttachmentCommand = "hello";
 
@@ -42,10 +41,6 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
         It should_save_attachment_with_specified_params = () =>
             attachmentServiceMock.Verify(
                 x => x.SaveAttachmentContent(questionnaireId, attachmentId, AttachmentType.Image, "image/png", fileBytes, fileName), Times.Once);
-
-        It should_update_attachment_name = () =>
-            attachmentServiceMock.Verify(
-                x => x.UpdateAttachmentName(questionnaireId, attachmentId, name), Times.Once);
 
         private static CommandController controller;
         private static readonly Mock<IAttachmentService> attachmentServiceMock = new Mock<IAttachmentService>();
