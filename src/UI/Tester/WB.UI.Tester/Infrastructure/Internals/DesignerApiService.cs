@@ -19,12 +19,18 @@ namespace WB.UI.Tester.Infrastructure.Internals
         private readonly IRestService restService;
         private readonly IPrincipal principal;
 
+        private RestCredentials restCredentials => new RestCredentials
+        {
+            Login = this.principal.CurrentUserIdentity.Name,
+            Password = this.principal.CurrentUserIdentity.Password
+        };
+
         public DesignerApiService(
             IRestService restService, 
             IPrincipal principal)
         {
             this.restService = restService;
-            this.principal = principal;
+            this.principal = principal;;
         }
 
         public async Task<bool> Authorize(string login, string password)
@@ -63,12 +69,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
 
             downloadedQuestionnaire = await this.restService.GetAsync<Questionnaire>(
                 url: $"questionnaires/{selectedQuestionnaire.Id}",
-                credentials:
-                    new RestCredentials
-                    {
-                        Login = this.principal.CurrentUserIdentity.Name,
-                        Password = this.principal.CurrentUserIdentity.Password
-                    },
+                credentials: this.restCredentials,
                 onDownloadProgressChanged: onDownloadProgressChanged, token: token);
 
             return downloadedQuestionnaire;
@@ -78,18 +79,13 @@ namespace WB.UI.Tester.Infrastructure.Internals
             Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, 
             CancellationToken token)
         {
-            var attachmentContent = await this.restService.DownloadFileAsync(
+            var attachment = await this.restService.DownloadFileAsync(
                 url: $"attachment/{attachmentId}",
-                credentials:
-                    new RestCredentials
-                    {
-                        Login = this.principal.CurrentUserIdentity.Name,
-                        Password = this.principal.CurrentUserIdentity.Password
-                    },
+                credentials: this.restCredentials,
                 onDownloadProgressChanged: onDownloadProgressChanged,
-                token: token);
+                token: token).ConfigureAwait(false);
 
-            return attachmentContent;
+            return attachment.Content;
         }
 
         private async Task<QuestionnaireListItem[]> GetPageOfQuestionnairesAsync(int pageIndex, CancellationToken token)
@@ -97,12 +93,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
             var  batchOfServerQuestionnaires = await this.restService.GetAsync<Core.SharedKernels.SurveySolutions.Api.Designer.QuestionnaireListItem[]>(
                 url: "questionnaires",
                 token: token,
-                credentials: 
-                    new RestCredentials
-                    {
-                        Login = this.principal.CurrentUserIdentity.Name,
-                        Password = this.principal.CurrentUserIdentity.Password
-                    },
+                credentials: this.restCredentials,
                 queryString: new { pageIndex = pageIndex });
 
             return batchOfServerQuestionnaires.Select(questionnaireListItem => new QuestionnaireListItem()
