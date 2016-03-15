@@ -60,6 +60,10 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             eventContext.ShouldContainEvent<AnswersRemoved>(@event
                 => @event.Questions.Count(q => q.Id == linkedQuestionId && !q.RosterVector.Any()) == 1);
 
+        It should_raise_LinkedOptionsChanged_event_with_empty_option_list_for_linked_question = () =>
+          eventContext.ShouldContainEvent<LinkedOptionsChanged>(@event
+              => @event.ChangedLinkedQuestions.Count(q => q.QuestionId.Id == linkedQuestionId && !q.Options.Any()) == 1);
+
         private static EventContext eventContext;
         private static Interview interview;
         private static Guid userId;

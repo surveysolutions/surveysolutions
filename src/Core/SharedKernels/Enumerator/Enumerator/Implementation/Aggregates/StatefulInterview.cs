@@ -646,11 +646,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public IEnumerable<BaseInterviewAnswer> FindAnswersOfReferencedQuestionForLinkedQuestion(Guid referencedQuestionId, Identity linkedQuestion)
         {
-            var stringKey = ConversionHelper.ConvertIdentityToString(linkedQuestion);
-            if (!this.interviewState.LinkedQuestionOptions.ContainsKey(stringKey))
+            if (!this.interviewState.LinkedQuestionOptions.ContainsKey(linkedQuestion))
                 return Enumerable.Empty<BaseInterviewAnswer>();
 
-            var linkedQuestionOptions = this.interviewState.LinkedQuestionOptions[stringKey];
+            var linkedQuestionOptions = this.interviewState.LinkedQuestionOptions[linkedQuestion];
 
             IEnumerable<Identity> targetQuestions =
                 linkedQuestionOptions.Select(x => new Identity(referencedQuestionId, x));
@@ -664,11 +663,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public IEnumerable<InterviewRoster> FindReferencedRostersForLinkedQuestion(Guid rosterId, Identity linkedQuestion)
         {
-             var stringKey = ConversionHelper.ConvertIdentityToString(linkedQuestion);
-            if (!this.interviewState.LinkedQuestionOptions.ContainsKey(stringKey))
+            if (!this.interviewState.LinkedQuestionOptions.ContainsKey(linkedQuestion))
                 return Enumerable.Empty<InterviewRoster>();
 
-            RosterVector[] targetRosters = this.interviewState.LinkedQuestionOptions[stringKey];
+            RosterVector[] targetRosters = this.interviewState.LinkedQuestionOptions[linkedQuestion];
 
             return
                 targetRosters
