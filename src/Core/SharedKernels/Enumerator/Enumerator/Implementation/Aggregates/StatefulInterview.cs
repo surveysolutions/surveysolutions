@@ -49,6 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         private readonly ConcurrentDictionary<string, bool> notAnsweredQuestionsEnablementStatus;
         private readonly ConcurrentDictionary<string, string> notAnsweredQuestionsInterviewerComments;
         private bool createdOnClient;
+        private bool hasLinkedOptionsChangedEvents=false;
 
         public StatefulInterview(ILogger logger, IPlainQuestionnaireRepository questionnaireRepository, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider)
             : base(logger, questionnaireRepository, expressionProcessorStatePrototypeProvider)
@@ -122,7 +123,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 this.SaveAnswerFromAnswerDto(answerDto);
             }
         }
-        
+
+        internal new void Apply(LinkedOptionsChanged @event)
+        {
+            base.Apply(@event);
+            this.hasLinkedOptionsChangedEvents = true;
+        }
+
         internal new void Apply(TextQuestionAnswered @event)
         {
             base.Apply(@event);
@@ -908,6 +915,23 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             var sectionInstances = questionnaire.GetAllSections().Select(x => new Identity(x, new decimal[0]));
 
             return sectionInstances.Sum(section => this.CountInvalidInterviewerAnswersInGroupRecursively(section));
+        }
+
+        public bool HasLinkedOptionsChangedEvents => this.hasLinkedOptionsChangedEvents;
+
+        public void UpdateLinkedOptions()
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
+
+            var linkedQuestionOptionsChanges = CreateChangedLinkedOptions(
+                expressionProcessorState, 
+                this.interviewState, 
+                questionnaire, null,
+                null, null, null, null).ToArray();
+
+            this.ApplyEvent(new LinkedOptionsChanged(linkedQuestionOptionsChanges));
         }
 
         public int CountAnsweredInterviewerQuestionsInGroupRecursively(Identity groupIdentity)

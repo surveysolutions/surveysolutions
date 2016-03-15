@@ -116,5 +116,8 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         int CountActiveQuestionsInInterview();
 
         int CountInvalidQuestionsInInterview();
+
+        bool HasLinkedOptionsChangedEvents { get; }
+        void UpdateLinkedOptions();
     }
 }
