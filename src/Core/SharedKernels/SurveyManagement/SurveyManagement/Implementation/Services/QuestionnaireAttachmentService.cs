@@ -1,4 +1,5 @@
-﻿using WB.Core.Infrastructure.PlainStorage;
+﻿using System.Linq;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
@@ -26,6 +27,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
         public void DeleteAttachment(string attachmentHash)
         {
             this.attachmentStorage.Remove(attachmentHash);
+        }
+
+        public bool HasAttachment(string attachmentHash)
+        {
+            return this.attachmentStorage.Query(attachments => attachments.Any(attachment => attachment.AttachmentHash == attachmentHash));
         }
 
         public byte[] GetAttachment(string attachmentHash)
