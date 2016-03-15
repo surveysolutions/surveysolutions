@@ -23,7 +23,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
             IQuestionnaireVerifier questionnaireVerifier = null,
             IExpressionProcessorGenerator expressionProcessorGenerator=null,
             ISerializer serializer=null,
-            IStringCompressor zipUtils = null)
+            IStringCompressor zipUtils = null,
+            IAttachmentService attachmentService = null)
         {
             return new ImportV2Controller(zipUtils ?? Mock.Of<IStringCompressor>(),
                 membershipUserService ?? Mock.Of<IMembershipUserService>(),
@@ -35,7 +36,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
                 expressionProcessorGenerator??Mock.Of<IExpressionProcessorGenerator>(),
                 Mock.Of<IQuestionnaireHelper>(),
                 engineVersionService ?? Mock.Of<IDesignerEngineVersionService>(),
-                serializer??Mock.Of<ISerializer>());
+                serializer??Mock.Of<ISerializer>(),
+                attachmentService: attachmentService ?? Mock.Of<IAttachmentService>());
         }
     }
 }
