@@ -78,7 +78,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
             Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, 
             CancellationToken token)
         {
-            var attachmentContent = await this.restService.GetAsync<string>(
+            var attachmentContent = await this.restService.DownloadFileAsync(
                 url: $"attachment/{attachmentId}",
                 credentials:
                     new RestCredentials
@@ -89,7 +89,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
                 onDownloadProgressChanged: onDownloadProgressChanged,
                 token: token);
 
-            return Convert.FromBase64String(attachmentContent);
+            return attachmentContent;
         }
 
         private async Task<QuestionnaireListItem[]> GetPageOfQuestionnairesAsync(int pageIndex, CancellationToken token)
