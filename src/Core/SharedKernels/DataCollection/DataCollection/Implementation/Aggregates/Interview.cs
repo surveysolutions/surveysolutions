@@ -1926,7 +1926,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (interviewChanges.LinkedQuestionOptionsChanges != null)
             {
-                this.LinkedQuestionOptionsChangesEvents(interviewChanges.LinkedQuestionOptionsChanges);
+                this.ApplyLinkedQuestionOptionsChangesEvents(interviewChanges.LinkedQuestionOptionsChanges);
             }
         }
 
@@ -1937,7 +1937,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new SubstitutionTitlesChanged(changedQuestionIds.ToArray()));
             }
         }
-        private void LinkedQuestionOptionsChangesEvents(ChangedLinkedOptions[] linkedQuestionOptionsChanges)
+        private void ApplyLinkedQuestionOptionsChangesEvents(ChangedLinkedOptions[] linkedQuestionOptionsChanges)
         {
             if (linkedQuestionOptionsChanges.Length > 0)
             {
@@ -2218,44 +2218,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         #region CheckInvariants
 
         private void CheckLinkedMultiOptionQuestionInvariants(Guid questionId, RosterVector rosterVector,
-            decimal[][] selectedRosterVectors, IQuestionnaire questionnaire, Identity answeredQuestion)
+            decimal[][] linkedQuestionSelectedOptions, IQuestionnaire questionnaire, Identity answeredQuestion)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.MultyOption);
             ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
 
-            if (!selectedRosterVectors.Any())
+            if (!linkedQuestionSelectedOptions.Any())
                 return;
 
-            var linkedQuestionKey =
-                ConversionHelper.ConvertIdAndRosterVectorToString(questionId, rosterVector);
-            if (!this.interviewState.LinkedQuestionOptions.ContainsKey(linkedQuestionKey))
-            {
-                throw new InterviewException(string.Format(
-                    "Answer on linked question {0} is incorrect. Avaliable options are missing" +
-                    "InterviewId: {1}",
-                    FormatQuestionForException(questionId, questionnaire), this.EventSourceId));
-            }
-            var linkedQuestionAvaliableOptions = this.interviewState.LinkedQuestionOptions[linkedQuestionKey];
+            var linkedQuestionIdentity = new Identity(questionId, rosterVector);
 
-            foreach (var selectedRosterVector in selectedRosterVectors)
+            ThrowIfOptionListIfMissingForLinkedQuestion(questionnaire, linkedQuestionIdentity);
+            
+            foreach (var selectedRosterVector in linkedQuestionSelectedOptions)
             {
-                if (!linkedQuestionAvaliableOptions.Contains(new RosterVector(selectedRosterVector)))
-                    throw new InterviewException(string.Format(
-                        "Answer on linked question {0} is incorrect. Option [{1}] is absent, available options [{2}]" +
-                        "InterviewId: {3}",
-                        FormatQuestionForException(questionId, questionnaire),
-                        string.Join(",", selectedRosterVector),
-                        string.Join(" and ", linkedQuestionAvaliableOptions.Select(o => string.Join(",", o))),
-                        this.EventSourceId));
+                ThrowIfOptionIsAbsentForTheLinkedQuestion(selectedRosterVector, questionnaire, linkedQuestionIdentity);
             }
 
-            ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, selectedRosterVectors.Length,
+            ThrowIfLengthOfSelectedValuesMoreThanMaxForSelectedAnswerOptions(questionId, linkedQuestionSelectedOptions.Length,
                 questionnaire);
         }
 
-        private void CheckLinkedSingleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal[] selectedRosterVector, IQuestionnaire questionnaire, Identity answeredQuestion)
+        private void CheckLinkedSingleOptionQuestionInvariants(Guid questionId, RosterVector rosterVector, decimal[] linkedQuestionSelectedOption, IQuestionnaire questionnaire, Identity answeredQuestion)
         {
             ThrowIfQuestionDoesNotExist(questionId, questionnaire);
             ThrowIfRosterVectorIsIncorrect(this.interviewState, questionId, rosterVector, questionnaire);
@@ -2263,26 +2249,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ThrowIfQuestionTypeIsNotOneOfExpected(questionId, questionnaire, QuestionType.SingleOption);
             ThrowIfQuestionOrParentGroupIsDisabled(this.interviewState, answeredQuestion, questionnaire);
 
-            var linkedQuestionKey =
-               ConversionHelper.ConvertIdAndRosterVectorToString(questionId, rosterVector);
-            if (!this.interviewState.LinkedQuestionOptions.ContainsKey(linkedQuestionKey))
+            var linkedQuestionIdentity = new Identity(questionId, rosterVector);
+
+            ThrowIfOptionListIfMissingForLinkedQuestion(questionnaire, linkedQuestionIdentity);
+
+            ThrowIfOptionIsAbsentForTheLinkedQuestion(linkedQuestionSelectedOption, questionnaire, linkedQuestionIdentity);
+        }
+
+        private void ThrowIfOptionIsAbsentForTheLinkedQuestion(decimal[] linkedQuestionSelectedOption, IQuestionnaire questionnaire,
+            Identity linkedQuestionIdentity)
+        {
+            var linkedQuestionAvaliableOptions = this.interviewState.LinkedQuestionOptions[linkedQuestionIdentity];
+
+            if (!linkedQuestionAvaliableOptions.Contains(new RosterVector(linkedQuestionSelectedOption)))
+                throw new InterviewException(string.Format(
+                    "Answer on linked question {0} is incorrect. Option [{1}] is absent, available options [{2}]" +
+                    "InterviewId: {3}",
+                    FormatQuestionForException(linkedQuestionIdentity.Id, questionnaire),
+                    string.Join(",", linkedQuestionSelectedOption),
+                    string.Join(" and ", linkedQuestionAvaliableOptions.Select(o => string.Join(",", o))),
+                    this.EventSourceId));
+        }
+
+        private void ThrowIfOptionListIfMissingForLinkedQuestion(IQuestionnaire questionnaire, Identity linkedQuestionIdentity)
+        {
+            if (!this.interviewState.LinkedQuestionOptions.ContainsKey(linkedQuestionIdentity))
             {
                 throw new InterviewException(string.Format(
                     "Answer on linked question {0} is incorrect. Avaliable options are missing" +
                     "InterviewId: {1}",
-                    FormatQuestionForException(questionId, questionnaire), this.EventSourceId));
+                    FormatQuestionForException(linkedQuestionIdentity.Id, questionnaire), this.EventSourceId));
             }
-
-            var linkedQuestionAvaliableOptions = this.interviewState.LinkedQuestionOptions[linkedQuestionKey];
-
-            if (!linkedQuestionAvaliableOptions.Contains(new RosterVector(selectedRosterVector)))
-                throw new InterviewException(string.Format(
-                    "Answer on linked question {0} is incorrect. Option [{1}] is absent, available options [{2}]" +
-                    "InterviewId: {3}",
-                    FormatQuestionForException(questionId, questionnaire),
-                    string.Join(",", selectedRosterVector),
-                    string.Join(" and ", linkedQuestionAvaliableOptions.Select(o => string.Join(",", o))),
-                    this.EventSourceId));
         }
 
         private void ThrowIfSelectedRosterRowIsAbsent(Guid questionId, decimal[] selectedRosterVector,
@@ -2549,13 +2546,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                rosterInstancesWithAffectedTitles, 
                AnswerUtils.AnswerToString(answer)).ToArray();
 
-            var answersForLinkedQuestionsToRemove = AnswersForLinkedQuestionsToRemove(this.interviewState, changedLinkedOptions);
+            var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
 
             return new InterviewChanges(interviewByAnswerChange,
                 enablementChanges,
                 validationChanges,
                 rosterCalculationData,
-                answersForLinkedQuestionsToRemove,
+                linkedQuestionsAnswersToRemove,
                 rosterInstancesWithAffectedTitles,
                 AnswerUtils.AnswerToString(answer),
                 substitutionChanges,
@@ -2643,13 +2640,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                rosterInstancesWithAffectedTitles,
                answerFormattedAsRosterTitle).ToArray();
 
-            var answersForLinkedQuestionsToRemove = AnswersForLinkedQuestionsToRemove(this.interviewState, changedLinkedOptions);
+            var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
 
             return new InterviewChanges(interviewByAnswerChange, 
                 enablementChanges, 
                 validationChanges,
                 rosterCalculationData,
-                answersForLinkedQuestionsToRemove, 
+                linkedQuestionsAnswersToRemove, 
                 rosterInstancesWithAffectedTitles, 
                 answerFormattedAsRosterTitle,
                 substitutionChanges, 
@@ -2734,13 +2731,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                rosterInstancesWithAffectedTitles,
                answerFormattedAsRosterTitle).ToArray();
 
-            var answersForLinkedQuestionsToRemove = AnswersForLinkedQuestionsToRemove(this.interviewState, changedLinkedOptions);
+            var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
+
             return new InterviewChanges(
                 interviewByAnswerChange,
                 enablementChanges,
                 validationChanges,
                 rosterCalculationData,
-                answersForLinkedQuestionsToRemove,
+                linkedQuestionsAnswersToRemove,
                 rosterInstancesWithAffectedTitles,
                 answerFormattedAsRosterTitle,
                 substitutionChanges,
@@ -2824,12 +2822,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                rosterInstancesWithAffectedTitles,
                answerFormattedAsRosterTitle).ToArray();
 
-            var answersForLinkedQuestionsToRemove = AnswersForLinkedQuestionsToRemove(this.interviewState, changedLinkedOptions);
+            var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
+
             return new InterviewChanges(answerChanges, 
                 enablementChanges,
                 validationChanges,
                 rosterCalculationData,
-                answersForLinkedQuestionsToRemove, 
+                linkedQuestionsAnswersToRemove, 
                 rosterInstancesWithAffectedTitles,
                 answerFormattedAsRosterTitle,
                 substitutionChanges,
@@ -2987,13 +2986,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                rosterInstancesWithAffectedTitles,
                null).ToArray();
 
-            var answersForLinkedQuestionsToRemove = AnswersForLinkedQuestionsToRemove(this.interviewState, changedLinkedOptions);
+            var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
 
             var interviewChanges= new InterviewChanges(interviewByAnswerChange,
                 enablementChanges,
                 validationChanges,
                 rosterCalculationData,
-                answersForLinkedQuestionsToRemove,
+                linkedQuestionsAnswersToRemove,
                 rosterInstancesWithAffectedTitles,
                 null,
                 substitutionChanges,
@@ -3089,23 +3088,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                rosterInstancesWithAffectedTitles,
                answerFormattedAsRosterTitle).ToArray();
 
-            var answersForLinkedQuestionsToRemove = AnswersForLinkedQuestionsToRemove(this.interviewState, changedLinkedOptions);
+            var linkedQuestionsAnswersToRemove = this.GetLinkedQuestionsAnswersToRemove(this.interviewState, changedLinkedOptions, questionnaire);
 
             return new InterviewChanges(
                 interviewByAnswerChange,
                 enablementChanges,
                 validationChanges,
                 null,
-                answersForLinkedQuestionsToRemove,
+                linkedQuestionsAnswersToRemove,
                 rosterInstancesWithAffectedTitles,
                 answerFormattedAsRosterTitle,
                 substitutedQuestions, changedLinkedOptions);
         }
 
-        private List<Identity> AnswersForLinkedQuestionsToRemove(InterviewStateDependentOnAnswers currentState, ChangedLinkedOptions[] linkedOptionChanges)
+        private List<Identity> GetLinkedQuestionsAnswersToRemove(
+            InterviewStateDependentOnAnswers currentState, 
+            ChangedLinkedOptions[] linkedOptionChanges,
+            IQuestionnaire questionnaire)
         {
             var answersToRemove = new List<Identity>();
-            foreach (Tuple<Identity, RosterVector> linkedSingleOptionAnswer in currentState.LinkedSingleOptionAnswersBuggy.Values)
+
+            foreach (Tuple<Identity, RosterVector> linkedSingleOptionAnswer in currentState.GetAllAnswersOnSingleOptionLinkedQuestions(questionnaire))
             {
                 var linkedQuestion = linkedSingleOptionAnswer.Item1;
                 var linkedQuestionSelectedOption = new RosterVector(linkedSingleOptionAnswer.Item2);
@@ -3116,9 +3119,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         answersToRemove.Add(linkedQuestion);
                 }
             }
-            var allLinkedMultipleOptionsAnswers = currentState.LinkedMultipleOptionsAnswers;
 
-            foreach (Tuple<Identity, RosterVector[]> linkedMultipleOptionsAnswer in allLinkedMultipleOptionsAnswers.Values)
+            foreach (Tuple<Identity, RosterVector[]> linkedMultipleOptionsAnswer in currentState.LinkedMultipleOptionsAnswers.Values)
             {
                 var linkedQuestion = linkedMultipleOptionsAnswer.Item1;
                 RosterVector[] linkedQuestionSelectedOptions = linkedMultipleOptionsAnswer.Item2;
@@ -3256,11 +3258,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 Guid linkedQuestionId = linkedQuestionConditionalExecutionResult.Key;
                 RosterVector[] optionsForLinkedQuestion = linkedQuestionConditionalExecutionResult.Value;
 
-                IEnumerable<Identity> instancesOfTheLinkedQuestionsQuestions =
+                IEnumerable<Identity> linkedQuestionInstances =
                     this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState,
                         linkedQuestionId, new decimal[0], questionnaire);
 
-                foreach (var instanceOfTheLinkedQuestionsQuestions in instancesOfTheLinkedQuestionsQuestions)
+                foreach (var instanceOfTheLinkedQuestionsQuestions in linkedQuestionInstances)
                 {
                     var referencedEntityId = questionnaire.IsQuestionLinkedToRoster(linkedQuestionId)
                         ? questionnaire.GetRosterReferencedByLinkedQuestion(linkedQuestionId)
@@ -3270,16 +3272,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     var changedOptionAvaliableForInstanceOfTheQuestion = optionsForLinkedQuestion.Where( o => rosterVectorToStartFrom.SequenceEqual(o.Take(rosterVectorToStartFrom.Length))).ToArray();
 
-                    var questionInstanceKey = ConversionHelper.ConvertIdAndRosterVectorToString(instanceOfTheLinkedQuestionsQuestions.Id, instanceOfTheLinkedQuestionsQuestions.RosterVector);
-                    if (!currentLinkedOptions.ContainsKey(questionInstanceKey))
+                    var questionIdentity = new Identity(instanceOfTheLinkedQuestionsQuestions.Id, instanceOfTheLinkedQuestionsQuestions.RosterVector);
+                    if (!currentLinkedOptions.ContainsKey(questionIdentity))
                     {
                         yield return new ChangedLinkedOptions(instanceOfTheLinkedQuestionsQuestions, changedOptionAvaliableForInstanceOfTheQuestion);
                         continue;
                     }
 
-                    var presentLinkedOptions = currentLinkedOptions[questionInstanceKey];
+                    var presentLinkedOptions = currentLinkedOptions[questionIdentity];
 
-                    if(presentLinkedOptions.Length!= changedOptionAvaliableForInstanceOfTheQuestion.Length || changedOptionAvaliableForInstanceOfTheQuestion.Any(o=>!presentLinkedOptions.Contains(o)))
+                    bool hasNumberOfOptionsChanged = presentLinkedOptions.Length !=
+                                                    changedOptionAvaliableForInstanceOfTheQuestion.Length;
+
+                    bool doesNewOptionsListContainOptionsWhichWasNotPresentBefore =
+                        changedOptionAvaliableForInstanceOfTheQuestion.Any(o => !presentLinkedOptions.Contains(o));
+
+                    if (hasNumberOfOptionsChanged || doesNewOptionsListContainOptionsWhichWasNotPresentBefore)
                         yield return new ChangedLinkedOptions(instanceOfTheLinkedQuestionsQuestions, changedOptionAvaliableForInstanceOfTheQuestion);
                 }
             }
