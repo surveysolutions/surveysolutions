@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ncqrs.Eventing;
@@ -14,21 +15,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public IReadOnlyCollection<CommittedEvent> RemoveEventsNotNeededToBeSent(
             IReadOnlyCollection<CommittedEvent> interviewEvents)
         {
-            return interviewEvents.Where(@event => !ShouldNotSendEvent(@event)).ToReadOnlyCollection();
+            CommittedEvent lastCompletionCommittedEvent = interviewEvents.Last(@event => @event.Payload is InterviewCompleted);
+            Guid lastCompletionCommitId = lastCompletionCommittedEvent.CommitId;
+
+            return interviewEvents.Where(@event => !ShouldNotSendEvent(@event, lastCompletionCommitId)).ToReadOnlyCollection();
         }
 
-        private static bool ShouldNotSendEvent(CommittedEvent committedEvent)
+        private static bool ShouldNotSendEvent(CommittedEvent committedEvent, Guid lastCompletionCommitId)
             => IsInterviewerOnly(committedEvent.Payload)
-            || IsCalculatedButNotAggregating(committedEvent);
+            || IsCalculatedButNotAggregating(committedEvent, lastCompletionCommitId);
 
         private static bool IsInterviewerOnly(IEvent eventPayload)
             => eventPayload is InterviewAnswersFromSyncPackageRestored
             || eventPayload is InterviewOnClientCreated
             || eventPayload is InterviewSynchronized;
 
-        private static bool IsCalculatedButNotAggregating(CommittedEvent committedEvent)
+        private static bool IsCalculatedButNotAggregating(CommittedEvent committedEvent, Guid lastCompletionCommitId)
             => IsCalculated(committedEvent.Payload)
-            && !IsAggregating(committedEvent);
+            && !IsFromLastCompletion(committedEvent, lastCompletionCommitId);
 
         private static bool IsCalculated(IEvent eventPayload)
             => eventPayload is AnswersDeclaredValid
@@ -38,7 +42,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             || eventPayload is GroupsEnabled
             || eventPayload is GroupsDisabled;
 
-        private static bool IsAggregating(CommittedEvent committedEvent)
-            => false;
+        private static bool IsFromLastCompletion(CommittedEvent committedEvent, Guid lastCompletionCommitId)
+            => committedEvent.CommitId == lastCompletionCommitId;
     }
 }
