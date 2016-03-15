@@ -121,12 +121,15 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     foreach (var questionnaireAttachment in questionnairePackage.Attachments)
                     {
+                        if(this.questionnaireAttachmentService.HasAttachment(questionnaireAttachment.AttachmentContentHash))
+                            continue;
+
                         var attachment = await this.restService.DownloadFileAsync(
                             url: $"attachments/{questionnaireAttachment.AttachmentId}",
                             credentials: designerUserCredentials);
 
                         this.questionnaireAttachmentService.SaveAttachment(questionnaireAttachment.AttachmentContentHash,
-                            questionnaireAttachment.ContentType, attachment);
+                            attachment.ContentType, attachment.Content);
                     }
                 }
                 

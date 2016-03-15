@@ -107,7 +107,12 @@ namespace WB.UI.Designer.Api
                 Content = new StreamContent(new MemoryStream(attachment.Content))
             };
 
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachment.ContentType);
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = attachment.FileName
+            };
+            response.Headers.ETag = new EntityTagHeaderValue("\"" + attachment.AttachmentContentId + "\"");
 
             return response;
         }

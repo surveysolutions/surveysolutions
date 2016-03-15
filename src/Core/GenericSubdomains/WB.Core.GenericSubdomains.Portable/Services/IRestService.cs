@@ -1,5 +1,4 @@
 using System;
-using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,7 +17,7 @@ namespace WB.Core.GenericSubdomains.Portable.Services
         Task<T> PostAsync<T>(string url, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null,
             object request = null, RestCredentials credentials = null, CancellationToken? token = null);
 
-        Task<byte[]> DownloadFileAsync(string url,
+        Task<RestFile> DownloadFileAsync(string url,
             Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null,
             RestCredentials credentials = null, CancellationToken? token = null);
     }

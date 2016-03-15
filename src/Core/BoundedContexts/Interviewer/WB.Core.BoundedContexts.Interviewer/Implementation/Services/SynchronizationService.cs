@@ -87,11 +87,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public async Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged,
             CancellationToken token)
         {
-            return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.DownloadFileAsync(
-                url: $"{this.questionnairesController}/{questionnaire.QuestionnaireId}/{questionnaire.Version}/assembly",
-                onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
-                token: token,
-                credentials: this.restCredentials));
+            return await this.TryGetRestResponseOrThrowAsync(async () =>
+            {
+                var restFile = await this.restService.DownloadFileAsync(
+                    url: $"{this.questionnairesController}/{questionnaire.QuestionnaireId}/{questionnaire.Version}/assembly",
+                    onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
+                    token: token,
+                    credentials: this.restCredentials).ConfigureAwait(false);
+                return restFile.Content;
+            });
         }
 
 
@@ -185,8 +189,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public async Task<byte[]> GetApplicationAsync(CancellationToken token)
         {
             return await this.TryGetRestResponseOrThrowAsync(async () =>
-                await this.restService.DownloadFileAsync(url: interviewerApiUrl, token: token,
-                    credentials: this.restCredentials));
+            {
+                var restFile = await this.restService.DownloadFileAsync(url: interviewerApiUrl, token: token,
+                    credentials: this.restCredentials).ConfigureAwait(false);
+
+                return restFile.Content;
+            });
         }
 
         public async Task<int?> GetLatestApplicationVersionAsync(CancellationToken token)
