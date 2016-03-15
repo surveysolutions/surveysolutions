@@ -50,9 +50,7 @@ namespace WB.UI.Interviewer.Infrastructure
                 {
                     PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")
                 });
-            this.Bind(typeof (IAsyncPlainStorage<>))
-                .To(typeof (SqlitePlainStorage<>))
-                .InSingletonScope();
+            this.Bind(typeof (IAsyncPlainStorage<>), typeof(IAsyncPlainStorageRemover<>)).To(typeof (SqlitePlainStorage<>)).InSingletonScope();
 
             this.Bind<InterviewerPrincipal>().To<InterviewerPrincipal>().InSingletonScope();
             this.Bind<IPrincipal>().ToMethod<IPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
