@@ -230,7 +230,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public string GetGroupTitle(Guid groupId) => this.GetGroupOrThrow(groupId).Title;
 
         public string GetStaticText(Guid staticTextId) => this.GetStaticTextOrThrow(staticTextId).Text;
-        public Attachment GetAttachmentIdForEntity(Guid entityId)
+        public Attachment GetAttachmentForEntity(Guid entityId)
         {
             IStaticText staticText = this.GetStaticTextImpl(entityId);
             if (staticText == null)
