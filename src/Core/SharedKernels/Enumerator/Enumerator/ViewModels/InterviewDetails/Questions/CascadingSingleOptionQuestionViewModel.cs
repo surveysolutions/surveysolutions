@@ -385,7 +385,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (this.questionIdentity.Equals(question.Id, question.RosterVector))
                 {
                     this.ResetTextInEditor = null;
-                    this.QuestionState.IsAnswered = false;
                     this.CanRemoveAnswer = false;
                 }
             }
@@ -401,7 +400,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
             {
-                this.QuestionState.IsAnswered = false;
                 this.ResetTextInEditor = string.Empty;
                 this.CanRemoveAnswer = false;
             }

@@ -17,6 +17,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     public class InterviewDetailsViewFactory : IInterviewDetailsViewFactory
     {
         private readonly IReadSideKeyValueStorage<InterviewData> interviewStore;
+
+        private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
         private readonly IReadSideRepositoryReader<UserDocument> userStore;
         private readonly IInterviewDataAndQuestionnaireMerger merger;
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
@@ -28,7 +30,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             IInterviewDataAndQuestionnaireMerger merger,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
-            IPlainQuestionnaireRepository plainQuestionnaireRepository)
+            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
+            IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore)
         {
             this.interviewStore = interviewStore;
             this.userStore = userStore;
@@ -36,6 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             this.changeStatusFactory = changeStatusFactory;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.interviewLinkedQuestionOptionsStore = interviewLinkedQuestionOptionsStore;
         }
 
         public DetailsViewModel GetInterviewDetails(Guid interviewId, Guid? currentGroupId, decimal[] currentGroupRosterVector, InterviewDetailsFilter? filter)
@@ -55,7 +59,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 throw new ArgumentException(
                     $"Questionnaire with id {interview.QuestionnaireId} and version {interview.QuestionnaireVersion} is missing.");
 
-            var interviewDetailsView = merger.Merge(interview, questionnaire, user.GetUseLight());
+            var interviewDetailsView = merger.Merge(interview, questionnaire, user.GetUseLight(), this.interviewLinkedQuestionOptionsStore.GetById(interviewId));
 
             var questionViews = interviewDetailsView.Groups.SelectMany(group => group.Entities).OfType<InterviewQuestionView>().ToList();
             var detailsStatisticView = new DetailsStatisticView()

@@ -345,6 +345,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
             try
             {
+                var transactionManager = this.transactionManagerProviderManager.GetTransactionManager();
                 foreach (var atomicEventHandler in atomicEventHandlers)
                 {
                     ThrowIfShouldStopViewsRebuilding();
@@ -354,7 +355,17 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     foreach (var eventSourceId in eventSourceIds)
                     {
                         UpdateStatusMessage($"Cleaning views for {cleanerName} and event source {eventSourceId}");
-                        atomicEventHandler.CleanWritersByEventSource(eventSourceId);
+                        try
+                        {
+                            transactionManager.BeginCommandTransaction();
+                            atomicEventHandler.CleanWritersByEventSource(eventSourceId);
+                            transactionManager.CommitCommandTransaction();
+                        }
+                        catch
+                        {
+                            transactionManager.RollbackCommandTransaction();
+                            throw;
+                        }
                         UpdateStatusMessage($"Views for {cleanerName} and event source {eventSourceId} was cleaned.");
                     }
                 }

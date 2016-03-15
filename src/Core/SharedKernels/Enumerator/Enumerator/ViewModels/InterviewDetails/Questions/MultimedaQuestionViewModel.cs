@@ -157,7 +157,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (myAnswerRemoved)
             {
                 this.Answer = null;
-                this.QuestionState.IsAnswered = false;
                 this.plainInterviewFileStorage.RemoveInterviewBinaryData(this.interviewId, this.GetPictureFileName());
             }
         }

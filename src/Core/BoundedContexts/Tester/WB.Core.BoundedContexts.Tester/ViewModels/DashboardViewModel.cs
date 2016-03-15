@@ -359,7 +359,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             foreach (var attachmentMeta in attachmentMetas)
             {
                 var attachmentId = attachmentMeta.AttachmentId.FormatGuid();
-                var attachmentContentId = attachmentMeta.AttachmentContentId;
+                var attachmentContentId = attachmentMeta.AttachmentContentHash;
 
                 var attachmentMetadata = new AttachmentMetadata()
                 {

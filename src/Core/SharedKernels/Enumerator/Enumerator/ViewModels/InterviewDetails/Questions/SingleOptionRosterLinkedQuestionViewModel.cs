@@ -24,6 +24,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class SingleOptionRosterLinkedQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
+        ILiteEventHandler<AnswerRemoved>,
+        ILiteEventHandler<AnswersRemoved>,
         ILiteEventHandler<RosterInstancesTitleChanged>,
         ILiteEventHandler<LinkedOptionsChanged>,
         IDisposable
@@ -239,9 +241,34 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 : string.Join(": ", rosterPrefixes, rosterTitle);
         }
 
+        public void Handle(AnswerRemoved @event)
+        {
+            if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
+            {
+                foreach (var option in this.Options.Where(option => option.Selected))
+                {
+                    option.Selected = false;
+                }
+            }
+        }
+         
+        public void Handle(AnswersRemoved @event)
+        {
+            foreach (var question in @event.Questions)
+            {
+                if (this.questionIdentity.Equals(question.Id, question.RosterVector))
+                {
+                    foreach (var option in this.Options.Where(option => option.Selected))
+                    {
+                        option.Selected = false;
+                    }
+                }
+            }
+        }
+
         public void Handle(RosterInstancesTitleChanged @event)
         {
-            var optionListShouldBeUpdated = @event.ChangedInstances.Any();
+            var optionListShouldBeUpdated = @event.ChangedInstances.Any(x => x.RosterInstance.GroupId == this.referencedRosterId);
             if (optionListShouldBeUpdated)
             {
                 this.RefreshOptionsListFromModel();
@@ -250,7 +277,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(LinkedOptionsChanged @event)
         {
-            var optionListShouldBeUpdated = @event.ChangedLinkedQuestions.Any(x => x.QuestionId.Id == referencedRosterId);
+            var optionListShouldBeUpdated = @event.ChangedLinkedQuestions.Any(x => x.QuestionId.Id == this.Identity.Id);
             if (optionListShouldBeUpdated)
             {
                 this.RefreshOptionsListFromModel();
@@ -263,7 +290,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.mainThreadDispatcher.RequestMainThreadAction(() =>
             {
-                this.Options.SynchronizeWith(optionsToUpdate, (s, t) => s.RosterVector.Identical(t.RosterVector));
+                this.Options.SynchronizeWith(optionsToUpdate, (s, t) => s.RosterVector.Identical(t.RosterVector) && s.Title == t.Title);
                 this.RaisePropertyChanged(() => this.HasOptions);
             });
         }

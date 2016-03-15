@@ -2556,8 +2556,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var substitutionChanges = new List<Identity>(this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, alteredState));
 
             var changedLinkedOptions =
-               CreateChangedLinkedOptions(expressionProcessorState.ProcessLinkedQuestionFilters(), this.interviewState,
-                   questionnaire).ToArray();
+               CreateChangedLinkedOptions(expressionProcessorState, this.interviewState, questionnaire).ToArray();
 
             var answersForLinkedQuestionsToRemove = AnswersForLinkedQuestionsToRemove(this.interviewState, changedLinkedOptions);
 
@@ -2645,7 +2644,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var substitutionChanges = new List<Identity>(this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, alteredState));
 
             var changedLinkedOptions =
-              CreateChangedLinkedOptions(expressionProcessorState.ProcessLinkedQuestionFilters(), this.interviewState,
+              CreateChangedLinkedOptions(expressionProcessorState, this.interviewState,
                   questionnaire).ToArray();
 
             var answersForLinkedQuestionsToRemove = AnswersForLinkedQuestionsToRemove(this.interviewState, changedLinkedOptions);
@@ -2731,7 +2730,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var substitutionChanges = new List<Identity>(this.CalculateChangesInSubstitutedQuestions(question.Id, question.RosterVector, questionnaire, alteredState));
 
             var changedLinkedOptions =
-              CreateChangedLinkedOptions(expressionProcessorState.ProcessLinkedQuestionFilters(), this.interviewState,
+              CreateChangedLinkedOptions(expressionProcessorState, this.interviewState,
                   questionnaire).ToArray();
 
             var answersForLinkedQuestionsToRemove = AnswersForLinkedQuestionsToRemove(this.interviewState, changedLinkedOptions);
@@ -2817,7 +2816,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             };
 
             var changedLinkedOptions =
-                CreateChangedLinkedOptions(expressionProcessorState.ProcessLinkedQuestionFilters(), this.interviewState,
+                CreateChangedLinkedOptions(expressionProcessorState, this.interviewState,
                 questionnaire).ToArray();
 
             var answersForLinkedQuestionsToRemove = AnswersForLinkedQuestionsToRemove(this.interviewState, changedLinkedOptions);
@@ -2974,7 +2973,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var substitutionChanges = new List<Identity>(this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, alteredState));
 
             var changedLinkedOptions =
-               CreateChangedLinkedOptions(expressionProcessorState.ProcessLinkedQuestionFilters(), this.interviewState,
+               CreateChangedLinkedOptions(expressionProcessorState, this.interviewState,
                questionnaire).ToArray();
 
             var answersForLinkedQuestionsToRemove = AnswersForLinkedQuestionsToRemove(this.interviewState, changedLinkedOptions);
@@ -3070,7 +3069,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var substitutedQuestions = new List<Identity>(this.CalculateChangesInSubstitutedQuestions(questionId, rosterVector, questionnaire, this.interviewState));
 
             var changedLinkedOptions =
-                CreateChangedLinkedOptions(expressionProcessorState.ProcessLinkedQuestionFilters(), this.interviewState,
+                CreateChangedLinkedOptions(expressionProcessorState, this.interviewState,
                     questionnaire).ToArray();
 
             var answersForLinkedQuestionsToRemove = AnswersForLinkedQuestionsToRemove(this.interviewState, changedLinkedOptions);
@@ -3123,16 +3122,66 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return answersToRemove;
         }
 
-        private IEnumerable<ChangedLinkedOptions> CreateChangedLinkedOptions(LinkedQuestionOptionsChanges conditionExecutionResult, InterviewStateDependentOnAnswers currentState, IQuestionnaire questionnaire)
+        private Dictionary<Guid, RosterVector[]> GetLinkedQuestionOptionsChanges(
+            IInterviewExpressionStateV7 interviewExpressionState, InterviewStateDependentOnAnswers currentState, IQuestionnaire questionnaire)
         {
-            var currentLinkedOptions = currentState.LinkedQuestionOptions;
-
-            if (conditionExecutionResult==null || conditionExecutionResult.LinkedQuestionOptions == null)
+            try
             {
-                yield break;
+                var processLinkedQuestionFilters = interviewExpressionState.ProcessLinkedQuestionFilters();
+                if (processLinkedQuestionFilters != null)
+                    return processLinkedQuestionFilters.LinkedQuestionOptions;
+                return new Dictionary<Guid, RosterVector[]>();
+            }
+            catch (FilteredLinkedQuestionsNotImplementedException)
+            {
+                return this.CalculateLinkedQuestionOptionsChangesWithLogicBeforeV7(currentState, questionnaire);
+            }
+        }
+
+        private Dictionary<Guid, RosterVector[]> CalculateLinkedQuestionOptionsChangesWithLogicBeforeV7(InterviewStateDependentOnAnswers currentState, IQuestionnaire questionnaire)
+        {
+            var result = new Dictionary<Guid, RosterVector[]>();
+            foreach (var questionLinkedOnRoster in questionnaire.GetQuestionsLinkedOnRoster())
+            {
+                var rosterId = questionnaire.GetRosterReferencedByLinkedQuestion(questionLinkedOnRoster);
+                IEnumerable<Identity> targetRosters =
+                    this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(currentState,
+                        new[] {rosterId}, new decimal[0], questionnaire).ToArray();
+
+                var optionRosterVectors =
+                    targetRosters.Where(
+                        r =>
+                            !currentState.IsGroupDisabled(r) &&
+                            !string.IsNullOrEmpty(currentState.GetRosterTitle(r.Id, r.RosterVector)))
+                        .Select(r => r.RosterVector)
+                        .ToArray();
+
+                result.Add(questionLinkedOnRoster, optionRosterVectors);
             }
 
-            foreach (var linkedQuestionConditionalExecutionResult in conditionExecutionResult.LinkedQuestionOptions)
+            foreach (var questionLinkedOnQuestion in questionnaire.GetQuestionsLinkedOnQuestion())
+            {
+                var referencedQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(questionLinkedOnQuestion);
+                IEnumerable<Identity> targetQuestions =
+                    this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(currentState,
+                        referencedQuestionId, new decimal[0], questionnaire);
+
+                var optionRosterVectors =
+                    targetQuestions.Where(q => !currentState.IsQuestionDisabled(q) && currentState.GetAnswerSupportedInExpressions(q) != null)
+                        .Select(q => q.RosterVector)
+                        .ToArray();
+
+                result.Add(questionLinkedOnQuestion, optionRosterVectors);
+            }
+            return result;
+        }
+
+        private IEnumerable<ChangedLinkedOptions> CreateChangedLinkedOptions(IInterviewExpressionStateV7 interviewExpressionState, InterviewStateDependentOnAnswers currentState, IQuestionnaire questionnaire)
+        {
+            var currentLinkedOptions = currentState.LinkedQuestionOptions;
+            var newCurrentLinkedOptions = GetLinkedQuestionOptionsChanges(interviewExpressionState, currentState, questionnaire);
+
+            foreach (var linkedQuestionConditionalExecutionResult in newCurrentLinkedOptions)
             {
                 Guid linkedQuestionId = linkedQuestionConditionalExecutionResult.Key;
                 RosterVector[] optionsForLinkedQuestion = linkedQuestionConditionalExecutionResult.Value;
