@@ -124,6 +124,9 @@ namespace WB.Tests.Unit
             public static AnswersDeclaredInvalid AnswersDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedConditions)
                 => new AnswersDeclaredInvalid(failedConditions);
 
+            public static AnswersDeclaredValid AnswersDeclaredValid()
+                => new AnswersDeclaredValid(new Identity[]{});
+
             public static AnswersRemoved AnswersRemoved(params Identity[] questions)
                 => new AnswersRemoved(questions);
 
@@ -638,10 +641,14 @@ namespace WB.Tests.Unit
                 };
             }
 
-            public static TextQuestionAnswered TextQuestionAnswered(Guid questionId, decimal[] rosterVector, string answer)
-            {
-                return new TextQuestionAnswered(Guid.NewGuid(), questionId, rosterVector, DateTime.Now, answer);
-            }
+            public static TextQuestionAnswered TextQuestionAnswered(
+                Guid? questionId = null, decimal[] rosterVector = null, string answer = null)
+                => new TextQuestionAnswered(
+                    Guid.NewGuid(),
+                    questionId ?? Guid.NewGuid(),
+                    rosterVector ?? WB.Core.SharedKernels.DataCollection.RosterVector.Empty,
+                    DateTime.Now,
+                    answer ?? "answer");
 
             public static NumericQuestionChanged UpdateNumericIntegerQuestion(Guid questionId, string variableName, string enablementCondition = null, string validationExpression = null)
             {
