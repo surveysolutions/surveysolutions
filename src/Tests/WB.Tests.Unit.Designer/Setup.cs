@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Web.Http;
+using System.Web.Http.Controllers;
 using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.UI.Designer.Api;
 
 namespace WB.Tests.Unit.Designer
 {
@@ -51,6 +56,44 @@ namespace WB.Tests.Unit.Designer
             }
 
             return questionnaireEntityFactoryMock;
+        }
+
+        public static void CommandApiControllerToAcceptAttachment(
+            ApiController controller, 
+            byte[] fileContent, 
+            MediaTypeHeaderValue contentType, 
+            string serializedCommand,
+            string fileParamName = "file",
+            string commandParamName = "command")
+        {
+            var binaryContent = new ByteArrayContent(fileContent);
+
+            binaryContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                Name = fileParamName
+            };
+            binaryContent.Headers.ContentType = contentType;
+
+            var commandContent = new StringContent(serializedCommand);
+            commandContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            {
+                Name = commandParamName
+            };
+
+            var multipartContent = new MultipartContent { binaryContent, commandContent };
+
+            var request = new HttpRequestMessage
+            {
+                Content = multipartContent
+            };
+            request.SetConfiguration(new HttpConfiguration());
+
+            var controllerContext = new HttpControllerContext
+            {
+                Request = request
+            };
+
+            controller.ControllerContext = controllerContext;
         }
     }
 }

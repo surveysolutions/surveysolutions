@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ExceptionMessages {
+    public class ExceptionMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Designer.Resources.ExceptionMessages", typeof(ExceptionMessages).Assembly);
@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,9 +61,18 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Uploaded content is not supported.
+        /// </summary>
+        public static string Attachments_Unsupported_content {
+            get {
+                return ResourceManager.GetString("Attachments_Unsupported_content", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Uploaded file &apos;{0}&apos; is not image.
         /// </summary>
-        internal static string Attachments_uploaded_file_is_not_image {
+        public static string Attachments_uploaded_file_is_not_image {
             get {
                 return ResourceManager.GetString("Attachments_uploaded_file_is_not_image", resourceCulture);
             }
@@ -72,7 +81,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Question can&apos;t be linked and cascading at the same time..
         /// </summary>
-        internal static string CantBeLinkedAndCascadingAtSameTime {
+        public static string CantBeLinkedAndCascadingAtSameTime {
             get {
                 return ResourceManager.GetString("CantBeLinkedAndCascadingAtSameTime", resourceCulture);
             }
@@ -81,7 +90,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Question that is used as parent in cascading dropdowns cant be removed before all child questions are removed..
         /// </summary>
-        internal static string CantRemoveParentQuestionInCascading {
+        public static string CantRemoveParentQuestionInCascading {
             get {
                 return ResourceManager.GetString("CantRemoveParentQuestionInCascading", resourceCulture);
             }
@@ -90,7 +99,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Sub-section or roster containing question that is used as parent for cascading combo box cannot be removed before all child questions are removed..
         /// </summary>
-        internal static string CantRemoveSectionParentQuestionInCascading {
+        public static string CantRemoveSectionParentQuestionInCascading {
             get {
                 return ResourceManager.GetString("CantRemoveSectionParentQuestionInCascading", resourceCulture);
             }
@@ -99,7 +108,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cascading questions can&apos;t have enabling condition..
         /// </summary>
-        internal static string CascadingCantHaveConditionExpression {
+        public static string CascadingCantHaveConditionExpression {
             get {
                 return ResourceManager.GetString("CascadingCantHaveConditionExpression", resourceCulture);
             }
@@ -108,7 +117,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cascading questions can&apos;t have validation condition..
         /// </summary>
-        internal static string CascadingCantHaveValidationExpression {
+        public static string CascadingCantHaveValidationExpression {
             get {
                 return ResourceManager.GetString("CascadingCantHaveValidationExpression", resourceCulture);
             }
@@ -117,7 +126,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Options in cascading question can not have empty ParentValue column..
         /// </summary>
-        internal static string CategoricalCascadingOptionsCantContainsEmptyParentValueField {
+        public static string CategoricalCascadingOptionsCantContainsEmptyParentValueField {
             get {
                 return ResourceManager.GetString("CategoricalCascadingOptionsCantContainsEmptyParentValueField", resourceCulture);
             }
@@ -126,7 +135,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Options in cascading question can not have not numeric value in ParentValue column..
         /// </summary>
-        internal static string CategoricalCascadingOptionsCantContainsNotDecimalParentValueField {
+        public static string CategoricalCascadingOptionsCantContainsNotDecimalParentValueField {
             get {
                 return ResourceManager.GetString("CategoricalCascadingOptionsCantContainsNotDecimalParentValueField", resourceCulture);
             }
@@ -135,7 +144,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type..
         /// </summary>
-        internal static string CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair {
+        public static string CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair {
             get {
                 return ResourceManager.GetString("CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair", resourceCulture);
             }
@@ -144,7 +153,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Categorical question contains more than 200 options.
         /// </summary>
-        internal static string CategoricalQuestionHasMoreThan200Options {
+        public static string CategoricalQuestionHasMoreThan200Options {
             get {
                 return ResourceManager.GetString("CategoricalQuestionHasMoreThan200Options", resourceCulture);
             }
@@ -153,7 +162,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Lookup table with such id already exist..
         /// </summary>
-        internal static string LookupTableAlreadyExist {
+        public static string LookupTableAlreadyExist {
             get {
                 return ResourceManager.GetString("LookupTableAlreadyExist", resourceCulture);
             }
@@ -162,7 +171,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Lookup table with such id is absent..
         /// </summary>
-        internal static string LookupTableIsAbsent {
+        public static string LookupTableIsAbsent {
             get {
                 return ResourceManager.GetString("LookupTableIsAbsent", resourceCulture);
             }
@@ -171,7 +180,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to File with no data can not be loaded.
         /// </summary>
-        internal static string LookupTables_cant_has_empty_content {
+        public static string LookupTables_cant_has_empty_content {
             get {
                 return ResourceManager.GetString("LookupTables_cant_has_empty_content", resourceCulture);
             }
@@ -180,7 +189,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Value {0} can not be parsed as decimal number. Column {1}, row {2}..
         /// </summary>
-        internal static string LookupTables_data_value_cannot_be_parsed {
+        public static string LookupTables_data_value_cannot_be_parsed {
             get {
                 return ResourceManager.GetString("LookupTables_data_value_cannot_be_parsed", resourceCulture);
             }
@@ -189,7 +198,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Headers with the same name are not allowed.
         /// </summary>
-        internal static string LookupTables_duplicating_headers_are_not_allowed {
+        public static string LookupTables_duplicating_headers_are_not_allowed {
             get {
                 return ResourceManager.GetString("LookupTables_duplicating_headers_are_not_allowed", resourceCulture);
             }
@@ -198,7 +207,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Empty or invalid headers are not allowed.
         /// </summary>
-        internal static string LookupTables_empty_or_invalid_header_are_not_allowed {
+        public static string LookupTables_empty_or_invalid_header_are_not_allowed {
             get {
                 return ResourceManager.GetString("LookupTables_empty_or_invalid_header_are_not_allowed", resourceCulture);
             }
@@ -207,7 +216,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Mandatory rowcode column is missing.
         /// </summary>
-        internal static string LookupTables_rowcode_column_is_mandatory {
+        public static string LookupTables_rowcode_column_is_mandatory {
             get {
                 return ResourceManager.GetString("LookupTables_rowcode_column_is_mandatory", resourceCulture);
             }
@@ -216,7 +225,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Value {0} can not be parsed as long integer number. Column {1}, row {2}..
         /// </summary>
-        internal static string LookupTables_rowcode_value_cannot_be_parsed {
+        public static string LookupTables_rowcode_value_cannot_be_parsed {
             get {
                 return ResourceManager.GetString("LookupTables_rowcode_value_cannot_be_parsed", resourceCulture);
             }
@@ -225,7 +234,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Rowcode values must be unique.
         /// </summary>
-        internal static string LookupTables_rowcode_values_must_be_unique {
+        public static string LookupTables_rowcode_values_must_be_unique {
             get {
                 return ResourceManager.GetString("LookupTables_rowcode_values_must_be_unique", resourceCulture);
             }
@@ -234,7 +243,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Too many columns in uploaded file. Max columns count is {0}.
         /// </summary>
-        internal static string LookupTables_too_many_columns {
+        public static string LookupTables_too_many_columns {
             get {
                 return ResourceManager.GetString("LookupTables_too_many_columns", resourceCulture);
             }
@@ -243,7 +252,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Max rows count limit ({0} rows) was exceeded..
         /// </summary>
-        internal static string LookupTables_too_many_rows {
+        public static string LookupTables_too_many_rows {
             get {
                 return ResourceManager.GetString("LookupTables_too_many_rows", resourceCulture);
             }
@@ -252,7 +261,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Macro with such is is already exist..
         /// </summary>
-        internal static string MacroAlreadyExist {
+        public static string MacroAlreadyExist {
             get {
                 return ResourceManager.GetString("MacroAlreadyExist", resourceCulture);
             }
@@ -261,7 +270,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Macro can not have empty content..
         /// </summary>
-        internal static string MacroContentIsEmpty {
+        public static string MacroContentIsEmpty {
             get {
                 return ResourceManager.GetString("MacroContentIsEmpty", resourceCulture);
             }
@@ -270,7 +279,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Macro with such is is absent..
         /// </summary>
-        internal static string MacroIsAbsent {
+        public static string MacroIsAbsent {
             get {
                 return ResourceManager.GetString("MacroIsAbsent", resourceCulture);
             }
@@ -279,7 +288,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Identifier &apos;{0}&apos; from expression &apos;{1}&apos; is not valid question or roster identifier. Question or roster with such an identifier is missing..
         /// </summary>
-        internal static string QuestionOrRosterIdentifierIsMissing {
+        public static string QuestionOrRosterIdentifierIsMissing {
             get {
                 return ResourceManager.GetString("QuestionOrRosterIdentifierIsMissing", resourceCulture);
             }
@@ -288,7 +297,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Question to cascade from should exist in questionnaire..
         /// </summary>
-        internal static string ShouldCascadeFromExistingQuestion {
+        public static string ShouldCascadeFromExistingQuestion {
             get {
                 return ResourceManager.GetString("ShouldCascadeFromExistingQuestion", resourceCulture);
             }
