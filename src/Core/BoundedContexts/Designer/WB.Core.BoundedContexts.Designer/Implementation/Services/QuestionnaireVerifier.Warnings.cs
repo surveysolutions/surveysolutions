@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool FewSectionsManyQuestions(ReadOnlyQuestionnaireDocument questionnaire)
             => questionnaire.Find<IQuestion>().Count() > 100
-            && questionnaire.Find<IGroup>(IsNotChapterOrRoot).Count() < 3;
+            && questionnaire.Find<IGroup>(IsSection).Count() < 3;
 
         private static bool MoreThanHalfNumericQuestionsWithoutValidationConditions(ReadOnlyQuestionnaireDocument questionnaire)
             => questionnaire.Find<IQuestion>(IsNumericWithoutValidation).Count() > 0.5 * questionnaire.Find<IQuestion>().Count();
@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             => group.IsRoster
             && !group.Children.Any();
 
-        private static bool IsNotChapterOrRoot(IGroup group) => group.GetParent().GetParent() != null;
+        private static bool IsSection(IGroup group) => group.GetParent().GetParent() == null;
 
         private static bool IsFixedRoster(IGroup group) => group.IsRoster && (group.FixedRosterTitles?.Any() ?? false);
 
