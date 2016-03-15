@@ -23,10 +23,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
         Establish context = () =>
         {
             entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var attachmentId = Guid.Parse("BBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAA").FormatGuid();
+            var attachmentId = Guid.Parse("BBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var attachmentIdString = attachmentId.FormatGuid();
             var attachmentContentId = "cccccc";
-            var attachment = new Attachment();
-            var attachmentMetadata = new AttachmentMetadata() { AttachmentContentId = attachmentContentId };
+            var attachment = new Attachment() { AttachmentId =  attachmentId };
+            var attachmentMetadata = new AttachmentMetadata()
+            {
+                AttachmentContentId = attachmentContentId,
+                Id = attachmentIdString
+            };
 
             var questionnaireMock = Mock.Of<IQuestionnaire>(_
                 => _.GetAttachmentForEntity(entityId) == attachment);
@@ -39,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
 
             attachmentContent = new byte[]{ 1, 2, 3 };
             var attachmentStorage = Mock.Of<IQuestionnaireAttachmentStorage>(s =>
-                s.GetAttachmentAsync(attachmentId) == Task.FromResult(attachmentMetadata)
+                s.GetAttachmentAsync(attachmentIdString) == Task.FromResult(attachmentMetadata)
                 && s.GetAttachmentContentAsync(attachmentContentId) == Task.FromResult(attachmentContent));
 
             viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository.Object, attachmentStorage);
