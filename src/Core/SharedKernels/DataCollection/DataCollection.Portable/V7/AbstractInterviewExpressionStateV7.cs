@@ -217,6 +217,11 @@ namespace WB.Core.SharedKernels.DataCollection.V7
             return result;
         }
 
+        public bool AreLinkedQuestionsSupported()
+        {
+            return true;
+        }
+
         IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone()
         {
             return Clone() as IInterviewExpressionStateV2;

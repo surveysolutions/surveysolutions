@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public class InterviewStateDependentOnAnswers : IReadOnlyInterviewStateDependentOnAnswers
+    public class InterviewStateDependentOnAnswers : IReadOnlyInterviewStateDependentOnAnswers 
     {
         private class AmendingWrapper : IReadOnlyInterviewStateDependentOnAnswers
         {
@@ -81,6 +81,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public ConcurrentHashSet<string> ValidAnsweredQuestions { set; get; }
         public ConcurrentHashSet<string> InvalidAnsweredQuestions { set; get; }
         public ConcurrentBag<AnswerComment> AnswerComments { get; set; }
+
+        public InterviewStateDependentOnAnswers Clone()
+        {
+            return new InterviewStateDependentOnAnswers()
+            {
+                AnswersSupportedInExpressions = this.AnswersSupportedInExpressions.ToConcurrentDictionary(x=>x.Key,x=>x.Value),
+                LinkedSingleOptionAnswersBuggy = this.LinkedSingleOptionAnswersBuggy.ToConcurrentDictionary(x => x.Key, x =>new Tuple<Identity, RosterVector>(x.Value.Item1, x.Value.Item2)),
+                LinkedMultipleOptionsAnswers = this.LinkedMultipleOptionsAnswers.ToConcurrentDictionary(x => x.Key, x => new Tuple<Identity, RosterVector[]>(x.Value.Item1, x.Value.Item2.ToArray())),
+                LinkedQuestionOptions = this.LinkedQuestionOptions.ToConcurrentDictionary(x => x.Key, x => x.Value.ToArray()),
+                TextListAnswers = this.TextListAnswers.ToConcurrentDictionary(x => x.Key, x => x.Value.Select(l=> new Tuple<decimal, string>(l.Item1, l.Item2)).ToArray()),
+
+                AnsweredQuestions = new ConcurrentHashSet<string>(this.AnsweredQuestions),
+                DisabledGroups = new ConcurrentHashSet<string>(this.DisabledGroups),
+                DisabledQuestions = new ConcurrentHashSet<string>(this.DisabledQuestions),
+                RosterGroupInstanceIds = this.RosterGroupInstanceIds.ToConcurrentDictionary(x => x.Key, x => new ConcurrentDistinctList<decimal>(x.Value)),
+                ValidAnsweredQuestions = new ConcurrentHashSet<string>(this.ValidAnsweredQuestions),
+                InvalidAnsweredQuestions = new ConcurrentHashSet<string>(this.InvalidAnsweredQuestions),
+                AnswerComments = new ConcurrentBag<AnswerComment>(this.AnswerComments),
+                RosterTitles = this.RosterTitles.ToConcurrentDictionary(x => x.Key, x => x.Value)
+            };
+        }
 
         public void ApplyInterviewChanges(InterviewChanges changes)
         {

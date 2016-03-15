@@ -95,7 +95,6 @@
     <Compile Include="V6\InterviewExpressionStateV5ToV6Adapter.cs" />
     <Compile Include="V7\AbstractConditionalLevelInstanceV7.cs" />
     <Compile Include="V7\AbstractInterviewExpressionStateV7.cs" />
-    <Compile Include="V7\FilteredLinkedQuestionsNotImplementedException.cs" />
     <Compile Include="V7\IExpressionExecutableV7.cs" />
     <Compile Include="V7\IInterviewExpressionStateV7.cs" />
     <Compile Include="V7\InterviewExpressionStateV6ToV7Adapter.cs" />
