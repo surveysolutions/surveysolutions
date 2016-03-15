@@ -92,7 +92,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             var trimmedSearchText = (searchTerm ?? "").Trim();
 
             Func<QuestionnaireListItem, bool> emptyFilter = x => true;
-            Func<QuestionnaireListItem, bool> titleSearchFilter = x => x.Title.Contains(trimmedSearchText) || x.OwnerName.Contains(trimmedSearchText);
+            Func<QuestionnaireListItem, bool> titleSearchFilter = x => x.Title.Contains(trimmedSearchText) || 
+                                                                       (!string.IsNullOrEmpty(x.OwnerName) && x.OwnerName.Contains(trimmedSearchText));
             Func<QuestionnaireListItem, bool> searchFilter = string.IsNullOrEmpty(trimmedSearchText)
                 ? emptyFilter
                 : titleSearchFilter;
