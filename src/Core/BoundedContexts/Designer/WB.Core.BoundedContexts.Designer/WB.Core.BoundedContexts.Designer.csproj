@@ -699,7 +699,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ExceptionMessages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
