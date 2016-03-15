@@ -235,7 +235,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (@event.QuestionId == this.questionIdentity.Id &&
                 @event.RosterVector.SequenceEqual(this.questionIdentity.RosterVector))
             {
-                QuestionState.IsAnswered = false;
                 this.AnswerAsString = "";
 
                 this.previousAnswer = null;

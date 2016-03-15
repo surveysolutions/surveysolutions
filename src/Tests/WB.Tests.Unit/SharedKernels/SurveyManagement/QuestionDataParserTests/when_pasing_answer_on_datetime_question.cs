@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
     {
         private Establish context = () =>
         {
-            answer = "4/28/2014";
+            answer = "4/28/2014 12:00 AM";
             questionDataParser = CreateQuestionDataParser();
             question = new DateTimeQuestion()
             {
@@ -26,6 +26,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
                     questionDataParser.TryParse(answer,questionVarName, question, out parcedValue);
 
         private It should_result_be_equal_to_4_28_2014 = () =>
-            parcedValue.ShouldEqual(DateTime.Parse("4/28/2014", CultureInfo.InvariantCulture.DateTimeFormat));
+            parcedValue.ShouldEqual(DateTime.Parse("4/28/2014 12:00 AM", CultureInfo.InvariantCulture.DateTimeFormat));
     }
 }

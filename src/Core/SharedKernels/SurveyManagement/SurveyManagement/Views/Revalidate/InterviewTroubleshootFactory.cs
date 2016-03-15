@@ -14,15 +14,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
     {
         private readonly IInterviewDataAndQuestionnaireMerger merger;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewStore;
+        private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
         private readonly IReadSideRepositoryReader<UserDocument> userStore;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
         public InterviewTroubleshootFactory(IReadSideKeyValueStorage<InterviewData> interviewStore,
             IReadSideRepositoryReader<UserDocument> userStore,
-            IInterviewDataAndQuestionnaireMerger merger, IPlainQuestionnaireRepository plainQuestionnaireRepository)
+            IInterviewDataAndQuestionnaireMerger merger, IPlainQuestionnaireRepository plainQuestionnaireRepository, IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore)
         {
             this.merger = merger;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.interviewLinkedQuestionOptionsStore = interviewLinkedQuestionOptionsStore;
             this.interviewStore = interviewStore;
             this.userStore = userStore;
         }
@@ -42,7 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
             if (user == null)
                 throw new ArgumentException($"User with id {interview.ResponsibleId} is not found.");
 
-            var mergedInterview = this.merger.Merge(interview, questionnaire, user.GetUseLight());
+            var mergedInterview = this.merger.Merge(interview, questionnaire, user.GetUseLight(), this.interviewLinkedQuestionOptionsStore.GetById(input.InterviewId));
 
 
             var interviewTroubleshootView = new InterviewTroubleshootView

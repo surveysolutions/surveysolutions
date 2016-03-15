@@ -97,7 +97,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight());
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null);
 
 
         It should_title_of_question_in_first_row_of_first_roster_has_rostertitle_replaced_with_a = () =>
