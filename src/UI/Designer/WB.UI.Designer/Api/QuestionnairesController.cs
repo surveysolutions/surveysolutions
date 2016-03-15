@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -58,9 +59,20 @@ namespace WB.UI.Designer.Api
 
         [Route("~/api/v15/attachment/{id:Guid}")]
         [HttpGet]
-        public string Attachment(Guid id)
+        public HttpResponseMessage Attachment(Guid id)
         {
-            return Convert.ToBase64String(attachmentService.GetAttachment(id).Content);
+            var questionnaireAttachment = this.attachmentService.GetAttachment(id);
+
+            if (questionnaireAttachment?.Content == null)
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            var response = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(questionnaireAttachment.Content)
+            };
+
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            return response;
         }
 
         [Route("{id:Guid}")]
