@@ -105,6 +105,10 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsRosterGroup(Guid groupId);
 
+        ReadOnlyCollection<Guid> GetAllQuestions();
+
+        ReadOnlyCollection<Guid> GetAllGroups();
+
         IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId);
 
         ReadOnlyCollection<Guid> GetAllUnderlyingInterviewerQuestions(Guid groupId);
