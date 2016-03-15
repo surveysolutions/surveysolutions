@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             interview.Apply(new AnswerCommented(userId, commentedQuestionId, new decimal[]{}, existingComment.Date, existingComment.Text));
 
             interview.AssignInterviewer(supervisorId, userId, DateTime.Now);
-            interview.Complete(userId, string.Empty, DateTime.Now);
+            interview.Apply(Create.Event.InterviewStatusChanged(status: InterviewStatus.Completed));
             interview.Approve(userId, string.Empty, DateTime.Now);
 
             eventContext = new EventContext();

@@ -6,6 +6,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
@@ -59,6 +60,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.notAnsweredQuestionsEnablementStatus = new ConcurrentDictionary<string, bool>();
             this.notAnsweredQuestionsInterviewerComments = new ConcurrentDictionary<string, string>();
             this.notAnsweredFailedConditions = new ConcurrentDictionary<string, IList<FailedValidationCondition>>();
+
+            this.ResetCalculatedState();
         }
 
         private void ResetCalculatedState()
@@ -245,6 +248,60 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.ResetCalculatedState();
             this.CommentQuestion(@event.QuestionId, @event.RosterVector, @event.Comment);
         }
+
+
+        #region Command handlers
+
+        public void Complete(Guid userId, string comment, DateTime completeTime)
+        {
+            ThrowIfInterviewHardDeleted();
+            this.ThrowIfInterviewStatusIsNotOneOfExpected(
+                InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
+
+
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            ReadOnlyCollection<Guid> allQuestions = questionnaire.GetAllQuestions();
+            ReadOnlyCollection<Identity> allQuestionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
+                this.interviewState, allQuestions, RosterVector.Empty, questionnaire).ToReadOnlyCollection();
+
+            var validQuestions = allQuestionInstances.Where(question => this.IsValid(question)).ToArray();
+            var invalidQuestions = allQuestionInstances.Where(question => !this.IsValid(question)).ToDictionary(
+                question => question,
+                question => this.GetFailedValidationConditions(question));
+
+            var enabledQuestions = allQuestionInstances.Where(question => this.IsEnabled(question)).ToArray();
+            var disabledQuestions = allQuestionInstances.Where(question => !this.IsEnabled(question)).ToArray();
+
+            ReadOnlyCollection<Guid> allGroups = questionnaire.GetAllGroups();
+            ReadOnlyCollection<Identity> allGroupInstances = this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(
+                this.interviewState, allGroups, RosterVector.Empty, questionnaire).ToReadOnlyCollection();
+
+            var enabledGroups = allGroupInstances.Where(group => this.IsEnabled(group)).ToArray();
+            var disabledGroups = allGroupInstances.Where(group => !this.IsEnabled(group)).ToArray();
+
+            bool isInterviewInvalid = this.HasInvalidAnswers();
+
+
+            if (validQuestions.Length > 0) this.ApplyEvent(new AnswersDeclaredValid(validQuestions));
+            if (invalidQuestions.Count > 0) this.ApplyEvent(new AnswersDeclaredInvalid(invalidQuestions));
+
+            if (enabledQuestions.Length > 0) this.ApplyEvent(new QuestionsEnabled(enabledQuestions));
+            if (disabledQuestions.Length > 0) this.ApplyEvent(new QuestionsDisabled(disabledQuestions));
+
+            if (enabledGroups.Length > 0) this.ApplyEvent(new GroupsEnabled(enabledGroups));
+            if (disabledGroups.Length > 0) this.ApplyEvent(new GroupsDisabled(disabledGroups));
+
+            this.ApplyEvent(new InterviewCompleted(userId, completeTime, comment));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
+
+            this.ApplyEvent(isInterviewInvalid
+                ? new InterviewDeclaredInvalid() as IEvent
+                : new InterviewDeclaredValid());
+        }
+
+        #endregion
+
 
         #region Group and question status and validity
 
