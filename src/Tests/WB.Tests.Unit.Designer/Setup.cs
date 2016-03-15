@@ -7,7 +7,9 @@ using Main.Core.Documents;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Designer.Api;
 
 namespace WB.Tests.Unit.Designer
@@ -94,6 +96,21 @@ namespace WB.Tests.Unit.Designer
             };
 
             controller.ControllerContext = controllerContext;
+        }
+
+        public static void ServiceLocatorForAttachmentService(IPlainStorageAccessor<AttachmentContent> attachmentContentStorage, IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage)
+        {
+            var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
+
+            serviceLocatorMock
+                .Setup(locator => locator.GetInstance<IPlainStorageAccessor<AttachmentContent>>())
+                .Returns(attachmentContentStorage);
+
+            serviceLocatorMock
+                .Setup(locator => locator.GetInstance<IPlainStorageAccessor<AttachmentMeta>>())
+                .Returns(attachmentMetaStorage);
+
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
         }
     }
 }

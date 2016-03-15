@@ -9,7 +9,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
     {
         public virtual string AttachmentId { get; set; }
         public virtual string QuestionnaireId { get; set; }
-        public virtual string Name { get; set; }
         public virtual string FileName { get; set; }
         public virtual DateTime LastUpdateDate { get; set; }
         public virtual string AttachmentContentHash { get; set; }
@@ -26,7 +25,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                 idMap.Column("Id");
             });
 
-            this.Property(x => x.Name);
             this.Property(x => x.FileName);
             this.Property(x => x.LastUpdateDate);
             this.Property(x => x.QuestionnaireId, cm => cm.Index("AttachmentMeta_QuestionnaireId"));
