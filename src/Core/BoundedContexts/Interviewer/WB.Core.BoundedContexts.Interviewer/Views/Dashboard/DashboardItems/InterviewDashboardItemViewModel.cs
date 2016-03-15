@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             IStatefulInterviewRepository interviewRepository,
             ICommandService commandService,
             IPrincipal principal,
-            IMvxMessenger messenger, 
+            IMvxMessenger messenger,
             IExternalAppLauncher externalAppLauncher,
             IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IAsyncPlainStorage<InterviewView> interviewViewRepository,
@@ -107,7 +107,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public IMvxCommand NavigateToGpsLocationCommand
         {
             get { return new MvxCommand(this.NavigateToGpsLocation, () => this.HasGpsLocation); }
-        } 
+        }
 
         private void NavigateToGpsLocation()
         {
@@ -186,53 +186,56 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public IMvxCommand LoadDashboardItemCommand
         {
-            get { return new MvxCommand(async () => await this.LoadInterview()); }
+            get { return new MvxAsyncCommand(LoadInterview, () => !this.isInterviewLoadingInProgress); }
         }
 
         private bool isInterviewLoadingInProgress = false;
 
         public async Task LoadInterview()
         {
-            if (this.isInterviewLoadingInProgress)
-                return;
-
             this.isInterviewLoadingInProgress = true;
-
-            if (this.Status == DashboardInterviewStatus.Completed)
+            try
             {
-                var isReopen = await this.userInteractionService.ConfirmAsync(
-                    InterviewerUIResources.Dashboard_Reinitialize_Interview_Message,
-                    okButton: UIResources.Yes,
-                    cancelButton: UIResources.No);
-
-                if (!isReopen)
+                if (this.Status == DashboardInterviewStatus.Completed)
                 {
-                    this.isInterviewLoadingInProgress = false;
-                    return;
+                    var isReopen = await this.userInteractionService.ConfirmAsync(
+                        InterviewerUIResources.Dashboard_Reinitialize_Interview_Message,
+                        okButton: UIResources.Yes,
+                        cancelButton: UIResources.No);
+
+                    if (!isReopen)
+                    {
+                        return;
+                    }
+
+                    this.RaiseStartingLongOperation();
+                    await Task.Run(async () =>
+                    {
+                        var restartInterviewCommand = new RestartInterviewCommand(this.InterviewId, this.principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
+                        await this.commandService.ExecuteAsync(restartInterviewCommand);
+                    });
                 }
 
-                var restartInterviewCommand = new RestartInterviewCommand(this.InterviewId, this.principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
-                await this.commandService.ExecuteAsync(restartInterviewCommand);
+                this.RaiseStartingLongOperation();
+                await Task.Run(async () =>
+                {
+                    var interviewIdString = this.InterviewId.FormatGuid();
+                    IStatefulInterview interview = interviewRepository.Get(interviewIdString);
+
+                    if (interview.CreatedOnClient)
+                    {
+                        await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewIdString);
+                    }
+                    else
+                    {
+                        await this.viewModelNavigationService.NavigateToInterviewAsync(interviewIdString);
+                    }
+                });
             }
-
-            await Task.Run(async () =>
+            finally
             {
-                RaiseStartingLongOperation();
-
-                var interviewIdString = this.InterviewId.FormatGuid();
-                IStatefulInterview interview = interviewRepository.Get(interviewIdString);
-
-                if (interview.CreatedOnClient)
-                {
-                    await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewIdString);
-                }
-                else
-                {
-                    await this.viewModelNavigationService.NavigateToInterviewAsync(interviewIdString);
-                }
-
                 this.isInterviewLoadingInProgress = false;
-            });
+            }
         }
 
         private void RaiseStartingLongOperation()
