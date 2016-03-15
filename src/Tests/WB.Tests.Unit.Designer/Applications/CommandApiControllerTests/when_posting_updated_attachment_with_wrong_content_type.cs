@@ -20,7 +20,6 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
             var updateAttachmentCommand = Create.Command.UpdateAttachment(questionnaireId, attachmentId, responsibleId, name, fileName);
 
             attachmentServiceMock.Setup(x => x.SaveAttachmentContent(questionnaireId, attachmentId, AttachmentType.Image, "image/png", fileBytes, fileName)).Verifiable();
-            attachmentServiceMock.Setup(x => x.UpdateAttachmentName(questionnaireId, attachmentId, name)).Verifiable();
 
             var serializedUpdateAttachmentCommand = "hello";
 
