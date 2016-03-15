@@ -22,8 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
         {
             entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-            var questionnaireMock = Mock.Of<IQuestionnaire>(_
-                => _.GetAttachmentIdForEntity(entityId) == (Attachment)null);
+            var questionnaireMock = Mock.Of<IQuestionnaire>();
             var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
             questionnaireRepository.SetReturnsDefault(questionnaireMock);
 

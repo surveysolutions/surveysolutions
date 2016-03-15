@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var interview = this.interviewRepository.Get(interviewId);
             IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
-            var attachment = questionnaire.GetAttachmentIdForEntity(entityIdentity.Id);
+            var attachment = questionnaire.GetAttachmentForEntity(entityIdentity.Id);
 
             if (attachment != null)
             {
