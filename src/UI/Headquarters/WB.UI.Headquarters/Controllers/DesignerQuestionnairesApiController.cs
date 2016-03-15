@@ -116,16 +116,18 @@ namespace WB.UI.Headquarters.Controllers
                 var questionnaire = this.zipUtils.DecompressString<QuestionnaireDocument>(questionnairePackage.Questionnaire);
                 var questionnaireContentVersion = questionnairePackage.QuestionnaireContentVersion;
                 var questionnaireAssembly = questionnairePackage.QuestionnaireAssembly;
-                var questionnaireAttachments = questionnairePackage.Attachments;
 
-                foreach (var questionnaireAttachment in questionnaireAttachments)
+                if (questionnairePackage.Attachments != null)
                 {
-                    var attachment = await this.restService.DownloadFileAsync(
-                        url: $"attachments/{questionnaireAttachment.AttachmentId}",
-                        credentials: designerUserCredentials);
+                    foreach (var questionnaireAttachment in questionnairePackage.Attachments)
+                    {
+                        var attachment = await this.restService.DownloadFileAsync(
+                            url: $"attachments/{questionnaireAttachment.AttachmentId}",
+                            credentials: designerUserCredentials);
 
-                    this.questionnaireAttachmentService.SaveAttachment(questionnaireAttachment.AttachmentContentHash,
-                        questionnaireAttachment.ContentType, attachment);
+                        this.questionnaireAttachmentService.SaveAttachment(questionnaireAttachment.AttachmentContentHash,
+                            questionnaireAttachment.ContentType, attachment);
+                    }
                 }
                 
                 this.CommandService.Execute(new ImportFromDesigner(
