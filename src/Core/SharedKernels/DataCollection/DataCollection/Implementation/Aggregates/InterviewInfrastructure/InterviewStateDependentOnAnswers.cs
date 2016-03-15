@@ -370,7 +370,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public IEnumerable<Tuple<Identity, RosterVector>> GetAllAnswersOnSingleOptionLinkedQuestions(IQuestionnaire questionnaire)
         {
-            return this.LinkedSingleOptionAnswersBuggy.Values.Where(answer => questionnaire.IsQuestionLinked(answer.Item1.Id));
+            return this.LinkedSingleOptionAnswersBuggy.Values.Where(answer => questionnaire.IsQuestionLinked(answer.Item1.Id) || questionnaire.IsQuestionLinkedToRoster(answer.Item1.Id));
         }
 
         public IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedMultipleOptionsAnswers(IQuestionnaire questionnaire)
