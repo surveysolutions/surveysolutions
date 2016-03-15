@@ -37,9 +37,7 @@ namespace WB.Infrastructure.Shared.Enumerator
                 c.HttpClientFactory = new ModernHttpClientFactory();
             });
 
-            var subfolderInLocalDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data");
-            this.Bind<IQuestionnaireAttachmentStorage>().To<QuestionnaireAttachmentStorage>()
-                .InSingletonScope().WithConstructorArgument("rootDirectoryPath", subfolderInLocalDirectory);
+            this.Bind<IQuestionnaireAttachmentStorage>().To<QuestionnaireAttachmentStorage>().InSingletonScope();
         }
     }
 }
