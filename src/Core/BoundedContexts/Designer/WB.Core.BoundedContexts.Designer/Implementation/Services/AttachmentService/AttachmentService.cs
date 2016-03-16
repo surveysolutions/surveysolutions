@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using Microsoft.Practices.ServiceLocation;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
@@ -16,10 +14,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 {
     public class AttachmentService : IAttachmentService
     {
-        private IPlainStorageAccessor<AttachmentContent> attachmentContentStorage => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<AttachmentContent>>();
-        private IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<AttachmentMeta>>();
+        private IPlainStorageAccessor<AttachmentContent> attachmentContentStorage;
+        private IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage;
 
         internal Func<MemoryStream, Image> ImageFromStream = stream => Image.FromStream(stream);
+
+        public AttachmentService(
+            IPlainStorageAccessor<AttachmentContent> attachmentContentStorage, 
+            IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage)
+        {
+            this.attachmentContentStorage = attachmentContentStorage;
+            this.attachmentMetaStorage = attachmentMetaStorage;
+        }
 
         public void SaveAttachmentContent(Guid questionnaireId, Guid attachmentId, string attachmentContentId, AttachmentType type, string contentType, byte[] binaryContent, string fileName)
         {
