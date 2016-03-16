@@ -62,7 +62,7 @@
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <AndroidLinkSkip>System.Runtime;System.Linq;System.Collections</AndroidLinkSkip>
+    <AndroidLinkSkip>System.Runtime;System.Linq;System.Collections;System.Text.RegularExpressions</AndroidLinkSkip>
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
     <BundleAssemblies>False</BundleAssemblies>
     <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>

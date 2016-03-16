@@ -51,7 +51,7 @@
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
     <ConsolePause>false</ConsolePause>
-    <AndroidLinkSkip>System.Runtime;System.Linq;System.Collections</AndroidLinkSkip>
+    <AndroidLinkSkip>System.Runtime;System.Linq;System.Collections;System.Text.RegularExpressions</AndroidLinkSkip>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
     <BundleAssemblies>False</BundleAssemblies>
