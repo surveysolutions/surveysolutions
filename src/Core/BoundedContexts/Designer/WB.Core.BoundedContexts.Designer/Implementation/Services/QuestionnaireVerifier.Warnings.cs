@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             && questionnaire.Find<IGroup>(IsSection).Count() < 3;
 
         private static bool MoreThanHalfNumericQuestionsWithoutValidationConditions(ReadOnlyQuestionnaireDocument questionnaire)
-            => questionnaire.Find<IQuestion>(IsNumericWithoutValidation).Count() > 0.5 * questionnaire.Find<IQuestion>().Count();
+            => questionnaire.Find<IQuestion>().Count(IsNumericWithoutValidation) > 0.5 * questionnaire.Find<IQuestion>().Count(IsNumeric);
 
         private static bool HasSingleQuestionInRoster(IGroup rosterGroup)
             => rosterGroup.IsRoster
@@ -92,8 +92,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool IsFixedRoster(IGroup group) => group.IsRoster && (group.FixedRosterTitles?.Any() ?? false);
 
         private static bool IsNumericWithoutValidation(IQuestion question)
-            => question.QuestionType == QuestionType.Numeric
+            => IsNumeric(question)
             && !question.ValidationConditions.Any();
+
+        private static bool IsNumeric(IQuestion question)
+            => question.QuestionType == QuestionType.Numeric;
 
         private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity, TSubEntity>(
             Func<TEntity, IEnumerable<TSubEntity>> getSubEnitites, Func<TSubEntity, bool> hasError, string code, Func<int, string> getMessageBySubEntityIndex)
