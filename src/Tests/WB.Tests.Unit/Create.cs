@@ -2762,5 +2762,23 @@ namespace WB.Tests.Unit
 
         public static InterviewEventStreamOptimizer InterviewEventStreamOptimizer()
             => new InterviewEventStreamOptimizer();
+
+        public static InterviewLinkedQuestionOptions InterviewLinkedQuestionOptions(params ChangedLinkedOptions[] options)
+        {
+            var result = new InterviewLinkedQuestionOptions();
+
+            foreach (var changedLinkedQuestion in options)
+            {
+                result.LinkedQuestionOptions[changedLinkedQuestion.QuestionId.ToString()] = changedLinkedQuestion.Options;
+            }
+
+            return result;
+        }
+
+        public static ChangedLinkedOptions ChangedLinkedOptions(Guid questionId,decimal[] questionRosterVector=null, RosterVector[] options=null)
+        {
+            return new ChangedLinkedOptions(new Identity(questionId, questionRosterVector ?? new decimal[0]),
+                options ?? new RosterVector[0]);
+        }
     }
 }
