@@ -29,7 +29,37 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning(HasNoGpsQuestions, "WB0211", VerificationMessages.WB0211_QuestionnaireHasNoGpsQuestion),
 
             Warning<IQuestion, ValidationCondition>(question => question.ValidationConditions, HasLongValidationCondition, "WB0212", index => string.Format(VerificationMessages.WB0212_LongValidationCondition, index)),
+
+            Warning(TotalAttachmentsSizeIsMoreThan50Mb, "WB0214", VerificationMessages.WB0214_TotalAttachmentsSizeIsMoreThan50Mb),
+            UnusedAttachments,
+            AttachmentSizeIsMoreThan5Mb,
         };
+
+        private IEnumerable<QuestionnaireVerificationMessage> AttachmentSizeIsMoreThan5Mb(ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
+        {
+            return this.attachmentService.GetAttachmentsForQuestionnaire(questionnaire.PublicKey)
+                .Where(x => x.SizeInBytes.HasValue && x.SizeInBytes > 5*1024*1024)
+                .Select(entity => QuestionnaireVerificationMessage.Warning("WB0213", VerificationMessages.WB0213_AttachmentSizeIsMoreThan5Mb, CreateAttachmentReference(Guid.Parse(entity.ItemId))));
+        }
+
+        private IEnumerable<QuestionnaireVerificationMessage> UnusedAttachments(ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
+        {
+            var usedAttachments = questionnaire
+                .Find<IStaticText>(t => !string.IsNullOrWhiteSpace(t.AttachmentName))
+                .Select(x => x.AttachmentName)
+                .Distinct()
+                .ToList();
+
+            return questionnaire.Attachments.Except(x => !usedAttachments.Contains(x.Name))
+                .Select(entity => QuestionnaireVerificationMessage.Warning("WB0215", VerificationMessages.WB0215_UnusedAttachments, CreateAttachmentReference(entity.AttachmentId)));
+        }
+
+        private bool TotalAttachmentsSizeIsMoreThan50Mb(ReadOnlyQuestionnaireDocument questionnaire)
+        {
+            return this.attachmentService
+                .GetAttachmentsForQuestionnaire(questionnaire.PublicKey)
+                .Sum(x => x.SizeInBytes ?? 0) > 50*1024*1024; // 50 Mb;
+        }
 
         private static bool HasLongValidationCondition(ValidationCondition condition)
         {
