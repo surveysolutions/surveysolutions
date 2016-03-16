@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
@@ -75,17 +76,25 @@ namespace WB.UI.Tester.Infrastructure.Internals
             return downloadedQuestionnaire;
         }
 
-        public async Task<byte[]> GetQuestionnaireAttachmentAsync(string attachmentId,
+        public async Task<AttachmentContent> GetAttachmentContentAsync(string attachmentId,
             Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, 
             CancellationToken token)
         {
-            var attachment = await this.restService.DownloadFileAsync(
+            var restFile = await this.restService.DownloadFileAsync(
                 url: $"attachment/{attachmentId}",
                 credentials: this.restCredentials,
                 onDownloadProgressChanged: onDownloadProgressChanged,
                 token: token).ConfigureAwait(false);
 
-            return attachment.Content;
+            var attachmentContent = new AttachmentContent()
+            {
+                ContentType = restFile.ContentType,
+                Content = restFile.Content,
+                Id = restFile.ContentHash,
+                Size = restFile.ContentLength ?? restFile.Content.LongLength
+            };
+
+            return attachmentContent;
         }
 
         private async Task<QuestionnaireListItem[]> GetPageOfQuestionnairesAsync(int pageIndex, CancellationToken token)
