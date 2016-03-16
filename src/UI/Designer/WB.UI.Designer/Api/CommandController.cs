@@ -2,8 +2,10 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web.Http;
+using MultipartDataMediaFormatter.Infrastructure;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -56,67 +58,43 @@ namespace WB.UI.Designer.Api
             this.attachmentService = attachmentService;
         }
 
+        public class AttachmentModel
+        {
+            public HttpFile File { get; set; }
+            public string Command { get; set; }
+        }
+
         [Route("~/api/command/updateAttachment")]
         [HttpPost]
-        public async Task<HttpResponseMessage> UpdateAttachment()
+        public HttpResponseMessage UpdateAttachment(AttachmentModel model)
         {
-            var commandType = typeof(UpdateAttachment).Name;
-            string fileParameterName = "file";
-            string commandParameterName = "command";
-
-            if (!this.Request.Content.IsMimeMultipartContent())
-            {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
-            }
-
-            var multipartStreamProvider = new MultipartMemoryStreamProvider();
-
-            UpdateAttachment updateAttachment;
+            var commandType = typeof (UpdateAttachment).Name;
+            UpdateAttachment updateAttachmentCommand;
             try
             {
-                await this.Request.Content.ReadAsMultipartAsync(multipartStreamProvider);
-
-                var multipartContents = multipartStreamProvider.Contents.Select(x => new
+                updateAttachmentCommand = (UpdateAttachment) this.commandDeserializer.Deserialize(commandType, model.Command);
+                using (SHA1CryptoServiceProvider sha1 = new SHA1CryptoServiceProvider())
                 {
-                    ParamName = x.Headers.ContentDisposition.Name.Replace("\"", string.Empty),
-                    Content = x
-                }).ToDictionary(x => x.ParamName, x => x.Content);
-
-                var fileStreamContent = new
-                {
-                    BinaryContent = multipartContents[fileParameterName].ReadAsByteArrayAsync().Result,
-                    ContentType = multipartContents[fileParameterName].Headers.ContentType?.MediaType
-                };
-
-                var commandContent = multipartContents[commandParameterName].ReadAsStringAsync().Result;
-
-                updateAttachment = (UpdateAttachment)this.commandDeserializer.Deserialize(commandType, commandContent);
-
-                if (fileStreamContent.BinaryContent?.Length > 0)
-                {
-                    // save image here
-                    AttachmentType attachmentType = GetAttachmentTypeByRequestMediaType(fileStreamContent.ContentType);
-
-                    this.attachmentService.SaveAttachmentContent(
-                        updateAttachment.QuestionnaireId, 
-                        updateAttachment.AttachmentId,
-                        attachmentType,
-                        fileStreamContent.ContentType,
-                        fileStreamContent.BinaryContent,
-                        updateAttachment.AttachmentFileName);
+                    updateAttachmentCommand.AttachmentContentId =
+                        BitConverter.ToString(sha1.ComputeHash(model.File.Buffer)).Replace("-", string.Empty);
                 }
-            }
-            catch (FormatException e)
-            {
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
+
+                this.attachmentService.SaveAttachmentContent(
+                    questionnaireId: updateAttachmentCommand.QuestionnaireId,
+                    attachmentId: updateAttachmentCommand.AttachmentId,
+                    attachmentContentId: updateAttachmentCommand.AttachmentContentId,
+                    type: this.GetAttachmentTypeByRequestMediaType(model.File.MediaType),
+                    contentType: model.File.MediaType,
+                    binaryContent: model.File.Buffer,
+                    fileName: model.File.FileName);
             }
             catch (ArgumentException e)
             {
-                this.logger.Error(string.Format("Error on command of type ({0}) handling ", commandType), e);
+                this.logger.Error($"Error on command of type ({commandType}) handling ", e);
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
             }
 
-            return this.ProcessCommand(updateAttachment, commandType);
+            return this.ProcessCommand(updateAttachmentCommand, commandType);
         }
 
         private AttachmentType GetAttachmentTypeByRequestMediaType(string contentType)

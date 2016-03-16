@@ -1237,10 +1237,10 @@ namespace WB.Tests.Unit.Designer
                 return new AddAttachment(questionnaireId, attachmentId, responsibleId);
             }
 
-            public static UpdateAttachment UpdateAttachment(Guid questionnaireId, Guid attachmentId, Guid responsibleId, string attachmentName,
+            public static UpdateAttachment UpdateAttachment(Guid questionnaireId, Guid attachmentId, string attachmentContentId, Guid responsibleId, string attachmentName,
                 string attachmentFileName)
             {
-                return new UpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, attachmentFileName);
+                return new UpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, attachmentFileName, attachmentContentId);
             }
 
             public static DeleteAttachment DeleteAttachment(Guid questionnaireId, Guid attachmentId, Guid responsibleId)

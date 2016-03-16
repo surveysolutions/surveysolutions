@@ -117,18 +117,18 @@ namespace WB.UI.Headquarters.Controllers
                 var questionnaireContentVersion = questionnairePackage.QuestionnaireContentVersion;
                 var questionnaireAssembly = questionnairePackage.QuestionnaireAssembly;
 
-                if (questionnairePackage.Attachments != null)
+                if (questionnaire.Attachments != null)
                 {
-                    foreach (var questionnaireAttachment in questionnairePackage.Attachments)
+                    foreach (var questionnaireAttachment in questionnaire.Attachments)
                     {
-                        if(this.questionnaireAttachmentService.HasAttachment(questionnaireAttachment.AttachmentContentHash))
+                        if(this.questionnaireAttachmentService.HasAttachment(questionnaireAttachment.ContentId))
                             continue;
 
                         var attachment = await this.restService.DownloadFileAsync(
                             url: $"attachments/{questionnaireAttachment.AttachmentId}",
                             credentials: designerUserCredentials);
 
-                        this.questionnaireAttachmentService.SaveAttachment(questionnaireAttachment.AttachmentContentHash,
+                        this.questionnaireAttachmentService.SaveAttachment(questionnaireAttachment.ContentId,
                             attachment.ContentType, attachment.Content);
                     }
                 }
