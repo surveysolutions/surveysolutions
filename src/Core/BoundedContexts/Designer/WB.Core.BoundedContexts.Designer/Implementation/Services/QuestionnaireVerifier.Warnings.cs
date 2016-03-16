@@ -50,7 +50,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 .Distinct()
                 .ToList();
 
-            return questionnaire.Attachments.Except(x => !usedAttachments.Contains(x.Name))
+            var attachments = questionnaire.Attachments.Except(x => usedAttachments.Contains(x.Name));
+            return attachments
                 .Select(entity => QuestionnaireVerificationMessage.Warning("WB0215", VerificationMessages.WB0215_UnusedAttachments, CreateAttachmentReference(entity.AttachmentId)));
         }
 
