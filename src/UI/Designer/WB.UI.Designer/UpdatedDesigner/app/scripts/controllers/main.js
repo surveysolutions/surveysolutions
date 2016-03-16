@@ -169,8 +169,10 @@ angular.module('designerApp')
                 } else if (reference.type.toLowerCase() === "lookuptable") {
                     $scope.verificationStatus.visible = false;
                     $rootScope.$broadcast("openLookupTables", { focusOn: reference.itemId });
-                }
-                else {
+                } else if (reference.type.toLowerCase() === "attachment") {
+                    $scope.verificationStatus.visible = false;
+                    $rootScope.$broadcast("openAttachments", { focusOn: reference.itemId });
+                } else {
                     $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
                         chapterId: reference.chapterId,
                         itemId: reference.itemId
