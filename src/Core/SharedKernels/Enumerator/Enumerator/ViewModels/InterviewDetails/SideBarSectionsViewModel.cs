@@ -186,7 +186,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private void RefreshListWithNewItemAdded(Identity addedIdentity, IStatefulInterview interview)
         {
             Identity parentId = interview.GetParentGroup(addedIdentity);
-            var sectionToAddTo = this.AllVisibleSections.SingleOrDefault(x => x.ScreenType == ScreenType.Group && x.SectionIdentity.Equals(parentId));
+            var sectionToAddTo = this.AllVisibleSections.FirstOrDefault(x => x.ScreenType == ScreenType.Group && x.SectionIdentity.Equals(parentId));
 
             if (sectionToAddTo != null)
             {
@@ -234,9 +234,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 var section = this.AllVisibleSections.FirstOrDefault(s => s.ScreenType == ScreenType.Group && s.SectionIdentity.Equals(groupIdentity));
                 if (section != null)
                 {
-                    if (section.Parent != null)
-                        section.Parent.Children.Remove(section);
-                    
+                    section.Parent?.Children.Remove(section);
+
                     section.RemoveMe();
                 }
             }
@@ -265,9 +264,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void UpdateSideBarTree()
         {
-            var tree = this.Sections.TreeToEnumerableDepthFirst(
-                x => x.Expanded ? x.Children : Enumerable.Empty<SideBarSectionViewModel>()
-                ).ToList();
+            var tree = this.Sections.TreeToEnumerableDepthFirst(x => x.Expanded ? x.Children : Enumerable.Empty<SideBarSectionViewModel>()).ToList();
             this.AllVisibleSections = new ObservableCollection<SideBarSectionViewModel>(tree);
             this.RaisePropertyChanged(() => this.AllVisibleSections);
         }
