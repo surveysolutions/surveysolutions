@@ -17,11 +17,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
     {
         public static AttachmentViewModel CreateViewModel(IPlainQuestionnaireRepository questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
-            IQuestionnaireAttachmentStorage attachmentStorage = null)
+            IAttachmentContentStorage attachmentContentStorage = null)
         {
             return new AttachmentViewModel(questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                attachmentStorage ?? Mock.Of<IQuestionnaireAttachmentStorage>());
+                attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>());
         }
 
     }
