@@ -90,7 +90,7 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpGet]
-        [Route("attachments/{id:Guid}")]
+        [Route("attachments/{id}")]
         public HttpResponseMessage Attachment(string id)
         {
             var attachment = this.attachmentService.GetAttachmentContent(id);
@@ -99,7 +99,7 @@ namespace WB.UI.Designer.Api
 
             var response = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new StreamContent(new MemoryStream(attachment.Content))
+                Content = new ByteArrayContent(attachment.Content)
             };
 
             response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachment.ContentType);
