@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.Controllers
     [ApiValidationAntiForgeryToken]
     public class DesignerQuestionnairesApiController : BaseApiController
     {
-        private readonly IQuestionnaireAttachmentService questionnaireAttachmentService;
+        private readonly IAttachmentContentService attachmentContentService;
 
         internal RestCredentials designerUserCredentials
         {
@@ -43,7 +43,7 @@ namespace WB.UI.Headquarters.Controllers
         public DesignerQuestionnairesApiController(
             ISupportedVersionProvider supportedVersionProvider,
             ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger, IRestService restService,
-            IQuestionnaireAttachmentService questionnaireAttachmentService)
+            IAttachmentContentService questionnaireAttachmentService)
             : this(supportedVersionProvider, commandService, globalInfo, zipUtils, logger, GetDesignerUserCredentials, restService, questionnaireAttachmentService)
         {
             
@@ -52,14 +52,14 @@ namespace WB.UI.Headquarters.Controllers
         internal DesignerQuestionnairesApiController(ISupportedVersionProvider supportedVersionProvider,
             ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger,
             Func<IGlobalInfoProvider, RestCredentials> getDesignerUserCredentials, IRestService restService,
-            IQuestionnaireAttachmentService questionnaireAttachmentService)
+            IAttachmentContentService attachmentContentService)
             : base(commandService, globalInfo, logger)
         {
             this.zipUtils = zipUtils;
             this.getDesignerUserCredentials = getDesignerUserCredentials;
             this.supportedVersionProvider = supportedVersionProvider;
             this.restService = restService;
-            this.questionnaireAttachmentService = questionnaireAttachmentService;
+            this.attachmentContentService = attachmentContentService;
         }
 
         private static RestCredentials GetDesignerUserCredentials(IGlobalInfoProvider globalInfoProvider)
@@ -121,15 +121,15 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     foreach (var questionnaireAttachment in questionnaire.Attachments)
                     {
-                        if(this.questionnaireAttachmentService.HasAttachment(questionnaireAttachment.ContentId))
+                        if(this.attachmentContentService.HasAttachmentContent(questionnaireAttachment.ContentId))
                             continue;
 
-                        var attachment = await this.restService.DownloadFileAsync(
-                            url: $"attachments/{questionnaireAttachment.AttachmentId}",
+                        var attachmentContent = await this.restService.DownloadFileAsync(
+                            url: $"attachments/{questionnaireAttachment.ContentId}",
                             credentials: designerUserCredentials);
 
-                        this.questionnaireAttachmentService.SaveAttachment(questionnaireAttachment.ContentId,
-                            attachment.ContentType, attachment.Content);
+                        this.attachmentContentService.SaveAttachmentContent(questionnaireAttachment.ContentId,
+                            attachmentContent.ContentType, attachmentContent.Content);
                     }
                 }
                 
