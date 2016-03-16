@@ -19,12 +19,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         };
 
         Because of = () => 
-            parsingResult = questionDataParser.TryParse(isoDateTimeAsString, questionVarName, question, out parcedValue);
+            parsingResult = questionDataParser.TryParse(expectedDateTimeAnswer.ToString("yyyy-MM-ddTHH:mm:ss"), questionVarName, question, out parcedValue);
 
         It should_result_be_equal_to_epexted = () =>
             parcedValue.ShouldEqual(expectedDateTimeAnswer);
 
         private static readonly DateTime expectedDateTimeAnswer = new DateTime(2016, 02, 13, 17, 04, 41);
-        private static readonly string isoDateTimeAsString = "2016-02-13T17:04:41";
     }
 }
