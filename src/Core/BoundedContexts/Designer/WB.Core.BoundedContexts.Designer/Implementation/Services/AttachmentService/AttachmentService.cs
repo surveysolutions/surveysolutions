@@ -104,6 +104,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
             var content = attachmentContentStorage.GetById(meta.AttachmentContentHash);
 
+            if (content == null)
+                return null;
+
             return new QuestionnaireAttachment
             {
                 AttachmentId = formattedAttachmentId,
