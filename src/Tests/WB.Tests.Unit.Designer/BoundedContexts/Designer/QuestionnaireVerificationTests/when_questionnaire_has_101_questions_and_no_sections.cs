@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         Establish context = () =>
         {
-            questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+            questionnaire = Create.QuestionnaireDocument(
                 children: Enumerable.Range(1, 101).Select(_ => Create.TextQuestion()).ToArray<IComposite>());
 
             verifier = CreateQuestionnaireVerifier();
