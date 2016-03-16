@@ -3175,6 +3175,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<RosterIdentity> rosterInstancesWithAffectedTitles,
             string answerAsRosterTitle)
         {
+            var questionsLinkedOnRoster = questionnaire.GetQuestionsLinkedOnRoster();
+            var questionsLinkedOnQuestion = questionnaire.GetQuestionsLinkedOnQuestion();
+            if(!questionsLinkedOnRoster.Any() && !questionsLinkedOnQuestion.Any())
+                return new Dictionary<Guid, RosterVector[]>();
+
             var updatedState = currentState.Clone();
 
             if (enablementChanges != null)
@@ -3204,7 +3209,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             var result = new Dictionary<Guid, RosterVector[]>();
-            foreach (var questionLinkedOnRoster in questionnaire.GetQuestionsLinkedOnRoster())
+            foreach (var questionLinkedOnRoster in questionsLinkedOnRoster)
             {
                 var rosterId = questionnaire.GetRosterReferencedByLinkedQuestion(questionLinkedOnRoster);
                 IEnumerable<Identity> targetRosters =
@@ -3221,7 +3226,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 result.Add(questionLinkedOnRoster, optionRosterVectors);
             }
 
-            foreach (var questionLinkedOnQuestion in questionnaire.GetQuestionsLinkedOnQuestion())
+            foreach (var questionLinkedOnQuestion in questionsLinkedOnQuestion)
             {
                 var referencedQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(questionLinkedOnQuestion);
                 IEnumerable<Identity> targetQuestions =
