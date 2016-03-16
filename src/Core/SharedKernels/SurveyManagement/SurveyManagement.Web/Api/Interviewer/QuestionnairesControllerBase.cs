@@ -121,5 +121,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         public virtual void LogQuestionnaireAssemblyAsSuccessfullyHandled(Guid id, int version)
         {
         }
+
+        [WriteToSyncLog(SynchronizationLogType.GetQuestionnaireAttachments)]
+        public virtual HttpResponseMessage GetAttachments(Guid id, int version)
+        {
+            var questionnaireDocumentVersioned = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
+
+            if (questionnaireDocumentVersioned == null)
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            var attachmentIds = questionnaireDocumentVersioned.Attachments.Select(a => a.ContentId).ToList();
+
+            var response = this.Request.CreateResponse(attachmentIds);
+            response.Headers.CacheControl = new CacheControlHeaderValue()
+            {
+                Public = true,
+                MaxAge = TimeSpan.FromDays(10)
+            };
+
+            return response;
+        }
     }
 }

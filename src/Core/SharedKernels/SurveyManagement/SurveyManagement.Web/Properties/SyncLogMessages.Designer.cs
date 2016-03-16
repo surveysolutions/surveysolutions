@@ -124,6 +124,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download attachment content: {0}.
+        /// </summary>
+        public static string GetAttachmentContent {
+            get {
+                return ResourceManager.GetString("GetAttachmentContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download list of census questionnaires: &lt;br/&gt; &lt;ul&gt;{0}&lt;/ul&gt;.
         /// </summary>
         public static string GetCensusQuestionnaires {
@@ -192,6 +201,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         public static string GetQuestionnaireAssembly {
             get {
                 return ResourceManager.GetString("GetQuestionnaireAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download questionnaire attachments: &lt;b&gt;{0}&lt;/b&gt; [{1}].
+        /// </summary>
+        public static string GetQuestionnaireAttachments {
+            get {
+                return ResourceManager.GetString("GetQuestionnaireAttachments", resourceCulture);
             }
         }
         

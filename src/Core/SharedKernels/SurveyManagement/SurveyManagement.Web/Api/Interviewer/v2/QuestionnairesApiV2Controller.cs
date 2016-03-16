@@ -39,5 +39,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         public override void LogQuestionnaireAsSuccessfullyHandled(Guid id, int version) => base.LogQuestionnaireAsSuccessfullyHandled(id, version);
         [HttpPost]
         public override void LogQuestionnaireAssemblyAsSuccessfullyHandled(Guid id, int version) => base.LogQuestionnaireAssemblyAsSuccessfullyHandled(id, version);
+        [HttpGet]
+        public override HttpResponseMessage GetAttachments(Guid id, int version) => base.GetAttachments(id, version);
+        
     }
 }

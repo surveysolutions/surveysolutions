@@ -131,6 +131,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
                     case SynchronizationLogType.InterviewProcessed:
                         logItem.Log = SyncLogMessages.InterviewProcessed.FormatString(context.GetActionArgument<Guid>("id"));
                         break;
+                    case SynchronizationLogType.GetQuestionnaireAttachments:
+                        logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.GetQuestionnaireAttachments, context);
+                        break;
+                    case SynchronizationLogType.GetAttachmentContent:
+                        logItem.Log = SyncLogMessages.GetAttachmentContent.FormatString(context.GetActionArgument<Guid>("id"));
+                        break;
 
                     default:
                         throw new ArgumentException("logAction");

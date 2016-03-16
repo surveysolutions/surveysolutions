@@ -186,4 +186,10 @@
   <data name="InterviewProcessed" xml:space="preserve">
     <value>&lt;font color="green"'&gt;Interview &lt;b&gt;{0}&lt;/b&gt; successfully processed&lt;/font&gt;</value>
   </data>
+  <data name="GetAttachmentContent" xml:space="preserve">
+    <value>Download attachment content: {0}</value>
+  </data>
+  <data name="GetQuestionnaireAttachments" xml:space="preserve">
+    <value>Download questionnaire attachments: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  </data>
 </root>
