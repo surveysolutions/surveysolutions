@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             IUserInteractionService userInteractionService = null,
             IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage = null,
             IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage = null,
-            IQuestionnaireAttachmentStorage questionnaireAttachmentStorage = null)
+            IAttachmentContentStorage attachmentContentStorage = null)
         {
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.Name == userName && _.UserId == userId);
             mockOfPrincipal.Setup(x => x.CurrentUserIdentity).Returns(userIdentity);
@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 questionnaireListStorage: questionnaireListStorage,
                 dashboardLastUpdateStorage: dashboardLastUpdateStorage ?? localDashboardLastUpdateStorageMock.Object,
                 logger: logger ?? Mock.Of<ILogger>(),
-                attachmentStorage: questionnaireAttachmentStorage ?? Mock.Of<IQuestionnaireAttachmentStorage>());
+                attachmentContentStorage: attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>());
         }
 
         protected static readonly Guid userId = Guid.Parse("ffffffffffffffffffffffffffffffff");

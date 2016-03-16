@@ -38,9 +38,6 @@ namespace WB.UI.Tester.Activities
 
         private async Task ClearAttachmentStorage()
         {
-            var attachmentMetadataRemover = Mvx.Resolve<IAsyncPlainStorageRemover<AttachmentMetadata>>();
-            await attachmentMetadataRemover.DeleteAllAsync();
-
             var attachmentContentRemover = Mvx.Resolve<IAsyncPlainStorageRemover<AttachmentContent>>();
             await attachmentContentRemover.DeleteAllAsync();
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -59,17 +60,22 @@ namespace WB.UI.Designer.Api
         [HttpGet]
         public HttpResponseMessage Attachment(Guid id)
         {
-            var questionnaireAttachment = this.attachmentService.GetAttachment(id);
+            var attachment = this.attachmentService.GetAttachment(id);
 
-            if (questionnaireAttachment?.Content == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+            if (attachment == null) return Request.CreateResponse(HttpStatusCode.NotFound);
 
             var response = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new ByteArrayContent(questionnaireAttachment.Content)
+                Content = new ByteArrayContent(attachment.Content)
             };
 
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachment.ContentType);
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = attachment.FileName
+            };
+            response.Headers.ETag = new EntityTagHeaderValue("\"" + attachment.AttachmentContentId + "\"");
+
             return response;
         }
 
