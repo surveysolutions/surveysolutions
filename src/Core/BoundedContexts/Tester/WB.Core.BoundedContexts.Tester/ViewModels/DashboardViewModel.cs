@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage;
         private readonly IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage;
         private readonly ILogger logger;
-        private readonly IQuestionnaireAttachmentStorage attachmentStorage;
+        private readonly IAttachmentContentStorage attachmentContentStorage;
 
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage, 
             IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage,
             ILogger logger,
-            IQuestionnaireAttachmentStorage attachmentStorage) : base(principal, viewModelNavigationService)
+            IAttachmentContentStorage attachmentContentStorage) : base(principal, viewModelNavigationService)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
@@ -71,7 +71,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.questionnaireListStorage = questionnaireListStorage;
             this.dashboardLastUpdateStorage = dashboardLastUpdateStorage;
             this.logger = logger;
-            this.attachmentStorage = attachmentStorage;
+            this.attachmentContentStorage = attachmentContentStorage;
             this.friendlyErrorMessageService = friendlyErrorMessageService;
         }
 
@@ -292,7 +292,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                 if (questionnairePackage != null)
                 {
-                    await this.DownloadQuestionnaireAttachments(questionnairePackage.AttachmentsMeta);
+                    await this.DownloadQuestionnaireAttachments(questionnairePackage);
 
                     this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_StoreQuestionnaire;
 
@@ -354,29 +354,22 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
         }
 
-        private async Task DownloadQuestionnaireAttachments(QuestionnaireAttachmentMeta[] attachmentMetas)
+        private async Task DownloadQuestionnaireAttachments(Questionnaire questionnaire)
         {
-            if (attachmentMetas == null)
+            if (questionnaire == null)
                 return;
 
-            foreach (var attachmentMeta in attachmentMetas)
+            var attachments = questionnaire.Document.Attachments;
+
+            foreach (var attachment in attachments)
             {
-                var attachmentId = attachmentMeta.AttachmentId.FormatGuid();
-                var attachmentContentId = attachmentMeta.AttachmentContentHash;
+                var attachmentContentId = attachment.ContentId;
 
-                var attachmentMetadata = new AttachmentMetadata()
-                {
-                    Id = attachmentId,
-                    AttachmentContentId = attachmentContentId,
-                    ContentType = attachmentMeta.ContentType,
-                };
-
-                await this.attachmentStorage.StoreAsync(attachmentMetadata);
-
-                var isExistsContent = false;//await this.attachmentStorage.IsExistAttachmentContentAsync(attachmentContentId);
+                var isExistsContent = await this.attachmentContentStorage.IsExistAttachmentContentAsync(attachmentContentId);
                 if (!isExistsContent)
                 {
-                    var attachmentContent = await this.designerApiService.GetQuestionnaireAttachmentAsync(attachmentId,
+                    var attachmentId = attachment.AttachmentId.FormatGuid();
+                    var attachmentContent = await this.designerApiService.GetAttachmentContentAsync(attachmentId,
                                         onDownloadProgressChanged: (downloadProgress) =>
                                         {
                                             this.ProgressIndicator = string.Format(TesterUIResources.ImportQuestionnaireAttachments_DownloadProgress,
@@ -384,7 +377,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                                         },
                                         token: this.tokenSource.Token);
 
-                    await this.attachmentStorage.StoreAttachmentContentAsync(attachmentContentId, attachmentContent);
+                    await this.attachmentContentStorage.StoreAttachmentContentAsync(attachmentContent);
                 }
             }
         }
