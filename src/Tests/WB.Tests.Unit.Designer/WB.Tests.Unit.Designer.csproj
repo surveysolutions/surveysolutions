@@ -351,6 +351,7 @@
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_static_text_with_attachment.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_static_text_with_attachment_and_client_version_is_11.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_yes_no_question.cs" />
+    <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_questionnaire_has_10_text_questions_and_5_numeric_questions_with_no_validation_conditions.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\Attachments\when_adding_attachment.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\Attachments\when_adding_attachment_without_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\Attachments\when_adding_attachment_with_premission_to_edit.cs" />
