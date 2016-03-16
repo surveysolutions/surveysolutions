@@ -356,6 +356,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         private async Task DownloadQuestionnaireAttachments(QuestionnaireAttachmentMeta[] attachmentMetas)
         {
+            if (attachmentMetas == null)
+                return;
+
             foreach (var attachmentMeta in attachmentMetas)
             {
                 var attachmentId = attachmentMeta.AttachmentId.FormatGuid();
