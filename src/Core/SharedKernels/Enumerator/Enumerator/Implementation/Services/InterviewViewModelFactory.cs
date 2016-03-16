@@ -46,7 +46,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             StaticTextModel = 300
         }
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
-        private readonly IPlainQuestionnaireRepository questionnaireModelRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
         private readonly Dictionary<InterviewEntityType, Func<IInterviewEntityViewModel>> EntityTypeToViewModelMap =
@@ -81,11 +80,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public InterviewViewModelFactory(
             IPlainQuestionnaireRepository questionnaireRepository,
-            IPlainQuestionnaireRepository questionnaireModelRepository,
             IStatefulInterviewRepository interviewRepository)
         {
             this.questionnaireRepository = questionnaireRepository;
-            this.questionnaireModelRepository = questionnaireModelRepository;
             this.interviewRepository = interviewRepository;
         }
 
@@ -101,10 +98,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private IEnumerable<IInterviewEntityViewModel> GenerateViewModels(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireModelRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
             if (!questionnaire.HasGroup(groupIdentity.Id))
-                throw new KeyNotFoundException($"Group with id {groupIdentity.Id.FormatGuid()} don't found");
+                throw new KeyNotFoundException($"Group with id {groupIdentity.Id.FormatGuid()} was not found. Interview id: {interviewId}.");
 
             var groupWithoutNestedChildren = interview.GetInterviewerEntities(groupIdentity);
 

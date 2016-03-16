@@ -143,7 +143,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var answerModel = interview.GetIntegerNumericAnswer(entityIdentity);
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
-            //var questionModel = questionnaire.GetIntegerNumericQuestion(entityIdentity.Id);
 
             if (answerModel.IsAnswered)
             {
