@@ -14,8 +14,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 {
     public class AttachmentService : IAttachmentService
     {
-        private IPlainStorageAccessor<AttachmentContent> attachmentContentStorage;
-        private IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage;
+        private readonly IPlainStorageAccessor<AttachmentContent> attachmentContentStorage;
+        private readonly IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage;
 
         internal Func<MemoryStream, Image> ImageFromStream = stream => Image.FromStream(stream);
 

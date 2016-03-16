@@ -7,9 +7,6 @@ namespace WB.Core.SharedKernels.SurveySolutions.Documents
         public Guid AttachmentId { get; set; }
         public string Name { get; set; }
         public string FileName { get; set; }
-        /// <summary>
-        /// Unused field on Designer subsystem
-        /// </summary>
         public string ContentId { get; set; }
 
         public Attachment Clone()
