@@ -6,11 +6,11 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 namespace WB.Core.SharedKernels.SurveyManagement.Mappings
 {
     [PlainStorage]
-    public class QuestionnaireAttachmentMap : ClassMapping<QuestionnaireAttachment>
+    public class AttachmentContentMap : ClassMapping<AttachmentContent>
     {
-        public QuestionnaireAttachmentMap()
+        public AttachmentContentMap()
         {
-            this.Id(x => x.AttachmentHash, idMap =>
+            this.Id(x => x.ContentHash, idMap =>
             {
                 idMap.Generator(Generators.Assigned);
                 idMap.Column("Id");
