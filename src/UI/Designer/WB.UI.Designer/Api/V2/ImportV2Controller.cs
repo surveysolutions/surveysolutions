@@ -81,24 +81,19 @@ namespace WB.UI.Designer.Api
             questionnaire.LookupTables = null;
             questionnaire.SharedPersons = null;
 
-            var attachmentMeta = attachmentService.GetBriefAttachmentsMetaForQuestionnaire(request.QuestionnaireId)
-                .Where(x => questionnaire.Attachments.Any(a => a.AttachmentId == x.AttachmentId))
-                .ToArray();
-
             return new QuestionnaireCommunicationPackage
             {
                 Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaire, SerializationBinderSettings.OldToNew)), // use binder to serialize to the old namespaces and assembly
                 QuestionnaireAssembly = resultAssembly,
-                QuestionnaireContentVersion = questionnaireContentVersion.Major,
-                Attachments = attachmentMeta
+                QuestionnaireContentVersion = questionnaireContentVersion.Major
             };
         }
 
         [HttpGet]
         [Route("attachments/{id:Guid}")]
-        public HttpResponseMessage Attachment(Guid id)
+        public HttpResponseMessage Attachment(string id)
         {
-            var attachment = this.attachmentService.GetAttachment(id);
+            var attachment = this.attachmentService.GetAttachmentContent(id);
 
             if (attachment == null) return Request.CreateResponse(HttpStatusCode.NotFound);
 
@@ -108,11 +103,7 @@ namespace WB.UI.Designer.Api
             };
 
             response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachment.ContentType);
-            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-            {
-                FileName = attachment.FileName
-            };
-            response.Headers.ETag = new EntityTagHeaderValue("\"" + attachment.AttachmentContentId + "\"");
+            response.Headers.ETag = new EntityTagHeaderValue("\"" + attachment.AttachmentContentHash + "\"");
 
             return response;
         }

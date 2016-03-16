@@ -895,7 +895,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void UpdateAttachment(UpdateAttachment command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-            this.ApplyEvent(new AttachmentUpdated(command.AttachmentId, command.AttachmentName, command.AttachmentFileName, command.ResponsibleId));
+            this.ApplyEvent(new AttachmentUpdated(
+                attachmentId: command.AttachmentId, 
+                attachmentName: command.AttachmentName, 
+                attachmentFileName: command.AttachmentFileName, 
+                responsibleId: command.ResponsibleId,
+                attachmentContentId: command.AttachmentContentId));
         }
 
         public void DeleteAttachment(DeleteAttachment command)
