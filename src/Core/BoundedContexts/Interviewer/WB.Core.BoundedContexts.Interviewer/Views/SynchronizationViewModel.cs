@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
+using MvvmCross.Platform.Core;
 using MvvmCross.Platform.Exceptions;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
@@ -19,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -35,6 +37,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IMvxMessenger messenger;
         private readonly IInterviewerQuestionnaireAccessor questionnaireFactory;
         private readonly IInterviewerInterviewAccessor interviewFactory;
+        private readonly IAttachmentContentStorage attachmentContentStorage;
 
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
@@ -55,7 +58,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IPrincipal principal,
             IMvxMessenger messenger,
             IInterviewerQuestionnaireAccessor questionnaireFactory,
-            IInterviewerInterviewAccessor interviewFactory)
+            IInterviewerInterviewAccessor interviewFactory,
+            IAttachmentContentStorage attachmentContentStorage)
         {
             this.synchronizationService = synchronizationService;
             this.logger = logger;
@@ -69,6 +73,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.messenger = messenger;
             this.questionnaireFactory = questionnaireFactory;
             this.interviewFactory = interviewFactory;
+            this.attachmentContentStorage = attachmentContentStorage;
         }
 
         private RestCredentials restCredentials => new RestCredentials()
@@ -288,6 +293,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             
             if (!this.questionnaireFactory.IsQuestionnaireExists(questionnaireIdentity))
             {
+                var contentIds = await synchronizationService.GetAttachmentContentsAsync(questionnaire: questionnaireIdentity,
+                    onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                    token: this.Token);
+
+                foreach (var contentId in contentIds)
+                {
+                    var isExistContent = await this.attachmentContentStorage.IsExistAttachmentContentAsync(contentId);
+                    if (!isExistContent)
+                    {
+                        var attachmentContent = await synchronizationService.GetAttachmentContentAsync(contentId: contentId,
+                            onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                            token: this.Token);
+
+                        await this.attachmentContentStorage.StoreAttachmentContentAsync(attachmentContent);
+                    }
+                }
+
+
                 var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(
                     questionnaire: questionnaireIdentity,
                     onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },

@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
@@ -23,6 +24,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly string usersController = string.Concat(interviewerApiUrl, "/users");
         private readonly string interviewsController = string.Concat(interviewerApiUrl, "/interviews");
         private readonly string questionnairesController = string.Concat(interviewerApiUrl, "/questionnaires");
+        private readonly string attachmentContentController = string.Concat(interviewerApiUrl, "/attachments");
 
         private readonly IPrincipal principal;
         private readonly IRestService restService;
@@ -182,6 +184,44 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 token: token));
         }
 
+
+
+        #endregion
+        
+        #region Attachments
+        public async Task<List<string>> GetAttachmentContentsAsync(QuestionnaireIdentity questionnaire, 
+            Action<decimal, long, long> onDownloadProgressChanged,
+            CancellationToken token)
+        {
+            return await this.TryGetRestResponseOrThrowAsync(async () =>
+                await this.restService.GetAsync<List<string>>(
+                    url: $"{this.questionnairesController}/{questionnaire.QuestionnaireId}/{questionnaire.Version}/attachments",
+                    credentials: this.restCredentials,
+                    token: token));
+        }
+
+        public async Task<AttachmentContent> GetAttachmentContentAsync(string contentId, 
+            Action<decimal, long, long> onDownloadProgressChanged, 
+            CancellationToken token)
+        {
+            return await this.TryGetRestResponseOrThrowAsync(async () =>
+            {
+                var restFile = await this.restService.DownloadFileAsync(
+                    url: $"{this.attachmentContentController}/{contentId}",
+                    onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
+                    token: token,
+                    credentials: this.restCredentials).ConfigureAwait(false);
+
+                var attachmentContent = new AttachmentContent()
+                {
+                    Content = restFile.Content,
+                    ContentType = restFile.ContentType,
+                    Id = restFile.ContentHash,
+                    Size = restFile.ContentLength ?? restFile.Content.Length
+                };
+                return attachmentContent;
+            });
+        } 
         #endregion
 
         #region [Application Api]
