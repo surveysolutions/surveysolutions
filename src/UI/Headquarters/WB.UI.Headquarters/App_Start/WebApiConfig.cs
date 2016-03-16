@@ -60,6 +60,8 @@ namespace WB.UI.Headquarters
             config.TypedRoute("api/interviewer/v2/interviews/{id:guid}/logstate", c => c.Action<InterviewsApiV2Controller>(x => x.LogInterviewAsSuccessfullyHandled(Param.Any<Guid>())));
             config.TypedRoute("api/interviewer/v2/interviews/{id:guid}", c => c.Action<InterviewsApiV2Controller>(x => x.Post(Param.Any<InterviewPackageApiView>())));
             config.TypedRoute("api/interviewer/v2/interviews/{id:guid}/image", c => c.Action<InterviewsApiV2Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
+            config.TypedRoute("api/interviewer/v2/questionnaires/{id:guid}/{version:int}/attachments", c => c.Action<QuestionnairesApiV2Controller>(x => x.GetAttachments(Param.Any<Guid>(), Param.Any<int>())));
+            config.TypedRoute("api/interviewer/v2/attachments/{id}", c => c.Action<AttachmentsApiV2Controller>(x => x.GetAttachmentContent(Param.Any<string>())));
 
 
             config.Filters.Add(new UnhandledExceptionFilter());

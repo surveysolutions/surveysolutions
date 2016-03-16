@@ -185,6 +185,7 @@
     <Compile Include="Api\ControlPanelApiController.cs" />
     <Compile Include="Api\HealthCheckApiController.cs" />
     <Compile Include="Api\InterviewerSyncController.cs" />
+    <Compile Include="Api\Interviewer\AttachmentsControllerBase.cs" />
     <Compile Include="Api\Interviewer\InterviewerControllerBase.cs" />
     <Compile Include="Api\Interviewer\DevicesControllerBase.cs" />
     <Compile Include="Api\Interviewer\UsersControllerBase.cs" />
@@ -198,6 +199,7 @@
     <Compile Include="Api\Interviewer\v2\InterviewerApiV2Controller.cs" />
     <Compile Include="Api\Interviewer\v2\DevicesApiV2Controller.cs" />
     <Compile Include="Api\Interviewer\v2\InterviewsApiV2Controller.cs" />
+    <Compile Include="Api\Interviewer\v2\AttachmentsApiV2Controller.cs" />
     <Compile Include="Api\Interviewer\v2\QuestionnairesApiV2Controller.cs" />
     <Compile Include="Api\Interviewer\v2\UsersApiV2Controller.cs" />
     <Compile Include="Api\InterviewsController.cs" />
