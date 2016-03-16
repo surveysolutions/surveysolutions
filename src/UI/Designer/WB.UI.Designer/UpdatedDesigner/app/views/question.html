@@ -239,14 +239,14 @@
                             <span ng-if="breadCrumb.isSectionPlaceHolder">{{::breadCrumb.title}}</span>
 
                             <a ng-if="!breadCrumb.isSectionPlaceHolder && breadCrumb.type==='roster'"
-                               ng-click="setLinkSource(breadCrumb.id)"
+                               ng-click="setLinkSource(breadCrumb.id, activeQuestion.linkedFilterExpression)"
                                role="menuitem"
                                tabindex="-1"
                                class="linked-roster-source"
                                href="javascript:void(0);">{{::breadCrumb.title}}</a>
 
                             <a ng-if="!breadCrumb.isSectionPlaceHolder&& breadCrumb.type!=='roster'"
-                               ng-click="setLinkSource(breadCrumb.id)"
+                               ng-click="setLinkSource(breadCrumb.id, activeQuestion.linkedFilterExpression)"
                                role="menuitem"
                                tabindex="-1"
                                class="linked-question-source"
@@ -256,7 +256,10 @@
                         </li>
                     </ul>
                 </div>
-                <hr/>
+                <p class="help-block ng-cloak" ng-show="questionForm.linkedToEntity.$error.required">
+                    You must bind this question
+                </p>
+                <hr />
                 <label for="linkedFilterExpression">Filter</label>
                 
                 <input id="linkedFilterExpression" type="text" ng-model="activeQuestion.linkedFilterExpression" class="form-control" style="border-color:#ccc;box-shadow: inset 0 1px 1px #ccc;">
