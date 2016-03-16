@@ -84,7 +84,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
         protected static Mock<ILiteEventRegistry> EventRegistry;
 
-        protected static List<CascadingOptionModel> Options = new List<CascadingOptionModel>
+        protected static List<CategoricalQuestionOption> Options = new List<CategoricalQuestionOption>
         {
             Create.CascadingOptionModel(1, "title abc 1", 1),
             Create.CascadingOptionModel(2, "title def 2", 1),

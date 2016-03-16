@@ -124,8 +124,7 @@
     <Compile Include="Utils\ObservableCollectionExtensions.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\AnswersRemovedNotifier.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\State\AttachmentViewModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\Questions\CascadingOptionModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\Questions\OptionModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\CategoricalQuestionOption.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\UIResources.Designer.cs">
       <AutoGen>True</AutoGen>
