@@ -46,7 +46,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (attachment != null)
             {
                 this.attachmentMetadata = await this.attachmentStorage.GetAttachmentAsync(attachment.AttachmentId.FormatGuid());
-                this.AttachmentContent = await this.attachmentStorage.GetAttachmentContentAsync(attachmentMetadata.AttachmentContentId);
+
+                if (this.attachmentMetadata != null)
+                    this.AttachmentContent = await this.attachmentStorage.GetAttachmentContentAsync(attachmentMetadata.AttachmentContentId);
             }
         }
 
