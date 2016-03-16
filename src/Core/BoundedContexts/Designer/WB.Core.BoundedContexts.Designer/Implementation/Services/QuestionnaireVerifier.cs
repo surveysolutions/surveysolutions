@@ -1379,7 +1379,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     .GroupBy(x => x.Name, StringComparer.InvariantCultureIgnoreCase)
                     .Where(group => group.Count() > 1)
                     .Select(group =>
-                            QuestionnaireVerificationMessage.Critical(
+                            QuestionnaireVerificationMessage.Error(
                                 "WB0065",
                                 VerificationMessages.WB0065_NameForAyyachmentIsNotUnique,
                                 group.Select(e => CreateAttachmentReference(e.AttachmentId)).ToArray()));

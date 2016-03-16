@@ -27,6 +27,7 @@ using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
@@ -1311,6 +1312,15 @@ namespace WB.Tests.Unit.Designer
             {
                 Content = content ?? new byte[0],
                 ContentType = contentType ?? "whatever"
+            };
+        }
+
+        public static AttachmentView AttachmentView(Guid? id = null, long? size = null)
+        {
+            return new AttachmentView
+            {
+                ItemId = (id ?? Guid.NewGuid()).FormatGuid(), 
+                SizeInBytes = size ?? 10
             };
         }
     }
