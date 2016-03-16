@@ -35,6 +35,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
            QuestionnaireDocument questionnaire,
            CodeGenerationSettings codeGenerationSettings)
         {
+            questionnaire.ConnectChildrenWithParent();
             var expressionState = new QuestionnaireExpressionStateModel
             {
                 AdditionalInterfaces = codeGenerationSettings.AdditionInterfaces,
