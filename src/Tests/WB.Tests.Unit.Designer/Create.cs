@@ -1284,9 +1284,13 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static AttachmentService AttachmentService()
+        public static AttachmentService AttachmentService(
+            IPlainStorageAccessor<AttachmentContent> attachmentContentStorage = null,
+            IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage = null)
         {
-            return new AttachmentService();
+            return new AttachmentService(
+                attachmentContentStorage ?? ServiceLocator.Current.GetInstance<IPlainStorageAccessor<AttachmentContent>>(),
+                attachmentMetaStorage ?? ServiceLocator.Current.GetInstance<IPlainStorageAccessor<AttachmentMeta>>());
         }
 
         public static AttachmentMeta AttachmentMeta(
