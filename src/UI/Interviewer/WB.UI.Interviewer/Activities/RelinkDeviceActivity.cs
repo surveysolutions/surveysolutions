@@ -8,7 +8,9 @@ using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities
 {
-    [Activity(WindowSoftInputMode = SoftInput.StateHidden, Theme = "@style/GrayAppTheme")]
+    [Activity(WindowSoftInputMode = SoftInput.StateHidden,
+        Theme = "@style/GrayAppTheme",
+        NoHistory = true)]
     public class RelinkDeviceActivity : BaseActivity<RelinkDeviceViewModel>
     {
         protected override int ViewResourceId
