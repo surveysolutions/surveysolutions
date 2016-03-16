@@ -37,7 +37,7 @@ namespace WB.Infrastructure.Shared.Enumerator
                 c.HttpClientFactory = new ModernHttpClientFactory();
             });
 
-            this.Bind<IQuestionnaireAttachmentStorage>().To<QuestionnaireAttachmentStorage>().InSingletonScope();
+            this.Bind<IAttachmentContentStorage>().To<AttachmentContentStorage>().InSingletonScope();
         }
     }
 }

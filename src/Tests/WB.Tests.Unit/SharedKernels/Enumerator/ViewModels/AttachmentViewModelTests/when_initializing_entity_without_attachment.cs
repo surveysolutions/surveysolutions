@@ -30,28 +30,27 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
             interviewRepository.SetReturnsDefault(interview);
 
-            attachmentStorage = Mock.Of<IQuestionnaireAttachmentStorage>();
+            attachmentContentStorage = Mock.Of<IAttachmentContentStorage>();
 
-            viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository.Object, attachmentStorage);
+            viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository.Object, attachmentContentStorage);
         };
 
         Because of = () => viewModel.Init("interview", new Identity(entityId, Empty.RosterVector));
 
-        It should_dont_call_attachment_storage = () =>
-            Mock.Get(attachmentStorage).Verify(s => s.GetAttachmentAsync(Moq.It.IsAny<string>()), Times.Never());
 
         It should_dont_call_attachment_content = () =>
-            Mock.Get(attachmentStorage).Verify(s => s.GetAttachmentContentAsync(Moq.It.IsAny<string>()), Times.Never());
+            Mock.Get(attachmentContentStorage).Verify(s => s.GetAttachmentContentAsync(Moq.It.IsAny<string>()), Times.Never());
 
         It should_initialize_image_flag_as_false = () => 
             viewModel.IsImage.ShouldBeFalse();
 
         It should_be_empty_attachment_content = () => 
-            viewModel.AttachmentContent.ShouldBeNull();
+            viewModel.Content.ShouldBeNull();
+
 
         static AttachmentViewModel viewModel;
         private static Guid entityId;
-        private static IQuestionnaireAttachmentStorage attachmentStorage;
+        private static IAttachmentContentStorage attachmentContentStorage;
     }
 }
 

@@ -8,6 +8,10 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         [PrimaryKey]
         public string Id { get; set; }
 
+        public string ContentType { get; set; }
+
         public byte[] Content { get; set; }
+
+        public long Size { get; set; }
     }
 }
