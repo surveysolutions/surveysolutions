@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         Establish context = () =>
         {
-            questionnaire = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            questionnaire = Create.QuestionnaireDocument(children: new IComposite[]
             {
                 Create.Section(),
                 Create.Section(),
