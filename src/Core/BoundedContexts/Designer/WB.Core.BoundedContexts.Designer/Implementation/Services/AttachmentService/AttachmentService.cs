@@ -21,16 +21,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
         internal Func<MemoryStream, Image> ImageFromStream = stream => Image.FromStream(stream);
 
-        public void SaveAttachmentContent(Guid questionnaireId, Guid attachmentId, AttachmentType type, string contentType, byte[] binaryContent, string fileName)
+        public void SaveAttachmentContent(Guid questionnaireId, Guid attachmentId, string attachmentContentId, AttachmentType type, string contentType, byte[] binaryContent, string fileName)
         {
             var formattedAttachmentId = attachmentId.FormatGuid();
             var storedAttachmentMeta = this.attachmentMetaStorage.GetById(formattedAttachmentId);
-            var hashOfBinaryContent = GetHash(binaryContent);
             var oldHashOfBinaryContent = "";
 
             if (storedAttachmentMeta != null)
             {
-                var sameFileWasUploaded = hashOfBinaryContent == storedAttachmentMeta.AttachmentContentHash;
+                var sameFileWasUploaded = attachmentContentId == storedAttachmentMeta.AttachmentContentHash;
                 if (sameFileWasUploaded)
                     return;
 
@@ -39,12 +38,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
             var attachmentDetails = BuildAttachmentMeta(type, binaryContent, fileName);
 
-            var countOfNewAttachmentContentReferences = this.attachmentMetaStorage.Query(_ => _.Count(x => x.AttachmentContentHash == hashOfBinaryContent));
+            var countOfNewAttachmentContentReferences = this.attachmentMetaStorage.Query(_ => _.Count(x => x.AttachmentContentHash == attachmentContentId));
             if (countOfNewAttachmentContentReferences == 0)
             {
                 var attachmentContent = new AttachmentContent
                 {
-                    AttachmentContentHash = hashOfBinaryContent,
+                    AttachmentContentHash = attachmentContentId,
                     Content = binaryContent,
                     Type = type,
                     ContentType = contentType,
@@ -52,7 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                     Size = binaryContent.LongLength
                 };
 
-                this.attachmentContentStorage.Store(attachmentContent, hashOfBinaryContent);
+                this.attachmentContentStorage.Store(attachmentContent, attachmentContentId);
             }
 
             var attachmentMeta = storedAttachmentMeta ?? new AttachmentMeta
@@ -63,7 +62,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
            
             attachmentMeta.LastUpdateDate = DateTime.UtcNow;
             attachmentMeta.FileName = fileName;
-            attachmentMeta.AttachmentContentHash = hashOfBinaryContent;
+            attachmentMeta.AttachmentContentHash = attachmentContentId;
 
             this.attachmentMetaStorage.Store(attachmentMeta, formattedAttachmentId);
 
@@ -113,6 +112,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                 AttachmentContentId = meta.AttachmentContentHash,
                 ContentType = content.ContentType
             };
+        }
+
+        public AttachmentContent GetAttachmentContent(string attachmentContentId)
+        {
+            return this.attachmentContentStorage.GetById(attachmentContentId);
         }
 
         public IEnumerable<QuestionnaireAttachmentMeta> GetBriefAttachmentsMetaForQuestionnaire(Guid questionnaireId)
@@ -186,16 +190,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                 AttachmentContentHash = storedAttachmentMeta.AttachmentContentHash,
             };
             this.attachmentMetaStorage.Store(clonedAttachmentMeta, formattedNewAttachmentId);
-        }
-
-        private string GetHash(byte[] binaryContent)
-        {
-            byte[] hash;
-            using (SHA1CryptoServiceProvider sha1 = new SHA1CryptoServiceProvider())
-            {
-                hash = sha1.ComputeHash(binaryContent);
-            }
-            return BitConverter.ToString(hash).Replace("-", string.Empty);
         }
 
         private AttachmentDetails BuildAttachmentMeta(AttachmentType type, byte[] binaryContent, string fileName)

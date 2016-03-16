@@ -589,7 +589,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             {
                 AttachmentId = evnt.Payload.AttachmentId,
                 Name = evnt.Payload.AttachmentName,
-                FileName = evnt.Payload.AttachmentFileName
+                FileName = evnt.Payload.AttachmentFileName,
+                ContentId = evnt.Payload.AttachmentContentId
             });
             this.UpdateQuestionnaire(evnt, document);
         }
