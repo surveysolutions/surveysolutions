@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -18,18 +19,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IQuestionnaireAttachmentStorage attachmentStorage;
+        private readonly IAttachmentContentStorage attachmentContentStorage;
 
-        private AttachmentMetadata attachmentMetadata;
+        private AttachmentContent attachmentContent;
 
         public AttachmentViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            IQuestionnaireAttachmentStorage attachmentStorage)
+            IAttachmentContentStorage attachmentContentStorage)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
-            this.attachmentStorage = attachmentStorage;
+            this.attachmentContentStorage = attachmentContentStorage;
         }
 
 
@@ -45,18 +46,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (attachment != null)
             {
-                this.attachmentMetadata = await this.attachmentStorage.GetAttachmentAsync(attachment.AttachmentId.FormatGuid());
-
-                if (this.attachmentMetadata != null)
-                    this.AttachmentContent = await this.attachmentStorage.GetAttachmentContentAsync(attachmentMetadata.AttachmentContentId);
+                this.attachmentContent = await this.attachmentContentStorage.GetAttachmentContentAsync(attachment.ContentId);
+                this.Content = this.attachmentContent?.Content;
             }
         }
 
-        public bool IsImage
-        {
-            get { return this.attachmentMetadata != null /*&& this.attachmentMetadata.ContentType.Contains(".jpg")*/; }
-        }
+        private readonly string[] imageContentTypes = {"image/png", "image/jpg", "image/gif", "image/jpeg", "image/pjpeg"};
 
-        public byte[] AttachmentContent { get; set; }
+        public bool IsImage => this.attachmentContent != null && this.imageContentTypes.Contains(this.attachmentContent.ContentType);
+
+        public byte[] Content { get; private set; }
     }
 }

@@ -8,7 +8,7 @@
   <ImageView style="@style/Interview_Question_Multimedia_Picture"
           android:scaleType="centerCrop"
           android:adjustViewBounds="true"
-          local:MvxBind="Bitmap Attachment.AttachmentContent, Converter=InMemoryImageValueWithDefault; 
+          local:MvxBind="Bitmap Attachment.Content, Converter=InMemoryImageValueWithDefault; 
                          Visible Attachment.IsImage;"/>
   
 </LinearLayout>

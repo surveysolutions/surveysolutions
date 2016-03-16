@@ -85,7 +85,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="IEnumeratorSettings.cs" />
     <Compile Include="Implementation\Aggregates\StatefulInterview.cs" />
-    <Compile Include="Implementation\Repositories\QuestionnaireAttachmentStorage.cs" />
+    <Compile Include="Implementation\Repositories\AttachmentContentStorage.cs" />
     <Compile Include="Implementation\Repositories\StatefulInterviewRepository.cs" />
     <Compile Include="Implementation\Services\AnswerToStringService.cs" />
     <Compile Include="Implementation\Services\FriendlyErrorMessageService.cs" />
@@ -109,7 +109,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UIResources.zh-CN.resx</DependentUpon>
     </Compile>
-    <Compile Include="Repositories\IQuestionnaireAttachmentStorage.cs" />
+    <Compile Include="Repositories\IAttachmentContentStorage.cs" />
     <Compile Include="Services\IExternalAppLauncher.cs" />
     <Compile Include="Services\IFriendlyErrorMessageService.cs" />
     <Compile Include="Services\Infrastructure\IPrincipal.cs" />
@@ -205,7 +205,6 @@
     <Compile Include="ViewModels\PrefilledQuestionsViewModel.cs" />
     <Compile Include="ViewModels\StartInterviewViewModel.cs" />
     <Compile Include="Views\AttachmentContent.cs" />
-    <Compile Include="Views\AttachmentMetadata.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
