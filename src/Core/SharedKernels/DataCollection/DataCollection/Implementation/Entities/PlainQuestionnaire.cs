@@ -584,13 +584,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public bool IsQuestionFilteredCombobox(Guid questionId)
         {
             var singleQuestion = (this.GetQuestion(questionId) as SingleQuestion);
-            return singleQuestion?.IsFilteredCombobox != null;
+            return singleQuestion?.IsFilteredCombobox ?? false;
         }
 
         public bool IsQuestionCascading(Guid questionId)
         {
             var singleQuestion = (this.GetQuestion(questionId) as SingleQuestion);
-            return singleQuestion?.CascadeFromQuestionId != null;
+            return singleQuestion?.CascadeFromQuestionId.HasValue ?? false;
         }
 
         public bool ShouldQuestionRecordAnswersOrder(Guid questionId)

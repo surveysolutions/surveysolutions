@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
             questionnaire.AddAttachment(Create.Command.AddAttachment(questionnaireId, attachmentId, responsibleId));
 
-            updateAttachment = Create.Command.UpdateAttachment(questionnaireId, attachmentId,responsibleId, name, fileName);
+            updateAttachment = Create.Command.UpdateAttachment(questionnaireId, attachmentId, attachmentContentId, responsibleId, name, fileName);
 
             eventContext = new EventContext();
         };
@@ -41,6 +41,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
         private static UpdateAttachment updateAttachment;
         private static Questionnaire questionnaire;
         private static readonly string name = "Attachment";
+        private static readonly string attachmentContentId = "ABECA98D65F866DFCD292BC973BDACF5954B916D";
         private static readonly string fileName = "Attachment.PNG";
         private static readonly Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");

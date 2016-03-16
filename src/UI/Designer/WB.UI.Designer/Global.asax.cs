@@ -16,6 +16,7 @@ using NConfig;
 using Elmah;
 using System.Web.Hosting;
 using System.Reflection;
+using MultipartDataMediaFormatter;
 using WB.Core.Infrastructure.Versions;
 
 namespace WB.UI.Designer
@@ -54,6 +55,8 @@ namespace WB.UI.Designer
 
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
             //BundleTable.EnableOptimizations = true;
+
+            GlobalConfiguration.Configuration.Formatters.Add(new FormMultipartEncodedMediaTypeFormatter());
         }
 
         private void CurrentUnhandledException(object sender, UnhandledExceptionEventArgs e)
