@@ -38,7 +38,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             public ConcurrentDictionary<Identity, bool> IsEnabled = new ConcurrentDictionary<Identity, bool>();
         }
 
+        private class LocalDelta
+        {
+            public Dictionary<Identity, bool> EnablementChanges = new Dictionary<Identity, bool>();
+            public Dictionary<Identity, bool> ValidityChanges = new Dictionary<Identity, bool>();
+        }
+
         private CalculatedState calculated = null;
+        private LocalDelta delta = null;
         private IQuestionnaire cachedQuestionnaire = null;
 
         private readonly ConcurrentDictionary<string, BaseInterviewAnswer> answers;
@@ -62,17 +69,24 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.notAnsweredFailedConditions = new ConcurrentDictionary<string, IList<FailedValidationCondition>>();
 
             this.ResetCalculatedState();
+            this.ResetLocalDelta();
         }
 
         private void ResetCalculatedState()
         {
             this.calculated = new CalculatedState();
         }
+
+        private void ResetLocalDelta()
+        {
+            this.delta = new LocalDelta();
+        }
        
         protected new void Apply(SynchronizationMetadataApplied @event)
         {
             base.Apply(@event);
             this.InitializeCreatedInterview(this.EventSourceId, @event.QuestionnaireId, @event.QuestionnaireVersion);
+            this.ResetLocalDelta();
         }
 
         protected new void Apply(InterviewOnClientCreated @event)
@@ -91,12 +105,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         }
         
 
+
         #region Applying answers
 
         public new void Apply(InterviewSynchronized @event)
         {
             base.Apply(@event);
             this.ResetCalculatedState();
+
+            this.ResetLocalDelta();
 
             this.createdOnClient = @event.InterviewData.CreatedOnClient;
 
@@ -265,20 +282,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             ReadOnlyCollection<Identity> allQuestionInstances = this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(
                 this.interviewState, allQuestions, RosterVector.Empty, questionnaire).ToReadOnlyCollection();
 
-            var validQuestions = allQuestionInstances.Where(question => this.IsValid(question)).ToArray();
-            var invalidQuestions = allQuestionInstances.Where(question => !this.IsValid(question)).ToDictionary(
+            var validQuestions = allQuestionInstances.Where(this.delta.ValidityChanges.ContainsKey).Where(question => this.IsValid(question)).ToArray();
+            var invalidQuestions = allQuestionInstances.Where(this.delta.ValidityChanges.ContainsKey).Where(question => !this.IsValid(question)).ToDictionary(
                 question => question,
                 question => this.GetFailedValidationConditions(question));
 
-            var enabledQuestions = allQuestionInstances.Where(question => this.IsEnabled(question)).ToArray();
-            var disabledQuestions = allQuestionInstances.Where(question => !this.IsEnabled(question)).ToArray();
+            var enabledQuestions = allQuestionInstances.Where(this.delta.EnablementChanges.ContainsKey).Where(question => this.IsEnabled(question)).ToArray();
+            var disabledQuestions = allQuestionInstances.Where(this.delta.EnablementChanges.ContainsKey).Where(question => !this.IsEnabled(question)).ToArray();
 
             ReadOnlyCollection<Guid> allGroups = questionnaire.GetAllGroups();
             ReadOnlyCollection<Identity> allGroupInstances = this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(
                 this.interviewState, allGroups, RosterVector.Empty, questionnaire).ToReadOnlyCollection();
 
-            var enabledGroups = allGroupInstances.Where(group => this.IsEnabled(group)).ToArray();
-            var disabledGroups = allGroupInstances.Where(group => !this.IsEnabled(group)).ToArray();
+            var enabledGroups = allGroupInstances.Where(this.delta.EnablementChanges.ContainsKey).Where(group => this.IsEnabled(group)).ToArray();
+            var disabledGroups = allGroupInstances.Where(this.delta.EnablementChanges.ContainsKey).Where(group => !this.IsEnabled(group)).ToArray();
 
             bool isInterviewInvalid = this.HasInvalidAnswers();
 
@@ -336,6 +353,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.ResetCalculatedState();
 
             @event.Questions.ForEach(x => this.DeclareAnswerAsValid(x.Id, x.RosterVector));
+            @event.Questions.ForEach(x => this.delta.ValidityChanges[new Identity(x.Id, x.RosterVector)] = true);
         }
 
         public new void Apply(AnswersDeclaredInvalid @event)
@@ -344,6 +362,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.ResetCalculatedState();
 
             @event.FailedValidationConditions.ForEach(x => this.DeclareAnswerAsInvalid(x.Key.Id, x.Key.RosterVector, x.Value.ToList()));
+            @event.Questions.ForEach(x => this.delta.ValidityChanges[new Identity(x.Id, x.RosterVector)] = false);
         }
 
         public new void Apply(GroupsDisabled @event)
@@ -352,9 +371,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.ResetCalculatedState();
 
             @event.Groups.ForEach(x => this.DisableGroup(x.Id, x.RosterVector));
+            @event.Groups.ForEach(x => this.delta.EnablementChanges[new Identity(x.Id, x.RosterVector)] = false);
         }
 
-       
+
         public new void Apply(GroupsEnabled @event)
         {
             base.Apply(@event);
@@ -365,6 +385,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 var groupOrRoster = this.GetOrCreateGroupOrRoster(x.Id, x.RosterVector);
                 groupOrRoster.IsDisabled = false;
             });
+            @event.Groups.ForEach(x => this.delta.EnablementChanges[new Identity(x.Id, x.RosterVector)] = true);
         }
 
         public new void Apply(QuestionsDisabled @event)
@@ -373,6 +394,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.ResetCalculatedState();
 
             @event.Questions.ForEach(x => this.DisableQuestion(x.Id, x.RosterVector));
+            @event.Questions.ForEach(x => this.delta.EnablementChanges[new Identity(x.Id, x.RosterVector)] = false);
         }
 
         public new void Apply(QuestionsEnabled @event)
@@ -393,6 +415,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                     this.notAnsweredQuestionsEnablementStatus[questionKey] = true;
                 }
             });
+            @event.Questions.ForEach(x => this.delta.EnablementChanges[new Identity(x.Id, x.RosterVector)] = true);
         }
 
         #endregion
