@@ -197,8 +197,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier(QuestionnaireTitleHasInvalidCharacters, "WB0097", VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
             Verifier(QuestionnaireHasSizeMoreThan5MB, "WB0098", size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size)),
             Verifier<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10),
-            Verifier<IQuestion>(LinkedQuestionFilterExpressionHasLengthMoreThan10000Characters, "WB0108", VerificationMessages.WB00108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters),
-            Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInFilterExpression, "WB0109", VerificationMessages.WB00109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion),
+            Verifier<IQuestion>(LinkedQuestionFilterExpressionHasLengthMoreThan10000Characters, "WB0108", VerificationMessages.WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters),
+            Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInFilterExpression, "WB0109", VerificationMessages.WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion),
             Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationConditionIsTooLong, "WB0104", index => string.Format(VerificationMessages.WB0104_ValidationConditionIsTooLong, index)),
             Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationMessageIsTooLong, "WB0105", index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index)),
             Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationConditionIsEmpty, "WB0106", index => string.Format(VerificationMessages.WB0106_ValidationConditionIsEmpty, index)),
@@ -217,8 +217,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             LookupVerifier(LookupTableMoreThan5000Rows, "WB0044", VerificationMessages.WB0044_LookupTableMoreThan5000Rows),
             LookupVerifier(LookupTableNotUniqueRowcodeValues, "WB0047", VerificationMessages.WB0047_LookupTableNotUniqueRowcodeValues),
 
-            //AttachmentVerifier(AttachmentHasEmptyContent, "WB0108", VerificationMessages.WB0108_AttachmentHasEmptyContent),
-            AttachmentVerifier(AttachmentHasInvalidName, "WB0109", VerificationMessages.WB0109_AttachmentHasInvalidName),
+            AttachmentVerifier(AttachmentHasEmptyContent, "WB0110", VerificationMessages.WB0110_AttachmentHasEmptyContent),
+            AttachmentVerifier(AttachmentHasInvalidName, "WB0111", VerificationMessages.WB0111_AttachmentHasInvalidName),
 
             VerifyGpsPrefilledQuestions,
             ErrorsByLinkedQuestions,

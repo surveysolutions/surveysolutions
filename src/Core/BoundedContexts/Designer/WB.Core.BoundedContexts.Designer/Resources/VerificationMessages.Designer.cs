@@ -151,24 +151,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked question filter expression has length more than 10,000 characters..
-        /// </summary>
-        internal static string WB00108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters {
-            get {
-                return ResourceManager.GetString("WB00108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Categorical linked question cannot be used in linked question filter expression..
-        /// </summary>
-        internal static string WB00109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion {
-            get {
-                return ResourceManager.GetString("WB00109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Linked question references a nonexistent question..
         /// </summary>
         internal static string WB0011_LinkedQuestionReferencesNotExistingQuestion {
@@ -1064,20 +1046,38 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Linked question filter expression has length more than 10,000 characters..
+        /// </summary>
+        internal static string WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters {
+            get {
+                return ResourceManager.GetString("WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Categorical linked question cannot be used in linked question filter expression..
+        /// </summary>
+        internal static string WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion {
+            get {
+                return ResourceManager.GetString("WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Attachment cannot be empty.
         /// </summary>
-        internal static string WB0108_AttachmentHasEmptyContent {
+        internal static string WB0110_AttachmentHasEmptyContent {
             get {
-                return ResourceManager.GetString("WB0108_AttachmentHasEmptyContent", resourceCulture);
+                return ResourceManager.GetString("WB0110_AttachmentHasEmptyContent", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Attachment has invalid name..
         /// </summary>
-        internal static string WB0109_AttachmentHasInvalidName {
+        internal static string WB0111_AttachmentHasInvalidName {
             get {
-                return ResourceManager.GetString("WB0109_AttachmentHasInvalidName", resourceCulture);
+                return ResourceManager.GetString("WB0111_AttachmentHasInvalidName", resourceCulture);
             }
         }
         

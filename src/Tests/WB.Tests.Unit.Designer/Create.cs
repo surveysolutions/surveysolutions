@@ -73,6 +73,67 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
+        public static Attachment Attachment(Guid? attachmentId = null, string name = "attachment", string fileName = "image.png")
+        {
+            return new Attachment
+            {
+                AttachmentId = attachmentId ?? Guid.NewGuid(),
+                Name = name,
+                FileName = fileName
+            };
+        }
+
+        public static AttachmentContent AttachmentContent(byte[] content = null, string contentType = null)
+        {
+            return new AttachmentContent
+            {
+                Content = content ?? new byte[0],
+                ContentType = contentType ?? "whatever"
+            };
+        }
+
+        public static AttachmentMeta AttachmentMeta(
+            string attachmentId,
+            string contentHash,
+            string questionnaireId = null,
+            string fileName = null,
+            DateTime? lastUpdateDate = null)
+        {
+            return new AttachmentMeta
+            {
+                AttachmentId = attachmentId,
+                AttachmentContentHash = contentHash,
+                QuestionnaireId = questionnaireId ?? "questionnaireId",
+                FileName = fileName ?? "fileName.txt",
+                LastUpdateDate = lastUpdateDate ?? DateTime.UtcNow
+            };
+        }
+
+        //public static AttachmentService AttachmentService(
+        //    IPlainStorageAccessor<AttachmentContent> attachmentContentStorage = null,
+        //    IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage = null)
+        //{
+        //    return new AttachmentService(
+        //        attachmentContentStorage ?? ServiceLocator.Current.GetInstance<IPlainStorageAccessor<AttachmentContent>>(),
+        //        attachmentMetaStorage ?? ServiceLocator.Current.GetInstance<IPlainStorageAccessor<AttachmentMeta>>()
+        //        );
+        //}
+
+        public static AttachmentService AttachmentService()
+        {
+            return new AttachmentService();
+        }
+
+
+        public static AttachmentView AttachmentView(Guid? id = null, long? size = null)
+        {
+            return new AttachmentView
+            {
+                ItemId = (id ?? Guid.NewGuid()).FormatGuid(),
+                SizeInBytes = size ?? 10
+            };
+        }
+
         public static Group Chapter(string title = "Chapter X", Guid? chapterId = null, bool hideIfDisabled = false, IEnumerable<IComposite> children = null)
         {
             return Create.Group(
@@ -812,10 +873,20 @@ namespace WB.Tests.Unit.Designer
 
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(params IComposite[] children)
         {
-            return QuestionnaireDocumentWithOneChapter(null, children);
+            return QuestionnaireDocumentWithOneChapter(null, null, children);
         }
 
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, params IComposite[] children)
+        {
+            return QuestionnaireDocumentWithOneChapter(chapterId, null, children);
+        }
+
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Attachment[] attachments = null, params IComposite[] children)
+        {
+            return QuestionnaireDocumentWithOneChapter(null, attachments, children);
+        }
+        
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, Attachment[] attachments = null, params IComposite[] children)
         {
             var result = new QuestionnaireDocument();
             var chapter = new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() };
@@ -826,6 +897,8 @@ namespace WB.Tests.Unit.Designer
             {
                 chapter.Children.Add(child);
             }
+
+            result.Attachments.AddRange(attachments ?? new Attachment[0]);
 
             return result;
         }
@@ -1272,60 +1345,6 @@ namespace WB.Tests.Unit.Designer
                logger,
                attachmentService ?? Mock.Of<IAttachmentService>(),
                lookupTableService ?? Mock.Of<ILookupTableService>());
-        }
-
-        public static Attachment Attachment(Guid? attachmentId = null, string name = "attachment", string fileName = "image.png")
-        {
-            return new Attachment
-            {
-                AttachmentId = attachmentId ?? Guid.NewGuid(),
-                Name = name,
-                FileName = fileName
-            };
-        }
-
-        public static AttachmentService AttachmentService(
-            IPlainStorageAccessor<AttachmentContent> attachmentContentStorage = null,
-            IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage = null)
-        {
-            return new AttachmentService(
-                attachmentContentStorage ?? ServiceLocator.Current.GetInstance<IPlainStorageAccessor<AttachmentContent>>(),
-                attachmentMetaStorage ?? ServiceLocator.Current.GetInstance<IPlainStorageAccessor<AttachmentMeta>>());
-        }
-
-        public static AttachmentMeta AttachmentMeta(
-            string attachmentId,
-            string contentHash,
-            string questionnaireId = null, 
-            string fileName = null, 
-            DateTime? lastUpdateDate = null)
-        {
-            return new AttachmentMeta
-            {
-                AttachmentId = attachmentId,
-                AttachmentContentHash = contentHash,
-                QuestionnaireId = questionnaireId ?? "questionnaireId",
-                FileName = fileName ?? "fileName.txt",
-                LastUpdateDate = lastUpdateDate ?? DateTime.UtcNow
-            };
-        }
-
-        public static AttachmentContent AttachmentContent(byte[] content = null, string contentType = null)
-        {
-            return new AttachmentContent
-            {
-                Content = content ?? new byte[0],
-                ContentType = contentType ?? "whatever"
-            };
-        }
-
-        public static AttachmentView AttachmentView(Guid? id = null, long? size = null)
-        {
-            return new AttachmentView
-            {
-                ItemId = (id ?? Guid.NewGuid()).FormatGuid(), 
-                SizeInBytes = size ?? 10
-            };
         }
     }
 }

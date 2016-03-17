@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
@@ -46,10 +47,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                                              DefaultValue = DefaultValue.Mock
                                          };
 
-            var attachmentServiceMock = new Mock<IAttachmentService>(MockBehavior.Default)
-            {
-                DefaultValue = DefaultValue.Mock
-            };
+            var attachmentServiceMock = Stub<IAttachmentService>.WithNotEmptyValues;
 
             return new QuestionnaireVerifier(expressionProcessor ?? new Mock<IExpressionProcessor>().Object, 
                 fileSystemAccessorMock.Object,
@@ -59,7 +57,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 new DesignerEngineVersionService(),
                 macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService(),
                 lookupTableService ?? lookupTableServiceMock.Object,
-                attachmentService ?? attachmentServiceMock.Object);
+                attachmentService ?? attachmentServiceMock);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] questionnaireChildren)

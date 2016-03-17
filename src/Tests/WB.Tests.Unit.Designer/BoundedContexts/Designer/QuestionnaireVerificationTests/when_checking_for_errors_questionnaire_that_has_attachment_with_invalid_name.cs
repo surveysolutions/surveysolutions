@@ -12,12 +12,13 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    class when_verifying_questionnaire_that_has_attachment_with_invalid_name : QuestionnaireVerifierTestsContext
+    class when_checking_for_errors_questionnaire_that_has_attachment_with_invalid_name : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
-            questionnaire = Create.QuestionnaireDocument(questionId, Create.TextQuestion(variable: "var"));
-            questionnaire.Attachments.Add(Create.Attachment(attachment1Id, "%hello?"));
+            questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionId, 
+                attachments: new [] { Create.Attachment(attachment1Id, "%hello?") }, 
+                children: Create.TextQuestion(variable: "var"));
 
             attachmentServiceMock.Setup(x => x.GetAttachment(attachment1Id)).Returns(Mock.Of<QuestionnaireAttachment>(a => a.Content == content));
 
@@ -30,8 +31,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code__WB0109 = () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0109");
+        It should_return_message_with_code__WB0111 = () =>
+            verificationMessages.Single().Code.ShouldEqual("WB0111");
 
         It should_return_message_with_General_level = () =>
             verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
