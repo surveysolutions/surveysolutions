@@ -217,7 +217,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             LookupVerifier(LookupTableMoreThan5000Rows, "WB0044", VerificationMessages.WB0044_LookupTableMoreThan5000Rows),
             LookupVerifier(LookupTableNotUniqueRowcodeValues, "WB0047", VerificationMessages.WB0047_LookupTableNotUniqueRowcodeValues),
 
-            AttachmentVerifier(AttachmentHasEmptyContent, "WB0108", VerificationMessages.WB0108_AttachmentHasEmptyContent),
+            //AttachmentVerifier(AttachmentHasEmptyContent, "WB0108", VerificationMessages.WB0108_AttachmentHasEmptyContent),
             AttachmentVerifier(AttachmentHasInvalidName, "WB0109", VerificationMessages.WB0109_AttachmentHasInvalidName),
 
             VerifyGpsPrefilledQuestions,
