@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null);
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null, null);
 
         It should_answered_question_be_enabled = () =>
             mergeResult.ReceivedByInterviewer.ShouldBeTrue();

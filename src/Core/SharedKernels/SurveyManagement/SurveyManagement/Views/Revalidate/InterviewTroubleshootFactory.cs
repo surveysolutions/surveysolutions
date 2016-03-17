@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
 {
@@ -17,16 +19,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
         private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
         private readonly IReadSideRepositoryReader<UserDocument> userStore;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IAttachmentContentService attachmentContentService;
 
         public InterviewTroubleshootFactory(IReadSideKeyValueStorage<InterviewData> interviewStore,
             IReadSideRepositoryReader<UserDocument> userStore,
-            IInterviewDataAndQuestionnaireMerger merger, IPlainQuestionnaireRepository plainQuestionnaireRepository, IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore)
+            IInterviewDataAndQuestionnaireMerger merger, 
+            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
+            IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore,
+            IAttachmentContentService attachmentContentService)
         {
             this.merger = merger;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.interviewLinkedQuestionOptionsStore = interviewLinkedQuestionOptionsStore;
             this.interviewStore = interviewStore;
             this.userStore = userStore;
+            this.attachmentContentService = attachmentContentService;
         }
 
         public InterviewTroubleshootView Load(InterviewTroubleshootInputModel input)
@@ -44,7 +51,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
             if (user == null)
                 throw new ArgumentException($"User with id {interview.ResponsibleId} is not found.");
 
-            var mergedInterview = this.merger.Merge(interview, questionnaire, user.GetUseLight(), this.interviewLinkedQuestionOptionsStore.GetById(input.InterviewId));
+            var attachmentIdAndTypes = attachmentContentService.GetContentTypes(questionnaire.Attachments.Select(x => x.ContentId).ToHashSet());
+
+            Dictionary<string, AttachmentInfoView> attachmentInfos = new Dictionary<string, AttachmentInfoView>();
+            foreach (var att in questionnaire.Attachments)
+            {
+                AttachmentInfoView attachmentInfoView = null;
+                attachmentIdAndTypes.TryGetValue(att.ContentId, out attachmentInfoView);
+
+                attachmentInfos.Add(att.Name, attachmentInfoView);
+            }
+
+            var mergedInterview = this.merger.Merge(interview, questionnaire, user.GetUseLight(), this.interviewLinkedQuestionOptionsStore.GetById(input.InterviewId), attachmentInfos);
 
 
             var interviewTroubleshootView = new InterviewTroubleshootView

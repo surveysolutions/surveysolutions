@@ -321,6 +321,7 @@
     <Compile Include="Views\Interviews\TeamInterviewsViewItem.cs" />
     <Compile Include="Views\Interview\CumulativeReportStatusChange.cs" />
     <Compile Include="Views\Interview\IInterviewInformationFactory.cs" />
+    <Compile Include="Views\Interview\InterviewAttachmentViewModel.cs" />
     <Compile Include="Views\Interview\InterviewInformation.cs" />
     <Compile Include="Views\Interview\InterviewerInterviewsFactory.cs" />
     <Compile Include="Views\Interview\AllInterviewsFactory.cs" />
@@ -368,6 +369,7 @@
     <Compile Include="Views\Preloading\QuestionnairePreloadingDataInputModel.cs" />
     <Compile Include="Views\Preloading\QuestionnairePreloadingDataItem.cs" />
     <Compile Include="Views\Preloading\QuestionnairePreloadingDataViewFactory.cs" />
+    <Compile Include="Views\Questionnaire\AttachmentInfoView.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireAndVersionsItem.cs" />
     <Compile Include="Views\Questionnaire\AttachmentContent.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireBrowseItem.cs" />

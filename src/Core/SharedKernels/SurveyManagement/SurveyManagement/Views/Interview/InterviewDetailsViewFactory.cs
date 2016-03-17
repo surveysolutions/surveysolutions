@@ -9,7 +9,10 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
@@ -24,6 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IAttachmentContentService attachmentContentService;
 
         public InterviewDetailsViewFactory(IReadSideKeyValueStorage<InterviewData> interviewStore,
             IReadSideRepositoryReader<UserDocument> userStore,
@@ -31,7 +35,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
-            IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore)
+            IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore,
+            IAttachmentContentService attachmentContentService)
         {
             this.interviewStore = interviewStore;
             this.userStore = userStore;
@@ -40,6 +45,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.interviewLinkedQuestionOptionsStore = interviewLinkedQuestionOptionsStore;
+            this.attachmentContentService = attachmentContentService;
         }
 
         public DetailsViewModel GetInterviewDetails(Guid interviewId, Guid? currentGroupId, decimal[] currentGroupRosterVector, InterviewDetailsFilter? filter)
@@ -58,8 +64,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             if (questionnaire == null)
                 throw new ArgumentException(
                     $"Questionnaire with id {interview.QuestionnaireId} and version {interview.QuestionnaireVersion} is missing.");
+            
+            var attachmentIdAndTypes = attachmentContentService.GetContentTypes(questionnaire.Attachments.Select(x => x.ContentId).ToHashSet());
 
-            var interviewDetailsView = merger.Merge(interview, questionnaire, user.GetUseLight(), this.interviewLinkedQuestionOptionsStore.GetById(interviewId));
+            Dictionary<string,AttachmentInfoView> attachmentInfos = new Dictionary<string, AttachmentInfoView>();
+            foreach (var att in questionnaire.Attachments)
+            {
+                AttachmentInfoView attachmentInfoView = null;
+                attachmentIdAndTypes.TryGetValue(att.ContentId, out attachmentInfoView);
+
+                attachmentInfos.Add(att.Name, attachmentInfoView);
+            }
+
+            var interviewDetailsView = merger.Merge(interview, questionnaire, user.GetUseLight(), this.interviewLinkedQuestionOptionsStore.GetById(interviewId), attachmentInfos);
 
             var questionViews = interviewDetailsView.Groups.SelectMany(group => group.Entities).OfType<InterviewQuestionView>().ToList();
             var detailsStatisticView = new DetailsStatisticView()
