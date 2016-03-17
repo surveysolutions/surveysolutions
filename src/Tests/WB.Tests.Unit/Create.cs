@@ -287,10 +287,10 @@ namespace WB.Tests.Unit
         }
 
         public static CommittedEvent CommittedEvent(string origin = null, Guid? eventSourceId = null, IEvent payload = null,
-            Guid? eventIdentifier = null, int eventSequence = 1)
+            Guid? eventIdentifier = null, int eventSequence = 1, Guid? commitId = null)
         {
             return new CommittedEvent(
-                Guid.Parse("33330000333330000003333300003333"),
+                commitId ?? Guid.NewGuid(),
                 origin,
                 eventIdentifier ?? Guid.Parse("44440000444440000004444400004444"),
                 eventSourceId ?? Guid.Parse("55550000555550000005555500005555"),
@@ -659,10 +659,11 @@ namespace WB.Tests.Unit
             return new ExportedQuestion() {Answers = new string[0]};
         }
 
+        public static FailedValidationCondition FailedValidationCondition(int? failedConditionIndex = null)
+            => new FailedValidationCondition(failedConditionIndex ?? 1117);
+
         public static FileSystemIOAccessor FileSystemIOAccessor()
-        {
-            return new FileSystemIOAccessor();
-        }
+            => new FileSystemIOAccessor();
 
         public static FixedRosterTitle FixedRosterTitle(decimal value, string title)
         {
@@ -2193,8 +2194,8 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static StatefulInterview StatefulInterview(Guid? questionnaireId = null, Guid? userId = null,
-            IPlainQuestionnaireRepository questionnaireRepository = null)
+        public static StatefulInterview StatefulInterview(Guid? questionnaireId = null, long? questionnaireVersion = null,
+            Guid? userId = null, IPlainQuestionnaireRepository questionnaireRepository = null)
         {
             questionnaireId = questionnaireId ?? Guid.NewGuid();
             var statefulInterview = new StatefulInterview(
@@ -2202,10 +2203,10 @@ namespace WB.Tests.Unit
                 questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues)
             {
-                QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, 1),
+                QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId.Value, questionnaireVersion ?? 1),
             };
 
-            statefulInterview.Apply(new InterviewCreated(userId ?? Guid.NewGuid(), questionnaireId.Value, 1));
+            statefulInterview.Apply(new InterviewCreated(userId ?? Guid.NewGuid(), questionnaireId.Value, questionnaireVersion ?? 1));
 
             return statefulInterview;
         }
@@ -2792,5 +2793,8 @@ namespace WB.Tests.Unit
         {
             return new ValidationCondition(expression, message);
         }
+
+        public static InterviewEventStreamOptimizer InterviewEventStreamOptimizer()
+            => new InterviewEventStreamOptimizer();
     }
 }

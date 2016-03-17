@@ -36,6 +36,7 @@ namespace WB.UI.Interviewer.Infrastructure
 
  			this.Bind<IInterviewerQuestionnaireAccessor>().To<InterviewerQuestionnaireAccessor>();
             this.Bind<IInterviewerInterviewAccessor>().To<InterviewerInterviewAccessor>();
+            this.Bind<IInterviewEventStreamOptimizer>().To<InterviewEventStreamOptimizer>();
             
             this.Bind<IPlainQuestionnaireRepository>().To<PlainQuestionnaireRepositoryWithCache>().InSingletonScope();
             this.Bind<IPlainInterviewFileStorage>().To<InterviewerPlainInterviewFileStorage>();

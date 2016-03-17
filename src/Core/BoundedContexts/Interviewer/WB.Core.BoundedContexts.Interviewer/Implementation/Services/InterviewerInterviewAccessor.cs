@@ -17,11 +17,9 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.Enumerator.Events;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
@@ -39,6 +37,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IInterviewerEventStorage eventStore;
         private readonly IAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache;
         private readonly ISnapshotStoreWithCache snapshotStoreWithCache;
+        private readonly IInterviewEventStreamOptimizer eventStreamOptimizer;
 
         public InterviewerInterviewAccessor(
             IAsyncPlainStorage<QuestionnaireView> questionnaireRepository,
@@ -51,7 +50,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IStringCompressor compressor,
             IInterviewerEventStorage eventStore,
             IAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache,
-            ISnapshotStoreWithCache snapshotStoreWithCache)
+            ISnapshotStoreWithCache snapshotStoreWithCache,
+            IInterviewEventStreamOptimizer eventStreamOptimizer)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewViewRepository = interviewViewRepository;
@@ -64,6 +64,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.eventStore = eventStore;
             this.aggregateRootRepositoryWithCache = aggregateRootRepositoryWithCache;
             this.snapshotStoreWithCache = snapshotStoreWithCache;
+            this.eventStreamOptimizer = eventStreamOptimizer;
         }
 
         public async Task RemoveInterviewAsync(Guid interviewId)
@@ -140,8 +141,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             List<CommittedEvent> storedEvents = this.eventStore.ReadFrom(interviewId, 0, int.MaxValue).ToList();
 
-            AggregateRootEvent[] eventsToSend = storedEvents
-                .Where(storedEvent=>!(storedEvent.Payload is InterviewAnswersFromSyncPackageRestored || storedEvent.Payload is InterviewOnClientCreated || storedEvent.Payload is InterviewSynchronized))
+            var optimizedEvents = this.eventStreamOptimizer.RemoveEventsNotNeededToBeSent(storedEvents);
+
+            AggregateRootEvent[] eventsToSend = optimizedEvents
                 .Select(storedEvent => new AggregateRootEvent(storedEvent))
                 .ToArray();
 

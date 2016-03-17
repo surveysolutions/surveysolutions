@@ -383,6 +383,7 @@
     <Compile Include="BoundedContexts\Interviewer\DashboardFactoryTests\when_getting_interviewer_dashboard.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerInterviewAccessorTests\InterviewerInterviewAccessorTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerInterviewAccessorTests\when_creating_interview.cs" />
+    <Compile Include="BoundedContexts\Interviewer\Services\InterviewerInterviewAccessorTests\when_removing_events_not_needed_to_be_sent.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerInterviewAccessorTests\when_removing_interview.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerPlainInterviewFileStorageTests\InterviewerPlainInterviewFileStorageTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\InterviewerPlainInterviewFileStorageTests\when_storing_interview_binary_data.cs" />
@@ -597,6 +598,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answer_yes_no_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_assign_interview_on_same_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_comment_question_received_by_interviewer.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_hqreject_interview.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_flag_question_received_by_interviewer.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_row_from_link_source_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_row_from_multioption_link_source_roster.cs" />
@@ -625,6 +627,8 @@
     <Compile Include="SharedKernels\Enumerator\Services\QuestionnaireModelBuilderTests\QuestionnaireModelBuilderTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\QuestionnaireModelBuilderTests\when_building_model_and_questionnaire_document_has_list_roster_without_max_value.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StatefulInterviewTestsContext.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_completing_interview_and_interview_has_3_invalid_and_2_valid_questions_outside_of_rosters.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_completing_interview_and_interview_has_3_invalid_questions_with_different_failing_conditions.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_determining_has_interview_a_group_and_group_is_in_roster_which_has_instance_with_id_equal_to_group_roster_vector.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_determining_has_interview_a_group_and_group_is_in_roster_which_has_instance_with_id_not_equal_to_group_roster_vector.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_determining_has_interview_a_group_and_group_is_in_roster_which_has_no_instances.cs" />
@@ -645,6 +649,9 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_count_of_invalid_questions_recursively.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_enabled_subgroups.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_question_answer.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_completing_interview_and_interview_has_2_disabled_and_2_enabled_instances_of_fixed_roster.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_completing_interview_and_interview_has_1_disabled_and_1_enabled_questions_in_fixed_roster_with_3_instances.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_completing_interview_and_interview_has_3_disabled_and_2_enabled_questions_outside_of_rosters.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_restoring_interview_state_from_sync_package.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\AnswerToStringServiceTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_passing_linked_single_option_question.cs" />
@@ -1975,7 +1982,6 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_hard_delete_interview.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_hard_delete_interview_which_was_hard_deleted_before.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_hqapprove_interview.cs" />
-    <Compile Include="SharedKernels\DataCollection\InterviewTests\when_hqreject_interview.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_hqreject_interview_in_incorrect_status.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_hq_approve_hard-deleted_interview.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_length_of_selected_values_less_than_max_for_selected_answer_options_for_multiquestion.cs" />
