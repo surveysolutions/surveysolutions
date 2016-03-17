@@ -9,6 +9,7 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Designer.Api;
 
@@ -16,6 +17,17 @@ namespace WB.Tests.Unit.Designer
 {
     internal static class Setup
     {
+        public static IAttachmentService AttachmentsServiceForOneQuestionnaire(Guid questionnaireId, params AttachmentView[] attachments)
+        {
+            var attachmentServiceMock = new Mock<IAttachmentService>();
+
+            attachmentServiceMock
+                .Setup(x => x.GetAttachmentsForQuestionnaire(questionnaireId))
+                .Returns(attachments);
+
+            return attachmentServiceMock.Object;
+        }
+
         public static void InstanceToMockedServiceLocator<TInstance>(TInstance instance)
         {
             Mock.Get(ServiceLocator.Current)
