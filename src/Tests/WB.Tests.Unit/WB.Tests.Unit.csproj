@@ -299,6 +299,7 @@
     <Compile Include="Applications\Headquarters\ApiUserControllerTests\when_editing_api_user_and_user_does_not_exist.cs" />
     <Compile Include="Applications\Headquarters\ApiUserControllerTests\when_creating_api_user.cs" />
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\DesignerQuestionnairesApiControllerTestsContext.cs" />
+    <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_importing_questionnaire_with_attachments.cs" />
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_importing_questionnaire_from_designer_and_command_service_throws_not_a_questionnaire_exception.cs" />
     <Compile Include="Applications\Headquarters\DesignerQuestionnairesApiControllerTests\when_requesting_questionnaire_and_designer_service_throws_fault_exception.cs" />
     <Compile Include="Applications\Headquarters\FilterTests\MaintenanceFilterTests\when_action_executing_and_read_side_is_outdated.cs" />
@@ -376,6 +377,8 @@
     <Compile Include="SharedKernels\DataCollection\InterviewAnswersCommandValidatorTests\when_responsible_supervisor_answer_on_supervisors_questions.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewAnswersCommandValidatorTests\when_not_responsible_supervisor_answer_on_supervisors_questions.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewExpressionStateStub.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\LinkedQuestions\when_remove_answer_from_link_source_question.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewTests\LinkedQuestions\when_remove_row_from_link_source_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Validation\when_answering_question_with_multiple_failed_validation_conditions.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_integer_question_decreasing_roster_size_of_roster_with_nested_roster.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_answering_text_list_question_decreasing_roster_size_of_roster_with_nested_roster.cs" />

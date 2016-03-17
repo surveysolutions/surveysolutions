@@ -483,4 +483,25 @@
   <data name="WB00110_LinkedQuestionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
     <value>Filter expression has a syntax error.</value>
   </data>
+  <data name="WB0065_NameForAyyachmentIsNotUnique" xml:space="preserve">
+    <value>Another attachment with the same name already exists.</value>
+  </data>
+  <data name="WB0095_StaticTextRefersAbsentAttachment" xml:space="preserve">
+    <value>Static text refers absent attachment</value>
+  </data>
+  <data name="WB0108_AttachmentHasEmptyContent" xml:space="preserve">
+    <value>Attachment cannot be empty</value>
+  </data>
+  <data name="WB0109_AttachmentHasInvalidName" xml:space="preserve">
+    <value>Attachment has invalid name.</value>
+  </data>
+  <data name="WB0213_AttachmentSizeIsMoreThan5Mb" xml:space="preserve">
+    <value>Attachment size is more than 5Mb</value>
+  </data>
+  <data name="WB0214_TotalAttachmentsSizeIsMoreThan50Mb" xml:space="preserve">
+    <value>Total size of attachments is more than 50Mb</value>
+  </data>
+  <data name="WB0215_UnusedAttachments" xml:space="preserve">
+    <value>Questionnaire contains unused attachments</value>
+  </data>
 </root>

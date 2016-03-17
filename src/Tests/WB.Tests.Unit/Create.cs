@@ -218,9 +218,9 @@ namespace WB.Tests.Unit
                 settings ?? Mock.Of<IHeadquartersSettings>());
         }
 
-        public static CascadingOptionModel CascadingOptionModel(int value, string title, int parentValue)
+        public static CategoricalQuestionOption CascadingOptionModel(int value, string title, int parentValue)
         {
-            return new CascadingOptionModel
+            return new CategoricalQuestionOption
                    {
                        Value = value,
                        Title = title,
@@ -1576,11 +1576,6 @@ namespace WB.Tests.Unit
                 AnswerValue = value ?? "1",
                 ParentValue = parentValue
             };
-        }
-
-        public static OptionModel OptionModel(string title, decimal value)
-        {
-            return new OptionModel { Title = title, Value = value };
         }
 
         public static ParaDataExportProcessDetails ParaDataExportProcess()

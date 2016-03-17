@@ -148,6 +148,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     .ToArray();
 
                 this.AddRosterInstances(instances);
+
+                var changedRosterTitles =
+                    rosterCalculationData.RosterInstancesToAdd.Select(
+                        i =>
+                            new ChangedRosterInstanceTitleDto(
+                                new RosterInstance(i.GroupId, i.OuterRosterVector, i.RosterInstanceId),
+                                rosterCalculationData.GetRosterInstanceTitle(i.GroupId, i.RosterInstanceId))).ToArray();
+
+                ChangeRosterTitles(changedRosterTitles);
             }
 
             if (rosterCalculationData.RosterInstancesToRemove.Any())
