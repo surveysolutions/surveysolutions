@@ -917,7 +917,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public bool HasLinkedOptionsChangedEvents => this.hasLinkedOptionsChangedEvents;
 
-        public void UpdateLinkedOptions()
+        [Obsolete("it should be removed when all clients has version 5.7 or higher")]
+        public void MigrateLinkedOptionsToFiltered()
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 

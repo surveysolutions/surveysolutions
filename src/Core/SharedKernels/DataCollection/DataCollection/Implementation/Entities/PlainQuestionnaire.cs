@@ -208,8 +208,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         public bool IsQuestionLinked(Guid questionId) => this.GetQuestionOrThrow(questionId).LinkedToQuestionId.HasValue;
-
-        public Guid[] GetQuestionsLinkedOnRoster()
+        public Guid[] GetQuestionsLinkedToRoster()
         {
             return this.QuestionCache.Values.Where(x => x.LinkedToRosterId.HasValue).Select(x => x.PublicKey).ToArray();
         }
