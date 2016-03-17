@@ -5,8 +5,9 @@ namespace WB.Core.SharedKernels.Enumerator.Repositories
 {
     public interface IAttachmentContentStorage
     {
-        Task StoreAttachmentContentAsync(AttachmentContent attachmentContent);
-        Task<AttachmentContent> GetAttachmentContentAsync(string attachmentContentId);
-        Task<bool> IsExistAttachmentContentAsync(string attachmentContentId);
+        Task StoreAsync(AttachmentContent attachmentContent);
+        Task<AttachmentContentMetadata> GetMetadataAsync(string attachmentContentId);
+        Task<bool> IsExistAsync(string attachmentContentId);
+        Task<byte[]> GetContentAsync(string attachmentContentId);
     }
 }
