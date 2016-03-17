@@ -282,7 +282,7 @@
             .transition(left 0.4s ease);
 
             .btn[disabled] {
-                color: @selected-panel-grey-color;
+                color: #c1c7cb;//@selected-panel-grey-color;
             }
 
             .left-side-panel-content {
@@ -548,8 +548,8 @@
             @attachments-accent-color: #e004c9;
             @attachments-border-color: #d9dde0;
             @attachments-drop-box-color: #78838a;
-            @attachments-preview-width:120px;
-            @attachments-preview-height:100px;
+            @attachments-preview-width:156px;
+            @attachments-preview-height:140px;
             @attachments-meta-color: #78838a;
 
             .attachments {
@@ -573,16 +573,16 @@
                         z-index: 10;
                         .lucida-console-font();
                         
-                        &.has-error{
-                            border-color: @common-dark-red-color;
+                        /*&.has-error{
+                            border-color: #e64545;
 
                             &:hover {
                                 border-color: @common-dark-red-color;
                             }
-                        }
+                        }*/
 
                         .error-message{
-                            color: @common-dark-red-color;
+                            color: #e64545;
                             margin: 0;
                         }
 
@@ -595,17 +595,20 @@
                         .attachment-preview{
                             display: table-cell;
                             vertical-align: top;
+                            border-right: 1px solid @attachments-border-color;
 
                             .attachment-preview-cover{
                                 height: @attachments-preview-height;
                                 width: @attachments-preview-width;
-                                margin-right: 10px;
+                                margin-right: 12px;
                                 overflow: hidden;
+                                cursor: pointer;
 
                                 img{
                                     height: @attachments-preview-height;
                                     width: @attachments-preview-width;
                                     object-fit: contain;
+                                    object-position: 100% 0;
                                 }
                             }
                            
@@ -613,6 +616,7 @@
                         .attachment-content{
                             display: table-cell; 
                             vertical-align: top;
+                            padding-left: 12px; 
 
                             .attachment-meta{
                                   .georgia-font();
@@ -654,7 +658,7 @@
                         }
 
                         input.table-name{
-                            width: @divider-width;
+                            width: 100%; // @divider-width;
                             color: @leftpanel-accent-color;
                         }
 
@@ -688,6 +692,7 @@
                         }
 
                         .actions {
+                            margin-right: 0;
                             button, a.btn {
                                 background: @attachments-panel-table-item-bg;
 
@@ -697,13 +702,6 @@
                             }
                             
                             .permanent-actions{
-                                background: @attachments-panel-table-item-bg;
-                                -webkit-box-shadow: -30px 1px 25px 0px  @attachments-panel-table-item-bg;
-                                -moz-box-shadow: -30px 1px 25px 0px  @attachments-panel-table-item-bg;
-                                box-shadow: -30px 1px 25px 0px  @attachments-panel-table-item-bg;
-                                //bottom: 10px;
-                                //position: absolute;
-                                //right: 0;
                                 padding-left: 5px;
                             }  
                             
@@ -714,7 +712,7 @@
 
                         .divider {
                             height: 2px;
-                            width: @divider-width;
+                            width: 100%;//@divider-width;
                             background: @attachments-border-color;
                         }
                     }

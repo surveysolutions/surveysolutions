@@ -4,6 +4,7 @@
             'use strict';
 
             $scope.downloadLookupFileBaseUrl = '../../attachment/';
+            $scope.benchmarkDownloadSpeed = 20;
             var hideAttachmentsPane = 'ctrl+l';
 
             if (hotkeys.get(hideAttachmentsPane) !== false) {
@@ -21,6 +22,10 @@
                     return sum + (attachment.sizeInBytes || 0);
                 }, 0);
             };
+
+            $scope.estimatedLoadingTime = function () {
+                return Math.floor($scope.totalSize / $scope.benchmarkDownloadSpeed);
+            }
 
             var dataBind = function (attachment, attachmentDto) {
                 attachment.initialAttachment = angular.copy(attachmentDto);
@@ -65,6 +70,12 @@
                 var degree = Math.min(Math.floor(Math.log(bytes) / Math.log(base)), sizes.length - 1);
                 var decimalPlaces = Math.min(Math.max(degree - 1, 0), 2);
                 return parseFloat((bytes / Math.pow(base, degree)).toFixed(decimalPlaces)) + ' ' + sizes[degree];
+            }
+
+            $scope.formatSeconds = function (seconds) {
+                if (seconds === 0) return '0 sec';
+
+                return seconds + " sec";
             }
 
             $scope.isFolded = false;

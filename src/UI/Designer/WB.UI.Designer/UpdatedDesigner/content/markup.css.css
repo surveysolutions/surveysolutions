@@ -7917,7 +7917,7 @@ textarea#edit-group-description {
   transition: left 0.4s ease;
 }
 #designer-editor.container section#main .left-side-panel .btn[disabled] {
-  color: #7e898f;
+  color: #c1c7cb;
 }
 #designer-editor.container section#main .left-side-panel .left-side-panel-content {
   background: #e5e8ea;
@@ -8168,15 +8168,16 @@ textarea#edit-group-description {
   position: relative;
   z-index: 10;
   font-family: "Lucida Console", Monaco, monospace;
-}
-#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item.has-error {
-  border-color: #a94442;
-}
-#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item.has-error:hover {
-  border-color: #a94442;
+  /*&.has-error{
+                            border-color: #e64545;
+
+                            &:hover {
+                                border-color: @common-dark-red-color;
+                            }
+                        }*/
 }
 #designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .error-message {
-  color: #a94442;
+  color: #e64545;
   margin: 0;
 }
 #designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item:hover {
@@ -8188,21 +8189,25 @@ textarea#edit-group-description {
 #designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .attachment-preview {
   display: table-cell;
   vertical-align: top;
+  border-right: 1px solid #d9dde0;
 }
 #designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .attachment-preview .attachment-preview-cover {
-  height: 100px;
-  width: 120px;
-  margin-right: 10px;
+  height: 140px;
+  width: 156px;
+  margin-right: 12px;
   overflow: hidden;
+  cursor: pointer;
 }
 #designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .attachment-preview .attachment-preview-cover img {
-  height: 100px;
-  width: 120px;
+  height: 140px;
+  width: 156px;
   object-fit: contain;
+  object-position: 100% 0;
 }
 #designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .attachment-content {
   display: table-cell;
   vertical-align: top;
+  padding-left: 12px;
 }
 #designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .attachment-content .attachment-meta {
   font-family: Georgia, serif;
@@ -8237,7 +8242,7 @@ textarea#edit-group-description {
   font-size: 14px;
 }
 #designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item input.table-name {
-  width: 275px;
+  width: 100%;
   color: #e004c9;
 }
 #designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .form-control[disabled],
@@ -8269,6 +8274,9 @@ textarea#edit-group-description {
   font-size: 14px;
   text-overflow: ellipsis;
 }
+#designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .actions {
+  margin-right: 0;
+}
 #designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .actions button,
 #designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .actions a.btn {
   background: #fff;
@@ -8278,10 +8286,6 @@ textarea#edit-group-description {
   background: #e6e6e6;
 }
 #designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .actions .permanent-actions {
-  background: #fff;
-  -webkit-box-shadow: -30px 1px 25px 0px #fff;
-  -moz-box-shadow: -30px 1px 25px 0px #fff;
-  box-shadow: -30px 1px 25px 0px #fff;
   padding-left: 5px;
 }
 #designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .actions.dirty .permanent-actions {
@@ -8289,7 +8293,7 @@ textarea#edit-group-description {
 }
 #designer-editor.container section#main .attachments-panel .attachments div.attachment-list div.attachments-panel-item .divider {
   height: 2px;
-  width: 275px;
+  width: 100%;
   background: #d9dde0;
 }
 #designer-editor.container section#main .macros-panel {
