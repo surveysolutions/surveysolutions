@@ -49,7 +49,7 @@
         <span data-bind="text: ReportTypeName"></span>
         @if (Model.SupervisorId.HasValue)
     {<text>
-            @PeriodicStatusReport.By @Model.SupervisorName
+            @PeriodicStatusReport.InThe @Model.SupervisorName @PeriodicStatusReport.Team.ToLower()
     </text>
         }
     </h3>
@@ -143,7 +143,7 @@
         <tbody>
             @if (Model.TotalRowPresent)
             {
-                <tr>
+                <tr style="color: green; font-weight: bold;">
                     <td>
                         <b>@PeriodicStatusReport.Total</b>
                     </td>

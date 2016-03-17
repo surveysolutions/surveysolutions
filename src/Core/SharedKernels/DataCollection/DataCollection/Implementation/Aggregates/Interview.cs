@@ -3175,7 +3175,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             List<RosterIdentity> rosterInstancesWithAffectedTitles,
             string answerAsRosterTitle)
         {
-            var questionsLinkedOnRoster = questionnaire.GetQuestionsLinkedOnRoster();
+            var questionsLinkedOnRoster = questionnaire.GetQuestionsLinkedToRoster();
             var questionsLinkedOnQuestion = questionnaire.GetQuestionsLinkedToQuestion();
             if(!questionsLinkedOnRoster.Any() && !questionsLinkedOnQuestion.Any())
                 return new Dictionary<Guid, RosterVector[]>();
@@ -4139,7 +4139,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected IQuestionnaire GetQuestionnaireOrThrow(Guid id, long version)
         {
-            IQuestionnaire questionnaire = this.questionnaireRepository.GetHistoricalQuestionnaire(id, version);
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(new QuestionnaireIdentity(id, version));
 
             if (questionnaire == null)
                 throw new InterviewException(string.Format("Questionnaire with id '{0}' of version {1} is not found.", id, version), InterviewDomainExceptionType.QuestionnaireIsMissing);
