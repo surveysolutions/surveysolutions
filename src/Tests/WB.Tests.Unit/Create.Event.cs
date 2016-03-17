@@ -16,6 +16,7 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -113,33 +114,28 @@ namespace WB.Tests.Unit
             }
 
             public static AnswersDeclaredInvalid AnswersDeclaredInvalid(Guid? id = null, decimal[] rosterVector = null)
-            {
-                var identities = new[]
+                => Create.Event.AnswersDeclaredInvalid(questions: new[]
                 {
                     new Identity(id ?? Guid.NewGuid(), rosterVector ?? new decimal[0]),
-                };
-                return new AnswersDeclaredInvalid(identities);
-            }
+                });
+
+            public static AnswersDeclaredInvalid AnswersDeclaredInvalid(Identity[] questions)
+                => new AnswersDeclaredInvalid(questions);
 
             public static AnswersDeclaredInvalid AnswersDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedConditions)
-            {
-                return new AnswersDeclaredInvalid(failedConditions);
-            }
+                => new AnswersDeclaredInvalid(failedConditions);
+
+            public static AnswersDeclaredValid AnswersDeclaredValid()
+                => new AnswersDeclaredValid(new Identity[]{});
 
             public static AnswersRemoved AnswersRemoved(params Identity[] questions)
-            {
-                return new AnswersRemoved(questions);
-            }
+                => new AnswersRemoved(questions);
 
             public static AnswerRemoved AnswerRemoved(Identity question)
-            {
-                return new AnswerRemoved(Guid.NewGuid(), question.Id, question.RosterVector, DateTime.Now);
-            }
+                => new AnswerRemoved(Guid.NewGuid(), question.Id, question.RosterVector, DateTime.Now);
 
             public static ExpressionsMigratedToCSharp ExpressionsMigratedToCSharpEvent()
-            {
-                return new ExpressionsMigratedToCSharp();
-            }
+                => new ExpressionsMigratedToCSharp();
 
             public static GeoLocationQuestionAnswered GeoLocationQuestionAnswered(Identity question, double latitude, double longitude)
             {
@@ -189,6 +185,12 @@ namespace WB.Tests.Unit
                         .ToPublishedEvent(eventSourceId: interviewId);
             }
 
+            public static InterviewCompleted InteviewCompleted()
+                => new InterviewCompleted(
+                    Guid.NewGuid(),
+                    DateTime.UtcNow,
+                    "comment");
+
             public static InterviewFromPreloadedDataCreated InterviewFromPreloadedDataCreated(Guid? questionnaireId = null, long? questionnaireVersion = null)
                 => new InterviewFromPreloadedDataCreated(
                     Guid.NewGuid(),
@@ -212,15 +214,8 @@ namespace WB.Tests.Unit
             public static InterviewReceivedBySupervisor InterviewReceivedBySupervisor()
                 => new InterviewReceivedBySupervisor();
 
-            public static IPublishedEvent<InterviewStatusChanged> InterviewStatusChanged(
-                Guid interviewId, 
-                InterviewStatus status, 
-                string comment = "hello",
-                Guid? eventId = null)
-            {
-                return new InterviewStatusChanged(status, comment)
-                    .ToPublishedEvent(eventSourceId: interviewId, eventId: eventId);
-            }
+            public static InterviewStatusChanged InterviewStatusChanged(InterviewStatus status, string comment = "hello")
+                => new InterviewStatusChanged(status, comment);
 
             public static InterviewSynchronized InterviewSynchronized(InterviewSynchronizationDto synchronizationDto)
             {
@@ -589,6 +584,20 @@ namespace WB.Tests.Unit
                 return new RosterInstancesAdded(instances);
             }
 
+            public static RosterInstancesAdded RosterInstancesAdded(Guid rosterId, params RosterVector[] fullRosterVectors)
+            {
+                AddedRosterInstance[] instances =
+                    fullRosterVectors
+                        .Select(fullRosterVector => new AddedRosterInstance(
+                            rosterId,
+                            outerRosterVector: fullRosterVector.Take(fullRosterVector.Length - 1).ToArray(),
+                            rosterInstanceId: fullRosterVector.Last(),
+                            sortIndex: null))
+                        .ToArray();
+
+                return new RosterInstancesAdded(instances);
+            }
+
             public static RosterInstancesAdded RosterInstancesAdded(Guid? rosterGroupId = null,
                 decimal[] rosterVector = null,
                 decimal? rosterInstanceId = null,
@@ -639,10 +648,14 @@ namespace WB.Tests.Unit
                 };
             }
 
-            public static TextQuestionAnswered TextQuestionAnswered(Guid questionId, decimal[] rosterVector, string answer)
-            {
-                return new TextQuestionAnswered(Guid.NewGuid(), questionId, rosterVector, DateTime.Now, answer);
-            }
+            public static TextQuestionAnswered TextQuestionAnswered(
+                Guid? questionId = null, decimal[] rosterVector = null, string answer = null)
+                => new TextQuestionAnswered(
+                    Guid.NewGuid(),
+                    questionId ?? Guid.NewGuid(),
+                    rosterVector ?? WB.Core.SharedKernels.DataCollection.RosterVector.Empty,
+                    DateTime.Now,
+                    answer ?? "answer");
 
             public static NumericQuestionChanged UpdateNumericIntegerQuestion(Guid questionId, string variableName, string enablementCondition = null, string validationExpression = null)
             {
@@ -718,6 +731,11 @@ namespace WB.Tests.Unit
 
                 public static IPublishedEvent<InterviewHardDeleted> InterviewHardDeleted(Guid? interviewId = null)
                     => Create.Event.InterviewHardDeleted().ToPublishedEvent(eventSourceId: interviewId);
+
+
+                public static IPublishedEvent<InterviewStatusChanged> InterviewStatusChanged(
+                    Guid interviewId, InterviewStatus status, string comment = "hello", Guid? eventId = null)
+                    => Create.Event.InterviewStatusChanged(status, comment).ToPublishedEvent(eventSourceId: interviewId, eventId: eventId);
             }
 
             internal static class Designer
