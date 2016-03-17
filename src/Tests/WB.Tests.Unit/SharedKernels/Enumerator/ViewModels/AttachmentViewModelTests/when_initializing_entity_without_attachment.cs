@@ -22,17 +22,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
         {
             entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-            var questionnaireMock = Mock.Of<IQuestionnaire>();
-            var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
-            questionnaireRepository.SetReturnsDefault(questionnaireMock);
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), _ => true);
 
             var interview = Mock.Of<IStatefulInterview>();
-            var interviewRepository = new Mock<IStatefulInterviewRepository>();
-            interviewRepository.SetReturnsDefault(interview);
+            var interviewRepository = Setup.StatefulInterviewRepository(interview);
 
             attachmentContentStorage = Mock.Of<IAttachmentContentStorage>();
 
-            viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository.Object, attachmentContentStorage);
+            viewModel = Create.AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentContentStorage);
         };
 
         Because of = () => viewModel.Init("interview", new Identity(entityId, Empty.RosterVector));

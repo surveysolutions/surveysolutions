@@ -208,12 +208,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         public bool IsQuestionLinked(Guid questionId) => this.GetQuestionOrThrow(questionId).LinkedToQuestionId.HasValue;
+
         public Guid[] GetQuestionsLinkedOnRoster()
         {
             return this.QuestionCache.Values.Where(x => x.LinkedToRosterId.HasValue).Select(x => x.PublicKey).ToArray();
         }
 
-        public Guid[] GetQuestionsLinkedOnQuestion()
+        public Guid[] GetQuestionsLinkedToQuestion()
         {
             return this.QuestionCache.Values.Where(x => x.LinkedToQuestionId.HasValue).Select(x => x.PublicKey).ToArray();
         }
@@ -230,6 +231,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public string GetGroupTitle(Guid groupId) => this.GetGroupOrThrow(groupId).Title;
 
         public string GetStaticText(Guid staticTextId) => this.GetStaticTextOrThrow(staticTextId).Text;
+
         public Attachment GetAttachmentForEntity(Guid entityId)
         {
             IStaticText staticText = this.GetStaticTextImpl(entityId);

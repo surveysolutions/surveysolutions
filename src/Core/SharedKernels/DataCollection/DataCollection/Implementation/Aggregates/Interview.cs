@@ -3176,7 +3176,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string answerAsRosterTitle)
         {
             var questionsLinkedOnRoster = questionnaire.GetQuestionsLinkedOnRoster();
-            var questionsLinkedOnQuestion = questionnaire.GetQuestionsLinkedOnQuestion();
+            var questionsLinkedOnQuestion = questionnaire.GetQuestionsLinkedToQuestion();
             if(!questionsLinkedOnRoster.Any() && !questionsLinkedOnQuestion.Any())
                 return new Dictionary<Guid, RosterVector[]>();
 

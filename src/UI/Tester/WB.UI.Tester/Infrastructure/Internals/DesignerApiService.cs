@@ -20,7 +20,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
         private readonly IRestService restService;
         private readonly IPrincipal principal;
 
-        private RestCredentials restCredentials => new RestCredentials
+        private RestCredentials RestCredentials => new RestCredentials
         {
             Login = this.principal.CurrentUserIdentity.Name,
             Password = this.principal.CurrentUserIdentity.Password
@@ -31,7 +31,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
             IPrincipal principal)
         {
             this.restService = restService;
-            this.principal = principal;;
+            this.principal = principal;
         }
 
         public async Task<bool> Authorize(string login, string password)
@@ -70,7 +70,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
 
             downloadedQuestionnaire = await this.restService.GetAsync<Questionnaire>(
                 url: $"questionnaires/{selectedQuestionnaire.Id}",
-                credentials: this.restCredentials,
+                credentials: this.RestCredentials,
                 onDownloadProgressChanged: onDownloadProgressChanged, token: token);
 
             return downloadedQuestionnaire;
@@ -82,7 +82,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
         {
             var restFile = await this.restService.DownloadFileAsync(
                 url: $"attachment/{attachmentId}",
-                credentials: this.restCredentials,
+                credentials: this.RestCredentials,
                 onDownloadProgressChanged: onDownloadProgressChanged,
                 token: token).ConfigureAwait(false);
 
@@ -102,7 +102,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
             var  batchOfServerQuestionnaires = await this.restService.GetAsync<Core.SharedKernels.SurveySolutions.Api.Designer.QuestionnaireListItem[]>(
                 url: "questionnaires",
                 token: token,
-                credentials: this.restCredentials,
+                credentials: this.RestCredentials,
                 queryString: new { pageIndex = pageIndex });
 
             return batchOfServerQuestionnaires.Select(questionnaireListItem => new QuestionnaireListItem()
