@@ -2779,9 +2779,9 @@ namespace WB.Tests.Unit
                 options ?? new RosterVector[0]);
         }
 
-        public static AttachmentContentService CreateAttachmentContentService(IPlainStorageAccessor<AttachmentContent> attachmentContentPlainStorage)
+        public static AttachmentContentService CreateAttachmentContentService(IPlainStorageAccessor<WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire.AttachmentContent> attachmentContentPlainStorage)
         {
-            return new AttachmentContentService(attachmentContentPlainStorage ?? Mock.Of<IPlainStorageAccessor<AttachmentContent>>());
+            return new AttachmentContentService(attachmentContentPlainStorage ?? Mock.Of<IPlainStorageAccessor<WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire.AttachmentContent>>());
         }
 
         public static AttachmentsController AttachmentsController(IAttachmentContentService attachmentContentService)
