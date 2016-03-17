@@ -10,7 +10,6 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    [Ignore("temp")]
     internal class when_completing_interview_and_interview_has_3_invalid_questions_with_different_failing_conditions
     {
         Establish context = () =>
@@ -25,13 +24,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview = Setup.StatefulInterview(questionnaireDocument: questionnaire);
 
             interview.Apply(Create.Event.InterviewStatusChanged(status: InterviewStatus.InterviewerAssigned));
-
-            interview.Apply(Create.Event.AnswersDeclaredInvalid(questions: new []
-            {
-                invalidQuestion1Identity,
-                invalidQuestion2Identity,
-                invalidQuestion3Identity,
-            }));
 
             interview.Apply(Create.Event.AnswersDeclaredInvalid(failedConditions: new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>
             {

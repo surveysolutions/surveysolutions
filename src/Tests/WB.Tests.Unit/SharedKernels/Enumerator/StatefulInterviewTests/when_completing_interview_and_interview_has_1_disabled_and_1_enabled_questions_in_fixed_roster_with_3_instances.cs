@@ -8,7 +8,6 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    [Ignore("temp")]
     internal class when_completing_interview_and_interview_has_1_disabled_and_1_enabled_questions_in_fixed_roster_with_3_instances
     {
         Establish context = () =>
@@ -47,6 +46,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Identity(disabledQuestionId, Create.RosterVector(1)),
                 Create.Identity(disabledQuestionId, Create.RosterVector(2)),
                 Create.Identity(disabledQuestionId, Create.RosterVector(3)),
+            }));
+
+            interview.Apply(Create.Event.QuestionsEnabled(new[]
+            {
+                Create.Identity(enabledQuestionId, Create.RosterVector(1)),
+                Create.Identity(enabledQuestionId, Create.RosterVector(2)),
+                Create.Identity(enabledQuestionId, Create.RosterVector(3)),
             }));
 
             eventContext = Create.EventContext();
