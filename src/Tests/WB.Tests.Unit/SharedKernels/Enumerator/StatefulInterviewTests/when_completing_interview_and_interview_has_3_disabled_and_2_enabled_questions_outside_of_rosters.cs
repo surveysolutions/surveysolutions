@@ -12,7 +12,6 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    [Ignore("temp")]
     internal class when_completing_interview_and_interview_has_3_disabled_and_2_enabled_questions_outside_of_rosters
     {
         Establish context = () =>
@@ -35,6 +34,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Identity(disabledQuestion1Id, RosterVector.Empty),
                 Create.Identity(disabledQuestion2Id, RosterVector.Empty),
                 Create.Identity(disabledQuestion3Id, RosterVector.Empty),
+            }));
+
+            interview.Apply(Create.Event.QuestionsEnabled(new []
+            {
+                Create.Identity(enabledQuestion1Id, RosterVector.Empty),
+                Create.Identity(enabledQuestion2Id, RosterVector.Empty),
             }));
 
             eventContext = Create.EventContext();

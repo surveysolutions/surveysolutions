@@ -9,7 +9,6 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    [Ignore("temp")]
     internal class when_completing_interview_and_interview_has_3_invalid_and_2_valid_questions_outside_of_rosters
     {
         Establish context = () =>
@@ -32,6 +31,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Identity(invalidQuestion1Id, RosterVector.Empty),
                 Create.Identity(invalidQuestion2Id, RosterVector.Empty),
                 Create.Identity(invalidQuestion3Id, RosterVector.Empty),
+            }));
+
+            interview.Apply(Create.Event.AnswersDeclaredValid(questions: new []
+            {
+                Create.Identity(validQuestion1Id, RosterVector.Empty),
+                Create.Identity(validQuestion2Id, RosterVector.Empty),
             }));
 
             eventContext = Create.EventContext();
