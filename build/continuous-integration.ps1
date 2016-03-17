@@ -41,7 +41,7 @@ try {
 		-OutFileName $PackageName | %{ if (-not $_) { Exit } }
 
 
-#	RunTests $BuildConfiguration
+	RunTests $BuildConfiguration
 
 	RunConfigTransform $ProjectDesigner $BuildConfiguration
 	BuildNewDesigner
