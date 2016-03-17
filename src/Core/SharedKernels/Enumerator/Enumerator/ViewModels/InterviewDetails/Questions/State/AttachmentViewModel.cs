@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAttachmentContentStorage attachmentContentStorage;
 
-        private AttachmentContent attachmentContent;
+        private AttachmentContentMetadata attachmentContentMetadata;
 
         public AttachmentViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,
@@ -46,14 +46,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (attachment != null)
             {
-                this.attachmentContent = await this.attachmentContentStorage.GetAttachmentContentAsync(attachment.ContentId);
-                this.Content = this.attachmentContent?.Content;
+                this.attachmentContentMetadata = await this.attachmentContentStorage.GetMetadataAsync(attachment.ContentId);
+
+                if (IsImage)
+                {
+                    this.Content = await this.attachmentContentStorage.GetContentAsync(attachment.ContentId);
+                }
             }
         }
 
         private readonly string[] imageContentTypes = {"image/png", "image/jpg", "image/gif", "image/jpeg", "image/pjpeg"};
 
-        public bool IsImage => this.attachmentContent != null && this.imageContentTypes.Contains(this.attachmentContent.ContentType);
+        public bool IsImage => this.attachmentContentMetadata != null && this.imageContentTypes.Contains(this.attachmentContentMetadata.ContentType);
 
         public byte[] Content { get; private set; }
     }

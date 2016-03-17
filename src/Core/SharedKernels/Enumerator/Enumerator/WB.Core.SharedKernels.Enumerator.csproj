@@ -203,6 +203,8 @@
     <Compile Include="ViewModels\PrefilledQuestionsViewModel.cs" />
     <Compile Include="ViewModels\StartInterviewViewModel.cs" />
     <Compile Include="Views\AttachmentContent.cs" />
+    <Compile Include="Views\AttachmentContentData.cs" />
+    <Compile Include="Views\AttachmentContentMetadata.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
