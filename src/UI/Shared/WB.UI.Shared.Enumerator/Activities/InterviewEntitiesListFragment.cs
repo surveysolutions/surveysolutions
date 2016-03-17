@@ -38,7 +38,12 @@ namespace WB.UI.Shared.Enumerator.Activities
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
-            this.layoutManager?.ScrollToPositionWithOffset(this.ViewModel.ScrollToIndex, 0);
+
+            if (this.ViewModel != null && this.ViewModel.ScrollToIndex != null)
+            {
+                this.layoutManager?.ScrollToPositionWithOffset(this.ViewModel.ScrollToIndex.Value, 0);
+                this.ViewModel.ScrollToIndex = null;
+            }
         }
     }
 }
