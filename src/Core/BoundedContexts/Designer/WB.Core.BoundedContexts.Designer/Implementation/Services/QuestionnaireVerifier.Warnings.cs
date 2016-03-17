@@ -72,7 +72,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static bool CategoricalQuestionHasALotOfOptions(IQuestion question)
         {
-            return question.QuestionType == QuestionType.SingleOption && question.Answers.Count > 30;
+            return question.QuestionType == QuestionType.SingleOption && 
+                   !question.IsFilteredCombobox.GetValueOrDefault(false) && 
+                   !question.CascadeFromQuestionId.HasValue &&
+                   question.Answers.Count > 30;
         }
 
         private bool HasLongEnablementCondition(IComposite groupOrQuestion)
