@@ -38,8 +38,11 @@ namespace WB.UI.Tester.Activities
 
         private async Task ClearAttachmentStorage()
         {
-            var attachmentContentRemover = Mvx.Resolve<IAsyncPlainStorageRemover<AttachmentContent>>();
-            await attachmentContentRemover.DeleteAllAsync();
+            var attachmentContentMetadataRemover = Mvx.Resolve<IAsyncPlainStorageRemover<AttachmentContentMetadata>>();
+            await attachmentContentMetadataRemover.DeleteAllAsync();
+
+            var attachmentContentDataRemover = Mvx.Resolve<IAsyncPlainStorageRemover<AttachmentContentData>>();
+            await attachmentContentDataRemover.DeleteAllAsync();
         }
     }
 }

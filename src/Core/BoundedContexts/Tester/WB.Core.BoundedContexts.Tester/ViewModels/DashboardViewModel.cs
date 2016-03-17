@@ -365,7 +365,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 var attachmentContentId = attachment.ContentId;
 
-                var isExistsContent = await this.attachmentContentStorage.IsExistAttachmentContentAsync(attachmentContentId);
+                var isExistsContent = await this.attachmentContentStorage.IsExistAsync(attachmentContentId);
                 if (!isExistsContent)
                 {
                     var attachmentId = attachment.AttachmentId.FormatGuid();
@@ -377,7 +377,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                                         },
                                         token: this.tokenSource.Token);
 
-                    await this.attachmentContentStorage.StoreAttachmentContentAsync(attachmentContent);
+                    await this.attachmentContentStorage.StoreAsync(attachmentContent);
                 }
             }
         }
