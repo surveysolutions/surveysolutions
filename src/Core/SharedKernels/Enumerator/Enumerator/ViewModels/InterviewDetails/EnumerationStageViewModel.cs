@@ -134,7 +134,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.ScrollToIndex = anchorElementIndex;
         }
 
-        public int ScrollToIndex { get; private set; }
+        public int? ScrollToIndex { get; set; }
 
         private void LoadFromModel(Identity groupIdentity)
         {
