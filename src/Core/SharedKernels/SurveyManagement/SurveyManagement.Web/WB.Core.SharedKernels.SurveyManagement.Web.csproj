@@ -600,6 +600,7 @@
     <EmbeddedResource Include="Views\Shared\ApiUserEditForm.cshtml" />
     <EmbeddedResource Include="Views\Interviewers\Index.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\Versions.cshtml" />
+    <EmbeddedResource Include="Views\Interview\AttachmentPartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">

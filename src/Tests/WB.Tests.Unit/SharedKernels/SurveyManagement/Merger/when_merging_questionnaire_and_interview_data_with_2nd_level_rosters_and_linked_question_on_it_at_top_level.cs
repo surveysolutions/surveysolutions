@@ -92,7 +92,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null);
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null, null);
 
 
         It should_linked_question_outside_roster_has_3_options = () =>

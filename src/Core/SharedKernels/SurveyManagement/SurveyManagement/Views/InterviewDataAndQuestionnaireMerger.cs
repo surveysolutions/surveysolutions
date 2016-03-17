@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views
 {
@@ -29,26 +30,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             public InterviewData Interview { get; }
             public IQuestionnaireDocument Questionnaire { get; }
             public Dictionary<string, Guid> VariableToQuestionId { get; }
+            public Dictionary<string, AttachmentInfoView> Attachments { get; }
 
             public InterviewInfoInternal(
                 InterviewData interview,
                 IQuestionnaireDocument questionnaire,
-                Dictionary<string, Guid> variableToQuestionId)
+                Dictionary<string, Guid> variableToQuestionId,
+                Dictionary<string, AttachmentInfoView> attachments)
             {
                 this.Interview = interview;
                 this.Questionnaire = questionnaire;
                 this.VariableToQuestionId = variableToQuestionId;
+                this.Attachments = attachments;
             }
         }
 
-        public InterviewDetailsView Merge(InterviewData interview, IQuestionnaireDocument questionnaire, UserLight responsible, InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)
+        public InterviewDetailsView Merge(InterviewData interview, IQuestionnaireDocument questionnaire, UserLight responsible, 
+            InterviewLinkedQuestionOptions interviewLinkedQuestionOptions, Dictionary<string, AttachmentInfoView> attachments)
         {
             questionnaire.ConnectChildrenWithParent();
-            
+
             var interviewInfo = new InterviewInfoInternal(
                 interview: interview,
                 questionnaire: questionnaire,
-                variableToQuestionId: questionnaire.GetAllQuestions().ToDictionary(x => x.StataExportCaption, x => x.PublicKey));
+                variableToQuestionId: questionnaire.GetAllQuestions().ToDictionary(x => x.StataExportCaption, x => x.PublicKey),
+                attachments: attachments);
 
             var interviewGroups = new List<InterviewGroupView>();
             var groupStack = new Stack<KeyValuePair<IGroup, int>>();
@@ -222,15 +228,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                             interviewLevel.RosterVector,
                             interviewInfo.Interview.Status);
 
+                    completedGroup.Entities.Add(interviewEntity);
+                    continue;
                 }
 
                 var staticText = entity as IStaticText;
                 if (staticText != null)
                 {
-                    interviewEntity = new InterviewStaticTextView(staticText);
+                    AttachmentInfoView attachment = null;
+                    if (interviewInfo.Attachments != null && !string.IsNullOrWhiteSpace(staticText.AttachmentName))
+                    {
+                        interviewInfo.Attachments.TryGetValue(staticText.AttachmentName, out attachment); 
+                    }
+
+                    interviewEntity = new InterviewStaticTextView(staticText, attachment == null ? null : new InterviewAttachmentViewModel(attachment.ContentHash, attachment.ContentType));
+
+                    completedGroup.Entities.Add(interviewEntity);
                 }
-                
-                completedGroup.Entities.Add(interviewEntity);
             }
 
             return completedGroup;

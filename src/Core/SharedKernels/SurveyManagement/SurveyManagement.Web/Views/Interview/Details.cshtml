@@ -120,19 +120,23 @@
                             <tbody>
                                 @foreach (var entity in group.Entities)
                                 {
-                                    if (entity is InterviewStaticTextView)
+                                    InterviewStaticTextView entityAsStaticText = entity as InterviewStaticTextView;
+                                    if (entityAsStaticText != null)
                                     {
-                                        @Html.Partial("StaticTextPartialView", entity as InterviewStaticTextView)
+                                        @Html.Partial("StaticTextPartialView", entityAsStaticText)
+                                        continue;
                                     }
-                                    if (entity is InterviewQuestionView)
+
+                                    InterviewQuestionView entityAsInterviewQuestionView = entity as InterviewQuestionView;
+                                    if (entityAsInterviewQuestionView != null)
                                     {
                                         if (Model.InterviewDetails.ReceivedByInterviewer)
                                         {
-                                            @Html.Partial("DetailsReadOnlyQuestionPartialView", entity as InterviewQuestionView)
+                                            @Html.Partial("DetailsReadOnlyQuestionPartialView", entityAsInterviewQuestionView)
                                         }
                                         else
                                         {
-                                            @Html.Partial("DetailsQuestionPartialView", entity as InterviewQuestionView, new ViewDataDictionary { { "InterviewId", Model.InterviewDetails.PublicKey } })
+                                            @Html.Partial("DetailsQuestionPartialView", entityAsInterviewQuestionView, new ViewDataDictionary { { "InterviewId", Model.InterviewDetails.PublicKey } })
                                         }
                                     }
                                 }

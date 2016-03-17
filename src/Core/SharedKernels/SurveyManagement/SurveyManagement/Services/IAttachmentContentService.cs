@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Services
@@ -8,5 +9,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services
         AttachmentContent GetAttachmentContent(string contentHash);
         void DeleteAttachmentContent(string contentHash);
         bool HasAttachmentContent(string contentHash);
+        Dictionary<string, AttachmentInfoView> GetContentTypes(HashSet<string> contentHashes);
     }
 }

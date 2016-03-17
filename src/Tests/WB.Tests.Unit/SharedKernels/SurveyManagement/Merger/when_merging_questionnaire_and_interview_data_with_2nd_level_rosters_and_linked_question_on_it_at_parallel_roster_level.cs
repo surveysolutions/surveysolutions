@@ -103,7 +103,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null);
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null, null);
 
         It should_linked_in_first_row_has_3_options = () =>
             GetQuestion(mergeResult, linkedQuestionId, new decimal[] { 0 }).Options.Count().ShouldEqual(3);

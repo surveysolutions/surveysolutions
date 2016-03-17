@@ -3,7 +3,12 @@
 <tr>
     <td colspan="4" class="static-text">
         <div class="cell-content">
-            <span>@Html.Raw(Model.Text)</span>
+            <div>@Html.Raw(Model.Text)</div>
+            
+            @if (Model.Attachment != null)
+            {
+                @Html.Partial("AttachmentPartialView", Model.Attachment)
+            }
         </div>
     </td>
 </tr>
