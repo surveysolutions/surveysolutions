@@ -428,6 +428,7 @@
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\YesNoAnswersTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\AnswerToStringServiceTests\when_passing_yesno_question.cs" />
     <Compile Include="SharedKernels\Enumerator\Services\MaskTextTests\when_removing_last_character.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewRepositoryTests\StatefulInterviewRepositoryNUnitTests.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StatefulInterviewTestsContext.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_completing_interview_and_interview_has_3_invalid_and_2_valid_questions_outside_of_rosters.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_completing_interview_and_interview_has_3_invalid_questions_with_different_failing_conditions.cs" />

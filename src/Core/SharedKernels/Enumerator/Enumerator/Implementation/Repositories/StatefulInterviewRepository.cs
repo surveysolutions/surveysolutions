@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
             if (!statefullInterview.HasLinkedOptionsChangedEvents)
             {
-                statefullInterview.UpdateLinkedOptions();
+                statefullInterview.MigrateLinkedOptionsToFiltered();
                 this.eventBus.CommitUncommittedEvents(statefullInterview, null);
                 statefullInterview.MarkChangesAsCommitted();
             }

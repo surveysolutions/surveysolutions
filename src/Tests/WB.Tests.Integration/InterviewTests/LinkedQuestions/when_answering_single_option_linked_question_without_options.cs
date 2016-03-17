@@ -11,7 +11,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
-    internal class when_answering_single_option_linked_question_with_the_link_on_absent_roster_row : InterviewTestsContext
+    internal class when_answering_single_option_linked_question_without_options : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -21,7 +21,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             var titleQuestionId = Guid.NewGuid();
             var questionnaireDocument = Create.QuestionnaireDocument(id: questionnaireId, children: new IComposite[]
             {
-                Create.SingleQuestion(id: linkedToQuestionId, linkedToQuestionId: linkedToQuestionId,
+                Create.SingleQuestion(id: linkedToQuestionId, linkedToQuestionId: titleQuestionId,
                     variable: "link_single"),
                 Integration.Create.NumericIntegerQuestion(id: triggerQuestionId, variable: "num_trigger"),
                 Create.Roster(id: Guid.NewGuid(), rosterSizeSourceType: RosterSizeSourceType.Question,
