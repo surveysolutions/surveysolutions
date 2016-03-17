@@ -4,17 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform;
 using MvvmCross.Platform.Core;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -82,7 +76,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 .Select(questionId => new SideBarPrefillQuestion
                 {
                     Question = questionnaire.GetQuestionTitle(questionId),
-                    Answer = this.GetAnswer(interview, questionnaire, questionId),
+                    Answer = this.GetAnswer(questionnaire, questionId),
                     StatsInvisible = questionnaire.GetQuestionType(questionId) == QuestionType.GpsCoordinates,
                 })
                 .ToList();
@@ -109,11 +103,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             if (eventArgs.TargetScreen != ScreenType.Group)
             {
-                this.UpdateInterviewStatus(null, ScreenType.Complete);
+                this.UpdateInterviewStatus(null);
             }
             else
             {
-                IStatefulInterview interview = this.interviewRepository.Get(this.navigationState.InterviewId);
                 IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(eventArgs.TargetGroup);
 
                 this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
@@ -142,19 +135,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        private void UpdateGroupStatus(Identity groupIdentity, ScreenType type = ScreenType.Group)
+        private void UpdateGroupStatus(Identity groupIdentity)
         {
             this.groupState.Init(this.navigationState.InterviewId, groupIdentity);
             this.Status = this.groupState.Status;
         }
 
-        private void UpdateInterviewStatus(Identity groupIdentity, ScreenType type = ScreenType.Group)
+        private void UpdateInterviewStatus(Identity groupIdentity)
         {
             this.interviewState.Init(this.navigationState.InterviewId, groupIdentity);
             this.Status = this.interviewState.Status;
         }
 
-        private string GetAnswer(IStatefulInterview interview, IQuestionnaire questionnaire, Guid referenceToQuestionId)
+        private string GetAnswer(IQuestionnaire questionnaire, Guid referenceToQuestionId)
         {
             var identityAsString = ConversionHelper.ConvertIdAndRosterVectorToString(referenceToQuestionId, new decimal[0]);
             var interviewAnswer = interview.Answers.ContainsKey(identityAsString) ? interview.Answers[identityAsString] : null;
@@ -187,7 +180,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public IEnumerable<SideBarPrefillQuestion> PrefilledQuestionsStats
         {
             get { return PrefilledQuestions.Where(x => !x.StatsInvisible); }
-
         }
 
         public void Dispose()

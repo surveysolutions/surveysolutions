@@ -646,7 +646,6 @@ namespace WB.Tests.Unit
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 substitutionService ?? Mock.Of<ISubstitutionService>(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                messenger ?? Mock.Of<IMvxMessenger>(),
                 userInterfaceStateService ?? Mock.Of<IUserInterfaceStateService>(),
                 mvxMainThreadDispatcher ?? Stub.MvxMainThreadDispatcher());
 
