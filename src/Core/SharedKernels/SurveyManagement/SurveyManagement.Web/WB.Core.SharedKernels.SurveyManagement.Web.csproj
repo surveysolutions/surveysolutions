@@ -185,7 +185,6 @@
     <Compile Include="Api\ControlPanelApiController.cs" />
     <Compile Include="Api\HealthCheckApiController.cs" />
     <Compile Include="Api\InterviewerSyncController.cs" />
-    <Compile Include="Api\Interviewer\AttachmentsControllerBase.cs" />
     <Compile Include="Api\Interviewer\InterviewerControllerBase.cs" />
     <Compile Include="Api\Interviewer\DevicesControllerBase.cs" />
     <Compile Include="Api\Interviewer\UsersControllerBase.cs" />
