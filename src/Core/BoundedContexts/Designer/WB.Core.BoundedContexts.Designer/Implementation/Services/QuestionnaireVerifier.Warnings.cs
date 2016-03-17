@@ -30,9 +30,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             Warning<IQuestion, ValidationCondition>(question => question.ValidationConditions, HasLongValidationCondition, "WB0212", index => string.Format(VerificationMessages.WB0212_LongValidationCondition, index)),
 
-            Warning(TotalAttachmentsSizeIsMoreThan50Mb, "WB0214", VerificationMessages.WB0214_TotalAttachmentsSizeIsMoreThan50Mb),
+            //Warning(TotalAttachmentsSizeIsMoreThan50Mb, "WB0214", VerificationMessages.WB0214_TotalAttachmentsSizeIsMoreThan50Mb),
             UnusedAttachments,
-            AttachmentSizeIsMoreThan5Mb,
+            //AttachmentSizeIsMoreThan5Mb,
         };
 
         private IEnumerable<QuestionnaireVerificationMessage> AttachmentSizeIsMoreThan5Mb(ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
