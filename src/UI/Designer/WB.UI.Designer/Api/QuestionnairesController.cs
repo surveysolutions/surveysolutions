@@ -21,10 +21,6 @@ namespace WB.UI.Designer.Api
     [RoutePrefix("api/v15/questionnaires")]
     public class QuestionnairesController : ApiController
     {
-        //temporary fix
-        //api version should not be used as version for compilation
-        internal static readonly Version ApiVersion = new Version(13, 0, 0);
-
         private readonly IMembershipUserService userHelper;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
@@ -32,6 +28,7 @@ namespace WB.UI.Designer.Api
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireListViewFactory viewFactory;
         private readonly IAttachmentService attachmentService;
+        private readonly IDesignerEngineVersionService engineVersionService;
 
         public QuestionnairesController(IMembershipUserService userHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
@@ -39,7 +36,8 @@ namespace WB.UI.Designer.Api
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
             IQuestionnaireListViewFactory viewFactory, 
-            IAttachmentService attachmentService)
+            IAttachmentService attachmentService,
+            IDesignerEngineVersionService engineVersionService)
         {
             this.userHelper = userHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
@@ -48,6 +46,7 @@ namespace WB.UI.Designer.Api
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.viewFactory = viewFactory;
             this.attachmentService = attachmentService;
+            this.engineVersionService = engineVersionService;
         }
 
         [Route("~/api/v15/login")]
@@ -98,12 +97,14 @@ namespace WB.UI.Designer.Api
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
             }
 
+            var questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
+
             string resultAssembly;
             try
             {
                 GenerationResult generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
                     questionnaireView.Source,
-                    ApiVersion, 
+                    questionnaireContentVersion, 
                     out resultAssembly);
                 if(!generationResult.Success)
                     throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
