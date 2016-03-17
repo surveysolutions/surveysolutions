@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public Identity Identity => this.questionIdentity;
 
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public async void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
             this.questionIdentity = entityIdentity;
-            this.Attachment.Init(interviewId, entityIdentity);
+            await this.Attachment.InitAsync(interviewId, entityIdentity);
 
             this.StaticText = questionnaire.GetStaticText(entityIdentity.Id);
         }
