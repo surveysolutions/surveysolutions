@@ -9,7 +9,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage
     public interface IAsyncPlainStorage<TEntity> : IDisposable where TEntity : class, IPlainStorageEntity
     {
         TEntity GetById(string id);
-
+        Task<TEntity> GetByIdAsync(string id);
         Task RemoveAsync(string id);
         Task RemoveAsync(IEnumerable<TEntity> entities);
 

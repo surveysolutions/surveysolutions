@@ -23,41 +23,35 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
         public async Task StoreAsync(AttachmentContent attachmentContent)
         {
+            await this.attachmentContentDataRepository.StoreAsync(new AttachmentContentData()
+            {
+                Id = attachmentContent.Id,
+                Content = attachmentContent.Content
+            });
             await this.attachmentContentMetadataRepository.StoreAsync(new AttachmentContentMetadata()
             {
                 ContentType = attachmentContent.ContentType,
                 Id = attachmentContent.Id,
                 Size = attachmentContent.Size,
             });
-            await this.attachmentContentDataRepository.StoreAsync(new AttachmentContentData()
-                    {
-                        Id = attachmentContent.Id,
-                        Content = attachmentContent.Content
-            });
         }
         
-        public Task<AttachmentContentMetadata> GetMetadataAsync(string attachmentContentId)
+        public async Task<AttachmentContentMetadata> GetMetadataAsync(string attachmentContentId)
         {
-            var attachmentContent = this.attachmentContentMetadataRepository.GetById(attachmentContentId);
-            if (attachmentContent == null)
-                return null;
-            return Task.FromResult(attachmentContent);
+            var attachmentContent = await this.attachmentContentMetadataRepository.GetByIdAsync(attachmentContentId);
+            return attachmentContent;
         }
 
-        public Task<bool> IsExistAsync(string attachmentContentId)
+        public async Task<bool> IsExistAsync(string attachmentContentId)
         {
-            var attachmentContent = this.attachmentContentMetadataRepository.GetById(attachmentContentId);
-            var fileExists = attachmentContent != null;
-            return Task.FromResult(fileExists);
+            var attachmentContent = await this.attachmentContentMetadataRepository.GetByIdAsync(attachmentContentId);
+            return attachmentContent != null;
         }
 
-        public Task<byte[]> GetContentAsync(string attachmentContentId)
+        public async Task<byte[]> GetContentAsync(string attachmentContentId)
         {
-            var attachmentContentData = this.attachmentContentDataRepository.GetById(attachmentContentId);
-            if (attachmentContentData == null)
-                return null;
-
-            return Task.FromResult(attachmentContentData.Content);
+            var attachmentContentData = await this.attachmentContentDataRepository.GetByIdAsync(attachmentContentId);
+            return attachmentContentData?.Content;
         }
     }
 }

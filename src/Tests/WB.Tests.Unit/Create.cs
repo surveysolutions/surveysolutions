@@ -141,6 +141,7 @@ using designer::WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGen
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable.CustomCollections;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
@@ -2786,6 +2787,40 @@ namespace WB.Tests.Unit
         public static AttachmentsController AttachmentsController(IAttachmentContentService attachmentContentService)
         {
            return new AttachmentsController(attachmentContentService);
+        }
+        
+        public static AttachmentContentMetadata AttachmentContentMetadata(string contentType)
+        {
+            return new AttachmentContentMetadata()
+            {
+                ContentType = contentType,
+            };
+        }
+        
+        public static AttachmentContentData AttachmentContentData(byte[] content)
+        {
+            return new AttachmentContentData()
+            {
+                Content = content,
+            };
+        }
+
+        public static Attachment Attachment(string contentId)
+        {
+            return new Attachment()
+            {
+                ContentId = contentId,
+            };
+        }
+        public static AttachmentViewModel AttachmentViewModel(
+            IPlainQuestionnaireRepository questionnaireRepository,
+            IStatefulInterviewRepository interviewRepository,
+            IAttachmentContentStorage attachmentContentStorage)
+        {
+            return new AttachmentViewModel(
+                questionnaireRepository: questionnaireRepository,
+                interviewRepository: interviewRepository,
+                attachmentContentStorage: attachmentContentStorage);
         }
     }
 }
