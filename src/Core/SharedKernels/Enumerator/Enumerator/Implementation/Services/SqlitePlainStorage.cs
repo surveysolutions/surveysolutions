@@ -58,6 +58,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return entity;
         }
 
+        public virtual async Task<TEntity> GetByIdAsync(string id)
+        {
+            TEntity entity = null;
+            await this.asyncStorage.RunInTransactionAsync(connection => entity = connection.Find<TEntity>(x => x.Id == id));
+            return entity;
+        }
+
         public async Task RemoveAsync(string id)
         {
             TEntity entity = this.GetById(id);

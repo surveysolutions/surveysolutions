@@ -190,6 +190,6 @@
     <value>Версия приложения</value>
   </data>
   <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
-    <value>Скачивает аттачмент - {0}%</value>
+    <value>Скачиваем аттачмент - {0}%</value>
   </data>
 </root>
