@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
 
         Because of = () => controller.GetQuestionnaire(importRequest).GetAwaiter().GetResult();
 
-        It should_rethrow_command_service_exception = () =>
+        It should_download_and_save_only_not_existing_attachemt_contents = () =>
         {
             mockOfRestService.Verify(x=>x.DownloadFileAsync(Moq.It.IsAny<string>(), null, Moq.It.IsAny<RestCredentials>(), null), Times.Exactly(2));
             mockOfAttachmentContentService.Verify(x=>x.SaveAttachmentContent(questionnaireAttachments[0].ContentId, Moq.It.IsAny<string>(), Moq.It.IsAny<byte[]>()), Times.Never);
