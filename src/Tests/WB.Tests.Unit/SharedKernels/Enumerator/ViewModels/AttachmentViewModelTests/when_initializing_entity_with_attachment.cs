@@ -18,15 +18,13 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelTests
 {
-    [Ignore("temp")]
     internal class when_initializing_entity_with_attachment : AttachmentViewModelTestContext
     {
         Establish context = () =>
         {
             entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var attachmentId = Guid.Parse("BBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var attachmentContentId = "cccccc";
-            var attachment = new Attachment() { AttachmentId =  attachmentId };
+            var attachment = new Attachment() { ContentId = attachmentContentId };
 
 
             var questionnaireMock = Mock.Of<IQuestionnaire>(_
@@ -38,12 +36,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
             interviewRepository.SetReturnsDefault(interview);
 
-            attachmentContent = new AttachmentContent()
-            {
-                Content = new byte[] { 1, 2, 3 }
-            };
+            attachmentContentMetadata = new AttachmentContentMetadata() { ContentType = "image/png" };
+            attachmentContentData = new AttachmentContentData() { Content = new byte[] { 1, 2, 3 } };
             var attachmentStorage = Mock.Of<IAttachmentContentStorage>(s =>
-                s.GetAttachmentContentAsync(attachmentContentId) == Task.FromResult(attachmentContent));
+                s.GetMetadataAsync(attachmentContentId) == Task.FromResult(attachmentContentMetadata)
+                && s.GetContentAsync(attachmentContentId) == Task.FromResult(attachmentContentData.Content));
 
             viewModel = CreateViewModel(questionnaireRepository.Object, interviewRepository.Object, attachmentStorage);
         };
@@ -52,11 +49,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
 
         It should_initialize_attachment_as_image = () => viewModel.IsImage.ShouldBeTrue();
 
-        It should_read_image_content = () => viewModel.Content.ShouldEqual(attachmentContent.Content);
+        It should_read_image_content = () => viewModel.Content.ShouldEqual(attachmentContentData.Content);
 
         static AttachmentViewModel viewModel;
         private static Guid entityId;
-        private static AttachmentContent attachmentContent;
+        private static AttachmentContentMetadata attachmentContentMetadata;
+        private static AttachmentContentData attachmentContentData;
     }
 }
 

@@ -16,7 +16,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelTests
 {
-    [Ignore("temp")]
     internal class when_initializing_entity_without_attachment : AttachmentViewModelTestContext
     {
         Establish context = () =>
@@ -40,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
 
 
         It should_dont_call_attachment_content = () =>
-            Mock.Get(attachmentContentStorage).Verify(s => s.GetAttachmentContentAsync(Moq.It.IsAny<string>()), Times.Never());
+            Mock.Get(attachmentContentStorage).Verify(s => s.GetMetadataAsync(Moq.It.IsAny<string>()), Times.Never());
 
         It should_initialize_image_flag_as_false = () => 
             viewModel.IsImage.ShouldBeFalse();
