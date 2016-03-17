@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
+    [Ignore("temp")]
     internal class when_completing_interview_and_interview_has_3_disabled_and_2_enabled_questions_outside_of_rosters
     {
         Establish context = () =>
