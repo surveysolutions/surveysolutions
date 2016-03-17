@@ -49,7 +49,7 @@ namespace WB.UI.Designer.Code
             {
                 if (reference.Type == QuestionnaireVerificationReferenceType.Attachment)
                 {
-                    var attachment = questionnaireDocument.Attachments.First(x => x.AttachmentId == reference.Id);
+                    var attachment = questionnaireDocument.Attachments.Single(x => x.AttachmentId == reference.Id);
                     yield return new VerificationReferenceEnriched
                     {
                         ItemId = reference.Id.FormatGuid(),

@@ -12,13 +12,13 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    class when_verifying_questionnaire_that_has_two_attachments_with_same_names : QuestionnaireVerifierTestsContext
+    class when_checking_for_errors_questionnaire_that_has_two_attachments_with_same_names : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
         {
-            questionnaire = Create.QuestionnaireDocument(questionId, Create.TextQuestion(variable: "var"));
-            questionnaire.Attachments.Add(Create.Attachment(attachment1Id, "hello"));
-            questionnaire.Attachments.Add(Create.Attachment(attachment2Id, "hello"));
+            questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionId, 
+                attachments: new[] { Create.Attachment(attachment1Id, "hello"), Create.Attachment(attachment2Id, "hello") },
+                children: Create.TextQuestion(variable: "var"));
 
             var questionnaireAttachment = Mock.Of<QuestionnaireAttachment>(a => a.Content == content);
             attachmentServiceMock.Setup(x => x.GetAttachment(attachment1Id)).Returns(questionnaireAttachment);

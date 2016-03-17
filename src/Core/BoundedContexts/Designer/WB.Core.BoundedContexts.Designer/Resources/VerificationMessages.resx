@@ -474,10 +474,10 @@
   <data name="WB0208_MoreThan50PercentsNumericQuestionsWithoutValidationConditions" xml:space="preserve">
     <value>Most numeric questions can have validation conditions. Add validation conditions to improve data quality.</value>
   </data>
-  <data name="WB00108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+  <data name="WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
     <value>Linked question filter expression has length more than 10,000 characters.</value>
   </data>
-  <data name="WB00109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion" xml:space="preserve">
+  <data name="WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion" xml:space="preserve">
     <value>Categorical linked question cannot be used in linked question filter expression.</value>
   </data>
   <data name="WB00110_LinkedQuestionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
@@ -489,10 +489,10 @@
   <data name="WB0095_StaticTextRefersAbsentAttachment" xml:space="preserve">
     <value>Static text refers absent attachment</value>
   </data>
-  <data name="WB0108_AttachmentHasEmptyContent" xml:space="preserve">
+  <data name="WB0110_AttachmentHasEmptyContent" xml:space="preserve">
     <value>Attachment cannot be empty</value>
   </data>
-  <data name="WB0109_AttachmentHasInvalidName" xml:space="preserve">
+  <data name="WB0111_AttachmentHasInvalidName" xml:space="preserve">
     <value>Attachment has invalid name.</value>
   </data>
   <data name="WB0213_AttachmentSizeIsMoreThan5Mb" xml:space="preserve">
