@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null);
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null, null);
 
 
         It should_question_has_2_options = () =>

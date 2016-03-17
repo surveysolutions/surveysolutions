@@ -7,7 +7,6 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
@@ -15,7 +14,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 {
-    internal class when_merging_questionnaire_and_interview_data_with_static_text : InterviewDataAndQuestionnaireMergerTestContext
+    internal class when_merging_questionnaire_and_interview_data_with_static_text_having_attachment : InterviewDataAndQuestionnaireMergerTestContext
     {
         Establish context = () =>
         {
@@ -26,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                     Children =
                         new List<IComposite>()
                         {
-                            new StaticText(publicKey: staticTextId, text: staticText)
+                            new StaticText(publicKey: staticTextId, text: staticText, attachmentName: attachmentName)
                         }
                 });
 
@@ -38,14 +37,20 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null, null);
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null, new Dictionary<string, AttachmentInfoView>() { { attachmentName , new AttachmentInfoView(attachmentContentId, attachmentType) }});
 
-        It should_answered_question_be_enabled = () =>
+        It should_static_text_exist= () =>
             GetStaticText().ShouldNotBeNull();
 
-        It should_answered_question_be_readonly = () =>
+        It should_static_text_have_text = () =>
             GetStaticText().Text.ShouldEqual(staticText);
-        
+
+        It should_static_text_attachment_content_type = () =>
+            GetStaticText().Attachment.ContentType.ShouldEqual(attachmentType);
+
+        It should_static_text_attachment_content_id = () =>
+            GetStaticText().Attachment.ContentId.ShouldEqual(attachmentContentId);
+
         private static InterviewGroupView GetNestedGroup()
         {
             return mergeResult.Groups.Find(g => g.Id == nestedGroupId);
@@ -66,5 +71,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         private static Guid interviewId = Guid.Parse("33333333333333333333333333333333");
         private static string nestedGroupTitle = "nested Group";
         private static string staticText = "static text";
+        private static string attachmentName = "test1";
+
+        private static string attachmentType = "img";
+        private static string attachmentContentId = "DTGHRHFJFJFJDD";
     }
 }
