@@ -215,6 +215,7 @@
     <Compile Include="Code\Security\PrincipalReplacer.cs" />
     <Compile Include="Code\ProtobufJsonSerializerAttribute.cs" />
     <Compile Include="Code\WriteToSyncLogAttribute.cs" />
+    <Compile Include="Controllers\AttachmentsController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />

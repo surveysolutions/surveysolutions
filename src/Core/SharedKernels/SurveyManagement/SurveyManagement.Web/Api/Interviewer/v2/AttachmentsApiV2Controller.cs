@@ -9,6 +9,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
@@ -18,18 +19,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
     [ApiBasicAuth(new[] { UserRoles.Operator })]
     public class AttachmentsApiV2Controller : ApiController
     {
-        private readonly IPlainStorageAccessor<AttachmentContent> attachmentContentStorage;
+        private readonly IAttachmentContentService attachmentContentService;
 
-        public AttachmentsApiV2Controller(IPlainStorageAccessor<AttachmentContent> attachmentContentStorage)
+        public AttachmentsApiV2Controller(IAttachmentContentService attachmentContentService)
         {
-            this.attachmentContentStorage = attachmentContentStorage;
+            this.attachmentContentService = attachmentContentService;
         }
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetAttachmentContent)]
         public HttpResponseMessage GetAttachmentContent(string id)
         {
-            var attachmentContent = this.attachmentContentStorage.GetById(id);
+            var attachmentContent = this.attachmentContentService.GetAttachmentContent(id);
 
             var response = new HttpResponseMessage(HttpStatusCode.OK)
             {
@@ -37,7 +38,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
             };
 
             response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachmentContent.ContentType);
-            response.Headers.ETag = new EntityTagHeaderValue("\"" + id + "\"");
+            response.Headers.ETag = new EntityTagHeaderValue("\"" + attachmentContent.ContentHash + "\"");
 
             response.Headers.CacheControl = new CacheControlHeaderValue
             {
