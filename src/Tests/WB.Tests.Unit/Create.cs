@@ -2774,5 +2774,10 @@ namespace WB.Tests.Unit
             return new ChangedLinkedOptions(new Identity(questionId, questionRosterVector ?? new decimal[0]),
                 options ?? new RosterVector[0]);
         }
+
+        public static AttachmentContentService CreateAttachmentContentService(IPlainStorageAccessor<AttachmentContent> attachmentContentPlainStorage)
+        {
+            return new AttachmentContentService(attachmentContentPlainStorage ?? Mock.Of<IPlainStorageAccessor<AttachmentContent>>());
+        }
     }
 }
