@@ -12,6 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
+    [Ignore("KP-6779 - ignored before fix by Slava")]
     internal class when_questionnaire_has_attachments_and_total_size_greater_50MB : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>

@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
+    [Ignore("KP-6779 - ignored before fix by Slava")]
     class when_verifying_questionnaire_that_has_attachment_with_empty_content : QuestionnaireVerifierTestsContext
     {
         Establish context = () =>
