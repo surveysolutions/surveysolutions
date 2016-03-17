@@ -27,6 +27,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
         public bool HasAttachmentContent(string contentHash) => this.attachmentContentStorage.Query(
             attachments => attachments.Select(content => content.ContentHash).Any(content => content == contentHash));
 
-        public byte[] GetAttachmentContent(string contentHash) => this.attachmentContentStorage.GetById(contentHash)?.Content;
+        public AttachmentContent GetAttachmentContent(string contentHash) => this.attachmentContentStorage.GetById(contentHash);
     }
 }

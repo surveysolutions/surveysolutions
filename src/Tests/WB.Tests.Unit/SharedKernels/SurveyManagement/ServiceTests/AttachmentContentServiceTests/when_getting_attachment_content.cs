@@ -12,24 +12,27 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AttachmentCo
         Establish context = () =>
         {
             var attachmentContentPlainStorage = new TestPlainStorage<AttachmentContent>();
-            attachmentContentPlainStorage.Store(
-                new AttachmentContent
-                {
-                    ContentHash = contentHash,
-                    Content = expectedContent
-                }, contentHash);
+            attachmentContentPlainStorage.Store(expectedContent, contentHash);
             attachmentContentService = Create.CreateAttachmentContentService(attachmentContentPlainStorage);
         };
 
         Because of = () =>
             actualContent = attachmentContentService.GetAttachmentContent(contentHash);
 
-        It should_return_array_of_bytes_by_content_id_from_plain_storage = () =>
-            expectedContent.SequenceEqual(actualContent);
+        It should_return_specified_attachment_content = () =>
+        {
+            expectedContent.ContentHash.ShouldEqual(actualContent.ContentHash);
+            expectedContent.Content.SequenceEqual(actualContent.Content);
+        };
 
         private static AttachmentContentService attachmentContentService;
         private static string contentHash = "content id";
-        private static byte[] actualContent;
-        private static readonly byte[] expectedContent = new byte[] {1, 2, 3};
+        private static AttachmentContent actualContent;
+
+        private static readonly AttachmentContent expectedContent = new AttachmentContent
+        {
+            ContentHash = "content id",
+            Content = new byte[] {1, 2, 3}
+        };
     }
 }
