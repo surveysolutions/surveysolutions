@@ -299,14 +299,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 foreach (var contentId in contentIds)
                 {
-                    var isExistContent = await this.attachmentContentStorage.IsExistAttachmentContentAsync(contentId);
+                    var isExistContent = await this.attachmentContentStorage.IsExistAsync(contentId);
                     if (!isExistContent)
                     {
                         var attachmentContent = await synchronizationService.GetAttachmentContentAsync(contentId: contentId,
                             onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                             token: this.Token);
 
-                        await this.attachmentContentStorage.StoreAttachmentContentAsync(attachmentContent);
+                        await this.attachmentContentStorage.StoreAsync(attachmentContent);
                     }
                 }
 
