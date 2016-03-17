@@ -454,7 +454,7 @@
     <value>Questionnaire has more than 1000 questions. It might be difficult to administer it.</value>
   </data>
   <data name="WB0209_LongEnablementCondition" xml:space="preserve">
-    <value>Enablement condition is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList()).</value>
+    <value>Enabling condition is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList()).</value>
   </data>
   <data name="WB0210_CategoricalQuestionHasManyOptions" xml:space="preserve">
     <value>Single-choice question has too many categories, consider changing to combo box.</value>
