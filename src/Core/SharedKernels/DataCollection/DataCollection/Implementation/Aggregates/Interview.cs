@@ -1596,22 +1596,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restored, comment: null));
         }
 
-        public void Complete(Guid userId, string comment, DateTime completeTime)
-        {
-            ThrowIfInterviewHardDeleted();
-            this.ThrowIfInterviewStatusIsNotOneOfExpected(
-                InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
-
-            bool isInterviewInvalid = this.HasInvalidAnswers() ;
-
-            this.ApplyEvent(new InterviewCompleted(userId, completeTime, comment));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
-
-            this.ApplyEvent(isInterviewInvalid
-                ? new InterviewDeclaredInvalid() as IEvent
-                : new InterviewDeclaredValid());
-        }
-
         public void Restart(Guid userId, string comment, DateTime restartTime)
         {
             ThrowIfInterviewHardDeleted();
@@ -3788,7 +3772,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     answer, FormatQuestionForException(questionId, questionnaire), EventSourceId, maxRosterRowCount));
         }
 
-        private void ThrowIfInterviewStatusIsNotOneOfExpected(params InterviewStatus[] expectedStatuses)
+        protected void ThrowIfInterviewStatusIsNotOneOfExpected(params InterviewStatus[] expectedStatuses)
         {
             if (!expectedStatuses.Contains(this.status))
                 throw new InterviewException(string.Format(
@@ -4457,10 +4441,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private bool HasInvalidAnswers()
-        {
-            return this.interviewState.InvalidAnsweredQuestions.Any();
-        }
+        protected bool HasInvalidAnswers() => this.interviewState.InvalidAnsweredQuestions.Any();
 
         private static YesNoAnswersOnly ConvertToYesNoAnswersOnly(AnsweredYesNoOption[] answeredOptions)
         {

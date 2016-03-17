@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.SurveySolutions;
 
@@ -84,14 +85,22 @@ namespace WB.Tests.Unit
         }
 
         public static IPlainQuestionnaireRepository QuestionnaireRepositoryWithOneQuestionnaire(
-            QuestionnaireIdentity questionnaireIdentity, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
-        {
-            var questionnaire = Mock.Of<IQuestionnaire>(questionnaireMoqPredicate);
+            QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument)
+            => Setup.QuestionnaireRepositoryWithOneQuestionnaire(
+                questionnaireIdentity,
+                Create.PlainQuestionnaire(questionnaireDocument));
 
-            return Mock.Of<IPlainQuestionnaireRepository>(repository
+        public static IPlainQuestionnaireRepository QuestionnaireRepositoryWithOneQuestionnaire(
+            QuestionnaireIdentity questionnaireIdentity, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
+            => Setup.QuestionnaireRepositoryWithOneQuestionnaire(
+                questionnaireIdentity,
+                Mock.Of<IQuestionnaire>(questionnaireMoqPredicate));
+
+        private static IPlainQuestionnaireRepository QuestionnaireRepositoryWithOneQuestionnaire(
+            QuestionnaireIdentity questionnaireIdentity, IQuestionnaire questionnaire)
+            => Mock.Of<IPlainQuestionnaireRepository>(repository
                 => repository.GetQuestionnaire(questionnaireIdentity) == questionnaire
                 && repository.GetHistoricalQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version) == questionnaire);
-        }
 
         public static IEventHandler FailingFunctionalEventHandler()
         {
@@ -173,6 +182,18 @@ namespace WB.Tests.Unit
                 => _.IsClientVersionSupported(Moq.It.IsAny<Version>()) == isClientVersionSupported
                 && _.IsQuestionnaireDocumentSupportedByClientVersion(Moq.It.IsAny<QuestionnaireDocument>(), Moq.It.IsAny<Version>()) == isQuestionnaireVersionSupported
                 && _.GetQuestionnaireContentVersion(Moq.It.IsAny<QuestionnaireDocument>()) == version);
+        }
+
+        public static StatefulInterview StatefulInterview(QuestionnaireDocument questionnaireDocument)
+        {
+            var questionnaireIdentity = Create.QuestionnaireIdentity();
+
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument);
+
+            return Create.StatefulInterview(
+                questionnaireId: questionnaireIdentity.QuestionnaireId,
+                questionnaireVersion: questionnaireIdentity.Version,
+                questionnaireRepository: questionnaireRepository);
         }
     }
 }

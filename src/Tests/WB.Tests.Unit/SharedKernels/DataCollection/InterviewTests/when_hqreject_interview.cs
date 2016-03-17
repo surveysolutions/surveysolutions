@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Linq;
 using Machine.Specifications;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using It = Machine.Specifications.It;
 
@@ -29,16 +26,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             interview.AssignInterviewer(supervisorId, userId, DateTime.Now);
-            interview.Complete(userId, string.Empty, DateTime.Now);
+            interview.Apply(Create.Event.InterviewStatusChanged(status: InterviewStatus.Completed));
             interview.Approve(userId, string.Empty, DateTime.Now);
 
             eventContext = new EventContext();
         };
 
-        private Because of = () =>
+        Because of = () =>
             interview.HqReject(userId, string.Empty);
 
-        private It should_raise_two_events = () =>
+        It should_raise_two_events = () =>
             eventContext.Events.Count().ShouldEqual(2);
 
         It should_raise_InterviewApprovedByHQ_event = () =>
