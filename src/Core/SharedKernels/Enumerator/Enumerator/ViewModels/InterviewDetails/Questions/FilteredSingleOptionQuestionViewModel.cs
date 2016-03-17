@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.Options = questionnaire
                 .GetAnswerOptionsAsValues(entityIdentity.Id)
-                .Select(x => new OptionModel { Value = x, Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x) })
+                .Select(x => new CategoricalQuestionOption { Value = x, Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x) })
                 .Select(this.ToViewModel)
                 .ToList();
 
@@ -102,7 +102,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
-        private FilteredComboboxItemViewModel ToViewModel(OptionModel model)
+        private FilteredComboboxItemViewModel ToViewModel(CategoricalQuestionOption model)
         {
             var optionViewModel = new FilteredComboboxItemViewModel
             {

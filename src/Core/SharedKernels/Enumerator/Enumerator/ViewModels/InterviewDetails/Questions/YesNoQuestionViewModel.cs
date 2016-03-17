@@ -76,7 +76,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
-            //var questionModel = questionnaire.GetYesNoQuestion(entityIdentity.Id);
             var answerModel = interview.GetYesNoAnswer(entityIdentity);
 
             this.areAnswersOrdered = questionnaire.ShouldQuestionRecordAnswersOrder(entityIdentity.Id);
@@ -87,14 +86,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.Options = questionnaire
                 .GetAnswerOptionsAsValues(entityIdentity.Id)
-                .Select(x => new OptionModel {  Value = x, Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x)})
+                .Select(x => new CategoricalQuestionOption {  Value = x, Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x)})
                 .Select(model => this.ToViewModel(model, answerModel))
                 .ToList();
 
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
-        private YesNoQuestionOptionViewModel ToViewModel(OptionModel model, YesNoAnswer answerModel)
+        private YesNoQuestionOptionViewModel ToViewModel(CategoricalQuestionOption model, YesNoAnswer answerModel)
         {
             var isExistAnswer = answerModel.Answers != null && answerModel.Answers.Any(a => a.OptionValue == model.Value);
             var isSelected = isExistAnswer 

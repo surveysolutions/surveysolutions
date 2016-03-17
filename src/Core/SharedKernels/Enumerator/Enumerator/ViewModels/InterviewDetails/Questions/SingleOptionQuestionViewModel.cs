@@ -78,7 +78,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.Options = questionnaire
                 .GetAnswerOptionsAsValues(entityIdentity.Id)
-                .Select(x => new OptionModel { Value = x, Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x) })
+                .Select(x => new CategoricalQuestionOption { Value = x, Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x) })
                 .Select(model => this.ToViewModel(model, isSelected: model.Value == selectedValue))
                 .ToList();
             this.eventRegistry.Subscribe(this, interviewId);
@@ -121,7 +121,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private SingleOptionQuestionOptionViewModel ToViewModel(OptionModel model, bool isSelected)
+        private SingleOptionQuestionOptionViewModel ToViewModel(CategoricalQuestionOption model, bool isSelected)
         {
             var optionViewModel = new SingleOptionQuestionOptionViewModel
             {

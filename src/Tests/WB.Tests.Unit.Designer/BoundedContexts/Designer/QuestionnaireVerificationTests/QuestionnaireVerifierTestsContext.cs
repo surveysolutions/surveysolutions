@@ -27,7 +27,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             IKeywordsProvider keywordsProvider = null, 
             IExpressionProcessorGenerator expressionProcessorGenerator = null,
             IMacrosSubstitutionService macrosSubstitutionService = null,
-            ILookupTableService lookupTableService = null)
+            ILookupTableService lookupTableService = null,
+            IAttachmentService attachmentService = null)
         {
             var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
             fileSystemAccessorMock.Setup(x => x.MakeValidFileName(Moq.It.IsAny<string>())).Returns<string>(s => s);
@@ -45,6 +46,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                                              DefaultValue = DefaultValue.Mock
                                          };
 
+            var attachmentServiceMock = new Mock<IAttachmentService>(MockBehavior.Default)
+            {
+                DefaultValue = DefaultValue.Mock
+            };
+
             return new QuestionnaireVerifier(expressionProcessor ?? new Mock<IExpressionProcessor>().Object, 
                 fileSystemAccessorMock.Object,
                 substitutionService ?? substitutionServiceInstance,
@@ -52,7 +58,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object, 
                 new DesignerEngineVersionService(),
                 macrosSubstitutionService ?? Create.DefaultMacrosSubstitutionService(),
-                lookupTableService ?? lookupTableServiceMock.Object);
+                lookupTableService ?? lookupTableServiceMock.Object,
+                attachmentService ?? attachmentServiceMock.Object);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(params IComposite[] questionnaireChildren)
@@ -275,7 +282,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             var fileSystemAccessor = new FileSystemIOAccessor();
 
             const string pathToProfile = "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.5\\Profile\\Profile111";
-            var referencesToAdd = new[] { "System.dll", "System.Core.dll", "mscorlib.dll", "System.Runtime.dll", "System.Collections.dll", "System.Linq.dll" };
+            var referencesToAdd = new[] { "System.dll","System.Core.dll","System.Runtime.dll","System.Collections.dll","System.Linq.dll","System.Linq.Expressions.dll","System.Linq.Queryable.dll","mscorlib.dll","System.Runtime.Extensions.dll","System.Text.RegularExpressions.dll" };
 
             var settings = new List<IDynamicCompilerSettings>
             {

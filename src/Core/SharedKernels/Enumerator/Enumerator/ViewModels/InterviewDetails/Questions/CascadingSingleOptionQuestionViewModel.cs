@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
-        private List<CascadingOptionModel> Options { get; set; }
+        private IReadOnlyList<CategoricalQuestionOption> Options;
         private readonly ILiteEventRegistry eventRegistry;
 
         public Identity Identities { get { return this.questionIdentity; } }
@@ -109,13 +109,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.Options = questionnaire
                 .GetAnswerOptionsAsValues(entityIdentity.Id)
-                .Select(x => new CascadingOptionModel
+                .Select(x => new CategoricalQuestionOption
                 {
                     Value = x,
                     Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x),
                     ParentValue = questionnaire.GetCascadingParentValue(entityIdentity.Id, x)
                 })
-                .ToList();
+                .ToList()
+                .ToReadOnlyCollection();
 
             if (answerModel.IsAnswered)
             {
@@ -275,7 +276,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 yield break;
             }
 
-            foreach (CascadingOptionModel model in this.Options.Where(x => x.ParentValue == this.answerOnParentQuestion.Value))
+            foreach (CategoricalQuestionOption model in this.Options.Where(x => x.ParentValue == this.answerOnParentQuestion.Value))
             {
                 var index = model.Title.IndexOf(textHint, StringComparison.OrdinalIgnoreCase);
                 if (index >= 0)
@@ -285,7 +286,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private CascadingComboboxItemViewModel CreateFormattedOptionModel(CascadingOptionModel model, string hint = null)
+        private CascadingComboboxItemViewModel CreateFormattedOptionModel(CategoricalQuestionOption model, string hint = null)
         {
             var text = !string.IsNullOrEmpty(hint) ? 
                 Regex.Replace(model.Title, hint, "<b>" + hint + "</b>", RegexOptions.IgnoreCase) :
@@ -296,7 +297,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                        Text = text,
                        OriginalText = model.Title,
                        Value = model.Value,
-                       ParentValue = model.ParentValue,
+                       ParentValue = model.ParentValue.Value,
                        Selected = this.SelectedObject != null && model.Value == this.SelectedObject.Value
                    };
         }

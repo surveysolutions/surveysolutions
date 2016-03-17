@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
@@ -91,7 +87,7 @@ namespace WB.UI.Designer.Api
 
         [HttpGet]
         [Route("attachments/{id}")]
-        public HttpResponseMessage Attachment(string id)
+        public HttpResponseMessage AttachmentContent(string id)
         {
             var attachment = this.attachmentService.GetAttachmentContent(id);
 
