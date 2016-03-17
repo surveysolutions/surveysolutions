@@ -144,6 +144,9 @@ using WB.Core.GenericSubdomains.Portable.CustomCollections;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Shared.Web.Membership;
@@ -2778,6 +2781,11 @@ namespace WB.Tests.Unit
         public static AttachmentContentService CreateAttachmentContentService(IPlainStorageAccessor<AttachmentContent> attachmentContentPlainStorage)
         {
             return new AttachmentContentService(attachmentContentPlainStorage ?? Mock.Of<IPlainStorageAccessor<AttachmentContent>>());
+        }
+
+        public static AttachmentsController AttachmentsController(IAttachmentContentService attachmentContentService)
+        {
+           return new AttachmentsController(attachmentContentService);
         }
     }
 }
