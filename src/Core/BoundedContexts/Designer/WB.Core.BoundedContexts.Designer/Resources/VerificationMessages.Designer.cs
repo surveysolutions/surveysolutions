@@ -1163,7 +1163,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enablement condition is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList())..
+        ///   Looks up a localized string similar to Enabling condition is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList())..
         /// </summary>
         internal static string WB0209_LongEnablementCondition {
             get {
