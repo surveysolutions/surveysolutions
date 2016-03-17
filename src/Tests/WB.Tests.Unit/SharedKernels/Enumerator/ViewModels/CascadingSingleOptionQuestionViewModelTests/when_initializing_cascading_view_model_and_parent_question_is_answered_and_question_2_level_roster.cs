@@ -72,11 +72,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.AutoCompleteSuggestions.Select(x => x.Value).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.Value));
 
         It should_create_option_models_with_specified_ParentValues = () =>
-            cascadingModel.AutoCompleteSuggestions.Select(x => x.ParentValue).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.ParentValue));
+            cascadingModel.AutoCompleteSuggestions.Select(x => x.ParentValue).ShouldContainOnly(OptionsIfParentAnswerIs1.Select(x => x.ParentValue.Value));
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
         private static readonly Mock<IStatefulInterview> StatefulInterviewMock = new Mock<IStatefulInterview>();
 
-        private static readonly List<CascadingOptionModel> OptionsIfParentAnswerIs1 = Options.Where(x => x.ParentValue == 1).ToList();
+        private static readonly List<CategoricalQuestionOption> OptionsIfParentAnswerIs1 = Options.Where(x => x.ParentValue == 1).ToList();
     }
 }

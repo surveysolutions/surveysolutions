@@ -667,6 +667,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Another attachment with the same name already exists..
+        /// </summary>
+        internal static string WB0065_NameForAyyachmentIsNotUnique {
+            get {
+                return ResourceManager.GetString("WB0065_NameForAyyachmentIsNotUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question of this type is not supported..
         /// </summary>
         internal static string WB0066_QuestionTypeIsNotAllowed {
@@ -937,6 +946,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Static text refers absent attachment.
+        /// </summary>
+        internal static string WB0095_StaticTextRefersAbsentAttachment {
+            get {
+                return ResourceManager.GetString("WB0095_StaticTextRefersAbsentAttachment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error occurred during questionnaire compilation..
         /// </summary>
         internal static string WB0096_GeneralCompilationError {
@@ -1042,6 +1060,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0107_ValidationMessageIsEmpty {
             get {
                 return ResourceManager.GetString("WB0107_ValidationMessageIsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attachment cannot be empty.
+        /// </summary>
+        internal static string WB0108_AttachmentHasEmptyContent {
+            get {
+                return ResourceManager.GetString("WB0108_AttachmentHasEmptyContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attachment has invalid name..
+        /// </summary>
+        internal static string WB0109_AttachmentHasInvalidName {
+            get {
+                return ResourceManager.GetString("WB0109_AttachmentHasInvalidName", resourceCulture);
             }
         }
         
@@ -1159,6 +1195,33 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         internal static string WB0212_LongValidationCondition {
             get {
                 return ResourceManager.GetString("WB0212_LongValidationCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attachment size is more than 5Mb.
+        /// </summary>
+        internal static string WB0213_AttachmentSizeIsMoreThan5Mb {
+            get {
+                return ResourceManager.GetString("WB0213_AttachmentSizeIsMoreThan5Mb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total size of attachments is more than 50Mb.
+        /// </summary>
+        internal static string WB0214_TotalAttachmentsSizeIsMoreThan50Mb {
+            get {
+                return ResourceManager.GetString("WB0214_TotalAttachmentsSizeIsMoreThan50Mb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire contains unused attachments.
+        /// </summary>
+        internal static string WB0215_UnusedAttachments {
+            get {
+                return ResourceManager.GetString("WB0215_UnusedAttachments", resourceCulture);
             }
         }
     }

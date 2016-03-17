@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         };
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
-        protected static readonly List<CascadingOptionModel> options = new List<CascadingOptionModel>
+        protected static readonly List<CategoricalQuestionOption> options = new List<CategoricalQuestionOption>
         {
             Create.CascadingOptionModel(1, "title abc 1", 1),
             Create.CascadingOptionModel(2, "title def 2", 1),
