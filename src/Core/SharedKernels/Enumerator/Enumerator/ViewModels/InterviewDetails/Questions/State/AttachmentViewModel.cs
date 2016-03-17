@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -34,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
 
-        public async void Init(string interviewId, Identity entityIdentity)
+        public async Task InitAsync(string interviewId, Identity entityIdentity)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
@@ -51,6 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (IsImage)
                 {
                     this.Content = await this.attachmentContentStorage.GetContentAsync(attachment.ContentId);
+                    this.RaisePropertyChanged(() => Content);
                 }
             }
         }

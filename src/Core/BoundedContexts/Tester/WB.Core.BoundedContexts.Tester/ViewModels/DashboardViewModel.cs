@@ -281,39 +281,16 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             try
             {
-                var questionnairePackage = await this.designerApiService.GetQuestionnaireAsync(
-                    selectedQuestionnaire: selectedQuestionnaire,
-                    onDownloadProgressChanged: (downloadProgress) =>
-                    {
-                        this.ProgressIndicator = string.Format(TesterUIResources.ImportQuestionnaire_DownloadProgress,
-                            downloadProgress);
-                    },
-                    token: this.tokenSource.Token);
+                var questionnairePackage = await this.DownloadQuestionnaire(selectedQuestionnaire);
 
                 if (questionnairePackage != null)
                 {
-                    await this.DownloadQuestionnaireAttachments(questionnairePackage);
-
                     this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_StoreQuestionnaire;
 
-                    var questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111-1111-1111-1111-111111111111"), 1);
-                    var questionnaireDocument = questionnairePackage.Document;
-                    var supportingAssembly = questionnairePackage.Assembly;
-
-                    questionnaireDocument.PublicKey = questionnaireIdentity.QuestionnaireId;
-
-                    this.questionnaireImportService.ImportQuestionnaire(questionnaireIdentity, questionnaireDocument, supportingAssembly);
-
-                    this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_CreateInterview;
-
-                    var interviewId = Guid.NewGuid();
-
-                    await this.commandService.ExecuteAsync(new CreateInterviewOnClientCommand(
-                        interviewId: interviewId,
-                        userId: this.principal.CurrentUserIdentity.UserId,
-                        questionnaireIdentity: questionnaireIdentity,
-                        answersTime: DateTime.UtcNow,
-                        supervisorId: Guid.NewGuid()));
+                    await this.DownloadQuestionnaireAttachments(questionnairePackage);
+                    var questionnaireIdentity = GenerateFakeQuestionnaireIdentity();
+                    this.StoreQuestionnaireWithNewIdentity(questionnaireIdentity, questionnairePackage);
+                    var interviewId = await this.CreateInterview(questionnaireIdentity);
 
                     await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
                 }
@@ -354,6 +331,48 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
         }
 
+        private QuestionnaireIdentity GenerateFakeQuestionnaireIdentity()
+        {
+            var questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111-1111-1111-1111-111111111111"), 1);
+            return questionnaireIdentity;
+        }
+
+        private async Task<Guid> CreateInterview(QuestionnaireIdentity questionnaireIdentity)
+        {
+            this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_CreateInterview;
+
+            var interviewId = Guid.NewGuid();
+
+            await this.commandService.ExecuteAsync(new CreateInterviewOnClientCommand(
+                interviewId: interviewId,
+                userId: this.principal.CurrentUserIdentity.UserId,
+                questionnaireIdentity: questionnaireIdentity,
+                answersTime: DateTime.UtcNow,
+                supervisorId: Guid.NewGuid()));
+            return interviewId;
+        }
+
+        private void StoreQuestionnaireWithNewIdentity(QuestionnaireIdentity questionnaireIdentity, Questionnaire questionnairePackage)
+        {
+            this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_StoreQuestionnaire;
+
+            var questionnaireDocument = questionnairePackage.Document;
+            var supportingAssembly = questionnairePackage.Assembly;
+
+            this.questionnaireImportService.ImportQuestionnaire(questionnaireIdentity, questionnaireDocument, supportingAssembly);
+        }
+
+        private async Task<Questionnaire> DownloadQuestionnaire(QuestionnaireListItem selectedQuestionnaire)
+        {
+            return await this.designerApiService.GetQuestionnaireAsync(
+                selectedQuestionnaire: selectedQuestionnaire,
+                onDownloadProgressChanged: (downloadProgress) =>
+                {
+                    this.ProgressIndicator = string.Format(TesterUIResources.ImportQuestionnaire_DownloadProgress, downloadProgress);
+                },
+                token: this.tokenSource.Token);
+        }
+
         private async Task DownloadQuestionnaireAttachments(Questionnaire questionnaire)
         {
             if (questionnaire == null)
@@ -372,8 +391,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     var attachmentContent = await this.designerApiService.GetAttachmentContentAsync(attachmentId,
                                         onDownloadProgressChanged: (downloadProgress) =>
                                         {
-                                            this.ProgressIndicator = string.Format(TesterUIResources.ImportQuestionnaireAttachments_DownloadProgress,
-                                                downloadProgress);
+                                            this.ProgressIndicator = string.Format(TesterUIResources.ImportQuestionnaireAttachments_DownloadProgress, downloadProgress);
                                         },
                                         token: this.tokenSource.Token);
 
