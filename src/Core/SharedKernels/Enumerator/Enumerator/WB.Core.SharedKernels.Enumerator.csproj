@@ -190,7 +190,6 @@
     <Compile Include="ViewModels\InterviewDetails\Questions\TextListItemViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\TextListQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\TextQuestionViewModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\ScrollToAnchorMessage.cs" />
     <Compile Include="ViewModels\InterviewDetails\SideBarPrefillQuestion.cs" />
     <Compile Include="ViewModels\InterviewDetails\SideBarSectionsViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\SideBarSectionViewModel.cs" />

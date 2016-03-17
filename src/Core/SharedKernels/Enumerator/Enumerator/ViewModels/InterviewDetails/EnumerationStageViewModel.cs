@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
-using MvvmCross.Plugins.Messenger;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -55,9 +54,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly ISubstitutionService substitutionService;
         readonly ILiteEventRegistry eventRegistry;
 
-        private readonly IMvxMessenger messenger;
         readonly IUserInterfaceStateService userInterfaceStateService;
-        private IMvxMainThreadDispatcher mvxMainThreadDispatcher;
+        private readonly IMvxMainThreadDispatcher mvxMainThreadDispatcher;
 
         private readonly object itemsListUpdateOnUILock = new object();
 
@@ -74,7 +72,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IStatefulInterviewRepository interviewRepository,
             ISubstitutionService substitutionService,
             ILiteEventRegistry eventRegistry,
-            IMvxMessenger messenger,
             IUserInterfaceStateService userInterfaceStateService,
             IMvxMainThreadDispatcher mvxMainThreadDispatcher)
         {
@@ -83,7 +80,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.interviewRepository = interviewRepository;
             this.substitutionService = substitutionService;
             this.eventRegistry = eventRegistry;
-            this.messenger = messenger;
             this.userInterfaceStateService = userInterfaceStateService;
             this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
         }
@@ -121,10 +117,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
 
             this.LoadFromModel(groupId);
-            this.SendScrollToMessage(anchoredElementIdentity);
+            this.SetScrollTo(anchoredElementIdentity);
         }
 
-        private void SendScrollToMessage(Identity scrollTo)
+        private void SetScrollTo(Identity scrollTo)
         {
             var anchorElementIndex = 0;
 
@@ -135,9 +131,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 anchorElementIndex = childItem != null ? this.Items.IndexOf(childItem) : 0;
             }
-
-            this.messenger.Publish(new ScrollToAnchorMessage(this, anchorElementIndex));
+            this.ScrollToIndex = anchorElementIndex;
         }
+
+        public int ScrollToIndex { get; private set; }
 
         private void LoadFromModel(Identity groupIdentity)
         {
