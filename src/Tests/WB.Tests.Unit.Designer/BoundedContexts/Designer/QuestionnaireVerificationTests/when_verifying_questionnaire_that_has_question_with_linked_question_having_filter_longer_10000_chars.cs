@@ -47,8 +47,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         It should_return_1_message = () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        It should_return_message_with_code__WB0094 = () =>
-            verificationMessages.First().Code.ShouldEqual("WB0094");
+        It should_return_message_with_code__WB0108 = () =>
+            verificationMessages.First().Code.ShouldEqual("WB0108");
 
         It should_return_message_with_one_references = () =>
             verificationMessages.First().References.Count().ShouldEqual(1);
