@@ -2143,8 +2143,7 @@ namespace WB.Tests.Unit
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 Stub.MvxMainThreadDispatcher(),
                 questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
-                answering ?? Mock.Of<AnsweringViewModel>(),
-                Mock.Of<IPlainQuestionnaireRepository>());
+                answering ?? Mock.Of<AnsweringViewModel>());
         }
 
         public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null,
