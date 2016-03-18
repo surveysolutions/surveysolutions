@@ -48,6 +48,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Identity(disabledQuestionId, Create.RosterVector(3)),
             }));
 
+            interview.Apply(Create.Event.QuestionsEnabled(new[]
+            {
+                Create.Identity(enabledQuestionId, Create.RosterVector(1)),
+                Create.Identity(enabledQuestionId, Create.RosterVector(2)),
+                Create.Identity(enabledQuestionId, Create.RosterVector(3)),
+            }));
+
             eventContext = Create.EventContext();
         };
 

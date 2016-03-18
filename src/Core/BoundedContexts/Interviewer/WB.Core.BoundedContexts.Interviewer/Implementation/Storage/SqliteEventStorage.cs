@@ -136,7 +136,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         private CommittedEvent ToCommitedEvent(EventView storedEvent)
         {
             return new CommittedEvent(
-                commitId: storedEvent.EventSourceId,
+                commitId: storedEvent.CommitId ?? storedEvent.EventSourceId,
                 origin: string.Empty,
                 eventIdentifier: storedEvent.EventId,
                 eventSourceId: storedEvent.EventSourceId,
@@ -165,6 +165,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             {
                 EventId = evt.EventIdentifier,
                 EventSourceId = evt.EventSourceId,
+                CommitId = evt.CommitId,
                 EventSequence = evt.EventSequence,
                 DateTimeUtc = evt.EventTimeStamp,
                 JsonEvent = JsonConvert.SerializeObject(evt.Payload, JsonSerializerSettings)
