@@ -15,6 +15,8 @@ using System.Net.Http;
 using System.Web.Http;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 {
@@ -92,6 +94,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
                   brokenSyncPackagesStorage ?? Mock.Of<IBrokenSyncPackagesStorage>(),
                 chunkReader ?? Mock.Of<IChunkReader>(),
                 folderPermissionChecker ?? Mock.Of<IFolderPermissionChecker>()*/healthCheckService ?? Mock.Of<IHealthCheckService>());
+        }
+        protected static AttachmentsApiV2Controller CreateAttachmentsApiV2Controller(
+            IAttachmentContentService attachmentContentService)
+        {
+            return new AttachmentsApiV2Controller(attachmentContentService ?? Mock.Of<IAttachmentContentService>());
         }
     }
 }

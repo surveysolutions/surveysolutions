@@ -1421,6 +1421,7 @@
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_questionnaires_controller_interviews_with_not_empty_params.cs" />
     <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\when_healthcheck_service_check_when_all_is_ok.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_intervews_controller_interview_details_with_not_empty_params.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_attachments_controller_attachments_by_id.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_questionnaires_controller_questionnaries_by_id.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_questionnaires_controller_questionnaries_statuses.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiTests\when_questionnaires_controller_questionnaries_with_not_empty_params.cs" />
