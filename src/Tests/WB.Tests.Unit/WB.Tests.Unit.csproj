@@ -418,6 +418,7 @@
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_interviewer_underlying_questions_in_group.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_answer_types.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_parent_for_cascading_question_is_set_to_hide_if_disabled.cs" />
+    <Compile Include="SharedKernels\DataCollection\ValidityChangesTests\when_creating_with_single_invalid_question.cs" />
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_creating_YesNoAnswers_from_another_one.cs" />
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_creating_YesNoAnswers_with_all_codes_only.cs" />
     <Compile Include="SharedKernels\DataCollection\YesNoAnswersTests\when_indexing_YesNoAnswers_with_absent_option_code1.cs" />
