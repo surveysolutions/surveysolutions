@@ -11,6 +11,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         [Indexed]
         public Guid EventSourceId { get; set; }
         [Unique(Name = "Unique AR sequence")]
+        public Guid CommitId { get; set; }
         public int EventSequence { get; set; }
         public DateTime DateTimeUtc { get; set; }
         public string JsonEvent { get; set; }
