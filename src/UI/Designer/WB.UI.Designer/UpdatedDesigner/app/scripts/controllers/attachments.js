@@ -1,10 +1,14 @@
 ﻿angular.module('designerApp')
     .controller('AttachmentsCtrl',
-        function ($rootScope, $scope, $state, hotkeys, commandService, utilityService, confirmService, Upload, $modal, notificationService) {
+        function ($rootScope, $scope, $state, hotkeys, commandService, utilityService, confirmService, Upload, $modal, notificationService, moment) {
             'use strict';
 
             $scope.downloadLookupFileBaseUrl = '../../attachment/';
             $scope.benchmarkDownloadSpeed = 20;
+            var recommendedMaxResolution = 1024;
+            var KB = 1024;
+            var MB = KB * KB;
+
             var hideAttachmentsPane = 'ctrl+l';
 
             if (hotkeys.get(hideAttachmentsPane) !== false) {
@@ -24,8 +28,20 @@
             };
 
             $scope.estimatedLoadingTime = function () {
-                return Math.floor($scope.totalSize / $scope.benchmarkDownloadSpeed);
+                return Math.floor($scope.totalSize() / $scope.benchmarkDownloadSpeed);
             }
+
+            $scope.isTotalSizeTooBig = function() {
+                return $scope.totalSize() > 50 * MB;
+            };
+
+            $scope.isAttachmentSizeTooBig = function (attachment) {
+                return attachment.sizeInBytes > 5 * MB;
+            };
+
+            $scope.isAttachmentResolutionTooBig = function (attachment) {
+                return ((attachment.height || 0) > recommendedMaxResolution) || ((attachment.width || 0) > recommendedMaxResolution);
+            };
 
             var dataBind = function (attachment, attachmentDto) {
                 attachment.initialAttachment = angular.copy(attachmentDto);
@@ -41,7 +57,7 @@
                     attachment.width = attachmentDto.details.width;
                 }
 
-                attachment.lastUpdated = attachmentDto.lastUpdated;
+                attachment.lastUpdated = moment(attachmentDto.lastUpdated);
                 attachment.sizeInBytes = attachmentDto.sizeInBytes;
                 
                 attachment.file = null;
@@ -65,7 +81,7 @@
             $scope.formatBytes = function (bytes)
             {
                 if (bytes === 0) return '0 Byte';
-                var base = 1024;
+                var base = KB;
                 var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
                 var degree = Math.min(Math.floor(Math.log(bytes) / Math.log(base)), sizes.length - 1);
                 var decimalPlaces = Math.min(Math.max(degree - 1, 0), 2);
@@ -73,9 +89,7 @@
             }
 
             $scope.formatSeconds = function (seconds) {
-                if (seconds === 0) return '0 sec';
-
-                return seconds + " sec";
+                return moment.duration(seconds).humanize();
             }
 
             $scope.isFolded = false;

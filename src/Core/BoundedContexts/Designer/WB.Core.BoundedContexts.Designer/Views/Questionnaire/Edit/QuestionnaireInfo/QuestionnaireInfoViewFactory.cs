@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                     Name = qAttachment.Name,
                     FileName = qAttachment.FileName,
                     SizeInBytes = subAttachment?.SizeInBytes,
-                    LastUpdated = subAttachment?.LastUpdated,
+                    LastUpdated = subAttachment?.LastUpdated.HasValue == true ? subAttachment?.LastUpdated.Value.ToLocalTime() : null,
                     Details = subAttachment?.Details
                 })
                 .OrderBy(x => x.Name)

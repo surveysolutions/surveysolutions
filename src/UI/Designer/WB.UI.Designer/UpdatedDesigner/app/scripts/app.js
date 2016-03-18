@@ -22,7 +22,8 @@
         'ng-context-menu',
         'ui.ace',
         'templates',
-        'ngFileUpload'
+        'ngFileUpload',
+        'angularMoment'
     ]);
 
     angular.module('designerApp').config(['$stateProvider', '$urlRouterProvider', '$rootScopeProvider', function ($stateProvider, $urlRouterProvider, $rootScopeProvider) {

@@ -217,7 +217,7 @@
                             '0': 'No Files Attachment to questionnaire',
                             '1': '{} File Attachment ({{formatBytes(totalSize())}} total)',
                             'other': '{} Files Attachments ({{formatBytes(totalSize())}} total)'}"></h3>
-                    <p>Est. loading time: {{formatSeconds(estimatedLoadingTime())}} at {{$scope.benchmarkDownloadSpeed}}Kb/s (EDGE)</p>
+                    <p class="estimated-download-time">Est. loading time: <span>{{formatSeconds(estimatedLoadingTime())}}</span> at {{benchmarkDownloadSpeed}}Kb/s (EDGE)</p>
                     <div class="empty-list" ng-show="attachments.length == 0">
                         <p>Use this tab to upload multimedia files that may be referenced in the questionnaire.</p>
                         <p>To avoid slow synchronization we recommend combined size of all attached files not to exceed 2MB.
@@ -256,7 +256,7 @@ specify the attachment <span class="variable-name">name</span> in its attachment
                                             <div class="drop-box">
                                                 Drop File here
                                             </div>
-                                            <p class="attachment-meta" ng-if="attachment.hasUploadedFile" ng-include="attachment.type + '-attachment-info-template.html'"></p>
+                                            <div class="attachment-meta" ng-if="attachment.hasUploadedFile" ng-include="attachment.type + '-attachment-info-template.html'"></div>
                                             <div class="actions clearfix" ng-class="{dirty: attachmentForm.$dirty }">
                                                 <div ng-show="attachmentForm.$dirty" class="pull-left">
                                                     <button type="submit" ng-disabled="attachmentForm.$invalid" class="btn lighter-hover" ng-click="saveAttachment(attachment, attachmentForm);$event.stopPropagation()">Save</button>
@@ -291,12 +291,13 @@ specify the attachment <span class="variable-name">name</span> in its attachment
             <li><a class="left-menu-attachments" ng-class="{unfolded: isUnfoldedAttachments }" ng-click="unfoldAttachments();"></a></li>
         </ul>
     </div>
-
     <div class="questionnaire-tree" ui-view></div>
 </section>
 
 <script type="text/ng-template" id="Image-attachment-info-template.html">
-    {{attachment.width}}&nbsp;&times;&nbsp;{{attachment.height}}&nbsp;px, format:&nbsp;{{attachment.format}}, size:&nbsp;{{formatBytes(attachment.sizeInBytes)}}
+    <p><span ng-class="{'error': isAttachmentResolutionTooBig(attachment)}">{{attachment.width}}&nbsp;&times;&nbsp;{{attachment.height}}&nbsp;px</span>, format:&nbsp;{{attachment.format}},
+    <span ng-class="{'error': isAttachmentSizeTooBig(attachment)}">size:&nbsp;{{formatBytes(attachment.sizeInBytes)}}</span></p>
+    <p>uploaded on {{attachment.lastUpdated | amDateFormat:'MMMM Do YYYY, h:mm a'}}</p>
 </script>
 
 <div id="verification-modal" ng-show="verificationStatus.visible" ng-class="verificationStatus.typeOfMessageToBeShown">
