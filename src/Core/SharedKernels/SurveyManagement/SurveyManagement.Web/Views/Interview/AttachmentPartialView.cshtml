@@ -4,6 +4,8 @@
 {
     if (Model.IsImage)
     {
-        <img src="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Attachments", action = "Content", id = Model.ContentId})" width="auto" height="auto"/>
+        <div class="width100">
+            <img src="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Attachments", action = "Content", id = Model.ContentId})" class="img-responsive" />
+        </div>
     }
 }
