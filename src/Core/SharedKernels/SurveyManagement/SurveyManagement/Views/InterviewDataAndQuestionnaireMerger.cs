@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             Dictionary<string, AttachmentInfoView> attachmentInfos = new Dictionary<string, AttachmentInfoView>();
 
             var questionnaireDocument = questionnaire as QuestionnaireDocument;
-            if (questionnaireDocument != null && attachmentInfoViews != null)
+            if (questionnaireDocument != null && questionnaireDocument.Attachments != null && attachmentInfoViews != null)
             {
                 foreach (var attachment in questionnaireDocument.Attachments)
                 {
