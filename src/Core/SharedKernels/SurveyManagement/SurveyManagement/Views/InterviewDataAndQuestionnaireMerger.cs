@@ -46,15 +46,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
         }
 
         public InterviewDetailsView Merge(InterviewData interview, IQuestionnaireDocument questionnaire, UserLight responsible, 
-            InterviewLinkedQuestionOptions interviewLinkedQuestionOptions, Dictionary<string, AttachmentInfoView> attachments)
+            InterviewLinkedQuestionOptions interviewLinkedQuestionOptions, IEnumerable<AttachmentInfoView> attachmentInfoViews)
         {
             questionnaire.ConnectChildrenWithParent();
+            Dictionary<string, AttachmentInfoView> attachmentInfos = new Dictionary<string, AttachmentInfoView>();
+
+            var questionnaireDocument = questionnaire as QuestionnaireDocument;
+            if (questionnaireDocument != null && attachmentInfoViews != null)
+            {
+                foreach (var attachment in questionnaireDocument.Attachments)
+                {
+                    AttachmentInfoView attachmentInfoView = attachmentInfoViews.FirstOrDefault(x => x.ContentHash == attachment.ContentId);
+                    attachmentInfos.Add(attachment.Name, attachmentInfoView);
+                }
+            }
 
             var interviewInfo = new InterviewInfoInternal(
                 interview: interview,
                 questionnaire: questionnaire,
                 variableToQuestionId: questionnaire.GetAllQuestions().ToDictionary(x => x.StataExportCaption, x => x.PublicKey),
-                attachments: attachments);
+                attachments: attachmentInfos);
 
             var interviewGroups = new List<InterviewGroupView>();
             var groupStack = new Stack<KeyValuePair<IGroup, int>>();

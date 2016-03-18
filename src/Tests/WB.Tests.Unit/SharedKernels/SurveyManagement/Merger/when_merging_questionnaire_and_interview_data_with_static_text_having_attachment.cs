@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
@@ -28,16 +29,20 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                             new StaticText(publicKey: staticTextId, text: staticText, attachmentName: attachmentName)
                         }
                 });
+            questionnaire.Attachments = new List<Attachment>() {new Attachment() {ContentId = attachmentContentId, Name = attachmentName } };
 
             interview = CreateInterviewData(interviewId);
             
             user = Mock.Of<UserDocument>();
 
             merger = CreateMerger(questionnaire);
+
+            attachmentInfos = new List<AttachmentInfoView>() { new AttachmentInfoView(attachmentContentId, attachmentType) };
+
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null, new Dictionary<string, AttachmentInfoView>() { { attachmentName , new AttachmentInfoView(attachmentContentId, attachmentType) }});
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null, attachmentInfos);
 
         It should_static_text_exist= () =>
             GetStaticText().ShouldNotBeNull();
@@ -75,5 +80,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
 
         private static string attachmentType = "img";
         private static string attachmentContentId = "DTGHRHFJFJFJDD";
+
+        private static List<AttachmentInfoView> attachmentInfos;
     }
 }

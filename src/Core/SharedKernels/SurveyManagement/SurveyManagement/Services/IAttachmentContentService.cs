@@ -9,6 +9,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services
         AttachmentContent GetAttachmentContent(string contentHash);
         void DeleteAttachmentContent(string contentHash);
         bool HasAttachmentContent(string contentHash);
-        Dictionary<string, AttachmentInfoView> GetContentTypes(HashSet<string> contentHashes);
+        IEnumerable<AttachmentInfoView> GetAttachmentInfosByContentIds(IEnumerable<string> contentHashes);
     }
 }

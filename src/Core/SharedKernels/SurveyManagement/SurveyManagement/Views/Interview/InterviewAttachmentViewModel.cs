@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Net.Mime;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {

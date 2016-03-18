@@ -8,6 +8,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
 {
     public interface IInterviewDataAndQuestionnaireMerger
     {
-        InterviewDetailsView Merge(InterviewData interview, IQuestionnaireDocument questionnaire, UserLight responsible, InterviewLinkedQuestionOptions interviewLinkedQuestionOptions, Dictionary<string, AttachmentInfoView> attachments);
+        InterviewDetailsView Merge(InterviewData interview, IQuestionnaireDocument questionnaire, UserLight responsible, InterviewLinkedQuestionOptions interviewLinkedQuestionOptions, IEnumerable<AttachmentInfoView> attachmentInfos);
     }
 }
