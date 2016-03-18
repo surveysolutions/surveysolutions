@@ -124,6 +124,9 @@ namespace WB.Tests.Unit
             public static AnswersDeclaredInvalid AnswersDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedConditions)
                 => new AnswersDeclaredInvalid(failedConditions);
 
+            public static AnswersDeclaredValid AnswersDeclaredValid(Identity[] questions)
+                => new AnswersDeclaredValid(questions);
+
             public static AnswersDeclaredValid AnswersDeclaredValid()
                 => new AnswersDeclaredValid(new Identity[]{});
 
@@ -552,14 +555,13 @@ namespace WB.Tests.Unit
                     Create.Identity(id ?? Guid.NewGuid(), rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty),
                 });
 
+            public static QuestionsEnabled QuestionsEnabled(Identity[] questions) => new QuestionsEnabled(questions);
+
             public static QuestionsEnabled QuestionsEnabled(Guid? id = null, decimal[] rosterVector = null)
-            {
-                var identities = new[]
+                => Create.Event.QuestionsEnabled(new[]
                 {
-                    new Identity(id ?? Guid.NewGuid(), rosterVector ?? new decimal[0]), 
-                };
-                return new QuestionsEnabled(identities);
-            }
+                    new Identity(id ?? Guid.NewGuid(), rosterVector ?? new decimal[0]),
+                });
 
             public static RosterChanged RosterChanged(Guid rosterId, RosterSizeSourceType rosterType, FixedRosterTitle[] titles)
             {

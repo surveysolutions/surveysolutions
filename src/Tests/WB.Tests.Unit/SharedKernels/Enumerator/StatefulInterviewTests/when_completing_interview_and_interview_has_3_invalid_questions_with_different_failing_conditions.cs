@@ -25,13 +25,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             interview.Apply(Create.Event.InterviewStatusChanged(status: InterviewStatus.InterviewerAssigned));
 
-            interview.Apply(Create.Event.AnswersDeclaredInvalid(questions: new []
-            {
-                invalidQuestion1Identity,
-                invalidQuestion2Identity,
-                invalidQuestion3Identity,
-            }));
-
             interview.Apply(Create.Event.AnswersDeclaredInvalid(failedConditions: new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>
             {
                 {

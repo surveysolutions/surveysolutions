@@ -351,7 +351,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.statistics.TotalRejectedInterviewsCount = interviews.Count(interview => interview.IsRejected);
 
             foreach (var interview in interviews)
-            {
+                {
                 this.SetProgressOperation(InterviewerUIResources.Synchronization_Download_Title,
                     InterviewerUIResources.Synchronization_Download_Description_Format.FormatString(
                         this.Statistics.RejectedInterviewsCount + this.Statistics.NewInterviewsCount + 1, interviews.Count,
