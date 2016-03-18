@@ -152,6 +152,7 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Shared.Web.Membership;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
+using AttachmentContent = WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire.AttachmentContent;
 
 namespace WB.Tests.Unit
 {
@@ -2796,15 +2797,6 @@ namespace WB.Tests.Unit
             return new ChangedLinkedOptions(new Identity(questionId, questionRosterVector ?? new decimal[0]),
                 options ?? new RosterVector[0]);
         }
-        public static AttachmentContentService AttachmentContentService(IPlainStorageAccessor<WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire.AttachmentContent> attachmentContentPlainStorage)
-        {
-            return new AttachmentContentService(attachmentContentPlainStorage ?? Mock.Of<IPlainStorageAccessor<WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire.AttachmentContent>>());
-        }
-
-        public static AttachmentsController AttachmentsController(IAttachmentContentService attachmentContentService)
-        {
-           return new AttachmentsController(attachmentContentService);
-        }
         
         public static AttachmentContentMetadata AttachmentContentMetadata(string contentType)
         {
@@ -2822,13 +2814,6 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static Attachment Attachment(string contentId)
-        {
-            return new Attachment()
-            {
-                ContentId = contentId,
-            };
-        }
         public static AttachmentViewModel AttachmentViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
