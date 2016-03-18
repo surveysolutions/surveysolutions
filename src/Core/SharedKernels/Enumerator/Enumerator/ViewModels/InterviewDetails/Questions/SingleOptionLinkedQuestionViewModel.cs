@@ -31,11 +31,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<AnswersRemoved>,
         ILiteEventHandler<AnswerRemoved>,
         ILiteEventHandler<LinkedOptionsChanged>,
+        ILiteEventHandler<RosterInstancesTitleChanged>,
         IDisposable
     {
         private readonly Guid userId;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
-        private readonly IPlainQuestionnaireRepository questionnaireStorage;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAnswerToStringService answerToStringService;
         private readonly ILiteEventRegistry eventRegistry;
@@ -49,8 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             ILiteEventRegistry eventRegistry,
             IMvxMainThreadDispatcher mainThreadDispatcher,
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionStateViewModel,
-            AnsweringViewModel answering, 
-            IPlainQuestionnaireRepository questionnaireRepository)
+            AnsweringViewModel answering)
         {
             if (principal == null) throw new ArgumentNullException("principal");
             if (questionnaireStorage == null) throw new ArgumentNullException("questionnaireStorage");
@@ -59,7 +58,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (eventRegistry == null) throw new ArgumentNullException("eventRegistry");
 
             this.userId = principal.CurrentUserIdentity.UserId;
-            this.questionnaireStorage = questionnaireStorage;
             this.interviewRepository = interviewRepository;
             this.answerToStringService = answerToStringService;
             this.eventRegistry = eventRegistry;
@@ -67,12 +65,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
-            this.questionnaireRepository = questionnaireRepository;
+            this.questionnaireRepository = questionnaireStorage;
         }
 
         private Guid interviewId;
         private Guid referencedQuestionId;
         private ObservableCollection<SingleOptionLinkedQuestionOptionViewModel> options;
+        private IEnumerable<Guid> parentRosterIds;
 
         public ObservableCollection<SingleOptionLinkedQuestionOptionViewModel> Options
         {
@@ -98,7 +97,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState.Init(interviewId, questionIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
             this.Identity = questionIdentity;
             this.interviewId = interview.Id;
@@ -107,6 +106,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             var options = this.GenerateOptionsFromModel(interview, this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity));
             this.Options = new ObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(options);
+
+            this.parentRosterIds = questionnaire.GetRostersFromTopToSpecifiedEntity(this.referencedQuestionId).ToHashSet();
 
             this.eventRegistry.Subscribe(this, interviewId);
         }
@@ -197,7 +198,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-
         public void Handle(AnswersRemoved @event)
         {
             foreach (var question in @event.Questions)
@@ -229,27 +229,36 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (changedLinkedQuestion != null)
             {
-                IStatefulInterview interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
-                IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
-
-                this.mainThreadDispatcher.RequestMainThreadAction(() =>
-                {
-                    var newOptions = this.GenerateOptionsFromModel(interview, questionnaire);
-                    var removedItems = this.Options.SynchronizeWith(newOptions, (s, t) => s.RosterVector.Identical(t.RosterVector));
-                    removedItems.ForEach(option =>
-                    {
-                        option.BeforeSelected -= this.OptionSelected;
-                        option.AnswerRemoved -= this.RemoveAnswer;
-                    });
-
-                    this.RaisePropertyChanged(() => HasOptions);
-                });
+                this.RefreshOptionsFromModel();
             }
         }
 
-        private static bool AreOptionsReferencingSameAnswer(SingleOptionLinkedQuestionOptionViewModel option1, SingleOptionLinkedQuestionOptionViewModel option2)
+        public void Handle(RosterInstancesTitleChanged @event)
         {
-            return option1.RosterVector.SequenceEqual(option2.RosterVector);
+            var optionListShouldBeUpdated = @event.ChangedInstances.Any(x => this.parentRosterIds.Contains(x.RosterInstance.GroupId));
+            if (optionListShouldBeUpdated)
+            {
+                this.RefreshOptionsFromModel();
+            }
+        }
+
+        private void RefreshOptionsFromModel()
+        {
+            IStatefulInterview interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+
+            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                var newOptions = this.GenerateOptionsFromModel(interview, questionnaire);
+                var removedItems = this.Options.SynchronizeWith(newOptions, (s, t) => s.RosterVector.Identical(t.RosterVector) && s.Title == t.Title);
+                removedItems.ForEach(option =>
+                {
+                    option.BeforeSelected -= this.OptionSelected;
+                    option.AnswerRemoved -= this.RemoveAnswer;
+                });
+
+                this.RaisePropertyChanged(() => this.HasOptions);
+            });
         }
 
         private SingleOptionLinkedQuestionOptionViewModel GenerateOptionViewModelOrNull(
