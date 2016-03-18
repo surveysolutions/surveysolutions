@@ -7,12 +7,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     {
         [PrimaryKey]
         public Guid EventId { get; set; }
+
         [Unique(Name = "Unique AR sequence")]
         [Indexed]
         public Guid EventSourceId { get; set; }
+
         [Unique(Name = "Unique AR sequence")]
-        public Guid CommitId { get; set; }
         public int EventSequence { get; set; }
+
+        public Guid? CommitId { get; set; }
+
         public DateTime DateTimeUtc { get; set; }
         public string JsonEvent { get; set; }
     }
