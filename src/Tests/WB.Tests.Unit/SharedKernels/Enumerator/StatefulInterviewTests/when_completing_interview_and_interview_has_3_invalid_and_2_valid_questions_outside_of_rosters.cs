@@ -33,6 +33,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Identity(invalidQuestion3Id, RosterVector.Empty),
             }));
 
+            interview.Apply(Create.Event.AnswersDeclaredValid(questions: new []
+            {
+                Create.Identity(validQuestion1Id, RosterVector.Empty),
+                Create.Identity(validQuestion2Id, RosterVector.Empty),
+            }));
+
             eventContext = Create.EventContext();
         };
 

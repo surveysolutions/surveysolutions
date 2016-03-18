@@ -44,6 +44,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Identity(rosterId, Create.RosterVector(-4)),
             }));
 
+            interview.Apply(Create.Event.GroupsEnabled(new []
+            {
+                Create.Identity(rosterId, Create.RosterVector(1)),
+                Create.Identity(rosterId, Create.RosterVector(2)),
+            }));
+
             eventContext = Create.EventContext();
         };
 
@@ -63,10 +69,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         It should_raise_GroupsEnabled_event = () =>
             eventContext.ShouldContainEvent<GroupsEnabled>();
 
-        It should_raise_GroupsEnabled_event_with_chapter_and_with_enabled_roster_vectors_of_fixed_roster = () =>
+        It should_raise_GroupsEnabled_event_with_enabled_roster_vectors_of_fixed_roster = () =>
             eventContext.GetEvent<GroupsEnabled>().Groups.ShouldContainOnly(new[]
             {
-                Create.Identity(chapterId, RosterVector.Empty),
                 Create.Identity(rosterId, Create.RosterVector(1)),
                 Create.Identity(rosterId, Create.RosterVector(2)),
             });
