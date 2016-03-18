@@ -17,12 +17,13 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
     public class MultiOptionLinkedToQuestionQuestionViewModel : MultiOptionLinkedQuestionViewModel,
-        ILiteEventHandler<LinkedOptionsChanged>
+        ILiteEventHandler<LinkedOptionsChanged>,
+        ILiteEventHandler<RosterInstancesTitleChanged>
     {
         private readonly IAnswerToStringService answerToStringService;
         private Guid linkedToQuestionId;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
-
+        private HashSet<Guid> parentRosterIds;
 
         public MultiOptionLinkedToQuestionQuestionViewModel(
             QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState,
@@ -46,6 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.maxAllowedAnswers = questionnaire.GetMaxSelectedAnswerOptions(questionIdentity.Id);
             this.areAnswersOrdered = questionnaire.ShouldQuestionRecordAnswersOrder(questionIdentity.Id);
             this.linkedToQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(questionIdentity.Id);
+            this.parentRosterIds = questionnaire.GetRostersFromTopToSpecifiedEntity(this.linkedToQuestionId).ToHashSet();
         }
 
         protected override IEnumerable<MultiOptionLinkedQuestionOptionViewModel> CreateOptions()
@@ -78,6 +80,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.Value.Identical(t.Value));
                 this.RaisePropertyChanged(() => HasOptions);
             });
+        }
+
+        public void Handle(RosterInstancesTitleChanged @event)
+        {
+            var optionListShouldBeUpdated = @event.ChangedInstances.Any(x => this.parentRosterIds.Contains(x.RosterInstance.GroupId));
+            if (optionListShouldBeUpdated)
+            {
+                var newOptions = this.CreateOptions();
+                this.mainThreadDispatcher.RequestMainThreadAction(() =>
+                {
+                    this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.Value.Identical(t.Value) && s.Title == t.Title);
+                    this.RaisePropertyChanged(() => HasOptions);
+                });
+            }
         }
 
         private MultiOptionLinkedQuestionOptionViewModel BuildOption(IQuestionnaire questionnaire,
