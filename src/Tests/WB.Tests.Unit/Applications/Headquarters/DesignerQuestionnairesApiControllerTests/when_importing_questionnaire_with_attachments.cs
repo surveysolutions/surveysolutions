@@ -8,9 +8,7 @@ using Moq;
 using Ncqrs.Commanding;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Template;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -27,15 +25,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
         {
             importRequest = new ImportQuestionnaireRequest(){ Questionnaire = new DesignerQuestionnaireListViewItem()};
 
-            var supportedVerstion = new Version(1,2,3);
+            var versionProvider = Setup.SupportedVersionProvider(new Version(1, 2, 3));
 
-            var versionProvider = new Mock<ISupportedVersionProvider>();
-            versionProvider.Setup(x => x.GetSupportedQuestionnaireVersion()).Returns(supportedVerstion);
-
-            var zipUtilsMock = new Mock<IStringCompressor>();
-
-            zipUtilsMock.Setup(_ => _.DecompressString<QuestionnaireDocument>(Moq.It.IsAny<string>()))
-                .Returns(new QuestionnaireDocument() { Attachments = questionnaireAttachments});
+            var zipUtils = Setup.StringCompressor_Decompress(new QuestionnaireDocument() {Attachments = questionnaireAttachments});
 
             mockOfRestService.Setup(x =>
                 x.DownloadFileAsync(Moq.It.IsAny<string>(), null, Moq.It.IsAny<RestCredentials>(), null)).Returns(Task.FromResult(new RestFile(new byte[] { 1 }, "image/png", "content id", 0, "file.png")));
@@ -49,7 +41,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
             
 
             controller = CreateDesignerQuestionnairesApiController(attachmentContentService: mockOfAttachmentContentService.Object,
-                supportedVersionProvider: versionProvider.Object, zipUtils: zipUtilsMock.Object, restService: mockOfRestService.Object);
+                supportedVersionProvider: versionProvider, zipUtils: zipUtils, restService: mockOfRestService.Object);
         };
 
         Because of = () => controller.GetQuestionnaire(importRequest).GetAwaiter().GetResult();
@@ -70,9 +62,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
         private static readonly List<Attachment> questionnaireAttachments =
             new List<Attachment>(new[]
             {
-                new Attachment {ContentId = "Content 1"},
-                new Attachment {ContentId = "Content 2"},
-                new Attachment {ContentId = "Content 3"}
+                Create.Attachment("Content 1"),
+                Create.Attachment("Content 2"),
+                Create.Attachment("Content 3")
             });
     }
 }

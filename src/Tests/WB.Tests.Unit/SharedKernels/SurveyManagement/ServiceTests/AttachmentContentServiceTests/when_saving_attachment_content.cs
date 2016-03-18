@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AttachmentCo
     {
         Establish context = () =>
         {
-            attachmentContentService = Create.CreateAttachmentContentService(mockOfAttachmentContentPlainStorage.Object);
+            attachmentContentService = Create.AttachmentContentService(mockOfAttachmentContentPlainStorage.Object);
         };
 
         Because of = () =>
