@@ -65,18 +65,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 throw new ArgumentException(
                     $"Questionnaire with id {interview.QuestionnaireId} and version {interview.QuestionnaireVersion} is missing.");
             
-            var attachmentIdAndTypes = attachmentContentService.GetContentTypes(questionnaire.Attachments.Select(x => x.ContentId).ToHashSet());
+            var attachmentIdAndTypes = attachmentContentService.GetAttachmentInfosByContentIds(questionnaire.Attachments.Select(x => x.ContentId).ToList());
 
-            Dictionary<string,AttachmentInfoView> attachmentInfos = new Dictionary<string, AttachmentInfoView>();
-            foreach (var att in questionnaire.Attachments)
-            {
-                AttachmentInfoView attachmentInfoView = null;
-                attachmentIdAndTypes.TryGetValue(att.ContentId, out attachmentInfoView);
-
-                attachmentInfos.Add(att.Name, attachmentInfoView);
-            }
-
-            var interviewDetailsView = merger.Merge(interview, questionnaire, user.GetUseLight(), this.interviewLinkedQuestionOptionsStore.GetById(interviewId), attachmentInfos);
+            var interviewDetailsView = merger.Merge(interview, questionnaire, user.GetUseLight(), this.interviewLinkedQuestionOptionsStore.GetById(interviewId), attachmentIdAndTypes);
 
             var questionViews = interviewDetailsView.Groups.SelectMany(group => group.Entities).OfType<InterviewQuestionView>().ToList();
             var detailsStatisticView = new DetailsStatisticView()

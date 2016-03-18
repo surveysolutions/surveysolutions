@@ -17,25 +17,22 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AttachmentCo
         };
 
         Because of = () =>
-            result = attachmentContentService.GetContentTypes(new HashSet<string>() { { contentHash} });
+            result = attachmentContentService.GetAttachmentInfosByContentIds(new List<string>() {  contentHash});
 
         It should_return_one_item = () =>
-            result.Count.ShouldEqual(1);
-
-        It should_return_correct_key = () =>
-            result.First().Key.ShouldEqual(contentHash);
+            result.Count().ShouldEqual(1);
 
         It should_return_correct_value = () =>
         {
-            result.First().Value.ContentHash.ShouldEqual(contentHash);
-            result.First().Value.ContentType.ShouldEqual(contentType);
+            result.First().ContentHash.ShouldEqual(contentHash);
+            result.First().ContentType.ShouldEqual(contentType);
         };
 
         private static AttachmentContentService attachmentContentService;
         private static string contentHash = "content id";
         private static string contentType = "content type";
 
-        private static Dictionary<string, AttachmentInfoView> result;
+        private static IEnumerable<AttachmentInfoView> result;
 
         private static readonly AttachmentContent expectedContent = new AttachmentContent
         {

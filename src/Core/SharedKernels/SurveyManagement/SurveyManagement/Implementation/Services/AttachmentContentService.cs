@@ -29,13 +29,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
         public bool HasAttachmentContent(string contentHash) => this.attachmentContentStorage.Query(
             attachments => attachments.Select(content => content.ContentHash).Any(content => content == contentHash));
 
-        public Dictionary<string, AttachmentInfoView> GetContentTypes(HashSet<string> contentHashes)
+        public IEnumerable<AttachmentInfoView> GetAttachmentInfosByContentIds(IEnumerable<string> contentHashes)
         {
             var attachmentContentTypes = this.attachmentContentStorage.Query(_ => _
                 .Where(x => contentHashes.Contains(x.ContentHash))
-                .Select(x => new { x.ContentHash, x.ContentType})
-                .Distinct()
-                .ToDictionary(x => x.ContentHash, x => new AttachmentInfoView(x.ContentHash, x.ContentType)));
+                .Select(x => new AttachmentInfoView(x.ContentHash, x.ContentType))
+                .ToList());
 
             return attachmentContentTypes;
         }
