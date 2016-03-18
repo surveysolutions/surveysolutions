@@ -23,11 +23,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             answersTime = new DateTime(2013, 09, 01);
 
             Guid groupId = Guid.Parse("22220000FFFFFFFFFFFFFFFFFFFFFFFF");
-
-            var questionaire = Mock.Of<IQuestionnaire>(_ => _.IsRosterGroup(groupId) == true);
-
-            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
-                => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
+            
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _ => _.IsRosterGroup(groupId) == true);
 
             eventContext = new EventContext();
 

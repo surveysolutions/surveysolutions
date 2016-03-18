@@ -88,7 +88,8 @@ namespace WB.Tests.Integration.InterviewTests
             Guid questionnaireId = questionnaireDocument.PublicKey;
 
             var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
-                =>  repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) ==new PlainQuestionnaire(questionnaireDocument,1));
+                =>  repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) ==new PlainQuestionnaire(questionnaireDocument,1) &&
+                    repository.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == new PlainQuestionnaire(questionnaireDocument, 1));
 
             IInterviewExpressionStateV7 state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument) ;
 
