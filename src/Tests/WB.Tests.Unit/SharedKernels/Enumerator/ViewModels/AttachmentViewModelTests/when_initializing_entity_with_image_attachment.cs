@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             var attachment = Create.Attachment(attachmentContentId);
             attachmentContentMetadata = Create.AttachmentContentMetadata("image/png");
             attachmentContentData = Create.AttachmentContentData(new byte[] { 1, 2, 3 });
-            var questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 3);
+            var questionnaireIdentity = Create.QuestionnaireIdentity(Guid.NewGuid());
 
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, _ 
                 => _.GetAttachmentForEntity(entityId) == attachment);
