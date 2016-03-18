@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<LocalizationSolution xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" AutoDoNotTranslate="true" InvariantLocale="en-US" IsTranslationPackage="false" AllowEditingInvariant="true" GridLayoutXml="" DockManagerLayoutXml="">
+<LocalizationSolution xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" AutoDoNotTranslate="true" InvariantLocale="en-US" IsTranslationPackage="false" AllowEditingInvariant="true" RemoveOrhpanedStrings="true" GridLayoutXml="" DockManagerLayoutXml="">
   <Projects>
-    <Project xsi:type="VSLocalizationProject" Name="WB.Core.BoundedContexts.Tester" VisualStudioProjectFilename="..\src\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\WB.Core.BoundedContexts.Tester.csproj" AssemblyName="WB.Core.BoundedContexts.Tester" AssemblyType="Dll" RootNamespace="WB.Core.BoundedContexts.Tester" InvariantLocale="en-US">
+    <Project xsi:type="VSLocalizationProject" Name="WB.Core.BoundedContexts.Tester" VisualStudioProjectFilename="..\src\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\WB.Core.BoundedContexts.Tester.csproj" ProjectType="Other" ProjectProgrammingLanguage="C_Sharp" AssemblyName="WB.Core.BoundedContexts.Tester" AssemblyType="Dll" RootNamespace="WB.Core.BoundedContexts.Tester" InvariantLocale="en-US">
       <locales>
         <locale />
         <locale>ru-RU</locale>
@@ -17,7 +17,7 @@
         <locale>zh-CN</locale>
       </locales>
       <items>
-        <it rn="Properties\TesterUIResources.resx" nm="Dashboard_HaveNotBeenUpdated" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="Dashboard_HaveNotBeenUpdated" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="list have not been updated" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="не обновлялись" ts="Changed" qs="ToReview" />
@@ -31,7 +31,7 @@
             <li lc="zh-CN" tx="列表还未更新" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="Dashboard_LastUpdated" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="Dashboard_LastUpdated" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="list was updated {0}" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="обновлялись {0}" ts="Translated" qs="ToReview" />
@@ -45,7 +45,7 @@
             <li lc="zh-CN" tx="列表已更新{0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_CheckConnectionToServer" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_CheckConnectionToServer" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Connecting to server" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Подключаемся к серверу" ts="Translated" qs="ToReview" />
@@ -59,7 +59,7 @@
             <li lc="zh-CN" tx="正在连接到服务器" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_CreateInterview" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_CreateInterview" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Creating interview" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Создаем новое интервью" ts="Translated" qs="ToReview" />
@@ -73,7 +73,7 @@
             <li lc="zh-CN" tx="正在创建调查" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_DownloadProgress" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_DownloadProgress" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Downloading questionnaire -  {0}%" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Скачиваем опросник - {0}%" ts="Translated" qs="ToReview" />
@@ -87,12 +87,12 @@
             <li lc="zh-CN" tx="正在下载调查问卷 - {0}%" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_Error_Forbidden" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_Error_Forbidden" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Can't open the questionnaire &quot;{0}&quot;. Your Designer user account is not authorized. Please check your login and password" ts="Changed" qs="ToReview" />
-            <li lc="ru-RU" tx="Невозможно открыть опросник {0}. Ваша учетная запись не авторизирована. Пожалуйста, проверьте ваши логин и пароль" er="" ts="Changed" qs="ToReview" />
+            <li lc="ru-RU" tx="Невозможно открыть опросник {0}. Ваша учетная запись не авторизирована. Пожалуйста, проверьте ваши логин и пароль" ts="Changed" qs="ToReview" />
             <li lc="es-ES" tx="No se puede abrir el cuestionario «{0}». Su cuenta de usuario de Designer no está autorizada. Por favor, compruebe su nombre de usuario y contraseña." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
-            <li lc="th-TH" tx="ไม่สามารถเปิดแบบสอบถาม &quot;{0}&quot; ได้ กรุณาตรวจสอบชื่อผู้ใช้และรหัสผ่าน" er="" ts="Changed" qs="ToReview" />
+            <li lc="th-TH" tx="ไม่สามารถเปิดแบบสอบถาม &quot;{0}&quot; ได้ กรุณาตรวจสอบชื่อผู้ใช้และรหัสผ่าน" ts="Changed" qs="ToReview" />
             <li lc="vi-VN" tx="Không thể mở bảng câu hỏi &quot;{0}&quot;. Trương mục người dùng thiết kế là không được phép. Hãy kiểm tra đăng nhập và mật khẩu của bạn." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
             <li lc="id-ID" tx="Tidak bisa membuka kuesioner &quot;{0}&quot;. Akun Desainer Anda tidak berwenang. Silakan periksa login dan password Anda." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
             <li lc="pt-PT" tx="Não é possível abrir o questionário &quot;{0}&quot;. Sua conta de usuário do Designer não é autorizada. Por favor, verifique seu login e senha." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
@@ -101,7 +101,7 @@
             <li lc="zh-CN" tx="无法打开调查问卷“{0}”。您的Designer账户未获授权。请检查用户名和密码。" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_Error_NotFound" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_Error_NotFound" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Can't open the questionnaire &quot;{0}&quot;. The questionnaire cannot be found. Please refresh the list of questionnaires." ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Невозможно открыть опросник {0}. Опросник не найден. Обновите список опросников, пожалуйста." ts="Translated" qs="ToReview" />
@@ -115,7 +115,7 @@
             <li lc="zh-CN" tx="无法打开调查问卷“{0}”。无法找到调查问卷。请刷新调查问卷列表。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_Error_PreconditionFailed" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_Error_PreconditionFailed" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Can't open the questionnaire &quot;{0}&quot;. The questionnaire has errors. Please fix this in Designer." ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Невозможно открыть опросник {0}. Опросник содержит ошибки. Исправьте, пожалуйста, их в Survey Solutions Designer." ts="Changed" qs="ToReview" />
@@ -129,7 +129,7 @@
             <li lc="zh-CN" tx="无法打开调查问卷“{0}”。调查问卷有错误。请在Designer中修正。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_StoreQuestionnaire" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaire_StoreQuestionnaire" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Saving questionnaire to local storage" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Сохранение опросника в локальном хранилище" ts="Translated" qs="ToReview" />
@@ -143,7 +143,13 @@
             <li lc="zh-CN" tx="正在将调查问卷保存到本地" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="Login_Error_NotFound" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaireAttachments_DownloadProgress" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Downloading questionnaire attachments -  {0}%" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Скачивает аттачмент - {0}%" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\TesterUIResources.resx" nm="Login_Error_NotFound" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Designer web application is not accessible at this moment. Check connection setting or try again later" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Приложение Designer недоступно в текущий момент" ts="Translated" qs="ToReview" />
@@ -157,7 +163,7 @@
             <li lc="zh-CN" tx="现在无法访问Designer网络应用程序。请检查连接设置或稍后再试。" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="MenuItem_Title_Dashboard" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="MenuItem_Title_Dashboard" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Questionnaires" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Опросники" ts="Translated" qs="ToReview" />
@@ -171,7 +177,7 @@
             <li lc="zh-CN" tx="调查问卷" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="MenuItem_Title_Settings" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="MenuItem_Title_Settings" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Settings" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Настройки" ts="Translated" qs="ToReview" />
@@ -185,7 +191,7 @@
             <li lc="zh-CN" tx="设置" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="MenuItem_Title_SignOut" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="MenuItem_Title_SignOut" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Sign out" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Выход" ts="Translated" qs="ToReview" />
@@ -199,7 +205,7 @@
             <li lc="zh-CN" tx="注销" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="Prefs_AcceptUnsignedSummary" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="Prefs_AcceptUnsignedSummary" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Disable SSL certificate validation" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Отключить проверку SSL сертификатов" ts="Translated" qs="ToReview" />
@@ -213,7 +219,7 @@
             <li lc="zh-CN" tx="禁用SSL证书验证" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="Prefs_AcceptUnsignedTitle" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="Prefs_AcceptUnsignedTitle" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Accept all SSL certificates" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Принимать все SSL сертификаты" ts="Translated" qs="ToReview" />
@@ -227,7 +233,7 @@
             <li lc="zh-CN" tx="接受所有SSL证书" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="Prefs_ConnectionSettings" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="Prefs_ConnectionSettings" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Connection settings" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Настройки подключения" ts="Translated" qs="ToReview" />
@@ -241,7 +247,7 @@
             <li lc="zh-CN" tx="连接设置" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="Prefs_DesignerEndPointSummary" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="Prefs_DesignerEndPointSummary" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="URL that is used to communicate with designer application" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="URL для подключения к приложению Survey Solutions Designer" ts="Translated" qs="ToReview" />
@@ -255,7 +261,7 @@
             <li lc="zh-CN" tx="与Designer应用程序通讯使用的网址" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="Prefs_DesignerEndPointTitle" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="Prefs_DesignerEndPointTitle" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Designer URL" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="URL приложения Designer" ts="Translated" qs="ToReview" />
@@ -269,7 +275,7 @@
             <li lc="zh-CN" tx="Designer网址" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="Prefs_GpsReceiveTimeoutSecSummary" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="Prefs_GpsReceiveTimeoutSecSummary" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Number of seconds to wait for coordinates" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Количество секунд, в течении которых будет ожидаться получение GPS координат" ts="Translated" qs="ToReview" />
@@ -283,7 +289,7 @@
             <li lc="zh-CN" tx="等待坐标的时间（秒）" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="Prefs_GpsReceiveTimeoutSecTitle" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="Prefs_GpsReceiveTimeoutSecTitle" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="GPS Receive timeout" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Время ожидания при считывании GPS координат" ts="Translated" qs="ToReview" />
@@ -297,7 +303,7 @@
             <li lc="zh-CN" tx="GPS接收超时" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="Prefs_HttpResponseTimeoutSummary" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="Prefs_HttpResponseTimeoutSummary" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Number of seconds to wait until server response" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Количество секунд, в течении которых будет ожидаться получение ответа от сервера" ts="Translated" qs="ToReview" />
@@ -311,7 +317,7 @@
             <li lc="zh-CN" tx="等待服务器响应的时间（秒）" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="Prefs_HttpResponseTimeoutTitle" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="Prefs_HttpResponseTimeoutTitle" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Server Response timeout" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Время ожидания при общении с сервером" ts="Translated" qs="ToReview" />
@@ -325,7 +331,7 @@
             <li lc="zh-CN" tx="服务器响应超时" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="Prefs_VersionSummaryFormat" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="Prefs_VersionSummaryFormat" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Version: {0}" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Версия:  {0}" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
@@ -339,7 +345,7 @@
             <li lc="zh-CN" tx="版本：{0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Properties\TesterUIResources.resx" nm="Prefs_VersionTitle" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Properties\TesterUIResources.resx" nm="Prefs_VersionTitle" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Application version" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Версия приложения" ts="Translated" qs="ToReview" />
