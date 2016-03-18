@@ -7994,7 +7994,7 @@ textarea#edit-group-description {
 .attachments-panel .attachments div.attachment-list div.attachments-panel-item {
   background: #fff;
   margin-bottom: 7px;
-  padding: 5px 10px 5px 10px;
+  padding: 12px 10px 5px 10px;
   border-bottom-left-radius: 8px;
   border-top-left-radius: 8px;
   border-bottom-right-radius: 8px;
@@ -8042,11 +8042,13 @@ textarea#edit-group-description {
 }
 .attachments-panel .attachments div.attachment-list div.attachments-panel-item .attachment-content .attachment-meta {
   font-family: Georgia, serif;
-  color: #78838a;
+  color: #98a0a5;
   font-size: 14px;
   font-style: italic;
   margin: 0;
-  margin-right: 20px;
+}
+.attachments-panel .attachments div.attachment-list div.attachments-panel-item .attachment-content .attachment-meta p {
+  margin: 0;
 }
 .attachments-panel .attachments div.attachment-list div.attachments-panel-item .drop-box {
   color: #78838a;
@@ -8073,7 +8075,7 @@ textarea#edit-group-description {
   font-size: 14px;
 }
 .attachments-panel .attachments div.attachment-list div.attachments-panel-item input.table-name {
-  width: 100%;
+  width: 275px;
   color: #e004c9;
 }
 .attachments-panel .attachments div.attachment-list div.attachments-panel-item .form-control[disabled],
@@ -8119,14 +8121,18 @@ textarea#edit-group-description {
 }
 .attachments-panel .attachments div.attachment-list div.attachments-panel-item .actions .permanent-actions {
   padding-left: 5px;
+  display: none;
 }
 .attachments-panel .attachments div.attachment-list div.attachments-panel-item .actions.dirty .permanent-actions {
   position: static;
 }
 .attachments-panel .attachments div.attachment-list div.attachments-panel-item .divider {
   height: 2px;
-  width: 100%;
+  width: 275px;
   background: #d9dde0;
+}
+.attachments-panel .attachments div.attachment-list div.attachments-panel-item:hover .actions .permanent-actions {
+  display: block;
 }
 .macros-panel {
   width: 85%;
