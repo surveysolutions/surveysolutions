@@ -11,23 +11,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AttachmentCo
         Establish context = () =>
         {
             var attachmentContentPlainStorage = new TestPlainStorage<AttachmentContent>();
-            attachmentContentPlainStorage.Store(
-                new AttachmentContent
-                {
-                    ContentHash = contentHash,
-                    Content = new byte[] { 1, 2, 3 }
-                }, contentHash);
-            attachmentContentService = Create.CreateAttachmentContentService(attachmentContentPlainStorage);
+            attachmentContentPlainStorage.Store(expectedContent, expectedContent.ContentHash);
+            attachmentContentService = Create.AttachmentContentService(attachmentContentPlainStorage);
         };
 
         Because of = () =>
-            isAttachmentContentExists = attachmentContentService.HasAttachmentContent(contentHash);
+            isAttachmentContentExists = attachmentContentService.HasAttachmentContent(expectedContent.ContentHash);
 
         It should_attachment_content_exists_in_plain_storage = () =>
             isAttachmentContentExists.ShouldBeTrue();
 
         private static AttachmentContentService attachmentContentService;
-        private static string contentHash = "content id";
+        private static readonly AttachmentContent expectedContent = Create.AttachmentContent();
         private static bool isAttachmentContentExists;
     }
 }

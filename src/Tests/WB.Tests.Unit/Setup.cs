@@ -9,6 +9,7 @@ using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -22,6 +23,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Tests.Unit
@@ -214,6 +216,24 @@ namespace WB.Tests.Unit
             }
 
             return questionnaireEntityFactoryMock;
+        }
+
+        public static ISupportedVersionProvider SupportedVersionProvider(Version supportedVerstion)
+        {
+            var versionProvider = new Mock<ISupportedVersionProvider>();
+            versionProvider.Setup(x => x.GetSupportedQuestionnaireVersion()).Returns(supportedVerstion);
+
+            return versionProvider.Object;
+        }
+
+        public static IStringCompressor StringCompressor_Decompress<TEntity>(TEntity entity) where TEntity: class
+        {
+            var zipUtilsMock = new Mock<IStringCompressor>();
+
+            zipUtilsMock.Setup(_ => _.DecompressString<TEntity>(Moq.It.IsAny<string>()))
+                .Returns(entity);
+
+            return zipUtilsMock.Object;
         }
     }
 }
