@@ -134,7 +134,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         private CommittedEvent ToCommitedEvent(EventView storedEvent)
         {
             return new CommittedEvent(
-                commitId: storedEvent.CommitId,
+                commitId: storedEvent.CommitId ?? storedEvent.EventSourceId,
                 origin: string.Empty,
                 eventIdentifier: storedEvent.EventId,
                 eventSourceId: storedEvent.EventSourceId,
