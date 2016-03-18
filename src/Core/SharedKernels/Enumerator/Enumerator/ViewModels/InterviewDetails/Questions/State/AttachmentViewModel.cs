@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
+
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
@@ -23,6 +17,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IAttachmentContentStorage attachmentContentStorage;
 
         private AttachmentContentMetadata attachmentContentMetadata;
+
+        private readonly string imageContentType = "image/";
 
         public AttachmentViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,
@@ -57,9 +53,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private readonly string[] imageContentTypes = {"image/png", "image/jpg", "image/gif", "image/jpeg", "image/pjpeg"};
-
-        public bool IsImage => this.attachmentContentMetadata != null && this.imageContentTypes.Contains(this.attachmentContentMetadata.ContentType);
+        public bool IsImage => this.attachmentContentMetadata != null 
+            && this.attachmentContentMetadata.ContentType.StartsWith(this.imageContentType);
 
         public byte[] Content { get; private set; }
     }
