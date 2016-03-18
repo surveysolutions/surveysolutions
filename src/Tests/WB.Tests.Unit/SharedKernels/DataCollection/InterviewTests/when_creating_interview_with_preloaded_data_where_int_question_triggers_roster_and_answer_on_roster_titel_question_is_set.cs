@@ -36,25 +36,22 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 });
 
             answersTime = new DateTime(2013, 09, 01);
-
-            var questionaire = Mock.Of<IQuestionnaire>(_
+            
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.HasQuestion(prefilledIntQuestion) == true
                    && _.GetQuestionType(prefilledIntQuestion) == QuestionType.Numeric
                    && _.IsQuestionInteger(prefilledIntQuestion) == true
-                   && _.GetRosterGroupsByRosterSizeQuestion(prefilledIntQuestion) == new Guid[] {rosterGroupId}
+                   && _.GetRosterGroupsByRosterSizeQuestion(prefilledIntQuestion) == new Guid[] { rosterGroupId }
 
                    && _.HasGroup(rosterGroupId) == true
                    && _.GetRosterLevelForGroup(rosterGroupId) == 1
-                   && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new Guid[] {rosterGroupId}
+                   && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new Guid[] { rosterGroupId }
 
                    && _.HasQuestion(rosterTitleQuestionId) == true
                    && _.GetQuestionType(rosterTitleQuestionId) == QuestionType.Text
-                   && _.GetRostersFromTopToSpecifiedQuestion(rosterTitleQuestionId) == new Guid[] {rosterGroupId}
+                   && _.GetRostersFromTopToSpecifiedQuestion(rosterTitleQuestionId) == new Guid[] { rosterGroupId }
                    && _.DoesQuestionSpecifyRosterTitle(rosterTitleQuestionId) == true
                    && _.GetRostersAffectedByRosterTitleQuestion(rosterTitleQuestionId) == new Guid[] { rosterGroupId });
-
-            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
-                => repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionaire);
 
             interview = Create.Interview(questionnaireRepository: questionnaireRepository);
 

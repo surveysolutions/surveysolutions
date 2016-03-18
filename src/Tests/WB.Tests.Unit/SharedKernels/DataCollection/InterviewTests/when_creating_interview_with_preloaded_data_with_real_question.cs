@@ -34,14 +34,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 });
             answersTime = new DateTime(2013, 09, 01);
 
-            var questionaire = Mock.Of<IQuestionnaire>(_
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.GetQuestionType(prefilledQuestionId) == QuestionType.Numeric
                     && _.HasQuestion(prefilledQuestionId) == true
                     && _.GetFixedRosterGroups(null) == new Guid[] { fixedRosterGroup }
                     && _.GetFixedRosterTitles(fixedRosterGroup) == new FixedRosterTitle[0]);
-
-            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
-                => repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionaire);
 
             eventContext = new EventContext();
 

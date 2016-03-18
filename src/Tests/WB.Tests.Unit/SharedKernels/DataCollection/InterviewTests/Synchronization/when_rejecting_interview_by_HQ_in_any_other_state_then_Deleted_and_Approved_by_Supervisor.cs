@@ -21,11 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
     {
         Establish context = () =>
         {
-            var questionnaireRepositoryMock = new Mock<IPlainQuestionnaireRepository>();
-            questionnaireRepositoryMock.Setup(x => x.GetHistoricalQuestionnaire(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
-                .Returns(Mock.Of<IQuestionnaire>());
-
-            questionnaireRepository = questionnaireRepositoryMock.Object;
+            questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), _ => true);
 
             statuses =
                 Enum.GetNames(typeof (InterviewStatus))
