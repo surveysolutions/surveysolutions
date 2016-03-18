@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
         
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetQuestionnaire)]
-        public virtual HttpResponseMessage Get(Guid id, int version)
+        public virtual HttpResponseMessage Get11(Guid id, int version)
         {
             return this.Get(id, version, 11);
         }

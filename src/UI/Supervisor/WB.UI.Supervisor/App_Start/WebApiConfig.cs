@@ -27,7 +27,8 @@ namespace WB.UI.Supervisor.App_Start
             config.TypedRoute("api/interviewer/v1/users/current", c => c.Action<UsersApiV1Controller>(x => x.Current()));
             config.TypedRoute("api/interviewer/v1/users/hasdevice", c => c.Action<UsersApiV1Controller>(x => x.HasDevice()));
             config.TypedRoute("api/interviewer/v1/questionnaires/census", c => c.Action<QuestionnairesApiV1Controller>(x => x.Census()));
-            config.TypedRoute("api/interviewer/v1/questionnaires/{id:guid}/{version:int}", c => c.Action<QuestionnairesApiV1Controller>(x => x.Get(Param.Any<Guid>(), Param.Any<int>())));
+            config.TypedRoute("api/interviewer/v1/questionnaires/{id:guid}/{version:int}", c => c.Action<QuestionnairesApiV1Controller>(x => x.Get11(Param.Any<Guid>(), Param.Any<int>())));
+            config.TypedRoute("api/interviewer/v1/questionnaires/{id:guid}/{version:int}/{contentVersion:long}", c => c.Action<QuestionnairesApiV1Controller>(x => x.Get(Param.Any<Guid>(), Param.Any<int>(), Param.Any<long>())));
             config.TypedRoute("api/interviewer/v1/questionnaires/{id:guid}/{version:int}/assembly", c => c.Action<QuestionnairesApiV1Controller>(x => x.GetAssembly(Param.Any<Guid>(), Param.Any<int>())));
             config.TypedRoute("api/interviewer/v1/questionnaires/{id:guid}/{version:int}/logstate", c => c.Action<QuestionnairesApiV1Controller>(x => x.LogQuestionnaireAsSuccessfullyHandled(Param.Any<Guid>(), Param.Any<int>())));
             config.TypedRoute("api/interviewer/v1/questionnaires/{id:guid}/{version:int}/assembly/logstate", c => c.Action<QuestionnairesApiV1Controller>(x => x.LogQuestionnaireAssemblyAsSuccessfullyHandled(Param.Any<Guid>(), Param.Any<int>())));
