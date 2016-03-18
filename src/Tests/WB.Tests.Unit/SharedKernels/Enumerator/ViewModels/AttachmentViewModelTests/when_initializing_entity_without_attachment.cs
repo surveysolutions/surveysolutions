@@ -21,10 +21,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
         Establish context = () =>
         {
             entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 3);
 
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), _ => true);
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, _ => true);
 
-            var interview = Mock.Of<IStatefulInterview>();
+            var interview = Mock.Of<IStatefulInterview>(i => i.QuestionnaireIdentity == questionnaireIdentity);
             var interviewRepository = Setup.StatefulInterviewRepository(interview);
 
             attachmentContentStorage = Mock.Of<IAttachmentContentStorage>();
@@ -32,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             viewModel = Create.AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentContentStorage);
         };
 
-        Because of = async () => await viewModel.InitAsync("interview", new Identity(entityId, Empty.RosterVector));
+        Because of = () => viewModel.InitAsync("interview", new Identity(entityId, Empty.RosterVector)).ConfigureAwait(false);
 
 
         It should_dont_call_attachment_content = () =>
