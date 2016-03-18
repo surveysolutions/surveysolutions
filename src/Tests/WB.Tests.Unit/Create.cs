@@ -222,6 +222,24 @@ namespace WB.Tests.Unit
                 settings ?? Mock.Of<IHeadquartersSettings>());
         }
 
+        public static AttachmentContentService AttachmentContentService(IPlainStorageAccessor<AttachmentContent> attachmentContentPlainStorage)
+        {
+            return new AttachmentContentService(attachmentContentPlainStorage ?? Mock.Of<IPlainStorageAccessor<AttachmentContent>>());
+        }
+
+        public static AttachmentsController AttachmentsController(IAttachmentContentService attachmentContentService)
+        {
+            return new AttachmentsController(attachmentContentService);
+        }
+
+        public static AttachmentContent AttachmentContent() => new AttachmentContent
+        {
+            ContentHash = "content id",
+            Content = new byte[] { 1, 2, 3 }
+        };
+
+        public static Attachment Attachment(string attachementHash) => new Attachment { ContentId = attachementHash };
+
         public static CategoricalQuestionOption CascadingOptionModel(int value, string title, int parentValue)
         {
             return new CategoricalQuestionOption
@@ -2778,8 +2796,7 @@ namespace WB.Tests.Unit
             return new ChangedLinkedOptions(new Identity(questionId, questionRosterVector ?? new decimal[0]),
                 options ?? new RosterVector[0]);
         }
-
-        public static AttachmentContentService CreateAttachmentContentService(IPlainStorageAccessor<WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire.AttachmentContent> attachmentContentPlainStorage)
+        public static AttachmentContentService AttachmentContentService(IPlainStorageAccessor<WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire.AttachmentContent> attachmentContentPlainStorage)
         {
             return new AttachmentContentService(attachmentContentPlainStorage ?? Mock.Of<IPlainStorageAccessor<WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire.AttachmentContent>>());
         }

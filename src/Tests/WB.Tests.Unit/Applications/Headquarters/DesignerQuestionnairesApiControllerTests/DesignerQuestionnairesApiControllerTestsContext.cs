@@ -14,9 +14,14 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
     internal class DesignerQuestionnairesApiControllerTestsContext
     {
         protected static DesignerQuestionnairesApiController CreateDesignerQuestionnairesApiController(
-            ICommandService commandService = null, IGlobalInfoProvider globalInfo = null, IStringCompressor zipUtils = null,
-            ILogger logger = null, Func<IGlobalInfoProvider, RestCredentials> getDesignerUserCredentials = null, IRestService restService = null,
-            ISupportedVersionProvider supportedVersionProvider = null, IAttachmentContentService attachmentContentService = null)
+            ICommandService commandService = null, 
+            IGlobalInfoProvider globalInfo = null, 
+            IStringCompressor zipUtils = null,
+            ILogger logger = null, 
+            Func<IGlobalInfoProvider, RestCredentials> getDesignerUserCredentials = null, 
+            IRestService restService = null,
+            ISupportedVersionProvider supportedVersionProvider = null, 
+            IAttachmentContentService attachmentContentService = null)
         {
             return new DesignerQuestionnairesApiController(
                 supportedVersionProvider ?? new Mock<ISupportedVersionProvider> { DefaultValue = DefaultValue.Mock }.Object,

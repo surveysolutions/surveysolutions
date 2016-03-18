@@ -12,12 +12,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AttachmentCo
         Establish context = () =>
         {
             var attachmentContentPlainStorage = new TestPlainStorage<AttachmentContent>();
-            attachmentContentPlainStorage.Store(expectedContent, contentHash);
-            attachmentContentService = Create.CreateAttachmentContentService(attachmentContentPlainStorage);
+            attachmentContentPlainStorage.Store(expectedContent, expectedContent.ContentHash);
+            attachmentContentService = Create.AttachmentContentService(attachmentContentPlainStorage);
         };
 
         Because of = () =>
-            actualContent = attachmentContentService.GetAttachmentContent(contentHash);
+            actualContent = attachmentContentService.GetAttachmentContent(expectedContent.ContentHash);
 
         It should_return_specified_attachment_content = () =>
         {
@@ -26,13 +26,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AttachmentCo
         };
 
         private static AttachmentContentService attachmentContentService;
-        private static string contentHash = "content id";
         private static AttachmentContent actualContent;
 
-        private static readonly AttachmentContent expectedContent = new AttachmentContent
-        {
-            ContentHash = "content id",
-            Content = new byte[] {1, 2, 3}
-        };
+        private static readonly AttachmentContent expectedContent = Create.AttachmentContent();
     }
 }
