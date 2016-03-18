@@ -7968,14 +7968,21 @@ textarea#edit-group-description {
 .attachments-panel .attachments {
   height: 100%;
 }
-.attachments-panel .attachments h3 {
-  margin-bottom: 0;
+.attachments-panel .attachments .panel-header {
+  margin: 18px 24px 20px 18px;
 }
-.attachments-panel .attachments .estimated-download-time {
-  margin: 0 24px 20px 28px;
+.attachments-panel .attachments .panel-header .title {
+  margin-right: 12px;
+}
+.attachments-panel .attachments .panel-header h3 {
+  margin: 12px 0 0 0;
+}
+.attachments-panel .attachments .panel-header .estimated-download-time {
   color: #c1c7cb;
   font-family: Georgia, serif;
   font-style: italic;
+  margin: 0;
+  padding-left: 10px;
 }
 .attachments-panel .attachments div.attachment-list {
   margin: 0;

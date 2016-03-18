@@ -21,7 +21,7 @@
             });
 
             $scope.attachments = [];
-            $scope.totalSize = function() {
+            $scope.totalSize = function () {
                 return _.reduce($scope.attachments, function (sum, attachment) {
                     return sum + (attachment.sizeInBytes || 0);
                 }, 0);
@@ -31,7 +31,7 @@
                 return Math.floor($scope.totalSize() / $scope.benchmarkDownloadSpeed);
             }
 
-            $scope.isTotalSizeTooBig = function() {
+            $scope.isTotalSizeTooBig = function () {
                 return $scope.totalSize() > 50 * MB;
             };
 
@@ -59,7 +59,7 @@
 
                 attachment.lastUpdated = moment(attachmentDto.lastUpdated);
                 attachment.sizeInBytes = attachmentDto.sizeInBytes;
-                
+
                 attachment.file = null;
                 attachment.hasUploadedFile = !_.isEmpty(attachmentDto.fileName);
             };
@@ -70,16 +70,14 @@
 
                 _.each($scope.questionnaire.attachments, function (attachmentDto) {
                     var attachment = {};
-                    if (!_.any($scope.attachments, 'itemId', attachmentDto.itemId))
-                    {
+                    if (!_.any($scope.attachments, 'itemId', attachmentDto.itemId)) {
                         dataBind(attachment, attachmentDto);
                         $scope.attachments.push(attachment);
                     }
                 });
             };
 
-            $scope.formatBytes = function (bytes)
-            {
+            $scope.formatBytes = function (bytes) {
                 if (bytes === 0) return '0 Byte';
                 var base = KB;
                 var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
@@ -98,7 +96,17 @@
                 $scope.isFolded = true;
             };
 
-            $scope.addNewAttachment = function () {
+            $scope.createAndUploadFile = function (file) {
+                if (_.isNull(file) || _.isUndefined(file)) {
+                    return;
+                }
+                $scope.addNewAttachment(function (attachment) {
+                    $scope.fileSelected(attachment, file);
+                    setTimeout(function () { utilityService.focus("focusAttachment" + attachment.itemId); }, 500);
+                });
+            };
+
+            $scope.addNewAttachment = function (callback) {
                 var newId = utilityService.guid();
 
                 var newAttachments = {
@@ -106,9 +114,13 @@
                 };
 
                 commandService.addAttachment($state.params.questionnaireId, newAttachments).success(function () {
-                    var attachments = {};
-                    dataBind(attachments, newAttachments);
-                    $scope.attachments.push(attachments);
+                    var attachment = {};
+                    dataBind(attachment, newAttachments);
+                    $scope.attachments.push(attachment);
+
+                    if (!_.isUndefined(callback)) {
+                        callback(attachment);
+                    }
                 });
             };
 
@@ -128,7 +140,9 @@
                     attachment.type = "Image";
                     attachment.hasUploadedFile = !_.isEmpty(attachment.fileName);
 
-                    attachmentForm.$setDirty();
+                    if (!_.isUndefined(attachmentForm)) {
+                        attachmentForm.$setDirty();
+                    }
                 })
                .catch(function () {
                    notificationService.error('Chosen file is not image');
@@ -136,27 +150,27 @@
             }
 
             $scope.saveAttachment = function (attachment, form) {
-                commandService.updateAttachment($state.params.questionnaireId, attachment).success(function() {
+                commandService.updateAttachment($state.params.questionnaireId, attachment).success(function () {
                     attachment.initialAttachment = angular.copy(attachment);
                     attachment.hasUploadedFile = !_.isEmpty(attachment.fileName);
                     form.$setPristine();
                 });
             };
 
-            $scope.cancel = function(attachment, form) {
+            $scope.cancel = function (attachment, form) {
                 var temp = angular.copy(attachment.initialAttachment);
                 dataBind(attachment, temp);
                 form.$setPristine();
             };
 
-            $scope.deleteAttachment = function(index) {
+            $scope.deleteAttachment = function (index) {
                 var attachment = $scope.attachments[index];
                 var attachmentName = attachment.name || "attachment with no name";
                 var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(attachmentName));
-                 
-                modalInstance.result.then(function(confirmResult) {
+
+                modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {
-                        commandService.deleteAttachment($state.params.questionnaireId, attachment.itemId).success(function() {
+                        commandService.deleteAttachment($state.params.questionnaireId, attachment.itemId).success(function () {
                             $scope.attachments.splice(index, 1);
                         });
                     }
@@ -174,10 +188,10 @@
                             modalInstance.dismiss();
                         };
 
-                        $scope.attachmentUrl = function() {
+                        $scope.attachmentUrl = function () {
                             return baseURL + $scope.attachment.itemId;
                         }
-                       
+
                     },
                     windowClass: 'attachment-preview-window',
                     resolve:

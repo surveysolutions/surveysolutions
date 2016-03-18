@@ -211,19 +211,30 @@
             </div>
             <div class="attachments">
                 <perfect-scrollbar class="scroller">
-                    <h3 ng-pluralize
-                        count="attachments.length"
-                        when="{
+                    <div class="panel-header clearfix">
+                        <div class="title pull-left">
+                            <h3 ng-pluralize
+                                count="attachments.length"
+                                when="{
                             '0': 'No Files Attachment to questionnaire',
                             '1': '{} File Attachment ({{formatBytes(totalSize())}} total)',
                             'other': '{} Files Attachments ({{formatBytes(totalSize())}} total)'}"></h3>
-                    <p class="estimated-download-time">Est. loading time: <span>{{formatSeconds(estimatedLoadingTime())}}</span> at {{benchmarkDownloadSpeed}}Kb/s (EDGE)</p>
+                            <p class="estimated-download-time">
+                                Est. loading time: <span>{{formatSeconds(estimatedLoadingTime())}}</span> at {{benchmarkDownloadSpeed}}Kb/s (EDGE)
+                            </p>
+
+                        </div>
+                        <button class="btn btn-default btn-lg btn-primary pull-left" ngf-select="createAndUploadFile($file);$event.stopPropagation()" ngf-accept="'image/*'" type="file">
+                            Upload new
+                        </button>
+                    </div>
                     <div class="empty-list" ng-show="attachments.length == 0">
                         <p>Use this tab to upload multimedia files that may be referenced in the questionnaire.</p>
                         <p>To avoid slow synchronization we recommend combined size of all attached files not to exceed 2MB.
-                            For supported file types, formats, and dimensions <a href="http://docs.mysurvey.solutions/attachments.pdf">click here</a></p>
+                            For supported file types, formats, and dimensions <a href="http://docs.mysurvey.solutions/attachments.pdf">click here</a>
+                        </p>
                         <p>To refer to an attachment in the questionnaire add a static text element and
-specify the attachment <span class="variable-name">name</span> in its attachment property.
+                            specify the attachment <span class="variable-name">name</span> in its attachment property.
                         </p>
                     </div>
                     <form role="form" name="attachmentsForm" novalidate>
@@ -239,20 +250,20 @@ specify the attachment <span class="variable-name">name</span> in its attachment
                                         </div>
                                         <div class="attachment-content">
                                             <input focus-on-out="focusAttachment{{attachment.itemId}}"
-                                                    ng-pattern="/^[\w\-]+$/"
-                                                    required=""
-                                                    placeholder="attachment name"
-                                                    maxlength="32"
-                                                    spellcheck="false"
-                                                    ng-model="attachment.name"
-                                                    name="name"
-                                                    class="form-control table-name"
-                                                    type="text" />
+                                                   ng-pattern="/^[\w\-]+$/"
+                                                   required=""
+                                                   placeholder="attachment name"
+                                                   maxlength="32"
+                                                   spellcheck="false"
+                                                   ng-model="attachment.name"
+                                                   name="name"
+                                                   class="form-control table-name"
+                                                   type="text"/>
                                             <div class="divider"></div>
                                             <p class="error-message ng-cloak" ng-show="attachmentForm.name.$error.pattern">
                                                 Invalid attachment name.
                                             </p>
-                                            <input class="form-control file-name" placeholder="file name" required="" spellcheck="false" ng-model="attachment.fileName" name="fileName" disabled="" type="text" />
+                                            <input class="form-control file-name" placeholder="file name" required="" spellcheck="false" ng-model="attachment.fileName" name="fileName" disabled="" type="text"/>
                                             <div class="drop-box">
                                                 Drop File here
                                             </div>
