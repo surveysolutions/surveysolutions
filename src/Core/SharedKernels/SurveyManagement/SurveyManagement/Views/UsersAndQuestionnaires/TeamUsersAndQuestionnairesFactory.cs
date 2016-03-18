@@ -31,12 +31,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires
                         _.Where(i => !i.IsDeleted && i.TeamLeadId == input.ViewerId)
                             .GroupBy(x => new {x.ResponsibleId, x.ResponsibleName})
                             .Where(x => x.Count() > 0)
-                            .Select(
-                                x => new UsersViewItem {UserId = x.Key.ResponsibleId, UserName = x.Key.ResponsibleName})
+                            .Select(x => new UsersViewItem {UserId = x.Key.ResponsibleId, UserName = x.Key.ResponsibleName})
                             .OrderBy(x => x.UserName).ToList());
 
 
-            List<QuestionnaireBrowseItem> allQuestionnaires = this.questionnairesReader.Query(_ => _.ToList());
+            List<QuestionnaireBrowseItem> allQuestionnaires = this.questionnairesReader.Query(x => x.Where(q => !q.IsDeleted).ToList());
 
             var questionnaires = allQuestionnaires.Select(questionnaire => new TemplateViewItem
             {
