@@ -1234,10 +1234,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (!incorrectReferencedQuestions.Any())
                 return new EntityVerificationResult<IComposite> { HasErrors = false };
 
+            var referencedEntities =
+                Enumerable.Concat(entity.ToEnumerable(), incorrectReferencedQuestions).Distinct().ToArray();
+
             return new EntityVerificationResult<IComposite>
             {
                 HasErrors = true,
-                ReferencedEntities = Enumerable.Concat(entity.ToEnumerable(), incorrectReferencedQuestions),
+                ReferencedEntities = referencedEntities
             };
         }
 
