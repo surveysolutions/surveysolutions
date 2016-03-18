@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 });
             answersTime = new DateTime(2013, 09, 01);
 
-            var questionaire = Mock.Of<IQuestionnaire>(_
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.GetQuestionType(prefilledQuestionId) == QuestionType.Numeric
                    && _.HasQuestion(prefilledQuestionId) == true
                    && _.IsQuestionInteger(prefilledQuestionId) == true
@@ -46,9 +46,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                    && _.HasGroup(rosterGroupId) == true
                    && _.GetRosterLevelForGroup(rosterGroupId) == 1
                    && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new Guid[] {rosterGroupId});
-
-            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
-                => repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionaire);
 
             eventContext = new EventContext();
 
