@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             viewModel = Create.AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentStorage);
         };
 
-        Because of = async () => await viewModel.InitAsync("interview", new Identity(entityId, Empty.RosterVector));
+        Because of = () => viewModel.InitAsync("interview", new Identity(entityId, Empty.RosterVector)).ConfigureAwait(false);
 
         It should_initialize_attachment_as_image = () => viewModel.IsImage.ShouldBeTrue();
 
