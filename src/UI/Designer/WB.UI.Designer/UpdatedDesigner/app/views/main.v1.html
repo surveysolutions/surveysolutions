@@ -245,7 +245,7 @@
                                     <div class="attachment">
                                         <div class="attachment-preview">
                                             <div class="attachment-preview-cover">
-                                                <img ng-if="attachment.hasUploadedFile || attachment.file!=null" ng-click="previewAttachment(attachment)" ngf-thumbnail="attachment.file || '{{downloadLookupFileBaseUrl + attachment.itemId}}'">
+                                                <img ng-if="attachment.hasUploadedFile || attachment.file!=null" ng-click="previewAttachment(attachment)" ngf-thumbnail="attachment.file || '{{downloadLookupFileBaseUrl + attachment.itemId+ '/thumbnail'}}'">
                                             </div>
                                         </div>
                                         <div class="attachment-content">

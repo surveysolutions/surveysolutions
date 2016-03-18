@@ -189,7 +189,7 @@
                         };
 
                         $scope.attachmentUrl = function () {
-                            return baseURL + $scope.attachment.itemId;
+                            return baseURL + $scope.attachment.itemId + '/thumbnail/568';
                         }
 
                     },
