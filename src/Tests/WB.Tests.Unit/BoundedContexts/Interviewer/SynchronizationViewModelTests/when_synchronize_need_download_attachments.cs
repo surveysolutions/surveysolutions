@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationViewModelTests
@@ -29,13 +30,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationViewModelTest
     {
         Establish context = () =>
         {
-            var principal = Mock.Of<IPrincipal>(p => p.CurrentUserIdentity == new InterviewerIdentity() { Name = "name", Password = "pass" });
+            var principal = Setup.InterviewerPrincipal("name", "pass");
 
             var emptyInterviewViews = new List<InterviewView>().ToReadOnlyCollection();
-            var interviewViewRepository = Mock.Of<IAsyncPlainStorage<InterviewView>>(
-                x => x.Where(interview => interview.Status == InterviewStatus.Completed) == emptyInterviewViews
-                && x.LoadAll() == new List<InterviewView>()
-                );
+            var interviewViewRepository = new SqliteInmemoryStorage<InterviewView>();
 
             var newCensusInterviewIdentities = new List<QuestionnaireIdentity>()
             {
@@ -52,8 +50,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationViewModelTest
                 && x.GetQuestionnaireAsync(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new QuestionnaireApiView())
                 && x.GetAttachmentContentsAsync(newCensusInterviewIdentities[0], Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(attachmentContentIds1)
                 && x.GetAttachmentContentsAsync(newCensusInterviewIdentities[1], Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(attachmentContentIds2)
-                && x.GetAttachmentContentAsync("1", Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new AttachmentContent() { Id = "1" })
-                && x.GetAttachmentContentAsync("5", Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new AttachmentContent() { Id = "5" })
+                && x.GetAttachmentContentAsync("1", Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(Create.Enumerator_AttachmentContent("1"))
+                && x.GetAttachmentContentAsync("5", Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(Create.Enumerator_AttachmentContent("5"))
                 );
 
             interviewerQuestionnaireAccessor = Mock.Of<IInterviewerQuestionnaireAccessor>(
