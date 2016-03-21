@@ -1,4 +1,6 @@
-﻿namespace WB.UI.Designer.Controllers
+﻿using System;
+
+namespace WB.UI.Designer.Controllers
 {
     using System.Web.Mvc;
 
@@ -19,9 +21,9 @@
             this.WriteToTempData(Alerts.ERROR, message);
         }
 
-        public void Success(string message)
+        public void Success(string message, bool append = false)
         {
-            this.WriteToTempData(Alerts.SUCCESS, message);
+            this.WriteToTempData(Alerts.SUCCESS, message, append);
         }
 
         protected override void Initialize(System.Web.Routing.RequestContext requestContext)
@@ -31,11 +33,18 @@
             ViewBag.UserHelper = UserHelper;
         }
 
-        private void WriteToTempData(string key, string message)
+        private void WriteToTempData(string key, string message, bool append = false)
         {
             if (this.TempData.ContainsKey(key))
             {
-                this.TempData[key] = message;
+                if (append)
+                {
+                    this.TempData[key] += Environment.NewLine + message;
+                }
+                else
+                {
+                    this.TempData[key] = message;
+                }
             }
             else
             {

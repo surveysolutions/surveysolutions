@@ -2,11 +2,11 @@
 <div id="edit-form">
     @if (TempData.ContainsKey(Alerts.SUCCESS))
     {
-        <div class="alert alert-success header">@Html.Raw(@TempData[Alerts.SUCCESS])</div>
+        <pre class="alert alert-success header">@Html.Raw(@TempData[Alerts.SUCCESS])</pre>
     }
     @if (TempData.ContainsKey(Alerts.ERROR))
     {
-        <div class="alert alert-danger header">@Html.Raw(@TempData[Alerts.ERROR])</div>
+        <pre class="alert alert-danger header">@Html.Raw(@TempData[Alerts.ERROR])</pre>
     }
     @using (Html.BeginForm("RestoreQuestionnaire", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
