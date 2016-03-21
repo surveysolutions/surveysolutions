@@ -48,12 +48,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         [WriteToSyncLog(SynchronizationLogType.GetQuestionnaireAttachments)]
         public HttpResponseMessage GetAttachments(Guid id, int version)
         {
-            var questionnaireDocumentVersioned = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
+            var questionnaireDocument = this.plainQuestionnaireRepository.GetQuestionnaireDocument(id, version);
 
-            if (questionnaireDocumentVersioned == null)
+            if (questionnaireDocument == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            var attachmentIds = questionnaireDocumentVersioned.Attachments.Select(a => a.ContentId).ToList();
+            var attachmentIds = questionnaireDocument.Attachments.Select(a => a.ContentId).ToList();
 
             var response = this.Request.CreateResponse(attachmentIds);
             response.Headers.CacheControl = new CacheControlHeaderValue()

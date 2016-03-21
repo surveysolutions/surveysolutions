@@ -233,11 +233,15 @@ namespace WB.Tests.Unit
             return new AttachmentsController(attachmentContentService);
         }
 
-        public static AttachmentContent AttachmentContent() => new AttachmentContent
+        public static AttachmentContent AttachmentContent(string contentHash = null, string contentType = null, byte[] content = null)
         {
-            ContentHash = "content id",
-            Content = new byte[] { 1, 2, 3 }
-        };
+            return new AttachmentContent
+            {
+                ContentHash = contentHash ?? "content id",
+                ContentType = contentType ,
+                Content = content ?? new byte[] {1, 2, 3}
+            };
+        }
 
         public static Attachment Attachment(string attachementHash) => new Attachment { ContentId = attachementHash };
 
@@ -1916,6 +1920,18 @@ namespace WB.Tests.Unit
             return result;
         }
 
+        public static QuestionnaireDocument QuestionnaireDocumentWithAttachments(Guid? chapterId = null, params Attachment[] attachments)
+        {
+            var result = new QuestionnaireDocument();
+            var chapter = new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() };
+
+            result.Children.Add(chapter);
+
+            result.Attachments = attachments.ToList();
+
+            return result;
+        }
+
         public static QuestionnaireExpressionStateModelFactory QuestionnaireExecutorTemplateModelFactory(
             IMacrosSubstitutionService macrosSubstitutionService = null,
             IExpressionProcessor expressionProcessor = null,
@@ -2823,6 +2839,15 @@ namespace WB.Tests.Unit
                 questionnaireRepository: questionnaireRepository,
                 interviewRepository: interviewRepository,
                 attachmentContentStorage: attachmentContentStorage);
+        }
+
+        public static WB.Core.SharedKernels.Enumerator.Views.AttachmentContent Enumerator_AttachmentContent(string id)
+        {
+            return new Core.SharedKernels.Enumerator.Views.AttachmentContent()
+            {
+                Id = id,
+
+            };
         }
     }
 }

@@ -15,16 +15,15 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 {
-    internal class when_attachments_controller_attachments_by_id : ApiTestContext
+    internal class when_getting_attachment_content : ApiTestContext
     {
         private Establish context = () =>
         {
-            attachmentContent = new AttachmentContent()
-            {
-                ContentHash = attachmentContentId,
-                ContentType = "image/png",
-                Content = new byte[]{ 1,2,3 },
-            };
+            attachmentContent = Create.AttachmentContent(
+                contentHash: attachmentContentId,
+                contentType: "image/png",
+                content: new byte[]{ 1,2,3 }
+            );
 
             attachmentContentService = Mock.Of<IAttachmentContentService>(
                 x => x.GetAttachmentContent(attachmentContentId) == attachmentContent);
