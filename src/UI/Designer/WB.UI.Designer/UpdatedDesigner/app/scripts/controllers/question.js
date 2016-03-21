@@ -11,7 +11,12 @@
                 hotkeys.del(saveQuestion);
             }
 
-            
+            var markFormAsChanged = function () {
+                if ($scope.questionForm) {
+                    $scope.questionForm.$setDirty();
+                }
+            }
+
             hotkeys.bindTo($scope)
                 .add({
                     combo: saveQuestion,
@@ -214,7 +219,7 @@
                     $scope.setLinkSource(null,null);
                 }
 
-                $scope.questionForm.$setDirty();
+                markFormAsChanged();
             };
 
             $scope.cancelQuestion = function () {
@@ -232,7 +237,7 @@
                     "id": utilityService.guid()
                 });
                 $scope.activeQuestion.optionsCount += 1;
-                $scope.questionForm.$setDirty();
+                markFormAsChanged();
             };
 
             $scope.editFilteredComboboxOptions = function () {
@@ -295,12 +300,12 @@
             $scope.removeOption = function (index) {
                 $scope.activeQuestion.options.splice(index, 1);
                 $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
-                $scope.questionForm.$setDirty();
+                markFormAsChanged();
             };
 
             $scope.removeValidationCondition = function(index) {
                 $scope.activeQuestion.validationConditions.splice(index, 1);
-                $scope.questionForm.$setDirty();
+                markFormAsChanged();
             }
 
             $scope.addValidationCondition = function() {
@@ -308,7 +313,7 @@
                     expression: '',
                     message: ''
                 });
-                $scope.questionForm.$setDirty();
+                markFormAsChanged();
                 _.defer(function () {
                     $(".question-editor .form-holder").scrollTo({ top: '+=200px', left: "+=0" }, 250);
                 });
@@ -335,7 +340,7 @@
                 if ($scope.activeQuestion.questionScope === 'Prefilled') {
                     $scope.activeQuestion.enablementCondition = '';
                 }
-                $scope.questionForm.$setDirty();
+                markFormAsChanged();
             };
 
             $scope.getQuestionScopes = function (currentQuestion) {
@@ -394,7 +399,7 @@
                     $scope.activeQuestion.linkedToEntityId = itemId;
                     $scope.activeQuestion.linkedToEntity = _.find($scope.sourceOfLinkedEntities, { id: $scope.activeQuestion.linkedToEntityId });
                     $scope.activeQuestion.linkedFilterExpression = linkedFilterExpression;
-                    $scope.questionForm.$setDirty();
+                    markFormAsChanged();
                 } 
             };
 
@@ -404,7 +409,7 @@
                 if (itemId) {
                     $scope.activeQuestion.cascadeFromQuestionId = itemId;
                     $scope.activeQuestion.cascadeFromQuestion = _.find($scope.sourceOfSingleQuestions, { id: $scope.activeQuestion.cascadeFromQuestionId });
-                    $scope.questionForm.$setDirty();
+                    markFormAsChanged();
                 }
             };
 
