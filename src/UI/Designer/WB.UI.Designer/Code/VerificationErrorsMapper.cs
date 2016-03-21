@@ -55,7 +55,7 @@ namespace WB.UI.Designer.Code
                         ItemId = reference.Id.FormatGuid(),
                         Type = QuestionnaireVerificationReferenceType.Attachment,
                         Variable = attachment.Name,
-                        Title = attachment.FileName
+                        Title = attachment.Name
                     };
                     continue;
                 }
