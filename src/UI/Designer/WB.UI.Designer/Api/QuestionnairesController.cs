@@ -55,25 +55,21 @@ namespace WB.UI.Designer.Api
         {
         }
 
-        [Route("~/api/v15/attachment/{id:Guid}")]
+        [Route("~/api/v15/attachment/{id}")]
         [HttpGet]
-        public HttpResponseMessage Attachment(Guid id)
+        public HttpResponseMessage Attachment(string id)
         {
-            var attachment = this.attachmentService.GetAttachment(id);
+            var attachmentContent = this.attachmentService.GetAttachmentContent(id);
 
-            if (attachment == null) return Request.CreateResponse(HttpStatusCode.NotFound);
+            if (attachmentContent == null) return Request.CreateResponse(HttpStatusCode.NotFound);
 
             var response = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new ByteArrayContent(attachment.Content)
+                Content = new ByteArrayContent(attachmentContent.Content)
             };
 
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachment.ContentType);
-            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-            {
-                FileName = attachment.FileName
-            };
-            response.Headers.ETag = new EntityTagHeaderValue("\"" + attachment.AttachmentContentId + "\"");
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachmentContent.ContentType);
+            response.Headers.ETag = new EntityTagHeaderValue("\"" + attachmentContent.AttachmentContentHash + "\"");
 
             return response;
         }

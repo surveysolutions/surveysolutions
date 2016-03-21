@@ -76,12 +76,12 @@ namespace WB.UI.Tester.Infrastructure.Internals
             return downloadedQuestionnaire;
         }
 
-        public async Task<AttachmentContent> GetAttachmentContentAsync(string attachmentId,
+        public async Task<AttachmentContent> GetAttachmentContentAsync(string attachmentContentId,
             Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, 
             CancellationToken token)
         {
             var restFile = await this.restService.DownloadFileAsync(
-                url: $"attachment/{attachmentId}",
+                url: $"attachment/{attachmentContentId}",
                 credentials: this.RestCredentials,
                 onDownloadProgressChanged: onDownloadProgressChanged,
                 token: token).ConfigureAwait(false);
