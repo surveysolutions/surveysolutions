@@ -8,9 +8,12 @@ using WB.UI.Designer.Code;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Text;
 using System.Web.Mvc;
 using System.Web.Security;
+using ICSharpCode.SharpZipLib.Zip;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Account;
@@ -132,6 +135,42 @@ namespace WB.UI.Designer.Controllers
             return new FileStreamResult(this.zipUtils.Compress(this.serializer.Serialize(questionnaireDocumentWithLookUpTables)), "application/octet-stream")
             {
                 FileDownloadName = string.Format("{0}.tmpl", questionnaireView.Title.ToValidFileName())
+            };
+        }
+
+        [HttpGet]
+        public FileStreamResult BackupQuestionnaire(Guid id)
+        {
+            var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            if (questionnaireView == null)
+                return null;
+
+            var questionnaireDocumentWithLookUpTables = new QuestionnaireDocumentWithLookUpTables()
+            {
+                QuestionnaireDocument = questionnaireView.Source,
+                LookupTables = this.lookupTableService.GetQuestionnairesLookupTables(id)
+            };
+
+            string questionnaireJson = this.serializer.Serialize(questionnaireDocumentWithLookUpTables);
+            byte[] questionnaireBytes = Encoding.UTF8.GetBytes(questionnaireJson);
+
+            var output = new MemoryStream();
+
+            ZipOutputStream zipOStream = new ZipOutputStream(output);
+
+            {
+                ZipEntry entry = new ZipEntry($"{questionnaireView.Title.ToValidFileName()}.json");
+                zipOStream.PutNextEntry(entry);
+                zipOStream.Write(questionnaireBytes, 0, questionnaireBytes.Length);
+            }
+
+            zipOStream.Finish();
+
+            output.Seek(0, SeekOrigin.Begin);
+
+            return new FileStreamResult(output, "application/octet-stream")
+            {
+                FileDownloadName = $"{questionnaireView.Title.ToValidFileName()}.zip"
             };
         }
 
