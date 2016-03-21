@@ -14,11 +14,14 @@ using System.Text;
 using System.Web.Mvc;
 using System.Web.Security;
 using ICSharpCode.SharpZipLib.Zip;
+using Lucene.Net.Search;
 using Newtonsoft.Json;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
@@ -40,6 +43,8 @@ namespace WB.UI.Designer.Controllers
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory;
         private readonly ILookupTableService lookupTableService;
+        private readonly IAttachmentService attachmentService;
+
         public AdminController(
             IMembershipUserService userHelper,
             IQuestionnaireHelper questionnaireHelper,
@@ -49,7 +54,8 @@ namespace WB.UI.Designer.Controllers
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             ISerializer serializer, 
             IViewFactory<AccountListViewInputModel, AccountListView> accountListViewFactory, 
-            ILookupTableService lookupTableService)
+            ILookupTableService lookupTableService,
+            IAttachmentService attachmentService)
             : base(userHelper)
         {
             this.questionnaireHelper = questionnaireHelper;
@@ -60,6 +66,7 @@ namespace WB.UI.Designer.Controllers
             this.serializer = serializer;
             this.accountListViewFactory = accountListViewFactory;
             this.lookupTableService = lookupTableService;
+            this.attachmentService = attachmentService;
         }
 
         [HttpGet]
@@ -145,26 +152,48 @@ namespace WB.UI.Designer.Controllers
             if (questionnaireView == null)
                 return null;
 
+            var questionnaireDocument = questionnaireView.Source;
             var questionnaireDocumentWithLookUpTables = new QuestionnaireDocumentWithLookUpTables()
             {
-                QuestionnaireDocument = questionnaireView.Source,
+                QuestionnaireDocument = questionnaireDocument,
                 LookupTables = this.lookupTableService.GetQuestionnairesLookupTables(id)
             };
 
             string questionnaireJson = this.serializer.Serialize(questionnaireDocumentWithLookUpTables);
-            byte[] questionnaireBytes = Encoding.UTF8.GetBytes(questionnaireJson);
 
             var output = new MemoryStream();
 
-            ZipOutputStream zipOStream = new ZipOutputStream(output);
+            ZipOutputStream zipStream = new ZipOutputStream(output);
 
+            zipStream.PutTextFileEntry($"{questionnaireView.Title.ToValidFileName()}.json", questionnaireJson);
+
+            for (int attachmentIndex = 0; attachmentIndex < questionnaireDocument.Attachments.Count; attachmentIndex++)
             {
-                ZipEntry entry = new ZipEntry($"{questionnaireView.Title.ToValidFileName()}.json");
-                zipOStream.PutNextEntry(entry);
-                zipOStream.Write(questionnaireBytes, 0, questionnaireBytes.Length);
+                try
+                {
+                    Attachment attachment = questionnaireDocument.Attachments[attachmentIndex];
+                    AttachmentContent attachmentContent = this.attachmentService.GetAttachmentContent(attachment.ContentId);
+
+                    if (attachmentContent?.Content != null)
+                    {
+                        zipStream.PutFileEntry(attachment.FileName, attachmentContent.Content);
+                    }
+                    else
+                    {
+                        zipStream.PutTextFileEntry(
+                            $"missing attachment ({attachment.FileName}).txt",
+                            $"Attachment '{attachment.Name}' is missing.");
+                    }
+                }
+                catch (Exception exception)
+                {
+                    zipStream.PutTextFileEntry(
+                        $"broken attachment #{attachmentIndex + 1}.txt",
+                        $"Failed to backup attachment. See error below.{Environment.NewLine}{exception}");
+                }
             }
 
-            zipOStream.Finish();
+            zipStream.Finish();
 
             output.Seek(0, SeekOrigin.Begin);
 
