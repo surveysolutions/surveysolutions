@@ -28,8 +28,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
             this.Property(x => x.Size);
 
-            this.Property(x => x.Type);
-
             this.Property(x => x.ContentType);
 
             Component(x => x.Details, cmp =>
