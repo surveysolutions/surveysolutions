@@ -9,6 +9,7 @@ using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Preferences;
 using Android.Widget;
+using Java.Lang;
 using MvvmCross.Droid.Views;
 using MvvmCross.Platform;
 using PCLStorage;
@@ -62,7 +63,6 @@ namespace WB.UI.Interviewer.Activities
         protected override async void TriggerFirstNavigate()
         {
             await this.BackwardCompatibilityAsync();
-
             await Mvx.Resolve<IViewModelNavigationService>().NavigateToLoginAsync();
         }
 
