@@ -20,6 +20,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
@@ -126,17 +127,53 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         public ActionResult RestoreQuestionnaire(HttpPostedFileBase uploadFile)
         {
-            uploadFile = uploadFile ?? this.Request.Files[0];
-
-            var isContentAvailable = uploadFile?.ContentLength > 0;
-            if (!isContentAvailable)
+            try
             {
-                this.Error("Uploaded file is not specified or empty.");
+                uploadFile = uploadFile ?? this.Request.Files[0];
+
+                var isContentAvailable = uploadFile?.ContentLength > 0;
+                if (!isContentAvailable)
+                {
+                    this.Error("Uploaded file is not specified or empty.");
+                    return this.View();
+                }
+
+                var zipStream = new ZipInputStream(this.CreateStreamCopy(uploadFile.InputStream));
+
+                ZipEntry zipEntry = zipStream.GetNextEntry();
+
+                while (zipEntry != null)
+                {
+                    if (zipEntry.IsFile && zipEntry.Name.ToLower().EndsWith(".json"))
+                    {
+                        using (var textReader = new StreamReader(zipStream, Encoding.UTF8))
+                        {
+                            var questionnaireDocumentWithLookUpTables = this.serializer.Deserialize<QuestionnaireDocumentWithLookUpTables>(textReader.ReadToEnd());
+
+                            this.commandService.Execute(new ImportQuestionnaire(this.UserHelper.WebUser.UserId, questionnaireDocumentWithLookUpTables.QuestionnaireDocument));
+                            foreach (var lookupTable in questionnaireDocumentWithLookUpTables.LookupTables)
+                            {
+                                this.lookupTableService.SaveLookupTableContent(questionnaireDocumentWithLookUpTables.QuestionnaireDocument.PublicKey,
+                                    lookupTable.Key, questionnaireDocumentWithLookUpTables.QuestionnaireDocument.LookupTables[lookupTable.Key].TableName,
+                                    lookupTable.Value);
+                            }
+
+                            this.Success($"Processed document '{zipEntry.Name}'.");
+                            return this.View();
+                        }
+                    }
+
+                    zipEntry = zipStream.GetNextEntry();
+                }
+
+                this.Success("All operaions complete.");
                 return this.View();
             }
-
-            this.Error("Feature is not yet implemented.");
-            return this.View();
+            catch (Exception exception)
+            {
+                this.Error($"Unexpected error occurred.{Environment.NewLine}{exception}");
+                return this.View();
+            }
         }
 
         private MemoryStream CreateStreamCopy(Stream originalStream)
@@ -174,7 +211,7 @@ namespace WB.UI.Designer.Controllers
                 return null;
 
             var questionnaireDocument = questionnaireView.Source;
-            var questionnaireDocumentWithLookUpTables = new QuestionnaireDocumentWithLookUpTables()
+            var questionnaireDocumentWithLookUpTables = new QuestionnaireDocumentWithLookUpTables
             {
                 QuestionnaireDocument = questionnaireDocument,
                 LookupTables = this.lookupTableService.GetQuestionnairesLookupTables(id)
@@ -208,6 +245,7 @@ namespace WB.UI.Designer.Controllers
                 }
                 catch (Exception exception)
                 {
+                    this.logger.Warn($"Failed to backup attachment #{attachmentIndex + 1} from questionnaire '{questionnaireView.Title}' ({id.FormatGuid()}).", exception);
                     zipStream.PutTextFileEntry(
                         $"Attachments/Invalid/broken attachment #{attachmentIndex + 1}.txt",
                         $"Failed to backup attachment. See error below.{Environment.NewLine}{exception}");
