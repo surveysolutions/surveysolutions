@@ -387,8 +387,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 var isExistsContent = await this.attachmentContentStorage.IsExistAsync(attachmentContentId);
                 if (!isExistsContent)
                 {
-                    var attachmentId = attachment.AttachmentId.FormatGuid();
-                    var attachmentContent = await this.designerApiService.GetAttachmentContentAsync(attachmentId,
+                    var attachmentContent = await this.designerApiService.GetAttachmentContentAsync(attachmentContentId,
                                         onDownloadProgressChanged: (downloadProgress) =>
                                         {
                                             this.ProgressIndicator = string.Format(TesterUIResources.ImportQuestionnaireAttachments_DownloadProgress, downloadProgress);
