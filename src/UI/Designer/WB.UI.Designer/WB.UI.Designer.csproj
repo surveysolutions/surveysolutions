@@ -269,6 +269,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\AttachmentsController.cs" />
     <Compile Include="Api\Attributes\ApiBasicAuthAttribute.cs" />
     <Compile Include="Api\CommandController.cs" />
     <Compile Include="Api\ControlPanelApiController.cs" />
@@ -281,10 +282,6 @@
     <Compile Include="Api\ImportController.cs" />
     <Compile Include="Api\QuestionnaireController.cs" />
     <Compile Include="Api\UsersController.cs" />
-    <Compile Include="AttachmentHandler.ashx.cs">
-      <DependentUpon>AttachmentHandler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="AttachmentHandler.cs" />
     <Compile Include="Code\PlainApiTransactionFilter.cs" />
     <Compile Include="Code\PlainTransactionFilter.cs" />
     <Compile Include="Code\Implementation\CommandInflaitingException.cs" />
@@ -457,7 +454,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scripts\components\query-string.js" />
     <Content Include="Scripts\editForm.js" />
-    <Content Include="AttachmentHandler.ashx" />
     <None Include="compilerconfig.json" />
     <Content Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
