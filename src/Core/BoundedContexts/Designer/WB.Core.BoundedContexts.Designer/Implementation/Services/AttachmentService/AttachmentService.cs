@@ -148,7 +148,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                     AttachmentContentHash = x.AttachmentContentHash,
                     Size = x.Size,
                     Details = x.Details,
-                    Type = x.Type,
                     ContentType = x.ContentType
                 })
                 .ToList());
@@ -160,8 +159,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                                                   ItemId = meta.AttachmentId,
                                                   FileName = meta.FileName,
                                                   LastUpdated = meta.LastUpdateDate,
-
-                                                  Type = details.Type.ToString(),
+                                                  
                                                   SizeInBytes = details.Size,
                                                   Details = details.Details
                                               };
