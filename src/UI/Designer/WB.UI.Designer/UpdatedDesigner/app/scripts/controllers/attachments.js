@@ -72,7 +72,7 @@
                     var attachment = {};
                     if (!_.any($scope.attachments, 'itemId', attachmentDto.itemId)) {
                         dataBind(attachment, attachmentDto);
-                        $scope.attachments.push(attachment);
+                        $scope.attachments.unshift(attachment);
                     }
                 });
             };
@@ -102,7 +102,11 @@
                 }
                 $scope.addNewAttachment(function (attachment) {
                     $scope.fileSelected(attachment, file);
-                    setTimeout(function () { utilityService.focus("focusAttachment" + attachment.itemId); }, 500);
+                    setTimeout(function() {
+                        attachment.name = attachment.fileName.replace(/\.[^/.]+$/, "");
+                        $scope.saveAttachment(attachment);
+                        utilityService.focus("focusAttachment" + attachment.itemId);
+                    }, 500);
                 });
             };
 
@@ -116,7 +120,7 @@
                 commandService.addAttachment($state.params.questionnaireId, newAttachments).success(function () {
                     var attachment = {};
                     dataBind(attachment, newAttachments);
-                    $scope.attachments.push(attachment);
+                    $scope.attachments.unshift(attachment);
 
                     if (!_.isUndefined(callback)) {
                         callback(attachment);
@@ -153,7 +157,8 @@
                 commandService.updateAttachment($state.params.questionnaireId, attachment).success(function () {
                     attachment.initialAttachment = angular.copy(attachment);
                     attachment.hasUploadedFile = !_.isEmpty(attachment.fileName);
-                    form.$setPristine();
+                    if (!_.isUndefined(form))
+                        form.$setPristine();
                 });
             };
 

@@ -263,10 +263,10 @@
                                             <p class="error-message ng-cloak" ng-show="attachmentForm.name.$error.pattern">
                                                 Invalid attachment name.
                                             </p>
-                                            <input class="form-control file-name" placeholder="file name" required="" spellcheck="false" ng-model="attachment.fileName" name="fileName" disabled="" type="text"/>
                                             <div class="drop-box">
                                                 Drop File here
                                             </div>
+
                                             <div class="attachment-meta" ng-if="attachment.hasUploadedFile" ng-include="attachment.type + '-attachment-info-template.html'"></div>
                                             <div class="actions clearfix" ng-class="{dirty: attachmentForm.$dirty }">
                                                 <div ng-show="attachmentForm.$dirty" class="pull-left">
@@ -287,9 +287,6 @@
                             </ng-form>
                         </div>
                     </form>
-                    <div class="button-holder">
-                        <input type="button" class="btn lighter-hover" value="ADD NEW Attachment" ng-click="addNewAttachment()">
-                    </div>
                 </perfect-scrollbar>
             </div>
         </div>
@@ -306,7 +303,9 @@
 </section>
 
 <script type="text/ng-template" id="Image-attachment-info-template.html">
-    <p><span ng-class="{'error': isAttachmentResolutionTooBig(attachment)}">{{attachment.width}}&nbsp;&times;&nbsp;{{attachment.height}}&nbsp;px</span>, format:&nbsp;{{attachment.format}},
+    <p>
+    <span class="file-name">{{attachment.fileName}}&nbsp;</span>
+    <span ng-class="{'error': isAttachmentResolutionTooBig(attachment)}">{{attachment.width}}&nbsp;&times;&nbsp;{{attachment.height}}&nbsp;px</span>, format:&nbsp;{{attachment.format}},
     <span ng-class="{'error': isAttachmentSizeTooBig(attachment)}">size:&nbsp;{{formatBytes(attachment.sizeInBytes)}}</span></p>
     <p>uploaded on {{attachment.lastUpdated | amDateFormat:'MMMM Do YYYY, h:mm a'}}</p>
 </script>
