@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
         //    this.attachmentMetaStorage = attachmentMetaStorage;
         //}
 
-        public void SaveAttachmentContent(Guid questionnaireId, Guid attachmentId, string attachmentContentId, AttachmentType type, string contentType, byte[] binaryContent, string fileName)
+        public void SaveAttachmentContent(Guid questionnaireId, Guid attachmentId, string attachmentContentId, string contentType, byte[] binaryContent, string fileName)
         {
             var formattedAttachmentId = attachmentId.FormatGuid();
             var storedAttachmentMeta = this.attachmentMetaStorage.GetById(formattedAttachmentId);
@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                 oldHashOfBinaryContent = storedAttachmentMeta.AttachmentContentHash;
             }
 
-            var attachmentDetails = BuildAttachmentMeta(type, binaryContent, fileName);
+            var attachmentDetails = BuildAttachmentMeta(binaryContent, fileName);
 
             var countOfNewAttachmentContentReferences = this.attachmentMetaStorage.Query(_ => _.Count(x => x.AttachmentContentHash == attachmentContentId));
             if (countOfNewAttachmentContentReferences == 0)
@@ -56,7 +56,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                 {
                     AttachmentContentHash = attachmentContentId,
                     Content = binaryContent,
-                    Type = type,
                     ContentType = contentType,
                     Details = attachmentDetails,
                     Size = binaryContent.LongLength
@@ -187,13 +186,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             this.attachmentMetaStorage.Store(clonedAttachmentMeta, formattedNewAttachmentId);
         }
 
-        private AttachmentDetails BuildAttachmentMeta(AttachmentType type, byte[] binaryContent, string fileName)
+        private AttachmentDetails BuildAttachmentMeta(byte[] binaryContent, string fileName)
         {
-            if (type == AttachmentType.Image)
-            {
-                return GetImageMeta(binaryContent, fileName);
-            }
-            return null;
+            return GetImageMeta(binaryContent, fileName);
         }
 
         public AttachmentDetails GetImageMeta(byte[] binaryContent, string fileName)

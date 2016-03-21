@@ -86,7 +86,6 @@ namespace WB.UI.Designer.Api
                     questionnaireId: updateAttachmentCommand.QuestionnaireId,
                     attachmentId: updateAttachmentCommand.AttachmentId,
                     attachmentContentId: updateAttachmentCommand.AttachmentContentId,
-                    type: this.GetAttachmentTypeByRequestMediaType(model.File.MediaType),
                     contentType: model.File.MediaType,
                     binaryContent: model.File?.Buffer,
                     fileName: model.File.FileName);
@@ -98,14 +97,6 @@ namespace WB.UI.Designer.Api
             }
 
             return this.ProcessCommand(updateAttachmentCommand, commandType);
-        }
-
-        private AttachmentType GetAttachmentTypeByRequestMediaType(string contentType)
-        {
-            if (contentType.StartsWith("image/"))
-                return AttachmentType.Image;
-
-            throw new FormatException(ExceptionMessages.Attachments_Unsupported_content);
         }
 
         [Route("~/api/command/updateLookupTable")]
