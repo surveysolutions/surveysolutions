@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Moq;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
@@ -12,10 +13,16 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
+using System.Web.Http.Hosting;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
@@ -99,6 +106,27 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
             IAttachmentContentService attachmentContentService)
         {
             return new AttachmentsApiV2Controller(attachmentContentService ?? Mock.Of<IAttachmentContentService>());
+        }
+
+        protected static QuestionnairesApiV2Controller CreateQuestionnairesApiV2Controller(
+            IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor = null,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null,
+            ISerializer serializer = null,
+            IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
+            IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter = null)
+        {
+            var questionnairesApiV2Controller = new QuestionnairesApiV2Controller(
+                questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
+                questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
+                serializer ?? Mock.Of<ISerializer>(),
+                plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                readsideRepositoryWriter ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
+
+            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, "http://localhost");
+            httpRequestMessage.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
+            questionnairesApiV2Controller.Request = httpRequestMessage;
+
+            return questionnairesApiV2Controller;
         }
     }
 }
