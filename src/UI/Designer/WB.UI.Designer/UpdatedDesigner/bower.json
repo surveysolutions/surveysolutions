@@ -17,7 +17,7 @@
     "angular-block-ui": "0.2.2",
     "angular-bootstrap": "0.13.4",
     "angular-cookies": "^1.5.2",
-    "angular-elastic": "2.5.0",
+    "angular-elastic": "^2.5.1",
     "angular-hotkeys": "chieffancypants/angular-hotkeys#1.4.5",
     "angular-loading-bar": "^0.9.0",
     "angular-perfect-scrollbar": "~0.1.4",
