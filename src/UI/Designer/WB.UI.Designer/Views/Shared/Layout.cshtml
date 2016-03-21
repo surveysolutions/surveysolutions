@@ -55,7 +55,7 @@
                 @Html.ActionLink("Change password", "Manage", "Account", null, new { @class = "btn btn-default" })
                 @if (userHelper.WebUser.IsAdmin)
                 {
-                    <a class="btn btn-default" href="@Url.Action("Import", "Admin")">Restore questionnaire</a>
+                    <a class="btn btn-default" href="@Url.Action("RestoreQuestionnaire", "Admin")">Restore questionnaire</a>
                 }
                 @Html.ActionLink("Logout", "LogOff", "Account", null, new { @class = "btn btn-default" })
             </nav>
