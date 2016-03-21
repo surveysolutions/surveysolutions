@@ -10,7 +10,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
         public virtual byte[] Content { get; set; }
         public virtual long Size { get; set; }
         public virtual AttachmentDetails Details { get; set; }
-        public virtual AttachmentType Type { get; set; }
         public virtual string ContentType { get; set; }
     }
 

@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
         };
 
         Because of = () =>
-            attachmentService.SaveAttachmentContent(questionnaireId, attachmentId, attachmentContentId, AttachmentType.Image, contentType, fileContent, fileName);
+            attachmentService.SaveAttachmentContent(questionnaireId, attachmentId, attachmentContentId, contentType, fileContent, fileName);
 
         It should_save_attachment_meta = () =>
             attachmentMetaStorage.GetById(attachmentId.FormatGuid()).ShouldNotBeNull();
