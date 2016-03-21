@@ -176,19 +176,19 @@ namespace WB.UI.Designer.Controllers
 
                     if (attachmentContent?.Content != null)
                     {
-                        zipStream.PutFileEntry(attachment.FileName, attachmentContent.Content);
+                        zipStream.PutFileEntry($"Attachments/{attachment.FileName}", attachmentContent.Content);
                     }
                     else
                     {
                         zipStream.PutTextFileEntry(
-                            $"missing attachment ({attachment.FileName}).txt",
+                            $"Attachments/Invalid/missing attachment #{attachmentIndex + 1} ({attachment.FileName}).txt",
                             $"Attachment '{attachment.Name}' is missing.");
                     }
                 }
                 catch (Exception exception)
                 {
                     zipStream.PutTextFileEntry(
-                        $"broken attachment #{attachmentIndex + 1}.txt",
+                        $"Attachments/Invalid/broken attachment #{attachmentIndex + 1}.txt",
                         $"Failed to backup attachment. See error below.{Environment.NewLine}{exception}");
                 }
             }
