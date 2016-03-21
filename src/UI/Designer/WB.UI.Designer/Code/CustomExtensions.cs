@@ -10,7 +10,7 @@ namespace WB.UI.Designer.Extensions
     {
         public static void PutFileEntry(this ZipOutputStream stream, string filename, byte[] content)
         {
-            var entry = new ZipEntry(filename);
+            var entry = new ZipEntry(filename) { IsUnicodeText = true };
             stream.PutNextEntry(entry);
             stream.Write(content, 0, content.Length);
         }
