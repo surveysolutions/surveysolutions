@@ -8,15 +8,16 @@
     {
         <div class="alert alert-danger header">@Html.Raw(@TempData[Alerts.ERROR])</div>
     }
-    @using (Html.BeginForm("Import", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("RestoreQuestionnaire", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
-        <h1>Import Questionnaire</h1>
+        <h1>Restore Questionnaire</h1>
         <div class="form-group">
-            <input class="form-control" type="file" name="my file" placeholder=".tmpl file"/>
+            <input class="form-control" type="file" name="myfile" placeholder=".zip file" accept=".zip"/>
         </div>
         <div class="form-actions">
             <input type="submit" class="btn btn-success btn-lg" value="Upload"/>
             @Html.ActionLink("Cancel", "Index", "Questionnaire", null, new { @class = "btn " })
+            @Html.ActionLink("Old format restore", "Import", "Admin", null, new { @class = "btn " })
         </div>
     }
 </div>
