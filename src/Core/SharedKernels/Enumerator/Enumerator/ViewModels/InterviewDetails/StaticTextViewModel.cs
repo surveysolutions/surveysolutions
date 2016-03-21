@@ -1,5 +1,6 @@
 ﻿using System;
 using MvvmCross.Core.ViewModels;
+using Nito.AsyncEx;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -37,9 +38,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
             this.questionIdentity = entityIdentity;
-            await this.Attachment.InitAsync(interviewId, entityIdentity);
-
             this.StaticText = questionnaire.GetStaticText(entityIdentity.Id);
+
+            AsyncContext.Run(() => this.Attachment.InitAsync(interviewId, entityIdentity));
         }
 
         private string staticText;
