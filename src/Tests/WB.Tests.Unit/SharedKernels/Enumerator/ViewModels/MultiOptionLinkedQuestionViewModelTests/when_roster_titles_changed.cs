@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             var linkToQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             var linkedQuestionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             topRosterId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-            var questionIdentity = new Identity(linkedQuestionId, RosterVector.Empty);
+            var questionIdentity = Create.Identity(linkedQuestionId, RosterVector.Empty);
 
             var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
                 Create.TextListQuestion(questionId: level1TriggerId),
