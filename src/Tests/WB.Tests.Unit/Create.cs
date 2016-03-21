@@ -153,6 +153,7 @@ using WB.UI.Designer.Code.Implementation;
 using WB.UI.Shared.Web.Membership;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using AttachmentContent = WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire.AttachmentContent;
+using AttachmentsController = WB.Core.SharedKernels.SurveyManagement.Web.Controllers.AttachmentsController;
 
 namespace WB.Tests.Unit
 {

@@ -3,7 +3,7 @@
         function ($rootScope, $scope, $state, hotkeys, commandService, utilityService, confirmService, Upload, $modal, notificationService, moment) {
             'use strict';
 
-            $scope.downloadLookupFileBaseUrl = '../../attachment/';
+            $scope.downloadLookupFileBaseUrl = '../../attachments';
             $scope.benchmarkDownloadSpeed = 20;
             var recommendedMaxResolution = 1024;
             var KB = 1024;
@@ -47,7 +47,6 @@
                 attachment.initialAttachment = angular.copy(attachmentDto);
 
                 attachment.itemId = attachmentDto.itemId;
-                attachment.type = attachmentDto.type;
                 attachment.name = attachmentDto.name;
                 attachment.fileName = attachmentDto.fileName;
 
@@ -141,7 +140,6 @@
                     attachment.fileName = attachment.file.name;
                     attachment.format = file.type;
                     attachment.sizeInBytes = file.size;
-                    attachment.type = "Image";
                     attachment.hasUploadedFile = !_.isEmpty(attachment.fileName);
 
                     if (!_.isUndefined(attachmentForm)) {
@@ -194,7 +192,7 @@
                         };
 
                         $scope.attachmentUrl = function () {
-                            return baseURL + $scope.attachment.itemId + '/thumbnail/568';
+                            return baseURL + "/thumbnail/" + $scope.attachment.itemId + '/568';
                         }
 
                     },

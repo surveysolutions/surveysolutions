@@ -11,9 +11,7 @@ namespace WB.UI.Designer.App_Start
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
-            routes.Add("AttachmentRoute", new Route("attachment/{attachmentId}/{transform}/{size}", new AttachmentRouteHandler()) {Defaults = new RouteValueDictionary(new { transform = UrlParameter.Optional, size = UrlParameter.Optional })});
-
+            
             routes.MapRouteLowercase(
                 name: "AdminUsersView",
                 url: "admin/users",
