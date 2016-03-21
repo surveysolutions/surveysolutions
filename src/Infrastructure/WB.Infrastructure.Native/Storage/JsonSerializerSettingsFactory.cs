@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization.Formatters;
 using Main.Core.Documents;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -87,8 +88,8 @@ namespace WB.Infrastructure.Native.Storage
             protected string oldAssemblyNameToRedirect = "Main.Core";
             protected string targetAssemblyName = "WB.Core.SharedKernels.Questionnaire";
 
-            protected const string oldAssemblyGenericReplacePattern = ", Main.Core]";
-            protected const string newAssemblyGenericReplacePattern = ", WB.Core.SharedKernels.Questionnaire]";
+            protected const string oldAssemblyGenericReplacePattern = ", Main.Core";
+            protected const string newAssemblyGenericReplacePattern = ", WB.Core.SharedKernels.Questionnaire";
 
             protected readonly Dictionary<string, string> typesMap = new Dictionary<string, string>();
             protected readonly Dictionary<Type, string> typeToName = new Dictionary<Type, string>();
