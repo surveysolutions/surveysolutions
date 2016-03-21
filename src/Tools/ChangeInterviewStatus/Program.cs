@@ -53,6 +53,8 @@ namespace ChangeInterviewStatus
         internal abstract class ChangeInterviewStatusCommand
         {
             private const int MaxNumberOfParallelTasks = 20;
+            private const int DefaultTriesNumberPerOperation = 1;
+            private const int MaxTriesNumberPerOperation = 30;
 
             [Description("HQ application host with http(s)")]
             [Argument(Name = "host", DefaultValue = "http://localhost")]
@@ -77,6 +79,10 @@ namespace ChangeInterviewStatus
             [Description("Max number of parallel tasks.")]
             [Argument(Name = "tasksLimit", DefaultValue = MaxNumberOfParallelTasks)]
             public int ParallelTasksLimit { get; set; }
+
+            [Description("Max number of retries per operation (max 30)")]
+            [Argument(Name = "retryLimit", DefaultValue = DefaultTriesNumberPerOperation)]
+            public int OperationRetryLimit { get; set; }
 
             private static string Delimeter => "\t";
             private ProcessStatus status = new ProcessStatus();
@@ -113,6 +119,7 @@ namespace ChangeInterviewStatus
 
                 Console.Clear();
                 var interviewsToImport = this.ParseFileWithInterviewsInfo(this.FilePath);
+                var retriesPerOperation = Math.Max(Math.Min(OperationRetryLimit, MaxTriesNumberPerOperation), 1);
 
                 this.status.TotalInterviewsCount = interviewsToImport.Length;
                 try
@@ -127,7 +134,7 @@ namespace ChangeInterviewStatus
                             bool hasError = false;
                             try
                             {
-                                await this.ChangeStatus(changeStatusUrl, importedInterview, credentials);
+                                await this.ChangeStatus(changeStatusUrl, importedInterview, credentials, retriesPerOperation);
                             }
                             catch (Exception ex)
                             {
@@ -174,19 +181,21 @@ namespace ChangeInterviewStatus
                 }
             }
 
-            private async Task ChangeStatus(string url, InterviewInfo interviewInfo, RestCredentials credentials)
+            private async Task ChangeStatus(string url, InterviewInfo interviewInfo, RestCredentials credentials, int retriesPerOperation)
             {
                 await this.ExecuteRequestAsync(
                     relativeUrl: url,
                     credentials: credentials,
                     method: HttpMethod.Post,
                     request: interviewInfo,
-                    userCancellationToken: this.cancellationTokenSource.Token);
+                    userCancellationToken: this.cancellationTokenSource.Token,
+                    retriesPerOperation: retriesPerOperation);
             }
 
             private async Task<HttpResponseMessage> ExecuteRequestAsync(
                 string relativeUrl,
                 HttpMethod method,
+                int retriesPerOperation,
                 object queryString = null,
                 object request = null,
                 RestCredentials credentials = null,
@@ -207,42 +216,61 @@ namespace ChangeInterviewStatus
                     restClient.WithBasicAuth(credentials.Login, credentials.Password);
 
                 HttpResponseMessage result = null;
-                try
+                var httpContent = this.CreateJsonContent(request);
+                var retriesLeft = retriesPerOperation;
+
+                while (retriesLeft > 0)
                 {
-                    result = await restClient.SendAsync(method, this.CreateJsonContent(request), linkedCancellationTokenSource.Token);
-                    Console.WriteLine("Request has been sent successfully");
-                }
-                catch (OperationCanceledException ex)
-                {
-                    // throwed when receiving bytes in ReceiveBytesWithProgressAsync method and user canceling request
-                    throw new RestException("Request canceled by user", type: RestExceptionType.RequestCanceledByUser, innerException: ex);
-                }
-                catch (FlurlHttpException ex)
-                {
-                    if (ex.GetSelfOrInnerAs<TaskCanceledException>() != null)
+                    try
                     {
-                        if (requestTimeoutToken.IsCancellationRequested)
+                        result = await restClient.SendAsync(method, httpContent, linkedCancellationTokenSource.Token);
+                        Console.WriteLine("Request has been sent successfully.");
+                        return result;
+                    }
+                    catch (OperationCanceledException ex)
+                    {
+                        // throwed when receiving bytes in ReceiveBytesWithProgressAsync method and user canceling request
+                        throw new RestException("Request canceled by user", type: RestExceptionType.RequestCanceledByUser, innerException: ex);
+                    }
+                    catch (FlurlHttpException ex)
+                    {
+                        if (ex.GetSelfOrInnerAs<TaskCanceledException>() != null)
                         {
-                            throw new RestException("Request timeout", type: RestExceptionType.RequestByTimeout,
-                                statusCode: HttpStatusCode.RequestTimeout, innerException: ex);
+                            if (retriesLeft > 1) // ignoring all statuses except AR errors
+                            {
+                                retriesLeft--;
+                                continue;
+                            }
+
+                            if (requestTimeoutToken.IsCancellationRequested)
+                            {
+                                throw new RestException("Request timeout", type: RestExceptionType.RequestByTimeout, statusCode: HttpStatusCode.RequestTimeout, innerException: ex);
+                            }
+
+                            if (userCancellationToken.HasValue && userCancellationToken.Value.IsCancellationRequested)
+                            {
+                                throw new RestException("Request canceled by user", type: RestExceptionType.RequestCanceledByUser, innerException: ex);
+                            }
+                        }
+                        else if (ex.Call.Response != null)
+                        {
+
+                            if (retriesLeft > 1 && ex.Call.Response.StatusCode == HttpStatusCode.NotAcceptable) // ignoring all statuses except AR errors 
+                            {
+                                retriesLeft--;
+                                continue;
+                            }
+
+                            //invalid status 406 should be thrown on first round
+                            throw new RestException(ex.Call.ErrorResponseBody ?? ex.Call.Response.ReasonPhrase, statusCode: ex.Call.Response.StatusCode, innerException: ex);
                         }
 
-                        if (userCancellationToken.HasValue && userCancellationToken.Value.IsCancellationRequested)
-                        {
-                            throw new RestException("Request canceled by user",
-                                type: RestExceptionType.RequestCanceledByUser, innerException: ex);
-                        }
+                        throw new RestException(message: "Unexpected web exception", innerException: ex);
                     }
-                    else if (ex.Call.Response != null)
+                    catch (Exception ex)
                     {
-                        throw new RestException(ex.Call.ErrorResponseBody ?? ex.Call.Response.ReasonPhrase, statusCode: ex.Call.Response.StatusCode, innerException: ex);
+                        throw new RestException(message: "Unexpected web exception", innerException: ex);
                     }
-
-                    throw new RestException(message: "Unexpected web exception", innerException: ex);
-                }
-                catch (Exception ex)
-                {
-                    throw new RestException(message: "Unexpected web exception", innerException: ex);
                 }
 
                 return result;
