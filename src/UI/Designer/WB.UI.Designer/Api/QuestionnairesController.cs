@@ -113,15 +113,6 @@ namespace WB.UI.Designer.Api
             var questionnaire = questionnaireView.Source.Clone();
             questionnaire.Macros = null;
 
-            var attachmentMeta = attachmentService.GetBriefAttachmentsMetaForQuestionnaire(id)
-                .Where(x => questionnaire.Attachments.Any(a => a.AttachmentId == x.AttachmentId))
-                .ToArray();
-
-            foreach (var attachment in questionnaire.Attachments)
-            {
-                attachment.ContentId = attachmentMeta.Single(x => x.AttachmentId == attachment.AttachmentId).AttachmentContentHash;
-            }
-
             return new Questionnaire
             {
                 Document = questionnaire,

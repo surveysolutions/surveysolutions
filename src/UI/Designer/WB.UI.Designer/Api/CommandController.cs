@@ -73,10 +73,13 @@ namespace WB.UI.Designer.Api
             try
             {
                 updateAttachmentCommand = (UpdateAttachment) this.commandDeserializer.Deserialize(commandType, model.Command);
-                using (SHA1CryptoServiceProvider sha1 = new SHA1CryptoServiceProvider())
+                if (model.File != null)
                 {
-                    updateAttachmentCommand.AttachmentContentId =
-                        BitConverter.ToString(sha1.ComputeHash(model.File.Buffer)).Replace("-", string.Empty);
+                    using (SHA1CryptoServiceProvider sha1 = new SHA1CryptoServiceProvider())
+                    {
+                        updateAttachmentCommand.AttachmentContentId =
+                            BitConverter.ToString(sha1.ComputeHash(model.File.Buffer)).Replace("-", string.Empty);
+                    }
                 }
 
                 this.attachmentService.SaveAttachmentContent(
@@ -85,7 +88,7 @@ namespace WB.UI.Designer.Api
                     attachmentContentId: updateAttachmentCommand.AttachmentContentId,
                     type: this.GetAttachmentTypeByRequestMediaType(model.File.MediaType),
                     contentType: model.File.MediaType,
-                    binaryContent: model.File.Buffer,
+                    binaryContent: model.File?.Buffer,
                     fileName: model.File.FileName);
             }
             catch (ArgumentException e)
