@@ -1,25 +1,23 @@
-﻿namespace WB.UI.Designer.Extensions
-{
-    using System;
-    using System.Globalization;
-    using System.Web.Security;
+﻿using System;
+using System.Globalization;
+using System.Text;
+using System.Web.Security;
+using ICSharpCode.SharpZipLib.Zip;
 
-    /// <summary>
-    ///     The custom extensions.
-    /// </summary>
+namespace WB.UI.Designer.Extensions
+{
     public static class CustomExtensions
     {
-        #region Public Methods and Operators
+        public static void PutFileEntry(this ZipOutputStream stream, string filename, byte[] content)
+        {
+            var entry = new ZipEntry(filename);
+            stream.PutNextEntry(entry);
+            stream.Write(content, 0, content.Length);
+        }
 
-        /// <summary>
-        /// The as guid.
-        /// </summary>
-        /// <param name="source">
-        /// The source.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Guid"/>.
-        /// </returns>
+        public static void PutTextFileEntry(this ZipOutputStream stream, string filename, string text)
+            => stream.PutFileEntry(filename, Encoding.UTF8.GetBytes(text ?? string.Empty));
+
         public static Guid AsGuid(this object source)
         {
             if (source == null)
@@ -27,50 +25,16 @@
             return Guid.Parse(source.ToString());
         }
 
-        /// <summary>
-        /// The invert special.
-        /// </summary>
-        /// <param name="val">
-        /// The val.
-        /// </param>
-        /// <param name="needValue">
-        /// The need value.
-        /// </param>
-        /// <returns>
-        /// The
-        ///     <see>
-        ///         <cref>int?</cref>
-        ///     </see>
-        ///     .
-        /// </returns>
         public static int? InvertBooleableInt(this int? val, bool needValue)
         {
             return needValue && !val.ToBool() ? 1 : (int?)null;
         }
 
-        /// <summary>
-        /// The to bool.
-        /// </summary>
-        /// <param name="val">
-        /// The val.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
         public static bool ToBool(this int? val)
         {
             return val.HasValue && (val.Value == 1);
         }
 
-        /// <summary>
-        /// The to error code.
-        /// </summary>
-        /// <param name="createStatus">
-        /// The create status.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
         public static string ToErrorCode(this MembershipCreateStatus createStatus)
         {
             switch (createStatus)
@@ -111,15 +75,6 @@
             }
         }
 
-        /// <summary>
-        /// The to ui message.
-        /// </summary>
-        /// <param name="message">
-        /// The message.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
         public static string ToUIMessage(this AccountManageMessageId message)
         {
             return message == AccountManageMessageId.ChangePasswordSuccess
@@ -131,22 +86,11 @@
                                    : string.Empty;
         }
 
-        /// <summary>
-        /// The to ui string.
-        /// </summary>
-        /// <param name="source">
-        /// The source.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
         public static string ToUIString(this DateTime source)
         {
             return DateTime.Compare(source.ToUniversalTime(), DateTime.MinValue) == 0
                        ? GlobalHelper.EmptyString
                        : source.ToString(CultureInfo.InvariantCulture);
         }
-
-        #endregion
     }
 }
