@@ -117,6 +117,27 @@ namespace WB.UI.Designer.Controllers
             return this.Import();
         }
 
+        [HttpGet]
+        public ActionResult RestoreQuestionnaire()
+        {
+            return this.View();
+        }
+
+        [HttpPost]
+        public ActionResult RestoreQuestionnaire(HttpPostedFileBase uploadFile)
+        {
+            uploadFile = uploadFile ?? this.Request.Files[0];
+
+            var isContentAvailable = uploadFile?.ContentLength > 0;
+            if (!isContentAvailable)
+            {
+                this.Error("Uploaded file is not specified or empty.");
+                return this.View();
+            }
+
+            this.Error("Feature is not yet implemented.");
+            return this.View();
+        }
 
         private MemoryStream CreateStreamCopy(Stream originalStream)
         {

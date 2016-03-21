@@ -1570,6 +1570,7 @@
     <Content Include="UpdatedDesigner\vendor\angular-moment\LICENSE" />
     <Content Include="UpdatedDesigner\vendor\angular-moment\package.json" />
     <Content Include="UpdatedDesigner\vendor\angular-moment\README.md" />
+    <Content Include="Views\Admin\RestoreQuestionnaire.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
