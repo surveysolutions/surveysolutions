@@ -148,15 +148,16 @@ namespace WB.UI.Designer.Controllers
                     {
                         var textReader = new StreamReader(zipStream, Encoding.UTF8);
 
-                        var questionnaireDocumentWithLookUpTables = this.serializer.Deserialize<QuestionnaireDocumentWithLookUpTables>(textReader.ReadToEnd());
+                        var questionnaireDocument = this.serializer.Deserialize<QuestionnaireDocument>(textReader.ReadToEnd());
 
-                        this.commandService.Execute(new ImportQuestionnaire(this.UserHelper.WebUser.UserId, questionnaireDocumentWithLookUpTables.QuestionnaireDocument));
-                        foreach (var lookupTable in questionnaireDocumentWithLookUpTables.LookupTables)
-                        {
-                            this.lookupTableService.SaveLookupTableContent(questionnaireDocumentWithLookUpTables.QuestionnaireDocument.PublicKey,
-                                lookupTable.Key, questionnaireDocumentWithLookUpTables.QuestionnaireDocument.LookupTables[lookupTable.Key].TableName,
-                                lookupTable.Value);
-                        }
+                        this.commandService.Execute(new ImportQuestionnaire(this.UserHelper.WebUser.UserId, questionnaireDocument));
+
+                        //foreach (var lookupTable in questionnaireDocumentWithLookUpTables.LookupTables)
+                        //{
+                        //    this.lookupTableService.SaveLookupTableContent(questionnaireDocumentWithLookUpTables.QuestionnaireDocument.PublicKey,
+                        //        lookupTable.Key, questionnaireDocumentWithLookUpTables.QuestionnaireDocument.LookupTables[lookupTable.Key].TableName,
+                        //        lookupTable.Value);
+                        //}
 
                         this.Success($"Processed document '{zipEntry.Name}'.", append: true);
                     }
@@ -209,13 +210,8 @@ namespace WB.UI.Designer.Controllers
                 return null;
 
             var questionnaireDocument = questionnaireView.Source;
-            var questionnaireDocumentWithLookUpTables = new QuestionnaireDocumentWithLookUpTables
-            {
-                QuestionnaireDocument = questionnaireDocument,
-                LookupTables = this.lookupTableService.GetQuestionnairesLookupTables(id)
-            };
 
-            string questionnaireJson = this.serializer.Serialize(questionnaireDocumentWithLookUpTables);
+            string questionnaireJson = this.serializer.Serialize(questionnaireDocument);
 
             var output = new MemoryStream();
 
@@ -248,6 +244,13 @@ namespace WB.UI.Designer.Controllers
                         $"Attachments/Invalid/broken attachment #{attachmentIndex + 1}.txt",
                         $"Failed to backup attachment. See error below.{Environment.NewLine}{exception}");
                 }
+            }
+
+            Dictionary<Guid, string> lookupTables = this.lookupTableService.GetQuestionnairesLookupTables(id);
+
+            foreach (KeyValuePair<Guid, string> lookupTable in lookupTables)
+            {
+                zipStream.PutTextFileEntry($"Lookup Tables/{id.FormatGuid()}/{lookupTable.Key.FormatGuid()}.txt", lookupTable.Value);
             }
 
             zipStream.Finish();
