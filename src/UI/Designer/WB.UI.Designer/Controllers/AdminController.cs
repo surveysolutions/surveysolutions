@@ -146,27 +146,25 @@ namespace WB.UI.Designer.Controllers
                 {
                     if (zipEntry.IsFile && zipEntry.Name.ToLower().EndsWith(".json"))
                     {
-                        using (var textReader = new StreamReader(zipStream, Encoding.UTF8))
+                        var textReader = new StreamReader(zipStream, Encoding.UTF8);
+
+                        var questionnaireDocumentWithLookUpTables = this.serializer.Deserialize<QuestionnaireDocumentWithLookUpTables>(textReader.ReadToEnd());
+
+                        this.commandService.Execute(new ImportQuestionnaire(this.UserHelper.WebUser.UserId, questionnaireDocumentWithLookUpTables.QuestionnaireDocument));
+                        foreach (var lookupTable in questionnaireDocumentWithLookUpTables.LookupTables)
                         {
-                            var questionnaireDocumentWithLookUpTables = this.serializer.Deserialize<QuestionnaireDocumentWithLookUpTables>(textReader.ReadToEnd());
-
-                            this.commandService.Execute(new ImportQuestionnaire(this.UserHelper.WebUser.UserId, questionnaireDocumentWithLookUpTables.QuestionnaireDocument));
-                            foreach (var lookupTable in questionnaireDocumentWithLookUpTables.LookupTables)
-                            {
-                                this.lookupTableService.SaveLookupTableContent(questionnaireDocumentWithLookUpTables.QuestionnaireDocument.PublicKey,
-                                    lookupTable.Key, questionnaireDocumentWithLookUpTables.QuestionnaireDocument.LookupTables[lookupTable.Key].TableName,
-                                    lookupTable.Value);
-                            }
-
-                            this.Success($"Processed document '{zipEntry.Name}'.");
-                            return this.View();
+                            this.lookupTableService.SaveLookupTableContent(questionnaireDocumentWithLookUpTables.QuestionnaireDocument.PublicKey,
+                                lookupTable.Key, questionnaireDocumentWithLookUpTables.QuestionnaireDocument.LookupTables[lookupTable.Key].TableName,
+                                lookupTable.Value);
                         }
+
+                        this.Success($"Processed document '{zipEntry.Name}'.", append: true);
                     }
 
                     zipEntry = zipStream.GetNextEntry();
                 }
 
-                this.Success("All operaions complete.");
+                this.Success("Restore successfully finished. See messages above for details on restored stuff.", append: true);
                 return this.View();
             }
             catch (Exception exception)
