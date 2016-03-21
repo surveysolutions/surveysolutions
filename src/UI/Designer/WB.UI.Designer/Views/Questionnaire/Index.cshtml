@@ -71,10 +71,6 @@
                                     <ul class="dropdown-menu">
                                         <li>@Html.ActionLink("Open", "Open", "App", routevalues, null)</li>
                                         @{
-                                if (actionModel.CanSynchronize)
-                                {
-                                    <li>@Html.ActionLink("Export to HQ", "Export", "Admin", routevalues, null)</li>
-                                }
                                 if (actionModel.CanCopy)
                                 {
                                     <li>@Html.ActionLink("Copy", "Clone", "Questionnaire", routevalues, null)</li>
@@ -82,12 +78,16 @@
                                 if (actionModel.CanExportToPdf)
                                 {
                                     <li class="divider"></li>
-                                            <li>@Html.ActionLink("Export as PDF", "exportquestionnaire", "Pdf", routevalues, null)</li>
+                                    <li>@Html.ActionLink("Export as PDF", "exportquestionnaire", "Pdf", routevalues, null)</li>
+                                }
+                                if (actionModel.CanSynchronize)
+                                {
+                                    <li>@Html.ActionLink("Backup", "Export", "Admin", routevalues, null)</li>
                                 }
                                 if (actionModel.CanDelete)
                                 {
                                     <li class="divider"></li>
-                                            <li><a href="#mDelete" onclick='deleteQuestionnaireModel.deleteItem("@itemId", "@itemType", "@itemName")' data-toggle="modal">Delete</a></li>
+                                    <li><a href="#mDelete" onclick='deleteQuestionnaireModel.deleteItem("@itemId", "@itemType", "@itemName")' data-toggle="modal">Delete</a></li>
                                 }
                                         }
                                     </ul>
