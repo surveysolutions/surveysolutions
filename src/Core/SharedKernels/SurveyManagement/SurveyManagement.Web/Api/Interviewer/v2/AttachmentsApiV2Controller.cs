@@ -26,6 +26,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         {
             var attachmentContent = this.attachmentContentService.GetAttachmentContent(id);
 
+            if (attachmentContent == null)
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+
             var response = new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Content = new ByteArrayContent(attachmentContent.Content)
