@@ -197,7 +197,7 @@ namespace WB.UI.Designer.Controllers
 
             output.Seek(0, SeekOrigin.Begin);
 
-            return new FileStreamResult(output, "application/octet-stream")
+            return new FileStreamResult(output, "application/zip")
             {
                 FileDownloadName = $"{questionnaireView.Title.ToValidFileName()}.zip"
             };
