@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private AttachmentContentMetadata attachmentContentMetadata;
 
-        private readonly string imageContentType = "image/";
+        private readonly string imageMimeType = "image";
 
         public AttachmentViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,
@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         public bool IsImage => this.attachmentContentMetadata != null 
-            && this.attachmentContentMetadata.ContentType.StartsWith(this.imageContentType);
+            && this.attachmentContentMetadata.ContentType.StartsWith(this.imageMimeType);
 
         public byte[] Content { get; private set; }
     }
