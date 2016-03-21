@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
         {
             var updateAttachmentCommand = Create.Command.UpdateAttachment(questionnaireId, attachmentId, attachmentContentId, responsibleId, name, fileName);
 
-            attachmentServiceMock.Setup(x => x.SaveAttachmentContent(questionnaireId, attachmentId, attachmentContentId, AttachmentType.Image, contentType, fileBytes, fileName)).Verifiable();
+            attachmentServiceMock.Setup(x => x.SaveAttachmentContent(questionnaireId, attachmentId, attachmentContentId, contentType, fileBytes, fileName)).Verifiable();
 
             var commandDeserializerMock = new Mock<ICommandDeserializer>();
 

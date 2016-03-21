@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
         };
 
         Because of = () =>
-            attachmentService.SaveAttachmentContent(questionnaireId, attachmentId, attachmentContentId, AttachmentType.Image, contentType, fileContent, fileName);
+            attachmentService.SaveAttachmentContent(questionnaireId, attachmentId, attachmentContentId, contentType, fileContent, fileName);
 
         It should_not_save_or_update_anything_in_meta_storage = () =>
             attachmentMetaStorage.Verify(x => x.Store(Moq.It.IsAny<AttachmentMeta>(), Moq.It.IsAny<string>()), Times.Never);

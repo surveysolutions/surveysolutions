@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
         };
 
         Because of = () =>
-            attachmentService.SaveAttachmentContent(questionnaireId, attachmentId, attachmentContentId, AttachmentType.Image, contentType, fileContent, fileName);
+            attachmentService.SaveAttachmentContent(questionnaireId, attachmentId, attachmentContentId, contentType, fileContent, fileName);
 
         It should_save_attachment_meta = () =>
             attachmentMetaStorage.GetById(attachmentId.FormatGuid()).ShouldNotBeNull();
@@ -48,7 +48,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
         It should_save_attachment_content_with_specified_properties = () =>
         {
             var attachmentContent = attachmentContentStorage.GetById(attachmentContentId);
-            attachmentContent.Type.ShouldEqual(AttachmentType.Image);
             attachmentContent.Content.ShouldBeTheSameAs(fileContent);
             attachmentContent.AttachmentContentHash.ShouldEqual(attachmentContentId);
             attachmentContent.ContentType.ShouldEqual(contentType);
