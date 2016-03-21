@@ -17,8 +17,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
     {
         Establish context = () =>
         {
-            //var questionnaireModel = Mock.Of<QuestionnaireModel>(_ => _.GroupsWithFirstLevelChildrenAsReferences == listOfSection && _.GroupsHierarchy == sectionsHierarchy);
-
             var questionnaireIdentity = Create.QuestionnaireIdentity();
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => _.GetAllSections() == listOfSections);
