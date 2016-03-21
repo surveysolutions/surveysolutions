@@ -67,7 +67,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private HashSet<Guid> readOnlyUsers=new HashSet<Guid>();
         private HashSet<Guid> macroIds = new HashSet<Guid>();
         private HashSet<Guid> lookupTableIds = new HashSet<Guid>();
-        private HashSet<Guid> attachmentIds = new HashSet<Guid>();
 
         private bool wasExpressionsMigrationPerformed = false;
 
@@ -101,7 +100,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         internal void Apply(AttachmentAdded e)
         {
-            this.attachmentIds.Add(e.AttachmentId);
         }
 
         internal void Apply(AttachmentUpdated e)
@@ -110,7 +108,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         internal void Apply(AttachmentDeleted e)
         {
-            this.attachmentIds.Remove(e.AttachmentId);
         }
 
         internal void Apply(SharedPersonToQuestionnaireAdded e)
@@ -183,10 +180,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (e.QuestionnaireDocument.LookupTables != null)
             {
                 this.lookupTableIds = e.QuestionnaireDocument.LookupTables.Select(x => x.Key).ToHashSet();
-            }
-            if (e.QuestionnaireDocument.Attachments != null)
-            {
-                this.attachmentIds = e.QuestionnaireDocument.Attachments.Select(x => x.AttachmentId).ToHashSet();
             }
         }
 
@@ -698,8 +691,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 WasExpressionsMigrationPerformed = wasExpressionsMigrationPerformed,
                 ReadOnlyUsers = this.readOnlyUsers,
                 MacroIds = this.macroIds,
-                LookupTableIds = this.lookupTableIds,
-                AttachmentIds = this.attachmentIds
+                LookupTableIds = this.lookupTableIds
             };
         }
 
@@ -710,7 +702,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.readOnlyUsers = snapshot.ReadOnlyUsers;
             this.macroIds = snapshot.MacroIds;
             this.lookupTableIds = snapshot.LookupTableIds;
-            this.attachmentIds = snapshot.AttachmentIds;
         }
 
         private static int? DetermineActualMaxValueForNumericQuestion(bool isAutopropagating, int? legacyMaxValue, int? actualMaxValue)
