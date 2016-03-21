@@ -26,7 +26,7 @@
         </div>
         @Html.HiddenFor(x => x.Id)
         <div class="form-actions">
-            <input type="submit" class="btn btn-success btn-lg" value="Copy"/>
+            <input type="submit" class="btn btn-success btn-lg" value="Copy" id="inputCloneQuestionnaire"/>
             @Html.ActionLink("Cancel", "Index", "Questionnaire", null, new { @class = "btn " })
             @Html.ActionLink("Back to List", "Index", "Questionnaire", null, new { @class = "btn " })
         </div>
@@ -34,5 +34,14 @@
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/editform")
+@Scripts.Render("~/editform")
+<script>
+    $(function () {
+        $('#edit-form').submit(function () {
+            $('#inputCloneQuestionnaire').attr("disabled", true);
+            return true;
+        });
+    });
+</script>
+
 }
