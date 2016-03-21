@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Web;
 using System.Web.Routing;
 using Microsoft.Practices.ServiceLocation;
@@ -12,7 +13,6 @@ namespace WB.UI.Designer
 {
     public class AttachmentHandler : IHttpHandler
     {
-        private const string thumbnailTransform = "thumbnail";
         private const int defaultImageSizeToScale = 156;
 
         private IAttachmentService attachmentService => ServiceLocator.Current.GetInstance<IAttachmentService>();
@@ -36,12 +36,12 @@ namespace WB.UI.Designer
             {
                 if (!Enum.TryParse(transformationType, out transform))
                 {
-                    Return404(context);
+                    Write404ToResponse(context);
+                    return;
                 }
             }
 
             QuestionnaireAttachment attachment;
-
             try
             {
                 this.TransactionManager.BeginTransaction();
@@ -55,18 +55,19 @@ namespace WB.UI.Designer
             }
             if (attachment == null)
             {
-                Return404(context);
+                Write404ToResponse(context);
+                return;
             }
             else
             {
                 if (transform == TransformationType.thumbnail)
-                    TransformContent(context, attachment, transformationType);
+                    ResizeAndWriteContentToResponse(context, attachment);
                 else
-                    GetOriginalContent(context, attachment);
+                    WriteOriginalContentToResponse(context, attachment);
             }
         }
 
-        private static void Return404(HttpContext context)
+        private static void Write404ToResponse(HttpContext context)
         {
             context.Response.ClearHeaders();
             context.Response.Clear();
@@ -75,7 +76,7 @@ namespace WB.UI.Designer
             context.Response.SuppressContent = true;
         }
 
-        private static void GetOriginalContent(HttpContext context, QuestionnaireAttachment attachment)
+        private static void WriteOriginalContentToResponse(HttpContext context, QuestionnaireAttachment attachment)
         {
             TimeSpan cacheTime = new TimeSpan(2, 0, 0);
             context.Response.Cache.VaryByParams["*"] = true;
@@ -89,22 +90,26 @@ namespace WB.UI.Designer
             context.Response.BinaryWrite(attachment.Content);
         }
 
-        private static void TransformContent(HttpContext context, QuestionnaireAttachment attachment, string transformation)
+        private static void ResizeAndWriteContentToResponse(HttpContext context, QuestionnaireAttachment attachment)
         {
-            //later should handle video and produce image preview 
-
-            var defaultSizeToScale = defaultImageSizeToScale;
+            var sizeToScale = defaultImageSizeToScale;
             int size;
             if (int.TryParse(context.Request.RequestContext.RouteData.Values["size"].ToString(), out size))
-                defaultSizeToScale = size;
+                sizeToScale = size;
 
             var resizeSettings = new ResizeSettings
             {
-                MaxWidth = defaultSizeToScale,
-                MaxHeight = defaultSizeToScale
+                MaxWidth = sizeToScale,
+                MaxHeight = sizeToScale
             };
 
-            byte[] resultStream = GetTrasformedContent(attachment, resizeSettings);
+            byte[] transformedContent = GetTrasformedContent(attachment, resizeSettings);
+
+            string transformedContentHash;
+            using (SHA1CryptoServiceProvider sha1 = new SHA1CryptoServiceProvider())
+            {
+                transformedContentHash = BitConverter.ToString(sha1.ComputeHash(transformedContent)).Replace("-", string.Empty);
+            }
 
             TimeSpan cacheTime = new TimeSpan(2, 0, 0);
             context.Response.Cache.VaryByParams["*"] = true;
@@ -112,10 +117,10 @@ namespace WB.UI.Designer
             context.Response.Cache.SetMaxAge(cacheTime);
             context.Response.Cache.SetCacheability(HttpCacheability.Public);
 
-            context.Response.Cache.SetETag(attachment.AttachmentContentId);
+            context.Response.Cache.SetETag(transformedContentHash);
             context.Response.ContentType = attachment.ContentType;
             context.Response.AddHeader("content-disposition", $"attachment; filename={attachment.FileName}");
-            context.Response.BinaryWrite(resultStream);
+            context.Response.BinaryWrite(transformedContent);
         }
 
         private static byte[] GetTrasformedContent(QuestionnaireAttachment attachment, ResizeSettings resizeSettings)
@@ -128,12 +133,11 @@ namespace WB.UI.Designer
         }
 
         public bool IsReusable => false;
-    }
 
-    public enum TransformationType
-    {
-        unknown = 0,
-        thumbnail = 1
+        private enum TransformationType
+        {
+            unknown = 0,
+            thumbnail = 1
+        }
     }
-
 }
