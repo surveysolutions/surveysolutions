@@ -54,7 +54,6 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
         private static readonly Questionnaire downloadedQuestionnaire = new Questionnaire
         {
             Document = new QuestionnaireDocument(),
-            AttachmentsMeta = new QuestionnaireAttachmentMeta[0],
             Assembly =  "assembly"
         };
         private static readonly QuestionnaireListItem selectedQuestionnaire = new QuestionnaireListItem() { Id = "11111111111111111111111111111111"};

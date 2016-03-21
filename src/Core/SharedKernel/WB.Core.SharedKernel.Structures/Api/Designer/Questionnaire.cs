@@ -7,6 +7,5 @@ namespace WB.Core.SharedKernels.SurveySolutions.Api.Designer
     {
         public QuestionnaireDocument Document { get; set; }
         public string Assembly { get; set; }
-        public QuestionnaireAttachmentMeta[] AttachmentsMeta { get; set; }
     }
 }

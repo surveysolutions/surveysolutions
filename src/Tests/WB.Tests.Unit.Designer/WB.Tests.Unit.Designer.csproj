@@ -327,7 +327,6 @@
     <Compile Include="BoundedContexts\AttachmentServiceTests\when_deleting_attachment_and_content_is_shared.cs" />
     <Compile Include="BoundedContexts\AttachmentServiceTests\when_getting_attachment.cs" />
     <Compile Include="BoundedContexts\AttachmentServiceTests\when_getting_attachment_and_meta_is_absent.cs" />
-    <Compile Include="BoundedContexts\AttachmentServiceTests\when_getting_attachment_brief_data_by_questionnaire.cs" />
     <Compile Include="BoundedContexts\AttachmentServiceTests\when_saving_attachment_and_content_is_new.cs" />
     <Compile Include="BoundedContexts\AttachmentServiceTests\when_saving_attachment_and_old_content_used_by_another_attachment.cs" />
     <Compile Include="BoundedContexts\AttachmentServiceTests\when_saving_attachment_with_new_content_and_one_more_attachment_already_uses_this_content.cs" />
