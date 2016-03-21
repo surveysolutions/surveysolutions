@@ -173,10 +173,19 @@ angular.module('designerApp')
                     $scope.verificationStatus.visible = false;
                     $rootScope.$broadcast("openAttachments", { focusOn: reference.itemId });
                 } else {
-                    $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
-                        chapterId: reference.chapterId,
-                        itemId: reference.itemId
-                    });
+                    if (!_.isNull(reference.failedValidationConditionIndex) && !_.isUndefined(reference.failedValidationConditionIndex)) {
+                        $state.go('questionnaire.chapter.' + reference.type.toLowerCase() + '.validation', {
+                            chapterId: reference.chapterId,
+                            itemId: reference.itemId,
+                            validationIndex: reference.failedValidationConditionIndex
+                        });
+                    } else {
+                        $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
+                            chapterId: reference.chapterId,
+                            itemId: reference.itemId,
+                            validationIndex: reference.failedValidationConditionIndex
+                        });
+                    }
                 }
             };
             

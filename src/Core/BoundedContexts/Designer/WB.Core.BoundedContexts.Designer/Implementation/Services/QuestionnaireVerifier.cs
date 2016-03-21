@@ -292,7 +292,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (gpsPrefilledQuestions.Length < 2)
                 return Enumerable.Empty<QuestionnaireVerificationMessage>();
 
-            var gpsPrefilledQuestionsReferences = gpsPrefilledQuestions.Select(CreateReference).ToArray();
+            var gpsPrefilledQuestionsReferences = gpsPrefilledQuestions.Select(x => CreateReference(x)).ToArray();
 
             return new[]
             {
@@ -683,7 +683,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     .Find<TEntity>(entity => true)
                     .SelectMany(entity => getSubEnitites(entity).Select((subEntity, index) => new { Entity = entity, SubEntity = subEntity, Index = index }))
                     .Where(descriptor => hasError(descriptor.Entity, descriptor.SubEntity, questionnaire, state))
-                    .Select(descriptor => QuestionnaireVerificationMessage.Error(code, getMessageBySubEntityIndex(descriptor.Index + 1), CreateReference(descriptor.Entity)));
+                    .Select(descriptor => QuestionnaireVerificationMessage.Error(code, getMessageBySubEntityIndex(descriptor.Index + 1), CreateReference(descriptor.Entity, descriptor.Index)));
         }
 
         private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity>(
@@ -715,7 +715,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 from entity in questionnaire.Find<TEntity>(_ => true)
                 let verificationResult = verifyEntity(entity, questionnaire)
                 where verificationResult.HasErrors
-                select QuestionnaireVerificationMessage.Error(code, message,verificationResult.ReferencedEntities.Select(CreateReference).ToArray());
+                select QuestionnaireVerificationMessage.Error(code, message,verificationResult.ReferencedEntities.Select(x => CreateReference(x)).ToArray());
         }
 
         private static bool MacroHasEmptyName(Macro macro, ReadOnlyQuestionnaireDocument questionnaire)
@@ -1465,7 +1465,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
                 yield return QuestionnaireVerificationMessage.Critical("WB0068",
                     VerificationMessages.WB0068_RosterHasNotUniqueVariableName,
-                    rosterVariableNameMappedOnRoster.Value.Select(CreateReference).ToArray());
+                    rosterVariableNameMappedOnRoster.Value.Select(x => CreateReference(x)).ToArray());
             }
         }
 
@@ -1536,6 +1536,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         : QuestionnaireVerificationReferenceType.Question),
                 entity.PublicKey);
         }
+
+        private static QuestionnaireVerificationReference CreateReference(IComposite entity, int failedValidationIndex)
+        {
+            return new QuestionnaireVerificationReference(
+                entity is IGroup
+                    ? QuestionnaireVerificationReferenceType.Group
+                    : (entity is IStaticText
+                        ? QuestionnaireVerificationReferenceType.StaticText
+                        : QuestionnaireVerificationReferenceType.Question),
+                entity.PublicKey)
+            {
+                FailedValidationConditionIndex = failedValidationIndex
+            };
+        }
+
 
         private static bool CategoricalMultianswerQuestionIsFeatured(IMultyOptionsQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
         {
