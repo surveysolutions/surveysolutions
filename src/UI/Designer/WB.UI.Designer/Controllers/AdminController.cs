@@ -272,18 +272,18 @@ namespace WB.UI.Designer.Controllers
             {
                 try
                 {
-                    Attachment attachment = questionnaireDocument.Attachments[attachmentIndex];
-                    AttachmentContent attachmentContent = this.attachmentService.GetAttachmentContent(attachment.ContentId);
+                    Attachment attachmentReference = questionnaireDocument.Attachments[attachmentIndex];
+                    var attachment = this.attachmentService.GetAttachment(attachmentReference.AttachmentId);
 
-                    if (attachmentContent?.Content != null)
+                    if (attachment?.Content != null)
                     {
-                        zipStream.PutFileEntry($"Attachments/{attachment.FileName}", attachmentContent.Content);
+                        zipStream.PutFileEntry($"Attachments/{attachment.FileName}", attachment.Content);
                     }
                     else
                     {
                         zipStream.PutTextFileEntry(
-                            $"Attachments/Invalid/missing attachment #{attachmentIndex + 1} ({attachment.FileName}).txt",
-                            $"Attachment '{attachment.Name}' is missing.");
+                            $"Attachments/Invalid/missing attachment #{attachmentIndex + 1} ({attachmentReference.AttachmentId.FormatGuid()}).txt",
+                            $"Attachment '{attachmentReference.Name}' is missing.");
                     }
                 }
                 catch (Exception exception)
