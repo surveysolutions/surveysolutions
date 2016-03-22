@@ -16,15 +16,11 @@ namespace WB.UI.Designer.Controllers
             this.UserHelper = userHelper;
         }
 
-        public void Error(string message)
-        {
-            this.WriteToTempData(Alerts.ERROR, message);
-        }
+        public void Error(string message, bool append = false) => this.WriteToTempData(Alerts.ERROR, message, append);
 
-        public void Success(string message, bool append = false)
-        {
-            this.WriteToTempData(Alerts.SUCCESS, message, append);
-        }
+        public void Info(string message, bool append = false) => this.WriteToTempData(Alerts.INFO, message, append);
+
+        public void Success(string message, bool append = false) => this.WriteToTempData(Alerts.SUCCESS, message, append);
 
         protected override void Initialize(System.Web.Routing.RequestContext requestContext)
         {

@@ -94,7 +94,7 @@ namespace WB.UI.Designer.Controllers
                         foreach (var lookupTable in document.LookupTables)
                         {
                             this.lookupTableService.SaveLookupTableContent(document.QuestionnaireDocument.PublicKey,
-                                lookupTable.Key, document.QuestionnaireDocument.LookupTables[lookupTable.Key].TableName,
+                                lookupTable.Key,
                                 lookupTable.Value);
                         }
                         return this.RedirectToAction("Index", "Questionnaire");
@@ -140,38 +140,87 @@ namespace WB.UI.Designer.Controllers
 
                 var zipStream = new ZipInputStream(this.CreateStreamCopy(uploadFile.InputStream));
 
+                int restoredEntities = 0;
+
                 ZipEntry zipEntry = zipStream.GetNextEntry();
 
                 while (zipEntry != null)
                 {
-                    if (zipEntry.IsFile && zipEntry.Name.ToLower().EndsWith(".json"))
+                    if (this.RestoreDataFromZipFileEntry(zipEntry, zipStream))
                     {
-                        var textReader = new StreamReader(zipStream, Encoding.UTF8);
-
-                        var questionnaireDocument = this.serializer.Deserialize<QuestionnaireDocument>(textReader.ReadToEnd());
-
-                        this.commandService.Execute(new ImportQuestionnaire(this.UserHelper.WebUser.UserId, questionnaireDocument));
-
-                        //foreach (var lookupTable in questionnaireDocumentWithLookUpTables.LookupTables)
-                        //{
-                        //    this.lookupTableService.SaveLookupTableContent(questionnaireDocumentWithLookUpTables.QuestionnaireDocument.PublicKey,
-                        //        lookupTable.Key, questionnaireDocumentWithLookUpTables.QuestionnaireDocument.LookupTables[lookupTable.Key].TableName,
-                        //        lookupTable.Value);
-                        //}
-
-                        this.Success($"Processed document '{zipEntry.Name}'.", append: true);
+                        restoredEntities++;
                     }
 
                     zipEntry = zipStream.GetNextEntry();
                 }
 
-                this.Success("Restore successfully finished. See messages above for details on restored stuff.", append: true);
+                this.Success($"Restore successfully finished. Restored {restoredEntities} entitites. See messages above for details.", append: true);
                 return this.View();
             }
             catch (Exception exception)
             {
-                this.Error($"Unexpected error occurred.{Environment.NewLine}{exception}");
+                this.logger.Error("Unexpected error occurred during restore of questionnaire from backup.", exception);
+                this.Error($"Unexpected error occurred.{Environment.NewLine}{exception}", append: true);
                 return this.View();
+            }
+        }
+
+        private bool RestoreDataFromZipFileEntry(ZipEntry zipEntry, ZipInputStream zipStream)
+        {
+            try
+            {
+                if (!zipEntry.IsFile)
+                    return false;
+
+                string[] zipEntryPathChunks = zipEntry.Name.Split(
+                    new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar },
+                    StringSplitOptions.RemoveEmptyEntries);
+
+                bool isInRootFolder = zipEntryPathChunks.Length == 1;
+                bool isInFirstLevelFolder = zipEntryPathChunks.Length == 2;
+                bool isInSecondLevelFolder = zipEntryPathChunks.Length == 3;
+                bool isQuestionnaireDocumentEntry = isInRootFolder && zipEntry.Name.ToLower().EndsWith(".json");
+                bool isLookupTableEntry =
+                    isInSecondLevelFolder &&
+                    zipEntryPathChunks[0].ToLower() == "lookup tables" &&
+                    zipEntryPathChunks[2].ToLower().EndsWith(".txt");
+
+                if (isQuestionnaireDocumentEntry)
+                {
+                    var textReader = new StreamReader(zipStream, Encoding.UTF8);
+                    var textContent = textReader.ReadToEnd();
+
+                    var questionnaireDocument = this.serializer.Deserialize<QuestionnaireDocument>(textContent);
+
+                    this.commandService.Execute(new ImportQuestionnaire(this.UserHelper.WebUser.UserId, questionnaireDocument));
+
+                    this.Success($"Restored questionnaire document '{questionnaireDocument.Title}' ({questionnaireDocument.PublicKey.FormatGuid()}) from '{zipEntry.Name}'.", append: true);
+                    return true;
+                }
+                else if (isLookupTableEntry)
+                {
+                    var questionnaireId = Guid.Parse(zipEntryPathChunks[1]);
+                    var lookupTableId = Guid.Parse(Path.GetFileNameWithoutExtension(zipEntryPathChunks[2]));
+
+                    var textReader = new StreamReader(zipStream, Encoding.UTF8);
+                    var textContent = textReader.ReadToEnd();
+
+                    this.lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableId, textContent);
+
+                    this.Success($"Restored lookup table '{lookupTableId.FormatGuid()}' for questionnaire '{questionnaireId.FormatGuid()}' from '{zipEntry.Name}'.", append: true);
+                    return true;
+                }
+                else
+                {
+                    this.Info($"Ignored zip file entry '{zipEntry.Name}'.", append: true);
+                    return false;
+                }
+            }
+            catch (Exception exception)
+            {
+                this.logger.Warn($"Error processing zip file entry '{zipEntry.Name}' during questionnaire restore from backup.", exception);
+                this.Error($"Error processing zip file entry '{zipEntry.Name}'.{Environment.NewLine}{exception}", append: true);
+                return false;
             }
         }
 
