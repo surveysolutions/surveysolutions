@@ -34,18 +34,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 return ResizeAndCreateResponse(attachment, maxSize.Value);
             }
             
-            return CreateResponse(attachment);
+            return CreateResponse(attachment.Content, attachment.ContentType, attachment.ContentHash);
         }
 
-        private HttpResponseMessage CreateResponse(AttachmentContent attachment)
+        private HttpResponseMessage CreateResponse(byte[] attachmentContent, string attachmentContentType, string attachmentContentHash)
         {
             var response = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new ByteArrayContent(attachment.Content)
+                Content = new ByteArrayContent(attachmentContent)
             };
 
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachment.ContentType);
-            response.Headers.ETag = new EntityTagHeaderValue("\"" + attachment.ContentHash + "\"");
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachmentContentType);
+            response.Headers.ETag = new EntityTagHeaderValue("\"" + attachmentContentHash + "\"");
 
             return response;
         }
@@ -71,21 +71,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 transformedContentHash = BitConverter.ToString(sha1.ComputeHash(transformedContent)).Replace("-", string.Empty);
             }
 
-
-            var response = new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new ByteArrayContent(transformedContent)
-            };
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachmentContent.ContentType);
-            response.Headers.ETag = new EntityTagHeaderValue("\"" + transformedContentHash + "\"");
-
-            response.Headers.CacheControl = new CacheControlHeaderValue
-            {
-                Public = true,
-                MaxAge = TimeSpan.FromDays(10)
-            };
-
-            return response;
+            return CreateResponse(transformedContent, attachmentContent.ContentType, transformedContentHash);
         }
     }
 }
