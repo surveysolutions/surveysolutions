@@ -1,12 +1,7 @@
-﻿using System.Linq;
-using System.Net.Mime;
-
-namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
+﻿namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
     public class InterviewAttachmentViewModel
     {
-        private readonly string[] imageContentTypes = { "image/png", "image/jpg", "image/gif", "image/jpeg", "image/pjpeg" };
-
         public InterviewAttachmentViewModel(string contentId, string contentType, string contentName)
         {
             this.ContentId = contentId;
@@ -19,7 +14,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
         public string ContentName { get; set; }
 
-        public bool IsImage => this.imageContentTypes.Contains(this.ContentType);
+        public bool IsImage => this.ContentType.StartsWith("image");
     }
     
 }
