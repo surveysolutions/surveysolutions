@@ -245,11 +245,11 @@
                                     <div class="attachment">
                                         <div class="attachment-preview">
                                             <div class="attachment-preview-cover">
-                                                <img ng-if="attachment.hasUploadedFile || attachment.file!=null" ng-click="previewAttachment(attachment)" ngf-thumbnail="attachment.file || '{{downloadLookupFileBaseUrl + '/thumbnail/' + attachment.itemId}}'">
+                                                <img ng-click="previewAttachment(attachment)" ngf-thumbnail="attachment.file || '{{downloadLookupFileBaseUrl + '/thumbnail/' + attachment.attachmentId}}'">
                                             </div>
                                         </div>
                                         <div class="attachment-content">
-                                            <input focus-on-out="focusAttachment{{attachment.itemId}}"
+                                            <input focus-on-out="focusAttachment{{attachment.attachmentId}}"
                                                    ng-pattern="/^[\w\-]+$/"
                                                    required=""
                                                    placeholder="attachment name"
@@ -261,13 +261,12 @@
                                                    type="text"/>
                                             <div class="divider"></div>
                                             <p class="error-message ng-cloak" ng-show="attachmentForm.name.$error.pattern">
-                                                Invalid attachment name.
+                                                Invalid attachment name
                                             </p>
-                                            <input class="form-control file-name" placeholder="file name" required="" spellcheck="false" ng-model="attachment.fileName" name="fileName" disabled="" type="text"/>
                                             <div class="drop-box">
                                                 Drop File here
                                             </div>
-                                            <div class="attachment-meta" ng-if="attachment.hasUploadedFile" ng-include="Image-attachment-info-template.html"></div>
+                                            <div class="attachment-meta" ng-include="'Image-attachment-info-template.html'"></div>
                                             <div class="actions clearfix" ng-class="{dirty: attachmentForm.$dirty }">
                                                 <div ng-show="attachmentForm.$dirty" class="pull-left">
                                                     <button type="submit" ng-disabled="attachmentForm.$invalid" class="btn lighter-hover" ng-click="saveAttachment(attachment, attachmentForm);$event.stopPropagation()">Save</button>
@@ -275,10 +274,9 @@
                                                 </div>
                                                 <div class="permanent-actions pull-right clearfix">
                                                     <button class="btn btn-default pull-right" ngf-select="" ngf-accept="'image/*'" ngf-change="fileSelected(attachment, $file, attachmentForm);$event.stopPropagation()" type="file">
-                                                        <span ng-hide="attachment.hasUploadedFile">Select file</span>
-                                                        <span ng-show="attachment.hasUploadedFile">Update</span>
+                                                        <span>Update</span>
                                                     </button>
-                                                    <a href="{{downloadLookupFileBaseUrl + attachment.itemId}}" ng-show="attachment.hasUploadedFile" class="btn btn-default pull-right" target="_blank">Download</a>
+                                                    <a href="{{downloadLookupFileBaseUrl  + '/' + attachment.attachmentId}}" class="btn btn-default pull-right" target="_blank">Download</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -287,9 +285,6 @@
                             </ng-form>
                         </div>
                     </form>
-                    <div class="button-holder">
-                        <input type="button" class="btn lighter-hover" value="ADD NEW Attachment" ng-click="addNewAttachment()">
-                    </div>
                 </perfect-scrollbar>
             </div>
         </div>
@@ -306,9 +301,11 @@
 </section>
 
 <script type="text/ng-template" id="Image-attachment-info-template.html">
-    <p><span ng-class="{'error': isAttachmentResolutionTooBig(attachment)}">{{attachment.width}}&nbsp;&times;&nbsp;{{attachment.height}}&nbsp;px</span>, format:&nbsp;{{attachment.format}},
-    <span ng-class="{'error': isAttachmentSizeTooBig(attachment)}">size:&nbsp;{{formatBytes(attachment.sizeInBytes)}}</span></p>
-    <p>uploaded on {{attachment.lastUpdated | amDateFormat:'MMMM Do YYYY, h:mm a'}}</p>
+    <p>
+    <span class="file-name">{{attachment.meta.fileName}}</span>, &nbsp;
+    <span ng-class="{'error': isAttachmentResolutionTooBig(attachment)}">{{attachment.content.details.width}}&nbsp;&times;&nbsp;{{attachment.content.details.height}}px</span>,&nbsp; format:&nbsp;{{attachment.content.type}},
+    <span ng-class="{'error': isAttachmentSizeTooBig(attachment)}">size:&nbsp;{{formatBytes(attachment.content.size)}}</span></p>
+    <p>uploaded on {{attachment.meta.lastUpdated | amDateFormat:'MMMM Do YYYY, h:mm a'}}</p>
 </script>
 
 <div id="verification-modal" ng-show="verificationStatus.visible" ng-class="verificationStatus.typeOfMessageToBeShown">

@@ -12,6 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             this.Chapters = new List<ChapterInfoView>();
             this.Macros = new List<MacroView>();
             this.LookupTables = new List<LookupTableView>();
+            this.Attachments = new List<AttachmentView>();
         }
         public string QuestionnaireId { get; set; }
         public string Title { get; set; }

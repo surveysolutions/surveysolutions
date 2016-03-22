@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -15,9 +17,11 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Models;
+using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.UI.Designer.Api
@@ -61,6 +65,7 @@ namespace WB.UI.Designer.Api
         public class AttachmentModel
         {
             public HttpFile File { get; set; }
+            public string FileName { get; set; }
             public string Command { get; set; }
         }
 
@@ -69,26 +74,35 @@ namespace WB.UI.Designer.Api
         public HttpResponseMessage UpdateAttachment(AttachmentModel model)
         {
             var commandType = typeof (UpdateAttachment).Name;
-            UpdateAttachment updateAttachmentCommand;
+            UpdateAttachment command;
             try
             {
-                updateAttachmentCommand = (UpdateAttachment) this.commandDeserializer.Deserialize(commandType, model.Command);
+                command = (UpdateAttachment) this.commandDeserializer.Deserialize(commandType, model.Command);
+                
                 if (model.File != null)
                 {
                     using (SHA1CryptoServiceProvider sha1 = new SHA1CryptoServiceProvider())
                     {
-                        updateAttachmentCommand.AttachmentContentId =
+                        command.AttachmentContentId =
                             BitConverter.ToString(sha1.ComputeHash(model.File.Buffer)).Replace("-", string.Empty);
                     }
+
+                    this.attachmentService.SaveContent(
+                        contentId: command.AttachmentContentId,
+                        contentType: model.File.MediaType,
+                        binaryContent: model.File.Buffer, 
+                        details: this.GetAttachmentDetails(model.File.Buffer, model.File.MediaType, model.File.FileName));
                 }
 
-                this.attachmentService.SaveAttachmentContent(
-                    questionnaireId: updateAttachmentCommand.QuestionnaireId,
-                    attachmentId: updateAttachmentCommand.AttachmentId,
-                    attachmentContentId: updateAttachmentCommand.AttachmentContentId,
-                    contentType: model.File.MediaType,
-                    binaryContent: model.File?.Buffer,
-                    fileName: model.File.FileName);
+                this.attachmentService.SaveMeta(
+                    attachmentId: command.AttachmentId,
+                    contentId: command.AttachmentContentId,
+                    questionnaireId: command.QuestionnaireId,
+                    fileName: model.File?.FileName ?? model.FileName);
+            }
+            catch (FormatException e)
+            {
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
             }
             catch (ArgumentException e)
             {
@@ -96,7 +110,32 @@ namespace WB.UI.Designer.Api
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
             }
 
-            return this.ProcessCommand(updateAttachmentCommand, commandType);
+            return this.ProcessCommand(command, commandType);
+        }
+
+        public AttachmentDetails GetAttachmentDetails(byte[] binaryContent, string contentType, string fileName)
+        {
+            if (contentType.StartsWith("image/"))
+            {
+                using (var stream = new MemoryStream(binaryContent))
+                {
+                    try
+                    {
+                        var image = Image.FromStream(stream);
+                        return new AttachmentDetails
+                        {
+                            Height = image.Size.Height,
+                            Width = image.Size.Width
+                        };
+                    }
+                    catch (ArgumentException e)
+                    {
+                        throw new FormatException(string.Format(ExceptionMessages.Attachments_uploaded_file_is_not_image, fileName), e);
+                    }
+                }
+            }
+
+            throw new FormatException(ExceptionMessages.Attachments_Unsupported_content);
         }
 
         [Route("~/api/command/updateLookupTable")]

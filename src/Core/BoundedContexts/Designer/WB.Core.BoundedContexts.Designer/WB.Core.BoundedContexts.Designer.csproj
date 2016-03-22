@@ -210,6 +210,7 @@
     <Compile Include="Events\Questionnaire\Macros\MacroUpdated.cs" />
     <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentContent.cs" />
+    <Compile Include="Implementation\Services\AttachmentService\AttachmentSize.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentMeta.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentService.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentDetails.cs" />

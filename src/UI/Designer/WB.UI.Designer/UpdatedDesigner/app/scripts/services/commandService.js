@@ -35,14 +35,22 @@
 
                     var command = {
                         questionnaireId: questionnaireId,
-                        attachmentId: attachment.itemId,
-                        attachmentName: attachment.name,
-                        attachmentFileName: attachment.fileName
+                        attachmentId: attachment.attachmentId,
+                        attachmentName: attachment.name
                     };
+
+                    if (!_.isUndefined(attachment.content)) {
+                        command.attachmentContentId = attachment.content.contentId;
+                    }
+
+                    var fileName = "";
+                    if (!_.isUndefined(attachment.meta)) {
+                        fileName = attachment.meta.fileName;
+                    }
 
                     return Upload.upload({
                         url: urlBase + '/updateAttachment',
-                        data: { file: _.isNull(attachment.file) ? "" : attachment.file, "command": JSON.stringify(command) }
+                        data: { file: _.isNull(attachment.file) ? "" : attachment.file, fileName: fileName,  "command": JSON.stringify(command) }
                     }).success(function () {
                         blockUI.stop();
                     }).error(function () {
@@ -50,18 +58,10 @@
                     });
                 };
 
-                commandService.addAttachment = function (questionnaireId, attachment) {
+                commandService.deleteAttachment = function (questionnaireId, attachmentId) {
                     var command = {
                         questionnaireId: questionnaireId,
-                        attachmentId: attachment.itemId
-                    };
-                    return commandCall("AddAttachment", command);
-                };
-
-                commandService.deleteAttachment = function (questionnaireId, itemId) {
-                    var command = {
-                        questionnaireId: questionnaireId,
-                        attachmentId: itemId
+                        attachmentId: attachmentId
                     };
                     return commandCall("DeleteAttachment", command);
                 };
