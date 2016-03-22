@@ -81,16 +81,12 @@ namespace WB.UI.Designer.Api
                 
                 if (model.File != null)
                 {
-                    using (SHA1CryptoServiceProvider sha1 = new SHA1CryptoServiceProvider())
-                    {
-                        command.AttachmentContentId =
-                            BitConverter.ToString(sha1.ComputeHash(model.File.Buffer)).Replace("-", string.Empty);
-                    }
+                    command.AttachmentContentId = this.attachmentService.GetAttachmentContentId(model.File.Buffer);
 
                     this.attachmentService.SaveContent(
                         contentId: command.AttachmentContentId,
                         contentType: model.File.MediaType,
-                        binaryContent: model.File.Buffer, 
+                        binaryContent: model.File.Buffer,
                         details: this.GetAttachmentDetails(model.File.Buffer, model.File.MediaType, model.File.FileName));
                 }
 
