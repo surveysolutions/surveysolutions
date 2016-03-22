@@ -6,6 +6,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
 {
     public interface IAttachmentService
     {
+        string GetAttachmentContentId(byte[] binaryContent);
         void SaveContent(string contentId, string contentType, byte[] binaryContent, AttachmentDetails details);
         void SaveMeta(Guid attachmentId, Guid questionnaireId, string contentId, string fileName);
         AttachmentContentView GetContentDetails(string contentId);
