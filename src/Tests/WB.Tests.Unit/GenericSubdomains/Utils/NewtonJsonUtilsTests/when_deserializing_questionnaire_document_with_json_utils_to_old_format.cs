@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -33,7 +34,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
             result.ShouldEqual(resultQuestionnaire);
 
 
-        private const string resultQuestionnaire = @"{""$type"":""Main.Core.Documents.QuestionnaireDocument, Main.Core"",""Id"":""questionnaireId"",""Children"":[{""$type"":""Main.Core.Entities.SubEntities.Group, Main.Core"",""Children"":[{""$type"":""Main.Core.Entities.SubEntities.Question.NumericQuestion, Main.Core"",""IsInteger"":true,""Answers"":[],""Capital"":false,""Children"":[],""HideIfDisabled"":false,""Featured"":true,""PublicKey"":""55555555-5555-5555-5555-555555555555"",""QuestionScope"":0,""QuestionType"":4,""StataExportCaption"":""DUNo"",""ValidationConditions"":[]},{""$type"":""Main.Core.Entities.SubEntities.Question.TextQuestion, Main.Core"",""Answers"":[],""Capital"":false,""Children"":[],""HideIfDisabled"":false,""Featured"":true,""PublicKey"":""33333333-3333-3333-3333-333333333333"",""QuestionScope"":0,""QuestionText"":""Question T"",""QuestionType"":7,""StataExportCaption"":""Prov"",""ValidationConditions"":[]}],""ConditionExpression"":"""",""HideIfDisabled"":false,""Enabled"":true,""Description"":"""",""IsRoster"":false,""RosterSizeSource"":0,""RosterFixedTitles"":[],""FixedRosterTitles"":[],""PublicKey"":""00000000-0000-0000-0000-000000000000"",""Title"":""Chapter""}],""Macros"":{""$type"":""System.Collections.Generic.Dictionary`2[[System.Guid, mscorlib],[WB.Core.SharedKernels.SurveySolutions.Documents.Macro, Main.Core]], mscorlib""},""LookupTables"":{""$type"":""System.Collections.Generic.Dictionary`2[[System.Guid, mscorlib],[WB.Core.SharedKernels.SurveySolutions.Documents.LookupTable, Main.Core]], mscorlib""},""Attachments"":[],""ConditionExpression"":"""",""HideIfDisabled"":false,""CreationDate"":""2015-03-22T12:55:30"",""LastEntryDate"":""2015-03-22T12:57:30"",""IsDeleted"":false,""IsPublic"":false,""UsesCSharp"":false,""PublicKey"":""11111111-1111-1111-1111-111111111111"",""IsRoster"":false,""RosterSizeSource"":0,""FixedRosterTitles"":[],""SharedPersons"":[],""LastEventSequence"":0}";
+        private static string resultQuestionnaire = ResourceHelper.ReadResourceFile("WB.Tests.Unit.Resources.questionnaire_in_old_format.json");
 
         private static QuestionnaireDocument questionnaire;
         private static NewtonJsonSerializer _jsonSerializer;
