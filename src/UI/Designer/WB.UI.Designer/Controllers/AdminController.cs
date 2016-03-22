@@ -131,10 +131,22 @@ namespace WB.UI.Designer.Controllers
             {
                 uploadFile = uploadFile ?? this.Request.Files[0];
 
-                var isContentAvailable = uploadFile?.ContentLength > 0;
-                if (!isContentAvailable)
+                var areFileNameAndContentAvailable = uploadFile?.FileName != null && uploadFile?.ContentLength > 0;
+                if (!areFileNameAndContentAvailable)
                 {
                     this.Error("Uploaded file is not specified or empty.");
+                    return this.View();
+                }
+
+                if (uploadFile.FileName.ToLower().EndsWith(".tmpl"))
+                {
+                    this.Error("You are trying to restore old format questionnaire. Please use 'Old Format Restore' option.");
+                    return this.View();
+                }
+
+                if (!uploadFile.FileName.ToLower().EndsWith(".zip"))
+                {
+                    this.Error("Only zip archives are supported. Please upload correct zip backup.");
                     return this.View();
                 }
 
