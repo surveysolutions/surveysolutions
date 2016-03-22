@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
-            questionnaire.AddAttachment(Create.Command.AddAttachment(questionnaireId, attachmentId, responsibleId));
+            questionnaire.AddOrUpdateAttachment(Create.Command.AddOrUpdateAttachment(questionnaireId, attachmentId, "", responsibleId, ""));
 
             deleteAttachment = Create.Command.DeleteAttachment(questionnaireId, attachmentId, responsibleId);
 

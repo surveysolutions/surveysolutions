@@ -7,12 +7,12 @@ using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Attachments;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
 {
-    internal class when_adding_attachment_with_premission_to_edit : QuestionnaireTestsContext
+    internal class when_adding_or_updating_attachment_with_premission_to_edit : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: ownerId);
-            addAttachment = Create.Command.AddAttachment(questionnaireId, attachmentId, sharedPersonId);
+            addOrUpdateAttachment = Create.Command.AddOrUpdateAttachment(questionnaireId, attachmentId, "", sharedPersonId, "");
             questionnaire.AddSharedPerson(sharedPersonId, "email@email.com", ShareType.Edit, ownerId);
 
             eventContext = new EventContext();
@@ -24,15 +24,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
             eventContext = null;
         };
 
-        Because of = () => questionnaire.AddAttachment(addAttachment);
+        Because of = () => questionnaire.AddOrUpdateAttachment(addOrUpdateAttachment);
 
-        It should_raise_AttachmentAdded_event_with_EntityId_specified = () =>
-            eventContext.GetSingleEvent<AttachmentAdded>().AttachmentId.ShouldEqual(attachmentId);
+        It should_raise_AttachmentUpdated_event_with_EntityId_specified = () =>
+            eventContext.GetSingleEvent<AttachmentUpdated>().AttachmentId.ShouldEqual(attachmentId);
 
-        It should_raise_AttachmentAdded_event_with_ResponsibleId_specified = () =>
-            eventContext.GetSingleEvent<AttachmentAdded>().ResponsibleId.ShouldEqual(sharedPersonId);
+        It should_raise_AttachmentUpdated_event_with_ResponsibleId_specified = () =>
+            eventContext.GetSingleEvent<AttachmentUpdated>().ResponsibleId.ShouldEqual(sharedPersonId);
 
-        private static AddAttachment addAttachment;
+        private static AddOrUpdateAttachment addOrUpdateAttachment;
         private static Questionnaire questionnaire;
         private static readonly Guid ownerId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static readonly Guid sharedPersonId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");

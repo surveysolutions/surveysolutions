@@ -143,9 +143,8 @@
     <Compile Include="Commands\Account\UnlockAccountCommand.cs" />
     <Compile Include="Commands\Account\UpdateAccountCommand.cs" />
     <Compile Include="Commands\CommandUtils.cs" />
-    <Compile Include="Commands\Questionnaire\Attachments\AddAttachment.cs" />
     <Compile Include="Commands\Questionnaire\Attachments\DeleteAttachment.cs" />
-    <Compile Include="Commands\Questionnaire\Attachments\UpdateAttachment.cs" />
+    <Compile Include="Commands\Questionnaire\Attachments\AddOrUpdateAttachment.cs" />
     <Compile Include="Commands\Questionnaire\Base\AbstractUpdateQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\AbstractQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\CommonQuestionParameters.cs" />
@@ -198,7 +197,6 @@
     <Compile Include="Commands\Questionnaire\StaticText\UpdateStaticText.cs" />
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaire.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
-    <Compile Include="Events\Questionnaire\Attachments\AttachmentAdded.cs" />
     <Compile Include="Events\Questionnaire\Attachments\AttachmentDeleted.cs" />
     <Compile Include="Events\Questionnaire\Attachments\AttachmentUpdated.cs" />
     <Compile Include="Events\Questionnaire\ExpressionsMigratedToCSharp.cs" />

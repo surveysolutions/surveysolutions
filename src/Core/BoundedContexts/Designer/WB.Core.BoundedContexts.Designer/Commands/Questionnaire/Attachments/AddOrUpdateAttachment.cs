@@ -4,9 +4,9 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments
 {
     [Serializable]
-    public class UpdateAttachment : QuestionnaireCommand
+    public class AddOrUpdateAttachment : QuestionnaireCommand
     {
-        public UpdateAttachment(
+        public AddOrUpdateAttachment(
             Guid questionnaireId,
             Guid attachmentId,
             Guid responsibleId,

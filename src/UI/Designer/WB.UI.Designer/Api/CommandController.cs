@@ -69,15 +69,15 @@ namespace WB.UI.Designer.Api
             public string Command { get; set; }
         }
 
-        [Route("~/api/command/updateAttachment")]
+        [Route("~/api/command/attachment")]
         [HttpPost]
         public HttpResponseMessage UpdateAttachment(AttachmentModel model)
         {
-            var commandType = typeof (UpdateAttachment).Name;
-            UpdateAttachment command;
+            var commandType = typeof (AddOrUpdateAttachment).Name;
+            AddOrUpdateAttachment command;
             try
             {
-                command = (UpdateAttachment) this.commandDeserializer.Deserialize(commandType, model.Command);
+                command = (AddOrUpdateAttachment) this.commandDeserializer.Deserialize(commandType, model.Command);
                 
                 if (model.File != null)
                 {

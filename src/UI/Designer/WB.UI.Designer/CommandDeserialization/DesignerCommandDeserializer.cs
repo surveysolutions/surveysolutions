@@ -58,8 +58,7 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "UpdateLookupTable", typeof (UpdateLookupTable) },
                     { "DeleteLookupTable", typeof (DeleteLookupTable) },
                      //Attachment commands
-                    { "AddAttachment", typeof (AddAttachment) },
-                    { "UpdateAttachment", typeof (UpdateAttachment) },
+                    { "AddOrUpdateAttachment", typeof (AddOrUpdateAttachment) },
                     { "DeleteAttachment", typeof (DeleteAttachment) }
                 };
             }
