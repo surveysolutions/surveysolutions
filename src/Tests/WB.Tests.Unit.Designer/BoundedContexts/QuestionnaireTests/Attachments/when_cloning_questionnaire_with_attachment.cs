@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
 
             sourceQuestionnaire = Create.QuestionnaireDocument();
-            sourceQuestionnaire.Attachments.Add(Create.Attachment(attachmentId: attachmentId, name: name, fileName: fileName));
+            sourceQuestionnaire.Attachments.Add(Create.Attachment(attachmentId: attachmentId, name: name, contentId: contentId));
 
             eventContext = new EventContext();
         };
@@ -37,8 +37,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
         It should_set_original_Name_in_raised_event = () =>
             eventContext.GetSingleEvent<QuestionnaireCloned>().QuestionnaireDocument.Attachments.First().Name.ShouldEqual(name);
 
-        It should_set_original_FileName_in_raised_event = () =>
-            eventContext.GetSingleEvent<QuestionnaireCloned>().QuestionnaireDocument.Attachments.First().FileName.ShouldEqual(fileName);
+        It should_set_Content_Id_in_raised_event = () =>
+            eventContext.GetSingleEvent<QuestionnaireCloned>().QuestionnaireDocument.Attachments.First().ContentId.ShouldEqual(contentId);
 
         private static Questionnaire questionnaire;
         private static QuestionnaireDocument sourceQuestionnaire;
@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
         private static readonly Guid clonedQuestionnaireId = Guid.Parse("22222222222222222222222222222222");
         private static readonly Guid attachmentId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static readonly string name = "name";
-        private static readonly string fileName = "file.PNG";
+        private static readonly string contentId = "content id";
         private static EventContext eventContext;
     }
 }

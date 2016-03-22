@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
             var attachmentMeta = attachmentMetaStorage.GetById(attachmentId.FormatGuid());
             attachmentMeta.FileName.ShouldEqual(fileName);
             attachmentMeta.QuestionnaireId.ShouldEqual(questionnaireId.FormatGuid());
-            attachmentMeta.AttachmentContentHash.ShouldEqual(attachmentContentId);
+            attachmentMeta.ContentId.ShouldEqual(attachmentContentId);
         };
 
         private static AttachmentService attachmentService;

@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
             questionnaire.AddAttachment(Create.Command.AddAttachment(questionnaireId, attachmentId, responsibleId));
 
-            updateAttachment = Create.Command.UpdateAttachment(questionnaireId, attachmentId, attachmentContentId, responsibleId, name, fileName);
+            updateAttachment = Create.Command.UpdateAttachment(questionnaireId, attachmentId, attachmentContentId, responsibleId, name);
 
             eventContext = new EventContext();
         };
@@ -35,14 +35,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
         It should_raise_AttachmentUpdated_event_with_AttachmentName_specified = () =>
             eventContext.GetSingleEvent<AttachmentUpdated>().AttachmentName.ShouldEqual(name);
 
-        It should_raise_AttachmentUpdated_event_with_AttachmentFileName_specified = () =>
-            eventContext.GetSingleEvent<AttachmentUpdated>().AttachmentFileName.ShouldEqual(fileName);
+        It should_raise_AttachmentUpdated_event_with_ContentId_specified = () =>
+            eventContext.GetSingleEvent<AttachmentUpdated>().AttachmentContentId.ShouldEqual(attachmentContentId);
 
         private static UpdateAttachment updateAttachment;
         private static Questionnaire questionnaire;
         private static readonly string name = "Attachment";
         private static readonly string attachmentContentId = "ABECA98D65F866DFCD292BC973BDACF5954B916D";
-        private static readonly string fileName = "Attachment.PNG";
         private static readonly Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid attachmentId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

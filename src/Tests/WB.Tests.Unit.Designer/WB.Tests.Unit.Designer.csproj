@@ -245,8 +245,6 @@
     <Compile Include="Applications\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_no_passed_value.cs" />
     <Compile Include="Applications\CommandApiControllerTests\CommandApiControllerTestContext.cs" />
     <Compile Include="Applications\CommandApiControllerTests\when_command_preparation_throws_exception.cs" />
-    <Compile Include="Applications\CommandApiControllerTests\when_posting_updated_attachment.cs" />
-    <Compile Include="Applications\CommandApiControllerTests\when_posting_updated_attachment_with_wrong_content_type.cs" />
     <Compile Include="Applications\CommandApiControllerTests\when_questionnaire_not_available.cs" />
     <Compile Include="Applications\CommandApiControllerTests\when_user_has_no_access_rights.cs" />
     <Compile Include="Applications\CommandDeserializerTests\CommandDeserializerTestsContext.cs" />
@@ -321,17 +319,6 @@
     <Compile Include="Applications\VerificationErrorsMapperTests\VerificationErrorsMapperTestContext.cs" />
     <Compile Include="Applications\VerificationErrorsMapperTests\when_enriching_errors_with_empty_static_text.cs" />
     <Compile Include="Applications\VerificationErrorsMapperTests\when_enriching_errors_with_titles_from_questionnaire.cs" />
-    <Compile Include="BoundedContexts\AttachmentServiceTests\AttachmentServiceTestContext.cs" />
-    <Compile Include="BoundedContexts\AttachmentServiceTests\when_cloning_attachment.cs" />
-    <Compile Include="BoundedContexts\AttachmentServiceTests\when_deleting_attachment_and_content_is_not_shared.cs" />
-    <Compile Include="BoundedContexts\AttachmentServiceTests\when_deleting_attachment_and_content_is_shared.cs" />
-    <Compile Include="BoundedContexts\AttachmentServiceTests\when_getting_attachment.cs" />
-    <Compile Include="BoundedContexts\AttachmentServiceTests\when_getting_attachment_and_meta_is_absent.cs" />
-    <Compile Include="BoundedContexts\AttachmentServiceTests\when_saving_attachment_and_content_is_new.cs" />
-    <Compile Include="BoundedContexts\AttachmentServiceTests\when_saving_attachment_and_old_content_used_by_another_attachment.cs" />
-    <Compile Include="BoundedContexts\AttachmentServiceTests\when_saving_attachment_with_new_content_and_one_more_attachment_already_uses_this_content.cs" />
-    <Compile Include="BoundedContexts\AttachmentServiceTests\when_saving_attachment_for_the_first_time.cs" />
-    <Compile Include="BoundedContexts\AttachmentServiceTests\when_saving_attachment_with_same_content.cs" />
     <Compile Include="BoundedContexts\Designer\AddTextQuestionHandlerTests\when_adding_text_question_and_variable_name_ends_with_underscore.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_filtered_linked_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_fixed_roster.cs" />

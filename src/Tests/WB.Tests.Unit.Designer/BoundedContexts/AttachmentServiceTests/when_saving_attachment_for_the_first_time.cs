@@ -31,14 +31,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
             var attachmentMeta = attachmentMetaStorage.GetById(attachmentId.FormatGuid());
             attachmentMeta.FileName.ShouldEqual(fileName);
             attachmentMeta.QuestionnaireId.ShouldEqual(questionnaireId.FormatGuid());
-            attachmentMeta.AttachmentContentHash.ShouldEqual(attachmentContentId);
+            attachmentMeta.ContentId.ShouldEqual(attachmentContentId);
         };
 
         It should_save_attachment_content_with_specified_properties = () =>
         {
             var attachmentContent = attachmentContentStorage.GetById(attachmentContentId);
             attachmentContent.Content.ShouldBeTheSameAs(fileContent);
-            attachmentContent.AttachmentContentHash.ShouldEqual(attachmentContentId);
+            attachmentContent.ContentId.ShouldEqual(attachmentContentId);
             attachmentContent.ContentType.ShouldEqual(contentType);
             attachmentContent.Details.Height.ShouldEqual(3);
             attachmentContent.Details.Width.ShouldEqual(2);

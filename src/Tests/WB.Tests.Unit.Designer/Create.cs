@@ -73,13 +73,13 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static Attachment Attachment(Guid? attachmentId = null, string name = "attachment", string fileName = "image.png")
+        public static Attachment Attachment(Guid? attachmentId = null, string name = "attachment", string contentId = "content id")
         {
             return new Attachment
             {
                 AttachmentId = attachmentId ?? Guid.NewGuid(),
                 Name = name,
-                FileName = fileName
+                ContentId = contentId
             };
         }
 
@@ -93,17 +93,17 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static AttachmentMeta AttachmentMeta(
-            string attachmentId,
+            Guid attachmentId,
             string contentHash,
-            string questionnaireId = null,
+            Guid questionnaireId,
             string fileName = null,
             DateTime? lastUpdateDate = null)
         {
             return new AttachmentMeta
             {
                 AttachmentId = attachmentId,
-                AttachmentContentHash = contentHash,
-                QuestionnaireId = questionnaireId ?? "questionnaireId",
+                ContentId = contentHash,
+                QuestionnaireId = questionnaireId,
                 FileName = fileName ?? "fileName.txt",
                 LastUpdateDate = lastUpdateDate ?? DateTime.UtcNow
             };
@@ -119,18 +119,17 @@ namespace WB.Tests.Unit.Designer
         //        );
         //}
 
-        public static AttachmentService AttachmentService()
-        {
-            return new AttachmentService();
-        }
-
 
         public static AttachmentView AttachmentView(Guid? id = null, long? size = null)
         {
             return new AttachmentView
             {
-                ItemId = (id ?? Guid.NewGuid()).FormatGuid(),
-                SizeInBytes = size ?? 10
+                AttachmentId = (id ?? Guid.NewGuid()).FormatGuid(),
+                Meta = new AttachmentMeta {},
+                Content = new AttachmentContentView
+                {
+                    Size = size ?? 10
+                }
             };
         }
 
@@ -1311,10 +1310,9 @@ namespace WB.Tests.Unit.Designer
                 return new AddAttachment(questionnaireId, attachmentId, responsibleId);
             }
 
-            public static UpdateAttachment UpdateAttachment(Guid questionnaireId, Guid attachmentId, string attachmentContentId, Guid responsibleId, string attachmentName,
-                string attachmentFileName)
+            public static UpdateAttachment UpdateAttachment(Guid questionnaireId, Guid attachmentId, string attachmentContentId, Guid responsibleId, string attachmentName)
             {
-                return new UpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, attachmentFileName, attachmentContentId);
+                return new UpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, attachmentContentId);
             }
 
             public static DeleteAttachment DeleteAttachment(Guid questionnaireId, Guid attachmentId, Guid responsibleId)
