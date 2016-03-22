@@ -282,8 +282,6 @@
     <Compile Include="Api\ImportController.cs" />
     <Compile Include="Api\QuestionnaireController.cs" />
     <Compile Include="Api\UsersController.cs" />
-    <Compile Include="Code\PlainApiTransactionFilter.cs" />
-    <Compile Include="Code\PlainTransactionFilter.cs" />
     <Compile Include="Code\Implementation\CommandInflaitingException.cs" />
     <Compile Include="Code\Implementation\CommandInflatingExceptionType.cs" />
     <Compile Include="Code\Implementation\ShareChangeType.cs" />
@@ -455,9 +453,9 @@
     <EmbeddedResource Include="Scripts\components\query-string.js" />
     <Content Include="Scripts\editForm.js" />
     <None Include="compilerconfig.json" />
-    <Content Include="compilerconfig.json.defaults">
+    <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
-    </Content>
+    </None>
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />

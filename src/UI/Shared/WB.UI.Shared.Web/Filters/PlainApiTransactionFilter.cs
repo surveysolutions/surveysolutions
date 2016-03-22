@@ -1,9 +1,9 @@
-﻿using System.Web.Http.Controllers;
+using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
+namespace WB.UI.Shared.Web.Filters
 {
     public class PlainApiTransactionFilter : ActionFilterAttribute, IActionFilter
     {
@@ -17,18 +17,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
-            TransactionManager.BeginTransaction();
+            this.TransactionManager.BeginTransaction();
         }
 
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
         {
             if (actionExecutedContext.Exception != null)
             {
-                TransactionManager.RollbackTransaction();
+                this.TransactionManager.RollbackTransaction();
             }
             else
             {
-                TransactionManager.CommitTransaction();
+                this.TransactionManager.CommitTransaction();
             }
         }
     }

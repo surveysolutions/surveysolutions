@@ -735,8 +735,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private bool AttachmentHasEmptyContent(Attachment attachment, ReadOnlyQuestionnaireDocument questionnaire)
         {
-            var attachmentContent = this.attachmentService.GetAttachment(attachment.AttachmentId);
-            return attachmentContent?.Content == null || attachmentContent.Content.Length == 0;
+            var attachmentContent = this.attachmentService.GetContentDetails(attachment.ContentId);
+            return attachmentContent == null || attachmentContent.Size == 0;
         }
 
         private static bool LookupTableHasEmptyName(Guid tableId, LookupTable table, ReadOnlyQuestionnaireDocument questionnaire)

@@ -89,7 +89,7 @@ namespace WB.UI.Designer.Api
         [Route("attachments/{id}")]
         public HttpResponseMessage AttachmentContent(string id)
         {
-            var attachment = this.attachmentService.GetAttachmentContent(id);
+            var attachment = this.attachmentService.GetContent(id);
 
             if (attachment == null) return Request.CreateResponse(HttpStatusCode.NotFound);
 
@@ -99,7 +99,7 @@ namespace WB.UI.Designer.Api
             };
 
             response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachment.ContentType);
-            response.Headers.ETag = new EntityTagHeaderValue("\"" + attachment.AttachmentContentHash + "\"");
+            response.Headers.ETag = new EntityTagHeaderValue("\"" + attachment.ContentId + "\"");
 
             return response;
         }

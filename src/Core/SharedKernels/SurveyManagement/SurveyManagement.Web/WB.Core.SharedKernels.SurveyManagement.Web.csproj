@@ -211,11 +211,9 @@
     <Compile Include="Api\UsersController.cs" />
     <Compile Include="Code\ApiBasicAuthAttribute.cs" />
     <Compile Include="Code\ProtobufJsonFormatter.cs" />
-    <Compile Include="Code\PlainApiTransactionFilter.cs" />
     <Compile Include="Code\ProtobufSerializer.cs" />
     <Compile Include="Code\Security\CustomIdentity.cs" />
     <Compile Include="Code\Security\CustomPrincipal.cs" />
-    <Compile Include="Code\PlainTransactionFilter.cs" />
     <Compile Include="Code\Security\IdentityExtentions.cs" />
     <Compile Include="Code\Security\PrincipalReplacer.cs" />
     <Compile Include="Code\ProtobufJsonSerializerAttribute.cs" />

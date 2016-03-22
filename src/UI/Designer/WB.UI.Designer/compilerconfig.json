@@ -2,5 +2,9 @@
   {
     "outputFile": "UpdatedDesigner/content/markup.css.css",
     "inputFile": "UpdatedDesigner/content/markup.css.less"
+  },
+  {
+    "outputFile": "UpdatedDesigner/content/designer-editor/wb-designer-editor.css.css",
+    "inputFile": "UpdatedDesigner/content/designer-editor/wb-designer-editor.css.less"
   }
 ]
