@@ -1,12 +1,11 @@
 using System;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using Machine.Specifications;
 using Moq;
 using MultipartDataMediaFormatter.Infrastructure;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.Api;
 using WB.UI.Shared.Web.CommandDeserialization;
 using It = Machine.Specifications.It;
@@ -17,33 +16,42 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
     {
         Establish context = () =>
         {
-            var updateAttachmentCommand = Create.Command.UpdateAttachment(questionnaireId, attachmentId, attachmentContentId, responsibleId, name, fileName);
+            var updateAttachmentCommand = Create.Command.AddOrUpdateAttachment(questionnaireId, attachmentId, attachmentContentId, responsibleId, name);
 
-            attachmentServiceMock.Setup(x => x.SaveAttachmentContent(questionnaireId, attachmentId, attachmentContentId, contentType, fileBytes, fileName)).Verifiable();
+            attachmentServiceMock.Setup(x => x.GetAttachmentContentId(fileBytes)).Returns(attachmentContentId);
+            attachmentServiceMock.Setup(x => x.SaveContent(attachmentContentId, contentType, fileBytes)).Verifiable();
+            attachmentServiceMock.Setup(x => x.SaveMeta(attachmentId, questionnaireId, attachmentContentId, fileName)).Verifiable();
 
             var commandDeserializerMock = new Mock<ICommandDeserializer>();
             
             commandDeserializerMock
-                .Setup(x => x.Deserialize(typeof (UpdateAttachment).Name, serializedUpdateAttachmentCommand))
+                .Setup(x => x.Deserialize(typeof (AddOrUpdateAttachment).Name, serializedUpdateAttachmentCommand))
                 .Returns(updateAttachmentCommand);
             
             controller = CreateCommandController(
                 commandDeserializer: commandDeserializerMock.Object,
-                attachmentService: attachmentServiceMock.Object);
-
-            Setup.CommandApiControllerToAcceptAttachment(controller, fileBytes, MediaTypeHeaderValue.Parse(contentType), serializedUpdateAttachmentCommand);
+                attachmentService: attachmentServiceMock.Object,
+                commandService: mockOfCommandService.Object);
         };
 
         Because of = () =>
-            message = controller.UpdateAttachment(new CommandController.AttachmentModel { File = new HttpFile { Buffer = fileBytes, FileName = fileName , MediaType = contentType }, Command = serializedUpdateAttachmentCommand });
+            controller.UpdateAttachment(new CommandController.AttachmentModel { File = new HttpFile { Buffer = fileBytes, FileName = fileName , MediaType = contentType }, Command = serializedUpdateAttachmentCommand });
 
-        It should_save_attachment_with_specified_params = () =>
+        It should_save_attachment_content_with_specified_params = () =>
             attachmentServiceMock.Verify(
-                x => x.SaveAttachmentContent(questionnaireId, attachmentId, attachmentContentId, contentType, fileBytes, fileName), Times.Once);
+                x => x.SaveContent(attachmentContentId, contentType, fileBytes), Times.Once);
+
+        It should_save_attachment_meta_with_specified_params = () =>
+            attachmentServiceMock.Verify(
+                x => x.SaveMeta(attachmentId, questionnaireId, attachmentContentId, fileName), Times.Once);
+
+        It should_execute_AddOrUpdateAttachment_command = () =>
+            mockOfCommandService.Verify(
+                x => x.Execute(Moq.It.IsAny<AddOrUpdateAttachment>(), Moq.It.IsAny<string>()), Times.Once);
 
         private static CommandController controller;
         private static readonly Mock<IAttachmentService> attachmentServiceMock = new Mock<IAttachmentService>();
-        private static HttpResponseMessage message;
+        private static readonly Mock<ICommandService> mockOfCommandService = new Mock<ICommandService>();
         private static string serializedUpdateAttachmentCommand = "hello";
         private static byte[] fileBytes = new byte[] { 96, 97, 98, 99, 100 };
         private static readonly string attachmentContentId = "ABECA98D65F866DFCD292BC973BDACF5954B916D";

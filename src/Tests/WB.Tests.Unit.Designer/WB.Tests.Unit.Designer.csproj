@@ -245,6 +245,8 @@
     <Compile Include="Applications\AttributesTests\when_api_basic_auth_attribute_handles_on_authorization_with_no_passed_value.cs" />
     <Compile Include="Applications\CommandApiControllerTests\CommandApiControllerTestContext.cs" />
     <Compile Include="Applications\CommandApiControllerTests\when_command_preparation_throws_exception.cs" />
+    <Compile Include="Applications\CommandApiControllerTests\when_posting_updated_attachment.cs" />
+    <Compile Include="Applications\CommandApiControllerTests\when_posting_updated_attachment_with_wrong_content_type.cs" />
     <Compile Include="Applications\CommandApiControllerTests\when_questionnaire_not_available.cs" />
     <Compile Include="Applications\CommandApiControllerTests\when_user_has_no_access_rights.cs" />
     <Compile Include="Applications\CommandDeserializerTests\CommandDeserializerTestsContext.cs" />
