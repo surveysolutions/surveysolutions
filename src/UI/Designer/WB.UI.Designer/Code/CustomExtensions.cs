@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Text;
 using System.Web.Security;
 using ICSharpCode.SharpZipLib.Zip;
@@ -8,6 +9,15 @@ namespace WB.UI.Designer.Extensions
 {
     public static class CustomExtensions
     {
+        public static byte[] ReadToEnd(this Stream stream)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                stream.CopyTo(memoryStream);
+                return memoryStream.ToArray();
+            }
+        }
+
         public static void PutFileEntry(this ZipOutputStream stream, string filename, byte[] content)
         {
             var entry = new ZipEntry(filename) { IsUnicodeText = true };
