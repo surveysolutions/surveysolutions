@@ -117,6 +117,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                 attachment.QuestionnaireId = questionnaireId;
                 attachment.FileName = fileName;
                 attachment.LastUpdateDate = DateTime.UtcNow;
+                attachment.ContentId = attachmentContentId;
                 this.attachmentMetaStorage.Store(attachment, attachment.AttachmentId);
             }
         }

@@ -98,10 +98,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.lookupTableIds.Remove(e.LookupTableId);
         }
 
-        internal void Apply(AttachmentAdded e)
-        {
-        }
-
         internal void Apply(AttachmentUpdated e)
         {
         }
@@ -876,14 +872,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #endregion
 
         #region Attachment command handlers
-
-        public void AddAttachment(AddAttachment command)
-        {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-            this.ApplyEvent(new AttachmentAdded(command.AttachmentId, command.ResponsibleId));
-        }
-        
-        public void UpdateAttachment(UpdateAttachment command)
+                
+        public void AddOrUpdateAttachment(AddOrUpdateAttachment command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             this.ApplyEvent(new AttachmentUpdated(

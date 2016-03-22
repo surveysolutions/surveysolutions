@@ -119,8 +119,7 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<UpdateLookupTable>(command => command.QuestionnaireId, aggregate => aggregate.UpdateLookupTable)
                 .Handles<DeleteLookupTable>(command => command.QuestionnaireId, aggregate => aggregate.DeleteLookupTable)
                 // Attachment
-                .Handles<AddAttachment>(command => command.QuestionnaireId, aggregate => aggregate.AddAttachment)
-                .Handles<UpdateAttachment>(command => command.QuestionnaireId, aggregate => aggregate.UpdateAttachment)
+                .Handles<AddOrUpdateAttachment>(command => command.QuestionnaireId, aggregate => aggregate.AddOrUpdateAttachment)
                 .Handles<DeleteAttachment>(command => command.QuestionnaireId, aggregate => aggregate.DeleteAttachment)
                 // Group
                 .Handles<AddGroup>(command => command.QuestionnaireId, (command, aggregate) => aggregate.AddGroupAndMoveIfNeeded(command.GroupId, command.ResponsibleId, command.Title, command.VariableName, command.RosterSizeQuestionId, command.Description, command.Condition, command.HideIfDisabled, command.ParentGroupId, command.IsRoster, command.RosterSizeSource, command.FixedRosterTitles, command.RosterTitleQuestionId, command.Index))

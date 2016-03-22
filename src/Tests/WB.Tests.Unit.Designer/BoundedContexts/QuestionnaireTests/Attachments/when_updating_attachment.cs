@@ -11,9 +11,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
-            questionnaire.AddAttachment(Create.Command.AddAttachment(questionnaireId, attachmentId, responsibleId));
+            questionnaire.AddOrUpdateAttachment(Create.Command.AddOrUpdateAttachment(questionnaireId, attachmentId, "", responsibleId, ""));
 
-            updateAttachment = Create.Command.UpdateAttachment(questionnaireId, attachmentId, attachmentContentId, responsibleId, name);
+            updateAttachment = Create.Command.AddOrUpdateAttachment(questionnaireId, attachmentId, attachmentContentId, responsibleId, name);
 
             eventContext = new EventContext();
         };
@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
             eventContext = null;
         };
 
-        Because of = () => questionnaire.UpdateAttachment(updateAttachment);
+        Because of = () => questionnaire.AddOrUpdateAttachment(updateAttachment);
 
         It should_raise_AttachmentUpdated_event_with_EntityId_specified = () =>
             eventContext.GetSingleEvent<AttachmentUpdated>().AttachmentId.ShouldEqual(attachmentId);
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
         It should_raise_AttachmentUpdated_event_with_ContentId_specified = () =>
             eventContext.GetSingleEvent<AttachmentUpdated>().AttachmentContentId.ShouldEqual(attachmentContentId);
 
-        private static UpdateAttachment updateAttachment;
+        private static AddOrUpdateAttachment updateAttachment;
         private static Questionnaire questionnaire;
         private static readonly string name = "Attachment";
         private static readonly string attachmentContentId = "ABECA98D65F866DFCD292BC973BDACF5954B916D";

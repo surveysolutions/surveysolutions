@@ -61,8 +61,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
         IEventHandler<LookupTableAdded>,
         IEventHandler<LookupTableUpdated>,
         IEventHandler<LookupTableDeleted>,
-
-        IEventHandler<AttachmentAdded>,
+        
         IEventHandler<AttachmentUpdated>,
         IEventHandler<AttachmentDeleted>
     {
@@ -569,16 +568,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
 
             document.LookupTables.Remove(evnt.Payload.LookupTableId);
 
-            this.UpdateQuestionnaire(evnt, document);
-        }
-
-        public void Handle(IPublishedEvent<AttachmentAdded> evnt)
-        {
-            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
-            AddOrUpdateAttachment(document, evnt.Payload.AttachmentId, new Attachment
-            {
-                AttachmentId = evnt.Payload.AttachmentId
-            });
             this.UpdateQuestionnaire(evnt, document);
         }
 
