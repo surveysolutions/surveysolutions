@@ -6,7 +6,6 @@ using Machine.Specifications;
 using Moq;
 using MultipartDataMediaFormatter.Infrastructure;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.UI.Designer.Api;
 using WB.UI.Shared.Web.CommandDeserialization;
@@ -14,26 +13,24 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
 {
-    [Ignore("Slave help, don't know what should check here")]
     internal class when_posting_updated_attachment_with_wrong_content_type : CommandApiControllerTestContext
     {
         Establish context = () =>
         {
-            var updateAttachmentCommand = Create.Command.UpdateAttachment(questionnaireId, attachmentId, attachmentContentId, responsibleId, name, fileName);
+            var updateAttachmentCommand = Create.Command.AddOrUpdateAttachment(questionnaireId, attachmentId, attachmentContentId, responsibleId, name);
 
-            attachmentServiceMock.Setup(x => x.SaveAttachmentContent(questionnaireId, attachmentId, attachmentContentId, contentType, fileBytes, fileName)).Verifiable();
+            attachmentServiceMock.Setup(x => x.GetAttachmentContentId(fileBytes)).Returns(attachmentContentId);
+            attachmentServiceMock.Setup(x => x.SaveContent(attachmentContentId, contentType, fileBytes)).Throws(new FormatException());
 
             var commandDeserializerMock = new Mock<ICommandDeserializer>();
 
             commandDeserializerMock
-                .Setup(x => x.Deserialize(typeof(UpdateAttachment).Name, serializedUpdateAttachmentCommand))
+                .Setup(x => x.Deserialize(typeof(AddOrUpdateAttachment).Name, serializedUpdateAttachmentCommand))
                 .Returns(updateAttachmentCommand);
 
             controller = CreateCommandController(
                 commandDeserializer: commandDeserializerMock.Object,
                 attachmentService: attachmentServiceMock.Object);
-
-            Setup.CommandApiControllerToAcceptAttachment(controller, fileBytes, MediaTypeHeaderValue.Parse("text/plain"), serializedUpdateAttachmentCommand);
         };
 
         Because of = () =>
@@ -53,6 +50,6 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
         private static readonly Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid attachmentId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        private static string contentType = "image/png";
+        private static string contentType = "text/plain";
     }
 }
