@@ -23,25 +23,18 @@
         height: 100%;
         border: none;
         position: relative;
+        min-width: 275px;
 
-        .modal-header {
-            position: absolute;
-            top: 0;
-            width: 100%;
-            left: 0;
+        .modal-header {                       
+            width: 100%;            
             height: @verification-modal-header-hight;
             .opensanslight-font();
             font-size: 36px;
-            font-weight: 300;
-            padding: 0 22px;
             border-bottom: 2px solid @verification-modal-content-border-color;
 
              button.close {
                 @s: 40px;
-                position: absolute;
                 z-index: 100;
-                top: 12px;
-                right: 4px;
                 width: @s;
                 height: @s;
                 background: url(../i/cross.png) 0 0 no-repeat;
@@ -59,7 +52,7 @@
         }
 
         .modal-body {
-            padding: @verification-modal-header-hight 0 @verification-modal-footer-hight;
+            padding: 0px;
             height: 100%;
 
             .error-message {

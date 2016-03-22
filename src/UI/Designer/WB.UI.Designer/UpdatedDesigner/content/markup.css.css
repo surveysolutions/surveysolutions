@@ -9230,26 +9230,17 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
 }
 #verification-modal .modal-content {
   height: 100%;
+  min-width: 275px;
   border: none;
   position: relative;
 }
 #verification-modal .modal-content .modal-header {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  left: 0;
-  height: 70px;
   font-family: 'Open Sans Light', sans-serif;
   font-size: 36px;
-  font-weight: 300;
-  padding: 0 22px;
   border-bottom: 2px solid #edeff1;
 }
 #verification-modal .modal-content .modal-header button.close {
-  position: absolute;
   z-index: 100;
-  top: 12px;
-  right: 4px;
   width: 40px;
   height: 40px;
   background: url(i/cross.png) 0 0 no-repeat;
@@ -9258,14 +9249,14 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   background-position: 0 -40px;
 }
 #verification-modal .modal-content .modal-header h3 {
-  line-height: 62px;
+  line-height: 36px;
 }
 #verification-modal .modal-content .modal-header h3 span {
   color: #dd2c2c;
 }
 #verification-modal .modal-content .modal-body {
-  padding: 70px 0 44px;
-  height: 100%;
+    padding: 0px; 
+    height: 100%;
 }
 #verification-modal .modal-content .modal-body .error-message {
   font-family: Georgia, serif;

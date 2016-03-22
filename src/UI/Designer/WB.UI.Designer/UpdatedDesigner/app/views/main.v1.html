@@ -311,10 +311,10 @@
 <div id="verification-modal" ng-show="verificationStatus.visible" ng-class="verificationStatus.typeOfMessageToBeShown">
     <div class="modal-content">
         <div class="modal-header">
+            <button type="button" class="close" ng-click="closeVerifications()" aria-hidden="true"> <!--&times;--> </button>
             <h3 class="modal-title">
                 Compilation: <span ng-pluralize count="verificationStatus.messagesToShow.length" when="{'1': '{} {{verificationStatus.typeOfMessageToBeShown}} found', '100': '{}+ errors found', 'other': '{} {{verificationStatus.typeOfMessageToBeShown}}s found'}"></span>
             </h3>
-            <button type="button" class="close" ng-click="closeVerifications()" aria-hidden="true"> <!--&times;--> </button>
         </div>
         <div class="modal-body">
             <perfect-scrollbar class="scroller">
