@@ -68,11 +68,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
         public List<AttachmentSize> GetAttachmentSizesByQuestionnaire(Guid questionnaireId)
         {
-            var attachmentIds = this.GetAttachmentsByQuestionnaire(questionnaireId).Select(attachment => attachment.ContentId);
+            var attachmentIdentifiers = this.GetAttachmentsByQuestionnaire(questionnaireId)
+                .Select(attachment => new { attachment.ContentId, attachment.AttachmentId })
+                .ToList();
 
-            return this.attachmentContentStorage.Query(
-                contents => contents.Select(content => new AttachmentSize {ContentId = content.ContentId, Size = content.Size})
-                        .Where(content => attachmentIds.Contains(content.ContentId)).ToList());
+            var attachmentContentIds = attachmentIdentifiers.Select(ai => ai.ContentId).ToList();
+
+            var attachmentSizeByContent = this.attachmentContentStorage.Query(
+                contents => contents.Select(content => new {ContentId = content.ContentId, Size = content.Size })
+                    .Where(content => attachmentContentIds.Contains(content.ContentId)).ToList());
+
+            return attachmentIdentifiers.Select(ai => new AttachmentSize()
+            {
+                AttachmentId = ai.AttachmentId,
+                ContentId = ai.ContentId,
+                Size = attachmentSizeByContent.SingleOrDefault(s => s.ContentId == ai.ContentId)?.Size ?? 0
+            }).ToList();
         }
 
         public string GetAttachmentContentId(byte[] binaryContent)
