@@ -90,7 +90,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
         [HttpPost]
         public override void LogInterviewAsSuccessfullyHandled(Guid id) => base.LogInterviewAsSuccessfullyHandled(id);
         [HttpPost]
-        public void Post(Guid id, string package) => this.incomingSyncPackagesQueue.Enqueue(interviewId: id, item: package);
+        public void Post(Guid id, [FromBody]string package) => this.incomingSyncPackagesQueue.Enqueue(interviewId: id, item: package);
         [HttpPost]
         public override void PostImage(PostFileRequest request) => base.PostImage(request);
 
