@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uploaded file &apos;{0}&apos; is not image.
+        ///   Looks up a localized string similar to Uploaded file is not an image.
         /// </summary>
         public static string Attachments_uploaded_file_is_not_image {
             get {

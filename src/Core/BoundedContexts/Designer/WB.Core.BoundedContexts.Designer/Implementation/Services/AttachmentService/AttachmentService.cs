@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
@@ -80,12 +83,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             }
         }
 
-        public void SaveContent(string contentId, string contentType, byte[] binaryContent, AttachmentDetails details)
+        public void SaveContent(string contentId, string contentType, byte[] binaryContent)
         {
             var isContentExists = this.attachmentContentStorage.Query(
                 contents => contents.Select(content => content.ContentId).Any(content => content == contentId));
 
             if (isContentExists) return;
+
+            AttachmentDetails details = GetAttachmentDetails(binaryContent, contentType);
 
             this.attachmentContentStorage.Store(new AttachmentContent
             {
@@ -145,6 +150,36 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                 ContentId = storedAttachmentMeta.ContentId,
             };
             this.attachmentMetaStorage.Store(clonedAttachmentMeta, newAttachmentId);
+        }
+
+        private static AttachmentDetails GetAttachmentDetails(byte[] binaryContent, string contentType)
+        {
+            if (contentType.StartsWith("image/"))
+            {
+                return GetImageAttachmentDetails(binaryContent);
+            }
+
+            throw new FormatException(ExceptionMessages.Attachments_Unsupported_content);
+        }
+
+        private static AttachmentDetails GetImageAttachmentDetails(byte[] binaryContent)
+        {
+            using (var stream = new MemoryStream(binaryContent))
+            {
+                try
+                {
+                    var image = Image.FromStream(stream);
+                    return new AttachmentDetails
+                    {
+                        Height = image.Size.Height,
+                        Width = image.Size.Width
+                    };
+                }
+                catch (ArgumentException e)
+                {
+                    throw new FormatException(ExceptionMessages.Attachments_uploaded_file_is_not_image, e);
+                }
+            }
         }
     }
 }

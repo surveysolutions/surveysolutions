@@ -86,8 +86,7 @@ namespace WB.UI.Designer.Api
                     this.attachmentService.SaveContent(
                         contentId: command.AttachmentContentId,
                         contentType: model.File.MediaType,
-                        binaryContent: model.File.Buffer,
-                        details: this.GetAttachmentDetails(model.File.Buffer, model.File.MediaType, model.File.FileName));
+                        binaryContent: model.File.Buffer);
                 }
 
                 this.attachmentService.SaveMeta(
