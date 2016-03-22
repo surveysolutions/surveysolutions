@@ -7,12 +7,11 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire.Attachments
     {
         public AttachmentUpdated() { }
 
-        public AttachmentUpdated(Guid attachmentId, string attachmentContentId, string attachmentName, string attachmentFileName, Guid responsibleId)
+        public AttachmentUpdated(Guid attachmentId, string attachmentContentId, string attachmentName, Guid responsibleId)
         {
             this.AttachmentId = attachmentId;
             this.AttachmentContentId = attachmentContentId;
             this.AttachmentName = attachmentName;
-            this.AttachmentFileName = attachmentFileName;
             this.ResponsibleId = responsibleId;
         }
 
@@ -21,7 +20,5 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire.Attachments
         public Guid AttachmentId { get; set; }
 
         public string AttachmentName { get; set; }
-
-        public string AttachmentFileName { get; set; }
     }
 }

@@ -6,6 +6,5 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
     {
         public int Height { get; set; }
         public int Width { get; set; }
-        public string Format { get; set; }
     }
 }

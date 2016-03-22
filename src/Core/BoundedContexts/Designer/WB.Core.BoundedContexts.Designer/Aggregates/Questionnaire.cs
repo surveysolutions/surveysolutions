@@ -804,7 +804,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             foreach (var attachment in clonedDocument.Attachments)
             {
                 var newAttachmentId = Guid.NewGuid();
-                this.attachmentService.CloneAttachmentMeta(attachment.AttachmentId, newAttachmentId, clonedDocument.PublicKey);
+                this.attachmentService.CloneMeta(attachment.AttachmentId, newAttachmentId, clonedDocument.PublicKey);
                 attachment.AttachmentId = newAttachmentId;
             }
 
@@ -889,7 +889,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ApplyEvent(new AttachmentUpdated(
                 attachmentId: command.AttachmentId, 
                 attachmentName: command.AttachmentName, 
-                attachmentFileName: command.AttachmentFileName, 
                 responsibleId: command.ResponsibleId,
                 attachmentContentId: command.AttachmentContentId));
         }

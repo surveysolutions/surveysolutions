@@ -1,213 +1,140 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
 using System.Linq;
-using Microsoft.Practices.ServiceLocation;
-using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService
 {
     public class AttachmentService : IAttachmentService
     {
-        private IPlainStorageAccessor<AttachmentContent> attachmentContentStorage => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<AttachmentContent>>();
-        private IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<AttachmentMeta>>();
-
-        // this does't work in all cases and should be fixed in KP-6873
-        //private readonly IPlainStorageAccessor<AttachmentContent> attachmentContentStorage;
-        //private readonly IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage;
-
-        internal Func<MemoryStream, Image> ImageFromStream = stream => Image.FromStream(stream);
-
-        //public AttachmentService(
-        //    IPlainStorageAccessor<AttachmentContent> attachmentContentStorage,
-        //    IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage)
-        //{
-        //    this.attachmentContentStorage = attachmentContentStorage;
-        //    this.attachmentMetaStorage = attachmentMetaStorage;
-        //}
-
-        public void SaveAttachmentContent(Guid questionnaireId, Guid attachmentId, string attachmentContentId, string contentType, byte[] binaryContent, string fileName)
+        private readonly IPlainStorageAccessor<AttachmentContent> attachmentContentStorage;
+        private readonly IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage;
+        
+        public AttachmentService(
+            IPlainStorageAccessor<AttachmentContent> attachmentContentStorage,
+            IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage)
         {
-            var formattedAttachmentId = attachmentId.FormatGuid();
-            var storedAttachmentMeta = this.attachmentMetaStorage.GetById(formattedAttachmentId);
-            var oldHashOfBinaryContent = "";
+            this.attachmentContentStorage = attachmentContentStorage;
+            this.attachmentMetaStorage = attachmentMetaStorage;
+        }
+        
+        public void Delete(Guid attachmentId)
+        {
+            var dbAttachment = this.attachmentMetaStorage.GetById(attachmentId);
 
-            if (storedAttachmentMeta != null)
+            if (dbAttachment != null)
             {
-                var sameFileWasUploaded = attachmentContentId == storedAttachmentMeta.AttachmentContentHash;
-                if (sameFileWasUploaded)
-                    return;
+                this.attachmentMetaStorage.Remove(attachmentId);
 
-                oldHashOfBinaryContent = storedAttachmentMeta.AttachmentContentHash;
-            }
-
-            var attachmentDetails = BuildAttachmentMeta(binaryContent, fileName);
-
-            var countOfNewAttachmentContentReferences = this.attachmentMetaStorage.Query(_ => _.Count(x => x.AttachmentContentHash == attachmentContentId));
-            if (countOfNewAttachmentContentReferences == 0)
-            {
-                var attachmentContent = new AttachmentContent
+                var countOfAttachmentContentReferences = this.attachmentMetaStorage.Query(metas => metas.Count(meta => meta.ContentId == dbAttachment.ContentId));
+                if (countOfAttachmentContentReferences == 0)
                 {
-                    AttachmentContentHash = attachmentContentId,
-                    Content = binaryContent,
-                    ContentType = contentType,
-                    Details = attachmentDetails,
-                    Size = binaryContent.LongLength
-                };
-
-                this.attachmentContentStorage.Store(attachmentContent, attachmentContentId);
-            }
-
-            var attachmentMeta = storedAttachmentMeta ?? new AttachmentMeta
-            {
-                AttachmentId = formattedAttachmentId,
-                QuestionnaireId = questionnaireId.FormatGuid()
-            };
-           
-            attachmentMeta.LastUpdateDate = DateTime.UtcNow;
-            attachmentMeta.FileName = fileName;
-            attachmentMeta.AttachmentContentHash = attachmentContentId;
-
-            this.attachmentMetaStorage.Store(attachmentMeta, formattedAttachmentId);
-
-            var attachmentHadContentBeforeThisUpload = !string.IsNullOrWhiteSpace(oldHashOfBinaryContent);
-            if (attachmentHadContentBeforeThisUpload)
-            {
-                var countOfOldAttachmentContentReferences = this.attachmentMetaStorage.Query(_ => _.Count(x => x.AttachmentContentHash == oldHashOfBinaryContent));
-                if (countOfOldAttachmentContentReferences == 0)
-                {
-                    this.attachmentContentStorage.Remove(oldHashOfBinaryContent);
+                    this.attachmentContentStorage.Remove(dbAttachment.ContentId);
                 }
             }
         }
 
-        public void DeleteAttachment(Guid attachmentId)
+        public List<AttachmentMeta> GetAttachmentsByQuestionnaire(Guid questionnaireId)
         {
-            var formattedAttachmentId = attachmentId.FormatGuid();
-            var storedAttachmentMeta = this.attachmentMetaStorage.GetById(formattedAttachmentId);
-            
-            this.attachmentMetaStorage.Remove(formattedAttachmentId);
-
-            if (storedAttachmentMeta != null)
-            {
-                var countOfAttachmentContentReferences = this.attachmentMetaStorage.Query(_ => _.Count(x => x.AttachmentContentHash == storedAttachmentMeta.AttachmentContentHash));
-                if (countOfAttachmentContentReferences == 0)
-                {
-                    this.attachmentContentStorage.Remove(storedAttachmentMeta.AttachmentContentHash);
-                }
-            }
+            return this.attachmentMetaStorage.Query(
+                attachments => attachments.Where(attachment => attachment.QuestionnaireId == questionnaireId).ToList());
         }
 
         public QuestionnaireAttachment GetAttachment(Guid attachmentId)
         {
-            var formattedAttachmentId = attachmentId.FormatGuid();
-            var meta = this.attachmentMetaStorage.GetById(formattedAttachmentId);
-
-            if (meta == null)
-                return null;
-
-            var content = attachmentContentStorage.GetById(meta.AttachmentContentHash);
-
-            if (content == null)
-                return null;
+            var attachment = this.attachmentMetaStorage.GetById(attachmentId);
+            var attachmentContent = this.attachmentContentStorage.GetById(attachment.ContentId);
 
             return new QuestionnaireAttachment
             {
-                AttachmentId = formattedAttachmentId,
-                FileName = meta.FileName,
-                Content = content.Content,
-                AttachmentContentId = meta.AttachmentContentHash,
-                ContentType = content.ContentType
+                AttachmentId = attachment.AttachmentId.FormatGuid(),
+                AttachmentContentId = attachment.ContentId,
+                FileName = attachment.FileName,
+                ContentType = attachmentContent.ContentType,
+                Content = attachmentContent.Content
             };
         }
 
-        public AttachmentContent GetAttachmentContent(string attachmentContentId)
+        public AttachmentContent GetContent(string contentId)
         {
-            return this.attachmentContentStorage.GetById(attachmentContentId);
+            return this.attachmentContentStorage.GetById(contentId);
         }
 
-        public IEnumerable<AttachmentView> GetAttachmentsForQuestionnaire(Guid questionnaireId)
+        public List<AttachmentSize> GetAttachmentSizesByQuestionnaire(Guid questionnaireId)
         {
-            var formattedQuestionnaireId = questionnaireId.FormatGuid();
-            var attachmentsMeta = this.attachmentMetaStorage.Query(_ => _
-                .Where(x => x.QuestionnaireId == formattedQuestionnaireId)
-                .ToList());
+            var attachmentIds = this.GetAttachmentsByQuestionnaire(questionnaireId).Select(attachment => attachment.ContentId);
 
-            var hashes = attachmentsMeta.Select(x => x.AttachmentContentHash).ToHashSet();
+            return this.attachmentContentStorage.Query(
+                contents => contents.Select(content => new AttachmentSize {ContentId = content.ContentId, Size = content.Size})
+                        .Where(content => attachmentIds.Contains(content.ContentId)).ToList());
+        }
 
-            var attachmentContentDetails = this.attachmentContentStorage.Query(_ => _
-                .Where(x => hashes.Contains(x.AttachmentContentHash))
-                .Select(x => new AttachmentContent
+        public void SaveContent(string contentId, string contentType, byte[] binaryContent, AttachmentDetails details)
+        {
+            var isContentExists = this.attachmentContentStorage.Query(
+                contents => contents.Select(content => content.ContentId).Any(content => content == contentId));
+
+            if (isContentExists) return;
+
+            this.attachmentContentStorage.Store(new AttachmentContent
+            {
+                ContentId = contentId,
+                ContentType = contentType,
+                Size = binaryContent.Length,
+                Details = details,
+                Content = binaryContent
+            }, contentId);
+        }
+
+        public void SaveMeta(Guid attachmentId, Guid questionnaireId, string attachmentContentId, string fileName)
+        {
+            var attachment = this.attachmentMetaStorage.GetById(attachmentId);
+
+            if (attachment == null)
+            {
+                this.attachmentMetaStorage.Store(new AttachmentMeta
                 {
-                    AttachmentContentHash = x.AttachmentContentHash,
-                    Size = x.Size,
-                    Details = x.Details,
-                    ContentType = x.ContentType
-                })
-                .ToList());
-
-            var attachmentsForQuestionnaire = from meta in attachmentsMeta
-                                              join details in attachmentContentDetails on meta.AttachmentContentHash equals details.AttachmentContentHash
-                                              select new AttachmentView
-                                              {
-                                                  ItemId = meta.AttachmentId,
-                                                  FileName = meta.FileName,
-                                                  LastUpdated = meta.LastUpdateDate,
-                                                  
-                                                  SizeInBytes = details.Size,
-                                                  Details = details.Details
-                                              };
-
-            return attachmentsForQuestionnaire;
+                    AttachmentId = attachmentId,
+                    QuestionnaireId = questionnaireId,
+                    ContentId = attachmentContentId,
+                    FileName = fileName,
+                    LastUpdateDate = DateTime.UtcNow
+                }, attachmentId);
+            }
+            else
+            {
+                attachment.QuestionnaireId = questionnaireId;
+                attachment.FileName = fileName;
+                attachment.LastUpdateDate = DateTime.UtcNow;
+                this.attachmentMetaStorage.Store(attachment, attachment.AttachmentId);
+            }
         }
 
-        public void CloneAttachmentMeta(Guid sourceAttachmentId, Guid newAttachmentId, Guid newQuestionnaireId)
+        public AttachmentContentView GetContentDetails(string attachmentContentId)
         {
-            var formattedSourceAttachmentId = sourceAttachmentId.FormatGuid();
-            var formattedNewAttachmentId = newAttachmentId.FormatGuid();
+            return this.attachmentContentStorage.Query(contents=>contents.Select(content=>new AttachmentContentView
+            {
+                ContentId = content.ContentId,
+                Type = content.ContentType,
+                Size = content.Size,
+                Details = content.Details
+            }).FirstOrDefault(content=>content.ContentId == attachmentContentId));
+        }
 
-            var storedAttachmentMeta = this.attachmentMetaStorage.GetById(formattedSourceAttachmentId);
+        public void CloneMeta(Guid sourceAttachmentId, Guid newAttachmentId, Guid newQuestionnaireId)
+        {
+            var storedAttachmentMeta = this.attachmentMetaStorage.GetById(sourceAttachmentId);
             var clonedAttachmentMeta = new AttachmentMeta
             {
-                AttachmentId = formattedNewAttachmentId,
-                QuestionnaireId = newQuestionnaireId.FormatGuid(),
+                AttachmentId = newAttachmentId,
+                QuestionnaireId = newQuestionnaireId,
                 FileName = storedAttachmentMeta.FileName,
                 LastUpdateDate = storedAttachmentMeta.LastUpdateDate,
-                AttachmentContentHash = storedAttachmentMeta.AttachmentContentHash,
+                ContentId = storedAttachmentMeta.ContentId,
             };
-            this.attachmentMetaStorage.Store(clonedAttachmentMeta, formattedNewAttachmentId);
-        }
-
-        private AttachmentDetails BuildAttachmentMeta(byte[] binaryContent, string fileName)
-        {
-            return GetImageMeta(binaryContent, fileName);
-        }
-
-        public AttachmentDetails GetImageMeta(byte[] binaryContent, string fileName)
-        {
-            using (var stream = new MemoryStream(binaryContent))
-            {
-                try
-                {
-                    var image = ImageFromStream(stream);
-                    return new AttachmentDetails
-                    {
-                        Height = image.Size.Height,
-                        Width = image.Size.Width,
-                        Format = new ImageFormatConverter().ConvertToString(image.RawFormat)
-                    };
-                }
-                catch (ArgumentException e)
-                {
-                    throw new FormatException(string.Format(ExceptionMessages.Attachments_uploaded_file_is_not_image, fileName), e);
-                }
-            }
+            this.attachmentMetaStorage.Store(clonedAttachmentMeta, newAttachmentId);
         }
     }
 }

@@ -22,6 +22,7 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpGet]
+        [Route("{id:Guid}")]
         public HttpResponseMessage Get(Guid id)
         {
             var attachment = this.attachmentService.GetAttachment(id);

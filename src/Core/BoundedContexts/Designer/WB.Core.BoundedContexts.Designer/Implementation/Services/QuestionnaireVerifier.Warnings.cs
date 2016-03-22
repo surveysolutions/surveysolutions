@@ -37,9 +37,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private IEnumerable<QuestionnaireVerificationMessage> AttachmentSizeIsMoreThan5Mb(ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
         {
-            return this.attachmentService.GetAttachmentsForQuestionnaire(questionnaire.PublicKey)
-                .Where(x => x.SizeInBytes.HasValue && x.SizeInBytes > 5*1024*1024)
-                .Select(entity => QuestionnaireVerificationMessage.Warning("WB0213", VerificationMessages.WB0213_AttachmentSizeIsMoreThan5Mb, CreateAttachmentReference(Guid.Parse(entity.ItemId))));
+            return this.attachmentService.GetAttachmentSizesByQuestionnaire(questionnaire.PublicKey)
+                .Where(x => x.Size > 5*1024*1024)
+                .Select(entity => QuestionnaireVerificationMessage.Warning("WB0213", VerificationMessages.WB0213_AttachmentSizeIsMoreThan5Mb, CreateAttachmentReference(entity.AttachmentId)));
         }
 
         private IEnumerable<QuestionnaireVerificationMessage> UnusedAttachments(ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
@@ -58,8 +58,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private bool TotalAttachmentsSizeIsMoreThan50Mb(ReadOnlyQuestionnaireDocument questionnaire)
         {
             return this.attachmentService
-                .GetAttachmentsForQuestionnaire(questionnaire.PublicKey)
-                .Sum(x => x.SizeInBytes ?? 0) > 50*1024*1024; // 50 Mb;
+                .GetAttachmentSizesByQuestionnaire(questionnaire.PublicKey)
+                .Sum(x => x.Size) > 50*1024*1024; // 50 Mb;
         }
 
         private static bool HasLongValidationCondition(ValidationCondition condition)

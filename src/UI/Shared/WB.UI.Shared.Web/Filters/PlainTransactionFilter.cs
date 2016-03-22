@@ -1,11 +1,11 @@
-﻿using System.Web.Http.Controllers;
-using System.Web.Http.Filters;
+using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
+using ActionFilterAttribute = System.Web.Mvc.ActionFilterAttribute;
 
-namespace WB.UI.Designer.Code
+namespace WB.UI.Shared.Web.Filters
 {
-    public class PlainApiTransactionFilter : ActionFilterAttribute, IActionFilter
+    public class PlainTransactionFilter : ActionFilterAttribute
     {
         IPlainTransactionManager TransactionManager
         {
@@ -15,14 +15,17 @@ namespace WB.UI.Designer.Code
             }
         }
 
-        public override void OnActionExecuting(HttpActionContext actionContext)
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             this.TransactionManager.BeginTransaction();
         }
 
-        public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
+        public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
-            if (actionExecutedContext.Exception != null)
+            if (!this.TransactionManager.IsTransactionStarted)
+                return;
+
+            if (filterContext.Exception != null)
             {
                 this.TransactionManager.RollbackTransaction();
             }

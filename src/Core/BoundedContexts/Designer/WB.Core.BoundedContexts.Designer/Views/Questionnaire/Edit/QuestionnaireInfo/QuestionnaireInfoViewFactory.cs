@@ -112,22 +112,17 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 .OrderBy(x => x.Name)
                 .ToList();
 
-            var dbAttachments = this.attachmentService.GetAttachmentsForQuestionnaire(questionnaireDocument.PublicKey).ToList();
+            
+            var attachments = this.attachmentService.GetAttachmentsByQuestionnaire(questionnaireDocument.PublicKey);
 
-            questionnaireInfoView.Attachments = (from qAttachment in questionnaireDocument.Attachments
-                join dbAttachment in dbAttachments on qAttachment.AttachmentId.FormatGuid() equals dbAttachment.ItemId into groupJoin
-                from subAttachment in groupJoin.DefaultIfEmpty()
-                select new AttachmentView
+            questionnaireInfoView.Attachments = questionnaireDocument.Attachments
+                .Select(attachmentIdentity => new AttachmentView
                 {
-                    ItemId = qAttachment.AttachmentId.FormatGuid(),
-                    Type = subAttachment?.Type,
-                    Name = qAttachment.Name,
-                    FileName = qAttachment.FileName,
-                    SizeInBytes = subAttachment?.SizeInBytes,
-                    LastUpdated = subAttachment?.LastUpdated.HasValue == true ? subAttachment?.LastUpdated.Value.ToLocalTime() : null,
-                    Details = subAttachment?.Details
+                    AttachmentId = attachmentIdentity.AttachmentId.FormatGuid(),
+                    Name = attachmentIdentity.Name,
+                    Content = this.attachmentService.GetContentDetails(attachmentIdentity.ContentId),
+                    Meta = attachments.FirstOrDefault(x => x.AttachmentId == attachmentIdentity.AttachmentId)
                 })
-                .OrderBy(x => x.Name)
                 .ToList();
 
             return questionnaireInfoView;

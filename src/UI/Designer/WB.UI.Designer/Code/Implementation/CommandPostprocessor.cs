@@ -64,7 +64,7 @@ namespace WB.UI.Designer.Code.Implementation
                 var deleteAttachment = command as DeleteAttachment;
                 if (deleteAttachment != null)
                 {
-                    attachmentService.DeleteAttachment(deleteAttachment.AttachmentId);
+                    attachmentService.Delete(deleteAttachment.AttachmentId);
                 }
 
                 var deleteLookupTable = command as DeleteLookupTable;
@@ -91,7 +91,7 @@ namespace WB.UI.Designer.Code.Implementation
 
             foreach (var attachment in questionnaire.Attachments)
             {
-                attachmentService.DeleteAttachment(attachment.AttachmentId);
+                attachmentService.Delete(attachment.AttachmentId);
             }
 
             foreach (var lookupTable in questionnaire.LookupTables)
