@@ -155,7 +155,7 @@ namespace WB.UI.Designer.Controllers
                     }
                 }
 
-                this.Success($"Restore successfully finished. Restored {restoredEntities} entitites. See messages above for details.", append: true);
+                this.Success($"Restore finished. Restored {restoredEntities} entitites. See messages above for details.", append: true);
 
                 return this.View();
             }
@@ -178,21 +178,28 @@ namespace WB.UI.Designer.Controllers
                     new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar },
                     StringSplitOptions.RemoveEmptyEntries);
 
-                bool isInRootFolder = zipEntryPathChunks.Length == 1;
-                bool isInFirstLevelFolder = zipEntryPathChunks.Length == 2;
-                bool isInSecondLevelFolder = zipEntryPathChunks.Length == 3;
+                Guid questionnaireId;
+                bool isInsideQuestionnaireFolder = Guid.TryParse(
+                    zipEntryPathChunks[0].Split(new[] {'(', ')'}, StringSplitOptions.RemoveEmptyEntries).Last(),
+                    out questionnaireId);
+
+                if (!isInsideQuestionnaireFolder)
+                {
+                    this.Info($"Ignored zip file entry '{zipEntry.Name}' because it is not under questionnaire folder. Top-level folder should contain questionnaire ID which will be used for restore.", append: true);
+                    return false;
+                }
 
                 bool isQuestionnaireDocumentEntry =
-                    isInRootFolder &&
-                    zipEntry.Name.ToLower().EndsWith(".json");
+                    zipEntryPathChunks.Length == 2 &&
+                    zipEntryPathChunks[1].ToLower().EndsWith(".json");
 
-                bool isAttachmentEntry =
-                    isInFirstLevelFolder &&
-                    zipEntryPathChunks[0].ToLower() == "attachments";
+                //bool isAttachmentEntry =
+                //    isInFirstLevelFolder &&
+                //    zipEntryPathChunks[0].ToLower() == "attachments";
 
                 bool isLookupTableEntry =
-                    isInSecondLevelFolder &&
-                    zipEntryPathChunks[0].ToLower() == "lookup tables" &&
+                    zipEntryPathChunks.Length == 3 &&
+                    zipEntryPathChunks[1].ToLower() == "lookup tables" &&
                     zipEntryPathChunks[2].ToLower().EndsWith(".txt");
 
                 if (isQuestionnaireDocumentEntry)
@@ -201,10 +208,11 @@ namespace WB.UI.Designer.Controllers
                     var textContent = textReader.ReadToEnd();
 
                     var questionnaireDocument = this.serializer.Deserialize<QuestionnaireDocument>(textContent);
+                    questionnaireDocument.PublicKey = questionnaireId;
 
                     this.commandService.Execute(new ImportQuestionnaire(this.UserHelper.WebUser.UserId, questionnaireDocument));
 
-                    this.Success($"Restored questionnaire document '{questionnaireDocument.Title}' ({questionnaireDocument.PublicKey.FormatGuid()}) from '{zipEntry.Name}'.", append: true);
+                    this.Success($"Restored questionnaire document '{questionnaireDocument.Title}' with id '{questionnaireDocument.PublicKey.FormatGuid()}' from '{zipEntry.Name}'.", append: true);
                     return true;
                 }
                 //else if (isAttachmentEntry)
@@ -213,7 +221,6 @@ namespace WB.UI.Designer.Controllers
                 //}
                 else if (isLookupTableEntry)
                 {
-                    var questionnaireId = Guid.Parse(zipEntryPathChunks[1]);
                     var lookupTableId = Guid.Parse(Path.GetFileNameWithoutExtension(zipEntryPathChunks[2]));
 
                     var textReader = new StreamReader(zipStream, Encoding.UTF8);
@@ -226,7 +233,7 @@ namespace WB.UI.Designer.Controllers
                 }
                 else
                 {
-                    this.Info($"Ignored zip file entry '{zipEntry.Name}'.", append: true);
+                    this.Info($"Ignored unknown zip file entry '{zipEntry.Name}'.", append: true);
                     return false;
                 }
             }
@@ -280,7 +287,9 @@ namespace WB.UI.Designer.Controllers
 
             ZipOutputStream zipStream = new ZipOutputStream(output);
 
-            zipStream.PutTextFileEntry($"{questionnaireView.Title.ToValidFileName()}.json", questionnaireJson);
+            string questionnaireFolderName = $"{questionnaireView.Title.ToValidFileName()} ({id.FormatGuid()})";
+
+            zipStream.PutTextFileEntry($"{questionnaireFolderName}/{questionnaireView.Title.ToValidFileName()}.json", questionnaireJson);
 
             for (int attachmentIndex = 0; attachmentIndex < questionnaireDocument.Attachments.Count; attachmentIndex++)
             {
@@ -291,20 +300,21 @@ namespace WB.UI.Designer.Controllers
 
                     if (attachment?.Content != null)
                     {
-                        zipStream.PutFileEntry($"Attachments/{attachment.FileName}", attachment.Content);
+                        zipStream.PutFileEntry($"{questionnaireFolderName}/Attachments/{attachmentReference.AttachmentId.FormatGuid()}/{attachment.FileName}", attachment.Content);
+                        zipStream.PutTextFileEntry($"{questionnaireFolderName}/Attachments/{attachmentReference.AttachmentId.FormatGuid()}/Content-Type.txt", attachment.ContentType);
                     }
                     else
                     {
                         zipStream.PutTextFileEntry(
-                            $"Attachments/Invalid/missing attachment #{attachmentIndex + 1} ({attachmentReference.AttachmentId.FormatGuid()}).txt",
+                            $"{questionnaireFolderName}/Attachments/Invalid/missing attachment #{attachmentIndex + 1} ({attachmentReference.AttachmentId.FormatGuid()}).txt",
                             $"Attachment '{attachmentReference.Name}' is missing.");
                     }
                 }
                 catch (Exception exception)
                 {
-                    this.logger.Warn($"Failed to backup attachment #{attachmentIndex + 1} from questionnaire '{questionnaireView.Title}' ({id.FormatGuid()}).", exception);
+                    this.logger.Warn($"Failed to backup attachment #{attachmentIndex + 1} from questionnaire '{questionnaireView.Title}' ({questionnaireFolderName}).", exception);
                     zipStream.PutTextFileEntry(
-                        $"Attachments/Invalid/broken attachment #{attachmentIndex + 1}.txt",
+                        $"{questionnaireFolderName}/Attachments/Invalid/broken attachment #{attachmentIndex + 1}.txt",
                         $"Failed to backup attachment. See error below.{Environment.NewLine}{exception}");
                 }
             }
@@ -313,7 +323,7 @@ namespace WB.UI.Designer.Controllers
 
             foreach (KeyValuePair<Guid, string> lookupTable in lookupTables)
             {
-                zipStream.PutTextFileEntry($"Lookup Tables/{id.FormatGuid()}/{lookupTable.Key.FormatGuid()}.txt", lookupTable.Value);
+                zipStream.PutTextFileEntry($"{questionnaireFolderName}/Lookup Tables/{lookupTable.Key.FormatGuid()}.txt", lookupTable.Value);
             }
 
             zipStream.Finish();
