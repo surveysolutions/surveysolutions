@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
         {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: ownerId);
             questionnaire.AddSharedPerson(sharedPersonId, "email@email.com", ShareType.Edit, ownerId);
-            questionnaire.AddAttachment(Create.Command.AddAttachment(questionnaireId, attachmentId, ownerId));
+            questionnaire.AddOrUpdateAttachment(Create.Command.AddOrUpdateAttachment(questionnaireId, attachmentId, "", ownerId, ""));
 
             deleteAttachment = Create.Command.DeleteAttachment(questionnaireId, attachmentId, sharedPersonId);
 

@@ -354,9 +354,8 @@
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_checking_for_errors_questionnaire_that_has_attachment_with_empty_content.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_checking_for_errors_questionnaire_that_has_attachment_with_invalid_name.cs" />
     <Compile Include="BoundedContexts\Designer\QuestionnaireVerificationTests\when_checking_for_errors_questionnaire_that_has_two_attachments_with_same_names.cs" />
-    <Compile Include="BoundedContexts\QuestionnaireTests\Attachments\when_adding_attachment.cs" />
-    <Compile Include="BoundedContexts\QuestionnaireTests\Attachments\when_adding_attachment_without_premission_to_edit.cs" />
-    <Compile Include="BoundedContexts\QuestionnaireTests\Attachments\when_adding_attachment_with_premission_to_edit.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTests\Attachments\when_adding_or_updating_attachment_without_premission_to_edit.cs" />
+    <Compile Include="BoundedContexts\QuestionnaireTests\Attachments\when_adding_or_updating_attachment_with_premission_to_edit.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\Attachments\when_cloning_questionnaire_with_attachment.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\Attachments\when_deleting_attachment.cs" />
     <Compile Include="BoundedContexts\QuestionnaireTests\Attachments\when_deleting_attachment_without_premission_to_edit.cs" />

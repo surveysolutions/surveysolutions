@@ -49,7 +49,7 @@
                     }
 
                     return Upload.upload({
-                        url: urlBase + '/updateAttachment',
+                        url: urlBase + '/attachment',
                         data: { file: _.isNull(attachment.file) ? "" : attachment.file, fileName: fileName,  "command": JSON.stringify(command) }
                     }).success(function () {
                         blockUI.stop();

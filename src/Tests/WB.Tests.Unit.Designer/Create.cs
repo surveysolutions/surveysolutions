@@ -1304,15 +1304,10 @@ namespace WB.Tests.Unit.Designer
             {
                 return new UpdateStaticText(questionnaireId, entityId, text, attachmentName, responsibleId);
             }
-
-            public static AddAttachment AddAttachment(Guid questionnaireId, Guid attachmentId, Guid responsibleId)
+            
+            public static AddOrUpdateAttachment AddOrUpdateAttachment(Guid questionnaireId, Guid attachmentId, string attachmentContentId, Guid responsibleId, string attachmentName)
             {
-                return new AddAttachment(questionnaireId, attachmentId, responsibleId);
-            }
-
-            public static UpdateAttachment UpdateAttachment(Guid questionnaireId, Guid attachmentId, string attachmentContentId, Guid responsibleId, string attachmentName)
-            {
-                return new UpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, attachmentContentId);
+                return new AddOrUpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, attachmentContentId);
             }
 
             public static DeleteAttachment DeleteAttachment(Guid questionnaireId, Guid attachmentId, Guid responsibleId)

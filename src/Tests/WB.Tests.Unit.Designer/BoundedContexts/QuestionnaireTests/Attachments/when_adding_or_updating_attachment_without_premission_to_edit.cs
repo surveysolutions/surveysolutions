@@ -7,17 +7,17 @@ using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
 {
-    internal class when_adding_attachment_without_premission_to_edit : QuestionnaireTestsContext
+    internal class when_adding_or_updating_attachment_without_premission_to_edit : QuestionnaireTestsContext
     {
         Establish context = () =>
         {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: ownerId);
             questionnaire.AddSharedPerson(sharedPersonId, "email@email.com", ShareType.View, ownerId);
-            addAttachment = Create.Command.AddAttachment(questionnaireId, attachmentId, sharedPersonId);
+            addOrUpdateAttachment = Create.Command.AddOrUpdateAttachment(questionnaireId, attachmentId, "", sharedPersonId, "");
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => questionnaire.AddAttachment(addAttachment));
+            exception = Catch.Exception(() => questionnaire.AddOrUpdateAttachment(addOrUpdateAttachment));
 
         It should_throw_exception = () =>
             exception.ShouldNotBeNull();
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
             ((QuestionnaireException)exception).ErrorType.ShouldEqual(DomainExceptionType.DoesNotHavePermissionsForEdit);
 
         private static Exception exception;
-        private static AddAttachment addAttachment;
+        private static AddOrUpdateAttachment addOrUpdateAttachment;
         private static Questionnaire questionnaire;
         private static readonly Guid ownerId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         private static readonly Guid sharedPersonId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
