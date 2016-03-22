@@ -18,14 +18,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
         };
 
         Because of = () =>
-            attachmentService.CloneAttachmentMeta(attachmentId, newAttachmentId, newQuestionnaireId);
+            attachmentService.CloneMeta(attachmentId, newAttachmentId, newQuestionnaireId);
 
         It should_save_cloned_attachment_meta_with_specified_properties = () =>
         {
             var attachmentMeta = attachmentMetaStorage.GetById(newAttachmentId.FormatGuid());
             attachmentMeta.FileName.ShouldEqual(fileName);
             attachmentMeta.QuestionnaireId.ShouldEqual(newQuestionnaireId.FormatGuid());
-            attachmentMeta.AttachmentContentHash.ShouldEqual(attachmentContentId);
+            attachmentMeta.ContentId.ShouldEqual(attachmentContentId);
         };
 
         private static AttachmentService attachmentService;

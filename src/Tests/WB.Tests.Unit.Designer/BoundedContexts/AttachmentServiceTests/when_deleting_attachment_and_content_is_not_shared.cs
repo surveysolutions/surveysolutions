@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
         };
 
         Because of = () =>
-            attachmentService.DeleteAttachment(attachmentId);
+            attachmentService.Delete(attachmentId);
 
         It should_delete_attachment_meta = () =>
             attachmentMetaStorage.GetById(attachmentId.FormatGuid()).ShouldBeNull();

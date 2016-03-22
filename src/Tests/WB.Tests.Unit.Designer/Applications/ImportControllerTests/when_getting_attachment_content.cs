@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
     {
         Establish context = () =>
         {
-            mockOfAttachmentService.Setup(x => x.GetAttachmentContent(attachmentContentId)).Returns(expectedAttachmentContent);
+            mockOfAttachmentService.Setup(x => x.GetContent(attachmentContentId)).Returns(expectedAttachmentContent);
 
             importController = CreateImportController(attachmentService: mockOfAttachmentService.Object);
         };
@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
         {
             response.Content.ReadAsByteArrayAsync().Result.SequenceEqual(expectedAttachmentContent.Content);
             response.Content.Headers.ContentType.MediaType.ShouldEqual(expectedAttachmentContent.ContentType);
-            response.Headers.ETag.Tag.ShouldEqual($"\"{expectedAttachmentContent.AttachmentContentHash}\"");
+            response.Headers.ETag.Tag.ShouldEqual($"\"{expectedAttachmentContent.ContentId}\"");
         };
 
         private static ImportV2Controller importController;
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
 
         private static readonly AttachmentContent expectedAttachmentContent = new AttachmentContent
         {
-            AttachmentContentHash = attachmentContentId,
+            ContentId = attachmentContentId,
             ContentType = "image/png",
             Content = new byte[] {1, 2, 3}
         };

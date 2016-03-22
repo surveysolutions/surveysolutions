@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
@@ -21,10 +22,9 @@ namespace WB.Tests.Unit.Designer
         {
             var attachmentServiceMock = new Mock<IAttachmentService>();
 
-            attachmentServiceMock
-                .Setup(x => x.GetAttachmentsForQuestionnaire(questionnaireId))
-                .Returns(attachments);
-
+            attachmentServiceMock.Setup(x => x.GetAttachmentSizesByQuestionnaire(questionnaireId))
+                .Returns(attachments.Select(y => new AttachmentSize {Size = y.Content.Size}).ToList());
+            
             return attachmentServiceMock.Object;
         }
 
