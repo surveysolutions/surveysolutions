@@ -1467,6 +1467,7 @@
       <SubType>Designer</SubType>
     </None>
     <Compile Include="Create.Controller.cs" />
+    <EmbeddedResource Include="Resources\questionnaire_in_old_format.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
