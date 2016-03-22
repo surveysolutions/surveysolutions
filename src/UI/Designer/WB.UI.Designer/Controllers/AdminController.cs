@@ -138,23 +138,25 @@ namespace WB.UI.Designer.Controllers
                     return this.View();
                 }
 
-                var zipStream = new ZipInputStream(this.CreateStreamCopy(uploadFile.InputStream));
-
                 int restoredEntities = 0;
 
-                ZipEntry zipEntry = zipStream.GetNextEntry();
-
-                while (zipEntry != null)
+                using (var zipStream = new ZipInputStream(uploadFile.InputStream))
                 {
-                    if (this.RestoreDataFromZipFileEntry(zipEntry, zipStream))
-                    {
-                        restoredEntities++;
-                    }
+                    ZipEntry zipEntry = zipStream.GetNextEntry();
 
-                    zipEntry = zipStream.GetNextEntry();
+                    while (zipEntry != null)
+                    {
+                        if (this.RestoreDataFromZipFileEntry(zipEntry, zipStream))
+                        {
+                            restoredEntities++;
+                        }
+
+                        zipEntry = zipStream.GetNextEntry();
+                    }
                 }
 
                 this.Success($"Restore successfully finished. Restored {restoredEntities} entitites. See messages above for details.", append: true);
+
                 return this.View();
             }
             catch (Exception exception)
@@ -179,7 +181,15 @@ namespace WB.UI.Designer.Controllers
                 bool isInRootFolder = zipEntryPathChunks.Length == 1;
                 bool isInFirstLevelFolder = zipEntryPathChunks.Length == 2;
                 bool isInSecondLevelFolder = zipEntryPathChunks.Length == 3;
-                bool isQuestionnaireDocumentEntry = isInRootFolder && zipEntry.Name.ToLower().EndsWith(".json");
+
+                bool isQuestionnaireDocumentEntry =
+                    isInRootFolder &&
+                    zipEntry.Name.ToLower().EndsWith(".json");
+
+                bool isAttachmentEntry =
+                    isInFirstLevelFolder &&
+                    zipEntryPathChunks[0].ToLower() == "attachments";
+
                 bool isLookupTableEntry =
                     isInSecondLevelFolder &&
                     zipEntryPathChunks[0].ToLower() == "lookup tables" &&
@@ -197,6 +207,10 @@ namespace WB.UI.Designer.Controllers
                     this.Success($"Restored questionnaire document '{questionnaireDocument.Title}' ({questionnaireDocument.PublicKey.FormatGuid()}) from '{zipEntry.Name}'.", append: true);
                     return true;
                 }
+                //else if (isAttachmentEntry)
+                //{
+                //    this.attachmentService.SaveContent();
+                //}
                 else if (isLookupTableEntry)
                 {
                     var questionnaireId = Guid.Parse(zipEntryPathChunks[1]);

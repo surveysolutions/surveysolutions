@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
@@ -69,6 +70,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             return this.attachmentContentStorage.Query(
                 contents => contents.Select(content => new AttachmentSize {ContentId = content.ContentId, Size = content.Size})
                         .Where(content => attachmentIds.Contains(content.ContentId)).ToList());
+        }
+
+        public string GetAttachmentContentId(byte[] binaryContent)
+        {
+            using (var sha1Service = new SHA1CryptoServiceProvider())
+            {
+                return BitConverter.ToString(sha1Service.ComputeHash(binaryContent)).Replace("-", string.Empty);
+            }
         }
 
         public void SaveContent(string contentId, string contentType, byte[] binaryContent, AttachmentDetails details)
