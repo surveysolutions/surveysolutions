@@ -264,7 +264,8 @@ namespace WB.UI.Designer.Controllers
 
                     this.commandService.Execute(new ImportQuestionnaire(this.UserHelper.WebUser.UserId, questionnaireDocument));
 
-                    this.Success($"Restored questionnaire document '{questionnaireDocument.Title}' with id '{questionnaireDocument.PublicKey.FormatGuid()}' from '{zipEntry.Name}'.", append: true);
+                    this.Success($"[{zipEntry.Name}]", append: true);
+                    this.Success($"    Restored questionnaire document '{questionnaireDocument.Title}' with id '{questionnaireDocument.PublicKey.FormatGuid()}'.", append: true);
                     state.RestoredEntitiesCount++;
                 }
                 else if (isAttachmentEntry)
@@ -277,14 +278,16 @@ namespace WB.UI.Designer.Controllers
                         string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
 
                         state.StoreAttachmentContentType(attachmentId, textContent);
-                        this.Success($"Found Content-Type '{textContent}' for attachment '{attachmentId.FormatGuid()}' in '{zipEntry.Name}'.", append: true);
+                        this.Success($"[{zipEntry.Name}]", append: true);
+                        this.Success($"    Found content-type '{textContent}' for attachment '{attachmentId.FormatGuid()}'.", append: true);
                     }
                     else
                     {
                         byte[] binaryContent = zipStream.ReadToEnd();
 
                         state.StoreAttachmentFile(attachmentId, fileName, binaryContent);
-                        this.Success($"Found file data '{fileName}' for attachment '{attachmentId.FormatGuid()}' in '{zipEntry.Name}'.", append: true);
+                        this.Success($"[{zipEntry.Name}]", append: true);
+                        this.Success($"    Found file data '{fileName}' for attachment '{attachmentId.FormatGuid()}'.", append: true);
                     }
 
                     var attachment = state.GetAttachment(attachmentId);
@@ -298,7 +301,8 @@ namespace WB.UI.Designer.Controllers
 
                         state.RemoveAttachment(attachmentId);
 
-                        this.Success($"Restored attachment '{attachmentId.FormatGuid()}' for questionnaire '{questionnaireId}' using file '{attachment.FileName}' and content-type '{attachment.ContentType}'.", append: true);
+                        this.Success($"    Restored attachment '{attachmentId.FormatGuid()}' for questionnaire '{questionnaireId.FormatGuid()}' using file '{attachment.FileName}' and content-type '{attachment.ContentType}'.", append: true);
+                        state.RestoredEntitiesCount++;
                     }
                 }
                 else if (isLookupTableEntry)
@@ -309,7 +313,8 @@ namespace WB.UI.Designer.Controllers
 
                     this.lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableId, textContent);
 
-                    this.Success($"Restored lookup table '{lookupTableId.FormatGuid()}' for questionnaire '{questionnaireId.FormatGuid()}' from '{zipEntry.Name}'.", append: true);
+                    this.Success($"[{zipEntry.Name}].", append: true);
+                    this.Success($"    Restored lookup table '{lookupTableId.FormatGuid()}' for questionnaire '{questionnaireId.FormatGuid()}'.", append: true);
                     state.RestoredEntitiesCount++;
                 }
                 else
