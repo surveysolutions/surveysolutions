@@ -18,11 +18,12 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (value != null)
             {
                 var displayMetrics = GetDisplayMetrics();
+                var minSize = Math.Min(displayMetrics.WidthPixels, displayMetrics.HeightPixels);
 
                 // Calculate inSampleSize
                 var boundsOptions = new BitmapFactory.Options { InJustDecodeBounds = true };
                 BitmapFactory.DecodeByteArray(value, 0, value.Length, boundsOptions);
-                int sampleSize = CalculateInSampleSize(boundsOptions, displayMetrics.WidthPixels, displayMetrics.HeightPixels);
+                int sampleSize = CalculateInSampleSize(boundsOptions, minSize, minSize);
 
                 var bitmapOptions = new BitmapFactory.Options {InSampleSize = sampleSize};
                 var bitmap = BitmapFactory.DecodeByteArray(value, 0, value.Length, bitmapOptions);
