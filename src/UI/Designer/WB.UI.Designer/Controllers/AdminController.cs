@@ -36,6 +36,45 @@ namespace WB.UI.Designer.Controllers
     [CustomAuthorize(Roles = "Administrator")]
     public class AdminController : BaseController
     {
+        private class RestoreState
+        {
+            public class Attachment
+            {
+                public string FileName { get; set; }
+                public string ContentType { get; set; }
+                public byte[] BinaryContent { get; set; }
+
+                public bool HasAllDataForRestore()
+                    => this.FileName != null
+                    && this.ContentType != null
+                    && this.BinaryContent != null;
+            }
+
+            private readonly Dictionary<Guid, Attachment> attachments = new Dictionary<Guid, Attachment>(); 
+
+            public int RestoredEntitiesCount { get; set; }
+
+            public void StoreAttachmentContentType(Guid attachmentId, string contentType)
+            {
+                this.attachments.GetOrAdd(attachmentId).ContentType = contentType;
+            }
+
+            public void StoreAttachmentFile(Guid attachmentId, string fileName, byte[] binaryContent)
+            {
+                this.attachments.GetOrAdd(attachmentId).FileName = fileName;
+                this.attachments.GetOrAdd(attachmentId).BinaryContent = binaryContent;
+            }
+
+            public Attachment GetAttachment(Guid attachmentId)
+                => this.attachments[attachmentId];
+
+            public void RemoveAttachment(Guid attachmentId)
+                => this.attachments.Remove(attachmentId);
+
+            public IEnumerable<Guid> GetPendingAttachments()
+                => this.attachments.Keys;
+        }
+
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly ILogger logger;
         private readonly IStringCompressor zipUtils;
@@ -150,7 +189,7 @@ namespace WB.UI.Designer.Controllers
                     return this.View();
                 }
 
-                int restoredEntities = 0;
+                var state = new RestoreState();
 
                 using (var zipStream = new ZipInputStream(uploadFile.InputStream))
                 {
@@ -158,16 +197,18 @@ namespace WB.UI.Designer.Controllers
 
                     while (zipEntry != null)
                     {
-                        if (this.RestoreDataFromZipFileEntry(zipEntry, zipStream))
-                        {
-                            restoredEntities++;
-                        }
+                        this.RestoreDataFromZipFileEntry(zipEntry, zipStream, state);
 
                         zipEntry = zipStream.GetNextEntry();
                     }
                 }
 
-                this.Success($"Restore finished. Restored {restoredEntities} entitites. See messages above for details.", append: true);
+                foreach (Guid attachmentId in state.GetPendingAttachments())
+                {
+                    this.Error($"Attachment '{attachmentId.FormatGuid()}' was not restored because there are not enough data for it in it's folder.", append: true);
+                }
+
+                this.Success($"Restore finished. Restored {state.RestoredEntitiesCount} entitites. See messages above for details.", append: true);
 
                 return this.View();
             }
@@ -179,12 +220,12 @@ namespace WB.UI.Designer.Controllers
             }
         }
 
-        private bool RestoreDataFromZipFileEntry(ZipEntry zipEntry, ZipInputStream zipStream)
+        private void RestoreDataFromZipFileEntry(ZipEntry zipEntry, ZipInputStream zipStream, RestoreState state)
         {
             try
             {
                 if (!zipEntry.IsFile)
-                    return false;
+                    return;
 
                 string[] zipEntryPathChunks = zipEntry.Name.Split(
                     new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar },
@@ -198,16 +239,16 @@ namespace WB.UI.Designer.Controllers
                 if (!isInsideQuestionnaireFolder)
                 {
                     this.Info($"Ignored zip file entry '{zipEntry.Name}' because it is not under questionnaire folder. Top-level folder should contain questionnaire ID which will be used for restore.", append: true);
-                    return false;
+                    return;
                 }
 
                 bool isQuestionnaireDocumentEntry =
                     zipEntryPathChunks.Length == 2 &&
                     zipEntryPathChunks[1].ToLower().EndsWith(".json");
 
-                //bool isAttachmentEntry =
-                //    isInFirstLevelFolder &&
-                //    zipEntryPathChunks[0].ToLower() == "attachments";
+                bool isAttachmentEntry =
+                    zipEntryPathChunks.Length == 4 &&
+                    zipEntryPathChunks[1].ToLower() == "attachments";
 
                 bool isLookupTableEntry =
                     zipEntryPathChunks.Length == 3 &&
@@ -216,8 +257,7 @@ namespace WB.UI.Designer.Controllers
 
                 if (isQuestionnaireDocumentEntry)
                 {
-                    var textReader = new StreamReader(zipStream, Encoding.UTF8);
-                    var textContent = textReader.ReadToEnd();
+                    string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
 
                     var questionnaireDocument = this.serializer.Deserialize<QuestionnaireDocument>(textContent);
                     questionnaireDocument.PublicKey = questionnaireId;
@@ -225,35 +265,62 @@ namespace WB.UI.Designer.Controllers
                     this.commandService.Execute(new ImportQuestionnaire(this.UserHelper.WebUser.UserId, questionnaireDocument));
 
                     this.Success($"Restored questionnaire document '{questionnaireDocument.Title}' with id '{questionnaireDocument.PublicKey.FormatGuid()}' from '{zipEntry.Name}'.", append: true);
-                    return true;
+                    state.RestoredEntitiesCount++;
                 }
-                //else if (isAttachmentEntry)
-                //{
-                //    this.attachmentService.SaveContent();
-                //}
+                else if (isAttachmentEntry)
+                {
+                    var attachmentId = Guid.Parse(zipEntryPathChunks[2]);
+                    var fileName = zipEntryPathChunks[3];
+
+                    if (fileName.ToLower() == "content-type.txt")
+                    {
+                        string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
+
+                        state.StoreAttachmentContentType(attachmentId, textContent);
+                        this.Success($"Found Content-Type '{textContent}' for attachment '{attachmentId.FormatGuid()}' in '{zipEntry.Name}'.", append: true);
+                    }
+                    else
+                    {
+                        byte[] binaryContent = zipStream.ReadToEnd();
+
+                        state.StoreAttachmentFile(attachmentId, fileName, binaryContent);
+                        this.Success($"Found file data '{fileName}' for attachment '{attachmentId.FormatGuid()}' in '{zipEntry.Name}'.", append: true);
+                    }
+
+                    var attachment = state.GetAttachment(attachmentId);
+
+                    if (attachment.HasAllDataForRestore())
+                    {
+                        string attachmentContentId = this.attachmentService.GetAttachmentContentId(attachment.BinaryContent);
+
+                        this.attachmentService.SaveContent(attachmentContentId, attachment.ContentType, attachment.BinaryContent);
+                        this.attachmentService.SaveMeta(attachmentId, questionnaireId, attachmentContentId, attachment.FileName);
+
+                        state.RemoveAttachment(attachmentId);
+
+                        this.Success($"Restored attachment '{attachmentId.FormatGuid()}' for questionnaire '{questionnaireId}' using file '{attachment.FileName}' and content-type '{attachment.ContentType}'.", append: true);
+                    }
+                }
                 else if (isLookupTableEntry)
                 {
                     var lookupTableId = Guid.Parse(Path.GetFileNameWithoutExtension(zipEntryPathChunks[2]));
 
-                    var textReader = new StreamReader(zipStream, Encoding.UTF8);
-                    var textContent = textReader.ReadToEnd();
+                    string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
 
                     this.lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableId, textContent);
 
                     this.Success($"Restored lookup table '{lookupTableId.FormatGuid()}' for questionnaire '{questionnaireId.FormatGuid()}' from '{zipEntry.Name}'.", append: true);
-                    return true;
+                    state.RestoredEntitiesCount++;
                 }
                 else
                 {
                     this.Info($"Ignored unknown zip file entry '{zipEntry.Name}'.", append: true);
-                    return false;
                 }
             }
             catch (Exception exception)
             {
                 this.logger.Warn($"Error processing zip file entry '{zipEntry.Name}' during questionnaire restore from backup.", exception);
                 this.Error($"Error processing zip file entry '{zipEntry.Name}'.{Environment.NewLine}{exception}", append: true);
-                return false;
             }
         }
 
