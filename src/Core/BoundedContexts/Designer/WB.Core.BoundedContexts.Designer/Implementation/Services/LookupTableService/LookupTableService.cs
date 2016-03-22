@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             this.documentStorage = documentStorage;
         }
 
-        public void SaveLookupTableContent(Guid questionnaireId, Guid lookupTableId, string lookupTableName, string fileContent)
+        public void SaveLookupTableContent(Guid questionnaireId, Guid lookupTableId, string fileContent)
         {
             var lookupTableContent = string.IsNullOrWhiteSpace(fileContent) 
                 ? this.GetLookupTableContent(questionnaireId, lookupTableId) 
