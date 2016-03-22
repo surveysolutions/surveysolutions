@@ -27,26 +27,37 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 {
                     control.SetImageBitmap(bitmap);
                 }
+                else
+                {
+                    LoadDefaultImage(control);
+                }
             }
             else
             {
-                var mvxAndroidCurrentTopActivity = ServiceLocator.Current.GetInstance<IMvxAndroidCurrentTopActivity>();
-                var resources = mvxAndroidCurrentTopActivity.Activity.Resources;
-                var noImageOptions = new BitmapFactory.Options();
-                var nullImageBitmap = BitmapFactory.DecodeResource(resources, Resource.Drawable.no_image_found, noImageOptions);
-
-                control.SetImageBitmap(nullImageBitmap);
+                LoadDefaultImage(control);
             }
         }
 
-        private static int CalculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight)
+        private static void LoadDefaultImage(ImageView control)
+        {
+            var mvxAndroidCurrentTopActivity = ServiceLocator.Current.GetInstance<IMvxAndroidCurrentTopActivity>();
+            var resources = mvxAndroidCurrentTopActivity.Activity.Resources;
+            var noImageOptions = new BitmapFactory.Options();
+            var nullImageBitmap = BitmapFactory.DecodeResource(resources, Resource.Drawable.no_image_found, noImageOptions);
+
+            control.SetImageBitmap(nullImageBitmap);
+        }
+
+
+        // http://stackoverflow.com/a/10127787/72174
+        private static int CalculateInSampleSize(BitmapFactory.Options actualImageParams, int maxAllowedWidth, int maxAllowedHeight)
         {
             // Raw height and width of image
-            int height = options.OutHeight;
-            int width = options.OutWidth;
+            int height = actualImageParams.OutHeight;
+            int width = actualImageParams.OutWidth;
             int inSampleSize = 1;
 
-            if (height > reqHeight || width > reqWidth)
+            if (height > maxAllowedHeight || width > maxAllowedWidth)
             {
 
                 int halfHeight = height / 2;
@@ -54,8 +65,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
                 // Calculate the largest inSampleSize value that is a power of 2 and keeps both
                 // height and width larger than the requested height and width.
-                while (halfHeight / inSampleSize > reqHeight
-                        && halfWidth / inSampleSize > reqWidth)
+                while (halfHeight / inSampleSize > maxAllowedHeight && halfWidth / inSampleSize > maxAllowedWidth)
                 {
                     inSampleSize *= 2;
                 }
