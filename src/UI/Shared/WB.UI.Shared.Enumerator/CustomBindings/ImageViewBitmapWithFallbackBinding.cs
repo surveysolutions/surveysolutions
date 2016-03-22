@@ -1,4 +1,6 @@
-﻿using Android.Graphics;
+﻿using System;
+using Android.Graphics;
+using Android.Util;
 using Android.Widget;
 using Microsoft.Practices.ServiceLocation;
 using MvvmCross.Platform.Droid.Platform;
@@ -15,16 +17,19 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
             if (value != null)
             {
-                var boundsOptions = new BitmapFactory.Options {InJustDecodeBounds = true};
-                BitmapFactory.DecodeByteArray(value, 0, value.Length, boundsOptions);
+                var displayMetrics = GetDisplayMetrics();
 
                 // Calculate inSampleSize
-                int sampleSize = CalculateInSampleSize(boundsOptions, 500, 500);
+                var boundsOptions = new BitmapFactory.Options { InJustDecodeBounds = true };
+                BitmapFactory.DecodeByteArray(value, 0, value.Length, boundsOptions);
+                int sampleSize = CalculateInSampleSize(boundsOptions, displayMetrics.WidthPixels, displayMetrics.HeightPixels);
+
                 var bitmapOptions = new BitmapFactory.Options {InSampleSize = sampleSize};
                 var bitmap = BitmapFactory.DecodeByteArray(value, 0, value.Length, bitmapOptions);
 
                 if (bitmap != null)
                 {
+                    SetupPaddingForImageView(control, displayMetrics, boundsOptions);
                     control.SetImageBitmap(bitmap);
                 }
                 else
@@ -48,6 +53,32 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             control.SetImageBitmap(nullImageBitmap);
         }
 
+        private static void SetupPaddingForImageView(ImageView control, DisplayMetrics displayMetrics, BitmapFactory.Options boundsOptions)
+        {
+            float margin_left_dp = 0;
+            float margin_right_dp = 0;
+
+            var isNeedPadding = boundsOptions.OutWidth < displayMetrics.WidthPixels;
+            if (isNeedPadding)
+            {
+                var element_margin_horizontal = control.Resources.GetDimension(Resource.Dimension.Interview_Entity_Element_margin_horizontal);
+                margin_left_dp = control.Resources.GetDimension(Resource.Dimension.Interview_Entity_margin_left);
+                margin_right_dp = control.Resources.GetDimension(Resource.Dimension.Interview_Entity_margin_right);
+                margin_left_dp += element_margin_horizontal;
+                margin_right_dp += element_margin_horizontal;
+            }
+
+            control.SetPadding((int)margin_left_dp, 0, (int)margin_right_dp, 0);
+        }
+
+        private static DisplayMetrics GetDisplayMetrics()
+        {
+            var mvxAndroidCurrentTopActivity = ServiceLocator.Current.GetInstance<IMvxAndroidCurrentTopActivity>();
+            var defaultDisplay = mvxAndroidCurrentTopActivity.Activity.WindowManager.DefaultDisplay;
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            defaultDisplay.GetMetrics(displayMetrics);
+            return displayMetrics;
+        }
 
         // http://stackoverflow.com/a/10127787/72174
         private static int CalculateInSampleSize(BitmapFactory.Options actualImageParams, int maxAllowedWidth, int maxAllowedHeight)
