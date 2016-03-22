@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
 
         Because of = () =>
             exception = Catch.Exception(() => 
-                lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableId, lookupTableName, fileContent));
+                lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableId, fileContent));
 
         It should_throw_exception = () =>
             exception.ShouldNotBeNull();
@@ -33,7 +33,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
 
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid lookupTableId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        private static readonly string lookupTableName = "lookup";
         private static string fileContent;
         private static LookupTableService lookupTableService;
 

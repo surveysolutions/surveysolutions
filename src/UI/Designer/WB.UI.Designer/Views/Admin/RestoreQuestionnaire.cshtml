@@ -1,23 +1,45 @@
 ﻿@using WB.UI.Designer.BootstrapSupport
+@{
+    ViewBag.Title = "Restore Questionnaire from Backup";
+}
+
 <div id="edit-form">
-    @if (TempData.ContainsKey(Alerts.SUCCESS))
-    {
-        <pre class="alert alert-success header">@Html.Raw(@TempData[Alerts.SUCCESS])</pre>
-    }
+
+    <h1>Restore Questionnaire from Backup</h1>
+
     @if (TempData.ContainsKey(Alerts.ERROR))
     {
-        <pre class="alert alert-danger header">@Html.Raw(@TempData[Alerts.ERROR])</pre>
+        <pre class="alert alert-danger">@Html.Raw(@TempData[Alerts.ERROR])</pre>
     }
-    @using (Html.BeginForm("RestoreQuestionnaire", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+
+    @if (TempData.ContainsKey(Alerts.INFO))
     {
-        <h1>Restore Questionnaire</h1>
-        <div class="form-group">
-            <input class="form-control" type="file" name="myfile" placeholder=".zip file" accept=".zip"/>
-        </div>
-        <div class="form-actions">
-            <input type="submit" class="btn btn-success btn-lg" value="Upload"/>
-            @Html.ActionLink("Cancel", "Index", "Questionnaire", null, new { @class = "btn " })
-            @Html.ActionLink("Old format restore", "Import", "Admin", null, new { @class = "btn " })
-        </div>
+        <pre class="alert alert-info">@Html.Raw(@TempData[Alerts.INFO])</pre>
     }
+
+    @if (TempData.ContainsKey(Alerts.SUCCESS))
+    {
+        <pre class="alert alert-success">@Html.Raw(@TempData[Alerts.SUCCESS])</pre>
+    }
+
+    @if (TempData.ContainsKey(Alerts.SUCCESS) || TempData.ContainsKey(Alerts.INFO) || TempData.ContainsKey(Alerts.ERROR))
+    {
+        <hr/>
+        @Html.ActionLink("Restore another questionnaire", "RestoreQuestionnaire", "Admin", null, new { @class = "btn btn-lg btn-default" })
+    }
+    else
+    {
+        using (Html.BeginForm("RestoreQuestionnaire", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="form-group">
+                <input class="form-control" type="file" name="myfile" placeholder=".zip file" accept=".zip" />
+            </div>
+            <div class="form-actions">
+                <input type="submit" class="btn btn-success btn-lg" value="Upload" />
+                @Html.ActionLink("Cancel", "Index", "Questionnaire", null, new { @class = "btn " })
+                @Html.ActionLink("Old format restore", "Import", "Admin", null, new { @class = "btn " })
+            </div>
+        }
+    }
+
 </div>

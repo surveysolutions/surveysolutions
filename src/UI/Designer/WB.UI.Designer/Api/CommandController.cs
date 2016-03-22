@@ -141,7 +141,6 @@ namespace WB.UI.Designer.Api
                     this.lookupTableService.SaveLookupTableContent(
                         updateLookupTableCommand.QuestionnaireId,
                         updateLookupTableCommand.LookupTableId,
-                        updateLookupTableCommand.LookupTableName,
                         fileStreamContent.StringContent);
                 }
             }

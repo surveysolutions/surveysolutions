@@ -88,9 +88,10 @@ namespace WB.UI.Designer.BootstrapSupport
     {
         public const string SUCCESS = "success";
         public const string ERROR = "danger";
+        public const string INFO = "info";
 
         public static string[] ALL{
-            get { return new[] {SUCCESS, ERROR}; }
+            get { return new[] {SUCCESS, ERROR, INFO}; }
         }
     }
 }
