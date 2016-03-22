@@ -139,7 +139,7 @@
                         attachment.meta.fileName = attachment.file.name;
                         attachment.meta.lastUpdated = moment();
 
-                        attachment.name = attachment.meta.fileName.replace(/\W+/g, "-");
+                        attachment.name = attachment.meta.fileName.replace(/\.[^/.]+$/, "");
 
                         if (!_.isUndefined(attachmentForm)) {
                             attachmentForm.$setDirty();
