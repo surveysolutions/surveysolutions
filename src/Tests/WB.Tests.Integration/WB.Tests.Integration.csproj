@@ -219,6 +219,7 @@
     <Compile Include="InterviewTests\CascadingDropdowns\when_remove_answer_from_parent_cascading_question.cs" />
     <Compile Include="InterviewTests\CodeGenerationTests\CodeGenerationTestsContext.cs" />
     <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_executes_linked_question_filters.cs" />
+    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_executes_linked_question_filters_and_filter_throw_exception.cs" />
     <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_processes_condition_expressions.cs" />
     <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_processes_condition_expressions_on_nested_roster.cs" />
     <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_processes_condition_expressions_on_roster.cs" />
