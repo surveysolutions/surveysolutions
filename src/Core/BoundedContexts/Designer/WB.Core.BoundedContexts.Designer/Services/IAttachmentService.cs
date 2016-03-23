@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         void CloneMeta(Guid sourceAttachmentId, Guid newAttachmentId, Guid newQuestionnaireId);
         void Delete(Guid attachmentId);
         List<AttachmentMeta> GetAttachmentsByQuestionnaire(Guid questionnaireId);
-        QuestionnaireAttachment GetAttachment(Guid attachmentId);
+        QuestionnaireAttachment GetAttachmentWithContent(Guid attachmentId);
         AttachmentContent GetContent(string contentId);
         List<AttachmentSize> GetAttachmentSizesByQuestionnaire(Guid questionnaireId);
     }

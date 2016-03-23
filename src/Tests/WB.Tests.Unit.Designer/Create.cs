@@ -83,12 +83,15 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static AttachmentContent AttachmentContent(byte[] content = null, string contentType = null)
+        public static AttachmentContent AttachmentContent(byte[] content = null, string contentType = null, string contentId = null,  long? size = null, AttachmentDetails details = null)
         {
             return new AttachmentContent
             {
+                ContentId = contentId,
                 Content = content ?? new byte[0],
-                ContentType = contentType ?? "whatever"
+                ContentType = contentType ?? "whatever",
+                Size = size ?? 10,
+                Details = details
             };
         }
 
@@ -109,15 +112,15 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        //public static AttachmentService AttachmentService(
-        //    IPlainStorageAccessor<AttachmentContent> attachmentContentStorage = null,
-        //    IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage = null)
-        //{
-        //    return new AttachmentService(
-        //        attachmentContentStorage ?? ServiceLocator.Current.GetInstance<IPlainStorageAccessor<AttachmentContent>>(),
-        //        attachmentMetaStorage ?? ServiceLocator.Current.GetInstance<IPlainStorageAccessor<AttachmentMeta>>()
-        //        );
-        //}
+        public static AttachmentService AttachmentService(
+            IPlainStorageAccessor<AttachmentContent> attachmentContentStorage = null,
+            IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage = null)
+        {
+            return new AttachmentService(
+                attachmentContentStorage ?? ServiceLocator.Current.GetInstance<IPlainStorageAccessor<AttachmentContent>>(),
+                attachmentMetaStorage ?? ServiceLocator.Current.GetInstance<IPlainStorageAccessor<AttachmentMeta>>()
+                );
+        }
 
 
         public static AttachmentView AttachmentView(Guid? id = null, long? size = null)

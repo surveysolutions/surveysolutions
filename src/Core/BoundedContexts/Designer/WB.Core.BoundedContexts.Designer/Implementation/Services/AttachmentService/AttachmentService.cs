@@ -46,9 +46,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                 attachments => attachments.Where(attachment => attachment.QuestionnaireId == questionnaireId).ToList());
         }
 
-        public QuestionnaireAttachment GetAttachment(Guid attachmentId)
+        public QuestionnaireAttachment GetAttachmentWithContent(Guid attachmentId)
         {
             var attachment = this.attachmentMetaStorage.GetById(attachmentId);
+            if (attachment == null) return null;
+
             var attachmentContent = this.attachmentContentStorage.GetById(attachment.ContentId);
 
             return new QuestionnaireAttachment

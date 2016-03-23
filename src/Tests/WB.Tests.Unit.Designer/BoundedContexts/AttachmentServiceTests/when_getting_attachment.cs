@@ -10,15 +10,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
         Establish context = () =>
         {
             attachmentContentStorage.Store(Create.AttachmentContent(content: fileContent, contentType: contentType), attachmentContentId);
-            attachmentMetaStorage.Store(Create.AttachmentMeta(attachmentId.FormatGuid(), attachmentContentId, questionnaireId: questionnaireId.FormatGuid(), fileName: fileName), attachmentId.FormatGuid());
+            attachmentMetaStorage.Store(Create.AttachmentMeta(attachmentId, attachmentContentId, questionnaireId: questionnaireId, fileName: fileName), attachmentId);
 
-            Setup.ServiceLocatorForAttachmentService(attachmentContentStorage, attachmentMetaStorage);
-
-            attachmentService = Create.AttachmentService();
+            attachmentService = Create.AttachmentService(attachmentContentStorage: attachmentContentStorage, attachmentMetaStorage: attachmentMetaStorage);
         };
 
         Because of = () =>
-            attachment = attachmentService.GetAttachment(attachmentId);
+            attachment = attachmentService.GetAttachmentWithContent(attachmentId);
 
         It should_return_attachment_with_specified_properties = () =>
         {

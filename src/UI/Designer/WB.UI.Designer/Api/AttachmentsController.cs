@@ -25,7 +25,7 @@ namespace WB.UI.Designer.Api
         [Route("{id:Guid}")]
         public HttpResponseMessage Get(Guid id)
         {
-            var attachment = this.attachmentService.GetAttachment(id);
+            var attachment = this.attachmentService.GetAttachmentWithContent(id);
 
             if (attachment == null) return Request.CreateResponse(HttpStatusCode.NotFound);
 
@@ -36,7 +36,7 @@ namespace WB.UI.Designer.Api
         [Route("thumbnail/{id:Guid}")]
         public HttpResponseMessage Thumbnail(Guid id)
         {
-            var attachment = this.attachmentService.GetAttachment(id);
+            var attachment = this.attachmentService.GetAttachmentWithContent(id);
 
             if (attachment == null) return Request.CreateResponse(HttpStatusCode.NotFound);
 
@@ -47,7 +47,7 @@ namespace WB.UI.Designer.Api
         [Route("thumbnail/{id:Guid}/{size:int}")]
         public HttpResponseMessage Thumbnail(Guid id, int size)
         {
-            var attachment = this.attachmentService.GetAttachment(id);
+            var attachment = this.attachmentService.GetAttachmentWithContent(id);
 
             if (attachment == null) return Request.CreateResponse(HttpStatusCode.NotFound);
 
