@@ -21,6 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<RosterInstancesTitleChanged>
     {
         private Guid linkedToRosterId;
+        private HashSet<Guid> parentRosters;
 
         public MultiOptionLinkedToRosterQuestionViewModel(
             QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState,
@@ -41,6 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.maxAllowedAnswers = questionnaire.GetMaxSelectedAnswerOptions(questionIdentity.Id);
             this.areAnswersOrdered = questionnaire.ShouldQuestionRecordAnswersOrder(questionIdentity.Id);
             this.linkedToRosterId = questionnaire.GetRosterReferencedByLinkedQuestion(questionIdentity.Id);
+            this.parentRosters = questionnaire.GetRostersFromTopToSpecifiedEntity(this.linkedToRosterId).ToHashSet();
         }
 
         protected override IEnumerable<MultiOptionLinkedQuestionOptionViewModel> CreateOptions()
@@ -115,7 +117,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(RosterInstancesTitleChanged @event)
         {
-            var optionListShouldBeUpdated = @event.ChangedInstances.Any(x => x.RosterInstance.GroupId == this.linkedToRosterId);
+            var optionListShouldBeUpdated = @event.ChangedInstances.Any(x => x.RosterInstance.GroupId == this.linkedToRosterId ||
+                                                                             this.parentRosters.Contains(x.RosterInstance.GroupId));
             if (optionListShouldBeUpdated)
             {
                 this.RefreshOptionsFromModel();
