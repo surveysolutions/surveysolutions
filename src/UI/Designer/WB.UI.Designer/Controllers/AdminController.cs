@@ -380,7 +380,7 @@ namespace WB.UI.Designer.Controllers
                 try
                 {
                     Attachment attachmentReference = questionnaireDocument.Attachments[attachmentIndex];
-                    var attachment = this.attachmentService.GetAttachment(attachmentReference.AttachmentId);
+                    var attachment = this.attachmentService.GetAttachmentWithContent(attachmentReference.AttachmentId);
 
                     if (attachment?.Content != null)
                     {
