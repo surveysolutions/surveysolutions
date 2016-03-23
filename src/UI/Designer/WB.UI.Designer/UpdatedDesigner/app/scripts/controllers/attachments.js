@@ -139,7 +139,11 @@
                         attachment.meta.fileName = attachment.file.name;
                         attachment.meta.lastUpdated = moment();
 
-                        attachment.name = attachment.meta.fileName.replace(/\.[^/.]+$/, "");
+                        var maxAttachmentNameLength = 32;
+                        var attachmentFileNameLength = attachment.meta.fileName.length;
+
+                        attachment.name = attachment.meta.fileName.replace(/\.[^/.]+$/, "")
+                            .substring(0, attachmentFileNameLength < maxAttachmentNameLength ? attachmentFileNameLength : maxAttachmentNameLength);
 
                         if (!_.isUndefined(attachmentForm)) {
                             attachmentForm.$setDirty();
