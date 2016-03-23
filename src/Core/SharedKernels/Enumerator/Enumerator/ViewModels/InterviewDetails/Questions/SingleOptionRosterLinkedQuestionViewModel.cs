@@ -65,6 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private IStatefulInterview interview;
         private Guid referencedRosterId;
         private ObservableCollection<SingleOptionLinkedQuestionOptionViewModel> options;
+        private HashSet<Guid> parentRosters;
 
         public ObservableCollection<SingleOptionLinkedQuestionOptionViewModel> Options
         {
@@ -103,7 +104,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
             this.referencedRosterId = questionnaire.GetRosterReferencedByLinkedQuestion(questionIdentity.Id);
-
+            this.parentRosters = questionnaire.GetRostersFromTopToSpecifiedEntity(this.referencedRosterId).ToHashSet();
             this.Options =
                 new ObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(
                     this.GenerateOptionsFromModel(interview));
@@ -268,7 +269,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(RosterInstancesTitleChanged @event)
         {
-            var optionListShouldBeUpdated = @event.ChangedInstances.Any(x => x.RosterInstance.GroupId == this.referencedRosterId);
+            var optionListShouldBeUpdated = @event.ChangedInstances.Any(x => x.RosterInstance.GroupId == this.referencedRosterId || 
+                                                                             this.parentRosters.Contains(x.RosterInstance.GroupId));
             if (optionListShouldBeUpdated)
             {
                 this.RefreshOptionsListFromModel();
