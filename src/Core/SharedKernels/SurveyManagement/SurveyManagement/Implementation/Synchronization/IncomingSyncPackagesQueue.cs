@@ -8,6 +8,7 @@ using System.Runtime.Caching;
 using Main.Core.Events;
 using Polly;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.CustomCollections;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization;
