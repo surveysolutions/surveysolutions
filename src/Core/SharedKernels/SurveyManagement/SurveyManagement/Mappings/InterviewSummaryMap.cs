@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.InterviewId);
             Property(x => x.QuestionnaireId);
             Property(x => x.QuestionnaireVersion);
-            Property(x => x.ResponsibleId);
+            Property(x => x.ResponsibleId, pm => pm.Column(cm => cm.Index("InterviewSummaries_ResponsibleId")));
             Property(x => x.Status);
             Property(x => x.IsDeleted);
             Property(x => x.HasErrors);
