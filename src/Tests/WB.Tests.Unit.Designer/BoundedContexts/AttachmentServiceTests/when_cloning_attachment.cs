@@ -1,7 +1,6 @@
 using System;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
-using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 {
@@ -10,21 +9,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
         Establish context = () =>
         {
             attachmentContentStorage.Store(Create.AttachmentContent(content: fileContent, contentType: contentType), attachmentContentId);
-            attachmentMetaStorage.Store(Create.AttachmentMeta(attachmentId.FormatGuid(), attachmentContentId, questionnaireId: questionnaireId.FormatGuid(), fileName: fileName), attachmentId.FormatGuid());
+            attachmentMetaStorage.Store(Create.AttachmentMeta(attachmentId, attachmentContentId, questionnaireId: questionnaireId, fileName: fileName), attachmentId);
 
-            Setup.ServiceLocatorForAttachmentService(attachmentContentStorage, attachmentMetaStorage);
-
-            attachmentService = Create.AttachmentService();
+            attachmentService = Create.AttachmentService(attachmentContentStorage: attachmentContentStorage, attachmentMetaStorage: attachmentMetaStorage);
         };
 
-        Because of = () =>
-            attachmentService.CloneMeta(attachmentId, newAttachmentId, newQuestionnaireId);
+        Because of = () => attachmentService.CloneMeta(attachmentId, newAttachmentId, newQuestionnaireId);
 
         It should_save_cloned_attachment_meta_with_specified_properties = () =>
         {
-            var attachmentMeta = attachmentMetaStorage.GetById(newAttachmentId.FormatGuid());
+            var attachmentMeta = attachmentMetaStorage.GetById(newAttachmentId);
             attachmentMeta.FileName.ShouldEqual(fileName);
-            attachmentMeta.QuestionnaireId.ShouldEqual(newQuestionnaireId.FormatGuid());
+            attachmentMeta.QuestionnaireId.ShouldEqual(newQuestionnaireId);
             attachmentMeta.ContentId.ShouldEqual(attachmentContentId);
         };
 

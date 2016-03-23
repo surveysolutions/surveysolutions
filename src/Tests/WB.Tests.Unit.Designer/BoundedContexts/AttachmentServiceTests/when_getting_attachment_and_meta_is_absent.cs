@@ -8,13 +8,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
     {
         Establish context = () =>
         {
-            Setup.ServiceLocatorForAttachmentService(attachmentContentStorage, attachmentMetaStorage);
-
-            attachmentService = Create.AttachmentService();
+            attachmentService = Create.AttachmentService(attachmentContentStorage: attachmentContentStorage, attachmentMetaStorage: attachmentMetaStorage);
         };
 
         Because of = () =>
-            attachment = attachmentService.GetAttachment(attachmentId);
+            attachment = attachmentService.GetAttachmentWithContent(attachmentId);
 
         It should_return_null = () =>
             attachment.ShouldBeNull();

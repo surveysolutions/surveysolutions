@@ -22,8 +22,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 children: Create.TextQuestion(variable: "var"));
 
             var questionnaireAttachment = Mock.Of<QuestionnaireAttachment>(a => a.Content == content);
-            attachmentServiceMock.Setup(x => x.GetAttachment(attachment1Id)).Returns(questionnaireAttachment);
-            attachmentServiceMock.Setup(x => x.GetAttachment(attachment2Id)).Returns(questionnaireAttachment);
+            attachmentServiceMock.Setup(x => x.GetAttachmentWithContent(attachment1Id)).Returns(questionnaireAttachment);
+            attachmentServiceMock.Setup(x => x.GetAttachmentWithContent(attachment2Id)).Returns(questionnaireAttachment);
             attachmentServiceMock.Setup(x => x.GetAttachmentSizesByQuestionnaire(Moq.It.IsAny<Guid>()))
                 .Returns(attachments.Select(y => new AttachmentSize { Size = 10 }).ToList());
 
