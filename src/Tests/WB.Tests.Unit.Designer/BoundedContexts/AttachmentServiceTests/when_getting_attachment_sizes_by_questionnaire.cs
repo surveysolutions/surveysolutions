@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
         Because of = () =>
             expectedAttachmentSizes = attachmentService.GetAttachmentSizesByQuestionnaire(questionnaireId);
 
-        It should_return_2_specified_attachments = () =>
+        It should_return_3_specified_attachment_sizes = () =>
         {
             expectedAttachmentSizes.Count.ShouldEqual(3);
             expectedAttachmentSizes[0].Size.ShouldEqual(100);
