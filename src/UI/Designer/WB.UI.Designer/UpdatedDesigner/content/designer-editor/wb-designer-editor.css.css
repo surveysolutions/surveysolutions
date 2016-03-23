@@ -404,8 +404,8 @@
   cursor: pointer;
 }
 .attachments-panel .attachments div.attachment-list div.attachments-panel-item .attachment-preview .attachment-preview-cover img {
-  height: 140px;
-  width: 156px;
+  max-height: 140px;
+  max-width: 156px;
   object-fit: contain;
   object-position: 100% 0;
 }

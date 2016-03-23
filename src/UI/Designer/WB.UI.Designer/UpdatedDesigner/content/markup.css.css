@@ -8030,8 +8030,8 @@ textarea#edit-group-description {
   cursor: pointer;
 }
 .attachments-panel .attachments div.attachment-list div.attachments-panel-item .attachment-preview .attachment-preview-cover img {
-  height: 140px;
-  width: 156px;
+  max-height: 140px;
+  max-width: 156px;
   object-fit: contain;
   object-position: 100% 0;
 }
@@ -9230,13 +9230,13 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
 }
 #verification-modal .modal-content {
   height: 100%;
-  min-width: 275px;
   border: none;
   position: relative;
+  min-width: 275px;
 }
 #verification-modal .modal-content .modal-header {
-  font-family: 'Open Sans Light', sans-serif;
   font-size: 36px;
+  font-family: 'Open Sans Light', sans-serif;
   border-bottom: 2px solid #edeff1;
 }
 #verification-modal .modal-content .modal-header button.close {
@@ -9249,14 +9249,14 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   background-position: 0 -40px;
 }
 #verification-modal .modal-content .modal-header h3 {
-  line-height: 36px;
+  line-height: 32px;
 }
 #verification-modal .modal-content .modal-header h3 span {
   color: #dd2c2c;
 }
 #verification-modal .modal-content .modal-body {
-    padding: 0px; 
-    height: 100%;
+  padding: 0px;
+  height: 100%;
 }
 #verification-modal .modal-content .modal-body .error-message {
   font-family: Georgia, serif;
