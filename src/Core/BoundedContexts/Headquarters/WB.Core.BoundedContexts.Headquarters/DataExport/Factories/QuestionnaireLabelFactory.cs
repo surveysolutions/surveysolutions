@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -28,7 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 
             foreach (ExportedHeaderItem headerItem in level.HeaderItems.Values)
             {
-                bool hasLabels = headerItem.Labels != null && headerItem.Labels.Count > 0;
+                bool hasLabels = headerItem.Labels != null && headerItem.Labels.Count > 0 && headerItem.QuestionType!=QuestionType.MultyOption;
 
                 for (int i = 0; i < headerItem.ColumnNames.Length; i++)
                 {
