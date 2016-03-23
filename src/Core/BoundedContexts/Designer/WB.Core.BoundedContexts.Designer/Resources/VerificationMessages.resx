@@ -492,9 +492,6 @@
   <data name="WB0110_AttachmentHasEmptyContent" xml:space="preserve">
     <value>Attachment cannot be empty</value>
   </data>
-  <data name="WB0111_AttachmentHasInvalidName" xml:space="preserve">
-    <value>Attachment has invalid name.</value>
-  </data>
   <data name="WB0213_AttachmentSizeIsMoreThan5Mb" xml:space="preserve">
     <value>Attachment size is more than 5Mb</value>
   </data>

@@ -218,7 +218,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             LookupVerifier(LookupTableNotUniqueRowcodeValues, "WB0047", VerificationMessages.WB0047_LookupTableNotUniqueRowcodeValues),
 
             AttachmentVerifier(AttachmentHasEmptyContent, "WB0110", VerificationMessages.WB0110_AttachmentHasEmptyContent),
-            AttachmentVerifier(AttachmentHasInvalidName, "WB0111", VerificationMessages.WB0111_AttachmentHasInvalidName),
 
             VerifyGpsPrefilledQuestions,
             ErrorsByLinkedQuestions,
@@ -726,11 +725,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool MacroHasInvalidName(Macro macro, ReadOnlyQuestionnaireDocument questionnaire)
         {
             return !IsVariableNameValid(macro.Name);
-        }
-
-        private bool AttachmentHasInvalidName(Attachment attachment, ReadOnlyQuestionnaireDocument questionnaire)
-        {
-            return !IsVariableNameValid(attachment.Name);
         }
 
         private bool AttachmentHasEmptyContent(Attachment attachment, ReadOnlyQuestionnaireDocument questionnaire)
