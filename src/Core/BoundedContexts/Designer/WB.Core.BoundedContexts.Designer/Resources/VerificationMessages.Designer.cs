@@ -1073,15 +1073,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Attachment has invalid name..
-        /// </summary>
-        internal static string WB0111_AttachmentHasInvalidName {
-            get {
-                return ResourceManager.GetString("WB0111_AttachmentHasInvalidName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters..
         /// </summary>
         internal static string WB0200_LargeNumberOfRostersIsCreated {
