@@ -63,9 +63,19 @@ namespace WB.Core.SharedKernels.DataCollection.V7
 
             foreach (var linkedQuestionFilter in this.LinkedQuestionFilters)
             {
+                bool enabled = false;
+                try
+                {
+                    enabled = linkedQuestionFilter.Value();
+                }
+#pragma warning disable
+                catch (Exception ex)
+                {
+                }
+#pragma warning restore
                 result.Add(new LinkedQuestionFilterResult()
                 {
-                    Enabled = linkedQuestionFilter.Value(),
+                    Enabled = enabled,
                     LinkedQuestionId = linkedQuestionFilter.Key,
                     RosterKey = this.RosterKey
                 });
