@@ -250,7 +250,6 @@
                                         </div>
                                         <div class="attachment-content">
                                             <input focus-on-out="focusAttachment{{attachment.attachmentId}}"
-                                                   ng-pattern="/^[\w\-]+$/"
                                                    required=""
                                                    placeholder="attachment name"
                                                    maxlength="32"
@@ -260,9 +259,6 @@
                                                    class="form-control table-name"
                                                    type="text"/>
                                             <div class="divider"></div>
-                                            <p class="error-message ng-cloak" ng-show="attachmentForm.name.$error.pattern">
-                                                Invalid attachment name
-                                            </p>
                                             <div class="drop-box">
                                                 Drop File here
                                             </div>

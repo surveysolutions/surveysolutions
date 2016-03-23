@@ -240,6 +240,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             await this.commandService.WaitPendingCommandsAsync();
             await this.RefreshDashboardAsync();
+            IsInProgress = false;
         }
         private void DashboardItemOnStartingLongOperation(StartingLongOperationMessage message)
         {

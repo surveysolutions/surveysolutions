@@ -49,7 +49,7 @@
                 attachment.attachmentId = attachmentDto.attachmentId;
                 attachment.name = attachmentDto.name;
 
-                attachment.file = attachmentDto.file;
+                attachment.file = null;
 
                 if (!_.isUndefined(attachmentDto.content) && !_.isNull(attachmentDto.content)) {
                     attachment.content = {};
