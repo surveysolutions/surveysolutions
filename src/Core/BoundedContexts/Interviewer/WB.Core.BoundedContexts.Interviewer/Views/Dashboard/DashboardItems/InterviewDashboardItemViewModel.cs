@@ -180,8 +180,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             if (!isNeedDelete)
                 return;
 
-            await this.interviewerInterviewFactory.RemoveInterviewAsync(this.InterviewId);
-            RaiseRemovedDashboardItem();
+            this.isInterviewLoadingInProgress = true;
+            try
+            {
+                this.RaiseStartingLongOperation();
+                await this.interviewerInterviewFactory.RemoveInterviewAsync(this.InterviewId);
+                RaiseRemovedDashboardItem();
+            }
+            finally
+            {
+                this.isInterviewLoadingInProgress = false;
+            }
         }
 
         public IMvxCommand LoadDashboardItemCommand

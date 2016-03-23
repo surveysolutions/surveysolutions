@@ -293,10 +293,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
                 if (!IsQuestionLinked(question))
                 {
+                    var questionLabel =
+                        string.IsNullOrEmpty(question.VariableLabel) ? question.QuestionText : question.VariableLabel;
                     if (question is IMultyOptionsQuestion)
-                        exportedHeaderItem.Titles[i] += string.Format(":{0}", question.Answers[i].AnswerText);
+                        exportedHeaderItem.Titles[i] += $"{questionLabel}:{question.Answers[i].AnswerText}";
                     if (question is ITextListQuestion)
-                        exportedHeaderItem.Titles[i] += string.Format(":{0}", i);
+                        exportedHeaderItem.Titles[i] += $"{questionLabel}:{i}";
                 }
             }
             return exportedHeaderItem;
