@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
             incomingPackagesQueue = CreateIncomingPackagesQueue(fileSystemAccessor: fileSystemMock.Object);
         };
 
-        Because of = () => incomingPackagesQueue.DeQueue();
+        Because of = () => incomingPackagesQueue.DeQueue(0);
 
         It should_not_delete_any_files = () =>
           fileSystemMock.Verify(x=>x.DeleteFile(Moq.It.IsAny<string>()), Times.Never);

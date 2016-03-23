@@ -619,6 +619,7 @@
     <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_load_quantity_report_for_interviewers_where_one_out_of_three_periods_is_in_future.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\SampleUploadViewFactoryTests\SampleUploadViewFactoryNUnitTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_interviewers_where_one_out_of_three_periods_is_in_future.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_enqueue_1000_files_and_then_get_length.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewerQuestionnairesControllerTests\when_getting_questionnaire_and_interviewer_content_version_is_less_then_in_questionnaire.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\InterviewersViewFactoryTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_hq_filtering_by_archived.cs" />
@@ -797,9 +798,6 @@
     <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_interviewers_by_day_period.cs" />
     <Compile Include="SharedKernels\SurveyManagement\HealthCheckTests\FolderPermissionCheckerTests\when_check_folders_permissions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\IncomingPackagesQueueTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_called_and_package_file_is_locked.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_called_and_package_file_was_locked_first_time_but_become_available_second_time.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_method_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_called_and_folder_with_packages_is_empty.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_HasPackagesByInterviewId_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewControllerTests\when_getting_interview_details_without_filter.cs" />
@@ -844,19 +842,11 @@
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_RejectedBySupervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_Restored.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SynchronizationDenormalizerTests\when_interview_status_changed_on_SupervisorAssigned.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SyncPackagesProcessorTests\when_ProcessNextSyncPackage_called_and_interview_were_created_on_client.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_called_and_package_cant_be_opened.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_DeQueue_called_and_package_content_cant_be_opened.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SyncPackagesProcessorTests\when_ProcessNextSyncPackage_called_and_sync_package_dequeue_throw_exception.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SyncPackagesProcessorTests\when_ProcessNextSyncPackage_called_and_sync_package_dequeue_throw_exception_with_interview_id.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SyncPackagesProcessorTests\when_ProcessNextSyncPackage_called_and_sync_package_is_absent.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SyncPackagesProcessorTests\when_ProcessNextSyncPackage_called_sync_package_is_present_but_command_executed_with_exception.cs" />
     <Compile Include="SharedKernels\SurveyManagement\HeadquartersTeamsAndStatusesReportTests\HeadquartersTeamsAndStatusesReportContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\HeadquartersTeamsAndStatusesReportTests\when_empty_data_base.cs" />
     <Compile Include="SharedKernels\SurveyManagement\HeadquartersTeamsAndStatusesReportTests\when_report_is_requested_by_template.cs" />
     <Compile Include="SharedKernels\SurveyManagement\HeadquartersTeamsAndStatusesReportTests\when_report_requested_by_viewer.cs" />
     <Compile Include="SharedKernels\SurveyManagement\HeadquartersTeamsAndStatusesReportTests\when_two_responsibles_and_each_status_has_one_interview.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SyncPackagesProcessorTests\when_ProcessNextSyncPackage_called_sync_package_is_present_but_command_executed_with_Interview_exception.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UnhandledPackageStorageTests\when_GetListOfUnhandledPackages_is_called_and_error_folder_is_missing.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UnhandledPackageStorageTests\when_GetListOfUnhandledPackages_is_called_and_error_folder_is_present_and_not_empty.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UnhandledPackageStorageTests\when_GetUnhandledPackagePath_is_called.cs" />
@@ -1259,7 +1249,6 @@
     <Compile Include="SharedKernels\SurveyManagement\FilebasedPreloadedDataRepositoryTests\when_preloaded_data_with_single_csv_is_present_and_GetPreloadedDataOfSample_is_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\FilebasedPreloadedDataRepositoryTests\when_storing_new_preloaded_data_file.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SyncPackagesProcessorTests\SyncPackagesProcessorTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\SyncPackagesProcessorTests\when_processing_item.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_PushSyncItem_called_and_item_has_empty_content.cs" />
     <Compile Include="SharedKernels\SurveyManagement\IncomingPackagesQueueTests\when_PushSyncItem_called_and_item_content_is_not_empty.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\InterviewApiControllerTestsContext.cs" />
@@ -1571,12 +1560,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\packages\System.Data.SQLite.Core.1.0.99.0\build\net46\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\System.Data.SQLite.Core.1.0.99.0\build\net46\System.Data.SQLite.Core.targets'))" />
-  </Target>
   <Import Project="..\..\..\packages\System.Data.SQLite.Core.1.0.99.0\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\..\..\packages\System.Data.SQLite.Core.1.0.99.0\build\net46\System.Data.SQLite.Core.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

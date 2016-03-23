@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace WB.Core.Synchronization
 {
@@ -6,8 +7,10 @@ namespace WB.Core.Synchronization
     {
         void Enqueue(Guid interviewId, string item);
         int QueueLength { get; }
-        IncomingSyncPackage DeQueue();
+        string DeQueue(int skip);
         void DeleteSyncItem(string syncItemPath);
+        IncomingSyncPackage GetSyncItem(string syncItemPath);
         bool HasPackagesByInterviewId(Guid interviewId);
+        List<string> DeQueueMany(int count);
     }
 }
