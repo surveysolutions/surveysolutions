@@ -20,15 +20,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionId, 
                 attachments: attachments,
                 children: Create.TextQuestion(variable: "var"));
-
-            var questionnaireAttachment = Mock.Of<QuestionnaireAttachment>(a => a.Content == content);
-            attachmentServiceMock.Setup(x => x.GetAttachmentWithContent(attachment1Id)).Returns(questionnaireAttachment);
-            attachmentServiceMock.Setup(x => x.GetAttachmentWithContent(attachment2Id)).Returns(questionnaireAttachment);
+            
             attachmentServiceMock.Setup(x => x.GetAttachmentSizesByQuestionnaire(Moq.It.IsAny<Guid>()))
                 .Returns(attachments.Select(y => new AttachmentSize { Size = 10 }).ToList());
 
             attachmentServiceMock.Setup(x => x.GetContentDetails(Moq.It.IsAny<string>()))
-                .Returns(new AttachmentContentView { Size = 10 });
+                .Returns(new AttachmentContent { Size = 10 });
 
             verifier = CreateQuestionnaireVerifier(attachmentService: attachmentServiceMock.Object);
         };

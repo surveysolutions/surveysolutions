@@ -46,21 +46,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                 attachments => attachments.Where(attachment => attachment.QuestionnaireId == questionnaireId).ToList());
         }
 
-        public QuestionnaireAttachment GetAttachmentWithContent(Guid attachmentId)
+        public AttachmentMeta GetAttachmentMeta(Guid attachmentId)
         {
-            var attachment = this.attachmentMetaStorage.GetById(attachmentId);
-            if (attachment == null) return null;
-
-            var attachmentContent = this.attachmentContentStorage.GetById(attachment.ContentId);
-
-            return new QuestionnaireAttachment
-            {
-                AttachmentId = attachment.AttachmentId.FormatGuid(),
-                AttachmentContentId = attachment.ContentId,
-                FileName = attachment.FileName,
-                ContentType = attachmentContent.ContentType,
-                Content = attachmentContent.Content
-            };
+            return this.attachmentMetaStorage.GetById(attachmentId);
         }
 
         public AttachmentContent GetContent(string contentId)
@@ -88,7 +76,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             }).ToList();
         }
 
-        public string GetAttachmentContentId(byte[] binaryContent)
+        public string GetAttachmentContentId(Guid attachmentId)
+        {
+            return this.attachmentMetaStorage.GetById(attachmentId)?.ContentId;
+        }
+
+        public string CreateAttachmentContentId(byte[] binaryContent)
         {
             using (var sha1Service = new SHA1CryptoServiceProvider())
             {
@@ -121,31 +114,31 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
             if (attachment == null)
             {
-                this.attachmentMetaStorage.Store(new AttachmentMeta
+               attachment = new AttachmentMeta
                 {
                     AttachmentId = attachmentId,
                     QuestionnaireId = questionnaireId,
                     ContentId = attachmentContentId,
                     FileName = fileName,
                     LastUpdateDate = DateTime.UtcNow
-                }, attachmentId);
+                };
             }
             else
             {
-                attachment.QuestionnaireId = questionnaireId;
                 attachment.FileName = fileName;
                 attachment.LastUpdateDate = DateTime.UtcNow;
-                attachment.ContentId = attachmentContentId;
-                this.attachmentMetaStorage.Store(attachment, attachment.AttachmentId);
+                attachment.ContentId = attachmentContentId ?? attachment.ContentId;
+
             }
+            this.attachmentMetaStorage.Store(attachment, attachment.AttachmentId);
         }
 
-        public AttachmentContentView GetContentDetails(string attachmentContentId)
+        public AttachmentContent GetContentDetails(string attachmentContentId)
         {
-            return this.attachmentContentStorage.Query(contents=>contents.Select(content=>new AttachmentContentView
+            return this.attachmentContentStorage.Query(contents=>contents.Select(content=>new AttachmentContent
             {
                 ContentId = content.ContentId,
-                Type = content.ContentType,
+                ContentType = content.ContentType,
                 Size = content.Size,
                 Details = content.Details
             }).FirstOrDefault(content=>content.ContentId == attachmentContentId));

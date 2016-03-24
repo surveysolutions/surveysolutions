@@ -212,7 +212,6 @@
     <Compile Include="Implementation\Services\AttachmentService\AttachmentMeta.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentService.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentDetails.cs" />
-    <Compile Include="Implementation\Services\AttachmentService\QuestionnaireAttachment.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\LinkedQuestionFilterExpressionModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\ValidationExpressionModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\InterviewExpressionStateTemplateV6.cs">
