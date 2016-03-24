@@ -480,7 +480,7 @@
   <data name="WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion" xml:space="preserve">
     <value>Categorical linked question cannot be used in linked question filter expression.</value>
   </data>
-  <data name="WB00110_LinkedQuestionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+  <data name="WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
     <value>Filter expression has a syntax error.</value>
   </data>
   <data name="WB0065_NameForAyyachmentIsNotUnique" xml:space="preserve">
@@ -489,7 +489,7 @@
   <data name="WB0095_StaticTextRefersAbsentAttachment" xml:space="preserve">
     <value>Static text refers absent attachment</value>
   </data>
-  <data name="WB0110_AttachmentHasEmptyContent" xml:space="preserve">
+  <data name="WB0111_AttachmentHasEmptyContent" xml:space="preserve">
     <value>Attachment cannot be empty</value>
   </data>
   <data name="WB0213_AttachmentSizeIsMoreThan5Mb" xml:space="preserve">

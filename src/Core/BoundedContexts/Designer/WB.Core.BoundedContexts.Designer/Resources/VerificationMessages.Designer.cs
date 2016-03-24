@@ -160,15 +160,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filter expression has a syntax error..
-        /// </summary>
-        internal static string WB00110_LinkedQuestionFilterExpresssionHasIncorrectSyntax {
-            get {
-                return ResourceManager.GetString("WB00110_LinkedQuestionFilterExpresssionHasIncorrectSyntax", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Linked question references a question type that is not supported..
         /// </summary>
         internal static string WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType {
@@ -1064,11 +1055,20 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter expression has a syntax error..
+        /// </summary>
+        internal static string WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax {
+            get {
+                return ResourceManager.GetString("WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Attachment cannot be empty.
         /// </summary>
-        internal static string WB0110_AttachmentHasEmptyContent {
+        internal static string WB0111_AttachmentHasEmptyContent {
             get {
-                return ResourceManager.GetString("WB0110_AttachmentHasEmptyContent", resourceCulture);
+                return ResourceManager.GetString("WB0111_AttachmentHasEmptyContent", resourceCulture);
             }
         }
         

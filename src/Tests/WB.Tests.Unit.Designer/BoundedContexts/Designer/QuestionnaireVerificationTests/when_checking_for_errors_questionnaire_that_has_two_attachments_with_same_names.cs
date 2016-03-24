@@ -17,12 +17,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Establish context = () =>
         {
             var attachments = new[] { Create.Attachment(attachment1Id, "hello"), Create.Attachment(attachment2Id, "hello") };
-            questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionId, 
+            questionnaire = Create.QuestionnaireDocumentWithOneChapter( 
                 attachments: attachments,
-                children: Create.TextQuestion(variable: "var"));
-            
+                children: Create.TextQuestion());
+
             attachmentServiceMock.Setup(x => x.GetAttachmentSizesByQuestionnaire(Moq.It.IsAny<Guid>()))
-                .Returns(attachments.Select(y => new AttachmentSize { Size = 10 }).ToList());
+                .Returns(attachments.Select(y => new AttachmentSize()).ToList());
 
             attachmentServiceMock.Setup(x => x.GetContentDetails(Moq.It.IsAny<string>()))
                 .Returns(new AttachmentContent { Size = 10 });
@@ -63,7 +63,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         private static readonly Guid attachment1Id = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid attachment2Id = Guid.Parse("22222222222222222222222222222222");
-        private static readonly Guid questionId = Guid.Parse("10000000000000000000000000000000");
-        private static readonly byte[] content = new byte[] { 1, 2, 3};
     }
 }
