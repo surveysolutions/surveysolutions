@@ -109,31 +109,6 @@ namespace WB.UI.Designer.Api
             return this.ProcessCommand(command, commandType);
         }
 
-        public AttachmentDetails GetAttachmentDetails(byte[] binaryContent, string contentType, string fileName)
-        {
-            if (contentType.StartsWith("image/"))
-            {
-                using (var stream = new MemoryStream(binaryContent))
-                {
-                    try
-                    {
-                        var image = Image.FromStream(stream);
-                        return new AttachmentDetails
-                        {
-                            Height = image.Size.Height,
-                            Width = image.Size.Width
-                        };
-                    }
-                    catch (ArgumentException e)
-                    {
-                        throw new FormatException(string.Format(ExceptionMessages.Attachments_uploaded_file_is_not_image, fileName), e);
-                    }
-                }
-            }
-
-            throw new FormatException(ExceptionMessages.Attachments_Unsupported_content);
-        }
-
         [Route("~/api/command/updateLookupTable")]
         [HttpPost]
         public async Task<HttpResponseMessage> UpdateLookupTable()
