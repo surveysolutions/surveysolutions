@@ -1331,5 +1331,13 @@ namespace WB.Tests.Unit.Designer
                attachmentService ?? Mock.Of<IAttachmentService>(),
                lookupTableService ?? Mock.Of<ILookupTableService>());
         }
+
+        public static AttachmentService AttachmentService(
+            IPlainStorageAccessor<AttachmentContent> attachmentContentStorage = null,
+            IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage = null)
+        {
+            return new AttachmentService(attachmentContentStorage: attachmentContentStorage,
+                attachmentMetaStorage: attachmentMetaStorage);
+        }
     }
 }

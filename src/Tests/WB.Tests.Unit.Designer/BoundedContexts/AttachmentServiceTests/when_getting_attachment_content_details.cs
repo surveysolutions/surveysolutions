@@ -20,13 +20,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
         It should_return_attachment_content_with_specified_properties = () =>
         {
             attachmentContent.ContentId.ShouldEqual(attachmentContentId);
-            attachmentContent.Type.ShouldEqual(contentType);
+            attachmentContent.ContentType.ShouldEqual(contentType);
             attachmentContent.Size.ShouldEqual(fileContent.Length);
             attachmentContent.Details.Height.ShouldEqual(contentDetails.Height);
             attachmentContent.Details.Width.ShouldEqual(contentDetails.Width);
         };
 
-        private static AttachmentContentView attachmentContent;
+        private static AttachmentContent attachmentContent;
         private static AttachmentService attachmentService;
         private static readonly AttachmentDetails contentDetails = new AttachmentDetails
         {
