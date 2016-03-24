@@ -380,12 +380,15 @@ namespace WB.UI.Designer.Controllers
                 try
                 {
                     Attachment attachmentReference = questionnaireDocument.Attachments[attachmentIndex];
-                    var attachment = this.attachmentService.GetAttachment(attachmentReference.AttachmentId);
+                    
+                    var attachmentContent = this.attachmentService.GetContent(attachmentReference.ContentId);
 
-                    if (attachment?.Content != null)
+                    if (attachmentContent?.Content != null)
                     {
-                        zipStream.PutFileEntry($"{questionnaireFolderName}/Attachments/{attachmentReference.AttachmentId.FormatGuid()}/{attachment.FileName}", attachment.Content);
-                        zipStream.PutTextFileEntry($"{questionnaireFolderName}/Attachments/{attachmentReference.AttachmentId.FormatGuid()}/Content-Type.txt", attachment.ContentType);
+                        var attachmentMeta = this.attachmentService.GetAttachmentMeta(attachmentReference.AttachmentId);
+
+                        zipStream.PutFileEntry($"{questionnaireFolderName}/Attachments/{attachmentReference.AttachmentId.FormatGuid()}/{attachmentMeta?.FileName ?? "unknown-file-name"}", attachmentContent.Content);
+                        zipStream.PutTextFileEntry($"{questionnaireFolderName}/Attachments/{attachmentReference.AttachmentId.FormatGuid()}/Content-Type.txt", attachmentContent.ContentType);
                     }
                     else
                     {

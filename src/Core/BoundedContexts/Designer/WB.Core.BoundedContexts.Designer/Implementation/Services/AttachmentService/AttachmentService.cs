@@ -46,19 +46,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                 attachments => attachments.Where(attachment => attachment.QuestionnaireId == questionnaireId).ToList());
         }
 
-        public QuestionnaireAttachment GetAttachment(Guid attachmentId)
+        public AttachmentMeta GetAttachmentMeta(Guid attachmentId)
         {
-            var attachment = this.attachmentMetaStorage.GetById(attachmentId);
-            var attachmentContent = this.attachmentContentStorage.GetById(attachment.ContentId);
-
-            return new QuestionnaireAttachment
-            {
-                AttachmentId = attachment.AttachmentId.FormatGuid(),
-                AttachmentContentId = attachment.ContentId,
-                FileName = attachment.FileName,
-                ContentType = attachmentContent.ContentType,
-                Content = attachmentContent.Content
-            };
+            return this.attachmentMetaStorage.GetById(attachmentId);
         }
 
         public AttachmentContent GetContent(string contentId)
@@ -143,12 +133,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             this.attachmentMetaStorage.Store(attachment, attachment.AttachmentId);
         }
 
-        public AttachmentContentView GetContentDetails(string attachmentContentId)
+        public AttachmentContent GetContentDetails(string attachmentContentId)
         {
-            return this.attachmentContentStorage.Query(contents=>contents.Select(content=>new AttachmentContentView
+            return this.attachmentContentStorage.Query(contents=>contents.Select(content=>new AttachmentContent
             {
                 ContentId = content.ContentId,
-                Type = content.ContentType,
+                ContentType = content.ContentType,
                 Size = content.Size,
                 Details = content.Details
             }).FirstOrDefault(content=>content.ContentId == attachmentContentId));

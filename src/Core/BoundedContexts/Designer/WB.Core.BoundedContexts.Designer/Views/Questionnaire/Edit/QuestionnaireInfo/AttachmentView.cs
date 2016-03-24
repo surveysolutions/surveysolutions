@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
     {
         public string AttachmentId { get; set; }
         public string Name { get; set; }
-        public AttachmentContentView Content { get; set; }
+        public AttachmentContent Content { get; set; }
         public AttachmentMeta Meta { get; set; }
     }
 }
