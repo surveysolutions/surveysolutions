@@ -563,6 +563,8 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_linked_options_changed_with_reduced_amound_of_items.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_roster_title_for_linked_question_changed.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedQuestionViewModelTests\when_selecting_first_option.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionRosterLinkedQuestionViewModelTests\SingleOptionRosterLinkedQuestionViewModelTestsContext.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionRosterLinkedQuestionViewModelTests\when_question_is_linked_to_second_level_question_and_title_changes.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\TextListQuestionViewModelTestContext.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_adding_new_empty_item_in_list_view_model_and_there_is_answer_in_interview.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextListQuestionViewModelTests\when_adding_new_item_in_list_view_model_and_there_is_answer_in_interview.cs" />
@@ -1450,6 +1452,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Compile Include="Create.Answers.cs" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
