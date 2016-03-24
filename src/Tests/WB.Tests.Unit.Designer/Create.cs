@@ -112,6 +112,14 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
+        public static AttachmentSize AttachmentSize(long? size = null)
+        {
+            return new AttachmentSize
+            {
+                Size = size ?? 10
+            };
+        }
+
         public static AttachmentView AttachmentView(Guid? id = null, long? size = null)
         {
             return new AttachmentView
