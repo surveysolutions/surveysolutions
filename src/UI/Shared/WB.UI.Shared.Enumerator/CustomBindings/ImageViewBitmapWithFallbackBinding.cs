@@ -13,6 +13,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
         }
 
+        
+
         protected override void SetValueToView(ImageView control, byte[] value)
         {
             if (value != null)
@@ -97,7 +99,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
                 // Calculate the largest inSampleSize value that is a power of 2 and keeps both
                 // height and width larger than the requested height and width.
-                while (halfHeight / inSampleSize > maxAllowedHeight && halfWidth / inSampleSize > maxAllowedWidth)
+                while (halfHeight / inSampleSize > maxAllowedHeight || halfWidth / inSampleSize > maxAllowedWidth)
                 {
                     inSampleSize *= 2;
                 }
