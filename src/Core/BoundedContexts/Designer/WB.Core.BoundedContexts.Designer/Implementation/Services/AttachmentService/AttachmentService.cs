@@ -86,7 +86,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             }).ToList();
         }
 
-        public string GetAttachmentContentId(byte[] binaryContent)
+        public string GetAttachmentContentId(Guid attachmentId)
+        {
+            return this.attachmentMetaStorage.GetById(attachmentId)?.ContentId;
+        }
+
+        public string CreateAttachmentContentId(byte[] binaryContent)
         {
             using (var sha1Service = new SHA1CryptoServiceProvider())
             {
@@ -119,23 +124,23 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
 
             if (attachment == null)
             {
-                this.attachmentMetaStorage.Store(new AttachmentMeta
+               attachment = new AttachmentMeta
                 {
                     AttachmentId = attachmentId,
                     QuestionnaireId = questionnaireId,
                     ContentId = attachmentContentId,
                     FileName = fileName,
                     LastUpdateDate = DateTime.UtcNow
-                }, attachmentId);
+                };
             }
             else
             {
-                attachment.QuestionnaireId = questionnaireId;
                 attachment.FileName = fileName;
                 attachment.LastUpdateDate = DateTime.UtcNow;
-                attachment.ContentId = attachmentContentId;
-                this.attachmentMetaStorage.Store(attachment, attachment.AttachmentId);
+                attachment.ContentId = attachmentContentId ?? attachment.ContentId;
+
             }
+            this.attachmentMetaStorage.Store(attachment, attachment.AttachmentId);
         }
 
         public AttachmentContentView GetContentDetails(string attachmentContentId)
