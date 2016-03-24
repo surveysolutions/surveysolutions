@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             get
             {
                 return synchronizationCommand ??
-                       (synchronizationCommand = new MvxCommand(async () => await this.RunSynchronizationAsync(),
+                       (synchronizationCommand = new MvxAsyncCommand(this.RunSynchronizationAsync,
                            () => !this.Synchronization.IsSynchronizationInProgress));
             }
         }
