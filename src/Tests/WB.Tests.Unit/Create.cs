@@ -2850,5 +2850,12 @@ namespace WB.Tests.Unit
 
             };
         }
+
+        public static IStatefulInterviewRepository StatefulInterviewRepositoryWith(IStatefulInterview interview)
+        {
+            var result = Substitute.For<IStatefulInterviewRepository>();
+            result.Get(null).ReturnsForAnyArgs(interview);
+            return result;
+        }
     }
 }
