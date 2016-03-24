@@ -294,7 +294,7 @@ namespace WB.UI.Designer.Controllers
 
                     if (attachment.HasAllDataForRestore())
                     {
-                        string attachmentContentId = this.attachmentService.GetAttachmentContentId(attachment.BinaryContent);
+                        string attachmentContentId = this.attachmentService.CreateAttachmentContentId(attachment.BinaryContent);
 
                         this.attachmentService.SaveContent(attachmentContentId, attachment.ContentType, attachment.BinaryContent);
                         this.attachmentService.SaveMeta(attachmentId, questionnaireId, attachmentContentId, attachment.FileName);

@@ -246,6 +246,7 @@
     <Compile Include="Applications\CommandApiControllerTests\CommandApiControllerTestContext.cs" />
     <Compile Include="Applications\CommandApiControllerTests\when_command_preparation_throws_exception.cs" />
     <Compile Include="Applications\CommandApiControllerTests\when_posting_updated_attachment.cs" />
+    <Compile Include="Applications\CommandApiControllerTests\when_posting_updated_attachment_without_file.cs" />
     <Compile Include="Applications\CommandApiControllerTests\when_posting_updated_attachment_with_wrong_content_type.cs" />
     <Compile Include="Applications\CommandApiControllerTests\when_questionnaire_not_available.cs" />
     <Compile Include="Applications\CommandApiControllerTests\when_user_has_no_access_rights.cs" />
