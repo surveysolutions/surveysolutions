@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -28,7 +27,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;
         static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
-
-        private static readonly Guid attachment1Id = Guid.Parse("11111111111111111111111111111111");
     }
 }
