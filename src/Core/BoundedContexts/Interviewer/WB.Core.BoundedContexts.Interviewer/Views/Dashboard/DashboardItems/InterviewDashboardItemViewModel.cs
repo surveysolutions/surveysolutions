@@ -168,28 +168,30 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public bool IsSupportedRemove { get; set; }
 
-        public IMvxCommand RemoveInterviewCommand => new MvxCommand(this.RemoveInterview);
-
-        private async void RemoveInterview()
+        public IMvxCommand RemoveInterviewCommand
         {
-            var isNeedDelete = await this.userInteractionService.ConfirmAsync(
-                InterviewerUIResources.Dashboard_RemoveInterviewQuestion.FormatString(this.QuestionnaireName),
-                okButton: UIResources.Yes,
-                cancelButton: UIResources.No);
+            get { return new MvxAsyncCommand(RemoveInterview, () => !this.isInterviewDeleteInProgress); }
+        }
 
-            if (!isNeedDelete)
-                return;
-
-            this.isInterviewLoadingInProgress = true;
+        private async Task RemoveInterview()
+        {
+            this.isInterviewDeleteInProgress = true;
             try
             {
-                this.RaiseStartingLongOperation();
+                var isNeedDelete = await this.userInteractionService.ConfirmAsync(
+                    InterviewerUIResources.Dashboard_RemoveInterviewQuestion.FormatString(this.QuestionnaireName),
+                    okButton: UIResources.Yes,
+                    cancelButton: UIResources.No);
+
+                if (!isNeedDelete)
+                    return;
+
                 await this.interviewerInterviewFactory.RemoveInterviewAsync(this.InterviewId);
                 RaiseRemovedDashboardItem();
             }
             finally
             {
-                this.isInterviewLoadingInProgress = false;
+                this.isInterviewDeleteInProgress = false;
             }
         }
 
@@ -199,6 +201,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         }
 
         private bool isInterviewLoadingInProgress = false;
+        private bool isInterviewDeleteInProgress = false;
 
         public async Task LoadInterview()
         {
