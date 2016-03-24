@@ -9232,7 +9232,8 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   height: 100%;
   border: none;
   position: relative;
-  min-width: 275px;
+  min-width: 610px;
+  min-height: 220px;
 }
 #verification-modal .modal-content .modal-header {
   font-size: 36px;
@@ -9256,7 +9257,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
 }
 #verification-modal .modal-content .modal-body {
   padding: 0px;
-  height: 100%;
+  height: calc(100% - 115px);
 }
 #verification-modal .modal-content .modal-body .error-message {
   font-family: Georgia, serif;
