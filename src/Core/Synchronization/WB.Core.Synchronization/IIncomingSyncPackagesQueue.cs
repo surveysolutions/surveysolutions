@@ -7,10 +7,9 @@ namespace WB.Core.Synchronization
     {
         void Enqueue(Guid interviewId, string item);
         int QueueLength { get; }
-        string DeQueue(int skip);
+        IReadOnlyCollection<string> GetTopSyncItemsAsFileNames(int count);
         void DeleteSyncItem(string syncItemPath);
         IncomingSyncPackage GetSyncItem(string syncItemPath);
         bool HasPackagesByInterviewId(Guid interviewId);
-        List<string> DeQueueMany(int count);
     }
 }

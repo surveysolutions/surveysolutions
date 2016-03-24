@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 
             Stopwatch innerwatch = Stopwatch.StartNew();
             this.fileSystemAccessor.WriteAllText(fullPathToSyncPackage, item);
-            this.logger.Info($"Sync_inner2_{syncPackageFileName}: WriteAllText {syncPackageFileName}. Took {innerwatch.Elapsed:g}.");
+            this.logger.Debug($"Sync package {syncPackageFileName}: WriteAllText {syncPackageFileName}. Took {innerwatch.Elapsed:g}.");
             innerwatch.Stop();
 
             this.GetCachedFilesInIncomingDirectory().Add(fullPathToSyncPackage);
@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                     retryAttempt => TimeSpan.FromSeconds(syncSettings.RetryIntervalInSeconds),
                     (exception, retryCount, context) =>
                     {
-                        logger.Warn($"package '{pathToPackage}' failed to open with error '{exception.Message}'", exception);
+                        this.logger.Warn($"Sync package '{pathToPackage}' failed to open with error '{exception.Message}'", exception);
                     }
                 );
         }
@@ -143,20 +143,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                     filename.EndsWith(this.syncSettings.IncomingCapiPackageFileNameExtension));
         }
 
-        public string DeQueue(int skip)
+        public IReadOnlyCollection<string> GetTopSyncItemsAsFileNames(int count)
         {
             var cachedFilesInIncomingDirectory = this.GetCachedFilesInIncomingDirectory().ToList();
-            this.logger.Info($"Current queue length is {cachedFilesInIncomingDirectory.Count}");
-
-            var pathToPackage = cachedFilesInIncomingDirectory.OrderBy(this.fileSystemAccessor.GetFileName).Skip(skip).FirstOrDefault();
-
-            return pathToPackage;
-        }
-
-        public List<string> DeQueueMany(int count)
-        {
-            var cachedFilesInIncomingDirectory = this.GetCachedFilesInIncomingDirectory().ToList();
-            this.logger.Info($"Current queue length is {cachedFilesInIncomingDirectory.Count}");
+            this.logger.Debug($"Current queue length: {cachedFilesInIncomingDirectory.Count}");
 
             var pathToPackage = cachedFilesInIncomingDirectory.OrderBy(this.fileSystemAccessor.GetFileName).Take(count).ToList();
 
@@ -172,7 +162,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 
                 Stopwatch innerwatch = Stopwatch.StartNew();
                 var fileContent = policy.Execute(() => fileSystemAccessor.ReadAllText(pathToPackage));
-                this.logger.Info($"Sync_inner2_{Path.GetFileName(pathToPackage)}: ReadAllText {Path.GetFileName(pathToPackage)}. Took {innerwatch.Elapsed:g}.");
+                this.logger.Debug($"GetSyncItem {Path.GetFileName(pathToPackage)}: ReadAllText {Path.GetFileName(pathToPackage)}. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Stop();
 
                 var syncItem = this.serializer.Deserialize<SyncItem>(fileContent);
@@ -193,7 +183,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             catch (Exception e)
             {
                 var message = string.Format("package '{0}' wasn't parsed. Reason: '{1}'", pathToPackage, e.Message);
-                logger.Error(message, e);
+                this.logger.Error(message, e);
                 throw new IncomingSyncPackageException(message, e, interviewId, pathToPackage);
             }
         }
