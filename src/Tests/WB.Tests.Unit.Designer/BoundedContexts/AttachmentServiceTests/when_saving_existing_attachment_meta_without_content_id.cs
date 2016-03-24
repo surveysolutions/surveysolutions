@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
@@ -8,7 +7,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 {
-    internal class when_saving_already_existing_attachment_meta : AttachmentServiceTestContext
+    internal class when_saving_existing_attachment_meta_without_content_id : AttachmentServiceTestContext
     {
         Establish context = () =>
         {
@@ -18,21 +17,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
         };
 
         Because of = () =>
-            attachmentService.SaveMeta(attachmentId, questionnaireId, attachmentContentId, fileName);
+            attachmentService.SaveMeta(attachmentId, questionnaireId, null, fileName);
 
         It should_save_meta_storage = () =>
             attachmentMetaStorage.Verify(x => x.Store(expectedAttachmentMeta, attachmentId), Times.Once);
 
-        It should_meta_have_updated_properties = () =>
+        It should_meta_contains_previous_content_id = () =>
         {
-            expectedAttachmentMeta.ContentId.ShouldEqual(attachmentContentId);
-            expectedAttachmentMeta.FileName.ShouldEqual(fileName);
+            expectedAttachmentMeta.ContentId.ShouldEqual(expectedAttachmentMeta.ContentId);
         };
 
         private static AttachmentService attachmentService;
         
         private static readonly Guid attachmentId = Guid.Parse("11111111111111111111111111111111");
-        private static readonly string attachmentContentId = "content id";
         private static readonly Guid questionnaireId = Guid.Parse("22222222222222222222222222222222");
         private static readonly string fileName = "image.png";
         private static readonly AttachmentMeta expectedAttachmentMeta = new AttachmentMeta
