@@ -20,10 +20,16 @@ namespace WB.Tests.Unit.Designer
         public static IAttachmentService AttachmentsServiceForOneQuestionnaire(Guid questionnaireId, params AttachmentView[] attachments)
         {
             var attachmentServiceMock = new Mock<IAttachmentService>();
+            
+            attachmentServiceMock.Setup(x => x.GetAttachmentSizesByQuestionnaire(Moq.It.IsAny<Guid>()))
+              .Returns(attachments.Select(y => Create.AttachmentSize()).ToList());
+
+            attachmentServiceMock.Setup(x => x.GetContentDetails(Moq.It.IsAny<string>()))
+                .Returns(Create.AttachmentContent(size: 10));
 
             attachmentServiceMock.Setup(x => x.GetAttachmentSizesByQuestionnaire(questionnaireId))
-                .Returns(attachments.Select(y => new AttachmentSize {Size = y.Content.Size}).ToList());
-            
+                .Returns(attachments.Select(y => Create.AttachmentSize(size: y.Content.Size)).ToList());
+
             return attachmentServiceMock.Object;
         }
 

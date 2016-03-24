@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using It = Machine.Specifications.It;
 
@@ -21,13 +18,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 attachments: attachments,
                 children: Create.TextQuestion());
 
-            attachmentServiceMock.Setup(x => x.GetAttachmentSizesByQuestionnaire(Moq.It.IsAny<Guid>()))
-                .Returns(attachments.Select(y => new AttachmentSize()).ToList());
+            var attachmentService = Setup.AttachmentsServiceForOneQuestionnaire(questionnaire.PublicKey);
 
-            attachmentServiceMock.Setup(x => x.GetContentDetails(Moq.It.IsAny<string>()))
-                .Returns(new AttachmentContent { Size = 10 });
-
-            verifier = CreateQuestionnaireVerifier(attachmentService: attachmentServiceMock.Object);
+            verifier = CreateQuestionnaireVerifier(attachmentService: attachmentService);
         };
 
         Because of = () =>
@@ -58,8 +51,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private static QuestionnaireDocument questionnaire;
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
-
-        private static Mock<IAttachmentService> attachmentServiceMock = new Mock<IAttachmentService>();
 
         private static readonly Guid attachment1Id = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid attachment2Id = Guid.Parse("22222222222222222222222222222222");
