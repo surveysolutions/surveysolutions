@@ -13,17 +13,18 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
         }
 
+        
+
         protected override void SetValueToView(ImageView control, byte[] value)
         {
             if (value != null)
             {
                 var displayMetrics = GetDisplayMetrics();
-                var minSize = Math.Min(displayMetrics.WidthPixels, displayMetrics.HeightPixels);
 
                 // Calculate inSampleSize
                 var boundsOptions = new BitmapFactory.Options { InJustDecodeBounds = true };
                 BitmapFactory.DecodeByteArray(value, 0, value.Length, boundsOptions);
-                int sampleSize = CalculateInSampleSize(boundsOptions, minSize, minSize);
+                int sampleSize = CalculateInSampleSize(boundsOptions, displayMetrics.WidthPixels, displayMetrics.HeightPixels);
 
                 var bitmapOptions = new BitmapFactory.Options {InSampleSize = sampleSize};
                 var bitmap = BitmapFactory.DecodeByteArray(value, 0, value.Length, bitmapOptions);
@@ -97,7 +98,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
                 // Calculate the largest inSampleSize value that is a power of 2 and keeps both
                 // height and width larger than the requested height and width.
-                while (halfHeight / inSampleSize > maxAllowedHeight && halfWidth / inSampleSize > maxAllowedWidth)
+                while (halfHeight / inSampleSize > maxAllowedHeight || halfWidth / inSampleSize > maxAllowedWidth)
                 {
                     inSampleSize *= 2;
                 }
