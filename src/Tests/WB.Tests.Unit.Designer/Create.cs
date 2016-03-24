@@ -112,24 +112,13 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static AttachmentService AttachmentService(
-            IPlainStorageAccessor<AttachmentContent> attachmentContentStorage = null,
-            IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage = null)
-        {
-            return new AttachmentService(
-                attachmentContentStorage ?? ServiceLocator.Current.GetInstance<IPlainStorageAccessor<AttachmentContent>>(),
-                attachmentMetaStorage ?? ServiceLocator.Current.GetInstance<IPlainStorageAccessor<AttachmentMeta>>()
-                );
-        }
-
-
         public static AttachmentView AttachmentView(Guid? id = null, long? size = null)
         {
             return new AttachmentView
             {
                 AttachmentId = (id ?? Guid.NewGuid()).FormatGuid(),
                 Meta = new AttachmentMeta {},
-                Content = new AttachmentContentView
+                Content = new AttachmentContent
                 {
                     Size = size ?? 10
                 }

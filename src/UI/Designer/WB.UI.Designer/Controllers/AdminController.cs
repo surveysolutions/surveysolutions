@@ -294,7 +294,7 @@ namespace WB.UI.Designer.Controllers
 
                     if (attachment.HasAllDataForRestore())
                     {
-                        string attachmentContentId = this.attachmentService.GetAttachmentContentId(attachment.BinaryContent);
+                        string attachmentContentId = this.attachmentService.CreateAttachmentContentId(attachment.BinaryContent);
 
                         this.attachmentService.SaveContent(attachmentContentId, attachment.ContentType, attachment.BinaryContent);
                         this.attachmentService.SaveMeta(attachmentId, questionnaireId, attachmentContentId, attachment.FileName);
@@ -380,12 +380,15 @@ namespace WB.UI.Designer.Controllers
                 try
                 {
                     Attachment attachmentReference = questionnaireDocument.Attachments[attachmentIndex];
-                    var attachment = this.attachmentService.GetAttachmentWithContent(attachmentReference.AttachmentId);
+                    
+                    var attachmentContent = this.attachmentService.GetContent(attachmentReference.ContentId);
 
-                    if (attachment?.Content != null)
+                    if (attachmentContent?.Content != null)
                     {
-                        zipStream.PutFileEntry($"{questionnaireFolderName}/Attachments/{attachmentReference.AttachmentId.FormatGuid()}/{attachment.FileName}", attachment.Content);
-                        zipStream.PutTextFileEntry($"{questionnaireFolderName}/Attachments/{attachmentReference.AttachmentId.FormatGuid()}/Content-Type.txt", attachment.ContentType);
+                        var attachmentMeta = this.attachmentService.GetAttachmentMeta(attachmentReference.AttachmentId);
+
+                        zipStream.PutFileEntry($"{questionnaireFolderName}/Attachments/{attachmentReference.AttachmentId.FormatGuid()}/{attachmentMeta?.FileName ?? "unknown-file-name"}", attachmentContent.Content);
+                        zipStream.PutTextFileEntry($"{questionnaireFolderName}/Attachments/{attachmentReference.AttachmentId.FormatGuid()}/Content-Type.txt", attachmentContent.ContentType);
                     }
                     else
                     {

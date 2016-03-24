@@ -13,14 +13,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
         public virtual string ContentType { get; set; }
     }
 
-    public class AttachmentContentView
-    {
-        public string ContentId { get; set; }
-        public long Size { get; set; }
-        public AttachmentDetails Details { get; set; }
-        public string Type { get; set; }
-    }
-
     [PlainStorage]
     public class QuestionnaireAttachmentContentMap : ClassMapping<AttachmentContent>
     {

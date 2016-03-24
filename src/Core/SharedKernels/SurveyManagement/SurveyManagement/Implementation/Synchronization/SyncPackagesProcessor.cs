@@ -36,9 +36,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            var packagePathes = incomingSyncPackagesQueue.DeQueueMany(batchSize);
+            IReadOnlyCollection<string> packagePathes = incomingSyncPackagesQueue.GetTopSyncItemsAsFileNames(batchSize);
 
-            this.logger.Info($"Sync_{logkey}: Received {packagePathes.Count} packages for procession. Took {stopwatch.Elapsed:g}.");
+            this.logger.Debug($"Sync process [{logkey}]: Received {packagePathes.Count} packages for procession. Took {stopwatch.Elapsed:g}.");
             stopwatch.Restart();
 
             if (packagePathes.Count > 0)
@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                    });
             }
 
-            this.logger.Warn($"Sync_{logkey}: Processed {packagePathes.Count} packages. Took {stopwatch.Elapsed:g}.");
+            this.logger.Info($"Sync process [{logkey}]: Processed {packagePathes.Count} packages. Took {stopwatch.Elapsed:g}.");
         }
 
         private void ProcessSinglePackage(string syncPackagePath, string logkey)
@@ -73,7 +73,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             {
                 syncPackage = this.incomingSyncPackagesQueue.GetSyncItem(syncPackagePath);
 
-                this.logger.Info($"Sync_inner_{logkey}: Read {Path.GetFileName(syncPackagePath)}. Took {innerwatch.Elapsed:g}.");
+                this.logger.Debug($"Sync process [{logkey}] package [{Path.GetFileName(syncPackagePath)}]: Read {Path.GetFileName(syncPackagePath)}. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
             }
             catch (IncomingSyncPackageException e)
@@ -99,26 +99,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                     syncPackage.CreatedOnClient);
                 this.commandService.Execute(command, syncPackage.Origin);
 
-                this.logger.Info(
-                    $"Sync_inner_{logkey}: Executed command for {Path.GetFileName(syncPackagePath)}. Took {innerwatch.Elapsed:g}.");
+                this.logger.Debug($"Sync process [{logkey}] package [{Path.GetFileName(syncPackagePath)}]: Executed command for {Path.GetFileName(syncPackagePath)}. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
             }
             catch (Exception e)
             {
-                this.logger.Error(
-                    $"package '{syncPackage.PathToPackage}' wasn't processed. Reason: '{e.Message}'",
-                    e);
-                this.brokenSyncPackagesStorage.StoreUnhandledPackage(syncPackage.PathToPackage, syncPackage.InterviewId,
-                    e);
+                this.logger.Error($"Sync package '{syncPackage.PathToPackage}' wasn't processed. Reason: '{e.Message}'", e);
+                this.brokenSyncPackagesStorage.StoreUnhandledPackage(syncPackage.PathToPackage, syncPackage.InterviewId, e);
 
-                this.logger.Info(
-                    $"Sync_inner_{logkey}: Failed executed command for {Path.GetFileName(syncPackagePath)}. Took {innerwatch.Elapsed:g}.");
+                this.logger.Debug($"Sync process [{logkey}] package [{Path.GetFileName(syncPackagePath)}]: Failed to execute command for {Path.GetFileName(syncPackagePath)}. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
             }
 
             this.incomingSyncPackagesQueue.DeleteSyncItem(syncPackage.PathToPackage);
 
-            this.logger.Info($"Sync_inner_{logkey}: Deleted {Path.GetFileName(syncPackagePath)}. Took {innerwatch.Elapsed:g}.");
+            this.logger.Debug($"Sync process [{logkey}] package [{Path.GetFileName(syncPackagePath)}]: Deleted {Path.GetFileName(syncPackagePath)}. Took {innerwatch.Elapsed:g}.");
             innerwatch.Stop();
         }
     }
