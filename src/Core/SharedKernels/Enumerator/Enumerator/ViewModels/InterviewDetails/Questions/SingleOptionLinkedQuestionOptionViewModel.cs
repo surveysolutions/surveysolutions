@@ -59,7 +59,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (this.BeforeSelected != null) this.BeforeSelected.Invoke(this, EventArgs.Empty);
         }
 
-
         protected virtual void OnAnswerRemoved()
         {
             var handler = this.AnswerRemoved;

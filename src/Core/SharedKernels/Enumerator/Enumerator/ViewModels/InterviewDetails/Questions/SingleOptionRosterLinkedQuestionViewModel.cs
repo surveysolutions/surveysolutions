@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Platform.Core;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
