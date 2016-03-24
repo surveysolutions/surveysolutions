@@ -78,12 +78,16 @@ namespace WB.UI.Designer.Api
                 
                 if (model.File != null)
                 {
-                    command.AttachmentContentId = this.attachmentService.GetAttachmentContentId(model.File.Buffer);
+                    command.AttachmentContentId = this.attachmentService.CreateAttachmentContentId(model.File.Buffer);
 
                     this.attachmentService.SaveContent(
                         contentId: command.AttachmentContentId,
                         contentType: model.File.MediaType,
                         binaryContent: model.File.Buffer);
+                }
+                else
+                {
+                    command.AttachmentContentId = this.attachmentService.GetAttachmentContentId(command.AttachmentId);
                 }
 
                 this.attachmentService.SaveMeta(
@@ -103,31 +107,6 @@ namespace WB.UI.Designer.Api
             }
 
             return this.ProcessCommand(command, commandType);
-        }
-
-        public AttachmentDetails GetAttachmentDetails(byte[] binaryContent, string contentType, string fileName)
-        {
-            if (contentType.StartsWith("image/"))
-            {
-                using (var stream = new MemoryStream(binaryContent))
-                {
-                    try
-                    {
-                        var image = Image.FromStream(stream);
-                        return new AttachmentDetails
-                        {
-                            Height = image.Size.Height,
-                            Width = image.Size.Width
-                        };
-                    }
-                    catch (ArgumentException e)
-                    {
-                        throw new FormatException(string.Format(ExceptionMessages.Attachments_uploaded_file_is_not_image, fileName), e);
-                    }
-                }
-            }
-
-            throw new FormatException(ExceptionMessages.Attachments_Unsupported_content);
         }
 
         [Route("~/api/command/updateLookupTable")]

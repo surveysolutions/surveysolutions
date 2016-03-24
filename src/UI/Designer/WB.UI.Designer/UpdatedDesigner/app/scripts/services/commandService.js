@@ -39,10 +39,6 @@
                         attachmentName: attachment.name
                     };
 
-                    if (!_.isUndefined(attachment.content)) {
-                        command.attachmentContentId = attachment.content.contentId;
-                    }
-
                     var fileName = "";
                     if (!_.isUndefined(attachment.meta)) {
                         fileName = attachment.meta.fileName;

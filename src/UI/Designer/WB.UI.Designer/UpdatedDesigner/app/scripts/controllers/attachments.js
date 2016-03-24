@@ -53,7 +53,6 @@
 
                 if (!_.isUndefined(attachmentDto.content) && !_.isNull(attachmentDto.content)) {
                     attachment.content = {};
-                    attachment.content.contentId = attachmentDto.content.contentId;
                     attachment.content.size = attachmentDto.content.size;
                     attachment.content.type = attachmentDto.content.type;
 

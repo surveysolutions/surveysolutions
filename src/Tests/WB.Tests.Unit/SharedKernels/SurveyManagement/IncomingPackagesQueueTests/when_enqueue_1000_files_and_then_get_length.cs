@@ -35,11 +35,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
 
         It should_store_1000_elements = () =>
         {
-            for (int i = 1; i <= 1000; i++)
+            List<string> fileNames = incomingSyncPackagesQueue.GetTopSyncItemsAsFileNames(1000).ToList();
+
+            for (int i = 0; i < 1000; i++)
             {
-                var filename = incomingSyncPackagesQueue.DeQueue(i - 1);
+                var filename = fileNames[i];
                 var readAllText = fileSystemAccessor.ReadAllText(filename);
-                readAllText.ShouldEqual(i.ToString());
+                readAllText.ShouldEqual((i+1).ToString());
             }
         };
 
