@@ -217,7 +217,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             LookupVerifier(LookupTableMoreThan5000Rows, "WB0044", VerificationMessages.WB0044_LookupTableMoreThan5000Rows),
             LookupVerifier(LookupTableNotUniqueRowcodeValues, "WB0047", VerificationMessages.WB0047_LookupTableNotUniqueRowcodeValues),
 
-            AttachmentVerifier(AttachmentHasEmptyContent, "WB0110", VerificationMessages.WB0110_AttachmentHasEmptyContent),
+            AttachmentVerifier(AttachmentHasEmptyContent, "WB0111", VerificationMessages.WB0111_AttachmentHasEmptyContent),
 
             VerifyGpsPrefilledQuestions,
             ErrorsByLinkedQuestions,
@@ -1710,7 +1710,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 else if (expressionLocation.ExpressionType == ExpressionLocationType.Filter)
                 {
                     return QuestionnaireVerificationMessage.Error("WB0110",
-                        VerificationMessages.WB00110_LinkedQuestionFilterExpresssionHasIncorrectSyntax, reference);
+                        VerificationMessages.WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax, reference);
                 }
             }
 

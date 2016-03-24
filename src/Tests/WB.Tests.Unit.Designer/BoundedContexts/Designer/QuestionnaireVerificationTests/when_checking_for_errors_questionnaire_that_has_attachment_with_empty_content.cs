@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionId, 
                 attachments: new[] { Create.Attachment(attachment1Id, "hello") },
-                children: Create.TextQuestion(variable: "var"));
+                children: Create.TextQuestion());
 
             verifier = CreateQuestionnaireVerifier();
         };
@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages.Count().ShouldEqual(1);
 
         It should_return_message_with_code__WB0110 = () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0110");
+            verificationMessages.Single().Code.ShouldEqual("WB0111");
 
         It should_return_message_with_General_level = () =>
             verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
