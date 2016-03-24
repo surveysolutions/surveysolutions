@@ -78,12 +78,16 @@ namespace WB.UI.Designer.Api
                 
                 if (model.File != null)
                 {
-                    command.AttachmentContentId = this.attachmentService.GetAttachmentContentId(model.File.Buffer);
+                    command.AttachmentContentId = this.attachmentService.CreateAttachmentContentId(model.File.Buffer);
 
                     this.attachmentService.SaveContent(
                         contentId: command.AttachmentContentId,
                         contentType: model.File.MediaType,
                         binaryContent: model.File.Buffer);
+                }
+                else
+                {
+                    command.AttachmentContentId = this.attachmentService.GetAttachmentContentId(command.AttachmentId);
                 }
 
                 this.attachmentService.SaveMeta(
