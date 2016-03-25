@@ -10,8 +10,10 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Api;
 
 namespace WB.Tests.Unit.Designer
@@ -123,6 +125,12 @@ namespace WB.Tests.Unit.Designer
                 .Returns(attachmentMetaStorage);
 
             ServiceLocator.SetLocatorProvider(() => serviceLocatorMock.Object);
+        }
+
+        public static IReadSideKeyValueStorage<QuestionnaireStateTracker> QuestionnaireStateTrackerForOneQuestionnaire()
+        {
+            return Mock.Of<IReadSideKeyValueStorage<QuestionnaireStateTracker>>(_ => 
+                _.GetById(It.IsAny<string>()) == Create.QuestionnaireStateTacker());
         }
     }
 }

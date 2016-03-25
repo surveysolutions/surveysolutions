@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -49,6 +50,23 @@ namespace WB.Tests.Unit.Designer
                     answerOrder: null,
                     answers: null,
                     isInteger: null);
+            }
+
+
+            public static IPublishedEvent<AttachmentUpdated> AttachmentUpdated(Guid? questionnaireId = null, Guid? entityId = null)
+            {
+                return new AttachmentUpdated
+                {
+                    AttachmentId = entityId ?? Guid.NewGuid()
+                }.ToPublishedEvent(eventSourceId: questionnaireId ?? Guid.NewGuid());
+            }
+
+            public static IPublishedEvent<AttachmentDeleted> AttachmentDeleted(Guid? questionnaireId = null, Guid? entityId = null)
+            {
+                return new AttachmentDeleted
+                {
+                    AttachmentId = entityId ?? Guid.NewGuid()
+                }.ToPublishedEvent(eventSourceId: questionnaireId ?? Guid.NewGuid());
             }
 
             public static NewQuestionAdded NumericQuestionAdded(Guid publicKey, Guid groupPublicKey,

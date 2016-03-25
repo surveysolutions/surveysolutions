@@ -18,9 +18,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
             IReadSideKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTacker = null
             )
         {
-            return new QuestionnaireChangeHistoryDenormalizer(accountDocumentStorage??Mock.Of<IReadSideRepositoryWriter<AccountDocument>>(),
+            return new QuestionnaireChangeHistoryDenormalizer(
+                accountDocumentStorage ?? Mock.Of<IReadSideRepositoryWriter<AccountDocument>>(),
                 questionnaireChangeRecord ?? Mock.Of<IReadSideRepositoryWriter<QuestionnaireChangeRecord>>(),
-                questionnaireStateTacker??Mock.Of<IReadSideKeyValueStorage<QuestionnaireStateTracker>>());
+                questionnaireStateTacker ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireStateTracker>>());
         }
 
         protected static QuestionnaireChangeRecord GetFirstChangeRecord(IQueryableReadSideRepositoryReader<QuestionnaireChangeRecord> questionnaireChangeRecord, string questionnaireId)
