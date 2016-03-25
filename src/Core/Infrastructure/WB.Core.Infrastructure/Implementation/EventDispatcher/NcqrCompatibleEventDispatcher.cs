@@ -139,6 +139,9 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             {
                 foreach (var handler in oldStyleHandlers)
                 {
+                    if(!handler.Bus.CanHandleEvent(publishableEvent))
+                        continue;
+					
                     handler.Bus.OnCatchingNonCriticalEventHandlerException +=
                         this.OnCatchingNonCriticalEventHandlerException;
                     try
