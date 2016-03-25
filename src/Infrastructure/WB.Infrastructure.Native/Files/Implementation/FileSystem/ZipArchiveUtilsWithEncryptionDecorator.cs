@@ -104,6 +104,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                 if(this.exportSettings != null && this.exportSettings.EncryptionEnforced())
                     zip.Password = this.exportSettings.GetPassword();
 
+                zip.UseZip64WhenSaving=Zip64Option.AsNecessary;
                 zip.CompressionLevel = CompressionLevel.Default;
                 zip.AddFiles(files, "");
                 zip.Save(archiveFilePath);
