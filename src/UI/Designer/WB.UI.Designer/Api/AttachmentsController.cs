@@ -48,7 +48,7 @@ namespace WB.UI.Designer.Api
 
             if (attachment == null) return Request.CreateResponse(HttpStatusCode.NotFound);
 
-            if (this.Request.Headers.IfNoneMatch.Any(x => x.Tag == attachment.ContentId))
+            if (this.Request.Headers.IfNoneMatch.Any(x => x.Tag.Trim('"') == attachment.ContentId))
                 return this.Request.CreateResponse(HttpStatusCode.NotModified);
 
             var attachmentContent = this.attachmentService.GetContent(attachment.ContentId);
