@@ -75,12 +75,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.interviewFactory = interviewFactory;
             this.attachmentContentStorage = attachmentContentStorage;
         }
-
-        private RestCredentials restCredentials => new RestCredentials()
-        {
-            Login = this.principal.CurrentUserIdentity.Name,
-            Password = this.principal.CurrentUserIdentity.Password
-        };
         private CancellationToken Token => this.synchronizationCancellationTokenSource.Token;
 
         private SychronizationStatistics statistics;
@@ -137,7 +131,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public IMvxCommand CancelSynchronizationCommand => new MvxCommand(this.CancelSynchronizaion);
 
         bool shouldUpdatePasswordOfInterviewer;
+
         public async Task SynchronizeAsync()
+        {
+            var restCredentials = new RestCredentials()
+            {
+                Login = this.principal.CurrentUserIdentity.Name,
+                Password = this.principal.CurrentUserIdentity.Password
+            };
+            await SynchronizeImplAsync(restCredentials);
+        }
+
+        private async Task SynchronizeImplAsync(RestCredentials restCredentials)
         {
             this.statistics = new SychronizationStatistics();
             this.synchronizationCancellationTokenSource = new CancellationTokenSource();
@@ -146,18 +151,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.IsSynchronizationInfoShowed = true;
             this.IsSynchronizationInProgress = true;
             this.messenger.Publish(new SyncronizationStartedMessage(this));
-
             try
             {
                 this.SetProgressOperation(InterviewerUIResources.Synchronization_UserAuthentication_Title,
                     InterviewerUIResources.Synchronization_UserAuthentication_Description);
 
-                await this.synchronizationService.CanSynchronizeAsync(token: this.Token, credentials: this.restCredentials);
+                await this.synchronizationService.CanSynchronizeAsync(token: this.Token, credentials: restCredentials);
 
                 if (this.shouldUpdatePasswordOfInterviewer)
                 {
                     this.shouldUpdatePasswordOfInterviewer = false;
-                    await this.UpdatePasswordOfInterviewerAsync();   
+                    await this.UpdatePasswordOfInterviewerAsync(restCredentials.Password);   
                 }
 
                 this.Status = SynchronizationStatus.Upload;
@@ -219,16 +223,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 }
                 else
                 {
-                    this.restCredentials.Password = this.passwordHasher.Hash(newPassword);
-                    await SynchronizeAsync();    
+                    restCredentials.Password = this.passwordHasher.Hash(newPassword);
+                    await SynchronizeImplAsync(restCredentials);    
                 }
             }
         }
 
-        private async Task UpdatePasswordOfInterviewerAsync()
+        private async Task UpdatePasswordOfInterviewerAsync(string password)
         {
             var localInterviewer = this.interviewersPlainStorage.FirstOrDefault();
-            localInterviewer.Password = this.restCredentials.Password;
+            localInterviewer.Password = password;
 
             await this.interviewersPlainStorage.StoreAsync(localInterviewer);
             await this.principal.SignInAsync(localInterviewer.Name, localInterviewer.Password, true);
