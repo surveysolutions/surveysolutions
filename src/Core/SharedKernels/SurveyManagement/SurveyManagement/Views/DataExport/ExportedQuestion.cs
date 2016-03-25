@@ -14,6 +14,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
     {
         private static CultureInfo exportCulture = CultureInfo.InvariantCulture;
         private static string exportDatetimeFormat = "o";
+        private static string exportDateFormat = "yyyy-MM-dd";
         private const string DefaultDelimiter = "|";
 
         public ExportedQuestion()
@@ -202,7 +203,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
             var formattable = obj as IFormattable;
             if (formattable != null)
             {
-                return formattable.ToString(this.QuestionType == QuestionType.DateTime? exportDatetimeFormat : null, exportCulture);
+                return formattable.ToString(this.QuestionType == QuestionType.DateTime? exportDateFormat : null, exportCulture);
             }
             return  obj.ToString();
         }

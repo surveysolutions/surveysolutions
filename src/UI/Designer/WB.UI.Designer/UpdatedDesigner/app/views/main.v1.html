@@ -245,7 +245,7 @@
                                     <div class="attachment">
                                         <div class="attachment-preview">
                                             <div class="attachment-preview-cover clearfix">
-                                                <img class="pull-right" ng-click="previewAttachment(attachment)" ngf-thumbnail="attachment.file || '{{downloadLookupFileBaseUrl + '/thumbnail/' + attachment.attachmentId}}'">
+                                                <img class="pull-right" ng-click="previewAttachment(attachment)" ngf-size="{width: 156, height: 140}" ngf-thumbnail="attachment.file || '{{downloadLookupFileBaseUrl + '/thumbnail/' + attachment.attachmentId}}'">
                                             </div>
                                         </div>
                                         <div class="attachment-content">
@@ -298,7 +298,7 @@
 
 <script type="text/ng-template" id="Image-attachment-info-template.html">
     <p>
-    <span>{{attachment.meta.fileName}}</span>, &nbsp;
+    <span class="file-name">{{attachment.meta.fileName}}</span>, &nbsp;
     <span ng-class="{'error': isAttachmentResolutionTooBig(attachment)}">{{attachment.content.details.width}}&nbsp;&times;&nbsp;{{attachment.content.details.height}}px</span>,&nbsp; format:&nbsp;{{attachment.content.type}},
     <span ng-class="{'error': isAttachmentSizeTooBig(attachment)}">size:&nbsp;{{formatBytes(attachment.content.size)}}</span></p>
     <p>uploaded: {{attachment.meta.lastUpdated | amDateFormat:'MMMM DD, YYYY [at] h:mm a'}}</p>
