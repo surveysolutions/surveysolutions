@@ -15,9 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         Establish context = () =>
         {
-            questionnaire = Create.QuestionnaireDocumentWithOneChapter(
-                attachments: new[] { Create.Attachment(attachment1Id) },
-                children: Create.Question(questionType: QuestionType.DateTime));
+            questionnaire = Create.QuestionnaireDocumentWithOneChapter(attachments: new[] { Create.Attachment() });
 
             attachmentServiceMock = Setup.AttachmentsServiceForOneQuestionnaire(questionnaire.PublicKey,
                 Create.AttachmentView(size: 6*1024*1024));
@@ -34,7 +32,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         static QuestionnaireVerifier verifier;
         static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static IAttachmentService attachmentServiceMock;
-
-        private static readonly Guid attachment1Id = Guid.Parse("11111111111111111111111111111111");
     }
 }
