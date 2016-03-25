@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             questionViewModel = CreateViewModel(questionnaire, interview);
         };
 
-        Because of = () => questionViewModel.Init("interview", linkedQuestionId, Create.NavigationState());
+        Because of = () => questionViewModel.InitAsync("interview", linkedQuestionId, Create.NavigationState());
 
         It should_substitute_titles_from_both_questions = () => questionViewModel.Options.First().Title.ShouldEqual("nastya: hamster");
 

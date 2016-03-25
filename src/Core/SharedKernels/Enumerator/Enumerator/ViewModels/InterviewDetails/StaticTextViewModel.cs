@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using Nito.AsyncEx;
 using WB.Core.Infrastructure.PlainStorage;
@@ -29,7 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public Identity Identity => this.questionIdentity;
 
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public async Task InitAsync(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
@@ -40,7 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.questionIdentity = entityIdentity;
             this.StaticText = questionnaire.GetStaticText(entityIdentity.Id);
 
-            AsyncContext.Run(() => this.Attachment.InitAsync(interviewId, entityIdentity));
+            await this.Attachment.InitAsync(interviewId, entityIdentity);
         }
 
         private string staticText;

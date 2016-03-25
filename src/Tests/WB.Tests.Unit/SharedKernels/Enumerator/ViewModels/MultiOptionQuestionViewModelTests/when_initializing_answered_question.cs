@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 eventRegistry: eventRegistry.Object);
         };
 
-        Because of = () => viewModel.Init(interviewId, questionId, navigationState);
+        Because of = () => viewModel.InitAsync(interviewId, questionId, navigationState);
 
         It should_build_options = () => viewModel.Options.Count.ShouldEqual(2);
 

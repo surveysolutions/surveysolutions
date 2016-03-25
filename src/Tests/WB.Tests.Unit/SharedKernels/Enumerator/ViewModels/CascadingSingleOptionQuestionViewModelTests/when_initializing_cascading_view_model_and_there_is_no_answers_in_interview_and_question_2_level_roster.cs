@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         };
 
         Because of = () =>
-            cascadingModel.Init(interviewId, questionIdentity, navigationState);
+            cascadingModel.InitAsync(interviewId, questionIdentity, navigationState);
 
         It should_initialize_question_state = () =>
             QuestionStateMock.Verify(x => x.Init(interviewId, questionIdentity, navigationState), Times.Once);
