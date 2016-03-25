@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
@@ -67,7 +68,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         
         public ActionResult Settings()
         {
-            IEnumerable<ApplicationSetting> settings = this.settingsProvider.GetSettings();
+            IEnumerable<ApplicationSetting> settings = this.settingsProvider.GetSettings().OrderBy(setting => setting.Name);
             return this.View(settings);
         }
 
