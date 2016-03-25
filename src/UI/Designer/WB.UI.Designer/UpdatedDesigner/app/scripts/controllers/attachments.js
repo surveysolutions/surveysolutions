@@ -54,7 +54,7 @@
                 if (!_.isUndefined(attachmentDto.content) && !_.isNull(attachmentDto.content)) {
                     attachment.content = {};
                     attachment.content.size = attachmentDto.content.size;
-                    attachment.content.type = attachmentDto.content.type;
+                    attachment.content.type = attachmentDto.content.contentType;
 
                     if (!_.isUndefined(attachmentDto.content.details) && !_.isNull(attachmentDto.content.details)) {
                         attachment.content.details = {};
