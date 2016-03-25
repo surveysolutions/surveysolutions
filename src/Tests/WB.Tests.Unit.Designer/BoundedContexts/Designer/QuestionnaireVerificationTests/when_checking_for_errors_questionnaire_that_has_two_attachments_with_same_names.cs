@@ -25,27 +25,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         Because of = () =>
             verificationMessages = verifier.CheckForErrors(questionnaire);
-
-        It should_return_1_message = () =>
-            verificationMessages.Count().ShouldEqual(1);
-
+       
         It should_return_message_with_code__WB0065 = () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0065");
-
-        It should_return_message_with_General_level = () =>
-            verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
+            verificationMessages.ShouldContainError("WB0065");
 
         It should_return_message_with_1_reference = () =>
-            verificationMessages.Single().References.Count().ShouldEqual(2);
+            verificationMessages.GetError("WB0065").References.Count().ShouldEqual(2);
 
         It should_return_message_reference_with_type_Attachment = () =>
-            verificationMessages.Single().References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.Attachment);
+            verificationMessages.GetError("WB0065").References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.Attachment);
 
         It should_return_message_reference_with_id_of_attachment1Id = () =>
-            verificationMessages.Single().References.ElementAt(0).Id.ShouldEqual(attachment1Id);
+            verificationMessages.GetError("WB0065").References.ElementAt(0).Id.ShouldEqual(attachment1Id);
 
         It should_return_message_reference_with_id_of_attachment2Id = () =>
-            verificationMessages.Single().References.ElementAt(1).Id.ShouldEqual(attachment2Id);
+            verificationMessages.GetError("WB0065").References.ElementAt(1).Id.ShouldEqual(attachment2Id);
 
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;
