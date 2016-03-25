@@ -12,9 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         Establish context = () =>
         {
-            questionnaire = Create.QuestionnaireDocumentWithOneChapter(
-                attachments: new [] { Create.Attachment() }, 
-                children : Create.Question(questionType: QuestionType.DateTime));
+            questionnaire = Create.QuestionnaireDocumentWithOneChapter(attachments: new [] { Create.Attachment() });
 
             verifier = CreateQuestionnaireVerifier();
         };

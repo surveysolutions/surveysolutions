@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Establish context = () =>
         {
             questionnaire = Create.QuestionnaireDocumentWithOneChapter(questionId, 
-                attachments: new[] { Create.Attachment(attachment1Id, "hello") },
+                attachments: new[] { Create.Attachment(attachment1Id) },
                 children: Create.TextQuestion());
 
             verifier = CreateQuestionnaireVerifier();
@@ -22,23 +22,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Because of = () =>
             verificationMessages = verifier.CheckForErrors(questionnaire);
 
-        It should_return_1_message = () =>
-            verificationMessages.Count().ShouldEqual(1);
-
-        It should_return_message_with_code__WB0110 = () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0111");
-
-        It should_return_message_with_General_level = () =>
-            verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
+        It should_return_message_with_code__WB0111 = () =>
+            verificationMessages.ShouldContainError("WB0111");
 
         It should_return_message_with_1_reference = () =>
-            verificationMessages.Single().References.Count().ShouldEqual(1);
+            verificationMessages.GetError("WB0111").References.Count().ShouldEqual(1);
 
         It should_return_message_reference_with_type_Attachment = () =>
-            verificationMessages.Single().References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.Attachment);
+            verificationMessages.GetError("WB0111").References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.Attachment);
 
         It should_return_message_reference_with_id_of_attachment1Id = () =>
-            verificationMessages.Single().References.Single().Id.ShouldEqual(attachment1Id);
+            verificationMessages.GetError("WB0111").References.Single().Id.ShouldEqual(attachment1Id);
 
 
         private static QuestionnaireVerifier verifier;

@@ -11,5 +11,11 @@ namespace WB.Tests.Unit.Designer
             => verificationMessages.Single(message
                 => message.MessageLevel == VerificationMessageLevel.Warning
                 && message.Code == code);
+
+        public static QuestionnaireVerificationMessage GetError(
+            this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
+            => verificationMessages.Single(message
+                => message.MessageLevel == VerificationMessageLevel.General
+                && message.Code == code);
     }
 }
