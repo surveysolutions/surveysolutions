@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -24,54 +25,45 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [HttpGet]
         public HttpResponseMessage Content(string id, int? maxSize = null)
         {
-            var attachment = this.attachmentContentService.GetAttachmentContent(id);
+            if (this.Request.Headers.IfNoneMatch.Any(x => x.Tag.Trim('"') == id))
+                return this.Request.CreateResponse(HttpStatusCode.NotModified);
 
-            if (attachment == null)
-                return Request.CreateResponse(HttpStatusCode.NotFound);
+            var attachmentContent = this.attachmentContentService.GetAttachmentContent(id);
 
-            if (maxSize.HasValue)
-            {
-                return ResizeAndCreateResponse(attachment, maxSize.Value);
-            }
-            
-            return CreateResponse(attachment.Content, attachment.ContentType, attachment.ContentHash);
-        }
+            if(attachmentContent == null)
+                return this.Request.CreateResponse(HttpStatusCode.NotFound);
 
-        private HttpResponseMessage CreateResponse(byte[] attachmentContent, string attachmentContentType, string attachmentContentHash)
-        {
             var response = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new ByteArrayContent(attachmentContent)
+                Content = new ByteArrayContent(GetTrasformedContent(attachmentContent.Content, maxSize))
             };
 
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachmentContentType);
-            response.Headers.ETag = new EntityTagHeaderValue("\"" + attachmentContentHash + "\"");
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachmentContent.ContentType);
+            response.Headers.ETag = new EntityTagHeaderValue("\"" + attachmentContent.ContentHash + "\"");
+            response.Headers.CacheControl = new CacheControlHeaderValue()
+            {
+                MaxAge = TimeSpan.MaxValue,
+                Public = true
+            };
 
             return response;
         }
 
-        private HttpResponseMessage ResizeAndCreateResponse(AttachmentContent attachmentContent, int sizeToScale)
+        private static byte[] GetTrasformedContent(byte[] source, int? sizeToScale = null)
         {
-            var resizeSettings = new ResizeSettings
-            {
-                MaxWidth = sizeToScale,
-                MaxHeight = sizeToScale
-            };
+            if (!sizeToScale.HasValue) return source;
 
-            byte[] transformedContent;
+            //later should handle video and produce image preview 
             using (var outputStream = new MemoryStream())
             {
-                ImageBuilder.Current.Build(attachmentContent.Content, outputStream, resizeSettings);
-                transformedContent = outputStream.ToArray();
-            }
-            
-            string transformedContentHash;
-            using (SHA1CryptoServiceProvider sha1 = new SHA1CryptoServiceProvider())
-            {
-                transformedContentHash = BitConverter.ToString(sha1.ComputeHash(transformedContent)).Replace("-", string.Empty);
-            }
+                ImageBuilder.Current.Build(source, outputStream, new ResizeSettings
+                {
+                    MaxWidth = sizeToScale.Value,
+                    MaxHeight = sizeToScale.Value
+                });
 
-            return CreateResponse(transformedContent, attachmentContent.ContentType, transformedContentHash);
+                return outputStream.ToArray();
+            }
         }
     }
 }

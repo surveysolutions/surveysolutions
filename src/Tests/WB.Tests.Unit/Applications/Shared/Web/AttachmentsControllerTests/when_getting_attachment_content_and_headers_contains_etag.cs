@@ -1,5 +1,6 @@
-using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.SurveyManagement.Services;
@@ -9,25 +10,25 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Shared.Web.AttachmentsControllerTests
 {
-    internal class when_getting_attachment_content
+    internal class when_getting_attachment_content_and_headers_contains_etag
     {
         Establish context = () =>
         {
             mockOfAttachmentContentService.Setup(x => x.GetAttachmentContent(attachmentContentId)).Returns(expectedAttachmentContent);
 
             controller = Create.AttachmentsController(mockOfAttachmentContentService.Object);
-            controller.Request = new HttpRequestMessage {Headers = {IfNoneMatch = {}}};
+            controller.Request = new HttpRequestMessage
+            {
+                Headers =
+                {
+                    IfNoneMatch = {new EntityTagHeaderValue($"\"{expectedAttachmentContent.ContentHash}\"", false)}
+                }
+            };
         };
 
-        Because of = () =>
-            response = controller.Content(attachmentContentId);
+        Because of = () => response = controller.Content(attachmentContentId);
 
-        It should_return_specified_http_response = () =>
-        {
-            response.Content.ReadAsByteArrayAsync().Result.SequenceEqual(expectedAttachmentContent.Content);
-            response.Content.Headers.ContentType.MediaType.ShouldEqual(expectedAttachmentContent.ContentType);
-            response.Headers.ETag.Tag.ShouldEqual($"\"{expectedAttachmentContent.ContentHash}\"");
-        };
+        It should_return_NotNModified_response = () => response.StatusCode.ShouldEqual(HttpStatusCode.NotModified);
 
         private static AttachmentsController controller;
         private static string attachmentContentId = "Attahcment Content Id";
