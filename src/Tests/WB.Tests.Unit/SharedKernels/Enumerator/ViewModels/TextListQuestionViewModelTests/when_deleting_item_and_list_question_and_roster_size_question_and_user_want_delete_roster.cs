@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
                 principal: principal,
                 userInteractionService: userInteraction.Object);
 
-            listModel.Init(interviewId, questionIdentity, navigationState);
+            listModel.InitAsync(interviewId, questionIdentity, navigationState);
         };
 
         Because of = () =>

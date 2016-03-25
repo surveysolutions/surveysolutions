@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             viewModel = CreateViewModel(questionnaireStorage: questionnaireStorage.Object,
                 interviewRepository: interviewRepository.Object);
 
-            viewModel.Init("blah", questionId, Create.NavigationState());
+            viewModel.InitAsync("blah", questionId, Create.NavigationState());
             viewModel.Options.Second().Checked = true;
         };
 

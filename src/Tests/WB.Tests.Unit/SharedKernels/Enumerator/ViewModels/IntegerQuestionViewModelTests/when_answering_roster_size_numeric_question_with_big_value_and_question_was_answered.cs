@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
                 interviewRepository: interviewRepository,
                 questionnaireRepository: questionnaireRepository);
 
-            integerModel.Init(interviewId, questionIdentity, navigationState);
+            integerModel.InitAsync(interviewId, questionIdentity, navigationState);
         };
 
         Because of = () =>

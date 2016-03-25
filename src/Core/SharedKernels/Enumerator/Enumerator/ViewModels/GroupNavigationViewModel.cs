@@ -87,7 +87,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.answerNotifier = answerNotifier;
         }
 
-        public virtual void Init(string interviewId, Identity groupIdentity, NavigationState navigationState)
+        public virtual void InitAsync(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
             this.interviewId = interviewId;
             this.Identity = groupIdentity;
