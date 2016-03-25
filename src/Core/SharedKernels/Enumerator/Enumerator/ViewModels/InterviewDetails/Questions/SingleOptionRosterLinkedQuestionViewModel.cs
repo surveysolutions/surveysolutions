@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get { return this.questionIdentity; }
         }
 
-        public void Init(string interviewId, Identity questionIdentity, NavigationState navigationState)
+        public void InitAsync(string interviewId, Identity questionIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (questionIdentity == null) throw new ArgumentNullException("questionIdentity");

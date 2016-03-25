@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             questionnaires.SetReturnsDefault(questionnaire);
 
             questionViewModel = CreateViewModel(interviewRepository: interviews.Object, questionnaireStorage: questionnaires.Object);
-            questionViewModel.Init(interviewId, questionId, Create.NavigationState());
+            questionViewModel.InitAsync(interviewId, questionId, Create.NavigationState());
         };
 
         Because of = () => questionViewModel.Handle(Create.Event.MultipleOptionsLinkedQuestionAnswered(questionId:questionId.Id,

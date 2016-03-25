@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.eventRegistry = eventRegistry;
         }
 
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public void InitAsync(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             var interview = this.interviewRepository.Get(interviewId);
 

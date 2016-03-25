@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             questionViewModel = CreateViewModel(interviewRepository: interviews.Object, questionnaireStorage: questionnaires.Object);
         };
 
-        Because of = () => questionViewModel.Init(interviewId, questionId, Create.NavigationState());
+        Because of = () => questionViewModel.InitAsync(interviewId, questionId, Create.NavigationState());
 
         It should_fill_options_from_linked_question = () => questionViewModel.Options.Count.ShouldEqual(2);
 

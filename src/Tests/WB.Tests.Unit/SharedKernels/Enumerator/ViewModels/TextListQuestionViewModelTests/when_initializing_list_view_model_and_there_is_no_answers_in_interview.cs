@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
         };
 
         Because of = () =>
-            listModel.Init(interviewId, questionIdentity, navigationState);
+            listModel.InitAsync(interviewId, questionIdentity, navigationState);
 
         It should_initialize_question_state = () =>
             QuestionStateMock.Verify(x => x.Init(interviewId, questionIdentity, navigationState), Times.Once);

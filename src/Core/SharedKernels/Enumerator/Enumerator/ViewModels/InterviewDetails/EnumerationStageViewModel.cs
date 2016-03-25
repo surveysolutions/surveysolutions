@@ -139,7 +139,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private void LoadFromModel(Identity groupIdentity)
         {
             try
-            {
+            { 
                 this.userInterfaceStateService.NotifyRefreshStarted();
 
                 var interviewEntityViewModels = this.interviewViewModelFactory
@@ -152,7 +152,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
 
                 var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
-                previousGroupNavigationViewModel.Init(this.interviewId, groupIdentity, this.navigationState);
+                previousGroupNavigationViewModel.InitAsync(this.interviewId, groupIdentity, this.navigationState);
 
                 foreach (var interviewItemViewModel in this.Items.OfType<IDisposable>())
                 {

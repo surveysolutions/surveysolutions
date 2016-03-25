@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         };
 
         Because of = () =>
-            cascadingModel.Init(interviewId, questionIdentity, navigationState);
+            cascadingModel.InitAsync(interviewId, questionIdentity, navigationState);
 
         It should_get_answer_for_parent_question_once = () =>
             StatefulInterviewMock.Verify(x => x.GetSingleOptionAnswer(parentIdentity), Times.Once);

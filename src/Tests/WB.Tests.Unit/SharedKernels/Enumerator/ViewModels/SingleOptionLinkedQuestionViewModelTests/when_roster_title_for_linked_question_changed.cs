@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                 .Returns(new [] { Create.TextAnswer("subtitle", linkToQuestionId, Create.RosterVector(1, 1))});
 
             viewModel = Create.SingleOptionLinkedQuestionViewModel(Create.PlainQuestionnaire(questionnaire), interview);
-            viewModel.Init(interview.Id.FormatGuid(), questionIdentity, Create.NavigationState());
+            viewModel.InitAsync(interview.Id.FormatGuid(), questionIdentity, Create.NavigationState());
         };
 
         Because of = () => viewModel.Handle(Create.RosterInstancesTitleChanged(rosterId: topRosterId));

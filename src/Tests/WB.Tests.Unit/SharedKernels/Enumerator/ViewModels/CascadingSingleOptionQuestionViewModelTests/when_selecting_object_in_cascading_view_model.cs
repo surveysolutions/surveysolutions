@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 interviewRepository: interviewRepository,
                 questionnaireRepository: questionnaireRepository);
 
-            cascadingModel.Init(interviewId, questionIdentity, navigationState);
+            cascadingModel.InitAsync(interviewId, questionIdentity, navigationState);
 
             cascadingModel.FilterText = "ti";
         };

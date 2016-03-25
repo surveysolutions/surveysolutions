@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
         };
 
         Because of = () =>
-            viewModel.Init(interviewId, questionIdentity, navigationState);
+            viewModel.InitAsync(interviewId, questionIdentity, navigationState);
 
         It should_initialize_question_state = () =>
             questionStateMock.Verify(state => state.Init(interviewId, questionIdentity, navigationState), Times.Once);

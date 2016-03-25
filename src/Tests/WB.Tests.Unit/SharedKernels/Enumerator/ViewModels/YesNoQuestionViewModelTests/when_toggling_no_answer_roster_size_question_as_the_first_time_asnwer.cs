@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             viewModel = CreateViewModel(questionnaireStorage: questionnaireStorage.Object, interviewRepository: interviewRepository.Object, 
                 answeringViewModel: answeringViewModelMock.Object);
 
-            viewModel.Init(interviewIdAsString, questionId, Create.NavigationState());
+            viewModel.InitAsync(interviewIdAsString, questionId, Create.NavigationState());
             viewModel.Options.First().Selected = false;
         };
 

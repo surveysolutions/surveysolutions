@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
         };
 
         Because of = () =>
-            viewModel.Init(interviewId, questionIdentity, navigationState);
+            viewModel.InitAsync(interviewId, questionIdentity, navigationState);
 
         It should_set_nonnull_answer = () =>
             viewModel.SelectedObject.ShouldNotBeNull();
