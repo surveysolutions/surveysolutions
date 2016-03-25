@@ -58,20 +58,29 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         private static void SetupPaddingForImageView(ImageView control, DisplayMetrics displayMetrics, BitmapFactory.Options boundsOptions)
         {
-            float margin_left_dp = 0;
-            float margin_right_dp = 0;
+            int margin_left_dp = 0;
+            int margin_right_dp = 0;
+            int margin_top_dp = 0;
+            int margin_bottom_dp = 0;
 
             var isNeedPadding = boundsOptions.OutWidth < displayMetrics.WidthPixels;
             if (isNeedPadding)
             {
-                var element_margin_horizontal = control.Resources.GetDimension(Resource.Dimension.Interview_Entity_Element_margin_horizontal);
-                margin_left_dp = control.Resources.GetDimension(Resource.Dimension.Interview_Entity_margin_left);
-                margin_right_dp = control.Resources.GetDimension(Resource.Dimension.Interview_Entity_margin_right);
-                margin_left_dp += element_margin_horizontal;
-                margin_right_dp += element_margin_horizontal;
+                float element_margin_horizontal = control.Resources.GetDimension(Resource.Dimension.Interview_Entity_Element_margin_horizontal);
+                float element_margin_left_dp = control.Resources.GetDimension(Resource.Dimension.Interview_Entity_margin_left);
+                float element_margin_right_dp = control.Resources.GetDimension(Resource.Dimension.Interview_Entity_margin_right);
+                margin_bottom_dp = (int)control.Resources.GetDimension(Resource.Dimension.Interview_Attachment_Small_margin_bottom);
+                margin_left_dp = (int)(element_margin_left_dp + element_margin_horizontal);
+                margin_right_dp = (int)(element_margin_right_dp + element_margin_horizontal);
+            }
+            else
+            {
+                margin_bottom_dp = (int)control.Resources.GetDimension(Resource.Dimension.Interview_Attachment_Large_margin_bottom);
             }
 
-            control.SetPadding((int)margin_left_dp, 0, (int)margin_right_dp, 0);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
+            lp.SetMargins(margin_left_dp, margin_top_dp, margin_right_dp, margin_bottom_dp);
+            control.LayoutParameters = lp;
         }
 
         private static DisplayMetrics GetDisplayMetrics()
