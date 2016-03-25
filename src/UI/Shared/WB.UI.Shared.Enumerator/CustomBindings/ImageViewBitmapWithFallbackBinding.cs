@@ -62,6 +62,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             int margin_right_dp = 0;
             int margin_top_dp = 0;
             int margin_bottom_dp = 0;
+            var layout_width = LinearLayout.LayoutParams.WrapContent;
+            var layout_height = LinearLayout.LayoutParams.WrapContent;
 
             var isNeedPadding = boundsOptions.OutWidth < displayMetrics.WidthPixels;
             if (isNeedPadding)
@@ -76,9 +78,10 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             else
             {
                 margin_bottom_dp = (int)control.Resources.GetDimension(Resource.Dimension.Interview_Attachment_Large_margin_bottom);
+                layout_width = LinearLayout.LayoutParams.MatchParent;
             }
 
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(layout_width, layout_height);
             lp.SetMargins(margin_left_dp, margin_top_dp, margin_right_dp, margin_bottom_dp);
             control.LayoutParameters = lp;
         }

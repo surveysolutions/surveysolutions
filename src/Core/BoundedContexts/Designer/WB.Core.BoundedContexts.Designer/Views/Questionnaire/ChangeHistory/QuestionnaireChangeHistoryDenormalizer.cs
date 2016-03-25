@@ -1,23 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
-using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Views.Account;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
@@ -67,7 +61,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
         IEventHandler<LookupTableAdded>,
         IEventHandler<LookupTableUpdated>,
-        IEventHandler<LookupTableDeleted>
+        IEventHandler<LookupTableDeleted>,
+
+        IEventHandler<AttachmentUpdated>,
+        IEventHandler<AttachmentDeleted>
     {
         private readonly IReadSideRepositoryWriter<AccountDocument> accountStorage;
         private readonly IReadSideRepositoryWriter<QuestionnaireChangeRecord> questionnaireChangeItemStorage;
@@ -457,24 +454,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                evnt.EventSequence);
         }
 
-        public void Handle(IPublishedEvent<LookupTableDeleted> evnt)
-        {
-            var questionnaire = questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
-            var lookupTableName = questionnaire.LookupState.ContainsKey(evnt.Payload.LookupTableId)
-                ? questionnaire.LookupState[evnt.Payload.LookupTableId]
-                : "";
-
-            AddQuestionnaireChangeItem(
-               evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
-               QuestionnaireActionType.Delete,
-               QuestionnaireItemType.LookupTable,
-               evnt.Payload.LookupTableId,
-               lookupTableName,
-               evnt.EventSequence);
-
-            questionnaire.LookupState.Remove(evnt.Payload.LookupTableId);
-            questionnaireStateTackerStorage.Store(questionnaire, evnt.EventSourceId);
-        }
 
         public void Handle(IPublishedEvent<MacroAdded> evnt)
         {
@@ -503,23 +482,33 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                evnt.EventSequence);
         }
 
-        public void Handle(IPublishedEvent<MacroDeleted> evnt)
+
+        public void Handle(IPublishedEvent<AttachmentUpdated> evnt)
         {
-            var questionnaire = questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
-            var macroName = questionnaire.MacroState.ContainsKey(evnt.Payload.MacroId) 
-                ? questionnaire.MacroState[evnt.Payload.MacroId]
-                : "";
+            AddOrUpdateQuestionnaireStateItem(evnt.EventSourceId, evnt.Payload.AttachmentId, evnt.Payload.AttachmentName, (s, id, title) => s.AttachmentState[id] = title);
 
             AddQuestionnaireChangeItem(
                evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
-               QuestionnaireActionType.Delete,
-               QuestionnaireItemType.Macro,
-               evnt.Payload.MacroId,
-               macroName,
+               QuestionnaireActionType.Update,
+               QuestionnaireItemType.Attachment,
+               evnt.Payload.AttachmentId,
+               evnt.Payload.AttachmentName,
                evnt.EventSequence);
+        }
 
-            questionnaire.MacroState.Remove(evnt.Payload.MacroId);
-            questionnaireStateTackerStorage.Store(questionnaire, evnt.EventSourceId);
+        public void Handle(IPublishedEvent<LookupTableDeleted> evnt)
+        {
+            DeleteItemFromStateAndUpdateHistory(evnt, q => q.LookupState, evnt.Payload.LookupTableId, QuestionnaireItemType.LookupTable, evnt.Payload.ResponsibleId);
+        }
+
+        public void Handle(IPublishedEvent<MacroDeleted> evnt)
+        {
+            DeleteItemFromStateAndUpdateHistory(evnt, q => q.MacroState, evnt.Payload.MacroId, QuestionnaireItemType.Macro, evnt.Payload.ResponsibleId);
+        }
+
+        public void Handle(IPublishedEvent<AttachmentDeleted> evnt)
+        {
+            DeleteItemFromStateAndUpdateHistory(evnt, q => q.AttachmentState, evnt.Payload.AttachmentId, QuestionnaireItemType.Attachment, evnt.Payload.ResponsibleId);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireItemMoved> evnt)
@@ -626,6 +615,32 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             }
             questionnaireStateTackerStorage.Store(questionnaireStateTacker, questionnaireId);
         }
+
+        private void DeleteItemFromStateAndUpdateHistory<T>(IPublishedEvent<T> evnt,
+            Func<QuestionnaireStateTracker, Dictionary<Guid, string>> state,
+            Guid itemId,
+            QuestionnaireItemType itemType,
+            Guid responsibleId)
+            where T : IEvent
+        {
+            QuestionnaireStateTracker questionnaire = this.questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
+
+            string itemName = "";
+
+            state(questionnaire).TryGetValue(itemId, out itemName);
+
+            this.AddQuestionnaireChangeItem(
+                evnt.EventIdentifier, evnt.EventSourceId, responsibleId, evnt.EventTimeStamp,
+                QuestionnaireActionType.Delete,
+                itemType,
+                itemId,
+                itemName,
+                evnt.EventSequence);
+
+            state(questionnaire).Remove(itemId);
+            this.questionnaireStateTackerStorage.Store(questionnaire, evnt.EventSourceId);
+        }
+
 
         private void AddOrUpdateQuestionState(Guid questionnaireId, Guid itemId, string itemTitle)
         {

@@ -331,6 +331,7 @@
     <Compile Include="BoundedContexts\Interviewer\Services\QuestionnaireAssemblyFileAccessorTests\QuestionnaireAssemblyFileAccessorTestsContext.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\QuestionnaireAssemblyFileAccessorTests\when_removing_questionnaire_assembly.cs" />
     <Compile Include="BoundedContexts\Interviewer\SynchronizationViewModelTests\SynchronizationViewModelTestsContext.cs" />
+    <Compile Include="BoundedContexts\Interviewer\SynchronizationViewModelTests\when_synchronize_and_need_to_change_password.cs" />
     <Compile Include="BoundedContexts\Interviewer\SynchronizationViewModelTests\when_synchronize_need_download_attachments.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_load_questionnaire_with_attachments.cs" />
     <Compile Include="BoundedContexts\Tester\ViewModels\DashboardViewModelTests\when_start_and_local_storage_has_2_public_and_2_my_questionnaires.cs" />
@@ -378,6 +379,7 @@
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_2_functional_handlers_and_second_catch_non_critical_exception.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_by_ignored_event_source.cs" />
     <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_2_old_school_handlers_and_first_catch_non_critical_exception.cs" />
+    <Compile Include="Infrastructure\NcqrCompatibleEventDispatcherTests\when_publishing_event_to_2_old_school_handlers_and_first_one_doesnt_handle_the_event.cs" />
     <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsV4Tests.cs" />
     <Compile Include="SharedKernels\DataCollection\CustomFunctions\CustomFunctionsV5Tests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewAnswersCommandValidatorTests\when_responsible_supervisor_answer_on_supervisors_questions.cs" />
