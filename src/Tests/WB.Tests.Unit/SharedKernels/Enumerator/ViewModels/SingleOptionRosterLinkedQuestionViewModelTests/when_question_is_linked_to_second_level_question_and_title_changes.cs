@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using Nito.AsyncEx.Synchronous;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
@@ -13,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionRosterLi
 {
     internal class when_question_is_linked_to_second_level_question_and_title_changes : SingleOptionRosterLinkedQuestionViewModelTestsContext
     {
-        Establish context = async () =>
+        Establish context = () =>
         {
             var linkToRosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var questionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -38,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionRosterLi
             var interviewRepository = Create.StatefulInterviewRepositoryWith(interview);
 
             viewModel = CreateViewModel(interviewRepository, questionnaireRepository);
-            await viewModel.InitAsync("interview", questionIdentity, Create.NavigationState(interviewRepository));
+            viewModel.InitAsync("interview", questionIdentity, Create.NavigationState(interviewRepository)).WaitAndUnwrapException();
 
             interview.FindReferencedRostersForLinkedQuestion(linkToRosterId, questionIdentity)
                 .Returns(new List<InterviewRoster> { Create.InterviewRoster(rosterId: linkToRosterId, rosterTitle: "title1")});

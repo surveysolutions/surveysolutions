@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
@@ -41,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
                 questionnaireRepository: questionnaireRepository,
                 principal: principal);
 
-            listModel.InitAsync(interviewId, questionIdentity, navigationState);
+            listModel.InitAsync(interviewId, questionIdentity, navigationState).WaitAndUnwrapException();
         };
 
         Because of = () => 

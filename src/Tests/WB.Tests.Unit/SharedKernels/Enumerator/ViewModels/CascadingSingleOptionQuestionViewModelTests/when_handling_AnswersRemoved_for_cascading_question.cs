@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -17,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 {
     internal class when_handling_AnswersRemoved_for_cascading_question : CascadingSingleOptionQuestionViewModelTestContext
     {
-        Establish context = async () =>
+        Establish context = () =>
         {
             SetUp();
             var childAnswer = Mock.Of<SingleOptionAnswer>(_ => _.IsAnswered == true && _.Answer == 3);
@@ -36,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 interviewRepository: interviewRepository,
                 questionnaireRepository: questionnaireRepository);
 
-            await cascadingModel.InitAsync(interviewGuid.FormatGuid(), questionIdentity, navigationState);
+            cascadingModel.InitAsync(interviewGuid.FormatGuid(), questionIdentity, navigationState).WaitAndUnwrapException();
         };
 
         Because of = () =>

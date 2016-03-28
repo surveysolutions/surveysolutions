@@ -1,6 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
@@ -25,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                  .Returns(new [] { Create.InterviewRoster(rosterId.Id, new decimal[] { 1 }, "title") });
 
             viewModel = CreateMultiOptionRosterLinkedQuestionViewModel(questionnaire, interview.Object);
-            viewModel.InitAsync("interview", questionId, Create.NavigationState());
+            viewModel.InitAsync("interview", questionId, Create.NavigationState()).WaitAndUnwrapException();
         };
 
         Because of = () =>

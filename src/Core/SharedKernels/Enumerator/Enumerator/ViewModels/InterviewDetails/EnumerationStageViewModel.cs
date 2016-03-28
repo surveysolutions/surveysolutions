@@ -156,7 +156,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
 
                 var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
-                previousGroupNavigationViewModel.InitAsync(this.interviewId, groupIdentity, this.navigationState);
+                await previousGroupNavigationViewModel.InitAsync(this.interviewId, groupIdentity, this.navigationState);
 
                 foreach (var interviewItemViewModel in this.Items.OfType<IDisposable>())
                 {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using Nito.AsyncEx.Synchronous;
 using NSubstitute;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -44,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             IQuestionnaire questionnaire = SetupQuestionnaireWithSingleOptionQuestionLinkedToTextQuestion(linkedQuestionId.Id, linkSourceQuestionId.Id);
 
             viewModel = Create.SingleOptionLinkedQuestionViewModel(interview: interview, questionnaire: questionnaire);
-            viewModel.InitAsync(interviewId, linkedQuestionId, Create.NavigationState());
+            viewModel.InitAsync(interviewId, linkedQuestionId, Create.NavigationState()).WaitAndUnwrapException();
 
             viewModel.Options.First().Selected = true;
 
