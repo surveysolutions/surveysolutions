@@ -170,42 +170,37 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public IMvxCommand RemoveInterviewCommand
         {
-            get { return new MvxAsyncCommand(RemoveInterview, () => !this.isInterviewDeleteInProgress); }
+            get { return new MvxAsyncCommand(RemoveInterview, () => this.isInterviewReadyToLoad); }
         }
 
         private async Task RemoveInterview()
         {
-            this.isInterviewDeleteInProgress = true;
-            try
-            {
-                var isNeedDelete = await this.userInteractionService.ConfirmAsync(
-                    InterviewerUIResources.Dashboard_RemoveInterviewQuestion.FormatString(this.QuestionnaireName),
-                    okButton: UIResources.Yes,
-                    cancelButton: UIResources.No);
+            this.isInterviewReadyToLoad = false;
 
-                if (!isNeedDelete)
-                    return;
+            var isNeedDelete = await this.userInteractionService.ConfirmAsync(
+                InterviewerUIResources.Dashboard_RemoveInterviewQuestion.FormatString(this.QuestionnaireName),
+                okButton: UIResources.Yes,
+                cancelButton: UIResources.No);
 
-                await this.interviewerInterviewFactory.RemoveInterviewAsync(this.InterviewId);
-                RaiseRemovedDashboardItem();
-            }
-            finally
+            if (!isNeedDelete)
             {
-                this.isInterviewDeleteInProgress = false;
+                this.isInterviewReadyToLoad = true;
+                return;
             }
+            await this.interviewerInterviewFactory.RemoveInterviewAsync(this.InterviewId);
+            RaiseRemovedDashboardItem();
         }
 
         public IMvxCommand LoadDashboardItemCommand
         {
-            get { return new MvxAsyncCommand(LoadInterview, () => !this.isInterviewLoadingInProgress); }
+            get { return new MvxAsyncCommand(LoadInterview, () => this.isInterviewReadyToLoad); }
         }
 
-        private bool isInterviewLoadingInProgress = false;
-        private bool isInterviewDeleteInProgress = false;
+        private bool isInterviewReadyToLoad = true;
 
         public async Task LoadInterview()
         {
-            this.isInterviewLoadingInProgress = true;
+            this.isInterviewReadyToLoad = false;
             try
             {
                 if (this.Status == DashboardInterviewStatus.Completed)
@@ -246,7 +241,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             }
             finally
             {
-                this.isInterviewLoadingInProgress = false;
+                this.isInterviewReadyToLoad = false;
             }
         }
 
