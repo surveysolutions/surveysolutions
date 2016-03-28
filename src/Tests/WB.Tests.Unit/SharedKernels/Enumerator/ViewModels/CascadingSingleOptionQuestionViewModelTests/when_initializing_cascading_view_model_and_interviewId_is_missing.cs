@@ -1,5 +1,7 @@
 using System;
 using Machine.Specifications;
+using Nito.AsyncEx;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using It = Machine.Specifications.It;
 
@@ -14,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => cascadingModel.InitAsync("Some interviewId", null, null));
+            exception = Catch.Exception(() => cascadingModel.InitAsync("Some interviewId", null, null).WaitAndUnwrapException());
 
         It should_throw_ArgumentNullException_exception = () =>
             exception.ShouldBeOfExactType<ArgumentNullException>();
