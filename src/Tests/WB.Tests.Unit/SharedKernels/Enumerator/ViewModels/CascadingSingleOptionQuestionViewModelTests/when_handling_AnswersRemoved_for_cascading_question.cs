@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 {
     internal class when_handling_AnswersRemoved_for_cascading_question : CascadingSingleOptionQuestionViewModelTestContext
     {
-        Establish context = () =>
+        Establish context = async () =>
         {
             SetUp();
             var childAnswer = Mock.Of<SingleOptionAnswer>(_ => _.IsAnswered == true && _.Answer == 3);
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 interviewRepository: interviewRepository,
                 questionnaireRepository: questionnaireRepository);
 
-            cascadingModel.InitAsync(interviewGuid.FormatGuid(), questionIdentity, navigationState);
+            await cascadingModel.InitAsync(interviewGuid.FormatGuid(), questionIdentity, navigationState);
         };
 
         Because of = () =>

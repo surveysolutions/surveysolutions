@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -67,7 +68,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public Identity Identity { get { return this.questionIdentity; } }
 
-        public void InitAsync(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public async Task InitAsync(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
@@ -100,6 +101,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.AutoCompleteSuggestions = this.Options;
             }
             this.eventRegistry.Subscribe(this, interviewId);
+
+            await Task.FromResult(true);
         }
 
         private FilteredComboboxItemViewModel ToViewModel(CategoricalQuestionOption model)
