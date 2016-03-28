@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
+using Nito.AsyncEx;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -136,17 +138,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public int? ScrollToIndex { get; set; }
 
-        private void LoadFromModel(Identity groupIdentity)
+        private async void LoadFromModel(Identity groupIdentity)
         {
             try
             { 
                 this.userInterfaceStateService.NotifyRefreshStarted();
 
-                var interviewEntityViewModels = this.interviewViewModelFactory
+                var entities = await this.interviewViewModelFactory
                     .GetEntities(
                         interviewId: this.navigationState.InterviewId,
                         groupIdentity: groupIdentity,
-                        navigationState: this.navigationState)
+                        navigationState: this.navigationState);
+
+                var interviewEntityViewModels = entities
                     .Where(entity => !this.ShouldBeHidden(entity.Identity))
                     .ToList();
 
@@ -217,17 +221,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
             {
+
                 lock (this.itemsListUpdateOnUILock)
                 {
                     try
                     {
                         this.userInterfaceStateService.NotifyRefreshStarted();
 
-                        List<IInterviewEntityViewModel> createdViewModelEntities = this.interviewViewModelFactory
-                            .GetEntities(
-                                interviewId: this.navigationState.InterviewId,
-                                groupIdentity: this.navigationState.CurrentGroup,
-                                navigationState: this.navigationState)
+                        var entities = AsyncContext.Run(() =>
+                             this.interviewViewModelFactory
+                                .GetEntities(
+                                    interviewId: this.navigationState.InterviewId,
+                                    groupIdentity: this.navigationState.CurrentGroup,
+                                    navigationState: this.navigationState));
+
+                        List<IInterviewEntityViewModel> createdViewModelEntities = entities
                             .Where(entity => !this.ShouldBeHidden(entity.Identity))
                             .ToList();
 
