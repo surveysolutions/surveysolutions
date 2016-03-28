@@ -56,26 +56,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         Because of = () =>
             resultErrors = verifier.CheckForErrors(questionnaire);
 
-        It should_return_1_message = () =>
-            resultErrors.Count().ShouldEqual(1);
-
-        It should_return_message_with_code__WB0109 = () =>
-            resultErrors.Single().Code.ShouldEqual("WB0109");
-
-        It should_return_message_with_two_references = () =>
-            resultErrors.Single().References.Count().ShouldEqual(2);
-
-        It should_return_first_message_reference_with_type_Question = () =>
-            resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
-
-        It should_return_first_message_reference_with_id_of_question_with_enablement_condition = () =>
-            resultErrors.Single().References.First().Id.ShouldEqual(questionWithFilterId);
-
-        It should_return_second_message_reference_with_type_Question = () =>
-            ShouldExtensionMethods.ShouldEqual(resultErrors.Single().References.Second().Type, QuestionnaireVerificationReferenceType.Question);
-
-        It should_return_second_message_reference_with_id_of_categorical_multi_linked_question = () =>
-            ShouldExtensionMethods.ShouldEqual(resultErrors.Single().References.Second().Id, categoricalQuestionId);
+        It should_return_no_errors = () =>
+            resultErrors.Count().ShouldEqual(0);
 
         private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;
