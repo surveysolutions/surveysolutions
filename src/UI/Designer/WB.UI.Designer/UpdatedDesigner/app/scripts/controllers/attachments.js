@@ -147,7 +147,7 @@
                         attachment.content.details.width = dimensions.width;
 
                         attachment.meta = {};
-                        attachment.meta.fileName = attachment.file.name;
+                        attachment.meta.fileName = file.name;
                         attachment.meta.lastUpdated = moment();
 
                         var maxAttachmentNameLength = 32;

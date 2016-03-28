@@ -42,7 +42,7 @@
     "ng-context-menu": "~1.0.1",
     "perfect-scrollbar": "~0.4.11",
     "prettycheckable": "~2.1.2",
-    "ng-file-upload": "~10.1.8",
+    "ng-file-upload": "^12.0.4",
     "angular-moment": "^0.10.3",
     "moment": "^2.12.0"
   },

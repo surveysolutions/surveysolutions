@@ -224,7 +224,7 @@
                             </p>
 
                         </div>
-                        <button class="btn btn-default btn-lg btn-primary pull-left" ngf-select="createAndUploadFile($file);$event.stopPropagation()" ngf-accept="'image/*'" type="file">
+                        <button class="btn btn-default btn-lg btn-primary pull-left" ngf-select ngf-change="createAndUploadFile($file);$event.stopPropagation()" ngf-accept="'image/*'" type="file">
                             Upload new
                         </button>
                     </div>
