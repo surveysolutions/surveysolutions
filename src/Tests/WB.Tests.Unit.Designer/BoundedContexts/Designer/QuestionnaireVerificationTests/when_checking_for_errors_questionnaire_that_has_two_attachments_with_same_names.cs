@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
@@ -13,10 +14,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         Establish context = () =>
         {
-            var attachments = new[] { Create.Attachment(attachment1Id, "hello"), Create.Attachment(attachment2Id, "hello") };
-            questionnaire = Create.QuestionnaireDocumentWithOneChapter( 
-                attachments: attachments,
-                children: Create.TextQuestion());
+            questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+                attachments: new[] { Create.Attachment(attachment1Id, "hello"), Create.Attachment(attachment2Id, "hello") });
 
             var attachmentService = Setup.AttachmentsServiceForOneQuestionnaire(questionnaire.PublicKey);
 
