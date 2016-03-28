@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            await this.QuestionState.InitAsync(interviewId, entityIdentity, navigationState);
 
             var answerModel = interview.GetQRBarcodeAnswer(entityIdentity);
             if (answerModel.IsAnswered)
@@ -88,8 +88,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
 
             this.eventRegistry.Subscribe(this, interviewId);
-
-            await Task.FromResult(true);
         }
 
         private async void SaveAnswer()

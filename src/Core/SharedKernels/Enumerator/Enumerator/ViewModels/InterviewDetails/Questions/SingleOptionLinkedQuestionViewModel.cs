@@ -94,7 +94,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (questionIdentity == null) throw new ArgumentNullException(nameof(questionIdentity));
 
-            this.QuestionState.Init(interviewId, questionIdentity, navigationState);
+            await this.QuestionState.InitAsync(interviewId, questionIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);

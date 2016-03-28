@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
@@ -28,12 +29,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
                 && interview.IsEnabled(enabledGroup) == true));
 
             var interviewViewModelFactory = Mock.Of<IInterviewViewModelFactory>(__ =>
-                __.GetEntities(Moq.It.IsAny<string>(), Moq.It.IsAny<Identity>(), Moq.It.IsAny<NavigationState>()) == new[]
+                __.GetEntities(Moq.It.IsAny<string>(), Moq.It.IsAny<Identity>(), Moq.It.IsAny<NavigationState>()) == Task.FromResult(new[]
                 {
                     Mock.Of<IInterviewEntityViewModel>(_ => _.Identity == enabledGroup),
                     Mock.Of<IInterviewEntityViewModel>(_ => _.Identity == disabledAndHideIfDisabledGroup),
                     Mock.Of<IInterviewEntityViewModel>(_ => _.Identity == disabledAndNotHideIfDisabledGroup),
-                }
+                }.AsEnumerable())
                 && __.GetNew<GroupNavigationViewModel>() == Mock.Of<GroupNavigationViewModel>());
 
             viemModel = Create.EnumerationStageViewModel(

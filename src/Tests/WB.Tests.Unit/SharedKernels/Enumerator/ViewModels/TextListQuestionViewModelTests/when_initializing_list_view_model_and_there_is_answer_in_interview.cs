@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
             listModel.InitAsync(interviewId, questionIdentity, navigationState);
 
         It should_initialize_question_state = () =>
-            QuestionStateMock.Verify(x => x.Init(interviewId, questionIdentity, navigationState), Times.Once);
+            QuestionStateMock.Verify(x => x.InitAsync(interviewId, questionIdentity, navigationState), Times.Once);
 
         It should_create_list_with_5_answers = () =>
             listModel.Answers.Count.ShouldEqual(5);

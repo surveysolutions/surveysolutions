@@ -70,7 +70,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public async Task InitAsync(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            await this.QuestionState.InitAsync(interviewId, entityIdentity, navigationState);
             this.questionIdentity = entityIdentity;
 
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
