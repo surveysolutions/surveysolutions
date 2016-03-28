@@ -637,13 +637,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     var multiOtion = question as MultyOptionsQuestion;
                     if (multiOtion != null && multiOtion.YesNoView)
                         return typeof(YesNoAnswers).Name;
-                    return (question.LinkedToQuestionId == null) ? "decimal[]" : "decimal[][]";
+                    return (question.LinkedToQuestionId == null && question.LinkedToRosterId == null) ? "decimal[]" : "decimal[][]";
 
                 case QuestionType.DateTime:
                     return "DateTime?";
 
                 case QuestionType.SingleOption:
-                    return (question.LinkedToQuestionId == null) ? "decimal?" : "decimal[]";
+                    return (question.LinkedToQuestionId == null && question.LinkedToRosterId==null) ? "decimal?" : "decimal[]";
 
                 case QuestionType.TextList:
                     return "Tuple<decimal, string>[]";

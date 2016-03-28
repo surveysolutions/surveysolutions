@@ -478,7 +478,7 @@
     <value>Linked question filter expression has length more than 10,000 characters.</value>
   </data>
   <data name="WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion" xml:space="preserve">
-    <value>Categorical linked question cannot be used in linked question filter expression.</value>
+    <value>The question cannot be used in is it own filter expression.</value>
   </data>
   <data name="WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
     <value>Filter expression has a syntax error.</value>
