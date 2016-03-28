@@ -1046,7 +1046,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categorical linked question cannot be used in linked question filter expression..
+        ///   Looks up a localized string similar to The question cannot be used in is it own filter expression..
         /// </summary>
         internal static string WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion {
             get {
