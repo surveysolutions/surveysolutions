@@ -56,9 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 interviewRepository: interviewRepository.Object,
                 answeringViewModel: answeringMock.Object);
 
-            viewModel.InitAsync("blah", questionId, Create.NavigationState());
-
-            
+            viewModel.InitAsync("blah", questionId, Create.NavigationState()).WaitAndUnwrapException();
         };
 
         Because of = () =>

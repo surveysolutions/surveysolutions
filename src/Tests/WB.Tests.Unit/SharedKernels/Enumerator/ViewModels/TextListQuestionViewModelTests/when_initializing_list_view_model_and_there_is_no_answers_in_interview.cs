@@ -1,5 +1,6 @@
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
@@ -33,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
         };
 
         Because of = () =>
-            listModel.InitAsync(interviewId, questionIdentity, navigationState);
+            listModel.InitAsync(interviewId, questionIdentity, navigationState).WaitAndUnwrapException();
 
         It should_initialize_question_state = () =>
             QuestionStateMock.Verify(x => x.InitAsync(interviewId, questionIdentity, navigationState), Times.Once);
