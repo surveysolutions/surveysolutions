@@ -5,9 +5,11 @@
 
             $scope.downloadLookupFileBaseUrl = '../../attachments';
             $scope.benchmarkDownloadSpeed = 20;
+            $scope.isReadOnlyForUser = false;
             var recommendedMaxResolution = 1024;
             var KB = 1024;
             var MB = KB * KB;
+            
 
             var hideAttachmentsPane = 'ctrl+l';
 
@@ -71,7 +73,12 @@
             };
 
             $scope.loadAttachments = function () {
-                if ($scope.questionnaire === null || $scope.questionnaire.attachments === null)
+                if ($scope.questionnaire === null)
+                    return;
+
+                $scope.isReadOnlyForUser = $scope.questionnaire.isReadOnlyForUser || false;
+
+                if ($scope.questionnaire.attachments === null)
                     return;
 
                 _.each($scope.questionnaire.attachments, function (attachmentDto) {
@@ -104,6 +111,11 @@
 
             $scope.createAndUploadFile = function (file) {
                 if (_.isNull(file) || _.isUndefined(file)) {
+                    return;
+                }
+
+                if ($scope.isReadOnlyForUser) {
+                    notificationService.notice("You don't have permissions for changing this questionnaire");
                     return;
                 }
 
