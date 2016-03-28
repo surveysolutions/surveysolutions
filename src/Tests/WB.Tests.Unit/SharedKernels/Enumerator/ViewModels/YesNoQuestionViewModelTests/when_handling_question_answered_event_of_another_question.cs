@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -52,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             viewModel = CreateViewModel(questionnaireStorage: questionnaireStorage.Object,
                 interviewRepository: interviewRepository.Object);
 
-            viewModel.InitAsync("blah", questionId, Create.NavigationState());
+            viewModel.InitAsync("blah", questionId, Create.NavigationState()).WaitAndUnwrapException();
 
         };
 

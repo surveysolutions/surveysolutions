@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -38,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
         };
 
         Because of = () =>
-            viewModel.InitAsync(interviewId, questionIdentity, navigationState);
+            viewModel.InitAsync(interviewId, questionIdentity, navigationState).WaitAndUnwrapException();
 
         It should_initialize_question_state = () =>
             questionStateMock.Verify(state => state.InitAsync(interviewId, questionIdentity, navigationState), Times.Once);

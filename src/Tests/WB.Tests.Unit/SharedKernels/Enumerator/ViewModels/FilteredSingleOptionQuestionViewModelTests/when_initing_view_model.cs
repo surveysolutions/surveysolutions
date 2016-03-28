@@ -1,6 +1,7 @@
 using System;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
@@ -49,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
         };
 
         Because of = () =>
-            viewModel.InitAsync(interviewId, questionIdentity, navigationState);
+            viewModel.InitAsync(interviewId, questionIdentity, navigationState).WaitAndUnwrapException();
 
         It should_set_nonnull_answer = () =>
             viewModel.SelectedObject.ShouldNotBeNull();

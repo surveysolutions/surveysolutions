@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 userInteractionService: userInteractionServiceMock.Object,
                 answeringViewModel: answeringViewModelMock.Object);
 
-            viewModel.InitAsync(interviewIdAsString, questionId, Create.NavigationState());
+            viewModel.InitAsync(interviewIdAsString, questionId, Create.NavigationState()).WaitAndUnwrapException();
             viewModel.Options.Last().Selected = null;
         };
 
