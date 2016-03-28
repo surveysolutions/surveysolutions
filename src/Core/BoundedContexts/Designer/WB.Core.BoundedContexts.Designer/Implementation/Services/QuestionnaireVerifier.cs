@@ -164,8 +164,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2, "WB0061", VerificationMessages.WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2),
             Verifier<IMultyOptionsQuestion>(this.MultiOptionQuestionYesNoQuestionCantBeLinked, "WB0007", VerificationMessages.WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked),
             Verifier<IMultyOptionsQuestion>(this.MultiOptionQuestionSupportsOnlyIntegerPositiveValues, "WB0008", VerificationMessages.WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues),
-            Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInQuestionEnablementCondition, "WB0064", VerificationMessages.WB0064_CategoricalLinkedQuestionUsedInEnablementCondition),
-            Verifier<IGroup, IComposite>(this.CategoricalLinkedQuestionUsedInGroupEnablementCondition, "WB0064", VerificationMessages.WB0064_CategoricalLinkedQuestionUsedInEnablementCondition),
             Verifier<IQuestion>(QuestionTypeIsNotAllowed, "WB0066", VerificationMessages.WB0066_QuestionTypeIsNotAllowed),
             Verifier<IGroup>(RosterHasEmptyVariableName, "WB0067", VerificationMessages.WB0067_RosterHasEmptyVariableName),
             Verifier<IGroup>(RosterHasInvalidVariableName, "WB0069", VerificationMessages.WB0069_RosterHasInvalidVariableName),
@@ -203,8 +201,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationMessageIsTooLong, "WB0105", index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index)),
             Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationConditionIsEmpty, "WB0106", index => string.Format(VerificationMessages.WB0106_ValidationConditionIsEmpty, index)),
             Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationMessageIsEmpty, "WB0107", index => string.Format(VerificationMessages.WB0107_ValidationMessageIsEmpty, index)),
-            Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, CategoricalLinkedQuestionUsedInValidationExpression, "WB0063", index => string.Format(VerificationMessages.WB0063_CategoricalLinkedQuestionUsedInValidationExpression, index)),
-
+            
             MacrosVerifier(MacroHasEmptyName, "WB0014", VerificationMessages.WB0014_MacroHasEmptyName),
             MacrosVerifier(MacroHasInvalidName, "WB0010", VerificationMessages.WB0010_MacroHasInvalidName),
                     
@@ -1199,19 +1196,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.Multimedia);
         }
 
-        private EntityVerificationResult<IComposite> CategoricalLinkedQuestionUsedInQuestionEnablementCondition(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
-        {
-            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(question, question.ConditionExpression,
-                questionnaire, isReferencedQuestionIncorrect: IsCategoricalLinkedQuestion);
-        }
-
-        private EntityVerificationResult<IComposite> CategoricalLinkedQuestionUsedInGroupEnablementCondition(IGroup group, ReadOnlyQuestionnaireDocument questionnaire)
-        {
-            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(group, group.ConditionExpression,
-                questionnaire, isReferencedQuestionIncorrect: IsCategoricalLinkedQuestion);
-        }
-
-
         private EntityVerificationResult<IComposite> VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
             IComposite entity, string expression, ReadOnlyQuestionnaireDocument questionnaire, Func<IQuestion, bool> isReferencedQuestionIncorrect)
         {
@@ -1269,12 +1253,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return new EntityVerificationResult<IComposite> { HasErrors = false };
         }
 
-        private bool CategoricalLinkedQuestionUsedInValidationExpression(IQuestion question, ValidationCondition validationCondition, ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
-        {
-            var verificationResult = this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(question, validationCondition.Expression, questionnaire, isReferencedQuestionIncorrect: IsCategoricalLinkedQuestion);
-            return verificationResult.HasErrors;
-        }
-
         private EntityVerificationResult<IComposite> CategoricalLinkedQuestionUsedInFilterExpression(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
         {
             if (!(question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue))
@@ -1283,8 +1261,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (string.IsNullOrEmpty(question.LinkedFilterExpression))
                 new EntityVerificationResult<IComposite> { HasErrors = false };
 
-            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(question, question.LinkedFilterExpression,
-                questionnaire, isReferencedQuestionIncorrect: IsCategoricalLinkedQuestion);
+            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(question,
+                question.LinkedFilterExpression,
+                questionnaire, isReferencedQuestionIncorrect: (q) => q.PublicKey == question.PublicKey);
         }
 
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByLinkedQuestions(
