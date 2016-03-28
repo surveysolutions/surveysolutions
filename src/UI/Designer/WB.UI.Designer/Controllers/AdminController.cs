@@ -339,6 +339,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpGet]
+        [Obsolete("Remove after 5.9+ version released")]
         public FileStreamResult Export(Guid id)
         {
             var questionnaireView = questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));

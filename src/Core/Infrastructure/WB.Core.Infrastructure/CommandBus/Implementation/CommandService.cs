@@ -142,19 +142,19 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             cancellationToken.ThrowIfCancellationRequested();
             commandHandler.Invoke(command, aggregate);
 
-            if (aggregate.GetUnCommittedChanges().Any())
-            {
-                CommittedEventStream commitedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
-                aggregate.MarkChangesAsCommitted();
+            if (!aggregate.HasUncommittedChanges())
+                return;
 
-                try
-                {
-                    this.eventBus.PublishCommittedEvents(commitedEvents);
-                }
-                finally
-                {
-                    this.snapshooter.CreateSnapshotIfNeededAndPossible(aggregate);
-                }
+            CommittedEventStream commitedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
+            aggregate.MarkChangesAsCommitted();
+
+            try
+            {
+                this.eventBus.PublishCommittedEvents(commitedEvents);
+            }
+            finally
+            {
+                this.snapshooter.CreateSnapshotIfNeededAndPossible(aggregate);
             }
         }
     }

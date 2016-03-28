@@ -65,13 +65,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task RemoveInterviewAsync(Guid interviewId)
         {
-            await this.commandService.ExecuteAsync(new HardDeleteInterview(interviewId,
-                this.principal.CurrentUserIdentity.UserId));
-
             this.aggregateRootRepositoryWithCache.CleanCache();
             this.snapshotStoreWithCache.CleanCache();
 
             this.eventStore.RemoveEventSourceById(interviewId);
+
+            await this.interviewViewRepository.RemoveAsync(interviewId.FormatGuid());
 
             await this.RemoveInterviewImagesAsync(interviewId);
         }
