@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionRosterLi
 {
     internal class when_question_is_linked_to_second_level_question_and_title_changes : SingleOptionRosterLinkedQuestionViewModelTestsContext
     {
-        Establish context = () =>
+        Establish context = async () =>
         {
             var linkToRosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var questionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionRosterLi
             var interviewRepository = Create.StatefulInterviewRepositoryWith(interview);
 
             viewModel = CreateViewModel(interviewRepository, questionnaireRepository);
-            viewModel.Init("interview", questionIdentity, Create.NavigationState(interviewRepository));
+            await viewModel.InitAsync("interview", questionIdentity, Create.NavigationState(interviewRepository));
 
             interview.FindReferencedRostersForLinkedQuestion(linkToRosterId, questionIdentity)
                 .Returns(new List<InterviewRoster> { Create.InterviewRoster(rosterId: linkToRosterId, rosterTitle: "title1")});

@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
             this.eventRegistry.Subscribe(this, interviewId);
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            await this.QuestionState.InitAsync(interviewId, entityIdentity, navigationState);
 
             this.questionIdentity = entityIdentity;
             this.userId = this.principal.CurrentUserIdentity.UserId;

@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             viewModel.InitAsync(interviewId, questionIdentity, navigationState);
 
         It should_initialize_question_state = () =>
-            questionStateMock.Verify(state => state.Init(interviewId, questionIdentity, navigationState), Times.Once);
+            questionStateMock.Verify(state => state.InitAsync(interviewId, questionIdentity, navigationState), Times.Once);
 
         It should_subsribe_self_to_event_registry = () =>
             eventRegistryMock.Verify(registry => registry.Subscribe(viewModel, Moq.It.IsAny<string>()), Times.Once);

@@ -137,7 +137,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
             this.liteEventRegistry.Subscribe(this, interviewId);
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            await this.QuestionState.InitAsync(interviewId, entityIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetIntegerNumericAnswer(entityIdentity);
