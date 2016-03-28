@@ -37,6 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
 
             interviewerInterviewAccessor = CreateInterviewerInterviewAccessor(
                 commandService: mockOfCommandService.Object,
+                interviewViewRepository: interviewViewRepositoryMock.Object,
                 aggregateRootRepositoryWithCache: mockOfAggregateRootRepositoryWithCache.Object,
                 snapshotStoreWithCache: mockOfSnapshotStoreWithCache.Object,
                 principal: principal,
@@ -47,8 +48,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
 
         Because of = () => interviewerInterviewAccessor.RemoveInterviewAsync(interviewId).WaitAndUnwrapException();
 
-        It should_remove_questionnaire_document_view_from_plain_storage = () =>
-            mockOfCommandService.Verify(x=>x.ExecuteAsync(Moq.It.IsAny<HardDeleteInterview>(), null, Moq.It.IsAny<CancellationToken>()), Times.Once);
+        It should_remove_interview_view_from_plain_storage = () =>
+            interviewViewRepositoryMock.Verify(x => x.RemoveAsync(interviewStringId), Times.Once);
 
         It should_clean_cache_of_aggregate_root_repository = () =>
             mockOfAggregateRootRepositoryWithCache.Verify(x => x.CleanCache(), Times.Once);
@@ -66,7 +67,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
              eventStore.Verify(x => x.RemoveEventSourceById(interviewId), Times.Once);
 
 
-        private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
+        private static readonly string interviewStringId = "11111111111111111111111111111111";
+        private static readonly Guid interviewId = Guid.Parse(interviewStringId);
         private static readonly InterviewMultimediaView[] interviewMultimediaViews =
         {
             new InterviewMultimediaView
@@ -96,6 +98,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         const string interviewFile2 = "file 2";
 
         private static readonly Mock<ICommandService> mockOfCommandService = new Mock<ICommandService>();
+        private static readonly Mock<IAsyncPlainStorage<InterviewView>> interviewViewRepositoryMock = new Mock<IAsyncPlainStorage<InterviewView>>();
         private static readonly Mock<IAggregateRootRepositoryWithCache> mockOfAggregateRootRepositoryWithCache = new Mock<IAggregateRootRepositoryWithCache>();
         private static readonly Mock<ISnapshotStoreWithCache> mockOfSnapshotStoreWithCache = new Mock<ISnapshotStoreWithCache>();
         private static InterviewerInterviewAccessor interviewerInterviewAccessor;

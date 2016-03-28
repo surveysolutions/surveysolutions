@@ -7169,6 +7169,9 @@ textarea {
 .icon-lookup {
   background-position: 0 -413px;
 }
+.icon-attachment {
+  background-position: 0 -442px;
+}
 .icon-error.icon-numeric {
   background-position: -30px 0;
 }
@@ -7207,6 +7210,9 @@ textarea {
 }
 .icon-error.icon-lookup {
   background-position: -30px -413px;
+}
+.icon-error.icon-attachment {
+  background-position: -30px -442px;
 }
 .mCSB_container {
   margin-right: 0;
