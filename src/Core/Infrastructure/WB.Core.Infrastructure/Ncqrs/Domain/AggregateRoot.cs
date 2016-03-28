@@ -50,6 +50,8 @@ namespace Ncqrs.Domain
             }
         }
 
+        public bool HasUncommittedChanges() => this.changes.Any();
+
         public IEnumerable<UncommittedEvent> GetUnCommittedChanges()
         {
             return this.changes.ToList();
