@@ -103,7 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
 
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            await this.QuestionState.InitAsync(interviewId, entityIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
             var answerModel = interview.GetTextListAnswer(entityIdentity);
@@ -119,8 +119,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.maxAnswerCount = questionnaire.GetMaxSelectedAnswerOptions(entityIdentity.Id);
 
             this.IsAddNewItemVisible = this.IsNeedShowAddNewItem();
-
-            await Task.FromResult(true);
         }
 
         private async void ListItemDeleted(object sender, EventArgs eventArgs)

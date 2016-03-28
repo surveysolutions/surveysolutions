@@ -129,7 +129,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            await this.QuestionState.InitAsync(interviewId, entityIdentity, navigationState);
 
             var answerModel = interview.GetGpsCoordinatesAnswer(entityIdentity);
             if (answerModel.IsAnswered)

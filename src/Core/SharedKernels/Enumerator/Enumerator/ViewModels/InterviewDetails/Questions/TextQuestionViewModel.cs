@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.liteEventRegistry.Subscribe(this, interviewId);
 
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            await this.QuestionState.InitAsync(interviewId, entityIdentity, navigationState);
 
             this.InitQuestionSettings();
             this.UpdateSelfFromModel();
