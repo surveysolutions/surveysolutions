@@ -1,6 +1,8 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -19,8 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
         };
 
         Because of = () =>
-            exception = Catch.Exception(() =>
-                listModel.InitAsync(null, null, null));
+            exception = Catch.Exception(() => listModel.InitAsync(null, null, null).WaitAndUnwrapException());
 
         It should_throw_ArgumentNullException_exception = () =>
             exception.ShouldBeOfExactType<ArgumentNullException>();
