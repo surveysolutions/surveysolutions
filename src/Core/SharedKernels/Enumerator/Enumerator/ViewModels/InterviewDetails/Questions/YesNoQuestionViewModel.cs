@@ -156,9 +156,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
             }
 
-            YesNoAnswer actualAnswerModel = interview.GetYesNoAnswer(this.Identity);
-
-            var selectedValuesWithoutJustChanged = actualAnswerModel.Answers?.Except(x => x.OptionValue == changedModel.Value) ?? Enumerable.Empty<AnsweredYesNoOption>();
+            var selectedValuesWithoutJustChanged = allSelectedOptions.Except(x => x.Value == changedModel.Value).Select(x => new AnsweredYesNoOption(x.Value, x.YesSelected));
 
             var selectedValuesWithJustChanged
                 = changedModel.Selected.HasValue
