@@ -63,13 +63,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public Identity Identity { get { return this.questionIdentity; } }
 
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public async Task InitAsync(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
 
             this.eventRegistry.Subscribe(this, interviewId);
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            await this.QuestionState.InitAsync(interviewId, entityIdentity, navigationState);
 
             this.questionIdentity = entityIdentity;
             this.userId = this.principal.CurrentUserIdentity.UserId;

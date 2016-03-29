@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -36,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         };
 
         Because of = () =>
-            cascadingModel.Init(interviewId, questionIdentity, navigationState);
+            cascadingModel.InitAsync(interviewId, questionIdentity, navigationState).WaitAndUnwrapException();
 
         It should_get_answer_for_parent_question_once = () =>
             StatefulInterviewMock.Verify(x => x.GetSingleOptionAnswer(parentIdentity), Times.Once);
@@ -45,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             StatefulInterviewMock.Verify(x => x.GetSingleOptionAnswer(questionIdentity), Times.Once);
 
         It should_initialize_question_state = () =>
-            QuestionStateMock.Verify(x => x.Init(interviewId, questionIdentity, navigationState), Times.Once);
+            QuestionStateMock.Verify(x => x.InitAsync(interviewId, questionIdentity, navigationState), Times.Once);
 
         It should_subscribe_for_events = () =>
             EventRegistry.Verify(x => x.Subscribe(cascadingModel, Moq.It.IsAny<string>()), Times.Once);

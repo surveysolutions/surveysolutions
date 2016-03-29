@@ -76,8 +76,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.QuestionnaireTitle = questionnaire.Title;
             this.PrefilledQuestions = new ObservableCollection<dynamic>();
 
-            this.interviewViewModelFactory.GetPrefilledQuestions(this.interviewId)
-                .ForEach(x => this.PrefilledQuestions.Add(x));
+            var questions = await this.interviewViewModelFactory.GetPrefilledQuestions(this.interviewId);
+            questions.ForEach(x => this.PrefilledQuestions.Add(x));
 
             var startButton = this.interviewViewModelFactory.GetNew<StartInterviewViewModel>();
             startButton.Init(interviewId, null, null);

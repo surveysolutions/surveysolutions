@@ -2,6 +2,7 @@
 using System.Linq;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -51,11 +52,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             viewModel = CreateViewModel(questionnaireStorage: questionnaireStorage.Object,
                 interviewRepository: interviewRepository.Object);
 
-            viewModel.Init("blah", questionId, Create.NavigationState());
+            viewModel.InitAsync("blah", questionId, Create.NavigationState()).WaitAndUnwrapException();
             viewModel.Options.First().Selected = true;
         };
 
-        private Because of = async () => await viewModel.ToggleAnswerAsync(viewModel.Options.First());
+        private Because of = () => viewModel.ToggleAnswerAsync(viewModel.Options.First()).WaitAndUnwrapException();
 
         private It should_undo_checked_property = () => viewModel.Options.First().YesSelected.ShouldBeFalse();
 
