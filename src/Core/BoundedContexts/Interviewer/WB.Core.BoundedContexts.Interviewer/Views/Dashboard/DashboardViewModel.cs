@@ -205,11 +205,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private async Task RunSynchronizationAsync()
         {
             await this.Synchronization.SynchronizeAsync();
-            if (this.Synchronization.Status == SynchronizationStatus.Success
-                || this.Synchronization.Status == SynchronizationStatus.Canceled)
-            {
-                await this.RefreshDashboardAsync();
-            }
+            await this.RefreshDashboardAsync();
         }
 
         private void ShowInterviews(DashboardInterviewStatus status)
