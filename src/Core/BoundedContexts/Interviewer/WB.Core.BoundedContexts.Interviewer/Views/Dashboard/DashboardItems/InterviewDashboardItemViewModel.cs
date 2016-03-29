@@ -241,7 +241,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             }
             finally
             {
-                this.isInterviewReadyToLoad = false;
+                this.isInterviewReadyToLoad = true;
             }
         }
 
