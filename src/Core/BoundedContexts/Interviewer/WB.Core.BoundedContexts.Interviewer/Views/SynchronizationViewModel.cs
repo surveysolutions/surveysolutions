@@ -100,8 +100,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             this.IsSynchronizationInfoShowed = false;
             this.IsSynchronizationInProgress = false;
-            if (this.synchronizationCancellationTokenSource != null &&
-                !this.synchronizationCancellationTokenSource.IsCancellationRequested)
+            if (this.synchronizationCancellationTokenSource != null && !this.synchronizationCancellationTokenSource.IsCancellationRequested)
                 this.synchronizationCancellationTokenSource.Cancel();
         }
 

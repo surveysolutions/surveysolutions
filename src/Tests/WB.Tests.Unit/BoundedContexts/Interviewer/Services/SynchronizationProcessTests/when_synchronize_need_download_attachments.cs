@@ -1,32 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
-using NUnit.Framework;
-using WB.Core.BoundedContexts.Interviewer.Properties;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
-using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationViewModelTests;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationViewModelTests
+namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
-    internal class when_synchronize_and_need_download_missing_attachments : SynchronizationViewModelTestsContext
+    internal class when_synchronize_and_need_download_missing_attachments : SynchronizationProcessTestsContext
     {
         Establish context = () =>
         {
@@ -66,7 +59,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationViewModelTest
                 && x.IsExistAsync("5") == Task.FromResult(false)
                 );
 
-            viewModel = Create.SynchronizationViewModel(principal: principal,
+            viewModel = CreateSynchronizationProcess(principal: principal,
                 interviewViewRepository: interviewViewRepository,
                 attachmentContentStorage: attachmentContentStorage,
                 synchronizationService: synchronizationService,
@@ -74,7 +67,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationViewModelTest
                 );
         };
 
-        Because of = async () => await viewModel.Synchronize();
+        Because of = () => viewModel.SyncronizeAsync(new Progress<SyncProgressInfo>(), CancellationToken.None).WaitAndUnwrapException();
 
         It should_download_attachment_content_for_id_1 = () =>
             Mock.Get(synchronizationService).Verify(s => s.GetAttachmentContentAsync("1", Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()), Times.Once());
@@ -101,7 +94,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationViewModelTest
             Mock.Get(attachmentContentStorage).Verify(s => s.StoreAsync(Moq.It.Is<AttachmentContent>(ac => ac.Id == "5")), Times.Once());
 
 
-        static SynchronizationViewModel viewModel;
+        static SynchronizationProcess viewModel;
         static IAttachmentContentStorage attachmentContentStorage;
         static ISynchronizationService synchronizationService;
         static IInterviewerQuestionnaireAccessor interviewerQuestionnaireAccessor;

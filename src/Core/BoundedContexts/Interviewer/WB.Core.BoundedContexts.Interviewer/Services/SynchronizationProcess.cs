@@ -36,6 +36,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly IAttachmentContentStorage attachmentContentStorage;
         private readonly IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
         private readonly IAsyncPlainStorage<InterviewFileView> interviewFileViewStorage;
+        private readonly IPasswordHasher passwordHasher;
+
+        private RestCredentials restCredentials;
 
         public SynchronizationProcess(ISynchronizationService synchronizationService, 
             IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
@@ -47,7 +50,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             IAttachmentContentStorage attachmentContentStorage, 
             IInterviewerInterviewAccessor interviewFactory, 
             IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage, 
-            IAsyncPlainStorage<InterviewFileView> interviewFileViewStorage)
+            IAsyncPlainStorage<InterviewFileView> interviewFileViewStorage,
+            IPasswordHasher passwordHasher)
         {
             this.synchronizationService = synchronizationService;
             this.interviewersPlainStorage = interviewersPlainStorage;
@@ -60,6 +64,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.interviewFactory = interviewFactory;
             this.interviewMultimediaViewStorage = interviewMultimediaViewStorage;
             this.interviewFileViewStorage = interviewFileViewStorage;
+            this.passwordHasher = passwordHasher;
         }
 
         public async Task SyncronizeAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
@@ -75,7 +80,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     Statistics = statistics
                 });
 
-                var restCredentials = new RestCredentials {
+                this.restCredentials = this.restCredentials ?? new RestCredentials {
                     Login = this.principal.CurrentUserIdentity.Name,
                     Password = this.principal.CurrentUserIdentity.Password
                 };
@@ -86,7 +91,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     this.shouldUpdatePasswordOfInterviewer = false;
                     await this.UpdatePasswordOfInterviewerAsync(restCredentials.Password);
                 }
-
 
                 await this.UploadCompletedInterviewsAsync(statistics, progress, cancellationToken);
                 await this.DownloadCensusAsync(progress, cancellationToken);
@@ -161,6 +165,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 }
                 else
                 {
+                    this.restCredentials.Password = this.passwordHasher.Hash(newPassword);
                     await this.SyncronizeAsync(progress, cancellationToken);
                 }
             }
@@ -228,7 +233,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
                 foreach (var contentId in contentIds)
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
                     var isExistContent = await this.attachmentContentStorage.IsExistAsync(contentId);
                     if (!isExistContent)
                     {
@@ -306,8 +310,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
             foreach (var interview in interviews)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-
                 progress.Report(new SyncProgressInfo
                 {
                     Title = InterviewerUIResources.Synchronization_Download_Title,
@@ -370,8 +372,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
             foreach (var imageView in imageViews)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-
                 var fileView = await this.interviewFileViewStorage.GetByIdAsync(imageView.FileId);
                 await this.synchronizationService.UploadInterviewImageAsync(
                     interviewId: imageView.InterviewId,
