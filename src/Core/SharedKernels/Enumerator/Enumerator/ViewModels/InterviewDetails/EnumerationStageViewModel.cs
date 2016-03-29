@@ -18,6 +18,7 @@ using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -86,7 +87,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
         }
 
-        public void Init(string interviewId, NavigationState navigationState, Identity groupId, Identity anchoredElementIdentity)
+        public async Task InitAsync(string interviewId, NavigationState navigationState, Identity groupId, Identity anchoredElementIdentity)
         {
             if (navigationState == null) throw new ArgumentNullException(nameof(navigationState));
             if (this.navigationState != null) throw new Exception("ViewModel already initialized");
@@ -98,7 +99,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.navigationState = navigationState;
             this.Items = new ObservableRangeCollection<IInterviewEntityViewModel>();
 
-            CreateRegularGroupScreen(groupId, anchoredElementIdentity);
+            await CreateRegularGroupScreen(groupId, anchoredElementIdentity);
 
             if (!this.eventRegistry.IsSubscribed(this, this.interviewId))
             {
@@ -106,7 +107,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        private void CreateRegularGroupScreen(Identity groupId, Identity anchoredElementIdentity)
+        private async Task CreateRegularGroupScreen(Identity groupId, Identity anchoredElementIdentity)
         {
             if (this.questionnaire.IsRosterGroup(groupId.Id))
             {
@@ -118,7 +119,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.Name = this.questionnaire.GetGroupTitle(groupId.Id); ;
             }
 
-            this.LoadFromModel(groupId);
+            await this.LoadFromModel(groupId);
             this.SetScrollTo(anchoredElementIdentity);
         }
 
@@ -138,7 +139,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public int? ScrollToIndex { get; set; }
 
-        private async void LoadFromModel(Identity groupIdentity)
+        private async Task LoadFromModel(Identity groupIdentity)
         {
             try
             { 
