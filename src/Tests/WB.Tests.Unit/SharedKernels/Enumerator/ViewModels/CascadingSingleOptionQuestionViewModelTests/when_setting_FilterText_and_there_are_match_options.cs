@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
@@ -34,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 interviewRepository: interviewRepository,
                 questionnaireRepository: questionnaireRepository);
 
-            cascadingModel.Init(interviewId, questionIdentity, navigationState);
+            cascadingModel.InitAsync(interviewId, questionIdentity, navigationState).WaitAndUnwrapException();
         };
 
         Because of = () =>

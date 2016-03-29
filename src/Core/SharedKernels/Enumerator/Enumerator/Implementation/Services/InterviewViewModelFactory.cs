@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using MvvmCross.Platform;
 using WB.Core.GenericSubdomains.Portable;
@@ -86,16 +87,31 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.interviewRepository = interviewRepository;
         }
 
-        public IEnumerable<IInterviewEntityViewModel> GetEntities(string interviewId, Identity groupIdentity, NavigationState navigationState)
+        public async Task<IEnumerable<IInterviewEntityViewModel>> GetEntities(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
             if (groupIdentity == null) throw new ArgumentNullException(nameof(groupIdentity));
 
-            return this.GenerateViewModels(interviewId, groupIdentity, navigationState);
+            return await this.GenerateViewModels(interviewId, groupIdentity, navigationState);
         }
 
-        public IEnumerable<IInterviewEntityViewModel> GetPrefilledQuestions(string interviewId) => this.GetPrefilledQuestionsImpl(interviewId);
+        public async Task<IEnumerable<IInterviewEntityViewModel>> GetPrefilledQuestions(string interviewId)
+        {
+            var interview = this.interviewRepository.Get(interviewId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
-        private IEnumerable<IInterviewEntityViewModel> GenerateViewModels(string interviewId, Identity groupIdentity, NavigationState navigationState)
+            var tasks = questionnaire
+                .GetPrefilledQuestions()
+                .Select(questionId => this.CreateInterviewEntityViewModel(
+                    entityId: questionId,
+                    rosterVector: RosterVector.Empty,
+                    entityModelType: GetEntityModelType(questionId, questionnaire),
+                    interviewId: interviewId,
+                    navigationState: null));
+
+            return await Task.WhenAll(tasks);
+        }
+
+        private async Task<IEnumerable<IInterviewEntityViewModel>> GenerateViewModels(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
@@ -105,12 +121,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             var groupWithoutNestedChildren = interview.GetInterviewerEntities(groupIdentity);
 
-            return groupWithoutNestedChildren.Select(questionnaireEntity => this.CreateInterviewEntityViewModel(
+            var tasks = groupWithoutNestedChildren.Select(questionnaireEntity => this.CreateInterviewEntityViewModel(
                 entityId: questionnaireEntity.Id,
                 rosterVector: questionnaireEntity.RosterVector,
                 entityModelType: GetEntityModelType(questionnaireEntity.Id, questionnaire),
                 interviewId: interviewId,
                 navigationState: navigationState));
+
+            return await Task.WhenAll(tasks);
         }
 
         [Obsolete("Do not use it. It is for transition purpose only")]
@@ -178,23 +196,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return InterviewEntityType.StaticTextModel;
         }
 
-        private IEnumerable<IInterviewEntityViewModel> GetPrefilledQuestionsImpl(string interviewId)
-        {
-            var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
-
-            return questionnaire
-                .GetPrefilledQuestions()
-                .Select(questionId =>
-                    this.CreateInterviewEntityViewModel(
-                        entityId: questionId,
-                        rosterVector: RosterVector.Empty,
-                        entityModelType: GetEntityModelType(questionId, questionnaire),
-                        interviewId: interviewId,
-                        navigationState: null));
-        }
-
-        private IInterviewEntityViewModel CreateInterviewEntityViewModel(
+        private async Task<IInterviewEntityViewModel> CreateInterviewEntityViewModel(
             Guid entityId,
             decimal[] rosterVector,
             InterviewEntityType entityModelType,
@@ -214,7 +216,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             IInterviewEntityViewModel viewModel = viewModelActivator.Invoke();
 
-            viewModel.Init(interviewId: interviewId, entityIdentity: identity, navigationState: navigationState);
+            await viewModel.InitAsync(interviewId: interviewId, entityIdentity: identity, navigationState: navigationState);
             return viewModel;
         }
 

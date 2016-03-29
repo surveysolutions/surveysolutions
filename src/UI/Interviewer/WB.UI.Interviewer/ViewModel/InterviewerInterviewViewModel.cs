@@ -84,7 +84,7 @@ namespace WB.UI.Interviewer.ViewModel
             }
         }
 
-        protected override MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
+        protected override async Task<MvxViewModel> UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
         {
             if (this.navigationState.CurrentScreenType == ScreenType.Complete)
             {
@@ -95,7 +95,7 @@ namespace WB.UI.Interviewer.ViewModel
             else
             {
                 var activeStageViewModel = interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
-                activeStageViewModel.Init(interviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
+                await activeStageViewModel.InitAsync(interviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
                 return activeStageViewModel;
             }
         }

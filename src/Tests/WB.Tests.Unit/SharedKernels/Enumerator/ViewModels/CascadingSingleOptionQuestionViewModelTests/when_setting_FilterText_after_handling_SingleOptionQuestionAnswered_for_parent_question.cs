@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
@@ -37,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 interviewRepository: interviewRepository,
                 questionnaireRepository: questionnaireRepository);
 
-            cascadingModel.Init(interviewGuid.FormatGuid(), questionIdentity, navigationState);
+            cascadingModel.InitAsync(interviewGuid.FormatGuid(), questionIdentity, navigationState).WaitAndUnwrapException();
 
             StatefulInterviewMock.Setup(x => x.GetSingleOptionAnswer(parentIdentity)).Returns(secondParentOptionAnswer);
 

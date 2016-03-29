@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             answering = new Mock<AnsweringViewModel>();
 
             questionViewModel = CreateViewModel(interviewRepository: interviews.Object, questionnaireStorage: questionnaires.Object, answering:answering.Object);
-            questionViewModel.Init("interviewId", questionId, Create.NavigationState());
+            questionViewModel.InitAsync("interviewId", questionId, Create.NavigationState()).WaitAndUnwrapException();
         };
 
         Because of = () =>

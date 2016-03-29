@@ -2,6 +2,7 @@
 using System.Linq;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -59,7 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 eventRegistry: eventRegistry.Object);
         };
 
-        Because of = () => viewModel.Init(interviewId, questionId, navigationState);
+        Because of = () => viewModel.InitAsync(interviewId, questionId, navigationState).WaitAndUnwrapException();
 
         It should_build_options = () => viewModel.Options.Count.ShouldEqual(5);
 
