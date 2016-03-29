@@ -421,8 +421,6 @@
     <Compile Include="Services\IAuthenticationService.cs" />
     <Compile Include="Services\IRecaptchaService.cs" />
     <Compile Include="Utils\FormatHelper.cs" />
-    <Compile Include="WebServices\IPublicService.cs" />
-    <Compile Include="WebServices\PublicService.cs" />
     <Compile Include="WebServices\Questionnaire\DownloadQuestionnaireRequest.cs" />
     <Compile Include="WebServices\Questionnaire\QuestionnaireListRequest.cs" />
     <Compile Include="WebServices\Questionnaire\QuestionnaireListViewItemMessage.cs" />
@@ -441,7 +439,6 @@
     <Content Include="Content\identity\favicon-designer-192x192.png" />
     <Content Include="Content\identity\favicon-designer-72x72.png" />
     <Content Include="Content\identity\favicon-designer-76x76.png" />
-    <Content Include="PublicService.svc" />
     <Content Include="Content\identity\favicon-designer.png" />
     <Content Include="Scripts\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\bindings.js" />
