@@ -57,7 +57,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.Answer, col =>
             {
                 col.Column("AnswerValue");
-                col.Index("AnswersToFeaturedQuestions_AnswerValue");
             });
             ManyToOne(x => x.InterviewSummary, mtm => {
                 mtm.Column("InterviewSummaryId");
