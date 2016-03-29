@@ -1,14 +1,14 @@
-﻿using Android.App;
+﻿using System;
+using System.Threading;
+using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
 using MvvmCross.Binding.Droid.BindingContext;
-using MvvmCross.Platform;
 using MvvmCross.Droid.Support.V7.RecyclerView;
-using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Properties;
-using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.UI.Interviewer.CustomControls;
 using WB.UI.Interviewer.Services;
@@ -20,12 +20,8 @@ namespace WB.UI.Interviewer.Activities
         Theme = "@style/GrayAppTheme", 
         WindowSoftInputMode = SoftInput.StateHidden,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
-    public class DashboardActivity : BaseActivity<DashboardViewModel>
+    public class DashboardActivity : BaseActivity<DashboardViewModel>, ISyncBgService
     {
-        private IMvxMessenger messenger => Mvx.Resolve<IMvxMessenger>();
-        private MvxSubscriptionToken syncStartSubscriptionToken;
-        private MvxSubscriptionToken syncEndSubscriptionToken;
-
         protected override int ViewResourceId => Resource.Layout.dashboard;
 
         public bool IsSyncServiceBound { get; set; }
@@ -34,9 +30,6 @@ namespace WB.UI.Interviewer.Activities
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-
-            this.syncStartSubscriptionToken = this.messenger.Subscribe<SyncronizationStartedMessage>(this.OnSyncStart);
-            this.syncEndSubscriptionToken = this.messenger.Subscribe<SyncronizationStoppedMessage>(this.OnSyncStop);
 
             this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
 
@@ -55,40 +48,14 @@ namespace WB.UI.Interviewer.Activities
             BindService(new Intent(this, typeof(SyncBgService)), new SyncServiceConnection(this), Bind.AutoCreate);
         }
 
-        private void OnSyncStop(SyncronizationStoppedMessage obj)
+        protected override void OnViewModelSet()
         {
-            Window.ClearFlags(WindowManagerFlags.KeepScreenOn);
-        }
-
-        private void OnSyncStart(SyncronizationStartedMessage obj)
-        {
-            Window.AddFlags(WindowManagerFlags.KeepScreenOn);
-            if (IsSyncServiceBound)
-            {
-                this.Binder.GetSyncService().StartSync();
-            }
+            base.OnViewModelSet();
+            this.ViewModel.Synchronization.SyncBgService = this;
         }
 
         public override void OnBackPressed()
         {
-            
-        }
-
-        protected override void OnStop()
-        {
-            base.OnStop();
-
-            if (this.syncEndSubscriptionToken != null)
-            {
-                this.messenger.Unsubscribe<SyncronizationStoppedMessage>(this.syncEndSubscriptionToken);
-            }
-            if (this.syncStartSubscriptionToken != null)
-            {
-                this.messenger.Unsubscribe<SyncronizationStartedMessage>(this.syncStartSubscriptionToken);
-            }
-
-            if (this.ViewModel != null)
-                this.ViewModel.Synchronization.CancelSynchronizationCommand.Execute();
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -118,9 +85,17 @@ namespace WB.UI.Interviewer.Activities
                 case Resource.Id.menu_signout:
                     this.ViewModel.SignOutCommand.Execute();
                     break;
-
             }
+
             return base.OnOptionsItemSelected(item);
+        }
+
+        public void StartSync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
+        {
+            if (IsSyncServiceBound)
+            {
+                this.Binder.GetSyncService().StartSync(progress, cancellationToken);
+            }
         }
     }
 }
