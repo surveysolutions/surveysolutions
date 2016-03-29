@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using Nito.AsyncEx.Synchronous;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
@@ -38,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionRosterLi
             var interviewRepository = Create.StatefulInterviewRepositoryWith(interview);
 
             viewModel = CreateViewModel(interviewRepository, questionnaireRepository);
-            viewModel.Init("interview", questionIdentity, Create.NavigationState(interviewRepository));
+            viewModel.InitAsync("interview", questionIdentity, Create.NavigationState(interviewRepository)).WaitAndUnwrapException();
 
             interview.FindReferencedRostersForLinkedQuestion(linkToRosterId, questionIdentity)
                 .Returns(new List<InterviewRoster> { Create.InterviewRoster(rosterId: linkToRosterId, rosterTitle: "title1")});

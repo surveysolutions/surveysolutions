@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -44,7 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Comments = commentsViewModel;
         }
         
-        public virtual void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public virtual async Task InitAsync(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
@@ -64,6 +65,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Enablement.Init(interviewId, entityIdentity, navigationState);
             this.Enablement.QuestionEnabled += EnablementOnQuestionEnabled;
             this.answersRemovedNotifier.AnswerRemoved += this.AnswerRemoved;
+
+            await Task.FromResult(true);
         }
 
         private void AnswerRemoved(object sender, EventArgs eventArgs)

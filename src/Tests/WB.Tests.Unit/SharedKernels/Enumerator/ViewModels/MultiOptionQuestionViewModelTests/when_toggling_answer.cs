@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 interviewRepository: interviewRepository.Object,
                 answeringViewModel: answeringMock.Object);
 
-            viewModel.Init("blah", questionId, Create.NavigationState());
+            viewModel.InitAsync("blah", questionId, Create.NavigationState()).WaitAndUnwrapException();
         };
 
         Because of = () =>

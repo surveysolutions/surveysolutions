@@ -89,12 +89,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public Identity Identity { get; private set; }
 
-        public void Init(string interviewId, Identity questionIdentity, NavigationState navigationState)
+        public async Task InitAsync(string interviewId, Identity questionIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (questionIdentity == null) throw new ArgumentNullException(nameof(questionIdentity));
 
-            this.QuestionState.Init(interviewId, questionIdentity, navigationState);
+            await this.QuestionState.InitAsync(interviewId, questionIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);

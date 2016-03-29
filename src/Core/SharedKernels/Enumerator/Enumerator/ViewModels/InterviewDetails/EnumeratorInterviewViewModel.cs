@@ -99,7 +99,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
+        private async void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
             if (eventArgs.TargetScreen != ScreenType.Group)
             {
@@ -115,11 +115,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
 
             this.CurrentStage.DisposeIfDisposable();
-            this.CurrentStage = UpdateCurrentScreenViewModel(eventArgs);
+            this.CurrentStage = await UpdateCurrentScreenViewModel(eventArgs);
             this.RaisePropertyChanged(() => this.CurrentStage);
         }
 
-        protected virtual MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
+        protected virtual async Task<MvxViewModel> UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
         {
             if (this.navigationState.CurrentScreenType == ScreenType.Complete)
             {
@@ -130,7 +130,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             else
             {
                 var activeStageViewModel = interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
-                activeStageViewModel.Init(interviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
+                await activeStageViewModel.InitAsync(interviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
                 return activeStageViewModel;
             }
         }

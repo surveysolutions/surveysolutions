@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -45,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             questionViewModel = CreateViewModel(interviewRepository: interviews.Object, questionnaireStorage: questionnaires.Object);
         };
 
-        Because of = () => questionViewModel.Init(interviewId, questionId, Create.NavigationState());
+        Because of = () => questionViewModel.InitAsync(interviewId, questionId, Create.NavigationState()).WaitAndUnwrapException();
 
         It should_fill_options_from_linked_question = () => questionViewModel.Options.Count.ShouldEqual(2);
 

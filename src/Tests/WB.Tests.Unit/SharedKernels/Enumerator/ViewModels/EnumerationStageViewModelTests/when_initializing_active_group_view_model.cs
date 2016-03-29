@@ -1,6 +1,7 @@
 using System;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -29,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
                 );
         };
 
-        Because of = () => enumerationStage.Init(interviewId, navigationState.Object, groupId, null);
+        Because of = () => enumerationStage.InitAsync(interviewId, navigationState.Object, groupId, null).WaitAndUnwrapException();
 
         It should_subscribe_view_model_for_events =
             () => eventRegistry.Verify(x => x.Subscribe(enumerationStage, interviewId), Times.Once);

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
+using Nito.AsyncEx;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -16,6 +18,7 @@ using Identity = WB.Core.SharedKernels.DataCollection.Identity;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -84,7 +87,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
         }
 
-        public void Init(string interviewId, NavigationState navigationState, Identity groupId, Identity anchoredElementIdentity)
+        public async Task InitAsync(string interviewId, NavigationState navigationState, Identity groupId, Identity anchoredElementIdentity)
         {
             if (navigationState == null) throw new ArgumentNullException(nameof(navigationState));
             if (this.navigationState != null) throw new Exception("ViewModel already initialized");
@@ -96,7 +99,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.navigationState = navigationState;
             this.Items = new ObservableRangeCollection<IInterviewEntityViewModel>();
 
-            CreateRegularGroupScreen(groupId, anchoredElementIdentity);
+            await CreateRegularGroupScreen(groupId, anchoredElementIdentity);
 
             if (!this.eventRegistry.IsSubscribed(this, this.interviewId))
             {
@@ -104,7 +107,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        private void CreateRegularGroupScreen(Identity groupId, Identity anchoredElementIdentity)
+        private async Task CreateRegularGroupScreen(Identity groupId, Identity anchoredElementIdentity)
         {
             if (this.questionnaire.IsRosterGroup(groupId.Id))
             {
@@ -116,7 +119,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.Name = this.questionnaire.GetGroupTitle(groupId.Id); ;
             }
 
-            this.LoadFromModel(groupId);
+            await this.LoadFromModel(groupId);
             this.SetScrollTo(anchoredElementIdentity);
         }
 
@@ -136,23 +139,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public int? ScrollToIndex { get; set; }
 
-        private void LoadFromModel(Identity groupIdentity)
+        private async Task LoadFromModel(Identity groupIdentity)
         {
             try
-            {
+            { 
                 this.userInterfaceStateService.NotifyRefreshStarted();
 
-                var interviewEntityViewModels = this.interviewViewModelFactory
+                var entities = await this.interviewViewModelFactory
                     .GetEntities(
                         interviewId: this.navigationState.InterviewId,
                         groupIdentity: groupIdentity,
-                        navigationState: this.navigationState)
+                        navigationState: this.navigationState);
+
+                var interviewEntityViewModels = entities
                     .Where(entity => !this.ShouldBeHidden(entity.Identity))
                     .ToList();
 
 
                 var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
-                previousGroupNavigationViewModel.Init(this.interviewId, groupIdentity, this.navigationState);
+                await previousGroupNavigationViewModel.InitAsync(this.interviewId, groupIdentity, this.navigationState);
 
                 foreach (var interviewItemViewModel in this.Items.OfType<IDisposable>())
                 {
@@ -217,17 +222,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
             {
+
                 lock (this.itemsListUpdateOnUILock)
                 {
                     try
                     {
                         this.userInterfaceStateService.NotifyRefreshStarted();
 
-                        List<IInterviewEntityViewModel> createdViewModelEntities = this.interviewViewModelFactory
-                            .GetEntities(
-                                interviewId: this.navigationState.InterviewId,
-                                groupIdentity: this.navigationState.CurrentGroup,
-                                navigationState: this.navigationState)
+                        var entities = AsyncContext.Run(() =>
+                             this.interviewViewModelFactory
+                                .GetEntities(
+                                    interviewId: this.navigationState.InterviewId,
+                                    groupIdentity: this.navigationState.CurrentGroup,
+                                    navigationState: this.navigationState));
+
+                        List<IInterviewEntityViewModel> createdViewModelEntities = entities
                             .Where(entity => !this.ShouldBeHidden(entity.Identity))
                             .ToList();
 

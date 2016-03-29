@@ -4,6 +4,7 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Nito.AsyncEx.Synchronous;
 using NSubstitute;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -43,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                 .Returns(new[] { Create.TextAnswer("subtitle", linkToQuestionId, Create.RosterVector(1, 1)) });
 
             viewModel = CreateViewModel(Create.PlainQuestionnaire(questionnaire), interview);
-            viewModel.Init(interview.Id.FormatGuid(), questionIdentity, Create.NavigationState());
+            viewModel.InitAsync(interview.Id.FormatGuid(), questionIdentity, Create.NavigationState()).WaitAndUnwrapException();
         };
 
         Because of = () => viewModel.Handle(Create.RosterInstancesTitleChanged(rosterId: topRosterId));

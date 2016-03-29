@@ -83,16 +83,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.eventRegistry = eventRegistry;
         }
 
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public async Task InitAsync(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             var interview = this.interviewRepository.Get(interviewId);
 
             Identity groupWithAnswersToMonitor = interview.GetParentGroup(entityIdentity);
 
-            this.Init(interviewId, entityIdentity, groupWithAnswersToMonitor, navigationState);
+            await this.InitAsync(interviewId, entityIdentity, groupWithAnswersToMonitor, navigationState);
         }
 
-        public void Init(string interviewId, Identity groupIdentity, Identity groupWithAnswersToMonitor, NavigationState navigationState)
+        public async Task InitAsync(string interviewId, Identity groupIdentity, Identity groupWithAnswersToMonitor, NavigationState navigationState)
         {
             this.interviewId = interviewId;
             var interview = this.interviewRepository.Get(interviewId);
@@ -119,6 +119,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
                 this.answerNotifier.QuestionAnswered += this.QuestionAnswered;
             }
+
+            await Task.FromResult(true);
         }
 
         private void QuestionAnswered(object sender, EventArgs e)

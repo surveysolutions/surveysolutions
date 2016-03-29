@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -45,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             questionViewModel = CreateViewModel(questionnaire, interview);
         };
 
-        Because of = () => questionViewModel.Init("interview", linkedQuestionId, Create.NavigationState());
+        Because of = () => questionViewModel.InitAsync("interview", linkedQuestionId, Create.NavigationState()).WaitAndUnwrapException();
 
         It should_substitute_titles_from_both_questions = () => questionViewModel.Options.First().Title.ShouldEqual("nastya: hamster");
 
