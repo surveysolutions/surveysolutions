@@ -64,13 +64,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
         public async Task SyncronizeAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
         {
+            SychronizationStatistics statistics = new SychronizationStatistics();
             try
             {
                 progress.Report(new SyncProgressInfo
                 {
                     Title = InterviewerUIResources.Synchronization_UserAuthentication_Title ,
                     Description = InterviewerUIResources.Synchronization_UserAuthentication_Description,
-                    Status = SynchronizationStatus.Started
+                    Status = SynchronizationStatus.Started,
+                    Statistics = statistics
                 });
 
                 var restCredentials = new RestCredentials {
@@ -85,7 +87,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     await this.UpdatePasswordOfInterviewerAsync(restCredentials.Password);
                 }
 
-                SychronizationStatistics statistics = new SychronizationStatistics();
 
                 await this.UploadCompletedInterviewsAsync(statistics, progress, cancellationToken);
                 await this.DownloadCensusAsync(progress, cancellationToken);
@@ -95,7 +96,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 {
                     Title = InterviewerUIResources.Synchronization_Success_Title,
                     Description = InterviewerUIResources.Synchronization_Success_Description,
-                    Status = SynchronizationStatus.Success
+                    Status = SynchronizationStatus.Success,
+                    Statistics = statistics
                 });
             }
             catch (SynchronizationException ex)
@@ -106,7 +108,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 switch (ex.Type)
                 {
                     case SynchronizationExceptionType.RequestCanceledByUser:
-                        progress.Report(new SyncProgressInfo {Status = SynchronizationStatus.Stopped });
+                        progress.Report(new SyncProgressInfo {
+                            Status = SynchronizationStatus.Stopped,
+                            Statistics = statistics
+                        });
                         break;
                     case SynchronizationExceptionType.Unauthorized:
                         this.shouldUpdatePasswordOfInterviewer = true;
@@ -117,7 +122,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                             Title = InterviewerUIResources.Synchronization_UserLinkedToAnotherDevice_Status,
                             Description = InterviewerUIResources.Synchronization_UserLinkedToAnotherDevice_Title,
                             UserIsLinkedToAnotherDevice = true,
-                            Status = SynchronizationStatus.Stopped
+                            Status = SynchronizationStatus.Stopped,
+                            Statistics = statistics
                         });
                         break;
                 }
@@ -129,7 +135,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 {
                     Title = errorTitle,
                     Description = errorDescription,
-                    Status = status
+                    Status = status,
+                    Statistics = statistics
                 });
             }
             catch (Exception ex)
@@ -138,7 +145,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 {
                     Title = InterviewerUIResources.Synchronization_Fail_Title,
                     Description = InterviewerUIResources.Synchronization_Fail_UnexpectedException,
-                    Status = SynchronizationStatus.Fail
+                    Status = SynchronizationStatus.Fail,
+                    Statistics = statistics
                 });
 
                 this.logger.Error("Synchronization. Unexpected exception", ex);
