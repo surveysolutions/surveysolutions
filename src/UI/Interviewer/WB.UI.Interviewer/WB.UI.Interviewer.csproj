@@ -348,6 +348,9 @@
     <Compile Include="Implementations\Services\ViewModelNavigationService.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Ninject\InterviewerUIModule.cs" />
+    <Compile Include="Services\SyncServiceConnection.cs" />
+    <Compile Include="Services\SyncBgService.cs" />
+    <Compile Include="Services\SyncServiceBinder.cs" />
     <Compile Include="Settings\InterviewerSettings.cs" />
     <Compile Include="SharedPreferences\SettingsNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -396,7 +399,9 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\dashboard_census_questionnare_item.axml" />
-    <AndroidResource Include="Resources\Layout\synchronization_panel.axml" />
+    <AndroidResource Include="Resources\Layout\synchronization_panel.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\Layout\dashboard_item_prefilled_question.axml" />
     <AndroidResource Include="Resources\Layout\finish_installation.axml">
       <SubType>AndroidResource</SubType>

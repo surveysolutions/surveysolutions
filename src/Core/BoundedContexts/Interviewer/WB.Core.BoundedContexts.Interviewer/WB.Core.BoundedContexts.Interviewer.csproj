@@ -157,8 +157,10 @@
     <Compile Include="Services\Infrastructure\IInterviewEventStreamOptimizer.cs" />
     <Compile Include="Services\IQuestionnaireContentVersionProvider.cs" />
     <Compile Include="Services\ISynchronizationService.cs" />
+    <Compile Include="Services\ISynchronizationProcess.cs" />
     <Compile Include="Services\ITabletDiagnosticService.cs" />
     <Compile Include="Services\IBackupRestoreService.cs" />
+    <Compile Include="Services\SynchronizationProcess.cs" />
     <Compile Include="Views\BackupRestoreViewModel.cs" />
     <Compile Include="Views\BandwidthTestViewModel.cs" />
     <Compile Include="Views\Dashboard\OldDashboardCapability\FeaturedCategoricalItem.cs" />
