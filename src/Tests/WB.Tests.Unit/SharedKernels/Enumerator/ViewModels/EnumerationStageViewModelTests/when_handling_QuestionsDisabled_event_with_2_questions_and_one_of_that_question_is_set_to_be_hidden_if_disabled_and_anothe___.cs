@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
@@ -34,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
                 mvxMainThreadDispatcher: Stub.MvxMainThreadDispatcher());
 
             var groupId = new Identity(Guid.NewGuid(), new decimal[0]);
-            viemModel.Init(interviewId, Create.NavigationState(), groupId, null);
+            viemModel.InitAsync(interviewId, Create.NavigationState(), groupId, null).WaitAndUnwrapException();
 
             viemModel.Items = new ObservableRangeCollection<IInterviewEntityViewModel>(new IInterviewEntityViewModel[]
             {
