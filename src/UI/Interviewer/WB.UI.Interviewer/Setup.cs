@@ -154,6 +154,7 @@ namespace WB.UI.Interviewer
                 .WithConstructorArgument("restoreFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Restore"));
 
             kernel.Bind<ISynchronizationService>().To<SynchronizationService>();
+            kernel.Bind<ISynchronizationProcess>().To<SynchronizationProcess>();
 
             kernel.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
             kernel.Bind<IQuestionnaireContentVersionProvider>().To<QuestionnaireContentVersionProvider>().InSingletonScope();

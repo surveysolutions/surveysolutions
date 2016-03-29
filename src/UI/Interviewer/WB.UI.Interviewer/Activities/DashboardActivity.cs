@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.UI.Interviewer.CustomControls;
+using WB.UI.Interviewer.Services;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities
@@ -26,6 +27,9 @@ namespace WB.UI.Interviewer.Activities
         private MvxSubscriptionToken syncEndSubscriptionToken;
 
         protected override int ViewResourceId => Resource.Layout.dashboard;
+
+        public bool IsSyncServiceBound { get; set; }
+        public SyncServiceBinder Binder { get; set; }
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -45,6 +49,12 @@ namespace WB.UI.Interviewer.Activities
             recyclerView.Adapter = adapter;
         }
 
+        protected override void OnStart()
+        {
+            base.OnStart();
+            BindService(new Intent(this, typeof(SyncBgService)), new SyncServiceConnection(this), Bind.AutoCreate);
+        }
+
         private void OnSyncStop(SyncronizationStoppedMessage obj)
         {
             Window.ClearFlags(WindowManagerFlags.KeepScreenOn);
@@ -53,6 +63,10 @@ namespace WB.UI.Interviewer.Activities
         private void OnSyncStart(SyncronizationStartedMessage obj)
         {
             Window.AddFlags(WindowManagerFlags.KeepScreenOn);
+            if (IsSyncServiceBound)
+            {
+                this.Binder.GetSyncService().StartSync();
+            }
         }
 
         public override void OnBackPressed()
