@@ -56,7 +56,7 @@ namespace WB.Tests.Unit
             IInterviewerInterviewAccessor interviewFactory = null,
             IAttachmentContentStorage attachmentContentStorage = null)
         {
-            return new SynchronizationViewModel(messenger ?? Mock.Of<IMvxMessenger>());
+            return new SynchronizationViewModel();
         }
     }
 }
