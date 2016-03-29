@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationViewModelTest
                 );
         };
 
-        Because of = async () => await viewModel.SynchronizeAsync();
+        Because of = async () => await viewModel.Synchronize();
 
         It should_download_attachment_content_for_id_1 = () =>
             Mock.Get(synchronizationService).Verify(s => s.GetAttachmentContentAsync("1", Moq.It.IsAny<Action<decimal, long, long>>(), Moq.It.IsAny<CancellationToken>()), Times.Once());

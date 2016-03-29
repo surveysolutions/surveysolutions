@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationViewModelTest
                 );
         };
 
-        Because of = async () => await viewModel.SynchronizeAsync();
+        Because of = async () => await viewModel.Synchronize();
 
         It should_store_updated_user_password_in_plain_storage = () =>
             interviewerStorageMock.Verify(

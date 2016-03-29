@@ -1,8 +1,6 @@
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Services;
 
@@ -10,31 +8,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class SynchronizationViewModel : MvxNotifyPropertyChanged
     {
-        private readonly IMvxMessenger messenger;
-        private readonly ISynchronizationProcess synchronizationProcess;
+        public ISyncBgService SyncBgService { get; set; }
+
+        public event EventHandler SyncCompleted;
 
         private bool hasUserAnotherDevice;
 
         private bool isSynchronizationInfoShowed;
-
         private bool isSynchronizationInProgress;
-
         private string processOperation;
-
-        public string processOperationDescription;
-
+        private string processOperationDescription;
         private SychronizationStatistics statistics;
-
         private SynchronizationStatus status;
-
         private CancellationTokenSource synchronizationCancellationTokenSource;
-
-        public SynchronizationViewModel(IMvxMessenger messenger,
-            ISynchronizationProcess synchronizationProcess)
-        {
-            this.messenger = messenger;
-            this.synchronizationProcess = synchronizationProcess;
-        }
 
         public SychronizationStatistics Statistics
         {
@@ -127,28 +113,29 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 this.ProcessOperationDescription = syncProgressInfo.Description;
                 this.Statistics = syncProgressInfo.Statistics;
                 this.Status = syncProgressInfo.Status;
+                this.IsSynchronizationInProgress = syncProgressInfo.IsRunning;
+                this.HasUserAnotherDevice = syncProgressInfo.UserIsLinkedToAnotherDevice;
+                if (!syncProgressInfo.IsRunning)
+                {
+                    this.OnSyncCompleted();
+                }
             });
         }
 
-        public async Task SynchronizeAsync()
+        public void Synchronize()
         {
-            try
-            {
-                this.messenger.Publish(new SyncronizationStartedMessage(this));
-                this.IsSynchronizationInfoShowed = true;
-                this.IsSynchronizationInProgress = true;
-                this.synchronizationCancellationTokenSource = new CancellationTokenSource();
-                var progress = new Progress<SyncProgressInfo>();
-                progress.ProgressChanged += ProgressOnProgressChanged;
-                await
-                    this.synchronizationProcess.SyncronizeAsync(progress,
-                        this.synchronizationCancellationTokenSource.Token);
-            }
-            finally
-            {
-                this.IsSynchronizationInProgress = false;
-                this.messenger.Publish(new SyncronizationStoppedMessage(this));
-            }
+            this.IsSynchronizationInProgress = true;
+            this.IsSynchronizationInfoShowed = true;
+            var progress = new Progress<SyncProgressInfo>();
+            progress.ProgressChanged += ProgressOnProgressChanged;
+            this.synchronizationCancellationTokenSource = new CancellationTokenSource();
+
+            this.SyncBgService?.StartSync(progress, this.synchronizationCancellationTokenSource.Token);
+        }
+
+        protected virtual void OnSyncCompleted()
+        {
+            this.SyncCompleted?.Invoke(this, EventArgs.Empty);
         }
     }
 

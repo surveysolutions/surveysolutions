@@ -22,5 +22,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         public SynchronizationStatus Status { get; set; }
         public SychronizationStatistics Statistics { get; set; }
         public bool UserIsLinkedToAnotherDevice { get; set; }
+
+        public bool IsRunning
+        {
+            get
+            {
+                return this.Status == SynchronizationStatus.Download || this.Status == SynchronizationStatus.Started ||
+                       this.Status == SynchronizationStatus.Upload;
+            }
+        }
     }
 }

@@ -156,6 +156,7 @@
     <Compile Include="Services\Infrastructure\IInterviewerUserIdentity.cs" />
     <Compile Include="Services\Infrastructure\IInterviewEventStreamOptimizer.cs" />
     <Compile Include="Services\IQuestionnaireContentVersionProvider.cs" />
+    <Compile Include="Services\ISyncBgService.cs" />
     <Compile Include="Services\ISynchronizationService.cs" />
     <Compile Include="Services\ISynchronizationProcess.cs" />
     <Compile Include="Services\ITabletDiagnosticService.cs" />

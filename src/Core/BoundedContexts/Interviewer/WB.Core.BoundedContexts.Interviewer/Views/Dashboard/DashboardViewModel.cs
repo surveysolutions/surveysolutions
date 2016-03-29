@@ -44,6 +44,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.messenger = messenger;
             this.commandService = commandService;
             this.Synchronization = synchronization;
+            this.Synchronization.SyncCompleted += async (sender, args) => await this.RefreshDashboardAsync();
         }
 
         private IMvxCommand synchronizationCommand;
@@ -204,8 +205,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private async Task RunSynchronizationAsync()
         {
-            await this.Synchronization.SynchronizeAsync();
-            await this.RefreshDashboardAsync();
+            this.Synchronization.Synchronize();
+            //await this.RefreshDashboardAsync();
         }
 
         private void ShowInterviews(DashboardInterviewStatus status)
