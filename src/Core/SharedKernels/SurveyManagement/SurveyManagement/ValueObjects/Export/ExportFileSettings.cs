@@ -21,5 +21,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export
         public static string ExtensionOfExportedDataFile => ".tab";
         public static string ExtensionOfDDIMetaDataFile => ".xml";
         public static char SeparatorOfExportedDataFile => '\t';
+        public static char NotReadableAnswersSeparator => '\u263A';
     }
 }
