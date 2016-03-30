@@ -17,24 +17,27 @@ namespace WB.Core.Infrastructure.CommandBus
 
         private class HandlerDescriptor
         {
-            public HandlerDescriptor(Type aggregateType, 
+            public HandlerDescriptor(
+                Type aggregateType, 
                 bool isInitializer, 
-                Func<ICommand, Guid> idResolver, 
+                Func<ICommand, Guid> idResolver,
                 Action<ICommand, IAggregateRoot> handler,
                 IEnumerable<Type> validators)
             {
                 this.AggregateType = aggregateType;
+                this.IsEventSourced = false;
                 this.IsInitializer = isInitializer;
                 this.IdResolver = idResolver;
                 this.Handler = handler;
                 this.Validators = validators != null ? new List<Type>(validators) : new List<Type>();                
             }
 
-            public Type AggregateType { get; private set; }
-            public bool IsInitializer { get; private set; }
-            public Func<ICommand, Guid> IdResolver { get; private set; }
-            public Action<ICommand, IAggregateRoot> Handler { get; private set; }
-            public List<Type> Validators { get; private set; }
+            public Type AggregateType { get; }
+            public bool IsEventSourced { get; }
+            public bool IsInitializer { get; }
+            public Func<ICommand, Guid> IdResolver { get; }
+            public Action<ICommand, IAggregateRoot> Handler { get; }
+            public List<Type> Validators { get; }
 
             public void AppendValidators(List<Type> validators)
             {
@@ -169,41 +172,32 @@ namespace WB.Core.Infrastructure.CommandBus
 
             Handlers.Add(commandName, new HandlerDescriptor(
                 typeof (TAggregate),
-                isInitializer,
-                command => aggregateRootIdResolver.Invoke((TCommand) command),
-                (command, aggregate) => commandHandler.Invoke((TCommand) command, (TAggregate) aggregate),
-                configuration.GetValidators()));
+                isInitializer: isInitializer,
+                idResolver: command => aggregateRootIdResolver.Invoke((TCommand) command),
+                handler: (command, aggregate) => commandHandler.Invoke((TCommand) command, (TAggregate) aggregate),
+                validators: configuration.GetValidators()));
         }
 
         internal static bool Contains(ICommand command)
-        {
-            return Handlers.ContainsKey(command.GetType().Name);
-        }
+            => Handlers.ContainsKey(command.GetType().Name);
 
         private static HandlerDescriptor GetHandlerDescriptor(ICommand command)
-        {
-            return Handlers[command.GetType().Name];
-        }
+            => Handlers[command.GetType().Name];
 
         internal static Type GetAggregateRootType(ICommand command)
-        {
-            return GetHandlerDescriptor(command).AggregateType;
-        }
+            => GetHandlerDescriptor(command).AggregateType;
 
         internal static bool IsInitializer(ICommand command)
-        {
-            return GetHandlerDescriptor(command).IsInitializer;
-        }
+            => GetHandlerDescriptor(command).IsInitializer;
 
         internal static Func<ICommand, Guid> GetAggregateRootIdResolver(ICommand command)
-        {
-            return GetHandlerDescriptor(command).IdResolver;
-        }
+            => GetHandlerDescriptor(command).IdResolver;
 
         internal static Action<ICommand, IAggregateRoot> GetCommandHandler(ICommand command)
-        {
-            return GetHandlerDescriptor(command).Handler;
-        }
+            => GetHandlerDescriptor(command).Handler;
+
+        internal static bool IsAggregateEventSourced(ICommand command)
+            => GetHandlerDescriptor(command).IsEventSourced;
 
         public static IEnumerable<Action<IAggregateRoot, ICommand>> GetValidators(ICommand command, IServiceLocator serviceLocator)
         {
