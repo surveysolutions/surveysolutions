@@ -20,7 +20,7 @@ namespace WB.Core.Infrastructure.CommandBus
             public HandlerDescriptor(Type aggregateType, 
                 bool isInitializer, 
                 Func<ICommand, Guid> idResolver, 
-                Action<ICommand, IEventSourcedAggregateRoot> handler,
+                Action<ICommand, IAggregateRoot> handler,
                 IEnumerable<Type> validators)
             {
                 this.AggregateType = aggregateType;
@@ -33,7 +33,7 @@ namespace WB.Core.Infrastructure.CommandBus
             public Type AggregateType { get; private set; }
             public bool IsInitializer { get; private set; }
             public Func<ICommand, Guid> IdResolver { get; private set; }
-            public Action<ICommand, IEventSourcedAggregateRoot> Handler { get; private set; }
+            public Action<ICommand, IAggregateRoot> Handler { get; private set; }
             public List<Type> Validators { get; private set; }
 
             public void AppendValidators(List<Type> validators)
@@ -47,7 +47,7 @@ namespace WB.Core.Infrastructure.CommandBus
         #region Fluent setup
 
         public class AggregateSetup<TAggregate>
-            where TAggregate : IEventSourcedAggregateRoot
+            where TAggregate : IAggregateRoot
         {
             public AggregateSetup<TAggregate> InitializesWith<TCommand>(Func<TCommand, Guid> aggregateRootIdResolver, Func<TAggregate, Action<TCommand>> commandHandler)
                 where TCommand : ICommand
@@ -92,7 +92,7 @@ namespace WB.Core.Infrastructure.CommandBus
         }
 
         public class AggregateWithCommandSetup<TAggregate, TAggregateCommand>
-            where TAggregate : IEventSourcedAggregateRoot
+            where TAggregate : IAggregateRoot
             where TAggregateCommand : ICommand
         {
             private readonly Func<TAggregateCommand, Guid> aggregateRootIdResolver;
@@ -145,7 +145,7 @@ namespace WB.Core.Infrastructure.CommandBus
         }
 
         public static AggregateSetup<TAggregate> Setup<TAggregate>()
-            where TAggregate : IEventSourcedAggregateRoot
+            where TAggregate : IAggregateRoot
         {
             return new AggregateSetup<TAggregate>();
         }
@@ -157,7 +157,7 @@ namespace WB.Core.Infrastructure.CommandBus
             bool isInitializer,
             Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer)
             where TCommand : ICommand
-            where TAggregate : IEventSourcedAggregateRoot
+            where TAggregate : IAggregateRoot
         {
             string commandName = typeof (TCommand).Name;
 
@@ -200,12 +200,12 @@ namespace WB.Core.Infrastructure.CommandBus
             return GetHandlerDescriptor(command).IdResolver;
         }
 
-        internal static Action<ICommand, IEventSourcedAggregateRoot> GetCommandHandler(ICommand command)
+        internal static Action<ICommand, IAggregateRoot> GetCommandHandler(ICommand command)
         {
             return GetHandlerDescriptor(command).Handler;
         }
 
-        public static IEnumerable<Action<IEventSourcedAggregateRoot, ICommand>> GetValidators(ICommand command, IServiceLocator serviceLocator)
+        public static IEnumerable<Action<IAggregateRoot, ICommand>> GetValidators(ICommand command, IServiceLocator serviceLocator)
         {
             var handlerDescriptor = GetHandlerDescriptor(command);
 
@@ -213,7 +213,7 @@ namespace WB.Core.Infrastructure.CommandBus
                 validatorType => GetValidatingAction(validatorType, handlerDescriptor.AggregateType, command.GetType(), serviceLocator));
         }
 
-        private static Action<IEventSourcedAggregateRoot, ICommand> GetValidatingAction(Type validatorType, Type aggregateType, Type commandType, IServiceLocator serviceLocator)
+        private static Action<IAggregateRoot, ICommand> GetValidatingAction(Type validatorType, Type aggregateType, Type commandType, IServiceLocator serviceLocator)
         {
             object validatorInstance = serviceLocator.GetInstance(validatorType);
             MethodInfo validatingMethod = validatorType.GetMethod("Validate", new[] { aggregateType, commandType });
@@ -236,7 +236,7 @@ namespace WB.Core.Infrastructure.CommandBus
         }
 
         public static void Configure<TAggregate, TCommand>(Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer)
-            where TAggregate : IEventSourcedAggregateRoot
+            where TAggregate : IAggregateRoot
             where TCommand : ICommand
         {
             var configuration = new CommandHandlerConfiguration<TAggregate, TCommand>();
