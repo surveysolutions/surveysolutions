@@ -27,9 +27,9 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         private readonly ConcurrentQueue<CommandDescriptor> queue = new ConcurrentQueue<CommandDescriptor>();
         private readonly object lockObject = new object();
 
-        public SequentialCommandService(IAggregateRootRepository repository, ILiteEventBus eventBus, IAggregateSnapshotter snapshooter,
+        public SequentialCommandService(IEventSourcedAggregateRootRepository eventSourcedRepository, ILiteEventBus eventBus, IAggregateSnapshotter snapshooter,
             IServiceLocator serviceLocator)
-            : base(repository, eventBus, snapshooter, serviceLocator) { }
+            : base(eventSourcedRepository, eventBus, snapshooter, serviceLocator) { }
 
         protected override void ExecuteImpl(ICommand command, string origin, CancellationToken cancellationToken)
         {

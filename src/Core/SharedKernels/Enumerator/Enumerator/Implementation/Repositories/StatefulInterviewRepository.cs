@@ -9,10 +9,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 {
     internal class StatefulInterviewRepository : IStatefulInterviewRepository
     {
-        private readonly IAggregateRootRepository aggregateRootRepository;
+        private readonly IEventSourcedAggregateRootRepository aggregateRootRepository;
         private readonly ILiteEventBus eventBus;
 
-        public StatefulInterviewRepository(IAggregateRootRepository aggregateRootRepository, ILiteEventBus eventBus)
+        public StatefulInterviewRepository(IEventSourcedAggregateRootRepository aggregateRootRepository, ILiteEventBus eventBus)
         {
             if (aggregateRootRepository == null) throw new ArgumentNullException(nameof(aggregateRootRepository));
             if (eventBus == null) throw new ArgumentNullException(nameof(eventBus));
