@@ -3668,9 +3668,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 Guid[] rosterGroupsStartingFromTop = questionnaire.GetRostersFromTopToSpecifiedGroup(rosterId).ToArray();
 
-                var outerVectorsForExtend =
-                    GetOuterVectorForParentRoster(state, rosterGroupsStartingFromTop,
-                        nearestToOuterRosterVector);
+                var outerVectorsForExtend = GetOuterVectorForParentRoster(state, rosterGroupsStartingFromTop, nearestToOuterRosterVector);
 
                 foreach (var outerVectorForExtend in outerVectorsForExtend)
                 {
@@ -3679,9 +3677,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     if (isNestedRoster)
                     {
                         var parentRosterId = rosterGroupsStartingFromTop.Shrink().Last();
-                        isParentRosterBeingDeleted = rosterInstancesToRemove.Any(x => x.GroupId == parentRosterId
-                               && x.RosterInstanceId == outerVectorForExtend.Last()
-                               && x.OuterRosterVector.SequenceEqual(outerVectorForExtend.Shrink()));
+                        var parentRosterIdentityWithWrongSortNumber = new RosterIdentity(parentRosterId, outerVectorForExtend.Shrink(), outerVectorForExtend.Last(), null);
+
+                        isParentRosterBeingDeleted = this.IsRosterBeingDeleted(parentRosterIdentityWithWrongSortNumber, rosterInstancesToRemove, rosterInstantiatesFromNestedLevels);
                     }
 
                     var rosterInstanceIdsBeingAdded = (isParentRosterBeingDeleted 
@@ -3710,9 +3708,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     RosterCalculationData nestedRostersDataForDelete = this.CalculateNestedRostersDataForDelete(state, questionnaire, rosterId,
                                                             listOfRosterInstanceIdsForRemove.Select(i => i.RosterInstanceId).ToList(), outerVectorForExtend);
+
                     rosterInstantiatesFromNestedLevels.Add(nestedRostersDataForDelete);
                 }
             }
+        }
+
+        private bool IsRosterBeingDeleted(RosterIdentity rosterIdentity, IEnumerable<RosterIdentity> rosterInstancesToRemove, IEnumerable<RosterCalculationData> rosterInstantiatesFromNestedLevels)
+        {
+            return rosterInstantiatesFromNestedLevels
+                    .SelectMany(x => x.RosterInstancesToRemove)
+                    .Union(rosterInstancesToRemove)
+                    .Any(x => x.GroupId == rosterIdentity.GroupId
+                              && x.RosterInstanceId == rosterIdentity.RosterInstanceId
+                              && x.OuterRosterVector.SequenceEqual(rosterIdentity.OuterRosterVector));
         }
 
         private RosterCalculationData CalculateNestedRostersDataForDelete(IReadOnlyInterviewStateDependentOnAnswers state,
