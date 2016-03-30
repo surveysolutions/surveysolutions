@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -8,9 +9,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
 {
     public class UserBrowseViewFactory : IViewFactory<UserBrowseInputModel, UserBrowseView>
     {
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> indexAccessor;
+        private readonly IPlainStorageAccessor<UserDocument> indexAccessor;
 
-        public UserBrowseViewFactory(IQueryableReadSideRepositoryReader<UserDocument> indexAccessor)
+        public UserBrowseViewFactory(IPlainStorageAccessor<UserDocument> indexAccessor)
         {
             this.indexAccessor = indexAccessor;
         }

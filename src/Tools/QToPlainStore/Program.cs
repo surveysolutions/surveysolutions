@@ -15,6 +15,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
@@ -31,11 +32,15 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Events.User;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
@@ -47,6 +52,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.Synchronization.Events.Sync;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
+using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.EventStore;
 using WB.Infrastructure.Native.Storage.EventStore.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -73,22 +79,28 @@ namespace QToPlainStore
         {
             [Option('r', "readside", Required = false, HelpText = "PostgreSql read side connection string.")]
             public string PGReadSideConnection { get; set; }
-            
-            [Option('i',"eventstoreserverip", Required = false, HelpText = "Event store server ip.")]
+
+            [Option('i', "eventstoreserverip", Required = false, HelpText = "Event store server ip.")]
             public string ServerIP { get; set; }
-            [Option('t',"eventstoreservertcp", Required = false, HelpText = "Event store server tct.")]
+
+            [Option('t', "eventstoreservertcp", Required = false, HelpText = "Event store server tct.")]
             public string ServerTcpPort { get; set; }
-            [Option('h',"eventstoreserverhttpport", Required = false, HelpText = "Event store http port.")]
+
+            [Option('h', "eventstoreserverhttpport", Required = false, HelpText = "Event store http port.")]
             public string ServerHttpPort { get; set; }
-            [Option('l',"eventstorelogin", Required = false, HelpText = "Event store login.")]
+
+            [Option('l', "eventstorelogin", Required = false, HelpText = "Event store login.")]
             public string Login { get; set; }
-            [Option('s',"eventstorepassword", Required = false, HelpText = "Event store password.")]
+
+            [Option('s', "eventstorepassword", Required = false, HelpText = "Event store password.")]
             public string Password { get; set; }
+
             [Option('p', "plainstore", Required = true, HelpText = "PostgreSql plain storage connection string.")]
             public string PGPlainConnection { get; set; }
 
             [Option('e', "postgreseventstore", Required = false, HelpText = "Event store server ip.")]
             public string PostgresEventStore { get; set; }
+
             [ParserState]
             public IParserState LastParserState { get; set; }
 
@@ -96,10 +108,10 @@ namespace QToPlainStore
             public string GetUsage()
             {
                 return HelpText.AutoBuild(this,
-                  (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
+                    (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
             }
         }
-        
+
         private static void Transfer(Options options)
         {
             if (!string.IsNullOrEmpty(options.PGReadSideConnection))
@@ -131,56 +143,79 @@ namespace QToPlainStore
                         ServerTcpPort = int.Parse(options.ServerTcpPort),
                         ServerHttpPort = int.Parse(options.ServerHttpPort),
                         Login = options.Login,
-                        Password = options.Password,
-                        UseBson = false
+                        Password = options.Password
                     };
 
                     eventStore = new WriteSideEventStore(new EventStoreConnectionProvider(eventStoreSettings), logger,
-                        eventStoreSettings, eventTypeResolver, serializer);
+                        eventStoreSettings, eventTypeResolver);
                 }
                 else
                 {
-                    eventStore=new PostgresEventStore(new PostgreConnectionSettings() {ConnectionString = options.PostgresEventStore }, eventTypeResolver, serializer);
+                    eventStore =
+                        new PostgresEventStore(
+                            new PostgreConnectionSettings() {ConnectionString = options.PostgresEventStore},
+                            eventTypeResolver);
                 }
                 MigrateEvents(eventStore, logger, serializer, options.PGPlainConnection);
             }
         }
 
-        private static void MigrateEvents(IStreamableEventStore eventStore, WB.Core.GenericSubdomains.Portable.Services.ILogger logger, ISerializer serializer,  string plainStorageConnection)
+        private static void MigrateEvents(IStreamableEventStore eventStore,
+            WB.Core.GenericSubdomains.Portable.Services.ILogger logger, ISerializer serializer,
+            string plainStorageConnection)
         {
 
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
                 ConnectionString = plainStorageConnection
             };
-            plainPostgresTransactionManager =new PlainPostgresTransactionManager(BuildSessionFactory(plainStorageConnection));
+            plainPostgresTransactionManager =
+                new PlainPostgresTransactionManager(BuildSessionFactory(plainStorageConnection));
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentRepository =
-                new PostgresPlainKeyValueStorage<QuestionnaireDocument>(null, postgresPlainStorageSettings, logger, serializer);
+                new PostgresPlainKeyValueStorage<QuestionnaireDocument>(null, postgresPlainStorageSettings, logger,
+                    serializer);
             plainQuestionnaireRepository = new PlainQuestionnaireRepositoryWithCache(questionnaireDocumentRepository);
 
-            questionnaireExportStructureStorage=new PostgresPlainKeyValueStorage<QuestionnaireExportStructure>(null, postgresPlainStorageSettings, logger, serializer);
-            questionnaireRosterStructureStorage=new PostgresPlainKeyValueStorage<QuestionnaireRosterStructure>(null, postgresPlainStorageSettings, logger, serializer);
-            referenceInfoForLinkedQuestionsStorage=new PostgresPlainKeyValueStorage<ReferenceInfoForLinkedQuestions>(null, postgresPlainStorageSettings, logger, serializer);
-            questionnaireQuestionsInfoStorage=new PostgresPlainKeyValueStorage<QuestionnaireQuestionsInfo>(null, postgresPlainStorageSettings, logger, serializer);
+            questionnaireExportStructureStorage = new PostgresPlainKeyValueStorage<QuestionnaireExportStructure>(null,
+                postgresPlainStorageSettings, logger, serializer);
+            questionnaireRosterStructureStorage = new PostgresPlainKeyValueStorage<QuestionnaireRosterStructure>(null,
+                postgresPlainStorageSettings, logger, serializer);
+            referenceInfoForLinkedQuestionsStorage =
+                new PostgresPlainKeyValueStorage<ReferenceInfoForLinkedQuestions>(null, postgresPlainStorageSettings,
+                    logger, serializer);
+            questionnaireQuestionsInfoStorage = new PostgresPlainKeyValueStorage<QuestionnaireQuestionsInfo>(null,
+                postgresPlainStorageSettings, logger, serializer);
 
-            questionnaireBrowseItemStorage=new PostgresPlainStorageRepository<QuestionnaireBrowseItem>(plainPostgresTransactionManager);
+            questionnaireBrowseItemStorage =
+                new PostgresPlainStorageRepository<QuestionnaireBrowseItem>(plainPostgresTransactionManager);
+
+            userDocumentStorage = new PostgresPlainStorageRepository<UserDocument>(plainPostgresTransactionManager);
+
+            var serviceLocator = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object;
+
+            ServiceLocator.SetLocatorProvider(() => serviceLocator);
+
+            Mock.Get(ServiceLocator.Current)
+              .Setup(locator => locator.GetInstance<IPlainStorageAccessor<UserDocument>>())
+              .Returns(userDocumentStorage);
 
             MoveQuestionnaireEventsToPlainStorage(eventStore);
 
         }
+
         private static HbmMapping GetMappings()
         {
             var mapper = new ModelMapper();
-            var mappingTypes = new[] {typeof(QuestionnaireBrowseItem).Assembly }
-                                            .SelectMany(x => x.GetExportedTypes())
-                                            .Where(x => x.GetCustomAttribute<PlainStorageAttribute>() != null &&
-                                                        x.IsSubclassOfRawGeneric(typeof(ClassMapping<>)));
+            var mappingTypes = new[] {typeof (QuestionnaireBrowseItem).Assembly}
+                .SelectMany(x => x.GetExportedTypes())
+                .Where(x => x.GetCustomAttribute<PlainStorageAttribute>() != null &&
+                            x.IsSubclassOfRawGeneric(typeof (ClassMapping<>)));
 
             mapper.AddMappings(mappingTypes);
             mapper.BeforeMapProperty += (inspector, member, customizer) =>
             {
-                var propertyInfo = (PropertyInfo)member.LocalMember;
-                if (propertyInfo.PropertyType == typeof(string))
+                var propertyInfo = (PropertyInfo) member.LocalMember;
+                if (propertyInfo.PropertyType == typeof (string))
                 {
                     customizer.Type(NHibernateUtil.StringClob);
                 }
@@ -193,6 +228,7 @@ namespace QToPlainStore
 
             return mapper.CompileMappingForAllExplicitlyAddedEntities();
         }
+
         private static ISessionFactory BuildSessionFactory(string plainStorageConnection)
         {
             var cfg = new Configuration();
@@ -214,61 +250,167 @@ namespace QToPlainStore
         {
             var events = eventStore.GetAllEvents();
             var eventsCount = eventStore.CountOfAllEvents();
-            
+
+            var eventHandlers = new ObsoleteEventHandleDescriptor[]
+            {
+                new ObsoleteEventHandleDescriptor<TemplateImported>(HandleTemplateImportedIfPossible),
+                new ObsoleteEventHandleDescriptor<QuestionnaireDisabled>(HandleQuestionnaireDisabledIfPossible),
+                new ObsoleteEventHandleDescriptor<QuestionnaireDeleted>(HandleQuestionnaireDeletedIfPossible),
+
+                new ObsoleteEventHandleDescriptor<NewUserCreated>(HandleNewUserCreatedIfPossible),
+                new ObsoleteEventHandleDescriptor<UserArchived>(HandleUserArchivedIfPossible),
+                new ObsoleteEventHandleDescriptor<UserUnarchived>(HandleUserUnarchivedIfPossible),
+                new ObsoleteEventHandleDescriptor<UserLocked>(HandleUserLockedIfPossible),
+                new ObsoleteEventHandleDescriptor<UserUnlocked>(HandleUserUnlockedIfPossible),
+                new ObsoleteEventHandleDescriptor<UserLockedBySupervisor>(HandleUserLockedBySupervisorIfPossible),
+                new ObsoleteEventHandleDescriptor<UserUnlockedBySupervisor>(HandleUserUnlockedBySupervisorIfPossible),
+                new ObsoleteEventHandleDescriptor<UserChanged>(HandleUserChangedIfPossible),
+                new ObsoleteEventHandleDescriptor<UserLinkedToDevice>(HandleUserLinkedToDeviceIfPossible)
+            };
+
             var countOfScannedEvents = 0;
             foreach (var committedEvent in events)
             {
-                var templateImportedEvent = committedEvent.Payload as TemplateImported;
-                if (templateImportedEvent != null)
+                foreach (var eventHandler in eventHandlers)
                 {
-                    plainPostgresTransactionManager.ExecuteInPlainTransaction(() =>
-                        StoreQuestionnaireToPlainStorage(templateImportedEvent, committedEvent.EventSourceId,
-                            committedEvent.EventSequence));
-                }
-
-                var questionnaireDisabledEvent = committedEvent.Payload as QuestionnaireDisabled;
-                if (questionnaireDisabledEvent != null)
-                {
-                    plainPostgresTransactionManager.ExecuteInPlainTransaction(() =>
-                    {
-                        var questionnaireBrowseItem =
-                            questionnaireBrowseItemStorage.AsVersioned()
-                                .Get(committedEvent.EventSourceId.FormatGuid(),
-                                    questionnaireDisabledEvent.QuestionnaireVersion);
-                        if (questionnaireBrowseItem != null)
-                        {
-                            questionnaireBrowseItem.Disabled = true;
-                            questionnaireBrowseItemStorage.AsVersioned()
-                                .Store(questionnaireBrowseItem, committedEvent.EventSourceId.FormatGuid(),
-                                    questionnaireDisabledEvent.QuestionnaireVersion);
-                        }
-                    });
-                }
-
-                var questionnaireDeletedEvent = committedEvent.Payload as QuestionnaireDeleted;
-                if (questionnaireDeletedEvent != null)
-                {
-                    plainPostgresTransactionManager.ExecuteInPlainTransaction(() =>
-                    {
-                        var questionnaireBrowseItem =
-                            questionnaireBrowseItemStorage.AsVersioned()
-                                .Get(committedEvent.EventSourceId.FormatGuid(),
-                                    questionnaireDeletedEvent.QuestionnaireVersion);
-                        if (questionnaireBrowseItem != null)
-                        {
-                            questionnaireBrowseItem.IsDeleted = true;
-                            questionnaireBrowseItemStorage.AsVersioned()
-                                .Store(questionnaireBrowseItem, committedEvent.EventSourceId.FormatGuid(),
-                                    questionnaireDeletedEvent.QuestionnaireVersion);
-                        }
-                    });
+                    eventHandler.Handle(committedEvent, plainPostgresTransactionManager);
                 }
                 countOfScannedEvents++;
 
-                if (countOfScannedEvents % 5000 == 0)
+                if (countOfScannedEvents%5000 == 0)
                 {
                     Console.WriteLine(@"Scanned {0} out of {1}", countOfScannedEvents, eventsCount);
                 }
+            }
+        }
+
+
+        private static void HandleNewUserCreatedIfPossible(
+            NewUserCreated newUserCreated,
+            Guid eventSourceId,
+            long eventSequence)
+        {
+            new User().CreateUser(newUserCreated.Email, newUserCreated.IsLockedBySupervisor, newUserCreated.IsLocked,
+                newUserCreated.Password, newUserCreated.PublicKey, newUserCreated.Roles, newUserCreated.Supervisor,
+                newUserCreated.Name, newUserCreated.PersonName, newUserCreated.PhoneNumber);
+        }
+
+        private static void HandleUserArchivedIfPossible(
+            UserArchived userArchived,
+            Guid eventSourceId,
+            long eventSequence)
+        {
+            var user = new User();
+            user.SetId(eventSourceId);
+            user.Archive();
+        }
+
+        private static void HandleUserUnarchivedIfPossible(
+            UserUnarchived userUnarchived,
+            Guid eventSourceId,
+            long eventSequence)
+        {
+            var user=new User();
+            user.SetId( eventSourceId);
+            user.Unarchive();
+        }
+
+        private static void HandleUserLockedIfPossible(
+            UserLocked userLocked,
+            Guid eventSourceId,
+            long eventSequence)
+        {
+             var user = new User();
+            user.SetId(eventSourceId);
+            user.Lock();
+        }
+
+        private static void HandleUserUnlockedIfPossible(
+            UserUnlocked userUnlocked,
+            Guid eventSourceId,
+            long eventSequence)
+        {
+            var user = new User();
+            user.SetId(eventSourceId);
+            user.Unlock();
+        }
+
+        private static void HandleUserLockedBySupervisorIfPossible(
+            UserLockedBySupervisor userLockedBySupervisor,
+            Guid eventSourceId,
+            long eventSequence)
+        {
+            var user = new User();
+            user.SetId(eventSourceId);
+            user.LockBySupervisor();
+        }
+
+        private static void HandleUserUnlockedBySupervisorIfPossible(
+            UserUnlockedBySupervisor userUnlockedBySupervisor,
+            Guid eventSourceId,
+            long eventSequence)
+        {
+            var user = new User();
+            user.SetId(eventSourceId);
+            user.UnlockBySupervisor();
+        }
+
+        private static void HandleUserChangedIfPossible(
+            UserChanged userChanged,
+            Guid eventSourceId,
+            long eventSequence)
+        {
+            var user = userDocumentStorage.GetById(eventSourceId.FormatGuid());
+            new User().ChangeUser(userChanged.Email, user.IsLockedBySupervisor, user.IsLockedByHQ,
+                userChanged.PasswordHash, userChanged.PersonName, userChanged.PhoneNumber, eventSourceId);
+        }
+
+        private static void HandleUserLinkedToDeviceIfPossible(
+            UserLinkedToDevice userLinkedToDevice,
+            Guid eventSourceId,
+            long eventSequence)
+        {
+            new User().LinkUserToDevice(new LinkUserToDevice(eventSourceId, userLinkedToDevice.DeviceId));
+        }
+
+        private static void HandleTemplateImportedIfPossible(TemplateImported templateImportedEvent, Guid eventSourceId,
+            long eventSequence)
+        {
+            StoreQuestionnaireToPlainStorage(templateImportedEvent, eventSourceId,
+                eventSequence);
+        }
+
+        private static void HandleQuestionnaireDisabledIfPossible(QuestionnaireDisabled questionnaireDisabledEvent,
+            Guid eventSourceId,
+            long eventSequence)
+        {
+            var questionnaireBrowseItem =
+                questionnaireBrowseItemStorage.GetById(
+                    new QuestionnaireIdentity(eventSourceId, questionnaireDisabledEvent.QuestionnaireVersion)
+                        .ToString());
+            if (questionnaireBrowseItem != null)
+            {
+                questionnaireBrowseItem.Disabled = true;
+                questionnaireBrowseItemStorage.GetById(
+                    new QuestionnaireIdentity(eventSourceId, questionnaireDisabledEvent.QuestionnaireVersion)
+                        .ToString());
+            }
+        }
+
+        private static void HandleQuestionnaireDeletedIfPossible(QuestionnaireDeleted questionnaireDeletedEvent,
+            Guid eventSourceId,
+            long eventSequence)
+        {
+            var questionnaireBrowseItem =
+                questionnaireBrowseItemStorage.GetById(
+                    new QuestionnaireIdentity(eventSourceId,
+                        questionnaireDeletedEvent.QuestionnaireVersion).ToString());
+            if (questionnaireBrowseItem != null)
+            {
+                questionnaireBrowseItem.IsDeleted = true;
+                questionnaireBrowseItemStorage.GetById(
+                    new QuestionnaireIdentity(eventSourceId,
+                        questionnaireDeletedEvent.QuestionnaireVersion).ToString());
             }
         }
 
@@ -278,10 +420,10 @@ namespace QToPlainStore
             var document = templateImportedEvent.Source;
             var newVersion = templateImportedEvent.Version ?? eventSequence;
             plainQuestionnaireRepository.StoreQuestionnaire(questionnaireId, newVersion, document);
-            questionnaireBrowseItemStorage.AsVersioned()
-                .Store(
-                    new QuestionnaireBrowseItem(document, newVersion, templateImportedEvent.AllowCensusMode,
-                        templateImportedEvent.ContentVersion ?? 1), questionnaireId.FormatGuid(), newVersion);
+            questionnaireBrowseItemStorage.Store(
+                new QuestionnaireBrowseItem(document, newVersion, templateImportedEvent.AllowCensusMode,
+                    templateImportedEvent.ContentVersion ?? 1),
+                new QuestionnaireIdentity(questionnaireId, newVersion).ToString());
 
             var questionnaireEntityId = new QuestionnaireIdentity(questionnaireId, newVersion).ToString();
 
@@ -303,12 +445,16 @@ namespace QToPlainStore
         private static IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory =
             new ReferenceInfoForLinkedQuestionsFactory();
 
-        private static IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory = new QuestionnaireRosterStructureFactory();
+        private static IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory =
+            new QuestionnaireRosterStructureFactory();
 
-        private static IExportViewFactory exportViewFactory = new ExportViewFactory(questionnaireRosterStructureFactory, new FileSystemIOAccessor());
+        private static IExportViewFactory exportViewFactory = new ExportViewFactory(
+            questionnaireRosterStructureFactory, new FileSystemIOAccessor());
+
         private static PlainPostgresTransactionManager plainPostgresTransactionManager;
         private static IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private static IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage;
+        private static IPlainStorageAccessor<UserDocument> userDocumentStorage;
 
         private static IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions> referenceInfoForLinkedQuestionsStorage;
         private static IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
@@ -320,7 +466,7 @@ namespace QToPlainStore
             var eventTypeResolver = new EventTypeResolver();
             var eventNamespaces = new[]
             {"WB.Core.SharedKernels.DataCollection.Events", "Main.Core.Events", "WB.Core.Synchronization.Events"};
-            var assemlies = new[] { typeof(TabletRegistered).Assembly, typeof(NewUserCreated).Assembly };
+            var assemlies = new[] {typeof (TabletRegistered).Assembly, typeof (NewUserCreated).Assembly};
             var events =
                 assemlies.SelectMany(a => a.GetTypes())
                     .Where(
@@ -338,7 +484,7 @@ namespace QToPlainStore
 
         private static Dictionary<string, string> GetQuestionnairesFromReadSide(string PGReadSideConnection)
         {
-            var questionnaires = new Dictionary<string,string>();
+            var questionnaires = new Dictionary<string, string>();
 
             using (var connection = new NpgsqlConnection(PGReadSideConnection))
             {
@@ -351,10 +497,10 @@ namespace QToPlainStore
                     {
                         while (npgsqlDataReader.Read())
                         {
-                            string value = (string)npgsqlDataReader["value"];
-                            string id = (string)npgsqlDataReader["id"];
+                            string value = (string) npgsqlDataReader["value"];
+                            string id = (string) npgsqlDataReader["id"];
 
-                            questionnaires.Add(id,value);
+                            questionnaires.Add(id, value);
                         }
                     }
                 }
@@ -375,7 +521,7 @@ namespace QToPlainStore
                     checkCommand.CommandText = $"select exists(select 1 from questionnairedocuments where id=:id)";
                     checkCommand.Parameters.AddWithValue("id", id);
 
-                    var exists = (bool)checkCommand.ExecuteScalar();
+                    var exists = (bool) checkCommand.ExecuteScalar();
 
                     if (!exists)
                     {
@@ -387,18 +533,21 @@ namespace QToPlainStore
                         var root = JObject.Parse(valueToExtract);
                         var questionnaire = root["Questionnaire"].ToString(Newtonsoft.Json.Formatting.None);
 
-                        if(string.IsNullOrWhiteSpace(questionnaire))
+                        if (string.IsNullOrWhiteSpace(questionnaire))
                             throw new Exception("Invalid Questionnaire content.");
-                        
-                        var valueParameter = new NpgsqlParameter("value", NpgsqlDbType.Json) { Value = questionnaire };
-                        var parameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) { Value = id };
+
+                        var valueParameter = new NpgsqlParameter("value", NpgsqlDbType.Json) {Value = questionnaire};
+                        var parameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) {Value = id};
                         insertCommand.Parameters.Add(parameter);
                         insertCommand.Parameters.Add(valueParameter);
                         var queryResult = insertCommand.ExecuteNonQuery();
 
                         if (queryResult > 1)
                         {
-                            throw new Exception(string.Format("Unexpected row count of deleted records. Expected to delete not more than 1 row, but affected {0} number of rows", queryResult));
+                            throw new Exception(
+                                string.Format(
+                                    "Unexpected row count of deleted records. Expected to delete not more than 1 row, but affected {0} number of rows",
+                                    queryResult));
                         }
 
                         transaction.Commit();
@@ -414,6 +563,36 @@ namespace QToPlainStore
         }
 
     }
+
+    internal abstract class ObsoleteEventHandleDescriptor
+    {
+        public abstract void Handle(CommittedEvent @event,
+            PlainPostgresTransactionManager plainPostgresTransactionManager);
+    }
+
+    internal class ObsoleteEventHandleDescriptor<T> : ObsoleteEventHandleDescriptor where T : class, WB.Core.Infrastructure.EventBus.IEvent
+    {
+        public ObsoleteEventHandleDescriptor(Action<T, Guid, long> action)
+        {
+            this.action = action;
+        }
+
+        private Action<T, Guid, long> action;
+
+        public override void Handle(CommittedEvent @event,
+            PlainPostgresTransactionManager plainPostgresTransactionManager)
+        {
+            var typedEvent = @event.Payload as T;
+            if (typedEvent == null)
+                return;
+
+            plainPostgresTransactionManager.ExecuteInPlainTransaction(() =>
+            {
+                this.action(typedEvent, @event.EventSourceId, @event.EventSequence);
+            });
+        }
+    }
+
     internal class Event
     {
         public Guid Id { get; set; }

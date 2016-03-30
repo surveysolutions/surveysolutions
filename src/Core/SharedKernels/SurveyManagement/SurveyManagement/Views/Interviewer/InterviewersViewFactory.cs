@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using NHibernate.Linq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 
@@ -11,9 +12,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
 {
     public class InterviewersViewFactory : IInterviewersViewFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
+        private readonly IPlainStorageAccessor<UserDocument> users;
 
-        public InterviewersViewFactory(IQueryableReadSideRepositoryReader<UserDocument> users)
+        public InterviewersViewFactory(IPlainStorageAccessor<UserDocument> users)
         {
             this.users = users;
         }

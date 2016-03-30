@@ -8,6 +8,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 // ReSharper disable once CheckNamespace
 namespace Main.Core.Events.User
 {
+    [Obsolete]
     public class UserChanged : IEvent
     {
         public string Email { get; set; }

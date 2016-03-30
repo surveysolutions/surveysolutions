@@ -203,7 +203,6 @@
     <Compile Include="EventHandler\InterviewSynchronizationDenormalizer.cs" />
     <Compile Include="Factories\IChartStatisticsViewFactory.cs" />
     <Compile Include="Implementation\Factories\InterviewSynchronizationDtoFactory.cs" />
-    <Compile Include="EventHandler\UserDenormalizer.cs" />
     <Compile Include="Factories\IInterviewSynchronizationDtoFactory.cs" />
     <Compile Include="Factories\IRecordsAccessorFactory.cs" />
     <Compile Include="Factories\IReferenceInfoForLinkedQuestionsFactory.cs" />
