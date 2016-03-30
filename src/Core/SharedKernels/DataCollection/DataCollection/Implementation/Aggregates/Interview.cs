@@ -3674,11 +3674,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 foreach (var outerVectorForExtend in outerVectorsForExtend)
                 {
-                    var rosterInstanceIdsBeingAdded = GetRosterInstanceIdsBeingAdded(
+                    var isParentRosterBeingDeleted = false;
+                    var isNestedRoster = rosterGroupsStartingFromTop.Length > 1;
+                    if (isNestedRoster)
+                    {
+                        var parentRosterId = rosterGroupsStartingFromTop.Shrink().Last();
+                        isParentRosterBeingDeleted = rosterInstancesToRemove.Any(x => x.GroupId == parentRosterId
+                               && x.RosterInstanceId == outerVectorForExtend.Last()
+                               && x.OuterRosterVector.SequenceEqual(outerVectorForExtend.Shrink()));
+                    }
+
+                    var rosterInstanceIdsBeingAdded = (isParentRosterBeingDeleted 
+                        ? Enumerable.Empty<RosterIdentity>()
+                        : GetRosterInstanceIdsBeingAdded(
                         existingRosterInstanceIds: this.interviewState.GetRosterInstanceIds(rosterId, outerVectorForExtend),
                         newRosterInstanceIds: rosterInstanceIds).Select(rosterInstanceId =>
                             new RosterIdentity(rosterId, outerVectorForExtend, rosterInstanceId,
-                                sortIndex: rosterInstanceIdsWithSortIndexes[rosterInstanceId])).ToList();
+                                sortIndex: rosterInstanceIdsWithSortIndexes[rosterInstanceId]))).ToList();
 
                     rosterInstancesToAdd.AddRange(rosterInstanceIdsBeingAdded);
 
