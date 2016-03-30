@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
@@ -81,6 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
             this.Bind<IDataExportProcessesService>().To<DataExportProcessesService>().InSingletonScope();
             this.Bind<IDataExporter>().To<DataExporter>().InSingletonScope();
+            this.Bind<InterviewExportredDataRowReader>().ToSelf();
 
             this.Bind<ITabularDataToExternalStatPackageExportService>().To<TabularDataToExternalStatPackageExportService>();
             this.Bind<ITabFileReader>().To<TabFileReader>();
