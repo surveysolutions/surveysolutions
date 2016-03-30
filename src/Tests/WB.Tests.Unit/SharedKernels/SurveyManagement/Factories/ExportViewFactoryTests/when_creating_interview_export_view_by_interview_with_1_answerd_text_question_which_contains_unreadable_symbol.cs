@@ -7,8 +7,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
-    [Ignore("KP-6925")]
-    internal class when_creating_interview_export_view_by_interview_with_1_answerd_text_question : ExportViewFactoryTestsContext
+    internal class when_creating_interview_export_view_by_interview_with_1_answerd_text_question_which_contains_unreadable_symbol : ExportViewFactoryTestsContext
     {
         Establish context = () =>
         {
@@ -28,17 +27,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument, 1),
                 interviewData);
 
-        It should_create_record__with_one_text_question = () =>
+        It should_create_record_with_one_text_question = () =>
             result.Levels[0].Records[0].GetQuestions()[0].Answers.Length.ShouldEqual(1);
 
-        It should_create_record__with_one_text_question_which_answer_on_text_question = () =>
-          result.Levels[0].Records[0].GetQuestions()[0].Answers.ShouldEqual(new[] { text });
+        It should_create_record_with_one_text_question_which_answered_and_doesnt_contain_the_unreadable_symbol = () =>
+          result.Levels[0].Records[0].GetQuestions()[0].Answers.ShouldEqual(new[] { "231 Pietermaritz StPietermaritzburg3201" });
 
         private static ExportViewFactory exportViewFactory;
         private static InterviewDataExportView result;
         private static Guid textQuestionId;
         private static QuestionnaireDocument questionnaireDocument;
         private static InterviewData interviewData;
-        private static string text = "231 Pietermaritz St\n\rPietermaritzburg\n\r3201";
+        private static string text = "231 Pietermaritz St\u263APietermaritzburg\u263A3201";
     }
 }

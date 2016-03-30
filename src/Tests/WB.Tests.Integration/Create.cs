@@ -24,6 +24,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -279,7 +280,7 @@ namespace WB.Tests.Integration
         }
 
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null, 
-            IEnumerable<Answer> answers = null, Guid? linkedToQuestionId = null, string variable = null, Guid? linkedToRosterId=null)
+            IEnumerable<Answer> answers = null, Guid? linkedToQuestionId = null, string variable = null, Guid? linkedToRosterId=null, bool yesNo = false)
         {
             return new MultyOptionsQuestion
             {
@@ -288,7 +289,8 @@ namespace WB.Tests.Integration
                 Answers = linkedToQuestionId.HasValue ? null : new List<Answer>(answers ?? new Answer[] {}),
                 LinkedToQuestionId = linkedToQuestionId,
                 StataExportCaption = variable,
-                LinkedToRosterId = linkedToRosterId
+                LinkedToRosterId = linkedToRosterId,
+                YesNoView = yesNo
             };
         }
 
@@ -644,6 +646,19 @@ namespace WB.Tests.Integration
                 postgreConnectionSettings ?? new PostgreConnectionSettings(),
                 Mock.Of<ILogger>(),
                 serializer ?? new NewtonJsonSerializer(new JsonSerializerSettingsFactory()));
+        }
+
+        public static class Command
+        {
+            public static AnswerYesNoQuestion AnswerYesNoQuestion(Guid questionId, RosterVector rosterVector, params AnsweredYesNoOption[] answers)
+            {
+                return new AnswerYesNoQuestion(Guid.NewGuid(), Guid.NewGuid(), questionId, rosterVector, DateTime.Now, answers);
+            }
+        }
+
+        public static AnsweredYesNoOption AnsweredYesNoOption(decimal optionValue, bool yes)
+        {
+            return new AnsweredYesNoOption(optionValue, yes);
         }
     }
 }

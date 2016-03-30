@@ -224,7 +224,7 @@
                             </p>
 
                         </div>
-                        <button class="btn btn-default btn-lg pull-left" ng-class="{'btn-primary': !isReadOnlyForUser}" ngf-select ngf-change="createAndUploadFile($file);$event.stopPropagation()" ngf-accept="'image/*'" type="file" ngf-select-disabled="isReadOnlyForUser" ngf-drop-disabled="isReadOnlyForUser">
+                        <button class="btn btn-default btn-lg pull-left" ng-class="{'btn-primary': !isReadOnlyForUser}" ngf-select ngf-change="createAndUploadFile($file);$event.stopPropagation()" ngf-accept="'image/*'" ngf-max-size="100MB" type="file" ngf-select-disabled="isReadOnlyForUser" ngf-drop-disabled="isReadOnlyForUser">
                             Upload new
                         </button>
                     </div>
