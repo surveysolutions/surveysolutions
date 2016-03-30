@@ -116,6 +116,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             Func<ICommand, Guid> aggregateRootIdResolver = CommandRegistry.GetAggregateRootIdResolver(command);
             Action<ICommand, IEventSourcedAggregateRoot> commandHandler = CommandRegistry.GetCommandHandler(command);
             IEnumerable<Action<IEventSourcedAggregateRoot, ICommand>> validators = CommandRegistry.GetValidators(command, this.serviceLocator);
+            bool isAggregateEventSourced = CommandRegistry.IsAggregateEventSourced(command);
 
             Guid aggregateId = aggregateRootIdResolver.Invoke(command);
 
