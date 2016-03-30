@@ -40,6 +40,7 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Aggregates\IAggregateRoot.cs" />
     <Compile Include="Aggregates\IEventSourcedAggregateRoot.cs" />
     <Compile Include="Aggregates\IAggregateRootRepository.cs" />
     <Compile Include="CommandBus\CommandHandlerConfiguration.cs" />
