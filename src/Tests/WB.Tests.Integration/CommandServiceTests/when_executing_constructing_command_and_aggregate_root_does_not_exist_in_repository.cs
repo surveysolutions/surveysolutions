@@ -41,7 +41,7 @@ namespace WB.Tests.Integration.CommandServiceTests
                 .Setup<Aggregate>()
                 .InitializesWith<Initialize>(_ => aggregateId, (command, aggregate) => aggregate.Initialize());
 
-            var repository = Mock.Of<IAggregateRootRepository>(_
+            var repository = Mock.Of<IEventSourcedAggregateRootRepository>(_
                 => _.GetLatest(typeof(Aggregate), aggregateId) == null as Aggregate);
 
             var eventBus = Mock.Of<IEventBus>();

@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
             ISerializer serializer = null,
             IStringCompressor compressor = null,
             IInterviewerEventStorage eventStore = null,
-            IAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache = null,
+            IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache = null,
             ISnapshotStoreWithCache snapshotStoreWithCache = null)
         {
             return new InterviewerInterviewAccessor(
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 commandService: commandService ?? Mock.Of<ICommandService>(),
                 principal: principal ?? Mock.Of<IInterviewerPrincipal>(),
                 eventStore: eventStore ?? Mock.Of<IInterviewerEventStorage>(),
-                aggregateRootRepositoryWithCache: aggregateRootRepositoryWithCache ?? Mock.Of<IAggregateRootRepositoryWithCache>(),
+                aggregateRootRepositoryWithCache: aggregateRootRepositoryWithCache ?? Mock.Of<IEventSourcedAggregateRootRepositoryWithCache>(),
                 snapshotStoreWithCache: snapshotStoreWithCache ?? Mock.Of<ISnapshotStoreWithCache>(),
                 serializer: serializer ?? Mock.Of<ISerializer>(),
                 eventStreamOptimizer: Mock.Of<IInterviewEventStreamOptimizer>());
