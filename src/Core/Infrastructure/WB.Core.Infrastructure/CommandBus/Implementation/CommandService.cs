@@ -114,12 +114,12 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
             Type aggregateType = CommandRegistry.GetAggregateRootType(command);
             Func<ICommand, Guid> aggregateRootIdResolver = CommandRegistry.GetAggregateRootIdResolver(command);
-            Action<ICommand, IAggregateRoot> commandHandler = CommandRegistry.GetCommandHandler(command);
-            IEnumerable<Action<IAggregateRoot, ICommand>> validators = CommandRegistry.GetValidators(command, this.serviceLocator);
+            Action<ICommand, IEventSourcedAggregateRoot> commandHandler = CommandRegistry.GetCommandHandler(command);
+            IEnumerable<Action<IEventSourcedAggregateRoot, ICommand>> validators = CommandRegistry.GetValidators(command, this.serviceLocator);
 
             Guid aggregateId = aggregateRootIdResolver.Invoke(command);
 
-            IAggregateRoot aggregate = this.repository.GetLatest(aggregateType, aggregateId);
+            IEventSourcedAggregateRoot aggregate = this.repository.GetLatest(aggregateType, aggregateId);
 
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -128,13 +128,13 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
                 if (!CommandRegistry.IsInitializer(command))
                     throw new CommandServiceException($"Unable to execute not-constructing command {command.GetType().Name} because aggregate {aggregateId.FormatGuid()} does not exist.");
 
-                aggregate = (IAggregateRoot) this.serviceLocator.GetInstance(aggregateType);
+                aggregate = (IEventSourcedAggregateRoot) this.serviceLocator.GetInstance(aggregateType);
                 aggregate.SetId(aggregateId);
             }
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            foreach (Action<IAggregateRoot, ICommand> validator in validators)
+            foreach (Action<IEventSourcedAggregateRoot, ICommand> validator in validators)
             {
                 validator.Invoke(aggregate, command);
             }
