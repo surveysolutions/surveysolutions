@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -11,10 +12,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
     public class TeamViewFactory : ITeamViewFactory 
     {
         readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
-        readonly IQueryableReadSideRepositoryReader<UserDocument> usersReader;
+        readonly IPlainStorageAccessor<UserDocument> usersReader;
 
         public TeamViewFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader,
-            IQueryableReadSideRepositoryReader<UserDocument> usersReader)
+            IPlainStorageAccessor<UserDocument> usersReader)
         {
             this.interviewSummaryReader = interviewSummaryReader;
             this.usersReader = usersReader;

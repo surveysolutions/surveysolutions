@@ -63,7 +63,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewData, InterviewHardDeleted>,
         IUpdateHandler<InterviewData, AnswerRemoved>
     {
-        private readonly IReadSideRepositoryWriter<UserDocument> users;
+        private readonly IPlainStorageAccessor<UserDocument> users;
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
 
         public override object[] Readers
@@ -262,7 +262,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
 
         public InterviewEventHandlerFunctional(
-            IReadSideRepositoryWriter<UserDocument> users,
+            IPlainStorageAccessor<UserDocument> users,
             IReadSideKeyValueStorage<InterviewData> interviewData, 
             IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage)
             : base(interviewData)

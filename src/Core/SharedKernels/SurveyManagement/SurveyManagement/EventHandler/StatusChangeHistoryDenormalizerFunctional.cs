@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -46,7 +47,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewStatuses, PictureQuestionAnswered>,
         IUpdateHandler<InterviewStatuses, UnapprovedByHeadquarters>
     {
-        private readonly IReadSideRepositoryWriter<UserDocument> users;
+        private readonly IPlainStorageAccessor<UserDocument> users;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummares;
         private readonly string unknown = "Unknown";
         private readonly InterviewExportedAction[] listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded = new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
@@ -88,7 +89,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public StatusChangeHistoryDenormalizerFunctional(
             IReadSideRepositoryWriter<InterviewStatuses> statuses,
-            IReadSideRepositoryWriter<UserDocument> users,
+            IPlainStorageAccessor<UserDocument> users,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummares)
             : base(statuses)
         {

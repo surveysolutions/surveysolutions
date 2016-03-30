@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
@@ -19,12 +20,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteS
 {
     internal class DeleteSupervisorService : IDeleteSupervisorService
     {
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> userDocumentReader;
+        private readonly IPlainStorageAccessor<UserDocument> userDocumentReader;
         private readonly ICommandService commandService;
         private readonly ILogger logger;
 
         public DeleteSupervisorService(
-            IQueryableReadSideRepositoryReader<UserDocument> userDocumentReader,
+            IPlainStorageAccessor<UserDocument> userDocumentReader,
             ICommandService commandService,
             ILogger logger, IQueryableReadSideRepositoryReader<InterviewSummary> interviews)
         {

@@ -4,5 +4,6 @@ using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.User
 {
+    [Obsolete]
     public class UserLockedBySupervisor : IEvent { }
 }

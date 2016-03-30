@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -22,7 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         private readonly IReadSideKeyValueStorage<InterviewData> interviewStore;
 
         private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
-        private readonly IReadSideRepositoryReader<UserDocument> userStore;
+        private readonly IPlainStorageAccessor<UserDocument> userStore;
         private readonly IInterviewDataAndQuestionnaireMerger merger;
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
@@ -30,7 +31,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         private readonly IAttachmentContentService attachmentContentService;
 
         public InterviewDetailsViewFactory(IReadSideKeyValueStorage<InterviewData> interviewStore,
-            IReadSideRepositoryReader<UserDocument> userStore,
+            IPlainStorageAccessor<UserDocument> userStore,
             IInterviewDataAndQuestionnaireMerger merger,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue,

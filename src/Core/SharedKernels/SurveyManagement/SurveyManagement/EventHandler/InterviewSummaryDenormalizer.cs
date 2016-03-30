@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventHandlers;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -41,10 +42,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
     {
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
-        private readonly IReadSideRepositoryWriter<UserDocument> users;
+        private readonly IPlainStorageAccessor<UserDocument> users;
 
         public InterviewSummaryDenormalizer(IReadSideRepositoryWriter<InterviewSummary> interviewSummary,
-            IReadSideRepositoryWriter<UserDocument> users, IPlainQuestionnaireRepository plainQuestionnaireRepository)
+            IPlainStorageAccessor<UserDocument> users, IPlainQuestionnaireRepository plainQuestionnaireRepository)
             : base(interviewSummary)
         {
             this.users = users;

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 using NHibernate.Linq;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 
@@ -14,9 +15,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
 
     public class UserViewFactory : IUserViewFactory 
     {
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
+        private readonly IPlainStorageAccessor<UserDocument> users;
 
-        public UserViewFactory(IQueryableReadSideRepositoryReader<UserDocument> users)
+        public UserViewFactory(IPlainStorageAccessor<UserDocument> users)
         {
             this.users = users;
         }

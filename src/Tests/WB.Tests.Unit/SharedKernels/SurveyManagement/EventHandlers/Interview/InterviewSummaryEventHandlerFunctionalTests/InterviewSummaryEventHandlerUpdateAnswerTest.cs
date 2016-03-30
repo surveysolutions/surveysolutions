@@ -9,6 +9,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -179,7 +180,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         {
             var mockOfInterviewSummary = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
             return new InterviewSummaryDenormalizer(mockOfInterviewSummary.Object,
-                new Mock<IReadSideRepositoryWriter<UserDocument>>().Object,
+                new Mock<IPlainStorageAccessor<UserDocument>>().Object,
                 plainQuestionnaireRepository:
                     Mock.Of<IPlainQuestionnaireRepository>(
                         _ =>

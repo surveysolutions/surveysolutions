@@ -99,15 +99,15 @@ namespace WB.Core.SharedKernels.SurveyManagement
             CommandRegistry
                 .Setup<User>()
                 .InitializesWith<CreateUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.CreateUser(command.Email, command.IsLockedBySupervisor, command.IsLockedByHQ, command.Password, command.PublicKey, command.Roles, command.Supervisor, command.UserName, command.PersonName, command.PhoneNumber))
-                .Handles<ChangeUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.ChangeUser(command.Email, command.IsLockedBySupervisor, command.IsLockedByHQ, command.PasswordHash, command.PersonName, command.PhoneNumber, command.UserId))
-                .Handles<LockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Lock())
-                .Handles<ArchiveUserCommad>(command => command.UserId, (command, aggregate) => aggregate.Archive())
-                .Handles<UnarchiveUserCommand>(command => command.UserId, (command, aggregate) => aggregate.Unarchive())
-                .Handles<UnarchiveUserAndUpdateCommand>(command => command.UserId, (command, aggregate) => aggregate.UnarchiveUserAndUpdate(command.PasswordHash, command.Email, command.PersonName, command.PhoneNumber))
-                .Handles<LockUserBySupervisorCommand>(command => command.UserId, (command, aggregate) => aggregate.LockBySupervisor())
-                .Handles<UnlockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Unlock())
-                .Handles<UnlockUserBySupervisorCommand>(command => command.PublicKey, (command, aggregate) => aggregate.UnlockBySupervisor())
-                .Handles<LinkUserToDevice>(command => command.Id, (command, aggregate) => aggregate.LinkUserToDevice(command));
+                .InitializesWith<ChangeUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.ChangeUser(command.Email, command.IsLockedBySupervisor, command.IsLockedByHQ, command.PasswordHash, command.PersonName, command.PhoneNumber, command.UserId))
+                .InitializesWith<LockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Lock())
+                .InitializesWith<ArchiveUserCommad>(command => command.UserId, (command, aggregate) => aggregate.Archive())
+                .InitializesWith<UnarchiveUserCommand>(command => command.UserId, (command, aggregate) => aggregate.Unarchive())
+                .InitializesWith<UnarchiveUserAndUpdateCommand>(command => command.UserId, (command, aggregate) => aggregate.UnarchiveUserAndUpdate(command.PasswordHash, command.Email, command.PersonName, command.PhoneNumber))
+                .InitializesWith<LockUserBySupervisorCommand>(command => command.UserId, (command, aggregate) => aggregate.LockBySupervisor())
+                .InitializesWith<UnlockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Unlock())
+                .InitializesWith<UnlockUserBySupervisorCommand>(command => command.PublicKey, (command, aggregate) => aggregate.UnlockBySupervisor())
+                .InitializesWith<LinkUserToDevice>(command => command.Id, (command, aggregate) => aggregate.LinkUserToDevice(command));
 
             CommandRegistry
                 .Setup<Interview>()

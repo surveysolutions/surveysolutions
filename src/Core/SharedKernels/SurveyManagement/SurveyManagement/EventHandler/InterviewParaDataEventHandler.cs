@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewHistoryView, InterviewReceivedBySupervisor>
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
-        private readonly IReadSideRepositoryWriter<UserDocument> userReader;
+        private readonly IPlainStorageAccessor<UserDocument> userReader;
         private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository;
         private readonly IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage;
         private readonly ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireExportStructure> cacheQuestionnaireExportStructure = new ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireExportStructure>();
@@ -67,8 +67,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         public InterviewParaDataEventHandler(
             IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage,
-            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader, 
-            IReadSideRepositoryWriter<UserDocument> userReader,
+            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
+            IPlainStorageAccessor<UserDocument> userReader,
             InterviewDataExportSettings interviewDataExportSettings,
             IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository)
         {

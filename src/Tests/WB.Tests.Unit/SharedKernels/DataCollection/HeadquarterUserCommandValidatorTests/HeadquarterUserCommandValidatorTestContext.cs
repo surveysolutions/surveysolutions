@@ -1,6 +1,7 @@
 ﻿using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -13,18 +14,18 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValid
     internal class HeadquarterUserCommandValidatorTestContext
     {
         protected static HeadquarterUserCommandValidator CreateHeadquarterUserCommandValidator(
-            IQueryableReadSideRepositoryReader<UserDocument> users = null,
+            IPlainStorageAccessor<UserDocument> users = null,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviews = null)
         {
             return
                 new HeadquarterUserCommandValidator(
-                    users ?? Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>());
+                    users ?? Mock.Of<IPlainStorageAccessor<UserDocument>>());
         }
 
         protected static HeadquarterUserCommandValidator CreateHeadquarterUserCommandValidatorWithUsers(
             params UserDocument[] users)
         {
-            var userStorage = new TestInMemoryWriter<UserDocument>();
+            var userStorage = new TestPlainStorage<UserDocument>();
             foreach (var user in users)
             {
                 userStorage.Store(user, user.PublicKey);

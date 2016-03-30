@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 {
     public class LocalUserFeedProcessor : ILocalUserFeedProcessor
     {
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
+        private readonly IPlainStorageAccessor<UserDocument> users;
         private readonly ILocalFeedStorage localFeedStorage;
         private readonly Action<ICommand> executeCommand;
         private readonly IHeadquartersUserReader headquartersUserReader;
@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
         private readonly ITransactionManager cqrsTransactionManager;
 
         public LocalUserFeedProcessor(
-            IQueryableReadSideRepositoryReader<UserDocument> users,
+            IPlainStorageAccessor<UserDocument> users,
             ILocalFeedStorage localFeedStorage,
             ICommandService commandService,
             IHeadquartersUserReader headquartersUserReader,

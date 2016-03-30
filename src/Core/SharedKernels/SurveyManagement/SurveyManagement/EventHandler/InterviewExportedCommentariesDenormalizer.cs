@@ -32,12 +32,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<UnapprovedByHeadquarters>
     {
         private readonly IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage;
-        private readonly IReadSideRepositoryWriter<UserDocument> userStorage;
+        private readonly IPlainStorageAccessor<UserDocument> userStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository;
         private readonly string unknown = "Unknown";
 
-        public InterviewExportedCommentariesDenormalizer(IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage, 
-            IReadSideRepositoryWriter<UserDocument> userStorage,
+        public InterviewExportedCommentariesDenormalizer(IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage,
+            IPlainStorageAccessor<UserDocument> userStorage,
             IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository)
         {
             this.interviewCommentariesStorage = interviewCommentariesStorage;

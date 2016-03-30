@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var questionnaireRosterStructureMockStorage = new Mock<IPlainKeyValueStorage<QuestionnaireRosterStructure>>();
             questionnaireRosterStructureMockStorage.Setup(x => x.GetById(It.IsAny<string>())).Returns(rosterStructure);
 
-            var userDocumentMockStorage = new Mock<IReadSideRepositoryWriter<UserDocument>>();
+            var userDocumentMockStorage = new Mock<IPlainStorageAccessor<UserDocument>>();
             userDocumentMockStorage.Setup(x => x.GetById(It.IsAny<string>())).Returns(user);
 
             return new InterviewEventHandlerFunctional(
