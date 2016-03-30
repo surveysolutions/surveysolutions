@@ -1012,6 +1012,7 @@ namespace WB.Tests.Unit
             return new InterviewDataExportRecord("test", new string[0], new string[0], new string [0])
             {
                 Answers = questions.Select(x => String.Join("\n", x)).ToArray() 
+                LevelName = ""
             };
         }
 
