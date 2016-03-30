@@ -25,8 +25,12 @@ namespace WB.UI.Designer.Code
                 {
                     Code = x.Key.Code,
                     Message = x.Key.Message,
-                    References = x.SelectMany(g => GetEnrichedReferences(g.References, questionnaireDocument)).ToList(),
-                    IsGroupedMessage = true
+                    IsGroupedMessage = true,
+                    Errors = x.Select(g => new VerificationMessageError()
+                    {
+                        References = GetEnrichedReferences(g.References, questionnaireDocument).ToList(),
+                        CompilationErrorMessages = g.CompilationErrorMessages
+                    }).ToList()
                 }).ToList();
 
             errors.AddRange(verificationMessages
@@ -34,8 +38,15 @@ namespace WB.UI.Designer.Code
                 {
                     Code = x.Code,
                     Message = x.Message,
-                    References = GetEnrichedReferences(x.References, questionnaireDocument).ToList(),
-                    IsGroupedMessage = false
+                    IsGroupedMessage = false,
+                    Errors = new List<VerificationMessageError>()
+                    {
+                        new VerificationMessageError()
+                        {
+                            CompilationErrorMessages = x.CompilationErrorMessages,
+                            References = GetEnrichedReferences(x.References, questionnaireDocument).ToList(),
+                        }
+                    }
                 }));
 
             return errors.OrderBy(x => x.Code).ToArray();

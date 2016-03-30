@@ -354,9 +354,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (compilationResult.Success)
                 yield break;
 
-            foreach (var locationOfExpressionError in compilationResult.Diagnostics.Select(x => x.Location).Distinct())
+            var elementsWithErrorMessages = compilationResult.Diagnostics.GroupBy(x => x.Location, x => x.Message);
+            foreach (var elementWithErrors in elementsWithErrorMessages)
             {
-                yield return CreateExpressionSyntaxError(new ExpressionLocation(locationOfExpressionError));
+                yield return CreateExpressionSyntaxError(new ExpressionLocation(elementWithErrors.Key), elementWithErrors.ToList());
             }
         } 
 
@@ -1666,7 +1667,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 CreateReference(sourseQuestion));
         }
 
-        private static QuestionnaireVerificationMessage CreateExpressionSyntaxError(ExpressionLocation expressionLocation)
+        private static QuestionnaireVerificationMessage CreateExpressionSyntaxError(ExpressionLocation expressionLocation, IEnumerable<string> compilationErrorMessages)
         {
             if (expressionLocation.ExpressionType != ExpressionLocationType.General)
             {
@@ -1679,17 +1680,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 {
                     reference.FailedValidationConditionIndex = expressionLocation.ExpressionPosition;
                     return QuestionnaireVerificationMessage.Error("WB0002",
-                        VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, reference);
+                        VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, compilationErrorMessages, reference);
                 }
                 else if (expressionLocation.ExpressionType == ExpressionLocationType.Condition)
                 {
                     return QuestionnaireVerificationMessage.Error("WB0003",
-                        VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax, reference);
+                        VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax, compilationErrorMessages, reference);
                 }
                 else if (expressionLocation.ExpressionType == ExpressionLocationType.Filter)
                 {
                     return QuestionnaireVerificationMessage.Error("WB0110",
-                        VerificationMessages.WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax, reference);
+                        VerificationMessages.WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax, compilationErrorMessages, reference);
                 }
             }
 

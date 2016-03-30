@@ -113,6 +113,21 @@ angular.module('designerApp')
                 $scope.verificationStatus.visible = false;
             };
 
+            var referancesWithMessagesArray = [];
+            $scope.getReferancesWithMessages = function (messagesToShow) {
+                for (var indexReferencesWithErrors in messagesToShow.errors) {
+                    var referencesWithErrors = messagesToShow.errors[indexReferencesWithErrors];
+                    for (var indexReference in referencesWithErrors.references) {
+                        var reference = referencesWithErrors.references[indexReference];
+                        referancesWithMessagesArray.push({
+                            reference: reference, 
+                            compilationErrorMessages: referencesWithErrors.compilationErrorMessages,
+                        });
+                    }
+                }
+                return referancesWithMessagesArray;
+            };
+
             $scope.toggleCheatSheet = function () {
                 hotkeys.toggleCheatSheet();
             };
