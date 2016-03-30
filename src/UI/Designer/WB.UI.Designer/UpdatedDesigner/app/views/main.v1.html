@@ -240,7 +240,7 @@
                     <form role="form" name="attachmentsForm" novalidate>
                         <div class="attachment-list">
                             <ng-form name="attachmentForm" ng-repeat="attachment in attachments">
-                                <div class="attachments-panel-item" ng-class="{'has-error': attachmentForm.name.$error.pattern}" ngf-drop="" ngf-max-size="30MB" ngf-change="fileSelected(attachment, $file, attachmentForm)" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
+                                <div class="attachments-panel-item" ng-class="{'has-error': attachmentForm.name.$error.pattern}" ngf-drop="" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file, attachmentForm)" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
                                     <a href ng-click="deleteAttachment($index)" class="btn delete-btn" tabindex="-1"></a>
                                     <div class="attachment">
                                         <div class="attachment-preview">
@@ -269,7 +269,7 @@
                                                     <button type="button" class="btn lighter-hover" ng-click="cancel(attachment, attachmentForm);$event.stopPropagation()">Cancel</button>
                                                 </div>
                                                 <div class="permanent-actions pull-right clearfix">
-                                                    <button class="btn btn-default pull-right" ngf-select="" ngf-accept="'image/*'" ngf-max-size="30MB" ngf-change="fileSelected(attachment, $file, attachmentForm);$event.stopPropagation()" type="file">
+                                                    <button class="btn btn-default pull-right" ngf-select="" ngf-accept="'image/*'" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file, attachmentForm);$event.stopPropagation()" type="file">
                                                         <span>Update</span>
                                                     </button>
                                                     <a href="{{downloadLookupFileBaseUrl  + '/' + attachment.attachmentId}}" class="btn btn-default pull-right" target="_blank">Download</a>
