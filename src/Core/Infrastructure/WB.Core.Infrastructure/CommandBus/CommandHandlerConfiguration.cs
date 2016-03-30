@@ -5,7 +5,7 @@ using WB.Core.Infrastructure.Aggregates;
 namespace WB.Core.Infrastructure.CommandBus
 {
     public class CommandHandlerConfiguration<TAggregate, TCommand>
-        where TAggregate : IEventSourcedAggregateRoot
+        where TAggregate : IAggregateRoot
         where TCommand : ICommand
     {
         private readonly List<Type> validators = new List<Type>();
