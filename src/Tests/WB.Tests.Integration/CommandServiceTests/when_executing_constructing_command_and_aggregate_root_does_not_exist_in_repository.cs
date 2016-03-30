@@ -47,8 +47,8 @@ namespace WB.Tests.Integration.CommandServiceTests
             var eventBus = Mock.Of<IEventBus>();
             var eventBusMock = Mock.Get(eventBus);
 
-            eventBusMock.Setup(bus => bus.CommitUncommittedEvents(Moq.It.IsAny<IAggregateRoot>(), Moq.It.IsAny<string>()))
-                        .Returns((IAggregateRoot aggregate, string origin) =>
+            eventBusMock.Setup(bus => bus.CommitUncommittedEvents(Moq.It.IsAny<IEventSourcedAggregateRoot>(), Moq.It.IsAny<string>()))
+                        .Returns((IEventSourcedAggregateRoot aggregate, string origin) =>
                         {
                             constructedAggregateId = aggregate.EventSourceId;
                             return Create.CommittedEventStream(aggregate.EventSourceId, aggregate.GetUnCommittedChanges());
@@ -80,7 +80,7 @@ namespace WB.Tests.Integration.CommandServiceTests
 
         It should_create_snapshot_of_aggregate_root_if_needed = () =>
             snapshooterMock.Verify(
-                snapshooter => snapshooter.CreateSnapshotIfNeededAndPossible(Moq.It.Is<IAggregateRoot>(aggregate => aggregate.EventSourceId == aggregateId)),
+                snapshooter => snapshooter.CreateSnapshotIfNeededAndPossible(Moq.It.Is<IEventSourcedAggregateRoot>(aggregate => aggregate.EventSourceId == aggregateId)),
                 Times.Once());
 
         private static CommandService commandService;

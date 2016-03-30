@@ -20,7 +20,7 @@ namespace Ncqrs.Eventing.Sourcing.Snapshotting
             _snapshotIntervalInEvents = snapshotIntervalInEvents;
         }
 
-        public bool ShouldCreateSnapshot(IAggregateRoot aggregateRoot)
+        public bool ShouldCreateSnapshot(IEventSourcedAggregateRoot aggregateRoot)
         {
             for (var i = aggregateRoot.InitialVersion + 1; i <= aggregateRoot.Version; i++)
             {
