@@ -43,7 +43,7 @@ namespace WB.Tests.Integration.CommandServiceTests
 
         It should_not_commit_events = () =>
             eventBusMock.Verify(
-                bus => bus.CommitUncommittedEvents(Moq.It.IsAny<IAggregateRoot>(), Moq.It.IsAny<string>()),
+                bus => bus.CommitUncommittedEvents(Moq.It.IsAny<IEventSourcedAggregateRoot>(), Moq.It.IsAny<string>()),
                 Times.Never());
 
         It should_not_publish_events = () =>

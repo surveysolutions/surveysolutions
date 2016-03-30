@@ -5,7 +5,7 @@ using Ncqrs.Eventing.Sourcing;
 
 namespace WB.Core.Infrastructure.Aggregates
 {
-    public interface IAggregateRoot : IEventSource
+    public interface IEventSourcedAggregateRoot : IEventSource
     {
         void SetId(Guid id);
         bool HasUncommittedChanges();
