@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
-    internal class when_3_level_nested_rosters_are_triggered_by_same_yesno_question : InterviewTestsContext
+    internal class when_3_level_nested_rosters_are_triggered_by_same_yesno_question_and_answer_is_has_1_option : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -33,11 +33,8 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId,
                     Create.MultyOptionsQuestion(rosterSizeQuestionId, variable: "multi", yesNo: true, answers: new List<Answer>
                     {
-                        Create.Option(text: "A", value: "10"),
-                        Create.Option(text: "B", value: "20"),
-                        Create.Option(text: "C", value: "30"),
-                        Create.Option(text: "D", value: "40"),
-                        Create.Option(text: "E", value: "50")
+                        Create.Option(text: "A", value: "20"),
+                        Create.Option(text: "B", value: "30")
                     }),
 
                     Create.Roster(
@@ -71,19 +68,17 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                 var interview = SetupInterview(questionnaireDocument, new List<object>() { });
 
-                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(rosterSizeQuestionId, RosterVector.Empty,
-                    Create.AnsweredYesNoOption(30, true)));
+                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(rosterSizeQuestionId, RosterVector.Empty, Yes(30)));
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(rosterSizeQuestionId, RosterVector.Empty,
-                    Create.AnsweredYesNoOption(20, true)));
+                    interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(rosterSizeQuestionId, RosterVector.Empty, Yes(20)));
 
                     var deletedRosters = eventContext.GetSingleEvent<RosterInstancesRemoved>().Instances;
                     var addedRosters = eventContext.GetSingleEvent<RosterInstancesAdded>().Instances;
 
                     result.CountOfAddedInstances = addedRosters.Length;
-                    result.CountOfRemovedInstances = addedRosters.Length;
+                    result.CountOfRemovedInstances = deletedRosters.Length;
 
                     result.Roster1_20_Added = addedRosters.Any(x => x.RosterInstanceId == 20 && x.GroupId == roster1Id);
                     result.Roster2_20_20_Added = addedRosters.Any(x => x.RosterInstanceId == 20 && x.GroupId == roster2Id);
@@ -92,9 +87,6 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                     result.Roster1_30_Removed = deletedRosters.Any(x => x.RosterInstanceId == 30 && x.GroupId == roster1Id);
                     result.Roster2_30_30_Removed = deletedRosters.Any(x => x.RosterInstanceId == 30 && x.GroupId == roster2Id);
                     result.Roster3_30_30_30_Removed = deletedRosters.Any(x => x.RosterInstanceId == 30 && x.GroupId == roster3Id);
-
-                    //interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(rosterSizeQuestionId, RosterVector.Empty,
-                    //    Create.AnsweredYesNoOption(20, true)));
                 }
 
                 return result;
