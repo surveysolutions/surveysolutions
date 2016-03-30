@@ -105,12 +105,12 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
         protected virtual void ExecuteImpl(ICommand command, string origin, CancellationToken cancellationToken)
         {
-            if (command == null) throw new ArgumentNullException("command");
+            if (command == null) throw new ArgumentNullException(nameof(command));
 
             cancellationToken.ThrowIfCancellationRequested();
 
             if (!CommandRegistry.Contains(command))
-                throw new CommandServiceException(string.Format("Unable to execute command {0} because it is not registered.", command.GetType().Name));
+                throw new CommandServiceException($"Unable to execute command {command.GetType().Name} because it is not registered.");
 
             Type aggregateType = CommandRegistry.GetAggregateRootType(command);
             Func<ICommand, Guid> aggregateRootIdResolver = CommandRegistry.GetAggregateRootIdResolver(command);
@@ -126,7 +126,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             if (aggregate == null)
             {
                 if (!CommandRegistry.IsInitializer(command))
-                    throw new CommandServiceException(string.Format("Unable to execute not-constructing command {0} because aggregate {1} does not exist.", command.GetType().Name, aggregateId.FormatGuid()));
+                    throw new CommandServiceException($"Unable to execute not-constructing command {command.GetType().Name} because aggregate {aggregateId.FormatGuid()} does not exist.");
 
                 aggregate = (IAggregateRoot) this.serviceLocator.GetInstance(aggregateType);
                 aggregate.SetId(aggregateId);
