@@ -239,7 +239,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
                 QuestionId = answer.Id,
                 QuestionRosterVector = answer.QuestionRosterVector,
                 LastSupervisorOrInterviewerComment = answer.Comments,
-                JsonAnswer = this.serializer.Serialize(answer.Answer, TypeSerializationSettings.AllTypes)
+                JsonAnswer = this.serializer.Serialize(answer.Answer, SerializationBinderSettings.NewToOld)
             };
         }
 
