@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Supervisor;
@@ -12,15 +13,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SupervisorsViewFactoryTes
     [Subject(typeof(SupervisorsViewFactory))]
     internal class SupervisorsViewFactoryTestContext
     {
-        protected static ISupervisorsViewFactory CreateSupervisorsViewFactory(IQueryableReadSideRepositoryReader<UserDocument> readSideRepositoryIndexAccessor)
+        protected static ISupervisorsViewFactory CreateSupervisorsViewFactory(IPlainStorageAccessor<UserDocument> readSideRepositoryIndexAccessor)
         {
             return new SupervisorsViewFactory(readSideRepositoryIndexAccessor);
         }
 
 
-        protected static IQueryableReadSideRepositoryReader<UserDocument> CreateQueryableReadSideRepositoryReaderWithUsers(params UserDocument[] users)
+        protected static IPlainStorageAccessor<UserDocument> CreateQueryableReadSideRepositoryReaderWithUsers(params UserDocument[] users)
         {
-            var userStorage = new TestInMemoryWriter<UserDocument>();
+            var userStorage = new TestPlainStorage<UserDocument>();
 
             foreach (var user in users)
             {

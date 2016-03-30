@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
                 Create.UserPreloadingDataRecord(login: supervisorName));
             var commantService = new Mock<ICommandService>();
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, UserRoles.Supervisor);
-            var userStorage = new InMemoryReadSideRepositoryAccessor<UserDocument>();
+            var userStorage = new TestPlainStorage<UserDocument>();
             userStorage.Store(Create.UserDocument(userName: supervisorName, isArchived: true), "id");
 
             var userBatchCreator =
@@ -94,7 +94,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
                 Create.UserPreloadingDataRecord(login: interviewerName, supervisor: "tttt"));
             var commantService = new Mock<ICommandService>();
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, UserRoles.Operator);
-            var userStorage = new InMemoryReadSideRepositoryAccessor<UserDocument>();
+            var userStorage = new TestPlainStorage<UserDocument>();
             userStorage.Store(Create.UserDocument(userName: interviewerName, isArchived: true, supervisorId:Guid.NewGuid()), "id");
 
             var userBatchCreator =
@@ -130,12 +130,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
         private UserBatchCreator CreateUserBatchCreator(
            IUserPreloadingService userPreloadingService = null,
            ICommandService commandService=null,
-           IQueryableReadSideRepositoryReader<UserDocument> userStorage = null)
+           IPlainStorageAccessor<UserDocument> userStorage = null)
         {
             return new UserBatchCreator(
                 userPreloadingService ?? Mock.Of<IUserPreloadingService>(),
                 commandService??Mock.Of<ICommandService>(),
-                userStorage ?? Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>(),
+                userStorage ?? Mock.Of<IPlainStorageAccessor<UserDocument>>(),
                 Mock.Of<ILogger>(),
                 Mock.Of<IPasswordHasher>(),
                 Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),  

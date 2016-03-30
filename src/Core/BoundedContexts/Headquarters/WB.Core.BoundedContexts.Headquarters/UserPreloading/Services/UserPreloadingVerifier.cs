@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private readonly IUserPreloadingService userPreloadingService;
 
-        private  readonly IQueryableReadSideRepositoryReader<UserDocument> userStorage;
+        private  readonly IPlainStorageAccessor<UserDocument> userStorage;
 
         private readonly UserPreloadingSettings userPreloadingSettings;
 
@@ -42,8 +42,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         readonly Regex phoneNumberValidationRegex;
 
         public UserPreloadingVerifier(ITransactionManagerProvider transactionManagerProvider, 
-            IUserPreloadingService userPreloadingService, 
-            IQueryableReadSideRepositoryReader<UserDocument> userStorage, 
+            IUserPreloadingService userPreloadingService,
+            IPlainStorageAccessor<UserDocument> userStorage, 
             IPlainTransactionManager plainTransactionManager, 
             UserPreloadingSettings userPreloadingSettings, 
             ILogger logger)

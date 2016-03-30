@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private readonly ICommandService commandService;
 
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> userStorage;
+        private readonly IPlainStorageAccessor<UserDocument> userStorage;
 
         private readonly ILogger logger;
 
@@ -40,8 +40,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         public UserBatchCreator(
             IUserPreloadingService userPreloadingService, 
-            ICommandService commandService, 
-            IQueryableReadSideRepositoryReader<UserDocument> userStorage, 
+            ICommandService commandService,
+            IPlainStorageAccessor<UserDocument> userStorage, 
             ILogger logger, 
             IPasswordHasher passwordHasher, 
             ITransactionManagerProvider transactionManagerProvider, 

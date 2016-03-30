@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
@@ -13,15 +14,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewersViewFactoryTe
     [Subject(typeof(InterviewersViewFactory))]
     internal class InterviewersViewFactoryTestContext
     {
-        protected static IInterviewersViewFactory CreateInterviewersViewFactory(IQueryableReadSideRepositoryReader<UserDocument> readSideRepositoryIndexAccessor)
+        protected static IInterviewersViewFactory CreateInterviewersViewFactory(IPlainStorageAccessor<UserDocument> readSideRepositoryIndexAccessor)
         {
             return new InterviewersViewFactory(readSideRepositoryIndexAccessor);
         }
 
 
-        protected static IQueryableReadSideRepositoryReader<UserDocument> CreateQueryableReadSideRepositoryReaderWithUsers(params UserDocument[] users)
+        protected static IPlainStorageAccessor<UserDocument> CreateQueryableReadSideRepositoryReaderWithUsers(params UserDocument[] users)
         {
-            var userStorage = new TestInMemoryWriter<UserDocument>();
+            var userStorage = new TestPlainStorage<UserDocument>();
 
             foreach (var user in users)
             {

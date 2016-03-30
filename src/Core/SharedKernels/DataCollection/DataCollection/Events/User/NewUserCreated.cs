@@ -8,9 +8,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 // ReSharper disable once CheckNamespace
 namespace Main.Core.Events.User
 {
-    /// <summary>
-    /// The new user created.
-    /// </summary>
+    [Obsolete]
     public class NewUserCreated : IEvent
     {
         public string Email { get; set; }
