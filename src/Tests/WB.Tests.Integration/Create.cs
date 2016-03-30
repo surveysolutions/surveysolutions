@@ -544,13 +544,13 @@ namespace WB.Tests.Integration
             return new QuestionnaireExportStructure() { HeaderToLevelMap = header };
         }
 
-        public static CommandService CommandService(IAggregateRootRepository repository = null, 
+        public static CommandService CommandService(IEventSourcedAggregateRootRepository repository = null, 
             IEventBus eventBus = null, 
             IAggregateSnapshotter snapshooter = null,
             IServiceLocator serviceLocator = null)
         {
             return new CommandService(
-                repository ?? Mock.Of<IAggregateRootRepository>(),
+                repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
                 eventBus ?? Mock.Of<IEventBus>(),
                 snapshooter ?? Mock.Of<IAggregateSnapshotter>(),
                 serviceLocator ?? Mock.Of<IServiceLocator>());
@@ -588,10 +588,10 @@ namespace WB.Tests.Integration
             return new FileSystemIOAccessor();
         }
 
-        public static SequentialCommandService SequentialCommandService(IAggregateRootRepository repository = null, ILiteEventBus eventBus = null, IAggregateSnapshotter snapshooter = null)
+        public static SequentialCommandService SequentialCommandService(IEventSourcedAggregateRootRepository repository = null, ILiteEventBus eventBus = null, IAggregateSnapshotter snapshooter = null)
         {
             return new SequentialCommandService(
-                repository ?? Mock.Of<IAggregateRootRepository>(),
+                repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
                 eventBus ?? Mock.Of<ILiteEventBus>(),
                 snapshooter ?? Mock.Of<IAggregateSnapshotter>(), Mock.Of<IServiceLocator>());
         }

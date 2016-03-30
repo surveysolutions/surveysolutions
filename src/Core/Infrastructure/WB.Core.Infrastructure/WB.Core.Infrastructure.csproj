@@ -42,7 +42,7 @@
   <ItemGroup>
     <Compile Include="Aggregates\IAggregateRoot.cs" />
     <Compile Include="Aggregates\IEventSourcedAggregateRoot.cs" />
-    <Compile Include="Aggregates\IAggregateRootRepository.cs" />
+    <Compile Include="Aggregates\IEventSourcedAggregateRootRepository.cs" />
     <Compile Include="CommandBus\CommandHandlerConfiguration.cs" />
     <Compile Include="CommandBus\CommandRegistry.cs" />
     <Compile Include="CommandBus\CommandRegistryException.cs" />
@@ -58,8 +58,8 @@
     <Compile Include="EventBus\IEventHandler.cs" />
     <Compile Include="EventBus\IEvent.cs" />
     <Compile Include="FileSystem\IAsynchronousFileSystemAccessor.cs" />
-    <Compile Include="Implementation\Aggregates\AggregateRootRepository.cs" />
-    <Compile Include="Implementation\Aggregates\AggregateRootRepositoryWithCache.cs" />
+    <Compile Include="Implementation\Aggregates\EventSourcedAggregateRootRepository.cs" />
+    <Compile Include="Implementation\Aggregates\EventSourcedAggregateRootRepositoryWithCache.cs" />
     <Compile Include="CommandBus\Implementation\CommandService.cs" />
     <Compile Include="CommandBus\Implementation\SequentialCommandService.cs" />
     <Compile Include="Implementation\InMemoryKeyValueStorage.cs" />
@@ -186,7 +186,7 @@
     <Compile Include="Versions\IProductVersion.cs" />
     <Compile Include="Versions\IProductVersionHistory.cs" />
     <Compile Include="Versions\ProductVersionChange.cs" />
-    <Compile Include="WriteSide\IAggregateRootRepositoryWithCache.cs" />
+    <Compile Include="WriteSide\IEventSourcedAggregateRootRepositoryWithCache.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">

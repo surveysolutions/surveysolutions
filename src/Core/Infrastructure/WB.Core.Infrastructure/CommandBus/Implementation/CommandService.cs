@@ -17,7 +17,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 {
     internal class CommandService : ICommandService
     {
-        private readonly IAggregateRootRepository repository;
+        private readonly IEventSourcedAggregateRootRepository eventSourcedRepository;
         private readonly ILiteEventBus eventBus;
         private readonly IAggregateSnapshotter snapshooter;
         private readonly IServiceLocator serviceLocator;
@@ -27,12 +27,12 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         private TaskCompletionSource<object> executionAwaiter = null;
 
 
-        public CommandService(IAggregateRootRepository repository,
+        public CommandService(IEventSourcedAggregateRootRepository eventSourcedRepository,
             ILiteEventBus eventBus, 
             IAggregateSnapshotter snapshooter,
             IServiceLocator serviceLocator)
         {
-            this.repository = repository;
+            this.eventSourcedRepository = eventSourcedRepository;
             this.eventBus = eventBus;
             this.snapshooter = snapshooter;
             this.serviceLocator = serviceLocator;
@@ -120,7 +120,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
             Guid aggregateId = aggregateRootIdResolver.Invoke(command);
 
-            IEventSourcedAggregateRoot aggregate = this.repository.GetLatest(aggregateType, aggregateId);
+            IEventSourcedAggregateRoot aggregate = this.eventSourcedRepository.GetLatest(aggregateType, aggregateId);
 
             cancellationToken.ThrowIfCancellationRequested();
 
