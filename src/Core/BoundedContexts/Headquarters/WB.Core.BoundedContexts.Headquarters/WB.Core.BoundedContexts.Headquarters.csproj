@@ -168,6 +168,7 @@
     <Compile Include="DataExport\Services\CsvWriterService.cs" />
     <Compile Include="DataExport\Services\DataExporter.cs" />
     <Compile Include="DataExport\Services\DataExportProcessesService.cs" />
+    <Compile Include="DataExport\Services\Exporters\InterviewExportredDataRowReader.cs" />
     <Compile Include="DataExport\Services\Exporters\InterviewsExporter.cs" />
     <Compile Include="DataExport\Services\IDataExporter.cs" />
     <Compile Include="DataExport\Services\IDataExportProcessesService.cs" />
