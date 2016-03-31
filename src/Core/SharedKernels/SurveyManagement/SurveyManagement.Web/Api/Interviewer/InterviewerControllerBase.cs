@@ -67,6 +67,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
                 : this.androidPackageReader.Read(pathToInterviewerApp).Version;
         }
         
+
+        //web config has content length override
+        //if new version is created make correspondent changes
         public virtual HttpResponseMessage PostTabletInformation(TabletInformationPackage tabletInformationPackage)
         {
             var user = this.userViewFactory.Load(new UserViewInputModel(tabletInformationPackage.AndroidId));

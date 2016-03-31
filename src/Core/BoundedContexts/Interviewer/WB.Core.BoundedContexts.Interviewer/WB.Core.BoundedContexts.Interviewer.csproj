@@ -162,6 +162,7 @@
     <Compile Include="Services\ITabletDiagnosticService.cs" />
     <Compile Include="Services\IBackupRestoreService.cs" />
     <Compile Include="Services\SynchronizationProcess.cs" />
+    <Compile Include="Services\SyncProgressDto.cs" />
     <Compile Include="Views\BackupRestoreViewModel.cs" />
     <Compile Include="Views\BandwidthTestViewModel.cs" />
     <Compile Include="Views\Dashboard\OldDashboardCapability\FeaturedCategoricalItem.cs" />

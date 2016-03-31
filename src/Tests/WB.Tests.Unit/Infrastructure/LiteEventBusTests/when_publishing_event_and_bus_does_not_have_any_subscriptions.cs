@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Ncqrs.Eventing;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 
 namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
 {
@@ -22,7 +23,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
             exception.ShouldBeNull();
 
 
-        private static ILiteEventBus eventBus;
+        private static LiteEventBus eventBus;
         private static CommittedEventStream eventsToPublish;
         private static Exception exception;
     }

@@ -2,6 +2,7 @@
 using System.Threading;
 using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
@@ -18,13 +19,13 @@ namespace WB.UI.Interviewer.Activities
 {
     [Activity(Label = "", 
         Theme = "@style/GrayAppTheme", 
+        LaunchMode = LaunchMode.SingleTask,
         WindowSoftInputMode = SoftInput.StateHidden,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class DashboardActivity : BaseActivity<DashboardViewModel>, ISyncBgService
     {
         protected override int ViewResourceId => Resource.Layout.dashboard;
 
-        public bool IsSyncServiceBound { get; set; }
         public SyncServiceBinder Binder { get; set; }
 
         protected override void OnCreate(Bundle bundle)
@@ -90,12 +91,11 @@ namespace WB.UI.Interviewer.Activities
             return base.OnOptionsItemSelected(item);
         }
 
-        public void StartSync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
+        public void StartSync()
         {
-            if (IsSyncServiceBound)
-            {
-                this.Binder.GetSyncService().StartSync(progress, cancellationToken);
-            }
+            this.Binder.GetSyncService().StartSync();
         }
+
+        public SyncProgressDto CurrentProgress => this.Binder.GetSyncService().CurrentProgress;
     }
 }

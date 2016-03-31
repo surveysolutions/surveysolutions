@@ -164,6 +164,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             startingLongOperationMessageSubscriptionToken = this.messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
             removedDashboardItemMessageSubscriptionToken = this.messenger.Subscribe<RemovedDashboardItemMessage>(DashboardItemOnRemovedDashboardItem);
 
+            this.Synchronization.Init();
             await this.RefreshDashboardAsync();
         }
 
