@@ -91,9 +91,9 @@ namespace WB.UI.Interviewer.Activities
             return base.OnOptionsItemSelected(item);
         }
 
-        public SyncProgressDto StartSync()
+        public void StartSync()
         {
-            return this.Binder.GetSyncService().StartSync();
+            this.Binder.GetSyncService().StartSync();
         }
 
         public SyncProgressDto CurrentProgress => this.Binder.GetSyncService().CurrentProgress;
