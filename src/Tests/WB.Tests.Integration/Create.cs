@@ -638,14 +638,13 @@ namespace WB.Tests.Integration
         }
 
         public static PostgresReadSideKeyValueStorage<TEntity> PostgresReadSideKeyValueStorage<TEntity>(
-            ISessionProvider sessionProvider = null, PostgreConnectionSettings postgreConnectionSettings = null, ISerializer serializer = null)
+            ISessionProvider sessionProvider = null, PostgreConnectionSettings postgreConnectionSettings = null)
             where TEntity : class, IReadSideRepositoryEntity
         {
             return new PostgresReadSideKeyValueStorage<TEntity>(
                 sessionProvider ?? Mock.Of<ISessionProvider>(),
                 postgreConnectionSettings ?? new PostgreConnectionSettings(),
-                Mock.Of<ILogger>(),
-                serializer ?? new NewtonJsonSerializer(new JsonSerializerSettingsFactory()));
+                Mock.Of<ILogger>());
         }
 
         public static class Command
