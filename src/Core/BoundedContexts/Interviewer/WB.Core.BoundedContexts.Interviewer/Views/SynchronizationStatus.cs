@@ -7,5 +7,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         Success,
         Fail,
         Canceled,
+        Started,
+        Stopped
     }
 }

@@ -24,6 +24,6 @@ namespace Ncqrs.Domain.Storage
         /// </summary>
         /// <param name="aggregateRoot">Aggregate root instance.</param>
         /// <returns>Snapshot instance if aggregate root supports snapthotting. Otherwise null.</returns>
-        Snapshot TryTakeSnapshot(IAggregateRoot aggregateRoot);
+        Snapshot TryTakeSnapshot(IEventSourcedAggregateRoot aggregateRoot);
     }
 }

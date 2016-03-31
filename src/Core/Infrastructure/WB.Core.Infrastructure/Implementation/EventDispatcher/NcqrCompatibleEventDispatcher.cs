@@ -170,7 +170,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                     errorsDuringHandling);
         }
 
-        public CommittedEventStream CommitUncommittedEvents(IAggregateRoot aggregateRoot, string origin)
+        public CommittedEventStream CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin)
         {
             var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnCommittedChanges());
             return this.eventStore.Store(eventStream);

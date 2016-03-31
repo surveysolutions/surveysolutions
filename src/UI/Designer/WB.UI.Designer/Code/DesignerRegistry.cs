@@ -45,7 +45,6 @@ namespace WB.UI.Designer.Code
             this.Bind<IChapterInfoViewFactory>().To<ChapterInfoViewFactory>();
             this.Bind<IQuestionnaireInfoFactory>().To<QuestionnaireInfoFactory>();
             this.Bind<IQuestionnaireInfoViewFactory>().To<QuestionnaireInfoViewFactory>();
-            this.Bind<IPublicService>().To<PublicService>();
         }
     }
 }

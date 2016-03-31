@@ -30,7 +30,7 @@ namespace Ncqrs.Domain.Storage
             return aggregate;
         }
 
-        public Snapshot TryTakeSnapshot(IAggregateRoot aggregateRoot)
+        public Snapshot TryTakeSnapshot(IEventSourcedAggregateRoot aggregateRoot)
         {
             Snapshot snapshot = null;
             _aggregateSnapshotter.TryTakeSnapshot(aggregateRoot, out snapshot);

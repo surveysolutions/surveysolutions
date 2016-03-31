@@ -425,9 +425,8 @@
   margin: 0;
 }
 .attachments-panel .attachments div.attachment-list div.attachments-panel-item .attachment-content .attachment-meta .file-name {
-  color: black;
-  font-family: "Lucida Console", Monaco, monospace;
-  font-style: normal;
+  display: inline-block;
+  word-break: break-all;
 }
 .attachments-panel .attachments div.attachment-list div.attachments-panel-item .drop-box {
   color: #78838a;

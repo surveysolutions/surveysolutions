@@ -8057,6 +8057,7 @@ textarea#edit-group-description {
   margin: 0;
 }
 .attachments-panel .attachments div.attachment-list div.attachments-panel-item .attachment-content .attachment-meta .file-name {
+  display: inline-block;
   word-break: break-all;
 }
 .attachments-panel .attachments div.attachment-list div.attachments-panel-item .drop-box {

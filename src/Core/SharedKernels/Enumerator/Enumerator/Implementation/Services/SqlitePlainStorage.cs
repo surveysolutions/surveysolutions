@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     (data, type) => serializer.DeserializeFromStream(new MemoryStream(data), type, TypeSerializationSettings.AllTypes),
                     (type) => true)))
             {
-                TraceListener = new MvxTraceListener($"{entityName}-SQL-Queries")
+                //TraceListener = new MvxTraceListener($"{entityName}-SQL-Queries")
             };
             this.asyncStorage = new SQLiteAsyncConnection(() => this.storage);
             this.logger = logger;

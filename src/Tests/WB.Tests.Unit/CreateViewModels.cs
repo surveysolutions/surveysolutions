@@ -56,20 +56,7 @@ namespace WB.Tests.Unit
             IInterviewerInterviewAccessor interviewFactory = null,
             IAttachmentContentStorage attachmentContentStorage = null)
         {
-            return new SynchronizationViewModel(
-                interviewViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewView>>(),
-                interviewersPlainStorage ?? Mock.Of<IAsyncPlainStorage<InterviewerIdentity>>(),
-                interviewMultimediaViewStorage ?? Mock.Of<IAsyncPlainStorage<InterviewMultimediaView>>(),
-                interviewFileViewStorage ?? Mock.Of<IAsyncPlainStorage<InterviewFileView>>(),
-                synchronizationService ?? Mock.Of<ISynchronizationService>(),
-                logger ?? Mock.Of<ILogger>(),
-                userInteractionService ?? Mock.Of<IUserInteractionService>(),
-                passwordHasher ?? Mock.Of<IPasswordHasher>(),
-                principal ?? Mock.Of<IPrincipal>(),
-                messenger ?? Mock.Of<IMvxMessenger>(),
-                questionnaireFactory ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),
-                interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>(),
-                attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>());
+            return new SynchronizationViewModel();
         }
     }
 }

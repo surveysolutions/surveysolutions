@@ -7,19 +7,19 @@ using WB.Core.Infrastructure.WriteSide;
 
 namespace WB.Core.Infrastructure.Implementation.Aggregates
 {
-    internal class AggregateRootRepositoryWithCache : AggregateRootRepository, IAggregateRootRepositoryWithCache
+    internal class EventSourcedAggregateRootRepositoryWithCache : EventSourcedAggregateRootRepository, IEventSourcedAggregateRootRepositoryWithCache
     {
-        static readonly ConcurrentDictionary<Type, IAggregateRoot> memoryCache = new ConcurrentDictionary<Type, IAggregateRoot>();
+        static readonly ConcurrentDictionary<Type, IEventSourcedAggregateRoot> memoryCache = new ConcurrentDictionary<Type, IEventSourcedAggregateRoot>();
 
-        public AggregateRootRepositoryWithCache(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository)
+        public EventSourcedAggregateRootRepositoryWithCache(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository)
             : base(eventStore, snapshotStore, repository)
         {
         }
 
 
-        public override IAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
+        public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
         {
-            IAggregateRoot aggregateRoot;
+            IEventSourcedAggregateRoot aggregateRoot;
 
             if (memoryCache.TryGetValue(aggregateType, out aggregateRoot)
                 && aggregateRoot.EventSourceId == aggregateId)

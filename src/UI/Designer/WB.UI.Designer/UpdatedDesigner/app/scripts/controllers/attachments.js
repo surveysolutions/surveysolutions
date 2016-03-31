@@ -11,7 +11,7 @@
             var MB = KB * KB;
             
 
-            var hideAttachmentsPane = 'ctrl+l';
+            var hideAttachmentsPane = 'ctrl+shift+a';
 
             if (hotkeys.get(hideAttachmentsPane) !== false) {
                 hotkeys.del(hideAttachmentsPane);

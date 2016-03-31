@@ -41,13 +41,13 @@ namespace WB.Tests.Integration.CommandServiceTests
 
             aggregateFromRepository = new Aggregate();
 
-            var repository = Mock.Of<IAggregateRootRepository>(_
+            var repository = Mock.Of<IEventSourcedAggregateRootRepository>(_
                 => _.GetLatest(typeof(Aggregate), aggregateId) == aggregateFromRepository);
 
             var eventBus = Mock.Of<IEventBus>();
             var eventBusMock = Mock.Get(eventBus);
-            eventBusMock.Setup(bus => bus.CommitUncommittedEvents(Moq.It.IsAny<IAggregateRoot>(), Moq.It.IsAny<string>()))
-                     .Returns((IAggregateRoot aggregate, string origin) =>
+            eventBusMock.Setup(bus => bus.CommitUncommittedEvents(Moq.It.IsAny<IEventSourcedAggregateRoot>(), Moq.It.IsAny<string>()))
+                     .Returns((IEventSourcedAggregateRoot aggregate, string origin) =>
                      {
                          return new CommittedEventStream(aggregate.EventSourceId,
                              aggregate.GetUnCommittedChanges()
