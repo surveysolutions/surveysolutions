@@ -318,18 +318,20 @@
                     <div class="question-list">
                         <div ng-repeat="error in verificationStatus.messagesToShow">
                             <div class="error-message"><span class="error-code">[{{error.code}}]:</span>{{error.message}}</div>
-                            <ul class="verification-items" ng-class="{singleError: !error.isGroupedMessage}" ng-repeat="referencesWithErrors in error.errors">
-                                <li class="verification-item-container" ng-repeat="reference in referencesWithErrors.references" ng-click="navigateTo(reference)">
-                                    <a class="verification-item" href="javascript:void(0);">
-                                        <span ng-if="referenceWithErrors.reference.type == 'Question'" class="icon icon-error {{referenceWithErrors.reference.questionType}}"></span>
-                                        <span ng-if="referenceWithErrors.reference.type == 'Macro'" class="icon icon-error icon-macro"></span>
-                                        <span ng-if="referenceWithErrors.reference.type == 'LookupTable'" class="icon icon-error icon-lookup"></span>
-                                        <span ng-if="referenceWithErrors.reference.type == 'StaticText'" class="icon icon-error icon-statictext"></span>
-                                        <span ng-if="referenceWithErrors.reference.type == 'Attachment'" class="icon icon-error icon-attachment"></span>
-                                        <span class="title">{{reference.title}}{{referencesWithErrors.compilationErrorMessages}}</span>
-                                        <span ng-if="referenceWithErrors.reference.type == 'Question' || referenceWithErrors.reference.type == 'Roster' || referenceWithErrors.reference.type == 'Macro'" class="variable" ng-bind="referenceWithErrors.reference.variable">aaaa</span>
-                                    </a>
-                                </li>
+                            <ul class="verification-items" ng-class="{singleError: !error.isGroupedMessage}">
+                                <empty-tag ng-repeat="referencesWithErrors in error.errors">
+                                    <li class="verification-item-container" ng-repeat="reference in referencesWithErrors.references" ng-click="navigateTo(reference)">
+                                        <a class="verification-item" href="javascript:void(0);">
+                                            <span ng-if="referenceWithErrors.reference.type == 'Question'" class="icon icon-error {{referenceWithErrors.reference.questionType}}"></span>
+                                            <span ng-if="referenceWithErrors.reference.type == 'Macro'" class="icon icon-error icon-macro"></span>
+                                            <span ng-if="referenceWithErrors.reference.type == 'LookupTable'" class="icon icon-error icon-lookup"></span>
+                                            <span ng-if="referenceWithErrors.reference.type == 'StaticText'" class="icon icon-error icon-statictext"></span>
+                                            <span ng-if="referenceWithErrors.reference.type == 'Attachment'" class="icon icon-error icon-attachment"></span>
+                                            <span class="title" title="{{referencesWithErrors.compilationErrorMessages != null ? referencesWithErrors.compilationErrorMessages.join('\r\n') : ''}}">{{reference.title}}{{referencesWithErrors.compilationErrorMessages != null ? ': ' + referencesWithErrors.compilationErrorMessages[0] : ''}}</span>
+                                            <span ng-if="referenceWithErrors.reference.type == 'Question' || referenceWithErrors.reference.type == 'Roster' || referenceWithErrors.reference.type == 'Macro'" class="variable" ng-bind="referenceWithErrors.reference.variable">aaaa</span>
+                                        </a>
+                                    </li>
+                                </empty-tag>
                             </ul>
                         </div>
                     </div>

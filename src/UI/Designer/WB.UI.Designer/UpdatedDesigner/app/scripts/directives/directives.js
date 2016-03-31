@@ -32,5 +32,11 @@
                 ngModel.$formatters.push(toUser);
             }
         };
+    }).directive("emptyTag", function () {
+        return {
+            restrict: "E",
+            replace: true,
+            template: ""
+        };
     });
 })();
