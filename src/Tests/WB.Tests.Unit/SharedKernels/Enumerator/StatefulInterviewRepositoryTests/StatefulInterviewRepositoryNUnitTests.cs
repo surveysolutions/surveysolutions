@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
             var eventStore = Create.EventStore(aggregateRootId, Array.Empty<CommittedEvent>());
             var aggregateSnapshotter = Create.AggregateSnapshotter();
             var domaiRepository = Create.DomainRepository(aggregateSnapshotter: aggregateSnapshotter);
-            var aggregateRootRepository = Create.AggregateRootRepository(snapshotStore: snapshotStore, eventStore: eventStore, repository: domaiRepository);
+            var aggregateRootRepository = Create.EventSourcedAggregateRootRepository(snapshotStore: snapshotStore, eventStore: eventStore, repository: domaiRepository);
 
             var statefulInterviewRepository = Create.StatefulInterviewRepository(aggregateRootRepository);
 
