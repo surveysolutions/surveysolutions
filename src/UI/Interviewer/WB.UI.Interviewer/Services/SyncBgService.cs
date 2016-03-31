@@ -17,16 +17,18 @@ namespace WB.UI.Interviewer.Services
         private Thread thread;
         private bool isSyncRunning;
 
-        public void StartSync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
+        public SyncProgressDto StartSync()
         {
             if (!this.isSyncRunning)
             {
                 var synchronizationProcess = Mvx.Resolve<ISynchronizationProcess>();
+                this.CurrentProgress = new SyncProgressDto(new Progress<SyncProgressInfo>(), new CancellationTokenSource());
+
                 this.thread = new Thread(() =>
                 {
                     try
                     {
-                        synchronizationProcess.SyncronizeAsync(progress, cancellationToken)
+                        synchronizationProcess.SyncronizeAsync(this.CurrentProgress.Progress, this.CurrentProgress.CancellationTokenSource.Token)
                                               .WaitAndUnwrapException(); // do not pass cancellationToken, since it will always throw operation cancelled here
                     }
                     catch (Exception e)
@@ -35,14 +37,19 @@ namespace WB.UI.Interviewer.Services
                     }
                     finally
                     {
-                        isSyncRunning = false;
+                        this.isSyncRunning = false;
+                        this.CurrentProgress = null;
                     }
                 });
 
                 this.isSyncRunning = true;
                 this.thread.Start();
             }
+
+            return this.CurrentProgress;
         }
+
+        public SyncProgressDto CurrentProgress { get; private set; }
 
         public override IBinder OnBind(Intent intent)
         {
