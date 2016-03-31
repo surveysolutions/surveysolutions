@@ -108,6 +108,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             this.InvokeOnMainThread(() =>
             {
+                this.IsSynchronizationInProgress = syncProgressInfo.IsRunning;
                 this.ProcessOperation = syncProgressInfo.Title;
                 this.ProcessOperationDescription = syncProgressInfo.Description;
                 this.Statistics = syncProgressInfo.Statistics;
@@ -121,15 +122,27 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             });
         }
 
+        public void Init()
+        {
+            var syncProgressDto = this.SyncBgService?.CurrentProgress;
+            if (syncProgressDto != null)
+            {
+                syncProgressDto.Progress.ProgressChanged += ProgressOnProgressChanged;
+                this.synchronizationCancellationTokenSource = syncProgressDto.CancellationTokenSource;
+            }
+        }
+
         public void Synchronize()
         {
-            this.IsSynchronizationInProgress = true;
             this.IsSynchronizationInfoShowed = true;
-            var progress = new Progress<SyncProgressInfo>();
-            progress.ProgressChanged += ProgressOnProgressChanged;
             this.synchronizationCancellationTokenSource = new CancellationTokenSource();
 
-            this.SyncBgService?.StartSync(progress, this.synchronizationCancellationTokenSource.Token);
+            var syncProgressDto = this.SyncBgService?.StartSync();
+            if (syncProgressDto != null)
+            {
+                syncProgressDto.Progress.ProgressChanged += ProgressOnProgressChanged;
+                this.synchronizationCancellationTokenSource = syncProgressDto.CancellationTokenSource;
+            }
         }
 
         protected virtual void OnSyncCompleted()
