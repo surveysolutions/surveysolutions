@@ -24,7 +24,6 @@ namespace WB.UI.Interviewer.Activities
     {
         protected override int ViewResourceId => Resource.Layout.dashboard;
 
-        public bool IsSyncServiceBound { get; set; }
         public SyncServiceBinder Binder { get; set; }
 
         protected override void OnCreate(Bundle bundle)
@@ -90,12 +89,11 @@ namespace WB.UI.Interviewer.Activities
             return base.OnOptionsItemSelected(item);
         }
 
-        public void StartSync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
+        public SyncProgressDto StartSync()
         {
-            if (IsSyncServiceBound)
-            {
-                this.Binder.GetSyncService().StartSync(progress, cancellationToken);
-            }
+            return this.Binder.GetSyncService().StartSync();
         }
+
+        public SyncProgressDto CurrentProgress => this.Binder.GetSyncService().CurrentProgress;
     }
 }

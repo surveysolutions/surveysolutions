@@ -19,13 +19,11 @@ namespace WB.UI.Interviewer.Services
             if (demoServiceBinder != null)
             {
                 activity.Binder = demoServiceBinder;
-                activity.IsSyncServiceBound = true;
             }
         }
 
         public void OnServiceDisconnected(ComponentName name)
         {
-            activity.IsSyncServiceBound = false;
         }
     }
 }
