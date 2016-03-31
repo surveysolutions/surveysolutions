@@ -30,16 +30,16 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
             result.ElementAt(0).Message.ShouldEqual(verificationMessages.ElementAt(0).Message);
 
         It should_return_first_error_with_same_References_count_as_input_error_has = () =>
-            result.ElementAt(0).References.Count.ShouldEqual(2);
+            result.ElementAt(0).Errors.First().References.Count.ShouldEqual(2);
 
         It should_return_first_error_that_references_question_with_questionId = () =>
-            result.ElementAt(0).References.ElementAt(0).ItemId.ShouldEqual(questionId);
+            result.ElementAt(0).Errors.First().References.ElementAt(0).ItemId.ShouldEqual(questionId);
 
         It should_return_first_error_that_references_group_with_groupId = () =>
-            result.ElementAt(0).References.ElementAt(1).ItemId.ShouldEqual(groupId);
+            result.ElementAt(0).Errors.First().References.ElementAt(1).ItemId.ShouldEqual(groupId);
 
         It should_return_first_error_that_references_question_with_questionTitle = () =>
-            result.ElementAt(0).References.ElementAt(0).Title.ShouldEqual(questionTitle);
+            result.ElementAt(0).Errors.First().References.ElementAt(0).Title.ShouldEqual(questionTitle);
 
         It should_return_first_error_with_IsGroupOfErrors_field_set_in_true = () =>
             result.ElementAt(0).IsGroupedMessage.ShouldBeTrue();
@@ -51,13 +51,13 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
             result.ElementAt(1).Message.ShouldEqual(verificationMessages.ElementAt(1).Message);
 
         It should_return_last_error_with_same_References_count_as_input_error_has = () =>
-            result.ElementAt(1).References.Count.ShouldEqual(verificationMessages.ElementAt(1).References.Count());
+            result.ElementAt(1).Errors.First().References.Count.ShouldEqual(verificationMessages.ElementAt(1).References.Count());
 
         It should_return_last_error_that_references_question_with_questionId = () =>
-            result.ElementAt(1).References.ElementAt(0).ItemId.ShouldEqual(groupId);
+            result.ElementAt(1).Errors.First().References.ElementAt(0).ItemId.ShouldEqual(groupId);
 
         It should_return_last_error_that_references_question_with_groupTitle = () =>
-            result.ElementAt(1).References.ElementAt(0).Title.ShouldEqual(groupTitle);
+            result.ElementAt(1).Errors.First().References.ElementAt(0).Title.ShouldEqual(groupTitle);
 
         It should_return_last_error_with_IsGroupOfErrors_field_set_in_true = () =>
             result.ElementAt(1).IsGroupedMessage.ShouldBeTrue();
@@ -69,16 +69,16 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
             result.ElementAt(2).Message.ShouldEqual(verificationMessages.ElementAt(2).Message);
 
         It should_return_third_error_with_same_References_count_as_input_error_has = () =>
-            result.ElementAt(2).References.Count.ShouldEqual(2);
+            result.ElementAt(2).Errors.First().References.Count.ShouldEqual(2);
 
         It should_return_third_error_that_references_question_with_questionId = () =>
-            result.ElementAt(2).References.ElementAt(0).ItemId.ShouldEqual(questionId);
+            result.ElementAt(2).Errors.First().References.ElementAt(0).ItemId.ShouldEqual(questionId);
 
         It should_return_third_error_that_references_group_with_groupId = () =>
-            result.ElementAt(2).References.ElementAt(1).ItemId.ShouldEqual(groupId);
+            result.ElementAt(2).Errors.First().References.ElementAt(1).ItemId.ShouldEqual(groupId);
 
         It should_return_third_error_that_references_question_with_questionTitle = () =>
-            result.ElementAt(2).References.ElementAt(0).Title.ShouldEqual(questionTitle);
+            result.ElementAt(2).Errors.First().References.ElementAt(0).Title.ShouldEqual(questionTitle);
 
         It should_return_third_error_with_IsGroupOfErrors_field_set_in_true = () =>
             result.ElementAt(2).IsGroupedMessage.ShouldBeFalse();
