@@ -23,7 +23,7 @@ namespace WB.Tests.Integration.CommandServiceTests
         private class Update : ICommand { public Guid CommandIdentifier { get; private set; } }
         private class Updated : IEvent { }
 
-        private class Aggregate : AggregateRoot
+        private class Aggregate : EventSourcedAggregateRoot
         {
             protected override void HandleEvent(object evnt) { }
 

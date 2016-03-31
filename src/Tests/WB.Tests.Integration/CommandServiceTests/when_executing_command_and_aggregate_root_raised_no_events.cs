@@ -17,7 +17,7 @@ namespace WB.Tests.Integration.CommandServiceTests
     {
         private class DoNothing : ICommand { public Guid CommandIdentifier { get; private set; } }
 
-        private class Aggregate : AggregateRoot
+        private class Aggregate : EventSourcedAggregateRoot
         {
             protected override void HandleEvent(object evnt) { }
 

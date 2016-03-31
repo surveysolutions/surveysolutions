@@ -26,7 +26,7 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
             public Guid CommandIdentifier { get; private set; }
         }
 
-        private class Aggregate : AggregateRoot
+        private class Aggregate : EventSourcedAggregateRoot
         {
             public void WorkAboutHalfSecond(WorkAboutHalfSecond command)
             {

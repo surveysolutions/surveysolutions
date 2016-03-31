@@ -17,7 +17,7 @@ namespace WB.Tests.Integration.CommandServiceTests
     {
         private class WorkFor1Second : ICommand { public Guid CommandIdentifier { get; private set; } }
 
-        private class Aggregate : AggregateRoot
+        private class Aggregate : EventSourcedAggregateRoot
         {
             public void WorkFor1Second(WorkFor1Second command)
             {

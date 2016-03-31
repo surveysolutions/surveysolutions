@@ -17,7 +17,7 @@ namespace WB.Tests.Integration.CommandServiceTests
     {
         private class ExecuteForHalfASecond : ICommand { public ExecuteForHalfASecond() { } public Guid CommandIdentifier { get; private set; } }
 
-        private class Aggregate : AggregateRoot
+        private class Aggregate : EventSourcedAggregateRoot
         {
             public void ExecuteForHalfASecond(ExecuteForHalfASecond command)
             {
