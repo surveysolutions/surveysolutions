@@ -10,7 +10,8 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views
 {
-    public static class LinkedQuestionUtils
+    [Obsolete("please don't use this class or extend it, the class serves only one purpose - support linked questions barward compatibility")]
+    public static class InterviewLevelUtils
     {
         public static InterviewLevel[] GetAvailableOptionsForQuestionLinkedOnRoster(
             IQuestion question,

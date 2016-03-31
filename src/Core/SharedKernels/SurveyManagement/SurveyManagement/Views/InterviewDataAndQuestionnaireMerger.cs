@@ -137,7 +137,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
 
         private IEnumerable<KeyValuePair<string, InterviewLevel>> GetRosterLevels(IGroup group, InterviewInfoInternal interviewInfo)
         {
-            var groupScope = GetRosterSizeSourcesForEntity(group);
+            var groupScope = InterviewLevelUtils.GetRosterSizeSourcesForEntity(group);
 
             return interviewInfo.Interview.Levels.Where(w => w.Value.ScopeVectors.ContainsKey(groupScope))
                           .OrderBy(x => x.Value.ScopeVectors.First().Value ?? x.Value.RosterVector.Last());
@@ -361,7 +361,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
 
         private Dictionary<decimal[], string> GetAvailableOptions(IQuestion question, decimal[] questionRosterVector, InterviewInfoInternal interviewInfo, InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)
         {
-            return LinkedQuestionUtils.GetAvailableOptionsForQuestionLinkedOnRoster(question, questionRosterVector,
+            return InterviewLevelUtils.GetAvailableOptionsForQuestionLinkedOnRoster(question, questionRosterVector,
                 interviewInfo.Interview, interviewInfo.Questionnaire, interviewLinkedQuestionOptions)
                 .ToDictionary(l => l.RosterVector,
                     l =>
@@ -369,19 +369,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                             l.QuestionsSearchCache[question.LinkedToQuestionId.Value].Answer.ToString(),
                             l.RosterVector, questionRosterVector,
                             l.ScopeVectors.Keys.First(),
-                            LinkedQuestionUtils.GetRosterSizeSourcesForEntity(question), interviewInfo));
+                            InterviewLevelUtils.GetRosterSizeSourcesForEntity(question), interviewInfo));
         }
 
         private Dictionary<decimal[], string> GetAvailableOptionsForQuestionLinkedOnRoster(IQuestion question, decimal[] questionRosterVector, InterviewInfoInternal interviewInfo, InterviewLinkedQuestionOptions interviewLinkedQuestionOptions)
         {
-            return LinkedQuestionUtils.GetAvailableOptionsForQuestionLinkedOnRoster(question, questionRosterVector,
+            return InterviewLevelUtils.GetAvailableOptionsForQuestionLinkedOnRoster(question, questionRosterVector,
                   interviewInfo.Interview, interviewInfo.Questionnaire, interviewLinkedQuestionOptions).ToDictionary(interviewLevel => interviewLevel.RosterVector,
                     interviewLevel => CreateLinkedQuestionOption(
                         interviewLevel.RosterRowTitles.ContainsKey(question.LinkedToRosterId.Value) ? interviewLevel.RosterRowTitles[question.LinkedToRosterId.Value] : null,
                         interviewLevel.RosterVector,
                         questionRosterVector,
                         interviewLevel.ScopeVectors.Keys.First(),
-                        LinkedQuestionUtils.GetRosterSizeSourcesForEntity(question),
+                        InterviewLevelUtils.GetRosterSizeSourcesForEntity(question),
                         interviewInfo));
         }
 
@@ -420,24 +420,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
             combinedRosterTitles.Add(title);
 
             return string.Join(": ", combinedRosterTitles.Where(rosterTitle => !string.IsNullOrEmpty(rosterTitle)));
-        }
-
-        public  ValueVector<Guid> GetRosterSizeSourcesForEntity(IComposite entity)
-        {
-            var rosterSizes = new List<Guid>();
-            while (!(entity is IQuestionnaireDocument))
-            {
-                var group = entity as IGroup;
-                if (group != null)
-                {
-                    if (IsRoster(group))
-                        rosterSizes.Add(group.RosterSizeQuestionId ?? group.PublicKey);
-
-                }
-                entity = entity.GetParent();
-            }
-            rosterSizes.Reverse();
-            return rosterSizes.ToArray();
         }
 
         private static bool IsRoster(IGroup currentGroup)
