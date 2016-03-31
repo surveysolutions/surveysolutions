@@ -2239,10 +2239,10 @@ namespace WB.Tests.Unit
             return statefulInterview;
         }
 
-        public static IStatefulInterviewRepository StatefulInterviewRepository(IAggregateRootRepository aggregateRootRepository, ILiteEventBus liteEventBus = null)
+        public static IStatefulInterviewRepository StatefulInterviewRepository(IEventSourcedAggregateRootRepository aggregateRootRepository, ILiteEventBus liteEventBus = null)
         {
             return new StatefulInterviewRepository(
-                aggregateRootRepository: aggregateRootRepository ?? Mock.Of<IAggregateRootRepository>(),
+                aggregateRootRepository: aggregateRootRepository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
                 eventBus: liteEventBus ?? Mock.Of<ILiteEventBus>());
         }
 
@@ -2858,9 +2858,9 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static IAggregateRootRepository AggregateRootRepository(IEventStore eventStore = null, ISnapshotStore snapshotStore = null, IDomainRepository repository = null)
+        public static IEventSourcedAggregateRootRepository EventSourcedAggregateRootRepository(IEventStore eventStore = null, ISnapshotStore snapshotStore = null, IDomainRepository repository = null)
         {
-            return new AggregateRootRepository(eventStore, snapshotStore, repository);
+            return new EventSourcedAggregateRootRepository(eventStore, snapshotStore, repository);
         }
 
         public static ISnapshotStore SnapshotStore(Guid aggregateRootId, Snapshot snapshot = null)
