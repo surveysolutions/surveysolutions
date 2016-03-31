@@ -11,28 +11,17 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
     {
         private readonly JsonUtilsSettings jsonUtilsSettings;
         private IJsonSerializerSettingsFactory jsonSerializerSettingsFactory;
-        private Dictionary<string, string> assemblyReplacementMapping = new Dictionary<string, string>();
 
         //assuming it injected not in global scope but pet thread
         private ConcurrentDictionary<TypeSerializationSettings, JsonSerializer> JsonSerializerCache = new ConcurrentDictionary<TypeSerializationSettings, JsonSerializer>();
-
-        public NewtonJsonSerializer(IJsonSerializerSettingsFactory jsonSerializerSettingsFactory) 
-            : this(jsonSerializerSettingsFactory, new Dictionary<string, string>()) { }
-
-        public NewtonJsonSerializer(IJsonSerializerSettingsFactory jsonSerializerSettingsFactory, Dictionary<string, string> assemblyReplacementMapping)
-            : this(jsonSerializerSettingsFactory, new JsonUtilsSettings() { TypeNameHandling = TypeSerializationSettings.ObjectsOnly }, assemblyReplacementMapping)
+        
+        public NewtonJsonSerializer(IJsonSerializerSettingsFactory jsonSerializerSettingsFactory)
+            : this(jsonSerializerSettingsFactory, new JsonUtilsSettings() { TypeNameHandling = TypeSerializationSettings.ObjectsOnly })
         {
         }
-
-        public NewtonJsonSerializer(IJsonSerializerSettingsFactory jsonSerializerSettingsFactory, JsonUtilsSettings jsonUtilsSettings) 
-            : this(jsonSerializerSettingsFactory, jsonUtilsSettings, new Dictionary<string, string>()) { }
-
-        public NewtonJsonSerializer(
-            IJsonSerializerSettingsFactory jsonSerializerSettingsFactory,
-            JsonUtilsSettings jsonUtilsSettings,
-            Dictionary<string, string> assemblyReplacementMapping)
+        
+        public NewtonJsonSerializer(IJsonSerializerSettingsFactory jsonSerializerSettingsFactory, JsonUtilsSettings jsonUtilsSettings)
         {
-            this.assemblyReplacementMapping = assemblyReplacementMapping;
             this.jsonSerializerSettingsFactory = jsonSerializerSettingsFactory;
             this.jsonUtilsSettings = jsonUtilsSettings;
         }
@@ -103,9 +92,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
 
         public T Deserialize<T>(string payload, TypeSerializationSettings settings)
         {
-            var appliedReplacementPayload = ApplyAssemblyReplacementMapping(payload);
-
-            return JsonConvert.DeserializeObject<T>(appliedReplacementPayload, jsonSerializerSettingsFactory.GetJsonSerializerSettings(settings));
+            return JsonConvert.DeserializeObject<T>(payload, jsonSerializerSettingsFactory.GetJsonSerializerSettings(settings));
         }
 
         public object Deserialize(string payload, Type type, TypeSerializationSettings settings)
@@ -158,17 +145,6 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             {
                 this.GetSerializer(this.jsonUtilsSettings.TypeNameHandling).Serialize(jsonWriter, value, type);
             }
-        }
-
-        private string ApplyAssemblyReplacementMapping(string payload)
-        {
-            var replaceOldAssemblyNames = payload;
-            foreach (var item in assemblyReplacementMapping)
-            {
-                replaceOldAssemblyNames = replaceOldAssemblyNames.Replace(item.Key, item.Value);
-            }
-            return replaceOldAssemblyNames;
-
         }
     }
 }

@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using Main.Core.Documents;
+﻿using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
 using Ninject;
 using Ninject.Modules;
-using SQLite.Net;
 using SQLite.Net.Interop;
 using SQLite.Net.Platform.XamarinAndroid;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
@@ -20,7 +18,6 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Shared.Enumerator;
-using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Interviewer.Infrastructure.Logging;
 using IPrincipal = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IPrincipal;
 using WB.Infrastructure.Shared.Enumerator.Internals;
@@ -73,14 +70,7 @@ namespace WB.UI.Interviewer.Infrastructure
             this.Bind<JsonUtilsSettings>()
                 .ToConstant(new JsonUtilsSettings() {TypeNameHandling = TypeSerializationSettings.ObjectsOnly});
 
-            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(
-                new JsonSerializerSettingsFactory(),
-                new Dictionary<string, string>()
-                {
-                    {
-                        "WB.UI.Capi", "WB.Core.BoundedContexts.Interviewer"
-                    }
-                }));
+            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(new JsonSerializerSettingsFactory()));
             this.Bind<IStringCompressor>().To<JsonCompressor>();
         }
     }
