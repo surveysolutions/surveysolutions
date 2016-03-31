@@ -2,6 +2,7 @@
 using System.Threading;
 using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
@@ -18,6 +19,7 @@ namespace WB.UI.Interviewer.Activities
 {
     [Activity(Label = "", 
         Theme = "@style/GrayAppTheme", 
+        LaunchMode = LaunchMode.SingleTask,
         WindowSoftInputMode = SoftInput.StateHidden,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class DashboardActivity : BaseActivity<DashboardViewModel>, ISyncBgService
