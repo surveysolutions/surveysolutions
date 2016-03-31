@@ -13,6 +13,6 @@ namespace WB.Core.Infrastructure.EventBus.Lite
 
         bool IsSubscribed(ILiteEventHandler handler, string eventSourceId);
 
-        IEnumerable<Action<object>> GetHandlers(CommittedEvent @event);
+        IReadOnlyCollection<Action<object>> GetHandlers(CommittedEvent @event);
     }
 }
