@@ -16,7 +16,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 {
     public class SqliteEventStorage : IInterviewerEventStorage, IDisposable
     {
-        private readonly ISerializer serializer;
         private readonly SQLiteConnectionWithLock connection;
         private ILogger logger;
         
@@ -37,7 +36,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 //TraceListener = traceListener
             };
             this.logger = logger;
-            this.serializer = serializer;
             this.connection.CreateTable<EventView>();
             this.connection.CreateIndex<EventView>(entity => entity.EventId);
         }
