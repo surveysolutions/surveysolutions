@@ -1,9 +1,8 @@
-using System.Linq;
+using Android.App;
 using Android.Content;
 using Android.Net;
 using Android.Net.Wifi;
 using Android.Telephony;
-using MvvmCross.Platform.Droid.Platform;
 using MvvmCross.Plugins.Network.Reachability;
 using WB.Core.GenericSubdomains.Portable.Services;
 
@@ -11,22 +10,18 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 {
     public class AndroidNetworkService : INetworkService
     {
-        private readonly IMvxAndroidCurrentTopActivity mvxAndroidCurrentTopActivity;
         private readonly IMvxReachability mvxReachability;
         private readonly string unknown = "UNKNOWN";
 
-       public AndroidNetworkService(IMvxAndroidCurrentTopActivity mvxAndroidCurrentTopActivity, IMvxReachability mvxReachability)
+       public AndroidNetworkService(IMvxReachability mvxReachability)
         {
-            this.mvxAndroidCurrentTopActivity = mvxAndroidCurrentTopActivity;
-            this.mvxReachability = mvxReachability;
+           this.mvxReachability = mvxReachability;
         }
 
         public bool IsNetworkEnabled()
         {
-            var cm = (ConnectivityManager)this.mvxAndroidCurrentTopActivity.Activity.GetSystemService(Context.ConnectivityService);
-
-            return cm.GetAllNetworkInfo().Where(networkInfo => networkInfo.Type == ConnectivityType.Wifi || networkInfo.Type == ConnectivityType.Mobile)
-                     .Any(networkInfo => networkInfo.IsConnectedOrConnecting);
+            var cm = (ConnectivityManager)Application.Context.GetSystemService(Context.ConnectivityService);
+            return cm.ActiveNetworkInfo?.IsConnectedOrConnecting ?? false;
         }
 
         public bool IsHostReachable(string host)
@@ -36,7 +31,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         private NetworkInfo GetNetworkInfo()
         {
-            ConnectivityManager cm = (ConnectivityManager)this.mvxAndroidCurrentTopActivity.Activity.GetSystemService(Context.ConnectivityService);
+            ConnectivityManager cm = (ConnectivityManager)Application.Context.GetSystemService(Context.ConnectivityService);
             return cm.ActiveNetworkInfo;
         }
 
@@ -58,12 +53,12 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
             if (network.Type == ConnectivityType.Wifi)
             {
-                WifiManager manager = (WifiManager)this.mvxAndroidCurrentTopActivity.Activity.GetSystemService(Context.WifiService);
+                WifiManager manager = (WifiManager)Application.Context.GetSystemService(Context.WifiService);
                 return manager.ConnectionInfo.SSID;
             }
             if (network.Type == ConnectivityType.Mobile)
             {
-                TelephonyManager manager = (TelephonyManager)this.mvxAndroidCurrentTopActivity.Activity.GetSystemService(Context.TelephonyService);
+                TelephonyManager manager = (TelephonyManager)Application.Context.GetSystemService(Context.TelephonyService);
                 return manager.NetworkOperatorName;
             }
             return this.GetNetworkInfo().Type.ToString();
