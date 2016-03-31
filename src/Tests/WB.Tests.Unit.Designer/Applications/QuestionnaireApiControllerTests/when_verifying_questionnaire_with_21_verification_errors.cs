@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             result = controller.Verify(questionnaireId);
 
         It should_returned_errors_contains_specified_errors_count = () =>
-            result.Errors.Sum(error => error.References.Count).ShouldEqual(QuestionnaireController.MaxVerificationErrors);
+            result.Errors.Sum(error => error.Errors.First().References.Count).ShouldEqual(QuestionnaireController.MaxVerificationErrors);
 
         private static QuestionnaireDocument questionnaireDocument; 
         private static Mock<IQuestionnaireVerifier> verifierMock ;
