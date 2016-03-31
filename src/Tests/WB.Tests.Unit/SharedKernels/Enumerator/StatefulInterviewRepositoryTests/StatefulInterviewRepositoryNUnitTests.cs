@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Moq;
+using Ncqrs.Eventing;
 using NSubstitute;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
@@ -50,6 +52,23 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
             Assert.That(result.HasLinkedOptionsChangedEvents, Is.True);
             liteEventBusMock.Verify(x => x.CommitUncommittedEvents(statefulInterview, Moq.It.IsAny<string>()),
                 Times.Once);
+        }
+
+        [Test]
+        public void When_getting_StatefullInterview_and_event_store_does_not_have_any_events_by_interview_Then_should_return_nullable_StatefullInterview()
+        {
+            var aggregateRootId = Guid.Parse("11111111111111111111111111111111");
+            var snapshotStore = Create.SnapshotStore(aggregateRootId);
+            var eventStore = Create.EventStore(aggregateRootId, Array.Empty<CommittedEvent>());
+            var aggregateSnapshotter = Create.AggregateSnapshotter();
+            var domaiRepository = Create.DomainRepository(aggregateSnapshotter: aggregateSnapshotter);
+            var aggregateRootRepository = Create.AggregateRootRepository(snapshotStore: snapshotStore, eventStore: eventStore, repository: domaiRepository);
+
+            var statefulInterviewRepository = Create.StatefulInterviewRepository(aggregateRootRepository);
+
+            var result = statefulInterviewRepository.Get(aggregateRootId.FormatGuid());
+
+            Assert.That(result, Is.EqualTo(null));
         }
 
         private StatefulInterviewRepository CreteStatefulInterviewRepository(StatefulInterview statefulInterview = null, ILiteEventBus liteEventBus=null)
