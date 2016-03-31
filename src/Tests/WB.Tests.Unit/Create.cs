@@ -2632,7 +2632,13 @@ namespace WB.Tests.Unit
             {
                 Code = code,
                 Message = message,
-                References = references.ToList()
+                Errors = new List<VerificationMessageError>()
+                { 
+                    new VerificationMessageError()
+                    {
+                        References = references.ToList()
+                    }
+                }
             };
         }
 

@@ -1246,7 +1246,13 @@ namespace WB.Tests.Unit.Designer
             {
                 Code = code,
                 Message = message,
-                References = references.ToList()
+                Errors = new List<VerificationMessageError>()
+                {
+                    new VerificationMessageError()
+                    {
+                        References = references.ToList()
+                    }
+                }
             };
         }
 
