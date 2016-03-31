@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
         public IStatefulInterview Get(string interviewId)
         {
-            if (interviewId == null) throw new ArgumentNullException("interviewId");
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
 
             var interviewAggregateRootId = Guid.Parse(interviewId);
             var statefullInterview = (StatefulInterview) this.aggregateRootRepository.GetLatest(typeof(StatefulInterview), interviewAggregateRootId);

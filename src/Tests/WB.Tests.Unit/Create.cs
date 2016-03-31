@@ -138,9 +138,15 @@ using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.Synchronization.SyncStorage;
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
 using designer::WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V6.Templates;
+using Ncqrs.Domain;
+using Ncqrs.Domain.Storage;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable.CustomCollections;
+using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.SurveyManagement.Commands;
@@ -2240,6 +2246,13 @@ namespace WB.Tests.Unit
             return statefulInterview;
         }
 
+        public static IStatefulInterviewRepository StatefulInterviewRepository(IAggregateRootRepository aggregateRootRepository, ILiteEventBus liteEventBus = null)
+        {
+            return new StatefulInterviewRepository(
+                aggregateRootRepository: aggregateRootRepository ?? Mock.Of<IAggregateRootRepository>(),
+                eventBus: liteEventBus ?? Mock.Of<ILiteEventBus>());
+        }
+
         public static StaticText StaticText(
             Guid? staticTextId = null,
             string text = "Static Text X",
@@ -2850,6 +2863,37 @@ namespace WB.Tests.Unit
                 Id = id,
 
             };
+        }
+
+        public static IAggregateRootRepository AggregateRootRepository(IEventStore eventStore = null, ISnapshotStore snapshotStore = null, IDomainRepository repository = null)
+        {
+            return new AggregateRootRepository(eventStore, snapshotStore, repository);
+        }
+
+        public static ISnapshotStore SnapshotStore(Guid aggregateRootId, Snapshot snapshot = null)
+        {
+            return Mock.Of<ISnapshotStore>(_ => _.GetSnapshot(aggregateRootId, Moq.It.IsAny<int>()) == snapshot);
+        }
+
+        public static IEventStore EventStore(Guid eventSourceId, IEnumerable<CommittedEvent> committedEvents)
+        {
+            return Mock.Of<IEventStore>(_ =>
+                _.ReadFrom(eventSourceId, Moq.It.IsAny<int>(), Moq.It.IsAny<int>()) == new CommittedEventStream(eventSourceId, committedEvents));
+        }
+
+        public static IDomainRepository DomainRepository(IAggregateSnapshotter aggregateSnapshotter = null, IServiceLocator serviceLocator = null)
+        {
+            return new DomainRepository(
+                aggregateSnapshotter: aggregateSnapshotter ?? Mock.Of<IAggregateSnapshotter>(),
+                serviceLocator: serviceLocator ?? Mock.Of<IServiceLocator>());
+        }
+
+        public static IAggregateSnapshotter AggregateSnapshotter(AggregateRoot aggregateRoot = null, bool isARLoadedFromSnapshotSuccessfully = false)
+        {
+            return Mock.Of<IAggregateSnapshotter>(_ =>
+                _.TryLoadFromSnapshot(Moq.It.IsAny<Type>(), Moq.It.IsAny<Snapshot>(),
+                    Moq.It.IsAny<CommittedEventStream>(), out aggregateRoot) ==
+                isARLoadedFromSnapshotSuccessfully);
         }
     }
 }
