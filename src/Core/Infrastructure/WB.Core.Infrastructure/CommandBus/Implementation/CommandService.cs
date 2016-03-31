@@ -114,9 +114,10 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
             Type aggregateType = CommandRegistry.GetAggregateRootType(command);
             Func<ICommand, Guid> aggregateRootIdResolver = CommandRegistry.GetAggregateRootIdResolver(command);
-            Action<ICommand, IEventSourcedAggregateRoot> commandHandler = CommandRegistry.GetCommandHandler(command);
-            IEnumerable<Action<IEventSourcedAggregateRoot, ICommand>> validators = CommandRegistry.GetValidators(command, this.serviceLocator);
+            Action<ICommand, IAggregateRoot> commandHandler = CommandRegistry.GetCommandHandler(command);
+            IEnumerable<Action<IAggregateRoot, ICommand>> validators = CommandRegistry.GetValidators(command, this.serviceLocator);
             bool isAggregateEventSourced = CommandRegistry.IsAggregateEventSourced(command);
+            bool isAggregatePlain = CommandRegistry.IsAggregatePlain(command);
 
             Guid aggregateId = aggregateRootIdResolver.Invoke(command);
 
@@ -124,11 +125,19 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             {
                 this.ExecuteEventSourcedCommand(command, origin, aggregateType, aggregateId, validators, commandHandler, cancellationToken);
             }
+            else if (isAggregatePlain)
+            {
+                this.ExecutePlainCommand(command, aggregateType, aggregateId, validators, commandHandler, cancellationToken);
+            }
+            else
+            {
+                throw new CommandServiceException($"Unable to execute command {command.GetType().Name} because it is registered to unknown aggregate root kind.");
+            }
         }
 
         private void ExecuteEventSourcedCommand(ICommand command, string origin,
-            Type aggregateType, Guid aggregateId, IEnumerable<Action<IEventSourcedAggregateRoot, ICommand>> validators,
-            Action<ICommand, IEventSourcedAggregateRoot> commandHandler, CancellationToken cancellationToken)
+            Type aggregateType, Guid aggregateId, IEnumerable<Action<IAggregateRoot, ICommand>> validators,
+            Action<ICommand, IAggregateRoot> commandHandler, CancellationToken cancellationToken)
         {
             IEventSourcedAggregateRoot aggregate = this.eventSourcedRepository.GetLatest(aggregateType, aggregateId);
 
@@ -145,12 +154,13 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            foreach (Action<IEventSourcedAggregateRoot, ICommand> validator in validators)
+            foreach (Action<IAggregateRoot, ICommand> validator in validators)
             {
                 validator.Invoke(aggregate, command);
             }
 
             cancellationToken.ThrowIfCancellationRequested();
+
             commandHandler.Invoke(command, aggregate);
 
             if (!aggregate.HasUncommittedChanges())
@@ -167,6 +177,28 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             {
                 this.snapshooter.CreateSnapshotIfNeededAndPossible(aggregate);
             }
+        }
+
+        private void ExecutePlainCommand(ICommand command,
+            Type aggregateType, Guid aggregateId, IEnumerable<Action<IAggregateRoot, ICommand>> validators,
+            Action<ICommand, IAggregateRoot> commandHandler, CancellationToken cancellationToken)
+        {
+            if (!CommandRegistry.IsInitializer(command))
+                throw new CommandServiceException($"Unable to execute not-constructing command {command.GetType().Name} because command service does not support plain repositories.");
+
+            var aggregate = (IAggregateRoot) this.serviceLocator.GetInstance(aggregateType);
+            aggregate.SetId(aggregateId);
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            foreach (Action<IAggregateRoot, ICommand> validator in validators)
+            {
+                validator.Invoke(aggregate, command);
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            commandHandler.Invoke(command, aggregate);
         }
     }
 }
