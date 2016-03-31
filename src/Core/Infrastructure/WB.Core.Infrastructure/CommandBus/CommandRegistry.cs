@@ -25,7 +25,6 @@ namespace WB.Core.Infrastructure.CommandBus
                 IEnumerable<Type> validators)
             {
                 this.AggregateType = aggregateType;
-                this.IsEventSourced = false;
                 this.IsInitializer = isInitializer;
                 this.IdResolver = idResolver;
                 this.Handler = handler;
@@ -33,7 +32,7 @@ namespace WB.Core.Infrastructure.CommandBus
             }
 
             public Type AggregateType { get; }
-            public bool IsEventSourced { get; }
+            public bool IsEventSourced => typeof(IEventSourcedAggregateRoot).GetTypeInfo().IsAssignableFrom(this.AggregateType.GetTypeInfo());
             public bool IsInitializer { get; }
             public Func<ICommand, Guid> IdResolver { get; }
             public Action<ICommand, IAggregateRoot> Handler { get; }
