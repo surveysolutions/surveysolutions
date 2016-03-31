@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 {
@@ -75,6 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         {
             var dataRecords = new List<InterviewDataExportRecord>();
 
+            var answersSeparator = ExportFileSettings.NotReadableAnswersSeparator.ToString();
             var interviewDataByLevels = this.GetLevelsFromInterview(interview, headerStructureForLevel.LevelScopeVector);
 
             foreach (InterviewLevel dataByLevel in interviewDataByLevels)
@@ -113,14 +115,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
                 string[][] questionsForExport = this.GetQuestionsForExport(dataByLevel, headerStructureForLevel);
 
-                dataRecords.Add(new InterviewDataExportRecord(recordId, 
-                    referenceValues, 
+                dataRecords.Add(new InterviewDataExportRecord(recordId,
+                    referenceValues,
                     parentRecordIds,
                     systemVariableValues)
                 {
-                    Answers = questionsForExport.Select(x => string.Join("\n", x)).ToArray()
+                    Answers = questionsForExport.Select(x => string.Join(answersSeparator,x.Select(s => s.Replace(answersSeparator, "")))).ToArray()
                 });
-
             }
 
             return dataRecords.ToArray();

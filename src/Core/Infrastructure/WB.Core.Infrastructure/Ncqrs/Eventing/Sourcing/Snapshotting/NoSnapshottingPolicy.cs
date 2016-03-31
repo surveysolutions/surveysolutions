@@ -8,7 +8,7 @@ namespace Ncqrs.Eventing.Sourcing.Snapshotting
     /// </summary>
     public class NoSnapshottingPolicy : ISnapshottingPolicy
     {
-        public bool ShouldCreateSnapshot(IAggregateRoot aggregateRoot)
+        public bool ShouldCreateSnapshot(IEventSourcedAggregateRoot aggregateRoot)
         {
             return false;
         }

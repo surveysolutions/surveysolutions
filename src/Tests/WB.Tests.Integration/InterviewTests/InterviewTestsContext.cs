@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -30,6 +31,15 @@ namespace WB.Tests.Integration.InterviewTests
     [Subject(typeof(Interview))]
     internal class InterviewTestsContext
     {
+        internal static AnsweredYesNoOption Yes(decimal value)
+        {
+            return Create.AnsweredYesNoOption(value, true);
+        }
+        internal static AnsweredYesNoOption No(decimal value)
+        {
+            return Create.AnsweredYesNoOption(value, false);
+        }
+
         protected static Interview SetupInterviewFromQuestionnaireDocumentRegisteringAllNeededDependencies(QuestionnaireDocument questionnaireDocument)
         {
             var questionnaireId = Guid.Parse("10000010000100100100100001000001");

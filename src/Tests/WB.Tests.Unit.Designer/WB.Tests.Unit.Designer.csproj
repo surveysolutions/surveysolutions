@@ -288,13 +288,6 @@
     <Compile Include="Applications\MessageHandlerTests\MessageHandlerTestContext.cs" />
     <Compile Include="Applications\MessageHandlerTests\when_https_verifier_reseives_https_request.cs" />
     <Compile Include="Applications\MessageHandlerTests\when_https_verifier_reseives_non_https_request.cs" />
-    <Compile Include="Applications\PublicServiceTests\when_service_and_response_objects_have_specific_namespace.cs" />
-    <Compile Include="Applications\PublicServiceTests\when_downloading_questionnaire_and_processor_generator_raises_exception.cs" />
-    <Compile Include="Applications\PublicServiceTests\when_downloading_questionnaire_and_processor_generator_failed.cs" />
-    <Compile Include="Applications\PublicServiceTests\when_downloading_questionnaire_and_verifier_returns_errors.cs" />
-    <Compile Include="Applications\PublicServiceTests\when_downloading_questionnaire_that_absent.cs" />
-    <Compile Include="Applications\PublicServiceTests\when_downloading_questionnaire_with_higher_version.cs" />
-    <Compile Include="Applications\PublicServiceTests\PublicServiceTestContext.cs" />
     <Compile Include="Applications\QuestionnaireApiControllerTests\QuestionnaireApiControllerTestContext.cs" />
     <Compile Include="Applications\QuestionnaireApiControllerTests\when_getting_absent_chapter.cs" />
     <Compile Include="Applications\QuestionnaireApiControllerTests\when_getting_absent_questionnaire.cs" />

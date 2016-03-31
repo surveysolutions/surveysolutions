@@ -11,7 +11,7 @@ namespace Ncqrs.Domain
     /// <summary>
     /// The abstract concept of an aggregate root.
     /// </summary>
-    public abstract class AggregateRoot : EventSource, IAggregateRoot
+    public abstract class AggregateRoot : EventSource, IEventSourcedAggregateRoot
     {
         // 628426 13 Feb 2011
         // Previous ThreadStatic was null referencing at random times under load 

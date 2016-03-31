@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly ICommandService commandService;
         private readonly IInterviewerPrincipal principal;
         private readonly IInterviewerEventStorage eventStore;
-        private readonly IAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache;
+        private readonly IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache;
         private readonly ISnapshotStoreWithCache snapshotStoreWithCache;
         private readonly ISerializer serializer;
         private readonly IInterviewEventStreamOptimizer eventStreamOptimizer;
@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             ICommandService commandService,
             IInterviewerPrincipal principal,
             IInterviewerEventStorage eventStore,
-            IAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache,
+            IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache,
             ISnapshotStoreWithCache snapshotStoreWithCache,
             ISerializer serializer,
             IInterviewEventStreamOptimizer eventStreamOptimizer)

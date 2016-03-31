@@ -19,7 +19,7 @@ namespace WB.Core.Infrastructure
             registry.BindAsSingleton<IEventTypeResolver, EventTypeResolver>();
             registry.Bind<IClock, DateTimeBasedClock>();
             
-            registry.Bind<IAggregateRootRepository, AggregateRootRepository>();
+            registry.Bind<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepository>();
             registry.BindAsSingleton<ICommandService, CommandService>();
 
             registry.BindAsSingletonWithConstructorArgument<ISnapshottingPolicy, SimpleSnapshottingPolicy>("snapshotIntervalInEvents", 1);

@@ -1,28 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.Views;
-using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
-namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationViewModelTests
+namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
-    internal class when_synchronize_and_need_to_change_password : SynchronizationViewModelTestsContext
+    internal class when_synchronize_and_need_to_change_password : SynchronizationProcessTestsContext
     {
         Establish context = () =>
         {
@@ -49,7 +43,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationViewModelTest
                 .Setup(x => x.FirstOrDefault())
                 .Returns(interviewerIdentity);
 
-            viewModel = Create.SynchronizationViewModel(principal: principalMock.Object,
+            viewModel = CreateSynchronizationProcess(principal: principalMock.Object,
                 synchronizationService: synchronizationServiceMock.Object,
                 interviewersPlainStorage: interviewerStorageMock.Object,
                 userInteractionService: userInteractionServiceMock.Object,
@@ -57,7 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationViewModelTest
                 );
         };
 
-        Because of = async () => await viewModel.SynchronizeAsync();
+        Because of = () => viewModel.SyncronizeAsync(new Progress<SyncProgressInfo>(), CancellationToken.None).WaitAndUnwrapException();
 
         It should_store_updated_user_password_in_plain_storage = () =>
             interviewerStorageMock.Verify(
@@ -66,7 +60,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationViewModelTest
         It should_sign_in_user_with_new_credentials = () =>
            principalMock.Verify(x => x.SignInAsync("name", "new password", true), Times.Once);
 
-        static SynchronizationViewModel viewModel;
+        static SynchronizationProcess viewModel;
         static Mock<IAsyncPlainStorage<InterviewerIdentity>> interviewerStorageMock = new Mock<IAsyncPlainStorage<InterviewerIdentity>>();
         static Mock<IUserInteractionService> userInteractionServiceMock=new Mock<IUserInteractionService>();
         static Mock<IPrincipal> principalMock = new Mock<IPrincipal>();

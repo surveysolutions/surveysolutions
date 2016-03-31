@@ -9,20 +9,20 @@ using WB.Core.Infrastructure.Aggregates;
 
 namespace WB.Core.Infrastructure.Implementation.Aggregates
 {
-    internal class AggregateRootRepository : IAggregateRootRepository
+    internal class EventSourcedAggregateRootRepository : IEventSourcedAggregateRootRepository
     {
         private readonly IEventStore eventStore;
         private readonly ISnapshotStore snapshotStore;
         private readonly IDomainRepository repository;
 
-        public AggregateRootRepository(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository)
+        public EventSourcedAggregateRootRepository(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository)
         {
             this.eventStore = eventStore;
             this.snapshotStore = snapshotStore;
             this.repository = repository;
         }
 
-        public virtual IAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
+        public virtual IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
         {
             Snapshot snapshot = this.snapshotStore.GetSnapshot(aggregateId, int.MaxValue);
 
