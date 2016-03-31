@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -149,7 +150,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             interviewView.LastInterviewerOrSupervisorComment = comments;
             interviewView.GpsLocation.Coordinates = gpsCoordinates;
             
-            this.interviewViewRepository.StoreAsync(interviewView).Wait();
+            this.interviewViewRepository.StoreAsync(interviewView).WaitAndUnwrapException();
         }
 
         private static GeoPosition GetGeoPositionAnswer(AnsweredQuestionSynchronizationDto item)
@@ -234,7 +235,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
         {
-            this.interviewViewRepository.RemoveAsync(evnt.EventSourceId.FormatGuid());
+            this.interviewViewRepository.RemoveAsync(evnt.EventSourceId.FormatGuid()).WaitAndUnwrapException();
         }
 
         public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
@@ -255,7 +256,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             interviewView.Status = evnt.Payload.Status;
             interviewView.LastInterviewerOrSupervisorComment = evnt.Payload.Comment;
 
-            this.interviewViewRepository.StoreAsync(interviewView).Wait();
+            this.interviewViewRepository.StoreAsync(interviewView).WaitAndUnwrapException();
         }
 
         private bool IsInterviewCompletedOrRestarted(InterviewStatus status)
@@ -287,7 +288,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 interviewView.StartedDateTime = answerTimeUtc;
             }
 
-            this.interviewViewRepository.StoreAsync(interviewView).Wait();
+            this.interviewViewRepository.StoreAsync(interviewView).WaitAndUnwrapException();
         }
 
         private readonly Dictionary<Guid, QuestionnaireIdentity> mapInterviewIdToQuestionnaireIdentity = new Dictionary<Guid, QuestionnaireIdentity>();
@@ -342,7 +343,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 }
             }
 
-            this.interviewViewRepository.StoreAsync(interviewView).Wait();
+            this.interviewViewRepository.StoreAsync(interviewView).WaitAndUnwrapException();
         }
 
         public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)
