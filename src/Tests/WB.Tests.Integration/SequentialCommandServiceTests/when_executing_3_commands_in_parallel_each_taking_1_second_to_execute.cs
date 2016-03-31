@@ -30,7 +30,7 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
                 .Setup<Aggregate>()
                 .Handles<WorkAbout1Second>(_ => aggregateId, aggregate => aggregate.WorkAbout1Second);
 
-            var repository = Mock.Of<IAggregateRootRepository>(_
+            var repository = Mock.Of<IEventSourcedAggregateRootRepository>(_
                 => _.GetLatest(typeof(Aggregate), aggregateId) == new Aggregate());
 
             commandService = Create.SequentialCommandService(repository: repository);

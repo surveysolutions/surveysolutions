@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                     (data, type) => serializer.DeserializeFromStream(new MemoryStream(data), type),
                     (type) => true)))
             {
-                TraceListener = traceListener
+                //TraceListener = traceListener
             };
             this.logger = logger;
             this.serializer = serializer;

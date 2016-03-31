@@ -99,7 +99,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
 
         private static readonly Mock<ICommandService> mockOfCommandService = new Mock<ICommandService>();
         private static readonly Mock<IAsyncPlainStorage<InterviewView>> interviewViewRepositoryMock = new Mock<IAsyncPlainStorage<InterviewView>>();
-        private static readonly Mock<IAggregateRootRepositoryWithCache> mockOfAggregateRootRepositoryWithCache = new Mock<IAggregateRootRepositoryWithCache>();
+        private static readonly Mock<IEventSourcedAggregateRootRepositoryWithCache> mockOfAggregateRootRepositoryWithCache = new Mock<IEventSourcedAggregateRootRepositoryWithCache>();
         private static readonly Mock<ISnapshotStoreWithCache> mockOfSnapshotStoreWithCache = new Mock<ISnapshotStoreWithCache>();
         private static InterviewerInterviewAccessor interviewerInterviewAccessor;
         private static Mock<IInterviewerEventStorage> eventStore;

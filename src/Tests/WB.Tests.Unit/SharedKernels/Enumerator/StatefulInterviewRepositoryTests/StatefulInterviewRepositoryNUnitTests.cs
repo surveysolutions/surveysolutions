@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
         {
             return
                 new StatefulInterviewRepository(
-                    Mock.Of<IAggregateRootRepository>(
+                    Mock.Of<IEventSourcedAggregateRootRepository>(
                         _ => _.GetLatest(Moq.It.IsAny<Type>(), Moq.It.IsAny<Guid>()) == statefulInterview),
                     liteEventBus??Mock.Of<ILiteEventBus>());
         }

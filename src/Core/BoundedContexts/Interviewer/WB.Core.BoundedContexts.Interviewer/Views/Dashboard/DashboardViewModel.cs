@@ -44,6 +44,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.messenger = messenger;
             this.commandService = commandService;
             this.Synchronization = synchronization;
+            this.Synchronization.SyncCompleted += async (sender, args) => await this.RefreshDashboardAsync();
         }
 
         private IMvxCommand synchronizationCommand;
@@ -52,7 +53,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             get
             {
                 return synchronizationCommand ??
-                       (synchronizationCommand = new MvxAsyncCommand(this.RunSynchronizationAsync,
+                       (synchronizationCommand = new MvxCommand(this.RunSynchronization,
                            () => !this.Synchronization.IsSynchronizationInProgress));
             }
         }
@@ -202,14 +203,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        private async Task RunSynchronizationAsync()
+        private void RunSynchronization()
         {
-            await this.Synchronization.SynchronizeAsync();
-            if (this.Synchronization.Status == SynchronizationStatus.Success
-                || this.Synchronization.Status == SynchronizationStatus.Canceled)
-            {
-                await this.RefreshDashboardAsync();
-            }
+            this.Synchronization.Synchronize();
         }
 
         private void ShowInterviews(DashboardInterviewStatus status)

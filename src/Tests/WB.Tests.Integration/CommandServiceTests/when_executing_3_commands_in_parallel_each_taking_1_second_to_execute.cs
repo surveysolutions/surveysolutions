@@ -31,7 +31,7 @@ namespace WB.Tests.Integration.CommandServiceTests
                 .Setup<Aggregate>()
                 .Handles<WorkFor1Second>(_ => aggregateId, aggregate => aggregate.WorkFor1Second);
 
-            var repository = Mock.Of<IAggregateRootRepository>(_
+            var repository = Mock.Of<IEventSourcedAggregateRootRepository>(_
                 => _.GetLatest(typeof(Aggregate), aggregateId) == new Aggregate());
 
             commandService = Create.CommandService(repository: repository);

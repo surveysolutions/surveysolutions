@@ -49,7 +49,7 @@ namespace Ncqrs.Domain.Storage
             return false;
         }
 
-        public bool TryTakeSnapshot(IAggregateRoot aggregateRoot, out Snapshot snapshot)
+        public bool TryTakeSnapshot(IEventSourcedAggregateRoot aggregateRoot, out Snapshot snapshot)
         {
             snapshot = null;
             var memType = aggregateRoot.GetType().GetSnapshotInterfaceType();
@@ -63,7 +63,7 @@ namespace Ncqrs.Domain.Storage
             return false;
         }
 
-        public void CreateSnapshotIfNeededAndPossible(IAggregateRoot aggregateRoot)
+        public void CreateSnapshotIfNeededAndPossible(IEventSourcedAggregateRoot aggregateRoot)
         {
             if (!this.snapshottingPolicy.ShouldCreateSnapshot(aggregateRoot))
                 return;
