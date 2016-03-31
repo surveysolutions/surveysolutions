@@ -120,6 +120,16 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
             Guid aggregateId = aggregateRootIdResolver.Invoke(command);
 
+            if (isAggregateEventSourced)
+            {
+                this.ExecuteEventSourcedCommand(command, origin, aggregateType, aggregateId, validators, commandHandler, cancellationToken);
+            }
+        }
+
+        private void ExecuteEventSourcedCommand(ICommand command, string origin,
+            Type aggregateType, Guid aggregateId, IEnumerable<Action<IEventSourcedAggregateRoot, ICommand>> validators,
+            Action<ICommand, IEventSourcedAggregateRoot> commandHandler, CancellationToken cancellationToken)
+        {
             IEventSourcedAggregateRoot aggregate = this.eventSourcedRepository.GetLatest(aggregateType, aggregateId);
 
             cancellationToken.ThrowIfCancellationRequested();

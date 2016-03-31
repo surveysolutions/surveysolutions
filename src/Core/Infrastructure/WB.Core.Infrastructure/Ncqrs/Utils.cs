@@ -7,11 +7,6 @@ namespace Ncqrs
 {
     internal static class Utils
     {
-        public static bool IsInstanceOfType(this Type someType, Type otherType)
-        {
-            return someType.GetTypeInfo().IsAssignableFrom(otherType.GetTypeInfo());
-        }
-
         public static bool IsAssignableFrom(this Type someType, Type otherType)
         {
             return someType.GetTypeInfo().IsAssignableFrom(otherType.GetTypeInfo());
