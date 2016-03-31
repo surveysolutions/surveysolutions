@@ -205,6 +205,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     }
                 }
             }
+            if (@event.InterviewData.LinkedQuestionOptions != null)
+            {
+                this.interviewState.LinkedQuestionOptions.Clear();
+
+                var changedLinkedOptions = @event.InterviewData.LinkedQuestionOptions.Select(x => new ChangedLinkedOptions(new Identity(x.Key.Id, x.Key.InterviewItemRosterVector), x.Value)).ToArray();
+
+                this.interviewState.ApplyLinkedOptionQuestionChanges(changedLinkedOptions);
+            }
 
             this.ExpressionProcessorStatePrototype.DeclareAnswersValid(@event.InterviewData.ValidAnsweredQuestions.Select(validAnsweredQuestion => new Identity(validAnsweredQuestion.Id, validAnsweredQuestion.InterviewItemRosterVector)));
             //should call this.ExpressionProcessorStatePrototype.ApplyFailedValidations(...) when sync is ready
@@ -219,6 +227,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.RosterGroupInstanceIds = BuildRosterInstanceIdsFromSynchronizationDto(@event.InterviewData);
             this.interviewState.ValidAnsweredQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.ValidAnsweredQuestions);
             this.interviewState.InvalidAnsweredQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.InvalidAnsweredQuestions);
+
+            this.interviewState.RosterTitles.Clear();
+            var changedRosterTitles =
+                @event.InterviewData.RosterGroupInstances.SelectMany(x => x.Value).Select(
+                    r =>
+                        new ChangedRosterInstanceTitleDto(
+                            new RosterInstance(r.RosterId, r.OuterScopeRosterVector, r.RosterInstanceId), r.RosterTitle))
+                    .ToArray();
+            this.interviewState.ChangeRosterTitles(changedRosterTitles);
         }
 
         public virtual void Apply(SynchronizationMetadataApplied @event)
