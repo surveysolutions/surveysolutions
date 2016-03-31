@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 {
     public interface ISyncBgService
     {
-        SyncProgressDto StartSync();
+        void StartSync();
 
         SyncProgressDto CurrentProgress { get; }
     }
