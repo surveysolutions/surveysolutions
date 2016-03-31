@@ -33,6 +33,7 @@ namespace WB.Core.Infrastructure.CommandBus
 
             public Type AggregateType { get; }
             public bool IsEventSourced => typeof(IEventSourcedAggregateRoot).GetTypeInfo().IsAssignableFrom(this.AggregateType.GetTypeInfo());
+            public bool IsPlain => typeof(IPlainAggregateRoot).GetTypeInfo().IsAssignableFrom(this.AggregateType.GetTypeInfo());
             public bool IsInitializer { get; }
             public Func<ICommand, Guid> IdResolver { get; }
             public Action<ICommand, IAggregateRoot> Handler { get; }
@@ -197,6 +198,9 @@ namespace WB.Core.Infrastructure.CommandBus
 
         internal static bool IsAggregateEventSourced(ICommand command)
             => GetHandlerDescriptor(command).IsEventSourced;
+
+        internal static bool IsAggregatePlain(ICommand command)
+            => GetHandlerDescriptor(command).IsPlain;
 
         public static IEnumerable<Action<IAggregateRoot, ICommand>> GetValidators(ICommand command, IServiceLocator serviceLocator)
         {
