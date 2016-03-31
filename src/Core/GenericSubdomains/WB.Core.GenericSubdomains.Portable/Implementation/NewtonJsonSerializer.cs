@@ -62,7 +62,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
 
         }
 
-        private string Serialize(object item, TypeSerializationSettings typeSerializationSettings, SerializationBinderSettings binderSettings)
+        public string Serialize(object item, TypeSerializationSettings typeSerializationSettings, SerializationBinderSettings binderSettings)
         {
             var jsonSerializerSettings = this.jsonSerializerSettingsFactory.GetJsonSerializerSettings(typeSerializationSettings, binderSettings);
             return JsonConvert.SerializeObject(item, jsonSerializerSettings);
