@@ -17,7 +17,7 @@ namespace WB.UI.Interviewer.Services
         private Thread thread;
         private bool isSyncRunning;
 
-        public SyncProgressDto StartSync()
+        public void StartSync()
         {
             if (!this.isSyncRunning)
             {
@@ -45,8 +45,6 @@ namespace WB.UI.Interviewer.Services
                 this.isSyncRunning = true;
                 this.thread.Start();
             }
-
-            return this.CurrentProgress;
         }
 
         public SyncProgressDto CurrentProgress { get; private set; }

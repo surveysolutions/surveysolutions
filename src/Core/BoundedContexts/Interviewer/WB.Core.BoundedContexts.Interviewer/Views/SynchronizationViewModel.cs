@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Services;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
@@ -137,7 +136,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.IsSynchronizationInfoShowed = true;
             this.synchronizationCancellationTokenSource = new CancellationTokenSource();
 
-            var syncProgressDto = this.SyncBgService?.StartSync();
+            this.SyncBgService.StartSync();
+            var syncProgressDto = this.SyncBgService.CurrentProgress;
             if (syncProgressDto != null)
             {
                 syncProgressDto.Progress.ProgressChanged += ProgressOnProgressChanged;
@@ -148,20 +148,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         protected virtual void OnSyncCompleted()
         {
             this.SyncCompleted?.Invoke(this, EventArgs.Empty);
-        }
-    }
-
-    public class SyncronizationStoppedMessage : MvxMessage
-    {
-        public SyncronizationStoppedMessage(object sender) : base(sender)
-        {
-        }
-    }
-
-    public class SyncronizationStartedMessage : MvxMessage
-    {
-        public SyncronizationStartedMessage(object sender) : base(sender)
-        {
         }
     }
 }
