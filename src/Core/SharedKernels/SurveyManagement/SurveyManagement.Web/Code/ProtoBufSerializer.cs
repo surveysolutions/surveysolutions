@@ -22,6 +22,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             throw new NotImplementedException();
         }
 
+        public string Serialize(object item, TypeSerializationSettings typeSerializationSettings,
+            SerializationBinderSettings binderSettings)
+        {
+            throw new NotImplementedException();
+        }
+
         public byte[] SerializeToByteArray(object item)
         {
             throw new NotImplementedException();
