@@ -116,21 +116,44 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             this.createdOnClient = @event.InterviewData.CreatedOnClient;
 
-            var orderedRosterInstances = @event.InterviewData.RosterGroupInstances.SelectMany(x => x.Value).OrderBy(x => x.OuterScopeRosterVector.Length).ToList();
+            var orderedRosterInstances =
+                @event.InterviewData.RosterGroupInstances.SelectMany(x => x.Value)
+                    .OrderBy(x => x.OuterScopeRosterVector.Length)
+                    .ToList();
             foreach (RosterSynchronizationDto roster in orderedRosterInstances)
             {
-                AddRosterInstance(new AddedRosterInstance(roster.RosterId, roster.OuterScopeRosterVector, roster.RosterInstanceId, roster.SortIndex));
-                ChangeRosterTitle(new RosterInstance(roster.RosterId, roster.OuterScopeRosterVector, roster.RosterInstanceId), roster.RosterTitle);
+                AddRosterInstance(new AddedRosterInstance(roster.RosterId, roster.OuterScopeRosterVector,
+                    roster.RosterInstanceId, roster.SortIndex));
+                ChangeRosterTitle(
+                    new RosterInstance(roster.RosterId, roster.OuterScopeRosterVector, roster.RosterInstanceId),
+                    roster.RosterTitle);
             }
 
-            @event.InterviewData.ValidAnsweredQuestions.ForEach(x => DeclareAnswerAsValid(x.Id, x.InterviewItemRosterVector));
-            @event.InterviewData.FailedValidationConditions.ForEach(x => this.DeclareAnswerAsInvalid(x.Key.Id, x.Key.RosterVector, x.Value)); 
+            @event.InterviewData.ValidAnsweredQuestions.ForEach(
+                x => DeclareAnswerAsValid(x.Id, x.InterviewItemRosterVector));
+            @event.InterviewData.FailedValidationConditions.ForEach(
+                x => this.DeclareAnswerAsInvalid(x.Key.Id, x.Key.RosterVector, x.Value));
 
             @event.InterviewData.DisabledQuestions.ForEach(x => DisableQuestion(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.DisabledGroups.ForEach(x => DisableGroup(x.Id, x.InterviewItemRosterVector));
-            @event.InterviewData.Answers.ForEach(x => CommentQuestion(x.Id, x.QuestionRosterVector,x.Comments));
+            @event.InterviewData.Answers.ForEach(x => CommentQuestion(x.Id, x.QuestionRosterVector, x.Comments));
 
+            this.sortIndexesOfRosterInstanses.Clear();
+            var rosterInstances =
+                @event.InterviewData.RosterGroupInstances.SelectMany(x => x.Value).ToArray();
+
+            foreach (var rosterSynchronizationDto in rosterInstances)
+            {
+                var rosterIdentity = new Identity(rosterSynchronizationDto.RosterId,
+                    new RosterVector(
+                        rosterSynchronizationDto.OuterScopeRosterVector.Union(new[]
+                        {rosterSynchronizationDto.RosterInstanceId})));
+                sortIndexesOfRosterInstanses[rosterIdentity] = rosterSynchronizationDto.SortIndex;
+            }
             this.ResetLocalDelta();
+
+            if (@event.InterviewData.LinkedQuestionOptions != null)
+                this.hasLinkedOptionsChangedEvents = true;
         }
 
         public void Apply(InterviewAnswersFromSyncPackageRestored @event)
