@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
@@ -29,7 +30,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
                 Mock.Of<IPlainKeyValueStorage<QuestionnaireRosterStructure>>(
                     _ =>
                         _.GetById(Moq.It.IsAny<string>()) ==
-                        new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(document, 1)));
+                        new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(document, 1)), 
+                Mock.Of<IReadSideKeyValueStorage<InterviewLinkedQuestionOptions>>(),
+                Mock.Of<IPlainQuestionnaireRepository>(_=>_.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())== document));
         }
 
         protected static InterviewSynchronizationDtoFactory CreateInterviewSynchronizationDtoFactory(QuestionnaireRosterStructure questionnaireRosterStructure)
@@ -39,7 +42,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
                 Mock.Of<IPlainKeyValueStorage<QuestionnaireRosterStructure>>(
                     _ =>
                         _.GetById(Moq.It.IsAny<string>()) ==
-                        questionnaireRosterStructure));
+                        questionnaireRosterStructure),
+                Mock.Of<IReadSideKeyValueStorage<InterviewLinkedQuestionOptions>>(),
+                Mock.Of<IPlainQuestionnaireRepository>());
         }
 
         internal static InterviewData CreateInterviewData(Guid? interviewId=null)
