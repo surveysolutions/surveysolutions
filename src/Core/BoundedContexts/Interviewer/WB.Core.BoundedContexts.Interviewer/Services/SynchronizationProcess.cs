@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -74,17 +75,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             {
                 progress.Report(new SyncProgressInfo
                 {
-                    Title = InterviewerUIResources.Synchronization_UserAuthentication_Title ,
+                    Title = InterviewerUIResources.Synchronization_UserAuthentication_Title,
                     Description = InterviewerUIResources.Synchronization_UserAuthentication_Description,
                     Status = SynchronizationStatus.Started,
                     Statistics = statistics
                 });
 
-                this.restCredentials = this.restCredentials ?? new RestCredentials {
+                this.restCredentials = this.restCredentials ?? new RestCredentials
+                {
                     Login = this.principal.CurrentUserIdentity.Name,
                     Password = this.principal.CurrentUserIdentity.Password
                 };
-                await this.synchronizationService.CanSynchronizeAsync(token: cancellationToken, credentials: restCredentials);
+                await
+                    this.synchronizationService.CanSynchronizeAsync(token: cancellationToken,
+                        credentials: restCredentials);
 
                 if (this.shouldUpdatePasswordOfInterviewer)
                 {
@@ -92,8 +96,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     await this.UpdatePasswordOfInterviewerAsync(restCredentials.Password);
                 }
 
+                cancellationToken.ThrowIfCancellationRequested();
                 await this.UploadCompletedInterviewsAsync(statistics, progress, cancellationToken);
+                cancellationToken.ThrowIfCancellationRequested();
                 await this.DownloadCensusAsync(progress, cancellationToken);
+                cancellationToken.ThrowIfCancellationRequested();
                 await this.DownloadInterviewsAsync(statistics, progress, cancellationToken);
 
                 progress.Report(new SyncProgressInfo
@@ -103,6 +110,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     Status = SynchronizationStatus.Success,
                     Statistics = statistics
                 });
+            }
+            catch (OperationCanceledException)
+            {
+                progress.Report(new SyncProgressInfo
+                {
+                    Status = SynchronizationStatus.Stopped,
+                    Statistics = statistics
+                });
+
+                return;
             }
             catch (SynchronizationException ex)
             {
@@ -191,6 +208,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
             foreach (var censusQuestionnaireIdentity in notExistingRemoteCensusQuestionnaireIdentities)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 await this.questionnaireFactory.RemoveQuestionnaireAsync(censusQuestionnaireIdentity);
             }
 
@@ -198,6 +216,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             var notExistingLocalCensusQuestionnaireIdentities = remoteCensusQuestionnaireIdentities.Except(localCensusQuestionnaireIdentities).ToList();
             foreach (var censusQuestionnaireIdentity in notExistingLocalCensusQuestionnaireIdentities)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 progress.Report(new SyncProgressInfo
                 {
                     Title = InterviewerUIResources.Synchronization_Download_Title,
@@ -243,7 +262,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                         await this.attachmentContentStorage.StoreAsync(attachmentContent);
                     }
                 }
-
 
                 var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(
                     questionnaire: questionnaireIdentity,
@@ -310,6 +328,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
             foreach (var interview in interviews)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 progress.Report(new SyncProgressInfo
                 {
                     Title = InterviewerUIResources.Synchronization_Download_Title,
@@ -343,6 +362,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
             foreach (var completedInterview in completedInterviews)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 var completedInterviewApiView = await this.interviewFactory.GetPackageByCompletedInterviewAsync(completedInterview.InterviewId);
                 progress.Report(new SyncProgressInfo
                 {
@@ -372,6 +392,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
             foreach (var imageView in imageViews)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 var fileView = await this.interviewFileViewStorage.GetByIdAsync(imageView.FileId);
                 await this.synchronizationService.UploadInterviewImageAsync(
                     interviewId: imageView.InterviewId,

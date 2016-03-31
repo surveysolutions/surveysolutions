@@ -4,9 +4,9 @@ using Android.OS;
 using Android.App;
 using Android.Content;
 using MvvmCross.Platform;
-using MvvmCross.Platform.Core;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.UI.Interviewer.Services
 {
@@ -15,14 +15,33 @@ namespace WB.UI.Interviewer.Services
     {
         private SyncServiceBinder binder;
         private Thread thread;
+        private bool isSyncRunning;
 
         public void StartSync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
         {
-            this.thread = new Thread(() =>
+            if (!this.isSyncRunning)
             {
-                 Mvx.Resolve<ISynchronizationProcess>().SyncronizeAsync(progress, cancellationToken).WaitAndUnwrapException(cancellationToken);
-            });
-            this.thread.Start();
+                var synchronizationProcess = Mvx.Resolve<ISynchronizationProcess>();
+                this.thread = new Thread(() =>
+                {
+                    try
+                    {
+                        synchronizationProcess.SyncronizeAsync(progress, cancellationToken)
+                                              .WaitAndUnwrapException(); // do not pass cancellationToken, since it will always throw operation cancelled here
+                    }
+                    catch (Exception e)
+                    {
+                        Mvx.Resolve<ILoggerProvider>().GetFor<SyncBgService>().Error(">!>Failed to synchronize", e);
+                    }
+                    finally
+                    {
+                        isSyncRunning = false;
+                    }
+                });
+
+                this.isSyncRunning = true;
+                this.thread.Start();
+            }
         }
 
         public override IBinder OnBind(Intent intent)
