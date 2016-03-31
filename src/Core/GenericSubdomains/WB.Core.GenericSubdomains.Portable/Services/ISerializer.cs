@@ -8,6 +8,7 @@ namespace WB.Core.GenericSubdomains.Portable.Services
         string Serialize(object item);
         string Serialize(object item, TypeSerializationSettings typeSerializationSettings);
         string Serialize(object item, SerializationBinderSettings binderSettings);
+        string Serialize(object item, TypeSerializationSettings typeSerializationSettings, SerializationBinderSettings binderSettings);
 
         byte[] SerializeToByteArray(object item);
         byte[] SerializeToByteArray(object item, TypeSerializationSettings typeSerializationSettings);

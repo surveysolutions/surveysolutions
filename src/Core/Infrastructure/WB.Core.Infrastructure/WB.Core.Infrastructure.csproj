@@ -43,6 +43,7 @@
     <Compile Include="Aggregates\IAggregateRoot.cs" />
     <Compile Include="Aggregates\IEventSourcedAggregateRoot.cs" />
     <Compile Include="Aggregates\IEventSourcedAggregateRootRepository.cs" />
+    <Compile Include="Aggregates\IPlainAggregateRoot.cs" />
     <Compile Include="CommandBus\CommandHandlerConfiguration.cs" />
     <Compile Include="CommandBus\CommandRegistry.cs" />
     <Compile Include="CommandBus\CommandRegistryException.cs" />

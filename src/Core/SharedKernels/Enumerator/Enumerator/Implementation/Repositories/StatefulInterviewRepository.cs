@@ -27,7 +27,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
             var interviewAggregateRootId = Guid.Parse(interviewId);
             var statefullInterview = (StatefulInterview) this.aggregateRootRepository.GetLatest(typeof(StatefulInterview), interviewAggregateRootId);
-            if (statefullInterview == null) throw new ArgumentOutOfRangeException(nameof(statefullInterview), $"Interview with Id: {interviewAggregateRootId} is not found.");
+
+            if (statefullInterview == null) return null;
 
             if (!statefullInterview.HasLinkedOptionsChangedEvents)
             {
