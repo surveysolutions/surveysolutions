@@ -22,6 +22,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.V6;
 using WB.Core.SharedKernels.DataCollection.V7;
+using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using It = Moq.It;
 using WB.Infrastructure.Native.Storage;
@@ -91,6 +92,29 @@ namespace WB.Tests.Integration.InterviewTests
             }
 
             return result;
+        }
+
+        protected static StatefulInterview SetupStatefullInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, IInterviewExpressionStateV7 precompiledState = null)
+        {
+            Guid questionnaireId = questionnaireDocument.PublicKey;
+
+            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
+                => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == new PlainQuestionnaire(questionnaireDocument, 1) &&
+                    repository.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == new PlainQuestionnaire(questionnaireDocument, 1));
+
+            IInterviewExpressionStateV7 state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument);
+
+            var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
+
+            var interview = Create.StatefulInterview(
+                questionnaireId: questionnaireId,
+                questionnaireRepository: questionnaireRepository,
+                expressionProcessorStatePrototypeProvider: statePrototypeProvider);
+
+            interview.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, 1);
+            ApplyAllEvents(interview, events);
+
+            return interview;
         }
 
         protected static Interview SetupInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, IInterviewExpressionStateV7 precompiledState = null)
