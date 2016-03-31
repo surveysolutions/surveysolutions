@@ -12,7 +12,7 @@ namespace Ncqrs.Spec
         private static EventContext _threadInstance;
 
         private readonly List<UncommittedEvent> _events = new List<UncommittedEvent>();
-        private Action<AggregateRoot, UncommittedEvent> _eventAppliedCallback;
+        private Action<EventSourcedAggregateRoot, UncommittedEvent> _eventAppliedCallback;
 
         public IEnumerable<UncommittedEvent> Events
         {
@@ -54,18 +54,18 @@ namespace Ncqrs.Spec
         private void InitializeAppliedEventHandler()
         {
             if(_eventAppliedCallback == null)
-                _eventAppliedCallback = new Action<AggregateRoot, UncommittedEvent>(AggregateRootEventAppliedHandler);
+                _eventAppliedCallback = new Action<EventSourcedAggregateRoot, UncommittedEvent>(AggregateRootEventAppliedHandler);
 
-            AggregateRoot.RegisterThreadStaticEventAppliedCallback(_eventAppliedCallback);
+            EventSourcedAggregateRoot.RegisterThreadStaticEventAppliedCallback(_eventAppliedCallback);
         }
 
         private void DestroyAppliedEventHandler()
         {
             if(_eventAppliedCallback != null)
-                AggregateRoot.UnregisterThreadStaticEventAppliedCallback(_eventAppliedCallback);
+                EventSourcedAggregateRoot.UnregisterThreadStaticEventAppliedCallback(_eventAppliedCallback);
         }
 
-        private void AggregateRootEventAppliedHandler(AggregateRoot aggregateRoot, UncommittedEvent evnt)
+        private void AggregateRootEventAppliedHandler(EventSourcedAggregateRoot aggregateRoot, UncommittedEvent evnt)
         {
             _events.Add(evnt);
         }

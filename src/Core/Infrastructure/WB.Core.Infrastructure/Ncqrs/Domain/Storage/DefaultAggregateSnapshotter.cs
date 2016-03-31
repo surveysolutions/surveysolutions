@@ -25,7 +25,7 @@ namespace Ncqrs.Domain.Storage
             this.serviceLocator = serviceLocator;
         }
 
-        public bool TryLoadFromSnapshot(Type aggregateRootType, Snapshot snapshot, CommittedEventStream committedEventStream, out AggregateRoot aggregateRoot)
+        public bool TryLoadFromSnapshot(Type aggregateRootType, Snapshot snapshot, CommittedEventStream committedEventStream, out EventSourcedAggregateRoot aggregateRoot)
         {
             aggregateRoot = null;
 
@@ -33,7 +33,7 @@ namespace Ncqrs.Domain.Storage
 
             if (AggregateSupportsSnapshot(aggregateRootType, snapshot.Payload.GetType()))
             {
-                aggregateRoot = (AggregateRoot) this.serviceLocator.GetInstance(aggregateRootType);
+                aggregateRoot = (EventSourcedAggregateRoot) this.serviceLocator.GetInstance(aggregateRootType);
                 aggregateRoot.InitializeFromSnapshot(snapshot);
 
                 var memType = aggregateRoot.GetType().GetSnapshotInterfaceType();

@@ -7,7 +7,7 @@ namespace Ncqrs.Eventing.Sourcing.Snapshotting
     /// This interface flags an object beeing <i>snapshotable</i>. This means
     /// that the state of the object could be saved to an 
     /// <see cref="ISnapshot"/> object and restored from a the from the same
-    /// class. This is used to prevent building <see cref="AggregateRoot"/>'s
+    /// class. This is used to prevent building <see cref="EventSourcedAggregateRoot"/>'s
     /// from the ground up.
     /// </summary>
     /// <remarks>
