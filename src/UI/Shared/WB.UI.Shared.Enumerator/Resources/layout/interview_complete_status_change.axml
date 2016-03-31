@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
-        android:layout_alignParentTop="true"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        style="@style/Interview_Complete_Screen_Scroll">
   <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
       style="@style/Interview_QuestionWithDivider"
       local:MvxBind="HideKeyboardOnClick .">
-
     <LinearLayout style="@style/Interview_QuestionWithDivider"
       local:MvxBind="HideKeyboardOnClick .">
       <LinearLayout style="@style/Interview_Question" android:orientation="vertical">

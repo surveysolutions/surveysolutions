@@ -11,7 +11,7 @@ namespace WB.UI.Shared.Enumerator.Activities
     {
         public static void RemoveFocusFromEditText(this Activity activity)
         {
-            View viewWithFocus = activity.CurrentFocus;
+            View viewWithFocus = activity?.CurrentFocus;
 
             if (viewWithFocus is EditText)
             {
@@ -21,9 +21,11 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         public static void HideKeyboard(this Activity activity, IBinder windowToken)
         {
-            var inputMethodManager = (InputMethodManager)activity.GetSystemService(Context.InputMethodService);
-
-            inputMethodManager.HideSoftInputFromWindow(windowToken, 0);
+            if (activity != null)
+            {
+                var inputMethodManager = (InputMethodManager) activity.GetSystemService(Context.InputMethodService);
+                inputMethodManager.HideSoftInputFromWindow(windowToken, 0);
+            }
         }     
     }
 }
