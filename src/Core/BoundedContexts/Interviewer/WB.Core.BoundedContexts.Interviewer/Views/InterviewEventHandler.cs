@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -255,7 +256,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             interviewView.Status = evnt.Payload.Status;
             interviewView.LastInterviewerOrSupervisorComment = evnt.Payload.Comment;
 
-            this.interviewViewRepository.StoreAsync(interviewView).Wait();
+            this.interviewViewRepository.StoreAsync(interviewView).WaitAndUnwrapException();
         }
 
         private bool IsInterviewCompletedOrRestarted(InterviewStatus status)
