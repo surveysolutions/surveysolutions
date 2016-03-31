@@ -2887,7 +2887,7 @@ namespace WB.Tests.Unit
                 serviceLocator: serviceLocator ?? Mock.Of<IServiceLocator>());
         }
 
-        public static IAggregateSnapshotter AggregateSnapshotter(AggregateRoot aggregateRoot = null, bool isARLoadedFromSnapshotSuccessfully = false)
+        public static IAggregateSnapshotter AggregateSnapshotter(EventSourcedAggregateRoot aggregateRoot = null, bool isARLoadedFromSnapshotSuccessfully = false)
         {
             return Mock.Of<IAggregateSnapshotter>(_ =>
                 _.TryLoadFromSnapshot(Moq.It.IsAny<Type>(), Moq.It.IsAny<Snapshot>(),

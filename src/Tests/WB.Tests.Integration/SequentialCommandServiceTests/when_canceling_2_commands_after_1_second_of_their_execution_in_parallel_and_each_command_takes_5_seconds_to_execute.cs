@@ -25,7 +25,7 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
             public string Name { get; private set; }
         }
 
-        private class Aggregate : AggregateRoot
+        private class Aggregate : EventSourcedAggregateRoot
         {
             public void StoreNameFor5Seconds(StoreNameFor5Seconds command)
             {

@@ -14,7 +14,7 @@ namespace WB.Tests.Integration.CommandServiceTests
     internal class when_executing_not_constructing_command_and_aggregate_root_does_not_exist_in_repository
     {
         private class NotConstructingCommand : ICommand { public Guid CommandIdentifier { get; private set; } }
-        private class Aggregate : AggregateRoot {}
+        private class Aggregate : EventSourcedAggregateRoot {}
 
         Establish context = () =>
         {

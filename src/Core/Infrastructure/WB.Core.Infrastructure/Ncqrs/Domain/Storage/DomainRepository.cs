@@ -20,9 +20,9 @@ namespace Ncqrs.Domain.Storage
             this.serviceLocator = serviceLocator;
         }
 
-        public AggregateRoot Load(Type aggreateRootType, Snapshot snapshot, CommittedEventStream eventStream)
+        public EventSourcedAggregateRoot Load(Type aggreateRootType, Snapshot snapshot, CommittedEventStream eventStream)
         {
-            AggregateRoot aggregate = null;
+            EventSourcedAggregateRoot aggregate = null;
 
             if (!_aggregateSnapshotter.TryLoadFromSnapshot(aggreateRootType, snapshot, eventStream, out aggregate))
                 aggregate = GetByIdFromScratch(aggreateRootType, eventStream);
@@ -37,13 +37,13 @@ namespace Ncqrs.Domain.Storage
             return snapshot;
         }
 
-        protected AggregateRoot GetByIdFromScratch(Type aggregateRootType, CommittedEventStream committedEventStream)
+        protected EventSourcedAggregateRoot GetByIdFromScratch(Type aggregateRootType, CommittedEventStream committedEventStream)
         {
-            AggregateRoot aggregateRoot = null;
+            EventSourcedAggregateRoot aggregateRoot = null;
 
             if (committedEventStream.Count() > 0)
             {
-                aggregateRoot = (AggregateRoot) this.serviceLocator.GetInstance(aggregateRootType);
+                aggregateRoot = (EventSourcedAggregateRoot) this.serviceLocator.GetInstance(aggregateRootType);
 
                 var mappedAggregateRoot = aggregateRoot as MappedAggregateRoot;
                 if (mappedAggregateRoot != null

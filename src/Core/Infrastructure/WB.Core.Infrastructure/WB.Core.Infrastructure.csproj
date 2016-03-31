@@ -94,7 +94,7 @@
     <Compile Include="Ncqrs\Commanding\CommandBase.cs" />
     <Compile Include="Ncqrs\DateTimeBasedClock.cs" />
     <Compile Include="Ncqrs\Domain\AggregateExtensions.cs" />
-    <Compile Include="Ncqrs\Domain\AggregateRoot.cs" />
+    <Compile Include="Ncqrs\Domain\EventSourcedAggregateRoot.cs" />
     <Compile Include="Ncqrs\Domain\AggregateRootMappedByConvention.cs" />
     <Compile Include="Ncqrs\Domain\Storage\AggregateRootNotFoundException.cs" />
     <Compile Include="Ncqrs\Domain\Storage\AggregateSupportsSnapshotValidator.cs" />
