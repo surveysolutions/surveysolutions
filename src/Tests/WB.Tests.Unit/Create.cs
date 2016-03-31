@@ -1295,22 +1295,15 @@ namespace WB.Tests.Unit
         }
 
         public static LastInterviewStatus LastInterviewStatus(InterviewStatus status = InterviewStatus.ApprovedBySupervisor)
-        {
-            return new LastInterviewStatus("entry-id", status);
-        }
+            => new LastInterviewStatus("entry-id", status);
 
-        public static ILiteEventBus LiteEventBus(ILiteEventRegistry liteEventRegistry = null,
-            IEventStore eventStore = null)
-        {
-            var eventReg = liteEventRegistry ?? Mock.Of<ILiteEventRegistry>();
-            var eventSt = eventStore ?? Mock.Of<IEventStore>();
-            return new LiteEventBus(eventReg, eventSt);
-        }
+        public static LiteEventBus LiteEventBus(ILiteEventRegistry liteEventRegistry = null, IEventStore eventStore = null)
+            => new LiteEventBus(
+                liteEventRegistry ?? Stub<ILiteEventRegistry>.WithNotEmptyValues,
+                eventStore ?? Mock.Of<IEventStore>());
 
         public static ILiteEventRegistry LiteEventRegistry()
-        {
-            return new LiteEventRegistry();
-        }
+            => new LiteEventRegistry();
 
         public static LookupTable LookupTable(string tableName, string fileName = null)
         {
