@@ -232,9 +232,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
             foreach (var linkedQuestion in linkedQuestions)
             {
-                var linkedQuestionRosterScope = LinkedQuestionUtils.GetRosterSizeSourcesForEntity(linkedQuestion);
+                var linkedQuestionRosterScope = InterviewLevelUtils.GetRosterSizeSourcesForEntity(linkedQuestion);
 
-                var interviewLevelsWithTheLinkedQuestion = LinkedQuestionUtils.FindLevelsByScope(interview, linkedQuestionRosterScope);
+                var interviewLevelsWithTheLinkedQuestion = InterviewLevelUtils.FindLevelsByScope(interview, linkedQuestionRosterScope);
 
                 foreach (var interviewLevel in interviewLevelsWithTheLinkedQuestion)
                 {
@@ -244,7 +244,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                         linkedQuestionIdentity.RosterVector);
 
                     result.Add(interviewItemId,
-                        LinkedQuestionUtils.GetAvailableOptionsForQuestionLinkedOnRoster(linkedQuestion,
+                        InterviewLevelUtils.GetAvailableOptionsForQuestionLinkedOnRoster(linkedQuestion,
                             linkedQuestionIdentity.RosterVector, interview, questionnaire,
                             interviewLinkedQuestionOptions).Select(l => new RosterVector(l.RosterVector)).ToArray());
                 }
