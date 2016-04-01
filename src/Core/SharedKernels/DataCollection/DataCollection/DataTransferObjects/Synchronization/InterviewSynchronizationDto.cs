@@ -27,6 +27,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             HashSet<InterviewItemId> invalidAnsweredQuestions,
             Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances,
             IList<KeyValuePair<Identity, IList<FailedValidationCondition>>> failedValidationConditions,
+            Dictionary<InterviewItemId, RosterVector[]> linkedQuestionOptions,
             bool wasCompleted,
             bool createdOnClient = false)
         {
@@ -48,7 +49,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             this.FailedValidationConditions = failedValidationConditions;
             this.WasCompleted = wasCompleted;
             this.CreatedOnClient = createdOnClient;
-
+            this.LinkedQuestionOptions = linkedQuestionOptions;
         }
 
         public Guid Id { get;  set; }
@@ -67,8 +68,8 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public HashSet<InterviewItemId> InvalidAnsweredQuestions { get;  set; }
 
         public IList<KeyValuePair<Identity, IList<FailedValidationCondition>>> FailedValidationConditions { get; set; } 
-        
         public Dictionary<InterviewItemId, RosterSynchronizationDto[]> RosterGroupInstances { get; set; }
+        public Dictionary<InterviewItemId, RosterVector[]> LinkedQuestionOptions { get; set; }
 
         public bool WasCompleted { get; set; }
     }

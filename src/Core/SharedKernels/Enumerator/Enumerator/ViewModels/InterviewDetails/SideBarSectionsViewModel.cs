@@ -193,7 +193,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 for (int i = 0; i < enabledSubgroups.Count; i++)
                 {
                     var enabledSubgroupIdentity = enabledSubgroups[i];
-                    if (i >= sectionToAddTo.Children.Count || !sectionToAddTo.Children[i].SectionIdentity.Equals(enabledSubgroupIdentity))
+                    if (i >= sectionToAddTo.Children.Count || !sectionToAddTo.Children.Any(x => x.SectionIdentity.Equals(enabledSubgroupIdentity)))
                     {
                         var sideBarItem = this.BuildSectionItem(sectionToAddTo, enabledSubgroupIdentity);
                         if (i < sectionToAddTo.Children.Count)
