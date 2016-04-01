@@ -137,23 +137,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             @event.InterviewData.DisabledQuestions.ForEach(x => DisableQuestion(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.DisabledGroups.ForEach(x => DisableGroup(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.Answers.ForEach(x => CommentQuestion(x.Id, x.QuestionRosterVector, x.Comments));
-
-            //this.sortIndexesOfRosterInstanses.Clear();
-            //var rosterInstances =
-            //    @event.InterviewData.RosterGroupInstances.SelectMany(x => x.Value).ToArray();
-
-            //foreach (var rosterSynchronizationDto in rosterInstances)
-            //{
-            //    var rosterIdentity = new Identity(rosterSynchronizationDto.RosterId,
-            //        new RosterVector(
-            //            rosterSynchronizationDto.OuterScopeRosterVector.Union(new[]
-            //            {rosterSynchronizationDto.RosterInstanceId})));
-            //    sortIndexesOfRosterInstanses[rosterIdentity] = rosterSynchronizationDto.SortIndex;
-            //}
+            
             this.ResetLocalDelta();
-
-            if (@event.InterviewData.LinkedQuestionOptions != null)
-                this.hasLinkedOptionsChangedEvents = true;
         }
 
         public void Apply(InterviewAnswersFromSyncPackageRestored @event)
