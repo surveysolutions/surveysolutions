@@ -42,19 +42,7 @@ namespace WB.Tests.Unit
             }
         }
 
-        public static SynchronizationViewModel SynchronizationViewModel(IAsyncPlainStorage<InterviewView> interviewViewRepository = null,
-            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage = null,
-            IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage = null,
-            IAsyncPlainStorage<InterviewFileView> interviewFileViewStorage = null,
-            ISynchronizationService synchronizationService = null,
-            ILogger logger = null,
-            IUserInteractionService userInteractionService = null,
-            IPasswordHasher passwordHasher = null,
-            IPrincipal principal = null,
-            IMvxMessenger messenger = null,
-            IInterviewerQuestionnaireAccessor questionnaireFactory = null,
-            IInterviewerInterviewAccessor interviewFactory = null,
-            IAttachmentContentStorage attachmentContentStorage = null)
+        public static SynchronizationViewModel SynchronizationViewModel()
         {
             return new SynchronizationViewModel();
         }
