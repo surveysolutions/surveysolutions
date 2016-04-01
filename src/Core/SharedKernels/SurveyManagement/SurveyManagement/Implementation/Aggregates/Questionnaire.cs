@@ -6,6 +6,7 @@ using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -21,7 +22,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
 {
-    public class Questionnaire : AggregateRootMappedByConvention
+    public class Questionnaire : IPlainAggregateRoot
     {
         #region Dependencies
 
@@ -40,6 +41,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
         private IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>();
         #endregion
 
+        private Guid Id { get; set; }
+
         public Questionnaire(
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor, 
@@ -54,6 +57,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
             this.exportViewFactory = exportViewFactory;
         }
 
+        public void SetId(Guid id) => this.Id = id;
+
         public void ImportFromDesigner(ImportFromDesigner command)
         {
             QuestionnaireDocument document = CastToQuestionnaireDocumentOrThrow(command.Source);
@@ -62,17 +67,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
 
             if (string.IsNullOrWhiteSpace(command.SupportingAssembly))
             {
-                throw new QuestionnaireException($"Cannot import questionnaire. Assembly file is empty. QuestionnaireId: {this.EventSourceId}");
+                throw new QuestionnaireException($"Cannot import questionnaire. Assembly file is empty. QuestionnaireId: {this.Id}");
             }
 
             var newVersion = this.GetNextVersion();
 
-            this.plainQuestionnaireRepository.StoreQuestionnaire(this.EventSourceId, newVersion, document);
-            this.questionnaireAssemblyFileAccessor.StoreAssembly(this.EventSourceId, newVersion, command.SupportingAssembly);
+            this.plainQuestionnaireRepository.StoreQuestionnaire(this.Id, newVersion, document);
+            this.questionnaireAssemblyFileAccessor.StoreAssembly(this.Id, newVersion, command.SupportingAssembly);
             this.questionnaireBrowseItemStorage.Store(
                 new QuestionnaireBrowseItem((QuestionnaireDocument) command.Source, newVersion, command.AllowCensusMode,
                     command.QuestionnaireContentVersion),
-                new QuestionnaireIdentity(this.EventSourceId, newVersion).ToString());
+                new QuestionnaireIdentity(this.Id, newVersion).ToString());
             
             var questionnaireEntityId = new QuestionnaireIdentity(command.QuestionnaireId, newVersion).ToString();
 
@@ -92,17 +97,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
             if (questionnaire==null)
                 throw new QuestionnaireException(string.Format(
                     "Questionnaire {0} ver {1} cannot be deleted because it is absent in repository.",
-                    this.EventSourceId.FormatGuid(), command.QuestionnaireVersion));
+                    this.Id.FormatGuid(), command.QuestionnaireVersion));
 
             if (questionnaire.Disabled)
                 throw new QuestionnaireException(string.Format(
                     "Questionnaire {0} ver {1} is already in delete process.",
-                    this.EventSourceId.FormatGuid(), command.QuestionnaireVersion));
+                    this.Id.FormatGuid(), command.QuestionnaireVersion));
 
 
             this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(command.QuestionnaireId, command.QuestionnaireVersion);
             
-            var browseItem = this.questionnaireBrowseItemStorage.GetById(new QuestionnaireIdentity(this.EventSourceId,command.QuestionnaireVersion).ToString());
+            var browseItem = this.questionnaireBrowseItemStorage.GetById(new QuestionnaireIdentity(this.Id, command.QuestionnaireVersion).ToString());
             if (browseItem != null)
             {
                 browseItem.Disabled = true;
@@ -116,14 +121,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
             if (questionnaire == null)
                 throw new QuestionnaireException(string.Format(
                     "Questionnaire {0} ver {1} cannot be deleted because it is absent in repository.",
-                    this.EventSourceId.FormatGuid(), command.QuestionnaireVersion));
+                    this.Id.FormatGuid(), command.QuestionnaireVersion));
 
             if (!questionnaire.Disabled)
                 throw new QuestionnaireException(string.Format(
                  "Questionnaire {0} ver {1} is not disabled.",
-                 this.EventSourceId.FormatGuid(), command.QuestionnaireVersion));
+                 this.Id.FormatGuid(), command.QuestionnaireVersion));
 
-            var browseItem = questionnaireBrowseItemStorage.GetById(new QuestionnaireIdentity(this.EventSourceId, command.QuestionnaireVersion).ToString());
+            var browseItem = questionnaireBrowseItemStorage.GetById(new QuestionnaireIdentity(this.Id, command.QuestionnaireVersion).ToString());
             if (browseItem != null)
             {
                 browseItem.IsDeleted = true;
@@ -144,7 +149,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
             if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
                 throw new QuestionnaireException(string.Format(
                     "Plain questionnaire {0} ver {1} cannot be registered because it is absent in plain repository.",
-                    this.EventSourceId, command.Version));
+                    this.Id, command.Version));
 
             //this.ApplyEvent(new PlainQuestionnaireRegistered(command.Version, command.AllowCensusMode));
         }
@@ -165,7 +170,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
 
             var availableVersions =
                 this.questionnaireBrowseItemStorage.Query(
-                    _ => _.Where(q => q.QuestionnaireId == this.EventSourceId).Select(q => q.Version));
+                    _ => _.Where(q => q.QuestionnaireId == this.Id).Select(q => q.Version));
             if (!availableVersions.Any())
                 return 1;
             return availableVersions.Max() + 1;
