@@ -327,7 +327,7 @@
                                             <span ng-if="referenceWithErrors.reference.type == 'LookupTable'" class="icon icon-error icon-lookup"></span>
                                             <span ng-if="referenceWithErrors.reference.type == 'StaticText'" class="icon icon-error icon-statictext"></span>
                                             <span ng-if="referenceWithErrors.reference.type == 'Attachment'" class="icon icon-error icon-attachment"></span>
-                                            <span class="title" title="{{referencesWithErrors.compilationErrorMessages != null ? referencesWithErrors.compilationErrorMessages.join('\r\n') : ''}}">{{reference.title}}{{referencesWithErrors.compilationErrorMessages != null ? ': ' + referencesWithErrors.compilationErrorMessages[0] : ''}}</span>
+                                            <span class="title" tooltip-append-to-body="true" tooltip-placement="right" tooltip-html="referencesWithErrors.compilationErrorMessages != null ? referencesWithErrors.compilationErrorMessages.join('<br />') : ''">{{reference.title}}{{referencesWithErrors.compilationErrorMessages != null ? ': ' + referencesWithErrors.compilationErrorMessages[0] : ''}}</span>
                                             <span ng-if="referenceWithErrors.reference.type == 'Question' || referenceWithErrors.reference.type == 'Roster' || referenceWithErrors.reference.type == 'Macro'" class="variable" ng-bind="referenceWithErrors.reference.variable">aaaa</span>
                                         </a>
                                     </li>
