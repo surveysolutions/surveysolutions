@@ -22,6 +22,7 @@ using MvvmCross.Platform.Exceptions;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Converters;
 using WB.UI.Shared.Enumerator.CustomBindings;
@@ -78,7 +79,8 @@ namespace WB.UI.Shared.Enumerator
         {
             var viewModelViewLookup = new Dictionary<Type, Type>()
             {
-                {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)}
+                {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
+                {typeof (EnumerationStageViewModel), typeof (InterviewEntitiesListFragment)},
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();
@@ -94,8 +96,8 @@ namespace WB.UI.Shared.Enumerator
 
             registry.AddOrOverwrite("Localization", new LocalizationValueConverter());
             registry.AddOrOverwrite("GroupStateToColor", new GroupStateToColorConverter());
-            registry.AddOrOverwrite("InMemoryImageValueWithDefault", new InMemoryImageValueWithDefaultConverter());
             registry.AddOrOverwrite("ToGoogleMapUrl", new ToGoogleMapUrlConverter());
+            registry.AddOrOverwrite("InMemoryImageValueWithDefault", new InMemoryImageValueWithDefaultConverter());
             registry.AddOrOverwrite("QuestionLayoutStyleBackground", new QuestionLayoutStyleBackgroundConverter());
             registry.AddOrOverwrite("QuestionEditorStyleBackground", new QuestionEditorStyleBackgroundConverter());
             registry.AddOrOverwrite("IsStringNotEmpty", new IsStringNotEmptyConverter());
@@ -135,6 +137,8 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<TextView>("TextColor", (view) => new TextViewTextColorBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("UnderlinePressed", (view) => new TextViewUnderlinePressedBinding(view));
             registry.RegisterCustomBindingFactory<EditText>("TextChanged", (editText) => new EditTextChangedBinding(editText));
+            registry.RegisterCustomBindingFactory<FrameLayout>("CurrentScreen", (frameLayout) => new FrameLayoutCurrentScreenBinding(frameLayout));
+            registry.RegisterCustomBindingFactory<ImageView>("BitmapWithFallback", (img) => new ImageViewBitmapWithFallbackBinding(img));
             MvxAppCompatSetupHelper.FillTargetFactories(registry);
             base.FillTargetFactories(registry);
         }

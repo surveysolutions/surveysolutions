@@ -123,6 +123,9 @@
   <data name="Dashboard_LastUpdated" xml:space="preserve">
     <value>list was updated {0}</value>
   </data>
+  <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
+    <value>Downloading questionnaire attachments -  {0}%</value>
+  </data>
   <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
     <value>Connecting to server</value>
   </data>

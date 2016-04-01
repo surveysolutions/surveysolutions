@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Machine.Specifications;
+using Moq;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTests
 {
@@ -14,23 +16,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
     {
         Establish context = () =>
         {
-            sectionAId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            sectionBId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-
-            var questionnaire = Create.QuestionnaireModel();
-            questionnaire.GroupsHierarchy = new List<GroupsHierarchyModel>
-            {
-                CreateGroupsHierarchyModel(sectionAId, "A"),
-                CreateGroupsHierarchyModel(sectionBId, "B")
-            };
-            questionnaire.GroupsWithFirstLevelChildrenAsReferences = new Dictionary<Guid, GroupModel>();
-            questionnaire.GroupsWithFirstLevelChildrenAsReferences[sectionAId] = new GroupModel{Id = sectionAId, Title = "A"};
-            questionnaire.GroupsWithFirstLevelChildrenAsReferences[sectionBId] = new GroupModel{Id = sectionBId, Title = "B"};
-
             var interview = Substitute.For<IStatefulInterview>();
             interview.IsEnabled(Moq.It.IsAny<Identity>()).ReturnsForAnyArgs(true);
 
+            var questionnaire = Mock.Of<IQuestionnaire>(_ => _.GetAllSections() == listOfSections);
             viewModel = CreateSectionsViewModel(questionnaire, interview);
+
             navigationState = Substitute.For<NavigationState>();
             viewModel.Init("", "", navigationState);
             
@@ -56,8 +47,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SectionsViewModelTes
         static SideBarSectionsViewModel viewModel;
         static SideBarSectionViewModel firstSelectedSection;
         static NavigationState navigationState;
-        static Guid sectionBId;
-        static Guid sectionAId;
+        static Guid sectionBId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+        static Guid sectionAId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        private static readonly List<Guid> listOfSections = new List<Guid> { sectionAId, sectionBId };
         static SideBarSectionViewModel secondSection;
     }
 }

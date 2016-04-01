@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
@@ -9,7 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
 {
     internal class TestInMemoryWriter<T> : IReadSideRepositoryWriter<T>,
         IReadSideKeyValueStorage<T>,
-        IQueryableReadSideRepositoryReader<T> 
+        IQueryableReadSideRepositoryReader<T>
         where T : class, IReadSideRepositoryEntity
     {
         private readonly Dictionary<string, T> storage = new Dictionary<string, T>();

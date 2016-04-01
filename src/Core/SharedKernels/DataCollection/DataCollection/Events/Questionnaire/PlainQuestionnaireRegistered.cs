@@ -1,8 +1,10 @@
-﻿using WB.Core.Infrastructure.EventBus;
+﻿using System;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Questionnaire
 {
+    [Obsolete]
     public class PlainQuestionnaireRegistered : IEvent
     {
         public long Version { get; private set; }

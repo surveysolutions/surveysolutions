@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public string MemberName => CodeGenerator.PrivateFieldsPrefix + VariableName;
         public string StateName => CodeGenerator.PrivateFieldsPrefix + VariableName + CodeGenerator.StateSuffix;
-        public string IdName => CodeGenerator.PrivateFieldsPrefix + VariableName + CodeGenerator.IdSuffix;
+        public string IdName => CodeGenerator.GetQuestionIdName(VariableName);
 
         public bool IsMultiOptionYesNoQuestion { get; set; }
         public List<string> AllMultioptionYesNoCodes { get; set; }

@@ -345,6 +345,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
             try
             {
+                var transactionManager = this.transactionManagerProviderManager.GetTransactionManager();
                 foreach (var atomicEventHandler in atomicEventHandlers)
                 {
                     ThrowIfShouldStopViewsRebuilding();
@@ -354,7 +355,17 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     foreach (var eventSourceId in eventSourceIds)
                     {
                         UpdateStatusMessage($"Cleaning views for {cleanerName} and event source {eventSourceId}");
-                        atomicEventHandler.CleanWritersByEventSource(eventSourceId);
+                        try
+                        {
+                            transactionManager.BeginCommandTransaction();
+                            atomicEventHandler.CleanWritersByEventSource(eventSourceId);
+                            transactionManager.CommitCommandTransaction();
+                        }
+                        catch
+                        {
+                            transactionManager.RollbackCommandTransaction();
+                            throw;
+                        }
                         UpdateStatusMessage($"Views for {cleanerName} and event source {eventSourceId} was cleaned.");
                     }
                 }
@@ -445,10 +456,12 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                         this.StoreReadSideVersion();
                     }
 
-                    UpdateStatusMessage(isPartialRebuild
-                        ? "Rebuild specific views succeeded."
-                        : "Rebuild all views succeeded.");
-                    logger.Info(isPartialRebuild ? "Rebuild specific views succeeded." : "Rebuild all views succeeded.");
+                    var finishMessage = this.FailedEventsCount > 0
+                        ? $"Rebuild {(isPartialRebuild ? "specific" : "all")} views finished with {this.FailedEventsCount} failed event(s)."
+                        : $"Rebuild {(isPartialRebuild ? "specific" : "all")} views succeeded.";
+
+                    UpdateStatusMessage(finishMessage);
+                    logger.Info(finishMessage);
                 }
             }
             catch (OperationCanceledException exception)

@@ -130,7 +130,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionConditionExpression: @event.Payload.ConditionExpression,
                 validationCondions: @event.Payload.ValidationConditions,
                 linkedToQuestionId: Monads.Maybe(() => @event.Payload.LinkedToQuestionId.FormatGuid()),
-                linkedToRosterId: Monads.Maybe(() => @event.Payload.LinkedToRosterId.FormatGuid()));
+                linkedToRosterId: Monads.Maybe(() => @event.Payload.LinkedToRosterId.FormatGuid()),
+                linkedFilterExpression: @event.Payload.LinkedFilterExpression);
 
             return state;
         }
@@ -147,7 +148,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 validationCondions: @event.Payload.ValidationConditions,
                 linkedToQuestionId: Monads.Maybe(() => @event.Payload.LinkedToQuestionId.FormatGuid()),
                 linkedToRosterId: Monads.Maybe(() => @event.Payload.LinkedToRosterId.FormatGuid()),
-                orderIndex: @event.Payload.TargetIndex);
+                orderIndex: @event.Payload.TargetIndex,
+                linkedFilterExpression: @event.Payload.LinkedFilterExpression);
 
             return state;
         }
@@ -215,7 +217,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionConditionExpression: @event.Payload.ConditionExpression,
                 questionValidationConditions: @event.Payload.ValidationConditions,
                 linkedToQuestionId: Monads.Maybe(() => @event.Payload.LinkedToQuestionId.FormatGuid()),
-                linkedToRosterId: Monads.Maybe(() => @event.Payload.LinkedToRosterId.FormatGuid()));
+                linkedToRosterId: Monads.Maybe(() => @event.Payload.LinkedToRosterId.FormatGuid()),
+                linkedFilterExpression: @event.Payload.LinkedFilterExpression);
 
             return state;
         }
@@ -230,7 +233,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionConditionExpression: @event.Payload.ConditionExpression,
                 questionValidationConditions: @event.Payload.ValidationConditions,
                 linkedToQuestionId: null,
-                linkedToRosterId:null);
+                linkedToRosterId:null,
+                linkedFilterExpression: null);
 
             return state;
         }
@@ -245,7 +249,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionConditionExpression: @event.Payload.ConditionExpression,
                 questionValidationConditions: @event.Payload.ValidationConditions,
                 linkedToQuestionId: null,
-                linkedToRosterId: null);
+                linkedToRosterId: null,
+                linkedFilterExpression: null);
 
             return state;
         }
@@ -260,7 +265,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionConditionExpression: @event.Payload.EnablementCondition,
                 questionValidationConditions: @event.Payload.ValidationConditions,
                 linkedToQuestionId: null,
-                linkedToRosterId: null);
+                linkedToRosterId: null,
+                linkedFilterExpression: null);
 
             return state;
         }
@@ -275,23 +281,32 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionConditionExpression: @event.Payload.EnablementCondition,
                 questionValidationConditions: @event.Payload.ValidationConditions,
                 linkedToQuestionId: null,
-                linkedToRosterId: null);
+                linkedToRosterId: null,
+                linkedFilterExpression:null);
 
             return state;
         }
 
         public GroupInfoView Update(GroupInfoView state, IPublishedEvent<StaticTextAdded> @event)
         {
-            this.AddStaticText(questionnaire: state, parentId: @event.Payload.ParentId.FormatGuid(),
-                entityId: @event.Payload.EntityId.FormatGuid(), text: @event.Payload.Text);
+            this.AddStaticText(
+                questionnaire: state, 
+                parentId: @event.Payload.ParentId.FormatGuid(),
+                entityId: @event.Payload.EntityId.FormatGuid(), 
+                text: @event.Payload.Text,
+                attachmentName: null);
 
             return state;
         }
 
         public GroupInfoView Update(GroupInfoView state, IPublishedEvent<StaticTextCloned> @event)
         {
-            this.AddStaticText(questionnaire: state, parentId: @event.Payload.ParentId.FormatGuid(),
-                entityId: @event.Payload.EntityId.FormatGuid(), text: @event.Payload.Text,
+            this.AddStaticText(
+                questionnaire: state, 
+                parentId: @event.Payload.ParentId.FormatGuid(),
+                entityId: @event.Payload.EntityId.FormatGuid(), 
+                text: @event.Payload.Text,
+                attachmentName: @event.Payload.AttachmentName,
                 orderIndex: @event.Payload.TargetIndex);
 
             return state;
@@ -299,8 +314,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         public GroupInfoView Update(GroupInfoView state, IPublishedEvent<StaticTextUpdated> @event)
         {
-            this.UpdateStaticText(questionnaire: state, entityId: @event.Payload.EntityId.FormatGuid(),
-                text: @event.Payload.Text);
+            this.UpdateStaticText(
+                questionnaire: state, 
+                entityId: @event.Payload.EntityId.FormatGuid(),
+                text: @event.Payload.Text,
+                attachmentName: @event.Payload.AttachmentName);
 
             return state;
         }
@@ -434,7 +452,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             IList<ValidationCondition> validationCondions,
             string linkedToQuestionId = null,
             string linkedToRosterId = null,
-            int? orderIndex = null)
+            int? orderIndex = null,
+            string linkedFilterExpression = null)
         {
             var groupView = this.FindGroup(questionnaireOrGroup: questionnaire, groupId: groupId);
 
@@ -452,8 +471,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 LinkedToQuestionId = linkedToQuestionId,
                 LinkedToRosterId = linkedToRosterId,
                 HasCondition = !string.IsNullOrWhiteSpace(questionConditionExpression),
-                HasValidation = validationCondions.Count > 0    
-            };
+                HasValidation = validationCondions.Count > 0,
+                LinkedFilterExpression = linkedFilterExpression
+        };
 
             if (orderIndex.HasValue)
             {
@@ -474,7 +494,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             string questionConditionExpression,
             IList<ValidationCondition> questionValidationConditions,       
             string linkedToQuestionId,
-            string linkedToRosterId)
+            string linkedToRosterId,
+            string linkedFilterExpression)
         {
             var questionView = this.FindQuestion(questionnaireOrGroup: questionnaire, questionId: questionId);
 
@@ -488,9 +509,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             questionView.LinkedToRosterId = linkedToRosterId;
             questionView.HasCondition = !string.IsNullOrWhiteSpace(questionConditionExpression);
             questionView.HasValidation = questionValidationConditions.Count > 0;
+            questionView.LinkedFilterExpression = linkedFilterExpression;
         }
 
-        private void AddStaticText(GroupInfoView questionnaire, string parentId, string entityId, string text,
+        private void AddStaticText(GroupInfoView questionnaire, string parentId, string entityId, string text, string attachmentName,
             int? orderIndex = null)
         {
             var groupView = this.FindGroup(questionnaireOrGroup: questionnaire, groupId: parentId);
@@ -502,7 +524,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             var staticTextInfoView = new StaticTextInfoView()
             {
                 ItemId = entityId,
-                Text = text
+                Text = text,
+                AttachmentName = attachmentName
             };
 
             if (orderIndex.HasValue)
@@ -515,7 +538,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             }
         }
 
-        private void UpdateStaticText(GroupInfoView questionnaire, string entityId, string text)
+        private void UpdateStaticText(GroupInfoView questionnaire, string entityId, string text, string attachmentName)
         {
             var staticTextInfoView = this.FindStaticText(questionnaireOrGroup: questionnaire, entityId: entityId);
 
@@ -523,6 +546,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 return;
 
             staticTextInfoView.Text = text;
+            staticTextInfoView.AttachmentName = attachmentName;
         }
 
         private void AddGroup(GroupInfoView questionnaire, string parentGroupId, string groupId, string groupTitle, string variableName,
@@ -574,7 +598,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                                      questionVariable: questionChild.StataExportCaption,
                                      questionConditionExpression: questionChild.ConditionExpression,
                                      validationCondions: questionChild.ValidationConditions,
-                                     linkedToQuestionId: Monads.Maybe(() => questionChild.LinkedToQuestionId.FormatGuid()));
+                                     linkedToQuestionId: Monads.Maybe(() => questionChild.LinkedToQuestionId.FormatGuid()),
+                                     linkedFilterExpression:questionChild.LinkedFilterExpression);
 
                     continue;
                 }
@@ -600,7 +625,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                     this.AddStaticText(questionnaire: currentState,
                         parentId: staticTextChild.GetParent().PublicKey.FormatGuid(),
                         entityId: staticTextChild.PublicKey.FormatGuid(),
-                        text: staticTextChild.Text);
+                        text: staticTextChild.Text,
+                        attachmentName: staticTextChild.AttachmentName);
 
                     continue;
                 }

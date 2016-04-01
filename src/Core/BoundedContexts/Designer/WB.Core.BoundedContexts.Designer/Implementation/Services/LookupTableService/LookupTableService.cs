@@ -4,9 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-
-using CsQuery.ExtensionMethods.Internal;
-
 using CsvHelper;
 using CsvHelper.Configuration;
 using Main.Core.Documents;
@@ -15,7 +12,6 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService
 {
@@ -35,7 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             this.documentStorage = documentStorage;
         }
 
-        public void SaveLookupTableContent(Guid questionnaireId, Guid lookupTableId, string lookupTableName, string fileContent)
+        public void SaveLookupTableContent(Guid questionnaireId, Guid lookupTableId, string fileContent)
         {
             var lookupTableContent = string.IsNullOrWhiteSpace(fileContent) 
                 ? this.GetLookupTableContent(questionnaireId, lookupTableId) 

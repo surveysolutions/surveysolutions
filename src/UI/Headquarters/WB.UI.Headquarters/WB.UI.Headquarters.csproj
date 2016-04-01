@@ -170,6 +170,10 @@
       <HintPath>..\..\..\..\packages\Quartz.2.3.3\lib\net40\Quartz.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SDammann.WebApi.Versioning, Version=2.7.0.0, Culture=neutral, PublicKeyToken=8e49016fcaf923da, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\SDammann.WebApi.Versioning.2.7.0.0\lib\net45\SDammann.WebApi.Versioning.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net" />
@@ -312,7 +316,9 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="parameters.xml" />
+    <None Include="parameters.xml">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\jqPlot\changes.txt" />
     <Content Include="Scripts\jqPlot\copyright.txt" />

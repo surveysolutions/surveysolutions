@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IInterviewerSettings interviewerSettings,
             ISynchronizationService synchronizationService,
             ILogger logger, 
-            IUserInteractionService userInteractionService)
+            IUserInteractionService userInteractionService) : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.principal = principal;
@@ -46,6 +46,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.logger = logger;
             this.userInteractionService = userInteractionService;
         }
+
+        public override bool IsAuthenticationRequired => false;
 
         private string endpoint;
         public string Endpoint
@@ -107,13 +109,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>()); }
         }
 
+        private InterviewerIdentity userIdentity;
         public void Init(InterviewerIdentity userIdentity)
+        {
+            this.userIdentity = userIdentity;
+        }
+
+        public override Task StartAsync()
         {
             this.IsUserValid = true;
             this.IsEndpointValid = true;
             this.Endpoint = this.interviewerSettings.Endpoint;
 
-            this.UserName = userIdentity.Name;
+            this.UserName = this.userIdentity.Name;
+
+            return Task.FromResult(true);
         }
 
         public async Task RefreshEndpoint()

@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
                 interviewersPlainStorage: InterviewersPlainStorageMock.Object);
         };
 
-        Because of = () => viewModel.Init();
+        Because of = async () => await viewModel.StartAsync();
 
         It should_fill_user_name = () =>
             viewModel.UserName.ShouldEqual(userName);

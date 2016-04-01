@@ -1,3 +1,4 @@
+using Flurl.Http;
 using Geolocator.Plugin;
 using Geolocator.Plugin.Abstractions;
 using ICSharpCode.SharpZipLib;
@@ -5,7 +6,11 @@ using Microsoft.Practices.ServiceLocation;
 using Ninject.Modules;
 using NinjectAdapter;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Infrastructure.Shared.Enumerator.Internals;
 using WB.Infrastructure.Shared.Enumerator.Internals.FileSystem;
@@ -28,6 +33,11 @@ namespace WB.Infrastructure.Shared.Enumerator
             this.Bind<IGpsLocationService>().To<GpsLocationService>().InSingletonScope();
             this.Bind<IGeolocator>().ToMethod(context => CrossGeolocator.Current);
 
+            FlurlHttp.Configure(c => {
+                c.HttpClientFactory = new ModernHttpClientFactory();
+            });
+
+            this.Bind<IAttachmentContentStorage>().To<AttachmentContentStorage>().InSingletonScope();
         }
     }
 }

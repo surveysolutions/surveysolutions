@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
@@ -20,16 +19,13 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
     {
         Establish context = () =>
         {
-            var designerApiService = Mock.Of<IDesignerApiService>(_ => _.GetQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(MyQuestionnaires) &&
-                _.GetQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(PublicQuestionnaires));
-
-            var storageAccessor = new TestAsyncPlainStorage<QuestionnaireListItem>(MyQuestionnaires.Union(PublicQuestionnaires));
+            var storageAccessor = new SqliteInmemoryStorage<QuestionnaireListItem>();
+            storageAccessor.StoreAsync(Questionnaires).WaitAndUnwrapException();
 
             viewModel = CreateDashboardViewModel(
-                designerApiService: designerApiService,
                 questionnaireListStorage: storageAccessor);
 
-            viewModel.Init();
+            viewModel.StartAsync().WaitAndUnwrapException();
             viewModel.ShowPublicQuestionnairesCommand.Execute();
         };
 
@@ -41,17 +37,35 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         private static DashboardViewModel viewModel;
 
-        private static readonly IReadOnlyCollection<QuestionnaireListItem> MyQuestionnaires = new List<QuestionnaireListItem>
+        private static readonly IReadOnlyCollection<QuestionnaireListItem> Questionnaires = new List<QuestionnaireListItem>
         {
-            new QuestionnaireListItem(){IsPublic = false, OwnerName = userName},
-            new QuestionnaireListItem(){IsPublic = false, OwnerName = userName}
-        };
-
-        private static readonly IReadOnlyCollection<QuestionnaireListItem> PublicQuestionnaires = new List<QuestionnaireListItem>
-        {
-            new QuestionnaireListItem(){IsPublic = true},
-            new QuestionnaireListItem(){IsPublic = true},
-            new QuestionnaireListItem(){IsPublic = true}
+            new QuestionnaireListItem()
+            {
+                IsPublic = false,
+                OwnerName = userName,
+                Id = Guid.NewGuid().FormatGuid()
+            },
+            new QuestionnaireListItem()
+            {
+                IsPublic = false,
+                OwnerName = userName,
+                Id = Guid.NewGuid().FormatGuid()
+            },
+            new QuestionnaireListItem()
+            {
+                IsPublic = true,
+                Id = Guid.NewGuid().FormatGuid()
+            },
+            new QuestionnaireListItem()
+            {
+                IsPublic = true,
+                Id = Guid.NewGuid().FormatGuid()
+            },
+            new QuestionnaireListItem()
+            {
+                IsPublic = true,
+                Id = Guid.NewGuid().FormatGuid()
+            }
         };
     }
 }

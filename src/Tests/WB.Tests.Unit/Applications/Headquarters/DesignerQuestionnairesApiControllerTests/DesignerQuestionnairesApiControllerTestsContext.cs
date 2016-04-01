@@ -14,9 +14,14 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
     internal class DesignerQuestionnairesApiControllerTestsContext
     {
         protected static DesignerQuestionnairesApiController CreateDesignerQuestionnairesApiController(
-            ICommandService commandService = null, IGlobalInfoProvider globalInfo = null, IStringCompressor zipUtils = null,
-            ILogger logger = null, Func<IGlobalInfoProvider, RestCredentials> getDesignerUserCredentials = null, IRestService restService = null,
-            ISupportedVersionProvider supportedVersionProvider = null)
+            ICommandService commandService = null, 
+            IGlobalInfoProvider globalInfo = null, 
+            IStringCompressor zipUtils = null,
+            ILogger logger = null, 
+            Func<IGlobalInfoProvider, RestCredentials> getDesignerUserCredentials = null, 
+            IRestService restService = null,
+            ISupportedVersionProvider supportedVersionProvider = null, 
+            IAttachmentContentService attachmentContentService = null)
         {
             return new DesignerQuestionnairesApiController(
                 supportedVersionProvider ?? new Mock<ISupportedVersionProvider> { DefaultValue = DefaultValue.Mock }.Object,
@@ -25,8 +30,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
                 zipUtils ?? new Mock<IStringCompressor> { DefaultValue = DefaultValue.Mock }.Object,
                 logger ?? Mock.Of<ILogger>(),
                 getDesignerUserCredentials ?? (_ => new Mock<RestCredentials> { DefaultValue = DefaultValue.Mock }.Object),
-                restService ?? Mock.Of<IRestService>()
-               );
+                restService ?? Mock.Of<IRestService>(),
+                attachmentContentService ?? Mock.Of<IAttachmentContentService>());
         }
     }
 }

@@ -37,7 +37,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 null,
                 null,
-                e.ValidationConditions);
+                e.ValidationConditions,
+                null);
             return data;
         }
 
@@ -69,7 +70,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 null,
                 null,
-                e.ValidationConditions);
+                e.ValidationConditions,
+                null);
             return data;
         }
 
@@ -101,7 +103,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 null,
                 null,
-                e.ValidationConditions);
+                e.ValidationConditions,
+                null);
             return data;
         }
 
@@ -133,7 +136,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 null,
                 null,
-                e.ValidationConditions);
+                e.ValidationConditions,
+                null);
             return data;
         }
 
@@ -165,7 +169,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 null,
                 null,
-                e.ValidationConditions);
+                e.ValidationConditions,
+                null);
             return data;
         }
 
@@ -197,7 +202,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 e.IsFilteredCombobox,
                 e.CascadeFromQuestionId,
                 null,
-                e.ValidationConditions);
+                e.ValidationConditions,
+                null);
             return data;
         }
 
@@ -229,7 +235,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 e.IsFilteredCombobox,
                 e.CascadeFromQuestionId,
                 e.YesNoView,
-                e.ValidationConditions);
+                e.ValidationConditions,e.LinkedFilterExpression);
             return data;
         }
 
@@ -261,7 +267,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 e.IsFilteredCombobox,
                 e.CascadeFromQuestionId,
                 e.YesNoView,
-                e.ValidationConditions);
+                e.ValidationConditions, e.LinkedFilterExpression);
             return data;
         }
 
@@ -293,7 +299,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 null,
                 null,
-                e.ValidationConditions);
+                e.ValidationConditions,
+                null);
             return data;
         }
 
@@ -325,7 +332,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 null,
                 null,
                 null,
-                e.ValidationConditions);
+                e.ValidationConditions,
+                null);
             data.ValidationConditions = evnt.Payload.ValidationConditions;
             return data;
         }

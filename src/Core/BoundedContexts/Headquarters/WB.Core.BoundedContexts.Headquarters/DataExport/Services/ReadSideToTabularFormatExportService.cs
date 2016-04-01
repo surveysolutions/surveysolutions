@@ -20,7 +20,9 @@ using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 
@@ -38,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly CommentsExporter commentsExporter;
         private readonly InterviewActionsExporter interviewActionsExporter;
         private readonly InterviewsExporter interviewsExporter;
-        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
         private readonly InterviewDataExportSettings exportSettings;
 
@@ -46,17 +48,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             ICsvWriter csvWriter, 
             ILogger logger,
             ITransactionManagerProvider transactionManager, 
-            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries,
-            InterviewDataExportSettings exportSettings)
+            InterviewDataExportSettings exportSettings, 
+            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
             this.logger = logger;
             this.transactionManager = transactionManager;
-            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.interviewSummaries = interviewSummaries;
             this.exportSettings = exportSettings;
+            this.questionnaireExportStructureRepository = questionnaireExportStructureRepository;
 
             this.interviewsExporter = ServiceLocator.Current.GetInstance<InterviewsExporter>();
 
@@ -149,11 +151,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath)
         {
             QuestionnaireExportStructure questionnaireExportStructure =
-              this.transactionManager.GetTransactionManager()
-                  .ExecuteInQueryTransaction(
-                      () =>
-                          this.questionnaireExportStructureStorage.AsVersioned()
-                              .Get(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version));
+                this.questionnaireExportStructureRepository.GetById(questionnaireIdentity.ToString());
 
             if (questionnaireExportStructure == null)
                 return;
@@ -203,11 +201,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private QuestionnaireExportStructure BuildQuestionnaireExportStructure(Guid questionnaireId, long questionnaireVersion)
         {
-            QuestionnaireExportStructure questionnaireExportStructure =
-             this.transactionManager.GetTransactionManager()
-                 .ExecuteInQueryTransaction(() =>
-                         this.questionnaireExportStructureStorage.AsVersioned()
-                             .Get(questionnaireId.FormatGuid(), questionnaireVersion));
+            QuestionnaireExportStructure questionnaireExportStructure = this.questionnaireExportStructureRepository.GetById(
+                    new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString());
             return questionnaireExportStructure;
         }
     }

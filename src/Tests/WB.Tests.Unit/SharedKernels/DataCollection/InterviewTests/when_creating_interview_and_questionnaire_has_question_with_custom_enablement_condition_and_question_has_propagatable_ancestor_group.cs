@@ -26,12 +26,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             Guid questionId = Guid.Parse("22220000111111111111111111111111");
             Guid parentPropagatableGroupId = Guid.Parse("22220000AAAAAAAAAAAAAAAAAAAAAAAA");
 
-            var questionaire = Mock.Of<IQuestionnaire>(_
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), _
                 => /*_.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new [] { questionId }
                 && */_.GetRostersFromTopToSpecifiedQuestion(questionId) == new [] { parentPropagatableGroupId });
-
-            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
-                => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
 
             eventContext = new EventContext();
 

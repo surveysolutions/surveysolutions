@@ -51,6 +51,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             using (var zip = new ZipFile(this.fileSystemAccessor.GetFileName(archiveFilePath)))
             {
                 zip.CompressionLevel = CompressionLevel.Default;
+                zip.UseZip64WhenSaving = Zip64Option.AsNecessary;
                 zip.AddFiles(files, "");
                 zip.Save(archiveFilePath);
             }

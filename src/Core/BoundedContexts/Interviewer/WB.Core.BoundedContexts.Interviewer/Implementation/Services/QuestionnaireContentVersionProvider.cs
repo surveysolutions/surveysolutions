@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     {
         public Version GetSupportedQuestionnaireContentVersion()
         {
-            return new Version(12, 0, 0);
+            return new Version(13, 0, 0);
         }
     }
 }

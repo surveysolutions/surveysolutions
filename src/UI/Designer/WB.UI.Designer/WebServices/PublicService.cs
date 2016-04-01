@@ -66,7 +66,7 @@ namespace WB.UI.Designer.WebServices
                 throw new FaultException(message, new FaultCode("InconsistentVersion")); //InconsistentVersionException(message);
             }
             
-            var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireView.Source).ToArray();
+            var questoinnaireErrors = questionnaireVerifier.CheckForErrors(questionnaireView.Source).ToArray();
 
             if (questoinnaireErrors.Any())
             {

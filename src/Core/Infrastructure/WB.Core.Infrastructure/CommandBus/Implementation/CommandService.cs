@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Threading;
@@ -140,6 +141,9 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
             cancellationToken.ThrowIfCancellationRequested();
             commandHandler.Invoke(command, aggregate);
+
+            if (!aggregate.HasUncommittedChanges())
+                return;
 
             CommittedEventStream commitedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
             aggregate.MarkChangesAsCommitted();

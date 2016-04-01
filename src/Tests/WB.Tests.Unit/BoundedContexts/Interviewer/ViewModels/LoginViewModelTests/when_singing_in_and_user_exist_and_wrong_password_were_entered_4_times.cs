@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 
 using Moq;
-
+using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
                 passwordHasher: passwordHasher,
                 principal: principal.Object);
 
-            viewModel.Init();
+            viewModel.StartAsync().WaitAndUnwrapException();
             viewModel.Password = wrongPassword;
 
             viewModel.SignInCommand.Execute();

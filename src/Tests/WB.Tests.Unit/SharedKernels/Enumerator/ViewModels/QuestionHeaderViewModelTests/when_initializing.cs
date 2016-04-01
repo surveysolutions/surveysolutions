@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using It = Machine.Specifications.It;
@@ -20,34 +18,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
         {
             substitutedQuesiton = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             substitutionTargetId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var maskedTextQuestionModel = new TextQuestionModel
-            {
-                Title = "title with %subst%",
-                Id = substitutionTargetId
-            };
-            QuestionnaireModel questionnaireModel = new QuestionnaireModel
-            {
-                Questions = new Dictionary<Guid, BaseQuestionModel>
-                {
-                    { substitutionTargetId, maskedTextQuestionModel }
-                },
-                QuestionsByVariableNames = new Dictionary<string, BaseQuestionModel>
-                {
-                    {
-                        "blah", maskedTextQuestionModel
-                    },
-                    {
-                        "subst", new TextQuestionModel
-                        {
-                            Variable = "subst",
-                            Id = substitutedQuesiton
-                        }
-                    },
-                }
-            };
+           
+            var questionnaireMock = Mock.Of<IQuestionnaire>(_
+                => _.GetQuestionTitle(substitutionTargetId) == "title with %subst%"
+                && _.GetQuestionInstruction(substitutionTargetId) == "Instruction"
+                && _.GetQuestionIdByVariable("blah") == substitutionTargetId
+                && _.GetQuestionIdByVariable("subst") == substitutedQuesiton);
 
-            var questionnaireRepository = new Mock<IPlainKeyValueStorage<QuestionnaireModel>>();
-            questionnaireRepository.SetReturnsDefault(questionnaireModel);
+
+            var questionnaireRepository = new Mock<IPlainQuestionnaireRepository>();
+            questionnaireRepository.SetReturnsDefault(questionnaireMock);
 
             var answer = new TextAnswer();
             answer.SetAnswer("answer");

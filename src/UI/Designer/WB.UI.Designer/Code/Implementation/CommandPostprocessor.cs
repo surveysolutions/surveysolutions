@@ -3,6 +3,9 @@ using System.Web.Security;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -18,15 +21,26 @@ namespace WB.UI.Designer.Code.Implementation
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
         private readonly IAccountRepository accountRepository;
         private readonly ILogger logger;
+        private readonly IAttachmentService attachmentService;
+        private readonly ILookupTableService lookupTableService;
 
 
-        public CommandPostprocessor(IMembershipUserService userHelper, IRecipientNotifier notifier, IAccountRepository accountRepository, IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader, ILogger logger)
+        public CommandPostprocessor(
+            IMembershipUserService userHelper, 
+            IRecipientNotifier notifier, 
+            IAccountRepository accountRepository, 
+            IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader, 
+            ILogger logger, 
+            IAttachmentService attachmentService, 
+            ILookupTableService lookupTableService)
         {
             this.userHelper = userHelper;
             this.notifier = notifier;
             this.questionnaireDocumentReader = questionnaireDocumentReader;
             this.accountRepository = accountRepository;
             this.logger = logger;
+            this.attachmentService = attachmentService;
+            this.lookupTableService = lookupTableService;
         }
 
 
@@ -34,22 +48,55 @@ namespace WB.UI.Designer.Code.Implementation
         {
             try
             {
-                var addSharedPersonCommand = command as AddSharedPersonToQuestionnaireCommand;
+                var addSharedPersonCommand = command as AddSharedPersonToQuestionnaire;
                 if (addSharedPersonCommand != null)
                 {
                     this.HandleNotifications(ShareChangeType.Share, addSharedPersonCommand.Email, addSharedPersonCommand.QuestionnaireId, addSharedPersonCommand.ShareType);
                     return;
                 }
 
-                var removeSharedPersonCommand = command as RemoveSharedPersonFromQuestionnaireCommand;
+                var removeSharedPersonCommand = command as RemoveSharedPersonFromQuestionnaire;
                 if (removeSharedPersonCommand != null)
                 {
                     this.HandleNotifications(ShareChangeType.StopShare, removeSharedPersonCommand.Email, removeSharedPersonCommand.QuestionnaireId, ShareType.Edit);
+                }
+
+                var deleteAttachment = command as DeleteAttachment;
+                if (deleteAttachment != null)
+                {
+                    attachmentService.Delete(deleteAttachment.AttachmentId);
+                }
+
+                var deleteLookupTable = command as DeleteLookupTable;
+                if (deleteLookupTable != null)
+                {
+                    this.lookupTableService.DeleteLookupTableContent(deleteLookupTable.QuestionnaireId, deleteLookupTable.LookupTableId);
+                }
+
+                var deleteQuestionnaire = command as DeleteQuestionnaire;
+                if (deleteQuestionnaire != null)
+                {
+                    DeleteAccompanyingDataOnQuestionnaireRemove(deleteQuestionnaire.QuestionnaireId);
                 }
             }
             catch (Exception exc)
             {
                 logger.Error("Error on command post-processing", exc);
+            }
+        }
+
+        private void DeleteAccompanyingDataOnQuestionnaireRemove(Guid questionnaireId)
+        {
+            var questionnaire = this.questionnaireDocumentReader.GetById(questionnaireId);
+
+            foreach (var attachment in questionnaire.Attachments)
+            {
+                attachmentService.Delete(attachment.AttachmentId);
+            }
+
+            foreach (var lookupTable in questionnaire.LookupTables)
+            {
+                this.lookupTableService.DeleteLookupTableContent(questionnaireId, lookupTable.Key);
             }
         }
 

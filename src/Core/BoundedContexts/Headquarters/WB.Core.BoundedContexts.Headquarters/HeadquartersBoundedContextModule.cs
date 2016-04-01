@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Interviews.Denormalizers;
@@ -24,6 +25,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -80,6 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
             this.Bind<IDataExportProcessesService>().To<DataExportProcessesService>().InSingletonScope();
             this.Bind<IDataExporter>().To<DataExporter>().InSingletonScope();
+            this.Bind<InterviewExportredDataRowReader>().ToSelf();
 
             this.Bind<ITabularDataToExternalStatPackageExportService>().To<TabularDataToExternalStatPackageExportService>();
             this.Bind<ITabFileReader>().To<TabFileReader>();
@@ -101,7 +104,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<ICsvWriter>().To<CsvWriter>();
             this.Bind<IExportViewFactory>().To<ExportViewFactory>();
             this.Bind<IDataExportStatusReader>().To<DataExportStatusReader>();
-            this.Kernel.RegisterDenormalizer<QuestionnaireExportStructureDenormalizer>();
         }
     }
 }

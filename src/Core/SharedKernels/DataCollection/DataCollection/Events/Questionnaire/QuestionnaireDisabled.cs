@@ -8,6 +8,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Questionnaire
 {
+    [Obsolete]
     public class QuestionnaireDisabled : IEvent
     {
         public long QuestionnaireVersion { get; set; }

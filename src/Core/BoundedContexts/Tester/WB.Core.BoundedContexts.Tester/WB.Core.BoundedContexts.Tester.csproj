@@ -64,7 +64,6 @@
       <DependentUpon>TesterUIResources.resx</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\DashboardViewModel.cs" />
-    <Compile Include="ViewModels\HelpViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\InterviewViewModel.cs" />
     <Compile Include="Views\DashboardLastUpdate.cs" />

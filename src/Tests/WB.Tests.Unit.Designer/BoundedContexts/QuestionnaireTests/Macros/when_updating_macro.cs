@@ -1,0 +1,54 @@
+using System;
+using Machine.Specifications;
+using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
+
+namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Macros
+{
+    internal class when_updating_macro : QuestionnaireTestsContext
+    {
+        Establish context = () =>
+        {
+            questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
+            questionnaire.AddMacro(Create.Command.AddMacro(questionnaireId, macroId, responsibleId));
+
+            updateMacro = Create.Command.UpdateMacro(questionnaireId, macroId, name, content, description, responsibleId);
+
+            eventContext = new EventContext();
+        };
+
+        Cleanup stuff = () =>
+        {
+            eventContext.Dispose();
+            eventContext = null;
+        };
+
+        Because of = () => questionnaire.UpdateMacro(updateMacro);
+
+        It should_raise_MacroUpdated_event_with_EntityId_specified = () =>
+            eventContext.GetSingleEvent<MacroUpdated>().MacroId.ShouldEqual(macroId);
+
+        It should_raise_MacroUpdated_event_with_ResponsibleId_specified = () =>
+            eventContext.GetSingleEvent<MacroUpdated>().ResponsibleId.ShouldEqual(responsibleId);
+
+        It should_raise_MacroUpdated_event_with_Name_specified = () =>
+            eventContext.GetSingleEvent<MacroUpdated>().Name.ShouldEqual(name);
+
+        It should_raise_MacroUpdated_event_with_Content_specified = () =>
+            eventContext.GetSingleEvent<MacroUpdated>().Content.ShouldEqual(content);
+
+        It should_raise_MacroUpdated_event_with_Description_specified = () =>
+            eventContext.GetSingleEvent<MacroUpdated>().Description.ShouldEqual(description);
+
+        private static UpdateMacro updateMacro;
+        private static Questionnaire questionnaire;
+        private static readonly string name = "macros";
+        private static readonly string content = "macros content";
+        private static readonly string description = "macros description";
+        private static readonly Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
+        private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
+        private static readonly Guid macroId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        private static EventContext eventContext;
+    }
+}

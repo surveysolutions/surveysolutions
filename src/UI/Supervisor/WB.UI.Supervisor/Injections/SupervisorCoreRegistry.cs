@@ -20,9 +20,9 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Shared.Web.Filters;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.UI.Supervisor.Injections
 {

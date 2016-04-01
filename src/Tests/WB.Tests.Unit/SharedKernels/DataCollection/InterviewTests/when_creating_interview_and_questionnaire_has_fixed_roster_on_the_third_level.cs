@@ -26,17 +26,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             answersTime = new DateTime(2013, 09, 01);
             var fixedRosterTitles = new[] { new FixedRosterTitle(1, "Title 1"), new FixedRosterTitle(2, "Title 2"), new FixedRosterTitle(3, "Title 3") };
             fixedRosterId = Guid.Parse("22220000FFFFFFFFFFFFFFFFFFFFFFFF");
-
-
-            var questionaire = Mock.Of<IQuestionnaire>(_
-                => _.GetFixedRosterGroups(null) == new Guid[] { fixedRosterId }
-                && _.GetFixedRosterTitles(fixedRosterId) == fixedRosterTitles
-                && _.IsRosterGroup(fixedRosterId) == true
-                && _.GetRostersFromTopToSpecifiedGroup(fixedRosterId) == new Guid[] { fixedRosterId }
-                );
-
-            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
-                => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
+            
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
+                 => _.GetFixedRosterGroups(null) == new Guid[] { fixedRosterId }
+                 && _.GetFixedRosterTitles(fixedRosterId) == fixedRosterTitles
+                 && _.IsRosterGroup(fixedRosterId) == true
+                 && _.GetRostersFromTopToSpecifiedGroup(fixedRosterId) == new Guid[] { fixedRosterId });
 
             eventContext = new EventContext();
 

@@ -70,6 +70,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attachment &quot;{0}&quot; deleted.
+        /// </summary>
+        public static string Attachment_Deleted {
+            get {
+                return ResourceManager.GetString("Attachment_Deleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attachment &quot;{0}&quot; updated.
+        /// </summary>
+        public static string Attachment_Updated {
+            get {
+                return ResourceManager.GetString("Attachment_Updated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to became a group.
         /// </summary>
         public static string became_a_group {

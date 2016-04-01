@@ -24,11 +24,11 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 using WB.UI.Headquarters.Views;
 using WB.UI.Shared.Web.Filters;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Infrastructure.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.UI.Headquarters.Injections
 {

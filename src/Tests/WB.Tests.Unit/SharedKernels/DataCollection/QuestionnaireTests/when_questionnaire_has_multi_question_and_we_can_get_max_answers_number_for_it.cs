@@ -6,6 +6,8 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
@@ -15,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
     {
         Establish context = () =>
         {
-            QuestionnaireDocument questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
+            questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
             {
                 new MultyOptionsQuestion()
                 {
@@ -24,19 +26,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                     QuestionType = QuestionType.MultyOption
                 }
             });
-
-            questionnaire = CreateImportedQuestionnaire(Guid.NewGuid(), questionnaireDocument);
         };
 
         Because of = () =>
-            maxSelectedAnswerOptions = questionnaire.GetQuestionnaire().GetMaxSelectedAnswerOptions(validatedQuestionId);
+            maxSelectedAnswerOptions = new PlainQuestionnaire(questionnaireDocument, 1).GetMaxSelectedAnswerOptions(validatedQuestionId);
 
         It should_max_selected_answer_options_be_equal_of_proposed_selected_answer_options = () =>
             maxSelectedAnswerOptions.ShouldEqual(proposedSelectedAnswerOptions);
 
         private static int? maxSelectedAnswerOptions;
         private static int? proposedSelectedAnswerOptions = 5;
-        private static Questionnaire questionnaire;
+        private static QuestionnaireDocument questionnaireDocument;
         private static Guid validatedQuestionId = new Guid("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
     }
 }

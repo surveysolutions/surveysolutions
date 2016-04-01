@@ -14,6 +14,13 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
         public static MvcHtmlString FormatQuestionnaireHistoricalRecord(this HtmlHelper helper, UrlHelper urlHelper,
             Guid questionnaireId, QuestionnaireChangeHistoricalRecord record)
         {
+            if (record.TargetType == QuestionnaireItemType.Attachment)
+            {
+                var attachmentRecord = GetFormattedHistoricalRecordForAttachment(record);
+                if (!string.IsNullOrWhiteSpace(attachmentRecord))
+                    return MvcHtmlString.Create(attachmentRecord);
+            }
+
             if (record.TargetType == QuestionnaireItemType.Macro)
             {
                 var macrosRecord = GetFormattedHistoricalRecordForMacros(record);
@@ -48,6 +55,17 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             }
 
             return MvcHtmlString.Create(mainRecord);
+        }
+        private static string GetFormattedHistoricalRecordForAttachment(QuestionnaireChangeHistoricalRecord record)
+        {
+            switch (record.ActionType)
+            {
+                case QuestionnaireActionType.Delete:
+                    return string.Format(QuestionnaireHistoryResources.Attachment_Deleted, record.TargetTitle);
+                case QuestionnaireActionType.Update:
+                    return string.Format(QuestionnaireHistoryResources.Attachment_Updated, record.TargetTitle);
+            }
+            return null;
         }
 
         private static string GetFormattedHistoricalRecordForLookupTable(QuestionnaireChangeHistoricalRecord record)

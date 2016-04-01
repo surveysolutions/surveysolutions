@@ -57,6 +57,9 @@
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_18</item>
+    <item name="android:background">?attr/selectableItemBackground</item>
+    <item name="android:paddingTop">@dimen/Dashboard_Menu_margin_vertical</item>
+    <item name="android:paddingBottom">@dimen/Dashboard_Menu_margin_vertical</item>
     <item name="android:layout_marginTop">@dimen/Dashboard_Questionnaire_MyQuestionnaireLink_margin_top</item>
     <item name="android:layout_marginBottom">@dimen/Dashboard_Questionnaire_MyQuestionnaireLink_margin_bottom</item>
     <item name="android:layout_marginLeft">@dimen/Dashboard_Menu_Item_margin_horizontal_in_between</item>

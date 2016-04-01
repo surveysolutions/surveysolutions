@@ -40,6 +40,7 @@ using WB.UI.Interviewer.Ninject;
 using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator;
+using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Ninject;
 using Xamarin;
 
@@ -80,7 +81,8 @@ namespace WB.UI.Interviewer
                 {typeof(DashboardViewModel), typeof(DashboardActivity)},
                 {typeof(DiagnosticsViewModel),typeof(DiagnosticsActivity) },
                 {typeof(InterviewerInterviewViewModel), typeof(InterviewActivity)},
-                {typeof(RelinkDeviceViewModel), typeof(RelinkDeviceActivity)}
+                {typeof(RelinkDeviceViewModel), typeof(RelinkDeviceActivity)},
+                {typeof(InterviewerCompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();

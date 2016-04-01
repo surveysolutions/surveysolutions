@@ -9,6 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         Question,
         Person,
         Macro,
-        LookupTable
+        LookupTable,
+        Attachment
     }
 }

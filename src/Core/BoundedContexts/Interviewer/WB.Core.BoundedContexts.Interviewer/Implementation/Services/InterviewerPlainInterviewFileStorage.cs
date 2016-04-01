@@ -84,10 +84,5 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.fileViewStorage.RemoveAsync(imageView.FileId).Wait();
             this.imageViewStorage.RemoveAsync(imageView.Id).Wait();
         }
-
-        public void RemoveAllBinaryDataForInterview(Guid interviewId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

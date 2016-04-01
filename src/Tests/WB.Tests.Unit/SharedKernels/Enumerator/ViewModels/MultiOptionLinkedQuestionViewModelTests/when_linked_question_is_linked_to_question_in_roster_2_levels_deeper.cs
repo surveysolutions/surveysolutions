@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Machine.Specifications;
+using Moq;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQuestionViewModelTests
 {
@@ -16,16 +18,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
     {
         Establish context = () =>
         {
-            var firstRosterTitleQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var secondRosterTitlQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             linkedQuestionId = new Identity(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), Empty.RosterVector);
 
-            var questionnaireModel = Create.QuestionnaireModel(new BaseQuestionModel[]
-            {
-                Create.TextQuestionModel(questionId: firstRosterTitleQuestionId),
-                Create.TextQuestionModel(questionId: secondRosterTitlQuestionId),
-                Create.LinkedMultiOptionQuestionModel(questionId: linkedQuestionId.Id, linkedToQuestionId: secondRosterTitlQuestionId)
-            });
+            var questionnaire = Mock.Of<IQuestionnaire>(_
+                => _.GetQuestionReferencedByLinkedQuestion(linkedQuestionId.Id) == secondRosterTitlQuestionId
+                && _.ShouldQuestionRecordAnswersOrder(linkedQuestionId.Id) == false);
 
             var interview = Substitute.For<IStatefulInterview>();
             interview.Answers.Returns(new ReadOnlyDictionary<string, BaseInterviewAnswer>(new Dictionary<string, BaseInterviewAnswer>()));
@@ -44,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                     "nastya"
                 });
 
-            questionViewModel = CreateViewModel(questionnaireModel, interview);
+            questionViewModel = CreateViewModel(questionnaire, interview);
         };
 
         Because of = () => questionViewModel.Init("interview", linkedQuestionId, Create.NavigationState());

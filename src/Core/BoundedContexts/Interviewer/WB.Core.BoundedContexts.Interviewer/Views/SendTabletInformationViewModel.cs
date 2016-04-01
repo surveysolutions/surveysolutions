@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-    public class SendTabletInformationViewModel : BaseViewModel
+    public class SendTabletInformationViewModel : MvxNotifyPropertyChanged
     {
         private readonly IBackupRestoreService backupRestoreService;
         private readonly ISynchronizationService synchronizationService;

@@ -85,20 +85,15 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="IEnumeratorSettings.cs" />
     <Compile Include="Implementation\Aggregates\StatefulInterview.cs" />
+    <Compile Include="Implementation\Repositories\AttachmentContentStorage.cs" />
     <Compile Include="Implementation\Repositories\StatefulInterviewRepository.cs" />
     <Compile Include="Implementation\Services\AnswerToStringService.cs" />
     <Compile Include="Implementation\Services\FriendlyErrorMessageService.cs" />
     <Compile Include="Implementation\Services\IGpsLocationService.cs" />
     <Compile Include="Implementation\Services\InterviewViewModelFactory.cs" />
-    <Compile Include="Implementation\Services\JsonSerializerSettingsFactory.cs" />
-    <Compile Include="Implementation\Services\QuestionnaireModelBuilder.cs" />
     <Compile Include="Implementation\Services\SqlitePlainStorage.cs" />
     <Compile Include="Implementation\Services\SqliteSettings.cs" />
     <Compile Include="Implementation\Services\MvxTraceListener.cs" />
-    <Compile Include="Models\Questionnaire\QuestionnaireModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\LinkedToRosterMultiOptionQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\LinkedToRosterSingleOptionQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\YesNoQuestionModel.cs" />
     <Compile Include="Properties\UIResources.id-ID.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -114,6 +109,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>UIResources.zh-CN.resx</DependentUpon>
     </Compile>
+    <Compile Include="Repositories\IAttachmentContentStorage.cs" />
     <Compile Include="Services\IExternalAppLauncher.cs" />
     <Compile Include="Services\IFriendlyErrorMessageService.cs" />
     <Compile Include="Services\Infrastructure\IPrincipal.cs" />
@@ -121,33 +117,14 @@
     <Compile Include="Services\Infrastructure\IUserIdentity.cs" />
     <Compile Include="Services\Infrastructure\QRBarcodeScanResult.cs" />
     <Compile Include="Services\Infrastructure\Storage\IAsyncPlainStorage.cs" />
+    <Compile Include="Services\Infrastructure\Storage\IAsyncPlainStorageRemover.cs" />
     <Compile Include="Services\Infrastructure\Storage\IPlainStorageEntity.cs" />
-    <Compile Include="Services\IQuestionnaireModelBuilder.cs" />
     <Compile Include="Services\IRosterTitleSubstitutionService.cs" />
     <Compile Include="Implementation\Services\RosterTitleSubstitutionService.cs" />
-    <Compile Include="Models\Questionnaire\GroupModel.cs" />
-    <Compile Include="Models\Questionnaire\GroupReferenceModel.cs" />
-    <Compile Include="Models\Questionnaire\GroupsHierarchyModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\BaseQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\CascadingOptionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\CascadingSingleOptionQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\DateTimeQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\FilteredSingleOptionQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\GpsCoordinatesQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\IntegerNumericQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\LinkedMultiOptionQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\LinkedSingleOptionQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\MultimediaQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\MultiOptionQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\OptionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\QRBarcodeQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\RealNumericQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\SingleOptionQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\TextListQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\Questions\TextQuestionModel.cs" />
-    <Compile Include="Models\Questionnaire\QuestionnaireReferenceModel.cs" />
-    <Compile Include="Models\Questionnaire\RosterModel.cs" />
-    <Compile Include="Models\Questionnaire\StaticTextModel.cs" />
+    <Compile Include="Utils\ObservableCollectionExtensions.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\State\AnswersRemovedNotifier.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\State\AttachmentViewModel.cs" />
+    <Compile Include="ViewModels\InterviewDetails\Questions\CategoricalQuestionOption.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\UIResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -165,7 +142,6 @@
     <Compile Include="Services\MaskText\Range.cs" />
     <Compile Include="Services\MaskText\RawText.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\ActiveStageViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\GpsLocation.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\MultiOptionLinkedToRosterQuestionViewModel.cs" />
@@ -214,7 +190,6 @@
     <Compile Include="ViewModels\InterviewDetails\Questions\TextListItemViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\TextListQuestionViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\Questions\TextQuestionViewModel.cs" />
-    <Compile Include="ViewModels\InterviewDetails\ScrollToAnchorMessage.cs" />
     <Compile Include="ViewModels\InterviewDetails\SideBarPrefillQuestion.cs" />
     <Compile Include="ViewModels\InterviewDetails\SideBarSectionsViewModel.cs" />
     <Compile Include="ViewModels\InterviewDetails\SideBarSectionViewModel.cs" />
@@ -227,6 +202,9 @@
     <Compile Include="ViewModels\ObservableRangeCollection.cs" />
     <Compile Include="ViewModels\PrefilledQuestionsViewModel.cs" />
     <Compile Include="ViewModels\StartInterviewViewModel.cs" />
+    <Compile Include="Views\AttachmentContent.cs" />
+    <Compile Include="Views\AttachmentContentData.cs" />
+    <Compile Include="Views\AttachmentContentMetadata.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -267,6 +245,14 @@
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\..\..\..\..\packages\Portable.Ninject.3.3.1\lib\portable-net4+sl5+wp8+win8+wpa81+monotouch+monoandroid+Xamarin.iOS\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Nito.AsyncEx, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Nito.AsyncEx.3.0.1\lib\portable-net45+netcore45+wpa81\Nito.AsyncEx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Nito.AsyncEx.Concurrent, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Nito.AsyncEx.3.0.1\lib\portable-net45+netcore45+wpa81\Nito.AsyncEx.Concurrent.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SQLite.Net, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">

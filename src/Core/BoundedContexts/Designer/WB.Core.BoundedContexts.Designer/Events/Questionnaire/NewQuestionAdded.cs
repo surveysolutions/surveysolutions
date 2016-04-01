@@ -16,7 +16,7 @@ namespace Main.Core.Events.Questionnaire
             Order? answerOrder, Answer[] answers, Guid? groupPublicKey, Guid? linkedToQuestionId, bool? isInteger, bool? areAnswersOrdered, bool? yesNoView, int? maxAllowedAnswers, 
             string mask, bool? isFilteredCombobox, Guid? cascadeFromQuestionId, IList<ValidationCondition> validationConditions) : base(responsibleId, conditionExpression, hideIfDisabled, featured, instructions, capital, publicKey, questionText, 
                 questionScope, stataExportCaption, variableLabel, validationExpression, validationMessage, questionType, answerOrder, answers, groupPublicKey, linkedToQuestionId, null, isInteger, 
-                areAnswersOrdered, yesNoView, maxAllowedAnswers, mask, isFilteredCombobox, cascadeFromQuestionId, validationConditions)
+                areAnswersOrdered, yesNoView, maxAllowedAnswers, mask, isFilteredCombobox, cascadeFromQuestionId, validationConditions, null)
         {
         }
     }

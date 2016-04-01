@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.V6;
+using WB.Core.SharedKernels.DataCollection.V7;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Validation
@@ -22,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Validation
             var questionId = Guid.NewGuid();
             questionIdentity = Create.Identity(questionId, RosterVector.Empty);
 
-            var interviewExpressionStateV6 = Substitute.For<IInterviewExpressionStateV6>();
+            var interviewExpressionStateV7 = Substitute.For<IInterviewExpressionStateV7>();
             IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidatoinConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
             failedValidatoinConditions.Add(questionIdentity, new List<FailedValidationCondition>
             {
@@ -31,16 +32,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Validation
             });
 
             var answersDeclaredInvalid = new List<Identity> {questionIdentity};
-            interviewExpressionStateV6.ProcessValidationExpressions()
+            interviewExpressionStateV7.ProcessValidationExpressions()
                                       .Returns(new ValidityChanges(new List<Identity>(), answersDeclaredInvalid, failedValidatoinConditions));
-            interviewExpressionStateV6.ProcessEnablementConditions()
+            interviewExpressionStateV7.ProcessEnablementConditions()
                                       .ReturnsForAnyArgs(Create.EnablementChanges());
 
-            interviewExpressionStateV6.Clone().Returns(interviewExpressionStateV6);
+            interviewExpressionStateV7.Clone().Returns(interviewExpressionStateV7);
 
             IInterviewExpressionStatePrototypeProvider expressionProcessorProvider = Substitute.For<IInterviewExpressionStatePrototypeProvider>();
             expressionProcessorProvider.GetExpressionState(new Guid(), 1)
-                                       .ReturnsForAnyArgs(interviewExpressionStateV6);
+                                       .ReturnsForAnyArgs(interviewExpressionStateV7);
 
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(Create.Question(questionId: questionId,
                 questionType: QuestionType.Text,

@@ -1,6 +1,7 @@
 ﻿using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 using Elmah.Contrib.WebApi;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.MessageHandlers;
 using WB.UI.Designer.Filters;
@@ -20,6 +21,8 @@ namespace WB.UI.Designer
                 config.MessageHandlers.Add(new HttpsVerifier());
 
             config.Filters.Add(new ApiMaintenanceFilter());
+
+            config.MessageHandlers.Add(new DecompressionHandler());
 
             config.MapHttpAttributeRoutes();
 

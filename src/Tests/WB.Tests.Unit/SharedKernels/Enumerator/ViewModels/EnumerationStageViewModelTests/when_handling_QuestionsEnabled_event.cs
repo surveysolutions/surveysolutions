@@ -32,7 +32,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
                     Mock.Of<IInterviewEntityViewModel>(_ => _.Identity == enabledQuestion),
                     Mock.Of<IInterviewEntityViewModel>(_ => _.Identity == disabledAndHideIfDisabledQuestion),
                     Mock.Of<IInterviewEntityViewModel>(_ => _.Identity == disabledAndNotHideIfDisabledQuestion),
-                });
+                }
+                && __.GetNew<GroupNavigationViewModel>() == Mock.Of<GroupNavigationViewModel>());
 
             viemModel = Create.EnumerationStageViewModel(
                 questionnaireRepository: questionnaireRepository,
@@ -40,7 +41,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
                 interviewRepository: interviewRepository,
                 mvxMainThreadDispatcher: Stub.MvxMainThreadDispatcher());
 
-            viemModel.Init(interviewId, Create.NavigationState());
+            var groupId = new Identity(Guid.NewGuid(), new decimal[0]);
+            viemModel.Init(interviewId, Create.NavigationState(), groupId, null);
         };
 
         Because of = () =>

@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             IStatefulInterviewRepository interviewRepository,
             ICommandService commandService,
             IPrincipal principal,
-            IMvxMessenger messenger, 
+            IMvxMessenger messenger,
             IExternalAppLauncher externalAppLauncher,
             IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IAsyncPlainStorage<InterviewView> interviewViewRepository,
@@ -107,7 +107,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public IMvxCommand NavigateToGpsLocationCommand
         {
             get { return new MvxCommand(this.NavigateToGpsLocation, () => this.HasGpsLocation); }
-        } 
+        }
 
         private void NavigateToGpsLocation()
         {
@@ -168,71 +168,81 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public bool IsSupportedRemove { get; set; }
 
-        public IMvxCommand RemoveInterviewCommand => new MvxCommand(this.RemoveInterview);
-
-        private async void RemoveInterview()
+        public IMvxCommand RemoveInterviewCommand
         {
+            get { return new MvxAsyncCommand(RemoveInterview, () => this.isInterviewReadyToLoad); }
+        }
+
+        private async Task RemoveInterview()
+        {
+            this.isInterviewReadyToLoad = false;
+
             var isNeedDelete = await this.userInteractionService.ConfirmAsync(
                 InterviewerUIResources.Dashboard_RemoveInterviewQuestion.FormatString(this.QuestionnaireName),
                 okButton: UIResources.Yes,
                 cancelButton: UIResources.No);
 
             if (!isNeedDelete)
+            {
+                this.isInterviewReadyToLoad = true;
                 return;
-
+            }
             await this.interviewerInterviewFactory.RemoveInterviewAsync(this.InterviewId);
             RaiseRemovedDashboardItem();
         }
 
         public IMvxCommand LoadDashboardItemCommand
         {
-            get { return new MvxCommand(async () => await this.LoadInterview()); }
+            get { return new MvxAsyncCommand(LoadInterview, () => this.isInterviewReadyToLoad); }
         }
 
-        private bool isInterviewLoadingInProgress = false;
+        private bool isInterviewReadyToLoad = true;
 
         public async Task LoadInterview()
         {
-            if (this.isInterviewLoadingInProgress)
-                return;
-
-            this.isInterviewLoadingInProgress = true;
-
-            if (this.Status == DashboardInterviewStatus.Completed)
+            this.isInterviewReadyToLoad = false;
+            try
             {
-                var isReopen = await this.userInteractionService.ConfirmAsync(
-                    InterviewerUIResources.Dashboard_Reinitialize_Interview_Message,
-                    okButton: UIResources.Yes,
-                    cancelButton: UIResources.No);
-
-                if (!isReopen)
+                if (this.Status == DashboardInterviewStatus.Completed)
                 {
-                    this.isInterviewLoadingInProgress = false;
-                    return;
+                    var isReopen = await this.userInteractionService.ConfirmAsync(
+                        InterviewerUIResources.Dashboard_Reinitialize_Interview_Message,
+                        okButton: UIResources.Yes,
+                        cancelButton: UIResources.No);
+
+                    if (!isReopen)
+                    {
+                        return;
+                    }
+
+                    this.RaiseStartingLongOperation();
+                    await Task.Run(async () =>
+                    {
+                        var restartInterviewCommand = new RestartInterviewCommand(this.InterviewId, this.principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
+                        await this.commandService.ExecuteAsync(restartInterviewCommand);
+                    });
                 }
 
-                var restartInterviewCommand = new RestartInterviewCommand(this.InterviewId, this.principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
-                await this.commandService.ExecuteAsync(restartInterviewCommand);
+                this.RaiseStartingLongOperation();
+                await Task.Run(async () =>
+                {
+                    var interviewIdString = this.InterviewId.FormatGuid();
+                    IStatefulInterview interview = interviewRepository.Get(interviewIdString);
+
+                    if (interview.CreatedOnClient)
+                    {
+                        await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewIdString);
+                    }
+                    else
+                    {
+                        await this.viewModelNavigationService.NavigateToInterviewAsync(interviewIdString);
+                    }
+                });
             }
-
-            await Task.Run(async () =>
+            finally
             {
-                RaiseStartingLongOperation();
-
-                var interviewIdString = this.InterviewId.FormatGuid();
-                IStatefulInterview interview = interviewRepository.Get(interviewIdString);
-
-                if (interview.CreatedOnClient)
-                {
-                    await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewIdString);
-                }
-                else
-                {
-                    await this.viewModelNavigationService.NavigateToInterviewAsync(interviewIdString);
-                }
-
-                this.isInterviewLoadingInProgress = false;
-            });
+                this.isInterviewReadyToLoad = true;
+            }
         }
 
         private void RaiseStartingLongOperation()

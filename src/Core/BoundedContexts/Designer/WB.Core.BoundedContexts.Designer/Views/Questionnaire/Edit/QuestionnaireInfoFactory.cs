@@ -303,6 +303,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                                                                  .GetMapper<MultiOptionDetailsView, NewEditQuestionView>()
                                                                  .Map(multiOptionDetailsView);
                     newEditQuestionView.LinkedToEntityId = Monads.Maybe(() => multiOptionDetailsView.LinkedToEntityId.FormatGuid());
+                    newEditQuestionView.LinkedFilterExpression = Monads.Maybe(() => multiOptionDetailsView.LinkedFilterExpression);
                     return
                         newEditQuestionView;
                 case QuestionType.SingleOption:
@@ -311,6 +312,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                                                               .GetMapper<SingleOptionDetailsView, NewEditQuestionView>()
                                                               .Map(singleOptionDetailsView);
                     editQuestionView.LinkedToEntityId = Monads.Maybe(() => singleOptionDetailsView.LinkedToEntityId.FormatGuid());
+                    editQuestionView.LinkedFilterExpression = Monads.Maybe(() => singleOptionDetailsView.LinkedFilterExpression);
                     editQuestionView.CascadeFromQuestionId = Monads.Maybe(() => singleOptionDetailsView.CascadeFromQuestionId.FormatGuid());
                     return editQuestionView;
                 case QuestionType.Text:

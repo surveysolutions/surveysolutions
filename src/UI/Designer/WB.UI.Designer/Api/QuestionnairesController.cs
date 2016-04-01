@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.UI.Designer.Api.Attributes;
@@ -20,26 +18,26 @@ using QuestionnaireListItem = WB.Core.SharedKernels.SurveySolutions.Api.Designer
 namespace WB.UI.Designer.Api
 {
     [ApiBasicAuth]
-    [RoutePrefix("api/v13/questionnaires")]
+    [RoutePrefix("api/v15/questionnaires")]
     public class QuestionnairesController : ApiController
     {
-        //temporary fix
-        //api version should not be used as version for compilation
-        internal static readonly Version ApiVersion = new Version(12, 0, 0);
-
         private readonly IMembershipUserService userHelper;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
         private readonly IQuestionnaireListViewFactory viewFactory;
+        private readonly IAttachmentService attachmentService;
+        private readonly IDesignerEngineVersionService engineVersionService;
 
         public QuestionnairesController(IMembershipUserService userHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator,
-            IQuestionnaireListViewFactory viewFactory)
+            IQuestionnaireListViewFactory viewFactory, 
+            IAttachmentService attachmentService,
+            IDesignerEngineVersionService engineVersionService)
         {
             this.userHelper = userHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
@@ -47,12 +45,33 @@ namespace WB.UI.Designer.Api
             this.questionnaireVerifier = questionnaireVerifier;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.viewFactory = viewFactory;
+            this.attachmentService = attachmentService;
+            this.engineVersionService = engineVersionService;
         }
 
-        [Route("~/api/v13/login")]
+        [Route("~/api/v15/login")]
         [HttpGet]
         public void Login()
         {
+        }
+
+        [Route("~/api/v15/attachment/{id}")]
+        [HttpGet]
+        public HttpResponseMessage Attachment(string id)
+        {
+            var attachmentContent = this.attachmentService.GetContent(id);
+
+            if (attachmentContent == null) return Request.CreateResponse(HttpStatusCode.NotFound);
+
+            var response = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new ByteArrayContent(attachmentContent.Content)
+            };
+
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachmentContent.ContentType);
+            response.Headers.ETag = new EntityTagHeaderValue("\"" + attachmentContent.ContentId + "\"");
+
+            return response;
         }
 
         [Route("{id:Guid}")]
@@ -69,17 +88,19 @@ namespace WB.UI.Designer.Api
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden));
             }
 
-            if (this.questionnaireVerifier.Verify(questionnaireView.Source).Any(x => x.MessageLevel > VerificationMessageLevel.Warning))
+            if (this.questionnaireVerifier.CheckForErrors(questionnaireView.Source).Any())
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
             }
+
+            var questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
 
             string resultAssembly;
             try
             {
                 GenerationResult generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
                     questionnaireView.Source,
-                    ApiVersion, 
+                    questionnaireContentVersion, 
                     out resultAssembly);
                 if(!generationResult.Success)
                     throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
@@ -89,7 +110,7 @@ namespace WB.UI.Designer.Api
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
             }
 
-            var questionnaire = questionnaireView.Source;
+            var questionnaire = questionnaireView.Source.Clone();
             questionnaire.Macros = null;
 
             return new Questionnaire
@@ -127,7 +148,7 @@ namespace WB.UI.Designer.Api
 
         private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)
         {
-            if (questionnaireView.IsPublic || questionnaireView.CreatedBy == this.userHelper.WebUser.UserId)
+            if (questionnaireView.IsPublic || questionnaireView.CreatedBy == this.userHelper.WebUser.UserId || this.userHelper.WebUser.IsAdmin)
                 return true;
 
             QuestionnaireSharedPersons questionnaireSharedPersons =

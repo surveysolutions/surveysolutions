@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable;
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
 using System;
 using System.Text;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
 {
@@ -36,7 +37,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
         };
 
         Because of = () =>
-            data.ForEach(x => result.Add(_jsonSerializer.Deserialize(Encoding.UTF8.GetBytes(x.Item2), eventTypeResolver.ResolveType(x.Item1.ToPascalCase()), TypeSerializationSettings.Event, SerializationType.Json)));
+            data.ForEach(x => result.Add(_jsonSerializer.Deserialize(Encoding.UTF8.GetBytes(x.Item2), eventTypeResolver.ResolveType(x.Item1.ToPascalCase()), TypeSerializationSettings.Auto)));
 
         It should_return_not_null_result = () =>
             result.Count.ShouldEqual(2);

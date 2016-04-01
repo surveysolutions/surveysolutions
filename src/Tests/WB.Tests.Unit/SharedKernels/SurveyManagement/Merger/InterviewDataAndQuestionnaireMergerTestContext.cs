@@ -123,16 +123,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             };
         }
 
-        internal static QuestionnaireDocumentVersioned CreateQuestionnaireWithVersion(QuestionnaireDocument questionnaireDocument)
-        {
-
-            return new QuestionnaireDocumentVersioned
-            {
-                Version = 1,
-                Questionnaire = questionnaireDocument
-            };
-        }
-
         internal static InterviewData CreateInterviewDataForQuestionnaireWithGroupAndFixedRoster(Guid interviewId, Guid groupId, string groupTitle, Guid fixedRosterId, string fixedRosterTitle, string[] rosterFixedTitles)
         {
             return new InterviewData()
