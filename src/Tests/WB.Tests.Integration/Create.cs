@@ -33,6 +33,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -480,6 +481,25 @@ namespace WB.Tests.Integration
             IPlainQuestionnaireRepository questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
             var interview = new Interview(
+                Mock.Of<ILogger>(),
+                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>());
+
+            interview.CreateInterview(
+                questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
+                1,
+                new Guid("D222D222D222D222D222D222D222D222"),
+                new Dictionary<Guid, object>(),
+                new DateTime(2012, 12, 20),
+                new Guid("F111F111F111F111F111F111F111F111"));
+
+            return interview;
+        }
+
+        public static StatefulInterview StatefulInterview(Guid? questionnaireId = null,
+            IPlainQuestionnaireRepository questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
+        {
+            var interview = new StatefulInterview(
                 Mock.Of<ILogger>(),
                 questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>());
