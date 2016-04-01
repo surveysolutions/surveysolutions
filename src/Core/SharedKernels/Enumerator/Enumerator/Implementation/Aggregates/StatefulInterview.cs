@@ -138,18 +138,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             @event.InterviewData.DisabledGroups.ForEach(x => DisableGroup(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.Answers.ForEach(x => CommentQuestion(x.Id, x.QuestionRosterVector, x.Comments));
 
-            this.sortIndexesOfRosterInstanses.Clear();
-            var rosterInstances =
-                @event.InterviewData.RosterGroupInstances.SelectMany(x => x.Value).ToArray();
+            //this.sortIndexesOfRosterInstanses.Clear();
+            //var rosterInstances =
+            //    @event.InterviewData.RosterGroupInstances.SelectMany(x => x.Value).ToArray();
 
-            foreach (var rosterSynchronizationDto in rosterInstances)
-            {
-                var rosterIdentity = new Identity(rosterSynchronizationDto.RosterId,
-                    new RosterVector(
-                        rosterSynchronizationDto.OuterScopeRosterVector.Union(new[]
-                        {rosterSynchronizationDto.RosterInstanceId})));
-                sortIndexesOfRosterInstanses[rosterIdentity] = rosterSynchronizationDto.SortIndex;
-            }
+            //foreach (var rosterSynchronizationDto in rosterInstances)
+            //{
+            //    var rosterIdentity = new Identity(rosterSynchronizationDto.RosterId,
+            //        new RosterVector(
+            //            rosterSynchronizationDto.OuterScopeRosterVector.Union(new[]
+            //            {rosterSynchronizationDto.RosterInstanceId})));
+            //    sortIndexesOfRosterInstanses[rosterIdentity] = rosterSynchronizationDto.SortIndex;
+            //}
             this.ResetLocalDelta();
 
             if (@event.InterviewData.LinkedQuestionOptions != null)
@@ -1213,9 +1213,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             {
                 if (questionnaire.IsRosterGroup(entity))
                 {
-                    foreach (var rosterInstance in
-                        this.GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(this.interviewState, entity, group.RosterVector, questionnaire)
-                            .OrderBy(x => this.sortIndexesOfRosterInstanses[x] ?? x.RosterVector.Last()))
+                    var childInstances = this.GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(this.interviewState, entity, @group.RosterVector, questionnaire)
+                                                .OrderBy(x => this.sortIndexesOfRosterInstanses[x] ?? x.RosterVector.Last());
+                    foreach (var rosterInstance in childInstances)
                     {
                         yield return rosterInstance;
                     }
