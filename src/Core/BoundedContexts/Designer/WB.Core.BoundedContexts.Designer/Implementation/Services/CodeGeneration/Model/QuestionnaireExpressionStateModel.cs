@@ -10,6 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             AllQuestions = new List<QuestionTemplateModel>();
             AllGroups = new List<GroupTemplateModel>();
             AllRosters = new List<RosterTemplateModel>();
+            AllLinkedQuestionFilters = new List<LinkedQuestionFilterExpressionModel>();
         }
         public Guid Id { set; get; }
         public List<QuestionTemplateModel> AllQuestions { set; get; }
@@ -28,5 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public List<LookupTableTemplateModel> LookupTables { get; set; }
         public Dictionary<string, ConditionDescriptionModel> MethodModels { get; set; }
+
+        public List<LinkedQuestionFilterExpressionModel> AllLinkedQuestionFilters {get;set;}
     }
 }

@@ -17,6 +17,8 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 {
@@ -74,6 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         {
             var dataRecords = new List<InterviewDataExportRecord>();
 
+            var answersSeparator = ExportFileSettings.NotReadableAnswersSeparator.ToString();
             var interviewDataByLevels = this.GetLevelsFromInterview(interview, headerStructureForLevel.LevelScopeVector);
 
             foreach (InterviewLevel dataByLevel in interviewDataByLevels)
@@ -112,14 +115,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
                 string[][] questionsForExport = this.GetQuestionsForExport(dataByLevel, headerStructureForLevel);
 
-                dataRecords.Add(new InterviewDataExportRecord(recordId, 
-                    referenceValues, 
+                dataRecords.Add(new InterviewDataExportRecord(recordId,
+                    referenceValues,
                     parentRecordIds,
                     systemVariableValues)
                 {
-                    Answers = questionsForExport.Select(x => string.Join("\n", x)).ToArray()
+                    Answers = questionsForExport.Select(x => string.Join(answersSeparator,x.Select(s => s.Replace(answersSeparator, "")))).ToArray()
                 });
-
             }
 
             return dataRecords.ToArray();
@@ -187,21 +189,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             foreach (var headerItem in headerStructureForLevel.HeaderItems.Values)
             {
                 var question = interviewLevel.QuestionsSearchCache.ContainsKey(headerItem.PublicKey) ? interviewLevel.QuestionsSearchCache[headerItem.PublicKey] : null;
-                ExportedQuestion exportedQuestion = null;
-                if (question == null)
-                {
-                    var answers = new List<string>();
-                    for (int i = 0; i < headerItem.ColumnNames.Length; i++)
-                    {
-                        answers.Add(string.Empty);
-                    }
-                    exportedQuestion = new ExportedQuestion(headerItem.QuestionType, answers.ToArray());
-                }
-                else
-                {
-                    exportedQuestion = new ExportedQuestion(question, headerItem);
-                }
-
+                ExportedQuestion exportedQuestion = new ExportedQuestion(question, headerItem);
+                
                 result.Add(exportedQuestion);
             }
             return result.Select(x => x.Answers).ToArray();
@@ -305,10 +294,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
                 if (!IsQuestionLinked(question))
                 {
+                    var questionLabel =
+                        string.IsNullOrEmpty(question.VariableLabel) ? question.QuestionText : question.VariableLabel;
                     if (question is IMultyOptionsQuestion)
-                        exportedHeaderItem.Titles[i] += string.Format(":{0}", question.Answers[i].AnswerText);
+                        exportedHeaderItem.Titles[i] += $"{questionLabel}:{question.Answers[i].AnswerText}";
                     if (question is ITextListQuestion)
-                        exportedHeaderItem.Titles[i] += string.Format(":{0}", i);
+                        exportedHeaderItem.Titles[i] += $"{questionLabel}:{i}";
                 }
             }
             return exportedHeaderItem;

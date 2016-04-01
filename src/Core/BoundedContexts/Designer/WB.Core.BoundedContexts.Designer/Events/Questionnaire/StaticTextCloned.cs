@@ -10,5 +10,6 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         public Guid SourceEntityId { get; set; }
         public int TargetIndex { get; set; }
         public string Text { get; set; }
+        public string AttachmentName { get; internal set; }
     }
 }

@@ -8,6 +8,7 @@ using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.Modularity;
+using WB.Core.Infrastructure.Versions;
 
 namespace WB.Core.Infrastructure
 {

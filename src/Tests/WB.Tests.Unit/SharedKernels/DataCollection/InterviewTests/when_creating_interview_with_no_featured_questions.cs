@@ -26,11 +26,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
 
-            var questionaire = Mock.Of<IQuestionnaire>(_
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.Version == questionnaireVersion);
-
-            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
-                => repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion) == questionaire);
 
             interview = Create.Interview(questionnaireRepository: questionnaireRepository);
         };

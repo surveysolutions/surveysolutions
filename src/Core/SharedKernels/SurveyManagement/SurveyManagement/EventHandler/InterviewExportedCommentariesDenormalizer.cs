@@ -4,9 +4,12 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
@@ -30,25 +33,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
     {
         private readonly IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage;
         private readonly IReadSideRepositoryWriter<UserDocument> userStorage;
-        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader;
+        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository;
         private readonly string unknown = "Unknown";
 
         public InterviewExportedCommentariesDenormalizer(IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage, 
-            IReadSideRepositoryWriter<UserDocument> userStorage, IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader)
+            IReadSideRepositoryWriter<UserDocument> userStorage,
+            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository)
         {
             this.interviewCommentariesStorage = interviewCommentariesStorage;
             this.userStorage = userStorage;
-            this.questionnaireReader = questionnaireReader;
+            this.questionnaireExportStructureRepository = questionnaireExportStructureRepository;
         }
 
-        public override object[] Writers
-        {
-            get { return new[] {interviewCommentariesStorage}; }
-        }
+        public override object[] Writers => new[] {this.interviewCommentariesStorage};
 
         public override object[] Readers
         {
-            get { return new object[] { this.userStorage, questionnaireReader }; }
+            get { return new object[] { this.userStorage }; }
         }
 
         public void CleanWritersByEventSource(Guid eventSourceId)
@@ -186,8 +187,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 return;
 
             QuestionnaireExportStructure questionnaire =
-                questionnaireReader.AsVersioned()
-                    .Get(interviewCommentaries.QuestionnaireId, interviewCommentaries.QuestionnaireVersion);
+                this.questionnaireExportStructureRepository.GetById(new QuestionnaireIdentity(Guid.Parse(interviewCommentaries.QuestionnaireId),interviewCommentaries.QuestionnaireVersion).ToString());
             if (questionnaire == null)
                 return;
 

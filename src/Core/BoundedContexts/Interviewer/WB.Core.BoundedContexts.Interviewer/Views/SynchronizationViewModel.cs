@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
+using MvvmCross.Platform.Core;
 using MvvmCross.Platform.Exceptions;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
@@ -19,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -35,6 +37,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IMvxMessenger messenger;
         private readonly IInterviewerQuestionnaireAccessor questionnaireFactory;
         private readonly IInterviewerInterviewAccessor interviewFactory;
+        private readonly IAttachmentContentStorage attachmentContentStorage;
 
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage;
@@ -55,7 +58,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IPrincipal principal,
             IMvxMessenger messenger,
             IInterviewerQuestionnaireAccessor questionnaireFactory,
-            IInterviewerInterviewAccessor interviewFactory)
+            IInterviewerInterviewAccessor interviewFactory,
+            IAttachmentContentStorage attachmentContentStorage)
         {
             this.synchronizationService = synchronizationService;
             this.logger = logger;
@@ -69,15 +73,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.messenger = messenger;
             this.questionnaireFactory = questionnaireFactory;
             this.interviewFactory = interviewFactory;
-
-            this.restCredentials = new RestCredentials()
-            {
-                Login = this.principal.CurrentUserIdentity.Name,
-                Password = this.principal.CurrentUserIdentity.Password
-            };
+            this.attachmentContentStorage = attachmentContentStorage;
         }
-
-        private readonly RestCredentials restCredentials;
         private CancellationToken Token => this.synchronizationCancellationTokenSource.Token;
 
         private SychronizationStatistics statistics;
@@ -134,7 +131,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public IMvxCommand CancelSynchronizationCommand => new MvxCommand(this.CancelSynchronizaion);
 
         bool shouldUpdatePasswordOfInterviewer;
+
         public async Task SynchronizeAsync()
+        {
+            var restCredentials = new RestCredentials()
+            {
+                Login = this.principal.CurrentUserIdentity.Name,
+                Password = this.principal.CurrentUserIdentity.Password
+            };
+            await SynchronizeImplAsync(restCredentials);
+        }
+
+        private async Task SynchronizeImplAsync(RestCredentials restCredentials)
         {
             this.statistics = new SychronizationStatistics();
             this.synchronizationCancellationTokenSource = new CancellationTokenSource();
@@ -143,18 +151,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.IsSynchronizationInfoShowed = true;
             this.IsSynchronizationInProgress = true;
             this.messenger.Publish(new SyncronizationStartedMessage(this));
-
             try
             {
                 this.SetProgressOperation(InterviewerUIResources.Synchronization_UserAuthentication_Title,
                     InterviewerUIResources.Synchronization_UserAuthentication_Description);
 
-                await this.synchronizationService.CanSynchronizeAsync(token: this.Token, credentials: this.restCredentials);
+                await this.synchronizationService.CanSynchronizeAsync(token: this.Token, credentials: restCredentials);
 
                 if (this.shouldUpdatePasswordOfInterviewer)
                 {
                     this.shouldUpdatePasswordOfInterviewer = false;
-                    await this.UpdatePasswordOfInterviewerAsync();   
+                    await this.UpdatePasswordOfInterviewerAsync(restCredentials.Password);   
                 }
 
                 this.Status = SynchronizationStatus.Upload;
@@ -216,16 +223,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 }
                 else
                 {
-                    this.restCredentials.Password = this.passwordHasher.Hash(newPassword);
-                    await SynchronizeAsync();    
+                    restCredentials.Password = this.passwordHasher.Hash(newPassword);
+                    await SynchronizeImplAsync(restCredentials);    
                 }
             }
         }
 
-        private async Task UpdatePasswordOfInterviewerAsync()
+        private async Task UpdatePasswordOfInterviewerAsync(string password)
         {
             var localInterviewer = this.interviewersPlainStorage.FirstOrDefault();
-            localInterviewer.Password = this.restCredentials.Password;
+            localInterviewer.Password = password;
 
             await this.interviewersPlainStorage.StoreAsync(localInterviewer);
             await this.principal.SignInAsync(localInterviewer.Name, localInterviewer.Password, true);
@@ -290,6 +297,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             
             if (!this.questionnaireFactory.IsQuestionnaireExists(questionnaireIdentity))
             {
+                var contentIds = await synchronizationService.GetAttachmentContentsAsync(questionnaire: questionnaireIdentity,
+                    onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                    token: this.Token);
+
+                foreach (var contentId in contentIds)
+                {
+                    var isExistContent = await this.attachmentContentStorage.IsExistAsync(contentId);
+                    if (!isExistContent)
+                    {
+                        var attachmentContent = await synchronizationService.GetAttachmentContentAsync(contentId: contentId,
+                            onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                            token: this.Token);
+
+                        await this.attachmentContentStorage.StoreAsync(attachmentContent);
+                    }
+                }
+
+
                 var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(
                     questionnaire: questionnaireIdentity,
                     onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
@@ -379,7 +404,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             foreach (var completedInterview in completedInterviews)
             {
-                var jsonPackageByCompletedInterview = await this.interviewFactory.GetPackageByCompletedInterviewAsync(completedInterview.InterviewId);
+                var completedInterviewApiView = await this.interviewFactory.GetPackageByCompletedInterviewAsync(completedInterview.InterviewId);
                 this.SetProgressOperation(
                     InterviewerUIResources.Synchronization_Upload_Title_Format.FormatString(InterviewerUIResources.Synchronization_Upload_CompletedAssignments_Text),
                     InterviewerUIResources.Synchronization_Upload_Description_Format.FormatString(
@@ -390,7 +415,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 await this.synchronizationService.UploadInterviewAsync(
                     interviewId: completedInterview.InterviewId,
-                    content: jsonPackageByCompletedInterview,
+                    completedInterview: completedInterviewApiView,
                     onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                     token: this.Token);
 

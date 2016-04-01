@@ -21,11 +21,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         Establish context = () =>
         {
             eventContext = new EventContext();
-            var questionnaire = Mock.Of<IQuestionnaire>(_
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.Version == questionnaireVersion);
-
-            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
-                => repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion) == questionnaire);
 
             interview = Create.Interview(questionnaireRepository: questionnaireRepository);
             interview.Apply(new InterviewerAssigned(userId, userId, DateTime.Now));

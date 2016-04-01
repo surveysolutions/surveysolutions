@@ -11,8 +11,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -42,7 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private readonly IPrincipal principal;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
         private Identity questionIdentity;
@@ -52,14 +51,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
-        private List<CascadingOptionModel> Options { get; set; }
+        private IReadOnlyList<CategoricalQuestionOption> Options;
         private readonly ILiteEventRegistry eventRegistry;
 
         public Identity Identities { get { return this.questionIdentity; } }
 
         public CascadingSingleOptionQuestionViewModel(
             IPrincipal principal,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
+            IPlainQuestionnaireRepository questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering, 
@@ -88,15 +87,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
-            var questionModel = questionnaire.GetQuestion<CascadingSingleOptionQuestionModel>(entityIdentity.Id);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+
+            var cascadingQuestionParentId = questionnaire.GetCascadingQuestionParentId(entityIdentity.Id);
+            if (!cascadingQuestionParentId.HasValue) throw new ArgumentNullException("parent of cascading question is missing");
+
             var answerModel = interview.GetSingleOptionAnswer(entityIdentity);
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
+            //entityIdentity.Id
+            var parentRosterVector = entityIdentity.RosterVector.Take(questionnaire.GetRosterLevelForEntity(cascadingQuestionParentId.Value)).ToArray();
 
-            var parentRosterVector = entityIdentity.RosterVector.Take(questionModel.RosterLevelDepthOfParentQuestion).ToArray();
-            this.parentQuestionIdentity = new Identity(questionModel.CascadeFromQuestionId, parentRosterVector);
+            this.parentQuestionIdentity = new Identity(cascadingQuestionParentId.Value, parentRosterVector);
 
             var parentAnswerModel = interview.GetSingleOptionAnswer(this.parentQuestionIdentity);
             if (parentAnswerModel.IsAnswered)
@@ -104,7 +107,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.answerOnParentQuestion = parentAnswerModel.Answer;
             }
 
-            this.Options = questionModel.Options.ToList();
+            this.Options = questionnaire
+                .GetAnswerOptionsAsValues(entityIdentity.Id)
+                .Select(x => new CategoricalQuestionOption
+                {
+                    Value = x,
+                    Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x),
+                    ParentValue = questionnaire.GetCascadingParentValue(entityIdentity.Id, x)
+                })
+                .ToList()
+                .ToReadOnlyCollection();
 
             if (answerModel.IsAnswered)
             {
@@ -264,7 +276,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 yield break;
             }
 
-            foreach (CascadingOptionModel model in this.Options.Where(x => x.ParentValue == this.answerOnParentQuestion.Value))
+            foreach (CategoricalQuestionOption model in this.Options.Where(x => x.ParentValue == this.answerOnParentQuestion.Value))
             {
                 var index = model.Title.IndexOf(textHint, StringComparison.OrdinalIgnoreCase);
                 if (index >= 0)
@@ -274,7 +286,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private CascadingComboboxItemViewModel CreateFormattedOptionModel(CascadingOptionModel model, string hint = null)
+        private CascadingComboboxItemViewModel CreateFormattedOptionModel(CategoricalQuestionOption model, string hint = null)
         {
             var text = !string.IsNullOrEmpty(hint) ? 
                 Regex.Replace(model.Title, hint, "<b>" + hint + "</b>", RegexOptions.IgnoreCase) :
@@ -285,7 +297,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                        Text = text,
                        OriginalText = model.Title,
                        Value = model.Value,
-                       ParentValue = model.ParentValue,
+                       ParentValue = model.ParentValue.Value,
                        Selected = this.SelectedObject != null && model.Value == this.SelectedObject.Value
                    };
         }
@@ -374,7 +386,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (this.questionIdentity.Equals(question.Id, question.RosterVector))
                 {
                     this.ResetTextInEditor = null;
-                    this.QuestionState.IsAnswered = false;
                     this.CanRemoveAnswer = false;
                 }
             }
@@ -390,7 +401,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
             {
-                this.QuestionState.IsAnswered = false;
                 this.ResetTextInEditor = string.Empty;
                 this.CanRemoveAnswer = false;
             }

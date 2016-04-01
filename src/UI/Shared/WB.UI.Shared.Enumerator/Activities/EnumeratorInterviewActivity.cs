@@ -1,16 +1,18 @@
 ﻿using Android.App;
 using Android.OS;
-using Android.Support.V4.Widget;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
 using MvvmCross.Binding.Droid.BindingContext;
+using MvvmCross.Core.Platform;
+using MvvmCross.Droid.Support.V7.Fragging.Fragments;
 using MvvmCross.Platform;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.UI.Shared.Enumerator.CustomControls;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
+using DrawerLayout = Android.Support.V4.Widget.DrawerLayout;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
@@ -19,16 +21,9 @@ namespace WB.UI.Shared.Enumerator.Activities
         private ActionBarDrawerToggle drawerToggle;
         private DrawerLayout drawerLayout;
         private MvxSubscriptionToken sectionChangeSubscriptionToken;
-        private MvxSubscriptionToken scrollToAnchorSubscriptionToken;
         private MvxSubscriptionToken interviewCompleteActivityToken;
 
         private Toolbar toolbar;
-
-        private MvxRecyclerView recyclerView;
-
-        private LinearLayoutManager layoutManager;
-
-        private InterviewEntityAdapter adapter;
 
         protected override int ViewResourceId
         {
@@ -55,22 +50,12 @@ namespace WB.UI.Shared.Enumerator.Activities
                 var viewModel = this.ViewModel;
                 viewModel.Sections.UpdateStatuses.Execute(null); // for some reason custom binding on drawerlayout is not working. 
             };
-
-            this.recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.interviewEntitiesList);
-
-            this.layoutManager = new LinearLayoutManager(this);
-            this.recyclerView.SetLayoutManager(this.layoutManager);
-            this.recyclerView.HasFixedSize = true;
-
-            this.adapter = new InterviewEntityAdapter((IMvxAndroidBindingContext)this.BindingContext);
-            this.recyclerView.Adapter = this.adapter;
         }
 
         protected override void OnStart()
         {
             var messenger = Mvx.Resolve<IMvxMessenger>();
             this.sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
-            this.scrollToAnchorSubscriptionToken = messenger.Subscribe<ScrollToAnchorMessage>(this.OnScrollToAnchorMessage);
             this.interviewCompleteActivityToken = messenger.Subscribe<InterviewCompletedMessage>(this.OnInterviewCompleteActivity);
             base.OnStart();
         }
@@ -97,23 +82,10 @@ namespace WB.UI.Shared.Enumerator.Activities
             Application.SynchronizationContext.Post(_ => { this.drawerLayout.CloseDrawers();}, null);
         }
 
-        private void OnScrollToAnchorMessage(ScrollToAnchorMessage msg)
-        {
-            if (this.layoutManager != null)
-            {
-                Application.SynchronizationContext.Post(_ =>
-                {
-                    this.layoutManager.ScrollToPositionWithOffset(msg.AnchorElementIndex, 0);
-                },
-                null);
-            }
-        }
-
         protected override void OnStop()
         {
             var messenger = Mvx.Resolve<IMvxMessenger>();
             messenger.Unsubscribe<SectionChangeMessage>(this.sectionChangeSubscriptionToken);
-            messenger.Unsubscribe<ScrollToAnchorMessage>(this.scrollToAnchorSubscriptionToken);
             messenger.Unsubscribe<InterviewCompletedMessage>(this.interviewCompleteActivityToken);
             base.OnStop();
         }

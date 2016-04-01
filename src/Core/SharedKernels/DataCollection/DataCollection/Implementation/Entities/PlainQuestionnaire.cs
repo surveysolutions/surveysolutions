@@ -208,6 +208,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         public bool IsQuestionLinked(Guid questionId) => this.GetQuestionOrThrow(questionId).LinkedToQuestionId.HasValue;
+        public Guid[] GetQuestionsLinkedToRoster()
+        {
+            return this.QuestionCache.Values.Where(x => x.LinkedToRosterId.HasValue).Select(x => x.PublicKey).ToArray();
+        }
+
+        public Guid[] GetQuestionsLinkedToQuestion()
+        {
+            return this.QuestionCache.Values.Where(x => x.LinkedToQuestionId.HasValue).Select(x => x.PublicKey).ToArray();
+        }
+
+        public Guid GetQuestionIdByVariable(string variable)
+        {
+            return this.QuestionCache.Values.Single(x => x.StataExportCaption == variable).PublicKey;
+        }
 
         public string GetQuestionTitle(Guid questionId) => this.GetQuestionOrThrow(questionId).QuestionText;
 
@@ -216,6 +230,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public string GetGroupTitle(Guid groupId) => this.GetGroupOrThrow(groupId).Title;
 
         public string GetStaticText(Guid staticTextId) => this.GetStaticTextOrThrow(staticTextId).Text;
+
+        public Attachment GetAttachmentForEntity(Guid entityId)
+        {
+            IStaticText staticText = this.GetStaticTextImpl(entityId);
+            if (staticText == null)
+                return null;
+
+            var attachment = this.innerDocument.Attachments.SingleOrDefault(kv => kv.Name == staticText.AttachmentName);
+            return attachment;
+        }
 
         public Guid? GetCascadingQuestionParentId(Guid questionId) => this.GetQuestionOrThrow(questionId).CascadeFromQuestionId;
 
@@ -278,13 +302,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public int? GetMaxSelectedAnswerOptions(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
-            bool questionTypeDoesNotSupportMaxSelectedAnswerOptions = question.QuestionType != QuestionType.MultyOption;
+            bool questionTypeDoesNotSupportMaxSelectedAnswerOptions = question.QuestionType != QuestionType.MultyOption && question.QuestionType != QuestionType.TextList;
 
-            if (questionTypeDoesNotSupportMaxSelectedAnswerOptions || !(question is IMultyOptionsQuestion))
+            if (questionTypeDoesNotSupportMaxSelectedAnswerOptions || !(question is IMultyOptionsQuestion || question is TextListQuestion))
                 throw new QuestionnaireException(
                     $"Cannot return maximum for selected answers for question with id '{questionId}' because it's type {question.QuestionType} does not support that parameter.");
 
-            return ((IMultyOptionsQuestion)question).MaxAllowedAnswers;
+            if (question is IMultyOptionsQuestion)
+                return ((IMultyOptionsQuestion)question).MaxAllowedAnswers;
+
+            return ((TextListQuestion)question).MaxAnswerCount;
         }
 
         public int GetMaxRosterRowCount() => Constants.MaxRosterRowCount;
@@ -529,7 +556,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool ShouldBeHiddenIfDisabled(Guid entityId)
         {
-            var entity = this.GetEntityOrThrow(entityId);
+            IComposite entity = this.GetEntityOrThrow(entityId);
+
+            var question = entity as IQuestion;
+            if (question?.CascadeFromQuestionId != null)
+            {
+                return this.ShouldBeHiddenIfDisabled(question.CascadeFromQuestionId.Value);
+            }
+
             return (entity as IConditional)?.HideIfDisabled ?? false;
         }
 
@@ -541,6 +575,35 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public bool HasMoreThanOneValidationRule(Guid questionId)
         {
             return this.GetQuestion(questionId).ValidationConditions.Count > 1;
+        }
+
+        public string GetQuestionInstruction(Guid questionId)
+        {
+            return this.GetQuestion(questionId).Instructions;
+        }
+
+        public bool IsQuestionFilteredCombobox(Guid questionId)
+        {
+            var singleQuestion = (this.GetQuestion(questionId) as SingleQuestion);
+            return singleQuestion?.IsFilteredCombobox ?? false;
+        }
+
+        public bool IsQuestionCascading(Guid questionId)
+        {
+            var singleQuestion = (this.GetQuestion(questionId) as SingleQuestion);
+            return singleQuestion?.CascadeFromQuestionId.HasValue ?? false;
+        }
+
+        public bool ShouldQuestionRecordAnswersOrder(Guid questionId)
+        {
+            var multiOptionsQuestion = (this.GetQuestion(questionId) as IMultyOptionsQuestion);
+            return multiOptionsQuestion?.AreAnswersOrdered == true;
+        }
+
+        public string GetTextQuestionMask(Guid questionId)
+        {
+            var textQuestion = (this.GetQuestion(questionId) as TextQuestion);
+            return textQuestion?.Mask;
         }
 
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)

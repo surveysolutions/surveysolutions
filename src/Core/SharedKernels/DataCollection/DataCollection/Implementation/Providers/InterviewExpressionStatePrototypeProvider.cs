@@ -7,7 +7,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.DataCollection.V6;
+using WB.Core.SharedKernels.DataCollection.V7;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 {
@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
             this.interviewExpressionStateUpgrader = interviewExpressionStateUpgrader;
         }
 
-        public IInterviewExpressionStateV6 GetExpressionState(Guid questionnaireId, long questionnaireVersion)
+        public IInterviewExpressionStateV7 GetExpressionState(Guid questionnaireId, long questionnaireVersion)
         {
             string assemblyFile = this.questionnaireAssemblyFileAccessor.GetFullPathToAssembly(questionnaireId, questionnaireVersion);
 
@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                     var initialExpressionState =
                         Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState;
 
-                    IInterviewExpressionStateV6 upgradedExpressionState =
+                    IInterviewExpressionStateV7 upgradedExpressionState =
                         interviewExpressionStateUpgrader.UpgradeToLatestVersionIfNeeded(initialExpressionState);
 
                     return upgradedExpressionState;

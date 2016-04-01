@@ -4,17 +4,16 @@ using System.Globalization;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     internal class AnswerToStringService : IAnswerToStringService
     {
-        public string AnswerToUIString(BaseQuestionModel question, BaseInterviewAnswer answer, IStatefulInterview interview, QuestionnaireModel questionnaire)
+        public string AnswerToUIString(Guid questionId, BaseInterviewAnswer answer, IStatefulInterview interview, IQuestionnaire questionnaire)
         {
             if (answer == null || !answer.IsAnswered)
                 return string.Empty;
@@ -46,10 +45,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 var multiAnswer = (MultiOptionAnswer)answer;
                 List<string> stringAnswers = new List<string>();
-                var multiOptionQuestionModel = (MultiOptionQuestionModel) question;
                 foreach (var answerValue in multiAnswer.Answers)
                 {
-                    stringAnswers.Add(multiOptionQuestionModel.Options.Single(x => x.Value == answerValue).Title);
+                    stringAnswers.Add(questionnaire.GetAnswerOptionTitle(questionId, answerValue));
                 }
                 
                 return string.Join(", ", stringAnswers);
@@ -59,13 +57,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 var yesNoAnswer = (YesNoAnswer)answer;
                 List<string> stringAnswers = new List<string>();
-                var yesNoQuestionModel = (YesNoQuestionModel)question;
                 var yesAnswers = yesNoAnswer.Answers.Where(s => s.Yes);
                 foreach (var answerValue in yesAnswers)
                 {
-                    stringAnswers.Add(yesNoQuestionModel.Options
-                        .Single(x => x.Value == answerValue.OptionValue)
-                        .Title);
+                    stringAnswers.Add(questionnaire.GetAnswerOptionTitle(questionId, answerValue.OptionValue));
                 }
 
                 return string.Join(", ", stringAnswers);
@@ -74,17 +69,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var singleOptionAnswer = answer as SingleOptionAnswer;
             if (singleOptionAnswer != null)
             {
-                var singleOptionQuestion = question as SingleOptionQuestionModel;
-                if (singleOptionQuestion != null)
-                    return singleOptionQuestion.Options.Single(x => x.Value == singleOptionAnswer.Answer).Title;
-
-                var filteredSingleOptionQuestion = question as FilteredSingleOptionQuestionModel;
-                if (filteredSingleOptionQuestion != null)
-                    return filteredSingleOptionQuestion.Options.Single(x => x.Value == singleOptionAnswer.Answer).Title;
-
-                var cascadingSingleOptionQuestion = question as CascadingSingleOptionQuestionModel;
-                if (cascadingSingleOptionQuestion != null)
-                    return cascadingSingleOptionQuestion.Options.Single(x => x.Value == singleOptionAnswer.Answer).Title;
+                if (singleOptionAnswer.Answer.HasValue)
+                {
+                    return questionnaire.GetAnswerOptionTitle(questionId, singleOptionAnswer.Answer.Value);
+                }
+                return string.Empty;
             }
 
             if (answer is TextListAnswer)
@@ -95,17 +84,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var singleOptionLinkedAnswer = answer as LinkedSingleOptionAnswer;
             if (singleOptionLinkedAnswer != null)
             {
-                var linkedSingleOptionQuestion = question as LinkedSingleOptionQuestionModel;
-                if (linkedSingleOptionQuestion != null)
+                if (questionnaire.IsQuestionLinked(questionId))
                 {
                     var referencedQuestionIdentity = new Identity(singleOptionLinkedAnswer.Id, singleOptionLinkedAnswer.RosterVector);
-                    var referencedAnswer = interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkedSingleOptionQuestion.LinkedToQuestionId, referencedQuestionIdentity)
+
+                    var questionIdReferencedByLinkedQuestion = questionnaire.GetQuestionReferencedByLinkedQuestion(singleOptionLinkedAnswer.Id);
+                    var referencedAnswer = interview.FindAnswersOfReferencedQuestionForLinkedQuestion(questionIdReferencedByLinkedQuestion, referencedQuestionIdentity)
                             .FirstOrDefault(a => a.RosterVector.SequenceEqual(singleOptionLinkedAnswer.Answer));
 
                     if (referencedAnswer != null)
                     {
-                        var referencedQuestion = questionnaire.Questions[linkedSingleOptionQuestion.LinkedToQuestionId];
-                        return this.AnswerToUIString(referencedQuestion, referencedAnswer, interview, questionnaire);
+                        return this.AnswerToUIString(questionIdReferencedByLinkedQuestion, referencedAnswer, interview, questionnaire);
                     }
                 }
             }

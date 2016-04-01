@@ -18,12 +18,12 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Infrastructure.Shared.Enumerator;
 using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Interviewer.Infrastructure.Logging;
 using IPrincipal = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IPrincipal;
+using WB.Infrastructure.Shared.Enumerator.Internals;
 
 namespace WB.UI.Interviewer.Infrastructure
 {
@@ -31,7 +31,6 @@ namespace WB.UI.Interviewer.Infrastructure
     {
         public override void Load()
         {
-            this.Bind<IPlainKeyValueStorage<QuestionnaireModel>>().To<QuestionnaireModelKeyValueStorage>().InSingletonScope();
             this.Bind<IPlainKeyValueStorage<QuestionnaireDocument>>().To<QuestionnaireKeyValueStorage>().InSingletonScope();
 
  			this.Bind<IInterviewerQuestionnaireAccessor>().To<InterviewerQuestionnaireAccessor>();
@@ -52,9 +51,7 @@ namespace WB.UI.Interviewer.Infrastructure
                 {
                     PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")
                 });
-            this.Bind(typeof (IAsyncPlainStorage<>))
-                .To(typeof (SqlitePlainStorage<>))
-                .InSingletonScope();
+            this.Bind(typeof (IAsyncPlainStorage<>), typeof(IAsyncPlainStorageRemover<>)).To(typeof (SqlitePlainStorage<>)).InSingletonScope();
 
             this.Bind<InterviewerPrincipal>().To<InterviewerPrincipal>().InSingletonScope();
             this.Bind<IPrincipal>().ToMethod<IPrincipal>(context => context.Kernel.Get<InterviewerPrincipal>());
@@ -73,8 +70,9 @@ namespace WB.UI.Interviewer.Infrastructure
                 kernel.Inject<IAsynchronousFileSystemAccessor>(), kernel.Inject<ILogger>(), 
                 AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies")));
 
-            this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
-            this.Bind<IProtobufSerializer>().To<ProtobufSerializer>();
+            this.Bind<JsonUtilsSettings>()
+                .ToConstant(new JsonUtilsSettings() {TypeNameHandling = TypeSerializationSettings.ObjectsOnly});
+
             this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(
                 new JsonSerializerSettingsFactory(),
                 new Dictionary<string, string>()

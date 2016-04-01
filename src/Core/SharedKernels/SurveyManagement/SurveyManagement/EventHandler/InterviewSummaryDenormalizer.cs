@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using NHibernate.Engine;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
@@ -42,20 +40,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewSummary, InterviewReceivedBySupervisor>
 
     {
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaires;
+        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IReadSideRepositoryWriter<UserDocument> users;
 
         public InterviewSummaryDenormalizer(IReadSideRepositoryWriter<InterviewSummary> interviewSummary,
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaires, IReadSideRepositoryWriter<UserDocument> users)
+            IReadSideRepositoryWriter<UserDocument> users, IPlainQuestionnaireRepository plainQuestionnaireRepository)
             : base(interviewSummary)
         {
-            this.questionnaires = questionnaires;
             this.users = users;
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
         }
 
         public override object[] Readers
         {
-            get { return new object[] { questionnaires, users }; }
+            get { return new object[] { users }; }
         }
 
         private InterviewSummary UpdateInterviewSummary(InterviewSummary interviewSummary, DateTime updateDateTime, Action<InterviewSummary> update)
@@ -88,10 +86,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                         return;
 
                     var questionnaire = this.GetQuestionnaire(interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
-                    if (questionnaire == null || questionnaire.Questionnaire==null)
+                    if (questionnaire == null)
                         return;
 
-                    var question = questionnaire.Questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == questionId);
+                    var question = questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == questionId);
                     if (question == null || question.Answers == null) 
                         return;
 
@@ -109,14 +107,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             UserDocument responsible = this.users.GetById(userId);
             var questionnarie = this.GetQuestionnaire(questionnaireId, questionnaireVersion);
 
-            var interviewSummary = new InterviewSummary(questionnarie.Questionnaire)
+            var interviewSummary = new InterviewSummary(questionnarie)
             {
                 InterviewId = eventSourceId,
                 WasCreatedOnClient = wasCreatedOnClient,
                 UpdateDate = eventTimeStamp,
                 QuestionnaireId = questionnaireId,
                 QuestionnaireVersion = questionnaireVersion,
-                QuestionnaireTitle = questionnarie.Questionnaire.Title,
+                QuestionnaireTitle = questionnarie.Title,
                 ResponsibleId = userId, // Creator is responsible
                 ResponsibleName = responsible != null ? responsible.UserName : "<UNKNOWN USER>",
                 ResponsibleRole = responsible != null ? responsible.Roles.FirstOrDefault() : UserRoles.Undefined
@@ -127,13 +125,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private readonly MemoryCache questionnaireCache = new MemoryCache("QuestionnaireCache");
 
-        private QuestionnaireDocumentVersioned GetQuestionnaire(Guid questionnaireId, long questionnaireVersion)
+        private QuestionnaireDocument GetQuestionnaire(Guid questionnaireId, long questionnaireVersion)
         {
             string key = questionnaireId.ToString() + questionnaireVersion.ToString();
             if (questionnaireCache.Contains(key))
-                return (QuestionnaireDocumentVersioned)questionnaireCache[key];
+                return (QuestionnaireDocument)questionnaireCache[key];
 
-            var questionare = this.questionnaires.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion);
+            var questionare = this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireId, questionnaireVersion);
             questionnaireCache[key] = questionare;
             return questionare;
         }

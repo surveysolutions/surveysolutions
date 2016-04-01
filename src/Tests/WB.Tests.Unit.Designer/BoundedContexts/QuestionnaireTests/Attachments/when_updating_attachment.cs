@@ -1,0 +1,50 @@
+using System;
+using Machine.Specifications;
+using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Attachments;
+
+namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
+{
+    internal class when_updating_attachment : QuestionnaireTestsContext
+    {
+        Establish context = () =>
+        {
+            questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: responsibleId);
+            questionnaire.AddOrUpdateAttachment(Create.Command.AddOrUpdateAttachment(questionnaireId, attachmentId, "", responsibleId, ""));
+
+            updateAttachment = Create.Command.AddOrUpdateAttachment(questionnaireId, attachmentId, attachmentContentId, responsibleId, name);
+
+            eventContext = new EventContext();
+        };
+
+        Cleanup stuff = () =>
+        {
+            eventContext.Dispose();
+            eventContext = null;
+        };
+
+        Because of = () => questionnaire.AddOrUpdateAttachment(updateAttachment);
+
+        It should_raise_AttachmentUpdated_event_with_EntityId_specified = () =>
+            eventContext.GetSingleEvent<AttachmentUpdated>().AttachmentId.ShouldEqual(attachmentId);
+
+        It should_raise_AttachmentUpdated_event_with_ResponsibleId_specified = () =>
+            eventContext.GetSingleEvent<AttachmentUpdated>().ResponsibleId.ShouldEqual(responsibleId);
+
+        It should_raise_AttachmentUpdated_event_with_AttachmentName_specified = () =>
+            eventContext.GetSingleEvent<AttachmentUpdated>().AttachmentName.ShouldEqual(name);
+
+        It should_raise_AttachmentUpdated_event_with_ContentId_specified = () =>
+            eventContext.GetSingleEvent<AttachmentUpdated>().AttachmentContentId.ShouldEqual(attachmentContentId);
+
+        private static AddOrUpdateAttachment updateAttachment;
+        private static Questionnaire questionnaire;
+        private static readonly string name = "Attachment";
+        private static readonly string attachmentContentId = "ABECA98D65F866DFCD292BC973BDACF5954B916D";
+        private static readonly Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");
+        private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
+        private static readonly Guid attachmentId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        private static EventContext eventContext;
+    }
+}

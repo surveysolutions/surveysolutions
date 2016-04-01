@@ -187,6 +187,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to in the.
+        /// </summary>
+        public static string InThe {
+            get {
+                return ResourceManager.GetString("InThe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Month.
         /// </summary>
         public static string Month {

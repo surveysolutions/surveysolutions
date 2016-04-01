@@ -56,6 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         private readonly ConcurrentDictionary<string, bool> notAnsweredQuestionsEnablementStatus;
         private readonly ConcurrentDictionary<string, string> notAnsweredQuestionsInterviewerComments;
         private bool createdOnClient;
+        private bool hasLinkedOptionsChangedEvents=false;
 
         public StatefulInterview(ILogger logger, IPlainQuestionnaireRepository questionnaireRepository, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider)
             : base(logger, questionnaireRepository, expressionProcessorStatePrototypeProvider)
@@ -115,20 +116,28 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             this.createdOnClient = @event.InterviewData.CreatedOnClient;
 
-            var orderedRosterInstances = @event.InterviewData.RosterGroupInstances.SelectMany(x => x.Value).OrderBy(x => x.OuterScopeRosterVector.Length).ToList();
+            var orderedRosterInstances =
+                @event.InterviewData.RosterGroupInstances.SelectMany(x => x.Value)
+                    .OrderBy(x => x.OuterScopeRosterVector.Length)
+                    .ToList();
             foreach (RosterSynchronizationDto roster in orderedRosterInstances)
             {
-                AddRosterInstance(new AddedRosterInstance(roster.RosterId, roster.OuterScopeRosterVector, roster.RosterInstanceId, roster.SortIndex));
-                ChangeRosterTitle(new RosterInstance(roster.RosterId, roster.OuterScopeRosterVector, roster.RosterInstanceId), roster.RosterTitle);
+                AddRosterInstance(new AddedRosterInstance(roster.RosterId, roster.OuterScopeRosterVector,
+                    roster.RosterInstanceId, roster.SortIndex));
+                ChangeRosterTitle(
+                    new RosterInstance(roster.RosterId, roster.OuterScopeRosterVector, roster.RosterInstanceId),
+                    roster.RosterTitle);
             }
 
-            @event.InterviewData.ValidAnsweredQuestions.ForEach(x => DeclareAnswerAsValid(x.Id, x.InterviewItemRosterVector));
-            @event.InterviewData.FailedValidationConditions.ForEach(x => this.DeclareAnswerAsInvalid(x.Key.Id, x.Key.RosterVector, x.Value)); 
+            @event.InterviewData.ValidAnsweredQuestions.ForEach(
+                x => DeclareAnswerAsValid(x.Id, x.InterviewItemRosterVector));
+            @event.InterviewData.FailedValidationConditions.ForEach(
+                x => this.DeclareAnswerAsInvalid(x.Key.Id, x.Key.RosterVector, x.Value));
 
             @event.InterviewData.DisabledQuestions.ForEach(x => DisableQuestion(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.DisabledGroups.ForEach(x => DisableGroup(x.Id, x.InterviewItemRosterVector));
-            @event.InterviewData.Answers.ForEach(x => CommentQuestion(x.Id, x.QuestionRosterVector,x.Comments));
-
+            @event.InterviewData.Answers.ForEach(x => CommentQuestion(x.Id, x.QuestionRosterVector, x.Comments));
+            
             this.ResetLocalDelta();
         }
 
@@ -140,6 +149,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             }
 
             this.ResetLocalDelta();
+        }
+
+        internal new void Apply(LinkedOptionsChanged @event)
+        {
+            base.Apply(@event);
+            this.hasLinkedOptionsChangedEvents = true;
         }
 
         internal new void Apply(TextQuestionAnswered @event)
@@ -664,12 +679,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public IEnumerable<BaseInterviewAnswer> FindAnswersOfReferencedQuestionForLinkedQuestion(Guid referencedQuestionId, Identity linkedQuestion)
         {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            if (!this.interviewState.LinkedQuestionOptions.ContainsKey(linkedQuestion))
+                return Enumerable.Empty<BaseInterviewAnswer>();
 
-            var rosterVectorToStartFrom = this.CalculateStartRosterVectorForAnswersOfLinkedToQuestion(referencedQuestionId, linkedQuestion, questionnaire);
+            var linkedQuestionOptions = this.interviewState.LinkedQuestionOptions[linkedQuestion];
 
             IEnumerable<Identity> targetQuestions =
-               this.GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, referencedQuestionId, rosterVectorToStartFrom, questionnaire);
+                linkedQuestionOptions.Select(x => new Identity(referencedQuestionId, x));
 
             var answers = targetQuestions
                 .Select(this.GetExistingAnswerOrNull)
@@ -680,17 +696,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public IEnumerable<InterviewRoster> FindReferencedRostersForLinkedQuestion(Guid rosterId, Identity linkedQuestion)
         {
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            if (!this.interviewState.LinkedQuestionOptions.ContainsKey(linkedQuestion))
+                return Enumerable.Empty<InterviewRoster>();
 
-            var rosterVectorToStartFrom = this.CalculateStartRosterVectorForAnswersOfLinkedToQuestion(rosterId, linkedQuestion, questionnaire);
-
-            IEnumerable<Identity> targetRosters = 
-                this.GetInstancesOfGroupsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, new[] {rosterId}, rosterVectorToStartFrom, questionnaire).ToArray();
+            RosterVector[] targetRosters = this.interviewState.LinkedQuestionOptions[linkedQuestion];
 
             return
                 targetRosters
-                    .Select(this.GetRoster)
-                    .Where(r => !r.IsDisabled && !string.IsNullOrEmpty(r.Title))
+                    .Select(x => this.GetRoster(new Identity(rosterId, x)))
                     .OrderBy(r => sortIndexesOfRosterInstanses[new Identity(r.Id, r.RosterVector)] ?? r.RosterVector.Last())
                     .ToArray();
         }
@@ -839,24 +852,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.sortIndexesOfRosterInstanses[rosterIdentity] = rosterInstance.SortIndex;
         }
 
-        private decimal[] CalculateStartRosterVectorForAnswersOfLinkedToQuestion(
-            Guid linkedToEntityId, Identity linkedQuestion, IQuestionnaire questionnaire)
-        {
-            Guid[] linkSourceRosterVector = questionnaire.GetRosterSizeSourcesForEntity(linkedToEntityId);
-            Guid[] linkedQuestionRosterSources = questionnaire.GetRosterSizeSourcesForEntity(linkedQuestion.Id);
-
-            int commonRosterSourcesPartLength = Enumerable
-                .Zip(linkSourceRosterVector, linkedQuestionRosterSources, AreEqual)
-                .TakeWhile(areEqual => areEqual)
-                .Count();
-            
-            int linkedQuestionRosterLevel = linkedQuestion.RosterVector.Length;
-
-            int targetRosterLevel = Math.Min(commonRosterSourcesPartLength, Math.Min(linkSourceRosterVector.Length - 1, linkedQuestionRosterLevel));
-
-            return linkedQuestion.RosterVector.Shrink(targetRosterLevel);
-        }
-
         public InterviewRoster FindRosterByOrDeeperRosterLevel(Guid rosterId, RosterVector targetRosterVector)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
@@ -951,6 +946,24 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             var sectionInstances = questionnaire.GetAllSections().Select(x => new Identity(x, new decimal[0]));
 
             return sectionInstances.Sum(section => this.CountInvalidInterviewerAnswersInGroupRecursively(section));
+        }
+
+        public bool HasLinkedOptionsChangedEvents => this.hasLinkedOptionsChangedEvents;
+
+        [Obsolete("it should be removed when all clients has version 5.7 or higher")]
+        public void MigrateLinkedOptionsToFiltered()
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            var expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
+
+            var linkedQuestionOptionsChanges = CreateChangedLinkedOptions(
+                expressionProcessorState, 
+                this.interviewState, 
+                questionnaire, null,
+                null, null, null, null).ToArray();
+
+            this.ApplyEvent(new LinkedOptionsChanged(linkedQuestionOptionsChanges));
         }
 
         public int CountAnsweredInterviewerQuestionsInGroupRecursively(Identity groupIdentity)
@@ -1185,9 +1198,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             {
                 if (questionnaire.IsRosterGroup(entity))
                 {
-                    foreach (var rosterInstance in
-                        this.GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(this.interviewState, entity, group.RosterVector, questionnaire)
-                            .OrderBy(x => this.sortIndexesOfRosterInstanses[x] ?? x.RosterVector.Last()))
+                    var childInstances = this.GetInstancesOfGroupsByGroupIdWithSameAndDeeperRosterLevelOrThrow(this.interviewState, entity, @group.RosterVector, questionnaire)
+                                                .OrderBy(x => this.sortIndexesOfRosterInstanses[x] ?? x.RosterVector.Last());
+                    foreach (var rosterInstance in childInstances)
                     {
                         yield return rosterInstance;
                     }
@@ -1354,11 +1367,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         private static TValue GetOrCalculate<TKey, TValue>(TKey key, Func<TKey, TValue> calculateValue, ConcurrentDictionary<TKey, TValue> calculatedValues)
         {
             return calculatedValues.GetOrAdd(key, calculateValue);
-        }
-
-        private static bool AreEqual(Guid first, Guid second)
-        {
-            return first == second;
         }
     }
 }

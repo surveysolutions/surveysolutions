@@ -1,14 +1,9 @@
 using System;
-using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -26,7 +21,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             interviewId = "interviewId";
             questionnaireId = "questionnaireId";
             userId = Guid.NewGuid();
-            questionIdentity = Create.Identity(Guid.NewGuid(), new decimal[0]);
 
             var singleOptionAnswer = Mock.Of<SingleOptionAnswer>(_ => _.Answer == 3 && _.IsAnswered == true);
 
@@ -36,20 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(_ => _.Get(interviewId) == interview);
 
-            var filteredSingleOptionQuestionModel = Mock.Of<FilteredSingleOptionQuestionModel>(_
-                => _.Id == questionIdentity.Id
-                   && _.Options == new List<OptionModel>()
-                   {
-                       new OptionModel() {Title = "abc", Value = 1},
-                       new OptionModel() {Title = "bac", Value = 2},
-                       new OptionModel() {Title = "bbc", Value = 3},
-                       new OptionModel() {Title = "bba", Value = 4},
-                       new OptionModel() {Title = "ccc", Value = 5},
-                   });
-
-            var questionnaireModel = Mock.Of<QuestionnaireModel>(_ => _.Questions == new Dictionary<Guid, BaseQuestionModel> { { questionIdentity.Id, filteredSingleOptionQuestionModel } });
-
-            var questionnaireRepository = Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(x => x.GetById(questionnaireId) == questionnaireModel);
+            var questionnaireRepository = SetupQuestionnaireRepositoryWithFilteredQuestion();
 
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
@@ -67,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             navigationState = Create.NavigationState();
         };
 
-        private Because of = () =>
+        Because of = () =>
             viewModel.Init(interviewId, questionIdentity, navigationState);
 
         It should_set_nonnull_answer = () =>
@@ -86,14 +67,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             viewModel.Options.ShouldContain(i => i.Value == 5);
         };
 
-
-
-
         private static FilteredSingleOptionQuestionViewModel viewModel;
         private static NavigationState navigationState;
         private static Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> questionStateMock;
         private static Mock<AnsweringViewModel> answeringViewModelMock;
-        private static Identity questionIdentity;
         private static string interviewId;
         private static string questionnaireId;
         private static Guid userId;

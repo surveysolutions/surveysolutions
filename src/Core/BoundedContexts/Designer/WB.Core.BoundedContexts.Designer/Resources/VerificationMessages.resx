@@ -361,7 +361,7 @@
     <value>Max number of answers for roster size question cannot be empty when question has more than 40 options.</value>
   </data>
   <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen40" xml:space="preserve">
-    <value>Max number of answers for roster size question cannot be greater then 40.</value>
+    <value>Max number of answers for roster size question cannot be greater than 40.</value>
   </data>
   <data name="WB0101_GroupHasLevelDepthMoreThan10" xml:space="preserve">
     <value>Sub-section can have no more than 10 parent sub-sections.</value>
@@ -437,5 +437,68 @@
   </data>
   <data name="WB0107_ValidationMessageIsEmpty" xml:space="preserve">
     <value>Validation error message #{0} is empty.</value>
+  </data>
+  <data name="WB0201_LargeNumberOfQuestionsInGroup" xml:space="preserve">
+    <value>Section or Roster contains more than 200 questions, consider splitting into sub-sections.</value>
+  </data>
+  <data name="WB0202_GroupWithoutQuestions" xml:space="preserve">
+    <value>Section contains no questions. Consider removing the empty section.</value>
+  </data>
+  <data name="WB0203_RosterHasSingleQuestion" xml:space="preserve">
+    <value>Roster group contains only one question. Consider grouping with other rosters. For fixed roster, consider presenting as a set of independent questions.</value>
+  </data>
+  <data name="WB0204_EmptyRoster" xml:space="preserve">
+    <value>Roster is empty. Remove it if it is not needed.</value>
+  </data>
+  <data name="WB0205_TooManyQuestions" xml:space="preserve">
+    <value>Questionnaire has more than 1000 questions. It might be difficult to administer it.</value>
+  </data>
+  <data name="WB0209_LongEnablementCondition" xml:space="preserve">
+    <value>Enabling condition is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList()).</value>
+  </data>
+  <data name="WB0210_CategoricalQuestionHasManyOptions" xml:space="preserve">
+    <value>Single-choice question has too many categories, consider changing to combo box.</value>
+  </data>
+  <data name="WB0211_QuestionnaireHasNoGpsQuestion" xml:space="preserve">
+    <value>Questionnaire contains no GPS questions. Consider adding a GPS question.</value>
+  </data>
+  <data name="WB0206_FewSectionsManyQuestions" xml:space="preserve">
+    <value>Questionnaire contains more than 100 questions but only one or two sections. Group questions into sections to simplify navigation and improve performance.</value>
+  </data>
+  <data name="WB0212_LongValidationCondition" xml:space="preserve">
+    <value>Validation condition #{0} is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList()).</value>
+  </data>
+  <data name="WB0207_FixedRosterContains3OrLessItems" xml:space="preserve">
+    <value>Fixed roster contains 3 or less items. Consider using sub-sections and a series of questions. Rosters complicate structure of exported data.</value>
+  </data>
+  <data name="WB0208_MoreThan50PercentsNumericQuestionsWithoutValidationConditions" xml:space="preserve">
+    <value>Most numeric questions can have validation conditions. Add validation conditions to improve data quality.</value>
+  </data>
+  <data name="WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>Linked question filter expression has length more than 10,000 characters.</value>
+  </data>
+  <data name="WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion" xml:space="preserve">
+    <value>Categorical linked question cannot be used in linked question filter expression.</value>
+  </data>
+  <data name="WB00110_LinkedQuestionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+    <value>Filter expression has a syntax error.</value>
+  </data>
+  <data name="WB0065_NameForAyyachmentIsNotUnique" xml:space="preserve">
+    <value>Another attachment with the same name already exists.</value>
+  </data>
+  <data name="WB0095_StaticTextRefersAbsentAttachment" xml:space="preserve">
+    <value>Static text refers absent attachment</value>
+  </data>
+  <data name="WB0110_AttachmentHasEmptyContent" xml:space="preserve">
+    <value>Attachment cannot be empty</value>
+  </data>
+  <data name="WB0213_AttachmentSizeIsMoreThan5Mb" xml:space="preserve">
+    <value>Attachment size is more than 5Mb</value>
+  </data>
+  <data name="WB0214_TotalAttachmentsSizeIsMoreThan50Mb" xml:space="preserve">
+    <value>Total size of attachments is more than 50Mb</value>
+  </data>
+  <data name="WB0215_UnusedAttachments" xml:space="preserve">
+    <value>Questionnaire contains unused attachments</value>
   </data>
 </root>

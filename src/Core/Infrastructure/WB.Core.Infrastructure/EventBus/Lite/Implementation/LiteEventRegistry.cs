@@ -37,7 +37,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 
         public bool IsSubscribed(ILiteEventHandler handler, string eventSourceId)
         {
-            if (handler == null) throw new ArgumentNullException("handler");
+            if (handler == null) throw new ArgumentNullException(nameof(handler));
             return handlers.Values.Any(x => x.Any(handlerRef =>
             {
                 ILiteEventHandler subsribedHandler;
@@ -46,7 +46,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             }));
         }
 
-        public IEnumerable<Action<object>> GetHandlers(CommittedEvent @event)
+        public IReadOnlyCollection<Action<object>> GetHandlers(CommittedEvent @event)
         {
             Type eventType = @event.Payload.GetType();
             string eventKey = GetEventKey(eventType, @event.EventSourceId.FormatGuid());
@@ -54,14 +54,14 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             lock (LockObject)
             {
                 ConcurrentHashSet<WeakReference<ILiteEventHandler>> handlersForEventType;
-                if (!handlers.TryGetValue(eventKey, out handlersForEventType))
+                if (!this.handlers.TryGetValue(eventKey, out handlersForEventType))
                 {
-                    return Enumerable.Empty<Action<object>>();
+                    return new List<Action<object>>();
                 }
 
                 var actualHandlers = GetExistingHandlers(eventKey, handlersForEventType);
 
-                return actualHandlers.Select(GetActionHandler);
+                return actualHandlers.Select(GetActionHandler).ToList();
             }
         }
 

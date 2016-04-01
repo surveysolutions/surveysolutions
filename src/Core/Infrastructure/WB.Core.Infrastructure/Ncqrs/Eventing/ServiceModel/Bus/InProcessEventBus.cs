@@ -51,6 +51,16 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             }
         }
 
+        public bool CanHandleEvent(IPublishableEvent eventMessage)
+        {
+            if (eventMessage?.Payload == null) return false;
+
+            if (this.eventBusSettings.IgnoredAggregateRoots.Contains(eventMessage.EventSourceId.FormatGuid()))
+                return false;
+
+            return this.eventHandlerMethods.Any(eventHandlerMethod => eventHandlerMethod.EventType.GetTypeInfo().IsAssignableFrom(eventMessage.Payload.GetType().GetTypeInfo()));
+        }
+
         public void Publish(IEnumerable<IPublishableEvent> eventMessages)
         {
             foreach (var eventMessage in eventMessages)

@@ -1,8 +1,11 @@
-﻿using Machine.Specifications;
+﻿using System;
+using Machine.Specifications;
+using Moq;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Services;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceTests
 {
@@ -17,27 +20,23 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
                 new AnsweredYesNoOption(3, false), 
                 new AnsweredYesNoOption(2, true), 
             });
-            yesNoQuestionModel = CreateYesNoQuestionModel(
-                new[]
-                {
-                    new OptionModel() { Title = "1", Value = 1 },
-                    new OptionModel() { Title = "2", Value = 2 },
-                    new OptionModel() { Title = "3", Value = 3 },
-                    new OptionModel() { Title = "4", Value = 4 },
-                    new OptionModel() { Title = "5", Value = 5 },
-                });
+           
+            questionnaireMock = Mock.Of<IQuestionnaire>(_ 
+                => _.GetAnswerOptionTitle(questionId, 5) == "5"
+                && _.GetAnswerOptionTitle(questionId, 2) == "2");
         };
 
         Because of = () =>
-            result = answerToStringService.AnswerToUIString(yesNoQuestionModel, yesNoAnswer, null, null);
+            result = answerToStringService.AnswerToUIString(questionId, yesNoAnswer, null, questionnaireMock);
 
         It should_return_3 = () =>
             result.ShouldEqual("5, 2");
 
 
         static string result;
+        static Guid questionId = Id.g1;
+        static IQuestionnaire questionnaireMock;
         static YesNoAnswer yesNoAnswer;
-        static YesNoQuestionModel yesNoQuestionModel;
         static IAnswerToStringService answerToStringService;
     }
 }

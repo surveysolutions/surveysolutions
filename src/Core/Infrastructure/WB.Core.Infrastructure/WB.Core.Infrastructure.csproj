@@ -170,13 +170,11 @@
     <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryCleaner.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryIndexAccessor.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IReadSideStorage.cs" />
-    <Compile Include="ReadSide\Repository\Accessors\ReadSideRepositoryReaderVersionedWrapper.cs" />
     <Compile Include="ReadSide\Repository\Accessors\ReadSideExtensions.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryReader.cs" />
     <Compile Include="MaintenanceException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadSide\Repository\Accessors\IReadSideRepositoryWriter.cs" />
-    <Compile Include="ReadSide\Repository\Accessors\ReadSideStorageVersionedWrapper.cs" />
     <Compile Include="InfrastructureModuleMobile.cs" />
     <Compile Include="Security\IExportSettings.cs" />
     <Compile Include="Security\ExportEncryptionSettings.cs" />
@@ -184,6 +182,9 @@
     <Compile Include="Transactions\ITransactionManagerProvider.cs" />
     <Compile Include="Transactions\ITransactionManagerProviderManager.cs" />
     <Compile Include="Transactions\TransactionManagerExtensions.cs" />
+    <Compile Include="Versions\IProductVersion.cs" />
+    <Compile Include="Versions\IProductVersionHistory.cs" />
+    <Compile Include="Versions\ProductVersionChange.cs" />
     <Compile Include="WriteSide\IAggregateRootRepositoryWithCache.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -117,19 +117,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\DeleteQuestionnaire.cs" />
+    <Compile Include="Commands\DisableQuestionnaire.cs" />
+    <Compile Include="Commands\ImportFromDesigner.cs" />
+    <Compile Include="Commands\QuestionnaireCommand.cs" />
+    <Compile Include="Commands\RegisterPlainQuestionnaire.cs" />
+    <Compile Include="EventHandler\LinkedOptionsDenormalizer.cs" />
     <Compile Include="EventHandler\QuestionnaireQuestionsInfo.cs" />
     <Compile Include="EventHandler\InterviewExportedCommentariesDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewReferencesDenormalizer.cs" />
-    <Compile Include="EventHandler\QuestionnaireQuestionsInfoDenormalizer.cs" />
     <Compile Include="Factories\IOldschoolChartStatisticsDataProvider.cs" />
     <Compile Include="Factories\IQuestionnaireBrowseViewFactory.cs" />
+    <Compile Include="Implementation\Aggregates\Questionnaire.cs" />
+    <Compile Include="Implementation\Factories\IExportViewFactory.cs" />
     <Compile Include="Implementation\Factories\OldschoolChartStatisticsDataProvider.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireBrowseViewFactory.cs" />
     <Compile Include="Implementation\Services\AndroidPackageReader.cs" />
     <Compile Include="Implementation\Services\DecimalToHeaderConverter.cs" />
     <Compile Include="Implementation\Services\HealthCheck\Checks\ReadSideHealthChecker.cs" />
     <Compile Include="Implementation\Services\Preloading\InterviewImportDataParsingService.cs" />
-    <Compile Include="Implementation\Services\JsonSerializerSettingsFactory.cs" />
     <Compile Include="Implementation\Services\QuestionnaireNameValidator.cs" />
     <Compile Include="Implementation\Services\InterviewAnswersCommandValidator.cs" />
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
@@ -137,6 +143,7 @@
     <Compile Include="Mappings\InterviewCommentariesMap.cs" />
     <Compile Include="Mappings\InterviewDataExportViewMap.cs" />
     <Compile Include="Mappings\MapReportAnswersCollectionMap.cs" />
+    <Compile Include="Mappings\AttachmentContentMap.cs" />
     <Compile Include="Mappings\SynchronizationLogItemMap.cs" />
     <Compile Include="Properties\CommandValidatorsMessages.Designer.cs">
       <DependentUpon>CommandValidatorsMessages.resx</DependentUpon>
@@ -144,15 +151,16 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Services\AndroidPackageInfo.cs" />
+    <Compile Include="Implementation\Services\AttachmentContentService.cs" />
     <Compile Include="Services\Export\ITabularFormatExportService.cs" />
     <Compile Include="Services\IAndroidPackageReader.cs" />
+    <Compile Include="Services\IAttachmentContentService.cs" />
     <Compile Include="Services\ISynchronizationLogViewFactory.cs" />
     <Compile Include="Services\Preloading\IInterviewImportDataParsingService.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
     <Compile Include="EventHandler\MapReportDenormalizer.cs" />
     <Compile Include="EventHandler\InterviewStatusTimeSpanDenormalizer.cs" />
     <Compile Include="EventHandler\StatusChangeHistoryDenormalizerFunctional.cs" />
-    <Compile Include="EventHandler\QuestionnaireBrowseItemEventHandler.cs" />
     <Compile Include="Factories\IPreloadedDataServiceFactory.cs" />
     <Compile Include="EventHandler\InterviewParaDataEventHandler.cs" />
     <Compile Include="EventHandler\DummyEventHandler.cs" />
@@ -195,9 +203,6 @@
     <Compile Include="EventHandler\InterviewSynchronizationDenormalizer.cs" />
     <Compile Include="Factories\IChartStatisticsViewFactory.cs" />
     <Compile Include="Implementation\Factories\InterviewSynchronizationDtoFactory.cs" />
-    <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
-    <Compile Include="EventHandler\QuestionnaireRosterStructureEventHandler.cs" />
-    <Compile Include="EventHandler\ReferenceInfoForLinkedQuestionsDenormalizer.cs" />
     <Compile Include="EventHandler\UserDenormalizer.cs" />
     <Compile Include="Factories\IInterviewSynchronizationDtoFactory.cs" />
     <Compile Include="Factories\IRecordsAccessorFactory.cs" />
@@ -217,7 +222,6 @@
     <Compile Include="Implementation\Services\Preloading\PreloadedDataVerifier.cs" />
     <Compile Include="Implementation\Services\Preloading\QuestionDataParser.cs" />
     <Compile Include="Implementation\Services\Preloading\PreloadedDataService.cs" />
-    <Compile Include="Implementation\Services\QuestionnaireCacheInitializer.cs" />
     <Compile Include="Implementation\Services\SampleImportService.cs" />
     <Compile Include="Implementation\Services\SupportedVersionProvider.cs" />
     <Compile Include="Implementation\Services\TabletInformation\FileBasedTabletInformationService.cs" />
@@ -244,7 +248,6 @@
     <Compile Include="Implementation\Services\HealthCheck\HealthCheckService.cs" />
     <Compile Include="Services\HealthCheck\IHealthCheckService.cs" />
     <Compile Include="Services\ICsvWriterService.cs" />
-    <Compile Include="Services\IQuestionnaireCacheInitializer.cs" />
     <Compile Include="Services\IQuestionnaireUpgradeService.cs" />
     <Compile Include="Services\ISampleImportService.cs" />
     <Compile Include="Services\ISupportedVersionProvider.cs" />
@@ -318,6 +321,7 @@
     <Compile Include="Views\Interviews\TeamInterviewsViewItem.cs" />
     <Compile Include="Views\Interview\CumulativeReportStatusChange.cs" />
     <Compile Include="Views\Interview\IInterviewInformationFactory.cs" />
+    <Compile Include="Views\Interview\InterviewAttachmentViewModel.cs" />
     <Compile Include="Views\Interview\InterviewInformation.cs" />
     <Compile Include="Views\Interview\InterviewerInterviewsFactory.cs" />
     <Compile Include="Views\Interview\AllInterviewsFactory.cs" />
@@ -331,6 +335,7 @@
     <Compile Include="Views\Interview\InterviewBrief.cs" />
     <Compile Include="Views\Interview\InterviewCommentedStatus.cs" />
     <Compile Include="Views\Interview\InterviewData.cs" />
+    <Compile Include="Views\Interview\InterviewLinkedQuestionOptions.cs" />
     <Compile Include="Views\Interview\InterviewReferences.cs" />
     <Compile Include="Views\Interview\InterviewDetailsInputModel.cs" />
     <Compile Include="Views\Interview\InterviewDetailsViewFactory.cs" />
@@ -355,6 +360,7 @@
     <Compile Include="Views\Interview\StatisticsLineGroupedByDateAndTemplate.cs" />
     <Compile Include="Views\Interview\StatisticsLineGroupedByUserAndTemplate.cs" />
     <Compile Include="Views\Interview\TimeSpanBetweenStatuses.cs" />
+    <Compile Include="Views\InterviewLevelUtils.cs" />
     <Compile Include="Views\ListViewModelBase.cs" />
     <Compile Include="Views\PreloadedData\PreloadedDataByFile.cs" />
     <Compile Include="Views\PreloadedData\PreloadedContentMetaData.cs" />
@@ -364,7 +370,9 @@
     <Compile Include="Views\Preloading\QuestionnairePreloadingDataInputModel.cs" />
     <Compile Include="Views\Preloading\QuestionnairePreloadingDataItem.cs" />
     <Compile Include="Views\Preloading\QuestionnairePreloadingDataViewFactory.cs" />
+    <Compile Include="Views\Questionnaire\AttachmentInfoView.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireAndVersionsItem.cs" />
+    <Compile Include="Views\Questionnaire\AttachmentContent.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireBrowseItem.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireBrowseView.cs" />
     <Compile Include="Views\Questionnaire\ReferenceInfoByQuestion.cs" />

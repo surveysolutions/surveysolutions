@@ -8,6 +8,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         Task NavigateToAsync<TViewModel>() where TViewModel : IMvxViewModel;
         Task NavigateToAsync<TViewModel>(object perameters) where TViewModel : IMvxViewModel;
         Task NavigateToDashboardAsync();
+        Task NavigateToLoginAsync();
         Task NavigateToInterviewAsync(string interviewId);
         Task NavigateToPrefilledQuestionsAsync(string interviewId);
     }

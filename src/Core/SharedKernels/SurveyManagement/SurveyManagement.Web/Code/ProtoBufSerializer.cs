@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 {
+    [Obsolete("Since v. 5.7")]
     public class ProtobufSerializer : IProtobufSerializer
     {
         public string Serialize(object item)
@@ -17,6 +18,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
         }
 
         public string Serialize(object item, TypeSerializationSettings typeSerializationSettings)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string Serialize(object item, TypeSerializationSettings typeSerializationSettings,
+            SerializationBinderSettings binderSettings)
         {
             throw new NotImplementedException();
         }
@@ -52,18 +59,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             ProtoBuf.Serializer.NonGeneric.Serialize(stream, value);
         }
 
-        public object DeserializeFromStream(Stream stream, Type type)
+        public object DeserializeFromStream(Stream stream, Type type, TypeSerializationSettings? typeSerializationSettings = null)
         {
             SerializerBuilder.Build(type);
             return ProtoBuf.Serializer.NonGeneric.Deserialize(type, stream);
         }
 
-        public byte[] SerializeToByteArray(object item, TypeSerializationSettings typeSerializationSettings, SerializationType serializationType)
+        public byte[] SerializeToByteArray(object item, TypeSerializationSettings typeSerializationSettings)
         {
             throw new NotImplementedException();
         }
 
-        public object Deserialize(byte[] payload, Type objectType, TypeSerializationSettings typeSerializationSettings, SerializationType serializationType)
+        public object Deserialize(byte[] payload, Type objectType, TypeSerializationSettings typeSerializationSettings)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string Serialize(object item, SerializationBinderSettings binderSettings)
         {
             throw new NotImplementedException();
         }

@@ -77,11 +77,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Droid.Support.V7.AppCompat, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.V7.AppCompat.4.0.0\lib\MonoAndroid403\MvvmCross.Droid.Support.V7.AppCompat.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.V7.AppCompat.4.0.2\lib\MonoAndroid403\MvvmCross.Droid.Support.V7.AppCompat.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MvvmCross.Droid.Support.V7.Fragging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.V7.Fragging.4.0.1\lib\MonoAndroid403\MvvmCross.Droid.Support.V7.Fragging.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Droid.Support.V7.RecyclerView, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.V7.RecyclerView.4.0.0\lib\MonoAndroid403\MvvmCross.Droid.Support.V7.RecyclerView.dll</HintPath>
+      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.V7.RecyclerView.4.0.1\lib\MonoAndroid403\MvvmCross.Droid.Support.V7.RecyclerView.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MvvmCross.Localization, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -167,19 +171,19 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
     <Reference Include="Xamarin.Android.Support.v4, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v4.23.1.1.0\lib\MonoAndroid403\Xamarin.Android.Support.v4.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v4.23.1.1.1\lib\MonoAndroid403\Xamarin.Android.Support.v4.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Android.Support.v7.AppCompat, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v7.AppCompat.23.1.1.0\lib\MonoAndroid403\Xamarin.Android.Support.v7.AppCompat.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v7.AppCompat.23.1.1.1\lib\MonoAndroid403\Xamarin.Android.Support.v7.AppCompat.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Android.Support.v7.MediaRouter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v7.MediaRouter.23.1.1.0\lib\MonoAndroid403\Xamarin.Android.Support.v7.MediaRouter.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v7.MediaRouter.23.1.1.1\lib\MonoAndroid403\Xamarin.Android.Support.v7.MediaRouter.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Android.Support.v7.RecyclerView, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v7.RecyclerView.23.1.1.0\lib\MonoAndroid403\Xamarin.Android.Support.v7.RecyclerView.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Xamarin.Android.Support.v7.RecyclerView.23.1.1.1\lib\MonoAndroid403\Xamarin.Android.Support.v7.RecyclerView.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Insights, Version=1.11.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -190,7 +194,10 @@
   <ItemGroup>
     <Compile Include="Activities\ActivityExtensions.cs" />
     <Compile Include="Activities\BaseActivity.cs" />
+    <Compile Include="Activities\BaseFragment.cs" />
+    <Compile Include="Activities\CompleteInterviewFragment.cs" />
     <Compile Include="Activities\EnumeratorInterviewActivity.cs" />
+    <Compile Include="Activities\InterviewEntitiesListFragment.cs" />
     <Compile Include="Activities\MenuLocalizationHelper.cs" />
     <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
     <Compile Include="Bootstrap\DownloadCachePluginBootstrap.cs" />
@@ -219,11 +226,13 @@
     <Compile Include="CustomBindings\EditTextFocusValueChangedBinding.cs" />
     <Compile Include="CustomBindings\EditTextSetFocusBinding.cs" />
     <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
+    <Compile Include="CustomBindings\ImageViewBitmapWithFallbackBinding.cs" />
     <Compile Include="CustomBindings\MaskedEditTextIsMaskedQuestionAnsweredBinding.cs" />
     <Compile Include="CustomBindings\MvxAutoCompleteTextViewHidePopupOnDoneBinding.cs" />
     <Compile Include="CustomBindings\MvxAutoCompleteTextViewResetTextBinding.cs" />
     <Compile Include="CustomBindings\MvxAutoCompleteTextViewShowPopupOnFocusBinding.cs" />
     <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
+    <Compile Include="CustomBindings\FrameLayoutCurrentScreenBinding.cs" />
     <Compile Include="CustomBindings\TextViewIsSelectedYesNoOptionColorBinding.cs" />
     <Compile Include="CustomBindings\TextViewBoldBinding.cs" />
     <Compile Include="CustomBindings\TextViewGroupInfoBinding.cs" />
@@ -987,6 +996,7 @@
     <AndroidResource Include="Resources\layout\interview_question__errors_item.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview__attachment.axml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">

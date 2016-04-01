@@ -42,11 +42,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
 
             synchronizationTime = DateTime.Now;
 
-            var questionnaireRepositoryMock = new Mock<IPlainQuestionnaireRepository>();
-            questionnaireRepositoryMock.Setup(x => x.GetHistoricalQuestionnaire(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()))
-                .Returns(Mock.Of<IQuestionnaire>());
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), _ => true);
 
-            interview = CreateInterview(questionnaireRepository: questionnaireRepositoryMock.Object);
+            interview = CreateInterview(questionnaireRepository: questionnaireRepository);
 
             interview.AssignInterviewer(supervisorId, userId, DateTime.Now);
             interview.Apply(Create.Event.InterviewStatusChanged(status: InterviewStatus.Completed));

@@ -1,13 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Documents;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -16,16 +25,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 {
     internal class InterviewSynchronizationDtoFactory : IInterviewSynchronizationDtoFactory
     {
-        private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures;
+        private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
+        private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
         private readonly IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository;
+        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
-        public InterviewSynchronizationDtoFactory(IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnriePropagationStructures, IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository)
+        public InterviewSynchronizationDtoFactory(
+            IReadSideRepositoryWriter<InterviewStatuses> interviewsRepository,
+            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, 
+            IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore, 
+            IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
-            if (questionnriePropagationStructures == null) throw new ArgumentNullException(nameof(questionnriePropagationStructures));
             if (interviewsRepository == null) throw new ArgumentNullException(nameof(interviewsRepository));
-
-            this.questionnriePropagationStructures = questionnriePropagationStructures;
+            
             this.interviewsRepository = interviewsRepository;
+            this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
+            this.interviewLinkedQuestionOptionsStore = interviewLinkedQuestionOptionsStore;
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
         }
 
         public InterviewSynchronizationDto BuildFrom(InterviewData interview, string comments, DateTime? rejectedDateTime, DateTime? interviewerAssignedDateTime)
@@ -51,8 +67,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             var invalidQuestions = new HashSet<InterviewItemId>();
             var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
 
-            var questionnariePropagationStructure = this.questionnriePropagationStructures.AsVersioned().Get(interview.QuestionnaireId.FormatGuid(),
-                interview.QuestionnaireVersion);
+            var questionnariePropagationStructure =
+                this.questionnaireRosterStructureStorage.GetById(
+                    new QuestionnaireIdentity(interview.QuestionnaireId,
+                        interview.QuestionnaireVersion).ToString());
 
             Dictionary<Identity, IList<FailedValidationCondition>> failedValidationConditions = new Dictionary<Identity, IList<FailedValidationCondition>>();
             foreach (var interviewLevel in interview.Levels.Values)
@@ -121,6 +139,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                     }   
                 }
             }
+            Dictionary<InterviewItemId, RosterVector[]> linkedQuestionOptions = CreateLinkedQuestionsOptions(interview);
 
             return new InterviewSynchronizationDto(interview.InterviewId,
                 status, 
@@ -137,6 +156,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 invalidQuestions,
                 propagatedGroupInstanceCounts,
                 failedValidationConditions.ToList(),
+                linkedQuestionOptions,
                 interview.WasCompleted,
                 interview.CreatedOnClient);
         }
@@ -194,6 +214,43 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 outerVector[i] = interviewLevel.RosterVector[i];
             }
             return outerVector;
+        }
+
+        private Dictionary<InterviewItemId, RosterVector[]> CreateLinkedQuestionsOptions(InterviewData interview)
+        {
+            var result = new Dictionary<InterviewItemId, RosterVector[]>();
+
+            var questionnaire =
+                this.plainQuestionnaireRepository.GetQuestionnaireDocument(
+                    new QuestionnaireIdentity(interview.QuestionnaireId,
+                        interview.QuestionnaireVersion));
+
+            questionnaire.ConnectChildrenWithParent();
+
+            var linkedQuestions = questionnaire.Find<IQuestion>(q => q.LinkedToRosterId.HasValue || q.LinkedToQuestionId.HasValue).ToArray();
+            var interviewLinkedQuestionOptions = this.interviewLinkedQuestionOptionsStore.GetById(interview.InterviewId);
+
+            foreach (var linkedQuestion in linkedQuestions)
+            {
+                var linkedQuestionRosterScope = InterviewLevelUtils.GetRosterSizeSourcesForEntity(linkedQuestion);
+
+                var interviewLevelsWithTheLinkedQuestion = InterviewLevelUtils.FindLevelsByScope(interview, linkedQuestionRosterScope);
+
+                foreach (var interviewLevel in interviewLevelsWithTheLinkedQuestion)
+                {
+                    var linkedQuestionIdentity = new Identity(linkedQuestion.PublicKey,
+                        interviewLevel.RosterVector);
+                    var interviewItemId = new InterviewItemId(linkedQuestionIdentity.Id,
+                        linkedQuestionIdentity.RosterVector);
+
+                    result.Add(interviewItemId,
+                        InterviewLevelUtils.GetAvailableOptionsForQuestionLinkedOnRoster(linkedQuestion,
+                            linkedQuestionIdentity.RosterVector, interview, questionnaire,
+                            interviewLinkedQuestionOptions).Select(l => new RosterVector(l.RosterVector)).ToArray());
+                }
+            }
+
+            return result;
         }
     }
 }

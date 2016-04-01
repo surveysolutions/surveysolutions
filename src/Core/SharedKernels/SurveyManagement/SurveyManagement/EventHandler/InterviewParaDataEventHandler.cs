@@ -6,12 +6,14 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -51,11 +53,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewHistoryView, GroupsDisabled>,
         IUpdateHandler<InterviewHistoryView, GroupsEnabled>,
         IUpdateHandler<InterviewHistoryView, AnswerRemoved>,
-        IUpdateHandler<InterviewHistoryView, UnapprovedByHeadquarters>
+        IUpdateHandler<InterviewHistoryView, UnapprovedByHeadquarters>,
+        IUpdateHandler<InterviewHistoryView, InterviewReceivedByInterviewer>,
+        IUpdateHandler<InterviewHistoryView, InterviewReceivedBySupervisor>
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
-        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader;
+        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository;
         private readonly IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage;
         private readonly ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireExportStructure> cacheQuestionnaireExportStructure = new ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireExportStructure>();
         private readonly ConcurrentDictionary<string, UserDocument> cacheUserDocument = new ConcurrentDictionary<string, UserDocument>();
@@ -65,14 +69,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader, 
             IReadSideRepositoryWriter<UserDocument> userReader,
-            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader, 
-            InterviewDataExportSettings interviewDataExportSettings)
+            InterviewDataExportSettings interviewDataExportSettings,
+            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository)
         {
             this.readSideStorage = readSideStorage;
             this.interviewSummaryReader = interviewSummaryReader;
             this.userReader = userReader;
-            this.questionnaireReader = questionnaireReader;
             this.interviewDataExportSettings = interviewDataExportSettings;
+            this.questionnaireExportStructureRepository = questionnaireExportStructureRepository;
         }
 
 
@@ -433,8 +437,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             var cachedQuestionnaireExportStructure =
                 this.cacheQuestionnaireExportStructure.GetOrAdd(
                     new QuestionnaireIdentity(questionnaireId, questionnaireVersion),
-                    (key) =>
-                        this.questionnaireReader.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion));
+                    (key) => this.questionnaireExportStructureRepository.GetById(new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString()));
 
             ReduceCacheIfNeeded(cacheQuestionnaireExportStructure);
             return cachedQuestionnaireExportStructure;
@@ -599,6 +602,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 CreateCommentParameters(@event.Payload.Comment));
 
             return view;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewReceivedByInterviewer> @event)
+        {
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.ReceivedByInterviewer, null, @event.EventTimeStamp);
+
+            return state;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewReceivedBySupervisor> @event)
+        {
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.ReceivedBySupervisor, null, @event.EventTimeStamp);
+
+            return state;
         }
     }
 }

@@ -11,9 +11,8 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -28,7 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<YesNoQuestionAnswered>
     {
         private readonly Guid userId;
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IUserInteractionService userInteraction;
@@ -43,7 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public List<YesNoQuestionOptionViewModel> Options { get; set; }
 
         public YesNoQuestionViewModel(IPrincipal principal,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
+            IPlainQuestionnaireRepository questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry,
             QuestionStateViewModel<YesNoQuestionAnswered> questionStateViewModel,
@@ -76,25 +75,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetById(interview.QuestionnaireId);
-            var questionModel = questionnaire.GetYesNoQuestion(entityIdentity.Id);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
             var answerModel = interview.GetYesNoAnswer(entityIdentity);
 
-            this.areAnswersOrdered = questionModel.AreAnswersOrdered;
-            this.maxAllowedAnswers = questionModel.MaxAllowedAnswers;
-            this.isRosterSizeQuestion = questionModel.IsRosterSizeQuestion;
+            this.areAnswersOrdered = questionnaire.ShouldQuestionRecordAnswersOrder(entityIdentity.Id);
+            this.maxAllowedAnswers = questionnaire.GetMaxSelectedAnswerOptions(entityIdentity.Id);
+            this.isRosterSizeQuestion = questionnaire.ShouldQuestionSpecifyRosterSize(entityIdentity.Id);
             this.Identity = entityIdentity;
             this.interviewId = interview.Id;
 
-            this.Options = questionModel
-                .Options
+            this.Options = questionnaire
+                .GetAnswerOptionsAsValues(entityIdentity.Id)
+                .Select(x => new CategoricalQuestionOption {  Value = x, Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x)})
                 .Select(model => this.ToViewModel(model, answerModel))
                 .ToList();
 
             this.eventRegistry.Subscribe(this, interviewId);
         }
 
-        private YesNoQuestionOptionViewModel ToViewModel(OptionModel model, YesNoAnswer answerModel)
+        private YesNoQuestionOptionViewModel ToViewModel(CategoricalQuestionOption model, YesNoAnswer answerModel)
         {
             var isExistAnswer = answerModel.Answers != null && answerModel.Answers.Any(a => a.OptionValue == model.Value);
             var isSelected = isExistAnswer 
@@ -120,6 +119,71 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         public async Task ToggleAnswerAsync(YesNoQuestionOptionViewModel changedModel)
+        {
+            List<YesNoQuestionOptionViewModel> allSelectedOptions =
+                this.areAnswersOrdered
+                ? this.Options.Where(x => x.Selected.HasValue).OrderBy(x => x.AnswerCheckedOrder).ToList()
+                : this.Options.Where(x => x.Selected.HasValue).ToList();
+
+            var interview = this.interviewRepository.Get(interviewIdAsString);
+
+            int countYesSelectedOptions = allSelectedOptions.Count(o => o.YesSelected);
+
+            if (this.maxAllowedAnswers.HasValue && countYesSelectedOptions > this.maxAllowedAnswers)
+            {
+                var answerModel = interview.GetYesNoAnswer(Identity);
+                var answeredYesNoOption = answerModel.Answers.FirstOrDefault(yn => yn.OptionValue == changedModel.Value);
+                changedModel.Selected = answeredYesNoOption?.Yes;
+                return;
+            }
+
+            if (this.isRosterSizeQuestion && (!changedModel.Selected.HasValue || !changedModel.Selected.Value))
+            {
+                var answerModel = interview.GetYesNoAnswer(Identity);
+
+                var backendYesAnswersCount = answerModel?.Answers?.Count(a => a.Yes) ?? 0;
+                var UIYesAnswersCount = this.Options.Count(o => o.YesSelected);
+
+                if (backendYesAnswersCount > UIYesAnswersCount)
+                {
+                    var amountOfRostersToRemove = 1;
+                    var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
+                    if (!(await this.userInteraction.ConfirmAsync(message)))
+                    {
+                        changedModel.Selected = true;
+                        return;
+                    }
+                }
+            }
+
+            var selectedValuesWithoutJustChanged = allSelectedOptions.Except(x => x.Value == changedModel.Value).Select(x => new AnsweredYesNoOption(x.Value, x.YesSelected));
+
+            var selectedValuesWithJustChanged
+                = changedModel.Selected.HasValue
+                    ? selectedValuesWithoutJustChanged.Union(new AnsweredYesNoOption(changedModel.Value, changedModel.Selected.Value).ToEnumerable()).ToArray()
+                    : selectedValuesWithoutJustChanged.ToArray();
+
+            var command = new AnswerYesNoQuestion(
+                this.interviewId,
+                this.userId,
+                this.Identity.Id,
+                this.Identity.RosterVector,
+                DateTime.UtcNow,
+                selectedValuesWithJustChanged);
+
+            try
+            {
+                await this.Answering.SendAnswerQuestionCommandAsync(command).ConfigureAwait(false);
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
+            }
+            catch (InterviewException ex)
+            {
+                this.QuestionState.Validity.ProcessException(ex);
+            }
+        }
+
+        // TODO: delete this method if KP-6577 is verified
+        public async Task ToggleAnswerAsyncOld(YesNoQuestionOptionViewModel changedModel)
         {
             List<YesNoQuestionOptionViewModel> allSelectedOptions =
                 this.areAnswersOrdered

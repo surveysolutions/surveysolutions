@@ -6,4 +6,4 @@
     android:id="@+id/interviewEntitiesList"
     android:layout_below="@+id/prefilledQuestions_questionnaireTitle_holder"
     android:scrollbars="vertical"
-    local:MvxBind="ItemsSource CurrentGroup.Items" />
+    local:MvxBind="ItemsSource Items" />

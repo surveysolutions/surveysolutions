@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using FluentAssertions.Common;
+using System.Globalization;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -34,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                 interviewData);
 
         It should_create_record__with_one_gps_question_which_contains_composite_answer = () =>
-          result.Levels[0].Records[0].GetQuestions()[0].Answers.ShouldEqual(new[] { "1", "2", "3", "4", new DateTime(1984,4,18).ToString()  });
+          result.Levels[0].Records[0].GetQuestions()[0].Answers.ShouldEqual(new[] { "1", "2", "3", "4", new DateTime(1984,4,18).ToString("o", CultureInfo.InvariantCulture)  });
 
         private static ExportViewFactory exportViewFactory;
         private static InterviewDataExportView result;

@@ -51,6 +51,10 @@
       <HintPath>..\..\..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\ImageResizer.4.0.5\lib\net45\ImageResizer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.7.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\DotNetZip.1.9.7\lib\net20\Ionic.Zip.dll</HintPath>
       <Private>True</Private>
@@ -111,6 +115,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -185,27 +190,35 @@
     <Compile Include="Api\ControlPanelApiController.cs" />
     <Compile Include="Api\HealthCheckApiController.cs" />
     <Compile Include="Api\InterviewerSyncController.cs" />
-    <Compile Include="Api\Interviewer\InterviewerDevicesController.cs" />
-    <Compile Include="Api\Interviewer\InterviewerInterviewsController.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Api\Interviewer\InterviewerQuestionnairesController.cs" />
-    <Compile Include="Api\Interviewer\InterviewerController.cs" />
-    <Compile Include="Api\Interviewer\InterviewerUsersController.cs" />
+    <Compile Include="Api\Interviewer\InterviewerControllerBase.cs" />
+    <Compile Include="Api\Interviewer\DevicesControllerBase.cs" />
+    <Compile Include="Api\Interviewer\UsersControllerBase.cs" />
+    <Compile Include="Api\Interviewer\QuestionnairesControllerBase.cs" />
+    <Compile Include="Api\Interviewer\InterviewsControllerBase.cs" />
+    <Compile Include="Api\Interviewer\v1\InterviewerApiV1Controller.cs" />
+    <Compile Include="Api\Interviewer\v1\DevicesApiV1Controller.cs" />
+    <Compile Include="Api\Interviewer\v1\InterviewsApiV1Controller.cs" />
+    <Compile Include="Api\Interviewer\v1\QuestionnairesApiV1Controller.cs" />
+    <Compile Include="Api\Interviewer\v1\UsersApiV1Controller.cs" />
+    <Compile Include="Api\Interviewer\v2\InterviewerApiV2Controller.cs" />
+    <Compile Include="Api\Interviewer\v2\DevicesApiV2Controller.cs" />
+    <Compile Include="Api\Interviewer\v2\InterviewsApiV2Controller.cs" />
+    <Compile Include="Api\Interviewer\v2\AttachmentsApiV2Controller.cs" />
+    <Compile Include="Api\Interviewer\v2\QuestionnairesApiV2Controller.cs" />
+    <Compile Include="Api\Interviewer\v2\UsersApiV2Controller.cs" />
     <Compile Include="Api\InterviewsController.cs" />
     <Compile Include="Api\QuestionnairesController.cs" />
     <Compile Include="Api\UsersController.cs" />
     <Compile Include="Code\ApiBasicAuthAttribute.cs" />
     <Compile Include="Code\ProtobufJsonFormatter.cs" />
-    <Compile Include="Code\PlainApiTransactionFilter.cs" />
     <Compile Include="Code\ProtobufSerializer.cs" />
     <Compile Include="Code\Security\CustomIdentity.cs" />
     <Compile Include="Code\Security\CustomPrincipal.cs" />
-    <Compile Include="Code\PlainTransactionFilter.cs" />
     <Compile Include="Code\Security\IdentityExtentions.cs" />
     <Compile Include="Code\Security\PrincipalReplacer.cs" />
     <Compile Include="Code\ProtobufJsonSerializerAttribute.cs" />
     <Compile Include="Code\WriteToSyncLogAttribute.cs" />
+    <Compile Include="Controllers\AttachmentsController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
@@ -219,6 +232,7 @@
     <Compile Include="Filters\ReplacePrincipal.cs" />
     <Compile Include="Filters\ObserverNotAllowedApiAttribute.cs" />
     <Compile Include="Filters\ReplacePrincipalWebApi.cs" />
+    <Compile Include="Filters\TypedDirectRouteProvider.cs" />
     <Compile Include="Models\Api\AssignChangeApiModel.cs" />
     <Compile Include="Models\Api\StatusChangeApiModel.cs" />
     <Compile Include="Models\CypherSettingsModel.cs" />
@@ -588,6 +602,8 @@
     <EmbeddedResource Include="Views\Shared\ApiUserCreateForm.cshtml" />
     <EmbeddedResource Include="Views\Shared\ApiUserEditForm.cshtml" />
     <EmbeddedResource Include="Views\Interviewers\Index.cshtml" />
+    <EmbeddedResource Include="Views\ControlPanel\Versions.cshtml" />
+    <EmbeddedResource Include="Views\Interview\AttachmentPartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">

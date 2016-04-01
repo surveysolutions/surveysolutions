@@ -3,6 +3,7 @@
     xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/Interview_QuestionWithDivider"
     local:MvxBind="HideKeyboardOnClick .">
+  
   <LinearLayout
       style="@style/Interview_Question"
       android:orientation="vertical">
@@ -12,6 +13,8 @@
           local:MvxBind="Html StaticText" />
     </LinearLayout>
   </LinearLayout>
-  <View
-      style="@style/Interview_Entity_Divider" />
+  
+  <include layout="@layout/interview__attachment" />
+  
+  <View style="@style/Interview_Entity_Divider" />
 </LinearLayout>

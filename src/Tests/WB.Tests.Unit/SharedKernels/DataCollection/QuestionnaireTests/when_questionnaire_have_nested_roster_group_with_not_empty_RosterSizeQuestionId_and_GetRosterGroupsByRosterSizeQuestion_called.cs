@@ -10,6 +10,8 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
@@ -18,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         Establish context = () =>
         {
             rosterGroupId = new Guid("EBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            QuestionnaireDocument questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
+            questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
             {
                 new NumericQuestion() { PublicKey = rosterSizeQuestionId, IsInteger = true, QuestionType = QuestionType.Numeric},
                 new Group()
@@ -38,12 +40,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                         }
                 }
             });
-
-            questionnaire = CreateImportedQuestionnaire(Guid.NewGuid(), questionnaireDocument);
         };
 
         Because of = () =>
-            rosterGroups = questionnaire.GetQuestionnaire().GetRosterGroupsByRosterSizeQuestion(rosterSizeQuestionId);
+            rosterGroups = new PlainQuestionnaire(questionnaireDocument, 1).GetRosterGroupsByRosterSizeQuestion(rosterSizeQuestionId);
 
         It should_rosterGroups_not_be_empty = () =>
             rosterGroups.ShouldNotBeEmpty();
@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             rosterGroups.ShouldContainOnly(rosterGroupId);
 
         private static IEnumerable<Guid> rosterGroups;
-        private static Questionnaire questionnaire;
+        private static QuestionnaireDocument questionnaireDocument;
         private static Guid rosterSizeQuestionId = new Guid("ABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static Guid nestedGroupId = new Guid("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static Guid rosterGroupId;

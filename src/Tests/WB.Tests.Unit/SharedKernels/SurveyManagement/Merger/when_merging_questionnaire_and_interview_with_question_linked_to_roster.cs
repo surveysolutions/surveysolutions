@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
         };
 
         Because of = () =>
-            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight());
+            mergeResult = merger.Merge(interview, questionnaire, user.GetUseLight(), null, null);
 
 
         It should_question_has_2_options = () =>
@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
             GetQuestion(mergeResult, linkedQuestionId, new decimal[0]).Answer.ShouldEqual(Create.RosterVector(1));
 
         It should_question_linked_on_nested_roster_has_4_options = () =>
-          GetQuestion(mergeResult, linkedOnNestedRosterQuestionId, new decimal[0]).Options.Select(x => x.Label).ShouldContainOnly("roster0: roster01", "roster0: roster02", "roster1: roster11", "roster1: roster12");
+            GetQuestion(mergeResult, linkedOnNestedRosterQuestionId, new decimal[0]).Options.Select(x => x.Label).ShouldContainOnly("roster0: roster01", "roster0: roster02", "roster1: roster11", "roster1: roster12");
 
 
         private static InterviewDataAndQuestionnaireMerger merger;

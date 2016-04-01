@@ -37,12 +37,13 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.CommandDeserialization;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Services;
+using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
-
+using WB.UI.Shared.Web.Versions;
 using WebActivatorEx;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
@@ -104,7 +105,11 @@ namespace WB.UI.Designer.App_Start
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
             {
                 ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
-                MappingAssemblies = new List<Assembly> { typeof(DesignerBoundedContextModule).Assembly}
+                MappingAssemblies = new List<Assembly>
+                {
+                    typeof(DesignerBoundedContextModule).Assembly,
+                    typeof(ProductVersionModule).Assembly,
+                }
             };
 
             var kernel = new StandardKernel(
@@ -122,7 +127,8 @@ namespace WB.UI.Designer.App_Start
                 new QuestionnaireVerificationModule(),
                 new MembershipModule(),
                 new MainModule(),
-                new FileInfrastructureModule()
+                new FileInfrastructureModule(),
+                new ProductVersionModule(typeof(MvcApplication).Assembly)
                 );
 
             kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(FilterScope.Controller)

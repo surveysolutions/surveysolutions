@@ -3,7 +3,6 @@ using System.Web.Configuration;
 using Ninject.Modules;
 using WB.Infrastructure.Native.Storage.EventStore;
 using WB.Infrastructure.Native.Storage.Postgre;
-using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Settings;
 
 namespace WB.UI.Shared.Web.Modules
@@ -24,7 +23,6 @@ namespace WB.UI.Shared.Web.Modules
                 eventStoreConnectionSettings.Login = WebConfigurationManager.AppSettings["EventStore.Login"];
                 eventStoreConnectionSettings.Password = WebConfigurationManager.AppSettings["EventStore.Password"];
                 eventStoreConnectionSettings.MaxCountToRead = int.Parse(WebConfigurationManager.AppSettings["EventStore.MaxCountToRead"]);
-                eventStoreConnectionSettings.UseBson = TryParseBool(WebConfigurationManager.AppSettings["EventStore.UseBson"]).GetValueOrDefault();
 
                 return new EventStoreWriteSideModule(eventStoreConnectionSettings);
             }

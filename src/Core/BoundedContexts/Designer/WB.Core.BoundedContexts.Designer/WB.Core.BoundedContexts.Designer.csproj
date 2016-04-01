@@ -98,6 +98,7 @@
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -142,6 +143,8 @@
     <Compile Include="Commands\Account\UnlockAccountCommand.cs" />
     <Compile Include="Commands\Account\UpdateAccountCommand.cs" />
     <Compile Include="Commands\CommandUtils.cs" />
+    <Compile Include="Commands\Questionnaire\Attachments\DeleteAttachment.cs" />
+    <Compile Include="Commands\Questionnaire\Attachments\AddOrUpdateAttachment.cs" />
     <Compile Include="Commands\Questionnaire\Base\AbstractUpdateQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\AbstractQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Base\CommonQuestionParameters.cs" />
@@ -158,42 +161,44 @@
     <Compile Include="Commands\Questionnaire\LookupTables\UpdateLookupTable.cs" />
     <Compile Include="Commands\Questionnaire\Macros\AddMacro.cs" />
     <Compile Include="Commands\Questionnaire\Macros\DeleteMacro.cs" />
-    <Compile Include="Commands\Questionnaire\PasteIntoCommand.cs" />
-    <Compile Include="Commands\Questionnaire\PasteAfterCommand.cs" />
+    <Compile Include="Commands\Questionnaire\PasteInto.cs" />
+    <Compile Include="Commands\Questionnaire\PasteAfter.cs" />
     <Compile Include="Commands\Questionnaire\Macros\UpdateMacro.cs" />
-    <Compile Include="Commands\Questionnaire\CloneQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\AddSharedPersonToQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateDateTimeQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateGpsCoordinatesQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\CloneQuestionnaire.cs" />
+    <Compile Include="Commands\Questionnaire\AddSharedPersonToQuestionnaire.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateDateTimeQuestion.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateGpsCoordinatesQuestion.cs" />
     <Compile Include="Commands\Questionnaire\Question\MigrateExpressionsToCSharp.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateMultimediaQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateMultiOptionQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateCascadingComboboxOptionsCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateFilteredComboboxOptionsCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateSingleOptionQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateQRBarcodeQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateTextListQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\DeleteQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\MoveQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateNumericQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\AddDefaultTypeQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\UpdateTextQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateMultimediaQuestion.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateMultiOptionQuestion.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateCascadingComboboxOptions.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateFilteredComboboxOptions.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateSingleOptionQuestion.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateQRBarcodeQuestion.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateTextListQuestion.cs" />
+    <Compile Include="Commands\Questionnaire\Question\DeleteQuestion.cs" />
+    <Compile Include="Commands\Questionnaire\Question\MoveQuestion.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateNumericQuestion.cs" />
+    <Compile Include="Commands\Questionnaire\Question\AddDefaultTypeQuestion.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateTextQuestion.cs" />
     <Compile Include="Commands\Questionnaire\Question\UpdateValidatableQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\RemoveSharedPersonFromQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\CreateQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\DeleteQuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\AddGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\DeleteGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\MoveGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\UpdateGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
+    <Compile Include="Commands\Questionnaire\RemoveSharedPersonFromQuestionnaire.cs" />
+    <Compile Include="Commands\Questionnaire\CreateQuestionnaire.cs" />
+    <Compile Include="Commands\Questionnaire\DeleteQuestionnaire.cs" />
+    <Compile Include="Commands\Questionnaire\Group\AddGroup.cs" />
+    <Compile Include="Commands\Questionnaire\Group\DeleteGroup.cs" />
+    <Compile Include="Commands\Questionnaire\Group\MoveGroup.cs" />
+    <Compile Include="Commands\Questionnaire\Group\UpdateGroup.cs" />
+    <Compile Include="Commands\Questionnaire\ImportQuestionnaire.cs" />
     <Compile Include="Commands\Questionnaire\Base\QuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\StaticText\DeleteStaticTextCommand.cs" />
-    <Compile Include="Commands\Questionnaire\StaticText\AddStaticTextCommand.cs" />
-    <Compile Include="Commands\Questionnaire\StaticText\MoveStaticTextCommand.cs" />
-    <Compile Include="Commands\Questionnaire\StaticText\UpdateStaticTextCommand.cs" />
-    <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
+    <Compile Include="Commands\Questionnaire\StaticText\DeleteStaticText.cs" />
+    <Compile Include="Commands\Questionnaire\StaticText\AddStaticText.cs" />
+    <Compile Include="Commands\Questionnaire\StaticText\MoveStaticText.cs" />
+    <Compile Include="Commands\Questionnaire\StaticText\UpdateStaticText.cs" />
+    <Compile Include="Commands\Questionnaire\UpdateQuestionnaire.cs" />
     <Compile Include="DispatcherRegistryHelper.cs" />
+    <Compile Include="Events\Questionnaire\Attachments\AttachmentDeleted.cs" />
+    <Compile Include="Events\Questionnaire\Attachments\AttachmentUpdated.cs" />
     <Compile Include="Events\Questionnaire\ExpressionsMigratedToCSharp.cs" />
     <Compile Include="Events\Questionnaire\LookupTables\LookupTableAdded.cs" />
     <Compile Include="Events\Questionnaire\LookupTables\LookupTableDeleted.cs" />
@@ -202,6 +207,12 @@
     <Compile Include="Events\Questionnaire\Macros\MacroDeleted.cs" />
     <Compile Include="Events\Questionnaire\Macros\MacroUpdated.cs" />
     <Compile Include="Events\Questionnaire\MultimediaQuestionUpdated.cs" />
+    <Compile Include="Implementation\Services\AttachmentService\AttachmentContent.cs" />
+    <Compile Include="Implementation\Services\AttachmentService\AttachmentSize.cs" />
+    <Compile Include="Implementation\Services\AttachmentService\AttachmentMeta.cs" />
+    <Compile Include="Implementation\Services\AttachmentService\AttachmentService.cs" />
+    <Compile Include="Implementation\Services\AttachmentService\AttachmentDetails.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\LinkedQuestionFilterExpressionModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\ValidationExpressionModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\InterviewExpressionStateTemplateV6.cs">
       <DependentUpon>InterviewExpressionStateTemplateV6.tt</DependentUpon>
@@ -221,10 +232,33 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\RosterScopeTemplateV6.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V7\Templates\InterviewExpressionStateTemplateV7.cs">
+      <DependentUpon>InterviewExpressionStateTemplateV7.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V7\Templates\InterviewExpressionStateTemplateV7.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V7\Templates\QuestionnaireLevelTemplateV7.cs">
+      <DependentUpon>QuestionnaireLevelTemplateV7.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V7\Templates\QuestionnaireLevelTemplateV7.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V7\Templates\RosterScopeTemplateV7.cs">
+      <DependentUpon>RosterScopeTemplateV7.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V7\Templates\RosterScopeTemplateV7.Extended.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\SharedTemplateV6.cs">
       <DependentUpon>SharedTemplateV6.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V7\Templates\SharedTemplateV7.cs">
+      <DependentUpon>SharedTemplateV7.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Implementation\Services\QuestionnaireDocumentExtensions.cs" />
     <Compile Include="Implementation\Services\QuestionTemplateModelExtensions.cs" />
@@ -324,11 +358,11 @@
       <DependentUpon>SharedTemplateV5.tt</DependentUpon>
     </Compile>
     <Compile Include="Implementation\Services\DesignerEngineVersionService.cs" />
-    <Compile Include="Implementation\Services\JsonSerializerSettingsFactory.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableContent.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableContentFile.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableRow.cs" />
     <Compile Include="Implementation\Services\LookupTableService\LookupTableService.cs" />
+    <Compile Include="Services\IAttachmentService.cs" />
     <Compile Include="Services\ILookupTableService.cs" />
     <Compile Include="Services\IMacrosSubstitutionService.cs" />
     <Compile Include="Implementation\Services\KeywordsProvider.cs" />
@@ -503,6 +537,7 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\TextDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\TextListDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfoFactory.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\AttachmentView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\LookupTableView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\MacroView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoView.cs" />
@@ -608,6 +643,10 @@
       <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>
       <Name>WB.Core.SharedKernels.Questionnaire</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
@@ -630,7 +669,11 @@
       <LastGenOutput>ExpressionMethodTemplate.cs</LastGenOutput>
       <TransformOnBuild>False</TransformOnBuild>
     </None>
-    <Compile Include="Implementation\Services\QuestionnaireVerifierWarnings.cs" />
+    <Compile Include="Implementation\Services\QuestionnaireVerifier.Warnings.cs" />
+    <None Include="Implementation\Services\CodeGeneration\V7\Templates\SharedTemplateV7.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>SharedTemplateV7.cs</LastGenOutput>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -653,7 +696,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ExceptionMessages.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -710,6 +753,18 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>LookupTablesTemplateV5.cs</LastGenOutput>
     </Content>
+    <None Include="Implementation\Services\CodeGeneration\V7\Templates\QuestionnaireLevelTemplateV7.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>QuestionnaireLevelTemplateV7.cs</LastGenOutput>
+    </None>
+    <None Include="Implementation\Services\CodeGeneration\V7\Templates\InterviewExpressionStateTemplateV7.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>InterviewExpressionStateTemplateV7.cs</LastGenOutput>
+    </None>
+    <None Include="Implementation\Services\CodeGeneration\V7\Templates\RosterScopeTemplateV7.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>RosterScopeTemplateV7.cs</LastGenOutput>
+    </None>
     <None Include="Implementation\Services\CodeGeneration\V6\Templates\SharedTemplateV6.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>SharedTemplateV6.cs</LastGenOutput>
@@ -731,6 +786,7 @@
     <Analyzer Include="..\..\..\..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\..\..\..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
   <Import Project="..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

@@ -1,3 +1,4 @@
+
 namespace WB.Core.Infrastructure.PlainStorage
 {
     public interface IPlainKeyValueStorage<TEntity>
@@ -6,6 +7,6 @@ namespace WB.Core.Infrastructure.PlainStorage
 
         void Remove(string id);
 
-        void Store(TEntity view, string id);
+        void Store(TEntity entity, string id);
     }
 }

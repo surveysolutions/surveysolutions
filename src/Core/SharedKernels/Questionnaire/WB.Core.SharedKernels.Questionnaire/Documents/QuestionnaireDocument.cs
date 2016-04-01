@@ -22,6 +22,7 @@ namespace Main.Core.Documents
             this.SharedPersons = new List<Guid>();
             this.Macros = new Dictionary<Guid, Macro>();
             this.LookupTables = new Dictionary<Guid, LookupTable>();
+            this.Attachments = new List<Attachment>();
         }
 
         public string Id { get; set; }
@@ -31,6 +32,8 @@ namespace Main.Core.Documents
         public Dictionary<Guid, Macro> Macros { get; set; }
 
         public Dictionary<Guid, LookupTable> LookupTables { get; set; }
+
+        public List<Attachment> Attachments { get; set; }
 
         public DateTime? CloseDate { get; set; }
 
@@ -505,6 +508,9 @@ namespace Main.Core.Documents
 
             doc.SharedPersons = new List<Guid>();
             this.SharedPersons.ForEach(x => doc.SharedPersons.Add(x));
+
+            doc.Attachments = new List<Attachment>();
+            this.Attachments.ForEach(x => doc.Attachments.Add(x.Clone()));
 
             return doc;
         }

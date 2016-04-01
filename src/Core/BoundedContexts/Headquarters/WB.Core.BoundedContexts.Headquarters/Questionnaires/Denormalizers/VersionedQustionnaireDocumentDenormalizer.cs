@@ -5,9 +5,8 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers
 {
@@ -15,16 +14,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers
         IEventHandler<TemplateImported>,
         IEventHandler<QuestionnaireDeleted>
     {
-        private readonly IQuestionnaireCacheInitializer questionnaireCacheInitializer;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage;
+        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
-        public VersionedQustionnaireDocumentDenormalizer(IQuestionnaireCacheInitializer questionnaireCacheInitializer,
-            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage)
+        public VersionedQustionnaireDocumentDenormalizer(
+            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage, 
+            IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
-            if (questionnaireCacheInitializer == null) throw new ArgumentNullException("questionnaireCacheInitializer");
-
-            this.questionnaireCacheInitializer = questionnaireCacheInitializer;
             this.documentStorage = documentStorage;
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
         }
 
         public override object[] Writers
@@ -34,11 +32,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Denormalizers
 
         public void Handle(IPublishedEvent<TemplateImported> evnt)
         {
-            QuestionnaireDocument document = evnt.Payload.Source.Clone();
+            QuestionnaireDocument document = this.plainQuestionnaireRepository.GetQuestionnaireDocument(evnt.EventSourceId,evnt.Payload.Version.Value).Clone();
             if (document == null)
                 return;
-
-            this.questionnaireCacheInitializer.InitializeQuestionnaireDocumentWithCaches(document);
 
             this.documentStorage.Store(document, this.CreateDocumentId(document.PublicKey, evnt.Payload.Version ?? evnt.EventSequence));
         }

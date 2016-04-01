@@ -14,6 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             StaticTextState = new Dictionary<Guid, string>();
             MacroState = new Dictionary<Guid, string>();
             LookupState = new Dictionary<Guid, string>();
+            AttachmentState = new Dictionary<Guid, string>();
         }
 
         public Dictionary<Guid, string> QuestionsState { get; set; }
@@ -22,6 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public Dictionary<Guid, string> StaticTextState { get; set; }
         public Dictionary<Guid, string> MacroState { get; set; }
         public Dictionary<Guid, string> LookupState { get; set; }
+        public Dictionary<Guid, string> AttachmentState { get; set; }
         public Guid CreatedBy { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 @model WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus.ChangeStatusView
 
 <div class="modal fade" id="statusHistoryModal" tabindex="-1" role="dialog" aria-labelledby="statusHistoryModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -12,9 +12,9 @@
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th style="width: 125px">State</th>
+                            <th style="width: 150px">State</th>
                             <th>with comment</th>
-                            <th style="width: 90px">on</th>
+                            <th style="width: 180px">on</th>
                             <th>by</th>
                         </tr>
                     </thead>
@@ -25,7 +25,7 @@
                             <tr>
                                 <td>@historyItem.Status.ToLocalizeString()</td>
                                 <td>@historyItem.Comment</td>
-                                <td>@historyItem.Date.ToShortDateString()</td>
+                                <td>@historyItem.Date.ToString("s")</td>
                                 <td>@historyItem.Responsible</td>
                             </tr>
                         }

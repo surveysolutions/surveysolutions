@@ -9,7 +9,6 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOptionQuestionViewModelTests
 {
-    [Ignore("temp solution")]
     internal class when_entering_filter_text : FilteredSingleOptionQuestionViewModelTestsContext
     {
         Establish context = () =>

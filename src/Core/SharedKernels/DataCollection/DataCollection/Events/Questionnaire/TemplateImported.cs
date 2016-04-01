@@ -6,6 +6,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 // ReSharper disable once CheckNamespace
 namespace Main.Core.Events.Questionnaire
 {
+    [Obsolete]
     public class TemplateImported : IEvent
     {
         public QuestionnaireDocument Source { get; set; }

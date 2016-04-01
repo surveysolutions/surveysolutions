@@ -1,4 +1,4 @@
-﻿using Main.Core.Documents;
+﻿using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 
 namespace WB.Core.SharedKernel.Structures.Synchronization.Designer
 {

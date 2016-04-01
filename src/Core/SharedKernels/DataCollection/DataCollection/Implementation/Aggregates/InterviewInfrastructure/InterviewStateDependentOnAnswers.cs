@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public class InterviewStateDependentOnAnswers : IReadOnlyInterviewStateDependentOnAnswers
+    public class InterviewStateDependentOnAnswers : IReadOnlyInterviewStateDependentOnAnswers 
     {
         private class AmendingWrapper : IReadOnlyInterviewStateDependentOnAnswers
         {
@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     : this.actualState.GetRosterInstanceIds(groupId, outerRosterVector);
             }
 
-            public IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedSingleOptionAnswers(IQuestionnaire questionnaire) => this.actualState.GetAllLinkedSingleOptionAnswers(questionnaire);
+            public IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedToQuestionSingleOptionAnswers(IQuestionnaire questionnaire) => this.actualState.GetAllLinkedToQuestionSingleOptionAnswers(questionnaire);
             public IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedMultipleOptionsAnswers(IQuestionnaire questionnaire) => this.actualState.GetAllLinkedMultipleOptionsAnswers(questionnaire);
             public IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedToRosterSingleOptionAnswers(IQuestionnaire questionnaire)=> this.actualState.GetAllLinkedToRosterSingleOptionAnswers(questionnaire);
             public IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedToRosterMultipleOptionsAnswers(IQuestionnaire questionnaire)=>this.actualState.GetAllLinkedToRosterMultipleOptionsAnswers(questionnaire);
@@ -55,6 +55,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.AnswersSupportedInExpressions = new ConcurrentDictionary<string, object>();
             this.LinkedSingleOptionAnswersBuggy = new ConcurrentDictionary<string, Tuple<Identity, RosterVector>>();
             this.LinkedMultipleOptionsAnswers = new ConcurrentDictionary<string, Tuple<Identity, RosterVector[]>>();
+            this.LinkedQuestionOptions=new ConcurrentDictionary<Identity, RosterVector[]>();
             this.TextListAnswers = new ConcurrentDictionary<string, Tuple<decimal, string>[]>();
 
             this.AnsweredQuestions = new ConcurrentHashSet<string>();
@@ -70,6 +71,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public ConcurrentDictionary<string, object> AnswersSupportedInExpressions { set; get; }
         public ConcurrentDictionary<string, Tuple<Identity, RosterVector>> LinkedSingleOptionAnswersBuggy { set; get; }
         public ConcurrentDictionary<string, Tuple<Identity, RosterVector[]>> LinkedMultipleOptionsAnswers { set; get; }
+        public ConcurrentDictionary<Identity, RosterVector[]> LinkedQuestionOptions { set; get; }
         public ConcurrentDictionary<string, Tuple<decimal, string>[]> TextListAnswers { set; get; }
         public ConcurrentHashSet<string> AnsweredQuestions { set; get; }
         public ConcurrentHashSet<string> DisabledGroups { set; get; }
@@ -79,6 +81,27 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public ConcurrentHashSet<string> ValidAnsweredQuestions { set; get; }
         public ConcurrentHashSet<string> InvalidAnsweredQuestions { set; get; }
         public ConcurrentBag<AnswerComment> AnswerComments { get; set; }
+
+        public InterviewStateDependentOnAnswers Clone()
+        {
+            return new InterviewStateDependentOnAnswers()
+            {
+                AnswersSupportedInExpressions = this.AnswersSupportedInExpressions.ToConcurrentDictionary(x=>x.Key,x=>x.Value),
+                LinkedSingleOptionAnswersBuggy = this.LinkedSingleOptionAnswersBuggy.ToConcurrentDictionary(x => x.Key, x =>new Tuple<Identity, RosterVector>(x.Value.Item1, x.Value.Item2)),
+                LinkedMultipleOptionsAnswers = this.LinkedMultipleOptionsAnswers.ToConcurrentDictionary(x => x.Key, x => new Tuple<Identity, RosterVector[]>(x.Value.Item1, x.Value.Item2.ToArray())),
+                LinkedQuestionOptions = this.LinkedQuestionOptions.ToConcurrentDictionary(x => x.Key, x => x.Value.ToArray()),
+                TextListAnswers = this.TextListAnswers.ToConcurrentDictionary(x => x.Key, x => x.Value.Select(l=> new Tuple<decimal, string>(l.Item1, l.Item2)).ToArray()),
+
+                AnsweredQuestions = new ConcurrentHashSet<string>(this.AnsweredQuestions),
+                DisabledGroups = new ConcurrentHashSet<string>(this.DisabledGroups),
+                DisabledQuestions = new ConcurrentHashSet<string>(this.DisabledQuestions),
+                RosterGroupInstanceIds = this.RosterGroupInstanceIds.ToConcurrentDictionary(x => x.Key, x => new ConcurrentDistinctList<decimal>(x.Value)),
+                ValidAnsweredQuestions = new ConcurrentHashSet<string>(this.ValidAnsweredQuestions),
+                InvalidAnsweredQuestions = new ConcurrentHashSet<string>(this.InvalidAnsweredQuestions),
+                AnswerComments = new ConcurrentBag<AnswerComment>(this.AnswerComments),
+                RosterTitles = this.RosterTitles.ToConcurrentDictionary(x => x.Key, x => x.Value)
+            };
+        }
 
         public void ApplyInterviewChanges(InterviewChanges changes)
         {
@@ -109,6 +132,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                 new RosterInstance(r.GroupId, r.OuterRosterVector, r.RosterInstanceId),
                                 changes.AnswerAsRosterTitle)).ToArray());
             }
+            if (changes.LinkedQuestionOptionsChanges != null)
+            {
+                ApplyLinkedOptionQuestionChanges(changes.LinkedQuestionOptionsChanges);
+            }
         }
 
         public void ApplyRosterData(RosterCalculationData rosterCalculationData)
@@ -121,6 +148,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     .ToArray();
 
                 this.AddRosterInstances(instances);
+
+                var changedRosterTitles =
+                    rosterCalculationData.RosterInstancesToAdd.Select(
+                        i =>
+                            new ChangedRosterInstanceTitleDto(
+                                new RosterInstance(i.GroupId, i.OuterRosterVector, i.RosterInstanceId),
+                                rosterCalculationData.GetRosterInstanceTitle(i.GroupId, i.RosterInstanceId))).ToArray();
+
+                ChangeRosterTitles(changedRosterTitles);
             }
 
             if (rosterCalculationData.RosterInstancesToRemove.Any())
@@ -138,6 +174,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.RemoveAnswers(rosterCalculationData.AnswersToRemoveByDecreasedRosterSize);
             }
             rosterCalculationData.RosterInstantiatesFromNestedLevels.ForEach(this.ApplyRosterData);
+        }
+
+        public void ApplyLinkedOptionQuestionChanges(ChangedLinkedOptions[] linkedQuestionOptionsChanges)
+        {
+            foreach (var linkedQuestionOptionsChange in linkedQuestionOptionsChanges)
+            {
+                var newLinkedQuestionOptions = linkedQuestionOptionsChange.Options.ToArray();
+
+                this.LinkedQuestionOptions.AddOrUpdate(linkedQuestionOptionsChange.QuestionId, linkedQuestionOptionsChange.Options.ToArray(), (k, v) => newLinkedQuestionOptions);
+            }
         }
 
         public void ApplyEnablementChanges(EnablementChanges enablementChanges)
@@ -319,21 +365,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : null;
         }
 
-        public IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedSingleOptionAnswers(IQuestionnaire questionnaire)
+        public IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedToQuestionSingleOptionAnswers(IQuestionnaire questionnaire)
         {
             // we currently have a bug that after restore linked single option answers list is filled with not linked answers after sync
             return this.LinkedSingleOptionAnswersBuggy.Values.Where(answer => questionnaire.IsQuestionLinked(answer.Item1.Id) && !questionnaire.IsQuestionLinkedToRoster(answer.Item1.Id));
-        }
-
-        public IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedMultipleOptionsAnswers(IQuestionnaire questionnaire)
-        {
-            return this.LinkedMultipleOptionsAnswers.Values.Where(answer => !questionnaire.IsQuestionLinkedToRoster(answer.Item1.Id));
         }
 
         public IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedToRosterSingleOptionAnswers(
             IQuestionnaire questionnaire)
         {
             return this.LinkedSingleOptionAnswersBuggy.Values.Where(answer => questionnaire.IsQuestionLinkedToRoster(answer.Item1.Id));
+        }
+
+        public IEnumerable<Tuple<Identity, RosterVector>> GetAllAnswersOnSingleOptionLinkedQuestions(IQuestionnaire questionnaire)
+        {
+            return this.LinkedSingleOptionAnswersBuggy.Values.Where(answer => questionnaire.IsQuestionLinked(answer.Item1.Id) || questionnaire.IsQuestionLinkedToRoster(answer.Item1.Id));
+        }
+
+        public IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedMultipleOptionsAnswers(IQuestionnaire questionnaire)
+        {
+            return this.LinkedMultipleOptionsAnswers.Values.Where(answer => !questionnaire.IsQuestionLinkedToRoster(answer.Item1.Id));
         }
 
         public IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedToRosterMultipleOptionsAnswers(IQuestionnaire questionnaire)

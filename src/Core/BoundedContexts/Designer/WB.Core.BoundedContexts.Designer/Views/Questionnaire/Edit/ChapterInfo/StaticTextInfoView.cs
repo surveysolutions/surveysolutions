@@ -6,5 +6,6 @@
         public ChapterItemType ItemType { get { return ChapterItemType.StaticText; }}
 
         public string Text { get; set; }
+        public string AttachmentName { get; set; }
     }
 }

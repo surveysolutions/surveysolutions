@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.InterviewId);
             Property(x => x.QuestionnaireId);
             Property(x => x.QuestionnaireVersion);
-            Property(x => x.ResponsibleId);
+            Property(x => x.ResponsibleId, pm => pm.Column(cm => cm.Index("InterviewSummaries_ResponsibleId")));
             Property(x => x.Status);
             Property(x => x.IsDeleted);
             Property(x => x.HasErrors);
@@ -39,7 +39,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
                     });
                     collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
                     collection.Inverse(true);
-                    collection.Lazy(CollectionLazy.NoLazy);
                 },
                 rel => { 
                     rel.OneToMany();
@@ -55,7 +54,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Table("AnswersToFeaturedQuestions");
             Property(x => x.Questionid, clm => clm.Column("QuestionId"));
             Property(x => x.Title, col => col.Column("AnswerTitle"));
-            Property(x => x.Answer, col => col.Column("AnswerValue"));
+            Property(x => x.Answer, col =>
+            {
+                col.Column("AnswerValue");
+            });
             ManyToOne(x => x.InterviewSummary, mtm => {
                 mtm.Column("InterviewSummaryId");
                 mtm.Index("InterviewSummaries_QuestionAnswers"); });

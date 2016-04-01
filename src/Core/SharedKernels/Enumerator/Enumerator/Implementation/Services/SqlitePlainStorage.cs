@@ -14,22 +14,25 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    public class SqlitePlainStorage<TEntity> : IAsyncPlainStorage<TEntity> where TEntity: class, IPlainStorageEntity
+    public class SqlitePlainStorage<TEntity> : IAsyncPlainStorage<TEntity>, IAsyncPlainStorageRemover<TEntity>
+        where TEntity: class, IPlainStorageEntity
     {
-        private readonly SQLiteAsyncConnection asyncStorage;
-        private readonly SQLiteConnectionWithLock storage;
+        protected readonly SQLiteAsyncConnection asyncStorage;
+        protected readonly SQLiteConnectionWithLock storage;
         private readonly ILogger logger;
 
-        public SqlitePlainStorage(ISQLitePlatform sqLitePlatform, ILogger logger,
-            IAsynchronousFileSystemAccessor fileSystemAccessor, ISerializer serializer,
+        public SqlitePlainStorage(ISQLitePlatform sqLitePlatform, 
+            ILogger logger,
+            IAsynchronousFileSystemAccessor fileSystemAccessor, 
+            ISerializer serializer,
             SqliteSettings settings)
         {
             var entityName = typeof(TEntity).Name;
             var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, entityName + "-data.sqlite3");
             this.storage = new SQLiteConnectionWithLock(sqLitePlatform,
                 new SQLiteConnectionString(pathToDatabase, true, new BlobSerializerDelegate(
-                    serializer.SerializeToByteArray,
-                    (data, type) => serializer.DeserializeFromStream(new MemoryStream(data), type),
+                    (data) => serializer.SerializeToByteArray(data, TypeSerializationSettings.AllTypes),
+                    (data, type) => serializer.DeserializeFromStream(new MemoryStream(data), type, TypeSerializationSettings.AllTypes),
                     (type) => true)))
             {
                 TraceListener = new MvxTraceListener($"{entityName}-SQL-Queries")
@@ -40,10 +43,25 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.storage.CreateIndex<TEntity>(entity => entity.Id);
         }
 
+        public SqlitePlainStorage(SQLiteConnectionWithLock storage, ILogger logger)
+        {
+            this.storage = storage;
+            this.logger = logger;
+            this.storage.CreateTable<TEntity>();
+            this.asyncStorage = new SQLiteAsyncConnection(() => this.storage);
+        }
+
         public virtual TEntity GetById(string id)
         {
             TEntity entity = null;
             this.storage.RunInTransaction(() => entity = this.storage.Find<TEntity>(x => x.Id == id));
+            return entity;
+        }
+
+        public virtual async Task<TEntity> GetByIdAsync(string id)
+        {
+            TEntity entity = null;
+            await this.asyncStorage.RunInTransactionAsync(connection => entity = connection.Find<TEntity>(x => x.Id == id));
             return entity;
         }
 
@@ -119,6 +137,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public IReadOnlyCollection<TEntity> LoadAll() => this.RunInTransaction(table => table.ToReadOnlyCollection());
 
+        public async Task<IReadOnlyCollection<TEntity>> LoadAllAsync() 
+            => await this.RunInTransactionAsync(table => table.ToReadOnlyCollection());
+        
         private TResult RunInTransaction<TResult>(Func<TableQuery<TEntity>, TResult> function)
         {
             TResult result = default(TResult);
@@ -131,6 +152,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             TResult result = default(TResult);
             await this.asyncStorage.RunInTransactionAsync(connection => result = function.Invoke(connection.Table<TEntity>()));
             return result;
+        }
+
+        public async Task DeleteAllAsync()
+        {
+            await this.asyncStorage.DeleteAllAsync<TEntity>();
         }
 
         public void Dispose()

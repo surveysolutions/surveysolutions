@@ -9,10 +9,13 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using It = Moq.It;
@@ -32,13 +35,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.T
             fileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
             return new TabularDataToExternalStatPackageExportService(
                 fileSystemAccessor,
-                Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(_ => _.GetById(
-                    It.IsAny<string>()) == questionnaireExportStructure),
                 Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 Mock.Of<ILogger>(),
                 tabFileReader ?? Mock.Of<ITabFileReader>(),
                 dataQueryFactory ?? Mock.Of< IDataQueryFactory> (),
-                datasetWriterFactory ?? Mock.Of<IDatasetWriterFactory>(), new QuestionnaireLabelFactory());
+                datasetWriterFactory ?? Mock.Of<IDatasetWriterFactory>(), new QuestionnaireLabelFactory(),
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireExportStructure>>(
+                    _ =>
+                        _.GetById(Moq.It.IsAny<string>()) == questionnaireExportStructure));
         }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)

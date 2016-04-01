@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Web.Compilation;
@@ -9,6 +10,8 @@ using Elmah;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Versions;
+using WB.Core.SharedKernels.SurveyManagement.Web;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
 using WB.UI.Shared.Web.DataAnnotations;
@@ -44,6 +47,9 @@ namespace WB.UI.Supervisor
 
         private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<MvcApplication>();
         private readonly IHealthCheckService healthCheckService = ServiceLocator.Current.GetInstance<IHealthCheckService>();
+        private readonly IProductVersionHistory productVersionHistory = ServiceLocator.Current.GetInstance<IProductVersionHistory>();
+
+        private static string ProductVersion => ServiceLocator.Current.GetInstance<IProductVersion>().ToString();
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
@@ -85,7 +91,9 @@ namespace WB.UI.Supervisor
 
         protected void Application_Start()
         {
-            this.logger.Info("Starting application.");
+            this.logger.Info($"Starting Supervisor {ProductVersion}");
+            this.productVersionHistory.RegisterCurrentVersion();
+
             MvcHandler.DisableMvcResponseHeader = true;
 
             AppDomain current = AppDomain.CurrentDomain;

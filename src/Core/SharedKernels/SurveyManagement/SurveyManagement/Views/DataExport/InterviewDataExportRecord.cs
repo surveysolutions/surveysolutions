@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
@@ -31,6 +32,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
         public virtual string[] SystemVariableValues { set; get; }
         public virtual string[] Answers { get; set; }
 
-        public virtual IList<ExportedQuestion> GetQuestions() => this.Answers.Select(x => new ExportedQuestion {Answers = x.Split('\n')}).ToList();
+        public virtual IList<ExportedQuestion> GetQuestions() =>
+            this.Answers
+            .Select(x =>new ExportedQuestion{Answers = x.Split(ExportFileSettings.NotReadableAnswersSeparator)})
+            .ToList();
     }
 }

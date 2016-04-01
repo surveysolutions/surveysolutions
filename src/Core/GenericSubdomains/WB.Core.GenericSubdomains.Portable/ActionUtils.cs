@@ -22,7 +22,7 @@ namespace WB.Core.GenericSubdomains.Utils
         {
             var exceptions = new List<Exception>();
 
-            foreach (var action in actions)
+            foreach (Action action in actions)
             {
                 try
                 {

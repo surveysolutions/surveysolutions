@@ -4,12 +4,12 @@ using Machine.Specifications;
 using System.Collections.Generic;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable;
 
 using datacollectionalias = datacollection::Main.Core.Events.Questionnaire;
 using System;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
 {
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
         };
 
         Because of = () =>
-            data.ForEach(x => result.Add(_jsonSerializer.Deserialize(x.Item2, eventTypeResolver.ResolveType(x.Item1.ToPascalCase()), TypeSerializationSettings.Event)));
+            data.ForEach(x => result.Add(_jsonSerializer.Deserialize(x.Item2, eventTypeResolver.ResolveType(x.Item1.ToPascalCase()), TypeSerializationSettings.Auto)));
 
         It should_return_not_null_result = () =>
             result.Count.ShouldEqual(2);

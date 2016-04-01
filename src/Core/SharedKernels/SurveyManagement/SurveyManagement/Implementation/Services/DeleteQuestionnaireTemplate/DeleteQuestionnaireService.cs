@@ -6,16 +6,14 @@ using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
-using WB.Infrastructure.Native;
 using WB.Infrastructure.Native.Threading;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQuestionnaireTemplate
@@ -23,9 +21,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
     internal class DeleteQuestionnaireService : IDeleteQuestionnaireService
     {
         private readonly Func<IInterviewsToDeleteFactory> interviewsToDeleteFactory;
-        private readonly IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaireBrowseItemReader;
+        private IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
         private readonly ICommandService commandService;
-        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly ILogger logger;
 
         private static readonly object DeleteInProcessLockObject = new object();
@@ -33,22 +30,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
 
         public DeleteQuestionnaireService(Func<IInterviewsToDeleteFactory> interviewsToDeleteFactory, 
             ICommandService commandService,
-            ILogger logger, 
-            IReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaireBrowseItemReader, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository)
+            ILogger logger)
         {
             this.interviewsToDeleteFactory = interviewsToDeleteFactory;
             this.commandService = commandService;
             this.logger = logger;
-            this.questionnaireBrowseItemReader = questionnaireBrowseItemReader;
-            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
         }
 
         public Task DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? userId)
         {
-            ITransactionManager cqrsTransactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
-            var questionnaire = cqrsTransactionManager.ExecuteInQueryTransaction(() => 
-                questionnaireBrowseItemReader.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion));
+            var questionnaire =
+                questionnaireBrowseItemReader.GetById(new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString());
 
             if (questionnaire != null)
             {
@@ -56,8 +48,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
                 {
                     this.commandService.Execute(new DisableQuestionnaire(questionnaireId, questionnaireVersion,
                         userId));
-
-                    this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(questionnaireId, questionnaireVersion);
                 }
             }
 
@@ -91,8 +81,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
             {
                 DeleteInterviews(questionnaireId, questionnaireVersion, userId);
 
-                this.commandService.Execute(new DeleteQuestionnaire(questionnaireId, questionnaireVersion,
-                    userId));
+
+                IPlainTransactionManager plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
+                plainTransactionManager.ExecuteInPlainTransaction(() =>
+                    this.commandService.Execute(new DeleteQuestionnaire(questionnaireId, questionnaireVersion,
+                        userId)));
             }
             catch (Exception e)
             {

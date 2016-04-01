@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Machine.Specifications;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
@@ -54,6 +55,10 @@ namespace WB.Tests.Integration
             stat.RejectedBySupervisorCount.ShouldEqual(rejectedBySupervisorCount);
             stat.ApprovedByHeadquartersCount.ShouldEqual(approvedByHeadquartersCount);
             stat.RejectedByHeadquartersCount.ShouldEqual(rejectedByHeadquartersCount);
+        }
+        public static void ShouldContainEvents<TEvent>(this EventContext eventContext, int count)
+        {
+            eventContext.Events.Count(e => e.Payload is TEvent).ShouldEqual(count);
         }
     }
 }

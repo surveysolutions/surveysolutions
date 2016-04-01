@@ -22,15 +22,18 @@ using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -40,6 +43,11 @@ using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.SharedKernels.SurveyManagement.Commands;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Integration
 {
@@ -192,10 +200,56 @@ namespace WB.Tests.Integration
                 return new RosterInstancesAdded(rosterInstances);
             }
 
+            public static RosterInstancesAdded RosterInstancesAdded(Guid? rosterGroupId = null,
+                decimal[] rosterVector = null,
+                decimal? rosterInstanceId = null,
+                int? sortIndex = null)
+            {
+                return new RosterInstancesAdded(new[]
+                {
+                    new AddedRosterInstance(rosterGroupId ?? Guid.NewGuid(), rosterVector ?? new decimal[0], rosterInstanceId ?? 0.0m, sortIndex)
+                });
+            }
+
             public static RosterInstancesRemoved RosterInstancesRemoved(params RosterInstance[] rosterInstances)
             {
                 return new RosterInstancesRemoved(rosterInstances);
             }
+        }
+
+        public static Group NumericRoster(Guid? rosterId, string variable, Guid? rosterSizeQuestionId, params IComposite[] children)
+        {
+            Group group = Create.Group(
+                id: rosterId,
+                title: "Roster X",
+                variable: variable,
+                children: children);
+
+            group.IsRoster = true;
+            group.RosterSizeSource = RosterSizeSourceType.Question;
+            group.RosterSizeQuestionId = rosterSizeQuestionId;
+            return group;
+        }
+
+        public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null,
+            Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title = null, bool hideIfDisabled = false, string linkedFilterExpression = null,
+            Guid? linkedToRosterId = null)
+        {
+            return new SingleQuestion
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                StataExportCaption = variable ?? "single_option_question",
+                QuestionText = title ?? "SO Question",
+                ConditionExpression = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
+                ValidationExpression = validationExpression,
+                QuestionType = QuestionType.SingleOption,
+                LinkedToQuestionId = linkedToQuestionId,
+                LinkedToRosterId = linkedToRosterId,
+                CascadeFromQuestionId = cascadeFromQuestionId,
+                Answers = (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Answer(a.ToString(), a)).ToList(),
+                LinkedFilterExpression = linkedFilterExpression
+            };
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
@@ -227,7 +281,7 @@ namespace WB.Tests.Integration
         }
 
         public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null, 
-            IEnumerable<Answer> answers = null, Guid? linkedToQuestionId = null, string variable = null)
+            IEnumerable<Answer> answers = null, Guid? linkedToQuestionId = null, string variable = null, Guid? linkedToRosterId=null, bool yesNo = false)
         {
             return new MultyOptionsQuestion
             {
@@ -235,7 +289,9 @@ namespace WB.Tests.Integration
                 PublicKey = id ?? Guid.NewGuid(),
                 Answers = linkedToQuestionId.HasValue ? null : new List<Answer>(answers ?? new Answer[] {}),
                 LinkedToQuestionId = linkedToQuestionId,
-                StataExportCaption = variable
+                StataExportCaption = variable,
+                LinkedToRosterId = linkedToRosterId,
+                YesNoView = yesNo
             };
         }
 
@@ -294,7 +350,7 @@ namespace WB.Tests.Integration
         }
 
         public static SingleQuestion SingleQuestion(Guid? id = null, string variable = null, string enablementCondition = null, 
-            string validationExpression = null, Guid? cascadeFromQuestionId = null, List<Answer> options = null)
+            string validationExpression = null, Guid? cascadeFromQuestionId = null, List<Answer> options = null, Guid? linkedToQuestionId = null, Guid? linkedToRosterId=null)
         {
             return new SingleQuestion
             {
@@ -304,7 +360,9 @@ namespace WB.Tests.Integration
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 Answers = options ?? new List<Answer>(),
-                CascadeFromQuestionId = cascadeFromQuestionId
+                CascadeFromQuestionId = cascadeFromQuestionId,
+                LinkedToQuestionId = linkedToQuestionId,
+                LinkedToRosterId = linkedToRosterId
             };
         }
 
@@ -409,7 +467,10 @@ namespace WB.Tests.Integration
         {
             var questionnaire = new Questionnaire(
                 Mock.Of<IPlainQuestionnaireRepository>(),
-                Mock.Of<IQuestionnaireAssemblyFileAccessor>());
+                Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
+                new ReferenceInfoForLinkedQuestionsFactory(), 
+                new QuestionnaireRosterStructureFactory(),
+                Mock.Of<IExportViewFactory>());
 
             questionnaire.ImportFromDesigner(new ImportFromDesigner(Guid.NewGuid(), questionnaireDocument, false, "base64 string of assembly", 1));
 
@@ -420,6 +481,25 @@ namespace WB.Tests.Integration
             IPlainQuestionnaireRepository questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
             var interview = new Interview(
+                Mock.Of<ILogger>(),
+                questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>());
+
+            interview.CreateInterview(
+                questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
+                1,
+                new Guid("D222D222D222D222D222D222D222D222"),
+                new Dictionary<Guid, object>(),
+                new DateTime(2012, 12, 20),
+                new Guid("F111F111F111F111F111F111F111F111"));
+
+            return interview;
+        }
+
+        public static StatefulInterview StatefulInterview(Guid? questionnaireId = null,
+            IPlainQuestionnaireRepository questionnaireRepository = null, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
+        {
+            var interview = new StatefulInterview(
                 Mock.Of<ILogger>(),
                 questionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>());
@@ -586,6 +666,19 @@ namespace WB.Tests.Integration
                 postgreConnectionSettings ?? new PostgreConnectionSettings(),
                 Mock.Of<ILogger>(),
                 serializer ?? new NewtonJsonSerializer(new JsonSerializerSettingsFactory()));
+        }
+
+        public static class Command
+        {
+            public static AnswerYesNoQuestion AnswerYesNoQuestion(Guid questionId, RosterVector rosterVector, params AnsweredYesNoOption[] answers)
+            {
+                return new AnswerYesNoQuestion(Guid.NewGuid(), Guid.NewGuid(), questionId, rosterVector, DateTime.Now, answers);
+            }
+        }
+
+        public static AnsweredYesNoOption AnsweredYesNoOption(decimal optionValue, bool yes)
+        {
+            return new AnsweredYesNoOption(optionValue, yes);
         }
     }
 }

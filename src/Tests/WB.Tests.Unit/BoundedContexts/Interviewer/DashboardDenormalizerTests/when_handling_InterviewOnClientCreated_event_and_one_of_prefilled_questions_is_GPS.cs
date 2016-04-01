@@ -26,16 +26,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                 .ToPublishedEvent(
                     eventSourceId: interviewId);
 
-            QuestionnaireDocumentVersioned versionedQuestionnaire = Create.QuestionnaireDocumentVersioned(
-                questionnaireDocument:
+            var questionnaire = 
                     Create.QuestionnaireDocumentWithOneChapter(
-                        Create.GpsCoordinateQuestion(questionId: prefilledGpsQuestionId, isPrefilled: true)),
-                version: 1);
+                        Create.GpsCoordinateQuestion(questionId: prefilledGpsQuestionId, isPrefilled: true));
 
             var questionnaireId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa$33";
             IPlainQuestionnaireRepository plainQuestionnaireRepository =
                 Mock.Of<IPlainQuestionnaireRepository>(storage
-                    => storage.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(questionnaireId)) == versionedQuestionnaire.Questionnaire);
+                    => storage.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(questionnaireId)) == questionnaire);
 
             var storeAsyncTask = new Task(() => { });
             storeAsyncTask.Start();

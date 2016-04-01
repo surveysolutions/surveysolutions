@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using Main.DenormalizerStorage;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -22,7 +16,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IReadSideRepositoryWriter<UserDocument> userReader;
-        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader;
+
+        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
         private readonly IEventStore eventStore;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly ILogger logger;
@@ -31,15 +26,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
             IEventStore eventStore, 
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
             IReadSideRepositoryWriter<UserDocument> userReader,
-            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader, 
-            ILogger logger, InterviewDataExportSettings interviewDataExportSettings)
+            ILogger logger, InterviewDataExportSettings interviewDataExportSettings, 
+            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
         {
             this.eventStore = eventStore;
             this.interviewSummaryReader = interviewSummaryReader;
             this.userReader = userReader;
-            this.questionnaireReader = questionnaireReader;
             this.logger = logger;
             this.interviewDataExportSettings = interviewDataExportSettings;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
 
         public InterviewHistoryView Load(Guid interviewId)
@@ -51,7 +46,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
         {
             var interviewHistoryReader = new InMemoryReadSideRepositoryAccessor<InterviewHistoryView>();
             var interviewHistoryDenormalizer =
-                new InterviewParaDataEventHandler(interviewHistoryReader, interviewSummaryReader, userReader, questionnaireReader, interviewDataExportSettings);
+                new InterviewParaDataEventHandler(interviewHistoryReader, interviewSummaryReader, userReader, interviewDataExportSettings, questionnaireExportStructureStorage);
 
             var events = this.eventStore.ReadFrom(interviewId, 0, int.MaxValue);
             foreach (var @event in events)

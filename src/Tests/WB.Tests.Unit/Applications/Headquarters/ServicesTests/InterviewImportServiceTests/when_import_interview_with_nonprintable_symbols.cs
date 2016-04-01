@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
     {
         private Establish context = () =>
         {
-            var questionnaireRepository = Setup.QuestionnaireReadSideKeyValueStorage(
+            var questionnaireDocument=
                 Create.QuestionnaireDocumentWithOneChapter(
                     Create.NumericQuestion(questionId: Guid.Parse("33333333333333333333333333333333"), variableName: "EANo", prefilled: true, isInteger: true),
                     Create.NumericQuestion(questionId: Guid.Parse("44444444444444444444444444444444"), variableName: "MapRefNo", prefilled: true, isInteger: true),
@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                     Create.TextQuestion(questionId: Guid.Parse("77777777777777777777777777777777"), variable: "LocalMunic", preFilled: true),
                     Create.TextQuestion(questionId: Guid.Parse("88888888888888888888888888888888"), variable: "MainPlace", preFilled: true),
                     Create.TextQuestion(questionId: Guid.Parse("99999999999999999999999999999999"), variable: "SubPlace", preFilled: true),
-                    Create.GpsCoordinateQuestion(questionId: Guid.Parse("10101010101010101010101010101010"), variable: "LongLat", isPrefilled: true)));
+                    Create.GpsCoordinateQuestion(questionId: Guid.Parse("10101010101010101010101010101010"), variable: "LongLat", isPrefilled: true));
             
             var mockOfPreloadedDataRepository = new Mock<IPreloadedDataRepository>();
             mockOfPreloadedDataRepository.Setup(x => x.GetBytesOfSampleData(Moq.It.IsAny<string>())).Returns(csvBytes);
@@ -56,11 +56,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                     });
 
             interviewImportService =
-                CreateInterviewImportService(questionnaireDocumentRepository: questionnaireRepository,
+                CreateInterviewImportService(
                     sampleImportSettings: new SampleImportSettings(1),
                     commandService: mockOfCommandService.Object,
                     preloadedDataRepository: mockOfPreloadedDataRepository.Object,
-                    interviewImportDataParsingService: mockOfSamplePreloadingDataParsingService.Object);
+                    interviewImportDataParsingService: mockOfSamplePreloadingDataParsingService.Object, 
+                    questionnaireDocument: questionnaireDocument);
         };
 
         Because of = () => exception = Catch.Exception(() =>

@@ -1,8 +1,10 @@
 ﻿using System;
+using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.Events.Sync;
 
@@ -32,7 +34,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<InterviewDeclaredInvalid>,
         IEventHandler<QuestionnaireAssemblyImported>,
         IEventHandler<TabletRegistered>,
-        IEventHandler<SubstitutionTitlesChanged>
+        IEventHandler<SubstitutionTitlesChanged>,
+        IEventHandler<TemplateImported>, 
+        IEventHandler<QuestionnaireDisabled>, 
+        IEventHandler<QuestionnaireDeleted>, 
+        IEventHandler<PlainQuestionnaireRegistered>
     {
         public void Handle(IPublishedEvent<AnswersDeclaredValid> evnt) { }
 
@@ -92,5 +98,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<QuestionnaireAssemblyImported> evnt){}
         public void Handle(IPublishedEvent<TabletRegistered> evnt){}
         public void Handle(IPublishedEvent<SubstitutionTitlesChanged> evnt){}
+
+        public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
+        {
+        }
+
+        public void Handle(IPublishedEvent<TemplateImported> evnt)
+        {
+        }
+
+        public void Handle(IPublishedEvent<QuestionnaireDisabled> evnt)
+        {
+        }
+
+        public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
+        {
+        }
     }
 }

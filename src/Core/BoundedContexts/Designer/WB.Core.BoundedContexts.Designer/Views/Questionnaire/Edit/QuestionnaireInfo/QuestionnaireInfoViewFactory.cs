@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
@@ -16,16 +17,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         private readonly IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersons;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
         private readonly IReadSideRepositoryReader<AccountDocument> accountsDocumentReader;
+        private readonly IAttachmentService attachmentService;
 
         public QuestionnaireInfoViewFactory(IReadSideKeyValueStorage<QuestionnaireInfoView> questionnaireStorage,
             IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersons,
             IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
-            IReadSideRepositoryReader<AccountDocument> accountsDocumentReader)
+            IReadSideRepositoryReader<AccountDocument> accountsDocumentReader,
+            IAttachmentService attachmentService)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.sharedPersons = sharedPersons;
             this.questionnaireDocumentReader = questionnaireDocumentReader;
             this.accountsDocumentReader = accountsDocumentReader;
+            this.attachmentService = attachmentService;
         }
 
         public QuestionnaireInfoView Load(string questionnaireId, Guid personId)
@@ -99,9 +103,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
             questionnaireInfoView.LookupTables = questionnaireDocument
                 .LookupTables
-                .Select(
-                    x =>
-                        new LookupTableView
+                .Select(x => new LookupTableView
                         {
                             ItemId = x.Key.FormatGuid(),
                             Name = x.Value.TableName ?? "",
@@ -109,6 +111,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                         })
                 .OrderBy(x => x.Name)
                 .ToList();
+
+            
+            var attachments = this.attachmentService.GetAttachmentsByQuestionnaire(questionnaireDocument.PublicKey);
+
+            questionnaireInfoView.Attachments = questionnaireDocument.Attachments
+                .Select(attachmentIdentity => new AttachmentView
+                {
+                    AttachmentId = attachmentIdentity.AttachmentId.FormatGuid(),
+                    Name = attachmentIdentity.Name,
+                    Content = this.attachmentService.GetContentDetails(attachmentIdentity.ContentId),
+                    Meta = attachments.FirstOrDefault(x => x.AttachmentId == attachmentIdentity.AttachmentId)
+                })
+                .ToList();
+
             return questionnaireInfoView;
         }
     }
