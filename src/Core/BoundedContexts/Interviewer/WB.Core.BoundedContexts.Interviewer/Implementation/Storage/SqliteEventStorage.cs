@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Ncqrs.Eventing;
@@ -191,7 +192,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             {
                 var oldCapiAssemblyName = "WB.UI.Capi";
                 var newCapiAssemblyName = "WB.Core.BoundedContexts.Interviewer";
-
+                var newQuestionsAssemblyName = "WB.Core.SharedKernels.Questionnaire";
                 var oldMainCoreAssemblyName = "Main.Core";
 
                 if (String.Equals(assemblyName, oldCapiAssemblyName, StringComparison.Ordinal) )
@@ -202,6 +203,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 {
                     if (oldMainCoreTypeMap.ContainsKey(typeName))
                         assemblyName = oldMainCoreTypeMap[typeName];
+                    else
+                        assemblyName = newQuestionsAssemblyName;
                 }
 
                 return base.BindToType(assemblyName, typeName);
