@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -28,12 +29,15 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
 
             eventStore = new Mock<IInterviewerEventStorage>();
 
-            inMemoryMultimediaViewRepository = new TestAsyncPlainStorage<InterviewMultimediaView>(interviewMultimediaViews);
+            inMemoryMultimediaViewRepository = new SqliteInmemoryStorage<InterviewMultimediaView>();
+            inMemoryMultimediaViewRepository.StoreAsync(interviewMultimediaViews).WaitAndUnwrapException();
 
-            inMemoryFileViewRepository = new TestAsyncPlainStorage<InterviewFileView>(interviewFileViews);
+            inMemoryFileViewRepository = new SqliteInmemoryStorage<InterviewFileView>();
+            inMemoryFileViewRepository.StoreAsync(interviewFileViews);
 
             interviewerInterviewAccessor = CreateInterviewerInterviewAccessor(
                 commandService: mockOfCommandService.Object,
+                interviewViewRepository: interviewViewRepositoryMock.Object,
                 aggregateRootRepositoryWithCache: mockOfAggregateRootRepositoryWithCache.Object,
                 snapshotStoreWithCache: mockOfSnapshotStoreWithCache.Object,
                 principal: principal,
@@ -44,8 +48,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
 
         Because of = () => interviewerInterviewAccessor.RemoveInterviewAsync(interviewId).WaitAndUnwrapException();
 
-        It should_remove_questionnaire_document_view_from_plain_storage = () =>
-            mockOfCommandService.Verify(x=>x.ExecuteAsync(Moq.It.IsAny<HardDeleteInterview>(), null, Moq.It.IsAny<CancellationToken>()), Times.Once);
+        It should_remove_interview_view_from_plain_storage = () =>
+            interviewViewRepositoryMock.Verify(x => x.RemoveAsync(interviewStringId), Times.Once);
 
         It should_clean_cache_of_aggregate_root_repository = () =>
             mockOfAggregateRootRepositoryWithCache.Verify(x => x.CleanCache(), Times.Once);
@@ -63,12 +67,25 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
              eventStore.Verify(x => x.RemoveEventSourceById(interviewId), Times.Once);
 
 
-        private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
+        private static readonly string interviewStringId = "11111111111111111111111111111111";
+        private static readonly Guid interviewId = Guid.Parse(interviewStringId);
         private static readonly InterviewMultimediaView[] interviewMultimediaViews =
         {
-            new InterviewMultimediaView { InterviewId = interviewId, FileId = interviewFile1},
-            new InterviewMultimediaView { InterviewId = interviewId, FileId = interviewFile2},
-            new InterviewMultimediaView { InterviewId = Guid.Parse("44444444444444444444444444444444")},
+            new InterviewMultimediaView
+            {
+                Id = Guid.NewGuid().FormatGuid(),
+                InterviewId = interviewId, FileId = interviewFile1
+            },
+            new InterviewMultimediaView
+            {
+                Id = Guid.NewGuid().FormatGuid(),
+                InterviewId = interviewId, FileId = interviewFile2
+            },
+            new InterviewMultimediaView
+            {
+                Id = Guid.NewGuid().FormatGuid(),
+                InterviewId = Guid.Parse("44444444444444444444444444444444")
+            },
         };
         private static readonly InterviewFileView[] interviewFileViews =
         {
@@ -81,11 +98,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         const string interviewFile2 = "file 2";
 
         private static readonly Mock<ICommandService> mockOfCommandService = new Mock<ICommandService>();
+        private static readonly Mock<IAsyncPlainStorage<InterviewView>> interviewViewRepositoryMock = new Mock<IAsyncPlainStorage<InterviewView>>();
         private static readonly Mock<IAggregateRootRepositoryWithCache> mockOfAggregateRootRepositoryWithCache = new Mock<IAggregateRootRepositoryWithCache>();
         private static readonly Mock<ISnapshotStoreWithCache> mockOfSnapshotStoreWithCache = new Mock<ISnapshotStoreWithCache>();
         private static InterviewerInterviewAccessor interviewerInterviewAccessor;
         private static Mock<IInterviewerEventStorage> eventStore;
-        private static TestAsyncPlainStorage<InterviewMultimediaView> inMemoryMultimediaViewRepository;
-        private static TestAsyncPlainStorage<InterviewFileView> inMemoryFileViewRepository;
+        private static IAsyncPlainStorage<InterviewMultimediaView> inMemoryMultimediaViewRepository;
+        private static IAsyncPlainStorage<InterviewFileView> inMemoryFileViewRepository;
     }
 }

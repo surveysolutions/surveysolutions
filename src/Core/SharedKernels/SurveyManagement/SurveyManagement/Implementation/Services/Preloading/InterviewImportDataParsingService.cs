@@ -1,8 +1,8 @@
 using System.Linq;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
@@ -15,46 +15,41 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
     {
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
         private readonly IPreloadedDataRepository preloadedDataRepository;
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentRepository;
-        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
-        private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
-        private readonly ITransactionManagerProvider transactionManager;
+        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
+        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+        private readonly IPlainTransactionManager plainTransactionManager;
 
         public InterviewImportDataParsingService(
             IPreloadedDataServiceFactory preloadedDataServiceFactory, 
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentRepository, 
-            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage, 
-            IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, 
-            ITransactionManagerProvider transactionManager, IPreloadedDataRepository preloadedDataRepository)
+            IPreloadedDataRepository preloadedDataRepository, 
+            IPlainQuestionnaireRepository plainQuestionnaireRepository, IPlainTransactionManager plainTransactionManager,
+            IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage, IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage)
         {
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
-            this.questionnaireDocumentRepository = questionnaireDocumentRepository;
-            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
-            this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
-            this.transactionManager = transactionManager;
             this.preloadedDataRepository = preloadedDataRepository;
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.plainTransactionManager = plainTransactionManager;
+            this.questionnaireRosterStructureStorage = questionnaireRosterStructureStorage;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
 
         public InterviewImportData[] GetInterviewsImportData(string interviewImportProcessId, QuestionnaireIdentity questionnaireIdentity)
         {
             var bigTemplateObject =
-                this.transactionManager.GetTransactionManager()
-                    .ExecuteInQueryTransaction(() => this.questionnaireDocumentRepository.AsVersioned()
-                        .Get(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version));
+                this.plainTransactionManager.ExecuteInPlainTransaction(() =>this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
 
             var questionnaireExportStructure =
-                this.transactionManager.GetTransactionManager()
-                    .ExecuteInQueryTransaction(() => this.questionnaireExportStructureStorage.AsVersioned()
-                        .Get(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version));
+                this.questionnaireExportStructureStorage.GetById(
+                    new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version).ToString());
             var questionnaireRosterStructure =
-                this.transactionManager.GetTransactionManager()
-                    .ExecuteInQueryTransaction(() => this.questionnaireRosterStructureStorage.AsVersioned()
-                        .Get(questionnaireIdentity.QuestionnaireId.FormatGuid(), questionnaireIdentity.Version));
+                this.questionnaireRosterStructureStorage.GetById(
+                    new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version).ToString());
 
 
             var preloadedDataService =
                 this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure,
-                    questionnaireRosterStructure, bigTemplateObject.Questionnaire);
+                    questionnaireRosterStructure, bigTemplateObject);
 
             var preloadedDataOfSample = this.preloadedDataRepository.GetPreloadedDataOfSample(interviewImportProcessId);
 

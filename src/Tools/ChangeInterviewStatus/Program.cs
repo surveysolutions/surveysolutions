@@ -53,9 +53,11 @@ namespace ChangeInterviewStatus
         internal abstract class ChangeInterviewStatusCommand
         {
             private const int MaxNumberOfParallelTasks = 20;
+            private const int DefaultTriesNumberPerOperation = 1;
+            private const int MaxTriesNumberPerOperation = 30;
 
             [Description("HQ application host with http(s)")]
-            [Argument(Name = "host", DefaultValue = "https://localhost")]
+            [Argument(Name = "host", DefaultValue = "http://localhost")]
             public string Host { get; set; }
 
             [Description("Login of API user. Default is apiuser")]
@@ -66,22 +68,23 @@ namespace ChangeInterviewStatus
             [Argument(Name = "password")]
             public string Password { get; set; }
 
-            [Description("Tab delimited file with interview ids and comments.")]
+            [Description("Absolute path to tab delimited file with interview ids and comments.")]
             [Argument(Name = "filePath")]
             public string FilePath { get; set; }
 
-            [Description("Path to file to write all errors after command completion.")]
-            [Argument(Name = "errorLog", DefaultValue = "errors.log")]
+            [Description("Absolute path to file to write all errors after command completion.")]
+            [Argument(Name = "errorLog")]
             public string ErrorLogFilePath { get; set; }
 
             [Description("Max number of parallel tasks.")]
             [Argument(Name = "tasksLimit", DefaultValue = MaxNumberOfParallelTasks)]
             public int ParallelTasksLimit { get; set; }
 
-            [Description("Delimiter in tab separated file. Default is tab symbol.")]
-            [Argument(Name = "delimeter", DefaultValue = "\t")]
-            public string Delimeter { get; set; }
+            [Description("Max number of retries per operation (max 30)")]
+            [Argument(Name = "retryLimit", DefaultValue = DefaultTriesNumberPerOperation)]
+            public int OperationRetryLimit { get; set; }
 
+            private static string Delimeter => "\t";
             private ProcessStatus status = new ProcessStatus();
             private ConsoleRestServiceSettings restServiceSettings;
 
@@ -116,6 +119,7 @@ namespace ChangeInterviewStatus
 
                 Console.Clear();
                 var interviewsToImport = this.ParseFileWithInterviewsInfo(this.FilePath);
+                var retriesPerOperation = Math.Max(Math.Min(OperationRetryLimit, MaxTriesNumberPerOperation), 1);
 
                 this.status.TotalInterviewsCount = interviewsToImport.Length;
                 try
@@ -123,13 +127,14 @@ namespace ChangeInterviewStatus
                     int processedInterviewsCount = 0;
                     Stopwatch elapsedTime = Stopwatch.StartNew();
 
-                    await interviewsToImport.ForEachAsync(Math.Min(this.ParallelTasksLimit, MaxNumberOfParallelTasks),
+                    var maxAmountOfParallelTasksFrom_1_To_20 = Math.Max(Math.Min(this.ParallelTasksLimit, MaxNumberOfParallelTasks), 1);
+                    await interviewsToImport.ForEachAsync(maxAmountOfParallelTasksFrom_1_To_20,
                         async (importedInterview) =>
                         {
                             bool hasError = false;
                             try
                             {
-                                await this.ChangeStatus(changeStatusUrl, importedInterview, credentials);
+                                await this.ChangeStatus(changeStatusUrl, importedInterview, credentials, retriesPerOperation);
                             }
                             catch (Exception ex)
                             {
@@ -151,10 +156,10 @@ namespace ChangeInterviewStatus
                         });
 
                     Console.WriteLine();
-                    var timePerInterview = new TimeSpan((long) this.status.TimePerInterview);
-                    Console.WriteLine($"Average time per interview: {timePerInterview:g)}");
+                    var timePerInterview = new TimeSpan((long)this.status.TimePerInterview);
+                    Console.WriteLine($"Average time per interview: {timePerInterview:g}");
                     var totalTime = new TimeSpan(elapsedTime.ElapsedTicks);
-                    Console.WriteLine($"Total time: {totalTime:g)}");
+                    Console.WriteLine($"Total time: {totalTime:g}");
                 }
                 catch (Exception exception)
                 {
@@ -169,22 +174,28 @@ namespace ChangeInterviewStatus
                         ZlpIOHelper.WriteAllText(this.ErrorLogFilePath, string.Join(Environment.NewLine, this.status.Errors.Select(x => x.ErrorMessage)));
                     }
                 }
-                Console.WriteLine("Completed");
+                Console.Write("Completed");
+                if (status.Errors.Any())
+                {
+                    Console.WriteLine($" with errors. Errors log can be found at '{ErrorLogFilePath}'");
+                }
             }
 
-            private async Task ChangeStatus(string url, InterviewInfo interviewInfo, RestCredentials credentials)
+            private async Task ChangeStatus(string url, InterviewInfo interviewInfo, RestCredentials credentials, int retriesPerOperation)
             {
                 await this.ExecuteRequestAsync(
                     relativeUrl: url,
                     credentials: credentials,
                     method: HttpMethod.Post,
                     request: interviewInfo,
-                    userCancellationToken: this.cancellationTokenSource.Token);
+                    userCancellationToken: this.cancellationTokenSource.Token,
+                    retriesPerOperation: retriesPerOperation);
             }
 
             private async Task<HttpResponseMessage> ExecuteRequestAsync(
                 string relativeUrl,
                 HttpMethod method,
+                int retriesPerOperation,
                 object queryString = null,
                 object request = null,
                 RestCredentials credentials = null,
@@ -205,41 +216,61 @@ namespace ChangeInterviewStatus
                     restClient.WithBasicAuth(credentials.Login, credentials.Password);
 
                 HttpResponseMessage result = null;
-                try
+                var httpContent = this.CreateJsonContent(request);
+                var retriesLeft = retriesPerOperation;
+
+                while (retriesLeft > 0)
                 {
-                    result = await restClient.SendAsync(method, this.CreateJsonContent(request), linkedCancellationTokenSource.Token);
-                }
-                catch (OperationCanceledException ex)
-                {
-                    // throwed when receiving bytes in ReceiveBytesWithProgressAsync method and user canceling request
-                    throw new RestException("Request canceled by user", type: RestExceptionType.RequestCanceledByUser, innerException: ex);
-                }
-                catch (FlurlHttpException ex)
-                {
-                    if (ex.GetSelfOrInnerAs<TaskCanceledException>() != null)
+                    try
                     {
-                        if (requestTimeoutToken.IsCancellationRequested)
+                        result = await restClient.SendAsync(method, httpContent, linkedCancellationTokenSource.Token);
+                        Console.WriteLine("Request has been sent successfully.");
+                        return result;
+                    }
+                    catch (OperationCanceledException ex)
+                    {
+                        // throwed when receiving bytes in ReceiveBytesWithProgressAsync method and user canceling request
+                        throw new RestException("Request canceled by user", type: RestExceptionType.RequestCanceledByUser, innerException: ex);
+                    }
+                    catch (FlurlHttpException ex)
+                    {
+                        if (ex.GetSelfOrInnerAs<TaskCanceledException>() != null)
                         {
-                            throw new RestException("Request timeout", type: RestExceptionType.RequestByTimeout,
-                                statusCode: HttpStatusCode.RequestTimeout, innerException: ex);
+                            if (retriesLeft > 1) // ignoring all statuses except AR errors
+                            {
+                                retriesLeft--;
+                                continue;
+                            }
+
+                            if (requestTimeoutToken.IsCancellationRequested)
+                            {
+                                throw new RestException("Request timeout", type: RestExceptionType.RequestByTimeout, statusCode: HttpStatusCode.RequestTimeout, innerException: ex);
+                            }
+
+                            if (userCancellationToken.HasValue && userCancellationToken.Value.IsCancellationRequested)
+                            {
+                                throw new RestException("Request canceled by user", type: RestExceptionType.RequestCanceledByUser, innerException: ex);
+                            }
+                        }
+                        else if (ex.Call.Response != null)
+                        {
+
+                            if (retriesLeft > 1 && ex.Call.Response.StatusCode == HttpStatusCode.NotAcceptable) // ignoring all statuses except AR errors 
+                            {
+                                retriesLeft--;
+                                continue;
+                            }
+
+                            //invalid status 406 should be thrown on first round
+                            throw new RestException(ex.Call.ErrorResponseBody ?? ex.Call.Response.ReasonPhrase, statusCode: ex.Call.Response.StatusCode, innerException: ex);
                         }
 
-                        if (userCancellationToken.HasValue && userCancellationToken.Value.IsCancellationRequested)
-                        {
-                            throw new RestException("Request canceled by user",
-                                type: RestExceptionType.RequestCanceledByUser, innerException: ex);
-                        }
+                        throw new RestException(message: "Unexpected web exception", innerException: ex);
                     }
-                    else if (ex.Call.Response != null)
+                    catch (Exception ex)
                     {
-                        throw new RestException(ex.Call.ErrorResponseBody ?? ex.Call.Response.ReasonPhrase, statusCode: ex.Call.Response.StatusCode, innerException: ex);
+                        throw new RestException(message: "Unexpected web exception", innerException: ex);
                     }
-
-                    throw new RestException(message: "Unexpected web exception", innerException: ex);
-                }
-                catch (Exception ex)
-                {
-                    throw new RestException(message: "Unexpected web exception", innerException: ex);
                 }
 
                 return result;
@@ -254,6 +285,9 @@ namespace ChangeInterviewStatus
 
             private InterviewInfo[] ParseFileWithInterviewsInfo(string filePath)
             {
+                if (!(Delimeter == "\t" || Delimeter == ","))
+                    throw new ArgumentException($"Wrong delimiter '{Delimeter}'. Only ',' or tab symbol are allowed.");
+
                 const string ID = "Id";
                 const string COMMENT = "Comment";
 
@@ -333,7 +367,7 @@ namespace ChangeInterviewStatus
                     HasHeaderRecord = true,
                     TrimFields = true,
                     IgnoreQuotes = false,
-                    Delimiter = this.Delimeter,
+                    Delimiter = Delimeter,
                     WillThrowOnMissingField = false
                 };
             }
@@ -366,7 +400,10 @@ namespace ChangeInterviewStatus
         public override string ToString()
         {
             var finishTime = new TimeSpan((long)(this.EstimatedTime - this.ElapsedTime));
-            return $"{this.ProcessedInterviewsCount}/{this.TotalInterviewsCount}. OK: {this.ProcessedInterviewsCount - this.Errors.Count} Errors: {this.Errors.Count}. End in: {finishTime:g)}.";
+            var result = $"{this.ProcessedInterviewsCount}/{this.TotalInterviewsCount}. ";
+            result += $"OK: {this.ProcessedInterviewsCount - this.Errors.Count} Errors: {this.Errors.Count}. ";
+            result += $"End in: {finishTime:g}.";
+            return result;
         }
     }
 

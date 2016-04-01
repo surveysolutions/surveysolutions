@@ -21,6 +21,8 @@
         GroupDisabled,
         QuestionDeclaredValid,
         QuestionDeclaredInvalid,
-        UnapproveByHeadquarters
+        UnapproveByHeadquarters,
+        ReceivedByInterviewer,
+        ReceivedBySupervisor
     }
 }

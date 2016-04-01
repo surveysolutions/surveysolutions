@@ -231,7 +231,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var model = new PreloadedDataVerificationErrorsView(questionnaireId, version, questionnaireInfo?.Title, verificationStatus.Errors.ToArray(), 
-                verificationStatus.WasSupervisorProvided, id, PreloadedContentType.Sample);
+                verificationStatus.WasResponsibleProvided, id, PreloadedContentType.Sample);
             return this.View(model);
         }
 
@@ -249,7 +249,7 @@ namespace WB.UI.Headquarters.Controllers
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
 
             var model = new PreloadedDataVerificationErrorsView(questionnaireId, version, questionnaireInfo?.Title, verificationStatus.Errors.ToArray(), 
-                verificationStatus.WasSupervisorProvided, id, PreloadedContentType.Panel);
+                verificationStatus.WasResponsibleProvided, id, PreloadedContentType.Panel);
 
             return this.View(model);
         }

@@ -1,9 +1,10 @@
 using System;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi
 {
     internal interface IDdiMetadataFactory
     {
-        string CreateDDIMetadataFileForQuestionnaireInFolder(Guid questionnaireId, long questionnaireVersion, string basePath);
+        string CreateDDIMetadataFileForQuestionnaireInFolder(QuestionnaireIdentity questionnaireId, string basePath);
     }
 }

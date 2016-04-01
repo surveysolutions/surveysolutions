@@ -42,6 +42,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
         private readonly ILookupTableService lookupTableService;
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
+        private readonly ICommandPostprocessor commandPostprocessor;
         private readonly ILogger logger;
 
         public QuestionnaireController(
@@ -51,7 +52,9 @@ namespace WB.UI.Designer.Controllers
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             ILogger logger,
             IQuestionnaireInfoFactory questionnaireInfoFactory,
-            IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory, ILookupTableService lookupTableService)
+            IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory, 
+            ILookupTableService lookupTableService, 
+            ICommandPostprocessor commandPostprocessor)
             : base(userHelper)
         {
             this.commandService = commandService;
@@ -61,6 +64,7 @@ namespace WB.UI.Designer.Controllers
             this.questionnaireInfoFactory = questionnaireInfoFactory;
             this.questionnaireChangeHistoryFactory = questionnaireChangeHistoryFactory;
             this.lookupTableService = lookupTableService;
+            this.commandPostprocessor = commandPostprocessor;
         }
 
         public ActionResult Clone(Guid id)
@@ -86,7 +90,7 @@ namespace WB.UI.Designer.Controllers
                 {
                     var questionnaireId = Guid.NewGuid();
 
-                    this.commandService.Execute(new CloneQuestionnaireCommand(questionnaireId, model.Title, UserHelper.WebUser.UserId, model.IsPublic, sourceModel.Source));
+                    this.commandService.Execute(new CloneQuestionnaire(questionnaireId, model.Title, UserHelper.WebUser.UserId, model.IsPublic, sourceModel.Source));
 
                     return this.RedirectToAction("Open", "App", new { id = questionnaireId });
                 }
@@ -126,7 +130,7 @@ namespace WB.UI.Designer.Controllers
                 try
                 {
                     this.commandService.Execute(
-                        new CreateQuestionnaireCommand(
+                        new CreateQuestionnaire(
                             questionnaireId: questionnaireId,
                             text: model.Title,
                             createdBy: UserHelper.WebUser.UserId,
@@ -155,7 +159,12 @@ namespace WB.UI.Designer.Controllers
             }
             else
             {
-                this.commandService.Execute(new DeleteQuestionnaireCommand(model.PublicKey));
+                var command = new DeleteQuestionnaire(model.PublicKey);
+
+                this.commandService.Execute(command);
+
+                this.commandPostprocessor.ProcessCommandAfterExecution(command);
+
                 this.Success(string.Format("Questionnaire \"{0}\" successfully deleted", model.Title));
             }
 
@@ -287,7 +296,7 @@ namespace WB.UI.Designer.Controllers
         public JsonResult ApplyOptions()
         {
             var commandResult = this.ExecuteCommand(
-                new UpdateFilteredComboboxOptionsCommand(
+                new UpdateFilteredComboboxOptions(
                         Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
                         this.questionWithOptionsViewModel.QuestionId,
                         this.UserHelper.WebUser.UserId,
@@ -299,7 +308,7 @@ namespace WB.UI.Designer.Controllers
         public JsonResult ApplyCascadingOptions()
         {
             var commandResult = this.ExecuteCommand(
-                new UpdateCascadingComboboxOptionsCommand(
+                new UpdateCascadingComboboxOptions(
                         Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
                         this.questionWithOptionsViewModel.QuestionId,
                         this.UserHelper.WebUser.UserId,

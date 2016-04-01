@@ -8,6 +8,7 @@ using WB.Core.Infrastructure.FileSystem;
 using System.IO;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using It = Machine.Specifications.It;
 
@@ -70,8 +71,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
         Because of = () =>
         {
             filePath =
-                ddiMetadataFactory.CreateDDIMetadataFileForQuestionnaireInFolder(questionnaireId,
-                    questionnaireVersion, "");
+                ddiMetadataFactory.CreateDDIMetadataFileForQuestionnaireInFolder(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), "");
         };
 
         It should_call_write_xml = () =>

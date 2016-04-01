@@ -8,7 +8,9 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
 namespace WB.UI.Tester.Infrastructure.Internals
@@ -17,6 +19,12 @@ namespace WB.UI.Tester.Infrastructure.Internals
     {
         private readonly IRestService restService;
         private readonly IPrincipal principal;
+
+        private RestCredentials RestCredentials => new RestCredentials
+        {
+            Login = this.principal.CurrentUserIdentity.Name,
+            Password = this.principal.CurrentUserIdentity.Password
+        };
 
         public DesignerApiService(
             IRestService restService, 
@@ -62,15 +70,31 @@ namespace WB.UI.Tester.Infrastructure.Internals
 
             downloadedQuestionnaire = await this.restService.GetAsync<Questionnaire>(
                 url: $"questionnaires/{selectedQuestionnaire.Id}",
-                credentials:
-                    new RestCredentials
-                    {
-                        Login = this.principal.CurrentUserIdentity.Name,
-                        Password = this.principal.CurrentUserIdentity.Password
-                    },
+                credentials: this.RestCredentials,
                 onDownloadProgressChanged: onDownloadProgressChanged, token: token);
 
             return downloadedQuestionnaire;
+        }
+
+        public async Task<AttachmentContent> GetAttachmentContentAsync(string attachmentContentId,
+            Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, 
+            CancellationToken token)
+        {
+            var restFile = await this.restService.DownloadFileAsync(
+                url: $"attachment/{attachmentContentId}",
+                credentials: this.RestCredentials,
+                onDownloadProgressChanged: onDownloadProgressChanged,
+                token: token).ConfigureAwait(false);
+
+            var attachmentContent = new AttachmentContent()
+            {
+                ContentType = restFile.ContentType,
+                Content = restFile.Content,
+                Id = restFile.ContentHash,
+                Size = restFile.ContentLength ?? restFile.Content.LongLength
+            };
+
+            return attachmentContent;
         }
 
         private async Task<QuestionnaireListItem[]> GetPageOfQuestionnairesAsync(int pageIndex, CancellationToken token)
@@ -78,12 +102,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
             var  batchOfServerQuestionnaires = await this.restService.GetAsync<Core.SharedKernels.SurveySolutions.Api.Designer.QuestionnaireListItem[]>(
                 url: "questionnaires",
                 token: token,
-                credentials: 
-                    new RestCredentials
-                    {
-                        Login = this.principal.CurrentUserIdentity.Name,
-                        Password = this.principal.CurrentUserIdentity.Password
-                    },
+                credentials: this.RestCredentials,
                 queryString: new { pageIndex = pageIndex });
 
             return batchOfServerQuestionnaires.Select(questionnaireListItem => new QuestionnaireListItem()

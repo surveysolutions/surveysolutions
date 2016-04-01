@@ -35,6 +35,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
            QuestionnaireDocument questionnaire,
            CodeGenerationSettings codeGenerationSettings)
         {
+            questionnaire.ConnectChildrenWithParent();
             var expressionState = new QuestionnaireExpressionStateModel
             {
                 AdditionalInterfaces = codeGenerationSettings.AdditionInterfaces,
@@ -125,6 +126,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     roster.VariableName));
             }
 
+            foreach (var filter in questionnaireTemplate.AllLinkedQuestionFilters)
+            {
+                methodModels.Add(ExpressionLocation.LinkedQuestionFilter(filter.LinkedQuestionId).Key, new ConditionDescriptionModel(
+
+                    filter.ParentScopeTypeName,
+                    filter.FilterForLinkedQuestionMethodName,
+                    codeGenerationSettings.Namespaces,
+                    filter.FilterExpression,
+                    false,
+                    string.Empty));
+            }
+
             return methodModels;
         }
 
@@ -137,9 +150,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var questions = rostersInScope.SelectMany(r => r.Questions).ToList();
             var rosters = rostersInScope.SelectMany(r => r.Rosters).ToList();
 
+            var linkedQuestionFilterExpressions=rostersInScope.SelectMany(x=>x.LinkedQuestionFilterExpressions).ToList();
+
             var conditionMethodsSortedByExecutionOrder = GetConditionMethodsSortedByExecutionOrder(questions, groups, rostersInScope, template.ConditionsPlayOrder);
 
-            return new RosterScopeTemplateModel(rosterScopeType, questions, groups, rosters, rostersInScope, conditionMethodsSortedByExecutionOrder);
+            return new RosterScopeTemplateModel(rosterScopeType, questions, groups, rosters, rostersInScope,
+                conditionMethodsSortedByExecutionOrder, linkedQuestionFilterExpressions);
         }
 
         public static List<ConditionMethodAndState> GetConditionMethodsSortedByExecutionOrder(
@@ -284,6 +300,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var rostersToProcess = new Queue<Tuple<IGroup, RosterScopeBaseModel>>();
             rostersToProcess.Enqueue(new Tuple<IGroup, RosterScopeBaseModel>(questionnaireDoc, expressionState.QuestionnaireLevelModel));
 
+            var linkedQuestions = CreateLinkedQuestionFilterExpressionModels(questionnaireDoc);
+            
             while (rostersToProcess.Count != 0)
             {
                 Tuple<IGroup, RosterScopeBaseModel> rosterScope = rostersToProcess.Dequeue();
@@ -321,11 +339,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                     if (IsRoster(childAsGroup))
                     {
-                        var roster = this.CreateRosterTemplateModel(questionnaireDoc, scopesTypeNames, childAsGroup, currentScope);
+                        var roster = this.CreateRosterTemplateModel(questionnaireDoc, scopesTypeNames, childAsGroup, currentScope, linkedQuestions);
 
                         rostersToProcess.Enqueue(new Tuple<IGroup, RosterScopeBaseModel>(childAsGroup, roster));
 
                         expressionState.AllRosters.Add(roster);
+
+                        expressionState.AllLinkedQuestionFilters.AddRange(roster.LinkedQuestionFilterExpressions);
 
                         currentScope.Rosters.Add(roster);
                     }
@@ -344,6 +364,52 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     }
                 }
             }
+        }
+
+        private List<LinkedQuestionFilterExpressionModel> CreateLinkedQuestionFilterExpressionModels(QuestionnaireDocument questionnaireDoc)
+        {
+            var linkedQuestions = questionnaireDoc.Find<IQuestion>(q => q.LinkedToQuestionId.HasValue).Select(
+                q =>
+                {
+                    var linkedQuestionSource = questionnaireDoc.Find<IQuestion>(q.LinkedToQuestionId.Value);
+                    if (linkedQuestionSource == null)
+                        return null;
+                    var parent = linkedQuestionSource.GetParent();
+                    while (parent != null)
+                    {
+                        var parentGroup = parent as IGroup;
+                        if (parentGroup != null && parentGroup.IsRoster)
+                        {
+                            var filterExpression = string.IsNullOrWhiteSpace(q.LinkedFilterExpression)? "true" :this.macrosSubstitutionService.InlineMacros(
+                                q.LinkedFilterExpression, questionnaireDoc.Macros.Values);
+
+                            return
+                                new LinkedQuestionFilterExpressionModel(
+                                    $"IsAnswered({linkedQuestionSource.StataExportCaption})&&({filterExpression})",
+                                    $"FilterForLinkedQuestion__{q.StataExportCaption}",
+                                    CodeGenerator.GetQuestionIdName(q.StataExportCaption), parentGroup.PublicKey, q.PublicKey);
+                        }
+                        parent = parent.GetParent();
+                    }
+                    return null;
+                }).Where(q => q != null).ToList();
+
+            linkedQuestions.AddRange(questionnaireDoc.Find<IQuestion>(q => q.LinkedToRosterId.HasValue).Select(
+                q =>
+                {
+                    var linkedQuestionRosterSource = questionnaireDoc.Find<IGroup>(q.LinkedToRosterId.Value);
+                    if (linkedQuestionRosterSource == null)
+                        return null;
+
+                    var filterExpression = string.IsNullOrWhiteSpace(q.LinkedFilterExpression) ? "true" : this.macrosSubstitutionService.InlineMacros(
+                                q.LinkedFilterExpression, questionnaireDoc.Macros.Values);
+                    return
+                        new LinkedQuestionFilterExpressionModel($"!string.IsNullOrEmpty(@rowname)&&({filterExpression})",
+                            $"FilterForLinkedQuestion__{q.StataExportCaption}",
+                            CodeGenerator.GetQuestionIdName(q.StataExportCaption), linkedQuestionRosterSource.PublicKey, q.PublicKey);
+                }).Where(q => q != null));
+
+            return linkedQuestions.ToList();
         }
 
         private static bool IsRoster(IGroup item)
@@ -412,7 +478,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             QuestionnaireDocument questionnaireDoc,
             Dictionary<string, string> scopesTypeNames,
             IGroup childAsIGroup,
-            RosterScopeBaseModel currentScope)
+            RosterScopeBaseModel currentScope,
+            List<LinkedQuestionFilterExpressionModel> linkedQuestions)
         {
             Guid currentScopeId = childAsIGroup.RosterSizeSource == RosterSizeSourceType.FixedTitles
                 ? childAsIGroup.PublicKey
@@ -425,16 +492,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 ? childAsIGroup.VariableName
                 : "__" + childAsIGroup.PublicKey.FormatGuid();
 
+
+            var typeName = this.GenerateTypeNameByScope($"{varName}_{childAsIGroup.PublicKey.FormatGuid()}_",
+                currentRosterScope, scopesTypeNames);
+
+            var linkedQuestionFilters = linkedQuestions.Where(q => q.RosterId == childAsIGroup.PublicKey).ToList();
+
+            linkedQuestionFilters.ForEach(x => x.ParentScopeTypeName = typeName);
+
             var roster = new RosterTemplateModel
             {
                 Id = childAsIGroup.PublicKey,
                 Conditions = this.macrosSubstitutionService.InlineMacros(childAsIGroup.ConditionExpression, questionnaireDoc.Macros.Values),
                 VariableName = varName,
-                TypeName = this.GenerateTypeNameByScope($"{varName}_{childAsIGroup.PublicKey.FormatGuid()}_", currentRosterScope, scopesTypeNames),
+                TypeName = typeName,
                 RosterScopeName = CodeGenerator.PrivateFieldsPrefix + varName + "_scope",
                 RosterScope = currentRosterScope,
                 ParentTypeName = currentScope.TypeName,
-                ParentScopeTypeName = currentScope.TypeName
+                ParentScopeTypeName = currentScope.TypeName,
+                LinkedQuestionFilterExpressions = linkedQuestionFilters
             };
             return roster;
         }

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using NHibernate.Util;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -11,14 +12,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 {
     public class ExportedQuestion
     {
+        private static CultureInfo exportCulture = CultureInfo.InvariantCulture;
+        private static string exportDatetimeFormat = "o";
+        private static string exportDateFormat = "yyyy-MM-dd";
+        private const string DefaultDelimiter = "|";
+
         public ExportedQuestion()
         {
-        }
-
-        public ExportedQuestion(QuestionType questionType, string[] answers)
-        {
-            this.QuestionType = questionType;
-            this.Answers = answers;
         }
 
         public ExportedQuestion(InterviewQuestion question, ExportedHeaderItem header)
@@ -28,9 +28,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 
             if (this.Answers.Length != header.ColumnNames.Length)
                 throw new InvalidOperationException(
-                    string.Format(
-                        "something wrong with export logic, answer's count is less then required by template. Was '{0}', expected '{1}'",
-                        this.Answers.Length, header.ColumnNames.Length));
+                    string.Format("something wrong with export logic, answer's count is less then required by template. Was '{0}', expected '{1}'",
+                                  this.Answers.Length, 
+                                  header.ColumnNames.Length));
         }
 
         private QuestionType QuestionType { get; }
@@ -40,21 +40,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 
         private string[] GetAnswers(InterviewQuestion question, ExportedHeaderItem header)
         {
-            if (question.Answer == null || question.IsDisabled())
+            if (question == null || question.Answer == null || question.IsDisabled())
                 return header.ColumnNames.Select(c => string.Empty).ToArray();
-
-            if (header.ColumnNames.Length == 1)
-                return new string[] { this.AnswerToStringValue(question.Answer, header) };
 
             var gpsQuestion = question.Answer as GeoPosition;
             if (gpsQuestion != null)
             {
                 return new[]
                 {
-                    gpsQuestion.Latitude.ToString(), gpsQuestion.Longitude.ToString(), gpsQuestion.Accuracy.ToString(),
-                    gpsQuestion.Altitude.ToString(), gpsQuestion.Timestamp.DateTime.ToString()
+                    gpsQuestion.Latitude.ToString(exportCulture),
+                    gpsQuestion.Longitude.ToString(exportCulture),
+                    gpsQuestion.Accuracy.ToString(exportCulture),
+                    gpsQuestion.Altitude.ToString(exportCulture),
+                    gpsQuestion.Timestamp.DateTime.ToString(exportDatetimeFormat, exportCulture)
                 };
             }
+
+            if (header.ColumnNames.Length == 1)
+                return new string[] { this.AnswerToStringValue(question.Answer, header) };
 
             var listOfAnswers = this.TryCastToEnumerable(question.Answer);
             if (listOfAnswers != null)
@@ -89,7 +92,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
 
         private string AnswerToStringValue(object answer, ExportedHeaderItem header)
         {
-            const string DefaultDelimiter = "|";
             if (answer == null)
                 return string.Empty;
 
@@ -99,19 +101,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
             {
                 if (header.LengthOfRosterVectorWhichNeedToBeExported.HasValue)
                 {
-                    var shrinkedArrayOfAnswers =
-                        arrayOfObject.Skip(arrayOfObject.Count() - header.LengthOfRosterVectorWhichNeedToBeExported.Value).ToArray();
+                    var shrinkedArrayOfAnswers = arrayOfObject.Skip(arrayOfObject.Count() - header.LengthOfRosterVectorWhichNeedToBeExported.Value).ToArray();
 
                     if (shrinkedArrayOfAnswers.Length == 1)
-                        return shrinkedArrayOfAnswers[0].ToString();
+                    {
+                        return ConvertAnswerToString(shrinkedArrayOfAnswers[0]);
+                    }
 
-                    return string.Format("[{0}]",
-                        string.Join(DefaultDelimiter, shrinkedArrayOfAnswers));
+                    return string.Format("[{0}]", string.Join(DefaultDelimiter, shrinkedArrayOfAnswers.Select(x => ConvertAnswerToString(x)).ToArray()));
                 }
-                return string.Join(DefaultDelimiter, arrayOfObject);
+                return string.Join(DefaultDelimiter, arrayOfObject.Select(x => ConvertAnswerToString(x)).ToArray());
             }
-
-            return answer.ToString();
+            
+            return ConvertAnswerToString(answer);
         }
 
 
@@ -150,7 +152,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
             for (int i = 0; i < result.Length; i++)
             {
                 int checkedOptionIndex = Array.IndexOf(answers, header.ColumnValues[i]);
-                result[i] = checkedOptionIndex > -1 ? (checkedOptionIndex + 1).ToString() : "0";
+                result[i] = checkedOptionIndex > -1 ? (checkedOptionIndex + 1).ToString(exportCulture) : "0";
             }
         }
 
@@ -181,7 +183,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
                                 .Select((item, index) => new {item, index})
                                 .FirstOrDefault(x => x.item.OptionValue == columnValue);
 
-                        result[i] = (selectedItemIndex.index + 1).ToString();
+                        result[i] = (selectedItemIndex.index + 1).ToString(exportCulture);
                         filledYesAnswersCount++;
                     }
                     else
@@ -194,6 +196,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.DataExport
                     result[i] = "";
                 }
             }
+        }
+
+        private string ConvertAnswerToString(object obj)
+        {
+            var formattable = obj as IFormattable;
+            if (formattable != null)
+            {
+                return formattable.ToString(this.QuestionType == QuestionType.DateTime? exportDateFormat : null, exportCulture);
+            }
+            return  obj.ToString();
         }
     }
 }

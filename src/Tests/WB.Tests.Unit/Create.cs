@@ -73,7 +73,6 @@ using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -98,8 +97,6 @@ using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire.Questions;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -141,9 +138,28 @@ using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.Synchronization.SyncStorage;
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
 using designer::WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V6.Templates;
+using Ncqrs.Domain;
+using Ncqrs.Domain.Storage;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable.CustomCollections;
+using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
+using WB.Core.SharedKernels.SurveyManagement.Commands;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
+using WB.UI.Designer.Api;
+using WB.UI.Designer.Code;
+using WB.UI.Designer.Code.Implementation;
+using WB.UI.Shared.Web.Membership;
+using WB.UI.Shared.Web.MembershipProvider.Accounts;
+using AttachmentContent = WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire.AttachmentContent;
+using AttachmentsController = WB.Core.SharedKernels.SurveyManagement.Web.Controllers.AttachmentsController;
 
 namespace WB.Tests.Unit
 {
@@ -214,9 +230,31 @@ namespace WB.Tests.Unit
                 settings ?? Mock.Of<IHeadquartersSettings>());
         }
 
-        public static CascadingOptionModel CascadingOptionModel(int value, string title, int parentValue)
+        public static AttachmentContentService AttachmentContentService(IPlainStorageAccessor<AttachmentContent> attachmentContentPlainStorage)
         {
-            return new CascadingOptionModel
+            return new AttachmentContentService(attachmentContentPlainStorage ?? Mock.Of<IPlainStorageAccessor<AttachmentContent>>());
+        }
+
+        public static AttachmentsController AttachmentsController(IAttachmentContentService attachmentContentService)
+        {
+            return new AttachmentsController(attachmentContentService);
+        }
+
+        public static AttachmentContent AttachmentContent(string contentHash = null, string contentType = null, byte[] content = null)
+        {
+            return new AttachmentContent
+            {
+                ContentHash = contentHash ?? "content id",
+                ContentType = contentType ,
+                Content = content ?? new byte[] {1, 2, 3}
+            };
+        }
+
+        public static Attachment Attachment(string attachementHash) => new Attachment { ContentId = attachementHash };
+
+        public static CategoricalQuestionOption CascadingOptionModel(int value, string title, int parentValue)
+        {
+            return new CategoricalQuestionOption
                    {
                        Value = value,
                        Title = title,
@@ -233,6 +271,11 @@ namespace WB.Tests.Unit
                 children: children);
         }
 
+        public static Group Section(string title = "Section X", Guid? sectionId = null, IEnumerable<IComposite> children = null)
+            => Create.Group(
+                title: title,
+                groupId: sectionId,
+                children: children);
 
         public static CodeGenerationSettings CodeGenerationSettings()
         {
@@ -552,12 +595,15 @@ namespace WB.Tests.Unit
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>());
         }
 
-        public static Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire DataCollectionQuestionnaire(
+        public static Core.SharedKernels.SurveyManagement.Implementation.Aggregates.Questionnaire DataCollectionQuestionnaire(
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null)
         {
-            return new Core.SharedKernels.DataCollection.Implementation.Aggregates.Questionnaire(
+            return new Core.SharedKernels.SurveyManagement.Implementation.Aggregates.Questionnaire(
                 plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
-                Mock.Of<IQuestionnaireAssemblyFileAccessor>());
+                Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
+                new ReferenceInfoForLinkedQuestionsFactory(),
+                new QuestionnaireRosterStructureFactory(),
+                Mock.Of<IExportViewFactory>());
         }
 
         public static DateTimeQuestion DateTimeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
@@ -622,7 +668,6 @@ namespace WB.Tests.Unit
         public static EnumerationStageViewModel EnumerationStageViewModel(
             IInterviewViewModelFactory interviewViewModelFactory = null,
             IPlainQuestionnaireRepository questionnaireRepository = null,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireModelRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
             ISubstitutionService substitutionService = null,
             ILiteEventRegistry eventRegistry = null,
@@ -632,11 +677,9 @@ namespace WB.Tests.Unit
             => new EnumerationStageViewModel(
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
                 questionnaireRepository ?? Stub<IPlainQuestionnaireRepository>.WithNotEmptyValues,
-                questionnaireModelRepository ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 substitutionService ?? Mock.Of<ISubstitutionService>(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                messenger ?? Mock.Of<IMvxMessenger>(),
                 userInterfaceStateService ?? Mock.Of<IUserInterfaceStateService>(),
                 mvxMainThreadDispatcher ?? Stub.MvxMainThreadDispatcher());
 
@@ -766,15 +809,6 @@ namespace WB.Tests.Unit
             {
                 GroupPublicKey = Guid.Parse(groupId)
             });
-        }
-
-        public static GroupModel GroupModel(Guid id, string title)
-        {
-            return new GroupModel
-            {
-                Id = id,
-                Title = title
-            };
         }
 
         public static IPublishedEvent<GroupStoppedBeingARoster> GroupStoppedBeingARosterEvent(string groupId)
@@ -983,7 +1017,8 @@ namespace WB.Tests.Unit
         {
             return new InterviewDataExportRecord("test", new string[0], new string[0], new string [0])
             {
-                Answers = questions.Select(x => String.Join("\n", x)).ToArray() 
+                Answers = questions.Select(x => String.Join("\n", x)).ToArray(), 
+                LevelName = ""
             };
         }
 
@@ -1233,8 +1268,9 @@ namespace WB.Tests.Unit
                 disabledQuestions ?? new HashSet<InterviewItemId>(),
                 validQuestions ?? new HashSet<InterviewItemId>(),
                 invalidQuestions ?? new HashSet<InterviewItemId>(),
-                rosterGroupInstances ?? new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), 
+                rosterGroupInstances ?? new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),
                 failedValidationConditions?.ToList() ?? new List<KeyValuePair<Identity, IList<FailedValidationCondition>>>(),
+                new Dictionary<InterviewItemId, RosterVector[]>(), 
                 wasCompleted ?? false);
         }
 
@@ -1260,43 +1296,23 @@ namespace WB.Tests.Unit
         }
 
         public static LastInterviewStatus LastInterviewStatus(InterviewStatus status = InterviewStatus.ApprovedBySupervisor)
-        {
-            return new LastInterviewStatus("entry-id", status);
-        }
+            => new LastInterviewStatus("entry-id", status);
 
-        public static LinkedMultiOptionQuestionModel LinkedMultiOptionQuestionModel(Guid? questionId = null, Guid? linkedToQuestionId =null)
-        {
-            return new LinkedMultiOptionQuestionModel()
-            {
-                Id =  questionId ?? Guid.NewGuid(),
-                LinkedToQuestionId = linkedToQuestionId ?? Guid.NewGuid()
-            };
-        }
-
-        public static ILiteEventBus LiteEventBus(ILiteEventRegistry liteEventRegistry = null,
-            IEventStore eventStore = null)
-        {
-            var eventReg = liteEventRegistry ?? Mock.Of<ILiteEventRegistry>();
-            var eventSt = eventStore ?? Mock.Of<IEventStore>();
-            return new LiteEventBus(eventReg, eventSt);
-        }
+        public static LiteEventBus LiteEventBus(ILiteEventRegistry liteEventRegistry = null, IEventStore eventStore = null)
+            => new LiteEventBus(
+                liteEventRegistry ?? Stub<ILiteEventRegistry>.WithNotEmptyValues,
+                eventStore ?? Mock.Of<IEventStore>());
 
         public static ILiteEventRegistry LiteEventRegistry()
-        {
-            return new LiteEventRegistry();
-        }
+            => new LiteEventRegistry();
 
-        public static LookupTable LookupTable(string tableName)
+        public static LookupTable LookupTable(string tableName, string fileName = null)
         {
             return new LookupTable
             {
-                TableName = tableName
+                TableName = tableName,
+                FileName = fileName ?? "lookup.tab"
             };
-        }
-
-        public static LookupTable LookupTable()
-        {
-            return new LookupTable() {FileName = "name", TableName = "table"};
         }
 
         public static LookupTableContent LookupTableContent(string[] variableNames, params LookupTableRow[] rows)
@@ -1342,13 +1358,13 @@ namespace WB.Tests.Unit
         public static MapReportDenormalizer MapReportDenormalizer(
             IReadSideRepositoryWriter<MapReportPoint> mapReportPointStorage = null,
             IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage = null,
-            IReadSideKeyValueStorage<QuestionnaireQuestionsInfo> questionsInfoStorage = null,
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentStorage = null)
+            QuestionnaireQuestionsInfo questionnaireQuestionsInfo=null,
+            QuestionnaireDocument questionnaireDocument=null)
             => new MapReportDenormalizer(
                 interviewReferencesStorage ?? new TestInMemoryWriter<InterviewReferences>(),
-                questionsInfoStorage ?? new TestInMemoryWriter<QuestionnaireQuestionsInfo>(),
-                questionnaireDocumentStorage ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(),
-                mapReportPointStorage ?? new TestInMemoryWriter<MapReportPoint>());
+                mapReportPointStorage ?? new TestInMemoryWriter<MapReportPoint>(),
+                Mock.Of<IPlainQuestionnaireRepository>(_=>_.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == questionnaireDocument),
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(_=>_.GetById(Moq.It.IsAny<string>())== questionnaireQuestionsInfo));
 
         public static MultimediaQuestion MultimediaQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer
@@ -1490,7 +1506,7 @@ namespace WB.Tests.Unit
 
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = "numeric_question", string enablementCondition = null, 
             string validationExpression = null, QuestionScope scope = QuestionScope.Interviewer, bool isPrefilled = false,
-            bool hideIfDisabled = false, List<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null)
+            bool hideIfDisabled = false, IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null)
         {
             return new NumericQuestion
             {
@@ -1503,7 +1519,7 @@ namespace WB.Tests.Unit
                 ValidationExpression = validationExpression,
                 QuestionScope = scope,
                 Featured = isPrefilled,
-                ValidationConditions = validationConditions ?? new List<ValidationCondition>(),
+                ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 LinkedToRosterId = linkedToRosterId,
             };
         }
@@ -1551,7 +1567,7 @@ namespace WB.Tests.Unit
             ));
         }
 
-        public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null)
+        public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, IEnumerable<ValidationCondition> validationConditions = null)
         {
             return new NumericQuestion
             {
@@ -1560,6 +1576,7 @@ namespace WB.Tests.Unit
                 StataExportCaption = variable,
                 IsInteger = false,
                 ConditionExpression = enablementCondition,
+                ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 ValidationExpression = validationExpression
             };
         }
@@ -1587,11 +1604,6 @@ namespace WB.Tests.Unit
                 AnswerValue = value ?? "1",
                 ParentValue = parentValue
             };
-        }
-
-        public static OptionModel OptionModel(string title, decimal value)
-        {
-            return new OptionModel { Title = title, Value = value };
         }
 
         public static ParaDataExportProcessDetails ParaDataExportProcess()
@@ -1769,7 +1781,8 @@ namespace WB.Tests.Unit
                 sourceQuestionnaireId: null,
                 maxAnswerCount: null,
                 countOfDecimalPlaces: null,
-                validationConditions: validationConditions
+                validationConditions: validationConditions,
+                linkedFilterExpression: null
             ));
         }
 
@@ -1787,7 +1800,8 @@ namespace WB.Tests.Unit
                 expressionProcessor ?? Mock.Of<IExpressionProcessor>(),
                 Create.SubstitutionService(),
                 Create.KeywordsProvider(),
-                Mock.Of<ILookupTableService>());
+                Mock.Of<ILookupTableService>(),
+                Mock.Of<IAttachmentService>());
         }
 
         public static IPublishedEvent<QuestionnaireAssemblyImported> QuestionnaireAssemblyImported(Guid questionnaireId, long version)
@@ -1807,7 +1821,7 @@ namespace WB.Tests.Unit
 
         public static QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire)
         {
-            return new QuestionnaireBrowseItem(questionnaire, 1, false);
+            return new QuestionnaireBrowseItem(questionnaire, 1, false,1);
         }
 
         public static QuestionnaireChangeRecord QuestionnaireChangeRecord(
@@ -1888,16 +1902,6 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static QuestionnaireDocumentVersioned QuestionnaireDocumentVersioned(
-            QuestionnaireDocument questionnaireDocument, long? version = null)
-        {
-            return new QuestionnaireDocumentVersioned
-            {
-                Questionnaire = questionnaireDocument,
-                Version = version ?? 77,
-            };
-        }
-
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(params IComposite[] children)
         {
             return QuestionnaireDocumentWithOneChapter(null, children);
@@ -1914,6 +1918,18 @@ namespace WB.Tests.Unit
             {
                 chapter.Children.Add(child);
             }
+
+            return result;
+        }
+
+        public static QuestionnaireDocument QuestionnaireDocumentWithAttachments(Guid? chapterId = null, params Attachment[] attachments)
+        {
+            var result = new QuestionnaireDocument();
+            var chapter = new Group("Chapter") { PublicKey = chapterId.GetValueOrDefault() };
+
+            result.Children.Add(chapter);
+
+            result.Attachments = attachments.ToList();
 
             return result;
         }
@@ -1945,15 +1961,18 @@ namespace WB.Tests.Unit
 
         public static QuestionnaireIdentity QuestionnaireIdentity()
         {
-            return new QuestionnaireIdentity(Guid.NewGuid(), 7);
+            return Create.QuestionnaireIdentity(Guid.NewGuid());
         }
 
-        public static QuestionnaireImportService QuestionnaireImportService(IPlainKeyValueStorage<QuestionnaireModel> plainKeyValueStorage = null)
+        public static QuestionnaireIdentity QuestionnaireIdentity(Guid questionnaireId)
         {
-            return new QuestionnaireImportService(plainKeyValueStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(),
-                Mock.Of<IPlainQuestionnaireRepository>(),
-                Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
-                Mock.Of<IQuestionnaireModelBuilder>());
+            return new QuestionnaireIdentity(questionnaireId, 7);
+        }
+
+        public static QuestionnaireImportService QuestionnaireImportService(IPlainQuestionnaireRepository plainKeyValueStorage = null)
+        {
+            return new QuestionnaireImportService(Mock.Of<IPlainQuestionnaireRepository>(),
+                Mock.Of<IQuestionnaireAssemblyFileAccessor>());
         }
 
         public static IPublishedEvent<QuestionnaireItemMoved> QuestionnaireItemMovedEvent(string itemId,
@@ -1978,24 +1997,11 @@ namespace WB.Tests.Unit
             return new QuestionnaireLevelLabels(levelName, variableLabels);
         }
 
-        public static QuestionnaireModel QuestionnaireModel(BaseQuestionModel[] questions = null)
-        {
-            return new QuestionnaireModel
-            {
-                Questions = questions != null ? questions.ToDictionary(question => question.Id, question => question) : new Dictionary<Guid, BaseQuestionModel>(),
-            };
-        }
-
-        public static QuestionnaireModelBuilder QuestionnaireModelBuilder()
-        {
-            return new QuestionnaireModelBuilder();
-        }
-
         public static QuestionnaireNameValidator QuestionnaireNameValidator(
-            IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
         {
             return new QuestionnaireNameValidator(
-                questionnaireBrowseItemStorage ?? Stub<IQueryableReadSideRepositoryReader<QuestionnaireBrowseItem>>.WithNotEmptyValues);
+                questionnaireBrowseItemStorage ?? Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
         }
 
         public static IPlainQuestionnaireRepository QuestionnaireRepositoryStubWithOneQuestionnaire(
@@ -2005,7 +2011,8 @@ namespace WB.Tests.Unit
 
             return Mock.Of<IPlainQuestionnaireRepository>(repository
                 => repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion ?? questionnaire.Version) == questionnaire
-                && repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion ?? 1) == questionnaire);
+                && repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion ?? 1) == questionnaire
+                && repository.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire);
         }
 
         public static QuestionnaireSharedPersons QuestionnaireSharedPersons(Guid? questionnaireId = null)
@@ -2041,6 +2048,12 @@ namespace WB.Tests.Unit
             => new RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions();
 
         public static RoslynExpressionProcessor RoslynExpressionProcessor() => new RoslynExpressionProcessor();
+
+        public static Group FixedRoster(Guid? rosterId = null, IEnumerable<string> fixedTitles = null, IEnumerable<IComposite> children = null)
+            => Create.Roster(
+                rosterId: rosterId,
+                children: children,
+                fixedTitles: fixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
 
         public static Group Roster(
             Guid? rosterId = null, 
@@ -2131,33 +2144,30 @@ namespace WB.Tests.Unit
         }
 
         public static SingleOptionLinkedQuestionViewModel SingleOptionLinkedQuestionViewModel(
-            QuestionnaireModel questionnaireModel = null,
+            IQuestionnaire questionnaire = null,
             IStatefulInterview interview = null,
             ILiteEventRegistry eventRegistry = null,
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionState = null,
             AnsweringViewModel answering = null)
         {
             var userIdentity = Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid());
-            questionnaireModel = questionnaireModel ?? Mock.Of<QuestionnaireModel>();
+            questionnaire = questionnaire ?? Mock.Of<IQuestionnaire>();
             interview = interview ?? Mock.Of<IStatefulInterview>();
 
             return new SingleOptionLinkedQuestionViewModel(
-                Mock.Of<IPrincipal>(_
-                    => _.CurrentUserIdentity == userIdentity),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireModel>>(_
-                    => _.GetById(It.IsAny<string>()) == questionnaireModel),
-                Mock.Of<IStatefulInterviewRepository>(_
-                    => _.Get(It.IsAny<string>()) == interview),
+                Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity),
+                Mock.Of<IPlainQuestionnaireRepository>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>()) == questionnaire),
+                Mock.Of<IStatefulInterviewRepository>(_ => _.Get(It.IsAny<string>()) == interview),
                 Create.AnswerToStringService(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 Stub.MvxMainThreadDispatcher(),
                 questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
-                answering ?? Mock.Of<AnsweringViewModel>(),
-                Mock.Of<AnswerNotifier>());
+                answering ?? Mock.Of<AnsweringViewModel>());
         }
 
         public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null,
-            Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title=null, bool hideIfDisabled = false)
+            Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title=null, bool hideIfDisabled = false, string linkedFilterExpression=null,
+            Guid? linkedToRosterId=null)
         {
             return new SingleQuestion
             {
@@ -2169,8 +2179,10 @@ namespace WB.Tests.Unit
                 ValidationExpression = validationExpression,
                 QuestionType = QuestionType.SingleOption,
                 LinkedToQuestionId = linkedToQuestionId,
+                LinkedToRosterId = linkedToRosterId,
                 CascadeFromQuestionId = cascadeFromQuestionId,
-                Answers = (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Answer(a.ToString(), a)).ToList()
+                Answers = (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Answer(a.ToString(), a)).ToList(),
+                LinkedFilterExpression= linkedFilterExpression
             };
         }
 
@@ -2228,11 +2240,19 @@ namespace WB.Tests.Unit
             return statefulInterview;
         }
 
+        public static IStatefulInterviewRepository StatefulInterviewRepository(IAggregateRootRepository aggregateRootRepository, ILiteEventBus liteEventBus = null)
+        {
+            return new StatefulInterviewRepository(
+                aggregateRootRepository: aggregateRootRepository ?? Mock.Of<IAggregateRootRepository>(),
+                eventBus: liteEventBus ?? Mock.Of<ILiteEventBus>());
+        }
+
         public static StaticText StaticText(
             Guid? staticTextId = null,
-            string text = "Static Text X")
+            string text = "Static Text X",
+            string attachmentName = null)
         {
-            return new StaticText(staticTextId ?? Guid.NewGuid(), text);
+            return new StaticText(staticTextId ?? Guid.NewGuid(), text, attachmentName);
         }
 
         public static IPublishedEvent<StaticTextAdded> StaticTextAddedEvent(string entityId = null, string parentId = null, string text = null)
@@ -2452,23 +2472,6 @@ namespace WB.Tests.Unit
                     DateTime.Now, "tttt"));
         }
 
-        public static LinkedSingleOptionQuestionModel LinkedSingleOptionQuestionModel(Guid? questionId, Guid  linkedToQuestionId)
-        {
-            return new LinkedSingleOptionQuestionModel
-            {
-                Id = questionId ?? Guid.NewGuid(),
-                LinkedToQuestionId = linkedToQuestionId
-            };
-        }
-
-        public static TextQuestionModel TextQuestionModel(Guid? questionId)
-        {
-            return new TextQuestionModel
-            {
-                Id  = questionId ?? Guid.NewGuid()
-            };
-        }
-
         public static TimeSpanBetweenStatuses TimeSpanBetweenStatuses(Guid? interviewerId = null, Guid? supervisorId = null, DateTime? timestamp = null, TimeSpan? timeSpanWithPreviousStatus = null)
         {
             return new TimeSpanBetweenStatuses()
@@ -2667,25 +2670,6 @@ namespace WB.Tests.Unit
                 answers: answers ?? new decimal[] {});
         }
 
-        public static YesNoQuestionModel YesNoQuestionModel(Guid id, bool areAnswersOrdered = true, int maxAllowedAnswers = 2, List<OptionModel> options = null)
-        {
-            return new YesNoQuestionModel
-            {
-                AreAnswersOrdered = areAnswersOrdered,
-                Id = id,
-                Instructions = "instructions",
-                Options = options ?? new List<OptionModel>
-                {
-                    Create.OptionModel("item1", 1),
-                    Create.OptionModel("item2", 2),
-                    Create.OptionModel("item3", 3),
-                    Create.OptionModel("item4", 4),
-                    Create.OptionModel("item5", 5),
-                },
-                MaxAllowedAnswers = maxAllowedAnswers
-            };
-        }
-
         internal static class Command
         {
             public static AddLookupTable AddLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId, string lookupTableName = "table")
@@ -2751,6 +2735,11 @@ namespace WB.Tests.Unit
             {
                 return new UpdateMacro(questionnaireId, macroId, name, content, description, userId ?? Guid.NewGuid());
             }
+
+            public static UpdateStaticText UpdateStaticText(Guid questionnaireId, Guid entityId, string text, string attachmentName, Guid responsibleId)
+            {
+                return new UpdateStaticText(questionnaireId, entityId, text, attachmentName, responsibleId);
+            }
         }
 
         private class SyncAsyncExecutorStub : IAsyncExecutor
@@ -2789,12 +2778,116 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static ValidationCondition ValidationCondition(string expression, string message)
+        public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")
         {
             return new ValidationCondition(expression, message);
         }
 
+        public static CommandPostprocessor CommandPostprocessor(
+            IMembershipUserService membershipUserService, 
+            IRecipientNotifier recipientNotifier, 
+            IAccountRepository accountRepository, 
+            IReadSideKeyValueStorage<QuestionnaireDocument> documentStorage, 
+            ILogger logger,
+            IAttachmentService attachmentService = null,
+            ILookupTableService lookupTableService = null)
+        {
+             return new CommandPostprocessor(
+                membershipUserService,
+                recipientNotifier,
+                accountRepository,
+                documentStorage,
+                logger,
+                attachmentService ?? Mock.Of<IAttachmentService>(),
+                lookupTableService ?? Mock.Of<ILookupTableService>());
+        }
+
         public static InterviewEventStreamOptimizer InterviewEventStreamOptimizer()
             => new InterviewEventStreamOptimizer();
+
+        public static InterviewLinkedQuestionOptions InterviewLinkedQuestionOptions(params ChangedLinkedOptions[] options)
+        {
+            var result = new InterviewLinkedQuestionOptions();
+
+            foreach (var changedLinkedQuestion in options)
+            {
+                result.LinkedQuestionOptions[changedLinkedQuestion.QuestionId.ToString()] = changedLinkedQuestion.Options;
+            }
+
+            return result;
+        }
+
+        public static ChangedLinkedOptions ChangedLinkedOptions(Guid questionId,decimal[] questionRosterVector=null, RosterVector[] options=null)
+        {
+            return new ChangedLinkedOptions(new Identity(questionId, questionRosterVector ?? new decimal[0]),
+                options ?? new RosterVector[0]);
+        }
+        
+        public static AttachmentContentMetadata AttachmentContentMetadata(string contentType)
+        {
+            return new AttachmentContentMetadata()
+            {
+                ContentType = contentType,
+            };
+        }
+        
+        public static AttachmentContentData AttachmentContentData(byte[] content)
+        {
+            return new AttachmentContentData()
+            {
+                Content = content,
+            };
+        }
+
+        public static AttachmentViewModel AttachmentViewModel(
+            IPlainQuestionnaireRepository questionnaireRepository,
+            IStatefulInterviewRepository interviewRepository,
+            IAttachmentContentStorage attachmentContentStorage)
+        {
+            return new AttachmentViewModel(
+                questionnaireRepository: questionnaireRepository,
+                interviewRepository: interviewRepository,
+                attachmentContentStorage: attachmentContentStorage);
+        }
+
+        public static WB.Core.SharedKernels.Enumerator.Views.AttachmentContent Enumerator_AttachmentContent(string id)
+        {
+            return new Core.SharedKernels.Enumerator.Views.AttachmentContent()
+            {
+                Id = id,
+
+            };
+        }
+
+        public static IAggregateRootRepository AggregateRootRepository(IEventStore eventStore = null, ISnapshotStore snapshotStore = null, IDomainRepository repository = null)
+        {
+            return new AggregateRootRepository(eventStore, snapshotStore, repository);
+        }
+
+        public static ISnapshotStore SnapshotStore(Guid aggregateRootId, Snapshot snapshot = null)
+        {
+            return Mock.Of<ISnapshotStore>(_ => _.GetSnapshot(aggregateRootId, Moq.It.IsAny<int>()) == snapshot);
+        }
+
+        public static IEventStore EventStore(Guid eventSourceId, IEnumerable<CommittedEvent> committedEvents)
+        {
+            return Mock.Of<IEventStore>(_ =>
+                _.ReadFrom(eventSourceId, Moq.It.IsAny<int>(), Moq.It.IsAny<int>()) == new CommittedEventStream(eventSourceId, committedEvents));
+        }
+
+        public static IDomainRepository DomainRepository(IAggregateSnapshotter aggregateSnapshotter = null, IServiceLocator serviceLocator = null)
+        {
+            return new DomainRepository(
+                aggregateSnapshotter: aggregateSnapshotter ?? Mock.Of<IAggregateSnapshotter>(),
+                serviceLocator: serviceLocator ?? Mock.Of<IServiceLocator>());
+        }
+
+        public static IAggregateSnapshotter AggregateSnapshotter(AggregateRoot aggregateRoot = null, bool isARLoadedFromSnapshotSuccessfully = false)
+        {
+            return Mock.Of<IAggregateSnapshotter>(_ =>
+                _.TryLoadFromSnapshot(Moq.It.IsAny<Type>(), Moq.It.IsAny<Snapshot>(),
+                    Moq.It.IsAny<CommittedEventStream>(), out aggregateRoot) ==
+                isARLoadedFromSnapshotSuccessfully);
+        }
     }
 }

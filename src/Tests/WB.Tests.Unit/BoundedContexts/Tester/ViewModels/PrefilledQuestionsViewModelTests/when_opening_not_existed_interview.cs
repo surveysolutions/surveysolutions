@@ -29,9 +29,10 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsView
                 interviewRepository: interviewRepositoryMock.Object,
                 viewModelNavigationService: navigationServiceMock.Object,
                 logger: loggerMock.Object);
+            viewModel.Init(notExistedInterviewId);
         };
 
-        Because of = () => viewModel.Init(notExistedInterviewId);
+        Because of = async () => await viewModel.StartAsync();
 
         It should_check_interview_in_repository = () =>
             interviewRepositoryMock.Verify(ns => ns.Get(notExistedInterviewId), Times.Once());

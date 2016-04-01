@@ -41,6 +41,11 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             await this.NavigateToAsync<DashboardViewModel>();
         }
 
+        public async Task NavigateToLoginAsync()
+        {
+            await this.NavigateToAsync<LoginViewModel>();
+        }
+
         public async Task NavigateToInterviewAsync(string interviewId)
         {
             await this.NavigateToAsync<InterviewViewModel>(new { interviewId = interviewId });

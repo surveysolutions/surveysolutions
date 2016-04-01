@@ -17,10 +17,16 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
+using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
 namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
@@ -39,6 +45,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage;
         private readonly IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage;
         private readonly ILogger logger;
+        private readonly IAttachmentContentStorage attachmentContentStorage;
 
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
@@ -52,7 +59,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IUserInteractionService userInteractionService,
             IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage, 
             IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage,
-            ILogger logger)
+            ILogger logger,
+            IAttachmentContentStorage attachmentContentStorage) : base(principal, viewModelNavigationService)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
@@ -63,12 +71,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.questionnaireListStorage = questionnaireListStorage;
             this.dashboardLastUpdateStorage = dashboardLastUpdateStorage;
             this.logger = logger;
+            this.attachmentContentStorage = attachmentContentStorage;
             this.friendlyErrorMessageService = friendlyErrorMessageService;
         }
 
-        public async Task Init()
+        public override async Task StartAsync()
         {
-            this.localQuestionnaires = this.questionnaireListStorage.LoadAll();
+            this.localQuestionnaires = await this.questionnaireListStorage.LoadAllAsync();
             
             if (!localQuestionnaires.Any())
             {
@@ -92,8 +101,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             var trimmedSearchText = (searchTerm ?? "").Trim();
 
             Func<QuestionnaireListItem, bool> emptyFilter = x => true;
-            Func<QuestionnaireListItem, bool> titleSearchFilter = x => x.Title.Contains(trimmedSearchText) || 
-                                                                       (!string.IsNullOrEmpty(x.OwnerName) && x.OwnerName.Contains(trimmedSearchText));
+            Func<QuestionnaireListItem, bool> titleSearchFilter = x => x.Title.Contains(trimmedSearchText) ||
+                    (x.OwnerName != null && x.OwnerName.Contains(trimmedSearchText));
             Func<QuestionnaireListItem, bool> searchFilter = string.IsNullOrEmpty(trimmedSearchText)
                 ? emptyFilter
                 : titleSearchFilter;
@@ -252,14 +261,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             this.IsPublicShowed = true;
 
-            this.SearchByLocalQuestionnaires();
+            this.SearchByLocalQuestionnaires(this.SearchText);
         }
 
         private void ShowMyQuestionnaires()
         {
             this.IsPublicShowed = false;
 
-            this.SearchByLocalQuestionnaires();
+            this.SearchByLocalQuestionnaires(this.SearchText);
         }
 
         private async Task LoadQuestionnaireAsync(QuestionnaireListItem selectedQuestionnaire)
@@ -272,37 +281,16 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             try
             {
-                var questionnairePackage = await this.designerApiService.GetQuestionnaireAsync(
-                    selectedQuestionnaire: selectedQuestionnaire,
-                    onDownloadProgressChanged: (downloadProgress) =>
-                    {
-                        this.ProgressIndicator = string.Format(TesterUIResources.ImportQuestionnaire_DownloadProgress,
-                            downloadProgress);
-                    },
-                    token: this.tokenSource.Token);
+                var questionnairePackage = await this.DownloadQuestionnaire(selectedQuestionnaire);
 
                 if (questionnairePackage != null)
                 {
                     this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_StoreQuestionnaire;
 
-                    var questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111-1111-1111-1111-111111111111"), 1);
-                    var questionnaireDocument = questionnairePackage.Document;
-                    var supportingAssembly = questionnairePackage.Assembly;
-
-                    questionnaireDocument.PublicKey = questionnaireIdentity.QuestionnaireId;
-
-                    this.questionnaireImportService.ImportQuestionnaire(questionnaireIdentity, questionnaireDocument, supportingAssembly);
-
-                    this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_CreateInterview;
-
-                    var interviewId = Guid.NewGuid();
-
-                    await this.commandService.ExecuteAsync(new CreateInterviewOnClientCommand(
-                        interviewId: interviewId,
-                        userId: this.principal.CurrentUserIdentity.UserId,
-                        questionnaireIdentity: questionnaireIdentity,
-                        answersTime: DateTime.UtcNow,
-                        supervisorId: Guid.NewGuid()));
+                    await this.DownloadQuestionnaireAttachments(questionnairePackage);
+                    var questionnaireIdentity = GenerateFakeQuestionnaireIdentity();
+                    this.StoreQuestionnaireWithNewIdentity(questionnaireIdentity, questionnairePackage);
+                    var interviewId = await this.CreateInterview(questionnaireIdentity);
 
                     await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
                 }
@@ -335,11 +323,79 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
             catch (Exception ex)
             {
-                this.logger.Error("Import questionaire exception. ", ex);
+                this.logger.Error("Import questionnaire exception. ", ex);
             }
             finally
             {
                 this.IsInProgress = false;   
+            }
+        }
+
+        private QuestionnaireIdentity GenerateFakeQuestionnaireIdentity()
+        {
+            var questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111-1111-1111-1111-111111111111"), 1);
+            return questionnaireIdentity;
+        }
+
+        private async Task<Guid> CreateInterview(QuestionnaireIdentity questionnaireIdentity)
+        {
+            this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_CreateInterview;
+
+            var interviewId = Guid.NewGuid();
+
+            await this.commandService.ExecuteAsync(new CreateInterviewOnClientCommand(
+                interviewId: interviewId,
+                userId: this.principal.CurrentUserIdentity.UserId,
+                questionnaireIdentity: questionnaireIdentity,
+                answersTime: DateTime.UtcNow,
+                supervisorId: Guid.NewGuid()));
+            return interviewId;
+        }
+
+        private void StoreQuestionnaireWithNewIdentity(QuestionnaireIdentity questionnaireIdentity, Questionnaire questionnairePackage)
+        {
+            this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_StoreQuestionnaire;
+
+            var questionnaireDocument = questionnairePackage.Document;
+            var supportingAssembly = questionnairePackage.Assembly;
+
+            this.questionnaireImportService.ImportQuestionnaire(questionnaireIdentity, questionnaireDocument, supportingAssembly);
+        }
+
+        private async Task<Questionnaire> DownloadQuestionnaire(QuestionnaireListItem selectedQuestionnaire)
+        {
+            return await this.designerApiService.GetQuestionnaireAsync(
+                selectedQuestionnaire: selectedQuestionnaire,
+                onDownloadProgressChanged: (downloadProgress) =>
+                {
+                    this.ProgressIndicator = string.Format(TesterUIResources.ImportQuestionnaire_DownloadProgress, downloadProgress);
+                },
+                token: this.tokenSource.Token);
+        }
+
+        private async Task DownloadQuestionnaireAttachments(Questionnaire questionnaire)
+        {
+            if (questionnaire == null)
+                return;
+
+            var attachments = questionnaire.Document.Attachments;
+
+            foreach (var attachment in attachments)
+            {
+                var attachmentContentId = attachment.ContentId;
+
+                var isExistsContent = await this.attachmentContentStorage.IsExistAsync(attachmentContentId);
+                if (!isExistsContent)
+                {
+                    var attachmentContent = await this.designerApiService.GetAttachmentContentAsync(attachmentContentId,
+                                        onDownloadProgressChanged: (downloadProgress) =>
+                                        {
+                                            this.ProgressIndicator = string.Format(TesterUIResources.ImportQuestionnaireAttachments_DownloadProgress, downloadProgress);
+                                        },
+                                        token: this.tokenSource.Token);
+
+                    await this.attachmentContentStorage.StoreAsync(attachmentContent);
+                }
             }
         }
 
@@ -381,7 +437,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
             catch (Exception ex)
             {
-                this.logger.Error("Load questionaire list exception. ", ex);
+                this.logger.Error("Load questionnaire list exception. ", ex);
             }
             finally
             {

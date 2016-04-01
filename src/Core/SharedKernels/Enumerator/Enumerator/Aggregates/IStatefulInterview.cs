@@ -116,5 +116,10 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
         int CountActiveQuestionsInInterview();
 
         int CountInvalidQuestionsInInterview();
+
+        bool HasLinkedOptionsChangedEvents { get; }
+
+        [Obsolete("it should be removed when all clients has version 5.7 or higher")]
+        void MigrateLinkedOptionsToFiltered();
     }
 }

@@ -3,25 +3,16 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Dapper;
-using NHibernate;
-using Ninject;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
-using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
@@ -30,33 +21,27 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
     {
         private readonly string dataFileExtension = "tab";
 
-        private readonly ITransactionManagerProvider transactionManager;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
         private readonly ILogger logger;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly ICsvWriter csvWriter;
-        private readonly ISessionFactory sessionFactory;
+        private readonly InterviewExportredDataRowReader rowReader;
 
         protected InterviewsExporter()
         {
         }
 
-        public InterviewsExporter(ITransactionManagerProvider transactionManager, 
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries, 
-            IFileSystemAccessor fileSystemAccessor,
+        public InterviewsExporter(IFileSystemAccessor fileSystemAccessor,
             ILogger logger,
             InterviewDataExportSettings interviewDataExportSettings, 
             ICsvWriter csvWriter,
-            [Named(PostgresReadSideModule.ReadSideSessionFactoryName)]ISessionFactory sessionFactory)
+            InterviewExportredDataRowReader rowReader)
         {
-            this.transactionManager = transactionManager;
-            this.interviewSummaries = interviewSummaries;
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.csvWriter = csvWriter;
-            this.sessionFactory = sessionFactory;
+            this.rowReader = rowReader;
         }
 
         public virtual void Export(QuestionnaireExportStructure questionnaireExportStructure, List<Guid> interviewIdsToExport, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
@@ -202,15 +187,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         private InterviewExportedDataRecord ExportSingleInterview(Guid interviewId)
         {
-            IList<InterviewDataExportRecord> records = null;
-
-            using (var session = this.sessionFactory.OpenStatelessSession())
-            {
-                records = session.Connection.Query<InterviewDataExportRecord>("SELECT * FROM interviewdataexportrecords WHERE interviewid = @interviewId", 
-                                                                              new {interviewId = interviewId})
-                                            .ToList();
-            }
-
+            var records = this.rowReader.ReadExportDataForInterview(interviewId);
             var interviewExportStructure = InterviewDataExportView.CreateFromRecords(interviewId, records);
 
             InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(interviewExportStructure, interviewId);

@@ -78,13 +78,16 @@
     self.readyToUpdate = ko.observable(false);
 
     self.questionnaireVersions = ko.computed(function () {
-        return self.selectedQuestionnaire() ? self.selectedQuestionnaire().Versions.sort() : null;
+        return self.selectedQuestionnaire() ? self.selectedQuestionnaire().Versions.sort() : [];
     });
 
     self.questionnaireVariables = ko.observableArray(null);
 
     self.isVariablesEnabled = ko.observable(false);
-
+    self.isVersionsEnabled = ko.computed(function () {
+        return self.selectedQuestionnaire() ? true  : false;
+    });
+    
     self.selectedQuestionnaire.subscribe(function () {
         if (!_.isUndefined(self.selectedQuestionnaire()) && self.selectedQuestionnaire().Versions.length === 1) {
             self.selectedVersion(undefined);

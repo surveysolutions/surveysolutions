@@ -1,20 +1,15 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
 using Machine.Specifications;
 
 using Moq;
-
+using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Tests.Unit.SharedKernels.SurveyManagement;
 using It = Machine.Specifications.It;
 
@@ -24,10 +19,14 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
     {
         Establish context = () =>
         {
-            var storageAccessor = new TestAsyncPlainStorage<QuestionnaireListItem>(MyQuestionnaires.Union(PublicQuestionnaires));
+            var designerApiService = Mock.Of<IDesignerApiService>(
+                _ => _.GetQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(Questionnaires));
 
-            viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessor);
-            viewModel.Init();
+            var storageAccessor = new SqliteInmemoryStorage<QuestionnaireListItem>();
+
+            viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessor,
+                designerApiService: designerApiService);
+            viewModel.StartAsync().WaitAndUnwrapException();
         };
 
         Because of = () => viewModel.ShowPublicQuestionnairesCommand.Execute();
@@ -38,17 +37,13 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         private static DashboardViewModel viewModel;
 
-        private static readonly IReadOnlyCollection<QuestionnaireListItem> MyQuestionnaires = new List<QuestionnaireListItem>
+        private static readonly IReadOnlyCollection<QuestionnaireListItem> Questionnaires = new List<QuestionnaireListItem>
         {
-            new QuestionnaireListItem(){IsPublic = false},
-            new QuestionnaireListItem(){IsPublic = false}
-        };
-
-        private static readonly IReadOnlyCollection<QuestionnaireListItem> PublicQuestionnaires = new List<QuestionnaireListItem>
-        {
-            new QuestionnaireListItem(){IsPublic = true},
-            new QuestionnaireListItem(){IsPublic = true},
-            new QuestionnaireListItem(){IsPublic = true}
+            new QuestionnaireListItem { IsPublic = false, Id = "1"},
+            new QuestionnaireListItem { IsPublic = false, Id = "2"},
+            new QuestionnaireListItem {IsPublic = true, Id = "3"},
+            new QuestionnaireListItem {IsPublic = true, Id = "4"},
+            new QuestionnaireListItem {IsPublic = true, Id = "5"}
         };
     }
 }

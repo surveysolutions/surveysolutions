@@ -18,12 +18,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.QuestionnaireId);
             Property(x => x.QuestionnaireVersion);
 
-            Set(x => x.TimeSpansBetweenStatuses, set =>
-            {
-                set.Key(key => key.Column("InterviewId"));
-                set.Lazy(CollectionLazy.NoLazy);
-                set.Cascade(Cascade.All | Cascade.DeleteOrphans);
-            },
+            Set(x => x.TimeSpansBetweenStatuses, set => {
+                    set.Key(key =>
+                    {
+                        key.Column(cm =>
+                        {
+                            cm.Name("InterviewId");
+                            cm.Index("InterviewStatusTimeSpans_InterviewId");
+                        });
+                    });
+                    set.Lazy(CollectionLazy.NoLazy);
+                    set.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                },
                 relation => relation.OneToMany());
         }
     }

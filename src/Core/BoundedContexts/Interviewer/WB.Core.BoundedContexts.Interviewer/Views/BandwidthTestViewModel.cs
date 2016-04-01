@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-    public class BandwidthTestViewModel : BaseViewModel
+    public class BandwidthTestViewModel : MvxNotifyPropertyChanged
     {
         private readonly INetworkService networkService;
         private readonly IRestService restService;

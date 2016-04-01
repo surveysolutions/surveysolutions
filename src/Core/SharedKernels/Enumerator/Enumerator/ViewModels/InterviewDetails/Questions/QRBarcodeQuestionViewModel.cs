@@ -156,7 +156,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (this.questionIdentity.Equals(@event.QuestionId, @event.RosterVector))
             {
-                this.QuestionState.IsAnswered = false;
                 this.Answer = null;
             }
         }

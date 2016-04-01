@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IPasswordHasher passwordHasher,
             IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage, 
             ISynchronizationService synchronizationService,
-            ILogger logger)
+            ILogger logger) : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.principal = principal;
@@ -39,6 +39,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.synchronizationService = synchronizationService;
             this.logger = logger;
         }
+
+        public override bool IsAuthenticationRequired => false;
 
         public string UserName { get; set; }
 
@@ -94,8 +96,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             get { return new MvxCommand(async () => await this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>()); }
         }
-
-        public async void Init()
+        
+        public override async Task StartAsync()
         {
             InterviewerIdentity currentInterviewer = this.interviewersPlainStorage.FirstOrDefault();
 

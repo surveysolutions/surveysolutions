@@ -38,14 +38,14 @@ namespace WB.UI.Designer.Code.Implementation
 
         private void InflateCopyPasteProperties(ICommand command)
         {
-            var currentPasteItemAfterCommand = command as PasteAfterCommand;
+            var currentPasteItemAfterCommand = command as PasteAfter;
             if (currentPasteItemAfterCommand != null)
             {
                 currentPasteItemAfterCommand.SourceDocument =
                     GetQuestionnaire(currentPasteItemAfterCommand.SourceQuestionnaireId);
             }
 
-            var currentPasteItemIntoCommand = command as PasteIntoCommand;
+            var currentPasteItemIntoCommand = command as PasteInto;
             if (currentPasteItemIntoCommand != null)
             {
                 currentPasteItemIntoCommand.SourceDocument =
@@ -85,7 +85,7 @@ namespace WB.UI.Designer.Code.Implementation
 
         private static void ValidateAddSharedPersonCommand(ICommand command)
         {
-            var addSharedPersonCommand = command as AddSharedPersonToQuestionnaireCommand;
+            var addSharedPersonCommand = command as AddSharedPersonToQuestionnaire;
             if (addSharedPersonCommand != null)
             {
                 var sharedPersonUserName = Membership.GetUserNameByEmail(addSharedPersonCommand.Email);
@@ -96,7 +96,7 @@ namespace WB.UI.Designer.Code.Implementation
 
         private static void ValidateRemoveSharedPersonCommand(ICommand command)
         {
-            var removeSharedPersonCommand = command as RemoveSharedPersonFromQuestionnaireCommand;
+            var removeSharedPersonCommand = command as RemoveSharedPersonFromQuestionnaire;
             if (removeSharedPersonCommand != null)
             {
                 var sharedPersonUserName = Membership.GetUserNameByEmail(removeSharedPersonCommand.Email);

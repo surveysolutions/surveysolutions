@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Events;
@@ -32,11 +31,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IAsyncPlainStorage<InterviewFileView> interviewFileViewRepository;
         private readonly ICommandService commandService;
         private readonly IInterviewerPrincipal principal;
-        private readonly ISerializer serializer;
-        private readonly IStringCompressor compressor;
         private readonly IInterviewerEventStorage eventStore;
         private readonly IAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache;
         private readonly ISnapshotStoreWithCache snapshotStoreWithCache;
+        private readonly ISerializer serializer;
         private readonly IInterviewEventStreamOptimizer eventStreamOptimizer;
 
         public InterviewerInterviewAccessor(
@@ -46,11 +44,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IAsyncPlainStorage<InterviewFileView> interviewFileViewRepository,
             ICommandService commandService,
             IInterviewerPrincipal principal,
-            ISerializer serializer,
-            IStringCompressor compressor,
             IInterviewerEventStorage eventStore,
             IAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache,
             ISnapshotStoreWithCache snapshotStoreWithCache,
+            ISerializer serializer,
             IInterviewEventStreamOptimizer eventStreamOptimizer)
         {
             this.questionnaireRepository = questionnaireRepository;
@@ -59,23 +56,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.interviewFileViewRepository = interviewFileViewRepository;
             this.commandService = commandService;
             this.principal = principal;
-            this.serializer = serializer;
-            this.compressor = compressor;
             this.eventStore = eventStore;
             this.aggregateRootRepositoryWithCache = aggregateRootRepositoryWithCache;
             this.snapshotStoreWithCache = snapshotStoreWithCache;
+            this.serializer = serializer;
             this.eventStreamOptimizer = eventStreamOptimizer;
         }
 
         public async Task RemoveInterviewAsync(Guid interviewId)
         {
-            await this.commandService.ExecuteAsync(new HardDeleteInterview(interviewId,
-                this.principal.CurrentUserIdentity.UserId));
-
             this.aggregateRootRepositoryWithCache.CleanCache();
             this.snapshotStoreWithCache.CleanCache();
 
             this.eventStore.RemoveEventSourceById(interviewId);
+
+            await this.interviewViewRepository.RemoveAsync(interviewId.FormatGuid());
 
             await this.RemoveInterviewImagesAsync(interviewId);
         }
@@ -91,14 +86,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             await this.interviewMultimediaViewRepository.RemoveAsync(imageViews);
         }
 
-        public async Task<string> GetPackageByCompletedInterviewAsync(Guid interviewId)
+        public async Task<InterviewPackageApiView> GetPackageByCompletedInterviewAsync(Guid interviewId)
         {
             InterviewView interview = await Task.FromResult(this.interviewViewRepository.GetById(interviewId.FormatGuid()));
 
             return await Task.Run(() => this.CreateSyncItem(interview));
         }
 
-        private string CreateSyncItem(InterviewView interview)
+        private InterviewPackageApiView CreateSyncItem(InterviewView interview)
         {
             AggregateRootEvent[] eventsToSend = this.BuildEventStreamOfLocalChangesToSend(interview.InterviewId);
 
@@ -119,16 +114,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 FeaturedQuestionsMeta = interview.AnswersOnPrefilledQuestions.Select(ToFeaturedQuestionMeta).ToList()
             };
 
-            var syncItem = new SyncItem
+            return new InterviewPackageApiView
             {
-                Content = this.compressor.CompressString(this.serializer.Serialize(eventsToSend, TypeSerializationSettings.AllTypes)),
-                IsCompressed = true,
-                ItemType = SyncItemType.Interview,
-                MetaInfo = this.compressor.CompressString(this.serializer.Serialize(metadata, TypeSerializationSettings.AllTypes)),
-                RootId = interview.InterviewId
+                InterviewId = interview.InterviewId,
+                Events = this.serializer.Serialize(eventsToSend),
+                MetaInfo = metadata
             };
-
-            return this.serializer.Serialize(syncItem);
         }
 
         private FeaturedQuestionMeta ToFeaturedQuestionMeta(InterviewAnswerOnPrefilledQuestionView prefilledQuestion)
@@ -150,16 +141,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return eventsToSend;
         }
 
-        public async Task CreateInterviewAsync(InterviewApiView info, InterviewDetailsApiView details)
+        public async Task CreateInterviewAsync(InterviewApiView info, InterviewerInterviewApiView details)
         {
             var questionnaireView = this.questionnaireRepository.GetById(info.QuestionnaireIdentity.ToString());
 
-            var answersOnPrefilledQuestions = details
-                .AnswersOnPrefilledQuestions?
-                .Select(prefilledQuestion => new AnsweredQuestionSynchronizationDto(prefilledQuestion.QuestionId, new decimal[0], prefilledQuestion.Answer, string.Empty))
-                .ToArray();
-
             var interviewStatus = info.IsRejected ? InterviewStatus.RejectedBySupervisor :  InterviewStatus.InterviewerAssigned;
+            var interviewDetails = this.serializer.Deserialize<InterviewSynchronizationDto>(details.Details, TypeSerializationSettings.AllTypes);
 
             var createInterviewFromSynchronizationMetadataCommand = new CreateInterviewFromSynchronizationMetadata(
                 interviewId: info.Id,
@@ -167,69 +154,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 questionnaireId: info.QuestionnaireIdentity.QuestionnaireId,
                 questionnaireVersion: info.QuestionnaireIdentity.Version,
                 status: interviewStatus,
-                featuredQuestionsMeta: answersOnPrefilledQuestions ?? new AnsweredQuestionSynchronizationDto[0],
-                comments: details.LastSupervisorOrInterviewerComment,
-                rejectedDateTime: details.RejectedDateTime,
-                interviewerAssignedDateTime: details.InterviewerAssignedDateTime,
+                featuredQuestionsMeta: details.AnswersOnPrefilledQuestions ?? new AnsweredQuestionSynchronizationDto[0],
+                comments: interviewDetails.Comments,
+                rejectedDateTime: interviewDetails.RejectDateTime,
+                interviewerAssignedDateTime: interviewDetails.InterviewerAssignedDateTime,
                 valid: true,
                 createdOnClient: questionnaireView.Census);
-
-            IList<KeyValuePair<Identity, IList<FailedValidationCondition>>> failedConditionsList =
-                this.serializer.Deserialize<IList<KeyValuePair<Identity, IList<FailedValidationCondition>>>>(details.FailedValidationConditions);
 
            var synchronizeInterviewCommand = new SynchronizeInterviewCommand(
                 interviewId: info.Id,
                 userId: this.principal.CurrentUserIdentity.UserId,
-                sycnhronizedInterview: new InterviewSynchronizationDto(
-                    info.Id,
-                    interviewStatus,
-                    details.LastSupervisorOrInterviewerComment,
-                    details.RejectedDateTime,
-                    details.InterviewerAssignedDateTime,
-                    this.principal.CurrentUserIdentity.UserId,
-                    info.QuestionnaireIdentity.QuestionnaireId,
-                    info.QuestionnaireIdentity.Version,
-                    details.Answers?.Select(this.ToAnsweredQuestionSynchronizationDto).ToArray() ??new AnsweredQuestionSynchronizationDto[0],
-                    new HashSet<InterviewItemId>(details.DisabledGroups?.Select(this.ToInterviewItemId) ?? new InterviewItemId[0]),
-                    new HashSet<InterviewItemId>(details.DisabledQuestions?.Select(this.ToInterviewItemId) ?? new InterviewItemId[0]),
-                    new HashSet<InterviewItemId>(details.ValidAnsweredQuestions?.Select(this.ToInterviewItemId) ?? new InterviewItemId[0]),
-                    new HashSet<InterviewItemId>(details.InvalidAnsweredQuestions?.Select(this.ToInterviewItemId) ?? new InterviewItemId[0]),
-                    details.RosterGroupInstances?.ToDictionary(roster => this.ToInterviewItemId(roster.Identity), roster =>
-                            roster.Instances?.Select(this.ToRosterSynchronizationDto).ToArray() ??
-                            new RosterSynchronizationDto[0]) ?? new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),
-                    failedConditionsList,
-                    false)
+                sycnhronizedInterview: interviewDetails
                 );
 
             await this.commandService.ExecuteAsync(createInterviewFromSynchronizationMetadataCommand);
             await this.commandService.ExecuteAsync(synchronizeInterviewCommand);
-        }
-
-        private AnsweredQuestionSynchronizationDto ToAnsweredQuestionSynchronizationDto(InterviewAnswerApiView answer)
-        {
-            return new AnsweredQuestionSynchronizationDto
-            {
-                Id = answer.QuestionId,
-                QuestionRosterVector = answer.QuestionRosterVector ?? new decimal[0],
-                AllComments = new CommentSynchronizationDto[0],
-                Comments = answer.LastSupervisorOrInterviewerComment,
-                Answer = this.serializer.Deserialize<object>(answer.JsonAnswer)
-            };
-        }
-
-        private RosterSynchronizationDto ToRosterSynchronizationDto(RosterInstanceApiView roster)
-        {
-            return new RosterSynchronizationDto(
-                rosterId: roster.RosterId,
-                outerScopeRosterVector: roster.OuterScopeRosterVector?.ToArray() ?? new decimal[0],
-                rosterInstanceId: roster.RosterInstanceId,
-                sortIndex: roster.SortIndex,
-                rosterTitle: roster.RosterTitle);
-        }
-
-        private InterviewItemId ToInterviewItemId(IdentityApiView identity)
-        {
-            return new InterviewItemId(identity.QuestionId, identity.RosterVector?.ToArray() ?? new decimal[0]);
         }
     }
 }

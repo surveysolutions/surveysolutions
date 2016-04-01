@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
 using System.Web.Http.Controllers;
 using WB.UI.Headquarters.Code;
 using System.Web.Http.Filters;
@@ -12,9 +13,13 @@ namespace WB.UI.Headquarters.Filters
         {
             if (!LegacyOptions.SupervisorFunctionsEnabled)
             {
-                var interviewerDevicesController = filterContext.ControllerContext.Controller as InterviewerDevicesController;
+                var interviewerApiNamespace = typeof (InterviewerControllerBase).Namespace;
+                var requestedControllerNamespace = filterContext.ControllerContext.Controller?.GetType().Namespace;
+                var isInterviewerController = requestedControllerNamespace != null &&
+                                              (interviewerApiNamespace != null &&
+                                               requestedControllerNamespace.IndexOf(interviewerApiNamespace, StringComparison.OrdinalIgnoreCase) > -1);
 
-                if (interviewerDevicesController != null)
+                if (isInterviewerController)
                 {
                     throw new HttpException(404, "synchronization controller is missing with current web site configuration");
                 }

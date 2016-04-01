@@ -137,7 +137,6 @@
     <Compile Include="DataExport\ExportProcessHandlers\TabBasedFormatExportHandler.cs" />
     <Compile Include="DataExport\ExportSettings.cs" />
     <Compile Include="DataExport\Denormalizers\ExportViewFactory.cs" />
-    <Compile Include="DataExport\Denormalizers\IExportViewFactory.cs" />
     <Compile Include="DataExport\Dtos\DataExportStatus.cs" />
     <Compile Include="DataExport\Dtos\DataExportFormat.cs" />
     <Compile Include="DataExport\Dtos\DataExportType.cs" />
@@ -169,6 +168,7 @@
     <Compile Include="DataExport\Services\CsvWriterService.cs" />
     <Compile Include="DataExport\Services\DataExporter.cs" />
     <Compile Include="DataExport\Services\DataExportProcessesService.cs" />
+    <Compile Include="DataExport\Services\Exporters\InterviewExportredDataRowReader.cs" />
     <Compile Include="DataExport\Services\Exporters\InterviewsExporter.cs" />
     <Compile Include="DataExport\Services\IDataExporter.cs" />
     <Compile Include="DataExport\Services\IDataExportProcessesService.cs" />
@@ -187,7 +187,6 @@
     <Compile Include="DataExport\Views\Labels\QuestionnaireLevelLabels.cs" />
     <Compile Include="DataExport\Views\Labels\VariableValueLabel.cs" />
     <Compile Include="DataExport\Views\RunningDataExportProcessView.cs" />
-    <Compile Include="DataExport\Denormalizers\QuestionnaireExportStructureDenormalizer.cs" />
     <Compile Include="DataExport\Ddi\Impl\DdiMetadataFactory.cs" />
     <Compile Include="DataExport\Ddi\Impl\DdiMetadataAccessor.cs" />
     <Compile Include="DataExport\Ddi\IDdiMetadataFactory.cs" />

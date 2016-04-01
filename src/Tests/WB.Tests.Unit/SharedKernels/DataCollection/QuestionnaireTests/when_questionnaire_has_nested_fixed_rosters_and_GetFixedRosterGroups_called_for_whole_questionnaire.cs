@@ -10,6 +10,8 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
@@ -18,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
         Establish context = () =>
         {
             rosterGroupId = new Guid("EBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            QuestionnaireDocument questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
+            questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
             {
                 new NumericQuestion()
                 {
@@ -49,12 +51,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                     IsRoster = true
                 }
             });
-
-            questionnaire = CreateImportedQuestionnaire(Guid.NewGuid(), questionnaireDocument);
+            
         };
 
         Because of = () =>
-            nestedRosters = questionnaire.GetQuestionnaire().GetFixedRosterGroups(null);
+            nestedRosters = new PlainQuestionnaire(questionnaireDocument, 1).GetFixedRosterGroups(null);
 
         It should_rosterGroups_not_be_empty = () =>
             nestedRosters.ShouldNotBeEmpty();
@@ -63,7 +64,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
             nestedRosters.ShouldContainOnly(fixedRosterId);
 
         private static IEnumerable<Guid> nestedRosters;
-        private static Questionnaire questionnaire;
+        private static QuestionnaireDocument questionnaireDocument;
         private static Guid rosterSizeQuestionId = new Guid("ABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static Guid nestedRosterId = new Guid("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         private static Guid fixedRosterId =new Guid("CBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");

@@ -4,9 +4,11 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -23,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries = null,
             IArchiveUtils archiveUtils = null,
             IReadSideKeyValueStorage<InterviewData> interviewDatas = null,
-            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireReader = null,
+            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage = null,
             IDataExportProcessesService dataExportProcessesService = null)
         {
             return new BinaryFormatDataExportHandler(
@@ -35,8 +37,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
                 interviewSummaries ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
                 archiveUtils ?? Mock.Of<IArchiveUtils>(),
                 interviewDatas ?? Mock.Of<IReadSideKeyValueStorage<InterviewData>>(),
-                questionnaireReader ?? Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(),
-                dataExportProcessesService ?? Mock.Of<IDataExportProcessesService>());
+                dataExportProcessesService ?? Mock.Of<IDataExportProcessesService>(),
+                questionnaireExportStructureStorage: questionnaireExportStructureStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireExportStructure>>());
         }
     }
 }

@@ -30,14 +30,46 @@
                     return commandCall(type, command);
                 };
 
+                commandService.updateAttachment = function (questionnaireId, attachment) {
+                    blockUI.start();
+
+                    var command = {
+                        questionnaireId: questionnaireId,
+                        attachmentId: attachment.attachmentId,
+                        attachmentName: attachment.name
+                    };
+
+                    var fileName = "";
+                    if (!_.isUndefined(attachment.meta)) {
+                        fileName = attachment.meta.fileName;
+                    }
+
+                    return Upload.upload({
+                        url: urlBase + '/attachment',
+                        data: { file: _.isNull(attachment.file) ? "" : attachment.file, fileName: fileName,  "command": JSON.stringify(command) }
+                    }).success(function () {
+                        blockUI.stop();
+                    }).error(function () {
+                        blockUI.stop();
+                    });
+                };
+
+                commandService.deleteAttachment = function (questionnaireId, attachmentId) {
+                    var command = {
+                        questionnaireId: questionnaireId,
+                        attachmentId: attachmentId
+                    };
+                    return commandCall("DeleteAttachment", command);
+                };
+
                 commandService.updateLookupTable = function (questionnaireId, lookupTable) {
                     blockUI.start();
 
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "lookupTableId": lookupTable.itemId,
-                        "lookupTableName": lookupTable.name,
-                        "lookupTableFileName": lookupTable.fileName
+                        questionnaireId: questionnaireId,
+                        lookupTableId: lookupTable.itemId,
+                        lookupTableName: lookupTable.name,
+                        lookupTableFileName: lookupTable.fileName
                     };
 
                     return Upload.upload({
@@ -52,35 +84,35 @@
 
                 commandService.addLookupTable = function (questionnaireId, lookupTable) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "lookupTableId": lookupTable.itemId
+                        questionnaireId: questionnaireId,
+                        lookupTableId: lookupTable.itemId
                     };
                     return commandCall("AddLookupTable", command);
                 };
 
                 commandService.deleteLookupTable = function (questionnaireId, itemId) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "lookupTableId": itemId
+                        questionnaireId: questionnaireId,
+                        lookupTableId: itemId
                     };
                     return commandCall("DeleteLookupTable", command);
                 };
 
                 commandService.addMacro = function (questionnaireId, macro) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "macroId": macro.itemId
+                        questionnaireId: questionnaireId,
+                        macroId: macro.itemId
                     };
                     return commandCall("AddMacro", command);
                 };
 
                 commandService.updateMacro = function (questionnaireId, macro) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "macroId": macro.itemId,
-                        "name": macro.name,
-                        "content": macro.content,
-                        "description": macro.description
+                        questionnaireId: questionnaireId,
+                        macroId: macro.itemId,
+                        name: macro.name,
+                        content: macro.content,
+                        description: macro.description
                     };
 
                     return commandCall("UpdateMacro", command);
@@ -88,8 +120,8 @@
 
                 commandService.deleteMacros = function(questionnaireId, itemId) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "macroId": itemId
+                        questionnaireId: questionnaireId,
+                        macroId: itemId
                     };
                     return commandCall("DeleteMacro", command);
                 };
@@ -122,6 +154,7 @@
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
                         command.linkedToEntityId = question.linkedToEntityId;
+                        command.linkedFilterExpression = question.linkedFilterExpression;
                         command.isFilteredCombobox = question.isFilteredCombobox || false;
                         command.cascadeFromQuestionId = question.cascadeFromQuestionId;
                         command.enablementCondition = question.cascadeFromQuestionId ? '' : command.enablementCondition;
@@ -137,6 +170,7 @@
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
                         command.linkedToEntityId = question.linkedToEntityId;
+                        command.linkedFilterExpression = question.linkedFilterExpression;
                         command.yesNoView = question.yesNoView;
                         command.options = _.isEmpty(command.linkedToEntityId) ? question.options : null;
                         break;
@@ -161,18 +195,18 @@
 
                 commandService.addChapter = function(questionnaireId, chapter) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "groupId": chapter.itemId,
-                        "title": chapter.title,
-                        "condition": "",
-                        "hideIfDisabled": false,
-                        "isRoster": false,
-                        "rosterSizeQuestionId": null,
-                        "rosterSizeSource": "Question",
-                        "rosterFixedTitles": null,
-                        "rosterTitleQuestionId": null,
-                        "parentGroupId": null,
-                        "variableName": null
+                        questionnaireId: questionnaireId,
+                        groupId: chapter.itemId,
+                        title: chapter.title,
+                        condition: "",
+                        hideIfDisabled: false,
+                        isRoster: false,
+                        rosterSizeQuestionId: null,
+                        rosterSizeSource: "Question",
+                        rosterFixedTitles: null,
+                        rosterTitleQuestionId: null,
+                        parentGroupId: null,
+                        variableName: null
                     };
 
                     return commandCall("AddGroup", command);
@@ -180,38 +214,38 @@
 
                 commandService.addGroup = function (questionnaireId, group, parentGroupId, index) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "groupId": group.itemId,
-                        "title": group.title,
-                        "condition": "",
-                        "hideIfDisabled": false,
-                        "isRoster": false,
-                        "rosterSizeQuestionId": null,
-                        "rosterSizeSource": "Question",
-                        "rosterFixedTitles": null,
-                        "rosterTitleQuestionId": null,
-                        "parentGroupId": parentGroupId,
-                        "variableName": null,
-                        "index": index
+                        questionnaireId: questionnaireId,
+                        groupId: group.itemId,
+                        title: group.title,
+                        condition: "",
+                        hideIfDisabled: false,
+                        isRoster: false,
+                        rosterSizeQuestionId: null,
+                        rosterSizeSource: "Question",
+                        rosterFixedTitles: null,
+                        rosterTitleQuestionId: null,
+                        parentGroupId: parentGroupId,
+                        variableName: null,
+                        index: index
                     };
                     return commandCall("AddGroup", command);
                 };
 
                 commandService.addRoster = function (questionnaireId, group, parentGroupId, index) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "groupId": group.itemId,
-                        "title": group.title,
-                        "condition": "",
-                        "hideIfDisabled": false,
-                        "isRoster": true,
-                        "rosterSizeQuestionId": null,
-                        "rosterSizeSource": "FixedTitles",
-                        "fixedRosterTitles": [{ value: 1, title: "First Title" }, { value:2, title: "Second Title" }],
-                        "rosterTitleQuestionId": null,
-                        "parentGroupId": parentGroupId,
-                        "variableName": group.variableName,
-                        "index": index
+                        questionnaireId: questionnaireId,
+                        groupId: group.itemId,
+                        title: group.title,
+                        condition: "",
+                        hideIfDisabled: false,
+                        isRoster: true,
+                        rosterSizeQuestionId: null,
+                        rosterSizeSource: "FixedTitles",
+                        fixedRosterTitles: [{ value: 1, title: "First Title" }, { value:2, title: "Second Title" }],
+                        rosterTitleQuestionId: null,
+                        parentGroupId: parentGroupId,
+                        variableName: group.variableName,
+                        index: index
                     };
 
                     return commandCall("AddGroup", command);
@@ -219,28 +253,28 @@
 
                 commandService.addStaticText = function (questionnaireId, staticText, parentId, index) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "entityId": staticText.itemId,
-                        "text": staticText.text,
-                        "parentId": parentId,
-                        "index": index
+                        questionnaireId: questionnaireId,
+                        entityId: staticText.itemId,
+                        text: staticText.text,
+                        parentId: parentId,
+                        index: index
                     };
                     return commandCall("AddStaticText", command);
                 };
 
                 commandService.updateGroup = function(questionnaireId, group) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "groupId": group.itemId,
-                        "title": group.title,
-                        "condition": group.enablementCondition,
-                        "hideIfDisabled": group.hideIfDisabled,
-                        "isRoster": false,
-                        "rosterSizeQuestionId": null,
-                        "rosterSizeSource": "Question",
-                        "rosterFixedTitles": null,
-                        "rosterTitleQuestionId": null,
-                        "variableName":null
+                        questionnaireId: questionnaireId,
+                        groupId: group.itemId,
+                        title: group.title,
+                        condition: group.enablementCondition,
+                        hideIfDisabled: group.hideIfDisabled,
+                        isRoster: false,
+                        rosterSizeQuestionId: null,
+                        rosterSizeSource: "Question",
+                        rosterFixedTitles: null,
+                        rosterTitleQuestionId: null,
+                        variableName:null
                     };
 
                     return commandCall("UpdateGroup", command);
@@ -249,14 +283,14 @@
                 commandService.updateRoster = function(questionnaireId, incomingRoster) {
 
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "groupId": incomingRoster.itemId,
-                        "title": incomingRoster.title,
-                        "description": incomingRoster.description,
-                        "condition": incomingRoster.enablementCondition,
-                        "hideIfDisabled": incomingRoster.hideIfDisabled,
-                        "variableName": incomingRoster.variableName,
-                        "isRoster": true
+                        questionnaireId: questionnaireId,
+                        groupId: incomingRoster.itemId,
+                        title: incomingRoster.title,
+                        description: incomingRoster.description,
+                        condition: incomingRoster.enablementCondition,
+                        hideIfDisabled: incomingRoster.hideIfDisabled,
+                        variableName: incomingRoster.variableName,
+                        isRoster: true
                     };
 
                     switch (incomingRoster.type) {
@@ -281,9 +315,10 @@
                 
                 commandService.updateStaticText = function (questionnaireId, staticText) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "entityId": staticText.itemId,
-                        "text": staticText.text
+                        questionnaireId: questionnaireId,
+                        entityId: staticText.itemId,
+                        text: staticText.text,
+                        attachmentName: staticText.attachmentName
                     };
 
                     return commandCall("UpdateStaticText", command);
@@ -291,10 +326,10 @@
 
                 commandService.addQuestion = function (questionnaireId, parentGroupId, newId, index) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "parentGroupId": parentGroupId,
-                        "questionId": newId,
-                        "index": index
+                        questionnaireId: questionnaireId,
+                        parentGroupId: parentGroupId,
+                        questionId: newId,
+                        index: index
                     };
 
                     return commandCall("AddDefaultTypeQuestion", command);
@@ -302,8 +337,8 @@
 
                 commandService.deleteGroup = function(questionnaireId, itemId) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "groupId": itemId
+                        questionnaireId: questionnaireId,
+                        groupId: itemId
                     };
 
                     return commandCall("DeleteGroup", command);
@@ -311,8 +346,8 @@
 
                 commandService.deleteQuestion = function (questionnaireId, itemId) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "questionId": itemId
+                        questionnaireId: questionnaireId,
+                        questionId: itemId
                     };
 
                     return commandCall("DeleteQuestion", command);
@@ -320,8 +355,8 @@
 
                 commandService.deleteStaticText = function (questionnaireId, itemId) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "entityId": itemId
+                        questionnaireId: questionnaireId,
+                        entityId: itemId
                     };
 
                     return commandCall("DeleteStaticText", command);

@@ -160,6 +160,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter expression has a syntax error..
+        /// </summary>
+        internal static string WB00110_LinkedQuestionFilterExpresssionHasIncorrectSyntax {
+            get {
+                return ResourceManager.GetString("WB00110_LinkedQuestionFilterExpresssionHasIncorrectSyntax", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Linked question references a question type that is not supported..
         /// </summary>
         internal static string WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType {
@@ -640,6 +649,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Another attachment with the same name already exists..
+        /// </summary>
+        internal static string WB0065_NameForAyyachmentIsNotUnique {
+            get {
+                return ResourceManager.GetString("WB0065_NameForAyyachmentIsNotUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question of this type is not supported..
         /// </summary>
         internal static string WB0066_QuestionTypeIsNotAllowed {
@@ -910,6 +928,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Static text refers absent attachment.
+        /// </summary>
+        internal static string WB0095_StaticTextRefersAbsentAttachment {
+            get {
+                return ResourceManager.GetString("WB0095_StaticTextRefersAbsentAttachment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error occurred during questionnaire compilation..
         /// </summary>
         internal static string WB0096_GeneralCompilationError {
@@ -947,7 +974,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max number of answers for roster size question cannot be greater then 40..
+        ///   Looks up a localized string similar to Max number of answers for roster size question cannot be greater than 40..
         /// </summary>
         internal static string WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen40 {
             get {
@@ -1019,11 +1046,173 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Linked question filter expression has length more than 10,000 characters..
+        /// </summary>
+        internal static string WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters {
+            get {
+                return ResourceManager.GetString("WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Categorical linked question cannot be used in linked question filter expression..
+        /// </summary>
+        internal static string WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion {
+            get {
+                return ResourceManager.GetString("WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attachment cannot be empty.
+        /// </summary>
+        internal static string WB0110_AttachmentHasEmptyContent {
+            get {
+                return ResourceManager.GetString("WB0110_AttachmentHasEmptyContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters..
         /// </summary>
         internal static string WB0200_LargeNumberOfRostersIsCreated {
             get {
                 return ResourceManager.GetString("WB0200_LargeNumberOfRostersIsCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Section or Roster contains more than 200 questions, consider splitting into sub-sections..
+        /// </summary>
+        internal static string WB0201_LargeNumberOfQuestionsInGroup {
+            get {
+                return ResourceManager.GetString("WB0201_LargeNumberOfQuestionsInGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Section contains no questions. Consider removing the empty section..
+        /// </summary>
+        internal static string WB0202_GroupWithoutQuestions {
+            get {
+                return ResourceManager.GetString("WB0202_GroupWithoutQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster group contains only one question. Consider grouping with other rosters. For fixed roster, consider presenting as a set of independent questions..
+        /// </summary>
+        internal static string WB0203_RosterHasSingleQuestion {
+            get {
+                return ResourceManager.GetString("WB0203_RosterHasSingleQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster is empty. Remove it if it is not needed..
+        /// </summary>
+        internal static string WB0204_EmptyRoster {
+            get {
+                return ResourceManager.GetString("WB0204_EmptyRoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire has more than 1000 questions. It might be difficult to administer it..
+        /// </summary>
+        internal static string WB0205_TooManyQuestions {
+            get {
+                return ResourceManager.GetString("WB0205_TooManyQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire contains more than 100 questions but only one or two sections. Group questions into sections to simplify navigation and improve performance..
+        /// </summary>
+        internal static string WB0206_FewSectionsManyQuestions {
+            get {
+                return ResourceManager.GetString("WB0206_FewSectionsManyQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fixed roster contains 3 or less items. Consider using sub-sections and a series of questions. Rosters complicate structure of exported data..
+        /// </summary>
+        internal static string WB0207_FixedRosterContains3OrLessItems {
+            get {
+                return ResourceManager.GetString("WB0207_FixedRosterContains3OrLessItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Most numeric questions can have validation conditions. Add validation conditions to improve data quality..
+        /// </summary>
+        internal static string WB0208_MoreThan50PercentsNumericQuestionsWithoutValidationConditions {
+            get {
+                return ResourceManager.GetString("WB0208_MoreThan50PercentsNumericQuestionsWithoutValidationConditions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enabling condition is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList())..
+        /// </summary>
+        internal static string WB0209_LongEnablementCondition {
+            get {
+                return ResourceManager.GetString("WB0209_LongEnablementCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Single-choice question has too many categories, consider changing to combo box..
+        /// </summary>
+        internal static string WB0210_CategoricalQuestionHasManyOptions {
+            get {
+                return ResourceManager.GetString("WB0210_CategoricalQuestionHasManyOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire contains no GPS questions. Consider adding a GPS question..
+        /// </summary>
+        internal static string WB0211_QuestionnaireHasNoGpsQuestion {
+            get {
+                return ResourceManager.GetString("WB0211_QuestionnaireHasNoGpsQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation condition #{0} is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList())..
+        /// </summary>
+        internal static string WB0212_LongValidationCondition {
+            get {
+                return ResourceManager.GetString("WB0212_LongValidationCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attachment size is more than 5Mb.
+        /// </summary>
+        internal static string WB0213_AttachmentSizeIsMoreThan5Mb {
+            get {
+                return ResourceManager.GetString("WB0213_AttachmentSizeIsMoreThan5Mb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total size of attachments is more than 50Mb.
+        /// </summary>
+        internal static string WB0214_TotalAttachmentsSizeIsMoreThan50Mb {
+            get {
+                return ResourceManager.GetString("WB0214_TotalAttachmentsSizeIsMoreThan50Mb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire contains unused attachments.
+        /// </summary>
+        internal static string WB0215_UnusedAttachments {
+            get {
+                return ResourceManager.GetString("WB0215_UnusedAttachments", resourceCulture);
             }
         }
     }

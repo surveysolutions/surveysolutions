@@ -1,11 +1,17 @@
 ﻿using System;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using MultipartDataMediaFormatter.Infrastructure;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
+using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -33,6 +39,7 @@ namespace WB.UI.Designer.Api
         private readonly ICommandPostprocessor commandPostprocessor;
        
         private readonly ILookupTableService lookupTableService;
+        private readonly IAttachmentService attachmentService;
 
         public CommandController(
             ICommandService commandService, 
@@ -40,7 +47,8 @@ namespace WB.UI.Designer.Api
             ILogger logger, 
             ICommandInflater commandPreprocessor,
             ICommandPostprocessor commandPostprocessor, 
-            ILookupTableService lookupTableService)
+            ILookupTableService lookupTableService, 
+            IAttachmentService attachmentService)
         {
             this.logger = logger;
             this.commandInflater = commandPreprocessor;
@@ -48,6 +56,57 @@ namespace WB.UI.Designer.Api
             this.commandDeserializer = commandDeserializer;
             this.commandPostprocessor = commandPostprocessor;
             this.lookupTableService = lookupTableService;
+            this.attachmentService = attachmentService;
+        }
+
+        public class AttachmentModel
+        {
+            public HttpFile File { get; set; }
+            public string FileName { get; set; }
+            public string Command { get; set; }
+        }
+
+        [Route("~/api/command/attachment")]
+        [HttpPost]
+        public HttpResponseMessage UpdateAttachment(AttachmentModel model)
+        {
+            var commandType = typeof (AddOrUpdateAttachment).Name;
+            AddOrUpdateAttachment command;
+            try
+            {
+                command = (AddOrUpdateAttachment) this.commandDeserializer.Deserialize(commandType, model.Command);
+                
+                if (model.File != null)
+                {
+                    command.AttachmentContentId = this.attachmentService.CreateAttachmentContentId(model.File.Buffer);
+
+                    this.attachmentService.SaveContent(
+                        contentId: command.AttachmentContentId,
+                        contentType: model.File.MediaType,
+                        binaryContent: model.File.Buffer);
+                }
+                else
+                {
+                    command.AttachmentContentId = this.attachmentService.GetAttachmentContentId(command.AttachmentId);
+                }
+
+                this.attachmentService.SaveMeta(
+                    attachmentId: command.AttachmentId,
+                    contentId: command.AttachmentContentId,
+                    questionnaireId: command.QuestionnaireId,
+                    fileName: model.File?.FileName ?? model.FileName);
+            }
+            catch (FormatException e)
+            {
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                this.logger.Error($"Error on command of type ({commandType}) handling ", e);
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
+            }
+
+            return this.ProcessCommand(command, commandType);
         }
 
         [Route("~/api/command/updateLookupTable")]
@@ -72,23 +131,21 @@ namespace WB.UI.Designer.Api
 
                 var multipartContents = multipartStreamProvider.Contents.Select(x => new
                 {
-                    ContentType = x.Headers.ContentDisposition.Name.Replace("\"", string.Empty),
-                    ContentName = (x.Headers.ContentDisposition.FileName ?? "").Trim('"'),
-                    Content = x.ReadAsStringAsync().Result
+                    ParamName = x.Headers.ContentDisposition.Name.Replace("\"", string.Empty),
+                    StringContent = x.ReadAsStringAsync().Result
                 }).ToList();
 
-                var fileStreamContent = multipartContents.Single(x => x.ContentType == fileParameterName);
-                var commandContent = multipartContents.Single(x => x.ContentType == commandParameterName);
+                var fileStreamContent = multipartContents.Single(x => x.ParamName == fileParameterName);
+                var commandContent = multipartContents.Single(x => x.ParamName == commandParameterName);
 
-                updateLookupTableCommand = (UpdateLookupTable)this.commandDeserializer.Deserialize(commandType, commandContent.Content);
+                updateLookupTableCommand = (UpdateLookupTable)this.commandDeserializer.Deserialize(commandType, commandContent.StringContent);
 
-                if (fileStreamContent.Content != null)
+                if (fileStreamContent.StringContent != null)
                 {
                     this.lookupTableService.SaveLookupTableContent(
                         updateLookupTableCommand.QuestionnaireId,
                         updateLookupTableCommand.LookupTableId,
-                        updateLookupTableCommand.LookupTableName,
-                        fileStreamContent.Content);
+                        fileStreamContent.StringContent);
                 }
             }
             catch (FormatException)

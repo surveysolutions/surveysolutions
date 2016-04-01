@@ -73,4 +73,8 @@
 
   <dimen name="Interview_Sidebar_GpsQuestions_max_width">400dp</dimen>
   <dimen name="Interview_Sidebar_GpsQuestions_max_height">95dp</dimen>
+
+  <dimen name="Interview_Attachment_Small_margin_bottom">32dp</dimen>
+  <dimen name="Interview_Attachment_Large_margin_bottom">1dp</dimen>
+
 </resources>

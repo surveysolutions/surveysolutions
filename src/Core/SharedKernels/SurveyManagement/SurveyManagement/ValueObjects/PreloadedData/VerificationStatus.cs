@@ -6,11 +6,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.ValueObjects.PreloadedData
     {
         public VerificationStatus()
         {
-            WasSupervisorProvided = false;
+            WasResponsibleProvided = false;
         }
 
         public IEnumerable<PreloadedDataVerificationError> Errors { set; get; }
 
-        public bool WasSupervisorProvided { set; get; }
+        public bool WasResponsibleProvided { set; get; }
     }
 }

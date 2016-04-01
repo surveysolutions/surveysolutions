@@ -2,15 +2,20 @@ using System;
 using System.Globalization;
 using System.Linq;
 using ddidotnet;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.Export;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 
@@ -18,38 +23,35 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
 {
     internal class DdiMetadataFactory : IDdiMetadataFactory
     {
-        private readonly ITransactionManagerProvider transactionManager;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         private readonly ILogger logger;
-        private readonly IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter;
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage;
+        private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
+        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
         private readonly IMetaDescriptionFactory metaDescriptionFactory;
 
         private readonly IQuestionnaireLabelFactory questionnaireLabelFactory;
         public DdiMetadataFactory(
             IFileSystemAccessor fileSystemAccessor,
-            IReadSideKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureWriter,
-            ITransactionManagerProvider transactionManager,
             ILogger logger,
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireDocumentVersionedStorage,
             IMetaDescriptionFactory metaDescriptionFactory, 
-            IQuestionnaireLabelFactory questionnaireLabelFactory)
+            IQuestionnaireLabelFactory questionnaireLabelFactory,
+            IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage, 
+            IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
-            this.questionnaireExportStructureWriter = questionnaireExportStructureWriter;
-            this.transactionManager = transactionManager;
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
-            this.questionnaireDocumentVersionedStorage = questionnaireDocumentVersionedStorage;
             this.metaDescriptionFactory = metaDescriptionFactory;
             this.questionnaireLabelFactory = questionnaireLabelFactory;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
         }
 
-        public string CreateDDIMetadataFileForQuestionnaireInFolder(Guid questionnaireId, long questionnaireVersion, string basePath)
+        public string CreateDDIMetadataFileForQuestionnaireInFolder(QuestionnaireIdentity questionnaireId, string basePath)
         {
-            QuestionnaireDocumentVersioned bigTemplateObject = this.GetQuestionnaireDocument(questionnaireId, questionnaireVersion);
-            QuestionnaireExportStructure questionnaireExportStructure = this.GetQuestionnaireExportStructure(questionnaireId, questionnaireVersion);
+            QuestionnaireDocument bigTemplateObject = this.GetQuestionnaireDocument(questionnaireId);
+            QuestionnaireExportStructure questionnaireExportStructure = this.GetQuestionnaireExportStructure(questionnaireId);
 
             if (questionnaireExportStructure == null || bigTemplateObject == null)
             {
@@ -63,7 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
                 var questionnaireLabelsForAllLevels =
                     this.questionnaireLabelFactory.CreateLabelsForQuestionnaire(questionnaireExportStructure);
 
-                metadataWriter.SetMetadataTitle(bigTemplateObject.Questionnaire.Title);
+                metadataWriter.SetMetadataTitle(bigTemplateObject.Title);
 
                 foreach (var questionnaireLevelLabels in questionnaireLabelsForAllLevels)
                 {
@@ -74,7 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
                         if (variableLabel.QuestionId.HasValue)
                         {
                             var questionItem =
-                                bigTemplateObject.Questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == variableLabel.QuestionId.Value);
+                                bigTemplateObject.Find<IQuestion>(variableLabel.QuestionId.Value);
 
                             if (questionItem == null)
                                 continue;
@@ -99,7 +101,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
                 }
 
                 var pathToWrite = this.fileSystemAccessor.CombinePath(basePath, ExportFileSettings.GetDDIFileName(
-                    $"{questionnaireId}_{questionnaireVersion}_ddi"));
+                    $"{questionnaireId.QuestionnaireId}_{questionnaireId.Version}_ddi"));
 
                 metadataWriter.SaveMetadataInFile(pathToWrite);
 
@@ -108,26 +110,21 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
             catch (Exception exc)
             {
                 this.logger.Error(
-                    $"Error on DDI metadata creation (questionnaireId:{questionnaireId}, questionnaireVersion:{questionnaireVersion}): ", exc);
+                    $"Error on DDI metadata creation (questionnaireId:{questionnaireId.QuestionnaireId}, questionnaireVersion:{questionnaireId.Version}): ", exc);
             }
 
             return string.Empty;
         }
 
-        private QuestionnaireExportStructure GetQuestionnaireExportStructure(Guid questionnaireId, long questionnaireVersion)
+        private QuestionnaireExportStructure GetQuestionnaireExportStructure(QuestionnaireIdentity questionnaireId)
         {
             return
-                this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(
-                    () =>
-                        this.questionnaireExportStructureWriter.AsVersioned()
-                            .Get(questionnaireId.FormatGuid(), questionnaireVersion));
+                this.questionnaireExportStructureStorage.GetById(questionnaireId.ToString());
         }
 
-        private QuestionnaireDocumentVersioned GetQuestionnaireDocument(Guid questionnaireId, long questionnaireVersion)
+        private QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireIdentity questionnaireId)
         {
-            return
-                this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(
-                    () => this.questionnaireDocumentVersionedStorage.AsVersioned().Get(questionnaireId.FormatGuid(), questionnaireVersion));
+            return this.plainQuestionnaireRepository.GetQuestionnaireDocument(questionnaireId);
         }
 
         private DdiDataType GetDdiDataType(QuestionType questionType)

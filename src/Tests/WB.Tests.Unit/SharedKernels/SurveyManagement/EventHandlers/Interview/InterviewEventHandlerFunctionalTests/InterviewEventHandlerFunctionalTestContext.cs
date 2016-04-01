@@ -5,12 +5,15 @@ using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewEventHandlerFunctionalTests
@@ -19,17 +22,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
     {
         protected static InterviewEventHandlerFunctional CreateInterviewEventHandlerFunctional(QuestionnaireRosterStructure rosterStructure = null, UserDocument user = null)
         {
-            var questionnaireRosterStructureMockStorage = new Mock<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>();
-            questionnaireRosterStructureMockStorage.Setup(x => x.GetById(It.IsAny<string>())).Returns(rosterStructure);
+            var questionnaireRosterStructureMockStorage = new Mock<IPlainKeyValueStorage<QuestionnaireRosterStructure>>();
             questionnaireRosterStructureMockStorage.Setup(x => x.GetById(It.IsAny<string>())).Returns(rosterStructure);
 
             var userDocumentMockStorage = new Mock<IReadSideRepositoryWriter<UserDocument>>();
             userDocumentMockStorage.Setup(x => x.GetById(It.IsAny<string>())).Returns(user);
 
             return new InterviewEventHandlerFunctional(
-                 userDocumentMockStorage.Object,
-                questionnaireRosterStructureMockStorage.Object,
-                new Mock<IReadSideKeyValueStorage<InterviewData>>().Object);
+                userDocumentMockStorage.Object,
+                new Mock<IReadSideKeyValueStorage<InterviewData>>().Object,
+                questionnaireRosterStructureMockStorage.Object);
         }
 
         protected static QuestionnaireRosterStructure CreateQuestionnaireRosterStructure(Guid scopeId,

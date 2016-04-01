@@ -8,9 +8,9 @@ using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Exceptions;
 using WB.UI.Shared.Web.Membership;
 using IRecipientNotifier = WB.UI.Designer.Code.IRecipientNotifier;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.UI.Designer
 {
@@ -47,6 +47,8 @@ namespace WB.UI.Designer
                 .InSingletonScope();
 
             this.Bind<IRecipientNotifier>().To<MailNotifier>();
+
+
         }
     }
 }

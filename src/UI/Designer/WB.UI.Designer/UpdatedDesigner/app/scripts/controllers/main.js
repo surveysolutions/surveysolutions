@@ -95,11 +95,15 @@ angular.module('designerApp')
             };
            
             $scope.showVerificationErrors = function () {
+                if ($scope.verificationStatus.errors.length === 0)
+                    return;
                 $scope.verificationStatus.typeOfMessageToBeShown = ERROR;
                 $scope.verificationStatus.messagesToShow = $scope.verificationStatus.errors;
                 $scope.verificationStatus.visible = true;
             }
             $scope.showVerificationWarnings = function () {
+                if ($scope.verificationStatus.warnings.length === 0)
+                    return;
                 $scope.verificationStatus.typeOfMessageToBeShown = WARNING;
                 $scope.verificationStatus.messagesToShow = $scope.verificationStatus.warnings;
                 $scope.verificationStatus.visible = true;
@@ -165,10 +169,12 @@ angular.module('designerApp')
                 } else if (reference.type.toLowerCase() === "lookuptable") {
                     $scope.verificationStatus.visible = false;
                     $rootScope.$broadcast("openLookupTables", { focusOn: reference.itemId });
-                }
-                else {
-                    if (!_.isNull(reference.failedValidationConditionIndex)) {
-                        $state.go('questionnaire.chapter.' + reference.type.toLowerCase() + ".validation", {
+                } else if (reference.type.toLowerCase() === "attachment") {
+                    $scope.verificationStatus.visible = false;
+                    $rootScope.$broadcast("openAttachments", { focusOn: reference.itemId });
+                } else {
+                    if (!_.isNull(reference.failedValidationConditionIndex) && !_.isUndefined(reference.failedValidationConditionIndex)) {
+                        $state.go('questionnaire.chapter.' + reference.type.toLowerCase() + '.validation', {
                             chapterId: reference.chapterId,
                             itemId: reference.itemId,
                             validationIndex: reference.failedValidationConditionIndex
@@ -176,12 +182,13 @@ angular.module('designerApp')
                     } else {
                         $state.go('questionnaire.chapter.' + reference.type.toLowerCase(), {
                             chapterId: reference.chapterId,
-                            itemId: reference.itemId
+                            itemId: reference.itemId,
+                            validationIndex: reference.failedValidationConditionIndex
                         });
                     }
                 }
             };
-
+            
             $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams) {
                 utilityService.scrollToValidationCondition(toParams.validationIndex);
             });

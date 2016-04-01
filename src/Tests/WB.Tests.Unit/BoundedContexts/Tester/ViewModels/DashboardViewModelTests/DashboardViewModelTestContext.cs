@@ -15,7 +15,9 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
@@ -36,7 +38,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             IFriendlyErrorMessageService friendlyErrorMessageService = null,
             IUserInteractionService userInteractionService = null,
             IAsyncPlainStorage<QuestionnaireListItem> questionnaireListStorage = null,
-            IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage = null)
+            IAsyncPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage = null,
+            IAttachmentContentStorage attachmentContentStorage = null)
         {
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.Name == userName && _.UserId == userId);
             mockOfPrincipal.Setup(x => x.CurrentUserIdentity).Returns(userIdentity);
@@ -59,7 +62,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 userInteractionService: userInteractionService,
                 questionnaireListStorage: questionnaireListStorage,
                 dashboardLastUpdateStorage: dashboardLastUpdateStorage ?? localDashboardLastUpdateStorageMock.Object,
-                logger: logger ?? Mock.Of<ILogger>());
+                logger: logger ?? Mock.Of<ILogger>(),
+                attachmentContentStorage: attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>());
         }
 
         protected static readonly Guid userId = Guid.Parse("ffffffffffffffffffffffffffffffff");

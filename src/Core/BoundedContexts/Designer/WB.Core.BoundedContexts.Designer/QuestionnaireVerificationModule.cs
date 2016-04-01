@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Designer
     {
         public override void Load()
         {
-            this.Bind<IQuestionnaireVerifier>().To<QuestionnaireVerifier>().InSingletonScope();
+            this.Bind<IQuestionnaireVerifier>().To<QuestionnaireVerifier>();
         }
     }
 }

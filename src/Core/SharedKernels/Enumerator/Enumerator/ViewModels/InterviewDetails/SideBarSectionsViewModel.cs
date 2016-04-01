@@ -7,12 +7,13 @@ using System.Windows.Input;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Models.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -25,11 +26,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     {
         private NavigationState navigationState;
 
-        private readonly IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository;
+        private readonly IPlainQuestionnaireRepository questionnaireRepository;
         readonly ILiteEventRegistry eventRegistry;
         private readonly ISideBarSectionViewModelsFactory modelsFactory;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
-        private string questionnaireId;
+        private QuestionnaireIdentity questionnaireId;
         private string interviewId;
 
         protected SideBarSectionsViewModel()
@@ -40,7 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public ObservableCollection<SideBarSectionViewModel> AllVisibleSections { get; set; }
 
         public SideBarSectionsViewModel(IStatefulInterviewRepository statefulInterviewRepository,
-            IPlainKeyValueStorage<QuestionnaireModel> questionnaireRepository,
+            IPlainQuestionnaireRepository questionnaireRepository,
             ILiteEventRegistry eventRegistry,
             ISideBarSectionViewModelsFactory modelsFactory)
         {
@@ -59,11 +60,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (interviewId == null) throw new ArgumentNullException("interviewId");
             if (questionnaireId == null) throw new ArgumentNullException("questionnaireId");
 
-            this.eventRegistry.Subscribe(this, interviewId);
+            this.interviewId = interviewId;
 
+            this.eventRegistry.Subscribe(this, interviewId);
             this.navigationState = navigationState;
             this.navigationState.ScreenChanged += this.OnScreenChanged;
-            this.questionnaireId = questionnaireId;
+            IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
+            this.questionnaireId = interview.QuestionnaireIdentity;
             this.interviewId = interviewId;
 
             this.BuildSectionsList();
@@ -71,13 +74,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void BuildSectionsList()
         {
-            var questionnaire = this.questionnaireRepository.GetById(this.questionnaireId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireId);
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
             List<SideBarSectionViewModel> sections = new List<SideBarSectionViewModel>();
 
-            foreach (GroupsHierarchyModel section in questionnaire.GroupsHierarchy)
+            foreach (Guid sectionId in questionnaire.GetAllSections())
             {
-                var groupIdentity = new Identity(section.Id, new decimal[] { });
+                var groupIdentity = new Identity(sectionId, new decimal[] { });
                 if (interview.IsEnabled(groupIdentity))
                 {
                     var sectionViewModel = this.BuildSectionItem(null, groupIdentity);
@@ -151,16 +154,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(GroupsEnabled @event)
         {
-            QuestionnaireModel questionnaire = this.questionnaireRepository.GetById(this.questionnaireId);
+            IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(this.questionnaireId);
             IStatefulInterview interview = this.statefulInterviewRepository.Get(this.interviewId);
 
             foreach (var groupId in @event.Groups)
             {
                 var addedIdentity = new Identity(groupId.Id, groupId.RosterVector);
 
-                var section = questionnaire.GroupsHierarchy.FirstOrDefault(s => s.Id == addedIdentity.Id);
-                if (section != null)
-                    this.AddSection(section, questionnaire, interview);
+                if (questionnaire.GetAllSections().Contains(addedIdentity.Id))
+                    this.AddSection(addedIdentity.Id, questionnaire, interview);
                 else
                     this.RefreshListWithNewItemAdded(addedIdentity, interview);
             }
@@ -169,21 +171,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.UpdateSideBarTree();
         }
 
-        private void AddSection(GroupsHierarchyModel section, QuestionnaireModel questionnaire, IStatefulInterview interview)
+        private void AddSection(Guid sectionId, IQuestionnaire questionnaire, IStatefulInterview interview)
         {
-            var sectionIdentity = new Identity(section.Id, new decimal[0]);
+            var sectionIdentity = new Identity(sectionId, new decimal[0]);
             var sectionViewModel = this.BuildSectionItem(null, sectionIdentity);
-            var index = questionnaire.GroupsHierarchy
-                .Where(s => interview.IsEnabled(new Identity(s.Id, new decimal[0])))
+            var index = questionnaire.GetAllSections()
+                .Where(sId => interview.IsEnabled(new Identity(sId, new decimal[0])))
                 .ToList()
-                .IndexOf(section);
+                .IndexOf(sectionId);
             this.Sections.Insert(index, sectionViewModel);
         }
 
         private void RefreshListWithNewItemAdded(Identity addedIdentity, IStatefulInterview interview)
         {
             Identity parentId = interview.GetParentGroup(addedIdentity);
-            var sectionToAddTo = this.AllVisibleSections.SingleOrDefault(x => x.ScreenType == ScreenType.Group && x.SectionIdentity.Equals(parentId));
+            var sectionToAddTo = this.AllVisibleSections.FirstOrDefault(x => x.ScreenType == ScreenType.Group && x.SectionIdentity.Equals(parentId));
 
             if (sectionToAddTo != null)
             {
@@ -191,7 +193,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 for (int i = 0; i < enabledSubgroups.Count; i++)
                 {
                     var enabledSubgroupIdentity = enabledSubgroups[i];
-                    if (i >= sectionToAddTo.Children.Count || !sectionToAddTo.Children[i].SectionIdentity.Equals(enabledSubgroupIdentity))
+                    if (i >= sectionToAddTo.Children.Count || !sectionToAddTo.Children.Any(x => x.SectionIdentity.Equals(enabledSubgroupIdentity)))
                     {
                         var sideBarItem = this.BuildSectionItem(sectionToAddTo, enabledSubgroupIdentity);
                         if (i < sectionToAddTo.Children.Count)
@@ -231,9 +233,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 var section = this.AllVisibleSections.FirstOrDefault(s => s.ScreenType == ScreenType.Group && s.SectionIdentity.Equals(groupIdentity));
                 if (section != null)
                 {
-                    if (section.Parent != null)
-                        section.Parent.Children.Remove(section);
-                    
+                    section.Parent?.Children.Remove(section);
+
                     section.RemoveMe();
                 }
             }
@@ -262,9 +263,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void UpdateSideBarTree()
         {
-            var tree = this.Sections.TreeToEnumerableDepthFirst(
-                x => x.Expanded ? x.Children : Enumerable.Empty<SideBarSectionViewModel>()
-                ).ToList();
+            var tree = this.Sections.TreeToEnumerableDepthFirst(x => x.Expanded ? x.Children : Enumerable.Empty<SideBarSectionViewModel>()).ToList();
             this.AllVisibleSections = new ObservableCollection<SideBarSectionViewModel>(tree);
             this.RaisePropertyChanged(() => this.AllVisibleSections);
         }

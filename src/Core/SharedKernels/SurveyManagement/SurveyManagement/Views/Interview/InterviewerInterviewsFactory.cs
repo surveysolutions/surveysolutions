@@ -43,7 +43,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         {
             var inProgressInterviews =  this.reader.Query(interviews =>
                 interviews.Where(interview => !interview.IsDeleted && (interview.ResponsibleId == interviewerId) && 
-                    (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor)).ToList());
+                    (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor))
+                    .Select(x => new {x.InterviewId, x.QuestionnaireId, x.QuestionnaireVersion, x.WasRejectedBySupervisor})
+                    .ToList());
 
             var deletedQuestionnaires = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel()
             {

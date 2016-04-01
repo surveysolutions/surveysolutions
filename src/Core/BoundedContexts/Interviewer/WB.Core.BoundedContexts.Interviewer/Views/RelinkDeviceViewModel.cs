@@ -24,13 +24,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             ISynchronizationService synchronizationService,
-            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage)
+            IAsyncPlainStorage<InterviewerIdentity> interviewersPlainStorage) : base(principal, viewModelNavigationService)
         {
             this.principal = principal;
             this.viewModelNavigationService = viewModelNavigationService;
             this.synchronizationService = synchronizationService;
             this.interviewersPlainStorage = interviewersPlainStorage;
         }
+
+        public override bool IsAuthenticationRequired => false;
 
         private string errorMessage;
         public string ErrorMessage
