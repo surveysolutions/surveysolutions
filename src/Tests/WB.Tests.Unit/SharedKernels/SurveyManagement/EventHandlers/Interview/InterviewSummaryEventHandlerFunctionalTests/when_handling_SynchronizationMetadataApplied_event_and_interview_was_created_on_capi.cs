@@ -29,7 +29,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             var usersMock = new Mock<IPlainStorageAccessor<UserDocument>>();
 
-            usersMock.Setup(_ => _.GetById(responsibleId))
+            var responsibleStringId = responsibleId.FormatGuid();
+            usersMock.Setup(_ => _.GetById(responsibleStringId))
                 .Returns(new UserDocument() {Supervisor = new UserLight() {Id = supervisorId, Name = supervisorName}});
 
             denormalizer = CreateDenormalizer(users: usersMock.Object);
