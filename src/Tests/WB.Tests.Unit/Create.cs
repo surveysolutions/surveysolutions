@@ -2532,9 +2532,11 @@ namespace WB.Tests.Unit
             return new UncommittedEvent(Guid.NewGuid(), Guid.NewGuid(), 1, 1, DateTime.Now, payload);
         }
 
-        public static User User()
+        public static User User(Guid? userId=null)
         {
-            return new User();
+            var user = new User();
+            user.SetId(userId??Guid.NewGuid());
+            return user;
         }
 
         public static UserArchived UserArchived()
