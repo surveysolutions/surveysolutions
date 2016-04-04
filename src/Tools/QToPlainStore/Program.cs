@@ -130,7 +130,6 @@ namespace QToPlainStore
 
 
                 var logger = Mock.Of<WB.Core.GenericSubdomains.Portable.Services.ILogger>();
-                var serializer = new NewtonJsonSerializer(new JsonSerializerSettingsFactory());
 
                 var eventTypeResolver = CreateEventTypeResolver();
 
@@ -156,12 +155,12 @@ namespace QToPlainStore
                             new PostgreConnectionSettings() {ConnectionString = options.PostgresEventStore},
                             eventTypeResolver);
                 }
-                MigrateEvents(eventStore, logger, serializer, options.PGPlainConnection);
+                MigrateEvents(eventStore, logger, options.PGPlainConnection);
             }
         }
 
         private static void MigrateEvents(IStreamableEventStore eventStore,
-            WB.Core.GenericSubdomains.Portable.Services.ILogger logger, ISerializer serializer,
+            WB.Core.GenericSubdomains.Portable.Services.ILogger logger,
             string plainStorageConnection)
         {
 
@@ -172,19 +171,14 @@ namespace QToPlainStore
             plainPostgresTransactionManager =
                 new PlainPostgresTransactionManager(BuildSessionFactory(plainStorageConnection));
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentRepository =
-                new PostgresPlainKeyValueStorage<QuestionnaireDocument>(null, postgresPlainStorageSettings, logger,
-                    serializer);
+                new PostgresPlainKeyValueStorage<QuestionnaireDocument>(postgresPlainStorageSettings, logger);
             plainQuestionnaireRepository = new PlainQuestionnaireRepositoryWithCache(questionnaireDocumentRepository);
 
-            questionnaireExportStructureStorage = new PostgresPlainKeyValueStorage<QuestionnaireExportStructure>(null,
-                postgresPlainStorageSettings, logger, serializer);
-            questionnaireRosterStructureStorage = new PostgresPlainKeyValueStorage<QuestionnaireRosterStructure>(null,
-                postgresPlainStorageSettings, logger, serializer);
+            questionnaireExportStructureStorage = new PostgresPlainKeyValueStorage<QuestionnaireExportStructure>(postgresPlainStorageSettings, logger);
+            questionnaireRosterStructureStorage = new PostgresPlainKeyValueStorage<QuestionnaireRosterStructure>(postgresPlainStorageSettings, logger);
             referenceInfoForLinkedQuestionsStorage =
-                new PostgresPlainKeyValueStorage<ReferenceInfoForLinkedQuestions>(null, postgresPlainStorageSettings,
-                    logger, serializer);
-            questionnaireQuestionsInfoStorage = new PostgresPlainKeyValueStorage<QuestionnaireQuestionsInfo>(null,
-                postgresPlainStorageSettings, logger, serializer);
+                new PostgresPlainKeyValueStorage<ReferenceInfoForLinkedQuestions>(postgresPlainStorageSettings,logger);
+            questionnaireQuestionsInfoStorage = new PostgresPlainKeyValueStorage<QuestionnaireQuestionsInfo>(postgresPlainStorageSettings, logger);
 
             questionnaireBrowseItemStorage =
                 new PostgresPlainStorageRepository<QuestionnaireBrowseItem>(plainPostgresTransactionManager);

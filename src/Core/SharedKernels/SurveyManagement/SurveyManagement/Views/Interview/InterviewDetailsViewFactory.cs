@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             if (interview == null || interview.IsDeleted)
                 return null;
 
-            var user = this.userStore.GetById(interview.ResponsibleId);
+            var user = this.userStore.GetById(interview.ResponsibleId.FormatGuid());
             if (user == null)
                 throw new ArgumentException($"User with id {interview.ResponsibleId} is not found.");
 

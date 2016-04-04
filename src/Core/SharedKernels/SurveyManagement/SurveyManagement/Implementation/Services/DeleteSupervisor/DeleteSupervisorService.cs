@@ -40,7 +40,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteS
             try
             {
                 this.commandService.Execute(new ArchiveUserCommad(supervisorId));
-
                 var interviewerIds =
                     userDocumentReader.Query(
                         _ =>

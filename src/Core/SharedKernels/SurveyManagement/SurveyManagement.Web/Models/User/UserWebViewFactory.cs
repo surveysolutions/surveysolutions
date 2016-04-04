@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -24,7 +25,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.User
         {
             if (input.UserId != Guid.Empty)
             {
-                return ToWebView(reader.GetById(input.UserId));
+                return ToWebView(reader.GetById(input.UserId.FormatGuid()));
             }
 
             if (!string.IsNullOrEmpty(input.UserName) && string.IsNullOrEmpty(input.Password))

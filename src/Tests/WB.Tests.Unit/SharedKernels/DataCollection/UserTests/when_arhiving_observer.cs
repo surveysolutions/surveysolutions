@@ -1,8 +1,12 @@
-﻿using Machine.Specifications;
+﻿using System;
+using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
 {
@@ -10,8 +14,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
     {
         Establish context = () =>
         {
+            Setup.InstanceToMockedServiceLocator(userDocumentStorage);
+            var userDocument = Create.UserDocument(userId: userId);
+            userDocument.Roles.Add(UserRoles.Observer);
+            userDocumentStorage.Store(userDocument, userId.FormatGuid());
             user = Create.User();
-            user.ApplyEvent(Create.NewUserCreated(role: UserRoles.Observer));
+            user.SetId(userId);
         };
 
         Because of = () =>
@@ -24,6 +32,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
             exception.ExceptionType.ShouldEqual(UserDomainExceptionType.RoleDoesntSupportDelete);
 
         private static User user;
+        private static Guid userId = Guid.NewGuid();
+        private static IPlainStorageAccessor<UserDocument> userDocumentStorage = new TestPlainStorage<UserDocument>();
         private static UserException exception;
     }
 }

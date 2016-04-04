@@ -1,9 +1,11 @@
 ﻿using System;
 using Main.Core.Events.Questionnaire;
+using Main.Core.Events.User;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
+using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.Events.Sync;
@@ -38,7 +40,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<TemplateImported>, 
         IEventHandler<QuestionnaireDisabled>, 
         IEventHandler<QuestionnaireDeleted>, 
-        IEventHandler<PlainQuestionnaireRegistered>
+        IEventHandler<PlainQuestionnaireRegistered>, 
+        IEventHandler<NewUserCreated>,
+                                    IEventHandler<UserChanged>,
+                                    IEventHandler<UserLocked>,
+                                    IEventHandler<UserUnlocked>,
+                                    IEventHandler<UserLockedBySupervisor>,
+                                    IEventHandler<UserUnlockedBySupervisor>,
+                                    IEventHandler<UserLinkedToDevice>,
+                                    IEventHandler<UserArchived>,
+                                    IEventHandler<UserUnarchived>
     {
         public void Handle(IPublishedEvent<AnswersDeclaredValid> evnt) { }
 
@@ -112,6 +123,43 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
+        {
+        }
+
+        public void Handle(IPublishedEvent<NewUserCreated> evnt)
+        {
+            
+        }
+
+        public void Handle(IPublishedEvent<UserChanged> evnt)
+        {
+        }
+
+        public void Handle(IPublishedEvent<UserLocked> evnt)
+        {
+        }
+
+        public void Handle(IPublishedEvent<UserUnlocked> evnt)
+        {
+        }
+
+        public void Handle(IPublishedEvent<UserLockedBySupervisor> evnt)
+        {
+        }
+
+        public void Handle(IPublishedEvent<UserUnlockedBySupervisor> evnt)
+        {
+        }
+
+        public void Handle(IPublishedEvent<UserLinkedToDevice> evnt)
+        {
+        }
+
+        public void Handle(IPublishedEvent<UserArchived> evnt)
+        {
+        }
+
+        public void Handle(IPublishedEvent<UserUnarchived> evnt)
         {
         }
     }

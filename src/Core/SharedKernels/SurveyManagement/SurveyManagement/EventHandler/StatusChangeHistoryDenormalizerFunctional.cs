@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             if (!listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded.Contains(interviewStatuses.InterviewCommentedStatuses.Last().Status))
                 return interviewStatuses;
 
-            UserDocument responsible = this.users.GetById(userId);
+            UserDocument responsible = this.users.GetById(userId.FormatGuid());
 
             if (responsible == null || !responsible.Roles.Contains(UserRoles.Operator))
                 return interviewStatuses;
@@ -299,7 +299,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private string GetResponsibleIdName(Guid responsibleId)
         {
-            var userDocument = this.users.GetById(responsibleId);
+            var userDocument = this.users.GetById(responsibleId.FormatGuid());
             var userName = userDocument?.UserName;
             return userName ?? this.unknown;
         }
@@ -334,7 +334,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             var supervisorName = supervisorId.HasValue ? GetResponsibleIdName(supervisorId.Value) : "";
             var interviewerName = interviewerId.HasValue ? GetResponsibleIdName(interviewerId.Value) : "";
 
-            var statusOriginator = this.users.GetById(userId);
+            var statusOriginator = this.users.GetById(userId.FormatGuid());
 
             interviewStatuses.InterviewCommentedStatuses.Add(new InterviewCommentedStatus(
                 eventId,
