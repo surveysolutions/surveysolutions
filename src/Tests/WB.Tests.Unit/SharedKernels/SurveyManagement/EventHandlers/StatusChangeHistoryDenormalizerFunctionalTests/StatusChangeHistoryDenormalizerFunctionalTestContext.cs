@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
             return
                 new StatusChangeHistoryDenormalizerFunctional(
                     interviewStatuses ?? Mock.Of<IReadSideRepositoryWriter<InterviewStatuses>>(),
-                    Mock.Of<IPlainStorageAccessor<UserDocument>>(_ => _.GetById(Moq.It.IsAny<Guid>()) == defultUserDocument),
+                    Mock.Of<IPlainStorageAccessor<UserDocument>>(_ => _.GetById(Moq.It.IsAny<string>()) == defultUserDocument),
                     Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(
                         _ => _.GetById(Moq.It.IsAny<string>()) == new InterviewSummary()));
         }
