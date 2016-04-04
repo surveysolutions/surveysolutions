@@ -544,6 +544,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\FilteredSingleOptionQuestionViewModelTests\when_creating_filtered_single_option_view_model.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionQuestionViewModelTests\when_toggling_answer_and_user_rejects_reduce_roster_size.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\NavigationStateTests\when_initializing_navigation_state.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\NavigationStateTests\when_navigating_back_to_complete_screen.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\NavigationStateTests\when_navigating_back_to_removed_roster_instance.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\NavigationStateTests\when_navigating_to_disabled_group.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\NavigationStateTests\when_navigating_to_existing_enabled_group.cs" />
