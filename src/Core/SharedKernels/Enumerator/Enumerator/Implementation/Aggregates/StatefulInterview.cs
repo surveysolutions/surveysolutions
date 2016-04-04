@@ -654,6 +654,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public bool HasGroup(Identity group)
         {
+            if (group == null)
+                return false;
+
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             if (!questionnaire.HasGroup(group.Id))
