@@ -12,9 +12,9 @@ namespace WB.UI.Designer.Code
 {
     public class JsonFormatter : MediaTypeFormatter
     {
-        private ISerializer serializer
+        private IStreamSerializer serializer
         {
-            get { return ServiceLocator.Current.GetInstance<ISerializer>(); }
+            get { return ServiceLocator.Current.GetInstance<IStreamSerializer>(); }
         }
 
         public JsonFormatter()

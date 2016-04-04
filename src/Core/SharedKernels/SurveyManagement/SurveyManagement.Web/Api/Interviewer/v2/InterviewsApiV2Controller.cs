@@ -36,7 +36,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
             ICommandService commandService,
             IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader,
             IMetaInfoBuilder metaBuilder,
-            ISerializer serializer,
+            ISynchronizationSerializer synchronizationSerializer,
             IStringCompressor compressor) : base(
                 plainInterviewFileStorage: plainInterviewFileStorage,
                 globalInfoProvider: globalInfoProvider,
@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 commandService: commandService,
                 syncPackagesMetaReader: syncPackagesMetaReader,
                 metaBuilder: metaBuilder,
-                serializer: serializer)
+                synchronizationSerializer: synchronizationSerializer)
         {
             this.compressor = compressor;
         }
@@ -68,7 +68,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 AnswersOnPrefilledQuestions = interviewMetaInfo?.FeaturedQuestionsMeta
                     .Select(prefilledQuestion => new AnsweredQuestionSynchronizationDto(prefilledQuestion.PublicKey, new decimal[0], prefilledQuestion.Value, string.Empty))
                     .ToArray(),
-                Details = this.serializer.Serialize(interviewDetails, TypeSerializationSettings.AllTypes)
+                Details = this.synchronizationSerializer.Serialize(interviewDetails, TypeSerializationSettings.AllTypes)
             });
 
             response.Headers.CacheControl = new CacheControlHeaderValue
@@ -87,10 +87,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         {
             this.incomingSyncPackagesQueue.Enqueue(
                 interviewId: package.InterviewId,
-                item: this.serializer.Serialize(new SyncItem
+                item: this.synchronizationSerializer.Serialize(new SyncItem
                 {
                     RootId = package.InterviewId,
-                    MetaInfo = this.compressor.CompressString(this.serializer.Serialize(package.MetaInfo)),
+                    MetaInfo = this.compressor.CompressString(this.synchronizationSerializer.Serialize(package.MetaInfo)),
                     Content = this.compressor.CompressString(package.Events),
                     IsCompressed = true,
                     ItemType = SyncItemType.Interview

@@ -253,13 +253,13 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
                 var meta = Encoding.GetString(resolvedEvent.Event.Metadata);
                 metadata = JsonConvert.DeserializeObject<EventMetada>(meta, EventSerializerSettings.BackwardCompatibleJsonSerializerSettings);
 
-                if (resolvedEvent.Event.IsJson)
+                //if (resolvedEvent.Event.IsJson)
                 {
                     eventData = JsonConvert.DeserializeObject(Encoding.GetString(resolvedEvent.Event.Data),
                         resolvedEventType,
                         EventSerializerSettings.BackwardCompatibleJsonSerializerSettings) as IEvent;
                 }
-                else
+                /*else
                 {
                     var dataStream = new MemoryStream(resolvedEvent.Event.Data);
                     dataStream.Seek(0, SeekOrigin.Begin);
@@ -267,7 +267,7 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
 
                     JsonSerializer serializer = JsonSerializer.Create(EventSerializerSettings.BackwardCompatibleJsonSerializerSettings);
                     eventData = serializer.Deserialize(dataReader, resolvedEventType) as IEvent;
-                }
+                }*/
 
                 var committedEvent = new CommittedEvent(Guid.NewGuid(),
                     metadata.Origin,

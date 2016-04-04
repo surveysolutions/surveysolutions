@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IInterviewerEventStorage eventStore;
         private readonly IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache;
         private readonly ISnapshotStoreWithCache snapshotStoreWithCache;
-        private readonly ISerializer serializer;
+        private readonly ISynchronizationSerializer synchronizationSerializer;
         private readonly IInterviewEventStreamOptimizer eventStreamOptimizer;
 
         public InterviewerInterviewAccessor(
@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IInterviewerEventStorage eventStore,
             IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache,
             ISnapshotStoreWithCache snapshotStoreWithCache,
-            ISerializer serializer,
+            ISynchronizationSerializer synchronizationSerializer,
             IInterviewEventStreamOptimizer eventStreamOptimizer)
         {
             this.questionnaireRepository = questionnaireRepository;
@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.eventStore = eventStore;
             this.aggregateRootRepositoryWithCache = aggregateRootRepositoryWithCache;
             this.snapshotStoreWithCache = snapshotStoreWithCache;
-            this.serializer = serializer;
+            this.synchronizationSerializer = synchronizationSerializer;
             this.eventStreamOptimizer = eventStreamOptimizer;
         }
 
@@ -116,7 +116,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return new InterviewPackageApiView
             {
                 InterviewId = interview.InterviewId,
-                Events = this.serializer.Serialize(eventsToSend),
+                Events = this.synchronizationSerializer.Serialize(eventsToSend),
                 MetaInfo = metadata
             };
         }
@@ -145,7 +145,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             var questionnaireView = this.questionnaireRepository.GetById(info.QuestionnaireIdentity.ToString());
 
             var interviewStatus = info.IsRejected ? InterviewStatus.RejectedBySupervisor :  InterviewStatus.InterviewerAssigned;
-            var interviewDetails = this.serializer.Deserialize<InterviewSynchronizationDto>(details.Details, TypeSerializationSettings.AllTypes);
+            var interviewDetails = this.synchronizationSerializer.Deserialize<InterviewSynchronizationDto>(details.Details, TypeSerializationSettings.AllTypes);
 
             var createInterviewFromSynchronizationMetadataCommand = new CreateInterviewFromSynchronizationMetadata(
                 interviewId: info.Id,
@@ -163,8 +163,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
            var synchronizeInterviewCommand = new SynchronizeInterviewCommand(
                 interviewId: info.Id,
                 userId: this.principal.CurrentUserIdentity.UserId,
-                sycnhronizedInterview: interviewDetails
-                );
+                sycnhronizedInterview: interviewDetails);
 
             await this.commandService.ExecuteAsync(createInterviewFromSynchronizationMetadataCommand);
             await this.commandService.ExecuteAsync(synchronizeInterviewCommand);

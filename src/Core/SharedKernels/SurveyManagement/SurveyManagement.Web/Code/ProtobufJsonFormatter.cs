@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
     [Obsolete("Since v. 5.7")]
     public class ProtobufJsonFormatter : MediaTypeFormatter
     {
-        private IProtobufSerializer serializer
+        private IProtobufSerializer protobufSerializer
         {
             get { return ServiceLocator.Current.GetInstance<IProtobufSerializer>(); }
         }
@@ -48,13 +48,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             return await Task.Run(() =>
             {
                 var bytesOfStream = Convert.FromBase64String(new StreamReader(readStream).ReadToEnd());
-                return this.serializer.DeserializeFromStream(stream: new MemoryStream(bytesOfStream), type: type);
+                return this.protobufSerializer.DeserializeFromStream(stream: new MemoryStream(bytesOfStream), type: type);
             });
         }
         
         public override Task WriteToStreamAsync(Type type, object value, Stream writeStream, System.Net.Http.HttpContent content, TransportContext transportContext)
         {
-            return Task.Run(() => this.serializer.SerializeToStream(value: value, type: type, stream: writeStream));
+            return Task.Run(() => this.protobufSerializer.SerializeToStream(value: value, type: type, stream: writeStream));
         }
     }
 }
