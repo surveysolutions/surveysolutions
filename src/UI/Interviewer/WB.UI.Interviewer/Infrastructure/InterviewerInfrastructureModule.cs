@@ -71,6 +71,8 @@ namespace WB.UI.Interviewer.Infrastructure
                 .ToConstant(new JsonUtilsSettings() {TypeNameHandling = TypeSerializationSettings.ObjectsOnly});
 
             this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(new JsonSerializerSettingsFactory()));
+            this.Bind<ISynchronizationSerializer>().ToMethod((ctx) => new SychronizationJsonSerializer(new JsonSerializerSettingsFactory()));
+
             this.Bind<IStringCompressor>().To<JsonCompressor>();
         }
     }

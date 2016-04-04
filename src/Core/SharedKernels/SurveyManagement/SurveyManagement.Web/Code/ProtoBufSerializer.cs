@@ -12,47 +12,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
     [Obsolete("Since v. 5.7")]
     public class ProtobufSerializer : IProtobufSerializer
     {
-        public string Serialize(object item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string Serialize(object item, TypeSerializationSettings typeSerializationSettings)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string Serialize(object item, TypeSerializationSettings typeSerializationSettings,
-            SerializationBinderSettings binderSettings)
-        {
-            throw new NotImplementedException();
-        }
-
-        public byte[] SerializeToByteArray(object item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public T Deserialize<T>(string payload)
-        {
-            throw new NotImplementedException();
-        }
-
-        public T Deserialize<T>(string payload, TypeSerializationSettings settings)
-        {
-            throw new NotImplementedException();
-        }
-
-        public T Deserialize<T>(byte[] payload)
-        {
-            throw new NotImplementedException();
-        }
-
-        public object Deserialize(string payload, Type type,TypeSerializationSettings settings)
-        {
-            throw new NotImplementedException();
-        }
-
         public void SerializeToStream(object value, Type type, Stream stream)
         {
             SerializerBuilder.Build(type);
@@ -63,21 +22,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
         {
             SerializerBuilder.Build(type);
             return ProtoBuf.Serializer.NonGeneric.Deserialize(type, stream);
-        }
-
-        public byte[] SerializeToByteArray(object item, TypeSerializationSettings typeSerializationSettings)
-        {
-            throw new NotImplementedException();
-        }
-
-        public object Deserialize(byte[] payload, Type objectType, TypeSerializationSettings typeSerializationSettings)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string Serialize(object item, SerializationBinderSettings binderSettings)
-        {
-            throw new NotImplementedException();
         }
 
         private static class SerializerBuilder

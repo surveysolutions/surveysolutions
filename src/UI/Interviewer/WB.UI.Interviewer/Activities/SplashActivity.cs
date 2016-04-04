@@ -7,7 +7,6 @@ using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.Graphics;
-using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Preferences;
 using Android.Widget;
@@ -169,7 +168,7 @@ namespace WB.UI.Interviewer.Activities
         private async Task RestoreInterviewDetailsAsync()
         {
             var commandService = Mvx.Resolve<ICommandService>();
-            var serializer = Mvx.Resolve<ISerializer>();
+            var synchronizationSerializer = Mvx.Resolve<ISynchronizationSerializer>();
 
             var interviewersRepository = Mvx.Resolve<IAsyncPlainStorage<InterviewerIdentity>>();
 
@@ -188,7 +187,7 @@ namespace WB.UI.Interviewer.Activities
             {
                 var interviewDetailsText = await interviewDetailsFile.ReadAllTextAsync();
                 var interviewSynchronizationDto =
-                    serializer.Deserialize<InterviewSynchronizationDto>(interviewDetailsText, TypeSerializationSettings.AllTypes);
+                    synchronizationSerializer.Deserialize<InterviewSynchronizationDto>(interviewDetailsText, TypeSerializationSettings.AllTypes);
 
                 await commandService.ExecuteAsync(new SynchronizeInterviewCommand(
                     interviewId: Guid.Parse(interviewDetailsFile.Name),
@@ -244,7 +243,7 @@ namespace WB.UI.Interviewer.Activities
 
         private async Task RestoreInterviewsAsync()
         {
-            var serializer = Mvx.Resolve<ISerializer>();
+            var serializer = Mvx.Resolve<ISynchronizationSerializer>();
             var interviewViewRepository = Mvx.Resolve<IAsyncPlainStorage<InterviewView>>();
 
             var interviews = this.GetSqlLiteEntities<QuestionnaireDTO>("Projections");

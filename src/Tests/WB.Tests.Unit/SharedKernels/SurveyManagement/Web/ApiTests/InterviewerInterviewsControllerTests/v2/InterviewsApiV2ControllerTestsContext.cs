@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
             ICommandService commandService = null,
             IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader = null,
             IMetaInfoBuilder metaBuilder = null,
-            ISerializer serializer =  null,
+            ISynchronizationSerializer synchronizationSerializer =  null,
             IStringCompressor compressor = null)
         {
             return new InterviewsApiV2Controller(
@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
                 commandService: commandService ?? Mock.Of<ICommandService>(),
                 syncPackagesMetaReader: syncPackagesMetaReader ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta>>(),
                 metaBuilder: metaBuilder ?? Mock.Of<IMetaInfoBuilder>(),
-                serializer: serializer ?? Mock.Of<ISerializer>(),
+                synchronizationSerializer: synchronizationSerializer ?? Mock.Of<ISynchronizationSerializer>(),
                 compressor: compressor ?? Mock.Of<IStringCompressor>());
         }
     }

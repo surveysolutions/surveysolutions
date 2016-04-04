@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         protected readonly ICommandService commandService;
         protected readonly IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader;
         protected readonly IMetaInfoBuilder metaBuilder;
-        protected readonly ISerializer serializer;
+        protected readonly ISynchronizationSerializer synchronizationSerializer;
         protected readonly IGlobalInfoProvider globalInfoProvider;
         protected readonly IInterviewInformationFactory interviewsFactory;
 
@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             ICommandService commandService,
             IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader,
             IMetaInfoBuilder metaBuilder,
-            ISerializer serializer)
+            ISynchronizationSerializer synchronizationSerializer)
         {
             this.plainInterviewFileStorage = plainInterviewFileStorage;
             this.globalInfoProvider = globalInfoProvider;
@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             this.commandService = commandService;
             this.syncPackagesMetaReader = syncPackagesMetaReader;
             this.metaBuilder = metaBuilder;
-            this.serializer = serializer;
+            this.synchronizationSerializer = synchronizationSerializer;
         }
         
         [WriteToSyncLog(SynchronizationLogType.GetInterviews)]
