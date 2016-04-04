@@ -8,29 +8,32 @@ using Moq;
 using Ncqrs;
 using Ncqrs.Spec;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection
 {
     [TestFixture]
     internal class UserARTests
     {
-        private EventContext eventContext;
+        private static IPlainStorageAccessor<UserDocument> userDocumentStorage;
 
         [SetUp]
         public void Init()
         {
+            userDocumentStorage = new TestPlainStorage<UserDocument>();
             AssemblyContext.SetupServiceLocator();
-
-            this.eventContext = new EventContext();
+            Setup.InstanceToMockedServiceLocator(userDocumentStorage);
         }
 
         [TearDown]
         public void Dispose()
         {
-            this.eventContext.Dispose();
-            this.eventContext = null;
+            ((TestPlainStorage<UserDocument>) userDocumentStorage).Clear();
+            userDocumentStorage = null;
         }
 
         [Test]
@@ -43,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             user.Lock();
 
             // assert
-            Assert.That(this.GetRaisedEvents<UserLocked>().Count(), Is.EqualTo(1));
+            Assert.That(GetUser(user).IsLockedByHQ, Is.EqualTo(true));
         }
 
         [Test]
@@ -56,7 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             user.LockBySupervisor();
 
             // assert
-            Assert.That(this.GetRaisedEvents<UserLockedBySupervisor>().Count(), Is.EqualTo(1));
+            Assert.That(this.GetUser(user).IsLockedBySupervisor, Is.EqualTo(true));
         }
 
 
@@ -70,7 +73,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             user.Unlock();
 
             // assert
-            Assert.That(this.GetRaisedEvents<UserUnlocked>().Count(), Is.EqualTo(1));
+            Assert.That(GetUser(user).IsLockedByHQ, Is.EqualTo(false));
         }
 
         [Test]
@@ -83,7 +86,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             user.UnlockBySupervisor();
 
             // assert
-            Assert.That(this.GetRaisedEvents<UserUnlockedBySupervisor>().Count(), Is.EqualTo(1));
+            Assert.That(this.GetUser(user).IsLockedBySupervisor, Is.EqualTo(false));
         }
 
 
@@ -99,7 +102,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             user.ChangeUser("mail@domain.net", isLockedBySupervisor, isLockedByHQ, string.Empty, string.Empty, String.Empty, Guid.Empty);
 
             // assert
-            Assert.That(this.GetRaisedEvents<UserLockedBySupervisor>().Count(), Is.EqualTo(1));
+            Assert.That(this.GetUser(user).IsLockedBySupervisor, Is.EqualTo(true));
         }
 
         [Test]
@@ -114,7 +117,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             user.ChangeUser("mail@domain.net", isLockedBySupervisor, isLockedByHQ, string.Empty, string.Empty, string.Empty, Guid.Empty);
 
             // assert
-            Assert.That(this.GetRaisedEvents<UserLocked>().Count(), Is.EqualTo(1));
+            Assert.That(this.GetUser(user).IsLockedByHQ, Is.EqualTo(true));
         }
 
         [Test]
@@ -128,7 +131,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             user.ChangeUser(specifiedEmail, false, false, string.Empty, string.Empty, string.Empty, Guid.Empty);
 
             // assert
-            Assert.That(this.GetSingleRaisedEvent<UserChanged>().Email, Is.EqualTo(specifiedEmail));
+            Assert.That(this.GetUser(user).Email, Is.EqualTo(specifiedEmail));
         }
 
         [Test]
@@ -141,11 +144,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
             // act
             user.CreateUser(
-                "my@email.com", isLockedBySupervisor, isLockedByHQ, "pwd", Guid.NewGuid(),
+                "my@email.com", isLockedBySupervisor, isLockedByHQ, "pwd", user.Id,
                 new UserRoles[] { }, null, "name", string.Empty, string.Empty);
 
             // assert
-            Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().IsLockedBySupervisor, Is.EqualTo(true));
+            Assert.That(this.GetUser(user).IsLockedBySupervisor, Is.EqualTo(true));
         }
 
         [Test]
@@ -157,11 +160,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
             // act
             user.CreateUser(
-                "my@email.com", false, false, "pwd", Guid.NewGuid(),
+                "my@email.com", false, false, "pwd", user.Id,
                 new UserRoles[] { }, null, specifiedName, string.Empty, string.Empty);
 
             // assert
-            Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().Name, Is.EqualTo(specifiedName));
+            Assert.That(this.GetUser(user).UserName, Is.EqualTo(specifiedName));
         }
 
         [Test]
@@ -173,11 +176,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
             // act
             user.CreateUser(
-                "my@email.com", false, false, specifiedPassword, Guid.NewGuid(),
+                "my@email.com", false, false, specifiedPassword, user.Id,
                 new UserRoles[] { }, null, "name", string.Empty, string.Empty);
 
             // assert
-            Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().Password, Is.EqualTo(specifiedPassword));
+            Assert.That(this.GetUser(user).Password, Is.EqualTo(specifiedPassword));
         }
 
         [Test]
@@ -189,11 +192,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
             // act
             user.CreateUser(
-                specifiedEmail, false, false, "pwd", Guid.NewGuid(),
+                specifiedEmail, false, false, "pwd", user.Id,
                 new UserRoles[] { }, null, "name", string.Empty, string.Empty);
 
             // assert
-            Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().Email, Is.EqualTo(specifiedEmail));
+            Assert.That(this.GetUser(user).Email, Is.EqualTo(specifiedEmail));
         }
 
         [Test]
@@ -201,7 +204,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         {
             // arrange
             Guid specifiedPublicKey = Guid.NewGuid();
-            User user = CreateUserAR();
+            User user = CreateUserAR(specifiedPublicKey);
 
             // act
             user.CreateUser(
@@ -209,7 +212,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 new UserRoles[] { }, null, "name", string.Empty, string.Empty);
 
             // assert
-            Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().PublicKey, Is.EqualTo(specifiedPublicKey));
+            Assert.That(this.GetUser(user).PublicKey, Is.EqualTo(specifiedPublicKey));
         }
 
         [Test]
@@ -221,30 +224,24 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
             // act
             user.CreateUser(
-                "my@email.com", false, false, "pwd", Guid.NewGuid(),
+                "my@email.com", false, false, "pwd", user.Id,
                 twoSpecifedRoles, null, "name", string.Empty, string.Empty);
 
             // assert
-            Assert.That(this.GetSingleRaisedEvent<NewUserCreated>().Roles, Is.EquivalentTo(twoSpecifedRoles));
+            Assert.That(this.GetUser(user).Roles, Is.EquivalentTo(twoSpecifedRoles));
         }
 
-        private static User CreateUserAR()
+        private static User CreateUserAR(Guid? id=null)
         {
-            return new User();
+            var user = new User();
+            user.SetId(id??Guid.NewGuid());
+            user.CreateUser("",false, false,"",user.Id,new [] {UserRoles.Operator },null,"","","");
+            return user;
         }
 
-        private T GetSingleRaisedEvent<T>()
+        private UserDocument GetUser(User user)
         {
-            return this.GetRaisedEvents<T>().Single();
-        }
-
-        private IEnumerable<T> GetRaisedEvents<T>()
-        {
-            return this.eventContext
-                .Events
-                .Where(e => e.Payload is T)
-                .Select(e => e.Payload)
-                .Cast<T>();
+            return userDocumentStorage.GetById(user.Id.FormatGuid());
         }
     }
 }

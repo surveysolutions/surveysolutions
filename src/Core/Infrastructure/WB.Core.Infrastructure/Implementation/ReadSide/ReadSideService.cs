@@ -15,6 +15,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
@@ -51,6 +52,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         private readonly IPostgresReadSideBootstraper postgresReadSideBootstraper;
         private Dictionary<IEventHandler, Stopwatch> handlersWithStopwatches;
         private readonly ITransactionManagerProviderManager transactionManagerProviderManager;
+        private readonly IPlainTransactionManager plainTransactionManager;
         private readonly ReadSideSettings settings;
         private readonly IReadSideKeyValueStorage<ReadSideVersion> readSideVersionStorage;
         private int? cachedReadSideDatabaseVersion = null as int?;
@@ -362,7 +364,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                             transactionManager.CommitCommandTransaction();
                         }
                         catch
-                        {
+                        {  
                             transactionManager.RollbackCommandTransaction();
                             throw;
                         }
@@ -374,6 +376,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 {
                     EnableWritersCacheForHandlers(handlers);
                     this.transactionManagerProviderManager.PinRebuildReadSideTransactionManager();
+                    this.plainTransactionManager.BeginTransaction();
                     this.republishStopwatch.Restart();
 
                     foreach (var eventSourceId in eventSourceIds)
@@ -387,6 +390,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     this.republishStopwatch.Stop();
                     this.transactionManagerProviderManager.UnpinTransactionManager();
                     this.DisableWritersCacheForHandlers(handlers);
+                    this.plainTransactionManager.RollbackTransaction();
                 }
 
                 UpdateStatusMessage("Rebuild views by event sources succeeded.");

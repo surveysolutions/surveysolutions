@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
@@ -105,7 +106,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private InterviewSummary CreateInterviewSummary(Guid userId, Guid questionnaireId, long questionnaireVersion,
             Guid eventSourceId, DateTime eventTimeStamp, bool wasCreatedOnClient)
         {
-            UserDocument responsible = this.users.GetById(userId);
+            UserDocument responsible = this.users.GetById(userId.FormatGuid());
             var questionnarie = this.GetQuestionnaire(questionnaireId, questionnaireVersion);
 
             var interviewSummary = new InterviewSummary(questionnarie)
@@ -182,7 +183,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
-                UserDocument userDocument = this.users.GetById(@event.Payload.SupervisorId);
+                UserDocument userDocument = this.users.GetById(@event.Payload.SupervisorId.FormatGuid());
                 var supervisorName = userDocument != null ? userDocument.UserName : "<UNKNOWN SUPERVISOR>";
 
                 interview.ResponsibleId = @event.Payload.SupervisorId;
@@ -306,7 +307,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                             }
                         }
                     }
-                    var responsible = this.users.GetById(state.ResponsibleId);
+                    var responsible = this.users.GetById(state.ResponsibleId.FormatGuid());
                     if (responsible != null && responsible.Supervisor != null)
                     {
                         state.TeamLeadId = responsible.Supervisor.Id;

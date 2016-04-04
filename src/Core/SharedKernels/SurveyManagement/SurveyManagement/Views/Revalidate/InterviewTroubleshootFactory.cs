@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
                 throw new ArgumentException(
                     $"Questionnaire with id {interview.QuestionnaireId} and version {interview.QuestionnaireVersion} is missing.");
 
-            var user = this.userStore.GetById(interview.ResponsibleId);
+            var user = this.userStore.GetById(interview.ResponsibleId.FormatGuid());
             if (user == null)
                 throw new ArgumentException($"User with id {interview.ResponsibleId} is not found.");
 

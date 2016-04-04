@@ -1,6 +1,7 @@
 ﻿using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -28,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValid
             var userStorage = new TestPlainStorage<UserDocument>();
             foreach (var user in users)
             {
-                userStorage.Store(user, user.PublicKey);
+                userStorage.Store(user, user.PublicKey.FormatGuid());
             }
             return
                 new HeadquarterUserCommandValidator(

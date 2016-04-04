@@ -2,6 +2,7 @@
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Resources;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -44,13 +45,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         public void Validate(User aggregate, UnarchiveUserCommand command)
         {
-            var user = users.GetById(aggregate.EventSourceId);
+            var user = users.GetById(aggregate.Id.FormatGuid());
             ThrowIfUserInRoleInterviewerAndSupervisorIsArchived(user.Roles.ToArray(), user.Supervisor.Id);
         }
 
         public void Validate(User aggregate, UnarchiveUserAndUpdateCommand command)
         {
-            var user = users.GetById(aggregate.EventSourceId);
+            var user = users.GetById(aggregate.Id.FormatGuid());
             ThrowIfUserInRoleInterviewerAndSupervisorIsArchived(user.Roles.ToArray(), user.Supervisor.Id);
         }
 
@@ -69,7 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (!userRoles.Contains(UserRoles.Operator))
                 return;
 
-            var user = users.GetById(supervisorId);
+            var user = users.GetById(supervisorId.FormatGuid());
             if (user == null || user.IsArchived)
                 throw new UserException(
                     HeadquarterUserCommandValidatorMessages.YouCantUnarchiveInterviewerUntilSupervisorIsArchived,

@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interviewer
 
         protected IQueryable<UserDocument> GetInterviewersListForViewer(InterviewersInputModel input)
         {
-            var viewer = this.users.GetById(input.ViewerId);
+            var viewer = this.users.GetById(input.ViewerId.FormatGuid());
 
             if (viewer == null)
                 return Enumerable.Empty<UserDocument>().AsQueryable();

@@ -298,7 +298,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private InterviewData CreateViewWithSequence(Guid userId, Guid eventSourceId, DateTime eventTimeStamp,
             Guid questionnaireId, long questionnaireVersion, long eventSequence, bool createdOnClient)
         {
-            var responsible = this.users.GetById(userId);
+            var responsible = this.users.GetById(userId.FormatGuid());
 
             var interview = new InterviewData()
             {
@@ -415,7 +415,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewData Update(InterviewData state, IPublishedEvent<AnswerCommented> @event)
         {
-            var commenter = this.users.GetById(@event.Payload.UserId);
+            var commenter = this.users.GetById(@event.Payload.UserId.FormatGuid());
 
             return this.SaveComment(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
                 @event.Payload.Comment, @event.Payload.UserId, commenter != null ? commenter.UserName : "<Unknown user>", @event.Payload.CommentTime);
