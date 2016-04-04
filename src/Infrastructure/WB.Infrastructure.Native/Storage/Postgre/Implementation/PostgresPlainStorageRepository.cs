@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
 using NHibernate.Linq;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -8,21 +9,21 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal class PostgresPlainStorageRepository<TEntity> : IPlainStorageAccessor<TEntity> where TEntity : class
     {
-        private readonly ISessionProvider sessionProvider;
+        private readonly Func<IPlainSessionProvider> sessionProviderFunc;
 
-        public PostgresPlainStorageRepository(IPlainSessionProvider sessionProvider)
+        public PostgresPlainStorageRepository(Func<IPlainSessionProvider> sessionProviderFunc)
         {
-            this.sessionProvider = sessionProvider;
+            this.sessionProviderFunc = sessionProviderFunc;
         }
 
         public TEntity GetById(object id)
         {
-            return this.sessionProvider.GetSession().Get<TEntity>(id);
+            return this.GetSession().Get<TEntity>(id);
         }
 
         public void Remove(object id)
         {
-            var session = this.sessionProvider.GetSession();
+            var session = this.GetSession();
 
             var entity = session.Get<TEntity>(id);
 
@@ -36,13 +37,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             foreach (var entity in entities)
             {
-                this.sessionProvider.GetSession().Delete(entity);
+                this.GetSession().Delete(entity);
             }
         }
 
         public void Store(TEntity entity, object id)
         {
-            this.sessionProvider.GetSession().SaveOrUpdate(entity);
+            this.GetSession().SaveOrUpdate(entity);
         }
 
         public void Store(IEnumerable<Tuple<TEntity, object>> entities)
@@ -55,7 +56,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
         {
-            return query.Invoke(this.sessionProvider.GetSession().Query<TEntity>());
+            return query.Invoke(GetSession().Query<TEntity>());
+        }
+
+        public ISession GetSession()
+        {
+            return this.sessionProviderFunc().GetSession();
         }
     }
 }

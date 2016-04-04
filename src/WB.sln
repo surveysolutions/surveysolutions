@@ -118,8 +118,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernels.Quest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tests.Unit.Designer", "Tests\WB.Tests.Unit.Designer\WB.Tests.Unit.Designer.csproj", "{6F9898A0-BC15-49AB-88C3-1DFA76BA9ECB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QToPlainStore", "Tools\QToPlainStore\QToPlainStore.csproj", "{EB7D160E-3BC5-4368-A6B8-E121692F058D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU

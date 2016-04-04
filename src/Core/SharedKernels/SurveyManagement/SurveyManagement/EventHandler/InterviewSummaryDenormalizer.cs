@@ -336,7 +336,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private string GetResponsibleIdName(Guid responsibleId)
         {
-            var responsible = this.users.GetById(responsibleId);
+            var responsible = this.users.GetById(responsibleId.FormatGuid());
             return responsible != null ? responsible.UserName : "<UNKNOWN RESPONSIBLE>";
         }
     }

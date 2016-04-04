@@ -36,6 +36,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
 
             this.transaction.Commit();
+            this.transaction = null;
             this.session.Close();
             this.session = null;
         }
@@ -48,6 +49,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
 
             this.transaction.Rollback();
+            this.transaction = null;
             this.session.Close();
             this.session = null;
         }

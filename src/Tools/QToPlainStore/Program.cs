@@ -181,9 +181,9 @@ namespace QToPlainStore
             questionnaireQuestionsInfoStorage = new PostgresPlainKeyValueStorage<QuestionnaireQuestionsInfo>(postgresPlainStorageSettings, logger);
 
             questionnaireBrowseItemStorage =
-                new PostgresPlainStorageRepository<QuestionnaireBrowseItem>(plainPostgresTransactionManager);
+                new PostgresPlainStorageRepository<QuestionnaireBrowseItem>(()=>plainPostgresTransactionManager);
 
-            userDocumentStorage = new PostgresPlainStorageRepository<UserDocument>(plainPostgresTransactionManager);
+            userDocumentStorage = new PostgresPlainStorageRepository<UserDocument>(() => plainPostgresTransactionManager);
 
             var serviceLocator = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object;
 
@@ -294,8 +294,7 @@ namespace QToPlainStore
             Guid eventSourceId,
             long eventSequence)
         {
-            var user = new User();
-            user.SetId(eventSourceId);
+            var user = InitUser(eventSourceId);
             user.Archive();
         }
 
@@ -304,8 +303,7 @@ namespace QToPlainStore
             Guid eventSourceId,
             long eventSequence)
         {
-            var user=new User();
-            user.SetId( eventSourceId);
+            var user= InitUser( eventSourceId);
             user.Unarchive();
         }
 
@@ -314,8 +312,7 @@ namespace QToPlainStore
             Guid eventSourceId,
             long eventSequence)
         {
-             var user = new User();
-            user.SetId(eventSourceId);
+             var user = InitUser(eventSourceId);
             user.Lock();
         }
 
@@ -324,8 +321,7 @@ namespace QToPlainStore
             Guid eventSourceId,
             long eventSequence)
         {
-            var user = new User();
-            user.SetId(eventSourceId);
+            var user = InitUser(eventSourceId);
             user.Unlock();
         }
 
@@ -334,8 +330,7 @@ namespace QToPlainStore
             Guid eventSourceId,
             long eventSequence)
         {
-            var user = new User();
-            user.SetId(eventSourceId);
+            var user = InitUser(eventSourceId);
             user.LockBySupervisor();
         }
 
@@ -344,8 +339,7 @@ namespace QToPlainStore
             Guid eventSourceId,
             long eventSequence)
         {
-            var user = new User();
-            user.SetId(eventSourceId);
+            var user = InitUser(eventSourceId);
             user.UnlockBySupervisor();
         }
 
@@ -354,8 +348,9 @@ namespace QToPlainStore
             Guid eventSourceId,
             long eventSequence)
         {
+            var userAR = InitUser(eventSourceId);
             var user = userDocumentStorage.GetById(eventSourceId.FormatGuid());
-            new User().ChangeUser(userChanged.Email, user.IsLockedBySupervisor, user.IsLockedByHQ,
+            userAR.ChangeUser(userChanged.Email, user.IsLockedBySupervisor, user.IsLockedByHQ,
                 userChanged.PasswordHash, userChanged.PersonName, userChanged.PhoneNumber, eventSourceId);
         }
 
@@ -364,7 +359,8 @@ namespace QToPlainStore
             Guid eventSourceId,
             long eventSequence)
         {
-            new User().LinkUserToDevice(new LinkUserToDevice(eventSourceId, userLinkedToDevice.DeviceId));
+            var user = InitUser(eventSourceId);
+            user.LinkUserToDevice(new LinkUserToDevice(eventSourceId, userLinkedToDevice.DeviceId));
         }
 
         private static void HandleTemplateImportedIfPossible(TemplateImported templateImportedEvent, Guid eventSourceId,
@@ -436,6 +432,12 @@ namespace QToPlainStore
             }, questionnaireEntityId);
         }
 
+        private static User InitUser(Guid id)
+        {
+            var user=new User();
+            user.SetId(id);
+            return user;
+        }
         private static IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory =
             new ReferenceInfoForLinkedQuestionsFactory();
 
