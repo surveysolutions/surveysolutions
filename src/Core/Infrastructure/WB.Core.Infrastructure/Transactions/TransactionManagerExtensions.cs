@@ -18,19 +18,27 @@ namespace WB.Core.Infrastructure.Transactions
 
         public static T ExecuteInPlainTransaction<T>(this IPlainTransactionManager transactionManager, Func<T> func)
         {
+            bool shouldStartTransaction = !transactionManager.IsTransactionStarted;
             try
             {
-                transactionManager.BeginTransaction();
-                
-                T result = func.Invoke();
-                
-                transactionManager.CommitTransaction();
+                if (shouldStartTransaction)
+                {
+                    transactionManager.BeginTransaction();
+                }
 
+                T result = func.Invoke();
+                if (shouldStartTransaction)
+                {
+                    transactionManager.CommitTransaction();
+                }
                 return result;
             }
             catch
             {
-                transactionManager.RollbackTransaction();
+                if (shouldStartTransaction)
+                {
+                    transactionManager.RollbackTransaction();
+                }
                 throw;
             }
         }

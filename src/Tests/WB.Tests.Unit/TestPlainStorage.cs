@@ -66,5 +66,7 @@ namespace WB.Tests.Unit
         {
             throw new NotImplementedException();
         }
+
+        public void Clear() { this.entites.Clear();}
     }
 }
