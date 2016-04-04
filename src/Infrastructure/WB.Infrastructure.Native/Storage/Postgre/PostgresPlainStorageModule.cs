@@ -9,6 +9,7 @@ using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using NHibernate.Tool.hbm2ddl;
 using Ninject;
+using Ninject.Activation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
@@ -53,6 +54,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.Bind<IPlainSessionProvider>().ToMethod(context => context.Kernel.Get<PlainPostgresTransactionManager>());
             this.Bind<IPlainTransactionManager>().ToMethod(context => context.Kernel.Get<PlainPostgresTransactionManager>());
             this.Bind(typeof(IPlainStorageAccessor<>)).To(typeof(PostgresPlainStorageRepository<>));
+
+            this.Bind<Func<IPlainSessionProvider>>().ToMethod(context => () => BuildPlainSessionProvider(context));
+        }
+
+        private IPlainSessionProvider BuildPlainSessionProvider(IContext context)
+        {
+            return context.Kernel.Get<PlainPostgresTransactionManager>();
         }
 
         private ISessionFactory BuildSessionFactory()
