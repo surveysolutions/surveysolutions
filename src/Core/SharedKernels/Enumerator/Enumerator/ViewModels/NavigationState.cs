@@ -145,8 +145,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 NavigationIdentity previousNavigationItem = this.navigationStack.Peek();
                 previousNavigationItem.AnchoredElementIdentity = this.CurrentGroup;
 
-                while (!this.CanNavigateTo(previousNavigationItem.TargetGroup) ||
-                       previousNavigationItem.TargetGroup.Equals(this.CurrentGroup))
+                while (!this.CanNavigateTo(previousNavigationItem.TargetGroup) || previousNavigationItem.TargetGroup.Equals(this.CurrentGroup))
                 {
                     if (this.navigationStack.Count == 0)
                     {

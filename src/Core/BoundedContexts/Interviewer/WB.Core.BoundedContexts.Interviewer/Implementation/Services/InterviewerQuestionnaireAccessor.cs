@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public class InterviewerQuestionnaireAccessor : IInterviewerQuestionnaireAccessor
     {
-        private readonly ISerializer serializer;
+        private readonly ISynchronizationSerializer synchronizationSerializer;
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
         private readonly IInterviewerInterviewAccessor interviewFactory;
 
@@ -24,14 +24,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
 
         public InterviewerQuestionnaireAccessor(
-            ISerializer serializer,
+            ISynchronizationSerializer synchronizationSerializer,
             IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IPlainQuestionnaireRepository plainQuestionnaireRepository,
             IAsyncPlainStorage<InterviewView> interviewViewRepository,
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor,
             IInterviewerInterviewAccessor interviewFactory)
         {
-            this.serializer = serializer;
+            this.synchronizationSerializer = synchronizationSerializer;
             this.questionnaireViewRepository = questionnaireViewRepository;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.interviewViewRepository = interviewViewRepository;
@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             var questionnaireId = questionnaireIdentity.ToString();
 
-            var serializedQuestionnaireDocument = await Task.Run(() => this.serializer.Deserialize<QuestionnaireDocument>(questionnaireDocument));
+            var serializedQuestionnaireDocument = await Task.Run(() => this.synchronizationSerializer.Deserialize<QuestionnaireDocument>(questionnaireDocument));
 
             await Task.Run(() => this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId,
                         questionnaireIdentity.Version, serializedQuestionnaireDocument));

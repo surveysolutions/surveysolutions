@@ -20,19 +20,19 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
     {
         private readonly IRestServiceSettings restServiceSettings;
         private readonly INetworkService networkService;
-        private readonly ISerializer serializer;
+        private readonly ISynchronizationSerializer synchronizationSerializer;
         private readonly IStringCompressor stringCompressor;
 
         public RestService(
             IRestServiceSettings restServiceSettings, 
             INetworkService networkService,
-            ISerializer serializer,
+            ISynchronizationSerializer synchronizationSerializer,
             IStringCompressor stringCompressor,
             IRestServicePointManager restServicePointManager)
         {
             this.restServiceSettings = restServiceSettings;
             this.networkService = networkService;
-            this.serializer = serializer;
+            this.synchronizationSerializer = synchronizationSerializer;
             this.stringCompressor = stringCompressor;
 
             if (this.restServiceSettings.AcceptUnsignedSslCertificate && restServicePointManager != null)
@@ -174,7 +174,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             return data == null
                 ? null
                 : new CompressedContent(
-                    new CapturedStringContent(this.serializer.Serialize(data), Encoding.UTF8, "application/json"), new GZipCompressor());
+                    new CapturedStringContent(this.synchronizationSerializer.Serialize(data), Encoding.UTF8, "application/json"), new GZipCompressor());
         }
 
         private async Task<T> ReceiveCompressedJsonWithProgressAsync<T>(Task<HttpResponseMessage> response,
@@ -270,7 +270,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             try
             {
                 var responseContent = GetDecompressedContentFromHttpResponseMessage(restResponse);
-                return this.serializer.Deserialize<T>(responseContent);
+                return this.synchronizationSerializer.Deserialize<T>(responseContent);
             }
             catch (JsonDeserializationException ex)
             {

@@ -27,6 +27,8 @@ namespace WB.UI.Designer
             this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
 
             this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(new JsonSerializerSettingsFactory()));
+            this.Bind<ISynchronizationSerializer>().ToMethod((ctx) => new SychronizationJsonSerializer(new JsonSerializerSettingsFactory()));
+            this.Bind<IStreamSerializer>().ToMethod((ctx) => new StreamJsonSerializer(new JsonSerializerSettingsFactory()));
 
             this.Bind<IStringCompressor>().To<JsonCompressor>().InSingletonScope();
             this.Bind<IArchiveUtils>().To<ZipArchiveUtils>();

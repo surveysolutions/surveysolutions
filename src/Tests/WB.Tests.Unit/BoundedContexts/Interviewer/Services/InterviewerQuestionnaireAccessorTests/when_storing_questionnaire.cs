@@ -17,9 +17,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
     {
         Establish context = () =>
         {
-            var serializer = Mock.Of<ISerializer>(x => x.Deserialize<QuestionnaireDocument>(Moq.It.IsAny<string>()) == questionnaireDocument);
+            var synchronizationSerializer = Mock.Of<ISynchronizationSerializer>(x => x.Deserialize<QuestionnaireDocument>(Moq.It.IsAny<string>()) == questionnaireDocument);
             interviewerQuestionnaireAccessor = CreateInterviewerQuestionnaireAccessor(
-                serializer: serializer,
+                synchronizationSerializer: synchronizationSerializer,
                 questionnaireViewRepository: mockOfQuestionnaireViewRepository.Object,
                 plainQuestionnaireRepository: mockOfPlainQuestionnaireRepository.Object);
         };

@@ -65,7 +65,8 @@ namespace WB.UI.Tester.Infrastructure
             this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
 
             this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(new JsonSerializerSettingsFactory()));
-
+            this.Bind<ISynchronizationSerializer>().ToMethod((ctx) => new SychronizationJsonSerializer(new JsonSerializerSettingsFactory()));
+            
             this.Bind<IStringCompressor>().To<JsonCompressor>();
             
             this.Bind<IDesignerApiService>().To<DesignerApiService>().InSingletonScope();

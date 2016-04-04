@@ -64,6 +64,8 @@
     <Compile Include="Implementation\Crypto\SHA1.cs" />
     <Compile Include="Implementation\DownloadProgressChangedEventArgs.cs" />
     <Compile Include="Implementation\JsonCompressor.cs" />
+    <Compile Include="Implementation\StreamJsonSerializer.cs" />
+    <Compile Include="Implementation\SychronizationJsonSerializer.cs" />
     <Compile Include="Implementation\NewtonJsonSerializer.cs" />
     <Compile Include="Implementation\PasswordHasher.cs" />
     <Compile Include="Implementation\RestCredentials.cs" />
@@ -104,6 +106,8 @@
     <Compile Include="Services\ICompressor.cs" />
     <Compile Include="Services\IJsonSerializerSettingsFactory.cs" />
     <Compile Include="Services\ILoggerProvider.cs" />
+    <Compile Include="Services\IStreamSerializer.cs" />
+    <Compile Include="Services\ISynchronizationSerializer.cs" />
     <Compile Include="Services\ISerializer.cs" />
     <Compile Include="Services\ILogger.cs" />
     <Compile Include="Services\INetworkService.cs" />

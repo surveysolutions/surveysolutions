@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
 
             controller = CreateInterviewerInterviewsController(
                 incomingSyncPackagesQueue: mockOfIncomingSyncPackagesQueue.Object,
-                serializer: mockOfSerializer.Object,
+                synchronizationSerializer: mockOfSerializer.Object,
                 compressor: mockOfCompressor.Object);
         };
 
@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
         private static readonly string compressedJsonStringInterviewMetaInfo = "compressed interview mata info";
         private static readonly InterviewMetaInfo interviewMetaInfo = new InterviewMetaInfo();
         private static readonly Mock<IIncomingSyncPackagesQueue> mockOfIncomingSyncPackagesQueue = new Mock<IIncomingSyncPackagesQueue>();
-        private static readonly Mock<ISerializer> mockOfSerializer = new Mock<ISerializer>();
+        private static readonly Mock<ISynchronizationSerializer> mockOfSerializer = new Mock<ISynchronizationSerializer>();
         private static readonly Mock<IStringCompressor> mockOfCompressor = new Mock<IStringCompressor>();
     }
 }
