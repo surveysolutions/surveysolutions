@@ -1,8 +1,12 @@
-﻿using Machine.Specifications;
+﻿using System;
+using Machine.Specifications;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Events.User;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
 {
@@ -10,7 +14,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
     {
         Establish context = () =>
         {
-            user = Create.User();
+            var userId = Guid.NewGuid();
+            Setup.InstanceToMockedServiceLocator(userDocumentStorage);
+            var userDocument = Create.UserDocument(userId: userId, isArchived: false);
+            userDocument.Roles.Add(UserRoles.Supervisor);
+            userDocumentStorage.Store(userDocument, userId.FormatGuid());
+            user = Create.User(userId);
         };
 
         Because of = () =>
@@ -28,5 +37,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
 
         private static User user;
         private static UserException exception;
+        private static IPlainStorageAccessor<UserDocument> userDocumentStorage = new TestPlainStorage<UserDocument>();
     }
 }
