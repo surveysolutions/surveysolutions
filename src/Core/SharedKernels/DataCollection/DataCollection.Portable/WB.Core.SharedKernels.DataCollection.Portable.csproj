@@ -97,6 +97,7 @@
     <Compile Include="V7\AbstractInterviewExpressionStateV7.cs" />
     <Compile Include="V7\IExpressionExecutableV7.cs" />
     <Compile Include="V7\IInterviewExpressionStateV7.cs" />
+    <Compile Include="ILatestInterviewExpressionState.cs" />
     <Compile Include="V7\InterviewExpressionStateV6ToV7Adapter.cs" />
     <Compile Include="ValidationDescription.cs" />
     <Compile Include="ValidityChanges.cs" />

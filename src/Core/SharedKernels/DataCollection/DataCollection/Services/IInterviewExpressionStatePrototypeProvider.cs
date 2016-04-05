@@ -5,6 +5,6 @@ namespace WB.Core.SharedKernels.DataCollection.Services
 {
     public interface IInterviewExpressionStatePrototypeProvider
     {
-        IInterviewExpressionStateV7 GetExpressionState(Guid questionnaireId, long questionnaireVersion);
+        ILatestInterviewExpressionState GetExpressionState(Guid questionnaireId, long questionnaireVersion);
     }
 }

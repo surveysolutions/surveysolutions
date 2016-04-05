@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.DataCollection.V7;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection
 {
-    internal class InterviewExpressionStateStub : AbstractInterviewExpressionStateV6, IInterviewExpressionStateV7
+    internal class InterviewExpressionStateStub : AbstractInterviewExpressionStateV6, ILatestInterviewExpressionState
     {
         public override Dictionary<Guid, Guid[]> GetParentsMap()
         {
@@ -44,6 +44,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         }
 
         IInterviewExpressionStateV7 IInterviewExpressionStateV7.Clone()
+        {
+            return this;
+        }
+
+        ILatestInterviewExpressionState ILatestInterviewExpressionState.Clone()
         {
             return this;
         }

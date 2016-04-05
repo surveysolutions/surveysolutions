@@ -4,6 +4,6 @@ namespace WB.Core.SharedKernels.DataCollection
 {
     public interface IInterviewExpressionStateUpgrader
     {
-        IInterviewExpressionStateV7 UpgradeToLatestVersionIfNeeded(IInterviewExpressionState state);
+        ILatestInterviewExpressionState UpgradeToLatestVersionIfNeeded(IInterviewExpressionState state);
     }
 }
