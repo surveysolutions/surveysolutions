@@ -8,9 +8,9 @@ namespace WB.Core.SharedKernels.DataCollection
 {
     public class InterviewExpressionStateUpgrader : IInterviewExpressionStateUpgrader
     {
-        public IInterviewExpressionStateV7 UpgradeToLatestVersionIfNeeded(IInterviewExpressionState state)
+        public ILatestInterviewExpressionState UpgradeToLatestVersionIfNeeded(IInterviewExpressionState state)
         {
-            var stateV7 = state as IInterviewExpressionStateV7;
+            var stateV7 = state as ILatestInterviewExpressionState;
             if (stateV7 != null)
                 return stateV7;
 
