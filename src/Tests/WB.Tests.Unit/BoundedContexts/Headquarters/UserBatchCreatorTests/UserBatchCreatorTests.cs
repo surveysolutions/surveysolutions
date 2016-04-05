@@ -137,9 +137,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
                 commandService??Mock.Of<ICommandService>(),
                 userStorage ?? Mock.Of<IPlainStorageAccessor<UserDocument>>(),
                 Mock.Of<ILogger>(),
-                Mock.Of<IPasswordHasher>(),
-                Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),  
-                Mock.Of<IPlainTransactionManager>());
+                Mock.Of<IPasswordHasher>());
         }
 
         private Mock<IUserPreloadingService> CreateUserPreloadingServiceMock(UserPreloadingProcess userPreloadingProcess, UserRoles role = UserRoles.Operator)

@@ -14,14 +14,12 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private readonly UserPreloadingSettings userPreloadingSettings;
 
-        private readonly IPlainTransactionManager plainTransactionManager;
+        private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
 
         public UserPreloadingCleaner(
-            IPlainTransactionManager plainTransactionManager, 
             UserPreloadingSettings userPreloadingSettings, 
             IPlainStorageAccessor<UserPreloadingProcess> userPreloadingProcessStorage)
         {
-            this.plainTransactionManager = plainTransactionManager;
             this.userPreloadingSettings = userPreloadingSettings;
             this.userPreloadingProcessStorage = userPreloadingProcessStorage;
         }

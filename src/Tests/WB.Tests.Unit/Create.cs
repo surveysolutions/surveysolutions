@@ -1643,8 +1643,7 @@ namespace WB.Tests.Unit
                         new QuestionnaireRosterStructureFactory(), new FileSystemIOAccessor())
                         .CreateQuestionnaireExportStructure(questionnaire, 1), new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(questionnaire, 1), questionnaire,
                     new QuestionDataParser(),
-                    new UserViewFactory(new TestPlainStorage<UserDocument>()),
-                    Mock.Of<ITransactionManagerProvider>());
+                    new UserViewFactory(new TestPlainStorage<UserDocument>()));
 
         }
 
