@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Validation
             var questionId = Guid.NewGuid();
             questionIdentity = Create.Identity(questionId, RosterVector.Empty);
 
-            var interviewExpressionStateV7 = Substitute.For<IInterviewExpressionStateV7>();
+            var interviewExpressionStateV7 = Substitute.For<ILatestInterviewExpressionState>();
             IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidatoinConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
             failedValidatoinConditions.Add(questionIdentity, new List<FailedValidationCondition>
             {

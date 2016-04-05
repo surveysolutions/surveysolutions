@@ -69,7 +69,7 @@ namespace WB.Tests.Integration.InterviewTests
 
         protected static IInterviewExpressionStatePrototypeProvider CreateInterviewExpressionStateProviderStub(Guid questionnaireId)
         {
-            var expressionState = new Mock<IInterviewExpressionStateV7>();
+            var expressionState = new Mock<ILatestInterviewExpressionState>();
 
             var emptyList = new List<Identity>();
 
@@ -94,7 +94,7 @@ namespace WB.Tests.Integration.InterviewTests
             return result;
         }
 
-        protected static StatefulInterview SetupStatefullInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, IInterviewExpressionStateV7 precompiledState = null)
+        protected static StatefulInterview SetupStatefullInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, ILatestInterviewExpressionState precompiledState = null)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
 
@@ -102,7 +102,7 @@ namespace WB.Tests.Integration.InterviewTests
                 => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == new PlainQuestionnaire(questionnaireDocument, 1) &&
                     repository.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == new PlainQuestionnaire(questionnaireDocument, 1));
 
-            IInterviewExpressionStateV7 state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument);
+            ILatestInterviewExpressionState state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument);
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
 
@@ -117,7 +117,7 @@ namespace WB.Tests.Integration.InterviewTests
             return interview;
         }
 
-        protected static Interview SetupInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, IInterviewExpressionStateV7 precompiledState = null)
+        protected static Interview SetupInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, ILatestInterviewExpressionState precompiledState = null)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
 
@@ -125,7 +125,7 @@ namespace WB.Tests.Integration.InterviewTests
                 =>  repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) ==new PlainQuestionnaire(questionnaireDocument,1) &&
                     repository.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == new PlainQuestionnaire(questionnaireDocument, 1));
 
-            IInterviewExpressionStateV7 state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument) ;
+            ILatestInterviewExpressionState state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument) ;
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
 
@@ -183,7 +183,7 @@ namespace WB.Tests.Integration.InterviewTests
             return firstTypedEvent != null ? ((T)firstTypedEvent.Payload) : null;
         }
 
-        public static IInterviewExpressionStateV7 GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
+        public static ILatestInterviewExpressionState GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
         {
             var fileSystemAccessor = new FileSystemIOAccessor(); 
             var questionnaireVersionProvider =new DesignerEngineVersionService();

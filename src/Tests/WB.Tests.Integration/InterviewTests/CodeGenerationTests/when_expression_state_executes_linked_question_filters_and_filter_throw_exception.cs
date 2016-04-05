@@ -5,7 +5,6 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.V7;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
