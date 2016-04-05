@@ -1,14 +1,16 @@
 using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.V2;
+using WB.Core.SharedKernels.DataCollection.V4;
+using WB.Core.SharedKernels.DataCollection.V5;
 
-namespace WB.Core.SharedKernels.DataCollection.V4
+namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapters.V5
 {
-    internal class InterviewExpressionStateV2ToV4Adapter : IInterviewExpressionStateV4
+    internal class InterviewExpressionStateV4ToV5Adapter : IInterviewExpressionStateV5
     {
-        private readonly IInterviewExpressionStateV2 interviewExpressionState;
+        private readonly IInterviewExpressionStateV4 interviewExpressionState;
 
-        public InterviewExpressionStateV2ToV4Adapter(IInterviewExpressionStateV2 interviewExpressionState)
+        public InterviewExpressionStateV4ToV5Adapter(IInterviewExpressionStateV4 interviewExpressionState)
         {
             this.interviewExpressionState = interviewExpressionState;
         }
@@ -74,6 +76,11 @@ namespace WB.Core.SharedKernels.DataCollection.V4
             this.interviewExpressionState.UpdateLinkedMultiOptionAnswer(questionId, propagationVector, selectedPropagationVectors); 
         }
 
+        public void UpdateYesNoAnswer(Guid questionId, decimal[] propagationVector, YesNoAnswersOnly selectedPropagationVectors)
+        {
+            
+        }
+
         public void DeclareAnswersInvalid(IEnumerable<Identity> invalidQuestions)
         {
             this.interviewExpressionState.DeclareAnswersInvalid(invalidQuestions); 
@@ -129,20 +136,24 @@ namespace WB.Core.SharedKernels.DataCollection.V4
             this.interviewExpressionState.SaveAllCurrentStatesAsPrevious(); 
         }
 
-        IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone()
-        {
-            return ((IInterviewExpressionStateV4)interviewExpressionState).Clone();
-        }
-
-
         public IInterviewExpressionState Clone()
         {
-            return ((IInterviewExpressionStateV4)interviewExpressionState).Clone(); 
+            return ((IInterviewExpressionStateV5)this.interviewExpressionState).Clone();
+        }
+
+        IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone()
+        {
+            return ((IInterviewExpressionStateV5)this.interviewExpressionState).Clone();
         }
 
         IInterviewExpressionStateV4 IInterviewExpressionStateV4.Clone()
         {
-            return new InterviewExpressionStateV2ToV4Adapter(this.interviewExpressionState.Clone());
+            return ((IInterviewExpressionStateV5)this.interviewExpressionState).Clone();
+        }
+
+        IInterviewExpressionStateV5 IInterviewExpressionStateV5.Clone()
+        {
+            return new InterviewExpressionStateV4ToV5Adapter(this.interviewExpressionState.Clone());
         }
 
         public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle)
@@ -153,7 +164,7 @@ namespace WB.Core.SharedKernels.DataCollection.V4
 
         public void SetInterviewProperties(IInterviewProperties properties)
         {
-            //do nothing. adaptee doesn't know anything about it
+            this.interviewExpressionState.SetInterviewProperties(properties);
         }
     }
 }

@@ -1,10 +1,14 @@
-﻿using WB.Core.SharedKernels.DataCollection.V2;
+﻿using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapters.V2;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapters.V4;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapters.V5;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapters.V6;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapters.V7;
+using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.V4;
 using WB.Core.SharedKernels.DataCollection.V5;
 using WB.Core.SharedKernels.DataCollection.V6;
-using WB.Core.SharedKernels.DataCollection.V7;
 
-namespace WB.Core.SharedKernels.DataCollection
+namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public class InterviewExpressionStateUpgrader : IInterviewExpressionStateUpgrader
     {
