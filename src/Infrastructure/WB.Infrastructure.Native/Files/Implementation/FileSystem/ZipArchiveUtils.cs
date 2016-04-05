@@ -36,14 +36,16 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             }
         }
 
-        public Task<byte[]> ZipDirectoryToByteArrayAsync(string sourceDirectory, string directoryFilter = null, string fileFilter = null)
-        {
-            return Task.Run(() => this.ZipDirectoryToByteArray(sourceDirectory, directoryFilter, fileFilter));
-        }
-
-        public byte[] ZipDirectoryToByteArray(string sourceDirectory, string directoryFilter = null, string fileFilter = null)
+        public void ZipDirectoryToFile(string sourceDirectory, string archiveFilePath, string directoryFilter = null,
+            string fileFilter = null)
         {
             throw new NotImplementedException();
+        }
+
+        public Task ZipDirectoryToFileAsync(string sourceDirectory, string archiveFilePath, string directoryFilter = null,
+            string fileFilter = null)
+        {
+            return Task.Run(() => this.ZipDirectoryToFile(sourceDirectory, archiveFilePath, directoryFilter, fileFilter));
         }
 
         public void ZipFiles(IEnumerable<string> files, string archiveFilePath)

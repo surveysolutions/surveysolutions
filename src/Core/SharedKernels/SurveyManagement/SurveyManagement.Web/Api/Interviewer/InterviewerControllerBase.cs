@@ -19,8 +19,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         private const string PHYSICALPATHTOAPPLICATION = "~/Client/";
 
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly ITabletInformationService tabletInformationService;
-        private readonly IUserViewFactory userViewFactory;
+        protected readonly ITabletInformationService tabletInformationService;
+        protected readonly IUserViewFactory userViewFactory;
         private readonly IAndroidPackageReader androidPackageReader;
 
         public InterviewerControllerBase(
