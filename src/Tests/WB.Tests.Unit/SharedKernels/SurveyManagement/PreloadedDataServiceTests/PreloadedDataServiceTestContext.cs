@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 
             var userViewFactory = new Mock<IUserViewFactory>();
             return new PreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure, questionnaireDocument,
-                new QuestionDataParser(), userViewFactory.Object, Mock.Of<ITransactionManagerProvider>());
+                new QuestionDataParser(), userViewFactory.Object);
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)
