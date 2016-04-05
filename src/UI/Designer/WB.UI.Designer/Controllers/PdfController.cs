@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
+using System.Net;
+using System.Web.Http;
 using System.Web.Mvc;
+using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.UI.Designer.Models;
 using WB.UI.Designer.Pdf;
 using WB.UI.Shared.Web.Membership;
 
@@ -12,13 +17,16 @@ namespace WB.UI.Designer.Controllers
     public class PdfController : BaseController
     {
         private readonly IViewFactory<PdfQuestionnaireInputModel, PdfQuestionnaireView> pdfViewFactory;
+        private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
 
         public PdfController(
             IMembershipUserService userHelper,
-            IViewFactory<PdfQuestionnaireInputModel, PdfQuestionnaireView> viewFactory)
+            IViewFactory<PdfQuestionnaireInputModel, PdfQuestionnaireView> viewFactory, 
+            IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
             : base(userHelper)
         {
             this.pdfViewFactory = viewFactory;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         public ActionResult RenderQuestionnaire(Guid id)
@@ -35,7 +43,19 @@ namespace WB.UI.Designer.Controllers
             return this.View(questionnaire);
         }
 
-        [Authorize]
+        [System.Web.Mvc.Authorize]
+        public ActionResult Print(Guid id)
+        {
+            var questionnaire = this.questionnaireStorage.GetById(id);
+            if (questionnaire == null || questionnaire.IsDeleted)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+
+            return this.View("RenderQuestionnaire", new PdfQuestionnaireModel(questionnaire));
+        }
+
+        [System.Web.Mvc.Authorize]
         public ActionResult ExportQuestionnaire(Guid id)
         {
             PdfQuestionnaireView questionnaire = this.LoadQuestionnaire(id);
