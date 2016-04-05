@@ -297,6 +297,7 @@
     <Compile Include="Implementation\Services\AuthenticationService.cs" />
     <Compile Include="Implementation\Services\RecaptchaService.cs" />
     <Compile Include="Models\IEmailNotification.cs" />
+    <Compile Include="Models\PdfQuestionnaireModel.cs" />
     <Compile Include="Models\QuestionnaireDocumentWithLookUpTables.cs" />
     <Compile Include="Models\SharingNotificationModel.cs" />
     <Compile Include="Models\VerificationMessageError.cs" />
@@ -441,6 +442,13 @@
     <Content Include="Content\identity\favicon-designer-72x72.png" />
     <Content Include="Content\identity\favicon-designer-76x76.png" />
     <Content Include="Content\identity\favicon-designer.png" />
+    <Content Include="Content\images\PDF-structure.png" />
+    <Content Include="Content\images\pdf_logo.png" />
+    <Content Include="fonts\lucidaconsole.svg" />
+    <Content Include="fonts\RobotoItalic.svg" />
+    <Content Include="fonts\RobotoLight.svg" />
+    <Content Include="fonts\RobotoMedium.svg" />
+    <Content Include="fonts\RobotoMediumItalic.svg" />
     <Content Include="Scripts\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\bindings.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
@@ -454,6 +462,27 @@
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
+    <Content Include="fonts\lucidaconsole.eot" />
+    <Content Include="fonts\lucidaconsole.ttf" />
+    <Content Include="fonts\lucidaconsole.woff" />
+    <Content Include="fonts\lucidaconsole.woff2" />
+    <Content Include="fonts\Roboto300.woff" />
+    <Content Include="fonts\RobotoItalic.eot" />
+    <Content Include="fonts\RobotoItalic.ttf" />
+    <Content Include="fonts\RobotoItalic.woff" />
+    <Content Include="fonts\RobotoItalic.woff2" />
+    <Content Include="fonts\RobotoLight.eot" />
+    <Content Include="fonts\RobotoLight.ttf" />
+    <Content Include="fonts\RobotoLight.woff" />
+    <Content Include="fonts\RobotoLight.woff2" />
+    <Content Include="fonts\RobotoMedium.eot" />
+    <Content Include="fonts\RobotoMedium.ttf" />
+    <Content Include="fonts\RobotoMedium.woff" />
+    <Content Include="fonts\RobotoMedium.woff2" />
+    <Content Include="fonts\RobotoMediumItalic.eot" />
+    <Content Include="fonts\RobotoMediumItalic.ttf" />
+    <Content Include="fonts\RobotoMediumItalic.woff" />
+    <Content Include="fonts\RobotoMediumItalic.woff2" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
@@ -1563,6 +1592,11 @@
     <Content Include="UpdatedDesigner\vendor\angular-moment\package.json" />
     <Content Include="UpdatedDesigner\vendor\angular-moment\README.md" />
     <Content Include="Views\Admin\RestoreQuestionnaire.cshtml" />
+    <Content Include="Views\Pdf\_RenderQuestion.cshtml" />
+    <Content Include="Views\Pdf\_RenderGroup.cshtml" />
+    <Content Include="Views\Pdf\_RenderRoster.cshtml" />
+    <Content Include="Views\Pdf\_RenderChildren.cshtml" />
+    <Content Include="Views\Pdf\_RenderStaticText.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1587,10 +1621,7 @@
     <Content Include="Views\Error\AccessDenied.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
-    <Content Include="Views\Pdf\_RenderChild.cshtml" />
     <Content Include="Views\Questionnaire\Clone.cshtml" />
-    <Content Include="Views\Pdf\_RenderQuestionDetails.cshtml" />
-    <Content Include="Views\Pdf\_RenderQuestionnaire.cshtml" />
     <Content Include="Views\Pdf\RenderQuestionnaire.cshtml" />
     <Content Include="Views\Account\PasswordReset.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
@@ -1602,8 +1633,6 @@
     <Content Include="Views\SystemMailer\ConfirmationEmail.cshtml" />
     <Content Include="Views\SystemMailer\ResetPasswordEmail.cshtml" />
     <Content Include="Views\Shared\_trackers.cshtml" />
-    <Content Include="Views\Pdf\RenderTitlePage.cshtml" />
-    <Content Include="Views\Pdf\_RenderTitlePage.cshtml" />
     <Content Include="Views\ControlPanel\ReadSide.cshtml" />
     <Content Include="Views\ControlPanel\NConfig.cshtml" />
     <Content Include="UpdatedDesigner\content\css-reset.css.less" />
@@ -1635,7 +1664,6 @@
     <Content Include="UpdatedDesigner\content\lib\wb-customfonts.css.less" />
     <Content Include="UpdatedDesigner\content\designer-editor\wb-share.css.less" />
     <Content Include="UpdatedDesigner\content\dropdown.css.less" />
-    <Content Include="Views\Pdf\_RenderStaticTextDetails.cshtml" />
     <Content Include="Views\ControlPanel\Index.cshtml" />
     <Content Include="Views\ControlPanel\Layout.ControlPanel.cshtml" />
     <Content Include="Views\Maintenance\WaitForReadSideRebuild.cshtml" />

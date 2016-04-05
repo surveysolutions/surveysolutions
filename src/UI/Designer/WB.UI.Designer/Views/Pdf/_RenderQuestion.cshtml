@@ -1,0 +1,108 @@
+﻿@using System
+@using Main.Core.Entities.SubEntities
+@using Main.Core.Entities.SubEntities.Question
+@using WB.UI.Designer.Models
+@model Main.Core.Entities.SubEntities.IQuestion
+@{
+    PdfQuestionnaireModel questionnaire = ViewBag.Questionnaire;
+    var question = Model;
+}
+<div class="question-container">
+    <div class="question">
+        <div class="question-title">@question.QuestionText</div>
+        <div class="common-info">
+            @if (questionnaire.QuestionHasInstructions(question))
+            {
+                <div class="instructions"><span>I</span>@question.Instructions</div>
+            }
+            @if (questionnaire.QuestionHasEnablementCondition(question))
+            {
+                <div class="condition"><span>E</span>@question.ConditionExpression</div>
+            }
+
+            @for (int i = 0; i < question.ValidationConditions.Count; i++)
+            {
+                var validation = question.ValidationConditions[i];
+                <div class="validation-expression"><span>V@(i)</span>@validation.Expression</div>
+                <div class="validation-message"><span>M@(i)</span>@validation.Message</div>
+            }
+        </div>
+    </div>
+    <div class="answer">
+        <div class="question-meta">
+            <div class="type">@questionnaire.GetFormattedQuestionType(question)</div>
+            <div class="variable_name">@question.StataExportCaption</div>
+        </div>
+
+        @switch (question.QuestionType)
+            {
+                case QuestionType.SingleOption:
+                    <div class="answer-editor">
+                        @foreach (var option in question.Answers)
+                        {
+                            <div class="option">
+                                <b>@questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)</b>
+                                <input type="radio" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
+                                <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
+                            </div>
+                        }
+                    </div>
+                break;
+            case QuestionType.MultyOption:
+                    <div class="answer-editor multi-option">
+                        @foreach (var option in question.Answers)
+                        {
+                            <div class="option">
+                                <b>@questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)</b>
+                                <input type="checkbox" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
+                                <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
+                            </div>
+                        }
+                    </div>
+                break;
+            case QuestionType.Numeric:
+                <div class="answer-editor">
+                    <input type="number" class="points">
+                </div>
+                break;
+            case QuestionType.DateTime:
+                <div class="answer-editor">
+                    <div class="row">
+                        <span>MM / DD / YYYY</span>
+                    </div>
+                    <div class="row">
+                        <input type="date">
+                    </div>
+                </div>
+                break;
+            case QuestionType.GpsCoordinates:
+                <div class="answer-editor gps">
+                    <input type="text" class="points">
+                    <sup>N</sup>
+                    <input type="text" class="points">
+                    <sup>W</sup>
+                    <input type="text" class="points">
+                    <sup>A</sup>
+                </div>
+                break;
+            case QuestionType.Text:
+                <div class="answer-editor">
+                    <input type="text" class="points">
+                </div>
+                break;
+            case QuestionType.TextList:
+                <div class="answer-editor">
+                    <input type="text" class="points">
+                </div>
+                break;
+            case QuestionType.QRBarcode:
+                <div class="answer-editor">
+                </div>
+                break;
+            case QuestionType.Multimedia:
+                <div class="answer-editor">
+                </div>
+                break;
+        }
+    </div>
+</div>
