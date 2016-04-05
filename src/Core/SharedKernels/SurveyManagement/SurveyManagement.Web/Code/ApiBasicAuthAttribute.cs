@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Resources;
 using System.Collections.Generic;
 using System.Web.Http;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 {
@@ -38,9 +39,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             get { return ServiceLocator.Current.GetInstance<IReadSideStatusService>(); }
         }
 
-        private ITransactionManagerProvider TransactionManagerProvider
+        private IPlainTransactionManager TransactionManagerProvider
         {
-            get { return ServiceLocator.Current.GetInstance<ITransactionManagerProvider>(); }
+            get { return ServiceLocator.Current.GetInstance<IPlainTransactionManager>(); }
         }
 
         private IPasswordHasher passwordHasher
@@ -79,18 +80,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             }
 
             BasicCredentials basicCredentials = ParseCredentials(actionContext);
+            
 
-
-
-            if (basicCredentials == null || !this.isUserValid(basicCredentials.Username, treatPasswordAsPlain ? this.passwordHasher.Hash(basicCredentials.Password):basicCredentials.Password))
-            {
-                this.RespondWithMessageThatUserDoesNotExists(actionContext);
-                return;
-            }
-
-            this.TransactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+            this.TransactionManagerProvider.BeginTransaction();
             try
             {
+                if (basicCredentials == null || !this.isUserValid(basicCredentials.Username, treatPasswordAsPlain ? this.passwordHasher.Hash(basicCredentials.Password) : basicCredentials.Password))
+                {
+                    this.RespondWithMessageThatUserDoesNotExists(actionContext);
+                    return;
+                }
+
                 var userInfo = this.userViewFactory.Load(new UserViewInputModel(UserName: basicCredentials.Username, UserEmail: null));
                 if (userInfo == null || userInfo.IsArchived)
                 {
@@ -106,7 +106,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             }
             finally
             {
-                this.TransactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
+                this.TransactionManagerProvider.RollbackTransaction();
             }
 
             var identity = new GenericIdentity(basicCredentials.Username, "Basic");
