@@ -46,13 +46,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public void Validate(User aggregate, UnarchiveUserCommand command)
         {
             var user = users.GetById(aggregate.Id.FormatGuid());
-            ThrowIfUserInRoleInterviewerAndSupervisorIsArchived(user.Roles.ToArray(), user.Supervisor.Id);
+            if (user.Supervisor != null)
+                ThrowIfUserInRoleInterviewerAndSupervisorIsArchived(user.Roles.ToArray(), user.Supervisor.Id);
         }
 
         public void Validate(User aggregate, UnarchiveUserAndUpdateCommand command)
         {
             var user = users.GetById(aggregate.Id.FormatGuid());
-            ThrowIfUserInRoleInterviewerAndSupervisorIsArchived(user.Roles.ToArray(), user.Supervisor.Id);
+            if (user.Supervisor != null)
+                ThrowIfUserInRoleInterviewerAndSupervisorIsArchived(user.Roles.ToArray(), user.Supervisor.Id);
         }
 
         private bool IsActiveUserExists(string userName)
