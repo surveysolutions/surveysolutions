@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using MvvmCross.Plugins.Network.Rest;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.DataCollection;
@@ -30,6 +33,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IRestService restService;
         private readonly IInterviewerSettings interviewerSettings;
         private readonly ISyncProtocolVersionProvider syncProtocolVersionProvider;
+        private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILogger logger;
 
         private RestCredentials restCredentials => this.principal.CurrentUserIdentity == null
@@ -41,12 +45,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IRestService restService,
             IInterviewerSettings interviewerSettings, 
             ISyncProtocolVersionProvider syncProtocolVersionProvider,
+            IFileSystemAccessor fileSystemAccessor,
             ILogger logger)
         {
             this.principal = principal;
             this.restService = restService;
             this.interviewerSettings = interviewerSettings;
             this.syncProtocolVersionProvider = syncProtocolVersionProvider;
+            this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
         }
 
@@ -245,19 +251,29 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     credentials: this.restCredentials, token: token));
         }
 
-        public async Task SendTabletInformationAsync(string archive, CancellationToken token)
+        public async Task SendTabletInformationAsync(string filePath, CancellationToken token)
         {
-            var tabletInformationPackage = new TabletInformationPackage
+            var fileSize = this.fileSystemAccessor.GetFileSize(filePath);
+
+            var tabletInformationHeaders = new Dictionary<string, string>()
             {
-                Content = archive,
-                AndroidId = this.interviewerSettings.GetDeviceId()
+                { "DeviceId", this.interviewerSettings.GetDeviceId() },
+                //{ "Content-Type", "application/octet-stream" },
+                //{ "Content-Length", fileSize.ToString() },
             };
+
             await this.TryGetRestResponseOrThrowAsync(async () =>
-            await this.restService.PostAsync(
-                url: string.Concat(interviewerApiUrl, "/tabletInfo"),
-                credentials: this.restCredentials,
-                request: tabletInformationPackage,
-                token: token));
+            {
+                using (var fileStream = this.fileSystemAccessor.ReadFile(filePath))
+                {
+                    await this.restService.SendStreamAsync(
+                        stream: fileStream,
+                        customHeaders: tabletInformationHeaders,
+                        url: string.Concat(interviewerApiUrl, "/tabletInfoAsFile"),
+                        credentials: this.restCredentials,
+                        token: token);
+                }
+            });
         }
 
         #endregion
