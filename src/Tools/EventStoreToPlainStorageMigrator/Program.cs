@@ -1,15 +1,10 @@
-﻿using CommandLine;
-using CommandLine.Text;
-using Newtonsoft.Json.Linq;
-using Npgsql;
-using NpgsqlTypes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Net;
 using System.Reflection;
-using EventStore.ClientAPI.SystemData;
+using CommandLine;
+using CommandLine.Text;
 using Humanizer;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -19,17 +14,18 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using Newtonsoft.Json.Linq;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using NHibernate.Tool.hbm2ddl;
+using Npgsql;
+using NpgsqlTypes;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
@@ -42,36 +38,41 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.Synchronization.Events.Sync;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
-using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.EventStore;
 using WB.Infrastructure.Native.Storage.EventStore.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
-using ILogger = EventStore.ClientAPI.ILogger;
 
-namespace QToPlainStore
+namespace EventStoreToPlainStorageMigrator
 {
     class Program
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("This will migrate questionnaires and users");
             var options = new Options();
             if (CommandLine.Parser.Default.ParseArguments(args, options))
             {
                 Console.WriteLine("Start.");
                 Transfer(options);
                 Console.WriteLine("Done.");
+            }
+            else
+            {
+                Console.WriteLine(
+                    "Example when EventStore stores events: EventStoreToPlainStorageMigrator -p \"Server = 127.0.0.1; Port = 5432; User Id = postgres; Password = Qwerty1234; Database = SuperHQ-Plain\" -i \"127.0.0.1\" -t 1113 -h 2113 -l admin -s changeit");
+
+                Console.WriteLine(
+                    "Example when Psotgres stores events: EventStoreToPlainStorageMigrator -p \"Server = 127.0.0.1; Port = 5432; User Id = postgres; Password = Qwerty1234; Database = SuperHQ-Plain\" -e \"Server = 127.0.0.1; Port = 5432; User Id = postgres; Password = Qwerty1234; Database = SuperHQ-Events\"");
+
             }
         }
 

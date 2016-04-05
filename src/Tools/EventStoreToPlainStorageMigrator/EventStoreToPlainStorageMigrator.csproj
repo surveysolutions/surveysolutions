@@ -7,8 +7,8 @@
     <ProjectGuid>{EB7D160E-3BC5-4368-A6B8-E121692F058D}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>QToPlainStore</RootNamespace>
-    <AssemblyName>QToPlainStore</AssemblyName>
+    <RootNamespace>EventStoreToPlainStorageMigrator</RootNamespace>
+    <AssemblyName>EventStoreToPlainStorageMigrator</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
