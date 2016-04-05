@@ -4,11 +4,8 @@ using System.IO;
 using System.Net;
 using System.Web.Http;
 using System.Web.Mvc;
-using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.UI.Designer.Models;
 using WB.UI.Designer.Pdf;
 using WB.UI.Shared.Web.Membership;
 
@@ -17,16 +14,16 @@ namespace WB.UI.Designer.Controllers
     public class PdfController : BaseController
     {
         private readonly IViewFactory<PdfQuestionnaireInputModel, PdfQuestionnaireView> pdfViewFactory;
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
 
+        private readonly IPdfFactory pdfFactory;
         public PdfController(
             IMembershipUserService userHelper,
             IViewFactory<PdfQuestionnaireInputModel, PdfQuestionnaireView> viewFactory, 
-            IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage)
+            IPdfFactory pdfFactory)
             : base(userHelper)
         {
             this.pdfViewFactory = viewFactory;
-            this.questionnaireStorage = questionnaireStorage;
+            this.pdfFactory = pdfFactory;
         }
 
         public ActionResult RenderQuestionnaire(Guid id)
@@ -46,13 +43,13 @@ namespace WB.UI.Designer.Controllers
         [System.Web.Mvc.Authorize]
         public ActionResult Print(Guid id)
         {
-            var questionnaire = this.questionnaireStorage.GetById(id);
-            if (questionnaire == null || questionnaire.IsDeleted)
+            var questionnaire = this.pdfFactory.Load(id, UserHelper.WebUser.UserId, UserHelper.WebUser.UserName);
+            if (questionnaire == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
-
-            return this.View("RenderQuestionnaire", new PdfQuestionnaireModel(questionnaire));
+            
+            return this.View("RenderQuestionnaire", questionnaire);
         }
 
         [System.Web.Mvc.Authorize]
