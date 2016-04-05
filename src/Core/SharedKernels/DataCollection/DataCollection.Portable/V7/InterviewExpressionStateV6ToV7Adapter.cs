@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.DataCollection.V6;
 
 namespace WB.Core.SharedKernels.DataCollection.V7
 {
-    internal class InterviewExpressionStateV6ToV7Adapter : IInterviewExpressionStateV7
+    internal class InterviewExpressionStateV6ToV7Adapter : IInterviewExpressionStateV7, ILatestInterviewExpressionState
     {
         private readonly IInterviewExpressionStateV6 interviewExpressionState;
 
@@ -152,33 +152,39 @@ namespace WB.Core.SharedKernels.DataCollection.V7
 
         public IInterviewExpressionState Clone()
         {
-            return ((IInterviewExpressionStateV7)this.interviewExpressionState).Clone();
+            return ((ILatestInterviewExpressionState)this.interviewExpressionState).Clone();
         }
 
         IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone()
         {
-            return ((IInterviewExpressionStateV7)this.interviewExpressionState).Clone();
+            return ((ILatestInterviewExpressionState)this.interviewExpressionState).Clone();
         }
 
         IInterviewExpressionStateV4 IInterviewExpressionStateV4.Clone()
         {
-            return ((IInterviewExpressionStateV7)this.interviewExpressionState).Clone();
+            return ((ILatestInterviewExpressionState)this.interviewExpressionState).Clone();
         }
 
         IInterviewExpressionStateV5 IInterviewExpressionStateV5.Clone()
         {
-            return ((IInterviewExpressionStateV7)this.interviewExpressionState).Clone();
+            return ((ILatestInterviewExpressionState)this.interviewExpressionState).Clone();
         }
 
         IInterviewExpressionStateV6 IInterviewExpressionStateV6.Clone()
         {
-            return ((IInterviewExpressionStateV7)this.interviewExpressionState).Clone();
+            return ((ILatestInterviewExpressionState)this.interviewExpressionState).Clone();
         }
 
         IInterviewExpressionStateV7 IInterviewExpressionStateV7.Clone()
         {
             return new InterviewExpressionStateV6ToV7Adapter(this.interviewExpressionState.Clone());
         }
+
+        ILatestInterviewExpressionState ILatestInterviewExpressionState.Clone()
+        {
+            return ((IInterviewExpressionStateV7)this).Clone() as ILatestInterviewExpressionState;
+        }
+
         public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle)
         {
             this.interviewExpressionState.UpdateRosterTitle(rosterId, outerRosterVector, rosterInstanceId, rosterTitle);
