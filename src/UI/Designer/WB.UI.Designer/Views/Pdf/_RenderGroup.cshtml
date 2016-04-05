@@ -1,0 +1,16 @@
+﻿@using WB.UI.Designer.Models
+@model Main.Core.Entities.SubEntities.IGroup
+@{
+    PdfQuestionnaireModel questionnaire = ViewBag.Questionnaire;
+}
+<div class="group">
+    <div class="group_container">
+        <div class="breacrumbs">@questionnaire.GetBreadcrumbsForGroup(Model.PublicKey)</div>
+        <div class="sub_section">@Model.Title</div>
+        @if (questionnaire.GroupHasEnablementCondition(Model))
+        {
+            <div class="common-info"><div class="condition"><span>E</span>@Model.ConditionExpression</div></div>
+        }
+    </div>
+</div>
+@Html.Partial("_RenderChildren", Model.PublicKey)
