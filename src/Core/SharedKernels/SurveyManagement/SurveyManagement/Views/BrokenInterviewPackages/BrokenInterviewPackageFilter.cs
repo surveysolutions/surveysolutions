@@ -6,6 +6,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.BrokenInterviewPackages
 {
     public class BrokenInterviewPackageFilter
     {
+        public Guid? ResponsibleId { get; set; }
+        public string QuestionnaireIdentity { get; set; }
         public DateTime? FromProcessingDateTime { get; set; }
         public DateTime? ToProcessingDateTime { get; set; }
         public string ExceptionType { get; set; }

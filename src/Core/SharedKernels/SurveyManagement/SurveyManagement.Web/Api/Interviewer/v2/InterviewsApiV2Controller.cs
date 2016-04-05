@@ -8,17 +8,16 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
-using WB.Core.Synchronization;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Core.Synchronization.SyncStorage;
 
@@ -27,8 +26,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
     [ApiBasicAuth(new[] { UserRoles.Operator })]
     public class InterviewsApiV2Controller : InterviewsControllerBase
     {
-        private readonly IStringCompressor compressor;
-
         public InterviewsApiV2Controller(
             IPlainInterviewFileStorage plainInterviewFileStorage,
             IGlobalInfoProvider globalInfoProvider,
@@ -37,18 +34,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
             ICommandService commandService,
             IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader,
             IMetaInfoBuilder metaBuilder,
-            ISynchronizationSerializer synchronizationSerializer,
-            IStringCompressor compressor) : base(
+            ISerializer serializer) : base(
                 plainInterviewFileStorage: plainInterviewFileStorage,
                 globalInfoProvider: globalInfoProvider,
                 interviewsFactory: interviewsFactory,
-                incomingSyncPackagesQueue: incomingSyncPackagesQueue,
+                interviewPackagesService: incomingSyncPackagesQueue,
                 commandService: commandService,
                 syncPackagesMetaReader: syncPackagesMetaReader,
                 metaBuilder: metaBuilder,
-                synchronizationSerializer: synchronizationSerializer)
+                serializer: serializer)
         {
-            this.compressor = compressor;
         }
 
         [HttpGet]
@@ -69,7 +64,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 AnswersOnPrefilledQuestions = interviewMetaInfo?.FeaturedQuestionsMeta
                     .Select(prefilledQuestion => new AnsweredQuestionSynchronizationDto(prefilledQuestion.PublicKey, new decimal[0], prefilledQuestion.Value, string.Empty))
                     .ToArray(),
-                Details = this.synchronizationSerializer.Serialize(interviewDetails, TypeSerializationSettings.AllTypes)
+                Details = this.serializer.Serialize(interviewDetails, TypeSerializationSettings.AllTypes)
             });
 
             response.Headers.CacheControl = new CacheControlHeaderValue
@@ -84,18 +79,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         public override void LogInterviewAsSuccessfullyHandled(Guid id) => base.LogInterviewAsSuccessfullyHandled(id);
 
         [HttpPost]
+        [WriteToSyncLog(SynchronizationLogType.PostInterview)]
         public void Post(InterviewPackageApiView package)
         {
-            this.incomingSyncPackagesQueue.Enqueue(
+            this.interviewPackagesService.StorePackage(
                 interviewId: package.InterviewId,
-                item: this.synchronizationSerializer.Serialize(new SyncItem
-                {
-                    RootId = package.InterviewId,
-                    MetaInfo = this.compressor.CompressString(this.synchronizationSerializer.Serialize(package.MetaInfo)),
-                    Content = this.compressor.CompressString(package.Events),
-                    IsCompressed = true,
-                    ItemType = SyncItemType.Interview
-                }));
+                questionnaireId: package.MetaInfo.TemplateId,
+                questionnaireVersion: package.MetaInfo.TemplateVersion,
+                responsibleId: package.MetaInfo.ResponsibleId,
+                interviewStatus: (InterviewStatus)package.MetaInfo.Status,
+                isCensusInterview: package.MetaInfo.CreatedOnClient ?? false,
+                events: package.Events);
         }
         [HttpPost]
         public override void PostImage(PostFileRequest request) => base.PostImage(request);

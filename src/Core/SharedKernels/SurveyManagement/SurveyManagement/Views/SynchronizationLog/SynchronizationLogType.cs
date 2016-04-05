@@ -19,5 +19,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog
         InterviewProcessed,
         GetQuestionnaireAttachments,
         GetAttachmentContent,
+        PostInterview,
+        PostPackage
     }
 }

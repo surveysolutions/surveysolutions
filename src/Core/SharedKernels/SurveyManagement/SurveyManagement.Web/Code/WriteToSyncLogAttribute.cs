@@ -31,29 +31,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
         private readonly SynchronizationLogType logAction;
 
         private IPlainStorageAccessor<SynchronizationLogItem> synchronizationLogItemPlainStorageAccessor
-        {
-            get { return ServiceLocator.Current.GetInstance<IPlainStorageAccessor<SynchronizationLogItem>>(); }
-        }
+            => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<SynchronizationLogItem>>();
 
-        private IGlobalInfoProvider globalInfoProvider
-        {
-            get { return ServiceLocator.Current.GetInstance<IGlobalInfoProvider>(); }
-        }
+        private IGlobalInfoProvider globalInfoProvider => ServiceLocator.Current.GetInstance<IGlobalInfoProvider>();
 
-        private IUserWebViewFactory userInfoViewFactory
-        {
-            get { return ServiceLocator.Current.GetInstance<IUserWebViewFactory>(); }
-        }
+        private IUserWebViewFactory userInfoViewFactory => ServiceLocator.Current.GetInstance<IUserWebViewFactory>();
 
         private IQuestionnaireBrowseViewFactory questionnaireBrowseItemFactory
-        {
-            get { return ServiceLocator.Current.GetInstance<IQuestionnaireBrowseViewFactory>(); }
-        }
+            => ServiceLocator.Current.GetInstance<IQuestionnaireBrowseViewFactory>();
 
-        private IUserViewFactory userViewFactory
-        {
-            get { return ServiceLocator.Current.GetInstance<IUserViewFactory>(); }
-        }
+        private IUserViewFactory userViewFactory => ServiceLocator.Current.GetInstance<IUserViewFactory>();
 
         private ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<WriteToSyncLogAttribute>();
 
@@ -137,6 +124,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
                     case SynchronizationLogType.GetAttachmentContent:
                         logItem.Log = SyncLogMessages.GetAttachmentContent.FormatString(context.GetActionArgument<Guid>("id"));
                         break;
+                    case SynchronizationLogType.PostInterview:
+                        var interviewId = context.GetActionArgument<InterviewPackageApiView>("package").InterviewId;
+                        logItem.Log = SyncLogMessages.PostPackage.FormatString(GetInterviewLink(context, interviewId), interviewId);
+                        break;
+                    case SynchronizationLogType.PostPackage:
+                        var packageId = context.GetActionArgument<Guid>("id");
+                        logItem.Log = SyncLogMessages.PostPackage.FormatString(GetInterviewLink(context, packageId), packageId);
+                        break;
 
                     default:
                         throw new ArgumentException("logAction");
@@ -153,13 +148,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
         {
             var interviewsApiView = this.GetResponseObject<List<InterviewApiView>>(context);
 
-            var messagesByInterviews = interviewsApiView.Select(x => new UrlHelper(context.Request).Link("Default",
-                        new { controller = "Interview", action = "Details", id = x.Id })).ToList();
+            var messagesByInterviews = interviewsApiView.Select(x => GetInterviewLink(context, x.Id)).ToList();
 
             var readability = !messagesByInterviews.Any()
                 ? SyncLogMessages.NoNewInterviewPackagesToDownload
                 : string.Join("<br />", messagesByInterviews);
             return SyncLogMessages.GetInterviews.FormatString(readability);
+        }
+
+        private static string GetInterviewLink(HttpActionExecutedContext context, Guid interviewId)
+        {
+            return new UrlHelper(context.Request).Link("Default",
+                new { controller = "Interview", action = "Details", id = interviewId });
         }
 
         private string GetInterviewPackagesLogMessage(HttpActionExecutedContext context)

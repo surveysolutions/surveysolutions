@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
@@ -16,7 +15,6 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
-using WB.Core.Synchronization;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Core.Synchronization.SyncStorage;
 
@@ -25,7 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
     public class InterviewsControllerBase : ApiController
     {
         private readonly IPlainInterviewFileStorage plainInterviewFileStorage;
-        protected readonly IInterviewPackagesService incomingSyncPackagesQueue;
+        protected readonly IInterviewPackagesService interviewPackagesService;
         protected readonly ICommandService commandService;
         protected readonly IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader;
         protected readonly IMetaInfoBuilder metaBuilder;
@@ -37,7 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             IPlainInterviewFileStorage plainInterviewFileStorage,
             IGlobalInfoProvider globalInfoProvider,
             IInterviewInformationFactory interviewsFactory,
-            IInterviewPackagesService incomingSyncPackagesQueue,
+            IInterviewPackagesService interviewPackagesService,
             ICommandService commandService,
             IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader,
             IMetaInfoBuilder metaBuilder,
@@ -46,7 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             this.plainInterviewFileStorage = plainInterviewFileStorage;
             this.globalInfoProvider = globalInfoProvider;
             this.interviewsFactory = interviewsFactory;
-            this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
+            this.interviewPackagesService = interviewPackagesService;
             this.commandService = commandService;
             this.syncPackagesMetaReader = syncPackagesMetaReader;
             this.metaBuilder = metaBuilder;

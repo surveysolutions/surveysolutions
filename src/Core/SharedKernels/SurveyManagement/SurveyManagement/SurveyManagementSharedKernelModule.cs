@@ -53,6 +53,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.SharedKernels.SurveyManagement
 {
@@ -219,16 +220,8 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 this.Kernel.RegisterDenormalizer<TabletDenormalizer>();
             }
 
-            this.Bind<IBrokenSyncPackagesStorage>()
-                .To<BrokenSyncPackagesStorage>();
-
-            this.Bind<ISyncPackagesProcessor>()
-                .To<SyncPackagesProcessor>()
-                .InSingletonScope();
-
-            this.Bind<IInterviewPackagesService>()
-              .To<IncomingSyncPackagesQueue>()
-              .InSingletonScope();
+            this.Bind<IBrokenSyncPackagesStorage>().To<BrokenSyncPackagesStorage>();
+            this.Bind<IInterviewPackagesService>().To<IncomingSyncPackagesQueue>();
 
             this.Bind<ReadSideSettings>().ToConstant(this.readSideSettings);
             this.Bind<ReadSideService>().ToSelf().InSingletonScope();

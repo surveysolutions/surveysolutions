@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.BrokenInterviewPackages;
@@ -20,6 +21,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
             return this.plainStorageAccessor.Query(queryable =>
             {
                 IQueryable<BrokenInterviewPackage> query = queryable;
+
+                if (filter.ResponsibleId.HasValue)
+                {
+                    query = query.Where(x => x.ResponsibleId == filter.ResponsibleId.Value);
+                }
+
+                if (!string.IsNullOrEmpty(filter.QuestionnaireIdentity))
+                {
+                    var questionnaireIdentity = QuestionnaireIdentity.Parse(filter.QuestionnaireIdentity);
+                    query = query.Where(x => x.QuestionnaireId == questionnaireIdentity.QuestionnaireId && x.QuestionnaireVersion == questionnaireIdentity.Version);
+                }
 
                 if (!string.IsNullOrEmpty(filter.ExceptionType))
                 {
@@ -54,7 +66,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                         ProcessingDate = package.ProcessingDate,
                         ExceptionType = package.ExceptionType,
                         ExceptionMessage = package.ExceptionMessage,
-                        ExceptionStackTrace = package.ExceptionStackTrace
+                        ExceptionStackTrace = package.ExceptionStackTrace,
+                        PackageSize = package.PackageSize,
+                        CompressedPackageSize = package.CompressedPackageSize
                     })
                     .ToList();
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Main.Core.Events;
 using WB.Core.GenericSubdomains.Portable;
@@ -7,7 +8,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -45,79 +45,134 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             this.syncSettings = syncSettings;
         }
 
-        public virtual void Enqueue(Guid interviewId, string packageContent)
+        [Obsolete("Since v 5.7")]
+        public virtual void StorePackage(Guid interviewId, string item) { }
+
+        public void StorePackage(Guid interviewId, Guid questionnaireId, long questionnaireVersion, Guid responsibleId,
+            InterviewStatus interviewStatus, bool isCensusInterview, string events)
         {
-                var interviewPackageId = Guid.NewGuid().FormatGuid();
                 this.interviewPackageStorage.Store(new InterviewPackage
                 {
-                    Id = interviewPackageId,
                     InterviewId = interviewId,
+                    QuestionnaireId = questionnaireId,
+                    QuestionnaireVersion = questionnaireVersion,
+                    InterviewStatus = interviewStatus,
+                    ResponsibleId = responsibleId,
+                    IsCensusInterview = isCensusInterview,
                     IncomingDate = DateTime.UtcNow,
-                    PackageContent = packageContent
-                }, interviewPackageId);
+                    CompressedEvents = this.archiver.CompressString(events)
+                }, null);
         }
 
-        public virtual int QueueLength => this.interviewPackageStorage.Query(packages => packages.Count());
+        public virtual int QueueLength
+            => this.interviewPackageStorage.Query(packages => packages.Select(package => package.Id).Count());
 
         public virtual bool HasPackagesByInterviewId(Guid interviewId)
             => this.interviewPackageStorage.Query(packages => packages.Any(package => package.InterviewId == interviewId)) ||
                    this.brokenInterviewPackageStorage.Query(packages => packages.Any(package => package.InterviewId == interviewId));
 
-        private void DeletePackage(string packageId) => this.interviewPackageStorage.Remove(packageId);
-
-        protected void MovePackageToBrokenPackages(string packageId, Exception exception)
+        public void ReprocessAllBrokenPackages()
         {
-            var interviewPackage = this.interviewPackageStorage.GetById(packageId);
-
-            this.brokenInterviewPackageStorage.Store(new BrokenInterviewPackage
+            List<BrokenInterviewPackage> chunkOfBrokenInterviewPackages;
+            do
             {
-                Id = interviewPackage.Id,
-                InterviewId = interviewPackage.InterviewId,
-                IncomingDate = interviewPackage.IncomingDate,
-                ProcessingDate = DateTime.UtcNow,
-                PackageContent = interviewPackage.PackageContent,
-                ExceptionType = (exception as InterviewException)?.ExceptionType.ToString() ?? "Unexpected",
-                ExceptionMessage = exception.Message,
-                ExceptionStackTrace = string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}"))
-            }, interviewPackage.Id);
-
-            this.interviewPackageStorage.Remove(packageId);
+                chunkOfBrokenInterviewPackages = this.brokenInterviewPackageStorage.Query(brokenPackages => brokenPackages.Take(10).ToList());
+                foreach (var brokenInterviewPackage in chunkOfBrokenInterviewPackages)
+                {
+                    this.interviewPackageStorage.Store(new InterviewPackage
+                    {
+                        ResponsibleId = brokenInterviewPackage.ResponsibleId,
+                        InterviewId = brokenInterviewPackage.InterviewId,
+                        IncomingDate = brokenInterviewPackage.IncomingDate,
+                        InterviewStatus = brokenInterviewPackage.InterviewStatus,
+                        IsCensusInterview = brokenInterviewPackage.IsCensusInterview,
+                        QuestionnaireId = brokenInterviewPackage.QuestionnaireId,
+                        QuestionnaireVersion = brokenInterviewPackage.QuestionnaireVersion,
+                        CompressedEvents = brokenInterviewPackage.CompressedEvents
+                    }, null);
+                    this.brokenInterviewPackageStorage.Remove(brokenInterviewPackage.Id);
+                }
+            } while (chunkOfBrokenInterviewPackages.Any());
         }
 
-        public virtual IReadOnlyCollection<string> GetTopSyncItemsAsFileNames(int count) => this.interviewPackageStorage.Query(
-                packages => packages.OrderByDescending(package => package.IncomingDate).Select(package => package.Id).Take(count).ToList());
+        public virtual IReadOnlyCollection<string> GetTopPackageIds(int count)
+            => this.interviewPackageStorage.Query(packages => packages.Select(package => package.Id).Take(count).ToList())
+                    .Select(packageId => packageId.ToString())
+                    .ToReadOnlyCollection();
 
-        public virtual void ProcessPackage(string packageId)
+        public virtual void ProcessPackage(string sPackageId)
         {
+            int packageId;
+            if(int.TryParse(sPackageId, out packageId))
+                this.ProcessPackage(packageId);
+            else
+                this.logger.Error($"Package {sPackageId}. Unknown package id");
+        }
+
+        private void ProcessPackage(int packageId)
+        {
+            Stopwatch innerwatch = Stopwatch.StartNew();
+            InterviewPackage package = null;
+            string decompressedEvents = null;
             try
             {
-                var fileContent = this.interviewPackageStorage.GetById(packageId)?.PackageContent;
+                package = this.interviewPackageStorage.GetById(packageId);
 
-                var package = this.serializer.Deserialize<SyncItem>(fileContent);
+                this.logger.Debug($"Package {packageId}. Read content from db. Took {innerwatch.Elapsed:g}.");
+                innerwatch.Restart();
 
-                var interviewMeta = this.serializer.Deserialize<InterviewMetaInfo>(this.archiver.DecompressString(package.MetaInfo));
-
-                var newInterviewEvents = this.serializer
-                    .Deserialize<AggregateRootEvent[]>(this.archiver.DecompressString(package.Content))
+                decompressedEvents = this.archiver.DecompressString(package.CompressedEvents);
+                var events = this.serializer
+                    .Deserialize<AggregateRootEvent[]>(decompressedEvents)
                     .Select(e => e.Payload)
                     .ToArray();
 
+                this.logger.Debug($"Package {packageId}. Decompressed and deserialized. Took {innerwatch.Elapsed:g}.");
+                innerwatch.Restart();
+
                 this.commandService.Execute(new SynchronizeInterviewEventsCommand(
-                    interviewId: interviewMeta.PublicKey,
-                    userId: interviewMeta.ResponsibleId,
-                    questionnaireId: interviewMeta.TemplateId,
-                    questionnaireVersion: interviewMeta.TemplateVersion,
-                    interviewStatus: (InterviewStatus)interviewMeta.Status,
-                    createdOnClient: interviewMeta.CreatedOnClient ?? false,
-                    synchronizedEvents: newInterviewEvents), syncSettings.Origin);
-
-                this.DeletePackage(packageId);
+                    interviewId: package.InterviewId,
+                    userId: package.ResponsibleId,
+                    questionnaireId: package.QuestionnaireId,
+                    questionnaireVersion: package.QuestionnaireVersion,
+                    interviewStatus: package.InterviewStatus,
+                    createdOnClient: package.IsCensusInterview,
+                    synchronizedEvents: events), syncSettings.Origin);
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                this.logger.Error($"Sync package '{packageId}' wasn't parsed. Reason: '{e.Message}'", e);
+                this.logger.Error($"Package {packageId}. FAILED. Reason: '{exception.Message}'", exception);
 
-                this.MovePackageToBrokenPackages(packageId, e);
+                if (package != null)
+                {
+                    this.brokenInterviewPackageStorage.Store(new BrokenInterviewPackage
+                    {
+                        InterviewId = package.InterviewId,
+                        QuestionnaireId = package.QuestionnaireId,
+                        QuestionnaireVersion = package.QuestionnaireVersion,
+                        InterviewStatus = package.InterviewStatus,
+                        ResponsibleId = package.ResponsibleId,
+                        IsCensusInterview = package.IsCensusInterview,
+                        IncomingDate = package.IncomingDate,
+                        CompressedEvents = package.CompressedEvents,
+                        PackageSize = decompressedEvents?.Length ?? 0,
+                        CompressedPackageSize = package.CompressedEvents?.Length ?? 0,
+                        ProcessingDate = DateTime.UtcNow,
+                        ExceptionType = (exception as InterviewException)?.ExceptionType.ToString() ?? "Unexpected",
+                        ExceptionMessage = exception.Message,
+                        ExceptionStackTrace = string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}"))
+                    }, null);
+
+                    this.logger.Debug($"Package {packageId}. Moved to broken packages. Took {innerwatch.Elapsed:g}.");
+                    innerwatch.Restart();
+                }
+            }
+            finally
+            {
+                this.interviewPackageStorage.Remove(packageId);
+
+                this.logger.Debug($"Package {packageId}. Removed. Took {innerwatch.Elapsed:g}.");
+                innerwatch.Stop();
             }
         }
     }

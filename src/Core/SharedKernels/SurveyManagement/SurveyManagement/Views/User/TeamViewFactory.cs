@@ -21,6 +21,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
             this.usersReader = usersReader;
         }
 
+        public UsersView GetAllInterviewers(int pageSize, string searchBy)
+        {
+            var queryByUsers = new Func<IQueryable<UserDocument>, IQueryable<UserDocument>>((users) =>
+                ApplyFilterByUserName(searchBy,
+                    users.Where(user => (user.Roles.Any(role => role == UserRoles.Operator))))
+                    .OrderBy(user => user.UserName));
+
+            return new UsersView()
+            {
+                Users = this.usersReader.Query(users =>
+                    queryByUsers(users)
+                        .Take(pageSize)
+                        .ToList()
+                        .Select(user => new UsersViewItem() { UserId = user.PublicKey, UserName = user.UserName })),
+
+                TotalCountByQuery = this.usersReader.Query(users => queryByUsers(users).Count())
+            };
+        }
+
         public UsersView GetInterviewers(int pageSize, string searchBy, Guid supervisorId)
         {
             var queryByUsers = new Func<IQueryable<UserDocument>, IQueryable<UserDocument>>((users) =>
