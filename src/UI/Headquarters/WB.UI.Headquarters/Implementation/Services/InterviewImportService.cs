@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CsvHelper;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -19,7 +20,9 @@ using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Threading;
 
 namespace WB.UI.Headquarters.Implementation.Services
 {
@@ -27,15 +30,15 @@ namespace WB.UI.Headquarters.Implementation.Services
     {
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly ICommandService commandService;
-        private readonly ITransactionManagerProvider transactionManager;
         private readonly ILogger logger;
         private readonly SampleImportSettings sampleImportSettings;
         private readonly IPreloadedDataRepository preloadedDataRepository;
         private readonly IInterviewImportDataParsingService interviewImportDataParsingService;
 
+        private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
+
         public InterviewImportService(
             ICommandService commandService,
-            ITransactionManagerProvider transactionManager,
             ILogger logger,
             SampleImportSettings sampleImportSettings, 
             IPreloadedDataRepository preloadedDataRepository, 
@@ -43,7 +46,6 @@ namespace WB.UI.Headquarters.Implementation.Services
             IPlainQuestionnaireRepository plainQuestionnaireRepository)
         {
             this.commandService = commandService;
-            this.transactionManager = transactionManager;
             this.logger = logger;
             this.sampleImportSettings = sampleImportSettings;
             this.preloadedDataRepository = preloadedDataRepository;
@@ -98,6 +100,8 @@ namespace WB.UI.Headquarters.Implementation.Services
                         var responsibleSupervisorId = importedInterview.SupervisorId ?? supervisorId.Value;
                         try
                         {
+                            ThreadMarkerManager.MarkCurrentThreadAsIsolated();
+                            this.plainTransactionManager.BeginTransaction();
                             this.commandService.Execute(new CreateInterviewByPrefilledQuestions(
                                 interviewId: Guid.NewGuid(),
                                 responsibleId: headquartersId,
@@ -120,6 +124,11 @@ namespace WB.UI.Headquarters.Implementation.Services
                             this.logger.Error(errorMessage, ex);
 
                             this.Status.State.Errors.Add(new InterviewImportError() {ErrorMessage = errorMessage});
+                        }
+                        finally
+                        {
+                            this.plainTransactionManager.RollbackTransaction();
+                            ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
                         }
 
                         Interlocked.Increment(ref createdInterviewsCount);

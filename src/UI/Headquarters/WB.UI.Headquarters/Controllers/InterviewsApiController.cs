@@ -123,18 +123,10 @@ namespace WB.UI.Headquarters.Controllers
             {
                 Task.Run(() =>
                 {
-                    ThreadMarkerManager.MarkCurrentThreadAsIsolated();
-
-                    try
-                    {
-                        this.interviewImportService.ImportInterviews(supervisorId: request.SupervisorId,
-                            questionnaireIdentity: questionnaireIdentity, interviewImportProcessId: request.InterviewImportProcessId, 
-                            headquartersId: headquartersId);
-                    }
-                    finally
-                    {
-                        ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
-                    }
+                    this.interviewImportService.ImportInterviews(supervisorId: request.SupervisorId,
+                        questionnaireIdentity: questionnaireIdentity,
+                        interviewImportProcessId: request.InterviewImportProcessId,
+                        headquartersId: headquartersId);
                 });
             }
 
