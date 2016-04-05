@@ -67,6 +67,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         [Obsolete("Since v 5.7")]
         public override void StorePackage(Guid interviewId, string item)
         {
+            if(string.IsNullOrEmpty(item)) throw new ArgumentException(nameof(item));
+
             var syncItem = this.serializer.Deserialize<SyncItem>(item);
 
             var meta = this.serializer.Deserialize<InterviewMetaInfo>(archiver.DecompressString(syncItem.MetaInfo));
