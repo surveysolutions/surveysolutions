@@ -6,7 +6,6 @@ using Moq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
-using WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTests;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UnhandledPackageStorageTests

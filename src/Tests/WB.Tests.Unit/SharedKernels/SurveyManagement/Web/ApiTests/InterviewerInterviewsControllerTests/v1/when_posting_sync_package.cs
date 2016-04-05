@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
         Because of = () => controller.Post(interviewId, package);
 
         It should_add_sync_package_to_sync_packages_queue = () =>
-            mockOfIncomingSyncPackagesQueue.Verify(x=>x.Enqueue(interviewId, package), Times.Once);
+            mockOfIncomingSyncPackagesQueue.Verify(x=>x.StorePackage(interviewId, package), Times.Once);
         
         
         private static InterviewsApiV1Controller controller;

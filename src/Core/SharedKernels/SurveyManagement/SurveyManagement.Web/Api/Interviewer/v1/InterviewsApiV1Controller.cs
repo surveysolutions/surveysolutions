@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
             ICommandService commandService,
             IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader,
             IMetaInfoBuilder metaBuilder,
-            ISerializer serializer) : base(
+            ISynchronizationSerializer synchronizationSerializer) : base(
                 plainInterviewFileStorage: plainInterviewFileStorage, 
                 globalInfoProvider: globalInfoProvider,
                 interviewsFactory: interviewsFactory,
@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
                 commandService: commandService,
                 syncPackagesMetaReader: syncPackagesMetaReader,
                 metaBuilder: metaBuilder,
-                serializer: serializer)
+                synchronizationSerializer: synchronizationSerializer)
         {
         }
 
@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
                 WasCompleted = interviewDetails.WasCompleted,
                 RosterGroupInstances = interviewDetails.RosterGroupInstances.Select(this.ToRosterApiView).ToList(),
                 Answers = interviewDetails.Answers.Select(this.ToInterviewApiView).ToList(),
-                FailedValidationConditions = this.serializer.Serialize(interviewDetails.FailedValidationConditions.ToList())
+                FailedValidationConditions = this.synchronizationSerializer.Serialize(interviewDetails.FailedValidationConditions.ToList())
             });
             response.Headers.CacheControl = new CacheControlHeaderValue
             {
@@ -136,9 +136,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
             {
                 var interviewSynchronizationDto = this.interviewsFactory.GetInterviewDetails(packageMetaInformation.InterviewId);
 
-                interviewSynchronizationPackage.Content = this.serializer.Serialize(interviewSynchronizationDto, TypeSerializationSettings.AllTypes);
+                interviewSynchronizationPackage.Content = this.synchronizationSerializer.Serialize(interviewSynchronizationDto, TypeSerializationSettings.AllTypes);
                 interviewSynchronizationPackage.MetaInfo =
-                    this.serializer.Serialize(this.metaBuilder.GetInterviewMetaInfo(interviewSynchronizationDto));
+                    this.synchronizationSerializer.Serialize(this.metaBuilder.GetInterviewMetaInfo(interviewSynchronizationDto));
             }
             else
             {
@@ -241,7 +241,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
                 QuestionId = answer.Id,
                 QuestionRosterVector = answer.QuestionRosterVector,
                 LastSupervisorOrInterviewerComment = answer.Comments,
-                JsonAnswer = this.serializer.Serialize(answer.Answer, SerializationBinderSettings.NewToOld)
+                JsonAnswer = this.synchronizationSerializer.Serialize(answer.Answer, TypeSerializationSettings.AllTypes, SerializationBinderSettings.NewToOld)
             };
         }
 

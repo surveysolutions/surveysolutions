@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
             ICommandService commandService,
             IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader,
             IMetaInfoBuilder metaBuilder,
-            ISerializer serializer) : base(
+            ISynchronizationSerializer synchronizationSerializer) : base(
                 plainInterviewFileStorage: plainInterviewFileStorage,
                 globalInfoProvider: globalInfoProvider,
                 interviewsFactory: interviewsFactory,
@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 commandService: commandService,
                 syncPackagesMetaReader: syncPackagesMetaReader,
                 metaBuilder: metaBuilder,
-                serializer: serializer)
+                synchronizationSerializer: synchronizationSerializer)
         {
         }
 
@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 AnswersOnPrefilledQuestions = interviewMetaInfo?.FeaturedQuestionsMeta
                     .Select(prefilledQuestion => new AnsweredQuestionSynchronizationDto(prefilledQuestion.PublicKey, new decimal[0], prefilledQuestion.Value, string.Empty))
                     .ToArray(),
-                Details = this.serializer.Serialize(interviewDetails, TypeSerializationSettings.AllTypes)
+                Details = this.synchronizationSerializer.Serialize(interviewDetails, TypeSerializationSettings.AllTypes)
             });
 
             response.Headers.CacheControl = new CacheControlHeaderValue
