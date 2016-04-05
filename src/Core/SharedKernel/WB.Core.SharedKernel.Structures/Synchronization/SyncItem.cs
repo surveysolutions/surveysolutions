@@ -2,6 +2,7 @@
 
 namespace WB.Core.SharedKernel.Structures.Synchronization
 {
+    [Obsolete("Since v 5.8")]
     public class SyncItem
     {
         public Guid RootId
