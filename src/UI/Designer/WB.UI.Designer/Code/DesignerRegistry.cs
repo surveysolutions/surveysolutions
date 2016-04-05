@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Mailers;
 using WB.UI.Designer.WebServices;
@@ -45,6 +46,7 @@ namespace WB.UI.Designer.Code
             this.Bind<IChapterInfoViewFactory>().To<ChapterInfoViewFactory>();
             this.Bind<IQuestionnaireInfoFactory>().To<QuestionnaireInfoFactory>();
             this.Bind<IQuestionnaireInfoViewFactory>().To<QuestionnaireInfoViewFactory>();
+            this.Bind<IPdfFactory>().To<PdfFactory>();
         }
     }
 }

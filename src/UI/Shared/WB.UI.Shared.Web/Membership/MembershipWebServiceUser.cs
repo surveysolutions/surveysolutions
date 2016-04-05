@@ -9,65 +9,21 @@
     /// </summary>
     public class MembershipWebServiceUser : IMembershipWebServiceUser
     {
-        #region Fields
-
         private readonly IMembershipHelper hepler;
 
-        private  string userName
-        {
-            get
-            {
-                return ServiceSecurityContext.Current.PrimaryIdentity.Name;
-            }
-        }
-            
-
-        #endregion
-
-        #region Constructors and Destructors
+        private  string userName => ServiceSecurityContext.Current.PrimaryIdentity.Name;
 
         public MembershipWebServiceUser(IMembershipHelper helper)
         {
             this.hepler = helper;
         }
 
-        #endregion
+        public MembershipUser MembershipUser => Membership.GetUser(this.userName);
 
-        #region Public Properties
+        public Guid UserId => Guid.Parse(this.MembershipUser.ProviderUserKey.ToString());
 
-        /// <summary>
-        /// Gets the current user.
-        /// </summary>
-        public MembershipUser MembershipUser
-        {
-            get
-            {
-                return Membership.GetUser(userName);
-            }
-        }
+        public string UserName => this.userName;
 
-        /// <summary>
-        /// Gets the current user id.
-        /// </summary>
-        public Guid UserId
-        {
-            get
-            {
-                return Guid.Parse(this.MembershipUser.ProviderUserKey.ToString());
-            }
-        }
-
-        /// <summary>
-        ///     Gets a value indicating whether is admin.
-        /// </summary>
-        public bool IsAdmin
-        {
-            get
-            {
-                return Roles.IsUserInRole(userName, hepler.ADMINROLENAME);
-            }
-        }
-
-        #endregion
+        public bool IsAdmin => Roles.IsUserInRole(this.userName, this.hepler.ADMINROLENAME);
     }
 }

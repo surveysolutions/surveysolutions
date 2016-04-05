@@ -560,6 +560,7 @@
     <Compile Include="Views\Questionnaire\Pdf\PdfEntityView.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Views\Questionnaire\Pdf\PdfFactory.cs" />
     <Compile Include="Views\Questionnaire\Pdf\PdfGroupView.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -568,6 +569,7 @@
     </Compile>
     <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireFactory.cs" />
     <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireInputModel.cs" />
+    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireModel.cs" />
     <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireView.cs">
       <SubType>Code</SubType>
     </Compile>
