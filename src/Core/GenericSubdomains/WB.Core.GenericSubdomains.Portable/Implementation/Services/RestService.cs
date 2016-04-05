@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
+using Flurl.Http.Configuration;
 using Flurl.Http.Content;
+using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable.Properties;
 using WB.Core.GenericSubdomains.Portable.Services;
 
@@ -40,12 +44,28 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         }
 
         private async Task<HttpResponseMessage> ExecuteRequestAsync(
-            string url, 
+            string url,
             HttpMethod method,
-            object queryString = null, 
+            object queryString = null,
             object request = null,
             RestCredentials credentials = null,
             bool forceNoCache = false,
+            Dictionary<string, string> customHeaders = null,
+            CancellationToken? userCancellationToken = null)
+        {
+            var compressedJsonContent = this.CreateCompressedJsonContent(request);
+            return await ExecuteRequestAsync(url, method, queryString, compressedJsonContent, credentials, forceNoCache,
+                customHeaders, userCancellationToken);
+        }
+
+        private async Task<HttpResponseMessage> ExecuteRequestAsync(
+            string url, 
+            HttpMethod method,
+            object queryString = null, 
+            HttpContent httpContent = null,
+            RestCredentials credentials = null,
+            bool forceNoCache = false,
+            Dictionary<string, string> customHeaders = null,
             CancellationToken? userCancellationToken = null)
         {
             if (!this.IsValidHostAddress(this.restServiceSettings.Endpoint))
@@ -82,10 +102,17 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 restClient.WithBasicAuth(credentials.Login, credentials.Password);
             }
 
+            if (customHeaders != null)
+            {
+                foreach (var customHeader in customHeaders)
+                {
+                    restClient.WithHeader(customHeader.Key, customHeader.Value);
+                }
+            }
+
             try
             {
-                return await restClient.SendAsync(method, this.CreateCompressedJsonContent(request),
-                    linkedCancellationTokenSource.Token);
+                return await restClient.SendAsync(method, httpContent, linkedCancellationTokenSource.Token);
             }
             catch (OperationCanceledException ex)
             {
@@ -121,7 +148,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         public async Task GetAsync(string url, object queryString, RestCredentials credentials, bool forceNoCache, CancellationToken? token)
         {
             await this.ExecuteRequestAsync(url: url, queryString: queryString, credentials: credentials,
-                    method: HttpMethod.Get, forceNoCache: forceNoCache, userCancellationToken: token);
+                    method: HttpMethod.Get, forceNoCache: forceNoCache, userCancellationToken: token,
+                    request: null);
         }
 
         public async Task PostAsync(string url, object request = null, RestCredentials credentials = null,
@@ -136,7 +164,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             RestCredentials credentials = null, CancellationToken? token = null)
         {
             var response = this.ExecuteRequestAsync(url: url, queryString: queryString, credentials: credentials, method: HttpMethod.Get,
-                userCancellationToken: token);
+                userCancellationToken: token, request: null);
 
             return await this.ReceiveCompressedJsonWithProgressAsync<T>(response: response, token: token ?? default(CancellationToken),
                 onDownloadProgressChanged: onDownloadProgressChanged);
@@ -158,7 +186,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             CancellationToken? token = null)
         {
             var response = this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Get,
-                userCancellationToken: token);
+                userCancellationToken: token, request: null);
 
             var restResponse = await this.ReceiveBytesWithProgressAsync(response: response, token: token ?? default(CancellationToken),
                         onDownloadProgressChanged: onDownloadProgressChanged);
@@ -167,6 +195,28 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             return new RestFile(content: fileContent, contentType: restResponse.RawContentType,
                 contentHash: restResponse.ETag, contentLength: restResponse.Length, fileName: restResponse.FileName);
+        }
+
+        public async Task SendStreamAsync(Stream streamData, string url, RestCredentials credentials,
+            Dictionary<string, string> customHeaders = null, CancellationToken? token = null)
+        {
+            using (var multipartFormDataContent = new MultipartFormDataContent())
+            {
+                using (HttpContent streamContent = new StreamContent(streamData))
+                {
+                    streamContent.Headers.Add("Content-Type", "application/octet-stream");
+                    streamContent.Headers.Add("Content-Length", streamData.Length.ToString());
+                    streamContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                    {
+                        FileName = "backup.zip"
+                    };
+                    multipartFormDataContent.Add(streamContent);
+
+                    await this.ExecuteRequestAsync(url: url, queryString: null, credentials: credentials,
+                        method: HttpMethod.Post, forceNoCache: true, userCancellationToken: token,
+                        customHeaders: customHeaders, httpContent: multipartFormDataContent);
+                }
+            }
         }
 
         private HttpContent CreateCompressedJsonContent(object data)

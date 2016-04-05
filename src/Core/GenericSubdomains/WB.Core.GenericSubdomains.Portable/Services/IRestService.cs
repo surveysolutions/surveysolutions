@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,5 +22,7 @@ namespace WB.Core.GenericSubdomains.Portable.Services
         Task<RestFile> DownloadFileAsync(string url,
             Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null,
             RestCredentials credentials = null, CancellationToken? token = null);
+
+        Task SendStreamAsync(Stream stream, string url, RestCredentials credentials, Dictionary<string, string> customHeaders = null, CancellationToken? token = null);
     }
 }

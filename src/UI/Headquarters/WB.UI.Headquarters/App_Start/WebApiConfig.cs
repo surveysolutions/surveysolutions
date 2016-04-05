@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http.Headers;
+using System.Web;
 using System.Web.Http;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
@@ -47,6 +49,7 @@ namespace WB.UI.Headquarters
             config.TypedRoute("api/interviewer/v2", c => c.Action<InterviewerApiV2Controller>(x => x.Get()));
             config.TypedRoute("api/interviewer/v2/latestversion", c => c.Action<InterviewerApiV2Controller>(x => x.GetLatestVersion()));
             config.TypedRoute("api/interviewer/v2/tabletInfo", c => c.Action<InterviewerApiV2Controller>(x => x.PostTabletInformation(Param.Any<TabletInformationPackage>())));
+            config.TypedRoute("api/interviewer/v2/tabletInfoAsFile", c => c.Action<InterviewerApiV2Controller>(x => x.PostTabletInformationAsFile()));
             config.TypedRoute("api/interviewer/v2/devices/current/{id}/{version}", c => c.Action<DevicesApiV2Controller>(x => x.CanSynchronize(Param.Any<string>(), Param.Any<int>())));
             config.TypedRoute("api/interviewer/v2/devices/link/{id}/{version:int}", c => c.Action<DevicesApiV2Controller>(x => x.LinkCurrentInterviewerToDevice(Param.Any<string>(), Param.Any<int>())));
             config.TypedRoute("api/interviewer/v2/users/current", c => c.Action<UsersApiV2Controller>(x => x.Current()));
