@@ -1,4 +1,10 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.TabletInformation;
@@ -29,5 +35,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 
         [HttpPost]
         public override HttpResponseMessage PostTabletInformation(TabletInformationPackage tabletInformationPackage) => base.PostTabletInformation(tabletInformationPackage);
+
+        [HttpPost]
+        public async Task<HttpResponseMessage> PostTabletInformationAsFile()
+        {
+            HttpRequestMessage request = this.Request;
+            if (!request.Content.IsMimeMultipartContent())
+            {
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+            }
+
+            var multipartMemoryStreamProvider = await request.Content.ReadAsMultipartAsync();
+            var httpContent = multipartMemoryStreamProvider.Contents.Single();
+            var fileContent = await httpContent.ReadAsByteArrayAsync();
+
+            var deviceId = this.Request.Headers.GetValues("DeviceId").Single();
+            var user = this.userViewFactory.Load(new UserViewInputModel(deviceId));
+
+            this.tabletInformationService.SaveTabletInformation(
+                content: fileContent,
+                androidId: deviceId,
+                registrationId: null,
+                user: user);
+
+            return this.Request.CreateResponse(HttpStatusCode.OK);
+        }
     }
 }

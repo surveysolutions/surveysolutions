@@ -23,11 +23,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.BackupRestoreServiceTests
             var backupRestoreService = CreateBackupRestoreService(archiveUtilsMock.Object,
                 asynchronousFileSystemAccessorMock.Object);
 
-            await backupRestoreService.GetSystemBackupAsync();
+            await backupRestoreService.BackupAsync();
 
             asynchronousFileSystemAccessorMock.Verify(x => x.CopyFileAsync("crush", "private"), Times.Once);
 
-            archiveUtilsMock.Verify(x => x.ZipDirectoryToByteArrayAsync("private", null, @"\.log$;\.dll$;\.sqlite3$;"), Times.Once);
+            archiveUtilsMock.Verify(x => x.ZipDirectoryToFileAsync("private", It.IsAny<string>(), null, @"\.log$;\.dll$;\.sqlite3$;"), Times.Once);
         }
 
         [Test]
