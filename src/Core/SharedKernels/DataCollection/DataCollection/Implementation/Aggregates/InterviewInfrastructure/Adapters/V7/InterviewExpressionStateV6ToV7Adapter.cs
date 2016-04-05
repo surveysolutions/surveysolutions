@@ -1,14 +1,18 @@
 using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.V2;
+using WB.Core.SharedKernels.DataCollection.V4;
+using WB.Core.SharedKernels.DataCollection.V5;
+using WB.Core.SharedKernels.DataCollection.V6;
+using WB.Core.SharedKernels.DataCollection.V7;
 
-namespace WB.Core.SharedKernels.DataCollection.V4
+namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapters.V7
 {
-    internal class InterviewExpressionStateV2ToV4Adapter : IInterviewExpressionStateV4
+    internal class InterviewExpressionStateV6ToV7Adapter : IInterviewExpressionStateV7, ILatestInterviewExpressionState
     {
-        private readonly IInterviewExpressionStateV2 interviewExpressionState;
+        private readonly IInterviewExpressionStateV6 interviewExpressionState;
 
-        public InterviewExpressionStateV2ToV4Adapter(IInterviewExpressionStateV2 interviewExpressionState)
+        public InterviewExpressionStateV6ToV7Adapter(IInterviewExpressionStateV6 interviewExpressionState)
         {
             this.interviewExpressionState = interviewExpressionState;
         }
@@ -74,13 +78,20 @@ namespace WB.Core.SharedKernels.DataCollection.V4
             this.interviewExpressionState.UpdateLinkedMultiOptionAnswer(questionId, propagationVector, selectedPropagationVectors); 
         }
 
+        public void UpdateYesNoAnswer(Guid questionId, decimal[] propagationVector, YesNoAnswersOnly selectedPropagationVectors)
+        {
+            this.interviewExpressionState.UpdateYesNoAnswer(questionId, propagationVector, selectedPropagationVectors);
+        }
+
         public void DeclareAnswersInvalid(IEnumerable<Identity> invalidQuestions)
         {
+            //code should be here
             this.interviewExpressionState.DeclareAnswersInvalid(invalidQuestions); 
         }
 
         public void DeclareAnswersValid(IEnumerable<Identity> validQuestions)
         {
+            //code should be here
             this.interviewExpressionState.DeclareAnswersValid(validQuestions); 
         }
 
@@ -116,6 +127,7 @@ namespace WB.Core.SharedKernels.DataCollection.V4
 
         public ValidityChanges ProcessValidationExpressions()
         {
+            //code should be put here
             return this.interviewExpressionState.ProcessValidationExpressions(); 
         }
 
@@ -129,31 +141,65 @@ namespace WB.Core.SharedKernels.DataCollection.V4
             this.interviewExpressionState.SaveAllCurrentStatesAsPrevious(); 
         }
 
-        IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone()
+        public LinkedQuestionOptionsChanges ProcessLinkedQuestionFilters()
         {
-            return ((IInterviewExpressionStateV4)interviewExpressionState).Clone();
+            throw new NotSupportedException("linked questions are not supported by versions lower then V7");
         }
 
+        public bool AreLinkedQuestionsSupported()
+        {
+            return false;
+        }
 
         public IInterviewExpressionState Clone()
         {
-            return ((IInterviewExpressionStateV4)interviewExpressionState).Clone(); 
+            return ((ILatestInterviewExpressionState)this.interviewExpressionState).Clone();
+        }
+
+        IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone()
+        {
+            return ((ILatestInterviewExpressionState)this.interviewExpressionState).Clone();
         }
 
         IInterviewExpressionStateV4 IInterviewExpressionStateV4.Clone()
         {
-            return new InterviewExpressionStateV2ToV4Adapter(this.interviewExpressionState.Clone());
+            return ((ILatestInterviewExpressionState)this.interviewExpressionState).Clone();
+        }
+
+        IInterviewExpressionStateV5 IInterviewExpressionStateV5.Clone()
+        {
+            return ((ILatestInterviewExpressionState)this.interviewExpressionState).Clone();
+        }
+
+        IInterviewExpressionStateV6 IInterviewExpressionStateV6.Clone()
+        {
+            return ((ILatestInterviewExpressionState)this.interviewExpressionState).Clone();
+        }
+
+        IInterviewExpressionStateV7 IInterviewExpressionStateV7.Clone()
+        {
+            return new InterviewExpressionStateV6ToV7Adapter(this.interviewExpressionState.Clone());
+        }
+
+        ILatestInterviewExpressionState ILatestInterviewExpressionState.Clone()
+        {
+            return ((IInterviewExpressionStateV7)this).Clone() as ILatestInterviewExpressionState;
         }
 
         public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle)
         {
             this.interviewExpressionState.UpdateRosterTitle(rosterId, outerRosterVector, rosterInstanceId, rosterTitle);
-
         }
 
         public void SetInterviewProperties(IInterviewProperties properties)
         {
-            //do nothing. adaptee doesn't know anything about it
+            this.interviewExpressionState.SetInterviewProperties(properties);
+        }
+
+        public void ApplyFailedValidations(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
+        {
+            //map to old 
+            this.interviewExpressionState.DeclareAnswersInvalid(failedValidationConditions.Keys);
         }
     }
 }

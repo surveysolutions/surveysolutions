@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection.V7;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    public class InterviewExpressionStateForPreloading : IInterviewExpressionStateV7
+    public class InterviewExpressionStateForPreloading : ILatestInterviewExpressionState
     {
         public InterviewExpressionStateForPreloading()
         {
@@ -122,6 +122,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         IInterviewExpressionStateV7 IInterviewExpressionStateV7.Clone()
         {
             return new InterviewExpressionStateForPreloading();
+        }
+
+        ILatestInterviewExpressionState ILatestInterviewExpressionState.Clone()
+        {
+            return ((IInterviewExpressionStateV7) this).Clone() as ILatestInterviewExpressionState;
         }
 
 
