@@ -1,7 +1,6 @@
 ﻿@using System
 @using Main.Core.Entities.SubEntities
-@using Main.Core.Entities.SubEntities.Question
-@using WB.UI.Designer.Models
+@using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 @model Main.Core.Entities.SubEntities.IQuestion
 @{
     PdfQuestionnaireModel questionnaire = ViewBag.Questionnaire;
@@ -67,12 +66,7 @@
                 break;
             case QuestionType.DateTime:
                 <div class="answer-editor">
-                    <div class="row">
-                        <span>MM / DD / YYYY</span>
-                    </div>
-                    <div class="row">
-                        <input type="date">
-                    </div>
+                    <input type="date" class="points">			
                 </div>
                 break;
             case QuestionType.GpsCoordinates:

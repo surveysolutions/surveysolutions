@@ -7,10 +7,20 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Portable;
 
-namespace WB.UI.Designer.Models
+namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
     public class PdfQuestionnaireModel
     {
+        public class ModificationStatisticsByUser
+        {
+            public Guid UserId { get; set; }
+            public string Name { get; set; }
+            public DateTime? Date { get; set; }
+
+            public DateTime? On => this.Date;
+            public string By => this.Name;
+        }
+
         public class GroupStatistics
         {
             public int GroupsCount { get; set; } = 0;
@@ -19,7 +29,19 @@ namespace WB.UI.Designer.Models
             public int StaticTextsCount { get; set; } = 0;
         }
 
+        public class QuestionnaireStatistics : GroupStatistics
+        {
+            public int SectionsCount { get; set; } = 0;
+            public int QuestionsWithConditionsCount { get; set; } = 0;
+        }
+
         private readonly QuestionnaireDocument questionnaire;
+
+        public ModificationStatisticsByUser Created { get; set; }
+        public ModificationStatisticsByUser LastModified { get; set; }
+        public ModificationStatisticsByUser Requested { get; set; }
+
+        public QuestionnaireStatistics Statistics { get; set; } = new QuestionnaireStatistics();
         private List<IComposite> allItems;
 
         public PdfQuestionnaireModel(QuestionnaireDocument questionnaire)
@@ -27,10 +49,16 @@ namespace WB.UI.Designer.Models
             this.questionnaire = questionnaire;
             this.questionnaire.ConnectChildrenWithParent();
             this.allItems = this.questionnaire.Children.SelectMany<IComposite, IComposite>(x => x.TreeToEnumerable<IComposite>(g => g.Children)).ToList();
+
+            FillStatistics(this.allItems, this.Statistics);
+            this.Statistics.SectionsCount = questionnaire.Children.Count;
+            this.Statistics.GroupsCount -= Statistics.SectionsCount;
+            this.Statistics.QuestionsWithConditionsCount = Find<IQuestion>(x => !string.IsNullOrWhiteSpace(x.ConditionExpression) || x.ValidationConditions.Any()).Count();
         }
 
-        public string Title => questionnaire.Title;
+        public string Title => this.questionnaire.Title;
         public IEnumerable<Guid> SectionIds => this.questionnaire.Children.Select(x => x.PublicKey).ToList();
+        public IEnumerable<ModificationStatisticsByUser> SharedPersons { get; set; }
 
         public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
            => this.Find(condition).FirstOrDefault();
@@ -67,7 +95,7 @@ namespace WB.UI.Designer.Models
 
         public bool IsRoster(IComposite item)
         {
-            return IsGroup(item) && (item as IGroup).IsRoster;
+            return this.IsGroup(item) && (item as IGroup).IsRoster;
         }
 
         public bool IsStaticText(IComposite item)
@@ -78,7 +106,7 @@ namespace WB.UI.Designer.Models
 
         public string GetBreadcrumbsForGroup(Guid groupId)
         {
-            var parents = this.GetAllParentGroupsStartingFromBottom(Find<Group>(groupId), this.questionnaire).ToList();
+            var parents = this.GetAllParentGroupsStartingFromBottom(this.Find<Group>(groupId), this.questionnaire).ToList();
             parents.Reverse();
             return string.Join(" / ", parents.Select(x => x.Title));
         }
@@ -100,13 +128,20 @@ namespace WB.UI.Designer.Models
         public GroupStatistics GetGroupStatistics(Guid groupId)
         {
             var statistics = new GroupStatistics();
-            foreach (var item in Find<Group>(groupId).TreeToEnumerable<IComposite>(g => g.Children).Where(x => x.PublicKey!=groupId))
+            var childItems = this.Find<Group>(groupId).TreeToEnumerable<IComposite>(g => g.Children).Where(x => x.PublicKey!=groupId);
+
+            return this.FillStatistics(childItems, statistics);
+        }
+
+        private GroupStatistics FillStatistics(IEnumerable<IComposite> items, GroupStatistics statistics)
+        {
+            foreach (var item in items)
             {
-                if (IsQuestion(item))
+                if (this.IsQuestion(item))
                     statistics.QuestionsCount++;
-                else if (IsRoster(item))
+                else if (this.IsRoster(item))
                     statistics.RostersCount++;
-                else if (IsGroup(item))
+                else if (this.IsGroup(item))
                     statistics.GroupsCount++;
                 else
                     statistics.StaticTextsCount++;
@@ -131,7 +166,7 @@ namespace WB.UI.Designer.Models
 
         public string GetRosterSourceQuestionVariable(Guid rosterId)
         {
-            var roster = Find<Group>(rosterId);
+            var roster = this.Find<Group>(rosterId);
             return roster.RosterSizeQuestionId != null 
                 ? this.Find<IQuestion>(roster.RosterSizeQuestionId.Value)?.StataExportCaption 
                 : string.Empty;
@@ -143,7 +178,7 @@ namespace WB.UI.Designer.Models
             if (!rosterSizeQuestionId.HasValue)
                 return string.Empty;
 
-            var question = Find<IQuestion>(rosterSizeQuestionId.Value);
+            var question = this.Find<IQuestion>(rosterSizeQuestionId.Value);
             switch (question.QuestionType)
             {
                 case QuestionType.MultyOption:
@@ -183,7 +218,7 @@ namespace WB.UI.Designer.Models
                     var isInteger = (question as NumericQuestion)?.IsInteger ?? false;
                     return "numeric / " + (isInteger ? "integer" : "decimal");
                 case QuestionType.DateTime:
-                    return "date";
+                    return "date / MM/DD/YYYY";
                 case QuestionType.GpsCoordinates:
                     return "GPS";
                 case QuestionType.Text:
