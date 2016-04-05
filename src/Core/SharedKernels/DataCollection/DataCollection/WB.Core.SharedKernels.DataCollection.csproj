@@ -109,7 +109,15 @@
     <Compile Include="Exceptions\InterviewDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserException.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V2\InterviewExpressionStateV1ToV2Adapter.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V4\InterviewExpressionStateV2ToV4Adapter.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V5\InterviewExpressionStateV4ToV5Adapter.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V6\InterviewExpressionStateV5ToV6Adapter.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V7\InterviewExpressionStateV6ToV7Adapter.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\IInterviewExpressionStateUpgrader.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\ILatestInterviewExpressionState.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewExpressionStateForPreloading.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewExpressionStateUpgrader.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\IReadOnlyInterviewStateDependentOnAnswers.cs" />
     <Compile Include="Implementation\Aggregates\User.cs" />
     <Compile Include="Commands\Interview\AnswerMultipleOptionsLinkedQuestionCommand.cs" />

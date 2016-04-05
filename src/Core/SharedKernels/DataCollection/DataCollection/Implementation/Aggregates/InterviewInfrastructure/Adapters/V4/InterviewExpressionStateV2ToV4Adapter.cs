@@ -2,15 +2,14 @@ using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.V4;
-using WB.Core.SharedKernels.DataCollection.V5;
 
-namespace WB.Core.SharedKernels.DataCollection.V6
+namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapters.V4
 {
-    internal class InterviewExpressionStateV5ToV6Adapter : IInterviewExpressionStateV6
+    internal class InterviewExpressionStateV2ToV4Adapter : IInterviewExpressionStateV4
     {
-        private readonly IInterviewExpressionStateV5 interviewExpressionState;
+        private readonly IInterviewExpressionStateV2 interviewExpressionState;
 
-        public InterviewExpressionStateV5ToV6Adapter(IInterviewExpressionStateV5 interviewExpressionState)
+        public InterviewExpressionStateV2ToV4Adapter(IInterviewExpressionStateV2 interviewExpressionState)
         {
             this.interviewExpressionState = interviewExpressionState;
         }
@@ -76,20 +75,13 @@ namespace WB.Core.SharedKernels.DataCollection.V6
             this.interviewExpressionState.UpdateLinkedMultiOptionAnswer(questionId, propagationVector, selectedPropagationVectors); 
         }
 
-        public void UpdateYesNoAnswer(Guid questionId, decimal[] propagationVector, YesNoAnswersOnly selectedPropagationVectors)
-        {
-            this.interviewExpressionState.UpdateYesNoAnswer(questionId, propagationVector, selectedPropagationVectors);
-        }
-
         public void DeclareAnswersInvalid(IEnumerable<Identity> invalidQuestions)
         {
-            //code should be here
             this.interviewExpressionState.DeclareAnswersInvalid(invalidQuestions); 
         }
 
         public void DeclareAnswersValid(IEnumerable<Identity> validQuestions)
         {
-            //code should be here
             this.interviewExpressionState.DeclareAnswersValid(validQuestions); 
         }
 
@@ -125,7 +117,6 @@ namespace WB.Core.SharedKernels.DataCollection.V6
 
         public ValidityChanges ProcessValidationExpressions()
         {
-            //code should be put here
             return this.interviewExpressionState.ProcessValidationExpressions(); 
         }
 
@@ -139,44 +130,31 @@ namespace WB.Core.SharedKernels.DataCollection.V6
             this.interviewExpressionState.SaveAllCurrentStatesAsPrevious(); 
         }
 
-        public IInterviewExpressionState Clone()
-        {
-            return ((IInterviewExpressionStateV6)this.interviewExpressionState).Clone();
-        }
-
         IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone()
         {
-            return ((IInterviewExpressionStateV6)this.interviewExpressionState).Clone();
+            return ((IInterviewExpressionStateV4)this.interviewExpressionState).Clone();
+        }
+
+
+        public IInterviewExpressionState Clone()
+        {
+            return ((IInterviewExpressionStateV4)this.interviewExpressionState).Clone(); 
         }
 
         IInterviewExpressionStateV4 IInterviewExpressionStateV4.Clone()
         {
-            return ((IInterviewExpressionStateV6)this.interviewExpressionState).Clone();
+            return new InterviewExpressionStateV2ToV4Adapter(this.interviewExpressionState.Clone());
         }
 
-        IInterviewExpressionStateV5 IInterviewExpressionStateV5.Clone()
-        {
-            return ((IInterviewExpressionStateV6)this.interviewExpressionState).Clone();
-        }
-
-        IInterviewExpressionStateV6 IInterviewExpressionStateV6.Clone()
-        {
-            return new InterviewExpressionStateV5ToV6Adapter(this.interviewExpressionState.Clone());
-        }
         public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle)
         {
             this.interviewExpressionState.UpdateRosterTitle(rosterId, outerRosterVector, rosterInstanceId, rosterTitle);
+
         }
 
         public void SetInterviewProperties(IInterviewProperties properties)
         {
-            this.interviewExpressionState.SetInterviewProperties(properties);
-        }
-
-        public void ApplyFailedValidations(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
-        {
-            //map to old 
-            this.interviewExpressionState.DeclareAnswersInvalid(failedValidationConditions.Keys);
+            //do nothing. adaptee doesn't know anything about it
         }
     }
 }
