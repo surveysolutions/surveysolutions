@@ -229,7 +229,6 @@
     <Compile Include="Implementation\Services\SampleImportService.cs" />
     <Compile Include="Implementation\Services\SupportedVersionProvider.cs" />
     <Compile Include="Implementation\Services\TabletInformation\FileBasedTabletInformationService.cs" />
-    <Compile Include="Implementation\Synchronization\SyncPackagesProcessor.cs" />
     <Compile Include="Implementation\Synchronization\BrokenSyncPackagesStorage.cs" />
     <Compile Include="Implementation\TemporaryDataStorage\FileTemporaryDataStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

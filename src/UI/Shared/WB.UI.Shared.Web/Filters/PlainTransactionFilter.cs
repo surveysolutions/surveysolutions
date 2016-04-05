@@ -7,13 +7,7 @@ namespace WB.UI.Shared.Web.Filters
 {
     public class PlainTransactionFilter : ActionFilterAttribute
     {
-        IPlainTransactionManager TransactionManager
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
-            }
-        }
+        IPlainTransactionManager TransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {

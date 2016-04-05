@@ -64,6 +64,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                 syncSettings.IncomingUnprocessedPackagesDirectoryName);
         }
 
+        [Obsolete("Since v 5.7")]
+        public override void StorePackage(Guid interviewId, string item)
+        {
+            var syncItem = this.serializer.Deserialize<SyncItem>(item);
+
+            var meta = this.serializer.Deserialize<InterviewMetaInfo>(archiver.DecompressString(syncItem.MetaInfo));
+
+            base.StorePackage(
+                interviewId: interviewId,
+                questionnaireId: meta.TemplateId,
+                questionnaireVersion: meta.TemplateVersion,
+                responsibleId: meta.ResponsibleId,
+                interviewStatus: (InterviewStatus)meta.Status,
+                isCensusInterview: meta.CreatedOnClient ?? false,
+                events: this.archiver.DecompressString(syncItem.Content));
+        }
+
         public override int QueueLength => this.GetCachedFilesInIncomingDirectory()
             .Count(filename => filename.EndsWith(this.syncSettings.IncomingCapiPackageFileNameExtension)) + base.QueueLength;
 
@@ -129,20 +146,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             }
         }
 
-        public override IReadOnlyCollection<string> GetTopSyncItemsAsFileNames(int count)
+        public override IReadOnlyCollection<string> GetTopPackageIds(int count)
         {
             var cachedFilesInIncomingDirectory = this.GetCachedFilesInIncomingDirectory().ToList();
             this.logger.Debug($"Current queue length: {cachedFilesInIncomingDirectory.Count}");
 
             var packagesFromFileStorage = cachedFilesInIncomingDirectory.OrderBy(this.fileSystemAccessor.GetFileName).Take(count).ToList();
 
-            return packagesFromFileStorage.Count == 0 ? base.GetTopSyncItemsAsFileNames(count) : packagesFromFileStorage;
+            return packagesFromFileStorage.Count == 0 ? base.GetTopPackageIds(count) : packagesFromFileStorage;
         }
 
         public override void ProcessPackage(string pathToPackage)
         {
             Guid? interviewId = null;
             string fileContent = null;
+
+            Stopwatch innerwatch = Stopwatch.StartNew();
             try
             {
                 if (!this.fileSystemAccessor.IsFileExists(pathToPackage))
@@ -152,12 +171,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                 }
 
                 var policy = SetupRetryPolicyForPackage(pathToPackage);
-
-
-                Stopwatch innerwatch = Stopwatch.StartNew();
+                
                 fileContent = policy.Execute(() => fileSystemAccessor.ReadAllText(pathToPackage));
-                this.logger.Debug($"GetSyncItem {Path.GetFileName(pathToPackage)}: ReadAllText {Path.GetFileName(pathToPackage)}. Took {innerwatch.Elapsed:g}.");
-                innerwatch.Stop();
+
+                this.logger.Debug($"Package {Path.GetFileName(pathToPackage)}. Read content from file. Took {innerwatch.Elapsed:g}.");
+                innerwatch.Restart();
 
                 var syncItem = this.serializer.Deserialize<SyncItem>(fileContent);
 
@@ -170,6 +188,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                     .Select(e => e.Payload)
                     .ToArray();
 
+                this.logger.Debug($"Package {Path.GetFileName(pathToPackage)}. Decompressed and deserialized. Took {innerwatch.Elapsed:g}.");
+                innerwatch.Restart();
+
                 this.commandService.Execute(new SynchronizeInterviewEventsCommand(
                     interviewId: meta.PublicKey,
                     userId: meta.ResponsibleId,
@@ -178,20 +199,25 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                     interviewStatus: (InterviewStatus) meta.Status,
                     createdOnClient: meta.CreatedOnClient ?? false,
                     synchronizedEvents: eventsToSync), syncSettings.Origin);
+
+                this.logger.Debug($"Package {Path.GetFileName(pathToPackage)}. Executed command. Took {innerwatch.Elapsed:g}.");
+                innerwatch.Restart();
             }
             catch (Exception e)
             {
-                this.logger.Error($"package '{pathToPackage}' wasn't parsed. Reason: '{e.Message}'", e);
+                this.logger.Error($"Package {Path.GetFileName(pathToPackage)}. FAILED. Reason: '{e.Message}'", e);
 
                 if (interviewId.HasValue && !string.IsNullOrEmpty(fileContent))
-                    base.Enqueue(interviewId.Value, fileContent);
+                    base.StorePackage(interviewId.Value, fileContent);
                 else
-                    this.brokenSyncPackagesStorage.StoreUnhandledPackage(pathToPackage, interviewId, e);
-            }
+                    this.brokenSyncPackagesStorage.StoreUnhandledPackage(pathToPackage, interviewId, e);}
             finally
             {
                 this.fileSystemAccessor.DeleteFile(pathToPackage);
                 this.GetCachedFilesInIncomingDirectory().Remove(pathToPackage);
+
+                this.logger.Debug($"Package {Path.GetFileName(pathToPackage)}. File deleted. Took {innerwatch.Elapsed:g}.");
+                innerwatch.Stop();
             }
         }
     }
