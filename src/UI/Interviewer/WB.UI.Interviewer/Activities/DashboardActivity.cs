@@ -19,7 +19,6 @@ namespace WB.UI.Interviewer.Activities
 {
     [Activity(Label = "", 
         Theme = "@style/GrayAppTheme", 
-        LaunchMode = LaunchMode.SingleTask,
         WindowSoftInputMode = SoftInput.StateHidden,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class DashboardActivity : BaseActivity<DashboardViewModel>, ISyncBgService
