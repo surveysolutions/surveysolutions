@@ -65,11 +65,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.BackupRestoreServiceTests
             await backupRestoreService.BackupAsync("backup");
 
             asynchronousFileSystemAccessorMock.Verify(x => x.CreateDirectoryAsync("backup"), Times.Once);
-            asynchronousFileSystemAccessorMock.Verify(
+            archiveUtilsMock.Verify(
                 x =>
-                    x.WriteAllBytesAsync(
+                    x.ZipDirectoryToFileAsync("backup",
                         Moq.It.Is<string>(_ => _.Contains(@"backup\backup-interviewer-") && _.Contains(@".ibak")),
-                        Moq.It.IsAny<byte[]>()), Times.Once);
+                        null,
+                        @"\.log$;\.dll$;\.sqlite3$;"), Times.Once);
         }
 
         private BackupRestoreService CreateBackupRestoreService(

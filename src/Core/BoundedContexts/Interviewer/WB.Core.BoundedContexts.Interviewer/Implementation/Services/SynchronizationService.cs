@@ -253,13 +253,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task SendTabletInformationAsync(string filePath, CancellationToken token)
         {
-            var fileSize = this.fileSystemAccessor.GetFileSize(filePath);
-
             var tabletInformationHeaders = new Dictionary<string, string>()
             {
                 { "DeviceId", this.interviewerSettings.GetDeviceId() },
-                //{ "Content-Type", "application/octet-stream" },
-                //{ "Content-Length", fileSize.ToString() },
             };
 
             await this.TryGetRestResponseOrThrowAsync(async () =>
