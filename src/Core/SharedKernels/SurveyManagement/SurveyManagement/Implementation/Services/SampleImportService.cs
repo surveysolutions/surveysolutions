@@ -20,18 +20,19 @@ using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.SampleImport;
+using WB.Infrastructure.Native.Threading;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
 {
     internal class SampleImportService : ISampleImportService
     {
         private static readonly Dictionary<string, SampleCreationStatus> preLoadingStatuses = new Dictionary<string, SampleCreationStatus>();
-
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
         private readonly IPlainTransactionManager transactionManager;
+        private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
         private readonly SampleImportSettings sampleImportSettings;
 
         private static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<SampleImportService>();
@@ -184,7 +185,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                     cancellationToken.ThrowIfCancellationRequested();
 
                     try
-                    { 
+                    {
+                        this.plainTransactionManager.BeginTransaction();
                         this.CreatePreloadedInterview(preloadedDataRecord, version, responsibleHeadquarterId, responsibleSupervisorId, commandInvoker, bigTemplate);
                     }
                     catch(InterviewException interviewException)
@@ -202,6 +204,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                         Logger.Error(e.Message, e);
 
                         Interlocked.Increment(ref errorCountOccuredOnInterviewsCreation);
+                    }
+                    finally
+                    {
+                        this.plainTransactionManager.RollbackTransaction();
                     }
 
                     Interlocked.Increment(ref totalInterviewsProcessed);

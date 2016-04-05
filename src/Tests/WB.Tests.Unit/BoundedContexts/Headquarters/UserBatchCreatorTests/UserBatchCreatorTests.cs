@@ -21,6 +21,20 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
     [TestFixture]
     internal class UserBatchCreatorTests
     {
+        [SetUp]
+        public void SetupTests()
+        {
+            var serviceLocator = Stub<IServiceLocator>.WithNotEmptyValues;
+            ServiceLocator.SetLocatorProvider(() => serviceLocator);
+            Setup.InstanceToMockedServiceLocator(Mock.Of<IPlainTransactionManager>());
+        }
+
+        [TearDown]
+        public void CleanTests()
+        {
+            Setup.InstanceToMockedServiceLocator<IPlainTransactionManager>(null);
+        }
+
         [Test]
         public void
             CreateUsersFromReadyToBeCreatedQueue_When_one_user_in_role_supervisor_is_present_in_the_dataset_Then_one_supervisor_should_be_created()

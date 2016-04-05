@@ -28,15 +28,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             IInterviewImportDataParsingService interviewImportDataParsingService=null,
             QuestionnaireDocument questionnaireDocument = null)
         {
-            if (transactionManager == null)
-            {
-                var mockOfTransactionManager = new Mock<ITransactionManagerProvider>();
-                mockOfTransactionManager.Setup(x => x.GetTransactionManager()).Returns(Mock.Of<ITransactionManager>());
-                transactionManager = mockOfTransactionManager.Object;
-            }
             return new InterviewImportService(
                 commandService: commandService ?? Mock.Of<ICommandService>(),
-                transactionManager: transactionManager,
                 logger: logger ?? Mock.Of<ILogger>(),
                 sampleImportSettings: sampleImportSettings ?? Mock.Of<SampleImportSettings>(),
                 preloadedDataRepository: preloadedDataRepository ?? Mock.Of<IPreloadedDataRepository>(),
