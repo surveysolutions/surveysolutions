@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Views;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.Practices.ServiceLocation;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
 {
