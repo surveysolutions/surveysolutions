@@ -7,8 +7,8 @@ namespace WB.Core.Infrastructure.FileSystem
     public interface IArchiveUtils
     {
         void ZipDirectory(string directory, string archiveFile);
-        byte[] ZipDirectoryToByteArray(string sourceDirectory, string directoryFilter = null, string fileFilter = null);
-        Task<byte[]> ZipDirectoryToByteArrayAsync(string sourceDirectory, string directoryFilter = null, string fileFilter = null);
+        void ZipDirectoryToFile(string sourceDirectory, string archiveFilePath, string directoryFilter = null, string fileFilter = null);
+        Task ZipDirectoryToFileAsync(string sourceDirectory, string archiveFilePath, string directoryFilter = null, string fileFilter = null);
         void ZipFiles(IEnumerable<string> files, string archiveFilePath);
         void Unzip(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false);
         Task UnzipAsync(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false);
