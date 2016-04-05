@@ -4,8 +4,9 @@ using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.V4;
 using WB.Core.SharedKernels.DataCollection.V5;
 using WB.Core.SharedKernels.DataCollection.V6;
+using WB.Core.SharedKernels.DataCollection.V7;
 
-namespace WB.Core.SharedKernels.DataCollection.V7
+namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapters.V7
 {
     internal class InterviewExpressionStateV6ToV7Adapter : IInterviewExpressionStateV7, ILatestInterviewExpressionState
     {
