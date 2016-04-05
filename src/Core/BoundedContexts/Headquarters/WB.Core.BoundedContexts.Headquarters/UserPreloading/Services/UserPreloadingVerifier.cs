@@ -17,16 +17,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 {
     internal class UserPreloadingVerifier : IUserPreloadingVerifier
     {
-        ITransactionManager TransactionManager
-        {
-            get { return transactionManagerProvider.GetTransactionManager(); }
-        }
-
         private bool IsWorking = false; //please use singleton injection
 
-        private readonly IPlainTransactionManager plainTransactionManager;
-
-        private readonly ITransactionManagerProvider transactionManagerProvider;
+        private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
 
         private readonly IUserPreloadingService userPreloadingService;
 
@@ -41,17 +34,14 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         readonly Regex emailValidationRegex;
         readonly Regex phoneNumberValidationRegex;
 
-        public UserPreloadingVerifier(ITransactionManagerProvider transactionManagerProvider, 
+        public UserPreloadingVerifier(
             IUserPreloadingService userPreloadingService,
             IPlainStorageAccessor<UserDocument> userStorage, 
-            IPlainTransactionManager plainTransactionManager, 
             UserPreloadingSettings userPreloadingSettings, 
             ILogger logger)
         {
-            this.transactionManagerProvider = transactionManagerProvider;
             this.userPreloadingService = userPreloadingService;
             this.userStorage = userStorage;
-            this.plainTransactionManager = plainTransactionManager;
             this.userPreloadingSettings = userPreloadingSettings;
             this.logger = logger;
             this.passwordValidationRegex = new Regex(this.userPreloadingSettings.PasswordFormatRegex);
@@ -104,11 +94,11 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private void ValidatePreloadedData(IList<UserPreloadingDataRecord> data, string processId)
         {
-            var activeUserNames = TransactionManager.ExecuteInQueryTransaction(() =>
+            var activeUserNames = plainTransactionManager.ExecuteInPlainTransaction(() =>
 
             userStorage.Query(_ => _.Where(u => !u.IsArchived).Select(u => u.UserName.ToLower())).ToHashSet());
 
-            var activeSupervisorNames = TransactionManager.ExecuteInQueryTransaction(() =>
+            var activeSupervisorNames = plainTransactionManager.ExecuteInPlainTransaction(() =>
 
                 userStorage.Query(
                     _ =>
@@ -116,7 +106,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                             .Select(u => u.UserName.ToLower()).Distinct()).ToHashSet()
                 );
 
-            var archivedSupervisorNames = TransactionManager.ExecuteInQueryTransaction(() =>
+            var archivedSupervisorNames = plainTransactionManager.ExecuteInPlainTransaction(() =>
 
                 userStorage.Query(
                     _ =>
@@ -124,7 +114,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                             .Select(u => u.UserName.ToLower())).ToHashSet()
                 );
 
-            var archivedInterviewerNamesMappedOnSupervisorName = TransactionManager.ExecuteInQueryTransaction(() =>
+            var archivedInterviewerNamesMappedOnSupervisorName = this.plainTransactionManager.ExecuteInPlainTransaction(() =>
                 userStorage.Query(
                     _ =>
                         _.Where(u => u.IsArchived && u.Roles.Contains(UserRoles.Operator))

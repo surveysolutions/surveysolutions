@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using Main.DenormalizerStorage;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
@@ -18,6 +19,20 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
     [TestFixture]
     internal class UserPreloadingVerifierTests
     {
+        [SetUp]
+        public void SetupTests()
+        {
+            var serviceLocator = Stub<IServiceLocator>.WithNotEmptyValues;
+            ServiceLocator.SetLocatorProvider(() => serviceLocator);
+            Setup.InstanceToMockedServiceLocator(Mock.Of<IPlainTransactionManager>());
+        }
+
+        [TearDown]
+        public void CleanTests()
+        {
+            Setup.InstanceToMockedServiceLocator<IPlainTransactionManager>(null);
+        }
+
         [Test]
         public void
             VerifyProcessFromReadyToBeVerifiedQueue_When_login_is_taken_by_existing_user_Then_record_verification_error_with_code_PLU0001()
@@ -240,11 +255,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
         {
             return
                 new UserPreloadingVerifier(
-                    Mock.Of<ITransactionManagerProvider>(
-                        _ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                     userPreloadingService ?? Mock.Of<IUserPreloadingService>(),
                     userStorage ?? new TestPlainStorage<UserDocument>(),
-                    Mock.Of<IPlainTransactionManager>(), Create.UserPreloadingSettings(), Mock.Of<ILogger>());
+                    Create.UserPreloadingSettings(), Mock.Of<ILogger>());
         }
 
         private Mock<IUserPreloadingService> CreateUserPreloadingServiceMock(UserPreloadingProcess userPreloadingProcess, UserRoles role = UserRoles.Operator)

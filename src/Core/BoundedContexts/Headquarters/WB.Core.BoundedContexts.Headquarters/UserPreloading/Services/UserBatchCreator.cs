@@ -27,14 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         protected readonly IPasswordHasher passwordHasher;
 
-        private readonly ITransactionManagerProvider transactionManagerProvider;
-
-        private readonly IPlainTransactionManager plainTransactionManager;
-
-        ITransactionManager TransactionManager
-        {
-            get { return transactionManagerProvider.GetTransactionManager(); }
-        }
+        private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
 
         private bool IsWorking = false;
 
@@ -43,17 +36,13 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             ICommandService commandService,
             IPlainStorageAccessor<UserDocument> userStorage, 
             ILogger logger, 
-            IPasswordHasher passwordHasher, 
-            ITransactionManagerProvider transactionManagerProvider, 
-            IPlainTransactionManager plainTransactionManager)
+            IPasswordHasher passwordHasher)
         {
             this.userPreloadingService = userPreloadingService;
             this.commandService = commandService;
             this.userStorage = userStorage;
             this.logger = logger;
             this.passwordHasher = passwordHasher;
-            this.transactionManagerProvider = transactionManagerProvider;
-            this.plainTransactionManager = plainTransactionManager;
         }
 
         public void CreateUsersFromReadyToBeCreatedQueue()
@@ -109,7 +98,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
             foreach (var supervisorToCreate in supervisorsToCreate)
             {
-                TransactionManager.ExecuteInQueryTransaction(
+                this.plainTransactionManager.ExecuteInPlainTransaction(
                     () => CreateSupervisorOrUnarchiveAndUpdate(supervisorToCreate));
 
                 this.plainTransactionManager.ExecuteInPlainTransaction(
@@ -120,7 +109,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
             foreach (var interviewerToCreate in interviewersToCreate)
             {
-                TransactionManager.ExecuteInQueryTransaction(
+                this.plainTransactionManager.ExecuteInPlainTransaction(
                     () => CreateInterviewerOrUnarchiveAndUpdate(interviewerToCreate));
 
                 this.plainTransactionManager.ExecuteInPlainTransaction(
