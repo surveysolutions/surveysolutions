@@ -9,22 +9,44 @@
 }
 <div class="question-container">
     <div class="question">
-        <div class="question-title">@question.QuestionText</div>
+        <div class="question-title" id="@questionnaire.GetQuestionId(question.PublicKey)">@question.QuestionText</div>
         <div class="common-info">
             @if (questionnaire.QuestionHasInstructions(question))
             {
-                <div class="instructions"><span>I</span>@questionnaire.GetQuestionInstructionExcerpt(question)</div>
+                <div class="instructions">
+                    <span>I</span>@questionnaire.GetQuestionInstructionExcerpt(question)
+                    @if (questionnaire.InstructionIsTooLong(question))
+                    {
+                        <div class="more">
+                            And <a href="#@questionnaire.GetInstructionsId(question.PublicKey)">@(question.Instructions.Length - questionnaire.Settings.InstructionsExcerptLength) other symbols [@questionnaire.GetQuestionIndexInAppendix(question.PublicKey, "I")]</a>
+                        </div>
+                    }
+                </div>
             }
             @if (questionnaire.QuestionHasEnablementCondition(question))
             {
-                <div class="condition"><span>E</span>@question.ConditionExpression</div>
+                <div class="condition"><span>E</span>@questionnaire.GetExpressionExcerpt(question.ConditionExpression)
+                    @if (questionnaire.ExpressionIsTooLong(question.ConditionExpression))
+                    {
+                        <div class="more">
+                            And <a href="#@questionnaire.GetConditionId(question.PublicKey)">@(question.ConditionExpression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetQuestionIndexInAppendix(question.PublicKey, "E")]</a>
+                        </div>
+                    }
+                </div>
             }
 
             @for (int i = 0; i < question.ValidationConditions.Count; i++)
             {
                 var validation = question.ValidationConditions[i];
-                <div class="validation-expression"><span>V@(i+1)</span>@validation.Expression</div>
-                <div class="validation-message"><span>M@(i+1)</span>@validation.Message</div>
+                <div class="validation-expression"><span>V@(i + 1)</span>@questionnaire.GetExpressionExcerpt(validation.Expression)
+                    @if (questionnaire.ExpressionIsTooLong(validation.Expression))
+                    {
+                        <div class="more">
+                            And <a href="#@questionnaire.GetValidationsId(question.PublicKey)">@(validation.Expression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetQuestionIndexInAppendix(question.PublicKey, "V")]</a>
+                        </div>
+                    }
+                </div>
+                <div class="validation-message"><span>M@(i + 1)</span>@validation.Message</div>
             }
         </div>
     </div>
@@ -37,36 +59,36 @@
         @switch (question.QuestionType)
             {
                 case QuestionType.SingleOption:
-                    <div class="answer-editor">
-                        @foreach (var option in question.Answers.Take(questionnaire.Settings.OptionsExcerptCount))
-                        {
-                            <div class="option">
-                                <b>@questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)</b>
-                                <input type="radio" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
-                                <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
-                            </div>
-                        }
-                        @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)
-                        {
-                            <div class="more">And <a href="#options-@question.PublicKey">@(question.Answers.Count- questionnaire.Settings.OptionsExcerptCount) other [@question.Answers.Count]</a></div>
-                        }
-                    </div>
+                <div class="answer-editor">
+                    @foreach (var option in question.Answers.Take(questionnaire.Settings.OptionsExcerptCount))
+                    {
+                        <div class="option">
+                            <b>@questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)</b>
+                            <input type="radio" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
+                            <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
+                        </div>
+                    }
+                    @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)
+                    {
+                        <div class="more">And <a href="#@questionnaire.GetOptionsId(question.PublicKey)">@(question.Answers.Count - questionnaire.Settings.OptionsExcerptCount) other [@questionnaire.GetQuestionIndexInAppendix(question.PublicKey, "O")]</a></div>
+                    }
+                </div>
                 break;
             case QuestionType.MultyOption:
-                    <div class="answer-editor multi-option">
-                        @foreach (var option in question.Answers.Take(questionnaire.Settings.OptionsExcerptCount))
-                        {
-                            <div class="option">
-                                <b>@questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)</b>
-                                <input type="checkbox" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
-                                <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
-                            </div>
-                        }
-                        @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)
-                        {
-                            <div class="more">And <a href="#options-@question.PublicKey">@(question.Answers.Count - questionnaire.Settings.OptionsExcerptCount) other []</a></div>
-                        }
-                    </div>
+                <div class="answer-editor multi-option">
+                    @foreach (var option in question.Answers.Take(questionnaire.Settings.OptionsExcerptCount))
+                    {
+                        <div class="option">
+                            <b>@questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)</b>
+                            <input type="checkbox" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
+                            <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
+                        </div>
+                    }
+                    @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)
+                    {
+                        <div class="more">And <a href="#@questionnaire.GetOptionsId(question.PublicKey)">@(question.Answers.Count - questionnaire.Settings.OptionsExcerptCount) other []</a></div>
+                    }
+                </div>
                 break;
             case QuestionType.Numeric:
                 <div class="answer-editor">
@@ -75,7 +97,7 @@
                 break;
             case QuestionType.DateTime:
                 <div class="answer-editor">
-                    <input type="date" class="points">			
+                    <input type="date" class="points">
                 </div>
                 break;
             case QuestionType.GpsCoordinates:
