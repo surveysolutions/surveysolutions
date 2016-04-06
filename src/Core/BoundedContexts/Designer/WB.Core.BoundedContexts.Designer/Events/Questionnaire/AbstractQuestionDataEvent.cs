@@ -14,12 +14,13 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         {
         }
 
-        public AbstractQuestionDataEvent(Guid responsibleId, string conditionExpression, bool hideIfDisabled, bool featured, string instructions, bool capital, Guid publicKey, string questionText, QuestionScope questionScope, string stataExportCaption, string variableLabel, string validationExpression, string validationMessage, IList<ValidationCondition> validationConditions) : base(responsibleId)
+        public AbstractQuestionDataEvent(Guid responsibleId, string conditionExpression, bool hideIfDisabled, bool featured, string instructions, QuestionProperties properties, bool capital, Guid publicKey, string questionText, QuestionScope questionScope, string stataExportCaption, string variableLabel, string validationExpression, string validationMessage, IList<ValidationCondition> validationConditions) : base(responsibleId)
         {
             this.ConditionExpression = conditionExpression;
             this.HideIfDisabled = hideIfDisabled;
             this.Featured = featured;
             this.Instructions = instructions;
+            this.Properties = properties;
             this.Capital = capital;
             this.PublicKey = publicKey;
             this.QuestionText = questionText;
@@ -35,6 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         public bool HideIfDisabled { get; private set; }
         public bool Featured { get; private set; }
         public string Instructions { get; private set; }
+        public QuestionProperties Properties { get; set; }
         public bool Capital { get; private set; }
         public Guid PublicKey { get; private set; }
         public string QuestionText { get; private set; }

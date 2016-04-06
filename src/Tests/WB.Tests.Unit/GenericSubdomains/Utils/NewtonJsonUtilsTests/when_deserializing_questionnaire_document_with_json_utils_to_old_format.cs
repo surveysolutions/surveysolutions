@@ -31,13 +31,10 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
             result.ShouldNotBeNull();
 
         It should_return_correct_deserialize_result = () =>
-            result.ShouldEqual(resultQuestionnaire);
+            result.ShouldNotContain(", WB.Core.SharedKernels.Questionnaire");
 
-
-        private static string resultQuestionnaire = ResourceHelper.ReadResourceFile("WB.Tests.Unit.Resources.questionnaire_in_old_format.json");
-
-        private static QuestionnaireDocument questionnaire;
-        private static NewtonJsonSerializer _jsonSerializer;
-        private static string result;
+       static QuestionnaireDocument questionnaire;
+       static NewtonJsonSerializer _jsonSerializer;
+       static string result;
     }
 }

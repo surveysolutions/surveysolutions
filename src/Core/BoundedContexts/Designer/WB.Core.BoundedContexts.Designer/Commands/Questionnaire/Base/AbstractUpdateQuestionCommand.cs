@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
 {
@@ -24,5 +25,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
         public string EnablementCondition { get; set; }
         public bool HideIfDisabled { get; set; }
         public string Instructions { get; private set; }
+        public QuestionProperties Properties { get; set; }
     }
 }

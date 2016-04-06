@@ -285,7 +285,8 @@ namespace WB.Tests.Unit
             string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string variableLabel = null, string validationExpression = null, string validationMessage = null,
             QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
             QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
-            string mask = null, int? maxAllowedAnswers = null, bool? yesNoView = null, bool? areAnswersOrdered = null, bool hideIfDisabled = false)
+            string mask = null, int? maxAllowedAnswers = null, bool? yesNoView = null, bool? areAnswersOrdered = null, bool hideIfDisabled = false,
+            QuestionProperties properties = null)
             {
                 return new NewQuestionAdded(
                     publicKey: publicKey,
@@ -300,6 +301,7 @@ namespace WB.Tests.Unit
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
+                    properties: properties ?? new QuestionProperties(false),
                     responsibleId: responsibleId.HasValue ? responsibleId.Value : Guid.NewGuid(),
                     capital: capital,
                     isInteger: isInteger,
@@ -347,7 +349,8 @@ namespace WB.Tests.Unit
                 string validationMessage = null,
                 string instructions = null,
                 Guid? responsibleId = null,
-                bool hideIfDisabled = false)
+                bool hideIfDisabled = false,
+            QuestionProperties properties = null)
             {
                 return new NumericQuestionChanged(
                     publicKey: publicKey,
@@ -361,6 +364,7 @@ namespace WB.Tests.Unit
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
+                    properties: properties ?? new QuestionProperties(false),
                     responsibleId: responsibleId.HasValue ? responsibleId.Value : Guid.NewGuid(),
                     capital: false,
                     isInteger: isInteger,
@@ -384,7 +388,8 @@ namespace WB.Tests.Unit
                 int targetIndex = 0,
                 QuestionScope scope = QuestionScope.Interviewer,
                 IList<ValidationCondition> validationConditions = null,
-                bool hideIfDisabled = false)
+                bool hideIfDisabled = false,
+            QuestionProperties properties = null)
             {
                 return new NumericQuestionCloned(
                     publicKey: publicKey,
@@ -399,6 +404,7 @@ namespace WB.Tests.Unit
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
+                    properties: properties ?? new QuestionProperties(false),
                     responsibleId: responsibleId.HasValue ? responsibleId.Value : Guid.NewGuid(),
                     capital: false,
                     isInteger: isInteger,
@@ -422,7 +428,8 @@ namespace WB.Tests.Unit
                 string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string validationExpression = null, string validationMessage = null,
                 QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
                 QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
-                bool hideIfDisabled = false)
+                bool hideIfDisabled = false,
+            QuestionProperties properties = null)
             {
                 return new QuestionChanged(
                     publicKey: publicKey,
@@ -437,6 +444,7 @@ namespace WB.Tests.Unit
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
+                    properties: properties ?? new QuestionProperties(false),
                     responsibleId: responsibleId.HasValue ? responsibleId.Value : Guid.NewGuid(),
                     capital: capital,
                     isInteger: isInteger,
@@ -459,7 +467,8 @@ namespace WB.Tests.Unit
             public static QuestionChanged QuestionChanged(Guid publicKey, Guid? groupPublicKey = null, string questionText = null, bool? isInteger = null,
                 string stataExportCaption = null, Guid? linkedToQuestionId = null, bool capital = false, string validationExpression = null, string validationMessage = null,
                 QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
-                QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null)
+                QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
+            QuestionProperties properties = null)
             {
                 return new QuestionChanged(
                     publicKey: publicKey,
@@ -474,6 +483,7 @@ namespace WB.Tests.Unit
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
+                    properties: properties ?? new QuestionProperties(false),
                     responsibleId: responsibleId.HasValue ? responsibleId.Value : Guid.NewGuid(),
                     capital: capital,
                     isInteger: isInteger,
@@ -499,7 +509,8 @@ namespace WB.Tests.Unit
                 QuestionScope questionScope = QuestionScope.Interviewer, string instructions = null, Answer[] answers = null, bool featured = false, Guid? responsibleId = null,
                 QuestionType questionType = QuestionType.Text, bool? isFilteredCombobox = null, Guid? cascadeFromQuestionId = null, string conditionExpression = null, Order? answerOrder = null,
                 Guid? sourceQuestionnaireId = null, int targetIndex = 0, int? maxAnswerCount = null, int? countOfDecimalPlaces = null,
-                IList<ValidationCondition> validationConditions = null)
+                IList<ValidationCondition> validationConditions = null,
+            QuestionProperties properties = null)
             {
                 return new QuestionCloned(
                     publicKey: publicKey,
@@ -514,6 +525,7 @@ namespace WB.Tests.Unit
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
+                    properties: properties ?? new QuestionProperties(false),
                     responsibleId: responsibleId.HasValue ? responsibleId.Value : Guid.NewGuid(),
                     capital: capital,
                     isInteger: isInteger,

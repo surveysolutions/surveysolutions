@@ -32,8 +32,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
         Because of = () =>            
                 questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: "title",
                     variableName: "qr_barcode_question",
-                variableLabel: null, enablementCondition: condition, hideIfDisabled: hideIfDisabled, instructions: instructions,
-                    responsibleId: responsibleId, scope: QuestionScope.Interviewer, 
+                variableLabel: null, enablementCondition: condition, hideIfDisabled: hideIfDisabled, instructions: instructions, 
+                    responsibleId: responsibleId, 
+                    scope: QuestionScope.Interviewer, 
                     validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>
                     {
                         new ValidationCondition
@@ -41,7 +42,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
                             Expression = validation,
                             Message = validationMessage
                         }
-                    });
+                    },
+                    properties: new QuestionProperties(false));
 
         Cleanup stuff = () =>
         {

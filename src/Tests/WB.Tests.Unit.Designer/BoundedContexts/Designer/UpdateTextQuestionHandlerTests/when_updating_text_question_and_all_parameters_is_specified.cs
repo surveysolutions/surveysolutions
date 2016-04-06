@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
                 responsibleId: responsibleId, validationCoditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>
                 {
                     new ValidationCondition { Expression = validationExpression, Message = validationMessage }
-                });
+                }, properties: new QuestionProperties(false));
 
         Cleanup stuff = () =>
         {

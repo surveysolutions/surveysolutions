@@ -7,9 +7,11 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
 {
     public class AbstractNumericQuestionDataEvent : AbstractQuestionDataEvent
     {
-        public AbstractNumericQuestionDataEvent(Guid responsibleId, string conditionExpression, bool hideIfDisabled, bool featured, string instructions, bool capital, Guid publicKey, 
+        public AbstractNumericQuestionDataEvent(Guid responsibleId, string conditionExpression, bool hideIfDisabled, bool featured, string instructions, QuestionProperties properties, 
+            bool capital, Guid publicKey, 
             string questionText, QuestionScope questionScope, string stataExportCaption, string variableLabel, string validationExpression, string validationMessage, 
-            bool? isInteger, int? countOfDecimalPlaces, IList<ValidationCondition> validationConditions) : base(responsibleId, conditionExpression, hideIfDisabled, featured, instructions, capital, publicKey, questionText, questionScope, 
+            bool? isInteger, int? countOfDecimalPlaces, IList<ValidationCondition> validationConditions) : 
+            base(responsibleId, conditionExpression, hideIfDisabled, featured, instructions, properties, capital, publicKey, questionText, questionScope, 
                 stataExportCaption, variableLabel, validationExpression, validationMessage, validationConditions)
         {
             this.IsInteger = isInteger;
