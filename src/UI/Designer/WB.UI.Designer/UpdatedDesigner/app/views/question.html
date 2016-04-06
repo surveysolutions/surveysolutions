@@ -64,7 +64,11 @@
 
         <div class="row" ng-show="(showInstruction===undefined && initialQuestion.instructions) || showInstruction">
             <div class="form-group col-xs-11">
-                <label for="edit-question-instructions">Instruction <help key="instruction" /></label>
+                <label for="edit-question-instructions">Instruction <help key="instruction"/></label>
+
+                <input id="cb-hide-instructions" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.hideInstructions"/>
+                <label for="cb-hide-instructions"><span></span>Hide instructions</label>
+
                 <textarea id="edit-question-instructions" ng-model="activeQuestion.instructions" class="form-control" msd-elastic></textarea>
             </div>
 

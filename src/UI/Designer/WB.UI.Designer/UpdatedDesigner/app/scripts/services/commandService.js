@@ -142,6 +142,7 @@
                             enablementCondition: question.enablementCondition,
                             hideIfDisabled: question.hideIfDisabled,
                             instructions: question.instructions,
+                            hideInstructions: question.hideInstructions
                         }
                     };
 

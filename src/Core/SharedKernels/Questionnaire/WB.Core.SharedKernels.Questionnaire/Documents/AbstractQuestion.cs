@@ -126,6 +126,7 @@ namespace Main.Core.Entities.SubEntities
             {
                 question.Answers.Add(answer.Clone());
             }
+            question.Properties = this.Properties;
 
             return question;
         }

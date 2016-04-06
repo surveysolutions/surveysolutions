@@ -2,11 +2,15 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
 {
     public class QuestionProperties
     {
-        public bool HideInstructions { get; protected set; }
+        protected QuestionProperties()
+        {
+        }
 
         public QuestionProperties(bool hideInstructions)
         {
             this.HideInstructions = hideInstructions;
         }
+
+        public bool HideInstructions { get; protected set; }
     }
 }
