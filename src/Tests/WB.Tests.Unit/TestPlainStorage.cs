@@ -34,13 +34,13 @@ namespace WB.Tests.Unit
 
         public void Store(T entity, object id)
         {
-            if (this.entites.ContainsKey(id))
+            if (id != null && this.entites.ContainsKey(id))
             {
                 this.entites[id] = entity;
             }
             else
             {
-                this.entites.Add(id, entity);
+                this.entites.Add(id ?? this.entites.Count + 1, entity);
             }
         }
 

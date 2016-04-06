@@ -6,7 +6,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.Synchronization;
 
@@ -17,7 +16,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
     {
         protected static IncomingSyncPackagesQueue CreateIncomingPackagesQueue(ISerializer serializer = null,
             IFileSystemAccessor fileSystemAccessor = null, IArchiveUtils archiver = null, 
-            IBrokenSyncPackagesStorage brokenSyncPackagesStorage = null,
             IPlainStorageAccessor<InterviewPackage> interviewPackageStorage = null,
             IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage = null,
             ICommandService commandService = null)
@@ -28,7 +26,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
                 Mock.Of<ILogger>(), 
                 serializer: serializer ?? Mock.Of<ISerializer>(),
                 archiver: archiver ?? Mock.Of<IArchiveUtils>(), 
-                brokenSyncPackagesStorage: brokenSyncPackagesStorage ?? Mock.Of<IBrokenSyncPackagesStorage>(),
                 interviewPackageStorage: interviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<InterviewPackage>>(),
                 brokenInterviewPackageStorage: brokenInterviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<BrokenInterviewPackage>>(),
                 commandService: commandService ?? Mock.Of<ICommandService>());

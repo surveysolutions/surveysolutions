@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         };
 
         Because of = () => exception = Catch.Exception(() =>
-            incomingSyncPackagesQueue.StorePackage(Guid.Empty, ""));
+            incomingSyncPackagesQueue.StorePackage(""));
 
         It should_throw_exception = () =>
           exception.ShouldNotBeNull();
