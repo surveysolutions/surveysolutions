@@ -638,6 +638,9 @@
                 var staticText = questionnaireService.findItem($scope.items, data.itemId);
                 if (_.isNull(staticText)) return;
                 staticText.text = data.text;
+
+                staticText.hasValidation = data.hasValidation;
+                staticText.hasCondition = data.hasCondition;
             });
 
             $rootScope.$on('groupUpdated', function (event, data) {

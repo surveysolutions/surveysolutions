@@ -319,7 +319,10 @@
                         questionnaireId: questionnaireId,
                         entityId: staticText.itemId,
                         text: staticText.text,
-                        attachmentName: staticText.attachmentName
+                        attachmentName: staticText.attachmentName,
+                        enablementCondition: staticText.enablementCondition,
+                        hideIfDisabled: staticText.hideIfDisabled,
+                        validationConditions: staticText.validationConditions
                     };
 
                     return commandCall("UpdateStaticText", command);

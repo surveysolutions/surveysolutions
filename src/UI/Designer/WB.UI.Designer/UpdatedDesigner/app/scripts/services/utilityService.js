@@ -117,6 +117,8 @@
                         "itemId": newId,
                         "text": "New static text",
                         itemType: 'StaticText',
+                        hasCondition: false,
+                        hasValidation: false,
                         getParentItem: function () { return parent; }
                     };
                     return emptyStaticText;

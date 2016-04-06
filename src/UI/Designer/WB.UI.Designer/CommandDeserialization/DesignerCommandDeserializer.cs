@@ -40,11 +40,14 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "UpdateSingleOptionQuestion", typeof (UpdateSingleOptionQuestion) },
                     { "UpdateGpsCoordinatesQuestion", typeof (UpdateGpsCoordinatesQuestion) },
                     { "UpdateFilteredComboboxOptions", typeof (UpdateFilteredComboboxOptions) },
+                    
                     //Static text commands
                     { "AddStaticText", typeof (AddStaticText) },
                     { "UpdateStaticText", typeof (UpdateStaticText) },
                     { "DeleteStaticText", typeof (DeleteStaticText) },
                     { "MoveStaticText", typeof (MoveStaticText) },
+                    
+                    //obsolete
                     { "MigrateExpressionsToCSharp", typeof(MigrateExpressionsToCSharp)},
 
                     {"PasteAfter", typeof(PasteAfter) },

@@ -365,7 +365,7 @@ namespace WB.Tests.Unit
                     validationMessage: validationMessage,
                     instructions: instructions,
                     properties: properties ?? new QuestionProperties(false),
-                    responsibleId: responsibleId.HasValue ? responsibleId.Value : Guid.NewGuid(),
+                    responsibleId: responsibleId ?? Guid.NewGuid(),
                     capital: false,
                     isInteger: isInteger,
                     countOfDecimalPlaces: null,
@@ -655,13 +655,44 @@ namespace WB.Tests.Unit
 
             public static StaticTextAdded StaticTextAdded(Guid? parentId = null, string text = null, Guid? responsibleId = null, Guid? publicKey = null)
             {
-                return new StaticTextAdded
-                {
-                    EntityId = publicKey.GetValueOrDefault(Guid.NewGuid()),
-                    ResponsibleId = responsibleId ?? Guid.NewGuid(),
-                    ParentId =  parentId ?? Guid.NewGuid(),
-                    Text = text
-                };
+                return new StaticTextAdded(
+                    publicKey.GetValueOrDefault(Guid.NewGuid()),
+                    responsibleId ?? Guid.NewGuid(),
+                    parentId ?? Guid.NewGuid(),
+                    text);
+            }
+
+            public static StaticTextUpdated StaticTextUpdated(Guid? parentId = null, string text = null, string attachment = null, 
+                Guid? responsibleId = null, Guid? publicKey = null, string enablementCondition = null, bool hideIfDisabled = false, 
+                IList<ValidationCondition> validationConditions = null)
+            {
+                return new StaticTextUpdated(
+                    publicKey.GetValueOrDefault(Guid.NewGuid()),
+                    responsibleId ?? Guid.NewGuid(),
+                    text,
+                    attachment,
+                    hideIfDisabled,
+                    enablementCondition,
+                    validationConditions);
+            }
+
+
+            public static StaticTextCloned StaticTextCloned(Guid? parentId = null, string text = null, string attachment = null,
+                Guid? responsibleId = null, Guid? publicKey = null, Guid? sourceQuestionnaireId = null, Guid? sourceEntityId = null,
+                string enablementCondition = null, bool hideIfDisabled = false, IList<ValidationCondition> validationConditions = null, int targetIndex = 0)
+            {
+                return new StaticTextCloned(
+                    publicKey.GetValueOrDefault(Guid.NewGuid()),
+                    responsibleId ?? Guid.NewGuid(),
+                    parentId ?? Guid.NewGuid(),
+                    sourceQuestionnaireId,
+                    sourceEntityId ?? Guid.NewGuid(),
+                    targetIndex,
+                    text,
+                    attachment,
+                    enablementCondition,
+                    hideIfDisabled,
+                    validationConditions);
             }
 
             public static TextQuestionAnswered TextQuestionAnswered(

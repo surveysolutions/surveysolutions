@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewDenorma
         };
 
         Because of = () =>
-            viewState =
-                denormalizer.Update(viewState,
+            viewState = denormalizer.Update(viewState,
                     Create.StaticTextClonedEvent(entityId: entityId, parentId: chapterId,
                         text: text, sourceEntityId: sourceEntityId, targetIndex: targetIndex));
 

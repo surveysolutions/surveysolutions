@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateStaticTextHandle
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new StaticTextAdded() { EntityId = entityId, ParentId = chapterId });
+            questionnaire.Apply(Create.Event.StaticTextAdded(entityId : entityId, parentId : chapterId ));
 
             eventContext = new EventContext();
 
@@ -23,7 +23,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateStaticTextHandle
                 entityId: entityId,
                 text: text,
                 attachmentName: "",
-                responsibleId: responsibleId);
+                responsibleId: responsibleId,
+                enamblementCondition: String.Empty);
         };
 
         Because of = () =>            

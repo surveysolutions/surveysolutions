@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -8,6 +9,7 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using It = Machine.Specifications.It;
 using it = Moq.It;
 
@@ -19,8 +21,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         {
             questionnaireEntityFactory = new Mock<IQuestionnaireEntityFactory>();
 
-            questionnaireEntityFactory.Setup(x => x.CreateStaticText(targetEntityId, text, it.IsAny<string>()))
-                .Returns(CreateStaticText(entityId: targetEntityId, text: text));
+            questionnaireEntityFactory.Setup(x => x.CreateStaticText(targetEntityId, text, it.IsAny<string>(), it.IsAny<string>(), it.IsAny<bool>(), Moq.It.IsAny<IList<ValidationCondition>>()))
+                .Returns(Create.StaticText(staticTextId: targetEntityId, text: text));
 
 
             var questionnaireDocument = CreateQuestionnaireDocument(new[]
@@ -29,7 +31,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                     children: new IComposite[]
                     {
                         new NumericQuestion(),
-                        CreateStaticText(entityId: sourceEntityId, text: "old text")
+                        Create.StaticText(staticTextId: sourceEntityId, text: "old text")
                     })
             });
 
@@ -54,7 +56,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 sourceEntityId: sourceEntityId, parentId: parentId, targetIndex: targetIndex, text: text));
 
         It should_call_CreateStaticText_in_questionnaireEntityFactory_only_ones = () =>
-           questionnaireEntityFactory.Verify(x => x.CreateStaticText(targetEntityId, text, it.IsAny<string>()), Times.Once);
+           questionnaireEntityFactory.Verify(x => x.CreateStaticText(targetEntityId, text, it.IsAny<string>(), null, false, Moq.It.IsAny<IList<ValidationCondition>>()), Times.Once);
 
         It should__static_text_be_in_questionnaire_document_view = () =>
             GetExpectedStaticText().ShouldNotBeNull();
