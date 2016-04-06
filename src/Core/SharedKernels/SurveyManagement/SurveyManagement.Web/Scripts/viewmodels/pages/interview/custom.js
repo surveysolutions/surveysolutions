@@ -144,11 +144,15 @@ ko.bindingHandlers.typeahead = {
     }
 };
 ko.bindingHandlers.numericformatter = {
-    init: function (element, valueAccessor) {
-        ko.utils.registerEventHandler(element, 'change', function () {
-            var observable = valueAccessor();
-            observable($(element).val());
-        });
+    init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContent) {
+        var allBindings = allBindingsAccessor();
+        var useFormatting = allBindings.useFormatting || false;
+        if (useFormatting) {
+            ko.utils.registerEventHandler(element, 'keyup', function() {
+                var observable = valueAccessor();
+                observable($(element).val());
+            });
+        }
     },
     update: function (element, valueAccessor) {
         var value = ko.utils.unwrapObservable(valueAccessor());
@@ -161,11 +165,10 @@ ko.bindingHandlers.numericformatter = {
 
         if (jElement.is('input')) {
             if (newValue !== value) {
-                jElement.val(newValue);
-
                 var oldCursorPosition = ko.bindingHandlers.numericformatter.getCursorPosition(element);
                 var newPosition = ko.bindingHandlers.numericformatter.getNewCursorPosition(value, newValue, oldCursorPosition);
                 
+                jElement.val(newValue);
                 ko.bindingHandlers.numericformatter.selectRange(element, newPosition);
             }
         }
