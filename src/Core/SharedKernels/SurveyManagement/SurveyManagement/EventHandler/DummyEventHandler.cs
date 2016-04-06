@@ -30,7 +30,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<InterviewDeclaredValid>,
         IEventHandler<SingleOptionLinkedQuestionAnswered>,
         IEventHandler<MultipleOptionsLinkedQuestionAnswered>,
-        //IEventHandler<SynchronizationMetadataApplied>,
         IEventHandler<InterviewApproved>,
         IEventHandler<InterviewRejected>,
         IEventHandler<InterviewDeclaredInvalid>,
@@ -42,125 +41,54 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<QuestionnaireDeleted>, 
         IEventHandler<PlainQuestionnaireRegistered>, 
         IEventHandler<NewUserCreated>,
-                                    IEventHandler<UserChanged>,
-                                    IEventHandler<UserLocked>,
-                                    IEventHandler<UserUnlocked>,
-                                    IEventHandler<UserLockedBySupervisor>,
-                                    IEventHandler<UserUnlockedBySupervisor>,
-                                    IEventHandler<UserLinkedToDevice>,
-                                    IEventHandler<UserArchived>,
-                                    IEventHandler<UserUnarchived>
+        IEventHandler<UserChanged>,
+        IEventHandler<UserLocked>,
+        IEventHandler<UserUnlocked>,
+        IEventHandler<UserLockedBySupervisor>,
+        IEventHandler<UserUnlockedBySupervisor>,
+        IEventHandler<UserLinkedToDevice>,
+        IEventHandler<UserArchived>,
+        IEventHandler<UserUnarchived>
     {
+        public override string Name => "Dummy event handler";
+
+        public override object[] Writers => new object[0];
+
         public void Handle(IPublishedEvent<AnswersDeclaredValid> evnt) { }
-
         public void Handle(IPublishedEvent<AnswersDeclaredInvalid> evnt) { }
-
         public void Handle(IPublishedEvent<GroupPropagated> evnt) { }
-
         public void Handle(IPublishedEvent<QuestionsEnabled> evnt) {}
-
         public void Handle(IPublishedEvent<QuestionsDisabled> evnt) {}
-
         public void Handle(IPublishedEvent<InterviewCompleted> evnt) {}
-
         public void Handle(IPublishedEvent<AnswerCommented> evnt) {}
-
         public void Handle(IPublishedEvent<FlagRemovedFromAnswer> evnt) {}
-
         public void Handle(IPublishedEvent<FlagSetToAnswer> evnt) {}
-
         public void Handle(IPublishedEvent<GroupsDisabled> evnt) { }
-
         public void Handle(IPublishedEvent<GroupsEnabled> evnt) { }
-
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt) {}
-
         public void Handle(IPublishedEvent<InterviewSentToHeadquarters> evnt) {}
-
         public void Handle(IPublishedEvent<InterviewDeclaredValid> evnt) {}
-
         public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt) {}
-
         public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt) {}
-
-        //public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt) {}
-
         public void Handle(IPublishedEvent<InterviewApproved> evnt) { }
-
-        public override string Name
-        {
-            get { return "Dummy event handler"; }
-        }
-
-        public override object[] Writers
-        {
-            get { return new object[0]; }
-        }
-
-        public void Handle(IPublishedEvent<InterviewRestarted> evnt){}
-        public void Handle(IPublishedEvent<InterviewRejected> evnt)
-        {
-        }
-
-        public void Handle(IPublishedEvent<InterviewDeclaredInvalid> evnt)
-        {
-        }
-
+        public void Handle(IPublishedEvent<InterviewRestarted> evnt) { }
+        public void Handle(IPublishedEvent<InterviewRejected> evnt) { }
+        public void Handle(IPublishedEvent<InterviewDeclaredInvalid> evnt) { }
         public void Handle(IPublishedEvent<QuestionnaireAssemblyImported> evnt){}
         public void Handle(IPublishedEvent<TabletRegistered> evnt){}
         public void Handle(IPublishedEvent<SubstitutionTitlesChanged> evnt){}
-
-        public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt)
-        {
-        }
-
-        public void Handle(IPublishedEvent<TemplateImported> evnt)
-        {
-        }
-
-        public void Handle(IPublishedEvent<QuestionnaireDisabled> evnt)
-        {
-        }
-
-        public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
-        {
-        }
-
-        public void Handle(IPublishedEvent<NewUserCreated> evnt)
-        {
-            
-        }
-
-        public void Handle(IPublishedEvent<UserChanged> evnt)
-        {
-        }
-
-        public void Handle(IPublishedEvent<UserLocked> evnt)
-        {
-        }
-
-        public void Handle(IPublishedEvent<UserUnlocked> evnt)
-        {
-        }
-
-        public void Handle(IPublishedEvent<UserLockedBySupervisor> evnt)
-        {
-        }
-
-        public void Handle(IPublishedEvent<UserUnlockedBySupervisor> evnt)
-        {
-        }
-
-        public void Handle(IPublishedEvent<UserLinkedToDevice> evnt)
-        {
-        }
-
-        public void Handle(IPublishedEvent<UserArchived> evnt)
-        {
-        }
-
-        public void Handle(IPublishedEvent<UserUnarchived> evnt)
-        {
-        }
+        public void Handle(IPublishedEvent<PlainQuestionnaireRegistered> evnt) { }
+        public void Handle(IPublishedEvent<TemplateImported> evnt) { }
+        public void Handle(IPublishedEvent<QuestionnaireDisabled> evnt) { }
+        public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt) { }
+        public void Handle(IPublishedEvent<NewUserCreated> evnt) { }
+        public void Handle(IPublishedEvent<UserChanged> evnt) { }
+        public void Handle(IPublishedEvent<UserLocked> evnt) { }
+        public void Handle(IPublishedEvent<UserUnlocked> evnt) { }
+        public void Handle(IPublishedEvent<UserLockedBySupervisor> evnt) { }
+        public void Handle(IPublishedEvent<UserUnlockedBySupervisor> evnt) { }
+        public void Handle(IPublishedEvent<UserLinkedToDevice> evnt) { }
+        public void Handle(IPublishedEvent<UserArchived> evnt) { }
+        public void Handle(IPublishedEvent<UserUnarchived> evnt) { }
     }
 }
