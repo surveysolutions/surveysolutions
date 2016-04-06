@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using Machine.Specifications;
 using Moq;
+using NSubstitute;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
@@ -18,24 +20,23 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         {
             mockOfSerializer.Setup(x => x.Deserialize<SyncItem>(contentOfSyncItem)).Returns(syncItem);
             mockOfSerializer.Setup(x => x.Deserialize<InterviewMetaInfo>(decompressedMetaInfo)).Returns(metaInfo);
+            mockOfCompressor.Setup(x => x.IsZipStream(Moq.It.IsAny<Stream>())).Returns(true);
             mockOfCompressor.Setup(x => x.DecompressString(syncItem.MetaInfo)).Returns(decompressedMetaInfo);
+            mockOfCompressor.Setup(x => x.DecompressString(syncItem.Content)).Returns(decompressedContent);
             incomingSyncPackagesQueue = CreateIncomingPackagesQueue(serializer: mockOfSerializer.Object,
                 archiver: mockOfCompressor.Object, interviewPackageStorage: mockOfPackagesAccessor.Object);
         };
 
-        Because of = () => incomingSyncPackagesQueue.StorePackage(Guid.Empty, contentOfSyncItem);
+        Because of = () => incomingSyncPackagesQueue.StorePackage(contentOfSyncItem);
 
         It should_deserialize_sync_item = () =>
           mockOfSerializer.Verify(x => x.Deserialize<SyncItem>(contentOfSyncItem), Times.Once);
 
-        It should_decompress_meta_info = () =>
-          mockOfCompressor.Verify(x => x.DecompressString(syncItem.MetaInfo), Times.Once);
-
         It should_deserialize_meta_info_by_interview = () =>
           mockOfSerializer.Verify(x => x.Deserialize<InterviewMetaInfo>(decompressedMetaInfo), Times.Once);
 
-        It should_decompress_intefview_events = () =>
-          mockOfCompressor.Verify(x => x.DecompressString(syncItem.Content), Times.Once);
+        It should_decompress_intefview_meta_info_and_events = () =>
+          mockOfCompressor.Verify(x => x.DecompressString(Moq.It.IsAny<string>()), Times.Exactly(2));
 
         It should_store_interview_package_to_storage = () =>
           mockOfPackagesAccessor.Verify(x => x.Store(Moq.It.IsAny<InterviewPackage>(), null), Times.Once);
@@ -60,5 +61,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         private static readonly Mock<IPlainStorageAccessor<InterviewPackage>> mockOfPackagesAccessor = new Mock<IPlainStorageAccessor<InterviewPackage>>();
         private static string contentOfSyncItem = "content of sync item";
         private static string decompressedMetaInfo = "decompressed meta info";
+        private static string decompressedContent = "decompressed content";
     }
 }
