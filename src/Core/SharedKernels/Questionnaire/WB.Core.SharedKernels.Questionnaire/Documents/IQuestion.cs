@@ -12,6 +12,7 @@ namespace Main.Core.Entities.SubEntities
         bool Capital { get; set; }
         bool Featured { get; set; }
         string Instructions { get; set; }
+        QuestionProperties Properties { get; set; }
         string QuestionText { get; set; }
         QuestionType QuestionType { get; set; }
         QuestionScope QuestionScope { get; set; }

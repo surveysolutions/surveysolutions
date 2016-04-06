@@ -134,6 +134,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 validationExpression: validationExpression,
                 validationMessage: validationMessage,
                 instructions: instructions,
+                properties: new QuestionProperties(false),
                 responsibleId: responsibleId.HasValue ? responsibleId.Value : Guid.NewGuid(),
                 capital: capital,
                 isInteger: isInteger,

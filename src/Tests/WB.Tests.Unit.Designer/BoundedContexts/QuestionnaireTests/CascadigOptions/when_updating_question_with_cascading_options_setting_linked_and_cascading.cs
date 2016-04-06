@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOptions
 {
@@ -50,7 +51,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
             parentQuestionId,
             false,
             cascadeFromQuestionId: parentQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
-            linkedFilterExpression: null));
+            linkedFilterExpression: null, properties: new QuestionProperties(false)));
 
         It should_not_allow_to_set_both_linked_and_cascading_qestion_at_the_same_time = () =>
         {

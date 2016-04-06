@@ -3,6 +3,7 @@ using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerTests
@@ -30,7 +31,9 @@ questionType: QuestionType.QRBarcode
                 questionnaire.UpdateQRBarcodeQuestion(questionId: questionId, title: "title",
                     variableName: null,
                     variableLabel: null, enablementCondition: null, hideIfDisabled: false, instructions: null,
-                    responsibleId: responsibleId, scope: QuestionScope.Interviewer, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>()));
+                    responsibleId: responsibleId, scope: QuestionScope.Interviewer, 
+                    validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
+                    properties: new QuestionProperties(false)));
 
         It should_not_throw_exception = () => exception.ShouldBeNull();
 

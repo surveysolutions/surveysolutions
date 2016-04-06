@@ -749,6 +749,7 @@ namespace WB.Tests.Unit.Designer
                 targetIndex: 0,
                 featured: false,
                 instructions: null,
+                properties: new QuestionProperties(false),
                 responsibleId: Guid.NewGuid(),
                 capital: false,
                 questionScope: QuestionScope.Interviewer,

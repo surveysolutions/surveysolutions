@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             exception = Catch.Exception(() =>
                 questionnaire.UpdateNumericQuestion(questionId, "title",
                     "var1",null, isPrefilled, QuestionScope.Interviewer, null, false, null,
-                    responsibleId: responsibleId, isInteger: false, countOfDecimalPlaces: null, validationConditions: new List<ValidationCondition>()));
+                    responsibleId: responsibleId, isInteger: false, countOfDecimalPlaces: null, validationConditions: new List<ValidationCondition>(), properties: new QuestionProperties(false)));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

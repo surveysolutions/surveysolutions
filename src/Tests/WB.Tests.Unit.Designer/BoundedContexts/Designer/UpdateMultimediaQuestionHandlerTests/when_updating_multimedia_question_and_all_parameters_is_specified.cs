@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultimediaQuestionHandlerTests
@@ -31,7 +32,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultimediaQuesti
                 questionnaire.UpdateMultimediaQuestion(questionId: questionId, title: "title",
                     variableName: "multimedia_question",
                     variableLabel: variableName, enablementCondition: condition, hideIfDisabled: hideIfDisabled, instructions: instructions,
-                    responsibleId: responsibleId, scope: QuestionScope.Interviewer);
+                    responsibleId: responsibleId, scope: QuestionScope.Interviewer, properties: new QuestionProperties(false));
 
         Cleanup stuff = () =>
         {

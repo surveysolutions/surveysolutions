@@ -1746,7 +1746,8 @@ namespace WB.Tests.Unit
             string parentGroupId = null, string questionVariable = null, string questionTitle = null,
             QuestionType questionType = QuestionType.Text, string questionConditionExpression = null,
             string sourceQuestionId = null,
-            IList<ValidationCondition> validationConditions = null, bool hideIfDisabled = false)
+            IList<ValidationCondition> validationConditions = null, bool hideIfDisabled = false,
+            QuestionProperties properties = null)
         {
             return ToPublishedEvent(new QuestionCloned(
                 publicKey : GetQuestionnaireItemId(questionId),
@@ -1760,6 +1761,7 @@ namespace WB.Tests.Unit
                 targetIndex: 0,
                 featured: false,
                 instructions: null,
+                properties: properties ?? new QuestionProperties(false),
                 responsibleId: Guid.NewGuid(),
                 capital: false,
                 questionScope: QuestionScope.Interviewer,

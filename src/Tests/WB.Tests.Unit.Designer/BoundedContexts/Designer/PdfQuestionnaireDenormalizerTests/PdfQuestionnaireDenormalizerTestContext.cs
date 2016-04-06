@@ -85,6 +85,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfQuestionnaireDenorm
                 hideIfDisabled: false,
                 featured:false,
                 instructions: null,
+                properties: new QuestionProperties(false), 
                 capital: false,
                 questionScope: QuestionScope.Interviewer, 
                 stataExportCaption: null,
