@@ -78,9 +78,6 @@ namespace EventStoreToPlainStorageMigrator
 
         protected class Options
         {
-            [Option('r', "readside", Required = false, HelpText = "PostgreSql read side connection string.")]
-            public string PGReadSideConnection { get; set; }
-
             [Option('i', "eventstoreserverip", Required = false, HelpText = "Event store server ip.")]
             public string ServerIP { get; set; }
 
@@ -115,49 +112,33 @@ namespace EventStoreToPlainStorageMigrator
 
         private static void Transfer(Options options)
         {
-            if (!string.IsNullOrEmpty(options.PGReadSideConnection))
-            {
-                var items = GetQuestionnairesFromReadSide(options.PGReadSideConnection);
-                Console.WriteLine("Found {0} questionnaires.", items.Count);
+            var logger = Mock.Of<WB.Core.GenericSubdomains.Portable.Services.ILogger>();
 
-                foreach (var item in items)
+            var eventTypeResolver = CreateEventTypeResolver();
+
+            IStreamableEventStore eventStore;
+            if (string.IsNullOrEmpty(options.PostgresEventStore))
+            {
+                var eventStoreSettings = new EventStoreSettings()
                 {
-                    Console.WriteLine("Processing {0} questionnaire.", item.Key);
-                    InsertItemIfNotExists(options.PGPlainConnection, item.Key, item.Value);
-                }
+                    ServerIP = options.ServerIP,
+                    ServerTcpPort = int.Parse(options.ServerTcpPort),
+                    ServerHttpPort = int.Parse(options.ServerHttpPort),
+                    Login = options.Login,
+                    Password = options.Password
+                };
+
+                eventStore = new WriteSideEventStore(new EventStoreConnectionProvider(eventStoreSettings), logger,
+                    eventStoreSettings, eventTypeResolver);
             }
             else
             {
-
-
-                var logger = Mock.Of<WB.Core.GenericSubdomains.Portable.Services.ILogger>();
-
-                var eventTypeResolver = CreateEventTypeResolver();
-
-                IStreamableEventStore eventStore;
-                if (string.IsNullOrEmpty(options.PostgresEventStore))
-                {
-                    var eventStoreSettings = new EventStoreSettings()
-                    {
-                        ServerIP = options.ServerIP,
-                        ServerTcpPort = int.Parse(options.ServerTcpPort),
-                        ServerHttpPort = int.Parse(options.ServerHttpPort),
-                        Login = options.Login,
-                        Password = options.Password
-                    };
-
-                    eventStore = new WriteSideEventStore(new EventStoreConnectionProvider(eventStoreSettings), logger,
-                        eventStoreSettings, eventTypeResolver);
-                }
-                else
-                {
-                    eventStore =
-                        new PostgresEventStore(
-                            new PostgreConnectionSettings() {ConnectionString = options.PostgresEventStore},
-                            eventTypeResolver);
-                }
-                MigrateEvents(eventStore, logger, options.PGPlainConnection);
+                eventStore =
+                    new PostgresEventStore(
+                        new PostgreConnectionSettings() {ConnectionString = options.PostgresEventStore},
+                        eventTypeResolver);
             }
+            MigrateEvents(eventStore, logger, options.PGPlainConnection);
         }
 
         private static void MigrateEvents(IStreamableEventStore eventStore,
