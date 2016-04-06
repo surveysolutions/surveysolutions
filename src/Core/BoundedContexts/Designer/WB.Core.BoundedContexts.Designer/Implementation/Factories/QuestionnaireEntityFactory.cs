@@ -2,19 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities;
-using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
 {
     internal class QuestionnaireEntityFactory : IQuestionnaireEntityFactory
     {
-        public IStaticText CreateStaticText(Guid entityId, string text, string attachmentName)
+        public IStaticText CreateStaticText(Guid entityId, string text, string attachmentName, 
+            string enablementCondition, bool hideIfDisabled, IList<ValidationCondition> validationConditions)
         {
-            return new StaticText(publicKey: entityId, text: System.Web.HttpUtility.HtmlDecode(text), attachmentName: attachmentName);
+            return new StaticText(publicKey: entityId, 
+                text: System.Web.HttpUtility.HtmlDecode(text), 
+                enablementCondition:enablementCondition,
+                hideIfDisabled:hideIfDisabled,
+                validationConditions : validationConditions ?? new List<ValidationCondition>(),
+                attachmentName: attachmentName);
         }
 
         public IQuestion CreateQuestion(QuestionData data)

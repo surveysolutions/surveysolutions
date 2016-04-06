@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -14,7 +15,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.UI.Designer.Api;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.Designer
 {
@@ -55,19 +56,19 @@ namespace WB.Tests.Unit.Designer
             if (!entityId.HasValue)
             {
                 questionnaireEntityFactoryMock
-                   .Setup(x => x.CreateStaticText(Moq.It.IsAny<Guid>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
-                   .Returns((Guid id, string t, string a) => Create.StaticText(id, t, a));
+                   .Setup(x => x.CreateStaticText(Moq.It.IsAny<Guid>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>(), Moq.It.IsAny<IList<ValidationCondition>>()))
+                   .Returns((Guid id, string t, string a, string c, bool h, IList<ValidationCondition> v) => Create.StaticText(id, t, a));
             }
             else if (string.IsNullOrWhiteSpace(attachmentName))
             {
                 questionnaireEntityFactoryMock
-                    .Setup(x => x.CreateStaticText(entityId.Value, text, Moq.It.IsAny<string>()))
+                    .Setup(x => x.CreateStaticText(entityId.Value, text, Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>(), Moq.It.IsAny<IList<ValidationCondition>>()))
                     .Returns(staticText);
             }
             else
             {
                 questionnaireEntityFactoryMock
-                   .Setup(x => x.CreateStaticText(entityId.Value, text, attachmentName))
+                   .Setup(x => x.CreateStaticText(entityId.Value, text, attachmentName, Moq.It.IsAny<string>(), Moq.It.IsAny<bool>(), Moq.It.IsAny<IList<ValidationCondition>>()))
                    .Returns(staticText);
             }
 

@@ -663,7 +663,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         internal void Apply(StaticTextAdded e)
         {
-            var staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, text: e.Text, attachmentName: null);
+            var staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, 
+                text: e.Text, 
+                attachmentName: null,
+                enablementCondition: null,
+                hideIfDisabled: false,
+                validationConditions: new List<ValidationCondition>());
 
             this.innerDocument.Add(c: staticText, parent: e.ParentId, parentPropagationKey: null);
         }
@@ -671,14 +676,24 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void Apply(StaticTextUpdated e)
         {
             var oldStaticText = this.innerDocument.Find<IStaticText>(e.EntityId);
-            var newStaticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, text: e.Text, attachmentName: e.AttachmentName);
+            var newStaticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, 
+                text: e.Text, 
+                attachmentName: e.AttachmentName,
+                enablementCondition: e.EnablementCondition,
+                hideIfDisabled: e.HideIfDisabled,
+                validationConditions:e.ValidationConditions);
 
             this.innerDocument.ReplaceEntity(oldStaticText, newStaticText);
         }
 
         internal void Apply(StaticTextCloned e)
         {
-            var staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, text: e.Text, attachmentName: e.AttachmentName);
+            var staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, 
+                text: e.Text, 
+                attachmentName: e.AttachmentName,
+                enablementCondition: e.EnablementCondition,
+                hideIfDisabled: e.HideIfDisabled,
+                validationConditions: e.ValidationConditions);
 
             this.innerDocument.Insert(e.TargetIndex, staticText, e.ParentId);
         }
@@ -1293,17 +1308,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var staticText = questionnaireItem as IStaticText;
                 if (staticText != null)
                 {
-                    events.Add(new StaticTextCloned
-                    {
-                        EntityId = itemId,
-                        ParentId = groupId,
-                        SourceEntityId = sourceItemId,
-                        SourceQuestionnaireId = sourceQuestionnaireId,
-                        TargetIndex = itemTargetIndex,
-                        Text = staticText.Text,
-                        AttachmentName = staticText.AttachmentName,
-                        ResponsibleId = responsibleId
-                    });
+                    events.AddRange(this.CreateStaticTextClonedEvents(itemId, groupId, staticText.Text,
+                        staticText.AttachmentName,
+                        staticText.ConditionExpression, 
+                        staticText.HideIfDisabled, 
+                        sourceItemId, 
+                        sourceQuestionnaireId,
+                        itemTargetIndex, 
+                        responsibleId,
+                        staticText.ValidationConditions));
                     continue;
                 }
             }
@@ -2133,32 +2146,29 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         #region Static text command handlers
-        public void AddStaticTextAndMoveIfNeeded(Guid entityId, Guid parentId, string text, Guid responsibleId, int? index = null)
+        public void AddStaticTextAndMoveIfNeeded(AddStaticText command)
         {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
-            this.ThrowDomainExceptionIfEntityAlreadyExists(entityId);
-            this.ThrowDomainExceptionIfGroupDoesNotExist(parentId);
-            this.ThrowDomainExceptionIfStaticTextIsEmpty(text);
+            this.ThrowDomainExceptionIfEntityAlreadyExists(command.EntityId);
+            this.ThrowDomainExceptionIfGroupDoesNotExist(command.ParentId);
+            this.ThrowDomainExceptionIfStaticTextIsEmpty(command.Text);
             this.innerDocument.ConnectChildrenWithParent();
-            this.ThrowIfChapterHasMoreThanAllowedLimit(parentId);
+            this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentId);
 
-            this.ApplyEvent(new StaticTextAdded
-            {
-                EntityId = entityId,
-                ParentId = parentId,
-                ResponsibleId = responsibleId,
-                Text = text
-            });
-
-            if (index.HasValue)
+            this.ApplyEvent(new StaticTextAdded(command.EntityId, 
+                command.ResponsibleId,
+                command.ParentId, 
+                command.Text));
+            
+            if (command.Index.HasValue)
             {
                 this.ApplyEvent(new QuestionnaireItemMoved
                 {
-                    PublicKey = entityId,
-                    GroupKey = parentId,
-                    TargetIndex = index.Value,
-                    ResponsibleId = responsibleId
+                    PublicKey = command.EntityId,
+                    GroupKey = command.ParentId,
+                    TargetIndex = command.Index.Value,
+                    ResponsibleId = command.ResponsibleId
                 });
             }
         }
@@ -2170,13 +2180,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfEntityDoesNotExists(command.EntityId);
             this.ThrowDomainExceptionIfStaticTextIsEmpty(command.Text);
 
-            this.ApplyEvent(new StaticTextUpdated
-            {
-                EntityId = command.EntityId,
-                Text = command.Text,
-                AttachmentName = command.AttachmentName,
-                ResponsibleId = command.ResponsibleId
-            });
+            //validation of condition and validations
+
+            this.ApplyEvent(new StaticTextUpdated(command.EntityId,
+                command.ResponsibleId, 
+                command.Text, 
+                command.AttachmentName, 
+                command.HideIfDisabled, 
+                command.EnablementCondition, 
+                command.ValidationConditions)
+            );
         }
 
         public void DeleteStaticText(Guid entityId, Guid responsibleId)
@@ -2361,17 +2374,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 if (targetToPasteIn.PublicKey == this.EventSourceId)
                     throw new QuestionnaireException(string.Format("Static Text cannot be pasted here."));
 
-                this.ApplyEvent(new StaticTextCloned()
-                {
-                    EntityId = pasteItemId,
-                    ParentId = targetToPasteIn.PublicKey,
-                    SourceEntityId = entityToInsert.PublicKey,
-                    SourceQuestionnaireId = sourceDocument.PublicKey,
-                    TargetIndex = targetIndex,
-                    Text = entityToInsertAsStaticText.Text,
-                    AttachmentName = entityToInsertAsStaticText.AttachmentName,
-                    ResponsibleId = responsibleId
-                });
+                this.ApplyEvent(new StaticTextCloned(
+                    entityId : pasteItemId,
+                    parentId : targetToPasteIn.PublicKey,
+                    sourceEntityId : entityToInsert.PublicKey,
+                    sourceQuestionnaireId : sourceDocument.PublicKey,
+                    targetIndex : targetIndex,
+                    text : entityToInsertAsStaticText.Text,
+                    attachmentName : entityToInsertAsStaticText.AttachmentName,
+                    responsibleId : responsibleId,
+                    enablementCondition: entityToInsertAsStaticText.ConditionExpression,
+                    hideIfDisabled: entityToInsertAsStaticText.HideIfDisabled,
+                    validationConditions: entityToInsertAsStaticText.ValidationConditions));
 
                 return;
             }
@@ -4503,6 +4517,25 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 yield return new GroupStoppedBeingARoster(responsibleId, groupId);
             }
+        }
+
+        private IEnumerable<IEvent> CreateStaticTextClonedEvents(Guid itemId, Guid parentGroupId, string text, string attachmentName, 
+            string enablementCondition, bool hideIfDisabled, Guid sourceItemId, Guid sourceQuestionnaireId,
+            int targetIndex, Guid responsibleId, IList<ValidationCondition> validationConditions)
+        {
+            yield return new StaticTextCloned(
+                entityId : itemId,
+                parentId : parentGroupId,
+                sourceEntityId : sourceItemId,
+                sourceQuestionnaireId : sourceQuestionnaireId,
+                targetIndex : targetIndex,
+                text : text,
+                attachmentName : attachmentName,
+                responsibleId : responsibleId,
+                enablementCondition : enablementCondition,
+                validationConditions : validationConditions,
+                hideIfDisabled: hideIfDisabled
+            );
         }
 
         #endregion

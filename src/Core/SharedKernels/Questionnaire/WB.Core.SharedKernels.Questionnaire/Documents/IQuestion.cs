@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.Composite;
-using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace Main.Core.Entities.SubEntities
 {
-    public interface IQuestion : IComposite, IConditional
+    public interface IQuestion : IComposite, IConditional, IValidatable
     {
         List<Answer> Answers { get; set; }
         Order? AnswerOrder { get; set; }
@@ -25,7 +24,7 @@ namespace Main.Core.Entities.SubEntities
         string LinkedFilterExpression { get; set; }
         Guid? CascadeFromQuestionId { get; set; }
         bool? IsFilteredCombobox { get; set; }
-        IList<ValidationCondition> ValidationConditions { get; set; }
+        
         void AddAnswer(Answer answer);
         IEnumerable<string> GetVariablesUsedInTitle();
     }

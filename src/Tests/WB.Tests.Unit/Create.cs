@@ -534,7 +534,7 @@ namespace WB.Tests.Unit
                         Title = chapter1Title,
                         Children = new List<IComposite>()
                         {
-                            new StaticText(publicKey: GetQuestionnaireItemId(chapter1StaticTextId), text: chapter1StaticText),
+                            StaticText(publicKey: GetQuestionnaireItemId(chapter1StaticTextId), text: chapter1StaticText),
                             new Group()
                             {
                                 PublicKey = GetQuestionnaireItemId(chapter1GroupId),
@@ -2249,34 +2249,31 @@ namespace WB.Tests.Unit
         }
 
         public static StaticText StaticText(
-            Guid? staticTextId = null,
+            Guid? publicKey = null,
             string text = "Static Text X",
             string attachmentName = null)
         {
-            return new StaticText(staticTextId ?? Guid.NewGuid(), text, attachmentName);
+            return new StaticText(publicKey ?? Guid.NewGuid(), text, null, false, new List<ValidationCondition>(),attachmentName);
         }
 
-        public static IPublishedEvent<StaticTextAdded> StaticTextAddedEvent(string entityId = null, string parentId = null, string text = null)
+        public static IPublishedEvent<StaticTextAdded> StaticTextAddedEvent(string entityId = null, Guid? responsibleId = null, string parentId = null, string text = null)
         {
-            return ToPublishedEvent(new StaticTextAdded()
-            {
-                EntityId = GetQuestionnaireItemId(entityId),
-                ParentId = GetQuestionnaireItemId(parentId),
-                Text = text
-            });
+            return ToPublishedEvent(new StaticTextAdded(
+                GetQuestionnaireItemId(entityId),
+                responsibleId ?? Guid.NewGuid(),
+                GetQuestionnaireItemId(parentId),
+                text));
         }
 
         public static IPublishedEvent<StaticTextCloned> StaticTextClonedEvent(string entityId = null,
             string parentId = null, string sourceEntityId = null, string text = null, int targetIndex = 0)
         {
-            return ToPublishedEvent(new StaticTextCloned()
-            {
-                EntityId = GetQuestionnaireItemId(entityId),
-                ParentId = GetQuestionnaireItemId(parentId),
-                SourceEntityId = GetQuestionnaireItemId(sourceEntityId),
-                Text = text,
-                TargetIndex = targetIndex
-            });
+            return ToPublishedEvent(Create.Event.StaticTextCloned(
+                publicKey : GetQuestionnaireItemId(entityId),
+                parentId : GetQuestionnaireItemId(parentId),
+                sourceEntityId : GetQuestionnaireItemId(sourceEntityId),
+                text : text,
+                targetIndex : targetIndex));
         }
 
         public static IPublishedEvent<StaticTextDeleted> StaticTextDeletedEvent(string entityId = null)
@@ -2287,13 +2284,13 @@ namespace WB.Tests.Unit
             });
         }
 
-        public static IPublishedEvent<StaticTextUpdated> StaticTextUpdatedEvent(string entityId = null, string text = null)
+        public static IPublishedEvent<StaticTextUpdated> StaticTextUpdatedEvent(string entityId = null, string text = null,
+            string enablementCondition = null, bool? hideIfDisabled = null, IList<ValidationCondition> validationConditions = null)
         {
-            return ToPublishedEvent(new StaticTextUpdated()
-            {
-                EntityId = GetQuestionnaireItemId(entityId),
-                Text = text
-            });
+            return ToPublishedEvent(Create.Event.StaticTextUpdated(
+
+                GetQuestionnaireItemId(entityId),
+                text));
         }
 
         public static ISubstitutionService SubstitutionService()
@@ -2745,9 +2742,10 @@ namespace WB.Tests.Unit
                 return new UpdateMacro(questionnaireId, macroId, name, content, description, userId ?? Guid.NewGuid());
             }
 
-            public static UpdateStaticText UpdateStaticText(Guid questionnaireId, Guid entityId, string text, string attachmentName, Guid responsibleId)
+            public static UpdateStaticText UpdateStaticText(Guid questionnaireId, Guid entityId, string text, string attachmentName, Guid responsibleId,
+                string enablementCondition, bool? hideIfDisabled, IList<ValidationCondition> validationConditions = null)
             {
-                return new UpdateStaticText(questionnaireId, entityId, text, attachmentName, responsibleId);
+                return new UpdateStaticText(questionnaireId, entityId, text, attachmentName, responsibleId, enablementCondition, hideIfDisabled?? false, validationConditions);
             }
         }
 

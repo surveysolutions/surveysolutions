@@ -128,7 +128,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionType: @event.Payload.QuestionType,
                 questionVariable: @event.Payload.StataExportCaption,
                 questionConditionExpression: @event.Payload.ConditionExpression,
-                validationCondions: @event.Payload.ValidationConditions,
+                validationConditions: @event.Payload.ValidationConditions,
                 linkedToQuestionId: Monads.Maybe(() => @event.Payload.LinkedToQuestionId.FormatGuid()),
                 linkedToRosterId: Monads.Maybe(() => @event.Payload.LinkedToRosterId.FormatGuid()),
                 linkedFilterExpression: @event.Payload.LinkedFilterExpression);
@@ -145,7 +145,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionType: @event.Payload.QuestionType,
                 questionVariable: @event.Payload.StataExportCaption,
                 questionConditionExpression: @event.Payload.ConditionExpression,
-                validationCondions: @event.Payload.ValidationConditions,
+                validationConditions: @event.Payload.ValidationConditions,
                 linkedToQuestionId: Monads.Maybe(() => @event.Payload.LinkedToQuestionId.FormatGuid()),
                 linkedToRosterId: Monads.Maybe(() => @event.Payload.LinkedToRosterId.FormatGuid()),
                 orderIndex: @event.Payload.TargetIndex,
@@ -163,7 +163,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionType: QuestionType.Numeric,
                 questionVariable: @event.Payload.StataExportCaption,
                 questionConditionExpression: @event.Payload.ConditionExpression,
-                validationCondions: @event.Payload.ValidationConditions,
+                validationConditions: @event.Payload.ValidationConditions,
                 orderIndex: @event.Payload.TargetIndex);
 
             return state;
@@ -178,7 +178,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                  questionType: QuestionType.TextList, 
                  questionVariable: @event.Payload.StataExportCaption,
                  questionConditionExpression: @event.Payload.ConditionExpression,
-                 validationCondions: @event.Payload.ValidationConditions, 
+                 validationConditions: @event.Payload.ValidationConditions, 
                  orderIndex: @event.Payload.TargetIndex);
 
             return state;
@@ -190,7 +190,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                  questionId: @event.Payload.QuestionId.FormatGuid(), questionTitle: @event.Payload.Title,
                  questionType: QuestionType.QRBarcode, questionVariable: @event.Payload.VariableName,
                  questionConditionExpression: @event.Payload.EnablementCondition,
-                validationCondions: @event.Payload.ValidationConditions,
+                 validationConditions: @event.Payload.ValidationConditions,
                  orderIndex: @event.Payload.TargetIndex);
 
             return state;
@@ -294,6 +294,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 parentId: @event.Payload.ParentId.FormatGuid(),
                 entityId: @event.Payload.EntityId.FormatGuid(), 
                 text: @event.Payload.Text,
+                enablementCondition: @event.Payload.EnablementCondition,
+                hideIfDisabled: @event.Payload.HideIfDisabled,
+                validationConditions: @event.Payload.ValidationConditions, 
+
                 attachmentName: null);
 
             return state;
@@ -307,6 +311,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 entityId: @event.Payload.EntityId.FormatGuid(), 
                 text: @event.Payload.Text,
                 attachmentName: @event.Payload.AttachmentName,
+                enablementCondition: @event.Payload.EnablementCondition,
+                hideIfDisabled: @event.Payload.HideIfDisabled,
+                validationConditions: @event.Payload.ValidationConditions,
                 orderIndex: @event.Payload.TargetIndex);
 
             return state;
@@ -318,7 +325,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 questionnaire: state, 
                 entityId: @event.Payload.EntityId.FormatGuid(),
                 text: @event.Payload.Text,
-                attachmentName: @event.Payload.AttachmentName);
+                attachmentName: @event.Payload.AttachmentName,
+                enablementCondition : @event.Payload.EnablementCondition,
+                hideIfDisabled : @event.Payload.HideIfDisabled,
+                validationConditions : @event.Payload.ValidationConditions);
 
             return state;
         }
@@ -449,7 +459,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             QuestionType questionType,
             string questionVariable,
             string questionConditionExpression,
-            IList<ValidationCondition> validationCondions,
+            IList<ValidationCondition> validationConditions,
             string linkedToQuestionId = null,
             string linkedToRosterId = null,
             int? orderIndex = null,
@@ -471,7 +481,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 LinkedToQuestionId = linkedToQuestionId,
                 LinkedToRosterId = linkedToRosterId,
                 HasCondition = !string.IsNullOrWhiteSpace(questionConditionExpression),
-                HasValidation = validationCondions.Count > 0,
+                HasValidation = validationConditions.Count > 0,
                 LinkedFilterExpression = linkedFilterExpression
         };
 
@@ -513,7 +523,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         }
 
         private void AddStaticText(GroupInfoView questionnaire, string parentId, string entityId, string text, string attachmentName,
-            int? orderIndex = null)
+            string enablementCondition, bool hideIfDisabled, IList<ValidationCondition> validationConditions, int? orderIndex = null)
         {
             var groupView = this.FindGroup(questionnaireOrGroup: questionnaire, groupId: parentId);
             if (groupView == null)
@@ -525,8 +535,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             {
                 ItemId = entityId,
                 Text = text,
-                AttachmentName = attachmentName
-            };
+                AttachmentName = attachmentName,
+                HasCondition = !string.IsNullOrWhiteSpace(enablementCondition),
+                HasValidation = validationConditions.Count > 0
+        };
 
             if (orderIndex.HasValue)
             {
@@ -538,7 +550,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             }
         }
 
-        private void UpdateStaticText(GroupInfoView questionnaire, string entityId, string text, string attachmentName)
+        private void UpdateStaticText(GroupInfoView questionnaire, string entityId, string text, string attachmentName, 
+            string enablementCondition, bool hideIfDisabled, IList<ValidationCondition> validationConditions)
         {
             var staticTextInfoView = this.FindStaticText(questionnaireOrGroup: questionnaire, entityId: entityId);
 
@@ -547,6 +560,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
             staticTextInfoView.Text = text;
             staticTextInfoView.AttachmentName = attachmentName;
+            staticTextInfoView.HasCondition = !string.IsNullOrWhiteSpace(enablementCondition);
+            staticTextInfoView.HasValidation = validationConditions.Count > 0;
         }
 
         private void AddGroup(GroupInfoView questionnaire, string parentGroupId, string groupId, string groupTitle, string variableName,
@@ -597,7 +612,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                                      questionType: questionChild.QuestionType,
                                      questionVariable: questionChild.StataExportCaption,
                                      questionConditionExpression: questionChild.ConditionExpression,
-                                     validationCondions: questionChild.ValidationConditions,
+                                     validationConditions: questionChild.ValidationConditions,
                                      linkedToQuestionId: Monads.Maybe(() => questionChild.LinkedToQuestionId.FormatGuid()),
                                      linkedFilterExpression:questionChild.LinkedFilterExpression);
 
@@ -626,6 +641,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                         parentId: staticTextChild.GetParent().PublicKey.FormatGuid(),
                         entityId: staticTextChild.PublicKey.FormatGuid(),
                         text: staticTextChild.Text,
+                        enablementCondition: staticTextChild.ConditionExpression,
+                        hideIfDisabled: staticTextChild.HideIfDisabled,
+                        validationConditions: staticTextChild.ValidationConditions,
                         attachmentName: staticTextChild.AttachmentName);
 
                     continue;

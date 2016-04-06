@@ -7,5 +7,8 @@
 
         public string Text { get; set; }
         public string AttachmentName { get; set; }
+
+        public bool HasCondition { get; set; }
+        public bool HasValidation { get; set; }
     }
 }

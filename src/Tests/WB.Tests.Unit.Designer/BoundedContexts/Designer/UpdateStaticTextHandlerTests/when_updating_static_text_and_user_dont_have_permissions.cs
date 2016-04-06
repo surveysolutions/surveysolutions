@@ -15,13 +15,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateStaticTextHandle
         {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.Apply(new NewGroupAdded { PublicKey = chapterId });
-            questionnaire.Apply(new StaticTextAdded() { EntityId = entityId, ParentId = chapterId });
+            questionnaire.Apply(Create.Event.StaticTextAdded(entityId : entityId, parentId : chapterId ));
+
             command = Create.Command.UpdateStaticText(
                 questionnaire.EventSourceId, 
                 entityId: entityId, 
                 text: "some text", 
                 attachmentName: "",
-                responsibleId: notExistinigUserId);
+                responsibleId: notExistinigUserId,
+                enamblementCondition: string.Empty);
         };
 
         Because of = () =>
