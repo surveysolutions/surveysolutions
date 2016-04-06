@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Entities.Composite;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace Main.Core.Entities.SubEntities
 {
