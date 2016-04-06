@@ -6,7 +6,6 @@
     var questionnaire = Model;
     ViewBag.Questionnaire = questionnaire;
 }
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,7 +39,7 @@
         <div class="column_header">
             <ul>
                 <li>
-                    <ul class="string_list">
+                    <ul class="group-statistics">
                         <li>Sections: <span>@questionnaire.Statistics.SectionsCount</span></li>
                         <li>Sub-sections: <span>@questionnaire.Statistics.GroupsCount</span></li>
                         <li>Question: <span>@questionnaire.Statistics.QuestionsCount</span></li>
@@ -71,7 +70,7 @@
                     <dt>&nbsp;</dt>
                     <dd>
                         <a href="#group-@sectionId" class="section_name">@questionnaire.GetGroupTitle(sectionId)</a>
-                        <ul class="string_list">
+                        <ul class="group-statistics">
                             @if (statistics.GroupsCount > 0)
                             {
                                 <li>Sub-sections: <span>@statistics.GroupsCount</span></li>
@@ -105,12 +104,24 @@
                 }
                 <dt>&nbsp;</dt>
                 <dd>
-                    <a href="#appendix_a" class="section_name appendix">Appendix a &#8212; full sets and expressions</a>
+                    <a href="#appendix_enablements" class="section_name appendix">Appendix a &#8212; full sets and expressions</a>
                 </dd>
                 <dt>&nbsp;</dt>
                 <dd>
-                    <a href="#appendix_b" class="section_name appendix">Appendix b &#8212; Export structure</a>
+                    <a href="#appendix_validations" class="section_name appendix">Appendix a &#8212; full sets and expressions</a>
                 </dd>
+                <dt>&nbsp;</dt>
+                <dd>
+                    <a href="#appendix_instructions" class="section_name appendix">Appendix a &#8212; full sets and expressions</a>
+                </dd>
+                <dt>&nbsp;</dt>
+                <dd>
+                    <a href="#appendix_options" class="section_name appendix">Appendix a &#8212; full sets and expressions</a>
+                </dd>
+                @*<dt>&nbsp;</dt>
+                    <dd>
+                        <a href="#appendix_b" class="section_name appendix">Appendix b &#8212; Export structure</a>
+                    </dd>*@
             </dl>
         </section>
     </article>
@@ -129,25 +140,109 @@
         }
     </article>
     <article class="appendix_section">
-        <h2 id="appendix_a">Appendix a &#8212; full sets and expressions</h2>
+        <h2 id="appendix_enablements">Appendix a &mdash; Enablement conditions</h2>
+        <ul class="container">
+            @{
+                var questionsWithLongConditions = questionnaire.GetQuestionsWithLongConditions();
+                for (var i = 0; i < questionsWithLongConditions.Count(); i++)
+                {
+                    var question = questionsWithLongConditions[i];
+                    <li>
+                        <span class="number">[@(i + 1)]</span>
+                        <div class="appendix_detail">
+                            <a href="#question-@question.PublicKey" id="condition-@question.PublicKey">
+                                <span>@question.StataExportCaption</span>: @question.QuestionText
+                            </a>
+                            <p>
+                                Enablement Condition:
+                                <pre>@question.ConditionExpression.Trim()</pre>
+                            </p>
+                        </div>
+                    </li>
+                }
+            }
+        </ul>
     </article>
     <article class="appendix_section">
-        <h2 id="appendix_b">Appendix b &#8212; Export structure</h2>
-        <section>
-            <h3>Projected export file structure</h3>
-        </section>
+        <h2 id="appendix_validations">Appendix b &mdash; Validation conditions and messages</h2>
+        <ul class="container">
+            @{
+                var questionsWithLongValidations = questionnaire.GetQuestionsWithLongValidations();
+                for (var i = 0; i < questionsWithLongValidations.Count(); i++)
+                {
+                    var question = questionsWithLongValidations[i];
+                    <li>
+                        <span class="number">[@(i + 1)]</span>
+                        <div class="appendix_detail">
+                            <a href="#question-@question.PublicKey" id="validation-@question.PublicKey">
+                                <span>@question.StataExportCaption</span>: @question.QuestionText
+                            </a>
+                            @foreach (var validationCondition in question.ValidationConditions)
+                            {
+                                <p>
+                                    Validation Condition:
+                                    <pre>@validationCondition.Expression.Trim()</pre>
+                                </p>
+                                <p>
+                                    Validation Message:
+                                    <span>@validationCondition.Message</span>
+                                </p>
+                            }
+                        </div>
+                    </li>
+                }
+            }
+        </ul>
     </article>
     <article class="appendix_section">
-        <h2>Appendix b &#8212; Export structure</h2>
-        <section>
-            <h3>Structure and order of variables in export files.</h3>
-        </section>
+        <h2 id="appendix_instructions">Appendix c &mdash; Instructions</h2>
+        <ul class="container">
+            @{
+                var questionsWithLongInstructions = questionnaire.GetQuestionsWithLongInstructions();
+                for (var i = 0; i < questionsWithLongInstructions.Count(); i++)
+                {
+                    var question = questionsWithLongInstructions[i];
+                    <li>
+                        <span class="number">[@(i + 1)]</span>
+                        <div class="appendix_detail">
+                            <a href="#question-@question.PublicKey" id="instruction-@question.PublicKey">
+                                <span>@question.StataExportCaption</span>: @question.QuestionText
+                            </a>
+                            <p>
+                                @question.Instructions
+                            </p>
+                        </div>
+                    </li>
+                }
+            }
+        </ul>
     </article>
     <article class="appendix_section">
-        <h2>Appendix b &#8212; Export structure</h2>
-        <section>
-            <h3>Projected export file structure</h3>
-        </section>
+        <h2 id="appendix_options">Appendix d &mdash; Options</h2>
+        <ul class="container">
+            @{
+                var questionsWithLongOptionsList = questionnaire.GetQuestionsWithLongOptionsList();
+                for (var i = 0; i < questionsWithLongOptionsList.Count(); i++)
+                {
+                    var question = questionsWithLongOptionsList[i];
+                    <li>
+                        <span class="number">[@(i + 1)]</span>
+                        <div class="appendix_detail">
+                            <a href="#question-@question.PublicKey" id="options-@question.PublicKey">
+                                <span>@question.StataExportCaption</span>: @question.QuestionText
+                            </a>
+                            <p>
+                                Options:
+                                @foreach (var option in question.Answers)
+                                {
+                                    <span><span>@option.AnswerValue:</span>@(option.AnswerText),</span>
+                                }
+                            </p>
+                        </div>
+                    </li>
+                }
+            }
+        </ul>
     </article>
 </body>
 </html>

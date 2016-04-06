@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     Name = grouping.Key.UserName,
                 })).ToList();
 
-            var pdfView = new PdfQuestionnaireModel(questionnaire)
+            var pdfView = new PdfQuestionnaireModel(questionnaire, new PdfSettings())
             {
                 Requested = new PdfQuestionnaireModel.ModificationStatisticsByUser
                 {
