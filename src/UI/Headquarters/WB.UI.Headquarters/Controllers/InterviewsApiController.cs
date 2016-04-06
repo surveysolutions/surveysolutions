@@ -121,13 +121,18 @@ namespace WB.UI.Headquarters.Controllers
 
             if (!isSupervisorRequired)
             {
-                Task.Run(() =>
+                ThreadMarkerManager.MarkCurrentThreadAsIsolated();
+
+                try
                 {
                     this.interviewImportService.ImportInterviews(supervisorId: request.SupervisorId,
-                        questionnaireIdentity: questionnaireIdentity,
-                        interviewImportProcessId: request.InterviewImportProcessId,
+                        questionnaireIdentity: questionnaireIdentity, interviewImportProcessId: request.InterviewImportProcessId,
                         headquartersId: headquartersId);
-                });
+                }
+                finally
+                {
+                    ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
+                }
             }
 
             return Request.CreateResponse(new ImportInterviewsResponseApiView

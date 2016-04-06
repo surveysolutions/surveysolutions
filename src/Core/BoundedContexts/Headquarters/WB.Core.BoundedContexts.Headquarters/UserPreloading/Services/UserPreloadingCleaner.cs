@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private readonly UserPreloadingSettings userPreloadingSettings;
 
-        private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
+        private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
 
         public UserPreloadingCleaner(
             UserPreloadingSettings userPreloadingSettings, 

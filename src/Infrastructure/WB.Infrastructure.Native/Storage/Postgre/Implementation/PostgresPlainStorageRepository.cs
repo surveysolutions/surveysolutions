@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Linq;
+using Ninject;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal class PostgresPlainStorageRepository<TEntity> : IPlainStorageAccessor<TEntity> where TEntity : class
     {
-        private readonly Func<IPlainSessionProvider> sessionProviderFunc;
+        private readonly IPlainSessionProvider sessionProvider;
 
-        public PostgresPlainStorageRepository(Func<IPlainSessionProvider> sessionProviderFunc)
+        public PostgresPlainStorageRepository(IPlainSessionProvider sessionProvider)
         {
-            this.sessionProviderFunc = sessionProviderFunc;
+            this.sessionProvider = sessionProvider;
         }
 
         public TEntity GetById(object id)
@@ -61,7 +62,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public ISession GetSession()
         {
-            return this.sessionProviderFunc().GetSession();
+            return this.sessionProvider.GetSession();
         }
     }
 }

@@ -35,7 +35,8 @@ namespace WB.UI.Headquarters.Implementation.Services
         private readonly IPreloadedDataRepository preloadedDataRepository;
         private readonly IInterviewImportDataParsingService interviewImportDataParsingService;
 
-        private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
+        private IPlainTransactionManager plainTransactionManager => plainTransactionManagerProvider.GetPlainTransactionManager();
+        private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
 
         public InterviewImportService(
             ICommandService commandService,
@@ -43,7 +44,8 @@ namespace WB.UI.Headquarters.Implementation.Services
             SampleImportSettings sampleImportSettings, 
             IPreloadedDataRepository preloadedDataRepository, 
             IInterviewImportDataParsingService interviewImportDataParsingService, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository)
+            IPlainQuestionnaireRepository plainQuestionnaireRepository,
+            IPlainTransactionManagerProvider plainTransactionManagerProvider)
         {
             this.commandService = commandService;
             this.logger = logger;
@@ -51,6 +53,7 @@ namespace WB.UI.Headquarters.Implementation.Services
             this.preloadedDataRepository = preloadedDataRepository;
             this.interviewImportDataParsingService = interviewImportDataParsingService;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.plainTransactionManagerProvider = plainTransactionManagerProvider;
         }
 
         public void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId,
@@ -101,15 +104,15 @@ namespace WB.UI.Headquarters.Implementation.Services
                         try
                         {
                             ThreadMarkerManager.MarkCurrentThreadAsIsolated();
-                            this.plainTransactionManager.BeginTransaction();
-                            this.commandService.Execute(new CreateInterviewByPrefilledQuestions(
-                                interviewId: Guid.NewGuid(),
-                                responsibleId: headquartersId,
-                                questionnaireIdentity: questionnaireIdentity,
-                                supervisorId: responsibleSupervisorId,
-                                interviewerId: importedInterview.InterviewerId,
-                                answersTime: DateTime.UtcNow,
-                                answersOnPrefilledQuestions: importedInterview.Answers));
+                            this.plainTransactionManager.ExecuteInPlainTransaction(
+                                () => this.commandService.Execute(new CreateInterviewByPrefilledQuestions(
+                                    interviewId: Guid.NewGuid(),
+                                    responsibleId: headquartersId,
+                                    questionnaireIdentity: questionnaireIdentity,
+                                    supervisorId: responsibleSupervisorId,
+                                    interviewerId: importedInterview.InterviewerId,
+                                    answersTime: DateTime.UtcNow,
+                                    answersOnPrefilledQuestions: importedInterview.Answers)));
                         }
                         catch (Exception ex)
                         {
@@ -127,7 +130,6 @@ namespace WB.UI.Headquarters.Implementation.Services
                         }
                         finally
                         {
-                            this.plainTransactionManager.RollbackTransaction();
                             ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
                         }
 

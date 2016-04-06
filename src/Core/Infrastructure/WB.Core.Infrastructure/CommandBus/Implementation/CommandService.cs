@@ -183,8 +183,9 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             Type aggregateType, Guid aggregateId, IEnumerable<Action<IAggregateRoot, ICommand>> validators,
             Action<ICommand, IAggregateRoot> commandHandler, CancellationToken cancellationToken)
         {
-            if (!CommandRegistry.IsInitializer(command))
-                throw new CommandServiceException($"Unable to execute not-constructing command {command.GetType().Name} because command service does not support plain repositories.");
+#warning uncomment when IUserRepository will be implemented
+            /*   if (!CommandRegistry.IsInitializer(command))
+                   throw new CommandServiceException($"Unable to execute not-constructing command {command.GetType().Name} because command service does not support plain repositories.");*/
 
             var aggregate = (IAggregateRoot) this.serviceLocator.GetInstance(aggregateType);
             aggregate.SetId(aggregateId);

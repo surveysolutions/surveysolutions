@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
         private IPlainTransactionManager TransactionManagerProvider
         {
-            get { return ServiceLocator.Current.GetInstance<IPlainTransactionManager>(); }
+            get { return ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager(); }
         }
 
         private IPasswordHasher passwordHasher
