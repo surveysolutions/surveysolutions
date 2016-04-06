@@ -109,6 +109,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .Handles<UnlockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Unlock())
                 .Handles<UnlockUserBySupervisorCommand>(command => command.PublicKey, (command, aggregate) => aggregate.UnlockBySupervisor())
                 .Handles<LinkUserToDevice>(command => command.Id, (command, aggregate) => aggregate.LinkUserToDevice(command));
+            this.Bind<User>().ToSelf();
 
             CommandRegistry
                 .Setup<Interview>()

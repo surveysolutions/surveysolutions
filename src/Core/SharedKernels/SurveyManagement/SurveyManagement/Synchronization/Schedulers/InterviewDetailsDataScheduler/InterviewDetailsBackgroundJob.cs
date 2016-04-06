@@ -7,6 +7,7 @@ using Microsoft.Practices.ServiceLocation;
 using Quartz;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Infrastructure.Native.Threading;
@@ -19,10 +20,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.Inte
         ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<InterviewDetailsBackgroundJob>();
         IInterviewPackagesService interviewPackagesService => ServiceLocator.Current.GetInstance<IInterviewPackagesService>();
         InterviewDetailsDataLoaderSettings interviewPackagesJobSetings => ServiceLocator.Current.GetInstance<InterviewDetailsDataLoaderSettings>();
-        IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
+        IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
+        IReadSideStatusService readSideStatusService => ServiceLocator.Current.GetInstance<IReadSideStatusService>();
 
         public void Execute(IJobExecutionContext context)
         {
+            if(this.readSideStatusService.AreViewsBeingRebuiltNow())
+                return;
+
             try
             {
                 Stopwatch stopwatch = Stopwatch.StartNew();

@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
 
         private IPlainTransactionManager PlainTransactionManager
         {
-            get { return ServiceLocator.Current.GetInstance<IPlainTransactionManager>(); }
+            get { return ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager(); }
         }
 
         private IReadSideStatusService readSideStatusService

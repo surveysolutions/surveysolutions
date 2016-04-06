@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
                 DeleteInterviews(questionnaireId, questionnaireVersion, userId);
 
 
-                IPlainTransactionManager plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
+                IPlainTransactionManager plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
                 plainTransactionManager.ExecuteInPlainTransaction(() =>
                     this.commandService.Execute(new DeleteQuestionnaire(questionnaireId, questionnaireVersion,
                         userId)));
