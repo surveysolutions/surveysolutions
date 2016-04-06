@@ -314,6 +314,7 @@
     <Compile Include="Applications\AdminControllerTests.cs" />
     <Compile Include="Applications\VerificationErrorsMapperTests\VerificationErrorsMapperTestContext.cs" />
     <Compile Include="Applications\VerificationErrorsMapperTests\when_enriching_errors_with_empty_static_text.cs" />
+    <Compile Include="Applications\VerificationErrorsMapperTests\when_enriching_errors_with_compilation_of_condition_on_questions.cs" />
     <Compile Include="Applications\VerificationErrorsMapperTests\when_enriching_errors_with_titles_from_questionnaire.cs" />
     <Compile Include="BoundedContexts\AttachmentServiceTests\AttachmentServiceTestContext.cs" />
     <Compile Include="BoundedContexts\AttachmentServiceTests\when_cloning_attachment.cs" />

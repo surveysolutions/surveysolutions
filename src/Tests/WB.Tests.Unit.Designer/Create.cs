@@ -1230,6 +1230,11 @@ namespace WB.Tests.Unit.Designer
             return mock.Object;
         }
 
+        public static QuestionnaireVerificationMessage VerificationError(string code, string message, IEnumerable<string> compilationErrorMessages, params QuestionnaireVerificationReference[] questionnaireVerificationReferences)
+        {
+            return QuestionnaireVerificationMessage.Error(code, message, compilationErrorMessages, questionnaireVerificationReferences);
+        }
+
         public static QuestionnaireVerificationMessage VerificationError(string code, string message, params QuestionnaireVerificationReference[] questionnaireVerificationReferences)
         {
             return QuestionnaireVerificationMessage.Error(code, message, questionnaireVerificationReferences);
