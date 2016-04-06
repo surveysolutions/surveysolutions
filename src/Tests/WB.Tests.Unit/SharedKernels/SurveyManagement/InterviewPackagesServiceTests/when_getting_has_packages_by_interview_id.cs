@@ -7,24 +7,24 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceTests
 {
-    internal class when_getting_queue_length : InterviewPackagesServiceTestsContext
+    internal class when_getting_has_packages_by_interview_id : InterviewPackagesServiceTestsContext
     {
         Establish context = () =>
         {
             packagesStorage = new TestPlainStorage<InterviewPackage>();
             brokenPackagesStorage = new TestPlainStorage<BrokenInterviewPackage>();
 
-            for (int i = 0; i < 100; i++)
-                packagesStorage.Store(new InterviewPackage {InterviewId = Guid.NewGuid()}, null);
-
+            packagesStorage.Store(new InterviewPackage {InterviewId = interviewId}, null);
+            
             interviewPackagesService = CreateInterviewPackagesService(interviewPackageStorage: packagesStorage, brokenInterviewPackageStorage: brokenPackagesStorage);
         };
 
-        Because of = () => packagesLength = interviewPackagesService.QueueLength;
+        Because of = () => hasPackagesByInterviewId = interviewPackagesService.HasPackagesByInterviewId(interviewId);
 
-        It should_be_specified_packages_length = () => packagesLength.ShouldEqual(100);
+        It should_packages_storage_contains_packages_by_interview_id = () => hasPackagesByInterviewId.ShouldEqual(true);
 
-        private static int packagesLength;
+        private static bool hasPackagesByInterviewId;
+        private static readonly Guid interviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static InterviewPackagesService interviewPackagesService;
         private static IPlainStorageAccessor<BrokenInterviewPackage> brokenPackagesStorage;
         private static IPlainStorageAccessor<InterviewPackage> packagesStorage;
