@@ -71,8 +71,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             => this.brokenInterviewPackageStorage.Query(packages => packages.Select(package => package.Id).Count());
 
         public virtual bool HasPackagesByInterviewId(Guid interviewId)
-            => this.interviewPackageStorage.Query(packages => packages.Any(package => package.InterviewId == interviewId)) ||
-                   this.brokenInterviewPackageStorage.Query(packages => packages.Any(package => package.InterviewId == interviewId));
+            => this.interviewPackageStorage.Query(packages => packages.Any(package => package.InterviewId == interviewId));
 
         public void ReprocessAllBrokenPackages()
         {

@@ -7,7 +7,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceTests
 {
-    internal class when_getting_queue_length : InterviewPackagesServiceTestsContext
+    internal class when_getting_invalid_packages_count : InterviewPackagesServiceTestsContext
     {
         Establish context = () =>
         {
@@ -15,12 +15,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
             brokenPackagesStorage = new TestPlainStorage<BrokenInterviewPackage>();
 
             for (int i = 0; i < 100; i++)
-                packagesStorage.Store(new InterviewPackage {InterviewId = Guid.NewGuid()}, null);
+                brokenPackagesStorage.Store(new BrokenInterviewPackage { InterviewId = Guid.NewGuid() }, null);
 
             interviewPackagesService = CreateInterviewPackagesService(interviewPackageStorage: packagesStorage, brokenInterviewPackageStorage: brokenPackagesStorage);
         };
 
-        Because of = () => packagesLength = interviewPackagesService.QueueLength;
+        Because of = () => packagesLength = interviewPackagesService.InvalidPackagesCount;
 
         It should_be_specified_packages_length = () => packagesLength.ShouldEqual(100);
 
