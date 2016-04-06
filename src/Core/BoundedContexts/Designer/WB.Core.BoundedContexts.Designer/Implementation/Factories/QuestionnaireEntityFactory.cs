@@ -36,6 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 data.Featured,
                 data.Capital,
                 data.Instructions,
+                data.Properties,
                 data.Mask,
                 data.LinkedToQuestionId,
                 data.LinkedToRosterId,
@@ -138,6 +139,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             bool featured,
             bool capital,
             string instructions,
+            QuestionProperties properties,
             string mask,
             Guid? linkedToQuestionId,
             Guid? linkedToRosterId,
@@ -164,6 +166,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             question.AnswerOrder = answerOrder;
             question.Featured = featured;
             question.Instructions = instructions;
+            question.Properties = properties;
             question.Capital = capital;
             question.LinkedToQuestionId = linkedToQuestionId;
             question.LinkedToRosterId = linkedToRosterId;
