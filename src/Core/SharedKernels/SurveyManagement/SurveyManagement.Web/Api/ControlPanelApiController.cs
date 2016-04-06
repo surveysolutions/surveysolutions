@@ -9,12 +9,10 @@ using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.BrokenInterviewPackages;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Models;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 
@@ -76,14 +74,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.productVersionHistory = productVersionHistory;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.interviewPackagesService = interviewPackagesService;
-        }
-        
-        public InterviewDetailsSchedulerViewModel InterviewDetails()
-        {
-            return new InterviewDetailsSchedulerViewModel
-            {
-                Messages = new string[0]
-            };
         }
         
         [NoTransaction]
@@ -163,10 +153,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             });
 
         [HttpPost]
-        public void ReprocessBrokenPackages()
-        {
-            this.interviewPackagesService.ReprocessAllBrokenPackages();
-        }
+        public void ReprocessBrokenPackages() => this.interviewPackagesService.ReprocessAllBrokenPackages();
 
         public class QuestionnaireView
         {
