@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         {
             for (int i = 1; i <= 1000; i++)
             {
-                incomingSyncPackagesQueue.StorePackage(Guid.NewGuid(), $"{i}");
+                incomingSyncPackagesQueue.StorePackage($"{i}");
                 Thread.Sleep(10);
             }
         };

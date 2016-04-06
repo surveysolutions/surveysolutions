@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             this.syncSettings = syncSettings;
         }
 
-        [Obsolete("Since v 5.7")]
+        [Obsolete("Since v 5.8")]
         public virtual void StorePackage(string item) { }
 
         public void StorePackage(Guid interviewId, Guid questionnaireId, long questionnaireVersion, Guid responsibleId,

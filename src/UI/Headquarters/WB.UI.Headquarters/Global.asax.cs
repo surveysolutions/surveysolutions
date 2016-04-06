@@ -137,6 +137,8 @@ namespace WB.UI.Headquarters
             {
                 this.logger.Fatal("Error on checking application health.", exc);
             }
+
+            HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
         }
 
         protected void Application_End()

@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Caching;
-using Main.Core.Events;
+using System.Text;
 using Polly;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.CustomCollections;
@@ -14,7 +14,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.Synchronization;
@@ -60,23 +59,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                 syncSettings.IncomingUnprocessedPackagesDirectoryName);
         }
 
-        [Obsolete("Since v 5.7")]
+        [Obsolete("Since v 5.8")]
         public override void StorePackage(string item)
         {
-            if(string.IsNullOrEmpty(item)) throw new ArgumentException(nameof(item));
+            if (string.IsNullOrEmpty(item)) throw new ArgumentException(nameof(item));
 
             var syncItem = this.serializer.Deserialize<SyncItem>(item);
 
-            var meta = this.serializer.Deserialize<InterviewMetaInfo>(archiver.DecompressString(syncItem.MetaInfo));
+            if (this.archiver.IsZipStream(new MemoryStream(Encoding.UTF8.GetBytes(syncItem.MetaInfo ?? ""))))
+                syncItem.MetaInfo = archiver.DecompressString(syncItem.MetaInfo);
+
+            if (this.archiver.IsZipStream(new MemoryStream(Encoding.UTF8.GetBytes(syncItem.Content ?? ""))))
+                syncItem.Content = this.archiver.DecompressString(syncItem.Content);
+
+            InterviewMetaInfo meta = this.serializer.Deserialize<InterviewMetaInfo>(syncItem.MetaInfo) ??
+                                     new InterviewMetaInfo();
 
             base.StorePackage(
                 interviewId: syncItem.RootId,
                 questionnaireId: meta.TemplateId,
                 questionnaireVersion: meta.TemplateVersion,
                 responsibleId: meta.ResponsibleId,
-                interviewStatus: (InterviewStatus)meta.Status,
+                interviewStatus: (InterviewStatus) meta.Status,
                 isCensusInterview: meta.CreatedOnClient ?? false,
-                events: this.archiver.DecompressString(syncItem.Content));
+                events: syncItem.Content ?? "");
         }
 
         public override int QueueLength => this.GetCachedFilesInIncomingDirectory()
