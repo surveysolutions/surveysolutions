@@ -45,9 +45,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
                 InterviewStatus.Restarted, false, "compressed serialized events");
         };
 
-        Because of = () => interviewPackagesService.ProcessPackage("package id as string");
+        Because of = () => interviewPackagesService.ProcessPackage("1");
 
-        private It should_broken_packages_storage_contains_1000_elements =
+        It should_execute_InterviewPackagesServiceTests_command =
             () => mockOfCommandService.Verify(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), Moq.It.IsAny<string>()), Times.Once);
 
         private static Mock<ICommandService> mockOfCommandService;
