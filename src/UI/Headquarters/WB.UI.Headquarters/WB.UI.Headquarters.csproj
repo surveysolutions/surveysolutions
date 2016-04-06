@@ -79,9 +79,6 @@
     <Reference Include="EmbeddedResourceVirtualPathProvider">
       <HintPath>..\..\..\..\packages\EmbeddedResourceVirtualPathProvider.1.2.22\lib\net40\EmbeddedResourceVirtualPathProvider.dll</HintPath>
     </Reference>
-    <Reference Include="HibernatingRhinos.Profiler.Appender">
-      <HintPath>..\..\..\..\..\NHibernate.Profiler-v3.0-Build-3093\HibernatingRhinos.Profiler.Appender.dll</HintPath>
-    </Reference>
     <Reference Include="HtmlSanitizationLibrary">
       <HintPath>..\..\..\..\packages\AntiXSS.4.2.1\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
     </Reference>
