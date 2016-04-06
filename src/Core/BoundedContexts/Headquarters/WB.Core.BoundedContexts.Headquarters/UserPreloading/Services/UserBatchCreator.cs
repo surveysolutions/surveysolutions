@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         protected readonly IPasswordHasher passwordHasher;
 
-        private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
+        private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
 
         private bool IsWorking = false;
 

@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
     {
         private bool IsWorking = false; //please use singleton injection
 
-        private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
+        private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
 
         private readonly IUserPreloadingService userPreloadingService;
 

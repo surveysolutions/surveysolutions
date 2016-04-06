@@ -6,7 +6,7 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
-    public class PlainPostgresTransactionManager : IPlainTransactionManager, IPlainSessionProvider, IDisposable
+    public class PlainPostgresTransactionManager : IPlainPostgresTransactionManager, IPlainSessionProvider, IDisposable
     {
         private readonly ISessionFactory sessionFactory;
         private ITransaction transaction;

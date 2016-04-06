@@ -3,6 +3,7 @@ using Main.Core.Documents;
 using Moq;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
@@ -33,8 +34,16 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                 logger: logger ?? Mock.Of<ILogger>(),
                 sampleImportSettings: sampleImportSettings ?? Mock.Of<SampleImportSettings>(),
                 preloadedDataRepository: preloadedDataRepository ?? Mock.Of<IPreloadedDataRepository>(),
-                interviewImportDataParsingService: interviewImportDataParsingService ?? Mock.Of<IInterviewImportDataParsingService>(),
-                plainQuestionnaireRepository: Mock.Of<IPlainQuestionnaireRepository>(_=>_.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>())== questionnaireDocument));
+                interviewImportDataParsingService:
+                    interviewImportDataParsingService ?? Mock.Of<IInterviewImportDataParsingService>(),
+                plainQuestionnaireRepository:
+                    Mock.Of<IPlainQuestionnaireRepository>(
+                        _ =>
+                            _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) ==
+                            questionnaireDocument),
+                plainTransactionManagerProvider:
+                    Mock.Of<IPlainTransactionManagerProvider>(
+                        _ => _.GetPlainTransactionManager() == Mock.Of<IPlainTransactionManager>()));
         }
     }
 }

@@ -54,7 +54,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         private Dictionary<IEventHandler, Stopwatch> handlersWithStopwatches;
         private readonly ITransactionManagerProviderManager transactionManagerProviderManager;
 
-        private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
+        private IPlainTransactionManagerProvider plainTransactionManagerProvider => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>();
 
         private readonly ReadSideSettings settings;
         private readonly IReadSideKeyValueStorage<ReadSideVersion> readSideVersionStorage;
@@ -379,7 +379,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 {
                     EnableWritersCacheForHandlers(handlers);
                     this.transactionManagerProviderManager.PinRebuildReadSideTransactionManager();
-                    this.plainTransactionManager.BeginTransaction();
+                    this.plainTransactionManagerProvider.PinRebuildReadSideTransactionManager();
                     this.republishStopwatch.Restart();
 
                     foreach (var eventSourceId in eventSourceIds)
@@ -393,7 +393,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     this.republishStopwatch.Stop();
                     this.transactionManagerProviderManager.UnpinTransactionManager();
                     this.DisableWritersCacheForHandlers(handlers);
-                    this.plainTransactionManager.RollbackTransaction();
+                    this.plainTransactionManagerProvider.UnpinTransactionManager();
                 }
 
                 UpdateStatusMessage("Rebuild views by event sources succeeded.");
@@ -443,7 +443,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     {
                         EnableWritersCacheForHandlers(handlers);
                         this.transactionManagerProviderManager.PinRebuildReadSideTransactionManager();
-                        this.plainTransactionManager.BeginTransaction();
+                        this.plainTransactionManagerProvider.PinRebuildReadSideTransactionManager();
                         this.republishStopwatch.Restart();
 
                         this.RepublishAllEvents(this.GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(),
@@ -453,8 +453,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     {
                         this.republishStopwatch.Stop();
                         this.transactionManagerProviderManager.UnpinTransactionManager();
-                        this.plainTransactionManager.RollbackTransaction();
                         this.DisableWritersCacheForHandlers(handlers);
+                        this.plainTransactionManagerProvider.UnpinTransactionManager();
 
                         if (!isPartialRebuild && this.postgresReadSideBootstraper != null)
                             this.postgresReadSideBootstraper.CreateIndexesAfterRebuildReadSide();
