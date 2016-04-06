@@ -147,6 +147,7 @@ namespace WB.UI.Designer.App_Start
 
             kernel.Bind<IAuthenticationService>().To<AuthenticationService>();
             kernel.Bind<IRecaptchaService>().To<RecaptchaService>();
+            kernel.Bind<QuestionnaireDowngradeService>().ToSelf();
 
             CreateAndRegisterEventBus(kernel);
             
