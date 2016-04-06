@@ -1,4 +1,6 @@
-﻿@using System.Linq
+﻿@using System.Collections.Generic
+@using System.Linq
+@using Main.Core.Entities.SubEntities
 @model WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf.PdfQuestionnaireModel
 
 @{
@@ -69,7 +71,7 @@
                     var statistics = questionnaire.GetGroupStatistics(sectionId);
                     <dt>&nbsp;</dt>
                     <dd>
-                        <a href="#group-@sectionId" class="section_name">@questionnaire.GetGroupTitle(sectionId)</a>
+                        <a href="#@questionnaire.GetGroupId(sectionId)" class="section_name">@questionnaire.GetGroupTitle(sectionId)</a>
                         <ul class="group-statistics">
                             @if (statistics.GroupsCount > 0)
                             {
@@ -125,15 +127,15 @@
             </dl>
         </section>
     </article>
-    <article class="help_info">
-        <img src="~/Content/images/PDF-structure.png" />
+    <article>
+        <img class="help_info" src="~/Content/images/PDF-structure.png" />
     </article>
     <article>
         @foreach (var sectionId in questionnaire.SectionIds)
         {
             <section class="section">
                 <div class="section_header">
-                    <h2 id="group-@sectionId">@questionnaire.GetGroupTitle(sectionId)</h2>
+                    <h2 id="@questionnaire.GetGroupId(sectionId)">@questionnaire.GetGroupTitle(sectionId)</h2>
                 </div>
                 @Html.Partial("_RenderChildren", sectionId)
             </section>
@@ -143,14 +145,13 @@
         <h2 id="appendix_enablements">Appendix a &mdash; Enablement conditions</h2>
         <ul class="container">
             @{
-                var questionsWithLongConditions = questionnaire.GetQuestionsWithLongConditions();
-                for (var i = 0; i < questionsWithLongConditions.Count(); i++)
+                for (var i = 0; i < questionnaire.QuestionsWithLongConditions.Count; i++)
                 {
-                    var question = questionsWithLongConditions[i];
+                    var question = questionnaire.QuestionsWithLongConditions[i];
                     <li>
                         <span class="number">[@(i + 1)]</span>
                         <div class="appendix_detail">
-                            <a href="#question-@question.PublicKey" id="condition-@question.PublicKey">
+                            <a href="#@questionnaire.GetQuestionId(question.PublicKey)" id="@questionnaire.GetConditionId(question.PublicKey)">
                                 <span>@question.StataExportCaption</span>: @question.QuestionText
                             </a>
                             <p>
@@ -167,14 +168,13 @@
         <h2 id="appendix_validations">Appendix b &mdash; Validation conditions and messages</h2>
         <ul class="container">
             @{
-                var questionsWithLongValidations = questionnaire.GetQuestionsWithLongValidations();
-                for (var i = 0; i < questionsWithLongValidations.Count(); i++)
+                for (var i = 0; i < questionnaire.QuestionsWithLongValidations.Count; i++)
                 {
-                    var question = questionsWithLongValidations[i];
+                    var question = questionnaire.QuestionsWithLongValidations[i];
                     <li>
                         <span class="number">[@(i + 1)]</span>
                         <div class="appendix_detail">
-                            <a href="#question-@question.PublicKey" id="validation-@question.PublicKey">
+                            <a href="#@questionnaire.GetQuestionId(question.PublicKey)" id="@questionnaire.GetValidationsId(question.PublicKey)">
                                 <span>@question.StataExportCaption</span>: @question.QuestionText
                             </a>
                             @foreach (var validationCondition in question.ValidationConditions)
@@ -198,14 +198,13 @@
         <h2 id="appendix_instructions">Appendix c &mdash; Instructions</h2>
         <ul class="container">
             @{
-                var questionsWithLongInstructions = questionnaire.GetQuestionsWithLongInstructions();
-                for (var i = 0; i < questionsWithLongInstructions.Count(); i++)
+                for (var i = 0; i < questionnaire.QuestionsWithLongInstructions.Count; i++)
                 {
-                    var question = questionsWithLongInstructions[i];
+                    var question = questionnaire.QuestionsWithLongInstructions[i];
                     <li>
                         <span class="number">[@(i + 1)]</span>
                         <div class="appendix_detail">
-                            <a href="#question-@question.PublicKey" id="instruction-@question.PublicKey">
+                            <a href="#@questionnaire.GetQuestionId(question.PublicKey)" id="@questionnaire.GetInstructionsId(question.PublicKey)">
                                 <span>@question.StataExportCaption</span>: @question.QuestionText
                             </a>
                             <p>
@@ -221,14 +220,13 @@
         <h2 id="appendix_options">Appendix d &mdash; Options</h2>
         <ul class="container">
             @{
-                var questionsWithLongOptionsList = questionnaire.GetQuestionsWithLongOptionsList();
-                for (var i = 0; i < questionsWithLongOptionsList.Count(); i++)
+                for (var i = 0; i < questionnaire.QuestionsWithLongOptionsList.Count; i++)
                 {
-                    var question = questionsWithLongOptionsList[i];
+                    var question = questionnaire.QuestionsWithLongOptionsList[i];
                     <li>
                         <span class="number">[@(i + 1)]</span>
                         <div class="appendix_detail">
-                            <a href="#question-@question.PublicKey" id="options-@question.PublicKey">
+                            <a href="#@questionnaire.GetQuestionId(question.PublicKey)" id="@questionnaire.GetOptionsId(question.PublicKey)">
                                 <span>@question.StataExportCaption</span>: @question.QuestionText
                             </a>
                             <p>

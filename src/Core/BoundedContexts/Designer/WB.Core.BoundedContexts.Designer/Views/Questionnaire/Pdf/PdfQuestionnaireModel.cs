@@ -15,7 +15,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public int ExpressionExcerptLength { get; } = 200;
         public int OptionsExcerptCount { get; } = 16;
         public int MinAmountOfDigitsInCodes { get; } = 2;
-
     }
 
     public class PdfQuestionnaireModel
@@ -61,11 +60,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             this.questionnaire.ConnectChildrenWithParent();
             this.allItems = this.questionnaire.Children.SelectMany<IComposite, IComposite>(x => x.TreeToEnumerable<IComposite>(g => g.Children)).ToList();
 
+            QuestionsWithLongConditions = Find<IQuestion>(x => x.ConditionExpression?.Length > Settings.ExpressionExcerptLength).ToList();
+            QuestionsWithLongValidations = Find<IQuestion>(x => x.ValidationConditions.Count > 0 && x.ValidationConditions.Any(condition => condition.Expression?.Length > Settings.ExpressionExcerptLength)).ToList();
+            QuestionsWithLongInstructions = Find<IQuestion>(x => x.Instructions?.Length > Settings.InstructionsExcerptLength).ToList();
+            QuestionsWithLongOptionsList = Find<IQuestion>(x => x.Answers?.Count > Settings.OptionsExcerptCount).ToList();
+
             FillStatistics(this.allItems, this.Statistics);
             this.Statistics.SectionsCount = questionnaire.Children.Count;
             this.Statistics.GroupsCount -= Statistics.SectionsCount;
             this.Statistics.QuestionsWithConditionsCount = Find<IQuestion>(x => !string.IsNullOrWhiteSpace(x.ConditionExpression) || x.ValidationConditions.Any()).Count();
         }
+
+        public List<IQuestion> QuestionsWithLongOptionsList { get; private set; }
+
+        public List<IQuestion> QuestionsWithLongInstructions { get; private set; }
+
+        public List<IQuestion> QuestionsWithLongValidations { get; private set; }
+
+        public List<IQuestion> QuestionsWithLongConditions { get; private set; }
 
         public string Title => this.questionnaire.Title;
         public IEnumerable<Guid> SectionIds => this.questionnaire.Children.Select(x => x.PublicKey).ToList();
@@ -138,8 +150,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public GroupStatistics GetGroupStatistics(Guid groupId)
         {
             var statistics = new GroupStatistics();
-            var childItems = this.Find<Group>(groupId).TreeToEnumerable<IComposite>(g => g.Children).Where(x => x.PublicKey!=groupId);
-
+            var childItems = this.Find<Group>(groupId).TreeToEnumerable<IComposite>(g => g.Children).Where(x => x.PublicKey != groupId);
             return this.FillStatistics(childItems, statistics);
         }
 
@@ -159,29 +170,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             return statistics;
         }
 
-        public bool QuestionHasInstructions(IQuestion question)
-        {
-            return !string.IsNullOrWhiteSpace(question.Instructions);
-        }
+        public bool QuestionHasInstructions(IQuestion question) => !string.IsNullOrWhiteSpace(question.Instructions);
 
-        public bool QuestionHasEnablementCondition(IQuestion question)
-        {
-            return !string.IsNullOrWhiteSpace(question.ConditionExpression);
-        }
+        public bool QuestionHasEnablementCondition(IQuestion question) => !string.IsNullOrWhiteSpace(question.ConditionExpression);
 
-        public bool GroupHasEnablementCondition(IGroup group)
-        {
-            return !string.IsNullOrWhiteSpace(group.ConditionExpression);
-        }
+        public bool GroupHasEnablementCondition(IGroup group) => !string.IsNullOrWhiteSpace(@group.ConditionExpression);
 
         public string GetRosterSourceQuestionVariable(Guid rosterId)
         {
             var roster = this.Find<Group>(rosterId);
-            return roster.RosterSizeQuestionId != null 
-                ? this.Find<IQuestion>(roster.RosterSizeQuestionId.Value)?.StataExportCaption 
+            return roster.RosterSizeQuestionId != null
+                ? this.Find<IQuestion>(roster.RosterSizeQuestionId.Value)?.StataExportCaption
                 : string.Empty;
         }
-
 
         public string GetStringifiedTypeOfRosterSizeQuestion(Guid? rosterSizeQuestionId)
         {
@@ -202,11 +203,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             }
         }
 
-        public string GetFormattedFixedRosterValue(IGroup roster, decimal value)
-        {
-            var values = roster.FixedRosterTitles.Select(x => (double)x.Value);
-            return FormatAsIntegerWithLeadingZeros(value, values);
-        }
+        public string GetFormattedFixedRosterValue(IGroup roster, decimal value) =>
+            this.FormatAsIntegerWithLeadingZeros(value, roster.FixedRosterTitles.Select(x => (double)x.Value));
 
         public string GetFormattedOptionValue(List<Answer> options, string optionValueAsString)
         {
@@ -220,15 +218,44 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             switch (question.QuestionType)
             {
                 case QuestionType.SingleOption:
-                    return "single-select";
+                {
+                    var singleQuestion = (question as SingleQuestion);
+                    var isLinked = (singleQuestion?.LinkedToQuestionId.HasValue ?? false) ||
+                                    (singleQuestion?.LinkedToRosterId.HasValue ?? false);
+                    var isCascading = singleQuestion?.CascadeFromQuestionId.HasValue ?? false;
+                    var isCombobox = singleQuestion?.IsFilteredCombobox ?? false;
+                    var questionOptions = (new[]
+                    {
+                        isLinked ? "linked" : "",
+                        isCascading? "cascading" : "",
+                        isCombobox? "Combo box" : ""
+                    }).Where(x => !string.IsNullOrWhiteSpace(x));
+
+                    var stringifiedQuestionOptions = string.Join(", ", questionOptions);
+                    return "single-select" + (string.IsNullOrWhiteSpace(stringifiedQuestionOptions) ? "" : ": " + stringifiedQuestionOptions);
+                }
                 case QuestionType.MultyOption:
-                    var areAnswersOrdered = (question as MultyOptionsQuestion)?.AreAnswersOrdered ?? false;
-                    return "multi-select" + (areAnswersOrdered ? " / ordered": "");
+                {
+                    var multyOptionsQuestion = (question as MultyOptionsQuestion);
+                    var areAnswersOrdered = multyOptionsQuestion?.AreAnswersOrdered ?? false;
+                    var isYesNoView = multyOptionsQuestion?.YesNoView ?? false;
+                    var isLinked = (multyOptionsQuestion?.LinkedToQuestionId.HasValue ?? false) ||
+                                    (multyOptionsQuestion?.LinkedToRosterId.HasValue ?? false);
+
+                    var questionOptions = (new[]
+                    {
+                        areAnswersOrdered ? "ordered" : "",
+                        isYesNoView ? "yes/no" : "",
+                        isLinked ? "linked" : ""
+                    }).Where(x => !string.IsNullOrWhiteSpace(x));
+                    var stringifiedQuestionOptions = string.Join(", ", questionOptions);
+                    return "multi-select" + (string.IsNullOrWhiteSpace(stringifiedQuestionOptions) ? "" : ": " + stringifiedQuestionOptions);
+                }
                 case QuestionType.Numeric:
                     var isInteger = (question as NumericQuestion)?.IsInteger ?? false;
-                    return "numeric / " + (isInteger ? "integer" : "decimal");
+                    return "numeric: " + (isInteger ? "integer" : "decimal");
                 case QuestionType.DateTime:
-                    return "date / MM/DD/YYYY";
+                    return "date: MM/DD/YYYY";
                 case QuestionType.GpsCoordinates:
                     return "GPS";
                 case QuestionType.Text:
@@ -251,29 +278,47 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             return Convert.ToInt64(value).ToString($"D{maxValue}");
         }
 
-        public List<IQuestion> GetQuestionsWithLongConditions()
+        public string GetQuestionInstructionExcerpt(IQuestion question) =>
+            question.Instructions.Substring(0, Math.Min(this.Settings.InstructionsExcerptLength, question.Instructions.Length));
+
+        public bool InstructionIsTooLong(IQuestion question) =>
+            question.Instructions?.Length > this.Settings.InstructionsExcerptLength;
+
+        public int GetQuestionIndexInAppendix(Guid questionId, string appendix)
         {
-            return Find<IQuestion>(x => x.ConditionExpression?.Length > Settings.ExpressionExcerptLength).ToList();
+            var question = Find<IQuestion>(questionId);
+            var index = -2;
+            switch (appendix)
+            {
+                case "E":
+                    index = QuestionsWithLongConditions.IndexOf(question);
+                    break;
+                case "V":
+                    index = QuestionsWithLongValidations.IndexOf(question);
+                    break;
+                case "I":
+                    index = QuestionsWithLongInstructions.IndexOf(question);
+                    break;
+                case "O":
+                    index = QuestionsWithLongOptionsList.IndexOf(question);
+                    break;
+            }
+            return index + 1;
         }
 
-        public List<IQuestion> GetQuestionsWithLongValidations()
-        {
-            return Find<IQuestion>(x => x.ValidationConditions.Count > 0 && x.ValidationConditions.Any(condition => condition.Expression?.Length > Settings.ExpressionExcerptLength)).ToList();
-        }
+        public bool ExpressionIsTooLong(string expression) => expression?.Length > this.Settings.ExpressionExcerptLength;
 
-        public List<IQuestion> GetQuestionsWithLongInstructions()
-        {
-            return Find<IQuestion>(x => x.Instructions?.Length > Settings.InstructionsExcerptLength).ToList();
-        }
+        public string GetExpressionExcerpt(string expression) => expression.Substring(0, Math.Min(this.Settings.ExpressionExcerptLength, expression.Length));
+        public string GetInstructionsId(Guid id) => $"instructions-{id.FormatGuid()}";
 
-        public List<IQuestion> GetQuestionsWithLongOptionsList()
-        {
-            return Find<IQuestion>(x => x.Answers?.Count> Settings.OptionsExcerptCount).ToList();
-        }
+        public string GetConditionId(Guid id) => $"condition-{id.FormatGuid()}";
 
-        public string GetQuestionInstructionExcerpt(IQuestion question)
-        {
-            return question.Instructions.Substring(0, Math.Min(Settings.InstructionsExcerptLength, question.Instructions.Length));
-        }
+        public string GetQuestionId(Guid id) => $"question-{id.FormatGuid()}";
+
+        public string GetGroupId(Guid id) => $"group-{id.FormatGuid()}";
+
+        public string GetValidationsId(Guid id) => $"validations-{id.FormatGuid()}";
+
+        public string GetOptionsId(Guid id) => $"options-{id.FormatGuid()}";
     }
 }
