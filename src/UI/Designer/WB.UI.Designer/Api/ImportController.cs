@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Http;
+using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
@@ -9,6 +12,7 @@ using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Code;
+using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Api
@@ -17,6 +21,7 @@ namespace WB.UI.Designer.Api
     public class ImportController : ImportControllerBase
     {
         private readonly IStringCompressor zipUtils;
+        private readonly QuestionnaireDowngradeService downgradeService;
         private readonly ISerializer serializer;
 
         public ImportController(
@@ -29,11 +34,13 @@ namespace WB.UI.Designer.Api
             IExpressionProcessorGenerator expressionProcessorGenerator,
             IQuestionnaireHelper questionnaireHelper,
             IDesignerEngineVersionService engineVersionService,
+            QuestionnaireDowngradeService downgradeService,
             ISerializer serializer)
             : base(userHelper, viewFactory, questionnaireViewFactory, sharedPersonsViewFactory,
                 questionnaireVerifier, expressionProcessorGenerator, questionnaireHelper, engineVersionService)
         {
             this.zipUtils = zipUtils;
+            this.downgradeService = downgradeService;
             this.serializer = serializer;
         }
 
@@ -58,15 +65,16 @@ namespace WB.UI.Designer.Api
 
             this.CheckInvariantsAndThrowIfInvalid(request, questionnaireView);
 
-            var questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
+            Version questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
 
             var resultAssembly = this.GetQuestionnaireAssemblyOrThrow(questionnaireView, questionnaireContentVersion);
 
-            var questionnaire = questionnaireView.Source.Clone();
+            QuestionnaireDocument questionnaire = questionnaireView.Source.Clone();
             questionnaire.Macros = null;
             questionnaire.LookupTables = null;
             questionnaire.SharedPersons = null;
             questionnaire.Attachments = null;
+            this.downgradeService.Downgrade(questionnaire, questionnaireContentVersion);
 
             return new QuestionnaireCommunicationPackage
             {
