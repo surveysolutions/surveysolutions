@@ -177,7 +177,7 @@ namespace WB.Tests.Unit.Designer
                     validationMessage: validationMessage,
                     instructions: instructions,
                     properties: properties ?? new QuestionProperties(false),
-                    responsibleId: responsibleId.HasValue ? responsibleId.Value : Guid.NewGuid(),
+                    responsibleId: responsibleId ?? Guid.NewGuid(),
                     capital: capital,
                     isInteger: isInteger,
                     questionType: questionType,
@@ -221,7 +221,7 @@ namespace WB.Tests.Unit.Designer
                     validationMessage: validationMessage,
                     instructions: instructions,
                     properties: properties ?? new QuestionProperties(false),
-                    responsibleId: responsibleId.HasValue ? responsibleId.Value : Guid.NewGuid(),
+                    responsibleId: responsibleId ?? Guid.NewGuid(),
                     capital: false,
                     isInteger: isInteger,
                     countOfDecimalPlaces: null,
@@ -261,7 +261,7 @@ namespace WB.Tests.Unit.Designer
                     validationMessage: validationMessage,
                     instructions: instructions,
                     properties: properties ?? new QuestionProperties(false),
-                    responsibleId: responsibleId.HasValue ? responsibleId.Value : Guid.NewGuid(),
+                    responsibleId: responsibleId ?? Guid.NewGuid(),
                     capital: false,
                     isInteger: isInteger,
                     countOfDecimalPlaces: null,
@@ -301,7 +301,7 @@ namespace WB.Tests.Unit.Designer
                     validationMessage: validationMessage,
                     instructions: instructions,
                     properties: properties ?? new QuestionProperties(false),
-                    responsibleId: responsibleId.HasValue ? responsibleId.Value : Guid.NewGuid(),
+                    responsibleId: responsibleId ?? Guid.NewGuid(),
                     capital: capital,
                     isInteger: isInteger,
                     questionType: questionType,
@@ -340,7 +340,7 @@ namespace WB.Tests.Unit.Designer
                     validationMessage: validationMessage,
                     instructions: instructions,
                     properties: properties ?? new QuestionProperties(false),
-                    responsibleId: responsibleId.HasValue ? responsibleId.Value : Guid.NewGuid(),
+                    responsibleId: responsibleId ?? Guid.NewGuid(),
                     capital: capital,
                     isInteger: isInteger,
                     questionType: questionType,
@@ -382,7 +382,7 @@ namespace WB.Tests.Unit.Designer
                     validationMessage: validationMessage,
                     instructions: instructions,
                     properties: properties ?? new QuestionProperties(false),
-                    responsibleId: responsibleId.HasValue ? responsibleId.Value : Guid.NewGuid(),
+                    responsibleId: responsibleId ?? Guid.NewGuid(),
                     capital: capital,
                     isInteger: isInteger,
                     questionType: questionType,
@@ -416,15 +416,43 @@ namespace WB.Tests.Unit.Designer
                 };
             }
 
-            public static StaticTextAdded StaticTextAdded(Guid? parentId = null, string text = null, Guid? responsibleId = null, Guid? publicKey = null)
+            public static StaticTextAdded StaticTextAdded(Guid? entityId = null, Guid ? parentId = null, string text = null, Guid? responsibleId = null)
             {
-                return new StaticTextAdded
-                {
-                    EntityId = publicKey.GetValueOrDefault(Guid.NewGuid()),
-                    ResponsibleId = responsibleId ?? Guid.NewGuid(),
-                    ParentId =  parentId ?? Guid.NewGuid(),
-                    Text = text
-                };
+                return new StaticTextAdded(entityId.GetValueOrDefault(Guid.NewGuid()),
+                    responsibleId ?? Guid.NewGuid(),
+                    parentId ?? Guid.NewGuid(),
+                    text);
+            }
+
+            public static StaticTextUpdated StaticTextUpdated(Guid? entityId = null, Guid? parentId = null, string text = null, string attachmentName = null,  Guid? responsibleId = null,
+                string enablementCondition = null, bool? hideIfDisabled = null, List<ValidationCondition> validationConditions = null)
+            {
+                return new StaticTextUpdated(
+                    entityId.GetValueOrDefault(Guid.NewGuid()),
+                    responsibleId ?? Guid.NewGuid(),
+                    text,
+                    attachmentName,
+                    hideIfDisabled ?? false,
+                    enablementCondition,
+                    validationConditions ?? new List<ValidationCondition>());
+            }
+
+            public static StaticTextCloned StaticTextCloned(Guid? parentId = null, string text = null, string attachmentName = null,
+                Guid? responsibleId = null, Guid? publicKey = null, Guid? sourceQuestionnaireId = null, Guid? sourceEntityId = null,
+                string enablementCondition = null, bool hideIfDisabled = false, IList<ValidationCondition> validationConditions = null, int targetIndex = 0)
+            {
+                return new StaticTextCloned(
+                    publicKey.GetValueOrDefault(Guid.NewGuid()),
+                    responsibleId ?? Guid.NewGuid(),
+                    parentId ?? Guid.NewGuid(),
+                    sourceQuestionnaireId,
+                    sourceEntityId ?? Guid.NewGuid(),
+                    targetIndex,
+                    text,
+                    attachmentName,
+                    enablementCondition,
+                    hideIfDisabled,
+                    validationConditions);
             }
 
             public static NumericQuestionChanged UpdateNumericIntegerQuestion(Guid questionId, string variableName, string enablementCondition = null, string validationExpression = null)

@@ -170,7 +170,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IGroup>(this.RosterHasVariableNameEqualToQuestionnaireTitle, "WB0070", VerificationMessages.WB0070_RosterHasVariableNameEqualToQuestionnaireTitle),
             Verifier<IGroup>(this.RosterHasVariableNameReservedForServiceNeeds, "WB0058", VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
             Verifier<IStaticText>(StaticTextIsEmpty, "WB0071", VerificationMessages.WB0071_StaticTextIsEmpty),
-            Verifier<IStaticText>(StaticTextRefersAbsentAttachment, "WB0071", VerificationMessages.WB0095_StaticTextRefersAbsentAttachment),
+            Verifier<IStaticText>(StaticTextRefersAbsentAttachment, "WB0095", VerificationMessages.WB0095_StaticTextRefersAbsentAttachment),
             Verifier<IQuestion>(OptionTitlesMustBeUniqueForCategoricalQuestion, "WB0072", VerificationMessages.WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion),
             Verifier<IQuestion>(OptionValuesMustBeUniqueForCategoricalQuestion, "WB0073", VerificationMessages.WB0073_OptionValuesMustBeUniqueForCategoricalQuestion),
             Verifier<IQuestion>(FilteredComboboxIsLinked, "WB0074", VerificationMessages.WB0074_FilteredComboboxIsLinked),
@@ -197,10 +197,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10),
             Verifier<IQuestion>(LinkedQuestionFilterExpressionHasLengthMoreThan10000Characters, "WB0108", VerificationMessages.WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters),
             Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInFilterExpression, "WB0109", VerificationMessages.WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion),
-            Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationConditionIsTooLong, "WB0104", index => string.Format(VerificationMessages.WB0104_ValidationConditionIsTooLong, index)),
-            Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationMessageIsTooLong, "WB0105", index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index)),
-            Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationConditionIsEmpty, "WB0106", index => string.Format(VerificationMessages.WB0106_ValidationConditionIsEmpty, index)),
-            Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationMessageIsEmpty, "WB0107", index => string.Format(VerificationMessages.WB0107_ValidationMessageIsEmpty, index)),
+
+            Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsTooLong, "WB0104", index => string.Format(VerificationMessages.WB0104_ValidationConditionIsTooLong, index)),
+            Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, "WB0105", index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index)),
+            Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsEmpty, "WB0106", index => string.Format(VerificationMessages.WB0106_ValidationConditionIsEmpty, index)),
+            Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsEmpty, "WB0107", index => string.Format(VerificationMessages.WB0107_ValidationMessageIsEmpty, index)),
             
             MacrosVerifier(MacroHasEmptyName, "WB0014", VerificationMessages.WB0014_MacroHasEmptyName),
             MacrosVerifier(MacroHasInvalidName, "WB0010", VerificationMessages.WB0010_MacroHasInvalidName),
@@ -298,9 +299,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             };
         }
 
-        private bool ConditionExpresssionHasLengthMoreThan10000Characters(IComposite groupOrQuestion, VerificationState state, ReadOnlyQuestionnaireDocument questionnaire)
+        private bool ConditionExpresssionHasLengthMoreThan10000Characters(IComposite groupOrQuestionOrStaticText, VerificationState state, ReadOnlyQuestionnaireDocument questionnaire)
         {
-            var customEnablementCondition = GetCustomEnablementCondition(groupOrQuestion);
+            var customEnablementCondition = GetCustomEnablementCondition(groupOrQuestionOrStaticText);
             
             if (string.IsNullOrEmpty(customEnablementCondition))
                 return false;
@@ -690,7 +691,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return (questionnaire, state) =>
                 questionnaire
                     .Find<TEntity>(entity => hasError(entity, state, questionnaire))
-                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message,CreateReference(entity)));
+                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
         }
 
         private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity>(
@@ -1533,12 +1534,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static string GetCustomEnablementCondition(IComposite entity)
         {
-            if (entity is IGroup)
-                return ((IGroup)entity).ConditionExpression;
-            else if (entity is IQuestion)
-                return ((IQuestion)entity).ConditionExpression;
-            else
-                return null;
+            var entityAsIConditional = entity as IConditional;
+
+            return entityAsIConditional?.ConditionExpression;
+        }
+
+        private static IEnumerable<ValidationCondition> GetValidationConditionsOrEmpty(IComposite entity)
+        {
+            var entityAsIConditional = entity as IValidatable;
+
+            return entityAsIConditional != null ? entityAsIConditional.ValidationConditions : Enumerable.Empty<ValidationCondition>();
         }
 
         private static IQuestion GetQuestionByIdentifier(string identifier, ReadOnlyQuestionnaireDocument questionnaire)

@@ -146,7 +146,7 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<PasteAfter>(command => command.QuestionnaireId, aggregate => aggregate.PasteAfter)
                 .Handles<PasteInto>(command => command.QuestionnaireId, aggregate => aggregate.PasteInto)
                 // Static text
-                .Handles<AddStaticText>(command => command.QuestionnaireId, (command, aggregate) => aggregate.AddStaticTextAndMoveIfNeeded(command.EntityId, command.ParentId, command.Text, command.ResponsibleId, command.Index))
+                .Handles<AddStaticText>(command => command.QuestionnaireId, aggregate => aggregate.AddStaticTextAndMoveIfNeeded)
                 .Handles<MoveStaticText>(command => command.QuestionnaireId, (command, aggregate) => aggregate.MoveStaticText(command.EntityId, command.TargetEntityId, command.TargetIndex, command.ResponsibleId))
                 .Handles<UpdateStaticText>(command => command.QuestionnaireId, aggregate => aggregate.UpdateStaticText)
                 .Handles<DeleteStaticText>(command => command.QuestionnaireId, (command, aggregate) => aggregate.DeleteStaticText(command.EntityId, command.ResponsibleId))

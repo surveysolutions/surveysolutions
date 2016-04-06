@@ -89,7 +89,7 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
                         PublicKey = chapterId,
                         Children = new List<IComposite>
                         {
-                            new StaticText(staticTextId, null)
+                            Create.StaticText(staticTextId, null)
                         }
                     }
                 }

@@ -131,7 +131,8 @@ namespace WB.UI.Designer.Code
                         ItemId = reference.Id.FormatGuid(),
                         Type = reference.Type,
                         Title = string.IsNullOrEmpty(staticText.Text) ? "static text" : staticText.Text,
-                        ChapterId = Monads.Maybe(() => parent.PublicKey.FormatGuid())
+                        ChapterId = Monads.Maybe(() => parent.PublicKey.FormatGuid()),
+                        FailedValidationConditionIndex = reference.FailedValidationConditionIndex
                     };
                 }
                 else
