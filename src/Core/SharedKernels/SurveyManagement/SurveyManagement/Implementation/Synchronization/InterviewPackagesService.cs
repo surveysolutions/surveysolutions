@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         }
 
         [Obsolete("Since v 5.7")]
-        public virtual void StorePackage(Guid interviewId, string item) { }
+        public virtual void StorePackage(string item) { }
 
         public void StorePackage(Guid interviewId, Guid questionnaireId, long questionnaireVersion, Guid responsibleId,
             InterviewStatus interviewStatus, bool isCensusInterview, string events)
@@ -66,6 +66,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 
         public virtual int QueueLength
             => this.interviewPackageStorage.Query(packages => packages.Select(package => package.Id).Count());
+
+        public int InvalidPackagesCount
+            => this.brokenInterviewPackageStorage.Query(packages => packages.Select(package => package.Id).Count());
 
         public virtual bool HasPackagesByInterviewId(Guid interviewId)
             => this.interviewPackageStorage.Query(packages => packages.Any(package => package.InterviewId == interviewId)) ||

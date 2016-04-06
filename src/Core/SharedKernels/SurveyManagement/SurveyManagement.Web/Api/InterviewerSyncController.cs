@@ -107,7 +107,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [ApiBasicAuth(new[] { UserRoles.Operator })]
         public HttpResponseMessage PostPackage(PostPackageRequest request)
         {
-            this.incomingSyncPackagesQueue.StorePackage(interviewId: request.InterviewId, item: request.SynchronizationPackage);
+            this.incomingSyncPackagesQueue.StorePackage(item: request.SynchronizationPackage);
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }

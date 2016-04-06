@@ -1,21 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -34,7 +25,6 @@ namespace WB.UI.Headquarters.Controllers
 
         public ControlPanelController(
             IServiceLocator serviceLocator,
-            IBrokenSyncPackagesStorage brokenSyncPackagesStorage,
             ICommandService commandService,
             IGlobalInfoProvider globalInfo,
             ILogger logger,
@@ -43,7 +33,7 @@ namespace WB.UI.Headquarters.Controllers
             ISettingsProvider settingsProvider,
             ITransactionManagerProvider transactionManagerProvider,
             IEventStoreApiService eventStoreApiService)
-            : base(serviceLocator, brokenSyncPackagesStorage, commandService, globalInfo, logger, settingsProvider, transactionManagerProvider, eventStoreApiService)
+            : base(serviceLocator, commandService, globalInfo, logger, settingsProvider, transactionManagerProvider, eventStoreApiService)
         {
             this.userViewFactory = userViewFactory;
             this.passwordHasher = passwordHasher;

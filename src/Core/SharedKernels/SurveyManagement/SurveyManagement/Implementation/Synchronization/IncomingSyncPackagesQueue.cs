@@ -16,7 +16,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.Synchronization;
 
@@ -33,7 +32,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         private readonly IArchiveUtils archiver;
         private readonly MemoryCache cache = new MemoryCache(nameof(IncomingSyncPackagesQueue));
         private readonly object cacheLockObject = new object();
-        private readonly IBrokenSyncPackagesStorage brokenSyncPackagesStorage;
         private readonly ICommandService commandService;
         
         public IncomingSyncPackagesQueue(IFileSystemAccessor fileSystemAccessor,
@@ -41,7 +39,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             ILogger logger,
             ISerializer serializer,
             IArchiveUtils archiver,
-            IBrokenSyncPackagesStorage brokenSyncPackagesStorage,
             IPlainStorageAccessor<InterviewPackage> interviewPackageStorage,
             IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage,
             ICommandService commandService) : base(
@@ -58,14 +55,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             this.logger = logger;
             this.serializer = serializer;
             this.archiver = archiver;
-            this.brokenSyncPackagesStorage = brokenSyncPackagesStorage;
             this.commandService = commandService;
             this.incomingUnprocessedPackagesDirectory = fileSystemAccessor.CombinePath(syncSettings.AppDataDirectory,
                 syncSettings.IncomingUnprocessedPackagesDirectoryName);
         }
 
         [Obsolete("Since v 5.7")]
-        public override void StorePackage(Guid interviewId, string item)
+        public override void StorePackage(string item)
         {
             if(string.IsNullOrEmpty(item)) throw new ArgumentException(nameof(item));
 
@@ -74,7 +70,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             var meta = this.serializer.Deserialize<InterviewMetaInfo>(archiver.DecompressString(syncItem.MetaInfo));
 
             base.StorePackage(
-                interviewId: interviewId,
+                interviewId: syncItem.RootId,
                 questionnaireId: meta.TemplateId,
                 questionnaireVersion: meta.TemplateVersion,
                 responsibleId: meta.ResponsibleId,
@@ -160,9 +156,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 
         public override void ProcessPackage(string pathToPackage)
         {
-            Guid? interviewId = null;
-            string fileContent = null;
-
             Stopwatch innerwatch = Stopwatch.StartNew();
             try
             {
@@ -174,52 +167,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 
                 var policy = SetupRetryPolicyForPackage(pathToPackage);
                 
-                fileContent = policy.Execute(() => fileSystemAccessor.ReadAllText(pathToPackage));
+                string fileContent = policy.Execute(() => fileSystemAccessor.ReadAllText(pathToPackage));
 
                 this.logger.Debug($"Package {Path.GetFileName(pathToPackage)}. Read content from file. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
 
-                var syncItem = this.serializer.Deserialize<SyncItem>(fileContent);
+                this.StorePackage(fileContent);
 
-                interviewId = syncItem.RootId;
-
-                var meta = this.serializer.Deserialize<InterviewMetaInfo>(archiver.DecompressString(syncItem.MetaInfo));
-
-                var eventsToSync = this.serializer
-                    .Deserialize<AggregateRootEvent[]>(archiver.DecompressString(syncItem.Content))
-                    .Select(e => e.Payload)
-                    .ToArray();
-
-                this.logger.Debug($"Package {Path.GetFileName(pathToPackage)}. Decompressed and deserialized. Took {innerwatch.Elapsed:g}.");
-                innerwatch.Restart();
-
-                this.commandService.Execute(new SynchronizeInterviewEventsCommand(
-                    interviewId: meta.PublicKey,
-                    userId: meta.ResponsibleId,
-                    questionnaireId: meta.TemplateId,
-                    questionnaireVersion: meta.TemplateVersion,
-                    interviewStatus: (InterviewStatus) meta.Status,
-                    createdOnClient: meta.CreatedOnClient ?? false,
-                    synchronizedEvents: eventsToSync), syncSettings.Origin);
-
-                this.logger.Debug($"Package {Path.GetFileName(pathToPackage)}. Executed command. Took {innerwatch.Elapsed:g}.");
-                innerwatch.Restart();
-            }
-            catch (Exception e)
-            {
-                this.logger.Error($"Package {Path.GetFileName(pathToPackage)}. FAILED. Reason: '{e.Message}'", e);
-
-                if (interviewId.HasValue && !string.IsNullOrEmpty(fileContent))
-                    base.StorePackage(interviewId.Value, fileContent);
-                else
-                    this.brokenSyncPackagesStorage.StoreUnhandledPackage(pathToPackage, interviewId, e);}
-            finally
-            {
                 this.fileSystemAccessor.DeleteFile(pathToPackage);
                 this.GetCachedFilesInIncomingDirectory().Remove(pathToPackage);
 
                 this.logger.Debug($"Package {Path.GetFileName(pathToPackage)}. File deleted. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Stop();
+            }
+            catch (Exception e)
+            {
+                this.logger.Error($"Package {Path.GetFileName(pathToPackage)}. FAILED. Reason: '{e.Message}'", e);
             }
         }
     }
