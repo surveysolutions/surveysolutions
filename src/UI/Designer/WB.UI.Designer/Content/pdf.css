@@ -96,13 +96,13 @@ header{
 .column_header:first-of-type{
 	width: 45%;
 }
-.string_list li{
+.group-statistics li{
 	display: inline-block;
 }
-.string_list li:after{
+.group-statistics li:after{
 	content: ",";
 }
-.string_list li:last-child::after{
+.group-statistics li:last-child::after{
 	content: ".";
 }
 .logo{
@@ -171,20 +171,18 @@ h1{
 .table_of_contents dl dd .appendix{
 	font-family: 'RobotoMediumItalic';
 }
-.table_of_contents .string_list{
+.table_of_contents .group-statistics{
 	font-size: 12px;
 	line-height: 14px;
 	margin-top: 4px;
 }
 /*End  Questionnaire information and content*/
 
+
 .help_info{
-	margin: 60px 75px 38px 78px;
-}
-.help_info img{
 	width: 100%;
 	height: auto;
-	display: block;
+	display: inline-block;
 }
 /*Start number of page*/
 .footer{							/*Number of page*/
@@ -307,13 +305,13 @@ h1{
 .answer-editor input:checked + label::after {
     display: block;
 }
-.option, .row{
+.option{
 	margin-top: 12px;
 }
-.option:first-of-type, .row:first-of-type{
+.option:first-of-type{
 	margin-top: 0;
 }
-.option b, .row b{
+.option b{
 	font-size: 11px;
 	line-height: 24px;
 	margin-right: 5px;
@@ -322,7 +320,7 @@ h1{
 	display: inline-block;
 	width: 19px;
 }
-.option>span, .row>span{
+.option>span{
     display: inline-block;
     margin-left: 18px;
     font-size: 18px;
@@ -378,19 +376,13 @@ h2{
 	width: 64%;
 }
 input[type=date] {
-	border: 2px solid #000;
-	border-radius: 3px;
-	box-shadow: 0 3px 3px rgba(0,0,0,0.1);
 	font-family: 'RobotoMedium';
 	line-height: 20px;
 	outline: 0;
 	padding: 5px 10px;
-	width: 200px;
 	font-size: 18px;
     line-height: 20px;
     text-transform: uppercase;
-    display: inline-block;
-    margin-left: 10px;
 }
 .common-info, .container, .generated_by span a{
 	font-size: 12px;
@@ -449,15 +441,15 @@ input[type=date] {
 	line-height: 24px;
 	width: 80%;
 }
-.roster ul, .static-text ul, .group ul{
+.generated_by ul{
 	margin-bottom: 10px;
 }
-.roster ul li, .static-text ul li, .group ul li{
+.generated_by ul li{
     margin-top: 17px;
     font-size: 18px;
     line-height: 20px;
 }
-.roster ul li span, .static-text ul li span, .group ul li span{
+.generated_by ul li span{
 	font-size: 12px;
 	line-height: 18px;
 	margin-right: 15px;
@@ -569,11 +561,12 @@ h3{
 	position: relative;
 }
 .number{
-	width: 30px;
+	width: 40px;
 	position: absolute;
 	display: block;
 	top: 0;
-	left: -30px;
+    text-align: right;
+	left: -45px;
 } 
 .appendix_detail{
 	font-family: 'RobotoMedium';
@@ -650,27 +643,30 @@ h4{
 
 @media print {
     header{
-    	margin: 0 15px 38px 46px;
+    	margin: 0 40px 38px 76px;
     } 
     .questionnaire_title{
-		margin-left: 44px;
+		margin-left: 74px;
 	}
 	.table_of_contents {
-		margin-left: 0;
-	}
-	.help_info{
-		margin: 60px 20px 38px 0;
+		margin-left: 30px;
 	}
 	.section{
-		padding: 35px 20px 0px 45px;
+		padding: 35px 45px 0px 75px;
 	}
 	.appendix_section{
-		margin: 0 0 0 30px;
+		margin: 0 25px 0 60px;
 	}
 	.footer{
-		margin: 53px 5px 0 47px; 
+		margin: 53px 30px 0 77px; 
 	}
-	article{
-		page-break-after: always;
+	article + article { 
+		page-break-before: always; 
+	}
+	@page {
+        margin: 2cm 0;
+	}
+	ul, img, .question-container, h1, h2, h3, h4, h5{
+	    page-break-inside: avoid;
 	}
 }

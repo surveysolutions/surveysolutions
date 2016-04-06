@@ -9,6 +9,15 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
+    public class PdfSettings
+    {
+        public int InstructionsExcerptLength { get; } = 200;
+        public int ExpressionExcerptLength { get; } = 200;
+        public int OptionsExcerptCount { get; } = 16;
+        public int MinAmountOfDigitsInCodes { get; } = 2;
+
+    }
+
     public class PdfQuestionnaireModel
     {
         public class ModificationStatisticsByUser
@@ -36,17 +45,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         }
 
         private readonly QuestionnaireDocument questionnaire;
+        public PdfSettings Settings { get; }
 
         public ModificationStatisticsByUser Created { get; set; }
         public ModificationStatisticsByUser LastModified { get; set; }
         public ModificationStatisticsByUser Requested { get; set; }
 
         public QuestionnaireStatistics Statistics { get; set; } = new QuestionnaireStatistics();
-        private List<IComposite> allItems;
+        private readonly List<IComposite> allItems;
 
-        public PdfQuestionnaireModel(QuestionnaireDocument questionnaire)
+        public PdfQuestionnaireModel(QuestionnaireDocument questionnaire, PdfSettings settings)
         {
             this.questionnaire = questionnaire;
+            this.Settings = settings;
             this.questionnaire.ConnectChildrenWithParent();
             this.allItems = this.questionnaire.Children.SelectMany<IComposite, IComposite>(x => x.TreeToEnumerable<IComposite>(g => g.Children)).ToList();
 
@@ -121,7 +132,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     yield return group;
                 }
                 group = (IGroup)group.GetParent();
-                
             }
         }
 
@@ -234,11 +244,36 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             }
         }
 
-        private static string FormatAsIntegerWithLeadingZeros(decimal value, IEnumerable<double> values)
+        private string FormatAsIntegerWithLeadingZeros(decimal value, IEnumerable<double> values)
         {
             var maxValue = values.Select(x => Math.Floor(Math.Log10(Math.Abs(x)) + 1)).Max();
-            maxValue = Math.Max(2, maxValue);
+            maxValue = Math.Max(Settings.MinAmountOfDigitsInCodes, maxValue);
             return Convert.ToInt64(value).ToString($"D{maxValue}");
+        }
+
+        public List<IQuestion> GetQuestionsWithLongConditions()
+        {
+            return Find<IQuestion>(x => x.ConditionExpression?.Length > Settings.ExpressionExcerptLength).ToList();
+        }
+
+        public List<IQuestion> GetQuestionsWithLongValidations()
+        {
+            return Find<IQuestion>(x => x.ValidationConditions.Count > 0 && x.ValidationConditions.Any(condition => condition.Expression?.Length > Settings.ExpressionExcerptLength)).ToList();
+        }
+
+        public List<IQuestion> GetQuestionsWithLongInstructions()
+        {
+            return Find<IQuestion>(x => x.Instructions?.Length > Settings.InstructionsExcerptLength).ToList();
+        }
+
+        public List<IQuestion> GetQuestionsWithLongOptionsList()
+        {
+            return Find<IQuestion>(x => x.Answers?.Count> Settings.OptionsExcerptCount).ToList();
+        }
+
+        public string GetQuestionInstructionExcerpt(IQuestion question)
+        {
+            return question.Instructions.Substring(0, Math.Min(Settings.InstructionsExcerptLength, question.Instructions.Length));
         }
     }
 }
