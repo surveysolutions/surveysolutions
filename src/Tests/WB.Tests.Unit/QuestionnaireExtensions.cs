@@ -42,7 +42,8 @@ namespace WB.Tests.Unit
                 instructions, 
                 mask, 
                 responsibleId, 
-                validationConditions);
+                validationConditions, 
+                new QuestionProperties(false));
         }
 
         public static void AddGpsCoordinatesQuestion(
@@ -58,7 +59,7 @@ namespace WB.Tests.Unit
             Guid responsibleId)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateGpsCoordinatesQuestion(questionId, title, variableName, variableLabel,false, scope, enablementCondition, false, instructions, responsibleId, new List<ValidationCondition>());
+            questionnaire.UpdateGpsCoordinatesQuestion(questionId, title, variableName, variableLabel,false, scope, enablementCondition, false, instructions, responsibleId, new List<ValidationCondition>(), new QuestionProperties(false));
         }
 
         public static void AddMultiOptionQuestion(
@@ -81,7 +82,7 @@ namespace WB.Tests.Unit
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
             questionnaire.UpdateMultiOptionQuestion(questionId, title, variableName, variableLabel, scope, enablementCondition, false, instructions, responsibleId, options, linkedToQuestionId, areAnswersOrdered, maxAllowedAnswers, yesNoView, new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
-                linkedFilterExpression: null);
+                linkedFilterExpression: null, properties: new QuestionProperties(false));
         }
 
         public static void AddSingleOptionQuestion(
@@ -104,7 +105,7 @@ namespace WB.Tests.Unit
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
             questionnaire.UpdateSingleOptionQuestion(questionId, title, variableName, variableLabel, isPreFilled, scope, enablementCondition, false, instructions, responsibleId, options, linkedToQuestionId, isFilteredCombobox, cascadeFromQuestionId, new List<ValidationCondition>(),
-                linkedFilterExpression: null);
+                linkedFilterExpression: null, properties: new QuestionProperties(false));
         }
 
         public static void AddNumericQuestion(
@@ -136,8 +137,7 @@ namespace WB.Tests.Unit
                 hideIfDisabled: false,
                 instructions: instructions,
                 responsibleId: responsibleId,
-                validationConditions: new List<ValidationCondition>()
-                );
+                validationConditions: new List<ValidationCondition>(), properties: new QuestionProperties(false));
         }
 
         public static void AddQRBarcodeQuestion(
@@ -154,7 +154,9 @@ namespace WB.Tests.Unit
             string validationMessage)
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
-            questionnaire.UpdateQRBarcodeQuestion(questionId, title, variableName, variableLabel, enablementCondition, false, instructions, responsibleId, scope: QuestionScope.Interviewer, validationConditions: new List<ValidationCondition>());
+            questionnaire.UpdateQRBarcodeQuestion(questionId, 
+                title, variableName, variableLabel, enablementCondition, false, instructions, 
+                responsibleId, scope: QuestionScope.Interviewer, validationConditions: new List<ValidationCondition>(), properties: new QuestionProperties(false));
         }
     }
 }

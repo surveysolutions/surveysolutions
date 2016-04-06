@@ -20,6 +20,7 @@ namespace Main.Core.Entities
             bool featured,
             bool capital,
             string instructions,
+            QuestionProperties questionProperties,
             string mask,
             Answer[] answers,
             Guid? linkedToQuestionId,
@@ -62,6 +63,7 @@ namespace Main.Core.Entities
             this.CascadeFromQuestionId = cascadeFromQuestionId;
             this.YesNoView = yesNoView;
             this.ValidationConditions = validationConditions ?? new List<ValidationCondition>();
+            this.Properties = questionProperties;
         }
 
         public readonly Guid PublicKey;
@@ -93,6 +95,7 @@ namespace Main.Core.Entities
         public readonly bool? IsFilteredCombobox;
         public readonly Guid? CascadeFromQuestionId;
         public readonly bool? YesNoView;
+        public readonly QuestionProperties Properties;
 
         public IList<ValidationCondition> ValidationConditions { get; set; } 
     }

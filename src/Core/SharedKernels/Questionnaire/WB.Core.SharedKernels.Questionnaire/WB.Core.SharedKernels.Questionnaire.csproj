@@ -66,6 +66,7 @@
     <Compile Include="Documents\QuestionData.cs" />
     <Compile Include="Documents\QuestionIdAndVariableName.cs" />
     <Compile Include="Documents\QuestionnaireDocument.cs" />
+    <Compile Include="Documents\QuestionProperties.cs" />
     <Compile Include="Documents\QuestionScope.cs" />
     <Compile Include="Documents\QuestionType.cs" />
     <Compile Include="Documents\Question\DateTimeQuestion.cs" />
