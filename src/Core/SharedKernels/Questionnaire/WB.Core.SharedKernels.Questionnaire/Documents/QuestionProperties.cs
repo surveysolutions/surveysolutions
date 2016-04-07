@@ -11,6 +11,6 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
             this.HideInstructions = hideInstructions;
         }
 
-        public bool HideInstructions { get; protected set; }
+        public bool HideInstructions { get; set; }
     }
 }
