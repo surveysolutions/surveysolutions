@@ -451,17 +451,25 @@ namespace WB.Tests.Integration
             return group;
         }
 
-        public static Group Group(Guid? id = null, string title = "Group X", string variable = null,
+        public static Group Group(
+            Guid? id = null, string title = "Group X", string variable = null,
             string enablementCondition = null, IEnumerable<IComposite> children = null)
-        {
-            return new Group(title)
+            => new Group(title)
             {
                 PublicKey = id ?? Guid.NewGuid(),
                 VariableName = variable,
-                ConditionExpression = enablementCondition,              
+                ConditionExpression = enablementCondition,
                 Children = children != null ? children.ToList() : new List<IComposite>(),
             };
-        }
+
+        public static StaticText StaticText(
+            Guid? id = null, string enablementCondition = null)
+            => new StaticText(
+                id ?? Guid.NewGuid(),
+                "Static Text",
+                enablementCondition,
+                false,
+                new List<ValidationCondition>());
 
         public static Questionnaire Questionnaire(QuestionnaireDocument questionnaireDocument)
         {

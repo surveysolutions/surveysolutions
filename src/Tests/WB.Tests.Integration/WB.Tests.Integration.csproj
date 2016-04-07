@@ -269,6 +269,7 @@
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_valid_answer_and_all_questions_were_valid_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_a_question_with_answer_that_enables_dependent_group.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_a_question_with_answer_that_enables_dependent_question.cs" />
+    <Compile Include="InterviewTests\LanguageTests\when_answering_on_a_question_with_answer_that_enables_dependent_static_text.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_and_related_group_condition_expression_throws_exception.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_condition_expression_throws_exception.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_validation_expression_throws_exception.cs" />
