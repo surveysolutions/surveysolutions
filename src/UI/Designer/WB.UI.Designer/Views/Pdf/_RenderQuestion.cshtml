@@ -80,8 +80,22 @@
                     {
                         <div class="option">
                             <b>@questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)</b>
-                            <input type="checkbox" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
-                            <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
+                            @if (questionnaire.IsYesNoMultiQuestion(question))
+                            {
+                                <div class="yes_no_multiselect">
+                                    <input type="radio" id="@question.StataExportCaption-@option.AnswerValue-yes" name="@question.StataExportCaption-@option.AnswerValue">
+                                    <label for="@question.StataExportCaption-@option.AnswerValue-yes"></label>
+                                    <span>/</span>
+                                    <input type="radio" id="@question.StataExportCaption-@option.AnswerValue-no" name="@question.StataExportCaption-@option.AnswerValue">
+                                    <label for="@question.StataExportCaption-@option.AnswerValue-no"></label>
+                                </div>
+                                <span class="yes_no-option-text">@option.AnswerText</span>
+                            }
+                            else
+                            {
+                                <input type="checkbox" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
+                                <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
+                            }
                         </div>
                     }
                     @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)

@@ -320,5 +320,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public string GetValidationsId(Guid id) => $"validations-{id.FormatGuid()}";
 
         public string GetOptionsId(Guid id) => $"options-{id.FormatGuid()}";
+
+        public bool IsYesNoMultiQuestion(IQuestion question)
+        {
+            var multyOptionsQuestion = (question as MultyOptionsQuestion);
+            return multyOptionsQuestion?.YesNoView ?? false;
+        }
     }
 }
