@@ -623,24 +623,6 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static PdfGroupView PdfGroupView()
-        {
-            return new PdfGroupView();
-        }
-
-        public static PdfQuestionnaireView PdfQuestionnaireView(Guid? publicId = null)
-        {
-            return new PdfQuestionnaireView
-            {
-                PublicId = publicId ?? Guid.Parse("FEDCBA98765432100123456789ABCDEF"),
-            };
-        }
-
-        public static PdfQuestionView PdfQuestionView()
-        {
-            return new PdfQuestionView();
-        }
-
         public static IPublishableEvent PublishableEvent(Guid? eventSourceId = null, IEvent payload = null)
         {
             return Mock.Of<IPublishableEvent>(_ => _.Payload == (payload ?? Mock.Of<IEvent>()) && _.EventSourceId == (eventSourceId ?? Guid.NewGuid()));

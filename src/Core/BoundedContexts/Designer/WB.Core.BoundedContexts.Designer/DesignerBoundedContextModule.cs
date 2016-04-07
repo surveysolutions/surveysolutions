@@ -20,7 +20,6 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
@@ -61,13 +60,11 @@ namespace WB.Core.BoundedContexts.Designer
             this.Unbind<ICompilerSettings>();
             this.Bind<ICompilerSettings>().ToConstant(this.compilerSettings);
             this.Bind<IDynamicCompilerSettingsProvider>().To<DynamicCompilerSettingsProvider>();
-            this.Bind<PdfQuestionTypeConverter>().To<PdfQuestionTypeConverter>();
 
             DispatcherRegistryHelper.RegisterDenormalizer<AccountDenormalizer>(this.Kernel);
             DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireDenormalizer>(this.Kernel);
             DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireSharedPersonsDenormalizer>(this.Kernel);
             DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireListViewItemDenormalizer>(this.Kernel);
-            DispatcherRegistryHelper.RegisterDenormalizer<PdfQuestionnaireDenormalizer>(this.Kernel);
             DispatcherRegistryHelper.RegisterDenormalizer<QuestionnaireChangeHistoryDenormalizer>(this.Kernel);
 
             this.Bind<IEventHandler>().To<QuestionnaireInfoViewDenormalizer>().InSingletonScope();
@@ -85,7 +82,6 @@ namespace WB.Core.BoundedContexts.Designer
             this.Kernel.RegisterFactory<QuestionnaireSharedPersonsFactory>();
             this.Kernel.RegisterFactory<AccountListViewFactory>();
             this.Kernel.RegisterFactory<AccountViewFactory>();
-            this.Kernel.RegisterFactory<PdfQuestionnaireFactory>();
 
             CommandRegistry
                 .Setup<AccountAR>()
