@@ -3,6 +3,7 @@ using System.Linq;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -11,22 +12,26 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
     public interface IPdfFactory
     {
         PdfQuestionnaireModel Load(Guid questionnaireId, Guid requestedByUserId, string requestedByUserName);
+        string LoadQuestionnaireTitle(Guid questionnaireId);
     }
 
     public class PdfFactory : IPdfFactory
     {
         private readonly IQueryableReadSideRepositoryReader<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage;
+        private readonly IQueryableReadSideRepositoryReader<QuestionnaireListViewItem> questionnaireListViewItemStorage;
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly IReadSideRepositoryReader<AccountDocument> accountsDocumentReader;
 
         public PdfFactory(
             IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
             IQueryableReadSideRepositoryReader<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage, 
-            IReadSideRepositoryReader<AccountDocument> accountsDocumentReader)
+            IReadSideRepositoryReader<AccountDocument> accountsDocumentReader, 
+            IQueryableReadSideRepositoryReader<QuestionnaireListViewItem> questionnaireListViewItemStorage)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireChangeHistoryStorage = questionnaireChangeHistoryStorage;
             this.accountsDocumentReader = accountsDocumentReader;
+            this.questionnaireListViewItemStorage = questionnaireListViewItemStorage;
         }
 
         public PdfQuestionnaireModel Load(Guid questionnaireId, Guid requestedByUserId, string requestedByUserName)
@@ -72,6 +77,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 })
             };
             return pdfView;
+        }
+
+        public string LoadQuestionnaireTitle(Guid questionnaireId)
+        {
+            return this.questionnaireListViewItemStorage.GetById(questionnaireId.FormatGuid()).Title;
         }
     }
 }
