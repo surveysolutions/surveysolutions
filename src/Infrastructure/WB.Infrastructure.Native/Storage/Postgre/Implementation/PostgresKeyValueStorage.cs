@@ -6,6 +6,7 @@ using Npgsql;
 using NpgsqlTypes;
 using WB.Core.GenericSubdomains.Portable.Services;
 using Newtonsoft.Json;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {

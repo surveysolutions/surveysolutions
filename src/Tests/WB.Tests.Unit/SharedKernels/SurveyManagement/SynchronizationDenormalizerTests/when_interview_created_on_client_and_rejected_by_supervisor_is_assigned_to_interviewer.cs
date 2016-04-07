@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
 
             interviewSummaryWriterMock.SetReturnsDefault(interviewSummary);
 
-            var serializer = Mock.Of<ISerializer>(x => x.Serialize(Moq.It.IsAny<object>(), Moq.It.IsAny<TypeSerializationSettings>()) == String.Empty);
+            var serializer = Mock.Of<ISerializer>(x => x.Serialize(Moq.It.IsAny<object>()) == String.Empty);
 
             synchronizationDenormalizer = CreateDenormalizer(
                 interviews: interviews.Object,

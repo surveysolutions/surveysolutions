@@ -2,6 +2,7 @@
 using System.Net.Http;
 using Machine.Specifications;
 using Main.Core.Documents;
+using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Storage;
@@ -20,12 +21,11 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
             questionnaire.CreationDate = new DateTime(2015, 03, 22, 12, 55, 30);
             questionnaire.LastEntryDate = new DateTime(2015, 03, 22, 12, 57, 30);
             questionnaire.PublicKey = Guid.Parse("11111111111111111111111111111111");
-
-            _jsonSerializer = CreateNewtonJsonUtils(new JsonSerializerSettingsFactory());
+            
         };
 
         Because of = () =>
-            result = _jsonSerializer.Serialize(questionnaire, SerializationBinderSettings.NewToOld);
+            result = JsonConvert.SerializeObject(questionnaire, JsonSerializerSettingsNewToOld);
 
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();
@@ -34,7 +34,14 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
             result.ShouldNotContain(", WB.Core.SharedKernels.Questionnaire");
 
        static QuestionnaireDocument questionnaire;
-       static NewtonJsonSerializer _jsonSerializer;
+       static readonly JsonSerializerSettings JsonSerializerSettingsNewToOld = new JsonSerializerSettings()
+       {
+           TypeNameHandling = TypeNameHandling.Objects,
+           NullValueHandling = NullValueHandling.Ignore,
+           FloatParseHandling = FloatParseHandling.Decimal,
+           Formatting = Formatting.None,
+           Binder = new NewToOldAssemblyRedirectSerializationBinder()
+       };
        static string result;
     }
 }

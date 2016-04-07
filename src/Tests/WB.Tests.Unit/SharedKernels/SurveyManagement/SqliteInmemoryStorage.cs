@@ -14,8 +14,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
     {
         public SqliteInmemoryStorage() : base(new SQLiteConnectionWithLock(new SQLitePlatformWin32(),
                 new SQLiteConnectionString(":memory:", true, new BlobSerializerDelegate(
-                    new NewtonJsonSerializer(new JsonSerializerSettingsFactory()).SerializeToByteArray,
-                    (data, type) => new NewtonJsonSerializer(new JsonSerializerSettingsFactory()).DeserializeFromStream(new MemoryStream(data), type),
+                    new JsonAllTypesSerializer(new JsonSerializerSettingsFactory()).SerializeToByteArray,
+                    (data, type) => new JsonAllTypesSerializer(new JsonSerializerSettingsFactory()).DeserializeFromStream(new MemoryStream(data), type),
                     (type) => true))),
             Substitute.For<ILogger>()
             )

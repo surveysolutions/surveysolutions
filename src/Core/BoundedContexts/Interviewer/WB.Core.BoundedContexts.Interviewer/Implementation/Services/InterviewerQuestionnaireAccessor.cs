@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public class InterviewerQuestionnaireAccessor : IInterviewerQuestionnaireAccessor
     {
-        private readonly ISynchronizationSerializer synchronizationSerializer;
+        private readonly IJsonAllTypesSerializer synchronizationSerializer;
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
         private readonly IInterviewerInterviewAccessor interviewFactory;
 
@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
 
         public InterviewerQuestionnaireAccessor(
-            ISynchronizationSerializer synchronizationSerializer,
+            IJsonAllTypesSerializer synchronizationSerializer,
             IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IPlainQuestionnaireRepository plainQuestionnaireRepository,
             IAsyncPlainStorage<InterviewView> interviewViewRepository,
