@@ -424,7 +424,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document
             }
 
             var staticText = questionnaireEntityFactory.CreateStaticText(entityId: evnt.Payload.EntityId, text: evnt.Payload.Text, 
-                attachmentName: null, hideIfDisabled:false, enablementCondition:null, validationConditions: new List<ValidationCondition>());
+                attachmentName: null, hideIfDisabled: evnt.Payload.HideIfDisabled, enablementCondition: evnt.Payload.EnablementCondition, 
+                validationConditions: evnt.Payload.ValidationConditions);
 
             questionnaireDocument.Add(staticText, evnt.Payload.ParentId, null);
 

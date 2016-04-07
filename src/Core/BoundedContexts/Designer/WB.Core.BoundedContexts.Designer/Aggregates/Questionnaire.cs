@@ -2159,7 +2159,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ApplyEvent(new StaticTextAdded(command.EntityId, 
                 command.ResponsibleId,
                 command.ParentId, 
-                command.Text));
+                command.Text,
+                null,
+                false,
+                null));
             
             if (command.Index.HasValue)
             {

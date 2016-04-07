@@ -421,7 +421,10 @@ namespace WB.Tests.Unit.Designer
                 return new StaticTextAdded(entityId.GetValueOrDefault(Guid.NewGuid()),
                     responsibleId ?? Guid.NewGuid(),
                     parentId ?? Guid.NewGuid(),
-                    text);
+                    text,
+                    null,
+                    false,
+                    null);
             }
 
             public static StaticTextUpdated StaticTextUpdated(Guid? entityId = null, Guid? parentId = null, string text = null, string attachmentName = null,  Guid? responsibleId = null,

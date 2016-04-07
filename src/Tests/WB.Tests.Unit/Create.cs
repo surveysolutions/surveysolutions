@@ -2244,7 +2244,10 @@ namespace WB.Tests.Unit
                 GetQuestionnaireItemId(entityId),
                 responsibleId ?? Guid.NewGuid(),
                 GetQuestionnaireItemId(parentId),
-                text));
+                text,
+                null,
+                false,
+                null));
         }
 
         public static IPublishedEvent<StaticTextCloned> StaticTextClonedEvent(string entityId = null,
@@ -2725,9 +2728,9 @@ namespace WB.Tests.Unit
             }
 
             public static UpdateStaticText UpdateStaticText(Guid questionnaireId, Guid entityId, string text, string attachmentName, Guid responsibleId,
-                string enablementCondition, bool? hideIfDisabled, IList<ValidationCondition> validationConditions = null)
+                string enablementCondition, bool hideIfDisabled = false, IList<ValidationCondition> validationConditions = null)
             {
-                return new UpdateStaticText(questionnaireId, entityId, text, attachmentName, responsibleId, enablementCondition, hideIfDisabled?? false, validationConditions);
+                return new UpdateStaticText(questionnaireId, entityId, text, attachmentName, responsibleId, enablementCondition, hideIfDisabled, validationConditions);
             }
         }
 
