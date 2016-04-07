@@ -514,19 +514,10 @@ figure{
     margin-top: 15px;
 	overflow: hidden;
 	padding: 0 0 2px;
-    width: 384px;
 }
 figure img{
 	height: auto;
 	display: block;
-}
-.img_text{
-	margin-top: 10px;
-}
-figcaption{
-	font: 11px/13px 'RobotoLight', sans-serif;
-	text-align: center;
-	word-break: break-all;
 }
 
 /*Start Appendix*/

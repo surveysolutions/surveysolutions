@@ -12,9 +12,9 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
+using WB.UI.Designer.Code.ConfigurationManager;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Mailers;
-using WB.UI.Designer.WebServices;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 
@@ -22,6 +22,18 @@ namespace WB.UI.Designer.Code
 {
     public class DesignerRegistry : NinjectModule
     {
+        private readonly PdfSettings pdfSettings;
+
+        public DesignerRegistry(PdfConfigSection pdfConfigSettings)
+        {
+            this.pdfSettings = new PdfSettings(
+                pdfConfigSettings.InstructionsExcerptLength.Value,
+                pdfConfigSettings.ExpressionExcerptLength.Value,
+                pdfConfigSettings.OptionsExcerptCount.Value,
+                pdfConfigSettings.MinAmountrOfDigitsInCodes.Value,
+                pdfConfigSettings.AttachmentSize.Value);
+        }
+
         public override void Load()
         {
             this.BindFilter<TransactionFilter>(FilterScope.First, 0)
@@ -46,6 +58,7 @@ namespace WB.UI.Designer.Code
             this.Bind<IChapterInfoViewFactory>().To<ChapterInfoViewFactory>();
             this.Bind<IQuestionnaireInfoFactory>().To<QuestionnaireInfoFactory>();
             this.Bind<IQuestionnaireInfoViewFactory>().To<QuestionnaireInfoViewFactory>();
+            this.Bind<PdfSettings>().ToConstant(pdfSettings);
             this.Bind<IPdfFactory>().To<PdfFactory>();
         }
     }

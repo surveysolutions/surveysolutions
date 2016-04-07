@@ -282,6 +282,7 @@
     <Compile Include="Api\ImportController.cs" />
     <Compile Include="Api\QuestionnaireController.cs" />
     <Compile Include="Api\UsersController.cs" />
+    <Compile Include="Code\ConfigurationManager\PdfConfigSection.cs" />
     <Compile Include="Code\Implementation\CommandInflaitingException.cs" />
     <Compile Include="Code\Implementation\CommandInflatingExceptionType.cs" />
     <Compile Include="Code\Implementation\ShareChangeType.cs" />
