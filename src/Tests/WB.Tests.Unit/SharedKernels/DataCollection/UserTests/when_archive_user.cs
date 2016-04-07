@@ -15,22 +15,18 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
     {
         Establish context = () =>
         {
-            Setup.InstanceToMockedServiceLocator(userDocumentStorage);
-            var userDocument = Create.UserDocument(userId: userId);
-            userDocument.Roles.Add(UserRoles.Supervisor);
-            userDocumentStorage.Store(userDocument, userId.FormatGuid());
             user = Create.User();
             user.SetId(userId);
+            user.Roles=new UserRoles[] { UserRoles.Supervisor};
         };
 
         Because of = () =>
             user.Archive();
         
         It should_user_be_archived = () =>
-           userDocumentStorage.GetById(userId.FormatGuid()).IsArchived.ShouldBeTrue();
+           user.IsArchived.ShouldBeTrue();
 
         private static User user;
         private static Guid userId = Guid.NewGuid();
-        private static IPlainStorageAccessor<UserDocument> userDocumentStorage = new TestPlainStorage<UserDocument>();
     }
 }
