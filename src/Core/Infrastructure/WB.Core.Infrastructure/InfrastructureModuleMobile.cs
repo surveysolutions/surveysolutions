@@ -29,6 +29,7 @@ namespace WB.Core.Infrastructure
             registry.BindAsSingletonWithConstructorArgument<ISnapshottingPolicy, SimpleSnapshottingPolicy>("snapshotIntervalInEvents", 1);
             registry.Bind<IAggregateSupportsSnapshotValidator,AggregateSupportsSnapshotValidator>();
             registry.Bind<IAggregateSnapshotter, DefaultAggregateSnapshotter>();
+            registry.Bind<IPlainAggregateRootRepository, PlainAggregateRootRepository>();
         }
     }
 }
