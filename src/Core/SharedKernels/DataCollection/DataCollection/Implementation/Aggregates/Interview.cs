@@ -1991,7 +1991,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     eneblementChanges.Add(interviewChanges.EnablementChanges);
             }
 
-            this.ApplyEnablementChangesEvents(EnablementChanges.UnionAllEnablementChanges(eneblementChanges));
+            this.ApplyEnablementChangesEvents(EnablementChanges.Union(eneblementChanges));
 
             //merge changes, saving only last state - valid or invalid  
             validityChanges.ForEach(this.ApplyValidityChangesEvents);
@@ -2018,6 +2018,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (enablementChanges.QuestionsToBeEnabled.Any())
             {
                 this.ApplyEvent(new QuestionsEnabled(enablementChanges.QuestionsToBeEnabled.ToArray()));
+            }
+
+            if (enablementChanges.StaticTextsToBeDisabled.Any())
+            {
+                this.ApplyEvent(new StaticTextsDisabled(enablementChanges.StaticTextsToBeDisabled.ToArray()));
+            }
+
+            if (enablementChanges.StaticTextsToBeEnabled.Any())
+            {
+                this.ApplyEvent(new StaticTextsEnabled(enablementChanges.StaticTextsToBeEnabled.ToArray()));
             }
         }
 
