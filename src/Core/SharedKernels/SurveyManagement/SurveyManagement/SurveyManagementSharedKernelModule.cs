@@ -53,7 +53,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
-using WB.Infrastructure.Native.Storage;
+using WB.Core.Infrastructure.Aggregates;
 
 namespace WB.Core.SharedKernels.SurveyManagement
 {
@@ -109,7 +109,9 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .Handles<UnlockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Unlock())
                 .Handles<UnlockUserBySupervisorCommand>(command => command.PublicKey, (command, aggregate) => aggregate.UnlockBySupervisor())
                 .Handles<LinkUserToDevice>(command => command.Id, (command, aggregate) => aggregate.LinkUserToDevice(command));
+
             this.Bind<User>().ToSelf();
+            this.Bind<IPlainAggregateRootRepository<User>>().To<UserPlainStorageRepository>();
 
             CommandRegistry
                 .Setup<Interview>()

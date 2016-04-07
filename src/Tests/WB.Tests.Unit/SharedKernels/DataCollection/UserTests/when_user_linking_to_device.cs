@@ -15,11 +15,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
     {
         Establish context = () =>
         {
-            Setup.InstanceToMockedServiceLocator(userDocumentStorage);
-            var userDocument = Create.UserDocument(userId: userId, isArchived: false);
-            userDocument.Roles.Add(UserRoles.Operator);
-            userDocumentStorage.Store(userDocument, userId.FormatGuid());
             userAr = Create.User(userId);
+            userAr.Roles = new UserRoles[] { UserRoles.Operator };
+            userAr.IsArchived = false;
             linkUserToDeviceCommand = Create.Command.LinkUserToDeviceCommand(userId, deviceId);
         };
 
@@ -27,12 +25,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
             userAr.LinkUserToDevice(linkUserToDeviceCommand);
 
         It should_link_one_device = () =>
-            userDocumentStorage.GetById(userId.FormatGuid()).DeviceChangingHistory.Count.ShouldEqual(1);
+            userAr.DeviceChangingHistory.Count.ShouldEqual(1);
 
         private static User userAr;
         private static LinkUserToDevice linkUserToDeviceCommand;
         private static Guid userId = Guid.Parse("11111111111111111111111111111111");
         private static string deviceId = "aaaaaaaaaaaaaaaa";
-        private static IPlainStorageAccessor<UserDocument> userDocumentStorage = new TestPlainStorage<UserDocument>();
     }
 }

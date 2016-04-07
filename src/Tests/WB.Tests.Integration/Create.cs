@@ -581,7 +581,8 @@ namespace WB.Tests.Integration
                 repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
                 eventBus ?? Mock.Of<IEventBus>(),
                 snapshooter ?? Mock.Of<IAggregateSnapshotter>(),
-                serviceLocator ?? Mock.Of<IServiceLocator>());
+                serviceLocator ?? Mock.Of<IServiceLocator>(),
+                Mock.Of<IPlainAggregateRootRepository>());
         }
 
 
@@ -621,7 +622,8 @@ namespace WB.Tests.Integration
             return new SequentialCommandService(
                 repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
                 eventBus ?? Mock.Of<ILiteEventBus>(),
-                snapshooter ?? Mock.Of<IAggregateSnapshotter>(), Mock.Of<IServiceLocator>());
+                snapshooter ?? Mock.Of<IAggregateSnapshotter>(), Mock.Of<IServiceLocator>(),
+                Mock.Of<IPlainAggregateRootRepository>());
         }
 
         public static Answer Answer(string answer, decimal value, decimal? parentValue = null)
