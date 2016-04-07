@@ -553,32 +553,8 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoViewDenormalizer.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireItemLink.cs" />
     <Compile Include="Views\Questionnaire\Edit\RosterType.cs" />
-    <Compile Include="Views\Questionnaire\Pdf\Extensions.cs" />
-    <Compile Include="Views\Questionnaire\Pdf\PdfAnswerView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\Pdf\PdfEntityView.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Views\Questionnaire\Pdf\PdfFactory.cs" />
-    <Compile Include="Views\Questionnaire\Pdf\PdfGroupView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireDenormalizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireFactory.cs" />
-    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireInputModel.cs" />
     <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireModel.cs" />
-    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionType.cs" />
-    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionTypeConverter.cs" />
-    <Compile Include="Views\Questionnaire\Pdf\PdfStaticTextView.cs" />
-    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionView.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Views\Questionnaire\QuestionnaireList\IQuestionnaireListViewFactory.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireListViewInputModel.cs">
       <SubType>Code</SubType>
