@@ -17,7 +17,7 @@
                     @if (questionnaire.ExpressionIsTooLong(staticText.ConditionExpression))
                 {
                         <div class="more">
-                            And <a href="#@questionnaire.GetConditionId(staticText.PublicKey)">@(staticText.ConditionExpression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(staticText.PublicKey, "E")]</a>
+                            And <a href="#@questionnaire.GetConditionRef(staticText.PublicKey)">@(staticText.ConditionExpression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(staticText.PublicKey, "E")]</a>
                         </div>
                     }
                 </div>
@@ -30,14 +30,14 @@
                     @if (questionnaire.ExpressionIsTooLong(validation.Expression))
                     {
                         <div class="more">
-                            And <a href="#@questionnaire.GetValidationsId(staticText.PublicKey)">@(validation.Expression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(staticText.PublicKey, "V")]</a>
+                            And <a href="#@questionnaire.GetValidationsRef(staticText.PublicKey)">@(validation.Expression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(staticText.PublicKey, "V")]</a>
                         </div>
                     }
                 </div>
                 <div class="validation-message"><span>M@(i + 1)</span>@validation.Message</div>
             }
         </div>
-        <div class="static_text">@staticText.Text</div>
+        <div id="@questionnaire.GetItemRef(staticText.PublicKey)" class="static_text">@staticText.Text</div>
         @if (questionnaire.StaticTextHasAttachedImage(staticText))
         {
             <figure>

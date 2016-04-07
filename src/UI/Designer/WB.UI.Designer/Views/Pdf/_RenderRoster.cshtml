@@ -38,7 +38,7 @@
                     @if (questionnaire.ExpressionIsTooLong(roster.ConditionExpression))
                     {
                         <div class="more">
-                            And <a href="#@questionnaire.GetConditionId(roster.PublicKey)">@(roster.ConditionExpression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(roster.PublicKey, "E")]</a>
+                            And <a href="#@questionnaire.GetConditionRef(roster.PublicKey)">@(roster.ConditionExpression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(roster.PublicKey, "E")]</a>
                         </div>
                     }
                 </div>

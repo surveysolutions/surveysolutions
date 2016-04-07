@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -11,24 +10,6 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
-    public class PdfSettings
-    {
-        public PdfSettings(int instructionsExcerptLength, int expressionExcerptLength, int optionsExcerptCount, int minAmountOfDigitsInCodes, int attachmentSize)
-        {
-            InstructionsExcerptLength = instructionsExcerptLength;
-            ExpressionExcerptLength = expressionExcerptLength;
-            OptionsExcerptCount = optionsExcerptCount;
-            MinAmountOfDigitsInCodes = minAmountOfDigitsInCodes;
-            AttachmentSize = attachmentSize;
-        }
-
-        public int InstructionsExcerptLength { get; }
-        public int ExpressionExcerptLength { get; }
-        public int OptionsExcerptCount { get; }
-        public int MinAmountOfDigitsInCodes { get; }
-        public int AttachmentSize { get; set; }
-    }
-
     public class PdfQuestionnaireModel
     {
         public class ModificationStatisticsByUser
@@ -264,10 +245,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public bool GroupHasEnablementCondition(IGroup group) => !string.IsNullOrWhiteSpace(@group.ConditionExpression);
 
+        public bool StaticTextHasEnablementCondition(IStaticText text) => !string.IsNullOrWhiteSpace(text.ConditionExpression);
+
         public string GetRosterSourceQuestionVariable(Guid rosterId)
         {
             var roster = this.Find<Group>(rosterId);
-            return roster.RosterSizeQuestionId != null
+            return roster?.RosterSizeQuestionId != null
                 ? this.Find<IQuestion>(roster.RosterSizeQuestionId.Value)?.StataExportCaption
                 : string.Empty;
         }
@@ -397,33 +380,23 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public bool ExpressionIsTooLong(string expression) => expression?.Length > this.Settings.ExpressionExcerptLength;
 
         public string GetExpressionExcerpt(string expression) => expression?.Substring(0, Math.Min(this.Settings.ExpressionExcerptLength, expression.Length)) ?? string.Empty;
-        public string GetInstructionsId(Guid id) => $"instructions-{id.FormatGuid()}";
+        public string GetInstructionsRef(Guid id) => $"instructions-{id.FormatGuid()}";
 
-        public string GetConditionId(Guid id) => $"condition-{id.FormatGuid()}";
+        public string GetConditionRef(Guid id) => $"condition-{id.FormatGuid()}";
 
-        public string GetQuestionId(Guid id) => $"question-{id.FormatGuid()}";
+        public string GetValidationsRef(Guid id) => $"validations-{id.FormatGuid()}";
 
-        public string GetGroupId(Guid id) => $"group-{id.FormatGuid()}";
+        public string GetOptionsRef(Guid id) => $"options-{id.FormatGuid()}";
 
-        public string GetValidationsId(Guid id) => $"validations-{id.FormatGuid()}";
-
-        public string GetOptionsId(Guid id) => $"options-{id.FormatGuid()}";
+        public string GetItemRef(Guid id) => $"{id.FormatGuid()}";
 
         public bool IsYesNoMultiQuestion(IQuestion question) => (question as MultyOptionsQuestion)?.YesNoView ?? false;
 
-        public bool StaticTextHasEnablementCondition(IStaticText text) => !string.IsNullOrWhiteSpace(text.ConditionExpression);
-
         public int GetValidationsCount(IList<ValidationCondition> validationConditions) => validationConditions?.Count ?? 0;
 
-        public Guid GetAttachmentId(IStaticText staticText)
-        {
-            return this.questionnaire.Attachments.First(x => x.Name == staticText.AttachmentName).AttachmentId;
-        }
+        public Guid GetAttachmentId(IStaticText staticText) => this.questionnaire.Attachments.First(x => x.Name == staticText.AttachmentName).AttachmentId;
 
-        public bool StaticTextHasAttachedImage(IStaticText staticText)
-        {
-            return !string.IsNullOrWhiteSpace(staticText.AttachmentName) &&
-                   this.questionnaire.Attachments.Any(x => x.Name == staticText.AttachmentName);
-        }
+        public bool StaticTextHasAttachedImage(IStaticText staticText) => !string.IsNullOrWhiteSpace(staticText.AttachmentName) &&
+                                                                          this.questionnaire.Attachments.Any(x => x.Name == staticText.AttachmentName);
     }
 }

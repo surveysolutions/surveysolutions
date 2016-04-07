@@ -82,7 +82,7 @@
                     var statistics = questionnaire.GetGroupStatistics(sectionId);
                     <dt>&nbsp;</dt>
                     <dd>
-                        <a href="#@questionnaire.GetGroupId(sectionId)" class="section_name">@questionnaire.GetGroupTitle(sectionId)</a>
+                        <a href="#@questionnaire.GetItemRef(sectionId)" class="section_name">@questionnaire.GetGroupTitle(sectionId)</a>
                         <ul class="group-statistics">
                             @if (statistics.GroupsCount > 0)
                             {
@@ -142,7 +142,7 @@
         {
             <section class="section">
                 <div class="section_header">
-                    <h2 id="@questionnaire.GetGroupId(sectionId)">@questionnaire.GetGroupTitle(sectionId)</h2>
+                    <h2 id="@questionnaire.GetItemRef(sectionId)">@questionnaire.GetGroupTitle(sectionId)</h2>
                 </div>
                 @Html.Partial("_RenderChildren", sectionId)
             </section>
@@ -157,7 +157,7 @@
                     <li>
                         <span class="number">[@item.Index]</span>
                         <div class="appendix_detail">
-                            <a href="#@questionnaire.GetQuestionId(item.Id)" id="@questionnaire.GetConditionId(item.Id)">
+                            <a href="#@questionnaire.GetItemRef(item.Id)" id="@questionnaire.GetConditionRef(item.Id)">
                                 <span>@item.VariableName</span>: @item.Title
                             </a>
                             <p>
@@ -183,7 +183,7 @@
                 <li>
                     <span class="number">[@item.Index]</span>
                     <div class="appendix_detail">
-                        <a href="#@questionnaire.GetQuestionId(item.Id)" id="@questionnaire.GetValidationsId(item.Id)">
+                        <a href="#@questionnaire.GetItemRef(item.Id)" id="@questionnaire.GetValidationsRef(item.Id)">
                             <span>@item.VariableName</span>: @item.Title
                         </a>
                         @foreach (var validationCondition in item.ValidationConditions)
@@ -213,7 +213,7 @@
                     <li>
                         <span class="number">[@(i + 1)]</span>
                         <div class="appendix_detail">
-                            <a href="#@questionnaire.GetQuestionId(question.PublicKey)" id="@questionnaire.GetInstructionsId(question.PublicKey)">
+                            <a href="#@questionnaire.GetItemRef(question.PublicKey)" id="@questionnaire.GetInstructionsRef(question.PublicKey)">
                                 <span>@question.StataExportCaption</span>: @question.QuestionText
                             </a>
                             <p>
@@ -235,7 +235,7 @@
                     <li>
                         <span class="number">[@(i + 1)]</span>
                         <div class="appendix_detail">
-                            <a href="#@questionnaire.GetQuestionId(question.PublicKey)" id="@questionnaire.GetOptionsId(question.PublicKey)">
+                            <a href="#@questionnaire.GetItemRef(question.PublicKey)" id="@questionnaire.GetOptionsRef(question.PublicKey)">
                                 <span>@question.StataExportCaption</span>: @question.QuestionText
                             </a>
                             <p>

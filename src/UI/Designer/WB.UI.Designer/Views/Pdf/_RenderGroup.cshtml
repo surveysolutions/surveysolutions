@@ -16,7 +16,7 @@
                     @if (questionnaire.ExpressionIsTooLong(group.ConditionExpression))
                     {
                         <div class="more">
-                            And <a href="#@questionnaire.GetConditionId(group.PublicKey)">@(group.ConditionExpression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(group.PublicKey, "E")]</a>
+                            And <a href="#@questionnaire.GetConditionRef(group.PublicKey)">@(group.ConditionExpression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(group.PublicKey, "E")]</a>
                         </div>
                     }
                 </div>
