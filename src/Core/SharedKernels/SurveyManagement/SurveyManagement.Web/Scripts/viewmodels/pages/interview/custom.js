@@ -152,6 +152,12 @@ ko.bindingHandlers.numericformatter = {
                 var observable = valueAccessor();
                 observable($(element).val());
             });
+        } else {
+            var value = ko.utils.unwrapObservable(valueAccessor());
+            var oldValue = $(element).text();
+            if (value != oldValue) {
+                $(element).text(value)
+            }
         }
     },
     update: function (element, valueAccessor) {
