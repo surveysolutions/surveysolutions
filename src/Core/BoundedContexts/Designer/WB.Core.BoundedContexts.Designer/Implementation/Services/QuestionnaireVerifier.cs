@@ -299,9 +299,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             };
         }
 
-        private bool ConditionExpresssionHasLengthMoreThan10000Characters(IComposite groupOrQuestionOrStaticText, VerificationState state, ReadOnlyQuestionnaireDocument questionnaire)
+        private bool ConditionExpresssionHasLengthMoreThan10000Characters(IComposite entity, VerificationState state, ReadOnlyQuestionnaireDocument questionnaire)
         {
-            var customEnablementCondition = GetCustomEnablementCondition(groupOrQuestionOrStaticText);
+            var customEnablementCondition = GetCustomEnablementCondition(entity);
             
             if (string.IsNullOrEmpty(customEnablementCondition))
                 return false;

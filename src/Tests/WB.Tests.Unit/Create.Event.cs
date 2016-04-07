@@ -659,7 +659,10 @@ namespace WB.Tests.Unit
                     publicKey.GetValueOrDefault(Guid.NewGuid()),
                     responsibleId ?? Guid.NewGuid(),
                     parentId ?? Guid.NewGuid(),
-                    text);
+                    text,
+                    null,
+                    false,
+                    null);
             }
 
             public static StaticTextUpdated StaticTextUpdated(Guid? parentId = null, string text = null, string attachment = null, 

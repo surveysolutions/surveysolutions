@@ -16,7 +16,7 @@ namespace Main.Core.Entities.SubEntities
 
             this.HideIfDisabled = hideIfDisabled;
             this.ConditionExpression = enablementCondition;
-            this.ValidationConditions = validationConditions;
+            this.ValidationConditions = validationConditions ?? new List<ValidationCondition>();
         }
 
         public List<IComposite> Children

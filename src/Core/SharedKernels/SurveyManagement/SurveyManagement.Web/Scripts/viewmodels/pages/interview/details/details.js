@@ -23,7 +23,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
 
         var command = datacontext.getCommand(config.commands.setCommentCommand, {
             comment: comment,
-            staticTextquestion: {
+            question: {
                 id: questionId,
                 rosterVector: parseRosterVector(underscoreJoinedQuestionRosterVector)
             }

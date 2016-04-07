@@ -7,14 +7,16 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
 {
     public class StaticTextAdded : QuestionnaireEntityEvent
     {
-        public StaticTextAdded(Guid entityId, Guid responsibleId, Guid parentId, string text) 
+        public StaticTextAdded(Guid entityId, Guid responsibleId, Guid parentId, string text, string enablementCondition, bool hideIfDisabled, IList<ValidationCondition> validationConditions) 
         {
             this.EntityId = entityId;
             this.ResponsibleId = responsibleId;
             this.ParentId = parentId;
             this.Text = text;
 
-            this.ValidationConditions = new List<ValidationCondition>();
+            this.HideIfDisabled = hideIfDisabled;
+            this.EnablementCondition = enablementCondition;
+            this.ValidationConditions = validationConditions ?? new List<ValidationCondition>(); ;
         }
 
         public Guid ParentId { get; set; }
