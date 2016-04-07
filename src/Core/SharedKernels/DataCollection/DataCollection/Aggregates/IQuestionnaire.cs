@@ -182,5 +182,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsQuestionCascading(Guid questionId);
         bool ShouldQuestionRecordAnswersOrder(Guid questionId);
         string GetTextQuestionMask(Guid questionId);
+        bool GetHideInstructions(Guid questionId);
     }
 }

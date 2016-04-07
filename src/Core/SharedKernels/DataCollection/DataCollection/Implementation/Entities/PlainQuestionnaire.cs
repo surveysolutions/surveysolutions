@@ -606,6 +606,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return textQuestion?.Mask;
         }
 
+        public bool GetHideInstructions(Guid questionId)
+        {
+            return this.GetQuestion(questionId).Properties.HideInstructions;
+        }
+
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
         {
             if (!this.cacheOfUnderlyingGroupsAndRosters.ContainsKey(groupId))
