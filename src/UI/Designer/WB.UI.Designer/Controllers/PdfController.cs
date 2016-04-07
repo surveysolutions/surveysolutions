@@ -14,8 +14,8 @@ namespace WB.UI.Designer.Controllers
     public class PdfController : BaseController
     {
         private readonly IViewFactory<PdfQuestionnaireInputModel, PdfQuestionnaireView> pdfViewFactory;
-
         private readonly IPdfFactory pdfFactory;
+
         public PdfController(
             IMembershipUserService userHelper,
             IViewFactory<PdfQuestionnaireInputModel, PdfQuestionnaireView> viewFactory, 
@@ -26,18 +26,15 @@ namespace WB.UI.Designer.Controllers
             this.pdfFactory = pdfFactory;
         }
 
-        public ActionResult RenderQuestionnaire(Guid id)
+        public ActionResult RenderQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName)
         {
-            PdfQuestionnaireView questionnaire = this.LoadQuestionnaire(id);
+            var questionnaire = this.pdfFactory.Load(id, requestedByUserId, requestedByUserName);
+            if (questionnaire == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
 
-            return this.View(questionnaire);
-        }
-
-        public ActionResult RenderTitlePage(Guid id)
-        {
-            PdfQuestionnaireView questionnaire = this.LoadQuestionnaire(id);
-
-            return this.View(questionnaire);
+            return this.View("RenderQuestionnaire", questionnaire);
         }
 
         [System.Web.Mvc.Authorize]
@@ -72,8 +69,7 @@ namespace WB.UI.Designer.Controllers
             PdfConvert.ConvertHtmlToPdf(
                 new PdfDocument
                     {
-                        Url = GlobalHelper.GenerateUrl("RenderQuestionnaire", "Pdf", new { id = id }),
-                        CoverUrl = GlobalHelper.GenerateUrl("RenderTitlePage", "Pdf", new {id = id})
+                        Url = GlobalHelper.GenerateUrl("RenderQuestionnaire", "Pdf", new { id = id, requestedByUserId = UserHelper.WebUser.UserId, requestedByUserName= UserHelper.WebUser.UserName })
                     },
                 new PdfOutput
                     {
