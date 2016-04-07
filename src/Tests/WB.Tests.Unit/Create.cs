@@ -1611,24 +1611,6 @@ namespace WB.Tests.Unit
             return new ParaDataExportProcessDetails(DataExportFormat.Tabular);
         }
 
-        public static PdfGroupView PdfGroupView()
-        {
-            return new PdfGroupView();
-        }
-
-        public static PdfQuestionnaireView PdfQuestionnaireView(Guid? publicId = null)
-        {
-            return new PdfQuestionnaireView
-            {
-                PublicId = publicId ?? Guid.Parse("FEDCBA98765432100123456789ABCDEF"),
-            };
-        }
-
-        public static PdfQuestionView PdfQuestionView()
-        {
-            return new PdfQuestionView();
-        }
-
         public static PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 19)
         {
             return new PlainQuestionnaire(
