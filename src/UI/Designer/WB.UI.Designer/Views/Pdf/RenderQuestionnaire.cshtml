@@ -29,7 +29,17 @@
                 <ul>
                     @foreach (var person in questionnaire.SharedPersons)
                     {
-                        <li>@person.Name <span>(last edited @person.On)</span></li>
+                        <li>
+                            @person.Name 
+                            @if (person.Date.HasValue)
+                            {
+                                <span>(last edited @(person.Date))</span>
+                            }
+                            else
+                            {
+                                <span>(never edited)</span>
+                            }
+                        </li>
                     }
                 </ul>
             }
