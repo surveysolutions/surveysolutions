@@ -65,11 +65,15 @@ namespace WB.Core.Infrastructure.CommandBus
                 return this;
             }
 
-            public AggregateSetup<TAggregate> Handles<TCommand>(Func<TCommand, Guid> aggregateRootIdResolver, Func<TAggregate, Action<TCommand>> commandHandler)
+            public AggregateSetup<TAggregate> Handles<TCommand>(
+                Func<TCommand, Guid> aggregateRootIdResolver,
+                Func<TAggregate, Action<TCommand>> getCommandHandler,
+                Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer = null) 
                 where TCommand : ICommand
-            {
-                return Handles(aggregateRootIdResolver, (command, aggregate) => commandHandler(aggregate)(command), configurer: null);
-            }
+                => this.Handles(
+                    aggregateRootIdResolver,
+                    (command, aggregate) => getCommandHandler(aggregate).Invoke(command),
+                    configurer);
 
             public AggregateSetup<TAggregate> Handles<TCommand>(Func<TCommand, Guid> aggregateRootIdResolver, Action<TCommand, TAggregate> commandHandler)
                 where TCommand : ICommand

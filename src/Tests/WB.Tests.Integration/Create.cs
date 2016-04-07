@@ -670,9 +670,19 @@ namespace WB.Tests.Integration
         public static class Command
         {
             public static AnswerYesNoQuestion AnswerYesNoQuestion(Guid questionId, RosterVector rosterVector, params AnsweredYesNoOption[] answers)
-            {
-                return new AnswerYesNoQuestion(Guid.NewGuid(), Guid.NewGuid(), questionId, rosterVector, DateTime.Now, answers);
-            }
+                => new AnswerYesNoQuestion(Guid.NewGuid(), Guid.NewGuid(), questionId, rosterVector, DateTime.Now, answers);
+
+            public static AnswerNumericIntegerQuestionCommand AnswerNumericIntegerQuestion(
+                Guid? questionId = null,
+                RosterVector rosterVector = null,
+                int? answer = null)
+                => new AnswerNumericIntegerQuestionCommand(
+                    Guid.NewGuid(),
+                    Guid.NewGuid(),
+                    questionId ?? Guid.NewGuid(),
+                    rosterVector ?? RosterVector.Empty,
+                    DateTime.UtcNow,
+                    answer ?? 42);
         }
 
         public static AnsweredYesNoOption AnsweredYesNoOption(decimal optionValue, bool yes)
