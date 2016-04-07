@@ -163,9 +163,10 @@ namespace EventStoreToPlainStorageMigrator
             questionnaireQuestionsInfoStorage = new PostgresPlainKeyValueStorage<QuestionnaireQuestionsInfo>(postgresPlainStorageSettings, logger);
 
             questionnaireBrowseItemStorage =
-                new PostgresPlainStorageRepository<QuestionnaireBrowseItem>(()=>plainPostgresTransactionManager);
-
-            userDocumentStorage = new PostgresPlainStorageRepository<UserDocument>(() => plainPostgresTransactionManager);
+                new PostgresPlainStorageRepository<QuestionnaireBrowseItem>(plainPostgresTransactionManager);
+            
+            userDocumentStorage = new PostgresPlainStorageRepository<UserDocument>(plainPostgresTransactionManager);
+            userPlainStorageRepository = new UserPlainStorageRepository(userDocumentStorage);
 
             var serviceLocator = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock }.Object;
 
@@ -234,14 +235,14 @@ namespace EventStoreToPlainStorageMigrator
                 new ObsoleteEventHandleDescriptor<QuestionnaireDeleted>(HandleQuestionnaireDeletedIfPossible),
 
                 new ObsoleteEventHandleDescriptor<NewUserCreated>(HandleNewUserCreatedIfPossible),
-                new ObsoleteEventHandleDescriptor<UserArchived>(HandleUserArchivedIfPossible),
-                new ObsoleteEventHandleDescriptor<UserUnarchived>(HandleUserUnarchivedIfPossible),
-                new ObsoleteEventHandleDescriptor<UserLocked>(HandleUserLockedIfPossible),
-                new ObsoleteEventHandleDescriptor<UserUnlocked>(HandleUserUnlockedIfPossible),
-                new ObsoleteEventHandleDescriptor<UserLockedBySupervisor>(HandleUserLockedBySupervisorIfPossible),
-                new ObsoleteEventHandleDescriptor<UserUnlockedBySupervisor>(HandleUserUnlockedBySupervisorIfPossible),
-                new ObsoleteEventHandleDescriptor<UserChanged>(HandleUserChangedIfPossible),
-                new ObsoleteEventHandleDescriptor<UserLinkedToDevice>(HandleUserLinkedToDeviceIfPossible)
+                new UserEventHandlerDescriptor<UserArchived>(HandleUserArchivedIfPossible),
+                new UserEventHandlerDescriptor<UserUnarchived>(HandleUserUnarchivedIfPossible),
+                new UserEventHandlerDescriptor<UserLocked>(HandleUserLockedIfPossible),
+                new UserEventHandlerDescriptor<UserUnlocked>(HandleUserUnlockedIfPossible),
+                new UserEventHandlerDescriptor<UserLockedBySupervisor>(HandleUserLockedBySupervisorIfPossible),
+                new UserEventHandlerDescriptor<UserUnlockedBySupervisor>(HandleUserUnlockedBySupervisorIfPossible),
+                new UserEventHandlerDescriptor<UserChanged>(HandleUserChangedIfPossible),
+                new UserEventHandlerDescriptor<UserLinkedToDevice>(HandleUserLinkedToDeviceIfPossible)
             };
 
             var countOfScannedEvents = 0;
@@ -262,87 +263,72 @@ namespace EventStoreToPlainStorageMigrator
 
 
         private static void HandleNewUserCreatedIfPossible(
-            NewUserCreated newUserCreated,
-            Guid eventSourceId,
+            NewUserCreated newUserCreated, Guid eventSourceId,
             long eventSequence)
         {
-            new User().CreateUser(newUserCreated.Email, newUserCreated.IsLockedBySupervisor, newUserCreated.IsLocked,
+            var user=new User();
+            user.SetId(eventSourceId);
+            user.CreateUser(newUserCreated.Email, newUserCreated.IsLockedBySupervisor, newUserCreated.IsLocked,
                 newUserCreated.Password, newUserCreated.PublicKey, newUserCreated.Roles, newUserCreated.Supervisor,
                 newUserCreated.Name, newUserCreated.PersonName, newUserCreated.PhoneNumber);
+            userPlainStorageRepository.Save(user);
         }
 
         private static void HandleUserArchivedIfPossible(
             UserArchived userArchived,
-            Guid eventSourceId,
-            long eventSequence)
+            User user)
         {
-            var user = InitUser(eventSourceId);
             user.Archive();
         }
 
         private static void HandleUserUnarchivedIfPossible(
             UserUnarchived userUnarchived,
-            Guid eventSourceId,
-            long eventSequence)
+            User user)
         {
-            var user= InitUser( eventSourceId);
             user.Unarchive();
         }
 
         private static void HandleUserLockedIfPossible(
             UserLocked userLocked,
-            Guid eventSourceId,
-            long eventSequence)
+            User user)
         {
-             var user = InitUser(eventSourceId);
             user.Lock();
         }
 
         private static void HandleUserUnlockedIfPossible(
             UserUnlocked userUnlocked,
-            Guid eventSourceId,
-            long eventSequence)
+            User user)
         {
-            var user = InitUser(eventSourceId);
             user.Unlock();
         }
 
         private static void HandleUserLockedBySupervisorIfPossible(
             UserLockedBySupervisor userLockedBySupervisor,
-            Guid eventSourceId,
-            long eventSequence)
+            User user)
         {
-            var user = InitUser(eventSourceId);
             user.LockBySupervisor();
         }
 
         private static void HandleUserUnlockedBySupervisorIfPossible(
             UserUnlockedBySupervisor userUnlockedBySupervisor,
-            Guid eventSourceId,
-            long eventSequence)
+            User user)
         {
-            var user = InitUser(eventSourceId);
             user.UnlockBySupervisor();
         }
 
         private static void HandleUserChangedIfPossible(
             UserChanged userChanged,
-            Guid eventSourceId,
-            long eventSequence)
+            User user)
         {
-            var userAR = InitUser(eventSourceId);
-            var user = userDocumentStorage.GetById(eventSourceId.FormatGuid());
-            userAR.ChangeUser(userChanged.Email, user.IsLockedBySupervisor, user.IsLockedByHQ,
-                userChanged.PasswordHash, userChanged.PersonName, userChanged.PhoneNumber, eventSourceId);
+            user.ChangeUser(userChanged.Email, user.IsLockedBySupervisor, user.IsLockedByHQ,
+                userChanged.PasswordHash, userChanged.PersonName, userChanged.PhoneNumber, user.Id);
         }
 
         private static void HandleUserLinkedToDeviceIfPossible(
             UserLinkedToDevice userLinkedToDevice,
-            Guid eventSourceId,
-            long eventSequence)
+            User user)
         {
-            var user = InitUser(eventSourceId);
-            user.LinkUserToDevice(new LinkUserToDevice(eventSourceId, userLinkedToDevice.DeviceId));
+            user.LinkUserToDevice(new LinkUserToDevice(user.Id, userLinkedToDevice.DeviceId));
         }
 
         private static void HandleTemplateImportedIfPossible(TemplateImported templateImportedEvent, Guid eventSourceId,
@@ -416,9 +402,7 @@ namespace EventStoreToPlainStorageMigrator
 
         private static User InitUser(Guid id)
         {
-            var user=new User();
-            user.SetId(id);
-            return user;
+            return userPlainStorageRepository.Get(id);
         }
         private static IReferenceInfoForLinkedQuestionsFactory referenceInfoForLinkedQuestionsFactory =
             new ReferenceInfoForLinkedQuestionsFactory();
@@ -433,6 +417,7 @@ namespace EventStoreToPlainStorageMigrator
         private static IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private static IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage;
         private static IPlainStorageAccessor<UserDocument> userDocumentStorage;
+        private static UserPlainStorageRepository userPlainStorageRepository;
 
         private static IPlainKeyValueStorage<ReferenceInfoForLinkedQuestions> referenceInfoForLinkedQuestionsStorage;
         private static IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
@@ -537,6 +522,31 @@ namespace EventStoreToPlainStorageMigrator
                         Console.WriteLine("Questionnaire {0} exists. Ignoring.", id);
                     }
                 }
+            }
+        }
+
+        internal class UserEventHandlerDescriptor<T> : ObsoleteEventHandleDescriptor
+            where T : class, WB.Core.Infrastructure.EventBus.IEvent
+        {
+            private Action<T, User> action;
+
+            public UserEventHandlerDescriptor(Action<T, User> action)
+            {
+                this.action = action;
+            }
+
+            public override void Handle(CommittedEvent @event, PlainPostgresTransactionManager plainPostgresTransactionManager)
+            {
+                var typedEvent = @event.Payload as T;
+                if (typedEvent == null)
+                    return;
+
+                plainPostgresTransactionManager.ExecuteInPlainTransaction(() =>
+                {
+                    var user = InitUser(@event.EventSourceId);
+                    this.action(typedEvent, user);
+                    userPlainStorageRepository.Save(user);
+                });
             }
         }
 
