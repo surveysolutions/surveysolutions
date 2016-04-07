@@ -682,6 +682,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public IEnumerable<BaseInterviewAnswer> FindAnswersOfReferencedQuestionForLinkedQuestion(Guid referencedQuestionId, Identity linkedQuestion)
         {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
             if (!this.interviewState.LinkedQuestionOptions.ContainsKey(linkedQuestion))
                 return Enumerable.Empty<BaseInterviewAnswer>();
 
@@ -690,25 +692,52 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             IEnumerable<Identity> targetQuestions =
                 linkedQuestionOptions.Select(x => new Identity(referencedQuestionId, x));
 
+            var rostersFromTopToSpecifiedQuestion = questionnaire.GetRostersFromTopToSpecifiedQuestion(referencedQuestionId).ToArray();
+
             var answers = targetQuestions
                 .Select(this.GetExistingAnswerOrNull)
-                .Where(answer => answer != null);
-
-            return answers;
+                .Where(answer => answer != null).ToArray()
+                .OrderBy(x => x.RosterVector.Length);
+            
+            for (int rosterDepth = 1; rosterDepth <= rostersFromTopToSpecifiedQuestion.Length; rosterDepth++)
+            {
+                var currentDepth = rosterDepth;
+                answers = answers.ThenBy(x => GetRosterSortIndex(rostersFromTopToSpecifiedQuestion[currentDepth-1], new RosterVector(x.RosterVector.Take(currentDepth))));
+            }
+            return answers.ToArray();
         }
 
         public IEnumerable<InterviewRoster> FindReferencedRostersForLinkedQuestion(Guid rosterId, Identity linkedQuestion)
         {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
             if (!this.interviewState.LinkedQuestionOptions.ContainsKey(linkedQuestion))
                 return Enumerable.Empty<InterviewRoster>();
 
             RosterVector[] targetRosters = this.interviewState.LinkedQuestionOptions[linkedQuestion];
 
-            return
+            var rosters =
                 targetRosters
-                    .Select(x => this.GetRoster(new Identity(rosterId, x)))
-                    .OrderBy(r => sortIndexesOfRosterInstanses[new Identity(r.Id, r.RosterVector)] ?? r.RosterVector.Last())
-                    .ToArray();
+                    .Select(x => this.GetRoster(new Identity(rosterId, x))).ToArray()
+                    .OrderBy(x => x.RosterVector.Length);
+
+            var rostersFromTopToSpecifiedQuestion = questionnaire.GetRostersFromTopToSpecifiedGroup(rosterId).ToArray();
+            for (int rosterDepth = 1; rosterDepth <= rostersFromTopToSpecifiedQuestion.Length; rosterDepth++)
+            {
+                var currentDepth = rosterDepth;
+                rosters = rosters.ThenBy(x => GetRosterSortIndex(rostersFromTopToSpecifiedQuestion[currentDepth - 1], new RosterVector(x.RosterVector.Take(currentDepth))));
+            }
+            return rosters.ToArray();
+        }
+
+        private int GetRosterSortIndex(Guid rosterId, RosterVector rosterVector)
+        {
+            var identity = new Identity(rosterId, rosterVector);
+            var lastValueInRosterVector = (int)(rosterVector.Last());
+            if (this.sortIndexesOfRosterInstanses.ContainsKey(identity))
+                return sortIndexesOfRosterInstanses[identity] ?? lastValueInRosterVector;
+
+            return lastValueInRosterVector;
         }
 
         private void SaveAnswerFromAnswerDto(InterviewAnswerDto answerDto)
