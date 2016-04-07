@@ -9,7 +9,7 @@
 }
 <div class="question-container">
     <div class="question">
-        <div class="question-title" id="@questionnaire.GetQuestionId(question.PublicKey)">@question.QuestionText</div>
+        <div class="question-title" id="@questionnaire.GetItemRef(question.PublicKey)">@question.QuestionText</div>
         <div class="common-info">
             @if (questionnaire.QuestionHasInstructions(question))
             {
@@ -18,7 +18,7 @@
                     @if (questionnaire.InstructionIsTooLong(question))
                     {
                         <div class="more">
-                            And <a href="#@questionnaire.GetInstructionsId(question.PublicKey)">@(question.Instructions.Length - questionnaire.Settings.InstructionsExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "I")]</a>
+                            And <a href="#@questionnaire.GetInstructionsRef(question.PublicKey)">@(question.Instructions.Length - questionnaire.Settings.InstructionsExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "I")]</a>
                         </div>
                     }
                 </div>
@@ -29,7 +29,7 @@
                     @if (questionnaire.ExpressionIsTooLong(question.ConditionExpression))
                     {
                         <div class="more">
-                            And <a href="#@questionnaire.GetConditionId(question.PublicKey)">@(question.ConditionExpression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "E")]</a>
+                            And <a href="#@questionnaire.GetConditionRef(question.PublicKey)">@(question.ConditionExpression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "E")]</a>
                         </div>
                     }
                 </div>
@@ -42,7 +42,7 @@
                     @if (questionnaire.ExpressionIsTooLong(validation.Expression))
                     {
                         <div class="more">
-                            And <a href="#@questionnaire.GetValidationsId(question.PublicKey)">@(validation.Expression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "V")]</a>
+                            And <a href="#@questionnaire.GetValidationsRef(question.PublicKey)">@(validation.Expression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "V")]</a>
                         </div>
                     }
                 </div>
@@ -70,7 +70,7 @@
                     }
                     @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)
                     {
-                        <div class="more">And <a href="#@questionnaire.GetOptionsId(question.PublicKey)">@(question.Answers.Count - questionnaire.Settings.OptionsExcerptCount) other [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "O")]</a></div>
+                        <div class="more">And <a href="#@questionnaire.GetOptionsRef(question.PublicKey)">@(question.Answers.Count - questionnaire.Settings.OptionsExcerptCount) other [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "O")]</a></div>
                     }
                 </div>
                 break;
@@ -100,7 +100,7 @@
                     }
                     @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)
                     {
-                        <div class="more">And <a href="#@questionnaire.GetOptionsId(question.PublicKey)">@(question.Answers.Count - questionnaire.Settings.OptionsExcerptCount) other []</a></div>
+                        <div class="more">And <a href="#@questionnaire.GetOptionsRef(question.PublicKey)">@(question.Answers.Count - questionnaire.Settings.OptionsExcerptCount) other []</a></div>
                     }
                 </div>
                 break;
