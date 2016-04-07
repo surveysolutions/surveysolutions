@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 text: System.Web.HttpUtility.HtmlDecode(text), 
                 enablementCondition:enablementCondition,
                 hideIfDisabled:hideIfDisabled,
-                validationConditions : validationConditions ?? new List<ValidationCondition>(),
+                validationConditions : validationConditions,
                 attachmentName: attachmentName);
         }
 
