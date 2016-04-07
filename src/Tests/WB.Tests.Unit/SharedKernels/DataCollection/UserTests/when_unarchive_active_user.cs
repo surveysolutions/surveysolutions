@@ -15,11 +15,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
         Establish context = () =>
         {
             var userId = Guid.NewGuid();
-            Setup.InstanceToMockedServiceLocator(userDocumentStorage);
-            var userDocument = Create.UserDocument(userId: userId, isArchived: false);
-            userDocument.Roles.Add(UserRoles.Supervisor);
-            userDocumentStorage.Store(userDocument, userId.FormatGuid());
             user = Create.User(userId);
+            user.Roles = new UserRoles[] { UserRoles.Supervisor };
+            user.IsArchived = false;
         };
 
         Because of = () =>
@@ -37,6 +35,5 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
 
         private static User user;
         private static UserException exception;
-        private static IPlainStorageAccessor<UserDocument> userDocumentStorage = new TestPlainStorage<UserDocument>();
     }
 }

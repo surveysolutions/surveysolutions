@@ -19,23 +19,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
     [TestFixture]
     internal class UserARTests
     {
-        private static IPlainStorageAccessor<UserDocument> userDocumentStorage;
-
-        [SetUp]
-        public void Init()
-        {
-            userDocumentStorage = new TestPlainStorage<UserDocument>();
-            AssemblyContext.SetupServiceLocator();
-            Setup.InstanceToMockedServiceLocator(userDocumentStorage);
-        }
-
-        [TearDown]
-        public void Dispose()
-        {
-            ((TestPlainStorage<UserDocument>) userDocumentStorage).Clear();
-            userDocumentStorage = null;
-        }
-
         [Test]
         public void Lock_When_called_Then_raised_UserLocked_event()
         {
@@ -241,7 +224,25 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
         private UserDocument GetUser(User user)
         {
-            return userDocumentStorage.GetById(user.Id.FormatGuid());
+            var userDocument = new UserDocument();
+
+            userDocument.UserId = user.Id.FormatGuid();
+            userDocument.UserName = user.UserName;
+            userDocument.Password = user.Password;
+            userDocument.PublicKey = user.Id;
+            userDocument.CreationDate = user.CreationDate;
+            userDocument.Email = user.Email;
+            userDocument.IsLockedBySupervisor = user.IsLockedBySupervisor;
+            userDocument.IsLockedByHQ = user.IsLockedByHQ;
+            userDocument.Supervisor = user.Supervisor;
+            userDocument.PersonName = user.PersonName;
+            userDocument.PhoneNumber = user.PhoneNumber;
+            userDocument.DeviceId = user.DeviceId;
+            userDocument.IsArchived = user.IsArchived;
+            userDocument.LastChangeDate = user.LastChangeDate;
+            userDocument.Roles = user.Roles.ToHashSet();
+            userDocument.DeviceChangingHistory=user.DeviceChangingHistory.ToHashSet();
+            return userDocument;
         }
     }
 }
