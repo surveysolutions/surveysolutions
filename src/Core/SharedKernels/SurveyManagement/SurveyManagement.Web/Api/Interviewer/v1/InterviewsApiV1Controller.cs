@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
             ICommandService commandService,
             IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader,
             IMetaInfoBuilder metaBuilder,
-            ISynchronizationSerializer synchronizationSerializer) : base(
+            IJsonAllTypesSerializer synchronizationSerializer) : base(
                 plainInterviewFileStorage: plainInterviewFileStorage, 
                 globalInfoProvider: globalInfoProvider,
                 interviewsFactory: interviewsFactory,
@@ -136,7 +136,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
             {
                 var interviewSynchronizationDto = this.interviewsFactory.GetInterviewDetails(packageMetaInformation.InterviewId);
 
-                interviewSynchronizationPackage.Content = this.synchronizationSerializer.Serialize(interviewSynchronizationDto, TypeSerializationSettings.AllTypes);
+                interviewSynchronizationPackage.Content = this.synchronizationSerializer.Serialize(interviewSynchronizationDto);
                 interviewSynchronizationPackage.MetaInfo =
                     this.synchronizationSerializer.Serialize(this.metaBuilder.GetInterviewMetaInfo(interviewSynchronizationDto));
             }
@@ -241,7 +241,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
                 QuestionId = answer.Id,
                 QuestionRosterVector = answer.QuestionRosterVector,
                 LastSupervisorOrInterviewerComment = answer.Comments,
-                JsonAnswer = this.synchronizationSerializer.Serialize(answer.Answer, TypeSerializationSettings.AllTypes, SerializationBinderSettings.NewToOld)
+                JsonAnswer = this.synchronizationSerializer.Serialize(answer.Answer)
             };
         }
 

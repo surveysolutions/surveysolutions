@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -16,6 +17,7 @@ using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
 {
@@ -75,9 +77,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
                 return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
             }
 
+
+            JsonSerializerSettings JsonSerializerSettingsNewToOld = new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.Objects,
+                NullValueHandling = NullValueHandling.Ignore,
+                FloatParseHandling = FloatParseHandling.Decimal,
+                Formatting = Formatting.None,
+                Binder = new NewToOldAssemblyRedirectSerializationBinder()
+            };
+
+            var questionnaireDocumentVersionedSrialized = useInOldSerializationFormat
+                ? JsonConvert.SerializeObject(questionnaireDocumentVersioned, JsonSerializerSettingsNewToOld)
+                : this.serializer.Serialize(questionnaireDocumentVersioned);
+
             var resultValue = new QuestionnaireApiView
             {
-                QuestionnaireDocument = this.serializer.Serialize(questionnaireDocumentVersioned, useInOldSerializationFormat ? SerializationBinderSettings.NewToOld: SerializationBinderSettings.OldToNew),
+                QuestionnaireDocument = questionnaireDocumentVersionedSrialized,
                 AllowCensus = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version)).AllowCensusMode
             };
 

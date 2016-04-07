@@ -165,7 +165,7 @@
     <Compile Include="Internals\FileSystem\ZipArchiveUtils.cs" />
     <Compile Include="Internals\FileSystem\FileSystemService.cs" />
     <Compile Include="Internals\GpsLocationService.cs" />
-    <Compile Include="Internals\JsonSerializerSettingsFactory.cs" />
+    <Compile Include="Internals\PortableJsonSerializerSettingsFactory.cs" />
     <Compile Include="Internals\ModernHttpClientFactory.cs" />
     <Compile Include="Internals\QRBarcodeScanService.cs" />
     <Compile Include="EnumeratorInfrastructureModule.cs" />

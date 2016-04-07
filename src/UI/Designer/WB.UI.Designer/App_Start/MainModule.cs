@@ -24,11 +24,9 @@ namespace WB.UI.Designer
             //this.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
             this.BindFilter<CustomHandleErrorFilter>(FilterScope.Global, 0).InSingletonScope();
             this.BindFilter<CustomAuthorizeFilter>(FilterScope.Controller, 0).WhenControllerHas<CustomAuthorizeAttribute>().InSingletonScope();
-            this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
 
             this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(new JsonSerializerSettingsFactory()));
-            this.Bind<ISynchronizationSerializer>().ToMethod((ctx) => new SychronizationJsonSerializer(new JsonSerializerSettingsFactory()));
-            this.Bind<IStreamSerializer>().ToMethod((ctx) => new StreamJsonSerializer(new JsonSerializerSettingsFactory()));
+            this.Bind<IJsonAllTypesSerializer>().ToMethod((ctx) => new JsonAllTypesSerializer(new JsonSerializerSettingsFactory()));
 
             this.Bind<IStringCompressor>().To<JsonCompressor>().InSingletonScope();
             this.Bind<IArchiveUtils>().To<ZipArchiveUtils>();
@@ -49,8 +47,6 @@ namespace WB.UI.Designer
                 .InSingletonScope();
 
             this.Bind<IRecipientNotifier>().To<MailNotifier>();
-
-
         }
     }
 }

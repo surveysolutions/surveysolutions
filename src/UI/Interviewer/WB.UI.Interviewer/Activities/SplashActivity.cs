@@ -168,7 +168,7 @@ namespace WB.UI.Interviewer.Activities
         private async Task RestoreInterviewDetailsAsync()
         {
             var commandService = Mvx.Resolve<ICommandService>();
-            var synchronizationSerializer = Mvx.Resolve<ISynchronizationSerializer>();
+            var jsonAllTypesSerializer = Mvx.Resolve<IJsonAllTypesSerializer>();
 
             var interviewersRepository = Mvx.Resolve<IAsyncPlainStorage<InterviewerIdentity>>();
 
@@ -187,7 +187,7 @@ namespace WB.UI.Interviewer.Activities
             {
                 var interviewDetailsText = await interviewDetailsFile.ReadAllTextAsync();
                 var interviewSynchronizationDto =
-                    synchronizationSerializer.Deserialize<InterviewSynchronizationDto>(interviewDetailsText, TypeSerializationSettings.AllTypes);
+                    jsonAllTypesSerializer.Deserialize<InterviewSynchronizationDto>(interviewDetailsText);
 
                 await commandService.ExecuteAsync(new SynchronizeInterviewCommand(
                     interviewId: Guid.Parse(interviewDetailsFile.Name),
@@ -243,7 +243,7 @@ namespace WB.UI.Interviewer.Activities
 
         private async Task RestoreInterviewsAsync()
         {
-            var serializer = Mvx.Resolve<ISynchronizationSerializer>();
+            var jsonAllTypesSerializer = Mvx.Resolve<IJsonAllTypesSerializer>();
             var interviewViewRepository = Mvx.Resolve<IAsyncPlainStorage<InterviewView>>();
 
             var interviews = this.GetSqlLiteEntities<QuestionnaireDTO>("Projections");
@@ -261,7 +261,7 @@ namespace WB.UI.Interviewer.Activities
                 QuestionnaireId = new QuestionnaireIdentity(Guid.Parse(x.Survey), x.SurveyVersion).ToString(),
                 LastInterviewerOrSupervisorComment = x.Comments,
                 Status = (InterviewStatus)x.Status,
-                AnswersOnPrefilledQuestions = serializer.Deserialize<FeaturedItem[]>(x.Properties, TypeSerializationSettings.AllTypes).Select(y => new InterviewAnswerOnPrefilledQuestionView
+                AnswersOnPrefilledQuestions = jsonAllTypesSerializer.Deserialize<FeaturedItem[]>(x.Properties).Select(y => new InterviewAnswerOnPrefilledQuestionView
                 {
                     QuestionId = y.PublicKey,
                     QuestionText = y.Title,
