@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -16,6 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public int ExpressionExcerptLength { get; } = 200;
         public int OptionsExcerptCount { get; } = 16;
         public int MinAmountOfDigitsInCodes { get; } = 2;
+        public int MaxImageSize { get; set; } = 384;
     }
 
     public class PdfQuestionnaireModel
@@ -403,5 +405,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public bool StaticTextHasEnablementCondition(IStaticText text) => !string.IsNullOrWhiteSpace(text.ConditionExpression);
 
         public int GetValidationsCount(IList<ValidationCondition> validationConditions) => validationConditions?.Count ?? 0;
+
+        public Guid GetAttachmentId(IStaticText staticText)
+        {
+            return this.questionnaire.Attachments.First(x => x.Name == staticText.AttachmentName).AttachmentId;
+        }
+
+        public bool StaticTextHasAttachedImage(IStaticText staticText)
+        {
+            return !string.IsNullOrWhiteSpace(staticText.AttachmentName) &&
+                   this.questionnaire.Attachments.Any(x => x.Name == staticText.AttachmentName);
+        }
     }
 }

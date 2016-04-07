@@ -246,6 +246,7 @@ h1{
 	text-transform: uppercase;
 	font-size: 10px;
 	line-height: 13px;
+    font-family: 'RobotoLight';
 }
 .variable_name, .appendix_detail span>span, 
 .structure_list, .splitted_variables{
@@ -510,15 +511,12 @@ input[type=date] {
 }
 figure{
 	margin: 0;
-	width: 39%;
+    margin-top: 15px;
 	overflow: hidden;
 	padding: 0 0 2px;
-}
-.img_question{
-	width: 87%;
+    width: 384px;
 }
 figure img{
-	width: 100%;
 	height: auto;
 	display: block;
 }
