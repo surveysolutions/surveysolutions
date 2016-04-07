@@ -40,9 +40,8 @@
         <div class="static_text">@staticText.Text</div>
         @if (questionnaire.StaticTextHasAttachedImage(staticText))
         {
-            <figure class="img_question">
-                <img src="@Url.HttpRouteUrl("AttachmentThumbnailWithSize", new {id = questionnaire.GetAttachmentId(staticText), size = questionnaire.Settings.MaxImageSize})" alt="">
-                <figcaption>@staticText.AttachmentName</figcaption>
+            <figure>
+                <img src="@Url.HttpRouteUrl("AttachmentThumbnailWithSize", new {id = questionnaire.GetAttachmentId(staticText), size = questionnaire.Settings.AttachmentSize})" alt="">
             </figure>
         }
     </div>

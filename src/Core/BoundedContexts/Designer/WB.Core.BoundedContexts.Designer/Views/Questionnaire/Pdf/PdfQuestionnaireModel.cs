@@ -13,11 +13,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
     public class PdfSettings
     {
-        public int InstructionsExcerptLength { get; } = 200;
-        public int ExpressionExcerptLength { get; } = 200;
-        public int OptionsExcerptCount { get; } = 16;
-        public int MinAmountOfDigitsInCodes { get; } = 2;
-        public int MaxImageSize { get; set; } = 384;
+        public PdfSettings(int instructionsExcerptLength, int expressionExcerptLength, int optionsExcerptCount, int minAmountOfDigitsInCodes, int attachmentSize)
+        {
+            InstructionsExcerptLength = instructionsExcerptLength;
+            ExpressionExcerptLength = expressionExcerptLength;
+            OptionsExcerptCount = optionsExcerptCount;
+            MinAmountOfDigitsInCodes = minAmountOfDigitsInCodes;
+            AttachmentSize = attachmentSize;
+        }
+
+        public int InstructionsExcerptLength { get; }
+        public int ExpressionExcerptLength { get; }
+        public int OptionsExcerptCount { get; }
+        public int MinAmountOfDigitsInCodes { get; }
+        public int AttachmentSize { get; set; }
     }
 
     public class PdfQuestionnaireModel

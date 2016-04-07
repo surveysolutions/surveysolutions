@@ -24,19 +24,22 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         private readonly IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly IReadSideRepositoryReader<AccountDocument> accountsDocumentReader;
         private readonly IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage;
+        private readonly PdfSettings pdfSettings;
 
         public PdfFactory(
             IReadSideKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
             IQueryableReadSideRepositoryReader<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage, 
             IReadSideRepositoryReader<AccountDocument> accountsDocumentReader, 
             IQueryableReadSideRepositoryReader<QuestionnaireListViewItem> questionnaireListViewItemStorage, 
-            IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage)
+            IReadSideKeyValueStorage<QuestionnaireSharedPersons> sharedPersonsStorage, 
+            PdfSettings pdfSettings)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireChangeHistoryStorage = questionnaireChangeHistoryStorage;
             this.accountsDocumentReader = accountsDocumentReader;
             this.questionnaireListViewItemStorage = questionnaireListViewItemStorage;
             this.sharedPersonsStorage = sharedPersonsStorage;
+            this.pdfSettings = pdfSettings;
         }
 
         public PdfQuestionnaireModel Load(Guid questionnaireId, Guid requestedByUserId, string requestedByUserName)
@@ -59,7 +62,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     Name = grouping.Key.UserName,
                 })).ToList();
 
-            var pdfView = new PdfQuestionnaireModel(questionnaire, new PdfSettings())
+            var pdfView = new PdfQuestionnaireModel(questionnaire, pdfSettings)
             {
                 Requested = new PdfQuestionnaireModel.ModificationStatisticsByUser
                 {
