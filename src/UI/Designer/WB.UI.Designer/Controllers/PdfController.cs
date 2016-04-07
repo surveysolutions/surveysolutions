@@ -40,14 +40,13 @@ namespace WB.UI.Designer.Controllers
         [System.Web.Mvc.Authorize]
         public ActionResult ExportQuestionnaire(Guid id)
         {
-            // find other place to load questionnaire title, this view is to heavy for this
-            var questionnaire = this.LoadQuestionnaire(id, UserHelper.WebUser.UserId, UserHelper.WebUser.UserName);
+            var questionnaireTitle = this.pdfFactory.LoadQuestionnaireTitle(id);
 
             using (var memoryStream = new MemoryStream())
             {
                 this.RenderQuestionnairePdfToMemoryStream(id, memoryStream);
 
-                return this.File(memoryStream.ToArray(), "application/pdf", string.Format("{0}.pdf", questionnaire.Title));
+                return this.File(memoryStream.ToArray(), "application/pdf", $"{questionnaireTitle}.pdf");
             }
         }
 
