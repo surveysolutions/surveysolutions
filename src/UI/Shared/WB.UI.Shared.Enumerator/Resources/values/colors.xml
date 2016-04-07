@@ -77,5 +77,8 @@
   <color name="interview_question_yes_no">#36AEE5</color>
   <color name="interview_question_yesno_selected_text">#3f3f3f</color>
   <color name="interview_question_yesno_not_selected_text">#a3a3a3</color>
+
+  <color name="instructions">#2a81cb</color>
+  <color name="instructions_pressed">#001D8B</color>
   
 </resources>
