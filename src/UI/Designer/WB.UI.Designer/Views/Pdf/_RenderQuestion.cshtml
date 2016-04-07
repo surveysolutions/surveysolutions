@@ -18,7 +18,7 @@
                     @if (questionnaire.InstructionIsTooLong(question))
                     {
                         <div class="more">
-                            And <a href="#@questionnaire.GetInstructionsId(question.PublicKey)">@(question.Instructions.Length - questionnaire.Settings.InstructionsExcerptLength) other symbols [@questionnaire.GetQuestionIndexInAppendix(question.PublicKey, "I")]</a>
+                            And <a href="#@questionnaire.GetInstructionsId(question.PublicKey)">@(question.Instructions.Length - questionnaire.Settings.InstructionsExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "I")]</a>
                         </div>
                     }
                 </div>
@@ -29,20 +29,20 @@
                     @if (questionnaire.ExpressionIsTooLong(question.ConditionExpression))
                     {
                         <div class="more">
-                            And <a href="#@questionnaire.GetConditionId(question.PublicKey)">@(question.ConditionExpression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetQuestionIndexInAppendix(question.PublicKey, "E")]</a>
+                            And <a href="#@questionnaire.GetConditionId(question.PublicKey)">@(question.ConditionExpression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "E")]</a>
                         </div>
                     }
                 </div>
             }
 
-            @for (int i = 0; i < question.ValidationConditions.Count; i++)
+            @for (int i = 0; i < questionnaire.GetValidationsCount(question.ValidationConditions); i++)
             {
                 var validation = question.ValidationConditions[i];
                 <div class="validation-expression"><span>V@(i + 1)</span>@questionnaire.GetExpressionExcerpt(validation.Expression)
                     @if (questionnaire.ExpressionIsTooLong(validation.Expression))
                     {
                         <div class="more">
-                            And <a href="#@questionnaire.GetValidationsId(question.PublicKey)">@(validation.Expression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetQuestionIndexInAppendix(question.PublicKey, "V")]</a>
+                            And <a href="#@questionnaire.GetValidationsId(question.PublicKey)">@(validation.Expression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "V")]</a>
                         </div>
                     }
                 </div>
@@ -70,7 +70,7 @@
                     }
                     @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)
                     {
-                        <div class="more">And <a href="#@questionnaire.GetOptionsId(question.PublicKey)">@(question.Answers.Count - questionnaire.Settings.OptionsExcerptCount) other [@questionnaire.GetQuestionIndexInAppendix(question.PublicKey, "O")]</a></div>
+                        <div class="more">And <a href="#@questionnaire.GetOptionsId(question.PublicKey)">@(question.Answers.Count - questionnaire.Settings.OptionsExcerptCount) other [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "O")]</a></div>
                     }
                 </div>
                 break;

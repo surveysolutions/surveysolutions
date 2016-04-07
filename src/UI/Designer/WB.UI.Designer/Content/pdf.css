@@ -246,7 +246,6 @@ h1{
 	text-transform: uppercase;
 	font-size: 10px;
 	line-height: 13px;
-	width: 49%;
 }
 .variable_name, .appendix_detail span>span, 
 .structure_list, .splitted_variables{
@@ -256,7 +255,6 @@ h1{
 }
 .variable_name{
 	float: right;
-	width: 49%;
 	text-align: right;
 	word-break: break-all;
 }
@@ -439,7 +437,6 @@ input[type=date] {
 	font-family: 'RobotoMedium';
 	font-size: 17.7px;
 	line-height: 24px;
-	width: 80%;
 }
 .generated_by ul{
 	margin-bottom: 10px;
@@ -477,9 +474,8 @@ input[type=date] {
 	font-size: 12px;
 	line-height: 14px;
 }
-.roster .variable_name, .static-text .variable_name, .group .variable_name{
+.roster .variable_name{
 	margin-top: 21px;
-	width: 20%;
 	text-align: right;
 }
 .gps .points{

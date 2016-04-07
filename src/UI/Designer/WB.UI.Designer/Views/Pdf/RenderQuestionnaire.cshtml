@@ -1,6 +1,7 @@
 ﻿@using System.Collections.Generic
 @using System.Linq
 @using Main.Core.Entities.SubEntities
+@using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 @model WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf.PdfQuestionnaireModel
 
 @{
@@ -151,21 +152,25 @@
         <h2 id="enablements_appendix">Appendix a &mdash; Enablement conditions</h2>
         <ul class="container">
             @{
-                for (var i = 0; i < questionnaire.QuestionsWithLongConditions.Count; i++)
+                foreach (var item in questionnaire.ItemsWithLongConditions)
                 {
-                    var question = questionnaire.QuestionsWithLongConditions[i];
                     <li>
-                        <span class="number">[@(i + 1)]</span>
+                        <span class="number">[@item.Index]</span>
                         <div class="appendix_detail">
-                            <a href="#@questionnaire.GetQuestionId(question.PublicKey)" id="@questionnaire.GetConditionId(question.PublicKey)">
-                                <span>@question.StataExportCaption</span>: @question.QuestionText
+                            <a href="#@questionnaire.GetQuestionId(item.Id)" id="@questionnaire.GetConditionId(item.Id)">
+                                <span>@item.VariableName</span>: @item.Title
                             </a>
                             <p>
                                 Enablement Condition:
-                                <pre>@question.ConditionExpression.Trim()</pre>
+                                <pre>@item.EnablementCondition</pre>
                             </p>
                         </div>
                     </li>
+                }
+                for (var i = 0; i < questionnaire.ItemsWithLongConditions.Count; i++)
+                {
+                    var question = questionnaire.ItemsWithLongConditions[i];
+
                 }
             }
         </ul>
@@ -173,31 +178,29 @@
     <article class="appendix_section">
         <h2 id="validations_appendix">Appendix b &mdash; Validation conditions and messages</h2>
         <ul class="container">
-            @{
-                for (var i = 0; i < questionnaire.QuestionsWithLongValidations.Count; i++)
-                {
-                    var question = questionnaire.QuestionsWithLongValidations[i];
-                    <li>
-                        <span class="number">[@(i + 1)]</span>
-                        <div class="appendix_detail">
-                            <a href="#@questionnaire.GetQuestionId(question.PublicKey)" id="@questionnaire.GetValidationsId(question.PublicKey)">
-                                <span>@question.StataExportCaption</span>: @question.QuestionText
-                            </a>
-                            @foreach (var validationCondition in question.ValidationConditions)
-                            {
-                                <p>
-                                    Validation Condition:
-                                    <pre>@validationCondition.Expression.Trim()</pre>
-                                </p>
-                                <p>
-                                    Validation Message:
-                                    <span>@validationCondition.Message</span>
-                                </p>
-                            }
-                        </div>
-                    </li>
-                }
+            @foreach (var item in questionnaire.ItemsWithLongValidations)
+            {
+                <li>
+                    <span class="number">[@item.Index]</span>
+                    <div class="appendix_detail">
+                        <a href="#@questionnaire.GetQuestionId(item.Id)" id="@questionnaire.GetValidationsId(item.Id)">
+                            <span>@item.VariableName</span>: @item.Title
+                        </a>
+                        @foreach (var validationCondition in item.ValidationConditions)
+                        {
+                            <p>
+                                Validation Condition:
+                                <pre>@validationCondition.Expression.Trim()</pre>
+                            </p>
+                            <p>
+                                Validation Message:
+                                <span>@validationCondition.Message</span>
+                            </p>
+                        }
+                    </div>
+                </li>
             }
+
         </ul>
     </article>
     <article class="appendix_section">
