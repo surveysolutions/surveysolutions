@@ -261,11 +261,13 @@
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_real_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_text_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_condition_uses_two_levels_of_nested_rosters.cs" />
+    <Compile Include="InterviewTests\LanguageTests\in_standalone_app_domain.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_inside_roster_with_lookup_table_in_validation.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_invalid_answer_and_all_questions_were_invalid_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_invalid_answer_and_all_questions_were_valid_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_valid_answer_and_all_questions_were_invalid_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_valid_answer_and_all_questions_were_valid_before_answer.cs" />
+    <Compile Include="InterviewTests\LanguageTests\when_answering_on_a_question_with_answer_that_enables_dependent_question.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_and_related_group_condition_expression_throws_exception.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_condition_expression_throws_exception.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_validation_expression_throws_exception.cs" />

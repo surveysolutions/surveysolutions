@@ -1220,7 +1220,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.CalculateInterviewChangesOnAnswerPictureQuestion(expressionProcessorState, userId, questionId, rosterVector, answerTime, pictureFileName, questionnaire);
         }
 
-        public void AnswerNumericIntegerQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, int answer)
+        public void AnswerNumericIntegerQuestion(AnswerNumericIntegerQuestionCommand command)
+            => AnswerNumericIntegerQuestion(command.UserId, command.QuestionId, command.RosterVector, command.AnswerTime, command.Answer);
+
+        internal void AnswerNumericIntegerQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, int answer)
         {
             ThrowIfInterviewHardDeleted();
             ThrowIfInterviewApprovedByHQ();
