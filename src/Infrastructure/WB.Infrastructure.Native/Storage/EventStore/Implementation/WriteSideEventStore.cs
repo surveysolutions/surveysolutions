@@ -18,8 +18,6 @@ using Nito.AsyncEx.Synchronous;
 using WB.Core.GenericSubdomains.Portable;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
-using System.IO;
-using Newtonsoft.Json.Bson;
 
 namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
 {

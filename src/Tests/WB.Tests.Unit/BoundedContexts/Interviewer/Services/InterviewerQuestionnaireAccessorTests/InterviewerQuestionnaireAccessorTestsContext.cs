@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
     internal class InterviewerQuestionnaireAccessorTestsContext
     {
         public static InterviewerQuestionnaireAccessor CreateInterviewerQuestionnaireAccessor(
-            ISynchronizationSerializer synchronizationSerializer = null,
+            IJsonAllTypesSerializer synchronizationSerializer = null,
             IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
             IAsyncPlainStorage<InterviewView> interviewViewRepository = null,
@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
             IInterviewerInterviewAccessor interviewFactory = null)
         {
             return new InterviewerQuestionnaireAccessor(
-                synchronizationSerializer: synchronizationSerializer ?? Mock.Of<ISynchronizationSerializer>(),
+                synchronizationSerializer: synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 questionnaireViewRepository: questionnaireViewRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireView>>(),
                 plainQuestionnaireRepository: plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 interviewViewRepository: interviewViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewView>>(),

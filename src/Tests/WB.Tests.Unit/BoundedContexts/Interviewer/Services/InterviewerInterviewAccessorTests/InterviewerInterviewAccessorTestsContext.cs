@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
             IAsyncPlainStorage<InterviewFileView> interviewFileViewRepository = null,
             ICommandService commandService = null,
             IInterviewerPrincipal principal = null,
-            ISynchronizationSerializer synchronizationSerializer = null,
+            IJsonAllTypesSerializer synchronizationSerializer = null,
             IStringCompressor compressor = null,
             IInterviewerEventStorage eventStore = null,
             IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache = null,
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 eventStore: eventStore ?? Mock.Of<IInterviewerEventStorage>(),
                 aggregateRootRepositoryWithCache: aggregateRootRepositoryWithCache ?? Mock.Of<IEventSourcedAggregateRootRepositoryWithCache>(),
                 snapshotStoreWithCache: snapshotStoreWithCache ?? Mock.Of<ISnapshotStoreWithCache>(),
-                synchronizationSerializer: synchronizationSerializer ?? Mock.Of<ISynchronizationSerializer>(),
+                synchronizationSerializer: synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 eventStreamOptimizer: Mock.Of<IInterviewEventStreamOptimizer>());
         }
     }

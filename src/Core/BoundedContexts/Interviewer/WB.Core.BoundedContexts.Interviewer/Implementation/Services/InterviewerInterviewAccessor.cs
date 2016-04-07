@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IInterviewerEventStorage eventStore;
         private readonly IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache;
         private readonly ISnapshotStoreWithCache snapshotStoreWithCache;
-        private readonly ISynchronizationSerializer synchronizationSerializer;
+        private readonly IJsonAllTypesSerializer synchronizationSerializer;
         private readonly IInterviewEventStreamOptimizer eventStreamOptimizer;
 
         public InterviewerInterviewAccessor(
@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IInterviewerEventStorage eventStore,
             IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache,
             ISnapshotStoreWithCache snapshotStoreWithCache,
-            ISynchronizationSerializer synchronizationSerializer,
+            IJsonAllTypesSerializer synchronizationSerializer,
             IInterviewEventStreamOptimizer eventStreamOptimizer)
         {
             this.questionnaireRepository = questionnaireRepository;
@@ -145,7 +145,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             var questionnaireView = this.questionnaireRepository.GetById(info.QuestionnaireIdentity.ToString());
 
             var interviewStatus = info.IsRejected ? InterviewStatus.RejectedBySupervisor :  InterviewStatus.InterviewerAssigned;
-            var interviewDetails = this.synchronizationSerializer.Deserialize<InterviewSynchronizationDto>(details.Details, TypeSerializationSettings.AllTypes);
+            var interviewDetails = this.synchronizationSerializer.Deserialize<InterviewSynchronizationDto>(details.Details);
 
             var createInterviewFromSynchronizationMetadataCommand = new CreateInterviewFromSynchronizationMetadata(
                 interviewId: info.Id,

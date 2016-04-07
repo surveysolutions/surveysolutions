@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
         protected readonly ICommandService commandService;
         protected readonly IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader;
         protected readonly IMetaInfoBuilder metaBuilder;
-        protected readonly ISynchronizationSerializer synchronizationSerializer;
+        protected readonly IJsonAllTypesSerializer synchronizationSerializer;
         protected readonly IGlobalInfoProvider globalInfoProvider;
         protected readonly IInterviewInformationFactory interviewsFactory;
 
@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             ICommandService commandService,
             IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader,
             IMetaInfoBuilder metaBuilder,
-            ISynchronizationSerializer synchronizationSerializer)
+            IJsonAllTypesSerializer synchronizationSerializer)
         {
             this.plainInterviewFileStorage = plainInterviewFileStorage;
             this.globalInfoProvider = globalInfoProvider;

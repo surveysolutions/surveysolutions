@@ -25,9 +25,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         {
             var principal = Mock.Of<IInterviewerPrincipal>(x =>
                 x.CurrentUserIdentity == Mock.Of<IInterviewerUserIdentity>(y => y.UserId == Guid.Parse("22222222222222222222222222222222")));
-            var synchronizationSerializer = Mock.Of<ISynchronizationSerializer>(
-                x => x.Deserialize<InterviewSynchronizationDto>(Moq.It.IsAny<string>(),
-                    TypeSerializationSettings.AllTypes) == new InterviewSynchronizationDto());
+            var synchronizationSerializer = Mock.Of<IJsonAllTypesSerializer>(
+                x => x.Deserialize<InterviewSynchronizationDto>(Moq.It.IsAny<string>()) == new InterviewSynchronizationDto());
 
             var quetstionnaireRepository = Mock.Of<IAsyncPlainStorage<QuestionnaireView>>(x=>x.GetById(questionnaireId.ToString()) == questionnaireInfo);
 

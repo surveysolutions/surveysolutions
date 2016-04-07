@@ -24,13 +24,13 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
     {
         private readonly IRestServiceSettings restServiceSettings;
         private readonly INetworkService networkService;
-        private readonly ISynchronizationSerializer synchronizationSerializer;
+        private readonly IJsonAllTypesSerializer synchronizationSerializer;
         private readonly IStringCompressor stringCompressor;
 
         public RestService(
             IRestServiceSettings restServiceSettings, 
             INetworkService networkService,
-            ISynchronizationSerializer synchronizationSerializer,
+            IJsonAllTypesSerializer synchronizationSerializer,
             IStringCompressor stringCompressor,
             IRestServicePointManager restServicePointManager)
         {
