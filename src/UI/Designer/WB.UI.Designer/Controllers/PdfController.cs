@@ -5,54 +5,43 @@ using System.Net;
 using System.Web.Http;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
-using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Pdf;
+using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Controllers
 {
     public class PdfController : BaseController
     {
-        private readonly IViewFactory<PdfQuestionnaireInputModel, PdfQuestionnaireView> pdfViewFactory;
         private readonly IPdfFactory pdfFactory;
 
         public PdfController(
-            IMembershipUserService userHelper,
-            IViewFactory<PdfQuestionnaireInputModel, PdfQuestionnaireView> viewFactory, 
+            IMembershipUserService userHelper, 
             IPdfFactory pdfFactory)
             : base(userHelper)
         {
-            this.pdfViewFactory = viewFactory;
             this.pdfFactory = pdfFactory;
         }
 
+        [LocalOrDevelopmentAccessOnly]
         public ActionResult RenderQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName)
         {
-            var questionnaire = this.pdfFactory.Load(id, requestedByUserId, requestedByUserName);
-            if (questionnaire == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
-
+            var questionnaire = this.LoadQuestionnaire(id, requestedByUserId, requestedByUserName);
             return this.View("RenderQuestionnaire", questionnaire);
         }
 
         [System.Web.Mvc.Authorize]
-        public ActionResult Print(Guid id)
+        public ActionResult PrintPreview(Guid id)
         {
-            var questionnaire = this.pdfFactory.Load(id, UserHelper.WebUser.UserId, UserHelper.WebUser.UserName);
-            if (questionnaire == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
-            
+            var questionnaire = this.LoadQuestionnaire(id, UserHelper.WebUser.UserId, UserHelper.WebUser.UserName);
             return this.View("RenderQuestionnaire", questionnaire);
         }
 
         [System.Web.Mvc.Authorize]
         public ActionResult ExportQuestionnaire(Guid id)
         {
-            PdfQuestionnaireView questionnaire = this.LoadQuestionnaire(id);
+            // find other place to load questionnaire title, this view is to heavy for this
+            var questionnaire = this.LoadQuestionnaire(id, UserHelper.WebUser.UserId, UserHelper.WebUser.UserName);
 
             using (var memoryStream = new MemoryStream())
             {
@@ -91,12 +80,14 @@ namespace WB.UI.Designer.Controllers
             return path;
         }
 
-
-        private PdfQuestionnaireView LoadQuestionnaire(Guid id)
+        private PdfQuestionnaireModel LoadQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName)
         {
-            var result = this.pdfViewFactory.Load(new PdfQuestionnaireInputModel() {Id = id});
-            result.ReconnectWithParent();
-            return result;
+            PdfQuestionnaireModel questionnaire = this.pdfFactory.Load(id, requestedByUserId, requestedByUserName);
+            if (questionnaire == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+            return questionnaire;
         }
     }
 }
