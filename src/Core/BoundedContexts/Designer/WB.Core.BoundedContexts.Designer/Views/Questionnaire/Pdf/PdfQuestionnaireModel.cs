@@ -6,6 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
@@ -43,6 +44,24 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             public int QuestionsWithConditionsCount { get; set; } = 0;
         }
 
+        public class EntityWithLongCondition
+        {
+            public  int Index { get; set; }
+            public Guid Id { get; set; }
+            public string VariableName { get; set; }
+            public string Title { get; set; }
+            public string EnablementCondition { get; set; }
+        }
+
+        public class EntityWithLongValidation
+        {
+            public int Index { get; set; }
+            public Guid Id { get; set; }
+            public string VariableName { get; set; }
+            public string Title { get; set; }
+            public List<ValidationCondition> ValidationConditions { get; set; }
+        }
+
         private readonly QuestionnaireDocument questionnaire;
         public PdfSettings Settings { get; }
 
@@ -60,8 +79,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             this.questionnaire.ConnectChildrenWithParent();
             this.allItems = this.questionnaire.Children.SelectMany<IComposite, IComposite>(x => x.TreeToEnumerable<IComposite>(g => g.Children)).ToList();
 
-            QuestionsWithLongConditions = Find<IQuestion>(x => x.ConditionExpression?.Length > Settings.ExpressionExcerptLength).ToList();
-            QuestionsWithLongValidations = Find<IQuestion>(x => x.ValidationConditions.Count > 0 && x.ValidationConditions.Any(condition => condition.Expression?.Length > Settings.ExpressionExcerptLength)).ToList();
+            ItemsWithLongConditions = CollectEntitiesWithLongConditions();
+            ItemsWithLongValidations = CollectItemsWithLongValidations();
             QuestionsWithLongInstructions = Find<IQuestion>(x => x.Instructions?.Length > Settings.InstructionsExcerptLength).ToList();
             QuestionsWithLongOptionsList = Find<IQuestion>(x => x.Answers?.Count > Settings.OptionsExcerptCount).ToList();
 
@@ -71,13 +90,71 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             this.Statistics.QuestionsWithConditionsCount = Find<IQuestion>(x => !string.IsNullOrWhiteSpace(x.ConditionExpression) || x.ValidationConditions.Any()).Count();
         }
 
+        private List<EntityWithLongValidation> CollectItemsWithLongValidations()
+        {
+            var questions = this.Find<IQuestion>(x => x.ValidationConditions.Count > 0 && x.ValidationConditions.Any(condition => condition.Expression?.Length > this.Settings.ExpressionExcerptLength))
+                .Select(x => new EntityWithLongValidation
+                {
+                    Id = x.PublicKey,
+                    Title = x.QuestionText,
+                    VariableName = x.StataExportCaption,
+                    ValidationConditions = x.ValidationConditions.ToList()
+                });
+            var staticTexts = this.Find<IStaticText>(x => x.ValidationConditions?.Count > 0 && x.ValidationConditions.Any(condition => condition.Expression?.Length > this.Settings.ExpressionExcerptLength))
+                .Select(x => new EntityWithLongValidation
+                {
+                    Id = x.PublicKey,
+                    Title = x.Text,
+                    ValidationConditions = x.ValidationConditions.ToList()
+                });
+            var entitiesWithLongValidations = questions.Union(staticTexts).ToList();
+
+            int index = 1;
+            entitiesWithLongValidations.ForEach(x => x.Index = index++);
+
+            return entitiesWithLongValidations;
+        }
+
+        private List<EntityWithLongCondition> CollectEntitiesWithLongConditions()
+        {
+            var questions = this.Find<IQuestion>(x => x.ConditionExpression?.Length > this.Settings.ExpressionExcerptLength)
+                .Select(x => new EntityWithLongCondition
+                {
+                    Id = x.PublicKey,
+                    Title = x.QuestionText,
+                    VariableName = x.StataExportCaption,
+                    EnablementCondition = x.ConditionExpression.Trim()
+                });
+            var groupsAndRosters = this.Find<IGroup>(x => x.ConditionExpression?.Length > this.Settings.ExpressionExcerptLength)
+                .Select(x => new EntityWithLongCondition
+                {
+                    Id = x.PublicKey,
+                    Title = x.Title,
+                    EnablementCondition = x.ConditionExpression.Trim()
+                });
+            var staticTexts = this.Find<IStaticText>(x => x.ConditionExpression?.Length > this.Settings.ExpressionExcerptLength)
+                .Select(x => new EntityWithLongCondition
+                {
+                    Id = x.PublicKey,
+                    Title = x.Text,
+                    EnablementCondition = x.ConditionExpression.Trim()
+                });
+
+            var entitiesWithLongConditions = questions.Union(groupsAndRosters).Union(staticTexts).ToList();
+
+            int index = 1;
+            entitiesWithLongConditions.ForEach(x => x.Index = index++);
+
+            return entitiesWithLongConditions;
+        }
+
         public List<IQuestion> QuestionsWithLongOptionsList { get; private set; }
 
         public List<IQuestion> QuestionsWithLongInstructions { get; private set; }
 
-        public List<IQuestion> QuestionsWithLongValidations { get; private set; }
+        public List<EntityWithLongValidation> ItemsWithLongValidations { get; private set; }
 
-        public List<IQuestion> QuestionsWithLongConditions { get; private set; }
+        public List<EntityWithLongCondition> ItemsWithLongConditions { get; private set; }
 
         public string Title => this.questionnaire.Title;
         public IEnumerable<Guid> SectionIds => this.questionnaire.Children.Select(x => x.PublicKey).ToList();
@@ -284,31 +361,31 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public bool InstructionIsTooLong(IQuestion question) =>
             question.Instructions?.Length > this.Settings.InstructionsExcerptLength;
 
-        public int GetQuestionIndexInAppendix(Guid questionId, string appendix)
+        public int GetEntityIndexInAppendix(Guid questionId, string appendix)
         {
-            var question = Find<IQuestion>(questionId);
-            var index = -2;
             switch (appendix)
             {
                 case "E":
-                    index = QuestionsWithLongConditions.IndexOf(question);
-                    break;
+                    return this.ItemsWithLongConditions.Single(x => x.Id == questionId).Index;
                 case "V":
-                    index = QuestionsWithLongValidations.IndexOf(question);
-                    break;
+                    return this.ItemsWithLongValidations.Single(x => x.Id == questionId).Index;
                 case "I":
-                    index = QuestionsWithLongInstructions.IndexOf(question);
-                    break;
+                {
+                    var question = Find<IQuestion>(questionId);
+                    return  QuestionsWithLongInstructions.IndexOf(question) + 1;
+                }
                 case "O":
-                    index = QuestionsWithLongOptionsList.IndexOf(question);
-                    break;
+                {
+                    var question = Find<IQuestion>(questionId);
+                    return QuestionsWithLongOptionsList.IndexOf(question) + 1;
+                }
             }
-            return index + 1;
+            return -1;
         }
 
         public bool ExpressionIsTooLong(string expression) => expression?.Length > this.Settings.ExpressionExcerptLength;
 
-        public string GetExpressionExcerpt(string expression) => expression.Substring(0, Math.Min(this.Settings.ExpressionExcerptLength, expression.Length));
+        public string GetExpressionExcerpt(string expression) => expression?.Substring(0, Math.Min(this.Settings.ExpressionExcerptLength, expression.Length)) ?? string.Empty;
         public string GetInstructionsId(Guid id) => $"instructions-{id.FormatGuid()}";
 
         public string GetConditionId(Guid id) => $"condition-{id.FormatGuid()}";
@@ -321,10 +398,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public string GetOptionsId(Guid id) => $"options-{id.FormatGuid()}";
 
-        public bool IsYesNoMultiQuestion(IQuestion question)
-        {
-            var multyOptionsQuestion = (question as MultyOptionsQuestion);
-            return multyOptionsQuestion?.YesNoView ?? false;
-        }
+        public bool IsYesNoMultiQuestion(IQuestion question) => (question as MultyOptionsQuestion)?.YesNoView ?? false;
+
+        public bool StaticTextHasEnablementCondition(IStaticText text) => !string.IsNullOrWhiteSpace(text.ConditionExpression);
+
+        public int GetValidationsCount(IList<ValidationCondition> validationConditions) => validationConditions?.Count ?? 0;
     }
 }
