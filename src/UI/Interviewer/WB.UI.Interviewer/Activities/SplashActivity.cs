@@ -49,85 +49,13 @@ namespace WB.UI.Interviewer.Activities
     [Activity(NoHistory = true, MainLauncher = true, ScreenOrientation = ScreenOrientation.Portrait, Theme = "@style/AppTheme")]
     public class SplashActivity : MvxSplashScreenActivity
     {
-        private Bitmap[] animationImagesCache;
-        private Handler uiHandler;
-        private Thread splashTread;
-        private ImageView spashAnimationView;
-        private bool keepAnimationRolling;
-
         public SplashActivity() : base(Resource.Layout.splash)
         {
-        }
-
-        protected override void OnCreate(Bundle bundle)
-        {
-            base.OnCreate(bundle);
-
-            spashAnimationView = this.FindViewById<ImageView>(Resource.Id.splash_animation);
-
-            this.animationImagesCache = new Bitmap[69];
-            for (int i = 0; i < this.animationImagesCache.Length; i++)
-            {
-                this.PutImageToCache(i, "splash");
-            }
-
-            this.uiHandler = new Handler(Looper.MainLooper);
-            this.keepAnimationRolling = true;
-            // thread for displaying the SplashScreen
-            this.splashTread = new Thread(() =>
-            {
-                try
-                {
-                    int imageIndex = 0;
-                    while (keepAnimationRolling)
-                    {
-                        Thread.Sleep(30);
-                        if (imageIndex < this.animationImagesCache.Length)
-                        {
-                            var index = imageIndex;
-                            uiHandler.Post(() =>
-                            {
-                                this.spashAnimationView.SetImageBitmap(this.animationImagesCache[index]);
-                            });
-                        }
-                        imageIndex++;
-                        imageIndex %= this.animationImagesCache.Length;
-                    }
-                }
-                catch (InterruptedException)
-                {
-                    // do nothing
-                }
-            });
-            this.splashTread.Start();
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            foreach (var bitmap in this.animationImagesCache)
-            {
-                bitmap.Recycle();
-                bitmap.Dispose();
-            }
-            this.uiHandler.Dispose();
-            this.splashTread.Dispose();
-        }
-
-        private void PutImageToCache(int cnt, string folder_name)
-        {
-            using (Stream imageStream = Assets.Open(System.IO.Path.Combine(folder_name, $"splash{cnt:00}.jpg")))
-            {
-                var bitmapDecoded = BitmapFactory.DecodeStream(imageStream);
-                this.animationImagesCache[cnt] = Bitmap.CreateScaledBitmap(bitmapDecoded, bitmapDecoded.Width * 2, bitmapDecoded.Height * 2, true);
-                bitmapDecoded.Recycle();
-            }
         }
 
         protected override async void TriggerFirstNavigate()
         {
             await this.BackwardCompatibilityAsync();
-            keepAnimationRolling = false;
             await Mvx.Resolve<IViewModelNavigationService>().NavigateToLoginAsync();
         }
 
