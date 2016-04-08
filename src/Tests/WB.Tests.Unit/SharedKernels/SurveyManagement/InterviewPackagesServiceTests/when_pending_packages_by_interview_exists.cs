@@ -7,7 +7,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceTests
 {
-    internal class when_getting_has_packages_by_interview_id : InterviewPackagesServiceTestsContext
+    internal class when_pending_packages_by_interview_exists : InterviewPackagesServiceTestsContext
     {
         Establish context = () =>
         {
@@ -19,9 +19,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
             interviewPackagesService = CreateInterviewPackagesService(interviewPackageStorage: packagesStorage, brokenInterviewPackageStorage: brokenPackagesStorage);
         };
 
-        Because of = () => hasPackagesByInterviewId = interviewPackagesService.HasPackagesByInterviewId(interviewId);
+        Because of = () => hasPackagesByInterviewId = interviewPackagesService.HasPendingPackageByInterview(interviewId);
 
-        It should_packages_storage_contains_packages_by_interview_id = () => hasPackagesByInterviewId.ShouldEqual(true);
+        It should_return_true = () => hasPackagesByInterviewId.ShouldEqual(true);
 
         private static bool hasPackagesByInterviewId;
         private static readonly Guid interviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

@@ -24,7 +24,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
                 syncSettings: new SyncSettings("hq"), 
                 logger: Mock.Of<ILogger>(), 
                 serializer: serializer ?? Mock.Of<ISerializer>(),
-                archiver: archiver ?? Mock.Of<IArchiveUtils>(), 
                 interviewPackageStorage: interviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<InterviewPackage>>(),
                 brokenInterviewPackageStorage: brokenInterviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<BrokenInterviewPackage>>(),
                 commandService: commandService ?? Mock.Of<ICommandService>());

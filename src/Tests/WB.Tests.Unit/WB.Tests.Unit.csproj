@@ -639,7 +639,7 @@
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_supervisor_try_see_other_supervisor_interviewers.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewersViewFactoryTests\when_hq_sorting_by_deviceId.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\InterviewPackagesServiceTestsContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\when_getting_has_packages_by_interview_id.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\when_pending_packages_by_interview_exists.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\when_reprocessing_all_broken_packages.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\when_storing_package.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\when_getting_top_package_ids.cs" />
