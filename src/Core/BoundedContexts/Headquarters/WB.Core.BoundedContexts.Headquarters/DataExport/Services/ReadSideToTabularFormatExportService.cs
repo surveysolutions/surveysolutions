@@ -120,32 +120,32 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                                   !x.IsDeleted;
             }
 
-            List<Guid> interviewIdsToExport = new List<Guid>();
+            HashSet<Guid> interviewIdsToExport = new HashSet<Guid>();
 
             var stopwatch = Stopwatch.StartNew();
-            int totalInterviewsToExport =
-                this.transactionManager.GetTransactionManager()
-                    .ExecuteInQueryTransaction(() => this.interviewSummaries.Query(_ => _.Count(expression)));
-
-            while (interviewIdsToExport.Count < totalInterviewsToExport)
+           
+            string lastRecivedId = null;
+            while (true)
             {
                 var ids = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
                     this.interviewSummaries.Query(_ => _
                         .Where(expression)
-                        .OrderBy(x => x.InterviewId)
+                        .OrderBy(x => x.SummaryId)
+                        .Where(x => lastRecivedId == null || x.SummaryId.CompareTo(lastRecivedId) > 0)
                         .Select(x => x.InterviewId)
-                        .Skip(interviewIdsToExport.Count)
                         .Take(this.exportSettings.InterviewIdsQueryBatchSize)
                         .ToList()));
+
                 if (ids.Count == 0) break;
 
                 cancellationToken.ThrowIfCancellationRequested();
-                interviewIdsToExport.AddRange(ids);
+                ids.ForEach(x => interviewIdsToExport.Add(x));
+                lastRecivedId = ids.Last().FormatGuid();
                 this.logger.Debug($"Received {interviewIdsToExport.Count:n0} interview interview ids.");
             }
             stopwatch.Stop();
             this.logger.Info($"Received {interviewIdsToExport.Count:N0} interviewIds to start export. Took {stopwatch.Elapsed:g} to complete.");
-            return interviewIdsToExport;
+            return interviewIdsToExport.ToList();
         }
 
         public void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath)
