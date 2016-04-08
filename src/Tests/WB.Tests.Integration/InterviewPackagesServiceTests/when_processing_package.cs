@@ -42,7 +42,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
 
             origin = "hq";
 
-            var newtonJsonSerializer = new NewtonJsonSerializer(new JsonSerializerSettingsFactory());
+            var newtonJsonSerializer = new NewtonJsonSerializer();
 
             interviewPackagesService = new InterviewPackagesService(
                 syncSettings: new SyncSettings(origin),
