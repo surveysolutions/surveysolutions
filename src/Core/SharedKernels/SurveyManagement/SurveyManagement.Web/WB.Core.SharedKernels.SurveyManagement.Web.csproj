@@ -602,7 +602,7 @@
     <EmbeddedResource Include="Views\Interviewers\Index.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\BrokenInterviewPackages.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\Versions.cshtml" />
-    <None Include="Views\Interview\AttachmentPartialView.cshtml" />
+    <EmbeddedResource Include="Views\Interview\AttachmentPartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
