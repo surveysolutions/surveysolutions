@@ -6,11 +6,13 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
         {
         }
 
-        public QuestionProperties(bool hideInstructions)
+        public QuestionProperties(bool hideInstructions, bool useFormatting)
         {
             this.HideInstructions = hideInstructions;
+            this.UseFormatting = useFormatting;
         }
 
         public bool HideInstructions { get; set; }
+        public bool UseFormatting { get; set; }
     }
 }

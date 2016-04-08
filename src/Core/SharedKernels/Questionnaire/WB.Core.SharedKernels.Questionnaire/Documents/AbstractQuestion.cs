@@ -16,7 +16,7 @@ namespace Main.Core.Entities.SubEntities
         {
             this.Answers = new List<Answer>();
             this.validationConditions = new List<ValidationCondition>();
-            this.Properties = new QuestionProperties(false);
+            this.Properties = new QuestionProperties(false, false);
         }
 
         protected AbstractQuestion(string text)

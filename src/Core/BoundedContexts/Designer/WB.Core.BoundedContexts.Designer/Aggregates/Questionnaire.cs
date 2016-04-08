@@ -1125,6 +1125,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             sourceQuestionnaireId:sourceQuestionnaireId,
                             responsibleId: responsibleId,
                             isInteger: numericQuestion.IsInteger,
+                            useFormatting: numericQuestion.UseFormatting,
                             countOfDecimalPlaces: numericQuestion.CountOfDecimalPlaces,
                             validationConditions: numericQuestion.ValidationConditions));
                         continue;
@@ -1560,7 +1561,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 validationExpression: null,
                 validationMessage : null,
                 instructions : null,
-                properties: new QuestionProperties(false), 
+                properties: new QuestionProperties(false, false), 
                 responsibleId : command.ResponsibleId,
                 linkedToQuestionId : null,
                 areAnswersOrdered : null,
@@ -2006,20 +2007,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
         #endregion
 
-        public void UpdateNumericQuestion(
-            Guid questionId,
-            string title,
-            string variableName, string variableLabel,
-            bool isPreFilled,
+        public void UpdateNumericQuestion(Guid questionId, 
+            string title, 
+            string variableName, 
+            string variableLabel, 
+            bool isPreFilled, 
             QuestionScope scope, 
-            string enablementCondition, 
+            string enablementCondition,
             bool hideIfDisabled, 
             string instructions,
             QuestionProperties properties,
-            Guid responsibleId,
-            bool isInteger,
-            int? countOfDecimalPlaces,
-            List<ValidationCondition> validationConditions)
+            Guid responsibleId, 
+            bool isInteger, int? countOfDecimalPlaces, List<ValidationCondition> validationConditions)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -4348,7 +4347,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private IEnumerable<IEvent> CreateNumericQuestionCloneEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, 
             string enablementCondition, bool hideIfDisabled, string validationExpression, string validationMessage, string instructions,
             QuestionProperties properties, Guid sourceQuestionId, 
-            Guid sourceQuestionnaireId,int targetIndex, Guid responsibleId, bool isInteger, int? countOfDecimalPlaces,
+            Guid sourceQuestionnaireId,
+            int targetIndex, Guid responsibleId, bool isInteger, bool useFormatting, int? countOfDecimalPlaces,
             IList<ValidationCondition> validationConditions)
         {
             yield return new NumericQuestionCloned

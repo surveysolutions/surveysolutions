@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
                     enablementCondition: enablementCondition,
                     hideIfDisabled: false,
                     instructions: instructions,
-                    responsibleId: notExistinigUserId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(), properties: new QuestionProperties(false)));
+                    responsibleId: notExistinigUserId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(), properties: Create.QuestionProperties()));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

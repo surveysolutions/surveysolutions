@@ -1743,7 +1743,7 @@ namespace WB.Tests.Unit
                 targetIndex: 0,
                 featured: false,
                 instructions: null,
-                properties: properties ?? new QuestionProperties(false),
+                properties: properties ?? new QuestionProperties(false, false),
                 responsibleId: Guid.NewGuid(),
                 capital: false,
                 questionScope: QuestionScope.Interviewer,

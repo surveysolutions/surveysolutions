@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                 {
                     new ValidationCondition { }
                 },
-                linkedFilterExpression: null, properties: new QuestionProperties(false)));
+                linkedFilterExpression: null, properties: Create.QuestionProperties()));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
                             Message = validationMessage
                         }
                     },
-                    properties: new QuestionProperties(false));
+                    properties: Create.QuestionProperties());
 
         Cleanup stuff = () =>
         {

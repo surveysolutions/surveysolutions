@@ -64,7 +64,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
             null,
             false,
             cascadeFromQuestionId: parentQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
-                linkedFilterExpression: null, properties: new QuestionProperties(false));
+                linkedFilterExpression: null, properties: Create.QuestionProperties());
 
         private Cleanup stuff = () =>
         {

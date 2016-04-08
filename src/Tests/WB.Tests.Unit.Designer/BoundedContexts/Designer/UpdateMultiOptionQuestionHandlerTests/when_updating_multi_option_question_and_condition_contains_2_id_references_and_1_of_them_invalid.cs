@@ -53,7 +53,7 @@ questionType: QuestionType.QRBarcode
                     areAnswersOrdered: areAnswersOrdered,
                     maxAllowedAnswers: maxAllowedAnswers,
                     yesNoView: yesNoView, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
-                linkedFilterExpression: null, properties: new QuestionProperties(false)));
+                linkedFilterExpression: null, properties: Create.QuestionProperties()));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

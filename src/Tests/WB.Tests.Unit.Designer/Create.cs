@@ -245,6 +245,11 @@ namespace WB.Tests.Unit.Designer
         }
 
 
+        public static QuestionProperties QuestionProperties()
+        {
+            return new QuestionProperties(false, false);
+        }
+
         public static DateTimeQuestion DateTimeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string text = null, QuestionScope scope = QuestionScope.Interviewer,
             bool preFilled = false, bool hideIfDisabled = false)
@@ -731,7 +736,7 @@ namespace WB.Tests.Unit.Designer
                 targetIndex: 0,
                 featured: false,
                 instructions: null,
-                properties: new QuestionProperties(false),
+                properties: Create.QuestionProperties(),
                 responsibleId: Guid.NewGuid(),
                 capital: false,
                 questionScope: QuestionScope.Interviewer,
