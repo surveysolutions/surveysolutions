@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireEntityFac
                 false,
                 false,
                 instructions ?? "",
-                new QuestionProperties(false),
+                new QuestionProperties(false, false),
                 null,
                 new Answer[0], 
                 null,

@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
                 variableLabel: null, enablementCondition: null, hideIfDisabled: false, instructions: null,
                     responsibleId: responsibleId, scope: QuestionScope.Interviewer, 
                     validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
-                    properties: new QuestionProperties(false)));
+                    properties: Create.QuestionProperties()));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

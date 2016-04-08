@@ -43,7 +43,7 @@ questionType: QuestionType.QRBarcode
                     linkedToEntityId: linkedToQuestionId,
                     isFilteredCombobox: isFilteredCombobox,
                     cascadeFromQuestionId: ñascadeFromQuestionId, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
-                linkedFilterExpression: null, properties: new QuestionProperties(false)));
+                linkedFilterExpression: null, properties: Create.QuestionProperties()));
 
         It should_not_throw_exception = () => exception.ShouldBeNull();
 

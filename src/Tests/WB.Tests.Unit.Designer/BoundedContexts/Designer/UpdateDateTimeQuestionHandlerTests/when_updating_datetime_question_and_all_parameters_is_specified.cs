@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
                 validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>
                 {
                     new ValidationCondition { Message = validationMessage, Expression = validationExpression }
-                }, properties: new QuestionProperties(false));
+                }, properties: Create.QuestionProperties());
 
         Cleanup stuff = () =>
         {

@@ -7,8 +7,10 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
 {
     public class NumericQuestionChanged : AbstractNumericQuestionDataEvent
     {
-        public NumericQuestionChanged(Guid responsibleId, string conditionExpression, bool hideIfDisabled, bool featured, string instructions, QuestionProperties properties, bool capital, Guid publicKey, 
-            string questionText, QuestionScope questionScope, string stataExportCaption, string variableLabel, string validationExpression, string validationMessage, 
+        public NumericQuestionChanged(Guid responsibleId, string conditionExpression, bool hideIfDisabled, bool featured, string instructions, QuestionProperties properties, 
+            bool capital, Guid publicKey, 
+            string questionText, QuestionScope questionScope, string stataExportCaption, 
+            string variableLabel, string validationExpression, string validationMessage, 
             bool? isInteger, int? countOfDecimalPlaces, List<ValidationCondition> validationConditions) : 
             base(responsibleId, conditionExpression, hideIfDisabled, featured, instructions, properties, capital, publicKey, questionText, 
                 questionScope, stataExportCaption, variableLabel, validationExpression, validationMessage, isInteger, countOfDecimalPlaces, validationConditions)
