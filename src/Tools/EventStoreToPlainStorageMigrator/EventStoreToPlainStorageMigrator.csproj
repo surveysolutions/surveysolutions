@@ -104,8 +104,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ObsoleteEventHandleDescriptor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionnaireMigrationEventHandlers.cs" />
+    <Compile Include="UserMigrationEventHandlers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
