@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Net.Http;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Newtonsoft.Json;
-using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
 {
-    internal class when_serializing_questionnaire_document_with_json_utils_to_old_format : NewtonJsonUtilsTestContext
+    internal class when_serializing_questionnaire_document_with_json_utils_to_old_format 
     {
         Establish context = () =>
         {
