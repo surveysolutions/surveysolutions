@@ -101,6 +101,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/bootstrap-datepicker.js",
                     "~/Scripts/Math.uuid.js",
                     "~/Scripts/viewmodels/pages/interview/custom.js",
+                    "~/Scripts/viewmodels/pages/interview/ko.bindingHandlers.numericformatter.js",
                     "~/Scripts/lodash.underscore.js",
                     "~/Scripts/jquery.maskedinput.js"
                 }
@@ -194,6 +195,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/bootbox.min.js",
                     "~/Scripts/knockout.validation.js",
                     "~/Scripts/viewmodels/pages/interview/custom.js",
+                    "~/Scripts/viewmodels/pages/interview/ko.bindingHandlers.numericformatter.js",
                     "~/Scripts/bootstrap3-typeahead.js",
                     "~/Scripts/components/typeahead-extended.js",
                     "~/Scripts/knockout/ko.typeahead.js",
@@ -201,6 +203,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/spin.js",
                     "~/Scripts/knockout/ko.spin.js",
                     "~/Scripts/pages/import-interviews.js"
+                }
+            },
+            {
+                "~/js/interviews", new[]
+                {
+                    "~/Scripts/bootbox.min.js",
+                    "~/Scripts/bootstrap3-typeahead.js",
+                    "~/Scripts/components/typeahead-extended.js",
+                    "~/Scripts/knockout/ko.typeahead.js",
+                    "~/Scripts/viewmodels/pages/interviews.base.js",
+                    "~/Scripts/viewmodels/pages/interview/hq.interviews.js",
+                    "~/Scripts/viewmodels/pages/interview/ko.bindingHandlers.numericformatter.js",
                 }
             },
         };
