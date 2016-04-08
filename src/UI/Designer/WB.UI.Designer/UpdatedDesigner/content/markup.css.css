@@ -7522,6 +7522,7 @@ input#edit-group-title {
 }
 .question-editor .checkbox-in-column {
   margin-top: 5px;
+  white-space: nowrap;
 }
 .question-editor .checkbox-in-column input.wb-checkbox + label {
   font-family: "Lucida Console", Monaco, monospace;
