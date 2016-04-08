@@ -248,6 +248,9 @@ h1{
 	line-height: 13px;
     font-family: 'RobotoLight';
 }
+.type span {
+    margin-top: 6px;
+}
 .variable_name, .appendix_detail span>span, 
 .structure_list, .splitted_variables{
 	font-size: 13px;
@@ -418,6 +421,7 @@ input[type=date] {
 }
 .condition span, .validation-expression span{
 	font-family: 'RobotoLight', sans-serif;
+    top: -1px;
 }
 .instructions, .instructions span, .validation-message, .validation-message span{
 	font-family: 'RobotoMedium';
@@ -449,7 +453,7 @@ input[type=date] {
 }
 .generated_by ul li span{
 	font-size: 12px;
-	line-height: 18px;
+	line-height: 12px;
 	margin-right: 15px;
 }
 .static_text{
@@ -549,7 +553,7 @@ h3{
 	width: 40px;
 	position: absolute;
 	display: block;
-	top: 0;
+	top: 1px;
     text-align: right;
 	left: -45px;
 } 
