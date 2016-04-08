@@ -179,6 +179,7 @@
                         command.isInteger = question.isInteger;
                         command.countOfDecimalPlaces = question.countOfDecimalPlaces;
                         command.maxValue = question.maxValue;
+                        command.useFormatting = question.useFormatting;
                         break;
                     case "DateTime":
                     case "GpsCoordinates":

@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.Designer
                 mask, 
                 responsibleId, 
                 validationConditions, 
-                new QuestionProperties(false));
+                new QuestionProperties(false, false));
         }
 
         public static void AddMultiOptionQuestion(
@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.Designer
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
             questionnaire.UpdateMultiOptionQuestion(questionId, title, variableName, variableLabel, scope, enablementCondition, false, instructions, responsibleId, options, linkedToQuestionId, areAnswersOrdered, maxAllowedAnswers, yesNoView, new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
-                linkedFilterExpression: null, properties: new QuestionProperties(false));
+                linkedFilterExpression: null, properties: Create.QuestionProperties());
         }
 
         public static void AddSingleOptionQuestion(
@@ -89,7 +89,7 @@ namespace WB.Tests.Unit.Designer
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(Guid.NewGuid(), questionId, parentGroupId, title, responsibleId));
             questionnaire.UpdateSingleOptionQuestion(questionId, title, variableName, variableLabel, isPreFilled, scope, enablementCondition, false, instructions, responsibleId, options, linkedToQuestionId, isFilteredCombobox, cascadeFromQuestionId, new List<ValidationCondition>(),
-                linkedFilterExpression: null, properties: new QuestionProperties(false));
+                linkedFilterExpression: null, properties: Create.QuestionProperties());
         }
 
         public static void AddNumericQuestion(
@@ -121,7 +121,7 @@ namespace WB.Tests.Unit.Designer
                 hideIfDisabled: false,
                 instructions: instructions,
                 responsibleId: responsibleId,
-                validationConditions: new List<ValidationCondition>(), properties: new QuestionProperties(false));
+                validationConditions: new List<ValidationCondition>(), properties: Create.QuestionProperties());
         }
     }
 }

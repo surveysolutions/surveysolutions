@@ -97,6 +97,6 @@ namespace Main.Core.Entities
         public readonly bool? YesNoView;
         public readonly QuestionProperties Properties;
 
-        public IList<ValidationCondition> ValidationConditions { get; set; } 
+        public IList<ValidationCondition> ValidationConditions { get; set; }
     }
 }

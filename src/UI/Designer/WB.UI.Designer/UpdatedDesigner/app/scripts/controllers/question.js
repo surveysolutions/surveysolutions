@@ -67,6 +67,7 @@
                 $scope.activeQuestion.allQuestionScopeOptions = question.allQuestionScopeOptions;
                 $scope.activeQuestion.instructions = question.instructions;
                 $scope.activeQuestion.hideInstructions = question.hideInstructions;
+                $scope.activeQuestion.useFormatting = question.useFormatting;
                 $scope.activeQuestion.maxAnswerCount = question.maxAnswerCount;
                 $scope.activeQuestion.maxAllowedAnswers = question.maxAllowedAnswers;
                 $scope.activeQuestion.areAnswersOrdered = question.areAnswersOrdered;

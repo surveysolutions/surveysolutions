@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         {
             Type = QuestionType.Numeric;
         }
-
+        public bool UseFormatting { get; set; }
         public bool IsInteger { get; set; }
         public int? CountOfDecimalPlaces { get; set; }
         public override QuestionType Type { get; set; }

@@ -23,6 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public bool IsPreFilled { get; set; }
         public string Instructions { get; set; }
         public bool HideInstructions { get; set; }
+        public bool UseFormatting { get; set; }
         public QuestionScope QuestionScope { get; set; }
         public string VariableName { get; set; }
         public string VariableLabel { get; set; }

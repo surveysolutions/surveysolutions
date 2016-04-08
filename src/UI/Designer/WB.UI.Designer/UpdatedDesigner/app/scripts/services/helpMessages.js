@@ -18,7 +18,8 @@
                 'validationExpression': 'A logical expression that validates an answer to the current question. Might include values of other questions.',
                 'validationMessage': 'Error message is shown when an answer to the current question fails a validation condition.',
                 'sourceQuestion': 'Source question (answer generates number of rows)',
-                'fixedTitles': 'Number of items determines the roster size. Each element of the list corresponds to a title of the roster row. Each element of the list should be placed on a separate line.'
+                'fixedTitles': 'Number of items determines the roster size. Each element of the list corresponds to a title of the roster row. Each element of the list should be placed on a separate line.',
+                'useFormatting': 'On interviewer app as user types this setting converts a number to a string of the form "-d,ddd,ddd.ddd…", where "-" indicates a negative number symbol if required, "d" indicates a digit (0-9), "," indicates a group separator, and "." indicates a decimal point symbol. Symbols may vary depending on tablet settings.'
             };
 
             helpService.getHelpMessage = function(key) {

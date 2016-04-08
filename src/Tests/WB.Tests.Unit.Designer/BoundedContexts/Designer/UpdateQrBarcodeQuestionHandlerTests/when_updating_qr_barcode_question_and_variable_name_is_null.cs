@@ -33,7 +33,7 @@ questionType: QuestionType.QRBarcode
                     variableLabel: null, enablementCondition: null, hideIfDisabled: false, instructions: null,
                     responsibleId: responsibleId, scope: QuestionScope.Interviewer, 
                     validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
-                    properties: new QuestionProperties(false)));
+                    properties: Create.QuestionProperties()));
 
         It should_not_throw_exception = () => exception.ShouldBeNull();
 

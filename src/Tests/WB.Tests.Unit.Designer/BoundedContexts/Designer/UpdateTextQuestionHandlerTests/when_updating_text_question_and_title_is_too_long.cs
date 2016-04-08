@@ -40,7 +40,7 @@ questionType: QuestionType.QRBarcode
                     hideIfDisabled: false,
                     instructions: instructions,
                     mask: null,
-                    responsibleId: responsibleId, validationCoditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(), properties: new QuestionProperties(false)));
+                    responsibleId: responsibleId, validationCoditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(), properties: Create.QuestionProperties()));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();
