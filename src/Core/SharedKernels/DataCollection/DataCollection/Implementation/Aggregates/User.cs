@@ -15,18 +15,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
     public class User : IPlainAggregateRoot
     {
-        private readonly UserRoles[] userRolesWhichAllowToBeDeleted = new[] {UserRoles.Operator, UserRoles.Supervisor};
+        private static readonly UserRoles[] RolesWhichSupportArchiving = { UserRoles.Operator, UserRoles.Supervisor };
 
         public Guid Id { get; private set; }
 
-        public User()
-        {
-        }
-
+        public User() {}
 
         public void SetId(Guid id)
         {
-            Id = id;
+            this.Id = id;
         }
 
         public DateTime CreationDate;
@@ -48,114 +45,118 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             Guid publicKey, UserRoles[] roles, UserLight supervisor, string userName, string personName,
             string phoneNumber)
         {
-            //// Check for uniqueness of person name and email!
-
-            UserName = userName;
-            Password = password;
-            CreationDate = DateTime.UtcNow;
-            Email = email;
-            IsLockedBySupervisor = isLockedBySupervisor;
-            IsLockedByHQ = isLockedByHq;
-            Supervisor = supervisor;
-            Roles = roles;
-            PersonName = personName;
-            PhoneNumber = phoneNumber;
+            this.UserName = userName;
+            this.Password = password;
+            this.CreationDate = DateTime.UtcNow;
+            this.Email = email;
+            this.IsLockedBySupervisor = isLockedBySupervisor;
+            this.IsLockedByHQ = isLockedByHq;
+            this.Supervisor = supervisor;
+            this.Roles = roles;
+            this.PersonName = personName;
+            this.PhoneNumber = phoneNumber;
         }
 
         public void ChangeUser(string email, bool? isLockedBySupervisor, bool isLockedByHQ, string passwordHash,
             string personName, string phoneNumber, Guid userId)
         {
-            ThrowIfUserArchived();
+            this.ThrowIfUserArchived();
 
-            Email = email;
-            Password = passwordHash;
-            PersonName = personName;
-            PhoneNumber = phoneNumber;
+            this.Email = email;
+            this.Password = passwordHash;
+            this.PersonName = personName;
+            this.PhoneNumber = phoneNumber;
 
             if (isLockedBySupervisor.HasValue)
             {
-                IsLockedBySupervisor = isLockedBySupervisor.Value;
+                this.IsLockedBySupervisor = isLockedBySupervisor.Value;
             }
 
-            IsLockedByHQ = isLockedByHQ;
+            this.IsLockedByHQ = isLockedByHQ;
         }
 
         public void LinkUserToDevice(LinkUserToDevice command)
         {
-            ThrowIfUserArchived();
-            DeviceId = command.DeviceId;
-            DeviceChangingHistory.Add(
+            this.ThrowIfUserArchived();
+
+            this.DeviceId = command.DeviceId;
+            this.DeviceChangingHistory.Add(
                 new DeviceInfo {Date = DateTime.UtcNow, DeviceId = command.DeviceId});
         }
 
         public void Lock()
         {
-            ThrowIfUserArchived();
+            this.ThrowIfUserArchived();
 
-            IsLockedByHQ = true;
+            this.IsLockedByHQ = true;
         }
 
         public void Unlock()
         {
-            ThrowIfUserArchived();
+            this.ThrowIfUserArchived();
 
-            IsLockedByHQ = false;
+            this.IsLockedByHQ = false;
         }
 
         public void LockBySupervisor()
         {
-            ThrowIfUserArchived();
+            this.ThrowIfUserArchived();
 
-            IsLockedBySupervisor = true;
+            this.IsLockedBySupervisor = true;
         }
 
         public void UnlockBySupervisor()
         {
-            ThrowIfUserArchived();
+            this.ThrowIfUserArchived();
 
-            IsLockedBySupervisor = false;
+            this.IsLockedBySupervisor = false;
         }
 
         public void Archive()
         {
-            ThrowIfUserArchived();
+            this.ThrowIfUserArchived();
+            this.ThrowIfRoleRestrictsArchiving();
 
-            if (Roles.Except(userRolesWhichAllowToBeDeleted).Any())
-                throw new UserException(
-                    $"user in roles {string.Join(",", Roles)} can't be deleted",
-                    UserDomainExceptionType.RoleDoesntSupportDelete);
-            IsArchived = true;
+            this.IsArchived = true;
         }
 
         public void Unarchive()
         {
-            ThrowIfUserIsNotArchived();
-            IsArchived = false;
+            this.ThrowIfUserIsNotArchived();
+            this.IsArchived = false;
         }
 
-        public void UnarchiveUserAndUpdate(string passwordHash, string email, string personName, string phoneNumber)
+        public void UnarchiveAndUpdate(string passwordHash, string email, string personName, string phoneNumber)
         {
-            ThrowIfUserIsNotArchived();
+            this.ThrowIfUserIsNotArchived();
 
-            IsArchived = false;
-            Password = passwordHash;
-            Email = email;
-            IsLockedBySupervisor = false;
-            IsLockedByHQ = false;
-            PersonName = personName;
-            PhoneNumber = phoneNumber;
+            this.IsArchived = false;
+            this.Password = passwordHash;
+            this.Email = email;
+            this.IsLockedBySupervisor = false;
+            this.IsLockedByHQ = false;
+            this.PersonName = personName;
+            this.PhoneNumber = phoneNumber;
         }
 
         private void ThrowIfUserIsNotArchived()
         {
-            if (!IsArchived)
+            if (!this.IsArchived)
                 throw new UserException("You can't unarchive active user", UserDomainExceptionType.UserIsNotArchived);
         }
 
         private void ThrowIfUserArchived()
         {
-            if (IsArchived)
+            if (this.IsArchived)
                 throw new UserException("User already archived", UserDomainExceptionType.UserArchived);
+        }
+
+        private void ThrowIfRoleRestrictsArchiving()
+        {
+            if (this.Roles.Except(RolesWhichSupportArchiving).Any())
+                throw new UserException(
+                    $"user in roles {string.Join(",", this.Roles)} can't be deleted",
+                    UserDomainExceptionType.RoleDoesntSupportDelete);
         }
     }
 }
