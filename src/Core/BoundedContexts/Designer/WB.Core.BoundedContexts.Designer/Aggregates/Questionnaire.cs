@@ -2182,8 +2182,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfEntityDoesNotExists(command.EntityId);
             this.ThrowDomainExceptionIfStaticTextIsEmpty(command.Text);
 
-            //validation of condition and validations
-
             this.ApplyEvent(new StaticTextUpdated(command.EntityId,
                 command.ResponsibleId, 
                 command.Text, 
