@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         {
             var userDocument = this.userDocumentStorage.GetById(aggregateId.FormatGuid());
 
-            return CreateUser(userDocument);
+            return ConvertToUser(userDocument);
         }
 
         public void Save(User user)
@@ -47,10 +47,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
             UpdateSet(userDocument.Roles, user.Roles);
             UpdateSet(userDocument.DeviceChangingHistory, user.DeviceChangingHistory);
+
             this.userDocumentStorage.Store(userDocument, user.Id.FormatGuid());
         }
 
-        private void UpdateSet<T>(ISet<T> originalSet, IEnumerable<T> updatedSet)
+        private static void UpdateSet<T>(ISet<T> originalSet, IEnumerable<T> updatedSet)
         {
             var itemsToAdd = updatedSet.Except(originalSet);
             foreach (T itemToAdd in itemsToAdd)
@@ -65,27 +66,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             }
         }
 
-        private User CreateUser(UserDocument userDocument)
+        private static User ConvertToUser(UserDocument userDocument)
         {
-            var result = new User();
+            var result = new User
+            {
+                CreationDate = userDocument.CreationDate,
+                DeviceChangingHistory = userDocument.DeviceChangingHistory.ToList(),
+                Email = userDocument.Email,
+                DeviceId = userDocument.DeviceId,
+                IsArchived = userDocument.IsArchived,
+                IsLockedByHQ = userDocument.IsLockedByHQ,
+                IsLockedBySupervisor = userDocument.IsLockedBySupervisor,
+                LastChangeDate = userDocument.LastChangeDate,
+                Password = userDocument.Password,
+                PersonName = userDocument.PersonName,
+                PhoneNumber = userDocument.PhoneNumber,
+                Roles = userDocument.Roles.ToArray(),
+                Supervisor = userDocument.Supervisor,
+                UserName = userDocument.UserName
+            };
 
             result.SetId(userDocument.PublicKey);
 
-            result.CreationDate = userDocument.CreationDate;
-            result.DeviceChangingHistory = userDocument.DeviceChangingHistory.ToList();
-            result.Email = userDocument.Email;
-            result.DeviceId = userDocument.DeviceId;
-            result.IsArchived = userDocument.IsArchived;
-            result.IsLockedByHQ = userDocument.IsLockedByHQ;
-            result.IsLockedBySupervisor = userDocument.IsLockedBySupervisor;
-            result.LastChangeDate = userDocument.LastChangeDate;
-            result.Password = userDocument.Password;
-            result.PersonName = userDocument.PersonName;
-            result.PhoneNumber = userDocument.PhoneNumber;
-            result.Roles = userDocument.Roles.ToArray();
-            result.Supervisor = userDocument.Supervisor;
-
-            result.UserName = userDocument.UserName;
             return result;
         }
     }

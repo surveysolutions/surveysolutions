@@ -104,7 +104,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .Handles<LockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Lock())
                 .Handles<ArchiveUserCommad>(command => command.UserId, (command, aggregate) => aggregate.Archive())
                 .Handles<UnarchiveUserCommand>(command => command.UserId, (command, aggregate) => aggregate.Unarchive())
-                .Handles<UnarchiveUserAndUpdateCommand>(command => command.UserId, (command, aggregate) => aggregate.UnarchiveUserAndUpdate(command.PasswordHash, command.Email, command.PersonName, command.PhoneNumber))
+                .Handles<UnarchiveUserAndUpdateCommand>(command => command.UserId, (command, aggregate) => aggregate.UnarchiveAndUpdate(command.PasswordHash, command.Email, command.PersonName, command.PhoneNumber))
                 .Handles<LockUserBySupervisorCommand>(command => command.UserId, (command, aggregate) => aggregate.LockBySupervisor())
                 .Handles<UnlockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Unlock())
                 .Handles<UnlockUserBySupervisorCommand>(command => command.PublicKey, (command, aggregate) => aggregate.UnlockBySupervisor())

@@ -9,46 +9,46 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 {
     internal class PlainAggregateRootRepository : IPlainAggregateRootRepository
     {
-        private readonly Type plainAggregateRootRepositoryType = typeof(IPlainAggregateRootRepository<>);
+        private readonly Type genericRepositoryType = typeof(IPlainAggregateRootRepository<>);
 
         public T Get<T>(Guid aggregateId) where T : class, IPlainAggregateRoot
         {
-            return (T)Get(typeof(T), aggregateId);
+            return (T) Get(typeof(T), aggregateId);
         }
 
         public IPlainAggregateRoot Get(Type aggregateRootType, Guid aggregateId)
         {
-            var plainAggregateRootRepositoryGenericType =
-                plainAggregateRootRepositoryType.MakeGenericType(aggregateRootType);
+            Type specificRepositoryType = this.genericRepositoryType.MakeGenericType(aggregateRootType);
 
-            var plainAggregateRootRepository = GetInstanceOfPlainAggregateRootRepositoryOrNull(plainAggregateRootRepositoryGenericType);
+            object specificRepository = GetSpecificRepositoryOrThrow(aggregateRootType, specificRepositoryType);
 
-            if (plainAggregateRootRepository == null)
-                return null;
+            MethodInfo methodInfo = specificRepositoryType.GetMethod(nameof(IPlainAggregateRootRepository<IPlainAggregateRoot>.Get));
 
-            MethodInfo methodInfo = plainAggregateRootRepositoryGenericType.GetMethod("Get");
-
-            return methodInfo.Invoke(plainAggregateRootRepository, new object[] { aggregateId }) as IPlainAggregateRoot;
+            return methodInfo.Invoke(specificRepository, new object[] { aggregateId }) as IPlainAggregateRoot;
         }
 
         public void Save(IPlainAggregateRoot aggregateRoot)
         {
-            var plainAggregateRootRepositoryGenericType =
-                plainAggregateRootRepositoryType.MakeGenericType(aggregateRoot.GetType());
+            var aggregateRootType = aggregateRoot.GetType();
 
-            var plainAggregateRootRepository = GetInstanceOfPlainAggregateRootRepositoryOrNull(plainAggregateRootRepositoryGenericType);
+            Type specificRepositoryType = this.genericRepositoryType.MakeGenericType(aggregateRootType);
 
-            if(plainAggregateRootRepository==null)
-                return;
+            object specificRepository = GetSpecificRepositoryOrThrow(aggregateRootType, specificRepositoryType);
 
-            MethodInfo methodInfo = plainAggregateRootRepositoryGenericType.GetMethod("Save");
+            MethodInfo methodInfo = specificRepositoryType.GetMethod(nameof(IPlainAggregateRootRepository<IPlainAggregateRoot>.Save));
 
-            methodInfo.Invoke(plainAggregateRootRepository, new object[] { aggregateRoot });
+            methodInfo.Invoke(specificRepository, new object[] { aggregateRoot });
         }
 
-        private object GetInstanceOfPlainAggregateRootRepositoryOrNull(Type plainAggregateRootRepositoryGenericType)
+        private static object GetSpecificRepositoryOrThrow(Type aggregateRootType, Type specificRepositoryType)
         {
-            return ServiceLocator.Current.GetAllInstances(plainAggregateRootRepositoryGenericType).SingleOrDefault();
+            var repositoryInstances = ServiceLocator.Current.GetAllInstances(specificRepositoryType).ToList();
+
+            if (!repositoryInstances.Any())
+                throw new NotSupportedException(
+                    $"Aggregate root of type {aggregateRootType.Name} is not supported by plain repository.");
+
+            return repositoryInstances.Single();
         }
     }
 }

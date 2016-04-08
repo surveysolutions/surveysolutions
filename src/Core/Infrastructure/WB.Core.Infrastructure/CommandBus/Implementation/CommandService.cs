@@ -28,10 +28,12 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         private TaskCompletionSource<object> executionAwaiter = null;
 
 
-        public CommandService(IEventSourcedAggregateRootRepository eventSourcedRepository,
+        public CommandService(
+            IEventSourcedAggregateRootRepository eventSourcedRepository,
             ILiteEventBus eventBus, 
             IAggregateSnapshotter snapshooter,
-            IServiceLocator serviceLocator, IPlainAggregateRootRepository plainAggregateRootRepository)
+            IServiceLocator serviceLocator,
+            IPlainAggregateRootRepository plainAggregateRootRepository)
         {
             this.eventSourcedRepository = eventSourcedRepository;
             this.eventBus = eventBus;
@@ -185,18 +187,15 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             Type aggregateType, Guid aggregateId, IEnumerable<Action<IAggregateRoot, ICommand>> validators,
             Action<ICommand, IAggregateRoot> commandHandler, CancellationToken cancellationToken)
         {
-            IPlainAggregateRoot aggregate = null;
-            if (CommandRegistry.IsInitializer(command))
+            IPlainAggregateRoot aggregate = this.plainAggregateRootRepository.Get(aggregateType, aggregateId);
+
+            if (aggregate == null)
             {
+                if (!CommandRegistry.IsInitializer(command))
+                    throw new CommandServiceException($"Unable to execute not-constructing command {command.GetType().Name} because aggregate {aggregateId.FormatGuid()} does not exist.");
+
                 aggregate = (IPlainAggregateRoot) this.serviceLocator.GetInstance(aggregateType);
                 aggregate.SetId(aggregateId);
-            }
-            else
-            {
-                aggregate = this.plainAggregateRootRepository.Get(aggregateType, aggregateId);
-                if (aggregate == null)
-                    throw new CommandServiceException(
-                        $"Unable to execute not-constructing command {command.GetType().Name} because command service does not support plain repositories.");
             }
 
             cancellationToken.ThrowIfCancellationRequested();
