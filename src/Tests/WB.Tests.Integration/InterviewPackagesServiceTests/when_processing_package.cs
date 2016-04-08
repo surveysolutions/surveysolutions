@@ -34,7 +34,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             pgSqlConnection = new NpgsqlConnection(connectionString);
             pgSqlConnection.Open();
 
-            packagesStorage = new PostgresPlainStorageRepository<InterviewPackage>(() => plainPostgresTransactionManager);
+            packagesStorage = new PostgresPlainStorageRepository<InterviewPackage>(plainPostgresTransactionManager);
 
             mockOfCommandService = new Mock<ICommandService>();
             mockOfCommandService.Setup(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), Moq.It.IsAny<string>()))

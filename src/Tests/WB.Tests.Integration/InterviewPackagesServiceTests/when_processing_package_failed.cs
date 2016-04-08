@@ -38,8 +38,8 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             pgSqlConnection = new NpgsqlConnection(connectionString);
             pgSqlConnection.Open();
 
-            packagesStorage = new PostgresPlainStorageRepository<InterviewPackage>(() => plainPostgresTransactionManager);
-            brokenPackagesStorage = new PostgresPlainStorageRepository<BrokenInterviewPackage>(() => plainPostgresTransactionManager);
+            packagesStorage = new PostgresPlainStorageRepository<InterviewPackage>(plainPostgresTransactionManager);
+            brokenPackagesStorage = new PostgresPlainStorageRepository<BrokenInterviewPackage>(plainPostgresTransactionManager);
 
             mockOfCommandService = new Mock<ICommandService>();
             mockOfCommandService.Setup(
