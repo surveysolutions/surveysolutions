@@ -288,7 +288,11 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
             });
         });
         $("input.numeric").each(function (index, item) {
-            $(item).keydown(function() {
+            var jItem = $(item);
+            jItem.data('useFormatting', jItem.attr("useFormatting") == "true");
+            ko.bindingHandlers.numericformatter.update(item, ko.observable($(item).val()));
+
+            jItem.keyup(function () {
                 ko.bindingHandlers.numericformatter.update(item, ko.observable($(item).val()));
             });
         });
