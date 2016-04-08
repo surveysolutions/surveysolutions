@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateStaticTextHandle
                 text: "some text", 
                 attachmentName: "",
                 responsibleId: notExistinigUserId,
-                enamblementCondition: string.Empty);
+                enablementCondition: string.Empty);
         };
 
         Because of = () =>
