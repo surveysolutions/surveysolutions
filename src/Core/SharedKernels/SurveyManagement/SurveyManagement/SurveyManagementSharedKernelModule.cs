@@ -89,6 +89,9 @@ namespace WB.Core.SharedKernels.SurveyManagement
         {
             this.Bind<InterviewPreconditionsServiceSettings>().ToConstant(new InterviewPreconditionsServiceSettings(interviewLimitCount));
 
+            this.Bind<Questionnaire>().ToSelf();
+            this.Bind<IPlainAggregateRootRepository<Questionnaire>>().To<QuestionnaireRepository>();
+
             CommandRegistry
                 .Setup<Questionnaire>()
                 .ResolvesIdFrom<QuestionnaireCommand>(command => command.QuestionnaireId)
@@ -96,6 +99,9 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .InitializesWith<RegisterPlainQuestionnaire>(aggregate => aggregate.RegisterPlainQuestionnaire)
                 .InitializesWith<DeleteQuestionnaire>(aggregate => aggregate.DeleteQuestionnaire)
                 .InitializesWith<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire);
+
+            this.Bind<User>().ToSelf();
+            this.Bind<IPlainAggregateRootRepository<User>>().To<UserRepository>();
 
             CommandRegistry
                 .Setup<User>()
@@ -109,9 +115,6 @@ namespace WB.Core.SharedKernels.SurveyManagement
                 .Handles<UnlockUserCommand>(command => command.PublicKey, (command, aggregate) => aggregate.Unlock())
                 .Handles<UnlockUserBySupervisorCommand>(command => command.PublicKey, (command, aggregate) => aggregate.UnlockBySupervisor())
                 .Handles<LinkUserToDevice>(command => command.Id, (command, aggregate) => aggregate.LinkUserToDevice(command));
-
-            this.Bind<User>().ToSelf();
-            this.Bind<IPlainAggregateRootRepository<User>>().To<UserPlainStorageRepository>();
 
             CommandRegistry
                 .Setup<Interview>()
