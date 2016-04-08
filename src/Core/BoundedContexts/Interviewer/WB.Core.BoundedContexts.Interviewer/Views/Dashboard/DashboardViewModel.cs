@@ -206,6 +206,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void RunSynchronization()
         {
+            this.Synchronization.IsSynchronizationInProgress = true;
             this.Synchronization.Synchronize();
         }
 
