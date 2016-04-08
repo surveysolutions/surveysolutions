@@ -662,7 +662,9 @@ namespace WB.Tests.Unit
                 groupsToBeDisabled ?? new List<Identity>(),
                 groupsToBeEnabled ?? new List<Identity>(),
                 questionsToBeDisabled ?? new List<Identity>(),
-                questionsToBeEnabled ?? new List<Identity>());
+                questionsToBeEnabled ?? new List<Identity>(),
+                new List<Identity>(),
+                new List<Identity>());
         }
 
         public static EnumerationStageViewModel EnumerationStageViewModel(
