@@ -31,7 +31,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         private readonly IArchiveUtils archiver;
         private readonly MemoryCache cache = new MemoryCache(nameof(IncomingSyncPackagesQueue));
         private readonly object cacheLockObject = new object();
-        private readonly ICommandService commandService;
         
         public IncomingSyncPackagesQueue(IFileSystemAccessor fileSystemAccessor,
             SyncSettings syncSettings,
@@ -45,7 +44,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                 brokenInterviewPackageStorage: brokenInterviewPackageStorage,
                 logger: logger,
                 serializer: serializer,
-                archiver: archiver,
                 syncSettings: syncSettings,
                 commandService: commandService)
         {
@@ -54,7 +52,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             this.logger = logger;
             this.serializer = serializer;
             this.archiver = archiver;
-            this.commandService = commandService;
             this.incomingUnprocessedPackagesDirectory = fileSystemAccessor.CombinePath(syncSettings.AppDataDirectory,
                 syncSettings.IncomingUnprocessedPackagesDirectoryName);
         }
@@ -102,9 +99,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                 );
         }
 
-        public override bool HasPackagesByInterviewId(Guid interviewId)
+        public override bool HasPendingPackageByInterview(Guid interviewId)
         {
-            return base.HasPackagesByInterviewId(interviewId) ||
+            return base.HasPendingPackageByInterview(interviewId) ||
                    this.GetCachedFilesInIncomingDirectory()
                        .Any(filename => filename.Contains(interviewId.FormatGuid()) &&
                                         filename.EndsWith(this.syncSettings.IncomingCapiPackageFileNameExtension));

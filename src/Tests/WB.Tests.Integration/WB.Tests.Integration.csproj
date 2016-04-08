@@ -65,6 +65,10 @@
     <Reference Include="FluentAssertions.Core">
       <HintPath>..\..\..\packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Humanizer, Version=1.37.7.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Humanizer.1.37.7\lib\portable-win+net40+sl50+wp8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Humanizer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
       <Private>True</Private>
@@ -207,6 +211,8 @@
     <Compile Include="EventStoreTests\with_in_memory_event_store.cs" />
     <Compile Include="Execute.cs" />
     <Compile Include="FileSystemIOAccessorTests\when_creating_not_existing_folder_and_it_s_parent_folders_also_do_not_exist.cs" />
+    <Compile Include="InterviewPackagesServiceTests\when_processing_package_failed.cs" />
+    <Compile Include="InterviewPackagesServiceTests\when_processing_package.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_creating_interview_with_cascading_questions_in_fixed_roster_and_parent_has_condition.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_reanswering_categorical_parent_cascading_for_the_second_time_with_previous_answer.cs" />
     <Compile Include="InterviewTests\CascadingDropdowns\when_answering_numeric_question_after_answering_single_option_question_and_dependent_cascading_question_has_no_options_for_this_answer_and_it_is_enabled.cs" />

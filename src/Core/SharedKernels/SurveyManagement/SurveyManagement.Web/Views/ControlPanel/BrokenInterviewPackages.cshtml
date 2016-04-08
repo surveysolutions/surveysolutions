@@ -11,7 +11,7 @@
 
 @section scripts
 {
-    @Styles.Render("~/Content/bootstrap-datepicker3.css")
+    @Styles.Render("~/Content/bootstrap-datepicker3.css", "~/Scripts/dateRangePicker/daterangepicker.css")
     @Styles.Render("~/css/list")
     @Scripts.Render("~/js/list", "~/js/brokeninterviewpackages")
     <script type="text/javascript">
@@ -70,15 +70,9 @@
                         <div class="btn btn-default"><span class=" glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                     </div>
                 </div>
-
-                <div class="input-group date" data-bind="datepicker: FromProcessingDate, datepickerOptions: { format: 'mm/dd/yyyy', keyboardNavigation: false, autoclose: true, todayHighlight: true, startDate: '01/01/2016', endDate: '+0d', forseParse: false }">
-                    <input id="date-picker-from" type="text" class="form-control" readonly="readonly">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-                </div>
-
-                <div class="input-group date" data-bind="datepicker: ToProcessingDate, datepickerOptions: { format: 'mm/dd/yyyy', keyboardNavigation: false, autoclose: true, todayHighlight: true, startDate: '01/01/2016', endDate: '+0d', forseParse: false }">
-                    <input id="date-picker-from" type="text" class="form-control" readonly="readonly">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                <div class="input-group" id="dates-range">
+                    <input type="text" class="form-control" data-bind="value: SelectedProcessingDateRange" readonly="readonly" />
+                    <span style="cursor: pointer" class="input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
                 </div>
             </div>
         </div>
@@ -99,7 +93,6 @@
                     <th data-bind='sortby: "IncomingDate"' style="width: 1px" nowrap>Incoming date</th>
                     <th data-bind='sortby: "ProcessingDate"' style="width: 1px" nowrap>Processing date</th>
                     <th data-bind='sortby: "PackageSize"' style="width: 90px" nowrap>Size</th>
-                    <th data-bind='sortby: "CompressedPackageSize"' style="width: 90px" nowrap>Size(Zip)</th>
                     <th data-bind='sortby: "ExceptionType"' style="width: 200px" nowrap>Exception type</th>
                     <th data-bind='sortby: "ExceptionMessage"'>Exception</th>
                 </tr>
@@ -113,7 +106,6 @@
                     <td data-bind="text: IncomingDate" nowrap></td>
                     <td data-bind="text: ProcessingDate" nowrap></td>
                     <td data-bind="text: $root.formatBytes(PackageSize())" nowrap style="text-align: right"></td>
-                    <td data-bind="text: $root.formatBytes(CompressedPackageSize())" nowrap style="text-align: right"></td>
                     <td data-bind="text: ExceptionType" nowrap></td>
                     <td>
                         <div class="accordion-group accordion-caret" style="max-width: 700px">

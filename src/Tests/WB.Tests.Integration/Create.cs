@@ -1,20 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Reflection;
+using Humanizer;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Main.Core.Events;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using NHibernate;
+using NHibernate.Cfg;
+using NHibernate.Cfg.MappingSchema;
+using NHibernate.Mapping.ByCode;
+using NHibernate.Mapping.ByCode.Conformist;
+using NHibernate.Tool.hbm2ddl;
 using NHibernate.Transform;
+using Npgsql;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
@@ -34,6 +46,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -48,6 +61,8 @@ using WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
+using Configuration = NHibernate.Cfg.Configuration;
 
 namespace WB.Tests.Integration
 {
@@ -677,6 +692,68 @@ namespace WB.Tests.Integration
                 Mock.Of<ILogger>());
         }
 
+        public static string TestPostgresDbAndGetConnectionString()
+        {
+            var testConnectionString = ConfigurationManager.ConnectionStrings["TestConnection"].ConnectionString;
+            var databaseName = "testdb_" + Guid.NewGuid().FormatGuid();
+            var connectionStringBuilder = new NpgsqlConnectionStringBuilder(testConnectionString)
+            {
+                Database = databaseName
+            };
+
+            using (var connection = new NpgsqlConnection(testConnectionString))
+            {
+                connection.Open();
+                var command = $"CREATE DATABASE {databaseName} ENCODING = 'UTF8'";
+                using (var sqlCommand = connection.CreateCommand())
+                {
+                    sqlCommand.CommandText = command;
+                    sqlCommand.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+            
+            return connectionStringBuilder.ConnectionString;
+        }
+
+        public static ISessionFactory SessionFactory(string connectionString, IEnumerable<Type> painStorageEntityMapTypes)
+        {
+            var cfg = new Configuration();
+            cfg.DataBaseIntegration(db =>
+            {
+                db.ConnectionString = connectionString;
+                db.Dialect<PostgreSQL91Dialect>();
+                db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
+            });
+
+            cfg.AddDeserializedMapping(GetMappingsFor(painStorageEntityMapTypes), "Plain");
+            var update = new SchemaUpdate(cfg);
+            update.Execute(true, true);
+
+            return cfg.BuildSessionFactory();
+        }
+
+        private static HbmMapping GetMappingsFor(IEnumerable<Type> painStorageEntityMapTypes)
+        {
+            var mapper = new ModelMapper();
+            mapper.AddMappings(painStorageEntityMapTypes);
+            mapper.BeforeMapProperty += (inspector, member, customizer) =>
+            {
+                var propertyInfo = (PropertyInfo)member.LocalMember;
+                if (propertyInfo.PropertyType == typeof(string))
+                {
+                    customizer.Type(NHibernateUtil.StringClob);
+                }
+            };
+            mapper.BeforeMapClass += (inspector, type, customizer) =>
+            {
+                var tableName = type.Name.Pluralize();
+                customizer.Table(tableName);
+            };
+
+            return mapper.CompileMappingForAllExplicitlyAddedEntities();
+        }
+
         public static class Command
         {
             public static AnswerYesNoQuestion AnswerYesNoQuestion(Guid questionId, RosterVector rosterVector, params AnsweredYesNoOption[] answers)
@@ -698,6 +775,14 @@ namespace WB.Tests.Integration
         public static AnsweredYesNoOption AnsweredYesNoOption(decimal optionValue, bool yes)
         {
             return new AnsweredYesNoOption(optionValue, yes);
+        }
+
+
+        public static AggregateRootEvent AggregateRootEvent(IEvent evnt)
+        {
+            var rnd = new Random();
+            return new AggregateRootEvent(new CommittedEvent(Guid.NewGuid(), "origin", Guid.NewGuid(), Guid.NewGuid(),
+                    rnd.Next(1, 10000000), DateTime.UtcNow, rnd.Next(1, 1000000), evnt));
         }
     }
 }

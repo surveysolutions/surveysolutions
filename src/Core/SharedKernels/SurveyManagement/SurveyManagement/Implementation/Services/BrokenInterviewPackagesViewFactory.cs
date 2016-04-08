@@ -67,8 +67,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                         ExceptionType = package.ExceptionType,
                         ExceptionMessage = package.ExceptionMessage,
                         ExceptionStackTrace = package.ExceptionStackTrace,
-                        PackageSize = package.PackageSize,
-                        CompressedPackageSize = package.CompressedPackageSize
+                        PackageSize = package.PackageSize
                     })
                     .ToList();
 

@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services
         int InvalidPackagesCount { get; }
         IReadOnlyCollection<string> GetTopPackageIds(int count);
         void ProcessPackage(string packageId);
-        bool HasPackagesByInterviewId(Guid interviewId);
+        bool HasPendingPackageByInterview(Guid interviewId);
         void ReprocessAllBrokenPackages();
     }
 }
