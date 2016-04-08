@@ -1,6 +1,9 @@
 ﻿ko.bindingHandlers.numericformatter = {
     init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContent) {
-        ko.utils.registerEventHandler(element, 'keyup', function() {
+        var allBindings = allBindingsAccessor();
+        $(element).data('useFormatting', allBindings.useFormatting || false);
+
+        ko.utils.registerEventHandler(element, 'keyup', function () {
             var observable = valueAccessor();
             observable($(element).val());
         });
@@ -10,14 +13,11 @@
         if (!value)
             return;
 
-        var allBindings = allBindingsAccessor();
-        var useFormatting = allBindings.useFormatting || false;
-
         var jElement = $(element);
 
         var newValue = ko.bindingHandlers.numericformatter.format(value);
 
-        if (useFormatting && jElement.is('input')) {
+        if (jElement.data('useFormatting') && jElement.is('input')) {
             if (newValue !== value) {
                 var oldCursorPosition = ko.bindingHandlers.numericformatter.getCursorPosition(element);
                 var newPosition = ko.bindingHandlers.numericformatter.getNewCursorPosition(value, newValue, oldCursorPosition);
@@ -54,7 +54,7 @@
         var indexOfOldValue = 0;
 
         for (var i = 0; i < newText.length; i++) {
-            while (newText[i] != oldText[indexOfOldValue]) {
+            while (newText[i] != oldText[indexOfOldValue] && indexOfOldValue < oldText.Length) {
 
                 if (isNaN(parseInt(newText[i])))
                     break;
