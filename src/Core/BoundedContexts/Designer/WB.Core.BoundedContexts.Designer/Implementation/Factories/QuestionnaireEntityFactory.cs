@@ -185,7 +185,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 numericQuestion.IsInteger = isInteger ?? false;
                 numericQuestion.CountOfDecimalPlaces = countOfDecimalPlaces;
                 numericQuestion.QuestionType = QuestionType.Numeric;
-                numericQuestion.UseFormatting = question.Properties.UseFormatting;
+                numericQuestion.UseFormatting = question.Properties?.UseFormatting ?? false;
             }
 
             var multioptionQuestion = question as IMultyOptionsQuestion;
