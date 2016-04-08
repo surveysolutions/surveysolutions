@@ -1,7 +1,7 @@
 ﻿Supervisor.VM.ControlPanel.BrokenInterviewPackages = function (brokenInperviewPackagesUrl, controlPanelBrokenInperviewPackagesUrl, exceptionTypesUrl, responsiblesUrl, questionnairesUrl, reprocessUrl) {
     Supervisor.VM.ControlPanel.BrokenInterviewPackages.superclass.constructor.apply(this, arguments);
 
-    var dateFormat = "MM/DD/YYYY";
+    var dateFormat = "YYYY-MM-DD";
 
     var self = this;
     self.Url = new Url(controlPanelBrokenInperviewPackagesUrl);
@@ -36,6 +36,30 @@
     self.SelectedExceptionType = ko.observable();
     self.FromProcessingDate = ko.observable();
     self.ToProcessingDate = ko.observable();
+    self.SelectedProcessingDateRange = ko.observable();
+    $("#dates-range").daterangepicker({
+        locale: {
+            format: dateFormat
+        },
+        maxDate: new Date()
+    },
+    function (start, end) {
+        self.setReportRange(start, end);
+        self.FromProcessingDate(start);
+        self.ToProcessingDate(end);
+
+        self.search();
+    });
+
+    self.setReportRange = function (start, end) {
+        if (!start || !end) return;
+
+        var formatedStartDate = start.format(dateFormat);
+        var formatedEndDate = end.format(dateFormat);
+        self.SelectedProcessingDateRange(formatedStartDate + "/" + formatedEndDate);
+        $('#dates-range').data('daterangepicker').setStartDate(moment(start));
+        $('#dates-range').data('daterangepicker').setEndDate(moment(end));
+    };
 
     self.formatBytes = function (bytes) {
         if (bytes === 0) return '0 Byte';
@@ -48,13 +72,17 @@
 
     self.GetFilterMethod = function () {
 
-        var startDate = _.isUndefined(self.FromProcessingDate()) ? "" : moment(self.FromProcessingDate()).format(dateFormat);
-        var endDate = _.isUndefined(self.ToProcessingDate()) ? "" : moment(self.ToProcessingDate()).format(dateFormat);
+        var startDate = self.FromProcessingDate() != null ? moment(self.FromProcessingDate()) : null;
+        var endDate = moment(self.ToProcessingDate());
+        if (startDate != null) {
+            self.Url.query['from'] = startDate.format(dateFormat);
+        }
+
+        self.Url.query['to'] = endDate.format(dateFormat);
 
         self.Url.query['questionnaire'] = self.SelectedQuestionnaire() || "";
         self.Url.query['exceptiontype'] = self.SelectedExceptionType() || "";
-        self.Url.query['from'] = startDate;
-        self.Url.query['to'] = endDate;
+        
 
         if (Modernizr.history) {
             window.history.pushState({}, "BrokenInterviewPackages", self.Url.toString());
@@ -62,8 +90,8 @@
 
         return {
             ExceptionType: self.SelectedExceptionType() || "",
-            FromProcessingDateTime: startDate,
-            ToProcessingDateTime: endDate,
+            FromProcessingDateTime: startDate != null ? startDate.format(dateFormat) : null,
+            ToProcessingDateTime: endDate.format(dateFormat),
             ResponsibleId: _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserId,
             QuestionnaireIdentity: self.SelectedQuestionnaire()
         };
@@ -76,19 +104,23 @@
             self.SelectedQuestionnaire(self.QueryString['questionnaire']);
             self.SelectedExceptionType(self.QueryString['exceptiontype']);
 
-            if (self.QueryString['from'])
-                self.FromProcessingDate(unescape(self.QueryString['from']));
-            if (self.QueryString['to'])
-                self.ToProcessingDate(unescape(self.QueryString['to']));
+            var fromPoint = self.QueryString['from'] || null;
+            if (fromPoint != null) {
+                self.Url.query['from'] = self.QueryString['from'] || null;
+            }
+
+            self.Url.query['to'] = self.QueryString['to'] || moment().format(dateFormat);
+            
+            var from = fromPoint != null ? unescape(fromPoint) : null;
+            var to = unescape(self.Url.query['to']);
+
+            self.FromProcessingDate(from);
+            self.ToProcessingDate(to);
 
             self.Url.query['exceptiontype'] = self.QueryString['exceptiontype'] || "";
-            self.Url.query['from'] = self.QueryString['from'] || "";
-            self.Url.query['to'] = self.QueryString['to'] || "";
             self.Url.query['questionnaire'] = self.QueryString['questionnaire'] || "";
 
             self.SelectedExceptionType.subscribe(self.filter);
-            self.FromProcessingDate.subscribe(self.filter);
-            self.ToProcessingDate.subscribe(self.filter);
             self.SelectedResponsible.subscribe(self.filter);
             self.SelectedQuestionnaire.subscribe(self.filter);
 

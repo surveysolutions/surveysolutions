@@ -184,7 +184,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/knockout/ko.typeahead.js",
                     "~/Scripts/spin.js",
                     "~/Scripts/knockout/ko.spin.js",
-                    "~/Scripts/viewmodels/pages/controlpanel/brokeninterviewpackages.js"
+                    "~/Scripts/viewmodels/pages/controlpanel/brokeninterviewpackages.js",
+                    "~/Scripts/dateRangePicker/daterangepicker.js"
                 }
             },
             {

@@ -141,6 +141,7 @@
     <Compile Include="Implementation\Services\InterviewAnswersCommandValidator.cs" />
     <Compile Include="Implementation\Services\SynchronizationLogViewFactory.cs" />
     <Compile Include="Implementation\Synchronization\InterviewPackagesService.cs" />
+    <Compile Include="Mappings\BrokenInterviewPackageMap.cs" />
     <Compile Include="Mappings\CumulativeReportStatusChangeMap.cs" />
     <Compile Include="Mappings\InterviewCommentariesMap.cs" />
     <Compile Include="Mappings\InterviewDataExportViewMap.cs" />

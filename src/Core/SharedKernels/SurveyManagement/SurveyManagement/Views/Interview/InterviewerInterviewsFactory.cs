@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
             return inProgressInterviews.Where(
                 interview => !deletedQuestionnaires.Any(deletedQuestionnaire => deletedQuestionnaire.QuestionnaireId == interview.QuestionnaireId && deletedQuestionnaire.Version == interview.QuestionnaireVersion)
-                && !this.incomingSyncPackagesQueue.HasPackagesByInterviewId(interview.InterviewId))
+                && !this.incomingSyncPackagesQueue.HasPendingPackageByInterview(interview.InterviewId))
                 .Select(interview => new InterviewInformation()
                 {
                     Id = interview.InterviewId,

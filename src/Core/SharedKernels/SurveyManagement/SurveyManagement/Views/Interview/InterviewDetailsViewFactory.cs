@@ -119,7 +119,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 FilteredGroups = selectedGroups,
                 Statistic = detailsStatisticView,
                 History = this.changeStatusFactory.Load(new ChangeStatusInputModel { InterviewId = interviewId }),
-                HasUnprocessedSyncPackages = this.incomingSyncPackagesQueue.HasPackagesByInterviewId(interviewId)
+                HasUnprocessedSyncPackages = this.incomingSyncPackagesQueue.HasPendingPackageByInterview(interviewId)
             };
         }
 
