@@ -141,8 +141,7 @@ namespace WB.Tests.Integration.InterviewTests
 
         protected static Interview SetupInterview(string questionnaireString, object[] events, IInterviewExpressionState precompiledState)
         {
-            var json = new NewtonJsonSerializer(new JsonSerializerSettingsFactory());
-            var questionnaireDocument = json.Deserialize<QuestionnaireDocument>(questionnaireString);
+            var questionnaireDocument = new NewtonJsonSerializer().Deserialize<QuestionnaireDocument>(questionnaireString);
             return SetupInterview(questionnaireDocument, events);
         }
 
