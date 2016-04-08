@@ -8,7 +8,6 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -20,22 +19,22 @@ using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.Synchronization;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Tests.Integration.PostgreSQLTests;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewPackagesServiceTests
 {
-    internal class when_processing_package_failed
+    internal class when_processing_package_failed : with_postgres_db
     {
         Establish context = () =>
         {
-            var connectionString = Create.TestPostgresDbAndGetConnectionString();
-            var sessionFactory = Create.SessionFactory(connectionString, new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) });
+            var sessionFactory = Create.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) });
             plainPostgresTransactionManager = new PlainPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
             origin = "hq";
             expectedException = new InterviewException("Some interview exception", InterviewDomainExceptionType.QuestionnaireIsMissing);
 
-            pgSqlConnection = new NpgsqlConnection(connectionString);
+            pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();
 
             packagesStorage = new PostgresPlainStorageRepository<InterviewPackage>(plainPostgresTransactionManager);

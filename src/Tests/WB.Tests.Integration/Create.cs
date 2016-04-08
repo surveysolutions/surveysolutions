@@ -692,30 +692,6 @@ namespace WB.Tests.Integration
                 Mock.Of<ILogger>());
         }
 
-        public static string TestPostgresDbAndGetConnectionString()
-        {
-            var testConnectionString = ConfigurationManager.ConnectionStrings["TestConnection"].ConnectionString;
-            var databaseName = "testdb_" + Guid.NewGuid().FormatGuid();
-            var connectionStringBuilder = new NpgsqlConnectionStringBuilder(testConnectionString)
-            {
-                Database = databaseName
-            };
-
-            using (var connection = new NpgsqlConnection(testConnectionString))
-            {
-                connection.Open();
-                var command = $"CREATE DATABASE {databaseName} ENCODING = 'UTF8'";
-                using (var sqlCommand = connection.CreateCommand())
-                {
-                    sqlCommand.CommandText = command;
-                    sqlCommand.ExecuteNonQuery();
-                }
-                connection.Close();
-            }
-            
-            return connectionStringBuilder.ConnectionString;
-        }
-
         public static ISessionFactory SessionFactory(string connectionString, IEnumerable<Type> painStorageEntityMapTypes)
         {
             var cfg = new Configuration();

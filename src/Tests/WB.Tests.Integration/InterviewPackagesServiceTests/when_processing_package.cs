@@ -19,19 +19,19 @@ using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.Synchronization;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Tests.Integration.PostgreSQLTests;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewPackagesServiceTests
 {
-    internal class when_processing_package
+    internal class when_processing_package : with_postgres_db
     {
         Establish context = () =>
         {
-            var connectionString = Create.TestPostgresDbAndGetConnectionString();
-            var sessionFactory = Create.SessionFactory(connectionString, new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) });
+            var sessionFactory = Create.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) });
             plainPostgresTransactionManager = new PlainPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
-            pgSqlConnection = new NpgsqlConnection(connectionString);
+            pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();
 
             packagesStorage = new PostgresPlainStorageRepository<InterviewPackage>(plainPostgresTransactionManager);
