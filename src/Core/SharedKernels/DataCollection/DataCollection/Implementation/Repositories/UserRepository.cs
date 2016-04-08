@@ -10,11 +10,11 @@ using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 {
-    internal class UserPlainStorageRepository: IPlainAggregateRootRepository<User>
+    internal class UserRepository : IPlainAggregateRootRepository<User>
     {
         private readonly IPlainStorageAccessor<UserDocument> userDocumentStorage;
 
-        public UserPlainStorageRepository(IPlainStorageAccessor<UserDocument> userDocumentStorage)
+        public UserRepository(IPlainStorageAccessor<UserDocument> userDocumentStorage)
         {
             this.userDocumentStorage = userDocumentStorage;
         }
