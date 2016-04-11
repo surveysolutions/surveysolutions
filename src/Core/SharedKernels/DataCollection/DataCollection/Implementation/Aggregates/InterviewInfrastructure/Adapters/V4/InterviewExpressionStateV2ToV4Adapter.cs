@@ -14,6 +14,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
             this.interviewExpressionState = interviewExpressionState;
         }
 
+        public static IInterviewExpressionStateV4 AdaptIfNeeded(IInterviewExpressionStateV2 adaptee)
+            => adaptee as IInterviewExpressionStateV4 ?? new InterviewExpressionStateV2ToV4Adapter(adaptee);
+
         public void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long? answer)
         {
             this.interviewExpressionState.UpdateNumericIntegerAnswer(questionId, rosterVector, answer);
