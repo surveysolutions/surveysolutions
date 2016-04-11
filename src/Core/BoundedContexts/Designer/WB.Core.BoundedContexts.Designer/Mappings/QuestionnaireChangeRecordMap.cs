@@ -23,8 +23,8 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
             Property(x => x.Timestamp);
             Property(x=>x.Sequence);
 
-            Property(x => x.UserName);
-            Property(x => x.UserId);
+            Property(x => x.UserName, pm => pm.Index("QuestionnaireChangeRecord_UserName"));
+            Property(x => x.UserId, pm => pm.Index("QuestionnaireChangeRecord_UserId"));
 
             Property(x => x.TargetItemId);
             Property(x => x.TargetItemTitle);
