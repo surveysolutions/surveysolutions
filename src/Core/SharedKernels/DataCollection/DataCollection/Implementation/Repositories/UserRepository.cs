@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         {
             var userDocument = this.userDocumentStorage.GetById(aggregateId.FormatGuid());
 
-            return ConvertToUser(userDocument);
+            return userDocument!= null ? ConvertToUser(userDocument) : null;
         }
 
         public void Save(User user)
