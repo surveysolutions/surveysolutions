@@ -100,7 +100,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             expectedPackage.QuestionnaireVersion.ShouldEqual(expectedCommand.QuestionnaireVersion);
             expectedPackage.ExceptionType.ShouldEqual(expectedException.ExceptionType.ToString());
             expectedPackage.ExceptionMessage.ShouldEqual(expectedException.Message);
-            expectedPackage.CompressedEvents.ShouldEqual(expectedEventsString);
+            expectedPackage.Events.ShouldEqual(expectedEventsString);
             expectedPackage.PackageSize.ShouldEqual(expectedEventsString.Length);
         };
 

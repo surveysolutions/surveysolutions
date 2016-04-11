@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             Property(x => x.InterviewId, cm => cm.Index("InterviewPackage_InterviewId"));
             Property(x => x.IncomingDate);
             Property(x => x.IsCensusInterview);
-            Property(x => x.CompressedEvents);
+            Property(x => x.Events);
             Property(x => x.InterviewStatus);
             Property(x => x.QuestionnaireId);
             Property(x => x.QuestionnaireVersion);
