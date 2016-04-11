@@ -112,7 +112,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.DeleteQ
                 {
                     try
                     {
-                        this.commandService.Execute(new HardDeleteInterview(interviewSummary.InterviewId, userId ?? interviewSummary.ResponsibleId));
+                        IPlainTransactionManager plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
+                        plainTransactionManager.ExecuteInPlainTransaction(() =>
+                                this.commandService.Execute(new HardDeleteInterview(interviewSummary.InterviewId, userId ?? interviewSummary.ResponsibleId)));
                     }
                     catch (Exception e)
                     {
