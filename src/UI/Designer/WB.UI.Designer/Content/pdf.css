@@ -669,10 +669,20 @@ h4{
 	article + article { 
 		page-break-before: always; 
 	}
-	@page {
-        margin: 2cm 0;
-	}
+	
 	ul, img, .question-container, h1, h2, h3, h4, h5{
 	    page-break-inside: avoid;
 	}
+}
+
+@page {
+    margin: 1cm 0;
+    size: A4;
+}
+
+@page :left{ 
+    content: "";
+}
+@page :right{ 
+    content: "";
 }
