@@ -14,13 +14,16 @@ namespace WB.UI.Designer.Controllers
     public class PdfController : BaseController
     {
         private readonly IPdfFactory pdfFactory;
+        private readonly PdfSettings pdfSettings;
 
         public PdfController(
             IMembershipUserService userHelper, 
-            IPdfFactory pdfFactory)
+            IPdfFactory pdfFactory, 
+            PdfSettings pdfSettings)
             : base(userHelper)
         {
             this.pdfFactory = pdfFactory;
+            this.pdfSettings = pdfSettings;
         }
 
         [LocalOrDevelopmentAccessOnly]
@@ -28,6 +31,12 @@ namespace WB.UI.Designer.Controllers
         {
             var questionnaire = this.LoadQuestionnaire(id, requestedByUserId, requestedByUserName);
             return this.View("RenderQuestionnaire", questionnaire);
+        }
+
+        [LocalOrDevelopmentAccessOnly]
+        public ActionResult RenderQuestionnaireFooter(Guid id)
+        {
+            return this.View("RenderQuestionnaireFooter");
         }
 
         [System.Web.Mvc.Authorize]
@@ -52,17 +61,25 @@ namespace WB.UI.Designer.Controllers
 
         private void RenderQuestionnairePdfToMemoryStream(Guid id, MemoryStream memoryStream)
         {
-            PdfConvert.Environment.WkHtmlToPdfPath = this.GetPathToWKHtmlToPdfExecutableOrThrow();
+            var pdfConvertEnvironment = new PdfConvertEnvironment
+            {
+                Timeout = pdfSettings.PdfGenerationTimeout,
+                TempFolderPath = Path.GetTempPath(),
+                WkHtmlToPdfPath = this.GetPathToWKHtmlToPdfExecutableOrThrow()
+            };
 
-            PdfConvert.ConvertHtmlToPdf(
-                new PdfDocument
-                    {
-                        Url = GlobalHelper.GenerateUrl("RenderQuestionnaire", "Pdf", new { id = id, requestedByUserId = UserHelper.WebUser.UserId, requestedByUserName= UserHelper.WebUser.UserName })
-                    },
-                new PdfOutput
-                    {
-                        OutputStream = memoryStream,
-                    });
+            var pdfDocument = new PdfDocument
+            {
+                Url = GlobalHelper.GenerateUrl("RenderQuestionnaire", "Pdf", new { id = id, requestedByUserId = this.UserHelper.WebUser.UserId, requestedByUserName= this.UserHelper.WebUser.UserName }),
+                FooterUrl = GlobalHelper.GenerateUrl("RenderQuestionnaireFooter", "Pdf", new { id = id})
+            };
+
+            var pdfOutput = new PdfOutput
+            {
+                OutputStream = memoryStream,
+            };
+
+            PdfConvert.ConvertHtmlToPdf(pdfDocument, pdfConvertEnvironment, pdfOutput);
 
             memoryStream.Flush();
         }
