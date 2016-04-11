@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         private readonly IPlainStorageAccessor<InterviewPackage> interviewPackageStorage;
         private readonly IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage;
         private readonly ILogger logger;
-        private readonly ISerializer serializer;
+        private readonly IJsonAllTypesSerializer serializer;
         private readonly ICommandService commandService;
         private readonly SyncSettings syncSettings;
 
@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             IPlainStorageAccessor<InterviewPackage> interviewPackageStorage,
             IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage,
             ILogger logger, 
-            ISerializer serializer,
+            IJsonAllTypesSerializer serializer,
             ICommandService commandService,
             SyncSettings syncSettings)
         {
@@ -56,7 +56,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                     ResponsibleId = responsibleId,
                     IsCensusInterview = isCensusInterview,
                     IncomingDate = DateTime.UtcNow,
-                    CompressedEvents = events
+                    Events = events
                 }, null);
         }
 
@@ -86,7 +86,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                         IsCensusInterview = brokenInterviewPackage.IsCensusInterview,
                         QuestionnaireId = brokenInterviewPackage.QuestionnaireId,
                         QuestionnaireVersion = brokenInterviewPackage.QuestionnaireVersion,
-                        CompressedEvents = brokenInterviewPackage.CompressedEvents
+                        Events = brokenInterviewPackage.Events
                     }, null);
                     this.brokenInterviewPackageStorage.Remove(brokenInterviewPackage.Id);
                 }
@@ -119,7 +119,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                 innerwatch.Restart();
                 
                 var events = this.serializer
-                    .Deserialize<AggregateRootEvent[]>(package.CompressedEvents)
+                    .Deserialize<AggregateRootEvent[]>(package.Events)
                     .Select(e => e.Payload)
                     .ToArray();
 
@@ -150,8 +150,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                         ResponsibleId = package.ResponsibleId,
                         IsCensusInterview = package.IsCensusInterview,
                         IncomingDate = package.IncomingDate,
-                        CompressedEvents = package.CompressedEvents,
-                        PackageSize = package.CompressedEvents?.Length ?? 0,
+                        Events = package.Events,
+                        PackageSize = package.Events?.Length ?? 0,
                         ProcessingDate = DateTime.UtcNow,
                         ExceptionType = (exception as InterviewException)?.ExceptionType.ToString() ?? "Unexpected",
                         ExceptionMessage = exception.Message,

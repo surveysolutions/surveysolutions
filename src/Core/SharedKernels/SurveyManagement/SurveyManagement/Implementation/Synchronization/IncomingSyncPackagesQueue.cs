@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         private readonly string incomingUnprocessedPackagesDirectory;
         private readonly SyncSettings syncSettings;
         private readonly ILogger logger;
-        private readonly ISerializer serializer;
+        private readonly IJsonAllTypesSerializer serializer;
         private readonly IArchiveUtils archiver;
         private readonly MemoryCache cache = new MemoryCache(nameof(IncomingSyncPackagesQueue));
         private readonly object cacheLockObject = new object();
@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         public IncomingSyncPackagesQueue(IFileSystemAccessor fileSystemAccessor,
             SyncSettings syncSettings,
             ILogger logger,
-            ISerializer serializer,
+            IJsonAllTypesSerializer serializer,
             IArchiveUtils archiver,
             IPlainStorageAccessor<InterviewPackage> interviewPackageStorage,
             IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage,
