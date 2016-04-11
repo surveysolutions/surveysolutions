@@ -2038,9 +2038,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new AnswersDeclaredValid(validityChanges.AnswersDeclaredValid.ToArray()));
             }
 
-            if (validityChanges.FailedValidationConditions.Any())
+            if (validityChanges.FailedValidationConditionsForQuestions.Any())
             {
-                this.ApplyEvent(new AnswersDeclaredInvalid(validityChanges.FailedValidationConditions));
+                this.ApplyEvent(new AnswersDeclaredInvalid(validityChanges.FailedValidationConditionsForQuestions));
+            }
+
+            if (validityChanges.StaticTextsDeclaredValid.Any())
+            {
+                this.ApplyEvent(new StaticTextsDeclaredValid(validityChanges.StaticTextsDeclaredValid.ToArray()));
+            }
+
+            if (validityChanges.FailedValidationConditionsForStaticTexts.Any())
+            {
+                this.ApplyEvent(new StaticTextsDeclaredInvalid(validityChanges.FailedValidationConditionsForStaticTexts));
             }
         }
 

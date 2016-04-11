@@ -11,9 +11,22 @@ namespace WB.Core.SharedKernels.DataCollection
             List<Identity> groupsToBeDisabled,
             List<Identity> groupsToBeEnabled,
             List<Identity> questionsToBeDisabled,
+            List<Identity> questionsToBeEnabled)
+            : this(
+                groupsToBeDisabled,
+                groupsToBeEnabled,
+                questionsToBeDisabled,
+                questionsToBeEnabled,
+                null,
+                null) {}
+
+        public EnablementChanges(
+            List<Identity> groupsToBeDisabled,
+            List<Identity> groupsToBeEnabled,
+            List<Identity> questionsToBeDisabled,
             List<Identity> questionsToBeEnabled,
-            List<Identity> staticTextsToBeDisabled = null,
-            List<Identity> staticTextsToBeEnabled = null)
+            List<Identity> staticTextsToBeDisabled,
+            List<Identity> staticTextsToBeEnabled)
         {
             this.GroupsToBeDisabled = groupsToBeDisabled ?? new List<Identity>();
             this.GroupsToBeEnabled = groupsToBeEnabled ?? new List<Identity>();

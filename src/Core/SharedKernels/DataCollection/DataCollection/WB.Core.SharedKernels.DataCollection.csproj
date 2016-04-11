@@ -94,6 +94,8 @@
     <Compile Include="Events\Interview\InterviewReceivedByInterviewer.cs" />
     <Compile Include="Events\Interview\InterviewReceivedBySupervisor.cs" />
     <Compile Include="Events\Interview\LinkedOptionsChanged.cs" />
+    <Compile Include="Events\Interview\StaticTextsDeclaredInvalid.cs" />
+    <Compile Include="Events\Interview\StaticTextsDeclaredValid.cs" />
     <Compile Include="Events\Interview\StaticTextsDisabled.cs" />
     <Compile Include="Events\Interview\StaticTextsEnabled.cs" />
     <Compile Include="Events\Interview\UnapprovedByHeadquarters.cs" />
