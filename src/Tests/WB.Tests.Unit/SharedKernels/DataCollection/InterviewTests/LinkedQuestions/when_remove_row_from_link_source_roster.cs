@@ -12,7 +12,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.LinkedQuestions
 {
-    [Ignore("temp to investigate expression state")]
     internal class when_remove_row_from_link_source_roster : InterviewTestsContext
     {
         Establish context = () =>

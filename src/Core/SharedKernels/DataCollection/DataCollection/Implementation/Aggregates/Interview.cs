@@ -2315,7 +2315,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (!this.interviewState.LinkedQuestionOptions.ContainsKey(linkedQuestionIdentity))
             {
                 throw new InterviewException(string.Format(
-                    "Answer on linked question {0} is incorrect. Avaliable options are missing" +
+                    "Answer on linked question {0} is incorrect. Avaliable options are missing. " +
                     "InterviewId: {1}",
                     FormatQuestionForException(linkedQuestionIdentity.Id, questionnaire), this.EventSourceId));
             }

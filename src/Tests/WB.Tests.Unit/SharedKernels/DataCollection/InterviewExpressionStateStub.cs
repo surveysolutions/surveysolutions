@@ -14,6 +14,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         protected override bool HasParentScropeRosterId(Guid rosterId) => false;
         public override IInterviewExpressionState Clone() => this;
         ILatestInterviewExpressionState ILatestInterviewExpressionState.Clone() => this;
+
+        //temp fix 
+        public new bool AreLinkedQuestionsSupported() => false;
+        
     }
 }
 
