@@ -120,7 +120,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                                   !x.IsDeleted;
             }
 
-            HashSet<Guid> interviewIdsToExport = new HashSet<Guid>();
+            List<Guid> interviewIdsToExport = new List<Guid>();
 
             var stopwatch = Stopwatch.StartNew();
            
@@ -139,7 +139,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 if (ids.Count == 0) break;
 
                 cancellationToken.ThrowIfCancellationRequested();
-                ids.ForEach(x => interviewIdsToExport.Add(x));
+                interviewIdsToExport.AddRange(ids);
                 lastRecivedId = ids.Last().FormatGuid();
                 this.logger.Debug($"Received {interviewIdsToExport.Count:n0} interview interview ids.");
             }
