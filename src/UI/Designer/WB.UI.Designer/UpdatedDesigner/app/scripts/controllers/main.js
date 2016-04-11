@@ -21,6 +21,21 @@ angular.module('designerApp')
             var openChaptersPane = 'left';
 
             hotkeys.add({
+                combo: 'ctrl+p',
+                allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                description: 'Print',
+                callback: function (event) {
+                    
+                    var printWindow = window.open("../../pdf/printpreview/" + $state.params.questionnaireId);
+                    
+                    printWindow.focus();
+                    printWindow.print();
+
+                    event.preventDefault();
+                }
+            });
+
+            hotkeys.add({
                 combo: 'ctrl+b',
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                 description: 'Compile',
