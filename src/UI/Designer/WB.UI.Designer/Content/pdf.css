@@ -185,11 +185,18 @@ h1{
 	display: inline-block;
 }
 /*Start number of page*/
-.footer{							/*Number of page*/
+.footer{							
 	overflow: hidden;
 	margin: 53px 69px 0 125px; 
 	font-size: 18px;
 	line-height: 20px;
+}
+.footer-section {
+    float: left;
+    text-transform: uppercase;
+	font-size: 10px;
+	line-height: 13px;
+    font-family: 'RobotoLight';
 }
 .page_path{
 	float: left;
@@ -542,6 +549,16 @@ h3{
 	margin: 0 5px 20px 0;
 	font-family: 'RobotoMedium';
 }
+.appendix_section h3 {
+    text-transform: none;
+}
+.appendix_section.legend img {
+    width: 100%;
+}
+.appendix_section.legend img+img{
+    margin-top: 100px;
+}
+
 .container{
 	margin-bottom: 40px;
 }
