@@ -12,6 +12,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
 
         public PortableJsonAllTypesSerializer()
         {
+ #pragma warning disable 612, 618
             this.jsonSerializerSettings = new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.All,
@@ -19,10 +20,10 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
                 FloatParseHandling = FloatParseHandling.Decimal,
                 Binder = new PortableOldToNewAssemblyRedirectSerializationBinder()
             };
-            
-        }
+#pragma warning restore 612, 618
+    }
 
-        public string Serialize(object item)
+    public string Serialize(object item)
         {
             return JsonConvert.SerializeObject(item, this.jsonSerializerSettings);
         }
