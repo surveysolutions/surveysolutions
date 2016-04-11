@@ -6,12 +6,10 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
-using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
@@ -43,8 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public IEnumerable<InterviewInformation> GetInProgressInterviews(Guid interviewerId)
         {
             var inProgressInterviews =  this.reader.Query(interviews =>
-                interviews.Where(interview => !interview.IsDeleted && (interview.ResponsibleId == interviewerId) && 
-                    (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor))
+                interviews.Where(interview => InterviewsInProgress(interviewerId, interview))
                     .Select(x => new {x.InterviewId, x.QuestionnaireId, x.QuestionnaireVersion, x.WasRejectedBySupervisor})
                     .ToList());
 
@@ -63,6 +60,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                     QuestionnaireIdentity = new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion),
                     IsRejected = interview.WasRejectedBySupervisor
                 });
+        }
+
+        private static bool InterviewsInProgress(Guid interviewerId, InterviewSummary interview)
+        {
+            return !interview.IsDeleted && (interview.ResponsibleId == interviewerId) && 
+                   (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor);
         }
 
         public IEnumerable<InterviewInformation> GetInterviewsByIds(Guid[] interviewIds)
@@ -113,6 +116,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 lastInterviewStatus.Status, lastRejectedBySupervisorStatus?.Comment,
                 lastRejectedBySupervisorStatus?.Date,
                 lastInterviewerAssignedStatus?.Date);
+        }
+
+        public IList<QuestionnaireIdentity> GetQuestionnairesWithAssignments(Guid interviewerId)
+        {
+            var inProgressQuestionnaires = this.reader.Query(interviews =>
+                                                         interviews.Where(interview => InterviewsInProgress(interviewerId, interview))
+                                                             .Select(x => new { x.QuestionnaireId, x.QuestionnaireVersion})
+                                                             .Distinct()
+                                                             .ToList());
+
+            return inProgressQuestionnaires.Select(x => new QuestionnaireIdentity(x.QuestionnaireId, x.QuestionnaireVersion)).ToList();
         }
     }
 }
