@@ -117,6 +117,7 @@
     <Compile Include="SyncStatusCode.cs" />
     <Compile Include="Tasks\ProggressAggregator.cs" />
     <Compile Include="Tree.cs" />
+    <Compile Include="TwoWayDictionaryAdapter.cs" />
     <Compile Include="TypeExtensions.cs" />
     <Compile Include="TypeSwitch.cs" />
     <Compile Include="Unit.cs" />
