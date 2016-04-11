@@ -18,6 +18,8 @@ namespace WB.Core.SharedKernels.DataCollection
 
             IReadOnlyList<FailedValidationCondition> singleFailedValidationList = new[] { new FailedValidationCondition(0) };
             this.FailedValidationConditions = this.AnswersDeclaredInvalid.ToDictionary(q => q, q => singleFailedValidationList);
+
+            this.StaticTextsDeclaredValid = new List<Identity>();
             this.FailedValidationConditionsForStaticTexts = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
         }
 
@@ -40,18 +42,19 @@ namespace WB.Core.SharedKernels.DataCollection
             IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedStaticTextsValidationConditions)
             : this(answersDeclaredValid, answersDeclaredInvalid)
         {
-            this.StaticTextsDeclaredValid = staticTextsDeclaredValid ?? new List<Identity>();
-
             this.FailedValidationConditions = failedValidationConditions ?? new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
+
+            this.StaticTextsDeclaredValid = staticTextsDeclaredValid ?? new List<Identity>();
             this.FailedValidationConditionsForStaticTexts = failedStaticTextsValidationConditions ?? new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
         }
 
         public void AppendChanges(ValidityChanges changes)
         {
             this.AnswersDeclaredValid.AddRange(changes.AnswersDeclaredValid);
-            this.StaticTextsDeclaredValid.AddRange(changes.StaticTextsDeclaredValid);
             this.AnswersDeclaredInvalid.AddRange(changes.AnswersDeclaredInvalid);
             this.FailedValidationConditions = this.FailedValidationConditions.Union(changes.FailedValidationConditions).ToDictionary(k => k.Key, v => v.Value);
+
+            this.StaticTextsDeclaredValid.AddRange(changes.StaticTextsDeclaredValid);
             this.FailedValidationConditionsForStaticTexts = this.FailedValidationConditionsForStaticTexts.Union(changes.FailedValidationConditionsForStaticTexts).ToDictionary(k => k.Key, v => v.Value);
         }
 
@@ -70,8 +73,9 @@ namespace WB.Core.SharedKernels.DataCollection
         {
             this.AnswersDeclaredInvalid.Clear();
             this.AnswersDeclaredValid.Clear();
-            this.StaticTextsDeclaredValid.Clear();
             this.FailedValidationConditions.Clear();
+
+            this.StaticTextsDeclaredValid.Clear();
             this.FailedValidationConditionsForStaticTexts.Clear();
         }
     }
