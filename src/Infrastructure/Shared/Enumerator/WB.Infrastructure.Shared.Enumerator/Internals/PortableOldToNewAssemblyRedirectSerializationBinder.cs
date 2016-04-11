@@ -6,9 +6,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace WB.Infrastructure.Shared.Enumerator.Internals
 {
-#pragma warning disable 612, 618
     [Obsolete("Resolves old namespaces. Cuold be dropped after incompatibility shift with the next version.")]
-#pragma warning restore 612, 618
     public class PortableOldToNewAssemblyRedirectSerializationBinder : DefaultSerializationBinder
     {
         private const string oldAssemblyNameToRedirect = "Main.Core";
