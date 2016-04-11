@@ -11,7 +11,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
-    [Ignore("temp ignore to research")]
     internal class when_remove_answer_from_link_source_question : InterviewTestsContext
     {
         Establish context = () =>
