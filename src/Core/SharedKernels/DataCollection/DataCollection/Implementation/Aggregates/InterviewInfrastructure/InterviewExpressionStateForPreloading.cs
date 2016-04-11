@@ -5,6 +5,7 @@ using WB.Core.SharedKernels.DataCollection.V4;
 using WB.Core.SharedKernels.DataCollection.V5;
 using WB.Core.SharedKernels.DataCollection.V6;
 using WB.Core.SharedKernels.DataCollection.V7;
+using WB.Core.SharedKernels.DataCollection.V8;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -124,11 +125,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return new InterviewExpressionStateForPreloading();
         }
 
-        ILatestInterviewExpressionState ILatestInterviewExpressionState.Clone()
+        IInterviewExpressionStateV8 IInterviewExpressionStateV8.Clone()
         {
-            return ((IInterviewExpressionStateV7) this).Clone() as ILatestInterviewExpressionState;
+            return new InterviewExpressionStateForPreloading();
         }
 
+        ILatestInterviewExpressionState ILatestInterviewExpressionState.Clone()
+        {
+            return new InterviewExpressionStateForPreloading();
+        }
 
         public void SetInterviewProperties(IInterviewProperties properties)
         {
