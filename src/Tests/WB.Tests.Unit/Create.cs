@@ -1944,14 +1944,9 @@ namespace WB.Tests.Unit
             return new QuestionnaireFeedDenormalizer(questionnaireFeedWriter);
         }
 
-        public static QuestionnaireIdentity QuestionnaireIdentity()
+        public static QuestionnaireIdentity QuestionnaireIdentity(Guid? questionnaireId = null, long? questionnaireVersion = null)
         {
-            return Create.QuestionnaireIdentity(Guid.NewGuid());
-        }
-
-        public static QuestionnaireIdentity QuestionnaireIdentity(Guid questionnaireId)
-        {
-            return new QuestionnaireIdentity(questionnaireId, 7);
+            return new QuestionnaireIdentity(questionnaireId ?? Guid.NewGuid(), questionnaireVersion ?? 7);
         }
 
         public static QuestionnaireImportService QuestionnaireImportService(IPlainQuestionnaireRepository plainKeyValueStorage = null)

@@ -304,7 +304,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Views\Questionnaire\QuestionDescription.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireBrowseInputModel.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireItemInputModel.cs">
       <SubType>Code</SubType>
     </Compile>
