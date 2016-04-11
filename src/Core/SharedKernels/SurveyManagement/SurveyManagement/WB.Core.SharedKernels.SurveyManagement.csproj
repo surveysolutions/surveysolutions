@@ -131,6 +131,7 @@
     <Compile Include="Implementation\Aggregates\Questionnaire.cs" />
     <Compile Include="Implementation\Factories\IExportViewFactory.cs" />
     <Compile Include="Implementation\Factories\OldschoolChartStatisticsDataProvider.cs" />
+    <Compile Include="Implementation\Factories\QuestionnaireBrowseInputModel.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireBrowseViewFactory.cs" />
     <Compile Include="Implementation\Repositories\QuestionnaireRepository.cs" />
     <Compile Include="Implementation\Services\AndroidPackageReader.cs" />

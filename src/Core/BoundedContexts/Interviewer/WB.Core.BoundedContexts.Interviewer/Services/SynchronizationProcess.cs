@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 cancellationToken.ThrowIfCancellationRequested();
                 await this.UploadCompletedInterviewsAsync(statistics, progress, cancellationToken);
                 cancellationToken.ThrowIfCancellationRequested();
-                await this.DownloadCensusAsync(progress, cancellationToken);
+                await this.SyncronizeQuestionnairesAsync(progress, cancellationToken);
                 cancellationToken.ThrowIfCancellationRequested();
                 await this.DownloadInterviewsAsync(statistics, progress, cancellationToken);
 
@@ -197,7 +197,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 isTextInputPassword: true);
         }
 
-        private async Task DownloadCensusAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
+        private async Task SyncronizeQuestionnairesAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
         {
             var remoteCensusQuestionnaireIdentities = await this.synchronizationService.GetCensusQuestionnairesAsync(cancellationToken);
 
