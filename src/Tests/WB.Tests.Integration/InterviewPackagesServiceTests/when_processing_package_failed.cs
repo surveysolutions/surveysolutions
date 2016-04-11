@@ -45,7 +45,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), Moq.It.IsAny<string>()))
                 .Throws(expectedException);
 
-            var newtonJsonSerializer = new NewtonJsonSerializer();
+            var newtonJsonSerializer = new JsonAllTypesSerializer();
 
             interviewPackagesService = new InterviewPackagesService(
                 syncSettings: new SyncSettings(origin),
