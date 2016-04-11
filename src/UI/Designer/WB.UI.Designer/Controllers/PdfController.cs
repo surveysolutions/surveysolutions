@@ -63,7 +63,7 @@ namespace WB.UI.Designer.Controllers
         {
             var pdfConvertEnvironment = new PdfConvertEnvironment
             {
-                Timeout = pdfSettings.PdfGenerationTimeout,
+                Timeout = pdfSettings.PdfGenerationTimeoutInMilliseconds,
                 TempFolderPath = Path.GetTempPath(),
                 WkHtmlToPdfPath = this.GetPathToWKHtmlToPdfExecutableOrThrow()
             };
