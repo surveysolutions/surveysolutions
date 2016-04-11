@@ -76,7 +76,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                     responsibleId: expectedCommand.UserId,
                     interviewStatus: expectedCommand.InterviewStatus,
                     isCensusInterview: expectedCommand.CreatedOnClient,
-                    events: newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents.Select(Create.AggregateRootEvent))));
+                    events: newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents.Select(Create.AggregateRootEvent).ToArray())));
         };
 
         Because of = () => plainPostgresTransactionManager.ExecuteInPlainTransaction(
