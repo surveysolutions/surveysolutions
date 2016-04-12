@@ -18,5 +18,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
         bool IsQuestionnaireExists(QuestionnaireIdentity questionnaireIdentity);
 
         bool IsQuestionnaireAssemblyExists(QuestionnaireIdentity questionnaireIdentity);
+
+        List<QuestionnaireIdentity> GetAllQuestionnaireIdentities();
+
+        bool IsAttachmentUsedAsync(string contentId);
     }
 }

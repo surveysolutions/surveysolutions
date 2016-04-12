@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+﻿using System.Threading.Tasks;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -23,12 +19,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
         public async Task StoreAsync(AttachmentContent attachmentContent)
         {
-            await this.attachmentContentDataRepository.StoreAsync(new AttachmentContentData()
+            await this.attachmentContentDataRepository.StoreAsync(new AttachmentContentData
             {
                 Id = attachmentContent.Id,
                 Content = attachmentContent.Content
             });
-            await this.attachmentContentMetadataRepository.StoreAsync(new AttachmentContentMetadata()
+            await this.attachmentContentMetadataRepository.StoreAsync(new AttachmentContentMetadata
             {
                 ContentType = attachmentContent.ContentType,
                 Id = attachmentContent.Id,

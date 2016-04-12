@@ -171,52 +171,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewerInt
                         null, Moq.It.IsAny<DateTime>(), Moq.It.IsAny<DateTime>()), Times.Once);
         }
 
-        [Test]
-        public void when_assignments_by_different_questionnaires_exists_should_return_list_of_ids()
-        {
-            var interviews = new TestInMemoryWriter<InterviewSummary>();
-            var responsibleId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            var questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-
-            interviews.Store(
-                Create.InterviewSummary(
-                    questionnaireId: questionnaireId,
-                    questionnaireVersion: 1,
-                    responsibleId: responsibleId,
-                    status: InterviewStatus.InterviewerAssigned), "1");
-
-            interviews.Store(
-                Create.InterviewSummary(
-                    questionnaireId: questionnaireId,
-                    questionnaireVersion: 1,
-                    responsibleId: responsibleId,
-                    status: InterviewStatus.InterviewerAssigned), "2");
-
-            interviews.Store(
-                Create.InterviewSummary(
-                    questionnaireId: questionnaireId,
-                    questionnaireVersion: 2,
-                    responsibleId: responsibleId,
-                    status: InterviewStatus.InterviewerAssigned), "3");
-
-            interviews.Store(
-                Create.InterviewSummary(questionnaireId: questionnaireId,
-                    questionnaireVersion: 2,
-                    responsibleId: Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"),
-                    status: InterviewStatus.InterviewerAssigned), "4");
-
-            var interviewerInterviewsFactory = this.CreateInterviewerInterviewsFactory(interviews);
-
-            var questionnairesWithAssignments =
-                interviewerInterviewsFactory.GetQuestionnairesWithAssignments(responsibleId).ToList();
-
-            Assert.That(questionnairesWithAssignments.Count, Is.EqualTo(2));
-            Assert.That(questionnairesWithAssignments.First(),
-                Is.EqualTo(Create.QuestionnaireIdentity(questionnaireId, 1)));
-            Assert.That(questionnairesWithAssignments.Second(),
-                Is.EqualTo(Create.QuestionnaireIdentity(questionnaireId, 2)));
-        }
-
         private InterviewerInterviewsFactory CreateInterviewerInterviewsFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> reader = null,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null,
