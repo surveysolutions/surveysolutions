@@ -7,7 +7,7 @@
 <#@ import namespace="WB.Core.SharedKernels.DataCollection" #> 
 <#@ include file="SharedTemplateV8.tt"#>
 
-internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV8<<#=this.Model.TypeName#>>, IExpressionExecutableV8
+internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV8<<#=this.Model.TypeName#>>
 {
 	public <#=Model.TypeName#>(
 		decimal[] rosterVector, 
@@ -91,68 +91,9 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV8<
 		
 	private readonly IList<Action> _conditionExpressions = new List<Action>();
 
-	protected override IEnumerable<Action> ConditionExpressions
-	{
-		get
-		{
-			return _conditionExpressions;
-		}
-	}
+	protected override IEnumerable<Action> ConditionExpressions => _conditionExpressions;
 
-	public void CalculateValidationChanges(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInvalid)
-	{
-		this.Validate(out questionsToBeValid, out questionsToBeInvalid); 
-	}			
-	
-	public ValidityChanges ProcessValidationExpressions() => this.ExecuteValidations();
-	
-	public EnablementChanges ProcessEnablementConditions() => this.ProcessEnablementConditionsImpl();
+	protected override void SetParentImpl(IExpressionExecutable parent) {}
 
-	public void SetParent(IExpressionExecutableV8 parentLevel)			
-	{
-	}	
-	public void SetParent(IExpressionExecutableV7 parentLevel)			
-	{
-	}	
-	public void SetParent(IExpressionExecutableV6 parentLevel)			
-	{
-	}	
-	public void SetParent(IExpressionExecutableV5 parentLevel)			
-	{
-	}
-
-	public void SetParent(IExpressionExecutableV2 parentLevel)			
-	{
-	}
-
-	public void SetParent(IExpressionExecutable parentLevel)			
-	{			
-	}
-
-	IExpressionExecutableV8 IExpressionExecutableV8.GetParent()
-	{
-		return null;
-	}
-	IExpressionExecutableV7 IExpressionExecutableV7.GetParent()
-	{
-		return null;
-	}
-	IExpressionExecutableV6 IExpressionExecutableV6.GetParent()
-	{
-		return null;
-	}
-	IExpressionExecutableV5 IExpressionExecutableV5.GetParent()
-	{
-		return null;
-	}
-
-	IExpressionExecutableV2 IExpressionExecutableV2.GetParent()
-	{
-		return null;
-	}
-
-	IExpressionExecutable IExpressionExecutable.GetParent()
-	{
-		return null;
-	}
+	protected override IExpressionExecutableV8 GetParentImpl() => null;
 }

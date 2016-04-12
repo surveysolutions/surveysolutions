@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
-            this.Write(">, IExpressionExecutableV8\r\n{\r\n\tpublic ");
+            this.Write(">\r\n{\r\n\tpublic ");
             
             #line 12 "C:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V8\Templates\QuestionnaireLevelTemplateV8.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.TypeName));
@@ -243,26 +243,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
-            this.Write("\t\t\r\n\tprivate readonly IList<Action> _conditionExpressions = new List<Action>();\r\n" +
-                    "\r\n\tprotected override IEnumerable<Action> ConditionExpressions\r\n\t{\r\n\t\tget\r\n\t\t{\r\n" +
-                    "\t\t\treturn _conditionExpressions;\r\n\t\t}\r\n\t}\r\n\r\n\tpublic void CalculateValidationCha" +
-                    "nges(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInva" +
-                    "lid)\r\n\t{\r\n\t\tthis.Validate(out questionsToBeValid, out questionsToBeInvalid); \r\n\t" +
-                    "}\t\t\t\r\n\t\r\n\tpublic ValidityChanges ProcessValidationExpressions() => this.ExecuteV" +
-                    "alidations();\r\n\t\r\n\tpublic EnablementChanges ProcessEnablementConditions() => thi" +
-                    "s.ProcessEnablementConditionsImpl();\r\n\r\n\tpublic void SetParent(IExpressionExecut" +
-                    "ableV8 parentLevel)\t\t\t\r\n\t{\r\n\t}\t\r\n\tpublic void SetParent(IExpressionExecutableV7 " +
-                    "parentLevel)\t\t\t\r\n\t{\r\n\t}\t\r\n\tpublic void SetParent(IExpressionExecutableV6 parentL" +
-                    "evel)\t\t\t\r\n\t{\r\n\t}\t\r\n\tpublic void SetParent(IExpressionExecutableV5 parentLevel)\t\t" +
-                    "\t\r\n\t{\r\n\t}\r\n\r\n\tpublic void SetParent(IExpressionExecutableV2 parentLevel)\t\t\t\r\n\t{\r" +
-                    "\n\t}\r\n\r\n\tpublic void SetParent(IExpressionExecutable parentLevel)\t\t\t\r\n\t{\t\t\t\r\n\t}\r\n" +
-                    "\r\n\tIExpressionExecutableV8 IExpressionExecutableV8.GetParent()\r\n\t{\r\n\t\treturn nul" +
-                    "l;\r\n\t}\r\n\tIExpressionExecutableV7 IExpressionExecutableV7.GetParent()\r\n\t{\r\n\t\tretu" +
-                    "rn null;\r\n\t}\r\n\tIExpressionExecutableV6 IExpressionExecutableV6.GetParent()\r\n\t{\r\n" +
-                    "\t\treturn null;\r\n\t}\r\n\tIExpressionExecutableV5 IExpressionExecutableV5.GetParent()" +
-                    "\r\n\t{\r\n\t\treturn null;\r\n\t}\r\n\r\n\tIExpressionExecutableV2 IExpressionExecutableV2.Get" +
-                    "Parent()\r\n\t{\r\n\t\treturn null;\r\n\t}\r\n\r\n\tIExpressionExecutable IExpressionExecutable" +
-                    ".GetParent()\r\n\t{\r\n\t\treturn null;\r\n\t}\r\n}\r\n");
+            this.Write(@"		
+	private readonly IList<Action> _conditionExpressions = new List<Action>();
+
+	protected override IEnumerable<Action> ConditionExpressions => _conditionExpressions;
+
+	protected override void SetParentImpl(IExpressionExecutable parent) {}
+
+	protected override IExpressionExecutableV8 GetParentImpl() => null;
+}
+");
             return this.GenerationEnvironment.ToString();
         }
         
