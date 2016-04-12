@@ -27,6 +27,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         protected RosterScopeBaseModel()
         {
+            this.Questions = new List<QuestionTemplateModel>();
+            this.StaticTexts = new List<StaticTextTemplateModel>();
+            this.Groups = new List<GroupTemplateModel>();
+            this.Rosters = new List<RosterTemplateModel>();
         }
 
         public string RosterScopeName { get; set; }
