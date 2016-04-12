@@ -31,6 +31,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.Commands;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using QuestionnaireDeleted = WB.Core.SharedKernels.DataCollection.Events.Questionnaire.QuestionnaireDeleted;
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
@@ -799,6 +800,16 @@ namespace WB.Tests.Unit
             public static LinkedOptionsChanged LinkedOptionsChanged(ChangedLinkedOptions[] options = null)
             {
                 return new LinkedOptionsChanged(options ?? new ChangedLinkedOptions[] {});
+            }
+
+            public static StaticTextsEnabled StaticTextsEnabled(params Identity[] ids)
+            {
+                return new StaticTextsEnabled(ids);
+            }
+
+            public static StaticTextsDisabled StaticTextsDisabled(params Identity[] ids)
+            {
+                return new StaticTextsDisabled(ids);
             }
         }
     }

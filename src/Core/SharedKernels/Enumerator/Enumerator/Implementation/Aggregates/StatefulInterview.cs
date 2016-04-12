@@ -1177,6 +1177,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 return answer.IsEnabled;
             }
 
+            if (base.interviewState.DisabledStaticTexts.Contains(entityIdentity))
+            {
+                return false;
+            }
+
             if (this.notAnsweredQuestionsEnablementStatus.ContainsKey(entityKey))
             {
                 return this.notAnsweredQuestionsEnablementStatus[entityKey];
