@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.CensusQuestionnai
             viewModel = CreateCensusQuestionnaireDashboardItemViewModel(interviewViewRepository: interviewViewRepository);
         };
 
-        Because of = async () => await viewModel.Init(questionnaireView);
+        Because of = () => viewModel.Init(questionnaireView);
 
         It should_view_model_have_specified_questionnaire_message = () => viewModel.QuestionnaireName.ShouldEqual(string.Format(InterviewerUIResources.DashboardItem_Title, questionnaireView.Title, questionnaireView.Identity.Version));
         It should_view_model_have_specified_comment = () => viewModel.Comment.ShouldEqual(string.Format(InterviewerUIResources.DashboardItem_CensusModeComment, interviewsByQuestionnaireCount));
