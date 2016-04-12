@@ -8,8 +8,7 @@
 <#@ include file="SharedTemplateV8.tt"#>
 
 internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV8<<#=this.Model.TypeName#>>, 
-	IRosterLevel<<#=this.Model.TypeName#>>, 
-	IExpressionExecutableV8
+	IRosterLevel<<#=this.Model.TypeName#>>
 {	
 	public <#=Model.TypeName#>(
 		decimal[] rosterVector, Identity[] rosterKey, 
@@ -149,77 +148,12 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV8<
 #>
 	private readonly List<Action> _conditionExpressions = new List<Action>();
 		
-	protected override IEnumerable<Action> ConditionExpressions
-	{
-		get
-		{
-			return _conditionExpressions;
-		}
-	}
+	protected override IEnumerable<Action> ConditionExpressions => _conditionExpressions;
 
-	public void CalculateValidationChanges(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInvalid)
-	{
-		this.Validate(out questionsToBeValid, out questionsToBeInvalid);  
-	}
-
-	public ValidityChanges ProcessValidationExpressions() => this.ExecuteValidations();
-	
-	public EnablementChanges ProcessEnablementConditions() => this.ProcessEnablementConditionsImpl();
-	
-	public void SetParent(IExpressionExecutableV8 parentLevel)			
-	{
-		this.@_parent = parentLevel as <#= Model.ParentTypeName#>;
-	}	
-
-	public void SetParent(IExpressionExecutableV7 parentLevel)			
-	{
-		this.@_parent = parentLevel as <#= Model.ParentTypeName#>;
-	}	
-
-	public void SetParent(IExpressionExecutableV6 parentLevel)			
-	{
-		this.@_parent = parentLevel as <#= Model.ParentTypeName#>;
-	}
-			 
-	public void SetParent(IExpressionExecutableV5 parentLevel)			
-	{
-		this.@_parent = parentLevel as <#= Model.ParentTypeName#>;
-	}
-
-	public void SetParent(IExpressionExecutableV2 parentLevel)			
-	{
-		this.@_parent = parentLevel as <#= Model.ParentTypeName#>;
-	}
-
-	public void SetParent(IExpressionExecutable parentLevel)			
+	protected override void SetParentImpl(IExpressionExecutable parent)
 	{			
-		this.@_parent = parentLevel as <#= Model.ParentTypeName#>;
+		this.@_parent = (<#= Model.ParentTypeName#>) parent;
 	}
 
-	IExpressionExecutableV8 IExpressionExecutableV8.GetParent() => this.@_parent;
-
-	IExpressionExecutableV7 IExpressionExecutableV7.GetParent()
-	{
-		return this.@_parent;
-	}
-
-	IExpressionExecutableV6 IExpressionExecutableV6.GetParent()
-	{
-		return this.@_parent;
-	}
-
-	IExpressionExecutableV5 IExpressionExecutableV5.GetParent()
-	{
-		return this.@_parent;
-	}
-
-	IExpressionExecutableV2 IExpressionExecutableV2.GetParent()
-	{
-		return this.@_parent;
-	}
-
-	IExpressionExecutable IExpressionExecutable.GetParent()
-	{
-		return this.@_parent;
-	}
+	protected override IExpressionExecutableV8 GetParentImpl() => this.@_parent;
 }

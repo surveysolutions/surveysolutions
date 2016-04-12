@@ -251,6 +251,9 @@
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_list_question_that_is_roster_size_and_roster_has_condition_should_turn_it_off.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_multiple_options_question_which_is_roster_size_question_and_roster_was_disabled_and_deleted.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_gps_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_a_question_with_answer_that_enables_dependent_group.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_a_question_with_answer_that_enables_dependent_question.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_a_question_with_answer_that_enables_dependent_static_text.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_single_question_that_is_in_roster_and_triggers_nested_group.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_roster_title_question_is_changed_and_roster_title_is_used_in_a_condition.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_text_question_inside_roster_that_was_disabled_then_deleted_then_added_again.cs" />
@@ -273,9 +276,6 @@
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_invalid_answer_and_all_questions_were_valid_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_valid_answer_and_all_questions_were_invalid_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_valid_answer_and_all_questions_were_valid_before_answer.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_on_a_question_with_answer_that_enables_dependent_group.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_on_a_question_with_answer_that_enables_dependent_question.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_on_a_question_with_answer_that_enables_dependent_static_text.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_and_related_group_condition_expression_throws_exception.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_condition_expression_throws_exception.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_validation_expression_throws_exception.cs" />
