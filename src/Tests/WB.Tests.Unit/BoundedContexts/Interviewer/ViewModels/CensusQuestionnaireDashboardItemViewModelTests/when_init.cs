@@ -17,8 +17,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.CensusQuestionnai
         Establish context = () =>
         {
             var interviewViewRepository = Mock.Of<IAsyncPlainStorage<InterviewView>>(
-                x => x.CountAsync(Moq.It.IsAny<Expression<Func<InterviewView, bool>>>()) ==
-                     Task.FromResult(interviewsByQuestionnaireCount));
+                x => x.Count(Moq.It.IsAny<Expression<Func<InterviewView, bool>>>()) ==
+                     interviewsByQuestionnaireCount);
 
             viewModel = CreateCensusQuestionnaireDashboardItemViewModel(interviewViewRepository: interviewViewRepository);
         };
