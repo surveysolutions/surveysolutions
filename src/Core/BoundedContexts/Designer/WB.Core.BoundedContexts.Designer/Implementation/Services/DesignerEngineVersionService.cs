@@ -44,15 +44,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         /// </summary>
         private readonly Version version_13 = new Version(13, 0, 0);
 
+        /// <summary>Static texts: enablement conditions and validations</summary>
+        private readonly Version version_14 = new Version(14, 0, 0);
 
-        public Version GetLatestSupportedVersion()
-        {
-            return version_13;
-        }
+
+        public Version GetLatestSupportedVersion() => this.version_14;
 
         public bool IsClientVersionSupported(Version clientVersion)
         {
-            var engineVersion = GetLatestSupportedVersion();
+            var engineVersion = this.GetLatestSupportedVersion();
             if (engineVersion > clientVersion)
             {
                 if (clientVersion < version_9)
@@ -63,7 +63,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public bool IsQuestionnaireDocumentSupportedByClientVersion(QuestionnaireDocument questionnaireDocument, Version clientVersion)
         {
-            var questionnaireContentVersion = this.GetQuestionnaireContentVersion(questionnaireDocument);
+            Version questionnaireContentVersion = this.GetQuestionnaireContentVersion(questionnaireDocument);
+
+            if (clientVersion < this.version_14 && questionnaireContentVersion == this.version_14)
+                return false;
 
             if (clientVersion < this.version_13 && questionnaireContentVersion == this.version_13)
                 return false;
@@ -82,6 +85,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public Version GetQuestionnaireContentVersion(QuestionnaireDocument questionnaireDocument)
         {
+            bool hasStaticTextsWithEnablementConditions = questionnaireDocument.Find<StaticText>(x => !string.IsNullOrWhiteSpace(x.ConditionExpression)).Any();
+            bool hasStaticTextsWithValidations = questionnaireDocument.Find<StaticText>(x => x.ValidationConditions.Any()).Any();
+            if (hasStaticTextsWithEnablementConditions || hasStaticTextsWithValidations)
+                return version_14;
+
             var countOfStaticTextsWithAttachment = questionnaireDocument.Find<StaticText>(q => !string.IsNullOrWhiteSpace(q.AttachmentName)).Count();
             if (countOfStaticTextsWithAttachment > 0)
                 return version_13;

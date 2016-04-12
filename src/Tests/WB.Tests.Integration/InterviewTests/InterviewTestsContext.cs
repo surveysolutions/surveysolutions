@@ -230,7 +230,9 @@ namespace WB.Tests.Integration.InterviewTests
                 return interviewExpressionState;
             }
 
-            throw new Exception("Error on IInterviewExpressionState generation");
+            throw new Exception(
+                $"Errors on IInterviewExpressionState generation:{Environment.NewLine}"
+                + string.Join(Environment.NewLine, emitResult.Diagnostics.Select((d, i) => $"{i+1}. {d.Message}")));
         }
     }
 }

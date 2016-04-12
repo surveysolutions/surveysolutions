@@ -91,6 +91,7 @@
     <Compile Include="V7\AbstractInterviewExpressionStateV7.cs" />
     <Compile Include="V7\IExpressionExecutableV7.cs" />
     <Compile Include="V7\IInterviewExpressionStateV7.cs" />
+    <Compile Include="V8\AbstractConditionalLevelInstanceV8.cs" />
     <Compile Include="V8\AbstractInterviewExpressionStateV8.cs" />
     <Compile Include="V8\IExpressionExecutableV8.cs" />
     <Compile Include="V8\IInterviewExpressionStateV8.cs" />
