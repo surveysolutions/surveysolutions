@@ -10,6 +10,5 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         IEnumerable<InterviewInformation> GetInProgressInterviews(Guid interviewerId);
         IEnumerable<InterviewInformation> GetInterviewsByIds(Guid[] interviewIds);
         InterviewSynchronizationDto GetInterviewDetails(Guid interviewId);
-        IList<QuestionnaireIdentity> GetQuestionnairesWithAssignments(Guid interviewerId);
     }
 }

@@ -17,7 +17,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
             IAsyncPlainStorage<InterviewView> interviewViewRepository = null,
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor = null,
-            IInterviewerInterviewAccessor interviewFactory = null)
+            IInterviewerInterviewAccessor interviewFactory = null,
+            IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocuments = null)
         {
             return new InterviewerQuestionnaireAccessor(
                 synchronizationSerializer: synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
@@ -25,7 +26,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
                 plainQuestionnaireRepository: plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 interviewViewRepository: interviewViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewView>>(),
                 questionnaireAssemblyFileAccessor: questionnaireAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
-                interviewFactory: interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>());
+                interviewFactory: interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>(),
+                questionnaireDocuments: questionnaireDocuments ?? Mock.Of< IAsyncPlainStorage<QuestionnaireDocumentView>>());
         }
     }
 }
