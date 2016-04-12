@@ -58,31 +58,18 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 			}
 #>		}
 
-		protected override bool HasParentScropeRosterId(Guid rosterId){
-			return IdOf.parentScopeMap.ContainsKey(rosterId);
-		}
+		protected override bool HasParentScropeRosterId(Guid rosterId) => IdOf.parentScopeMap.ContainsKey(rosterId);
 
-		protected override Guid GetQuestionnaireId()
-		{
-			return IdOf.@__questionnaire;
-		}
+		protected override Guid GetQuestionnaireId() => IdOf.@__questionnaire;
 
-		protected override Guid[] GetParentRosterScopeIds(Guid rosterId)
-		{
-			return IdOf.parentScopeMap[rosterId];
-		}
+		protected override Guid[] GetParentRosterScopeIds(Guid rosterId) => IdOf.parentScopeMap[rosterId];
 
 		public override IInterviewExpressionState Clone()
-		{
-			return new <#=QuestionnaireStructure.ClassName#>(this.InterviewScopes, this.SiblingRosters, this.InterviewProperties);
-		}
-		
+			=> new <#=QuestionnaireStructure.ClassName#>(this.InterviewScopes, this.SiblingRosters, this.InterviewProperties);
 
-		public override Dictionary<Guid, Guid[]> GetParentsMap() 
-		{
-			return IdOf.parentScopeMap;
-		}	
+		public override Dictionary<Guid, Guid[]> GetParentsMap() => IdOf.parentScopeMap;
 	}
+
 		//generate QuestionnaireLevel
 <#	
 			QuestionnaireLevelTemplateV8 questionnairetemplate = CreateQuestionnaireLevelTemplate();

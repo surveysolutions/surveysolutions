@@ -1,7 +1,7 @@
 using AppDomainToolkit;
 using Machine.Specifications;
 
-namespace WB.Tests.Integration.InterviewTests.LanguageTests
+namespace WB.Tests.Integration.InterviewTests
 {
     internal class in_standalone_app_domain : InterviewTestsContext
     {
