@@ -457,7 +457,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.interviewState.EnableQuestions(@event.Questions);
 
             this.ExpressionProcessorStatePrototype.EnableQuestions(@event.Questions);
+        }
 
+        public virtual void Apply(StaticTextsDisabled @event)
+        {
+            this.ExpressionProcessorStatePrototype.DisableStaticTexts(@event.StaticTexts);
+        }
+
+        public virtual void Apply(StaticTextsEnabled @event)
+        {
+            this.ExpressionProcessorStatePrototype.EnableStaticTexts(@event.StaticTexts);
         }
 
         public virtual void Apply(AnswerCommented @event)

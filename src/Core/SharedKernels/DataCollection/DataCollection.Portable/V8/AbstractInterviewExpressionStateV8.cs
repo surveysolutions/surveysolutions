@@ -54,6 +54,31 @@ namespace WB.Core.SharedKernels.DataCollection.V8
                     .OrderBy(x => x.GetLevel()) // order by scope depth starting from top because conditionally lower scope could depend only from upper scope
                     .Select(scope => scope.ProcessEnablementConditions()));
 
+        protected new virtual IExpressionExecutableV8 GetRosterByIdAndVector(Guid questionId, decimal[] rosterVector)
+            => (IExpressionExecutableV8) base.GetRosterByIdAndVector(questionId, rosterVector);
+
+        public void DisableStaticTexts(IEnumerable<Identity> staticTextsToDisable)
+        {
+            foreach (Identity staticText in staticTextsToDisable)
+            {
+                var targetLevel = this.GetRosterByIdAndVector(staticText.Id, staticText.RosterVector);
+                if (targetLevel == null) return;
+
+                targetLevel.DisableStaticText(staticText.Id);
+            }
+        }
+
+        public void EnableStaticTexts(IEnumerable<Identity> staticTextsToEnable)
+        {
+            foreach (Identity staticText in staticTextsToEnable)
+            {
+                var targetLevel = this.GetRosterByIdAndVector(staticText.Id, staticText.RosterVector);
+                if (targetLevel == null) return;
+
+                targetLevel.EnableStaticText(staticText.Id);
+            }
+        }
+
         IInterviewExpressionStateV8 IInterviewExpressionStateV8.Clone() => (IInterviewExpressionStateV8) this.Clone();
     }
 }

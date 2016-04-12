@@ -58,6 +58,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
         public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle) => this.adaptee.UpdateRosterTitle(rosterId, outerRosterVector, rosterInstanceId, rosterTitle);
         IInterviewExpressionState IInterviewExpressionState.Clone() => this.Clone();
 
+        public void DisableStaticTexts(IEnumerable<Identity> staticTextsToDisable) { }
+        public void EnableStaticTexts(IEnumerable<Identity> staticTextsToEnable) { }
+
         private IInterviewExpressionStateV8 Clone() => new InterviewExpressionStateV7ToV8Adapter(this.adaptee.Clone());
     }
 }

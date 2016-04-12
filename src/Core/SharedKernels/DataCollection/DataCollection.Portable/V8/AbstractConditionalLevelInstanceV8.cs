@@ -85,20 +85,65 @@ namespace WB.Core.SharedKernels.DataCollection.V8
         IExpressionExecutableV7 IExpressionExecutableV7.GetParent() => this.GetParentImpl();
         IExpressionExecutableV8 IExpressionExecutableV8.GetParent() => this.GetParentImpl();
 
+        public void DisableStaticText(Guid staticTextId)
+        {
+            if (this.EnablementStates.ContainsKey(staticTextId))
+                this.EnablementStates[staticTextId].State = State.Disabled;
+        }
+
+        public void EnableStaticText(Guid staticTextId)
+        {
+            if (this.EnablementStates.ContainsKey(staticTextId))
+                this.EnablementStates[staticTextId].State = State.Enabled;
+        }
+
         protected EnablementChanges ProcessEnablementConditionsImpl()
         {
-            List<Identity> questionsToBeEnabled;
-            List<Identity> questionsToBeDisabled;
-            List<Identity> groupsToBeEnabled;
-            List<Identity> groupsToBeDisabled;
+            foreach (Action enablementCondition in this.ConditionExpressions)
+            {
+                enablementCondition.Invoke();
+            }
 
-            this.CalculateConditionChanges(
-                out questionsToBeEnabled,
-                out questionsToBeDisabled,
-                out groupsToBeEnabled,
-                out groupsToBeDisabled);
+            var questionsToBeEnabled = this.EnablementStates.Values
+                .Where(x => x.Type == ItemType.Question)
+                .Where(StateChangedToEnabled)
+                .Select(x => new Identity(x.ItemId, this.RosterVector))
+                .ToList();
 
-            return new EnablementChanges(groupsToBeDisabled, groupsToBeEnabled, questionsToBeDisabled, questionsToBeEnabled);
+            var questionsToBeDisabled = this.EnablementStates.Values
+                .Where(x => x.Type == ItemType.Question)
+                .Where(StateChangedToDisabled)
+                .Select(x => new Identity(x.ItemId, this.RosterVector))
+                .ToList();
+
+            var groupsToBeEnabled = this.EnablementStates.Values
+                .Where(x => x.Type == ItemType.Group)
+                .Where(StateChangedToEnabled)
+                .Select(x => new Identity(x.ItemId, this.RosterVector))
+                .ToList();
+
+            var groupsToBeDisabled = this.EnablementStates.Values
+                .Where(x => x.Type == ItemType.Group)
+                .Where(StateChangedToDisabled)
+                .Select(x => new Identity(x.ItemId, this.RosterVector))
+                .ToList();
+
+            var staticTextsToBeEnabled = this.EnablementStates.Values
+                .Where(x => x.Type == ItemType.StaticText)
+                .Where(StateChangedToEnabled)
+                .Select(x => new Identity(x.ItemId, this.RosterVector))
+                .ToList();
+
+            var staticTextsToBeDisabled = this.EnablementStates.Values
+                .Where(x => x.Type == ItemType.StaticText)
+                .Where(StateChangedToDisabled)
+                .Select(x => new Identity(x.ItemId, this.RosterVector))
+                .ToList();
+
+            return new EnablementChanges(
+                groupsToBeDisabled, groupsToBeEnabled,
+                questionsToBeDisabled, questionsToBeEnabled,
+                staticTextsToBeDisabled, staticTextsToBeEnabled);
         }
     }
 }

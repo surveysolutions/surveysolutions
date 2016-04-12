@@ -37,15 +37,19 @@ namespace WB.Core.BoundedContexts.Designer.Services
             };
         }
 
-        public static ExpressionLocation GroupCondition(Guid groupId)
+        public static ExpressionLocation GroupCondition(Guid groupId) => new ExpressionLocation
         {
-            return new  ExpressionLocation
-            {
-                ItemType = ExpressionLocationItemType.Group,
-                ExpressionType = ExpressionLocationType.Condition,
-                Id = groupId
-            };
-        }
+            ItemType = ExpressionLocationItemType.Group,
+            ExpressionType = ExpressionLocationType.Condition,
+            Id = groupId
+        };
+
+        public static ExpressionLocation StaticTextCondition(Guid staticTextId) => new ExpressionLocation
+        {
+            ItemType = ExpressionLocationItemType.StaticText,
+            ExpressionType = ExpressionLocationType.Condition,
+            Id = staticTextId
+        };
 
         public static ExpressionLocation LinkedQuestionFilter(Guid questionId)
         {

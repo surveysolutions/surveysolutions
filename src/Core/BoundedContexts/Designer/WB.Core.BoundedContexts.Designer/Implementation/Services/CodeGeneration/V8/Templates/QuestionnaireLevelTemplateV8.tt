@@ -21,6 +21,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV8<
 <#
 	GroupsStatesInLevelConstructor(Model.Groups);
 	QuestionsStatesInLevelConstructor(Model.Questions);
+	StaticTextsStatesInLevelConstructor(Model.StaticTexts);
 	RostersStatesInLevelConstructor(Model.Rosters);
 #>
 <#
@@ -85,6 +86,15 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV8<
 	{ 
 #>
 	private ConditionalState <#= @group.StateName#> = new ConditionalState(IdOf.<#=@group.IdName#>, ItemType.Group);
+<# 
+	}
+#>
+	// static texts condition states
+<#
+	foreach (var staticText in Model.StaticTexts) 
+	{ 
+#>
+	private ConditionalState <#=staticText.StateName#> = new ConditionalState(IdOf.<#=staticText.IdName#>, ItemType.StaticText);
 <# 
 	}
 #>

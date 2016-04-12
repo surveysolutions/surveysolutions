@@ -7,7 +7,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
-    [Ignore("unignore after KP-6970 implemented")]
     internal class when_answering_on_a_question_with_answer_that_enables_dependent_static_text : in_standalone_app_domain
     {
         Because of = () => results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>

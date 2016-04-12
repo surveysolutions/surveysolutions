@@ -11,6 +11,9 @@ namespace WB.Core.SharedKernels.DataCollection.V8
         new IExpressionExecutableV8 GetParent();
         new IExpressionExecutableV8 CreateChildRosterInstance(Guid rosterId, decimal[] rosterVector, Identity[] rosterIdentityKey);
 
+        void DisableStaticText(Guid staticTextId);
+        void EnableStaticText(Guid staticTextId);
+
         EnablementChanges ProcessEnablementConditions();
     }
 }
