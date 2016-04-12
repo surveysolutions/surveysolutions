@@ -97,6 +97,15 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 <# 
 		}
 #>
+		//static texts
+<#
+		foreach (var staticText in QuestionnaireStructure.AllStaticTexts) 
+		{
+#>
+		public static readonly Guid <#=staticText.IdName#> = Guid.Parse("<#=staticText.Id#>");
+<# 
+		}
+#>
 		//groups
 <#
 		foreach (var g in QuestionnaireStructure.AllGroups) 
@@ -175,6 +184,15 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 			{
 #>
 			{<#= q.IdName#>, <#= q.RosterScopeName#>},
+<# 
+			}
+#>
+			//static texts
+<#
+			foreach (var staticText in QuestionnaireStructure.AllStaticTexts) 
+			{
+#>
+			{<#= staticText.IdName#>, <#= staticText.RosterScopeName#>},
 <# 
 			}
 #>

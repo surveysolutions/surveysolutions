@@ -242,7 +242,7 @@ namespace WB.Core.SharedKernels.DataCollection
                 .ToList();
         }
 
-        private static bool StateChangedToEnabled(ConditionalState state)
+        protected static bool StateChangedToEnabled(ConditionalState state)
         {
             if (state.State == State.Unknown && state.PreviousState == State.Disabled)
             {
@@ -256,7 +256,7 @@ namespace WB.Core.SharedKernels.DataCollection
         }
 
 
-        private static bool StateChangedToDisabled(ConditionalState state)
+        protected static bool StateChangedToDisabled(ConditionalState state)
         {
             bool isCurrentStateDisabled = state.State == State.Disabled;
             bool isPreviousStateDisabled = state.PreviousState == State.Disabled;
