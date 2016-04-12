@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardFactoryTests
         };
 
         Because of = () =>
-            dashboardByInterviewer = interviewerDashboardFactory.GetInterviewerDashboardAsync(interviewerId).WaitAndUnwrapException();
+            dashboardByInterviewer = interviewerDashboardFactory.GetInterviewerDashboardAsync(interviewerId);
 
         It should_interviews_be_filered_by_specified_interviewer = () =>
             dashboardByInterviewer.StartedInterviews
