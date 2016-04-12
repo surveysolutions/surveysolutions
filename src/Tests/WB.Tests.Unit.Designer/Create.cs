@@ -161,10 +161,8 @@ namespace WB.Tests.Unit.Designer
                     "WB.Core.SharedKernels.DataCollection.V5",
                     "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
                 },
-                isLookupTablesFeatureSupported: true)
-            {
-                ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV5(expressionStateModel).TransformText()
-            };
+                isLookupTablesFeatureSupported: true,
+                expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV5(expressionStateModel).TransformText());
         }
 
         public static CodeGenerator CodeGenerator(

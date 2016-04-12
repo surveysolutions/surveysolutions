@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V2
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V6.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V7.Templates;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V8.Templates;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.Infrastructure.FileSystem;
@@ -54,7 +55,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         public Dictionary<string, string> Generate(QuestionnaireDocument questionnaire, Version targetVersion)
         {
-            CodeGenerationSettings codeGenerationSettings = this.CreateCodeGenerationSettingsBasedOnEngineVersion(targetVersion);
+            CodeGenerationSettings codeGenerationSettings = CreateCodeGenerationSettingsBasedOnEngineVersion(targetVersion);
 
             QuestionnaireExpressionStateModel expressionStateModel = this.expressionStateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, codeGenerationSettings);
 
@@ -101,97 +102,108 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
         }
 
-        private CodeGenerationSettings CreateCodeGenerationSettingsBasedOnEngineVersion(Version version)
+        private static CodeGenerationSettings CreateCodeGenerationSettingsBasedOnEngineVersion(Version version)
         {
-            if (version.Major <= 8)
-                throw new VersionNotFoundException($"version '{version}' is not found");
-            
-            if (version.Major == 9)
-                return new CodeGenerationSettings(
-                    additionInterfaces: new[] { "IInterviewExpressionStateV2" },
-                    namespaces: new[]
-                    {
-                        "WB.Core.SharedKernels.DataCollection.V2",
-                        "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
-                        "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions"
-                    },
-                    isLookupTablesFeatureSupported: false)
-                {
-                    ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplate(expressionStateModel).TransformText()
-                };
-
-            if (version.Major == 10)
-                return new CodeGenerationSettings(
-                    additionInterfaces: new[] { "IInterviewExpressionStateV2", "IInterviewExpressionStateV4" },
-                    namespaces: new[]
-                    {
-                        "WB.Core.SharedKernels.DataCollection.V2",
-                        "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
-                        "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
-                        "WB.Core.SharedKernels.DataCollection.V4",
-                        "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions"
-                    },
-                    isLookupTablesFeatureSupported: false)
-                {
-                    ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV2(expressionStateModel).TransformText()
-                };
-
-            if (version.Major == 11)
-                return new CodeGenerationSettings(
-                   additionInterfaces: new[] { "IInterviewExpressionStateV5" },
-                   namespaces: new[]
-                   {
-                        "WB.Core.SharedKernels.DataCollection.V2",
-                        "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
-                        "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
-                        "WB.Core.SharedKernels.DataCollection.V4",
-                        "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
-                        "WB.Core.SharedKernels.DataCollection.V5",
-                        "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
-                   },
-                   isLookupTablesFeatureSupported: true)
+            switch (version.Major)
             {
-                ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV5(expressionStateModel).TransformText()
-            };
+                case 9: 
+                    return new CodeGenerationSettings(
+                        additionInterfaces: new[] { "IInterviewExpressionStateV2" },
+                        namespaces: new[]
+                        {
+                            "WB.Core.SharedKernels.DataCollection.V2",
+                            "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions"
+                        },
+                        isLookupTablesFeatureSupported: false,
+                        expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplate(expressionStateModel).TransformText());
 
-            if (version.Major == 12)
-                return new CodeGenerationSettings(
-                   additionInterfaces: new[] { "IInterviewExpressionStateV6" },
-                   namespaces: new[]
-                   {
-                        "WB.Core.SharedKernels.DataCollection.V2",
-                        "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
-                        "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
-                        "WB.Core.SharedKernels.DataCollection.V4",
-                        "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
-                        "WB.Core.SharedKernels.DataCollection.V5",
-                        "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions",
-                        "WB.Core.SharedKernels.DataCollection.V6"
-                   },
-                   isLookupTablesFeatureSupported: true)
-                {
-                    ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV6(expressionStateModel).TransformText()
-                };
+                case 10:
+                    return new CodeGenerationSettings(
+                        additionInterfaces: new[] { "IInterviewExpressionStateV2", "IInterviewExpressionStateV4" },
+                        namespaces: new[]
+                        {
+                            "WB.Core.SharedKernels.DataCollection.V2",
+                            "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V4",
+                            "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions"
+                        },
+                        isLookupTablesFeatureSupported: false,
+                        expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV2(expressionStateModel).TransformText());
 
-            return new CodeGenerationSettings(
-                   additionInterfaces: new[] { "IInterviewExpressionStateV7" },
-                   namespaces: new[]
-                   {
-                        "WB.Core.SharedKernels.DataCollection.V2",
-                        "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
-                        "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
-                        "WB.Core.SharedKernels.DataCollection.V4",
-                        "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
-                        "WB.Core.SharedKernels.DataCollection.V5",
-                        "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions",
-                        "WB.Core.SharedKernels.DataCollection.V6",
-                        "WB.Core.SharedKernels.DataCollection.V7"
-                   },
-                   isLookupTablesFeatureSupported: true)
-            {
-                ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV7(expressionStateModel).TransformText()
-            };
+                case 11:
+                    return new CodeGenerationSettings(
+                        additionInterfaces: new[] { "IInterviewExpressionStateV5" },
+                        namespaces: new[]
+                        {
+                            "WB.Core.SharedKernels.DataCollection.V2",
+                            "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V4",
+                            "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V5",
+                            "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
+                        },
+                        isLookupTablesFeatureSupported: true,
+                        expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV5(expressionStateModel).TransformText());
 
+                case 12:
+                    return new CodeGenerationSettings(
+                        additionInterfaces: new[] { "IInterviewExpressionStateV6" },
+                        namespaces: new[]
+                        {
+                            "WB.Core.SharedKernels.DataCollection.V2",
+                            "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V4",
+                            "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V5",
+                            "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V6"
+                        },
+                        isLookupTablesFeatureSupported: true,
+                        expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV6(expressionStateModel).TransformText());
+
+                case 13:
+                    return new CodeGenerationSettings(
+                        additionInterfaces: new[] {"IInterviewExpressionStateV7"},
+                        namespaces: new[]
+                        {
+                            "WB.Core.SharedKernels.DataCollection.V2",
+                            "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V4",
+                            "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V5",
+                            "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V6",
+                            "WB.Core.SharedKernels.DataCollection.V7"
+                        },
+                        isLookupTablesFeatureSupported: true,
+                        expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV7(expressionStateModel).TransformText());
+
+                case 14:
+                    return new CodeGenerationSettings(
+                        additionInterfaces: new[] {"IInterviewExpressionStateV8"},
+                        namespaces: new[]
+                        {
+                            "WB.Core.SharedKernels.DataCollection.V2",
+                            "WB.Core.SharedKernels.DataCollection.V2.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V3.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V4",
+                            "WB.Core.SharedKernels.DataCollection.V4.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V5",
+                            "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions",
+                            "WB.Core.SharedKernels.DataCollection.V6",
+                            "WB.Core.SharedKernels.DataCollection.V7",
+                            "WB.Core.SharedKernels.DataCollection.V8",
+                        },
+                        isLookupTablesFeatureSupported: true,
+                        expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV8(expressionStateModel).TransformText());
+            }
+
+            throw new VersionNotFoundException($"Version '{version}' is not supported.");
         }
     }
 }

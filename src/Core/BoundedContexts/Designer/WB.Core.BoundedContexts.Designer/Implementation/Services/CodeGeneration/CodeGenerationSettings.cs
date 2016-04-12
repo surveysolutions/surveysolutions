@@ -5,22 +5,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     internal class CodeGenerationSettings
     {
-        public CodeGenerationSettings(string[] additionInterfaces, 
-            string[] namespaces,
-            bool isLookupTablesFeatureSupported)
+        public CodeGenerationSettings(string[] additionInterfaces, string[] namespaces, bool isLookupTablesFeatureSupported, Func<QuestionnaireExpressionStateModel, string> expressionStateBodyGenerator)
         {
-            AdditionInterfaces = additionInterfaces;
-            Namespaces = namespaces;
-            IsLookupTablesFeatureSupported = isLookupTablesFeatureSupported;
+            this.AdditionInterfaces = additionInterfaces;
+            this.Namespaces = namespaces;
+            this.IsLookupTablesFeatureSupported = isLookupTablesFeatureSupported;
+            this.ExpressionStateBodyGenerator = expressionStateBodyGenerator;
         }
 
+        public string[] AdditionInterfaces { get; }
 
-        public string[] AdditionInterfaces { get; private set; }
+        public string[] Namespaces { get; }
 
-        public string[] Namespaces { get; private set; }
+        public bool IsLookupTablesFeatureSupported { get; }
 
-        public bool IsLookupTablesFeatureSupported { get; private set; }
-
-        public Func<QuestionnaireExpressionStateModel, string> ExpressionStateBodyGenerator { get; set; }
+        public Func<QuestionnaireExpressionStateModel, string> ExpressionStateBodyGenerator { get; }
     }
 }

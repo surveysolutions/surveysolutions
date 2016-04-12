@@ -28,15 +28,24 @@ namespace WB.Core.SharedKernels.DataCollection.V8
 
         private IDictionary<string, IExpressionExecutableV8> InitializeInterviewScopes()
             => new TwoWayDictionaryAdapter<string, IExpressionExecutableV7, IExpressionExecutableV8>(
-                base.InterviewScopes, ConvertExpressionExecutableV7ToV8, ConvertExpressionExecutableV8ToV7);
+                () => base.InterviewScopes, ConvertExpressionExecutableV7ToV8, ConvertExpressionExecutableV8ToV7);
 
         private static IExpressionExecutableV7 ConvertExpressionExecutableV8ToV7(IExpressionExecutableV8 expressionExecutableV8)
             => expressionExecutableV8;
 
         private static IExpressionExecutableV8 ConvertExpressionExecutableV7ToV8(IExpressionExecutableV7 expressionExecutableV7)
         {
-            throw new NotSupportedException("Interview scope expression executable V7 cannot be converted to V8");
+            if (expressionExecutableV7 == null)
+                return null;
+
+            if (expressionExecutableV7 is IExpressionExecutableV8)
+                return (IExpressionExecutableV8) expressionExecutableV7;
+
+            throw new NotSupportedException($"Interview scope expression executable V7 ({expressionExecutableV7.GetType().FullName}) cannot be converted to V8");
         }
+
+        public new IEnumerable<IExpressionExecutableV8> GetRosterInstances(Identity[] rosterKey, Guid scopeId)
+            => base.GetRosterInstances(rosterKey, scopeId).Cast<IExpressionExecutableV8>();
 
         public new virtual EnablementChanges ProcessEnablementConditions()
             => EnablementChanges.Union(
