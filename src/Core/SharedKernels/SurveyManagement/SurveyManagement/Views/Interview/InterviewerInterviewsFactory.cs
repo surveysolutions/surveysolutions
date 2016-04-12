@@ -41,7 +41,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public IEnumerable<InterviewInformation> GetInProgressInterviews(Guid interviewerId)
         {
             var inProgressInterviews =  this.reader.Query(interviews =>
-                interviews.Where(interview => InterviewsInProgress(interviewerId, interview))
+                interviews.Where(interview => !interview.IsDeleted && (interview.ResponsibleId == interviewerId) && 
+                                              (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor))
                     .Select(x => new {x.InterviewId, x.QuestionnaireId, x.QuestionnaireVersion, x.WasRejectedBySupervisor})
                     .ToList());
 
@@ -60,12 +61,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                     QuestionnaireIdentity = new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion),
                     IsRejected = interview.WasRejectedBySupervisor
                 });
-        }
-
-        private static bool InterviewsInProgress(Guid interviewerId, InterviewSummary interview)
-        {
-            return !interview.IsDeleted && (interview.ResponsibleId == interviewerId) && 
-                   (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor);
         }
 
         public IEnumerable<InterviewInformation> GetInterviewsByIds(Guid[] interviewIds)
@@ -121,7 +116,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public IList<QuestionnaireIdentity> GetQuestionnairesWithAssignments(Guid interviewerId)
         {
             var inProgressQuestionnaires = this.reader.Query(interviews =>
-                                                         interviews.Where(interview => InterviewsInProgress(interviewerId, interview))
+                                                         interviews.Where(interview => !interview.IsDeleted && (interview.ResponsibleId == interviewerId) && 
+                                                                                       (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor))
                                                              .Select(x => new { x.QuestionnaireId, x.QuestionnaireVersion})
                                                              .Distinct()
                                                              .ToList());
