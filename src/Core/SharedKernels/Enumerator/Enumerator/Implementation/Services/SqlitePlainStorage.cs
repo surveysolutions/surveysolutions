@@ -133,6 +133,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate)
             => await this.RunInTransactionAsync(table => table.Count(predicate));
 
+        public int Count(Expression<Func<TEntity, bool>> predicate)
+          => this.RunInTransaction(table => table.Count(predicate));
+
         public TEntity FirstOrDefault() => this.RunInTransaction(table => table.FirstOrDefault());
 
         public IReadOnlyCollection<TEntity> LoadAll() => this.RunInTransaction(table => table.ToReadOnlyCollection());
