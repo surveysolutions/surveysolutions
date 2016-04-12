@@ -440,6 +440,8 @@
     <Compile Include="SharedKernels\Enumerator\Services\MaskTextTests\when_removing_last_character.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewRepositoryTests\StatefulInterviewRepositoryNUnitTests.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StatefulInterviewTestsContext.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StaticText\when_static_text_disabled_after_enabling.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StaticText\when_static_text_enabled.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_completing_interview_and_interview_has_3_invalid_and_2_valid_questions_outside_of_rosters.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_completing_interview_and_interview_has_3_invalid_questions_with_different_failing_conditions.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_determining_has_interview_a_group_and_group_is_in_roster_which_has_instance_with_id_equal_to_group_roster_vector.cs" />
