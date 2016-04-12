@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MvvmCross.Platform;
+using MvvmCross.Platform.Exceptions;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
@@ -33,10 +35,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly IPrincipal principal;
         private readonly ILogger logger;
         private readonly IUserInteractionService userInteractionService;
-        private readonly IInterviewerQuestionnaireAccessor questionnaireFactory;
+        private readonly IInterviewerQuestionnaireAccessor questionnairesAccessor;
         private readonly IAttachmentContentStorage attachmentContentStorage;
         private readonly IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
         private readonly IAsyncPlainStorage<InterviewFileView> interviewFileViewStorage;
+        private readonly AttachmentsCleanupService cleanupService;
         private readonly IPasswordHasher passwordHasher;
 
         private RestCredentials restCredentials;
@@ -47,11 +50,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             IPrincipal principal,
             ILogger logger, 
             IUserInteractionService userInteractionService, 
-            IInterviewerQuestionnaireAccessor questionnaireFactory, 
+            IInterviewerQuestionnaireAccessor questionnairesAccessor, 
             IAttachmentContentStorage attachmentContentStorage, 
             IInterviewerInterviewAccessor interviewFactory, 
             IAsyncPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage, 
             IAsyncPlainStorage<InterviewFileView> interviewFileViewStorage,
+            AttachmentsCleanupService cleanupService,
             IPasswordHasher passwordHasher)
         {
             this.synchronizationService = synchronizationService;
@@ -60,11 +64,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.principal = principal;
             this.logger = logger;
             this.userInteractionService = userInteractionService;
-            this.questionnaireFactory = questionnaireFactory;
+            this.questionnairesAccessor = questionnairesAccessor;
             this.attachmentContentStorage = attachmentContentStorage;
             this.interviewFactory = interviewFactory;
             this.interviewMultimediaViewStorage = interviewMultimediaViewStorage;
             this.interviewFileViewStorage = interviewFileViewStorage;
+            this.cleanupService = cleanupService;
             this.passwordHasher = passwordHasher;
         }
 
@@ -200,8 +205,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private async Task SyncronizeQuestionnairesAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
         {
             var remoteCensusQuestionnaireIdentities = await this.synchronizationService.GetCensusQuestionnairesAsync(cancellationToken);
-
-            var localCensusQuestionnaireIdentities = this.questionnaireFactory.GetCensusQuestionnaireIdentities();
+            var localCensusQuestionnaireIdentities = this.questionnairesAccessor.GetCensusQuestionnaireIdentities();
 
             var notExistingRemoteCensusQuestionnaireIdentities = localCensusQuestionnaireIdentities.Where(
                 questionnaireIdentity => !remoteCensusQuestionnaireIdentities.Contains(questionnaireIdentity));
@@ -209,7 +213,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             foreach (var censusQuestionnaireIdentity in notExistingRemoteCensusQuestionnaireIdentities)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                await this.questionnaireFactory.RemoveQuestionnaireAsync(censusQuestionnaireIdentity);
+                await this.questionnairesAccessor.RemoveQuestionnaireAsync(censusQuestionnaireIdentity);
             }
 
             var processedQuestionnaires = 0;
@@ -229,22 +233,40 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
                 processedQuestionnaires++;
             }
+
+            var serverQuestionnaires = await this.synchronizationService.GetServerQuestionnairesAsync(cancellationToken);
+            var localQuestionnaires = this.questionnairesAccessor.GetAllQuestionnaireIdentities();
+
+            var questionnairesToRemove = localQuestionnaires.Except(serverQuestionnaires);
+
+            foreach (var questionnaireIdentity in questionnairesToRemove)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await this.questionnairesAccessor.RemoveQuestionnaireAsync(questionnaireIdentity);
+
+                progress.Report(new SyncProgressInfo
+                {
+                    Title = InterviewerUIResources.Synchronization_Download_AttachmentsCleanup
+                });
+            }
+
+            await this.cleanupService.RemovedOrphanedAttachments().ConfigureAwait(false);
         }
 
         private async Task DownloadQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken)
         {
-            if (!this.questionnaireFactory.IsQuestionnaireAssemblyExists(questionnaireIdentity))
+            if (!this.questionnairesAccessor.IsQuestionnaireAssemblyExists(questionnaireIdentity))
             {
                 var questionnaireAssembly = await this.synchronizationService.GetQuestionnaireAssemblyAsync(
                     questionnaire: questionnaireIdentity,
                     onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                     token: cancellationToken);
 
-                await this.questionnaireFactory.StoreQuestionnaireAssemblyAsync(questionnaireIdentity, questionnaireAssembly);
+                await this.questionnairesAccessor.StoreQuestionnaireAssemblyAsync(questionnaireIdentity, questionnaireAssembly);
                 await this.synchronizationService.LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(questionnaireIdentity);
             }
 
-            if (!this.questionnaireFactory.IsQuestionnaireExists(questionnaireIdentity))
+            if (!this.questionnairesAccessor.IsQuestionnaireExists(questionnaireIdentity))
             {
                 var contentIds = await this.synchronizationService.GetAttachmentContentsAsync(questionnaire: questionnaireIdentity,
                     onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
@@ -268,7 +290,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     onDownloadProgressChanged: (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                     token: cancellationToken);
 
-                await this.questionnaireFactory.StoreQuestionnaireAsync(questionnaireIdentity,
+                await this.questionnairesAccessor.StoreQuestionnaireAsync(questionnaireIdentity,
                     questionnaireApiView.QuestionnaireDocument, questionnaireApiView.AllowCensus);
 
                 await this.synchronizationService.LogQuestionnaireAsSuccessfullyHandledAsync(questionnaireIdentity);

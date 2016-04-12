@@ -42,6 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>(),
                 interviewMultimediaViewStorage ?? Mock.Of<IAsyncPlainStorage<InterviewMultimediaView>>(),
                 interviewFileViewStorage ?? Mock.Of<IAsyncPlainStorage<InterviewFileView>>(),
+                Mock.Of<AttachmentsCleanupService>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>());
         }
     }

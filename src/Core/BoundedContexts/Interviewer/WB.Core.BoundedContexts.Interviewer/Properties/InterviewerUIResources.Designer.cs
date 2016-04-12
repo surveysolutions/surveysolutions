@@ -911,6 +911,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Removing obsolete attachments..
+        /// </summary>
+        public static string Synchronization_Download_AttachmentsCleanup {
+            get {
+                return ResourceManager.GetString("Synchronization_Download_AttachmentsCleanup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} of {1} {2} done.
         /// </summary>
         public static string Synchronization_Download_Description_Format {
