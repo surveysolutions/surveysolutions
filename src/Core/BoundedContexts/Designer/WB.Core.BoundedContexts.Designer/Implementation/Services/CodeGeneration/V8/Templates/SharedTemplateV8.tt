@@ -18,6 +18,16 @@ void GroupsStatesInLevelConstructor(List<GroupTemplateModel> groups)
 	}
 }
 
+void StaticTextsStatesInLevelConstructor(List<StaticTextTemplateModel> staticTexts)
+{
+	foreach (var staticText in staticTexts) 
+	{
+#>
+		EnablementStates.Add(<#=staticText.StateName#>.ItemId, <#=staticText.StateName#>);
+<#+
+	}
+}
+
 void QuestionsStatesInLevelConstructor(List<QuestionTemplateModel> questions)
 {
 	foreach (var question in questions)

@@ -47,6 +47,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
         public void SaveAllCurrentStatesAsPrevious() => this.adaptee.SaveAllCurrentStatesAsPrevious();
         public LinkedQuestionOptionsChanges ProcessLinkedQuestionFilters() => this.adaptee.ProcessLinkedQuestionFilters();
         public bool AreLinkedQuestionsSupported() => this.adaptee.AreLinkedQuestionsSupported();
+        public void DisableStaticTexts(IEnumerable<Identity> staticTextsToDisable) => this.adaptee.DisableStaticTexts(staticTextsToDisable);
+        public void EnableStaticTexts(IEnumerable<Identity> staticTextsToEnable) => this.adaptee.EnableStaticTexts(staticTextsToEnable);
         IInterviewExpressionState IInterviewExpressionState.Clone() => this.Clone();
         IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone() => this.Clone();
         IInterviewExpressionStateV4 IInterviewExpressionStateV4.Clone() => this.Clone();

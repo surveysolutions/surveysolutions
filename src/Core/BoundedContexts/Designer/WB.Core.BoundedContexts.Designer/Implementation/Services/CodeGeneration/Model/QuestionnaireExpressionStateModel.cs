@@ -8,12 +8,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public QuestionnaireExpressionStateModel()
         {
             AllQuestions = new List<QuestionTemplateModel>();
+            AllStaticTexts = new List<StaticTextTemplateModel>();
             AllGroups = new List<GroupTemplateModel>();
             AllRosters = new List<RosterTemplateModel>();
             AllLinkedQuestionFilters = new List<LinkedQuestionFilterExpressionModel>();
         }
         public Guid Id { set; get; }
         public List<QuestionTemplateModel> AllQuestions { set; get; }
+        public List<StaticTextTemplateModel> AllStaticTexts { get; }
         public List<GroupTemplateModel> AllGroups { set; get; }
         public List<RosterTemplateModel> AllRosters { set; get; }
         public string ClassName { set; get; }

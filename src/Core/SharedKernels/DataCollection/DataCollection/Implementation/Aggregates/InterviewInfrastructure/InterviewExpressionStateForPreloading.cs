@@ -120,6 +120,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return true;
         }
 
+        public void DisableStaticTexts(IEnumerable<Identity> staticTextsToDisable) {}
+
+        public void EnableStaticTexts(IEnumerable<Identity> staticTextsToEnable) {}
+
         IInterviewExpressionStateV7 IInterviewExpressionStateV7.Clone()
         {
             return new InterviewExpressionStateForPreloading();

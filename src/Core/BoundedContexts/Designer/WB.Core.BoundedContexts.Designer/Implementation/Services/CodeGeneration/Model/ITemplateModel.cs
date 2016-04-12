@@ -4,8 +4,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public interface ITemplateModel
     {
-        Guid Id { set; get; }
-        string VariableName { set; get; }
-        string Condition { set; get; }
+        Guid Id { get; }
+        string VariableName { get; }
+        string Condition { get; }
     }
 }
