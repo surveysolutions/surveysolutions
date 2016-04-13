@@ -35,7 +35,7 @@ namespace WB.Tests.Unit
                     interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                     Mock.Of<IPlainQuestionnaireRepository>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire),
                     Stub.MvxMainThreadDispatcher());
-                result.Init("interviewid", entityIdentity, Create.NavigationState(interviewRepository));
+                result.Init("interviewid", entityIdentity);
 
                 Mvx.RegisterSingleton(Stub.MvxMainThreadDispatcher());
 

@@ -69,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private Identity questionIdentity;
 
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public void Init(string interviewId, Identity entityIdentity)
         {
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
