@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.InteropServices;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.CustomCollections;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -66,6 +67,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.InvalidAnsweredQuestions = new ConcurrentHashSet<string>();
             this.AnswerComments = new ConcurrentBag<AnswerComment>();
             this.RosterTitles = new ConcurrentDictionary<string, string>();
+            this.DisabledStaticTexts = new ConcurrentHashSet<Identity>();
         }
 
         public ConcurrentDictionary<string, object> AnswersSupportedInExpressions { set; get; }
@@ -76,6 +78,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public ConcurrentHashSet<string> AnsweredQuestions { set; get; }
         public ConcurrentHashSet<string> DisabledGroups { set; get; }
         public ConcurrentHashSet<string> DisabledQuestions { set; get; }
+        public ConcurrentHashSet<Identity> DisabledStaticTexts { set; get; }
         public ConcurrentDictionary<string, ConcurrentDistinctList<decimal>> RosterGroupInstanceIds { set; get; }
         public ConcurrentDictionary<string, string> RosterTitles { set; get; }
         public ConcurrentHashSet<string> ValidAnsweredQuestions { set; get; }
@@ -233,6 +236,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 rosterRowInstances.Remove(instance.RosterInstanceId);
 
                 this.RosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
+            }
+        }
+
+        public void EnableStaticTexts(Identity[] staticTexts)
+        {
+            foreach (var staticText in staticTexts)
+            {
+                this.DisabledStaticTexts.Remove(staticText);
+            }
+        }
+
+        public void DisableStaticTexts(Identity[] staticTexts)
+        {
+            foreach (var staticText in staticTexts)
+            {
+                this.DisabledStaticTexts.Add(staticText);
             }
         }
 

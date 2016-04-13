@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             this.Property(x => x.ProcessingDate);
             this.Property(x => x.PackageSize);
             this.Property(x => x.IsCensusInterview);
-            this.Property(x => x.CompressedEvents);
+            this.Property(x => x.Events);
             this.Property(x => x.InterviewStatus);
             this.Property(x => x.QuestionnaireId);
             this.Property(x => x.QuestionnaireVersion);

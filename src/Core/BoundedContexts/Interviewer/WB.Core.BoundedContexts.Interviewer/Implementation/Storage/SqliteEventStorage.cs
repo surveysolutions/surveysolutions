@@ -186,6 +186,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             Binder = new CapiAndMainCoreToInterviewerAndSharedKernelsBinder()
         };
 
+        [Obsolete("Resolves old namespaces. Cuold be dropped after incompatibility shift with the next version.")]
         private class CapiAndMainCoreToInterviewerAndSharedKernelsBinder : DefaultSerializationBinder
         {
             public override Type BindToType(string assemblyName, string typeName)

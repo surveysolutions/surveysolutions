@@ -52,7 +52,14 @@
     </div>
     <div class="answer">
         <div class="question-meta">
-            <div class="type">@questionnaire.GetFormattedQuestionType(question)</div>
+            <div class="type">
+                @questionnaire.GetFormattedQuestionType(question)
+                @if (question.QuestionScope != QuestionScope.Interviewer)
+                {
+                    <br />
+                    <span>Scope: @question.QuestionScope</span>
+                }
+            </div>
             <div class="variable_name">@question.StataExportCaption</div>
         </div>
 

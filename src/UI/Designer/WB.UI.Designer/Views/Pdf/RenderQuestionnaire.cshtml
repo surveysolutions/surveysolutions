@@ -131,11 +131,12 @@
                 <dd>
                     <a href="#options_appendix" class="section_name appendix">Appendix d &#8212; OPTIONS</a>
                 </dd>
+                <dt>&nbsp;</dt>
+                <dd>
+                    <a href="#legend_appendix" class="section_name appendix">Legend</a>
+                </dd>
             </dl>
         </section>
-    </article>
-    <article>
-        <img class="help_info" src="~/Content/images/PDF-structure.png" />
     </article>
     <article>
         @foreach (var sectionId in questionnaire.SectionIds)
@@ -149,34 +150,27 @@
         }
     </article>
     <article class="appendix_section">
-        <h2 id="enablements_appendix">Appendix a &mdash; Enablement conditions</h2>
+        <h2 id="enablements_appendix">Appendix a &#8212; Enablement conditions</h2>
         <ul class="container">
-            @{
-                foreach (var item in questionnaire.ItemsWithLongConditions)
-                {
-                    <li>
-                        <span class="number">[@item.Index]</span>
-                        <div class="appendix_detail">
-                            <a href="#@questionnaire.GetItemRef(item.Id)" id="@questionnaire.GetConditionRef(item.Id)">
-                                <span>@item.VariableName</span>: @item.Title
-                            </a>
-                            <p>
-                                Enablement Condition:
-                                <pre>@item.EnablementCondition</pre>
-                            </p>
-                        </div>
-                    </li>
-                }
-                for (var i = 0; i < questionnaire.ItemsWithLongConditions.Count; i++)
-                {
-                    var question = questionnaire.ItemsWithLongConditions[i];
-
-                }
+            @foreach (var item in questionnaire.ItemsWithLongConditions)
+            {
+                <li>
+                    <span class="number">[@item.Index]</span>
+                    <div class="appendix_detail">
+                        <a href="#@questionnaire.GetItemRef(item.Id)" id="@questionnaire.GetConditionRef(item.Id)">
+                            <span>@item.VariableName</span>: @item.Title
+                        </a>
+                        <p>
+                            Enablement Condition:
+                            <pre>@item.EnablementCondition</pre>
+                        </p>
+                    </div>
+                </li>
             }
         </ul>
     </article>
     <article class="appendix_section">
-        <h2 id="validations_appendix">Appendix b &mdash; Validation conditions and messages</h2>
+        <h2 id="validations_appendix">Appendix b &#8212; Validation conditions and messages</h2>
         <ul class="container">
             @foreach (var item in questionnaire.ItemsWithLongValidations)
             {
@@ -204,52 +198,56 @@
         </ul>
     </article>
     <article class="appendix_section">
-        <h2 id="instructions_appendix">Appendix c &mdash; Instructions</h2>
+        <h2 id="instructions_appendix">Appendix c &#8212; Instructions</h2>
         <ul class="container">
-            @{
-                for (var i = 0; i < questionnaire.QuestionsWithLongInstructions.Count; i++)
-                {
-                    var question = questionnaire.QuestionsWithLongInstructions[i];
-                    <li>
-                        <span class="number">[@(i + 1)]</span>
-                        <div class="appendix_detail">
-                            <a href="#@questionnaire.GetItemRef(question.PublicKey)" id="@questionnaire.GetInstructionsRef(question.PublicKey)">
-                                <span>@question.StataExportCaption</span>: @question.QuestionText
-                            </a>
-                            <p>
-                                @question.Instructions
-                            </p>
-                        </div>
-                    </li>
-                }
+            @for (var i = 0; i < questionnaire.QuestionsWithLongInstructions.Count; i++)
+            {
+                var question = questionnaire.QuestionsWithLongInstructions[i];
+                <li>
+                    <span class="number">[@(i + 1)]</span>
+                    <div class="appendix_detail">
+                        <a href="#@questionnaire.GetItemRef(question.PublicKey)" id="@questionnaire.GetInstructionsRef(question.PublicKey)">
+                            <span>@question.StataExportCaption</span>: @question.QuestionText
+                        </a>
+                        <p>
+                            @question.Instructions
+                        </p>
+                    </div>
+                </li>
             }
         </ul>
     </article>
-    <article class="appendix_section">
-        <h2 id="options_appendix">Appendix d &mdash; Options</h2>
-        <ul class="container">
-            @{
-                for (var i = 0; i < questionnaire.QuestionsWithLongOptionsList.Count; i++)
-                {
-                    var question = questionnaire.QuestionsWithLongOptionsList[i];
-                    <li>
-                        <span class="number">[@(i + 1)]</span>
-                        <div class="appendix_detail">
-                            <a href="#@questionnaire.GetItemRef(question.PublicKey)" id="@questionnaire.GetOptionsRef(question.PublicKey)">
-                                <span>@question.StataExportCaption</span>: @question.QuestionText
-                            </a>
-                            <p>
-                                Options:
-                                @foreach (var option in question.Answers)
-                                {
-                                    <span><span>@option.AnswerValue:</span>@(option.AnswerText),</span>
-                                }
-                            </p>
-                        </div>
-                    </li>
-                }
-            }
-        </ul>
-    </article>
+<article class="appendix_section">
+    <h2 id="options_appendix">Appendix d &#8212; Options</h2>
+    <ul class="container">
+        @for (var i = 0; i < questionnaire.QuestionsWithLongOptionsList.Count; i++)
+        {
+            var question = questionnaire.QuestionsWithLongOptionsList[i];
+            <li>
+                <span class="number">[@(i + 1)]</span>
+                <div class="appendix_detail">
+                    <a href="#@questionnaire.GetItemRef(question.PublicKey)" id="@questionnaire.GetOptionsRef(question.PublicKey)">
+                        <span>@question.StataExportCaption</span>: @question.QuestionText
+                    </a>
+                    <p>
+                        Options:
+                        @foreach (var option in question.Answers)
+                        {
+                            <span><span>@option.AnswerValue:</span>@(option.AnswerText),</span>
+                        }
+                    </p>
+                </div>
+            </li>
+        }
+    </ul>
+</article>
+<article class="appendix_section legend">
+    <h2 id="legend_appendix">Legend</h2>
+    <section>
+        <h3>Legend and structure of information in this file</h3>
+        <img src="~/Content/images/pdf-question-legend.jpg"/>
+        <img src="~/Content/images/pdf-roster-legend.jpg"/>
+    </section>
+</article>
 </body>
 </html>

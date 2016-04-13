@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
             this.IsInteger = isInteger;
             this.CountOfDecimalPlaces = countOfDecimalPlaces;
         }
-        public bool UseFormatting { get; set; }
+
         public bool? IsInteger { get; private set; }
         public int? CountOfDecimalPlaces { get; private set; }
     }

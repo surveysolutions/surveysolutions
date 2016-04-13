@@ -9,7 +9,8 @@ namespace WB.UI.Designer.Code.ConfigurationManager
         private const string OPTIONSEXCERPTCOUNT = "optionsExcerptCount";
         private const string MINAMOUNTOFDIGITSINCODES = "minAmountOfDigitsInCodes";
         private const string ATTACHMENTSIZE = "attachmentSize";
-
+        private const string PDFGENERATIONTIMEOUT = "pdfGenerationTimeoutInSeconds";
+        
         [ConfigurationProperty(INSTRUCTIONSEXCERPTLENGTH, IsRequired = true)]
         public PdfConfigurationElement InstructionsExcerptLength
         {
@@ -44,6 +45,14 @@ namespace WB.UI.Designer.Code.ConfigurationManager
             get { return ((PdfConfigurationElement)(base[ATTACHMENTSIZE])); }
             set { base[ATTACHMENTSIZE] = value; }
         }
+
+        [ConfigurationProperty(PDFGENERATIONTIMEOUT, IsRequired = true)]
+        public PdfConfigurationElement PdfGenerationTimeoutInSeconds
+        {
+            get { return ((PdfConfigurationElement)(base[PDFGENERATIONTIMEOUT])); }
+            set { base[PDFGENERATIONTIMEOUT] = value; }
+        }
+
 
         public class PdfConfigurationElement : ConfigurationElement
         {

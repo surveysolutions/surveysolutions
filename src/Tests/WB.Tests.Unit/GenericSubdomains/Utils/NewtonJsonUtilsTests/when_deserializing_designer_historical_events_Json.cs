@@ -3,27 +3,32 @@
 using Machine.Specifications;
 using System.Collections.Generic;
 using Ncqrs.Eventing.Storage;
-using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.UI.Designer.Providers.CQRS.Accounts.Events;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable;
 
 using TemplateImported = designer::Main.Core.Events.Questionnaire.TemplateImported;
 using System;
-using System.Text;
 using Newtonsoft.Json;
 using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
 {
-    internal class when_deserializing_designer_historical_events_Json : NewtonJsonUtilsTestContext
+    internal class when_deserializing_designer_historical_events_Json 
     {
         Establish context = () =>
         {
             eventTypeResolver = new EventTypeResolver();
             eventTypeResolver.RegisterEventDataType(typeof(AccountRegistered));
             eventTypeResolver.RegisterEventDataType(typeof(TemplateImported));
+
+            jsonSerializerSettings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Objects,
+                NullValueHandling = NullValueHandling.Ignore,
+                FloatParseHandling = FloatParseHandling.Decimal,
+                Formatting = Formatting.None,
+                Binder = new OldToNewAssemblyRedirectSerializationBinder()
+            };
 
             data.Add(new Tuple<string,string>(
                 "accountRegistered",
@@ -36,12 +41,12 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
         };
 
         Because of = () =>
-            data.ForEach(x => result.Add(JsonConvert.DeserializeObject(x.Item2, eventTypeResolver.ResolveType(x.Item1.ToPascalCase()), jsonSerializerSettingsFactory.GetAllTypesJsonSerializerSettings())));
+            data.ForEach(x => result.Add(JsonConvert.DeserializeObject(x.Item2, eventTypeResolver.ResolveType(x.Item1.ToPascalCase()), jsonSerializerSettings)));
 
         It should_return_not_null_result = () =>
             result.Count.ShouldEqual(2);
 
-        private static JsonSerializerSettingsFactory jsonSerializerSettingsFactory = new JsonSerializerSettingsFactory();
+        private static JsonSerializerSettings jsonSerializerSettings;
 
         private static EventTypeResolver eventTypeResolver;
         private static List<Tuple<string, string>> data = new List<Tuple<string, string>>();

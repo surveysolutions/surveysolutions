@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection.V7;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapters.V7
 {
-    internal class InterviewExpressionStateV6ToV7Adapter : IInterviewExpressionStateV7, ILatestInterviewExpressionState
+    internal class InterviewExpressionStateV6ToV7Adapter : IInterviewExpressionStateV7
     {
         private readonly IInterviewExpressionStateV6 interviewExpressionState;
 
@@ -16,6 +16,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
         {
             this.interviewExpressionState = interviewExpressionState;
         }
+
+        public static IInterviewExpressionStateV7 AdaptIfNeeded(IInterviewExpressionStateV6 adaptee)
+            => adaptee as IInterviewExpressionStateV7 ?? new InterviewExpressionStateV6ToV7Adapter(adaptee);
 
         public void UpdateNumericIntegerAnswer(Guid questionId, decimal[] rosterVector, long? answer)
         {
@@ -151,40 +154,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
             return false;
         }
 
-        public IInterviewExpressionState Clone()
-        {
-            return ((ILatestInterviewExpressionState)this.interviewExpressionState).Clone();
-        }
-
-        IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone()
-        {
-            return ((ILatestInterviewExpressionState)this.interviewExpressionState).Clone();
-        }
-
-        IInterviewExpressionStateV4 IInterviewExpressionStateV4.Clone()
-        {
-            return ((ILatestInterviewExpressionState)this.interviewExpressionState).Clone();
-        }
-
-        IInterviewExpressionStateV5 IInterviewExpressionStateV5.Clone()
-        {
-            return ((ILatestInterviewExpressionState)this.interviewExpressionState).Clone();
-        }
-
-        IInterviewExpressionStateV6 IInterviewExpressionStateV6.Clone()
-        {
-            return ((ILatestInterviewExpressionState)this.interviewExpressionState).Clone();
-        }
-
-        IInterviewExpressionStateV7 IInterviewExpressionStateV7.Clone()
-        {
-            return new InterviewExpressionStateV6ToV7Adapter(this.interviewExpressionState.Clone());
-        }
-
-        ILatestInterviewExpressionState ILatestInterviewExpressionState.Clone()
-        {
-            return ((IInterviewExpressionStateV7)this).Clone() as ILatestInterviewExpressionState;
-        }
+        IInterviewExpressionState IInterviewExpressionState.Clone() => this.Clone();
+        IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone() => this.Clone();
+        IInterviewExpressionStateV4 IInterviewExpressionStateV4.Clone() => this.Clone();
+        IInterviewExpressionStateV5 IInterviewExpressionStateV5.Clone() => this.Clone();
+        IInterviewExpressionStateV6 IInterviewExpressionStateV6.Clone() => this.Clone();
+        IInterviewExpressionStateV7 IInterviewExpressionStateV7.Clone() => this.Clone();
 
         public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle)
         {
@@ -201,5 +176,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
             //map to old 
             this.interviewExpressionState.DeclareAnswersInvalid(failedValidationConditions.Keys);
         }
+
+        private IInterviewExpressionStateV7 Clone() => new InterviewExpressionStateV6ToV7Adapter(this.interviewExpressionState.Clone());
     }
 }

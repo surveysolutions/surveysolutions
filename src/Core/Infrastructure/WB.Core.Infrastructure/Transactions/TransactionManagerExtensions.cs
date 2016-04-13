@@ -11,6 +11,11 @@ namespace WB.Core.Infrastructure.Transactions
             transactionManager.ExecuteInPlainTransaction(action.ToFunc());
         }
 
+        public static void ExecuteInQueryTransaction(this IPlainTransactionManager transactionManager, Action action)
+        {
+            transactionManager.ExecuteInQueryTransaction(action.ToFunc());
+        }
+
         public static void ExecuteInQueryTransaction(this ITransactionManager transactionManager, Action action)
         {
             transactionManager.ExecuteInQueryTransaction(action.ToFunc());
@@ -61,6 +66,28 @@ namespace WB.Core.Infrastructure.Transactions
                 if (shouldStartTransaction)
                 {
                     transactionManager.RollbackQueryTransaction();
+                }
+            }
+        }
+
+        public static T ExecuteInQueryTransaction<T>(this IPlainTransactionManager transactionManager, Func<T> func)
+        {
+            bool shouldStartTransaction = !transactionManager.IsTransactionStarted;
+            try
+            {
+
+                if (shouldStartTransaction)
+                {
+                    transactionManager.BeginTransaction();
+                }
+
+                return func.Invoke();
+            }
+            finally
+            {
+                if (shouldStartTransaction)
+                {
+                    transactionManager.RollbackTransaction();
                 }
             }
         }

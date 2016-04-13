@@ -77,9 +77,16 @@ namespace WB.Tests.Integration
                 macrosSubstitutionService ?? DefaultMacrosSubstitutionService(),
                 expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
                 lookupTableService ?? ServiceLocator.Current.GetInstance<ILookupTableService>(),
-                Mock.Of<IFileSystemAccessor>(),
-                Mock.Of<ICompilerSettings>());
+                new FileSystemIOAccessor(), 
+                GetCompilerSettingsStub());
         }
+
+        private static ICompilerSettings GetCompilerSettingsStub()
+            => System.Environment.MachineName.ToLower() == "powerglide" // TLK's :)
+                ? Mock.Of<ICompilerSettings>(settings
+                    => settings.EnableDump == true
+                    && settings.DumpFolder == "C:/Projects/Data/Tests/CodeDump")
+                : Mock.Of<ICompilerSettings>();
 
         public static IMacrosSubstitutionService DefaultMacrosSubstitutionService()
         {

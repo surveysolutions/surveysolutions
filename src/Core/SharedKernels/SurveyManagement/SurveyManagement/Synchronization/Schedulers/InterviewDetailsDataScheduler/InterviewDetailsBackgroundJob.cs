@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.Inte
             ThreadMarkerManager.MarkCurrentThreadAsNoTransactional();
             try
             {
-                return this.plainTransactionManager.ExecuteInPlainTransaction(query);
+                return this.plainTransactionManager.ExecuteInQueryTransaction(query);
             }
             finally
             {

@@ -16,6 +16,7 @@ using Ninject;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -155,6 +156,7 @@ namespace WB.UI.Interviewer
 
             kernel.Bind<ISynchronizationService>().To<SynchronizationService>();
             kernel.Bind<ISynchronizationProcess>().To<SynchronizationProcess>();
+            kernel.Bind<AttachmentsCleanupService>().ToSelf();
 
             kernel.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
             kernel.Bind<IQuestionnaireContentVersionProvider>().To<QuestionnaireContentVersionProvider>().InSingletonScope();
