@@ -8,8 +8,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 {
     public interface IInterviewViewModelFactory
     {
-        Task<IEnumerable<IInterviewEntityViewModel>> GetEntities(string interviewId, Identity groupIdentity, NavigationState navigationState);
-        Task<IEnumerable<IInterviewEntityViewModel>> GetPrefilledQuestions(string interviewId);
+        Task<IEnumerable<IInterviewEntityViewModel>> GetEntitiesAsync(string interviewId, Identity groupIdentity, NavigationState navigationState);
+        Task<IEnumerable<IInterviewEntityViewModel>> GetPrefilledQuestionsAsync(string interviewId);
         T GetNew<T>() where T : class;
     }
 }
