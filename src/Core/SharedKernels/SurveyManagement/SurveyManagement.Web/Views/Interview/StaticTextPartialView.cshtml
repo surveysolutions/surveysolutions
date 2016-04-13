@@ -1,10 +1,10 @@
 ﻿@model WB.Core.SharedKernels.SurveyManagement.Views.Interview.InterviewStaticTextView
 
-<tr>
+<tr class="@css("text-muted", !Model.IsEnabled)">
     <td colspan="4" class="static-text">
         <div class="cell-content">
             <div>@Html.Raw(Model.Text)</div>
-            
+
             @if (Model.Attachment != null)
             {
                 @Html.Partial("AttachmentPartialView", Model.Attachment)
@@ -12,3 +12,8 @@
         </div>
     </td>
 </tr>
+
+@helper css(string style, bool shouldBeAdded = true)
+{
+    @(shouldBeAdded ? style : string.Empty)
+}
