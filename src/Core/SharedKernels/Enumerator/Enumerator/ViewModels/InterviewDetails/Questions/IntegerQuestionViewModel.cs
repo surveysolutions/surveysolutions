@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -39,23 +37,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public AnsweringViewModel Answering { get; private set; }
 
         private bool isRosterSizeQuestion;
-
-        private int? previousAnswer;
         private int answerMaxValue;
 
-        private string answerAsString;
-        public string AnswerAsString
+        private double? previousAnswer;
+        private double? answer;
+        public double? Answer
         {
-            get { return this.answerAsString; }
+            get { return this.answer; }
             set
             {
-                if (this.answerAsString != value)
+                if (this.answer != value)
                 {
-                    this.answerAsString = value;
+                    this.answer = value;
                     this.RaisePropertyChanged();
                 }
             }
         }
+
+        public bool UseFormatting { get; private set; }
 
         private IMvxCommand valueChangeCommand;
         public IMvxCommand ValueChangeCommand
@@ -78,7 +77,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (!QuestionState.IsAnswered)
             {
-                AnswerAsString = "";
+                this.Answer = null;
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
                 return;
             }
@@ -91,7 +90,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         amountOfRostersToRemove);
                     if (!(await this.userInteractionService.ConfirmAsync(message)))
                     {
-                        this.AnswerAsString = NullableIntToAnswerString(this.previousAnswer);
+                        this.Answer = this.previousAnswer;
                         return;
                     }
                 }
@@ -127,12 +126,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.liteEventRegistry = liteEventRegistry;
         }
 
-        public Identity Identity { get { return this.questionIdentity; } }
+        public Identity Identity => this.questionIdentity;
 
         public async Task InitAsync(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException("interviewId");
-            if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
+            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
@@ -144,11 +143,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
+            this.UseFormatting = questionnaire.ShouldUseFormatting(entityIdentity.Id);
+
             if (answerModel.IsAnswered)
             {
-                var answer = answerModel.Answer;
-                this.AnswerAsString = NullableIntToAnswerString(answer);
-                this.previousAnswer = Monads.Maybe(() => answer);
+                this.Answer = answerModel.Answer;
+                this.previousAnswer = Monads.Maybe(() => answerModel.Answer);
             }
             this.isRosterSizeQuestion = questionnaire.ShouldQuestionSpecifyRosterSize(entityIdentity.Id);
             this.answerMaxValue = RosterUpperBoundDefaultValue;
@@ -156,14 +156,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SendAnswerIntegerQuestionCommandAsync()
         {
-            if (string.IsNullOrWhiteSpace(this.AnswerAsString))
+            if (this.Answer == null)
             {
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Integer_EmptyValueError);
                 return;
             }
-
-            int answer;
-            if (!int.TryParse(this.AnswerAsString, NumberStyles.Any, CultureInfo.InvariantCulture, out answer))
+            
+            if (double.IsNaN(this.Answer.Value) || this.Answer > int.MaxValue)
             {
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Integer_ParsingError);
                 return;
@@ -171,27 +170,27 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (this.isRosterSizeQuestion)
             {
-                if (answer < 0)
+                if (this.Answer < 0)
                 {
-                    var message = string.Format(UIResources.Interview_Question_Integer_NegativeRosterSizeAnswer, this.AnswerAsString);
+                    var message = string.Format(UIResources.Interview_Question_Integer_NegativeRosterSizeAnswer, this.Answer);
                     this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message);
                     return;
                 }
 
-                if (answer > this.answerMaxValue)
+                if (this.Answer > this.answerMaxValue)
                 {
-                    var message = string.Format(UIResources.Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue, this.AnswerAsString, this.answerMaxValue);
+                    var message = string.Format(UIResources.Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue, this.Answer, this.answerMaxValue);
                     this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message);
                     return;
                 }
 
-                if (this.previousAnswer.HasValue && answer < this.previousAnswer)
+                if (this.previousAnswer.HasValue && this.Answer < this.previousAnswer)
                 {
-                    var amountOfRostersToRemove = this.previousAnswer - answer;
+                    var amountOfRostersToRemove = this.previousAnswer - this.Answer;
                     var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
                     if (!(await this.userInteractionService.ConfirmAsync(message)))
                     {
-                        this.AnswerAsString = NullableIntToAnswerString(this.previousAnswer);
+                        this.Answer = this.previousAnswer;
                         return;
                     }
                 }
@@ -203,24 +202,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
                 answerTime: DateTime.UtcNow,
-                answer: answer);
+                answer: (int)this.Answer);
 
             try
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
 
-                this.previousAnswer = answer;
+                this.previousAnswer = this.Answer;
             }
             catch (InterviewException ex)
             {
                 this.QuestionState.Validity.ProcessException(ex);
             }
-        }
-
-        private static string NullableIntToAnswerString(int? answer)
-        {
-            return answer.HasValue ? answer.Value.ToString(CultureInfo.InvariantCulture) : null;
         }
 
         public void Dispose()
@@ -234,7 +228,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (@event.QuestionId == this.questionIdentity.Id &&
                 @event.RosterVector.SequenceEqual(this.questionIdentity.RosterVector))
             {
-                this.AnswerAsString = "";
+                this.Answer = null;
 
                 this.previousAnswer = null;
             }
