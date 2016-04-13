@@ -611,6 +611,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.GetQuestion(questionId).Properties.HideInstructions;
         }
 
+        public bool ShouldUseFormatting(Guid questionId)
+        {
+            var numericQuestion = this.GetQuestion(questionId) as INumericQuestion;
+            return numericQuestion?.UseFormatting ?? false;
+        }
+
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
         {
             if (!this.cacheOfUnderlyingGroupsAndRosters.ContainsKey(groupId))
