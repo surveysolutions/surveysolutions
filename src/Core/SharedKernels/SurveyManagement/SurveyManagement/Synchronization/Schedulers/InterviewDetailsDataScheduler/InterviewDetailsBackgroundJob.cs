@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.Inte
             {
                 Stopwatch stopwatch = Stopwatch.StartNew();
 
-                IReadOnlyCollection<string> packageIds = this.ExecuteWithoutTransaction(() =>
+                IReadOnlyCollection<string> packageIds = this.ExecuteInQueryTransaction(() =>
                     this.interviewPackagesService.GetTopPackageIds(
                         this.interviewPackagesJobSetings.SynchronizationBatchCount));
 
@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.Inte
             }
         }
 
-        private T ExecuteWithoutTransaction<T>(Func<T> query)
+        private T ExecuteInQueryTransaction<T>(Func<T> query)
         {
             ThreadMarkerManager.MarkCurrentThreadAsNoTransactional();
             try
