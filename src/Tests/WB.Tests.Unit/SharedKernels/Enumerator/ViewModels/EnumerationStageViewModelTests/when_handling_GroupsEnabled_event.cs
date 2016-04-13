@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
                 && interview.IsEnabled(enabledGroup) == true));
 
             var interviewViewModelFactory = Mock.Of<IInterviewViewModelFactory>(__ =>
-                __.GetEntities(Moq.It.IsAny<string>(), Moq.It.IsAny<Identity>(), Moq.It.IsAny<NavigationState>()) == Task.FromResult(new[]
+                __.GetEntitiesAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<Identity>(), Moq.It.IsAny<NavigationState>()) == Task.FromResult(new[]
                 {
                     Mock.Of<IInterviewEntityViewModel>(_ => _.Identity == enabledGroup),
                     Mock.Of<IInterviewEntityViewModel>(_ => _.Identity == disabledAndHideIfDisabledGroup),
