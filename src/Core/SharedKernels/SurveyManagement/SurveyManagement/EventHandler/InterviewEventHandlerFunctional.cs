@@ -52,6 +52,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewData, AnswersRemoved>,
         IUpdateHandler<InterviewData, GroupsDisabled>,
         IUpdateHandler<InterviewData, GroupsEnabled>,
+        IUpdateHandler<InterviewData, StaticTextsEnabled>,
+        IUpdateHandler<InterviewData, StaticTextsDisabled>,
         IUpdateHandler<InterviewData, QuestionsDisabled>,
         IUpdateHandler<InterviewData, QuestionsEnabled>,
         IUpdateHandler<InterviewData, AnswersDeclaredInvalid>,
@@ -520,6 +522,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
                 updatedQuestion.QuestionState &= ~QuestionState.Answered;
             });
+        }
+
+        public InterviewData Update(InterviewData state, IPublishedEvent<StaticTextsEnabled> @event)
+        {
+            return @event.Payload.StaticTexts.Aggregate(
+                    state,
+                    (document, group) => PreformActionOnLevel(document, group.RosterVector, level =>
+                    {
+                        if (!level.DisabledStaticTexts.Contains(group.Id))
+                        {
+                            level.DisabledStaticTexts.Remove(group.Id);
+                        }
+                    }));
+        }
+
+        public InterviewData Update(InterviewData state, IPublishedEvent<StaticTextsDisabled> @event)
+        {
+            return @event.Payload.StaticTexts.Aggregate(
+                state,
+                (document, group) => PreformActionOnLevel(document, group.RosterVector, level =>
+                {
+                    if (!level.DisabledStaticTexts.Contains(group.Id))
+                    {
+                        level.DisabledStaticTexts.Add(group.Id);
+                    }
+                }));
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<GroupsDisabled> @event)
