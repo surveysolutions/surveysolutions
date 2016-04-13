@@ -14,6 +14,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         }
 
         public string Text { get; set; }
+        public bool IsEnabled { get; set; }
         public InterviewAttachmentViewModel Attachment { get; set; }
     }
 }
