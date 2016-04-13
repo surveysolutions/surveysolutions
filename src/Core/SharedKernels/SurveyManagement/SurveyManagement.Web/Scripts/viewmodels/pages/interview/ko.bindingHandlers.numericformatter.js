@@ -50,11 +50,11 @@
         return numeric.substr(0, numeric.length - countOfPeriods * periodLength) + separatedNumeric + decimal;
     },
     getNewCursorPosition: function (oldText, newText, oldCursorPosition) {
-        var newCursorPosition = newText.length;
+        var newCursorPosition = 0;
         var indexOfOldValue = 0;
 
         for (var i = 0; i < newText.length; i++) {
-            while (newText[i] != oldText[indexOfOldValue] && indexOfOldValue < oldText.Length) {
+            while (newText[i] != oldText[indexOfOldValue] && indexOfOldValue < oldText.length) {
 
                 if (isNaN(parseInt(newText[i])))
                     break;
