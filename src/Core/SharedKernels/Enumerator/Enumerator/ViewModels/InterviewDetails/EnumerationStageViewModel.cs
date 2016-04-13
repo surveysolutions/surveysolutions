@@ -31,6 +31,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         ILiteEventHandler<GroupsDisabled>,
         ILiteEventHandler<QuestionsEnabled>,
         ILiteEventHandler<QuestionsDisabled>,
+        ILiteEventHandler<StaticTextsDisabled>,
+        ILiteEventHandler<StaticTextsEnabled>,
         IDisposable
     {
         private string name;
@@ -216,6 +218,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.InvalidateViewModelsByConditions(@event.Groups);
             this.RemoveEntities(@event.Groups.Where(this.ShouldBeHiddenIfDisabled).ToArray());
+        }
+
+
+        public void Handle(StaticTextsDisabled @event)
+        {
+            this.RemoveEntities(@event.StaticTexts.Where(this.ShouldBeHiddenIfDisabled).ToArray());
+        }
+
+        public void Handle(StaticTextsEnabled @event)
+        {
+            this.AddMissingEntities();
         }
 
         private void AddMissingEntities()
