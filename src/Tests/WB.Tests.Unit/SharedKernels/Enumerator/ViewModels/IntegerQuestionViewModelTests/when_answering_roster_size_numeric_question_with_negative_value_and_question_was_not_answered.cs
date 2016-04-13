@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
 
         Because of = () =>
         {
-            integerModel.AnswerAsString = "-4";
+            integerModel.Answer = -4;
             integerModel.ValueChangeCommand.Execute();
         };
 
