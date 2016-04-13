@@ -84,7 +84,7 @@ namespace WB.Tests.Integration
         private static ICompilerSettings GetCompilerSettingsStub()
             => System.Environment.MachineName.ToLower() == "powerglide" // TLK's :)
                 ? Mock.Of<ICompilerSettings>(settings
-                    => settings.EnableDump == true
+                    => settings.EnableDump == false
                     && settings.DumpFolder == "C:/Projects/Data/Tests/CodeDump")
                 : Mock.Of<ICompilerSettings>();
 
@@ -346,7 +346,8 @@ namespace WB.Tests.Integration
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null, 
             string variable = null,
             string enablementCondition = null, 
-            string validationExpression = null)
+            string validationExpression = null,
+            IEnumerable<ValidationCondition> validationConditions = null)
         {
             return new NumericQuestion
             {
@@ -356,6 +357,7 @@ namespace WB.Tests.Integration
                 IsInteger = true,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
+                ValidationConditions = validationConditions?.ToList(),
             };
         }
 
@@ -767,5 +769,10 @@ namespace WB.Tests.Integration
             return new AggregateRootEvent(new CommittedEvent(Guid.NewGuid(), "origin", Guid.NewGuid(), Guid.NewGuid(),
                     rnd.Next(1, 10000000), DateTime.UtcNow, rnd.Next(1, 1000000), evnt));
         }
+
+        public static ValidationCondition ValidationCondition(string expression = null, string message = null)
+            => new ValidationCondition(
+                expression,
+                message ?? (expression != null ? $"condition '{expression}' is not met" : null));
     }
 }
