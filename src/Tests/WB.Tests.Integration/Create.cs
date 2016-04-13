@@ -487,13 +487,13 @@ namespace WB.Tests.Integration
             };
 
         public static StaticText StaticText(
-            Guid? id = null, string enablementCondition = null)
+            Guid? id = null, string enablementCondition = null, IEnumerable<ValidationCondition> validationConditions = null)
             => new StaticText(
                 id ?? Guid.NewGuid(),
                 "Static Text",
                 enablementCondition,
                 false,
-                new List<ValidationCondition>());
+                validationConditions?.ToList());
 
         public static Questionnaire Questionnaire(QuestionnaireDocument questionnaireDocument)
         {

@@ -8,25 +8,26 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
-    internal class when_answering_on_a_question_with_answer_that_makes_dependent_question_invalid : in_standalone_app_domain
+    [Ignore("KP-6970")]
+    internal class when_answering_on_a_question_with_answer_that_makes_dependent_static_text_invalid : in_standalone_app_domain
     {
         Because of = () => results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
         {
             Setup.MockedServiceLocator();
 
             var answeredQuestionId = Guid.Parse("11111111111111111111111111111111");
-            var dependentQuestionId = Guid.Parse("22222222222222222222222222222222");
+            var dependentStaticTextId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
             var interview = SetupInterview(
                 questionnaireDocument: Create.QuestionnaireDocument(children: new IComposite[]
                 {
                     Create.NumericIntegerQuestion(answeredQuestionId, "q1"),
-                    Create.NumericIntegerQuestion(dependentQuestionId, "q2",
-                        validationConditions: Create.ValidationCondition(expression: "q1 != q2").ToEnumerable()),
+                    Create.StaticText(dependentStaticTextId,
+                        validationConditions: Create.ValidationCondition(expression: "q1 > 0").ToEnumerable()),
                 }),
                 events: new object[]
                 {
-                    Create.Event.NumericIntegerQuestionAnswered(questionId: dependentQuestionId, answer: 1),
+                    Create.Event.NumericIntegerQuestionAnswered(questionId: dependentStaticTextId, answer: 1),
                 });
 
             using (var eventContext = new EventContext())
@@ -35,25 +36,25 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 return new InvokeResults
                 {
-                    WasAnswersDeclaredInvalidEventPublishedForDependentQuestion =
+                    WasStaticTextsDeclaredInvalidEventPublishedForDependentStaticText =
                         eventContext
-                            .GetSingleEventOrNull<AnswersDeclaredInvalid>()?
-                            .FailedValidationConditions
-                            .ContainsKey(Create.Identity(dependentQuestionId))
+                            .GetSingleEventOrNull<StaticTextsDeclaredInvalid>()?
+                            .GetFailedValidationConditionsDictionary()
+                            .ContainsKey(Create.Identity(dependentStaticTextId))
                         ?? false,
                 };
             }
         });
 
-        It should_mark_dependent_question_as_invalid = () =>
-            results.WasAnswersDeclaredInvalidEventPublishedForDependentQuestion.ShouldBeTrue();
+        It should_mark_dependent_static_text_as_invalid = () =>
+            results.WasStaticTextsDeclaredInvalidEventPublishedForDependentStaticText.ShouldBeTrue();
 
         private static InvokeResults results;
 
         [Serializable]
         internal class InvokeResults
         {
-            public bool WasAnswersDeclaredInvalidEventPublishedForDependentQuestion { get; set; }
+            public bool WasStaticTextsDeclaredInvalidEventPublishedForDependentStaticText { get; set; }
         }
     }
 }
