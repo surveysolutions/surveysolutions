@@ -115,11 +115,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
 
             this.CurrentStage.DisposeIfDisposable();
-            this.CurrentStage = await UpdateCurrentScreenViewModel(eventArgs);
+            this.CurrentStage = await this.UpdateCurrentScreenViewModelAsync(eventArgs);
             this.RaisePropertyChanged(() => this.CurrentStage);
         }
 
-        protected virtual async Task<MvxViewModel> UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
+        protected virtual async Task<MvxViewModel> UpdateCurrentScreenViewModelAsync(ScreenChangedEventArgs eventArgs)
         {
             if (this.navigationState.CurrentScreenType == ScreenType.Complete)
             {
