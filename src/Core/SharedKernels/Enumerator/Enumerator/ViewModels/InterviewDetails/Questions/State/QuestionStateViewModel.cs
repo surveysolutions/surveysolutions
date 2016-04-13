@@ -60,9 +60,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.answersRemovedNotifier.Init(interviewId, entityIdentity);
             this.Header.Init(interviewId, entityIdentity);
-            this.Validity.Init(interviewId, entityIdentity, navigationState);
+            this.Validity.Init(interviewId, entityIdentity);
             this.Comments.Init(interviewId, entityIdentity, navigationState);
-            this.Enablement.Init(interviewId, entityIdentity, navigationState);
+            this.Enablement.Init(interviewId, entityIdentity);
             this.Enablement.EntityEnabled += this.EnablementOnEntityEnabled;
             this.answersRemovedNotifier.AnswerRemoved += this.AnswerRemoved;
 
