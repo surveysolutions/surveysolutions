@@ -183,5 +183,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool ShouldQuestionRecordAnswersOrder(Guid questionId);
         string GetTextQuestionMask(Guid questionId);
         bool GetHideInstructions(Guid questionId);
+        bool ShouldUseFormatting(Guid questionId);
     }
 }

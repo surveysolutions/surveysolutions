@@ -17,4 +17,10 @@
   <declare-styleable name="MaxHeightScrollView">
     <attr name="maxHeight" format="dimension"/>
   </declare-styleable>
+  <declare-styleable name="NumericEditText">
+    <attr name="maxDigitsBeforeDecimal" format="integer" />
+    <attr name="maxDigitsAfterDecimal" format="integer" />
+    <attr name="numbersOnly" format="boolean" />
+    <attr name="useGroupSeparator" format="boolean" />
+  </declare-styleable>
 </resources>
