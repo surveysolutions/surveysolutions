@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -35,29 +36,23 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [PreventDoubleSubmit]
         public ActionResult Finish(UserModel model)
         {
             if (ModelState.IsValid)
             {
-                try
-                {
-                    this.CommandService.Execute(
-                        new CreateUserCommand(publicKey: Guid.NewGuid(), userName: model.UserName,
-                                              password: passwordHasher.Hash(model.Password), 
-                                              email: model.Email, isLockedBySupervisor: false,
-                                              isLockedByHQ: false, roles: new[] { UserRoles.Administrator }, 
-                                              supervsor: null,
-                                              personName:model.PersonName,
-                                              phoneNumber:model.PhoneNumber));
+                this.CommandService.Execute(
+                    new CreateUserCommand(publicKey: Guid.NewGuid(), userName: model.UserName,
+                                            password: passwordHasher.Hash(model.Password), 
+                                            email: model.Email, isLockedBySupervisor: false,
+                                            isLockedByHQ: false, roles: new[] { UserRoles.Administrator }, 
+                                            supervsor: null,
+                                            personName:model.PersonName,
+                                            phoneNumber:model.PhoneNumber));
 
-                    this.authentication.SignIn(model.UserName, true);
+                this.authentication.SignIn(model.UserName, true);
 
-                    return this.RedirectToAction("Index", "Headquarters");
-                }
-                catch (Exception ex)
-                {
-                    this.Logger.Fatal("Error when creating admin user", ex);
-                }
+                return this.RedirectToAction("Index", "Headquarters");
             }
 
             return View(model);

@@ -141,8 +141,7 @@ namespace WB.Tests.Integration.InterviewTests
 
         protected static Interview SetupInterview(string questionnaireString, object[] events, IInterviewExpressionState precompiledState)
         {
-            var json = new NewtonJsonSerializer(new JsonSerializerSettingsFactory());
-            var questionnaireDocument = json.Deserialize<QuestionnaireDocument>(questionnaireString);
+            var questionnaireDocument = new NewtonJsonSerializer().Deserialize<QuestionnaireDocument>(questionnaireString);
             return SetupInterview(questionnaireDocument, events);
         }
 
@@ -231,7 +230,9 @@ namespace WB.Tests.Integration.InterviewTests
                 return interviewExpressionState;
             }
 
-            throw new Exception("Error on IInterviewExpressionState generation");
+            throw new Exception(
+                $"Errors on IInterviewExpressionState generation:{Environment.NewLine}"
+                + string.Join(Environment.NewLine, emitResult.Diagnostics.Select((d, i) => $"{i+1}. {d.Message}")));
         }
     }
 }

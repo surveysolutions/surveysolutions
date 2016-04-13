@@ -8,22 +8,14 @@ namespace WB.UI.Designer.Pdf
 {
     public class PdfConvert
     {
-        static PdfConvertEnvironment _e;
+        static PdfConvertEnvironment pdfConvertEnvironmentDefaults;
 
-        public static PdfConvertEnvironment Environment
+        public static PdfConvertEnvironment EnvironmentDefaults => pdfConvertEnvironmentDefaults ?? (pdfConvertEnvironmentDefaults = new PdfConvertEnvironment
         {
-            get
-            {
-                if (_e == null)
-                    _e = new PdfConvertEnvironment
-                    {
-                        TempFolderPath = Path.GetTempPath(),
-                        WkHtmlToPdfPath = Path.Combine(OSUtil.GetProgramFilesx86Path(), @"wkhtmltopdf\wkhtmltopdf.exe"),
-                        Timeout = 60000
-                    };
-                return _e;
-            }
-        }
+            TempFolderPath = Path.GetTempPath(),
+            WkHtmlToPdfPath = Path.Combine(OSUtil.GetProgramFilesx86Path(), @"wkhtmltopdf\wkhtmltopdf.exe"),
+            Timeout = 60000
+        });
 
         public static void ConvertHtmlToPdf(PdfDocument document, PdfOutput output)
         {
@@ -33,7 +25,7 @@ namespace WB.UI.Designer.Pdf
         public static void ConvertHtmlToPdf(PdfDocument document, PdfConvertEnvironment environment, PdfOutput woutput)
         {
             if (environment == null)
-                environment = Environment;
+                environment = EnvironmentDefaults;
 
             String outputPdfFilePath;
             bool delete;
@@ -53,7 +45,9 @@ namespace WB.UI.Designer.Pdf
 
             StringBuilder paramsBuilder = new StringBuilder();
             paramsBuilder.Append("--page-size A4 ");
-            //paramsBuilder.Append("--redirect-delay 0 "); not available in latest version
+            paramsBuilder.Append("--margin-left 0 ");
+            paramsBuilder.Append("--margin-right 0 ");
+            
             if (!string.IsNullOrEmpty(document.HeaderUrl))
             {
                 paramsBuilder.AppendFormat("--header-html {0} ", document.HeaderUrl);
@@ -63,13 +57,13 @@ namespace WB.UI.Designer.Pdf
             if (!string.IsNullOrEmpty(document.FooterUrl))
             {
                 paramsBuilder.AppendFormat("--footer-html {0} ", document.FooterUrl);
-                paramsBuilder.Append("--margin-bottom 25 ");
-                paramsBuilder.Append("--footer-spacing 5 ");
             }
-
-            if (!string.IsNullOrEmpty(document.PageNumbersFormat))
+            else
             {
-                paramsBuilder.AppendFormat("--footer-right \"{0}\" ", document.PageNumbersFormat);
+                if (!string.IsNullOrEmpty(document.PageNumbersFormat))
+                {
+                    paramsBuilder.AppendFormat("--footer-right \"{0}\" ", document.PageNumbersFormat);
+                }
             }
 
             if (!string.IsNullOrEmpty(document.CoverUrl))

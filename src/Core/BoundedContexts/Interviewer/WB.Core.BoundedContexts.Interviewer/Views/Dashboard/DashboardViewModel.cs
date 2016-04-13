@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.messenger = messenger;
             this.commandService = commandService;
             this.Synchronization = synchronization;
-            this.Synchronization.SyncCompleted += async (sender, args) => await this.RefreshDashboardAsync();
+            this.Synchronization.SyncCompleted += (sender, args) => this.RefreshDashboard();
         }
 
         private IMvxCommand synchronizationCommand;
@@ -159,18 +159,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        public override async Task StartAsync()
+        public override Task StartAsync()
         {
             startingLongOperationMessageSubscriptionToken = this.messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
             removedDashboardItemMessageSubscriptionToken = this.messenger.Subscribe<RemovedDashboardItemMessage>(DashboardItemOnRemovedDashboardItem);
 
             this.Synchronization.Init();
-            await this.RefreshDashboardAsync();
+            this.RefreshDashboard();
+            return Task.FromResult(true);
         }
 
-        private async Task RefreshDashboardAsync()
+        private void RefreshDashboard()
         {
-            this.DashboardInformation = await this.dashboardFactory.GetInterviewerDashboardAsync(
+            this.DashboardInformation = this.dashboardFactory.GetInterviewerDashboardAsync(
                 this.principal.CurrentUserIdentity.UserId);
 
             if ((CurrentDashboardStatus == DashboardInterviewStatus.Completed && this.CompletedInterviewsCount == 0)
@@ -237,7 +238,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private async void DashboardItemOnRemovedDashboardItem(RemovedDashboardItemMessage message)
         {
             await this.commandService.WaitPendingCommandsAsync();
-            await this.RefreshDashboardAsync();
+            this.RefreshDashboard();
         }
         private void DashboardItemOnStartingLongOperation(StartingLongOperationMessage message)
         {

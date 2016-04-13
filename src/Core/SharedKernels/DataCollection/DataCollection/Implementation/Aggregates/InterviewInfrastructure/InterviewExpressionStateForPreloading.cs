@@ -5,6 +5,7 @@ using WB.Core.SharedKernels.DataCollection.V4;
 using WB.Core.SharedKernels.DataCollection.V5;
 using WB.Core.SharedKernels.DataCollection.V6;
 using WB.Core.SharedKernels.DataCollection.V7;
+using WB.Core.SharedKernels.DataCollection.V8;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
@@ -119,16 +120,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return true;
         }
 
+        public void DisableStaticTexts(IEnumerable<Identity> staticTextsToDisable) {}
+
+        public void EnableStaticTexts(IEnumerable<Identity> staticTextsToEnable) {}
+
         IInterviewExpressionStateV7 IInterviewExpressionStateV7.Clone()
+        {
+            return new InterviewExpressionStateForPreloading();
+        }
+
+        IInterviewExpressionStateV8 IInterviewExpressionStateV8.Clone()
         {
             return new InterviewExpressionStateForPreloading();
         }
 
         ILatestInterviewExpressionState ILatestInterviewExpressionState.Clone()
         {
-            return ((IInterviewExpressionStateV7) this).Clone() as ILatestInterviewExpressionState;
+            return new InterviewExpressionStateForPreloading();
         }
-
 
         public void SetInterviewProperties(IInterviewProperties properties)
         {

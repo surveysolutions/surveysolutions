@@ -150,6 +150,7 @@
     </Compile>
     <Compile Include="Services\IInterviewerDashboardFactory.cs" />
     <Compile Include="Services\IInterviewerSettings.cs" />
+    <Compile Include="Services\Infrastructure\AttachmentsCleanupService.cs" />
     <Compile Include="Services\Infrastructure\IInterviewerInterviewAccessor.cs" />
     <Compile Include="Services\Infrastructure\IInterviewerPrincipal.cs" />
     <Compile Include="Services\Infrastructure\IInterviewerQuestionnaireAccessor.cs" />

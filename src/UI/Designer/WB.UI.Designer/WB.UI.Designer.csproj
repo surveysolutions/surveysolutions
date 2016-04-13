@@ -443,8 +443,9 @@
     <Content Include="Content\identity\favicon-designer-72x72.png" />
     <Content Include="Content\identity\favicon-designer-76x76.png" />
     <Content Include="Content\identity\favicon-designer.png" />
-    <Content Include="Content\images\PDF-structure.png" />
     <Content Include="Content\images\pdf_logo.png" />
+    <Content Include="Content\images\pdf-question-legend.jpg" />
+    <Content Include="Content\images\pdf-roster-legend.jpg" />
     <Content Include="fonts\lucidaconsole.svg" />
     <Content Include="fonts\RobotoItalic.svg" />
     <Content Include="fonts\RobotoLight.svg" />
@@ -1598,6 +1599,7 @@
     <Content Include="Views\Pdf\_RenderRoster.cshtml" />
     <Content Include="Views\Pdf\_RenderChildren.cshtml" />
     <Content Include="Views\Pdf\_RenderStaticText.cshtml" />
+    <Content Include="Views\Pdf\RenderQuestionnaireFooter.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

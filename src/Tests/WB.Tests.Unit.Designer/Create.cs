@@ -161,10 +161,8 @@ namespace WB.Tests.Unit.Designer
                     "WB.Core.SharedKernels.DataCollection.V5",
                     "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
                 },
-                isLookupTablesFeatureSupported: true)
-            {
-                ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV5(expressionStateModel).TransformText()
-            };
+                isLookupTablesFeatureSupported: true,
+                expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV5(expressionStateModel).TransformText());
         }
 
         public static CodeGenerator CodeGenerator(
@@ -1047,14 +1045,14 @@ namespace WB.Tests.Unit.Designer
             string attachmentName = null,
             string enablementCondition = null,
             bool hideIfDisabled = false,
-            List<ValidationCondition> validationConditions = null)
+            IEnumerable<ValidationCondition> validationConditions = null)
         {
             return new StaticText(
                 staticTextId ?? Guid.NewGuid(), 
                 text,
                 enablementCondition,
                 hideIfDisabled,
-                validationConditions ?? new List<ValidationCondition>(),
+                validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 attachmentName);
         }
 
@@ -1287,9 +1285,6 @@ namespace WB.Tests.Unit.Designer
                 return new DeleteMacro(questionnaire, macroId ?? Guid.NewGuid(), userId ?? Guid.NewGuid());
             }
 
-
-
-
             public static UpdateLookupTable UpdateLookupTable(Guid questionnaireId, Guid lookupTableId, Guid responsibleId, string lookupTableName = "table")
             {
                 return new UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, lookupTableName, "file");
@@ -1301,9 +1296,9 @@ namespace WB.Tests.Unit.Designer
             }
 
             public static UpdateStaticText UpdateStaticText(Guid questionnaireId, Guid entityId, string text, string attachmentName, Guid responsibleId,
-                string enamblementCondition, bool hideIfDisabled = false, IList<ValidationCondition> validationConditions = null)
+                string enablementCondition, bool hideIfDisabled = false, IList<ValidationCondition> validationConditions = null)
             {
-                return new UpdateStaticText(questionnaireId, entityId, text, attachmentName, responsibleId, enamblementCondition, hideIfDisabled, validationConditions);
+                return new UpdateStaticText(questionnaireId, entityId, text, attachmentName, responsibleId, enablementCondition, hideIfDisabled, validationConditions);
             }
             
             public static AddOrUpdateAttachment AddOrUpdateAttachment(Guid questionnaireId, Guid attachmentId, string attachmentContentId, Guid responsibleId, string attachmentName)

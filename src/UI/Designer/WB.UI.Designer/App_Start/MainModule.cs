@@ -25,8 +25,8 @@ namespace WB.UI.Designer
             this.BindFilter<CustomHandleErrorFilter>(FilterScope.Global, 0).InSingletonScope();
             this.BindFilter<CustomAuthorizeFilter>(FilterScope.Controller, 0).WhenControllerHas<CustomAuthorizeAttribute>().InSingletonScope();
 
-            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(new JsonSerializerSettingsFactory()));
-            this.Bind<IJsonAllTypesSerializer>().ToMethod((ctx) => new JsonAllTypesSerializer(new JsonSerializerSettingsFactory()));
+            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer());
+            this.Bind<IJsonAllTypesSerializer>().ToMethod((ctx) => new JsonAllTypesSerializer());
 
             this.Bind<IStringCompressor>().To<JsonCompressor>().InSingletonScope();
             this.Bind<IArchiveUtils>().To<ZipArchiveUtils>();

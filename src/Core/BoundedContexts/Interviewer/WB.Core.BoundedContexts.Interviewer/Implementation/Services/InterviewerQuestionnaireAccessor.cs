@@ -22,6 +22,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocuments;
 
         public InterviewerQuestionnaireAccessor(
             IJsonAllTypesSerializer synchronizationSerializer,
@@ -29,7 +30,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IPlainQuestionnaireRepository plainQuestionnaireRepository,
             IAsyncPlainStorage<InterviewView> interviewViewRepository,
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor,
-            IInterviewerInterviewAccessor interviewFactory)
+            IInterviewerInterviewAccessor interviewFactory, 
+            IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocuments)
         {
             this.synchronizationSerializer = synchronizationSerializer;
             this.questionnaireViewRepository = questionnaireViewRepository;
@@ -37,6 +39,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.interviewViewRepository = interviewViewRepository;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
             this.interviewFactory = interviewFactory;
+            this.questionnaireDocuments = questionnaireDocuments;
         }
 
         public async Task StoreQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireDocument, bool census)
@@ -89,6 +92,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return this.questionnaireViewRepository.Where(questionnaire => questionnaire.Census)
                     .Select(questionnaire => questionnaire.Identity)
                     .ToList();
+        }
+
+        public List<QuestionnaireIdentity> GetAllQuestionnaireIdentities()
+        {
+            return this.questionnaireViewRepository.LoadAll()
+                 .Select(questionnaire => questionnaire.Identity)
+                 .ToList();
+        }
+
+        public bool IsAttachmentUsedAsync(string contentId)
+        {
+            var questionnaireDocumentViews = this.questionnaireDocuments.LoadAll().Where(x => !x.Document.IsDeleted).ToList();
+            return questionnaireDocumentViews.Count > 0 && questionnaireDocumentViews.Any(x => x.Document.Attachments.Any(a => a.ContentId == contentId));
         }
 
         public bool IsQuestionnaireExists(QuestionnaireIdentity questionnaireIdentity)

@@ -62,91 +62,21 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public ModificationStatisticsByUser Requested { get; set; }
 
         public QuestionnaireStatistics Statistics { get; set; } = new QuestionnaireStatistics();
-        private readonly List<IComposite> allItems;
+        internal List<IComposite> AllItems;
 
         public PdfQuestionnaireModel(QuestionnaireDocument questionnaire, PdfSettings settings)
         {
             this.questionnaire = questionnaire;
             this.Settings = settings;
-            this.questionnaire.ConnectChildrenWithParent();
-            this.allItems = this.questionnaire.Children.SelectMany<IComposite, IComposite>(x => x.TreeToEnumerable<IComposite>(g => g.Children)).ToList();
-
-            ItemsWithLongConditions = CollectEntitiesWithLongConditions();
-            ItemsWithLongValidations = CollectItemsWithLongValidations();
-            QuestionsWithLongInstructions = Find<IQuestion>(x => x.Instructions?.Length > Settings.InstructionsExcerptLength).ToList();
-            QuestionsWithLongOptionsList = Find<IQuestion>(x => x.Answers?.Count > Settings.OptionsExcerptCount).ToList();
-
-            FillStatistics(this.allItems, this.Statistics);
-            this.Statistics.SectionsCount = questionnaire.Children.Count;
-            this.Statistics.GroupsCount -= Statistics.SectionsCount;
-            this.Statistics.QuestionsWithConditionsCount = Find<IQuestion>(x => !string.IsNullOrWhiteSpace(x.ConditionExpression) || x.ValidationConditions.Any()).Count();
         }
 
-        private List<EntityWithLongValidation> CollectItemsWithLongValidations()
-        {
-            var questions = this.Find<IQuestion>(x => x.ValidationConditions.Count > 0 && x.ValidationConditions.Any(condition => condition.Expression?.Length > this.Settings.ExpressionExcerptLength))
-                .Select(x => new EntityWithLongValidation
-                {
-                    Id = x.PublicKey,
-                    Title = x.QuestionText,
-                    VariableName = x.StataExportCaption,
-                    ValidationConditions = x.ValidationConditions.ToList()
-                });
-            var staticTexts = this.Find<IStaticText>(x => x.ValidationConditions?.Count > 0 && x.ValidationConditions.Any(condition => condition.Expression?.Length > this.Settings.ExpressionExcerptLength))
-                .Select(x => new EntityWithLongValidation
-                {
-                    Id = x.PublicKey,
-                    Title = x.Text,
-                    ValidationConditions = x.ValidationConditions.ToList()
-                });
-            var entitiesWithLongValidations = questions.Union(staticTexts).ToList();
+        public List<IQuestion> QuestionsWithLongOptionsList { get; internal set; }
 
-            int index = 1;
-            entitiesWithLongValidations.ForEach(x => x.Index = index++);
+        public List<IQuestion> QuestionsWithLongInstructions { get; internal set; }
 
-            return entitiesWithLongValidations;
-        }
+        public List<EntityWithLongValidation> ItemsWithLongValidations { get; internal set; }
 
-        private List<EntityWithLongCondition> CollectEntitiesWithLongConditions()
-        {
-            var questions = this.Find<IQuestion>(x => x.ConditionExpression?.Length > this.Settings.ExpressionExcerptLength)
-                .Select(x => new EntityWithLongCondition
-                {
-                    Id = x.PublicKey,
-                    Title = x.QuestionText,
-                    VariableName = x.StataExportCaption,
-                    EnablementCondition = x.ConditionExpression.Trim()
-                });
-            var groupsAndRosters = this.Find<IGroup>(x => x.ConditionExpression?.Length > this.Settings.ExpressionExcerptLength)
-                .Select(x => new EntityWithLongCondition
-                {
-                    Id = x.PublicKey,
-                    Title = x.Title,
-                    EnablementCondition = x.ConditionExpression.Trim()
-                });
-            var staticTexts = this.Find<IStaticText>(x => x.ConditionExpression?.Length > this.Settings.ExpressionExcerptLength)
-                .Select(x => new EntityWithLongCondition
-                {
-                    Id = x.PublicKey,
-                    Title = x.Text,
-                    EnablementCondition = x.ConditionExpression.Trim()
-                });
-
-            var entitiesWithLongConditions = questions.Union(groupsAndRosters).Union(staticTexts).ToList();
-
-            int index = 1;
-            entitiesWithLongConditions.ForEach(x => x.Index = index++);
-
-            return entitiesWithLongConditions;
-        }
-
-        public List<IQuestion> QuestionsWithLongOptionsList { get; private set; }
-
-        public List<IQuestion> QuestionsWithLongInstructions { get; private set; }
-
-        public List<EntityWithLongValidation> ItemsWithLongValidations { get; private set; }
-
-        public List<EntityWithLongCondition> ItemsWithLongConditions { get; private set; }
+        public List<EntityWithLongCondition> ItemsWithLongConditions { get; internal set; }
 
         public string Title => this.questionnaire.Title;
         public IEnumerable<Guid> SectionIds => this.questionnaire.Children.Select(x => x.PublicKey).ToList();
@@ -156,14 +86,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
            => this.Find(condition).FirstOrDefault();
 
         public IEnumerable<T> Find<T>() where T : class
-           => this.allItems.Where(x => x is T).Cast<T>();
+           => this.AllItems.Where(x => x is T).Cast<T>();
 
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
             => this.Find<T>().Where(condition);
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
-            return this.allItems.FirstOrDefault(x => x is T && x.PublicKey == publicKey) as T;
+            return this.AllItems.FirstOrDefault(x => x is T && x.PublicKey == publicKey) as T;
         }
 
         public string GetGroupTitle(Guid groupId) => this.Find<Group>(groupId).Title;
@@ -223,7 +153,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             return this.FillStatistics(childItems, statistics);
         }
 
-        private GroupStatistics FillStatistics(IEnumerable<IComposite> items, GroupStatistics statistics)
+        internal GroupStatistics FillStatistics(IEnumerable<IComposite> items, GroupStatistics statistics)
         {
             foreach (var item in items)
             {

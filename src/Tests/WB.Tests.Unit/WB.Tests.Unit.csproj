@@ -311,6 +311,7 @@
     <Compile Include="Applications\Shared\Web\AttachmentsControllerTests\when_getting_attachment_content_and_headers_contains_etag.cs" />
     <Compile Include="Applications\Shared\Web\AttachmentsControllerTests\when_getting_attachment_content.cs" />
     <Compile Include="Bootstrap\MessengerPluginBootstrap.cs" />
+    <Compile Include="BoundedContexts\Interviewer\AttachmentsCleanupServiceTests.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_GeoLocationQuestionAnswered_event_second_time.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardDenormalizerTests\when_handling_YesNoQuestionAnswered_event.cs" />
     <Compile Include="BoundedContexts\Interviewer\DashboardFactoryTests\InterviewerDashboardFactoryTestsContext.cs" />
@@ -439,6 +440,8 @@
     <Compile Include="SharedKernels\Enumerator\Services\MaskTextTests\when_removing_last_character.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewRepositoryTests\StatefulInterviewRepositoryNUnitTests.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StatefulInterviewTestsContext.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StaticText\when_static_text_disabled_after_enabling.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StaticText\when_static_text_enabled.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_completing_interview_and_interview_has_3_invalid_and_2_valid_questions_outside_of_rosters.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_completing_interview_and_interview_has_3_invalid_questions_with_different_failing_conditions.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_determining_has_interview_a_group_and_group_is_in_roster_which_has_instance_with_id_equal_to_group_roster_vector.cs" />
@@ -705,7 +708,6 @@
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewerInterviewsFactoryTests\InterviewerInterviewsFactoryNUnitTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryTests\InterviewSummaryTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ViewsTests\InterviewTests\InterviewSummaryTests\when_create_interview_summary_with_GPS_prefilled.cs" />
-    <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\NewtonJsonUtilsTestContext.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_questionnaire_document_with_json_utils.cs" />
     <Compile Include="Infrastructure\HybridEventBusTests\when_publishing_aggregate_root_events_and_publish_to_cqrs_event_bus_fails.cs" />
     <Compile Include="Infrastructure\HybridEventBusTests\when_publishing_aggregate_root_events_and_publish_to_lite_event_bus_fails.cs" />
@@ -883,9 +885,6 @@
     <Compile Include="Applications\Headquarters\FilterTests\MaintenanceFilterTests\MaintenanceFilterTestsContext.cs" />
     <Compile Include="Applications\Headquarters\FilterTests\MaintenanceFilterTests\when_action_executing_and_views_are_being_rebuilt_now.cs" />
     <Compile Include="Applications\Headquarters\HQControllerTests\HQControllerTestContext.cs" />
-    <Compile Include="Applications\Headquarters\InstallControllerTests\InstallControllerTestsContext.cs" />
-    <Compile Include="Applications\Headquarters\InstallControllerTests\when_finish_installation.cs" />
-    <Compile Include="Applications\Headquarters\InstallControllerTests\when_finish_installation_and_command_service_throws_exception.cs" />
     <Compile Include="Applications\Supervisor\HQSyncControllerTests\HQSyncControllerTestsContext.cs" />
     <Compile Include="Applications\Supervisor\HQSyncControllerTests\when_pushing_data_to_hq.cs" />
     <Compile Include="Applications\Supervisor\HQSyncControllerTests\when_requesting_push_status.cs" />

@@ -211,8 +211,8 @@ namespace WB.UI.Headquarters.Injections
 
             this.Bind<IProtobufSerializer>().To<ProtobufSerializer>();
 
-            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(new JsonSerializerSettingsFactory()));
-            this.Bind<IJsonAllTypesSerializer>().ToMethod((ctx) => new JsonAllTypesSerializer(new JsonSerializerSettingsFactory()));
+            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer());
+            this.Bind<IJsonAllTypesSerializer>().ToMethod((ctx) => new JsonAllTypesSerializer());
 
             this.Bind<IStringCompressor>().To<JsonCompressor>();
             this.Bind<IRestServiceSettings>().To<DesignerQuestionnaireApiRestServiceSettings>().InSingletonScope();
