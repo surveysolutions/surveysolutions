@@ -148,7 +148,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.userInterfaceStateService.NotifyRefreshStarted();
 
                 var entities = await this.interviewViewModelFactory
-                    .GetEntities(
+                    .GetEntitiesAsync(
                         interviewId: this.navigationState.InterviewId,
                         groupIdentity: groupIdentity,
                         navigationState: this.navigationState);
@@ -244,7 +244,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                         var entities = AsyncContext.Run(() =>
                              this.interviewViewModelFactory
-                                .GetEntities(
+                                .GetEntitiesAsync(
                                     interviewId: this.navigationState.InterviewId,
                                     groupIdentity: this.navigationState.CurrentGroup,
                                     navigationState: this.navigationState));
