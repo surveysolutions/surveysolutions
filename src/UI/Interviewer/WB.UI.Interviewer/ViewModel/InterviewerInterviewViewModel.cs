@@ -84,7 +84,7 @@ namespace WB.UI.Interviewer.ViewModel
             }
         }
 
-        protected override async Task<MvxViewModel> UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
+        protected override async Task<MvxViewModel> UpdateCurrentScreenViewModelAsync(ScreenChangedEventArgs eventArgs)
         {
             if (this.navigationState.CurrentScreenType == ScreenType.Complete)
             {
