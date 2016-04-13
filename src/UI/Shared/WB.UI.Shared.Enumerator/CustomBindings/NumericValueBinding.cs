@@ -23,7 +23,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         private void Target_NumericValueCleared(object sender, NumericValueClearedEventArgs e)
         {
-            FireValueChanged(this.Target.GetNumericValue());
+            FireValueChanged(null);
         }
 
         private void Target_NumericValueChanged(object sender, NumericValueChangedEventArgs e)
