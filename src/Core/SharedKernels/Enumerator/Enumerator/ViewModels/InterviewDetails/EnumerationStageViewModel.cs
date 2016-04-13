@@ -99,7 +99,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.navigationState = navigationState;
             this.Items = new ObservableRangeCollection<IInterviewEntityViewModel>();
 
-            await CreateRegularGroupScreen(groupId, anchoredElementIdentity);
+            await this.CreateRegularGroupScreenAsync(groupId, anchoredElementIdentity);
 
             if (!this.eventRegistry.IsSubscribed(this, this.interviewId))
             {
@@ -107,7 +107,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        private async Task CreateRegularGroupScreen(Identity groupId, Identity anchoredElementIdentity)
+        private async Task CreateRegularGroupScreenAsync(Identity groupId, Identity anchoredElementIdentity)
         {
             if (this.questionnaire.IsRosterGroup(groupId.Id))
             {
@@ -119,7 +119,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.Name = this.questionnaire.GetGroupTitle(groupId.Id); ;
             }
 
-            await this.LoadFromModel(groupId);
+            await this.LoadFromModelAsync(groupId);
             this.SetScrollTo(anchoredElementIdentity);
         }
 
@@ -139,7 +139,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public int? ScrollToIndex { get; set; }
 
-        private async Task LoadFromModel(Identity groupIdentity)
+        private async Task LoadFromModelAsync(Identity groupIdentity)
         {
             try
             { 
