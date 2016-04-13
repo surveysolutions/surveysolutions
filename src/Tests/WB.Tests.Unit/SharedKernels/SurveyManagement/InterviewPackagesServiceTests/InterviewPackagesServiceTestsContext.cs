@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
     internal class InterviewPackagesServiceTestsContext
     {
         protected static InterviewPackagesService CreateInterviewPackagesService(
-            ISerializer serializer = null,
+            IJsonAllTypesSerializer serializer = null,
             IArchiveUtils archiver = null, 
             IPlainStorageAccessor<InterviewPackage> interviewPackageStorage = null,
             IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage = null,
@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
             return new InterviewPackagesService(
                 syncSettings: new SyncSettings("hq"), 
                 logger: Mock.Of<ILogger>(), 
-                serializer: serializer ?? Mock.Of<ISerializer>(),
+                serializer: serializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 interviewPackageStorage: interviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<InterviewPackage>>(),
                 brokenInterviewPackageStorage: brokenInterviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<BrokenInterviewPackage>>(),
                 commandService: commandService ?? Mock.Of<ICommandService>());

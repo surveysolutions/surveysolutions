@@ -104,9 +104,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
                     "Questionnaire {0} ver {1} is already in delete process.",
                     this.Id.FormatGuid(), command.QuestionnaireVersion));
 
-
-            this.plainQuestionnaireRepository.DeleteQuestionnaireDocument(command.QuestionnaireId, command.QuestionnaireVersion);
-            
             var browseItem = this.questionnaireBrowseItemStorage.GetById(new QuestionnaireIdentity(this.Id, command.QuestionnaireVersion).ToString());
             if (browseItem != null)
             {

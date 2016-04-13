@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
         {
             mockOfPackagesStorage = new Mock<IPlainStorageAccessor<InterviewPackage>>();
 
-            var compressor = Mock.Of<IArchiveUtils>(x => x.CompressString(expectedPackage.CompressedEvents) == compressedEvents);
+            var compressor = Mock.Of<IArchiveUtils>(x => x.CompressString(expectedPackage.Events) == compressedEvents);
 
             interviewPackagesService = CreateInterviewPackagesService(interviewPackageStorage: mockOfPackagesStorage.Object,
                     archiver: compressor);
@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
                     questionnaireId: expectedPackage.QuestionnaireId,
                     questionnaireVersion: expectedPackage.QuestionnaireVersion,
                     responsibleId: expectedPackage.ResponsibleId, interviewStatus: expectedPackage.InterviewStatus,
-                    isCensusInterview: expectedPackage.IsCensusInterview, events: expectedPackage.CompressedEvents);
+                    isCensusInterview: expectedPackage.IsCensusInterview, events: expectedPackage.Events);
 
         It should_store_specified_package =
             () => mockOfPackagesStorage.Verify(x => x.Store(Moq.It.IsAny<InterviewPackage>(), null), Times.Once);
@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
             QuestionnaireVersion = 111,
             InterviewStatus = InterviewStatus.Restarted,
             IsCensusInterview = true,
-            CompressedEvents = "compressed events by interview"
+            Events = "compressed events by interview"
         };
 
         private static string compressedEvents = "compressed events";

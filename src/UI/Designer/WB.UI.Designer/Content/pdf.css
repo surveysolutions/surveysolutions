@@ -185,11 +185,18 @@ h1{
 	display: inline-block;
 }
 /*Start number of page*/
-.footer{							/*Number of page*/
+.footer{							
 	overflow: hidden;
 	margin: 53px 69px 0 125px; 
 	font-size: 18px;
 	line-height: 20px;
+}
+.footer-section {
+    float: left;
+    text-transform: uppercase;
+	font-size: 10px;
+	line-height: 13px;
+    font-family: 'RobotoLight';
 }
 .page_path{
 	float: left;
@@ -247,6 +254,9 @@ h1{
 	font-size: 10px;
 	line-height: 13px;
     font-family: 'RobotoLight';
+}
+.type span {
+    margin-top: 6px;
 }
 .variable_name, .appendix_detail span>span, 
 .structure_list, .splitted_variables{
@@ -418,6 +428,7 @@ input[type=date] {
 }
 .condition span, .validation-expression span{
 	font-family: 'RobotoLight', sans-serif;
+    top: -1px;
 }
 .instructions, .instructions span, .validation-message, .validation-message span{
 	font-family: 'RobotoMedium';
@@ -449,7 +460,7 @@ input[type=date] {
 }
 .generated_by ul li span{
 	font-size: 12px;
-	line-height: 18px;
+	line-height: 12px;
 	margin-right: 15px;
 }
 .static_text{
@@ -538,6 +549,16 @@ h3{
 	margin: 0 5px 20px 0;
 	font-family: 'RobotoMedium';
 }
+.appendix_section h3 {
+    text-transform: none;
+}
+.appendix_section.legend img {
+    width: 100%;
+}
+.appendix_section.legend img+img{
+    margin-top: 100px;
+}
+
 .container{
 	margin-bottom: 40px;
 }
@@ -549,7 +570,7 @@ h3{
 	width: 40px;
 	position: absolute;
 	display: block;
-	top: 0;
+	top: 1px;
     text-align: right;
 	left: -45px;
 } 
@@ -648,10 +669,20 @@ h4{
 	article + article { 
 		page-break-before: always; 
 	}
-	@page {
-        margin: 2cm 0;
-	}
+	
 	ul, img, .question-container, h1, h2, h3, h4, h5{
 	    page-break-inside: avoid;
 	}
+}
+
+@page {
+    margin: 1cm 0;
+    size: A4;
+}
+
+@page :left{ 
+    content: "";
+}
+@page :right{ 
+    content: "";
 }

@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
     [Subject(typeof(IncomingSyncPackagesQueue))]
     internal class IncomingPackagesQueueTestContext
     {
-        protected static IncomingSyncPackagesQueue CreateIncomingPackagesQueue(ISerializer serializer = null,
+        protected static IncomingSyncPackagesQueue CreateIncomingPackagesQueue(IJsonAllTypesSerializer serializer = null,
             IFileSystemAccessor fileSystemAccessor = null, IArchiveUtils archiver = null, 
             IPlainStorageAccessor<InterviewPackage> interviewPackageStorage = null,
             IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage = null,
@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
                 fileSystemAccessor??Mock.Of<IFileSystemAccessor>(),
                 new SyncSettings(AppDataDirectory, IncomingCapiPackagesWithErrorsDirectoryName, IncomingCapiPackageFileNameExtension, IncomingCapiPackagesDirectoryName, "",3,1), 
                 Mock.Of<ILogger>(), 
-                serializer: serializer ?? Mock.Of<ISerializer>(),
+                serializer: serializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 archiver: archiver ?? Mock.Of<IArchiveUtils>(), 
                 interviewPackageStorage: interviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<InterviewPackage>>(),
                 brokenInterviewPackageStorage: brokenInterviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<BrokenInterviewPackage>>(),

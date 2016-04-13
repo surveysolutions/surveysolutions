@@ -279,7 +279,8 @@ namespace WB.Tests.Unit
 
         public static CodeGenerationSettings CodeGenerationSettings()
         {
-            return new CodeGenerationSettings(additionInterfaces: new[] { "IInterviewExpressionStateV5" },
+            return new CodeGenerationSettings(
+                additionInterfaces: new[] { "IInterviewExpressionStateV5" },
                 namespaces: new[]
                 {
                     "WB.Core.SharedKernels.DataCollection.V2",
@@ -290,15 +291,14 @@ namespace WB.Tests.Unit
                     "WB.Core.SharedKernels.DataCollection.V5",
                     "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions"
                 },
-                isLookupTablesFeatureSupported: true)
-            {
-                ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV5(expressionStateModel).TransformText()
-            };
+                isLookupTablesFeatureSupported: true,
+                expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV5(expressionStateModel).TransformText());
         }
 
         public static CodeGenerationSettings CodeGenerationSettingsV6()
         {
-            return new CodeGenerationSettings(additionInterfaces: new[] { "IInterviewExpressionStateV6" },
+            return new CodeGenerationSettings(
+                additionInterfaces: new[] { "IInterviewExpressionStateV6" },
                 namespaces: new[]
                 {
                     "WB.Core.SharedKernels.DataCollection.V2",
@@ -310,10 +310,8 @@ namespace WB.Tests.Unit
                     "WB.Core.SharedKernels.DataCollection.V5.CustomFunctions",
                     "WB.Core.SharedKernels.DataCollection.V5"
                 },
-                isLookupTablesFeatureSupported: true)
-            {
-                ExpressionStateBodyGenerator = expressionStateModel => new InterviewExpressionStateTemplateV6(expressionStateModel).TransformText()
-            };
+                isLookupTablesFeatureSupported: true,
+                expressionStateBodyGenerator: expressionStateModel => new InterviewExpressionStateTemplateV6(expressionStateModel).TransformText());
         }
 
         public static CodeGenerator CodeGenerator(
@@ -662,7 +660,9 @@ namespace WB.Tests.Unit
                 groupsToBeDisabled ?? new List<Identity>(),
                 groupsToBeEnabled ?? new List<Identity>(),
                 questionsToBeDisabled ?? new List<Identity>(),
-                questionsToBeEnabled ?? new List<Identity>());
+                questionsToBeEnabled ?? new List<Identity>(),
+                new List<Identity>(),
+                new List<Identity>());
         }
 
         public static EnumerationStageViewModel EnumerationStageViewModel(
@@ -1942,14 +1942,9 @@ namespace WB.Tests.Unit
             return new QuestionnaireFeedDenormalizer(questionnaireFeedWriter);
         }
 
-        public static QuestionnaireIdentity QuestionnaireIdentity()
+        public static QuestionnaireIdentity QuestionnaireIdentity(Guid? questionnaireId = null, long? questionnaireVersion = null)
         {
-            return Create.QuestionnaireIdentity(Guid.NewGuid());
-        }
-
-        public static QuestionnaireIdentity QuestionnaireIdentity(Guid questionnaireId)
-        {
-            return new QuestionnaireIdentity(questionnaireId, 7);
+            return new QuestionnaireIdentity(questionnaireId ?? Guid.NewGuid(), questionnaireVersion ?? 7);
         }
 
         public static QuestionnaireImportService QuestionnaireImportService(IPlainQuestionnaireRepository plainKeyValueStorage = null)

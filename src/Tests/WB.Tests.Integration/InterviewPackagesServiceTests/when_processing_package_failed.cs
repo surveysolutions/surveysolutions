@@ -45,7 +45,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), Moq.It.IsAny<string>()))
                 .Throws(expectedException);
 
-            var newtonJsonSerializer = new NewtonJsonSerializer(new JsonSerializerSettingsFactory());
+            var newtonJsonSerializer = new JsonAllTypesSerializer();
 
             interviewPackagesService = new InterviewPackagesService(
                 syncSettings: new SyncSettings(origin),
@@ -71,7 +71,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                         new DateTimeQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[] { 2, 5, 8}, DateTime.UtcNow, DateTime.Today),  
                     });
 
-            expectedEventsString = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents.Select(Create.AggregateRootEvent));
+            expectedEventsString = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents.Select(Create.AggregateRootEvent).ToArray());
 
             plainPostgresTransactionManager.ExecuteInPlainTransaction(
                 () => interviewPackagesService.StorePackage(
@@ -100,7 +100,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             expectedPackage.QuestionnaireVersion.ShouldEqual(expectedCommand.QuestionnaireVersion);
             expectedPackage.ExceptionType.ShouldEqual(expectedException.ExceptionType.ToString());
             expectedPackage.ExceptionMessage.ShouldEqual(expectedException.Message);
-            expectedPackage.CompressedEvents.ShouldEqual(expectedEventsString);
+            expectedPackage.Events.ShouldEqual(expectedEventsString);
             expectedPackage.PackageSize.ShouldEqual(expectedEventsString.Length);
         };
 

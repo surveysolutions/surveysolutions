@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
             Status = (int)InterviewStatus.Restarted,
             CreatedOnClient = true
         };
-        private static readonly Mock<ISerializer> mockOfSerializer = new Mock<ISerializer>();
+        private static readonly Mock<IJsonAllTypesSerializer> mockOfSerializer = new Mock<IJsonAllTypesSerializer>();
         private static readonly Mock<IArchiveUtils> mockOfCompressor = new Mock<IArchiveUtils>();
         private static readonly Mock<IPlainStorageAccessor<InterviewPackage>> mockOfPackagesAccessor = new Mock<IPlainStorageAccessor<InterviewPackage>>();
         private static string contentOfSyncItem = "content of sync item";

@@ -1,27 +1,34 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 
-namespace WB.Core.GenericSubdomains.Portable.Implementation
+namespace WB.Infrastructure.Native.Storage
 {
     public class JsonAllTypesSerializer : IJsonAllTypesSerializer
     {
-        private readonly IJsonSerializerSettingsFactory jsonSerializerSettingsFactory;
-        
-        public JsonAllTypesSerializer(IJsonSerializerSettingsFactory jsonSerializerSettingsFactory)
+        private readonly JsonSerializerSettings jsonSerializerSettings;
+
+        public JsonAllTypesSerializer()
         {
-            this.jsonSerializerSettingsFactory = jsonSerializerSettingsFactory;
+            this.jsonSerializerSettings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All,
+                NullValueHandling = NullValueHandling.Ignore,
+                FloatParseHandling = FloatParseHandling.Decimal,
+                Binder = new OldToNewAssemblyRedirectSerializationBinder()
+            };
         }
 
         public string Serialize(object item)
         {
-            return JsonConvert.SerializeObject(item, this.jsonSerializerSettingsFactory.GetAllTypesJsonSerializerSettings());
+            return JsonConvert.SerializeObject(item, jsonSerializerSettings);
         }
         
         public T Deserialize<T>(string payload)
         {
-            return JsonConvert.DeserializeObject<T>(payload, jsonSerializerSettingsFactory.GetAllTypesJsonSerializerSettings());
+            return JsonConvert.DeserializeObject<T>(payload, jsonSerializerSettings);
         }
 
         public T Deserialize<T>(byte[] payload)
@@ -31,7 +38,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
                 var input = new MemoryStream(payload);
                 using (var reader = new StreamReader(input))
                 {
-                    return JsonSerializer.Create(jsonSerializerSettingsFactory.GetAllTypesJsonSerializerSettings()).Deserialize<T>(new JsonTextReader(reader));
+                    return JsonSerializer.Create(jsonSerializerSettings).Deserialize<T>(new JsonTextReader(reader));
                 }
             }
             catch (JsonReaderException ex)
@@ -45,7 +52,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             using (var sr = new StreamReader(stream))
             using (var jsonTextReader = new JsonTextReader(sr))
             {
-                return JsonSerializer.Create(jsonSerializerSettingsFactory.GetAllTypesJsonSerializerSettings()).Deserialize(jsonTextReader, type);
+                return JsonSerializer.Create(jsonSerializerSettings).Deserialize(jsonTextReader, type);
             }
         }
 
@@ -54,7 +61,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             var output = new MemoryStream();
             using (var writer = new StreamWriter(output))
             {
-                JsonSerializer.Create(this.jsonSerializerSettingsFactory.GetAllTypesJsonSerializerSettings()).Serialize(writer, payload);
+                JsonSerializer.Create(jsonSerializerSettings).Serialize(writer, payload);
             }
             return output.ToArray();
         }

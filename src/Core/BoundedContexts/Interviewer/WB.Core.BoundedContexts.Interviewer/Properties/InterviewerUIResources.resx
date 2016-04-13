@@ -569,4 +569,7 @@ Please re-enter your password. If the problem persists, contact your Supervisor.
   <data name="FinishInstallation_EndpointDiffers" xml:space="preserve">
     <value>Synchronization endpoint '{0}' is different from provided in Settings ('{1}'). Load URL from settings?</value>
   </data>
+  <data name="Synchronization_Download_AttachmentsCleanup" xml:space="preserve">
+    <value>Removing obsolete attachments.</value>
+  </data>
 </root>

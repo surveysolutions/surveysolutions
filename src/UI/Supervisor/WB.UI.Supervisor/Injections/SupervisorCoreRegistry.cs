@@ -203,8 +203,8 @@ namespace WB.UI.Supervisor.Injections
 
             RegisterViewFactories();
 
-            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(new JsonSerializerSettingsFactory()));
-            this.Bind<IJsonAllTypesSerializer>().ToMethod((ctx) => new JsonAllTypesSerializer(new JsonSerializerSettingsFactory()));
+            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer());
+            this.Bind<IJsonAllTypesSerializer>().ToMethod((ctx) => new JsonAllTypesSerializer());
 
             this.Bind<IStringCompressor>().To<JsonCompressor>();
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace WB.Infrastructure.Native.Storage
 {
+    [Obsolete("Resolves old namespaces. Cuold be dropped after incompatibility shift with the next version.")]
     public class NewToOldAssemblyRedirectSerializationBinder : MainCoreAssemblyRedirectSerializationBaseBinder
     {
         public override Type BindToType(string assemblyName, string typeName)

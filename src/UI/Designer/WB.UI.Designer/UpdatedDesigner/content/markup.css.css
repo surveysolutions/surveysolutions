@@ -6781,7 +6781,8 @@ ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a > i {
   position: absolute;
 }
 .instructions-cross {
-  margin-top: 31px;
+  margin-top: 38px;
+  margin-left: -30px;
 }
 .wb-label {
   font-family: "Lucida Console", Monaco, monospace;

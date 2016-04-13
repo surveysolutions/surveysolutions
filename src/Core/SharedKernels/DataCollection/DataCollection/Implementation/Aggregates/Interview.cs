@@ -455,9 +455,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(QuestionsEnabled @event)
         {
             this.interviewState.EnableQuestions(@event.Questions);
-
             this.ExpressionProcessorStatePrototype.EnableQuestions(@event.Questions);
+        }
 
+        public virtual void Apply(StaticTextsEnabled @event)
+        {
+            this.interviewState.EnableStaticTexts(@event.StaticTexts);
+            this.ExpressionProcessorStatePrototype.EnableStaticTexts(@event.StaticTexts);
+        }
+
+        public virtual void Apply(StaticTextsDisabled @event)
+        {
+            this.interviewState.DisableStaticTexts(@event.StaticTexts);
+            this.ExpressionProcessorStatePrototype.DisableStaticTexts(@event.StaticTexts);
         }
 
         public virtual void Apply(AnswerCommented @event)
@@ -2038,9 +2048,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new AnswersDeclaredValid(validityChanges.AnswersDeclaredValid.ToArray()));
             }
 
-            if (validityChanges.FailedValidationConditions.Any())
+            if (validityChanges.FailedValidationConditionsForQuestions.Any())
             {
-                this.ApplyEvent(new AnswersDeclaredInvalid(validityChanges.FailedValidationConditions));
+                this.ApplyEvent(new AnswersDeclaredInvalid(validityChanges.FailedValidationConditionsForQuestions));
+            }
+
+            if (validityChanges.StaticTextsDeclaredValid.Any())
+            {
+                this.ApplyEvent(new StaticTextsDeclaredValid(validityChanges.StaticTextsDeclaredValid.ToArray()));
+            }
+
+            if (validityChanges.FailedValidationConditionsForStaticTexts.Any())
+            {
+                this.ApplyEvent(new StaticTextsDeclaredInvalid(validityChanges.FailedValidationConditionsForStaticTexts));
             }
         }
 
@@ -2305,7 +2325,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (!this.interviewState.LinkedQuestionOptions.ContainsKey(linkedQuestionIdentity))
             {
                 throw new InterviewException(string.Format(
-                    "Answer on linked question {0} is incorrect. Avaliable options are missing" +
+                    "Answer on linked question {0} is incorrect. Avaliable options are missing. " +
                     "InterviewId: {1}",
                     FormatQuestionForException(linkedQuestionIdentity.Id, questionnaire), this.EventSourceId));
             }

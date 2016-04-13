@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
-using Nito.AsyncEx;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
@@ -16,16 +13,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
 
+        public EnablementViewModel Enablement { get; set; }
         public AttachmentViewModel Attachment { get; set; }
 
         public StaticTextViewModel(
             IPlainQuestionnaireRepository questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
-            AttachmentViewModel attachmentViewModel)
+            AttachmentViewModel attachmentViewModel,
+            EnablementViewModel enablement)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.Attachment = attachmentViewModel;
+            this.Enablement = enablement;
         }
 
         public Identity Identity => this.questionIdentity;
@@ -41,6 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.questionIdentity = entityIdentity;
             this.StaticText = questionnaire.GetStaticText(entityIdentity.Id);
 
+            this.Enablement.Init(interviewId, entityIdentity, navigationState);
             await this.Attachment.InitAsync(interviewId, entityIdentity);
         }
 

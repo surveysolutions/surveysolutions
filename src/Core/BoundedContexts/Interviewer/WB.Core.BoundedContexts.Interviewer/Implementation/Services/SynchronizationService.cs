@@ -125,6 +125,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 credentials: this.restCredentials, token: token));
         }
 
+        public async Task<List<QuestionnaireIdentity>> GetServerQuestionnairesAsync(CancellationToken cancellationToken)
+        {
+            return await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.GetAsync<List<QuestionnaireIdentity>>(
+              url: string.Concat(this.questionnairesController, "/list"),
+              credentials: this.restCredentials, token: cancellationToken));
+        }
+
         public async Task LogQuestionnaireAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire)
         {
             await this.TryGetRestResponseOrThrowAsync(async () => await this.restService.PostAsync(
