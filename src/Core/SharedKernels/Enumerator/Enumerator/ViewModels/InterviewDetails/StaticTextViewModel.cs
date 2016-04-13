@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.identity = entityIdentity;
 
-            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
+            this.QuestionState.Init(interviewId, entityIdentity);
             this.rawText = questionnaire.GetStaticText(entityIdentity.Id);
 
             this.StaticText = interview.IsEnabled(entityIdentity) ? this.rawText : RemoveHtmlTags(this.rawText);

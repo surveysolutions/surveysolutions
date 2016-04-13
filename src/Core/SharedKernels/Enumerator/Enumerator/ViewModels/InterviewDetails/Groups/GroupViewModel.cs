@@ -106,7 +106,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             if (!questionnaire.HasGroup(groupIdentity.Id))
                 throw new InvalidOperationException("Group with identity {0} don't found".FormatString(groupIdentity));
 
-            this.Enablement.Init(interviewId, groupIdentity, navigationState);
+            this.Enablement.Init(interviewId, groupIdentity);
             this.GroupState.Init(interviewId, groupIdentity);
 
             this.Title = questionnaire.GetGroupTitle(groupIdentity.Id);
