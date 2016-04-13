@@ -2883,5 +2883,12 @@ namespace WB.Tests.Unit
             result.Get(null).ReturnsForAnyArgs(interview);
             return result;
         }
+
+        public static IPlainQuestionnaireRepository PlainQuestionnaireRepositoryWith(IQuestionnaire questionnaire)
+        {
+            var result = Substitute.For<IPlainQuestionnaireRepository>();
+            result.GetQuestionnaire(null).ReturnsForAnyArgs(questionnaire);
+            return result;
+        }
     }
 }

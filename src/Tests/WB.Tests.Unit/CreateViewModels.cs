@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Tests.Unit
@@ -39,6 +40,19 @@ namespace WB.Tests.Unit
                 Mvx.RegisterSingleton(Stub.MvxMainThreadDispatcher());
 
                 return result;
+            }
+
+            public static StaticTextStateViewModel StaticTextStateViewModel(IStatefulInterviewRepository interviewRepository = null,
+                ILiteEventRegistry eventRegistry = null)
+            {
+                return  new StaticTextStateViewModel(Create.ViewModels.EnablementViewModel(interviewRepository, eventRegistry));
+            }
+
+            private static EnablementViewModel EnablementViewModel(IStatefulInterviewRepository interviewRepository = null, 
+                ILiteEventRegistry eventRegistry = null)
+            {
+                return new EnablementViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(), 
+                    eventRegistry ?? Create.LiteEventRegistry());
             }
         }
 

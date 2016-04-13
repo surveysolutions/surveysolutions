@@ -63,7 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Validity.Init(interviewId, entityIdentity, navigationState);
             this.Comments.Init(interviewId, entityIdentity, navigationState);
             this.Enablement.Init(interviewId, entityIdentity, navigationState);
-            this.Enablement.QuestionEnabled += EnablementOnQuestionEnabled;
+            this.Enablement.EntityEnabled += this.EnablementOnEntityEnabled;
             this.answersRemovedNotifier.AnswerRemoved += this.AnswerRemoved;
 
             await Task.FromResult(true);
@@ -74,7 +74,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.UpdateFromModel();
         }
 
-        private void EnablementOnQuestionEnabled(object sender, EventArgs eventArgs)
+        private void EnablementOnEntityEnabled(object sender, EventArgs eventArgs)
         {
             this.UpdateFromModel();
         }
@@ -117,7 +117,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Dispose()
         {
             this.liteEventRegistry.Unsubscribe(this, interviewId);
-            this.Enablement.QuestionEnabled -= this.EnablementOnQuestionEnabled;
+            this.Enablement.EntityEnabled -= this.EnablementOnEntityEnabled;
             this.answersRemovedNotifier.AnswerRemoved -= this.AnswerRemoved;
             Header.Dispose();
             Validity.Dispose();
