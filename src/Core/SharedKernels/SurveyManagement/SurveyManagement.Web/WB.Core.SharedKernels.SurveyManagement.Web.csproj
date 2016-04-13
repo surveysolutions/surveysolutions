@@ -704,7 +704,7 @@
     <EmbeddedResource Include="Scripts\viewmodels\pages\periodicstatusreport.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\viewmodels\pages\interview\ko.bindingHandlers.numericformatter.js" />
+    <EmbeddedResource Include="Scripts\knockout\ko.numericformatter.js" />
     <EmbeddedResource Include="Scripts\viewmodels\pages\controlpanel\brokeninterviewpackages.js" />
     <EmbeddedResource Include="Scripts\viewmodels\pages\interviewers.js" />
     <EmbeddedResource Include="Scripts\viewmodels\pages\tabletinfo.js" />
