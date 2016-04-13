@@ -12,11 +12,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             this.DisabledGroups = new HashSet<Guid>();
             this.RosterRowTitles = new Dictionary<Guid, string>();
             this.QuestionsSearchCache = new Dictionary<Guid, InterviewQuestion>();
+            this.DisabledStaticTexts = new HashSet<Guid>();
         }
         public InterviewLevel(ValueVector<Guid> scopeVector, int? sortIndex, decimal[] vector)
             : this()
         {
-            this.ScopeVectors = new Dictionary<ValueVector<Guid>, int?>() { { scopeVector, sortIndex } };
+            this.ScopeVectors = new Dictionary<ValueVector<Guid>, int?> { { scopeVector, sortIndex } };
             this.RosterVector = vector;
         }
 
@@ -25,6 +26,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public HashSet<Guid> DisabledGroups { get; set; }
         public Dictionary<Guid, string> RosterRowTitles { set; get; }
         public Dictionary<Guid, InterviewQuestion> QuestionsSearchCache { set; get; }
-        
+        public HashSet<Guid> DisabledStaticTexts { get; set; }
     }
 }
