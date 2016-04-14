@@ -6,10 +6,11 @@ using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
-    internal class when_answering_numeric_question_with_invalid_answer_and_all_questions_were_invalid_before_answer : InterviewTestsContext
+    internal class when_answering_numeric_question_with_valid_answer_and_static_text_raiser_exception : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -22,44 +23,34 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 Setup.MockedServiceLocator();
 
                 var questionA = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-                var questionB = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+                var staticTextB = Guid.Parse("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
 
                 var interview = SetupInterview(
                     Create.QuestionnaireDocument(children: new[]
                     {
                         Create.Chapter(children: new IComposite[]
                         {
-                            Create.NumericIntegerQuestion(id: questionA, variable: "a", validationExpression: "a > 0"),
-                            Create.NumericIntegerQuestion(id: questionB, variable: "b", validationExpression: "b > 0"),
+                            Create.NumericIntegerQuestion(id: questionA, variable: "a"),
+                            Create.StaticText(id: staticTextB, validationConditions: new List<ValidationCondition>() {new ValidationCondition("10/a < 2", "err") }),
                         }),
                     }),
                     events: new object[]
                     {
                         Create.Event.NumericIntegerQuestionAnswered(questionId: questionA, answer: -1),
-                        Create.Event.NumericIntegerQuestionAnswered(questionId: questionB, answer: -2),
 
-                        Create.Event.AnswersDeclaredInvalid(
-                            new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>()
-                            {
-                                {
-                                    Create.Identity(questionA),
-                                    new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
-                                },
-                                {
-                                    Create.Identity(questionB),
-                                    new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
-                                }
-                            })
+                        Create.Event.StaticTextsDeclaredValid(new []{  Create.Identity(staticTextB) })
                     });
 
-            using (var eventContext = new EventContext())
+                using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), questionA, Empty.RosterVector, DateTime.Now, -3);
+                    interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), questionA, Empty.RosterVector, DateTime.Now, 0);
 
                     return new InvokeResult
                     {
                         AnswersDeclaredValidEventCount = eventContext.Count<AnswersDeclaredValid>(),
                         AnswersDeclaredInvalidEventCount = eventContext.Count<AnswersDeclaredInvalid>(),
+                        StaticTextsDeclaredInvalidCount = eventContext.Count<StaticTextsDeclaredInvalid>(),
+                        StaticTextsDeclaredValidCount = eventContext.Count<StaticTextsDeclaredValid>()
                     };
                 }
             });
@@ -76,6 +67,12 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         It should_raise_AnswersDeclaredInvalid_event = () =>
             result.AnswersDeclaredInvalidEventCount.ShouldEqual(0);
 
+        It should_not_raise_StaticTextsDeclaredValid_event = () =>
+            result.StaticTextsDeclaredValidCount.ShouldEqual(0);
+
+        It should_raise_StaticTextsDeclaredInvalid_event = () =>
+            result.StaticTextsDeclaredInvalidCount.ShouldEqual(1);
+
         private static AppDomainContext appDomainContext;
         private static InvokeResult result;
 
@@ -84,6 +81,9 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         {
             public int AnswersDeclaredValidEventCount { get; set; }
             public int AnswersDeclaredInvalidEventCount { get; set; }
+
+            public int StaticTextsDeclaredValidCount { set; get; }
+            public int StaticTextsDeclaredInvalidCount { set; get; }
         }
     }
 }
