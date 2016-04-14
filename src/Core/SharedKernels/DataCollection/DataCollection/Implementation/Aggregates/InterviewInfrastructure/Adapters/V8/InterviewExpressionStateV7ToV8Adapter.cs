@@ -44,6 +44,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
         public ValidityChanges ProcessValidationExpressions() => this.adaptee.ProcessValidationExpressions();
         public EnablementChanges ProcessEnablementConditions() => this.adaptee.ProcessEnablementConditions();
         public void SaveAllCurrentStatesAsPrevious() => this.adaptee.SaveAllCurrentStatesAsPrevious();
+        
         IInterviewExpressionStateV8 IInterviewExpressionStateV8.Clone() => this.Clone();
         IInterviewExpressionStateV7 IInterviewExpressionStateV7.Clone() => this.Clone();
         public LinkedQuestionOptionsChanges ProcessLinkedQuestionFilters() => this.adaptee.ProcessLinkedQuestionFilters();
@@ -60,6 +61,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
 
         public void DisableStaticTexts(IEnumerable<Identity> staticTextsToDisable) { }
         public void EnableStaticTexts(IEnumerable<Identity> staticTextsToEnable) { }
+        public void DeclareStaticTextValid(IEnumerable<Identity> validStaticTexts) {}
+        public void ApplyStaticTextFailedValidations(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions) {}
 
         private IInterviewExpressionStateV8 Clone() => new InterviewExpressionStateV7ToV8Adapter(this.adaptee.Clone());
     }

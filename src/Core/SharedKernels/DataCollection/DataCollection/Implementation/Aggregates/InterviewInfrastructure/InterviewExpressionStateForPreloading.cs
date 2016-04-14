@@ -123,6 +123,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void DisableStaticTexts(IEnumerable<Identity> staticTextsToDisable) {}
 
         public void EnableStaticTexts(IEnumerable<Identity> staticTextsToEnable) {}
+        public void DeclareStaticTextValid(IEnumerable<Identity> validStaticTexts) {}
+
+        public void ApplyStaticTextFailedValidations(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions) {}
 
         IInterviewExpressionStateV7 IInterviewExpressionStateV7.Clone()
         {

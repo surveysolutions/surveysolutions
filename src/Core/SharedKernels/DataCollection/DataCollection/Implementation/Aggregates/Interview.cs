@@ -222,6 +222,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.DisableGroups(@event.InterviewData.DisabledGroups.Select(validAnsweredQuestion => new Identity(validAnsweredQuestion.Id, validAnsweredQuestion.InterviewItemRosterVector)));
 
 
+
             this.interviewState.DisabledGroups = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.DisabledGroups);
             this.interviewState.DisabledQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.DisabledQuestions);
             this.interviewState.RosterGroupInstanceIds = BuildRosterInstanceIdsFromSynchronizationDto(@event.InterviewData);
@@ -428,10 +429,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(StaticTextsDeclaredValid @event)
         {
+            this.interviewState.DeclareStaticTextValid(@event.StaticTexts);
+            this.ExpressionProcessorStatePrototype.DeclareStaticTextValid(@event.StaticTexts);
         }
 
         public virtual void Apply(StaticTextsDeclaredInvalid @event)
         {
+            var staticTextsConditions = @event.GetFailedValidationConditionsDictionary();
+
+            this.interviewState.DeclareStaticTextInvalid(staticTextsConditions.Keys);
+            this.ExpressionProcessorStatePrototype.ApplyStaticTextFailedValidations(staticTextsConditions);
         }
 
         public void Apply(LinkedOptionsChanged @event)

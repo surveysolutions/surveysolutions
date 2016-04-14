@@ -49,6 +49,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
         public bool AreLinkedQuestionsSupported() => this.adaptee.AreLinkedQuestionsSupported();
         public void DisableStaticTexts(IEnumerable<Identity> staticTextsToDisable) => this.adaptee.DisableStaticTexts(staticTextsToDisable);
         public void EnableStaticTexts(IEnumerable<Identity> staticTextsToEnable) => this.adaptee.EnableStaticTexts(staticTextsToEnable);
+
+        public void DeclareStaticTextValid(IEnumerable<Identity> validQuestions) => this.adaptee.DeclareStaticTextValid(validQuestions);
+        
+        public void ApplyStaticTextFailedValidations(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
+            => this.adaptee.ApplyStaticTextFailedValidations(failedValidationConditions);
+        
         IInterviewExpressionState IInterviewExpressionState.Clone() => this.Clone();
         IInterviewExpressionStateV2 IInterviewExpressionStateV2.Clone() => this.Clone();
         IInterviewExpressionStateV4 IInterviewExpressionStateV4.Clone() => this.Clone();
@@ -59,7 +65,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Adapter
         ILatestInterviewExpressionState ILatestInterviewExpressionState.Clone() => this.Clone();
         public void UpdateRosterTitle(Guid rosterId, decimal[] outerRosterVector, decimal rosterInstanceId, string rosterTitle) => this.adaptee.UpdateRosterTitle(rosterId, outerRosterVector, rosterInstanceId, rosterTitle);
         public void SetInterviewProperties(IInterviewProperties properties) => this.adaptee.SetInterviewProperties(properties);
-        public void ApplyFailedValidations(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions) => this.adaptee.DeclareAnswersInvalid(failedValidationConditions.Keys);
+
+        public void ApplyFailedValidations(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions) => this.adaptee.ApplyFailedValidations(failedValidationConditions);
 
         private ILatestInterviewExpressionState Clone() => new InterviewExpressionStateV8ToLatestAdapter(this.adaptee.Clone());
     }

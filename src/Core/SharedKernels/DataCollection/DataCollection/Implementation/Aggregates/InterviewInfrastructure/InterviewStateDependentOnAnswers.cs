@@ -68,6 +68,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.AnswerComments = new ConcurrentBag<AnswerComment>();
             this.RosterTitles = new ConcurrentDictionary<string, string>();
             this.DisabledStaticTexts = new ConcurrentHashSet<Identity>();
+
+            this.ValidStaticTexts = new ConcurrentHashSet<string>();
+            this.InvalidStaticTexts = new ConcurrentHashSet<string>();
         }
 
         public ConcurrentDictionary<string, object> AnswersSupportedInExpressions { set; get; }
@@ -84,6 +87,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public ConcurrentHashSet<string> ValidAnsweredQuestions { set; get; }
         public ConcurrentHashSet<string> InvalidAnsweredQuestions { set; get; }
         public ConcurrentBag<AnswerComment> AnswerComments { get; set; }
+
+        public ConcurrentHashSet<string> ValidStaticTexts { set; get; }
+        public ConcurrentHashSet<string> InvalidStaticTexts { set; get; }
+
 
         public InterviewStateDependentOnAnswers Clone()
         {
@@ -102,7 +109,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ValidAnsweredQuestions = new ConcurrentHashSet<string>(this.ValidAnsweredQuestions),
                 InvalidAnsweredQuestions = new ConcurrentHashSet<string>(this.InvalidAnsweredQuestions),
                 AnswerComments = new ConcurrentBag<AnswerComment>(this.AnswerComments),
-                RosterTitles = this.RosterTitles.ToConcurrentDictionary(x => x.Key, x => x.Value)
+                RosterTitles = this.RosterTitles.ToConcurrentDictionary(x => x.Key, x => x.Value),
+
+                DisabledStaticTexts = new ConcurrentHashSet<Identity>(this.DisabledStaticTexts),
+                ValidStaticTexts = new ConcurrentHashSet<string>(this.ValidStaticTexts),
+                InvalidStaticTexts = new ConcurrentHashSet<string>(InvalidStaticTexts)
             };
         }
 
@@ -304,7 +315,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.InvalidAnsweredQuestions.Remove(questionKey);
             }
         }
-        
+
+        public void DeclareStaticTextValid(IEnumerable<Identity> statisTexts)
+        {
+            foreach (string questionKey in statisTexts.Select(ConversionHelper.ConvertIdentityToString))
+            {
+                this.ValidStaticTexts.Add(questionKey);
+                this.InvalidStaticTexts.Remove(questionKey);
+            }
+        }
+
+        public void DeclareStaticTextInvalid(IEnumerable<Identity> statisTexts)
+        {
+            foreach (string questionKey in statisTexts.Select(ConversionHelper.ConvertIdentityToString))
+            {
+                this.InvalidStaticTexts.Add(questionKey);
+                this.ValidStaticTexts.Remove(questionKey);
+            }
+        }
+
         public void RemoveAnswers(IEnumerable<Identity> questions)
         {
             foreach (string questionKey in questions.Select(ConversionHelper.ConvertIdentityToString))
