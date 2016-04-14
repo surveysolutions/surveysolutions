@@ -115,12 +115,14 @@ namespace WB.Core.SharedKernels.DataCollection
             return this.InterviewScopes.ContainsKey(rosterStringKey) ? this.InterviewScopes[rosterStringKey] : null;
         }
 
-        public ValidityChanges ProcessValidationExpressions()
+        public ValidityChanges ProcessValidationExpressions() => ProcessValidationExpressionsImpl(this.InterviewScopes.Values);
+
+        public static ValidityChanges ProcessValidationExpressionsImpl(IEnumerable<IExpressionExecutable> interviewScopes)
         {
             var questionsToBeValid = new List<Identity>();
             var questionsToBeInvalid = new List<Identity>();
 
-            foreach (var interviewScopeKvpValue in this.InterviewScopes.Values)
+            foreach (var interviewScopeKvpValue in interviewScopes)
             {
                 List<Identity> questionsToBeValidByScope;
                 List<Identity> questionsToBeInvalidByScope;

@@ -71,24 +71,7 @@ namespace WB.Core.SharedKernels.DataCollection.V5
             }
         }
 
-        public new ValidityChanges ProcessValidationExpressions()
-        {
-            var questionsToBeValid = new List<Identity>();
-            var questionsToBeInvalid = new List<Identity>();
-
-            foreach (var interviewScopeKvpValue in this.InterviewScopes.Values)
-            {
-                List<Identity> questionsToBeValidByScope;
-                List<Identity> questionsToBeInvalidByScope;
-
-                interviewScopeKvpValue.CalculateValidationChanges(out questionsToBeValidByScope, out questionsToBeInvalidByScope);
-
-                questionsToBeValid.AddRange(questionsToBeValidByScope);
-                questionsToBeInvalid.AddRange(questionsToBeInvalidByScope);
-            }
-
-            return new ValidityChanges(answersDeclaredValid: questionsToBeValid, answersDeclaredInvalid: questionsToBeInvalid);
-        }
+        public new ValidityChanges ProcessValidationExpressions() => ProcessValidationExpressionsImpl(this.InterviewScopes.Values);
 
         public new EnablementChanges ProcessEnablementConditions() => ProcessEnablementConditionsImpl(this.InterviewScopes.Values);
 

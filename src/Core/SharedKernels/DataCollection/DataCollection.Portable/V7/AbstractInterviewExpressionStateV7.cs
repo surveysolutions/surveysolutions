@@ -74,17 +74,7 @@ namespace WB.Core.SharedKernels.DataCollection.V7
             }
         }
 
-        public new ValidityChanges ProcessValidationExpressions()
-        {
-            ValidityChanges changes = new ValidityChanges();
-
-            foreach (var interviewScopeKvpValue in this.InterviewScopes.Values)
-            {
-                changes.AppendChanges(interviewScopeKvpValue.ProcessValidationExpressions());
-            }
-
-            return changes;
-        }
+        public new ValidityChanges ProcessValidationExpressions() => ProcessValidationExpressionsImpl(this.InterviewScopes.Values);
 
         public new EnablementChanges ProcessEnablementConditions() => ProcessEnablementConditionsImpl(this.InterviewScopes.Values);
 
