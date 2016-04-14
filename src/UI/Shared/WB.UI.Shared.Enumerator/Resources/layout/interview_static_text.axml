@@ -10,7 +10,12 @@
     <LinearLayout style="@style/Interview_Question_Header">
       <TextView
           style="@style/Interview_Question_Title"
-          local:MvxBind="Html StaticText" />
+          local:MvxBind="Html StaticText; Visible Not(QuestionState.Validity.IsInvalid)" />
+
+      <TextView
+          style="@style/Interview_Question_Title"
+          android:textColor="@color/errorTextColor"
+          local:MvxBind="Text StaticText; Visible QuestionState.Validity.IsInvalid" />
     </LinearLayout>
   </LinearLayout>
   <include layout="@layout/interview__attachment" />
