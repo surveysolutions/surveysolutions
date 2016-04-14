@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -10,10 +11,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactory
         protected static GroupInfoView CreateChapterInfoView(string questionnaireId, string chapterId)
         {
             return new GroupInfoView()
-            {
-                ItemId = questionnaireId,
-                Items = new List<IQuestionnaireItem>() {new GroupInfoView() {ItemId = chapterId}}
-            };
+                {
+                    ItemId = questionnaireId,
+                    Items = new List<IQuestionnaireItem>() {new GroupInfoView() {ItemId = chapterId}}
+                };
         }
 
         protected static GroupInfoView CreateChapterInfoViewWithoutChapters(string questionnaireId, string chapterId)

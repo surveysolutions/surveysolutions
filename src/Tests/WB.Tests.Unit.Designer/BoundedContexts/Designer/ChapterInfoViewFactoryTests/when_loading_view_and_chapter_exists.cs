@@ -1,5 +1,6 @@
 ﻿using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
@@ -26,9 +27,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactory
             view.ShouldNotBeNull();
 
         It should_chapter_id_be_equal_chapterId = () =>
-            view.ItemId.ShouldEqual(chapterId);
+            view.Chapter.ItemId.ShouldEqual(chapterId);
 
-        private static IQuestionnaireItem view;
+        private static NewChapterView view;
         private static ChapterInfoViewFactory factory;
         private static string questionnaireId = "11111111111111111111111111111111";
         private static string chapterId = "22222222222222222222222222222222";

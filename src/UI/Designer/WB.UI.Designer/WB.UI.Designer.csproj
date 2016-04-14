@@ -530,6 +530,7 @@
     <Content Include="UpdatedDesigner\content\i\designer-left-icons.png" />
     <Content Include="UpdatedDesigner\content\i\left-panel-shadow-small.png" />
     <Content Include="UpdatedDesigner\content\i\macro-panel-btn.png" />
+    <Content Include="UpdatedDesigner\vendor\ace-builds\src-noconflict\ext-language_tools.js" />
     <Content Include="UpdatedDesigner\vendor\angular-moment\angular-moment.js" />
     <Content Include="UpdatedDesigner\vendor\angular-moment\angular-moment.min.js" />
     <Content Include="UpdatedDesigner\vendor\angular-moment\Gruntfile.js" />

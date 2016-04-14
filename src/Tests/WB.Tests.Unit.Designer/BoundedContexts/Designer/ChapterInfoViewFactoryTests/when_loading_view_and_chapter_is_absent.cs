@@ -1,5 +1,6 @@
 ﻿using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using It = Machine.Specifications.It;
@@ -25,7 +26,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactory
         It should_chapter_be_null = () =>
             view.ShouldBeNull();
 
-        private static IQuestionnaireItem view;
+        private static NewChapterView view;
         private static ChapterInfoViewFactory factory;
         private static string questionnaireId = "11111111111111111111111111111111";
         private static string chapterId = "22222222222222222222222222222222";
