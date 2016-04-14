@@ -5,6 +5,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
     public class GroupInfoView : IQuestionnaireItem, IReadSideRepositoryEntity
     {
+        public GroupInfoView()
+        {
+            this.Items = new List<IQuestionnaireItem>();
+        }
+
         public string ItemId { get; set; }
         public ChapterItemType ItemType { get { return ChapterItemType.Group; }}
 
