@@ -25,9 +25,6 @@ namespace WB.Tests.Unit
                     interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                     Mock.Of<IPlainQuestionnaireRepository>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaire),
                     Stub.MvxMainThreadDispatcher());
-                result.Init("interviewid", entityIdentity);
-
-                Mvx.RegisterSingleton(Stub.MvxMainThreadDispatcher());
 
                 return result;
             }
@@ -35,8 +32,8 @@ namespace WB.Tests.Unit
             public static StaticTextStateViewModel StaticTextStateViewModel(IStatefulInterviewRepository interviewRepository = null,
                 ILiteEventRegistry eventRegistry = null)
             {
-                return  new StaticTextStateViewModel(Create.ViewModels.EnablementViewModel(interviewRepository, eventRegistry),
-                    Create.ViewModels.ValidityViewModel());
+                return new StaticTextStateViewModel(Create.ViewModels.EnablementViewModel(interviewRepository, eventRegistry),
+                    Create.ViewModels.ValidityViewModel(interviewRepository: interviewRepository));
             }
 
             private static EnablementViewModel EnablementViewModel(IStatefulInterviewRepository interviewRepository = null, 
