@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Templates;
@@ -88,10 +89,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             if (!this.settings.EnableDump)
                 return;
 
-            if (this.fileSystemAccessor.IsDirectoryExists(this.settings.DumpFolder))
-                this.fileSystemAccessor.DeleteDirectory(this.settings.DumpFolder);
-
-            this.fileSystemAccessor.CreateDirectory(this.settings.DumpFolder);
+            if (!this.fileSystemAccessor.IsDirectoryExists(this.settings.DumpFolder))
+            {
+                this.fileSystemAccessor.CreateDirectory(this.settings.DumpFolder);
+            }
+            else
+            {
+                foreach (var filename in this.fileSystemAccessor.GetFilesInDirectory(this.settings.DumpFolder))
+                {
+                    try
+                    {
+                        this.fileSystemAccessor.DeleteFile(filename);
+                    }
+                    catch (Exception)
+                    {
+                        Debug.WriteLine($"Failed to delete file {filename}.");
+                    }
+                }
+            }
 
             foreach (var generatedClass in generatedClasses)
             {
