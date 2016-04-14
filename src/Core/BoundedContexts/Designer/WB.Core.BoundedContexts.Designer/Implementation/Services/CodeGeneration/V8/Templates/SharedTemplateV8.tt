@@ -25,6 +25,23 @@ void StaticTextsStatesInLevelConstructor(List<StaticTextTemplateModel> staticTex
 #>
 		EnablementStates.Add(<#=staticText.StateName#>.ItemId, <#=staticText.StateName#>);
 <#+
+		if (staticText.HasAnyValidation())
+		{
+#>
+			var <#= staticText.IdName#>__allValidations = new Dictionary<int, Func<bool>>();
+<#+ 
+			foreach (var @validationExp in staticText.ValidationExpressions.Where(x => !string.IsNullOrWhiteSpace(x.ValidationExpression))) 
+			{
+#>
+				<#= staticText.IdName#>__allValidations.Add(<#=@validationExp.Order#>,<#=@validationExp.ValidationMethodName#>);				
+<#+ 
+			}
+#>
+			ValidationExpressionDescriptions.Add(new Identity(IdOf.<#=staticText.IdName#>, rosterVector),
+				ValidationDescription.ForStaticText(
+					validations: <#=staticText.IdName#>__allValidations));		 
+<#+ 
+		}
 	}
 }
 
@@ -39,32 +56,33 @@ void QuestionsStatesInLevelConstructor(List<QuestionTemplateModel> questions)
 		if(question.HasAnyValidation())
 		{
 #>
-        var <#= question.IdName#>__allValidations = new Dictionary<int, Func<bool>>();
-
-		<#+ 
-	foreach (var @validationExp in question.ValidationExpressions.Where(x=> !string.IsNullOrWhiteSpace(x.ValidationExpression))) 
-		{
-#>
-		<#= question.IdName#>__allValidations.Add(<#=@validationExp.Order#>,<#=@validationExp.ValidationMethodName#>);				
-<#+ 
-		}
-#>
-
-        ValidationExpressionDescriptions.Add(new Identity(IdOf.<#= question.IdName#>, rosterVector),
-		  new ValidationDescription {
-		    PreexecutionCheck = () => this.IsAnswerEmpty(<#=question.VariableName#>),
-		    Validations = <#= question.IdName#>__allValidations});		 
+			var <#= question.IdName#>__allValidations = new Dictionary<int, Func<bool>>();
 
 <#+ 
+			foreach (var @validationExp in question.ValidationExpressions.Where(x=> !string.IsNullOrWhiteSpace(x.ValidationExpression))) 
+			{
+#>
+				<#= question.IdName#>__allValidations.Add(<#=@validationExp.Order#>,<#=@validationExp.ValidationMethodName#>);				
+<#+ 
+			}
+#>
+
+			ValidationExpressionDescriptions.Add(new Identity(IdOf.<#= question.IdName#>, rosterVector),
+				new ValidationDescription.ForQuestion(
+					preexecutionCheck: () => this.IsAnswerEmpty(<#=question.VariableName#>),
+					validations: <#= question.IdName#>__allValidations));		 
+
+<#+ 
 		}
+
 		if (question.IsMultiOptionYesNoQuestion)
 		{
 #>
-		AddUpdaterToMap(IdOf.<#=question.IdName#>, (<#=typeof(YesNoAnswersOnly).Name#> val) => {<#=question.MemberName#> = new <#=typeof(YesNoAnswers).Name#>(<#=question.MemberName#>.All,val); });
+			AddUpdaterToMap(IdOf.<#=question.IdName#>, (<#=typeof(YesNoAnswersOnly).Name#> val) => {<#=question.MemberName#> = new <#=typeof(YesNoAnswers).Name#>(<#=question.MemberName#>.All,val); });
 <#+ 
 		}else{
 #>
-		AddUpdaterToMap(IdOf.<#=question.IdName#>, (<#=question.TypeName#> val) => {<#=question.MemberName#>  = val; });
+			AddUpdaterToMap(IdOf.<#=question.IdName#>, (<#=question.TypeName#> val) => {<#=question.MemberName#>  = val; });
 <#+ 
 		}
 	}

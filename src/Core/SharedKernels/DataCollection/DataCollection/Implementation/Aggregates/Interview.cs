@@ -426,6 +426,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
+        public virtual void Apply(StaticTextsDeclaredValid @event)
+        {
+        }
+
+        public virtual void Apply(StaticTextsDeclaredInvalid @event)
+        {
+        }
+
         public void Apply(LinkedOptionsChanged @event)
         {
             this.interviewState.ApplyLinkedOptionQuestionChanges(@event.ChangedLinkedQuestions);

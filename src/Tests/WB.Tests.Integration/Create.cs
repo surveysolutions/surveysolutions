@@ -84,7 +84,7 @@ namespace WB.Tests.Integration
         private static ICompilerSettings GetCompilerSettingsStub()
             => System.Environment.MachineName.ToLower() == "powerglide" // TLK's :)
                 ? Mock.Of<ICompilerSettings>(settings
-                    => settings.EnableDump == false
+                    => settings.EnableDump == true
                     && settings.DumpFolder == "C:/Projects/Data/Tests/CodeDump")
                 : Mock.Of<ICompilerSettings>();
 

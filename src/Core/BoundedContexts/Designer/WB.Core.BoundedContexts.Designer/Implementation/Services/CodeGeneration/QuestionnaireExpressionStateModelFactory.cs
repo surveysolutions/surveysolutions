@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
@@ -119,15 +120,33 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     group.VariableName));
             }
 
-            foreach (var staticTextModel in questionnaireTemplate.AllStaticTexts.Where(x => !string.IsNullOrWhiteSpace(x.Condition)))
+            foreach (var staticText in questionnaireTemplate.AllStaticTexts)
             {
-                methodModels.Add(ExpressionLocation.StaticTextCondition(staticTextModel.Id).Key, new ConditionDescriptionModel(
-                    staticTextModel.ParentScopeTypeName,
-                    staticTextModel.ConditionMethodName,
-                    codeGenerationSettings.Namespaces,
-                    staticTextModel.Condition,
-                    false,
-                    staticTextModel.VariableName));
+                if (!string.IsNullOrWhiteSpace(staticText.Condition))
+                {
+                    methodModels.Add(
+                        ExpressionLocation.StaticTextCondition(staticText.Id).Key,
+                        new ConditionDescriptionModel(
+                            staticText.ParentScopeTypeName,
+                            staticText.ConditionMethodName,
+                            codeGenerationSettings.Namespaces,
+                            staticText.Condition,
+                            false,
+                            staticText.VariableName));
+                }
+
+                foreach (var validation in staticText.ValidationExpressions.Where(x => !string.IsNullOrWhiteSpace(x.ValidationExpression)))
+                {
+                    methodModels.Add(
+                        ExpressionLocation.StaticTextValidation(staticText.Id, validation.Order).Key,
+                        new ConditionDescriptionModel(
+                            staticText.ParentScopeTypeName,
+                            validation.ValidationMethodName,
+                            codeGenerationSettings.Namespaces,
+                            validation.ValidationExpression,
+                            false,
+                            validation.VariableName));
+                }
             }
 
             foreach (RosterTemplateModel roster in questionnaireTemplate.AllRosters.Where(x => !string.IsNullOrWhiteSpace(x.Conditions)))
@@ -355,7 +374,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                     if (child is IStaticText)
                     {
-                        var staticTextModel = this.CreateStaticTextTemplateModel(questionnaireDoc, (IStaticText) child, currentScope);
+                        var staticTextModel = this.CreateStaticTextTemplateModel((IStaticText) child, currentScope, questionnaireDoc);
 
                         currentScope.StaticTexts.Add(staticTextModel);
 
@@ -469,19 +488,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 ? childAsIQuestion.StataExportCaption
                 : "__" + childAsIQuestion.PublicKey.FormatGuid();
 
-            var validationConditions = new List<ValidationExpressionModel>();
-
-            for (int i = 0; i < childAsIQuestion.ValidationConditions.Count; i++)
-                {
-                    validationConditions.Add(new ValidationExpressionModel(
-                        this.macrosSubstitutionService.InlineMacros(childAsIQuestion.ValidationConditions[i].Expression, questionnaireDoc.Macros.Values),
-                        varName,
-                        i));
-                }
-            
             var condition = childAsIQuestion.CascadeFromQuestionId.HasValue
                 ? this.GetConditionForCascadingQuestion(questionnaireDoc, childAsIQuestion.PublicKey)
                 : this.macrosSubstitutionService.InlineMacros(childAsIQuestion.ConditionExpression, questionnaireDoc.Macros.Values);
+
+            var validationExpressions = childAsIQuestion
+                .ValidationConditions
+                .Select((validationCondition, index)
+                    => new ValidationExpressionModel(
+                        this.macrosSubstitutionService.InlineMacros(validationCondition.Expression, questionnaireDoc.Macros.Values),
+                        varName,
+                        index))
+                .ToList();
 
             var question = new QuestionTemplateModel
             {
@@ -491,7 +509,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 TypeName = GenerateQuestionTypeName(childAsIQuestion),
                 RosterScopeName = rosterScopeName,
                 ParentScopeTypeName = parentScopeTypeName,
-                ValidationExpressions = validationConditions
+                ValidationExpressions = validationExpressions
             };
 
             if (childAsIQuestion.QuestionType == QuestionType.MultyOption && childAsIQuestion is IMultyOptionsQuestion)
@@ -560,13 +578,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 ParentScopeTypeName = currentScope.TypeName,
             };
 
-        private StaticTextTemplateModel CreateStaticTextTemplateModel(
-            QuestionnaireDocument questionnaire,
-            IStaticText staticText,
-            RosterScopeBaseModel currentScope)
+        private StaticTextTemplateModel CreateStaticTextTemplateModel(IStaticText staticText, RosterScopeBaseModel currentScope, QuestionnaireDocument questionnaire)
             => new StaticTextTemplateModel(
                 staticText.PublicKey,
                 this.macrosSubstitutionService.InlineMacros(staticText.ConditionExpression, questionnaire.Macros.Values),
+                staticText
+                    .ValidationConditions
+                    .Select(validationCondition
+                        => this.macrosSubstitutionService.InlineMacros(validationCondition.Expression, questionnaire.Macros.Values))
+                    .ToList(),
                 currentScope.RosterScopeName,
                 currentScope.TypeName);
 

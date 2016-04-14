@@ -61,16 +61,21 @@ namespace WB.Core.BoundedContexts.Designer.Services
             };
         }
 
-        public static ExpressionLocation QuestionValidation(Guid questionId, int? position)
+        public static ExpressionLocation QuestionValidation(Guid questionId, int? position) => new ExpressionLocation
         {
-            return new ExpressionLocation
-            {
-                ItemType = ExpressionLocationItemType.Question,
-                ExpressionType = ExpressionLocationType.Validation,
-                Id = questionId,
-                ExpressionPosition = position
-            };
-        }
+            ItemType = ExpressionLocationItemType.Question,
+            ExpressionType = ExpressionLocationType.Validation,
+            Id = questionId,
+            ExpressionPosition = position
+        };
+
+        public static ExpressionLocation StaticTextValidation(Guid questionId, int? position) => new ExpressionLocation
+        {
+            ItemType = ExpressionLocationItemType.StaticText,
+            ExpressionType = ExpressionLocationType.Validation,
+            Id = questionId,
+            ExpressionPosition = position
+        };
 
         public static ExpressionLocation QuestionCondition(Guid questionId)
         {
