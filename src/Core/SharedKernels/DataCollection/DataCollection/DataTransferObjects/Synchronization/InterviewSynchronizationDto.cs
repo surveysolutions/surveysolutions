@@ -23,6 +23,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             AnsweredQuestionSynchronizationDto[] answers,
             HashSet<InterviewItemId> disabledGroups,
             HashSet<InterviewItemId> disabledQuestions,
+            HashSet<InterviewItemId> disabledStaticTexts,
             HashSet<InterviewItemId> validAnsweredQuestions,
             HashSet<InterviewItemId> invalidAnsweredQuestions,
             Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances,
@@ -42,6 +43,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             Answers = answers;
             DisabledGroups = disabledGroups;
             DisabledQuestions = disabledQuestions;
+            this.DisabledStaticTexts = disabledStaticTexts;
             ValidAnsweredQuestions = validAnsweredQuestions;
             InvalidAnsweredQuestions = invalidAnsweredQuestions;
             
@@ -64,6 +66,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public AnsweredQuestionSynchronizationDto[] Answers { get;  set; }
         public HashSet<InterviewItemId> DisabledGroups { get;  set; }
         public HashSet<InterviewItemId> DisabledQuestions { get;  set; }
+        public HashSet<InterviewItemId> DisabledStaticTexts { get; set; }
         public HashSet<InterviewItemId> ValidAnsweredQuestions { get;  set; }
         public HashSet<InterviewItemId> InvalidAnsweredQuestions { get;  set; }
 
