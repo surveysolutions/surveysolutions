@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Comments = commentsViewModel;
         }
         
-        public virtual async Task InitAsync(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public virtual Task InitAsync(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Enablement.EntityEnabled += this.EnablementOnEntityEnabled;
             this.answersRemovedNotifier.AnswerRemoved += this.AnswerRemoved;
 
-            await Task.FromResult(true);
+            return Task.FromResult(true);
         }
 
         private void AnswerRemoved(object sender, EventArgs eventArgs)
