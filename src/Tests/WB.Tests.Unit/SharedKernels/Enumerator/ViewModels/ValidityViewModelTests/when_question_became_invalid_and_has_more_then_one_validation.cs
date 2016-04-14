@@ -45,6 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
             viewModel = Create.ViewModels.ValidityViewModel(questionnaire: plainQuestionnaire,
                 interviewRepository: statefulInterviewRepository,
                 entityIdentity: questionIdentity);
+            viewModel.Init("interviewid", questionIdentity);
         };
 
         Because of = () =>
