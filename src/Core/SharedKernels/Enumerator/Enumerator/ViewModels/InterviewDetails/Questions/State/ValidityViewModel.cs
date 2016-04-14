@@ -20,9 +20,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class ValidityViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<AnswersDeclaredValid>,
         ILiteEventHandler<AnswersDeclaredInvalid>,
+        ILiteEventHandler<StaticTextsDeclaredValid>,
+        ILiteEventHandler<StaticTextsDeclaredInvalid>,
         ILiteEventHandler<QuestionsEnabled>,
         IDisposable
     {
+        public event EventHandler BecameInvalid;
+        public event EventHandler BecameValid;
+
         public class ErrorMessage : MvxNotifyPropertyChanged
         {
             private string caption;
@@ -77,7 +82,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionIdentity = entityIdentity;
 
             this.liteEventRegistry.Subscribe(this, interviewId);
-
             this.UpdateValidState();
         }
 
@@ -158,6 +162,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+        public void Handle(StaticTextsDeclaredValid @event)
+        {
+            if (@event.StaticTexts.Contains(this.questionIdentity))
+            {
+                this.UpdateValidState();
+                this.OnBecameValid();
+            }
+        }
+
+        public void Handle(StaticTextsDeclaredInvalid @event)
+        {
+            if (@event.GetFailedValidationConditionsDictionary().Keys.Contains(this.questionIdentity))
+            {
+                this.UpdateValidState();
+                this.OnBecameInvalid();
+            }
+        }
+
         public void Handle(QuestionsEnabled @event)
         {
             if (@event.Questions.Contains(this.questionIdentity))
@@ -193,6 +215,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Dispose()
         {
             this.liteEventRegistry.Unsubscribe(this, this.interviewId);
+        }
+
+        protected virtual void OnBecameInvalid()
+        {
+            this.BecameInvalid?.Invoke(this, EventArgs.Empty);
+        }
+
+        protected virtual void OnBecameValid()
+        {
+            this.BecameValid?.Invoke(this, EventArgs.Empty);
         }
     }
 }

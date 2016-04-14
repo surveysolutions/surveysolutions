@@ -8,7 +8,8 @@
       <include layout="@layout/interview_question__instructions" />
       <LinearLayout style="@style/Interview_Question_Answer"
         local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
-        <LinearLayout  style="@style/Interview_Question_Border" local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
+        <LinearLayout  style="@style/Interview_Question_Border" 
+                       local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
           
           <NumericEditText style="@style/Interview_Question_Answer_Text_Editor"
                            local:numbersOnly="true"
