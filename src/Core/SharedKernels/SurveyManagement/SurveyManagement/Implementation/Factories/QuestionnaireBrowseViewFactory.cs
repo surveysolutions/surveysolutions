@@ -45,12 +45,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                         query = query.Where(x => x.Title.ContainsIgnoreCaseSensitive(input.Filter));
                     }
 
-                    if (input.OnlyCensus.HasValue)
-                    {
-                        query = query.Where(x => x.AllowCensusMode == input.OnlyCensus);
-                    }
                 }
-                else { query = query.Where(x => !x.IsDeleted); }
+                else
+                {
+                    query = query.Where(x => !x.IsDeleted);
+                }
+
+                if (input.OnlyCensus.HasValue)
+                {
+                    query = query.Where(x => x.AllowCensusMode == input.OnlyCensus);
+                }
 
                 var queryResult = query.OrderUsingSortExpression(input.Order);
 
