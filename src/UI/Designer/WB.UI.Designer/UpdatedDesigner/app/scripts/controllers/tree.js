@@ -604,8 +604,10 @@
             $scope.refreshTree = function () {
                 questionnaireService.getChapterById($state.params.questionnaireId, $state.params.chapterId)
                     .success(function (result) {
-                        $scope.items = result.items;
-                        $scope.currentChapter = result;
+
+                        $scope.items = result.chapter.items;
+                        $scope.currentChapter = result.chapter;
+                        $rootScope.variableNames = result.variableNames;
                         connectTree();
                     });
             };

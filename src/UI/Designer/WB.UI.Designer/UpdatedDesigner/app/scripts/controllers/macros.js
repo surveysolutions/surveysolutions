@@ -100,13 +100,17 @@
                 // Editor part
                 var renderer = editor.renderer;
 
+                ace.require("ace/ext/language_tools");
+
                 // Options
                 editor.setOptions({
                     maxLines: Infinity,
                     mode: "ace/mode/csharp",
                     fontSize: 16,
                     highlightActiveLine: false,
-                    theme: "ace/theme/github"
+                    theme: "ace/theme/github",
+                    enableBasicAutocompletion: true,
+                    enableLiveAutocompletion: false
                 });
                 renderer.setShowGutter(false);
                 renderer.setPadding(0);

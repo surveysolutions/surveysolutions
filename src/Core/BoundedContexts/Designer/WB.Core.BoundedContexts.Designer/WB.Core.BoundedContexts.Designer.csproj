@@ -537,6 +537,7 @@
     <Compile Include="Views\Questionnaire\Edit\ICompositeView.cs" />
     <Compile Include="Views\Questionnaire\Edit\IQuestionnaireInfoFactory.cs" />
     <Compile Include="Views\Questionnaire\Edit\DropdownQuestionView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\NewChapterView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditGroupView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditQuestionView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditRosterView.cs" />

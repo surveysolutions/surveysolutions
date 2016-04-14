@@ -67,7 +67,7 @@ namespace WB.UI.Designer.Api
 
         [HttpGet]
         [CamelCase]
-        public IQuestionnaireItem Chapter(string id, string chapterId)
+        public NewChapterView Chapter(string id, string chapterId)
         {
             var chapterInfoView = chapterInfoViewFactory.Load(questionnaireId: id, groupId: chapterId);
 

@@ -1,4 +1,6 @@
-﻿using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+﻿using System.Collections.Generic;
+using System.Linq;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
@@ -11,11 +13,52 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             this.readSideReader = readSideReader;
         }
 
-        public IQuestionnaireItem Load(string questionnaireId, string groupId)
+        public NewChapterView Load(string questionnaireId, string groupId)
         {
             var questionnaire = this.readSideReader.GetById(questionnaireId);
 
-            return questionnaire != null ? questionnaire.Items.Find(chapter => chapter.ItemId == groupId) : null;
+            if (questionnaire == null)
+            {
+                return null;
+            }
+
+            var chapterItem = questionnaire.Items.Find(chapter => chapter.ItemId == groupId);
+            if (chapterItem == null)
+                return null;
+
+            return new NewChapterView()
+            {
+                Chapter = chapterItem,
+                VariableNames = this.CollectVariableNames(questionnaire)
+            };
+        }
+
+        private string[] CollectVariableNames(GroupInfoView questionnaire)
+        {
+            List<string> variables = new List<string>();
+
+            var nodes = new Stack<IQuestionnaireItem>(new[] { questionnaire });
+
+            while (nodes.Any())
+            {
+                IQuestionnaireItem node = nodes.Pop();
+                var nodeAsQuestionInfoView = node as QuestionInfoView;
+                if (nodeAsQuestionInfoView != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(nodeAsQuestionInfoView.Variable))
+                        variables.Add(nodeAsQuestionInfoView.Variable);
+                    continue;
+                }
+
+                var nodeAsGroupInfoView = node as GroupInfoView;
+                if (nodeAsGroupInfoView == null)
+                    continue;
+                if(!string.IsNullOrWhiteSpace(nodeAsGroupInfoView.Variable))
+                    variables.Add(nodeAsGroupInfoView.Variable);
+
+                foreach (var item in nodeAsGroupInfoView.Items) nodes.Push(item);
+            }
+            return variables.Distinct().ToArray();
         }
     }
 }

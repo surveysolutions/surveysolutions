@@ -259,7 +259,8 @@ angular.module('designerApp')
             };
 
             $scope.currentChapter = null;
-
+            $scope.variableNames = [];
+            
             $rootScope.$on('groupDeleted', function (scope, removedItemId) {
                 $scope.questionnaire.groupsCount--;
                 $scope.removeItemWithIdFromErrors(removedItemId);
@@ -327,20 +328,39 @@ angular.module('designerApp')
                 });
             };
 
+            
             $scope.aceLoaded = function (editor) {
                 // Editor part
                 var renderer = editor.renderer;
+                var lang_tool = ace.require("ace/ext/language_tools");
+
+                var variablesCompletor = 
+                {
+                    getCompletions: function (editor, session, pos, prefix, callback) {
+                        callback(null, $rootScope.variableNames.map(function (variable) {
+                            return {name: variable, value: variable, meta: "variable" }
+                        }));
+                    }
+                }
 
                 // Options
                 editor.setOptions({
                     maxLines: Infinity,
-                    mode: "ace/mode/csharp",
                     fontSize: 16,
                     highlightActiveLine: false,
-                    theme: "ace/theme/github"
+                    theme: "ace/theme/github",
+                    enableBasicAutocompletion: true,
+                    enableLiveAutocompletion: false
                 });
                 renderer.setShowGutter(false);
                 renderer.setPadding(12);
+
+                editor.getSession().setMode({
+                    path: "ace/mode/csharp",
+                    timestamp: Date.now()
+                });
+
+                lang_tool.addCompleter(variablesCompletor);
 
                 editor.$blockScrolling = Infinity;
                 editor.commands.bindKey("tab", null);
