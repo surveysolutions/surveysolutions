@@ -1,6 +1,6 @@
 angular.module('designerApp')
     .controller('MainCtrl',
-        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal) {
+        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal, notificationService) {
 
             $(document).on('click', "a[href='javascript:void(0);']", function (e) { e.preventDefault(); }); // remove when we will stop support of IE 9 KP-6076
 
@@ -27,10 +27,12 @@ angular.module('designerApp')
                 callback: function (event) {
                     
                     var printWindow = window.open("../../pdf/printpreview/" + $state.params.questionnaireId);
-                    
-                    printWindow.focus();
+                    try{
+                        printWindow.focus();
+                    } catch(e) {
+                        notificationService.notice(e);//"Make sure popups are not blocked");
+                    }
                     printWindow.print();
-
                     event.preventDefault();
                 }
             });
