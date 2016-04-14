@@ -40,7 +40,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             || eventPayload is QuestionsEnabled
             || eventPayload is QuestionsDisabled
             || eventPayload is GroupsEnabled
-            || eventPayload is GroupsDisabled;
+            || eventPayload is GroupsDisabled
+            || eventPayload is StaticTextsDisabled
+            || eventPayload is StaticTextsEnabled;
 
         private static bool IsFromLastCompletion(CommittedEvent committedEvent, Guid lastCompletionCommitId)
             => committedEvent.CommitId == lastCompletionCommitId;

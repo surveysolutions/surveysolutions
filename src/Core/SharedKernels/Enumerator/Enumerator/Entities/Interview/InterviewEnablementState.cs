@@ -2,7 +2,7 @@ using System;
 
 namespace WB.Core.SharedKernels.Enumerator.Entities.Interview
 {
-    public class InterviewGroup
+    public class InterviewEnablementState
     {
         public Guid Id { get; set; }
         public decimal[] RosterVector { get; set; }

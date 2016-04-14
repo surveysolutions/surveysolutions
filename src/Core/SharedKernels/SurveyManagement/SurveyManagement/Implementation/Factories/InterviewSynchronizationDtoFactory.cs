@@ -63,6 +63,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             var answeredQuestions = new List<AnsweredQuestionSynchronizationDto>();
             var disabledGroups = new HashSet<InterviewItemId>();
             var disabledQuestions = new HashSet<InterviewItemId>();
+            var disabledStaticTexts = new HashSet<InterviewItemId>();
             var validQuestions = new HashSet<InterviewItemId>();
             var invalidQuestions = new HashSet<InterviewItemId>();
             var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
@@ -105,6 +106,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 foreach (var disabledGroup in interviewLevel.DisabledGroups)
                 {
                     disabledGroups.Add(new InterviewItemId(disabledGroup, interviewLevel.RosterVector));
+                }
+                foreach (var disabledStaticText in interviewLevel.DisabledStaticTexts)
+                {
+                    disabledStaticTexts.Add(new InterviewItemId(disabledStaticText, interviewLevel.RosterVector));
                 }
 
                 this.FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(questionnariePropagationStructure, interviewLevel,
@@ -152,6 +157,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 answeredQuestions.ToArray(),
                 disabledGroups,
                 disabledQuestions,
+                disabledStaticTexts,
                 validQuestions,
                 invalidQuestions,
                 propagatedGroupInstanceCounts,
