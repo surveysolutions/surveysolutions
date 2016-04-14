@@ -1,22 +1,12 @@
-﻿using System;
-using Moq;
+﻿using Moq;
 using MvvmCross.Platform;
-using MvvmCross.Plugins.Messenger;
-using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
-using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
@@ -45,7 +35,8 @@ namespace WB.Tests.Unit
             public static StaticTextStateViewModel StaticTextStateViewModel(IStatefulInterviewRepository interviewRepository = null,
                 ILiteEventRegistry eventRegistry = null)
             {
-                return  new StaticTextStateViewModel(Create.ViewModels.EnablementViewModel(interviewRepository, eventRegistry));
+                return  new StaticTextStateViewModel(Create.ViewModels.EnablementViewModel(interviewRepository, eventRegistry),
+                    Create.ViewModels.ValidityViewModel());
             }
 
             private static EnablementViewModel EnablementViewModel(IStatefulInterviewRepository interviewRepository = null, 
