@@ -196,6 +196,11 @@ namespace WB.Tests.Integration
             {
                 return new AnswersDeclaredInvalid(questions);
             }
+            
+            public static AnswersDeclaredInvalid AnswersDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
+            {
+                return new AnswersDeclaredInvalid(failedValidationConditions);
+            }
 
             public static QuestionsEnabled QuestionsEnabled(params Identity[] questions)
             {
@@ -215,6 +220,16 @@ namespace WB.Tests.Integration
             public static GroupsDisabled GroupsDisabled(params Identity[] groups)
             {
                 return new GroupsDisabled(groups);
+            }
+
+            public static StaticTextsDeclaredValid StaticTextsDeclaredValid(params Identity[] staticTexts)
+            {
+                return new StaticTextsDeclaredValid(staticTexts);
+            }
+
+            public static StaticTextsDeclaredInvalid StaticTextsDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
+            {
+                return new StaticTextsDeclaredInvalid(failedValidationConditions);
             }
 
             public static RosterInstancesAdded RosterInstancesAdded(params AddedRosterInstance[] rosterInstances)
