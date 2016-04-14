@@ -46,22 +46,29 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.QuestionState.Init(interviewId, entityIdentity);
             this.rawText = questionnaire.GetStaticText(entityIdentity.Id);
 
-            this.StaticText = interview.IsEnabled(entityIdentity) ? this.rawText : RemoveHtmlTags(this.rawText);
+            this.SetStaticText();
 
-            this.QuestionState.Enablement.EntityDisabled += this.EnablementOnEntityDisabled;
-            this.QuestionState.Enablement.EntityEnabled += EnablementOnEntityEnabled;
+            this.QuestionState.Enablement.EntityDisabled += (s,a) => this.SetStaticText();
+            this.QuestionState.Enablement.EntityEnabled += (s, a) => this.SetStaticText();
+            this.QuestionState.Validity.BecameInvalid += (s, a) => this.SetStaticText();
+            this.QuestionState.Validity.BecameValid += (s, a) => this.SetStaticText();
+
             await this.Attachment.InitAsync(interviewId, entityIdentity);
         }
 
-        private void EnablementOnEntityEnabled(object sender, EventArgs eventArgs)
+        private void SetStaticText()
         {
-            this.StaticText = rawText;
+            if (ShouldStipHtml)
+            {
+                this.StaticText = RemoveHtmlTags(this.rawText);
+            }
+            else
+            {
+                this.StaticText = this.rawText;
+            }
         }
 
-        private void EnablementOnEntityDisabled(object sender, EventArgs eventArgs)
-        {
-            this.StaticText = RemoveHtmlTags(rawText);
-        }
+        private bool ShouldStipHtml => !this.QuestionState.Enablement.Enabled || this.QuestionState.Validity.IsInvalid;
 
         private Identity identity;
         private string rawText;
