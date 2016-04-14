@@ -1676,10 +1676,27 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             if (expressionLocation.ExpressionType != ExpressionLocationType.General)
             {
-                var reference = new QuestionnaireVerificationReference(
-                    expressionLocation.ItemType == ExpressionLocationItemType.Question
-                        ? QuestionnaireVerificationReferenceType.Question
-                        : QuestionnaireVerificationReferenceType.Group, expressionLocation.Id);
+
+                QuestionnaireVerificationReferenceType questionnaireVerificationReferenceType;
+
+                switch (expressionLocation.ItemType)
+                {
+                    case ExpressionLocationItemType.Group:
+                    case ExpressionLocationItemType.Roster:
+                        questionnaireVerificationReferenceType = QuestionnaireVerificationReferenceType.Group;
+                        break;
+                    case ExpressionLocationItemType.Question:
+                        questionnaireVerificationReferenceType = QuestionnaireVerificationReferenceType.Question;
+                        break;
+                    case ExpressionLocationItemType.StaticText:
+                        questionnaireVerificationReferenceType = QuestionnaireVerificationReferenceType.StaticText;
+                        break;
+                    default:
+                        throw new ArgumentException("expressionLocation");
+                }
+
+
+                var reference = new QuestionnaireVerificationReference(questionnaireVerificationReferenceType, expressionLocation.Id);
 
                 if (expressionLocation.ExpressionType == ExpressionLocationType.Validation)
                 {
