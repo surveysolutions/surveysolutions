@@ -92,7 +92,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             await this.InitAsync(interviewId, entityIdentity, groupWithAnswersToMonitor, navigationState);
         }
 
-        public async Task InitAsync(string interviewId, Identity groupIdentity, Identity groupWithAnswersToMonitor, NavigationState navigationState)
+        public Task InitAsync(string interviewId, Identity groupIdentity, Identity groupWithAnswersToMonitor, NavigationState navigationState)
         {
             this.interviewId = interviewId;
             var interview = this.interviewRepository.Get(interviewId);
@@ -120,7 +120,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 this.answerNotifier.QuestionAnswered += this.QuestionAnswered;
             }
 
-            await Task.FromResult(true);
+            return Task.FromResult(true);
         }
 
         private void QuestionAnswered(object sender, EventArgs e)
