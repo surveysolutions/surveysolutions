@@ -1252,7 +1252,8 @@ namespace WB.Tests.Unit
             Dictionary<Identity, IList<FailedValidationCondition>> failedValidationConditions = null,
             InterviewStatus status = InterviewStatus.SupervisorAssigned,
             Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances = null,
-            bool? wasCompleted = false)
+            bool? wasCompleted = false,
+            HashSet<InterviewItemId> disabledStaticTexts = null)
         {
             return new InterviewSynchronizationDto(
                 interviewId ?? Guid.NewGuid(),
@@ -1266,6 +1267,7 @@ namespace WB.Tests.Unit
                 answers ?? new AnsweredQuestionSynchronizationDto[0],
                 disabledGroups ?? new HashSet<InterviewItemId>(),
                 disabledQuestions ?? new HashSet<InterviewItemId>(),
+                disabledStaticTexts ?? new HashSet<InterviewItemId>(),
                 validQuestions ?? new HashSet<InterviewItemId>(),
                 invalidQuestions ?? new HashSet<InterviewItemId>(),
                 rosterGroupInstances ?? new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),

@@ -530,7 +530,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     state,
                     (document, group) => PreformActionOnLevel(document, group.RosterVector, level =>
                     {
-                        if (!level.DisabledStaticTexts.Contains(group.Id))
+                        if (level.DisabledStaticTexts.Contains(group.Id))
                         {
                             level.DisabledStaticTexts.Remove(group.Id);
                         }
