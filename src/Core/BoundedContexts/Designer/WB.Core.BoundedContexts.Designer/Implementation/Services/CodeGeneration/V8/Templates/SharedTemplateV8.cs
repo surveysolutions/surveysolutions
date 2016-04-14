@@ -425,8 +425,8 @@ this.Write(this.ToStringHelper.ToStringWithCulture(question.IdName));
         #line hidden
         
         #line 70 "C:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V8\Templates\SharedTemplateV8.tt"
-this.Write(", rosterVector),\r\n\t\t\t\tnew ValidationDescription.ForQuestion(\r\n\t\t\t\t\tpreexecutionCh" +
-        "eck: () => this.IsAnswerEmpty(");
+this.Write(", rosterVector),\r\n\t\t\t\tValidationDescription.ForQuestion(\r\n\t\t\t\t\tpreexecutionCheck:" +
+        " () => this.IsAnswerEmpty(");
 
         
         #line default
