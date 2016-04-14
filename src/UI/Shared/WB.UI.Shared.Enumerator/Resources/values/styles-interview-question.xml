@@ -99,7 +99,7 @@
     <item name="android:layout_height">match_parent</item>
     <item name="android:layout_weight">1</item>
     <item name="android:focusable">true</item>
-    <item name="android:layout_width">@dimen/Interview_Question_Answer_TextEditor_width</item>
+    <item name="android:layout_width">@dimen/Zero</item>
     <item name="android:focusableInTouchMode">true</item>
     <item name="android:textStyle">bold</item>
     <item name="android:textCursorDrawable">@null</item>
