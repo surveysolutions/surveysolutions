@@ -72,11 +72,13 @@ namespace WB.Core.SharedKernels.DataCollection.V6
             }
         }
 
-        public new ValidityChanges ProcessValidationExpressions()
+        public new ValidityChanges ProcessValidationExpressions() => ProcessValidationExpressionsImpl(this.InterviewScopes.Values);
+
+        protected static ValidityChanges ProcessValidationExpressionsImpl(IEnumerable<IExpressionExecutableV6> interviewScopes)
         {
             ValidityChanges changes = new ValidityChanges();
 
-            foreach (var interviewScopeKvpValue in this.InterviewScopes.Values)
+            foreach (var interviewScopeKvpValue in interviewScopes)
             {
                 changes.AppendChanges(interviewScopeKvpValue.ProcessValidationExpressions());
             }
