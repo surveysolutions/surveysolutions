@@ -59,6 +59,41 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             Assert.That(viewModel.StaticText, Is.EqualTo(textWithHtml));
         }
 
+        [Test]
+        public async Task when_static_text_is_invalid_should_strip_html()
+        {
+            var interview = Mock.Of<IStatefulInterview>(x => x.QuestionnaireIdentity == questionnaireIdentity && x.IsValid(this.staticTextIdentity) == false);
+            var questionnaire = Mock.Of<IQuestionnaire>(x => x.GetStaticText(staticTextIdentity.Id) == "text with <b>html</b>");
+
+            var questionnaireRepository = Create.PlainQuestionnaireRepositoryWith(questionnaire);
+            var interviewRepository = Create.StatefulInterviewRepositoryWith(interview);
+
+            var viewModel = CreateViewModel(questionnaireRepository, interviewRepository);
+
+            await viewModel.InitAsync("id", staticTextIdentity, Create.NavigationState());
+
+            Assert.That(viewModel.StaticText, Is.EqualTo("text with html"));
+        }
+
+        [Test]
+        public async Task when_static_text_is_valid_and_enabled_should_put_html_as_is()
+        {
+            var interview = Mock.Of<IStatefulInterview>(x => x.QuestionnaireIdentity == questionnaireIdentity && 
+                                                             x.IsValid(this.staticTextIdentity) == true &&
+                                                             x.IsEnabled(this.staticTextIdentity) == true);
+            var textWithHtml = "text with <b>html</b>";
+            var questionnaire = Mock.Of<IQuestionnaire>(x => x.GetStaticText(staticTextIdentity.Id) == textWithHtml);
+
+            var questionnaireRepository = Create.PlainQuestionnaireRepositoryWith(questionnaire);
+            var interviewRepository = Create.StatefulInterviewRepositoryWith(interview);
+
+            var viewModel = CreateViewModel(questionnaireRepository, interviewRepository);
+
+            await viewModel.InitAsync("id", staticTextIdentity, Create.NavigationState());
+
+            Assert.That(viewModel.StaticText, Is.EqualTo(textWithHtml));
+        }
+
         static StaticTextViewModel CreateViewModel(IPlainQuestionnaireRepository questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
             AttachmentViewModel attachmentViewModel = null,
