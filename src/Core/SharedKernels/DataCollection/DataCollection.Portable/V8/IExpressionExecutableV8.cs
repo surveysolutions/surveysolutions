@@ -14,6 +14,9 @@ namespace WB.Core.SharedKernels.DataCollection.V8
         void DisableStaticText(Guid staticTextId);
         void EnableStaticText(Guid staticTextId);
 
+        void ApplyStaticTextFailedValidations(Guid staticTextId, IReadOnlyList<FailedValidationCondition> failedValidations);
+        void DeclareStaticTextValid(Guid staticTextId);
+
         EnablementChanges ProcessEnablementConditions();
     }
 }
