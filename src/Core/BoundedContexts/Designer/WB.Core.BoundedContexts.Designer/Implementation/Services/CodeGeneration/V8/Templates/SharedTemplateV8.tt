@@ -68,7 +68,7 @@ void QuestionsStatesInLevelConstructor(List<QuestionTemplateModel> questions)
 #>
 
 			ValidationExpressionDescriptions.Add(new Identity(IdOf.<#= question.IdName#>, rosterVector),
-				new ValidationDescription.ForQuestion(
+				ValidationDescription.ForQuestion(
 					preexecutionCheck: () => this.IsAnswerEmpty(<#=question.VariableName#>),
 					validations: <#= question.IdName#>__allValidations));		 
 
