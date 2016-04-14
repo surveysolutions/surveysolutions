@@ -4,7 +4,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class ValidationExpressionModel
     {
-
         public ValidationExpressionModel(string validationExpression, string variableName, int order)
         {
             this.ValidationExpression = validationExpression;
@@ -12,9 +11,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.Order = order;
         }
 
-        public string ValidationExpression { private set; get; }
-        public string ValidationMethodName => string.Format("{0}{1}__{2}", CodeGenerator.ValidationPrefix, VariableName, this.Order.ToString(CultureInfo.InvariantCulture)) ;
-        public string VariableName { set; get; }
-        public int Order { private set; get; }
+        public string ValidationExpression { get; }
+        public string ValidationMethodName => $"{CodeGenerator.ValidationPrefix}{this.VariableName}__{this.Order.ToString(CultureInfo.InvariantCulture)}";
+        public string VariableName { get; }
+        public int Order { get; }
     }
 }

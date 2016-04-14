@@ -8,7 +8,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
-    [Ignore("KP-6970")]
     internal class when_answering_on_a_question_with_answer_that_makes_dependent_static_text_invalid : in_standalone_app_domain
     {
         Because of = () => results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
@@ -23,7 +22,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 {
                     Create.NumericIntegerQuestion(answeredQuestionId, "q1"),
                     Create.StaticText(dependentStaticTextId,
-                        validationConditions: Create.ValidationCondition(expression: "q1 > 0").ToEnumerable()),
+                        validationConditions: Create.ValidationCondition(expression: "q1 != 0").ToEnumerable()),
                 }),
                 events: new object[]
                 {
@@ -32,7 +31,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
             using (var eventContext = new EventContext())
             {
-                interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestion(questionId: answeredQuestionId, answer: 1));
+                interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestion(questionId: answeredQuestionId, answer: 0));
 
                 return new InvokeResults
                 {
