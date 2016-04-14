@@ -79,6 +79,28 @@ namespace WB.Core.SharedKernels.DataCollection.V8
             }
         }
 
+        public void DeclareStaticTextValid(IEnumerable<Identity> validStaticTexts)
+        {
+            foreach (Identity staticText in validStaticTexts)
+            {
+                var targetLevel = this.GetRosterByIdAndVector(staticText.Id, staticText.RosterVector);
+                if (targetLevel == null) return;
+
+                targetLevel.DeclareStaticTextValid(staticText.Id);
+            }
+        }
+
+        void IInterviewExpressionStateV8.ApplyStaticTextFailedValidations(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
+        {
+            foreach (var failedValidationCondition in failedValidationConditions)
+            {
+                var targetLevel = this.GetRosterByIdAndVector(failedValidationCondition.Key.Id, failedValidationCondition.Key.RosterVector);
+                if (targetLevel == null) return;
+
+                (targetLevel as IExpressionExecutableV8).ApplyStaticTextFailedValidations(failedValidationCondition.Key.Id, failedValidationCondition.Value);
+            }
+        }
+
         IInterviewExpressionStateV8 IInterviewExpressionStateV8.Clone() => (IInterviewExpressionStateV8) this.Clone();
     }
 }

@@ -69,6 +69,7 @@ namespace WB.Core.SharedKernels.DataCollection.V8
             => this.Validate(out questionsToBeValid, out questionsToBeInvalid);
 
         public ValidityChanges ProcessValidationExpressions() => this.ExecuteValidations();
+        
         public EnablementChanges ProcessEnablementConditions() => this.ProcessEnablementConditionsImpl();
 
         public void SetParent(IExpressionExecutable parent) => this.SetParentImpl(parent);
@@ -97,11 +98,27 @@ namespace WB.Core.SharedKernels.DataCollection.V8
                 this.EnablementStates[staticTextId].State = State.Enabled;
         }
 
+        public void DeclareStaticTextValid(Guid staticTextId)
+        {
+            this.ValidAnsweredQuestions.Add(staticTextId);
+            this.InvalidAnsweredQuestions.Remove(staticTextId);
+            this.InvalidAnsweredFailedValidations.Remove(staticTextId);
+        }
+
+        public void ApplyStaticTextFailedValidations(Guid staticTextId, IReadOnlyList<FailedValidationCondition> failedValidations)
+        {
+            this.ValidAnsweredQuestions.Remove(staticTextId);
+            this.InvalidAnsweredQuestions.Add(staticTextId);
+
+            this.InvalidAnsweredFailedValidations[staticTextId] = failedValidations;
+        }
+
         protected new ValidityChanges ExecuteValidations()
         {
             var questionsToBeValid = new List<Identity>();
             var questionsToBeInvalid = new List<Identity>();
             var failedQuestionsValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
+
             var staticTextsToBeValid = new List<Identity>();
             var failedStaticTextsValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
 
@@ -197,11 +214,11 @@ namespace WB.Core.SharedKernels.DataCollection.V8
                         isValid = !invalids.Any();
                     }
 
-                    if (isValid)// && !this.ValidAnsweredQuestions.Contains(staticTextId))
+                    if (isValid && !this.ValidAnsweredQuestions.Contains(staticTextId))
                     {
                         staticTextsToBeValid.Add(validationExpressionDescription.Key);
                     }
-                    else if (!isValid)// && !this.InvalidAnsweredQuestions.Contains(questionId)
+                    else if (!isValid)
                     {
                         // no changes in invalid validations
                         // do not raise
