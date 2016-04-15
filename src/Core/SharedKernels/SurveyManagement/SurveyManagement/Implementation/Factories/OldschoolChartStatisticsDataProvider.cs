@@ -7,37 +7,42 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Infrastructure.Native.Storage;
+using NHibernate;
+using NHibernate.Criterion;
+using NHibernate.Linq;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 {
     internal class OldschoolChartStatisticsDataProvider : IOldschoolChartStatisticsDataProvider
     {
-        private readonly IQueryableReadSideRepositoryReader<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
+        private readonly INHibernateQueryableReadSideRepositoryReader<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
 
-        public OldschoolChartStatisticsDataProvider(IQueryableReadSideRepositoryReader<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage)
+        public OldschoolChartStatisticsDataProvider(INHibernateQueryableReadSideRepositoryReader<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage)
         {
             this.cumulativeReportStatusChangeStorage = cumulativeReportStatusChangeStorage;
         }
 
         public StatisticsGroupedByDateAndTemplate GetStatisticsInOldFormat(Guid questionnaireId, long questionnaireVersion)
         {
-            var count = this.cumulativeReportStatusChangeStorage.Query(_ => _
+            var count =
+                this.cumulativeReportStatusChangeStorage.QueryOver( _ =>_
                 .Where(change => change.QuestionnaireId == questionnaireId)
                 .Where(change => change.QuestionnaireVersion == questionnaireVersion)
-                .Count());
+                .Select(Projections.Count<CumulativeReportStatusChange>(x => x.EntryId))
+                .SingleOrDefault<int>());
 
             if (count == 0)
                 return null;
 
-            var minDate = this.cumulativeReportStatusChangeStorage.Query(_ => _
+            var minMaxDate = this.cumulativeReportStatusChangeStorage.QueryOver(_ => _
                 .Where(change => change.QuestionnaireId == questionnaireId)
                 .Where(change => change.QuestionnaireVersion == questionnaireVersion)
-                .Min(change => change.Date));
+                .Select(Projections.Min<CumulativeReportStatusChange>(x => x.Date), Projections.Max<CumulativeReportStatusChange>(x => x.Date))
+                .SingleOrDefault<object[]>());
 
-            var maxDate = this.cumulativeReportStatusChangeStorage.Query(_ => _
-                .Where(change => change.QuestionnaireId == questionnaireId)
-                .Where(change => change.QuestionnaireVersion == questionnaireVersion)
-                .Max(change => change.Date));
+            var minDate = (DateTime)minMaxDate[0];
+            var maxDate = (DateTime)minMaxDate[1];
 
             Dictionary<InterviewStatus, Dictionary<DateTime, int>> countsByStatusAndDate =
                 this.GetCountsForQuestionnaireGroupedByStatusAndDate(questionnaireId, questionnaireVersion);

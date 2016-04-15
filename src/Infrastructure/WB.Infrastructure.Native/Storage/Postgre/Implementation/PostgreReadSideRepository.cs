@@ -14,7 +14,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal class PostgreReadSideRepository<TEntity> : IReadSideRepositoryWriter<TEntity>,
         IReadSideRepositoryCleaner,
-        IQueryableReadSideRepositoryReader<TEntity>
+        INHibernateQueryableReadSideRepositoryReader<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly ISessionProvider sessionProvider;
@@ -83,6 +83,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             string entityName = typeof(TEntity).Name;
 
             session.Delete(string.Format("from {0} e", entityName));
+        }
+
+        public virtual TResult QueryOver<TResult>(Func<IQueryOver<TEntity, TEntity>, TResult> query)
+        {
+            return query.Invoke(this.sessionProvider.GetSession().QueryOver<TEntity>());
         }
 
         public virtual TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
