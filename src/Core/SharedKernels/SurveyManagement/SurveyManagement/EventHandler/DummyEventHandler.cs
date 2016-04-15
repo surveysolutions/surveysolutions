@@ -3,10 +3,12 @@ using Main.Core.Events.Questionnaire;
 using Main.Core.Events.User;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.SurveyManagement.Commands;
+using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.Synchronization.Documents;
 using WB.Core.Synchronization.Events.Sync;
 
@@ -48,7 +50,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IEventHandler<UserUnlockedBySupervisor>,
         IEventHandler<UserLinkedToDevice>,
         IEventHandler<UserArchived>,
-        IEventHandler<UserUnarchived>
+        IEventHandler<UserUnarchived>,
+        IEventHandler<StaticTextsDeclaredInvalid>,
+        IEventHandler<StaticTextsDeclaredValid>
     {
         public override string Name => "Dummy event handler";
 
@@ -90,5 +94,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<UserLinkedToDevice> evnt) { }
         public void Handle(IPublishedEvent<UserArchived> evnt) { }
         public void Handle(IPublishedEvent<UserUnarchived> evnt) { }
+        public void Handle(IPublishedEvent<StaticTextsDeclaredInvalid> evnt) { }
+        public void Handle(IPublishedEvent<StaticTextsDeclaredValid> evnt) { }
     }
 }

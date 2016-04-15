@@ -349,6 +349,7 @@
     <Compile Include="Views\Interview\InterviewDetailsInputModel.cs" />
     <Compile Include="Views\Interview\InterviewDetailsViewFactory.cs" />
     <Compile Include="Views\Interview\InterviewEntityView.cs" />
+    <Compile Include="Views\Interview\InterviewStaticText.cs" />
     <Compile Include="Views\Interview\InterviewStaticTextView.cs" />
     <Compile Include="Views\Interview\InterviewStatuses.cs" />
     <Compile Include="Views\Interview\InterviewStatusTimeSpans.cs" />

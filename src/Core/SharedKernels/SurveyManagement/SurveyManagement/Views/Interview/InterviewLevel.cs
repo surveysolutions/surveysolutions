@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
@@ -13,6 +14,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             this.RosterRowTitles = new Dictionary<Guid, string>();
             this.QuestionsSearchCache = new Dictionary<Guid, InterviewQuestion>();
             this.DisabledStaticTexts = new HashSet<Guid>();
+            this.StaticTexts = new Dictionary<Guid, InterviewStaticText>();
         }
         public InterviewLevel(ValueVector<Guid> scopeVector, int? sortIndex, decimal[] vector)
             : this()
@@ -27,5 +29,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public Dictionary<Guid, string> RosterRowTitles { set; get; }
         public Dictionary<Guid, InterviewQuestion> QuestionsSearchCache { set; get; }
         public HashSet<Guid> DisabledStaticTexts { get; set; }
+        public Dictionary<Guid, InterviewStaticText> StaticTexts { get; set; }
     }
 }

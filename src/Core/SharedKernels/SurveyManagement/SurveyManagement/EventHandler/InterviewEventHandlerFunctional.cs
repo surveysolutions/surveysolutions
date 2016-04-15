@@ -54,6 +54,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewData, GroupsEnabled>,
         IUpdateHandler<InterviewData, StaticTextsEnabled>,
         IUpdateHandler<InterviewData, StaticTextsDisabled>,
+        IUpdateHandler<InterviewData, StaticTextsDeclaredInvalid>,
+        IUpdateHandler<InterviewData, StaticTextsDeclaredValid>,
         IUpdateHandler<InterviewData, QuestionsDisabled>,
         IUpdateHandler<InterviewData, QuestionsEnabled>,
         IUpdateHandler<InterviewData, AnswersDeclaredInvalid>,
@@ -178,6 +180,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 var answeredQuestion = questionsAtTheLevel.QuestionsSearchCache[questionId];
 
                 update(answeredQuestion);
+            });
+        }
+
+        private static InterviewData UpdateStaticText(InterviewData interview, decimal[] vector, Guid staticTextId, Action<InterviewStaticText> update)
+        {
+            return PreformActionOnLevel(interview, vector, (interviewLevel) =>
+            {
+                if (!interviewLevel.StaticTexts.ContainsKey(staticTextId))
+                    interviewLevel.StaticTexts.Add(staticTextId, new InterviewStaticText(staticTextId));
+
+                var staticText = interviewLevel.StaticTexts[staticTextId];
+
+                update(staticText);
             });
         }
 
@@ -547,6 +562,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     {
                         level.DisabledStaticTexts.Add(group.Id);
                     }
+                }));
+        }
+
+
+        public InterviewData Update(InterviewData state, IPublishedEvent<StaticTextsDeclaredInvalid> @event)
+        {
+            return @event.Payload.FailedValidationConditions.Aggregate(
+                state,
+                (document, staticTextKeyValue) => UpdateStaticText(document, staticTextKeyValue.Key.RosterVector, staticTextKeyValue.Key.Id, (staticText) =>
+                {
+                    staticText.IsInvalid = true;
+                    staticText.FailedValidationConditions = staticTextKeyValue.Value;
+                }));
+        }
+
+        public InterviewData Update(InterviewData state, IPublishedEvent<StaticTextsDeclaredValid> @event)
+        {
+            return @event.Payload.StaticTexts.Aggregate(
+                state,
+                (document, staticTextIdentity) => UpdateStaticText(document, staticTextIdentity.RosterVector, staticTextIdentity.Id, (staticText) =>
+                {
+                    staticText.IsInvalid = false;
+                    staticText.FailedValidationConditions = new List<FailedValidationCondition>();
                 }));
         }
 
