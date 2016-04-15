@@ -113,6 +113,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId);
 
+        IEnumerable<Guid> GetAllUnderlyingStaticTexts(Guid groupId);
+
         ReadOnlyCollection<Guid> GetAllUnderlyingInterviewerQuestions(Guid groupId);
 
         IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId);

@@ -54,6 +54,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfUnderlyingInterviewerQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfParentsStartingFromTop = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildStaticTexts = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
+        private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingStaticTexts = new Dictionary<Guid, IEnumerable<Guid>>();
 
 
         internal QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
@@ -504,6 +505,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId)
             => this.cacheOfUnderlyingQuestions.GetOrUpdate(groupId, this.GetAllUnderlyingQuestionsImpl);
 
+        public IEnumerable<Guid> GetAllUnderlyingStaticTexts(Guid groupId)
+             => this.cacheOfUnderlyingStaticTexts.GetOrUpdate(groupId, this.GetAllUnderlyingStaticTextsImpl);
+
         public ReadOnlyCollection<Guid> GetAllUnderlyingInterviewerQuestions(Guid groupId)
         {
             if (!this.cacheOfUnderlyingInterviewerQuestions.ContainsKey(groupId))
@@ -936,6 +940,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     ? rostersAffectedByCurrentDomain.Union(new[] { rosterAffectedByBackwardCompatibility.Value })
                     : rostersAffectedByCurrentDomain);
         }
+
+        private IEnumerable<Guid> GetAllUnderlyingStaticTextsImpl(Guid groupId)
+            => this
+                .GetGroupOrThrow(groupId)
+                .Find<IStaticText>(_ => true)
+                .Select(question => question.PublicKey)
+                .ToList();
 
         private IEnumerable<Guid> GetAllUnderlyingQuestionsImpl(Guid groupId)
             => this
