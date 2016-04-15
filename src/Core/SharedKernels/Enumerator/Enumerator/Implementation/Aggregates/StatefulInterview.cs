@@ -1006,12 +1006,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return sectionInstances.Sum(section => this.CountActiveInterviewerQuestionsInGroupRecursively(section));
         }
 
-        public int CountInvalidQuestionsInInterview()
+        public int CountInvalidEntitiesInInterview()
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             var sectionInstances = questionnaire.GetAllSections().Select(x => new Identity(x, new decimal[0]));
 
-            return sectionInstances.Sum(section => this.CountInvalidInterviewerAnswersInGroupRecursively(section));
+            return sectionInstances.Sum(section => this.CountInvalidInterviewerAnswersInGroupRecursively(section) + this.CountInvalidStaticTextsInGroupRecursively(section));
         }
 
         public bool HasLinkedOptionsChangedEvents => this.hasLinkedOptionsChangedEvents;
@@ -1066,6 +1066,22 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 && x.Value.IsEnabled 
                 && x.Value.IsAnswered 
                 && !x.Value.IsValid);
+        }
+
+
+        public int CountInvalidStaticTextsInGroupRecursively(Identity groupIdentity)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingStaticTexts(groupIdentity.Id);
+
+            List<Identity> questionInstances = this
+                .GetInstancesOfStaticTextsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestionsInGroup, groupIdentity.RosterVector, questionnaire)
+                .ToList();
+
+            IEnumerable<Identity> allInvalidChildStaticTexts = this.interviewState.InvalidStaticTexts.Where(x => questionInstances.Contains(x.Key))
+                                                                                  .Select(x => x.Key);
+
+            return allInvalidChildStaticTexts.Count(x => !this.interviewState.DisabledStaticTexts.Contains(x));
         }
 
         public int CountInvalidInterviewerEntitiesInGroupOnly(Identity group)
@@ -1160,8 +1176,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public bool IsValid(Identity identity)
         {
             var questionKey = ConversionHelper.ConvertIdentityToString(identity);
-            if (this.interviewState.InvalidStaticTexts.ContainsKey(questionKey)) return false;
-            if (this.interviewState.ValidStaticTexts.Contains(questionKey)) return true;
+            if (this.interviewState.InvalidStaticTexts.ContainsKey(identity)) return false;
+            if (this.interviewState.ValidStaticTexts.Contains(identity)) return true;
 
             if (!this.Answers.ContainsKey(questionKey))
             {
@@ -1175,9 +1191,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public IReadOnlyList<FailedValidationCondition> GetFailedValidationConditions(Identity questionId)
         {
             var convertIdentityToString = ConversionHelper.ConvertIdentityToString(questionId);
-            if (this.interviewState.InvalidStaticTexts.ContainsKey(convertIdentityToString))
+            if (this.interviewState.InvalidStaticTexts.ContainsKey(questionId))
             {
-                return this.interviewState.InvalidStaticTexts[convertIdentityToString];
+                return this.interviewState.InvalidStaticTexts[questionId];
             }
 
             if (this.Answers.ContainsKey(convertIdentityToString))

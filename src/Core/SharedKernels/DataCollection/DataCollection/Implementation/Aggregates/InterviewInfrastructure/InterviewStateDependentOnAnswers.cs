@@ -69,8 +69,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.RosterTitles = new ConcurrentDictionary<string, string>();
             this.DisabledStaticTexts = new ConcurrentHashSet<Identity>();
 
-            this.ValidStaticTexts = new ConcurrentHashSet<string>();
-            this.InvalidStaticTexts = new ConcurrentDictionary<string, IReadOnlyList<FailedValidationCondition>>();
+            this.ValidStaticTexts = new ConcurrentHashSet<Identity>();
+            this.InvalidStaticTexts = new ConcurrentDictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
         }
 
         public ConcurrentDictionary<string, object> AnswersSupportedInExpressions { set; get; }
@@ -88,8 +88,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public ConcurrentHashSet<string> InvalidAnsweredQuestions { set; get; }
         public ConcurrentBag<AnswerComment> AnswerComments { get; set; }
 
-        public ConcurrentHashSet<string> ValidStaticTexts { set; get; }
-        public IDictionary<string, IReadOnlyList<FailedValidationCondition>> InvalidStaticTexts { set; get; }
+        public ConcurrentHashSet<Identity> ValidStaticTexts { set; get; }
+        public IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> InvalidStaticTexts { set; get; }
 
 
         public InterviewStateDependentOnAnswers Clone()
@@ -112,8 +112,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 RosterTitles = this.RosterTitles.ToConcurrentDictionary(x => x.Key, x => x.Value),
 
                 DisabledStaticTexts = new ConcurrentHashSet<Identity>(this.DisabledStaticTexts),
-                ValidStaticTexts = new ConcurrentHashSet<string>(this.ValidStaticTexts),
-                InvalidStaticTexts = new ConcurrentDictionary<string, IReadOnlyList<FailedValidationCondition>>(InvalidStaticTexts)
+                ValidStaticTexts = new ConcurrentHashSet<Identity>(this.ValidStaticTexts),
+                InvalidStaticTexts = new ConcurrentDictionary<Identity, IReadOnlyList<FailedValidationCondition>>(InvalidStaticTexts)
             };
         }
 
@@ -318,7 +318,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void DeclareStaticTextValid(IEnumerable<Identity> statisTexts)
         {
-            foreach (string questionKey in statisTexts.Select(ConversionHelper.ConvertIdentityToString))
+            foreach (var questionKey in statisTexts)
             {
                 this.ValidStaticTexts.Add(questionKey);
                 this.InvalidStaticTexts.Remove(questionKey);
@@ -329,10 +329,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (var questionKey in statisTexts)
             {
-                var stringKey = ConversionHelper.ConvertIdentityToString(questionKey.Key);
-
-                this.InvalidStaticTexts[stringKey] = questionKey.Value;
-                this.ValidStaticTexts.Remove(stringKey);
+                this.InvalidStaticTexts[questionKey.Key] = questionKey.Value;
+                this.ValidStaticTexts.Remove(questionKey.Key);
             }
         }
 
