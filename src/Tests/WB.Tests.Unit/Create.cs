@@ -954,7 +954,7 @@ namespace WB.Tests.Unit
             Guid? supervisorId = null,
             DateTime? timestamp = null, 
             TimeSpan? timeSpanWithPreviousStatus = null, 
-            InterviewExportedAction status = InterviewExportedAction.Completed)
+            InterviewExportedAction status = InterviewExportedAction.ApprovedBySupervisor)
         {
             return new InterviewCommentedStatus()
             {
@@ -2453,12 +2453,12 @@ namespace WB.Tests.Unit
                     DateTime.Now, "tttt"));
         }
 
-        public static TimeSpanBetweenStatuses TimeSpanBetweenStatuses(Guid? interviewerId = null, Guid? supervisorId = null, DateTime? timestamp = null, TimeSpan? timeSpanWithPreviousStatus = null)
+        public static TimeSpanBetweenStatuses TimeSpanBetweenStatuses(Guid? interviewerId = null, Guid? supervisorId = null, DateTime? timestamp = null, TimeSpan? timeSpanWithPreviousStatus = null, InterviewExportedAction endStatus= InterviewExportedAction.ApprovedByHeadquarter)
         {
             return new TimeSpanBetweenStatuses()
             {
                 BeginStatus = InterviewExportedAction.InterviewerAssigned,
-                EndStatus = InterviewExportedAction.ApprovedByHeadquarter,
+                EndStatus = endStatus,
                 EndStatusTimestamp = timestamp ?? DateTime.Now,
                 InterviewerId = interviewerId ?? Guid.NewGuid(),
                 SupervisorId = supervisorId ?? Guid.NewGuid(),
