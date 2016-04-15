@@ -515,7 +515,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Collect and send to HQ all tablet infromation.
+        ///   Looks up a localized string similar to Collect and send to HQ all tablet information.
         /// </summary>
         public static string Diagnostics_Send_Title {
             get {
