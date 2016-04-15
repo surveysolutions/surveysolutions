@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -15,11 +16,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             this.FailedValidationMessages = new List<ValidationCondition>();
         }
 
-        public InterviewStaticTextView(IStaticText staticText, InterviewAttachmentViewModel attachment) : this()
+        public InterviewStaticTextView(IStaticText staticText, InterviewStaticText interviewStaticText, InterviewAttachmentViewModel attachment) : this()
         {
             this.Id = staticText.PublicKey;
             this.Text = staticText.Text;
             this.Attachment = attachment;
+
+            if (interviewStaticText != null)
+            {
+                this.IsEnabled = interviewStaticText.IsEnabled;
+                this.IsValid = !interviewStaticText.IsInvalid;
+                this.FailedValidationMessages = interviewStaticText.FailedValidationConditions.Select(x => staticText.ValidationConditions[x.FailedConditionIndex]).ToList();
+            }
         }
 
         public string Text { get; set; }
