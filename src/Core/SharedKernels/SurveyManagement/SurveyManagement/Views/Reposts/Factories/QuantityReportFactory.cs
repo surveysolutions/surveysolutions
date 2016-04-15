@@ -16,13 +16,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
         IViewFactory<QuantityBySupervisorsReportInputModel, QuantityByResponsibleReportView>
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewstatusStorage;
+        private readonly IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage;
 
-        public QuantityReportFactory(IQueryableReadSideRepositoryReader<InterviewStatuses> interviewstatusStorage)
+        public QuantityReportFactory(
+            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewstatusStorage, 
+            IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage)
         {
             this.interviewstatusStorage = interviewstatusStorage;
+            this.interviewStatusTimeSpansStorage = interviewStatusTimeSpansStorage;
         }
 
-        private QuantityByResponsibleReportView Load(
+        private QuantityByResponsibleReportView Load<T>(
             DateTime reportStartDate,
             string period,
             int columnCount,
@@ -30,10 +34,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             int pageSize,
             Guid questionnaireId,
             long questionnaireVersion,
-            InterviewExportedAction[] statuses,
-            Expression<Func<InterviewCommentedStatus, Guid>> selectUser,
-            Expression<Func<InterviewCommentedStatus, bool>> restrictUser,
-            Expression<Func<InterviewCommentedStatus, UserAndTimestamp>> userIdSelector)
+            Func<Guid, long, DateTime, DateTime, IQueryable<T>> query,
+            Expression<Func<T, Guid>> selectUser,
+            Expression<Func<T, bool>> restrictUser,
+            Expression<Func<T, UserAndTimestamp>> userIdSelector)
         {
             var from = reportStartDate.Date;
             var to = AddPeriod(from, period, columnCount);
@@ -44,7 +48,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                     .Where(i => i.From.Date <= DateTime.Now.Date)
                     .ToArray();
 
-            var allUsersQuery = QueryInterviewStatuses(questionnaireId, questionnaireVersion, from, to, statuses);
+            var allUsersQuery = query(questionnaireId, questionnaireVersion, from, to);
 
             if (restrictUser != null)
                 allUsersQuery = allUsersQuery.Where(restrictUser);
@@ -58,8 +62,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             var userIds = users.Skip((page - 1)*pageSize)
                 .Take(pageSize).ToArray();
 
-            var allInterviewsInStatus =
-                QueryInterviewStatuses(questionnaireId, questionnaireVersion, from, to, statuses)
+            var allInterviewsInStatus = query(questionnaireId, questionnaireVersion, from, to)
                     .Select(userIdSelector)
                     .Where(ics => ics.UserId.HasValue && userIds.Contains(ics.UserId.Value))
                     .Select(i => new {UserId = i.UserId.Value, i.UserName, i.Timestamp})
@@ -82,14 +85,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             }).ToArray();
 
             var quantityTotalRow =
-                CreateQuantityTotalRow(allUsersQuery, dateTimeRanges);
+                CreateQuantityTotalRow(allUsersQuery, dateTimeRanges, userIdSelector);
 
             return new QuantityByResponsibleReportView(rows, quantityTotalRow, dateTimeRanges, usersCount);
         }
 
-        private QuantityTotalRow CreateQuantityTotalRow(IQueryable<InterviewCommentedStatus> interviews, DateTimeRange[] dateTimeRanges)
+        private QuantityTotalRow CreateQuantityTotalRow<T>(IQueryable<T> interviews, DateTimeRange[] dateTimeRanges,
+            Expression<Func<T, UserAndTimestamp>> userIdSelector)
         {
-            var allInterviewsInStatus = interviews
+            var allInterviewsInStatus = interviews.Select(userIdSelector)
                   .Select(i =>  i.Timestamp.Date)
                   .ToArray();
 
@@ -102,6 +106,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             }
 
             return new QuantityTotalRow(quantityByPeriod.ToArray(), allInterviewsInStatus.Length);
+        }
+
+        private IQueryable<TimeSpanBetweenStatuses> QueryCompleteStatusesExcludingRestarts(
+         Guid questionnaireId,
+         long questionnaireVersion,
+         DateTime from,
+         DateTime to)
+        {
+            return interviewStatusTimeSpansStorage.Query(_ =>
+                _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
+                    .SelectMany(x => x.TimeSpansBetweenStatuses)
+                    .Where(
+                        ics =>
+                            ics.EndStatusTimestamp.Date >= from && ics.EndStatusTimestamp.Date < to.Date && ics.EndStatus== InterviewExportedAction.Completed));
         }
 
         private IQueryable<InterviewCommentedStatus> QueryInterviewStatuses(
@@ -121,8 +139,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                          statuses.Contains(ics.Status)));
         }
 
+        private bool IsCompleteReportRequested(InterviewExportedAction[] interviewStatuses)
+        {
+            if (interviewStatuses.Length != 1)
+                return false;
+            return interviewStatuses[0] == InterviewExportedAction.Completed;
+        }
+
         public QuantityByResponsibleReportView Load(QuantityByInterviewersReportInputModel input)
         {
+            if (IsCompleteReportRequested(input.InterviewStatuses))
+            {
+                return Load(
+                reportStartDate: input.From,
+                period: input.Period,
+                columnCount: input.ColumnCount,
+                page: input.Page,
+                pageSize: input.PageSize,
+                questionnaireId: input.QuestionnaireId,
+                questionnaireVersion: input.QuestionnaireVersion,
+                query: QueryCompleteStatusesExcludingRestarts,
+                selectUser: u => u.InterviewerId.Value,
+                restrictUser: u => u.SupervisorId == input.SupervisorId,
+                userIdSelector: i => new UserAndTimestamp() { UserId = i.InterviewerId, UserName = i.InterviewerName, Timestamp = i.EndStatusTimestamp });
+            }
             return Load(
                 reportStartDate: input.From,
                 period: input.Period,
@@ -131,7 +171,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 pageSize: input.PageSize,
                 questionnaireId: input.QuestionnaireId,
                 questionnaireVersion: input.QuestionnaireVersion,
-                statuses: input.InterviewStatuses,
+                query: (questionnaireId, questionnaireVersion, from, to) => QueryInterviewStatuses(questionnaireId, questionnaireVersion, from, to, input.InterviewStatuses),
                 selectUser: u => u.InterviewerId.Value,
                 restrictUser: u => u.SupervisorId == input.SupervisorId,
                 userIdSelector: i => new UserAndTimestamp(){UserId = i.InterviewerId, UserName = i.InterviewerName, Timestamp = i.Timestamp});
@@ -139,6 +179,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 
         public QuantityByResponsibleReportView Load(QuantityBySupervisorsReportInputModel input)
         {
+            if (IsCompleteReportRequested(input.InterviewStatuses))
+            {
+                return Load(
+                 reportStartDate: input.From,
+                 period: input.Period,
+                 columnCount: input.ColumnCount,
+                 page: input.Page,
+                 pageSize: input.PageSize,
+                 questionnaireId: input.QuestionnaireId,
+                 questionnaireVersion: input.QuestionnaireVersion,
+                 query: QueryCompleteStatusesExcludingRestarts,
+                 selectUser: u => u.SupervisorId.Value,
+                 restrictUser: null,
+                 userIdSelector: i => new UserAndTimestamp() { UserId = i.SupervisorId, UserName = i.SupervisorName, Timestamp = i.EndStatusTimestamp });
+            }
+
             return Load(
                 reportStartDate:input.From,
                 period:input.Period,
@@ -147,7 +203,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 pageSize:input.PageSize,
                 questionnaireId:input.QuestionnaireId,
                 questionnaireVersion:input.QuestionnaireVersion,
-                statuses:input.InterviewStatuses,
+                query: (questionnaireId, questionnaireVersion, from, to) => QueryInterviewStatuses(questionnaireId, questionnaireVersion, from, to, input.InterviewStatuses),
                 selectUser:u => u.SupervisorId.Value,
                 restrictUser:null,
                 userIdSelector:i => new UserAndTimestamp(){UserId = i.SupervisorId, UserName = i.SupervisorName, Timestamp = i.Timestamp});

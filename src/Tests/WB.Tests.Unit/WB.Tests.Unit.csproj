@@ -609,6 +609,7 @@
     <Compile Include="SharedKernels\QuestionnaireTests\when_cloning_questionnaire_document_with_macros.cs" />
     <Compile Include="SharedKernels\QuestionnaireTests\when_cloning_questionnaire_with_shared_persons.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewExportedCommentariesDenormalizerTests\InterviewExportedCommentariesDenormalizerNunitTests.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\when_interview_completed_event_received_after_restart.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\InterviewStatusTimeSpanDenormalizerTests\when_interview_unapproved_by_headquarters_event_recived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\CumulativeChartDenormalizerTests\when_handling_InterviewStatusChanged_event_and_there_are_no_last_status_for_this_interview.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\CumulativeChartDenormalizerTests\when_handling_InterviewStatusChanged_event_and_there_is_last_status_for_this_interview.cs" />
@@ -633,6 +634,7 @@
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_questionnaire_has_multioption_linked_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_questionnaire_has_multioption_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_questionnaire_has_yesno_question.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_load_quantity_completed_report_for_supervisors_by_month_period.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_load_quantity_report_for_interviewers_where_one_out_of_three_periods_is_in_future.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\SampleUploadViewFactoryTests\SampleUploadViewFactoryNUnitTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_interviewers_where_one_out_of_three_periods_is_in_future.cs" />

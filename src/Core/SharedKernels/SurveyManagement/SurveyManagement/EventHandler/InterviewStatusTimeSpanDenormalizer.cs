@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using Main.Core.Events.Sync;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
@@ -20,8 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private readonly InterviewExportedAction[] beginStatusesForCompleteStatus = new[]
         {
-            InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor,
-            InterviewExportedAction.Restarted
+            InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor
         };
 
         public InterviewStatusTimeSpanDenormalizer(
@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public void Handle(IPublishedEvent<InterviewCompleted> evnt)
         {
             var statusHistory = statuses.GetById(evnt.EventSourceId);
-            if(statusHistory==null)
+            if (statusHistory == null)
                 return;
 
             var lastAssignOfRejectStatus =
@@ -54,8 +54,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
             if (lastAssignOfRejectStatus == null)
                 return;
-
-            var timeSpan = (evnt.Payload.CompleteTime ?? evnt.EventTimeStamp) - lastAssignOfRejectStatus.Timestamp;
+            var completeTime = evnt.Payload.CompleteTime ?? evnt.EventTimeStamp;
+            var completeTimeSpan = completeTime - lastAssignOfRejectStatus.Timestamp;
 
             var interviewCustomStatusTimestamps = interviewCustomStatusTimestampStorage.GetById(evnt.EventSourceId);
 
@@ -69,16 +69,56 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 };
             }
 
+            var statusesAfterLastAssign = GetStausesAfterLastAssignOrReject(statusHistory, lastAssignOfRejectStatus);
+
+            var wasInterviewRestarted =
+                statusesAfterLastAssign.Any(s => s.Status == InterviewExportedAction.Restarted);
+
+            if (wasInterviewRestarted)
+            {
+                ReplaceLastCompleteStatus(interviewCustomStatusTimestamps, lastAssignOfRejectStatus,
+                   completeTime, completeTimeSpan);
+            }
+            else
+                AddTimeSpanForCompleteStatus(interviewCustomStatusTimestamps, lastAssignOfRejectStatus,
+                    completeTime, completeTimeSpan);
+
+            interviewCustomStatusTimestampStorage.Store(interviewCustomStatusTimestamps,
+                interviewCustomStatusTimestamps.InterviewId);
+        }
+
+        private InterviewCommentedStatus[] GetStausesAfterLastAssignOrReject(InterviewStatuses statusHistory, InterviewCommentedStatus lastAssignOfRejectStatus)
+        {
+            return statusHistory.InterviewCommentedStatuses.SkipWhile(s => s.Id != lastAssignOfRejectStatus.Id)
+                  .Skip(1)
+                  .ToArray();
+        }
+
+        private void AddTimeSpanForCompleteStatus(InterviewStatusTimeSpans interviewCustomStatusTimestamps, InterviewCommentedStatus lastAssignOfRejectStatus, DateTime completeTime, TimeSpan timeSpan)
+        {
             interviewCustomStatusTimestamps.TimeSpansBetweenStatuses.Add(
                 new TimeSpanBetweenStatuses(lastAssignOfRejectStatus.SupervisorId,
                     lastAssignOfRejectStatus.InterviewerId, lastAssignOfRejectStatus.Status,
                     InterviewExportedAction.Completed,
-                    evnt.Payload.CompleteTime ?? evnt.EventTimeStamp, timeSpan, lastAssignOfRejectStatus.SupervisorName,
+                    completeTime, timeSpan,
+                    lastAssignOfRejectStatus.SupervisorName,
                     lastAssignOfRejectStatus.InterviewerName));
-
-            interviewCustomStatusTimestampStorage.Store(interviewCustomStatusTimestamps, interviewCustomStatusTimestamps.InterviewId);
         }
 
+        private void ReplaceLastCompleteStatus(InterviewStatusTimeSpans interviewCustomStatusTimestamps, InterviewCommentedStatus lastAssignOfRejectStatus, DateTime completeTime, TimeSpan timeSpan)
+        {
+            var lastCompletedStatus =
+             interviewCustomStatusTimestamps.TimeSpansBetweenStatuses.LastOrDefault(
+                 s => s.EndStatus == InterviewExportedAction.Completed);
+            if (lastCompletedStatus == null)
+            {
+                AddTimeSpanForCompleteStatus(interviewCustomStatusTimestamps, lastAssignOfRejectStatus, completeTime,
+                    timeSpan);
+                return;
+            }
+            lastCompletedStatus.EndStatusTimestamp = completeTime;
+            lastCompletedStatus.TimeSpan = timeSpan;
+        }
         public void Handle(IPublishedEvent<InterviewApprovedByHQ> evnt)
         {
             var statusHistory = statuses.GetById(evnt.EventSourceId);
