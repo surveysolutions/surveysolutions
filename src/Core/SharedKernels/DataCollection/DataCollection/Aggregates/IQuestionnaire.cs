@@ -67,6 +67,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsQuestion(Guid entityId);
 
+        bool IsStaticText(Guid entityId);
+
         bool IsInterviewierQuestion(Guid questionId);
 
         ReadOnlyCollection<Guid> GetPrefilledQuestions();
@@ -171,6 +173,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         ReadOnlyCollection<Guid> GetChildEntityIds(Guid groupId);
 
         ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId);
+
+        ReadOnlyCollection<Guid> GetChildStaticTexts(Guid groupId);
+
         bool IsPrefilled(Guid questionId);
         bool ShouldBeHiddenIfDisabled(Guid entityId);
 
