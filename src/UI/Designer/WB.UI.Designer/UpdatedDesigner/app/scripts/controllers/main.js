@@ -32,7 +32,7 @@ angular.module('designerApp')
                     } catch(e) {
                         notificationService.notice(e);//"Make sure popups are not blocked");
                     }
-                    printWindow.print();
+                    //printWindow.print();
                     event.preventDefault();
                 }
             });
