@@ -229,7 +229,7 @@ namespace WB.Tests.Integration
 
             public static StaticTextsDeclaredInvalid StaticTextsDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
             {
-                return new StaticTextsDeclaredInvalid(failedValidationConditions);
+                return new StaticTextsDeclaredInvalid(failedValidationConditions.ToList());
             }
 
             public static RosterInstancesAdded RosterInstancesAdded(params AddedRosterInstance[] rosterInstances)
