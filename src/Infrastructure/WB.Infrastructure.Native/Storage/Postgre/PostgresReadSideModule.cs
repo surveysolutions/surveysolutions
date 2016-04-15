@@ -84,6 +84,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
             this.Kernel.Bind(typeof (IQueryableReadSideRepositoryReader<>)).To(typeof (PostgreReadSideRepository<>));
             this.Kernel.Bind(typeof (IReadSideRepositoryReader<>)).To(typeof (PostgreReadSideRepository<>));
+            this.Kernel.Bind(typeof(INHibernateQueryableReadSideRepositoryReader<>)).To(typeof(PostgreReadSideRepository<>));
         }
 
         private ISessionFactory BuildSessionFactory()
