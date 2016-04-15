@@ -44,34 +44,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.identity = entityIdentity;
 
             this.QuestionState.Init(interviewId, entityIdentity);
-            this.rawText = questionnaire.GetStaticText(entityIdentity.Id);
-
-            this.SetStaticText();
-
-            this.QuestionState.Enablement.EntityDisabled += (s,a) => this.SetStaticText();
-            this.QuestionState.Enablement.EntityEnabled += (s, a) => this.SetStaticText();
-            this.QuestionState.Validity.BecameInvalid += (s, a) => this.SetStaticText();
-            this.QuestionState.Validity.BecameValid += (s, a) => this.SetStaticText();
+            this.RawStaticText = questionnaire.GetStaticText(entityIdentity.Id);
+            this.StaticText = RemoveHtmlTags(this.RawStaticText);
 
             await this.Attachment.InitAsync(interviewId, entityIdentity);
         }
 
-        private void SetStaticText()
+        private Identity identity;
+
+        private string rawText;
+        public string RawStaticText
         {
-            if (ShouldStipHtml)
+            get { return this.rawText; }
+            set
             {
-                this.StaticText = RemoveHtmlTags(this.rawText);
-            }
-            else
-            {
-                this.StaticText = this.rawText;
+                this.RaiseAndSetIfChanged(ref this.rawText, value);
             }
         }
-
-        private bool ShouldStipHtml => !this.QuestionState.Enablement.Enabled || this.QuestionState.Validity.IsInvalid;
-
-        private Identity identity;
-        private string rawText;
 
         private string staticText;
         public string StaticText

@@ -95,7 +95,7 @@ namespace WB.Core.SharedKernels.Enumerator.Aggregates
 
         int CountInvalidInterviewerAnswersInGroupRecursively(Identity groupIdentity);
 
-        int CountInvalidInterviewerQuestionsInGroupOnly(Identity group);
+        int CountInvalidInterviewerEntitiesInGroupOnly(Identity group);
 
         bool HasInvalidInterviewerQuestionsInGroupOnly(Identity group);
 

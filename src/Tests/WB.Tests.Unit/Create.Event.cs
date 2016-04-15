@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -810,6 +811,19 @@ namespace WB.Tests.Unit
             public static StaticTextsDisabled StaticTextsDisabled(params Identity[] ids)
             {
                 return new StaticTextsDisabled(ids);
+            }
+
+            public static StaticTextsDeclaredInvalid StaticTextsDeclaredInvalid(params Identity[] staticTextIdentity)
+            {
+                List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>> failedConditions = staticTextIdentity.Select(x => 
+                    new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(
+                        x, new ReadOnlyCollection<FailedValidationCondition>(new List<FailedValidationCondition> {new FailedValidationCondition(0)}))).ToList();
+                return new StaticTextsDeclaredInvalid(failedConditions);
+            }
+
+            public static StaticTextsDeclaredValid StaticTextsDeclaredValid(params Identity[] staticTextIdentity)
+            {
+                return new StaticTextsDeclaredValid(staticTextIdentity);
             }
         }
     }
