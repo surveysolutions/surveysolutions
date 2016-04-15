@@ -53,6 +53,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildInterviewerQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfUnderlyingInterviewerQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfParentsStartingFromTop = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
+        private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildStaticTexts = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
 
 
         internal QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
@@ -317,6 +318,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public int GetMaxRosterRowCount() => Constants.MaxRosterRowCount;
 
         public bool IsQuestion(Guid entityId) => this.HasQuestion(entityId);
+        public bool IsStaticText(Guid entityId)
+        {
+            return this.GetStaticTextImpl(entityId) != null;
+        }
 
         public bool IsInterviewierQuestion(Guid questionId)
         {
@@ -548,6 +553,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     .Select(question => question.PublicKey)
                     .ToReadOnlyCollection());
 
+        public ReadOnlyCollection<Guid> GetChildStaticTexts(Guid groupId)
+             => this.cacheOfChildStaticTexts.GetOrUpdate(groupId, ()
+                => this
+                    .GetGroupOrThrow(groupId)
+                    .Children.OfType<IStaticText>()
+                    .Select(s => s.PublicKey)
+                    .ToReadOnlyCollection());
+        
+
         public bool IsPrefilled(Guid questionId)
         {
             var question = this.GetQuestionOrThrow(questionId);
@@ -569,12 +583,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public string GetValidationMessage(Guid questionId, int conditionIndex)
         {
-            return this.GetQuestion(questionId).ValidationConditions[conditionIndex].Message;
+            if (IsQuestion(questionId))
+            {
+                return this.GetQuestion(questionId).ValidationConditions[conditionIndex].Message;
+            }
+            else if (IsStaticText(questionId))
+            {
+                return this.GetStaticTextImpl(questionId).ValidationConditions[conditionIndex].Message;
+            }
+
+            return null;
         }
 
         public bool HasMoreThanOneValidationRule(Guid questionId)
         {
-            return this.GetQuestion(questionId).ValidationConditions.Count > 1;
+            if (this.IsQuestion(questionId))
+            {
+                return this.GetQuestion(questionId).ValidationConditions.Count > 1;
+            }
+
+            if (this.IsStaticText(questionId))
+            {
+                return this.GetStaticTextImpl(questionId).ValidationConditions.Count > 1;
+            }
+
+            return false;
         }
 
         public string GetQuestionInstruction(Guid questionId)

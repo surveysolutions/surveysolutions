@@ -437,7 +437,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             var staticTextsConditions = @event.GetFailedValidationConditionsDictionary();
 
-            this.interviewState.DeclareStaticTextInvalid(staticTextsConditions.Keys);
+            this.interviewState.DeclareStaticTextInvalid(staticTextsConditions);
             this.ExpressionProcessorStatePrototype.ApplyStaticTextFailedValidations(staticTextsConditions);
         }
 
@@ -1052,12 +1052,48 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(state, questionId, rosterVector, questionnare));
         }
 
+        protected IEnumerable<Identity> GetInstancesOfStaticTextsWithSameAndDeeperRosterLevelOrThrow(
+            InterviewStateDependentOnAnswers state,
+            IEnumerable<Guid> staticTextIds,
+            RosterVector rosterVector,
+            IQuestionnaire questionnaire)
+        {
+            return staticTextIds.SelectMany(questionId =>
+                GetInstancesOfStaticTextsWithSameAndDeeperRosterLevelOrThrow(state, questionId, rosterVector, questionnaire));
+        }
+
         protected IEnumerable<Identity> GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(
             IReadOnlyInterviewStateDependentOnAnswers state,
             IEnumerable<Guid> entityIds, RosterVector rosterVector, IQuestionnaire questionnare)
         {
             return entityIds.SelectMany(entityId =>
                 GetInstancesOfEntitiesWithSameAndDeeperRosterLevelOrThrow(state, entityId, rosterVector, questionnare));
+        }
+
+
+        protected IEnumerable<Identity> GetInstancesOfStaticTextsWithSameAndDeeperRosterLevelOrThrow(
+          IReadOnlyInterviewStateDependentOnAnswers state,
+          Guid staticTextId, 
+          RosterVector rosterVector, 
+          IQuestionnaire questionnare)
+        {
+            int vectorRosterLevel = rosterVector.Length;
+            int staticTextRosterLevel = questionnare.GetRosterLevelForEntity(staticTextId);
+
+            if (staticTextRosterLevel < vectorRosterLevel)
+                throw new InterviewException(
+                    $"StaticText {FormatQuestionForException(staticTextId, questionnare)} expected to have roster level not upper than {vectorRosterLevel} but it is {staticTextRosterLevel}. InterviewId: {this.EventSourceId}");
+
+            Guid[] parentRosterGroupsStartingFromTop =
+                questionnare.GetRostersFromTopToSpecifiedEntity(staticTextId).ToArray();
+
+            IEnumerable<RosterVector> staticTextRosterVectors = ExtendRosterVector(state,
+                rosterVector, staticTextRosterLevel, parentRosterGroupsStartingFromTop);
+
+            foreach (decimal[] questionRosterVector in staticTextRosterVectors)
+            {
+                yield return new Identity(staticTextId, questionRosterVector);
+            }
         }
 
         protected IEnumerable<Identity> GetInstancesOfQuestionsWithSameAndDeeperRosterLevelOrThrow(

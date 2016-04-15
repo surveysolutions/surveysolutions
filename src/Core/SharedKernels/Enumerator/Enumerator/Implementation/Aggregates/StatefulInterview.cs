@@ -36,6 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             public ConcurrentDictionary<Identity, ReadOnlyCollection<Identity>> EnabledInterviewerChildQuestions = new ConcurrentDictionary<Identity, ReadOnlyCollection<Identity>>();
             public ConcurrentDictionary<Identity, ReadOnlyCollection<Identity>> GroupsAndRostersInGroup = new ConcurrentDictionary<Identity, ReadOnlyCollection<Identity>>();
             public ConcurrentDictionary<Identity, bool> IsEnabled = new ConcurrentDictionary<Identity, bool>();
+            public ConcurrentDictionary<Identity, ReadOnlyCollection<Identity>> EnabledStaticTextChildQuestions = new ConcurrentDictionary<Identity, ReadOnlyCollection<Identity>>();
         }
 
         private class LocalDelta
@@ -1067,10 +1068,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 && !x.Value.IsValid);
         }
 
-        public int CountInvalidInterviewerQuestionsInGroupOnly(Identity group)
+        public int CountInvalidInterviewerEntitiesInGroupOnly(Identity group)
         {
             return this
                 .GetEnabledInterviewerChildQuestions(group)
+                .Union(this.GetEnabledInvalidChildStaticTexts(group))
                 .Count(question => !this.IsValid(question));
         }
 
@@ -1078,6 +1080,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             return this
                 .GetEnabledInterviewerChildQuestions(group)
+                .Union(this.GetEnabledInvalidChildStaticTexts(group))
                 .Any(question => !this.IsValid(question));
         }
 
@@ -1157,6 +1160,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public bool IsValid(Identity identity)
         {
             var questionKey = ConversionHelper.ConvertIdentityToString(identity);
+            if (this.interviewState.InvalidStaticTexts.ContainsKey(questionKey)) return false;
+            if (this.interviewState.ValidStaticTexts.Contains(questionKey)) return true;
+
             if (!this.Answers.ContainsKey(questionKey))
             {
                 return !this.notAnsweredQuestionsValidityStatus.ContainsKey(questionKey) || this.notAnsweredQuestionsValidityStatus[questionKey];
@@ -1169,6 +1175,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public IReadOnlyList<FailedValidationCondition> GetFailedValidationConditions(Identity questionId)
         {
             var convertIdentityToString = ConversionHelper.ConvertIdentityToString(questionId);
+            if (this.interviewState.InvalidStaticTexts.ContainsKey(convertIdentityToString))
+            {
+                return this.interviewState.InvalidStaticTexts[convertIdentityToString];
+            }
+
             if (this.Answers.ContainsKey(convertIdentityToString))
             {
                 return this.Answers[convertIdentityToString].FailedValidations.ToReadOnlyCollection();
@@ -1225,7 +1236,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public bool WasAnswered(Identity entityIdentity)
         {
+            if (this.GetQuestionnaireOrThrow().IsStaticText(entityIdentity.Id))
+            {
+                return true;
+            }
+
             var questionKey = ConversionHelper.ConvertIdentityToString(entityIdentity);
+
             if (!this.Answers.ContainsKey(questionKey))
                 return false;
 
@@ -1285,12 +1302,32 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             }
         }
 
+        private IEnumerable<Identity> GetEnabledInvalidChildStaticTexts(Identity parent)
+        {
+            return GetOrCalculate(
+                parent,
+                this.GetEnabledInterviewerChildStaticTextsImpl,
+                this.calculated.EnabledStaticTextChildQuestions);
+        }
+
         private ReadOnlyCollection<Identity> GetEnabledInterviewerChildQuestions(Identity group)
         {
             return GetOrCalculate(
                 group,
                 this.GetEnabledInterviewerChildQuestionsImpl,
                 this.calculated.EnabledInterviewerChildQuestions);
+        }
+
+        private ReadOnlyCollection<Identity> GetEnabledInterviewerChildStaticTextsImpl(Identity group)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            IEnumerable<Guid> staticTextIds = questionnaire.GetChildStaticTexts(group.Id);
+
+            IEnumerable<Identity> questions = GetInstancesOfStaticTextsWithSameAndDeeperRosterLevelOrThrow(
+                this.interviewState, staticTextIds, group.RosterVector, questionnaire);
+
+            return questions.Where(this.IsEnabled).ToReadOnlyCollection();
         }
 
         private ReadOnlyCollection<Identity> GetEnabledInterviewerChildQuestionsImpl(Identity group)

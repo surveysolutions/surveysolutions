@@ -70,7 +70,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.DisabledStaticTexts = new ConcurrentHashSet<Identity>();
 
             this.ValidStaticTexts = new ConcurrentHashSet<string>();
-            this.InvalidStaticTexts = new ConcurrentHashSet<string>();
+            this.InvalidStaticTexts = new ConcurrentDictionary<string, IReadOnlyList<FailedValidationCondition>>();
         }
 
         public ConcurrentDictionary<string, object> AnswersSupportedInExpressions { set; get; }
@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public ConcurrentBag<AnswerComment> AnswerComments { get; set; }
 
         public ConcurrentHashSet<string> ValidStaticTexts { set; get; }
-        public ConcurrentHashSet<string> InvalidStaticTexts { set; get; }
+        public IDictionary<string, IReadOnlyList<FailedValidationCondition>> InvalidStaticTexts { set; get; }
 
 
         public InterviewStateDependentOnAnswers Clone()
@@ -113,7 +113,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 DisabledStaticTexts = new ConcurrentHashSet<Identity>(this.DisabledStaticTexts),
                 ValidStaticTexts = new ConcurrentHashSet<string>(this.ValidStaticTexts),
-                InvalidStaticTexts = new ConcurrentHashSet<string>(InvalidStaticTexts)
+                InvalidStaticTexts = new ConcurrentDictionary<string, IReadOnlyList<FailedValidationCondition>>(InvalidStaticTexts)
             };
         }
 
@@ -325,12 +325,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        public void DeclareStaticTextInvalid(IEnumerable<Identity> statisTexts)
+        public void DeclareStaticTextInvalid(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> statisTexts)
         {
-            foreach (string questionKey in statisTexts.Select(ConversionHelper.ConvertIdentityToString))
+            foreach (var questionKey in statisTexts)
             {
-                this.InvalidStaticTexts.Add(questionKey);
-                this.ValidStaticTexts.Remove(questionKey);
+                var stringKey = ConversionHelper.ConvertIdentityToString(questionKey.Key);
+
+                this.InvalidStaticTexts[stringKey] = questionKey.Value;
+                this.ValidStaticTexts.Remove(stringKey);
             }
         }
 

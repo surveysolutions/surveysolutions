@@ -10,7 +10,7 @@
     <LinearLayout style="@style/Interview_Question_Header">
       <TextView
           style="@style/Interview_Question_Title"
-          local:MvxBind="Html StaticText; Visible Not(QuestionState.Validity.IsInvalid)" />
+          local:MvxBind="Html RawStaticText; Visible Not(QuestionState.Validity.IsInvalid)" />
 
       <TextView
           style="@style/Interview_Question_Title"
