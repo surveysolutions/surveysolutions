@@ -4,7 +4,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class StaticTextsDeclaredValid : StaticTextsPassiveEvent
     {
-        public StaticTextsDeclaredValid(Identity[] questions)
-            : base(questions) {}
+        public StaticTextsDeclaredValid(Identity[] staticTexts)
+            : base(staticTexts) {}
     }
 }

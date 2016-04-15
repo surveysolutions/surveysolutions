@@ -169,6 +169,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 {
                     case InterviewDetailsFilter.Enabled:
                         return staticText.IsEnabled;
+                    case InterviewDetailsFilter.Invalid:
+                        return !staticText.IsValid;
                     case InterviewDetailsFilter.Flagged:
                         return false;
                     default:

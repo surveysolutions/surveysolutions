@@ -1,6 +1,6 @@
 ﻿@model WB.Core.SharedKernels.SurveyManagement.Views.Interview.InterviewStaticTextView
 
-<tr class="@css("text-muted", !Model.IsEnabled)">
+<tr class="@css("danger", !Model.IsValid && Model.IsEnabled) @css("text-muted", !Model.IsEnabled)">
     <td colspan="4" class="static-text">
         <div class="cell-content">
             <div>@Html.Raw(Model.Text)</div>
@@ -8,6 +8,21 @@
             @if (Model.Attachment != null)
             {
                 @Html.Partial("AttachmentPartialView", Model.Attachment)
+            }
+
+            @if (!Model.IsValid)
+            {
+                <dl>
+                    @foreach (var validationCondition in Model.FailedValidationMessages)
+                    {
+                        <dt>
+                            <small class="text-error">@validationCondition.Expression</small>
+                        </dt>
+                        <dd>
+                            <small class="text-error">@validationCondition.Message</small>
+                        </dd>
+                    }
+                </dl>
             }
         </div>
     </td>

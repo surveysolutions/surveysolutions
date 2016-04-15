@@ -255,6 +255,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                     var interviewAttachmentViewModel = attachment == null ? null : new InterviewAttachmentViewModel(attachment.ContentHash, attachment.ContentType, staticText.AttachmentName);
                     var interviewStaticTextView = new InterviewStaticTextView(staticText, interviewAttachmentViewModel);
                     interviewStaticTextView.IsEnabled = !interviewLevel.DisabledStaticTexts.Contains(staticText.PublicKey);
+
+                    if (interviewLevel.StaticTexts.ContainsKey(staticText.PublicKey))
+                    {
+                        var interviewStaticText = interviewLevel.StaticTexts[staticText.PublicKey];
+                        interviewStaticTextView.IsValid = !interviewStaticText.IsInvalid;
+                        interviewStaticTextView.FailedValidationMessages = interviewStaticText.FailedValidationConditions.
+                            Select(x => staticText.ValidationConditions[x.FailedConditionIndex]).ToList();
+                    }
+
                     interviewEntity = interviewStaticTextView;
                     
                     completedGroup.Entities.Add(interviewEntity);
