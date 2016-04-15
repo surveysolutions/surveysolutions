@@ -107,9 +107,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 {
                     disabledGroups.Add(new InterviewItemId(disabledGroup, interviewLevel.RosterVector));
                 }
-                foreach (var disabledStaticText in interviewLevel.DisabledStaticTexts)
+                foreach (var staticText in interviewLevel.StaticTexts.Values)
                 {
-                    disabledStaticTexts.Add(new InterviewItemId(disabledStaticText, interviewLevel.RosterVector));
+                    if (!staticText.IsEnabled)
+                    {
+                        disabledStaticTexts.Add(new InterviewItemId(staticText.Id, interviewLevel.RosterVector));
+                    }
                 }
 
                 this.FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(questionnariePropagationStructure, interviewLevel,

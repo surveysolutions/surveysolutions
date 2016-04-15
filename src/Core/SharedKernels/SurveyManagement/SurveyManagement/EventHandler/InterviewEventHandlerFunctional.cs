@@ -542,26 +542,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         public InterviewData Update(InterviewData state, IPublishedEvent<StaticTextsEnabled> @event)
         {
             return @event.Payload.StaticTexts.Aggregate(
-                    state,
-                    (document, group) => PreformActionOnLevel(document, group.RosterVector, level =>
-                    {
-                        if (level.DisabledStaticTexts.Contains(group.Id))
-                        {
-                            level.DisabledStaticTexts.Remove(group.Id);
-                        }
-                    }));
+                state,
+                (document, staticTextIdentity) => UpdateStaticText(document, staticTextIdentity.RosterVector, staticTextIdentity.Id, (staticText) =>
+                {
+                    staticText.IsEnabled = true;
+                }));
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<StaticTextsDisabled> @event)
         {
             return @event.Payload.StaticTexts.Aggregate(
                 state,
-                (document, group) => PreformActionOnLevel(document, group.RosterVector, level =>
+                (document, staticTextIdentity) => UpdateStaticText(document, staticTextIdentity.RosterVector, staticTextIdentity.Id, (staticText) =>
                 {
-                    if (!level.DisabledStaticTexts.Contains(group.Id))
-                    {
-                        level.DisabledStaticTexts.Add(group.Id);
-                    }
+                    staticText.IsEnabled = false;
                 }));
         }
 

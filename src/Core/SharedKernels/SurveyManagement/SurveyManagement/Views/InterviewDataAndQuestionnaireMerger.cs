@@ -252,17 +252,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                         interviewInfo.Attachments.TryGetValue(staticText.AttachmentName, out attachment); 
                     }
 
+                    var interviewStaticText = interviewLevel.StaticTexts.ContainsKey(staticText.PublicKey) ? interviewLevel.StaticTexts[staticText.PublicKey] : null;
                     var interviewAttachmentViewModel = attachment == null ? null : new InterviewAttachmentViewModel(attachment.ContentHash, attachment.ContentType, staticText.AttachmentName);
-                    var interviewStaticTextView = new InterviewStaticTextView(staticText, interviewAttachmentViewModel);
-                    interviewStaticTextView.IsEnabled = !interviewLevel.DisabledStaticTexts.Contains(staticText.PublicKey);
-
-                    if (interviewLevel.StaticTexts.ContainsKey(staticText.PublicKey))
-                    {
-                        var interviewStaticText = interviewLevel.StaticTexts[staticText.PublicKey];
-                        interviewStaticTextView.IsValid = !interviewStaticText.IsInvalid;
-                        interviewStaticTextView.FailedValidationMessages = interviewStaticText.FailedValidationConditions.
-                            Select(x => staticText.ValidationConditions[x.FailedConditionIndex]).ToList();
-                    }
+                    var interviewStaticTextView = new InterviewStaticTextView(staticText, interviewStaticText, interviewAttachmentViewModel);
 
                     interviewEntity = interviewStaticTextView;
                     

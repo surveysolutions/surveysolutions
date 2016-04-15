@@ -10,6 +10,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         {
             this.FailedValidationConditions = new List<FailedValidationCondition>();
             this.IsInvalid = false;
+            this.IsEnabled = true;
         }
 
         public InterviewStaticText(Guid id):this()
@@ -18,6 +19,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         }
 
         public Guid Id { get; set; }
+
+        public bool IsEnabled { get; set; }
 
         public bool IsInvalid { get; set; }
 

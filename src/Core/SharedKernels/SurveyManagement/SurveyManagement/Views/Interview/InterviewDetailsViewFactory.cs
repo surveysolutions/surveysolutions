@@ -65,17 +65,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
             var interviewDetailsView = merger.Merge(interview, questionnaire, user.GetUseLight(), this.interviewLinkedQuestionOptionsStore.GetById(interviewId), attachmentIdAndTypes);
 
-            var questionViews = interviewDetailsView.Groups.SelectMany(group => group.Entities).OfType<InterviewQuestionView>().ToList();
+            var interviewEntityViews = interviewDetailsView.Groups
+                .SelectMany(group => group.Entities)
+                .Where(entity => entity is InterviewQuestionView || entity is InterviewStaticTextView)
+                .ToList();
+
             var detailsStatisticView = new DetailsStatisticView()
             {
-                AnsweredCount = questionViews.Count(question => this.IsEntityInFilter(InterviewDetailsFilter.Answered, question)),
-                UnansweredCount = questionViews.Count(question => this.IsEntityInFilter(InterviewDetailsFilter.Unanswered, question)),
-                CommentedCount = questionViews.Count(question => this.IsEntityInFilter(InterviewDetailsFilter.Commented, question)),
-                EnabledCount = questionViews.Count(question => this.IsEntityInFilter(InterviewDetailsFilter.Enabled, question)),
-                FlaggedCount = questionViews.Count(question => this.IsEntityInFilter(InterviewDetailsFilter.Flagged, question)),
-                InvalidCount = questionViews.Count(question => this.IsEntityInFilter(InterviewDetailsFilter.Invalid, question)),
-                SupervisorsCount = questionViews.Count(question => this.IsEntityInFilter(InterviewDetailsFilter.Supervisors, question)),
-                HiddenCount = questionViews.Count(question => this.IsEntityInFilter(InterviewDetailsFilter.Hidden, question)),
+                AnsweredCount = interviewEntityViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Answered, interviewEntityView)),
+                UnansweredCount = interviewEntityViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Unanswered, interviewEntityView)),
+                CommentedCount = interviewEntityViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Commented, interviewEntityView)),
+                EnabledCount = interviewEntityViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Enabled, interviewEntityView)),
+                FlaggedCount = interviewEntityViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Flagged, interviewEntityView)),
+                InvalidCount = interviewEntityViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Invalid, interviewEntityView)),
+                SupervisorsCount = interviewEntityViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Supervisors, interviewEntityView)),
+                HiddenCount = interviewEntityViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Hidden, interviewEntityView)),
             };
 
             var selectedGroups = new List<InterviewGroupView>();
