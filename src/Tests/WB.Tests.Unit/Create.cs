@@ -2230,9 +2230,10 @@ namespace WB.Tests.Unit
         public static StaticText StaticText(
             Guid? publicKey = null,
             string text = "Static Text X",
-            string attachmentName = null)
+            string attachmentName = null,
+            List<ValidationCondition> validationConditions = null)
         {
-            return new StaticText(publicKey ?? Guid.NewGuid(), text, null, false, new List<ValidationCondition>(),attachmentName);
+            return new StaticText(publicKey ?? Guid.NewGuid(), text, null, false, validationConditions ?? new List<ValidationCondition>(), attachmentName);
         }
 
         public static IPublishedEvent<StaticTextAdded> StaticTextAddedEvent(string entityId = null, Guid? responsibleId = null, string parentId = null, string text = null)
