@@ -135,7 +135,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 {
                     case SynchronizationExceptionType.RequestCanceledByUser:
                         progress.Report(new SyncProgressInfo {
-                            Status = SynchronizationStatus.Stopped,
+                            Title = errorTitle,
+                            Description = errorDescription,
+                            Status = SynchronizationStatus.Canceled,
                             Statistics = statistics
                         });
                         break;
@@ -148,22 +150,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                             Title = InterviewerUIResources.Synchronization_UserLinkedToAnotherDevice_Status,
                             Description = InterviewerUIResources.Synchronization_UserLinkedToAnotherDevice_Title,
                             UserIsLinkedToAnotherDevice = true,
-                            Status = SynchronizationStatus.Stopped,
+                            Status = SynchronizationStatus.Fail,
+                            Statistics = statistics
+                        });
+                        break;
+                    default:
+                        progress.Report(new SyncProgressInfo
+                        {
+                            Title = errorTitle,
+                            Description = errorDescription,
+                            Status = SynchronizationStatus.Fail,
                             Statistics = statistics
                         });
                         break;
                 }
-
-                var status = ex.Type == SynchronizationExceptionType.RequestCanceledByUser
-                    ? SynchronizationStatus.Canceled
-                    : SynchronizationStatus.Fail;
-                progress.Report(new SyncProgressInfo
-                {
-                    Title = errorTitle,
-                    Description = errorDescription,
-                    Status = status,
-                    Statistics = statistics
-                });
             }
             catch (Exception ex)
             {
