@@ -2075,7 +2075,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (validityChanges.FailedValidationConditionsForStaticTexts.Any())
             {
-                this.ApplyEvent(new StaticTextsDeclaredInvalid(validityChanges.FailedValidationConditionsForStaticTexts));
+                this.ApplyEvent(new StaticTextsDeclaredInvalid(validityChanges.FailedValidationConditionsForStaticTexts.ToList()));
             }
         }
 

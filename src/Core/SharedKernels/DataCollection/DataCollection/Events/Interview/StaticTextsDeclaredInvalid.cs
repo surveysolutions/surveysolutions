@@ -20,9 +20,9 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             this.FailedValidationConditions = new List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>>();;
         }
 
-        public StaticTextsDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions)
+        public StaticTextsDeclaredInvalid(List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>> failedValidationConditions)
         {
-            this.FailedValidationConditions = failedValidationConditions.ToList();
+            this.FailedValidationConditions = failedValidationConditions;
         }
     }
 }
