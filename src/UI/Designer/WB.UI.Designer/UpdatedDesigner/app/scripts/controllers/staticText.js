@@ -3,6 +3,8 @@
         function ($rootScope, $scope, $state, questionnaireService, commandService, hotkeys) {
             "use strict";
 
+            $scope.currentChapterId = $state.params.chapterId;
+
             var saveStaticText = 'ctrl+s';
 
             if (hotkeys.get(saveStaticText) !== false) {
