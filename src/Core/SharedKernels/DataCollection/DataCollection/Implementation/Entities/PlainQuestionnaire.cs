@@ -55,7 +55,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfUnderlyingInterviewerQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfParentsStartingFromTop = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildStaticTexts = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
-        private Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingStaticTexts = new Dictionary<Guid, IEnumerable<Guid>>();
+        private readonly Dictionary<Guid, ReadOnlyCollection<decimal>> cacheOfAnswerOptionsAsValues = new Dictionary<Guid, ReadOnlyCollection<decimal>>();
+        private readonly Dictionary<Guid, Dictionary<decimal, Answer>> cacheOfAnswerOptions = new Dictionary<Guid, Dictionary<decimal, Answer>>();
+        private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingStaticTexts = new Dictionary<Guid, IEnumerable<Guid>>();
 
 
         internal QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
@@ -263,6 +265,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public Guid? GetCascadingQuestionParentId(Guid questionId) => this.GetQuestionOrThrow(questionId).CascadeFromQuestionId;
 
         public IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId)
+             => this.cacheOfAnswerOptionsAsValues.GetOrUpdate(questionId, () 
+                => this.GetAnswerOptionsAsValuesImpl(questionId));
+
+        public ReadOnlyCollection<decimal> GetAnswerOptionsAsValuesImpl(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
@@ -273,41 +279,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 throw new QuestionnaireException(
                     $"Cannot return answer options for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
 
-            return question.Answers.Select(answer => ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToList();
+            return question.Answers.Select(answer => ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToReadOnlyCollection();
         }
 
-        public string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue)
-        {
-            IQuestion question = this.GetQuestionOrThrow(questionId);
-
-            bool questionTypeDoesNotSupportAnswerOptions
-                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
-
-            if (questionTypeDoesNotSupportAnswerOptions)
-                throw new QuestionnaireException(
-                    $"Cannot return answer option title for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
-
-            return question
-                .Answers
-                .Single(answer => answerOptionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId))
-                .AnswerText;
-        }
+        public string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue) => this.GetAnswerOption(questionId, answerOptionValue).AnswerText;
 
         public decimal GetCascadingParentValue(Guid questionId, decimal answerOptionValue)
         {
-            var question = this.GetQuestionOrThrow(questionId);
-
-            var questionTypeDoesNotSupportAnswerOptions
-                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
-
-            if (questionTypeDoesNotSupportAnswerOptions)
-                throw new QuestionnaireException(
-                    $"Cannot return answer option title for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
-
-            var stringParentAnswer = question
-                .Answers
-                .Single(answer => answerOptionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId))
-                .ParentValue;
+            var stringParentAnswer = this.GetAnswerOption(questionId, answerOptionValue).ParentValue;
 
             decimal parsedValue;
 
@@ -316,6 +295,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     $"Cannot parse parent answer option value '{stringParentAnswer}' as decimal. Question id: '{questionId}'.");
 
             return parsedValue;
+        }
+
+        private Answer GetAnswerOption(Guid questionId, decimal answerOptionValue)
+            => this.cacheOfAnswerOptions.GetOrUpdate(questionId, answerOptionValue, 
+                                                    () => GetAnswerOptionImpl(questionId, answerOptionValue));
+
+        private Answer GetAnswerOptionImpl(Guid questionId, decimal answerOptionValue)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            bool questionTypeDoesNotSupportAnswerOptions
+                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
+
+            if (questionTypeDoesNotSupportAnswerOptions)
+                throw new QuestionnaireException(
+                    $"Cannot return answer option for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
+
+            return question
+                .Answers
+                .Single(answer => answerOptionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId));
         }
 
         public int? GetMaxSelectedAnswerOptions(Guid questionId)
