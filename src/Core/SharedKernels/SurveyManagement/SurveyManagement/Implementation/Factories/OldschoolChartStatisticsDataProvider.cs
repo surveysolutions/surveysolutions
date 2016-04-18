@@ -2,23 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Infrastructure.Native.Storage;
-using NHibernate;
 using NHibernate.Criterion;
-using NHibernate.Linq;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 {
     internal class OldschoolChartStatisticsDataProvider : IOldschoolChartStatisticsDataProvider
     {
-        private readonly INHibernateQueryableReadSideRepositoryReader<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
+        private readonly INaviteReadSideStorage<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
 
-        public OldschoolChartStatisticsDataProvider(INHibernateQueryableReadSideRepositoryReader<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage)
+        public OldschoolChartStatisticsDataProvider(INaviteReadSideStorage<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage)
         {
             this.cumulativeReportStatusChangeStorage = cumulativeReportStatusChangeStorage;
         }

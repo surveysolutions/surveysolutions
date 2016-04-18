@@ -12,15 +12,15 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
-    internal class PostgreReadSideRepository<TEntity> : IReadSideRepositoryWriter<TEntity>,
+    internal class PostgreReadSideStorage<TEntity> : IReadSideRepositoryWriter<TEntity>,
         IReadSideRepositoryCleaner,
-        INHibernateQueryableReadSideRepositoryReader<TEntity>
+        INaviteReadSideStorage<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly ISessionProvider sessionProvider;
         private readonly ILogger logger;
 
-        public PostgreReadSideRepository([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider, ILogger logger)
+        public PostgreReadSideStorage([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider, ILogger logger)
         {
             this.sessionProvider = sessionProvider;
             this.logger = logger;

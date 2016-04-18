@@ -39,7 +39,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         }
 
         protected override IReadSideStorage<TEntity> GetPostgresReadSideStorage<TEntity>(IContext context)
-            => (IReadSideStorage<TEntity>) context.Kernel.GetService(typeof(PostgreReadSideRepository<>).MakeGenericType(typeof(TEntity)));
+            => (IReadSideStorage<TEntity>) context.Kernel.GetService(typeof(PostgreReadSideStorage<>).MakeGenericType(typeof(TEntity)));
 
         public override void Load()
         {
@@ -49,7 +49,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
             this.Kernel.Bind<IPostgresReadSideBootstraper>().To<PostgresReadSideBootstraper>();
 
-            this.Kernel.Bind(typeof(PostgreReadSideRepository<>)).ToSelf().InSingletonScope();
+            this.Kernel.Bind(typeof(PostgreReadSideStorage<>)).ToSelf().InSingletonScope();
             this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(this.GetReadSideStorageWrappedWithCache).InSingletonScope(); 
             
             this.Kernel.Bind<ISessionFactory>()
@@ -82,9 +82,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.Kernel.Bind<ITransactionManagerProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
             this.Kernel.Bind<ITransactionManagerProviderManager>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
 
-            this.Kernel.Bind(typeof (IQueryableReadSideRepositoryReader<>)).To(typeof (PostgreReadSideRepository<>));
-            this.Kernel.Bind(typeof (IReadSideRepositoryReader<>)).To(typeof (PostgreReadSideRepository<>));
-            this.Kernel.Bind(typeof(INHibernateQueryableReadSideRepositoryReader<>)).To(typeof(PostgreReadSideRepository<>));
+            this.Kernel.Bind(typeof (IQueryableReadSideRepositoryReader<>)).To(typeof (PostgreReadSideStorage<>));
+            this.Kernel.Bind(typeof (IReadSideRepositoryReader<>)).To(typeof (PostgreReadSideStorage<>));
+            this.Kernel.Bind(typeof(INaviteReadSideStorage<>)).To(typeof(PostgreReadSideStorage<>));
         }
 
         private ISessionFactory BuildSessionFactory()
