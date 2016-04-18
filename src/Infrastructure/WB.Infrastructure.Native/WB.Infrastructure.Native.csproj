@@ -165,7 +165,7 @@
     <Compile Include="Logging\NLogLogger.cs" />
     <Compile Include="Logging\NLogLoggerProvider.cs" />
     <Compile Include="Logging\NLogLoggingModule.cs" />
-    <Compile Include="Storage\INHibernateQueryableReadSideRepositoryReader.cs" />
+    <Compile Include="Storage\INaviteReadSideStorage.cs" />
     <Compile Include="Storage\JsonAllTypesSerializer.cs" />
     <Compile Include="Storage\Esent\Implementation\EsentCachedReadSideStorage.cs" />
     <Compile Include="Storage\EventSerializerSettings.cs" />
@@ -211,7 +211,7 @@
     <Compile Include="Storage\Postgre\Implementation\RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions.cs" />
     <Compile Include="Storage\Postgre\Implementation\PostgresReadSideBootstraper.cs" />
     <Compile Include="Storage\Postgre\Implementation\CqrsPostgresTransactionManager.cs" />
-    <Compile Include="Storage\Postgre\Implementation\PostgreReadSideRepository.cs" />
+    <Compile Include="Storage\Postgre\Implementation\PostgreReadSideStorage.cs" />
     <Compile Include="Storage\Postgre\Implementation\TransactionManagerProvider.cs" />
     <Compile Include="Storage\Postgre\PostgreConnectionSettings.cs" />
     <Compile Include="Storage\Postgre\PostgresReadSideModule.cs" />
