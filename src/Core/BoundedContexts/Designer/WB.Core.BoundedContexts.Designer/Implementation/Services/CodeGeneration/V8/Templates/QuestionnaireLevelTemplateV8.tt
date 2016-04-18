@@ -41,6 +41,7 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV8<
 			ValidAnsweredQuestions = new HashSet<Guid>(this.ValidAnsweredQuestions),
 			InvalidAnsweredQuestions = new HashSet<Guid>(this.InvalidAnsweredQuestions),
 			InvalidAnsweredFailedValidations = new Dictionary<Guid, IReadOnlyList<FailedValidationCondition>>(this.InvalidAnsweredFailedValidations),
+			ValidStaticTexts = new HashSet<Guid>(this.ValidStaticTexts),
 <#
 	QuestionsCopyOperatorsInCopyMembers(Model.Questions);
 #>
