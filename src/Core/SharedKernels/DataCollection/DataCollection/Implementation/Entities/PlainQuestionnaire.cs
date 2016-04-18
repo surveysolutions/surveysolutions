@@ -161,7 +161,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             this.groupCache = groupCache.ToDictionary(x => x.Key.FormatGuid(), x => x.Value);
             this.questionCache = questionCache;
-            this.staticTextCache = staticTextCache;
         }
 
         public long Version => this.getVersion();
