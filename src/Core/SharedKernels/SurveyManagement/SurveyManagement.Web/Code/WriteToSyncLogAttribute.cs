@@ -122,7 +122,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
                         logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.GetQuestionnaireAttachments, context);
                         break;
                     case SynchronizationLogType.GetAttachmentContent:
-                        logItem.Log = SyncLogMessages.GetAttachmentContent.FormatString(context.GetActionArgument<Guid>("id"));
+                        logItem.Log = SyncLogMessages.GetAttachmentContent.FormatString(context.GetActionArgument<string>("id"));
                         break;
                     case SynchronizationLogType.PostInterview:
                         var interviewId = context.GetActionArgument<InterviewPackageApiView>("package").InterviewId;
