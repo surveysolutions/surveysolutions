@@ -359,7 +359,7 @@ angular.module('designerApp')
                     timestamp: Date.now()
                 });
 
-                ace.require("ace/ext/language_tools").addCompleter(variablesCompletor);
+                ace.require("ace/ext/language_tools");//.addCompleter(variablesCompletor);
 
                 editor.$blockScrolling = Infinity;
                 editor.commands.bindKey("tab", null);
