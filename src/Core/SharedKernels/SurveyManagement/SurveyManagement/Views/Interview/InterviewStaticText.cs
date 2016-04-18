@@ -8,14 +8,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     {
         public InterviewStaticText()
         {
+        }
+
+        public InterviewStaticText(Guid id)
+        {
+            this.Id = id;
             this.FailedValidationConditions = new List<FailedValidationCondition>();
             this.IsInvalid = false;
             this.IsEnabled = true;
-        }
-
-        public InterviewStaticText(Guid id):this()
-        {
-            this.Id = id;
         }
 
         public Guid Id { get; set; }

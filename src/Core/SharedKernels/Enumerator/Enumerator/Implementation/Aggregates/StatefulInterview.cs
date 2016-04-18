@@ -138,12 +138,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 x => DeclareAnswerAsValid(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.FailedValidationConditions.ForEach(
                 x => this.DeclareAnswerAsInvalid(x.Key.Id, x.Key.RosterVector, x.Value));
-
+            
             @event.InterviewData.DisabledQuestions.ForEach(x => DisableQuestion(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.DisabledStaticTexts.ForEach(x => DisableStaticText(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.DisabledGroups.ForEach(x => DisableGroup(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.Answers.ForEach(x => CommentQuestion(x.Id, x.QuestionRosterVector, x.Comments));
-            
+
             this.ResetLocalDelta();
         }
 
@@ -320,6 +320,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             var enabledGroups = allGroupInstances.Where(this.delta.EnablementChanged.Contains).Where(group => this.IsEnabled(group)).ToArray();
             var disabledGroups = allGroupInstances.Where(this.delta.EnablementChanged.Contains).Where(group => !this.IsEnabled(group)).ToArray();
 
+            ReadOnlyCollection<Guid> allStaticTextIds = questionnaire.GetAllStaticTexts();
+            ReadOnlyCollection<Identity> allStaticTextIdentities = this.GetInstancesOfStaticTextsWithSameAndDeeperRosterLevelOrThrow(
+                this.interviewState, allStaticTextIds, RosterVector.Empty, questionnaire).ToReadOnlyCollection();
+            var validStaticTexts = allStaticTextIdentities.Where(this.delta.ValidityChanged.Contains).Where(this.IsValid).ToArray();
+            var invalidStaticTexts = allStaticTextIdentities.Where(this.delta.ValidityChanged.Contains)
+                .Where(staticText => !this.IsValid(staticText))
+                .Select(staticText => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(
+                    staticText,
+                    this.GetFailedValidationConditions(staticText))).ToList();
+            var enabledStaticTexts = allStaticTextIdentities.Where(this.delta.EnablementChanged.Contains).Where(this.IsEnabled).ToArray();
+            var disabledStaticTexts = allStaticTextIdentities.Where(this.delta.EnablementChanged.Contains).Where(staticText => !this.IsEnabled(staticText)).ToArray();
+
             bool isInterviewInvalid = this.HasInvalidAnswers();
 
 
@@ -331,6 +343,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             if (enabledGroups.Length > 0) this.ApplyEvent(new GroupsEnabled(enabledGroups));
             if (disabledGroups.Length > 0) this.ApplyEvent(new GroupsDisabled(disabledGroups));
+
+            if(enabledStaticTexts.Length > 0) this.ApplyEvent(new StaticTextsEnabled(enabledStaticTexts));
+            if (disabledStaticTexts.Length > 0) this.ApplyEvent(new StaticTextsDisabled(disabledStaticTexts));
+
+            if (validStaticTexts.Length > 0) this.ApplyEvent(new StaticTextsDeclaredValid(validStaticTexts));
+            if (invalidStaticTexts.Count > 0) this.ApplyEvent(new StaticTextsDeclaredInvalid(invalidStaticTexts));
+
 
             this.ApplyEvent(new InterviewCompleted(userId, completeTime, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
@@ -461,6 +480,24 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             @event.StaticTexts.ForEach(x => this.DisableStaticText(x.Id, x.RosterVector));
             @event.StaticTexts.ForEach(x => this.delta.EnablementChanged.Add(new Identity(x.Id, x.RosterVector)));
+        }
+
+        public new void Apply(StaticTextsDeclaredValid @event)
+        {
+            base.Apply(@event);
+            this.ResetCalculatedState();
+
+            @event.StaticTexts.ForEach(x => this.DeclareAnswerAsValid(x.Id, x.RosterVector));
+            @event.StaticTexts.ForEach(x => this.delta.ValidityChanged.Add(new Identity(x.Id, x.RosterVector)));
+        }
+
+        public new void Apply(StaticTextsDeclaredInvalid @event)
+        {
+            base.Apply(@event);
+            this.ResetCalculatedState();
+
+            @event.FailedValidationConditions.ForEach(x => this.DeclareAnswerAsInvalid(x.Key.Id, x.Key.RosterVector, x.Value.ToList()));
+            @event.GetFailedValidationConditionsDictionary().Keys.ForEach(x => this.delta.ValidityChanged.Add(new Identity(x.Id, x.RosterVector)));
         }
 
         #endregion
