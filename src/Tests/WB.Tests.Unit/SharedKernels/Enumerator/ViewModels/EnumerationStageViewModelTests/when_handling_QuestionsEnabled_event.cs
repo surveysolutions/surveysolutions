@@ -29,12 +29,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
                    && interview.IsEnabled(enabledQuestion) == true));
 
             var interviewViewModelFactory = Mock.Of<IInterviewViewModelFactory>(__ =>
-                __.GetEntities(Moq.It.IsAny<string>(), Moq.It.IsAny<Identity>(), Moq.It.IsAny<NavigationState>()) == Task.FromResult(new[]
+                __.GetEntities(Moq.It.IsAny<string>(), Moq.It.IsAny<Identity>(), Moq.It.IsAny<NavigationState>()) == new[]
                 {
                     Mock.Of<IInterviewEntityViewModel>(_ => _.Identity == enabledQuestion),
                     Mock.Of<IInterviewEntityViewModel>(_ => _.Identity == disabledAndHideIfDisabledQuestion),
                     Mock.Of<IInterviewEntityViewModel>(_ => _.Identity == disabledAndNotHideIfDisabledQuestion),
-                }.AsEnumerable())
+                }.AsEnumerable()
                 && __.GetNew<GroupNavigationViewModel>() == Mock.Of<GroupNavigationViewModel>());
 
             viemModel = Create.EnumerationStageViewModel(
