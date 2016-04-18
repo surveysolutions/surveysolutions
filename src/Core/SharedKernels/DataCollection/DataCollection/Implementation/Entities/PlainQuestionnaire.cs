@@ -36,6 +36,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly Func<long> getVersion;
         private readonly Guid? responsibleId;
 
+        private Dictionary<Guid, IStaticText> staticTextCache = null;
         private Dictionary<Guid, IQuestion> questionCache = null;
         private Dictionary<string, IGroup> groupCache = null;
         private Dictionary<Guid, IComposite> entityCache = null;
@@ -82,6 +83,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
+        private Dictionary<Guid, IStaticText> StaticTextCache
+        {
+            get
+            {
+                return this.staticTextCache ?? (this.staticTextCache
+                    = this.innerDocument
+                        .Find<IStaticText>(_ => true)
+                        .ToDictionary(
+                            staticText => staticText.PublicKey,
+                            staticText => staticText));
+            }
+        }
+
         private Dictionary<Guid, IQuestion> QuestionCache
         {
             get
@@ -116,6 +130,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
         }
 
+        private IEnumerable<IStaticText> AllStaticTexts => this.StaticTextCache.Values;
+
         private IEnumerable<IQuestion> AllQuestions => this.QuestionCache.Values;
 
         private IEnumerable<IGroup> AllGroups => this.GroupCache.Values;
@@ -143,6 +159,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             this.groupCache = groupCache.ToDictionary(x => x.Key.FormatGuid(), x => x.Value);
             this.questionCache = questionCache;
+            this.staticTextCache = staticTextCache;
         }
 
         public long Version => this.getVersion();
@@ -498,6 +515,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public ReadOnlyCollection<Guid> GetAllQuestions()
             => this.AllQuestions.Select(question => question.PublicKey).ToReadOnlyCollection();
+
+        public ReadOnlyCollection<Guid> GetAllStaticTexts()
+            => this.AllStaticTexts.Select(staticText => staticText.PublicKey).ToReadOnlyCollection();
 
         public ReadOnlyCollection<Guid> GetAllGroups()
             => this.AllGroups.Select(question => question.PublicKey).ToReadOnlyCollection();
