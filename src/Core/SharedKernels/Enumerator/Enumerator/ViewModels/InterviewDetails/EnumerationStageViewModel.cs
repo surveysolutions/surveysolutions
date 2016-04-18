@@ -92,7 +92,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public async Task InitAsync(string interviewId, NavigationState navigationState, Identity groupId, Identity anchoredElementIdentity)
         {
             if (navigationState == null) throw new ArgumentNullException(nameof(navigationState));
-            if (this.navigationState != null) throw new Exception("ViewModel already initialized");
+            if (this.navigationState != null) throw new InvalidOperationException("ViewModel already initialized");
 
             this.interviewId = interviewId;
             this.interview = this.interviewRepository.Get(interviewId);
@@ -121,7 +121,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.Name = this.questionnaire.GetGroupTitle(groupId.Id); ;
             }
 
-            await this.LoadFromModelAsync(groupId);
+            await this.LoadFromModelAsync(groupId).ConfigureAwait(false);
             this.SetScrollTo(anchoredElementIdentity);
         }
 
@@ -151,21 +151,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     .GetEntitiesAsync(
                         interviewId: this.navigationState.InterviewId,
                         groupIdentity: groupIdentity,
-                        navigationState: this.navigationState);
+                        navigationState: this.navigationState)
+                    .ConfigureAwait(false);
 
                 var interviewEntityViewModels = entities
                     .Where(entity => !this.ShouldBeHidden(entity.Identity))
                     .ToList();
 
-
                 var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
-                await previousGroupNavigationViewModel.InitAsync(this.interviewId, groupIdentity, this.navigationState);
+                await previousGroupNavigationViewModel.InitAsync(this.interviewId, groupIdentity, this.navigationState).ConfigureAwait(false);
 
                 foreach (var interviewItemViewModel in this.Items.OfType<IDisposable>())
                 {
                     interviewItemViewModel.Dispose();
                 }
-                this.mvxMainThreadDispatcher.RequestMainThreadAction(() => this.Items.Reset(interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<IInterviewEntityViewModel>())));
+                this.mvxMainThreadDispatcher.RequestMainThreadAction(() => 
+                    this.Items.Reset(interviewEntityViewModels.Concat(previousGroupNavigationViewModel.ToEnumerable<IInterviewEntityViewModel>())));
             }
             finally
             {

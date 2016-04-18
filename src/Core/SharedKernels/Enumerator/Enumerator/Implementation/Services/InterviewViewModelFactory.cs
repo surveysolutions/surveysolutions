@@ -91,7 +91,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             if (groupIdentity == null) throw new ArgumentNullException(nameof(groupIdentity));
 
-            return await this.GenerateViewModelsAsync(interviewId, groupIdentity, navigationState);
+            return await this.GenerateViewModelsAsync(interviewId, groupIdentity, navigationState).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<IInterviewEntityViewModel>> GetPrefilledQuestionsAsync(string interviewId)
@@ -108,7 +108,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     interviewId: interviewId,
                     navigationState: null));
 
-            return await Task.WhenAll(tasks);
+            return await Task.WhenAll(tasks).ConfigureAwait(false);
         }
 
         private async Task<IEnumerable<IInterviewEntityViewModel>> GenerateViewModelsAsync(string interviewId, Identity groupIdentity, NavigationState navigationState)
@@ -128,7 +128,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 interviewId: interviewId,
                 navigationState: navigationState));
 
-            return await Task.WhenAll(tasks);
+            return await Task.WhenAll(tasks).ConfigureAwait(false);
         }
 
         [Obsolete("Do not use it. It is for transition purpose only")]
@@ -216,7 +216,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             IInterviewEntityViewModel viewModel = viewModelActivator.Invoke();
 
-            await viewModel.InitAsync(interviewId: interviewId, entityIdentity: identity, navigationState: navigationState);
+            await viewModel.InitAsync(interviewId: interviewId, entityIdentity: identity, navigationState: navigationState).ConfigureAwait(false);
             return viewModel;
         }
 

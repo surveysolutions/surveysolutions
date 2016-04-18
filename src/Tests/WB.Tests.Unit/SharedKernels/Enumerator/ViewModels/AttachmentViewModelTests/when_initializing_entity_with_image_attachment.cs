@@ -36,8 +36,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             var interviewRepository = Setup.StatefulInterviewRepository(interview);
 
             var attachmentStorage = Mock.Of<IAttachmentContentStorage>(s =>
-                s.GetMetadataAsync(attachmentContentId) == Task.FromResult(attachmentContentMetadata)
-                && s.GetContentAsync(attachmentContentId) == Task.FromResult(attachmentContentData.Content));
+                s.GetMetadata(attachmentContentId) == attachmentContentMetadata
+                && s.GetContent(attachmentContentId) == attachmentContentData.Content);
 
             viewModel = Create.AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentStorage);
         };
