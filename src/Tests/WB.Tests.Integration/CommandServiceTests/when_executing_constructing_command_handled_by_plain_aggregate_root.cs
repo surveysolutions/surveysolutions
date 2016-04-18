@@ -11,19 +11,19 @@ namespace WB.Tests.Integration.CommandServiceTests
 {
     internal class when_executing_constructing_command_handled_by_plain_aggregate_root
     {
-        private class PlainCommand : ICommand { public Guid CommandIdentifier { get; private set; } }
+        private class PlainConstructingCommand : ICommand { public Guid CommandIdentifier { get; private set; } }
 
         private class Aggregate : IPlainAggregateRoot
         {
             public void SetId(Guid id) {}
-            public void Handle(PlainCommand command) => handledCommand = command;
+            public void Handle(PlainConstructingCommand command) => handledCommand = command;
         }
 
         Establish context = () =>
         {
             CommandRegistry
                 .Setup<Aggregate>()
-                .InitializesWith<PlainCommand>(_ => Guid.Empty, aggregate => aggregate.Handle);
+                .InitializesWith<PlainConstructingCommand>(_ => Guid.Empty, aggregate => aggregate.Handle);
 
             var serviceLocator = Mock.Of<IServiceLocator>(_
                 => _.GetInstance(typeof(Aggregate)) == new Aggregate());
@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             handledCommand.ShouldEqual(executedCommand);
 
         private static CommandService commandService;
-        private static PlainCommand handledCommand = null;
-        private static PlainCommand executedCommand = new PlainCommand();
+        private static PlainConstructingCommand handledCommand = null;
+        private static PlainConstructingCommand executedCommand = new PlainConstructingCommand();
     }
 }
