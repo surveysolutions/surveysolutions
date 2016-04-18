@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             viewModel = Create.AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentContentStorage);
         };
 
-        Because of = () => viewModel.InitAsync("interview", new Identity(entityId, Empty.RosterVector)).WaitAndUnwrapException();
+        Because of = () => viewModel.Init("interview", new Identity(entityId, Empty.RosterVector));
 
 
         It should_dont_call_attachment_content = () =>

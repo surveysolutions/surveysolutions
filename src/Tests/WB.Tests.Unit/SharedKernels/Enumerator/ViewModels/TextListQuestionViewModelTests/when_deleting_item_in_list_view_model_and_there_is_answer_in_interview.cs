@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
                 questionnaireRepository: questionnaireRepository,
                 principal: principal);
 
-            listModel.InitAsync(interviewId, questionIdentity, navigationState).WaitAndUnwrapException();
+            listModel.Init(interviewId, questionIdentity, navigationState);
         };
 
         Because of = () => 

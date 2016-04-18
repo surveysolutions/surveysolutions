@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 eventRegistry: eventRegistry.Object);
         };
 
-        Because of = () => viewModel.InitAsync(interviewId, questionId, navigationState).WaitAndUnwrapException();
+        Because of = () => viewModel.Init(interviewId, questionId, navigationState);
 
         It should_build_options = () => viewModel.Options.Count.ShouldEqual(5);
 

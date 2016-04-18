@@ -34,10 +34,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
         };
 
         Because of = () =>
-            listModel.InitAsync(interviewId, questionIdentity, navigationState).WaitAndUnwrapException();
+            listModel.Init(interviewId, questionIdentity, navigationState);
 
         It should_initialize_question_state = () =>
-            QuestionStateMock.Verify(x => x.InitAsync(interviewId, questionIdentity, navigationState), Times.Once);
+            QuestionStateMock.Verify(x => x.Init(interviewId, questionIdentity, navigationState), Times.Once);
 
         It should_create_empty_list_of_answers = () => 
             listModel.Answers.Count.ShouldEqual(0);

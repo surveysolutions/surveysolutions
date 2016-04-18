@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => cascadingModel.InitAsync("Some interviewId", null, null).WaitAndUnwrapException());
+            exception = Catch.Exception(() => cascadingModel.Init("Some interviewId", null, null));
 
         It should_throw_ArgumentNullException_exception = () =>
             exception.ShouldBeOfExactType<ArgumentNullException>();

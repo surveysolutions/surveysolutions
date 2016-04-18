@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
 
-        public Task InitAsync(string interviewId, Identity entityIdentity)
+        public void Init(string interviewId, Identity entityIdentity)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
@@ -51,8 +51,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.RaisePropertyChanged(() => Content);
                 }
             }
-
-            return Task.FromResult(true);
         }
 
         public bool IsImage => this.attachmentContentMetadata != null 

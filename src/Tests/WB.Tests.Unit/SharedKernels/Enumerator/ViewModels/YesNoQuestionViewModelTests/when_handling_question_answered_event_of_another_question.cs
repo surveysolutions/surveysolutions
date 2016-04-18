@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             viewModel = CreateViewModel(questionnaireStorage: questionnaireStorage.Object,
                 interviewRepository: interviewRepository.Object);
 
-            viewModel.InitAsync("blah", questionId, Create.NavigationState()).WaitAndUnwrapException();
+            viewModel.Init("blah", questionId, Create.NavigationState());
 
         };
 

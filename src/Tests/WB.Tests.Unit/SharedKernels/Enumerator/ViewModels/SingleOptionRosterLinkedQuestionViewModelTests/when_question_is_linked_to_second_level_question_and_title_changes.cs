@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionRosterLi
             var interviewRepository = Create.StatefulInterviewRepositoryWith(interview);
 
             viewModel = CreateViewModel(interviewRepository, questionnaireRepository);
-            viewModel.InitAsync("interview", questionIdentity, Create.NavigationState(interviewRepository)).WaitAndUnwrapException();
+            viewModel.Init("interview", questionIdentity, Create.NavigationState(interviewRepository));
 
             interview.FindReferencedRostersForLinkedQuestion(linkToRosterId, questionIdentity)
                 .Returns(new List<InterviewRoster> { Create.InterviewRoster(rosterId: linkToRosterId, rosterTitle: "title1")});
