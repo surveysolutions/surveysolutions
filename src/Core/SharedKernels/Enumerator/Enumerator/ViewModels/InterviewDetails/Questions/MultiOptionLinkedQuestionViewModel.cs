@@ -62,9 +62,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public Identity Identity => this.questionIdentity;
 
-        public async Task InitAsync(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            await this.QuestionState.InitAsync(interviewId, entityIdentity, navigationState);
+            this.QuestionState.Init(interviewId, entityIdentity, navigationState);
             this.eventRegistry.Subscribe(this, interviewId);
             this.questionIdentity = entityIdentity;
             this.userId = this.userIdentity.CurrentUserIdentity.UserId;

@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
         }
 
-        public async Task InitAsync(string interviewId, NavigationState navigationState, Identity groupId, Identity anchoredElementIdentity)
+        public void Init(string interviewId, NavigationState navigationState, Identity groupId, Identity anchoredElementIdentity)
         {
             if (navigationState == null) throw new ArgumentNullException(nameof(navigationState));
             if (this.navigationState != null) throw new InvalidOperationException("ViewModel already initialized");
@@ -101,7 +101,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.navigationState = navigationState;
             this.Items = new ObservableRangeCollection<IInterviewEntityViewModel>();
 
-            await this.CreateRegularGroupScreenAsync(groupId, anchoredElementIdentity);
+            this.CreateRegularGroupScreen(groupId, anchoredElementIdentity);
 
             if (!this.eventRegistry.IsSubscribed(this, this.interviewId))
             {
@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        private async Task CreateRegularGroupScreenAsync(Identity groupId, Identity anchoredElementIdentity)
+        private void CreateRegularGroupScreen(Identity groupId, Identity anchoredElementIdentity)
         {
             if (this.questionnaire.IsRosterGroup(groupId.Id))
             {
@@ -121,7 +121,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.Name = this.questionnaire.GetGroupTitle(groupId.Id); ;
             }
 
-            await this.LoadFromModelAsync(groupId).ConfigureAwait(false);
+            this.LoadFromModel(groupId);
             this.SetScrollTo(anchoredElementIdentity);
         }
 
@@ -141,25 +141,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public int? ScrollToIndex { get; set; }
 
-        private async Task LoadFromModelAsync(Identity groupIdentity)
+        private void LoadFromModel(Identity groupIdentity)
         {
             try
             { 
                 this.userInterfaceStateService.NotifyRefreshStarted();
 
-                var entities = await this.interviewViewModelFactory
-                    .GetEntitiesAsync(
+                var entities = this.interviewViewModelFactory
+                    .GetEntities(
                         interviewId: this.navigationState.InterviewId,
                         groupIdentity: groupIdentity,
-                        navigationState: this.navigationState)
-                    .ConfigureAwait(false);
+                        navigationState: this.navigationState);
 
                 var interviewEntityViewModels = entities
                     .Where(entity => !this.ShouldBeHidden(entity.Identity))
                     .ToList();
 
                 var previousGroupNavigationViewModel = this.interviewViewModelFactory.GetNew<GroupNavigationViewModel>();
-                await previousGroupNavigationViewModel.InitAsync(this.interviewId, groupIdentity, this.navigationState).ConfigureAwait(false);
+                previousGroupNavigationViewModel.Init(this.interviewId, groupIdentity, this.navigationState);
 
                 foreach (var interviewItemViewModel in this.Items.OfType<IDisposable>())
                 {
@@ -235,7 +234,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
             {
-
                 lock (this.itemsListUpdateOnUILock)
                 {
                     try
@@ -244,7 +242,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                         var entities = AsyncContext.Run(() =>
                              this.interviewViewModelFactory
-                                .GetEntitiesAsync(
+                                .GetEntities(
                                     interviewId: this.navigationState.InterviewId,
                                     groupIdentity: this.navigationState.CurrentGroup,
                                     navigationState: this.navigationState));

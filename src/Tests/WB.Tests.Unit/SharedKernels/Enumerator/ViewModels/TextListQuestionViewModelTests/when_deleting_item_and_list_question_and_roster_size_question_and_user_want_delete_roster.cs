@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
                 principal: principal,
                 userInteractionService: userInteraction.Object);
 
-            listModel.InitAsync(interviewId, questionIdentity, navigationState).WaitAndUnwrapException();
+            listModel.Init(interviewId, questionIdentity, navigationState);
         };
 
         Because of = () =>

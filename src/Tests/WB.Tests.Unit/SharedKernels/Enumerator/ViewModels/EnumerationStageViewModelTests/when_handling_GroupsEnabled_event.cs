@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
                 && interview.IsEnabled(enabledGroup) == true));
 
             var interviewViewModelFactory = Mock.Of<IInterviewViewModelFactory>(__ =>
-                __.GetEntitiesAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<Identity>(), Moq.It.IsAny<NavigationState>()) == Task.FromResult(new[]
+                __.GetEntities(Moq.It.IsAny<string>(), Moq.It.IsAny<Identity>(), Moq.It.IsAny<NavigationState>()) == Task.FromResult(new[]
                 {
                     Mock.Of<IInterviewEntityViewModel>(_ => _.Identity == enabledGroup),
                     Mock.Of<IInterviewEntityViewModel>(_ => _.Identity == disabledAndHideIfDisabledGroup),
@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
                 mvxMainThreadDispatcher: Stub.MvxMainThreadDispatcher());
 
             var groupId = new Identity(Guid.NewGuid(), new decimal[0]);
-            viemModel.InitAsync(interviewId, Create.NavigationState(), groupId, null).WaitAndUnwrapException();
+            viemModel.Init(interviewId, Create.NavigationState(), groupId, null);
         };
 
         Because of = () =>

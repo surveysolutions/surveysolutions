@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
                 );
         };
 
-        Because of = () => enumerationStage.InitAsync(interviewId, navigationState.Object, groupId, null).WaitAndUnwrapException();
+        Because of = () => enumerationStage.Init(interviewId, navigationState.Object, groupId, null);
 
         It should_subscribe_view_model_for_events =
             () => eventRegistry.Verify(x => x.Subscribe(enumerationStage, interviewId), Times.Once);

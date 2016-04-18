@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
                 interviewRepository: interviewRepository,
                 questionnaireRepository: questionnaireRepository);
 
-            integerModel.InitAsync(interviewId, questionIdentity, navigationState).WaitAndUnwrapException();
+            integerModel.Init(interviewId, questionIdentity, navigationState);
         };
 
         Because of = () =>

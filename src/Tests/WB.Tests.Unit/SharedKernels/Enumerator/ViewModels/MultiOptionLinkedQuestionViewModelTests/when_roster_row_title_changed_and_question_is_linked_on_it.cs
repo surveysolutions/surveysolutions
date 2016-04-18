@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                  .Returns(new [] { Create.InterviewRoster(rosterId.Id, new decimal[] { 1 }, "title") });
 
             viewModel = CreateMultiOptionRosterLinkedQuestionViewModel(questionnaire, interview.Object);
-            viewModel.InitAsync("interview", questionId, Create.NavigationState()).WaitAndUnwrapException();
+            viewModel.Init("interview", questionId, Create.NavigationState());
         };
 
         Because of = () =>
