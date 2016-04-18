@@ -12,6 +12,9 @@ namespace WB.Core.SharedKernels.DataCollection.V8
     public abstract class AbstractConditionalLevelInstanceV8<T> : AbstractConditionalLevelInstanceV7<T>, IExpressionExecutableV8
         where T : IExpressionExecutableV8
     {
+
+        protected HashSet<Guid> ValidStaticTexts = new HashSet<Guid>();
+
         protected new Func<Identity[], Guid, IEnumerable<IExpressionExecutableV8>> GetInstances { get; private set; }
 
         protected AbstractConditionalLevelInstanceV8(decimal[] rosterVector, Identity[] rosterKey,
@@ -100,16 +103,13 @@ namespace WB.Core.SharedKernels.DataCollection.V8
 
         public void DeclareStaticTextValid(Guid staticTextId)
         {
-            this.ValidAnsweredQuestions.Add(staticTextId);
-            this.InvalidAnsweredQuestions.Remove(staticTextId);
+            this.ValidStaticTexts.Add(staticTextId);
             this.InvalidAnsweredFailedValidations.Remove(staticTextId);
         }
 
         public void ApplyStaticTextFailedValidations(Guid staticTextId, IReadOnlyList<FailedValidationCondition> failedValidations)
         {
-            this.ValidAnsweredQuestions.Remove(staticTextId);
-            this.InvalidAnsweredQuestions.Add(staticTextId);
-
+            this.ValidStaticTexts.Remove(staticTextId);
             this.InvalidAnsweredFailedValidations[staticTextId] = failedValidations;
         }
 
@@ -122,72 +122,24 @@ namespace WB.Core.SharedKernels.DataCollection.V8
             var staticTextsToBeValid = new List<Identity>();
             var failedStaticTextsValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
 
-            foreach (var validationExpressionDescription in this.ValidationExpressionDescriptions.Where(x => x.Value.IsFromQuestion))
-            {
-                try
-                {
-                    // do not validate disabled questions
-                    Guid questionId = validationExpressionDescription.Key.Id;
-                    if (this.EnablementStates.ContainsKey(questionId) && this.EnablementStates[questionId].State == State.Disabled)
-                        continue;
+            this.ExecuteQuestionsValidation(questionsToBeValid, questionsToBeInvalid, failedQuestionsValidationConditions);
+            this.ExecuteStaticTextsValidations(staticTextsToBeValid, failedStaticTextsValidationConditions);
 
-                    bool isValid;
-                    List<FailedValidationCondition> invalids = new List<FailedValidationCondition>();
-                    if (validationExpressionDescription.Value.PreexecutionCheck.Invoke())
-                    {
-                        isValid = true;
-                    }
-                    else
-                    {
-                        foreach (var validation in validationExpressionDescription.Value.Validations)
-                        {
-                            try
-                            {
-                                if (!validation.Value.Invoke())
-                                    invalids.Add(new FailedValidationCondition() { FailedConditionIndex = validation.Key });
-                            }
-                            catch
-                            {
-                                invalids.Add(new FailedValidationCondition() { FailedConditionIndex = validation.Key });
-                            }
-                        }
+            return new ValidityChanges(
+                questionsToBeValid, questionsToBeInvalid, failedQuestionsValidationConditions,
+                staticTextsToBeValid, failedStaticTextsValidationConditions);
+        }
 
-                        isValid = !invalids.Any();
-                    }
-
-                    if (isValid && !this.ValidAnsweredQuestions.Contains(questionId))
-                    {
-                        questionsToBeValid.Add(validationExpressionDescription.Key);
-                    }
-                    else if (!isValid)// && !this.InvalidAnsweredQuestions.Contains(questionId)
-                    {
-                        // no changes in invalid validations
-                        // do not raise
-                        if (this.InvalidAnsweredFailedValidations.ContainsKey(questionId) &&
-                            (this.InvalidAnsweredFailedValidations[questionId].Count == invalids.Count) &&
-                            !this.InvalidAnsweredFailedValidations[questionId].Except(invalids).Any())
-                            continue;
-                        else // first or invalid old events support, raising a new one 
-                        {
-                            questionsToBeInvalid.Add(validationExpressionDescription.Key);
-                            failedQuestionsValidationConditions.Add(validationExpressionDescription.Key, invalids);
-                        }
-                    }
-                }
-                catch
-                {
-                    // failed to execute are treated as valid
-                    questionsToBeInvalid.Add(validationExpressionDescription.Key);
-                }
-            }
-
+        private void ExecuteStaticTextsValidations(List<Identity> staticTextsToBeValid, Dictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedStaticTextsValidationConditions)
+        {
             foreach (var validationExpressionDescription in this.ValidationExpressionDescriptions.Where(x => x.Value.IsFromStaticText))
             {
                 try
                 {
                     // do not validate disabled static texts
                     Guid staticTextId = validationExpressionDescription.Key.Id;
-                    if (this.EnablementStates.ContainsKey(staticTextId) && this.EnablementStates[staticTextId].State == State.Disabled)
+                    if (this.EnablementStates.ContainsKey(staticTextId) &&
+                        this.EnablementStates[staticTextId].State == State.Disabled)
                         continue;
 
                     bool isValid;
@@ -203,18 +155,18 @@ namespace WB.Core.SharedKernels.DataCollection.V8
                             try
                             {
                                 if (!validation.Value.Invoke())
-                                    invalids.Add(new FailedValidationCondition() { FailedConditionIndex = validation.Key });
+                                    invalids.Add(new FailedValidationCondition() {FailedConditionIndex = validation.Key});
                             }
                             catch
                             {
-                                invalids.Add(new FailedValidationCondition() { FailedConditionIndex = validation.Key });
+                                invalids.Add(new FailedValidationCondition() {FailedConditionIndex = validation.Key});
                             }
                         }
 
                         isValid = !invalids.Any();
                     }
 
-                    if (isValid && !this.ValidAnsweredQuestions.Contains(staticTextId))
+                    if (isValid && !this.ValidStaticTexts.Contains(staticTextId))
                     {
                         staticTextsToBeValid.Add(validationExpressionDescription.Key);
                     }
@@ -237,10 +189,70 @@ namespace WB.Core.SharedKernels.DataCollection.V8
                     // failed to execute are treated as valid
                 }
             }
+        }
 
-            return new ValidityChanges(
-                questionsToBeValid, questionsToBeInvalid, failedQuestionsValidationConditions,
-                staticTextsToBeValid, failedStaticTextsValidationConditions);
+        private void ExecuteQuestionsValidation(List<Identity> questionsToBeValid, List<Identity> questionsToBeInvalid,
+            Dictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedQuestionsValidationConditions)
+        {
+            foreach (var validationExpressionDescription in this.ValidationExpressionDescriptions.Where(x => x.Value.IsFromQuestion))
+            {
+                try
+                {
+                    // do not validate disabled questions
+                    Guid questionId = validationExpressionDescription.Key.Id;
+                    if (this.EnablementStates.ContainsKey(questionId) &&
+                        this.EnablementStates[questionId].State == State.Disabled)
+                        continue;
+
+                    bool isValid;
+                    List<FailedValidationCondition> invalids = new List<FailedValidationCondition>();
+                    if (validationExpressionDescription.Value.PreexecutionCheck.Invoke())
+                    {
+                        isValid = true;
+                    }
+                    else
+                    {
+                        foreach (var validation in validationExpressionDescription.Value.Validations)
+                        {
+                            try
+                            {
+                                if (!validation.Value.Invoke())
+                                    invalids.Add(new FailedValidationCondition() {FailedConditionIndex = validation.Key});
+                            }
+                            catch
+                            {
+                                invalids.Add(new FailedValidationCondition() {FailedConditionIndex = validation.Key});
+                            }
+                        }
+
+                        isValid = !invalids.Any();
+                    }
+
+                    if (isValid && !this.ValidAnsweredQuestions.Contains(questionId))
+                    {
+                        questionsToBeValid.Add(validationExpressionDescription.Key);
+                    }
+                    else if (!isValid) // && !this.InvalidAnsweredQuestions.Contains(questionId)
+                    {
+                        // no changes in invalid validations
+                        // do not raise
+                        if (this.InvalidAnsweredFailedValidations.ContainsKey(questionId) &&
+                            (this.InvalidAnsweredFailedValidations[questionId].Count == invalids.Count) &&
+                            !this.InvalidAnsweredFailedValidations[questionId].Except(invalids).Any())
+                            continue;
+                        else // first or invalid old events support, raising a new one 
+                        {
+                            questionsToBeInvalid.Add(validationExpressionDescription.Key);
+                            failedQuestionsValidationConditions.Add(validationExpressionDescription.Key, invalids);
+                        }
+                    }
+                }
+                catch
+                {
+                    // failed to execute are treated as valid
+                    questionsToBeInvalid.Add(validationExpressionDescription.Key);
+                }
+            }
         }
 
         protected EnablementChanges ProcessEnablementConditionsImpl()
