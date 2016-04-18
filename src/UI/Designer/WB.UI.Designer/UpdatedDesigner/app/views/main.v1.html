@@ -322,7 +322,7 @@
                                 <empty-tag ng-repeat="referencesWithErrors in error.errors">
                                     <li class="verification-item-container" ng-repeat="reference in referencesWithErrors.references" ng-click="navigateTo(reference)">
                                         <a class="verification-item" href="javascript:void(0);">
-                                            <span ng-if="reference.type == 'Question'" class="icon icon-error {{referenceWithErrors.reference.questionType}}"></span>
+                                            <span ng-if="reference.type == 'Question'" class="icon icon-error {{reference.questionType}}"></span>
                                             <span ng-if="reference.type == 'Macro'" class="icon icon-error icon-macro"></span>
                                             <span ng-if="reference.type == 'LookupTable'" class="icon icon-error icon-lookup"></span>
                                             <span ng-if="reference.type == 'StaticText'" class="icon icon-error icon-statictext"></span>
