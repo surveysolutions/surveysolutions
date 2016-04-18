@@ -32,21 +32,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             });
         }
         
-        public async Task<AttachmentContentMetadata> GetMetadataAsync(string attachmentContentId)
+        public AttachmentContentMetadata GetMetadata(string attachmentContentId)
         {
-            var attachmentContent = await this.attachmentContentMetadataRepository.GetByIdAsync(attachmentContentId);
+            var attachmentContent = this.attachmentContentMetadataRepository.GetById(attachmentContentId);
             return attachmentContent;
         }
 
-        public async Task<bool> IsExistAsync(string attachmentContentId)
+        public bool Exists(string attachmentContentId)
         {
-            var attachmentContent = await this.attachmentContentMetadataRepository.GetByIdAsync(attachmentContentId);
-            return attachmentContent != null;
+            var attachmentContent = this.attachmentContentMetadataRepository.Count(x => x.Id == attachmentContentId);
+            return attachmentContent > 0;
         }
 
-        public async Task<byte[]> GetContentAsync(string attachmentContentId)
+        public byte[] GetContent(string attachmentContentId)
         {
-            var attachmentContentData = await this.attachmentContentDataRepository.GetByIdAsync(attachmentContentId);
+            var attachmentContentData = this.attachmentContentDataRepository.GetById(attachmentContentId);
             return attachmentContentData?.Content;
         }
     }

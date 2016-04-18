@@ -53,10 +53,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 );
 
             attachmentContentStorage = Mock.Of<IAttachmentContentStorage>(
-                x => x.IsExistAsync("1") == Task.FromResult(false)
-                && x.IsExistAsync("2") == Task.FromResult(true)
-                && x.IsExistAsync("3") == Task.FromResult(true)
-                && x.IsExistAsync("5") == Task.FromResult(false)
+                x => x.Exists("1") == false
+                && x.Exists("2") == true
+                && x.Exists("3") == true
+                && x.Exists("5") == false
                 );
 
             viewModel = CreateSynchronizationProcess(principal: principal,
