@@ -15,6 +15,9 @@ namespace WB.Core.GenericSubdomains.Portable
             dictionary.GetOrAdd(key1).Add(key2, value);
         }
 
+        public static TValue GetOrUpdate<TKey1, TKey2, TValue>(this Dictionary<TKey1, Dictionary<TKey2, TValue>> dictionary, TKey1 key1, TKey2 key2, Func<TValue> valueInit)
+            => dictionary.GetOrAdd(key1).GetOrUpdate(key2, valueInit);
+
         public static TValue GetOrAdd<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key)
             where TValue : new()
         {
