@@ -274,7 +274,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
                 foreach (var contentId in contentIds)
                 {
-                    var isExistContent = await this.attachmentContentStorage.IsExistAsync(contentId);
+                    var isExistContent = attachmentContentStorage.Exists(contentId);
                     if (!isExistContent)
                     {
                         var attachmentContent = await this.synchronizationService.GetAttachmentContentAsync(contentId: contentId,

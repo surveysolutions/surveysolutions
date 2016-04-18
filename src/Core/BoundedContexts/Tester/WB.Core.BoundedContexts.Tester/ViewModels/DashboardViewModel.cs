@@ -384,7 +384,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 var attachmentContentId = attachment.ContentId;
 
-                var isExistsContent = await this.attachmentContentStorage.IsExistAsync(attachmentContentId);
+                var isExistsContent = this.attachmentContentStorage.Exists(attachmentContentId);
                 if (!isExistsContent)
                 {
                     var attachmentContent = await this.designerApiService.GetAttachmentContentAsync(attachmentContentId,
