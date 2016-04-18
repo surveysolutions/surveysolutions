@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public Identity Identity => this.identity;
 
-        public async Task InitAsync(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.RawStaticText = questionnaire.GetStaticText(entityIdentity.Id);
             this.StaticText = RemoveHtmlTags(this.RawStaticText);
 
-            await this.Attachment.InitAsync(interviewId, entityIdentity);
+            this.Attachment.Init(interviewId, entityIdentity);
         }
 
         private Identity identity;

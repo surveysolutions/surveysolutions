@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
                 mvxMainThreadDispatcher: Stub.MvxMainThreadDispatcher());
 
             var groupId = new Identity(Guid.NewGuid(), new decimal[0]);
-            viemModel.InitAsync(interviewId, Create.NavigationState(), groupId, null).WaitAndUnwrapException();
+            viemModel.Init(interviewId, Create.NavigationState(), groupId, null);
 
             viemModel.Items = new ObservableRangeCollection<IInterviewEntityViewModel>(new IInterviewEntityViewModel[]
             {

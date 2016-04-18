@@ -59,6 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Init(string interviewId)
         {
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             this.interviewId = interviewId;
         }
 
@@ -68,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             interview = this.interviewRepository.Get(interviewId);
             if (interview == null) throw new Exception("Interview is null.");
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
-            if (questionnaire == null) throw new Exception("questionnaire is null. QuestionnaireId: " + interview.QuestionnaireId);
+            if (questionnaire == null) throw new Exception("Questionnaire not found. QuestionnaireId: " + interview.QuestionnaireId);
 
             this.QuestionnaireTitle = questionnaire.Title;
             this.PrefilledQuestions = questionnaire
@@ -99,7 +100,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        private async void OnScreenChanged(ScreenChangedEventArgs eventArgs)
+        private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
             if (eventArgs.TargetScreen != ScreenType.Group)
             {
@@ -115,11 +116,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
 
             this.CurrentStage.DisposeIfDisposable();
-            this.CurrentStage = await this.UpdateCurrentScreenViewModelAsync(eventArgs);
+            this.CurrentStage = this.UpdateCurrentScreenViewModel(eventArgs);
             this.RaisePropertyChanged(() => this.CurrentStage);
         }
 
-        protected virtual async Task<MvxViewModel> UpdateCurrentScreenViewModelAsync(ScreenChangedEventArgs eventArgs)
+        protected virtual MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
         {
             if (this.navigationState.CurrentScreenType == ScreenType.Complete)
             {
@@ -130,7 +131,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             else
             {
                 var activeStageViewModel = interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
-                await activeStageViewModel.InitAsync(interviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
+                activeStageViewModel.Init(interviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
                 return activeStageViewModel;
             }
         }

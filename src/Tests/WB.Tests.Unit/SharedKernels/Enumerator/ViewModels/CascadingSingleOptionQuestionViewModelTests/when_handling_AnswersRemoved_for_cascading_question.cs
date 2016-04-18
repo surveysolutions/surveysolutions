@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 interviewRepository: interviewRepository,
                 questionnaireRepository: questionnaireRepository);
 
-            cascadingModel.InitAsync(interviewGuid.FormatGuid(), questionIdentity, navigationState).WaitAndUnwrapException();
+            cascadingModel.Init(interviewGuid.FormatGuid(), questionIdentity, navigationState);
         };
 
         Because of = () =>

@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 questionnaireRepository: questionnaireRepository);
 
             var navigationState = Create.NavigationState();
-            viewModel.InitAsync(interviewId, questionIdentity, navigationState).WaitAndUnwrapException();
+            viewModel.Init(interviewId, questionIdentity, navigationState);
         };
 
         Because of = () =>

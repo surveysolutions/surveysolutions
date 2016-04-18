@@ -87,7 +87,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.answerNotifier = answerNotifier;
         }
 
-        public virtual Task InitAsync(string interviewId, Identity groupIdentity, NavigationState navigationState)
+        public virtual void Init(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
             this.interviewId = interviewId;
             this.Identity = groupIdentity;
@@ -115,8 +115,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             var questionsToListen = interview.GetChildQuestions(groupIdentity);
             this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());
             this.answerNotifier.QuestionAnswered += this.QuestionAnswered;
-
-            return Task.FromResult(true);
         }
 
         private void QuestionAnswered(object sender, EventArgs e)

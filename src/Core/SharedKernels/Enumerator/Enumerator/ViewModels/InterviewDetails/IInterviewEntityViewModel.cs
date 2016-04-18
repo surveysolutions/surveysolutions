@@ -6,6 +6,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     public interface IInterviewEntityViewModel
     {
         Identity Identity { get; }
-        Task InitAsync(string interviewId, Identity entityIdentity, NavigationState navigationState);
+        void Init(string interviewId, Identity entityIdentity, NavigationState navigationState);
     }
 }

@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                          .Returns(linkSourceQuestionId.Id);
 
             viewModel = Create.SingleOptionLinkedQuestionViewModel(interview: interview, questionnaire: questionnaire);
-            viewModel.InitAsync(interviewId, linkedQuestionId, Create.NavigationState()).WaitAndUnwrapException();
+            viewModel.Init(interviewId, linkedQuestionId, Create.NavigationState());
 
             interview.FindAnswersOfReferencedQuestionForLinkedQuestion(linkSourceQuestionId.Id, linkedQuestionId)
                   .Returns(new List<BaseInterviewAnswer>

@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => listModel.InitAsync(null, null, null).WaitAndUnwrapException());
+            exception = Catch.Exception(() => listModel.Init(null, null, null));
 
         It should_throw_ArgumentNullException_exception = () =>
             exception.ShouldBeOfExactType<ArgumentNullException>();

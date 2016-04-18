@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                 interview: interview,
                 answering: answeringMock.Object);
 
-            viewModel.InitAsync(interviewId, questionIdentity, navigationState).WaitAndUnwrapException();
+            viewModel.Init(interviewId, questionIdentity, navigationState);
         };
 
         Because of = () =>
