@@ -332,8 +332,7 @@ angular.module('designerApp')
             $scope.aceLoaded = function (editor) {
                 // Editor part
                 var renderer = editor.renderer;
-                var lang_tool = ace.require("ace/ext/language_tools");
-
+                
                 var variablesCompletor = 
                 {
                     getCompletions: function (editor, session, pos, prefix, callback) {
@@ -360,7 +359,7 @@ angular.module('designerApp')
                     timestamp: Date.now()
                 });
 
-                lang_tool.addCompleter(variablesCompletor);
+                ace.require("ace/ext/language_tools").addCompleter(variablesCompletor);
 
                 editor.$blockScrolling = Infinity;
                 editor.commands.bindKey("tab", null);
