@@ -89,7 +89,7 @@ foreach (var namespaceToInclude in QuestionnaireStructure.Namespaces)
 				this.InterviewProperties);
 			this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);		
 			
-				");
+");
             
             #line 38 "C:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V8\Templates\InterviewExpressionStateTemplateV8.tt"
 
