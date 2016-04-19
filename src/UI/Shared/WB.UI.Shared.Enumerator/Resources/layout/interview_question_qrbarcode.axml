@@ -13,10 +13,9 @@
           <TableLayout style="@style/FullWidthWrappingLayout" 
                        android:stretchColumns="0">
             <TableRow>
-                <TextView style="@style/Interview_Question_TextAnswer"
+                <TextView style="@style/Interview_Question_TextAnswer"  android:layout_width="@dimen/Interview_Sidebar_GpsQuestions_max_width"
                           local:MvxBind="Text Answer; Visible QuestionState.IsAnswered" />
-                <ImageButton style="@style/Interview_Question_RemoveAnswer"
-                             android:layout_marginLeft="@dimen/Interview_Question_InputButton_padding"
+                <ImageButton style="@style/Interview_Question_RemoveAnswer" android:layout_marginTop="@dimen/Interview_Question_TextAnswer_margin_top" android:layout_marginRight="@dimen/Interview_Question_Answer_FilteredComboBox_padding"
                              local:MvxBind="HideKeyboardOnClick .; 
                                             Click RemoveAnswerCommand;
                                             Visible QuestionState.IsAnswered" />
