@@ -16,12 +16,13 @@
                                           Value Answer; 
                                           FocusValueChanged ValueChangeCommand; 
                                           Hint Localization('RealQuestion_Hint');" />
-          
-          <ImageButton style="@style/Interview_Question_RemoveAnswer"
+          <LinearLayout local:MvxBind="Click RemoveAnswerCommand; Visible QuestionState.IsAnswered;"
+                style="@style/Interview_Question_RemoveAnswerWrapper">
+          <ImageButton style="@style/Interview_Question_RemoveAnswer" android:duplicateParentState="true"
                        android:layout_gravity="right"
                        local:MvxBind="Click RemoveAnswerCommand; 
-                                      HideKeyboardOnClick .; 
-                                      Visible QuestionState.IsAnswered;" />
+                                      HideKeyboardOnClick .;" />
+          </LinearLayout>
         </LinearLayout>
       </LinearLayout>
       <include layout="@layout/interview_question__errors" />

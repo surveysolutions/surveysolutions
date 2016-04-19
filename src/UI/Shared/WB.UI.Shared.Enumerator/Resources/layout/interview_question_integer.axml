@@ -8,19 +8,21 @@
       <include layout="@layout/interview_question__instructions" />
       <LinearLayout style="@style/Interview_Question_Answer"
         local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
-        <LinearLayout  style="@style/Interview_Question_Border" 
+        <LinearLayout  style="@style/Interview_Question_Border"
                        local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
-          
+
           <NumericEditText style="@style/Interview_Question_Answer_Text_Editor"
                            local:numbersOnly="true"
                            local:MvxBind="UseGroupSeparator UseFormatting;
                                           Value Answer; 
                                           FocusValueChanged ValueChangeCommand; 
                                           Hint Localization('IntegerQuestion_Hint');" />
-          
-          <ImageButton style="@style/Interview_Question_RemoveAnswer"
-                              android:layout_gravity="right"
-                              local:MvxBind="Click RemoveAnswerCommand; HideKeyboardOnClick .; Visible QuestionState.IsAnswered;" />
+          <LinearLayout local:MvxBind="Click RemoveAnswerCommand; Visible QuestionState.IsAnswered;"
+          style="@style/Interview_Question_RemoveAnswerWrapper">
+            <ImageButton style="@style/Interview_Question_RemoveAnswer"
+                                android:layout_gravity="right"  android:duplicateParentState="true"
+                                local:MvxBind="Click RemoveAnswerCommand; HideKeyboardOnClick .;" />
+          </LinearLayout>
         </LinearLayout>
       </LinearLayout>
       <include layout="@layout/interview_question__errors" />
