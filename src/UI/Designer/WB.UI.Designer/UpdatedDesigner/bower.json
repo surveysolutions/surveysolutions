@@ -50,12 +50,6 @@
     "angular": "^1.5.2"
   },
   "overrides": {
-    "angular": {
-      "main": [
-        "angular.min.js",
-        "angular-csp.css"
-      ]
-    },
     "ace-builds": {
       "main": [
         "src-noconflict/ace.js",
