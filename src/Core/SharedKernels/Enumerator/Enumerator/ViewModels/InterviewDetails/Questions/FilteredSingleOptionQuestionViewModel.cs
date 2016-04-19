@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
@@ -35,9 +33,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private readonly IPrincipal principal;
-        private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
+        private readonly IOptionsRepository optionsRepository;
 
         private Identity questionIdentity;
         private Guid interviewId;
@@ -47,26 +45,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public FilteredSingleOptionQuestionViewModel(
             IPrincipal principal,
-            IPlainQuestionnaireRepository questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
-            AnsweringViewModel answering)
+            AnsweringViewModel answering, 
+            IOptionsRepository optionsRepository)
         {
             if (principal == null) throw new ArgumentNullException("principal");
-            if (questionnaireRepository == null) throw new ArgumentNullException("questionnaireRepository");
             if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
 
             this.principal = principal;
-            this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.eventRegistry = eventRegistry;
 
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
+            this.optionsRepository = optionsRepository;
         }
 
-        public Identity Identity { get { return this.questionIdentity; } }
+        public Identity Identity => this.questionIdentity;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
@@ -76,15 +73,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState.Init(interviewId, entityIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
             var answerModel = interview.GetSingleOptionAnswer(entityIdentity);
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interview.Id;
 
-            this.Options = questionnaire
-                .GetAnswerOptionsAsValues(entityIdentity.Id)
-                .Select(x => new CategoricalQuestionOption { Value = x, Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x) })
+            this.Options = optionsRepository.GetQuestionOptions(interview.QuestionnaireIdentity, this.questionIdentity.Id)
                 .Select(this.ToViewModel)
                 .ToList();
 
