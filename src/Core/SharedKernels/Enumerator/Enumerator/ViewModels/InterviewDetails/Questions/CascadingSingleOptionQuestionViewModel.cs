@@ -111,16 +111,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
 
             this.Options = optionsRepository.GetQuestionOptions(interview.QuestionnaireIdentity, entityIdentity.Id);
-                /*questionnaire
-                .GetAnswerOptionsAsValues(entityIdentity.Id)
-                .Select(x => new CategoricalQuestionOption
-                {
-                    Value = x,
-                    Title = questionnaire.GetAnswerOptionTitle(entityIdentity.Id, x),
-                    ParentValue = questionnaire.GetCascadingParentValue(entityIdentity.Id, x)
-                })
-                .ToList()
-                .ToReadOnlyCollection();*/
 
             if (answerModel.IsAnswered)
             {
