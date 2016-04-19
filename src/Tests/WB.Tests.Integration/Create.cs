@@ -771,7 +771,7 @@ namespace WB.Tests.Integration
                     Guid.NewGuid(),
                     Guid.NewGuid(),
                     questionId ?? Guid.NewGuid(),
-                    rosterVector ?? RosterVector.Empty,
+                    rosterVector ?? WB.Core.SharedKernels.DataCollection.RosterVector.Empty,
                     DateTime.UtcNow,
                     answer ?? 42);
         }
@@ -799,5 +799,7 @@ namespace WB.Tests.Integration
             return new CumulativeReportStatusChange(Guid.NewGuid().FormatGuid(), questionnaireId ?? Guid.NewGuid(),
                 questionnaireVersion ?? 1, date??DateTime.Now, InterviewStatus.Completed, 1);
         }
+
+        public static RosterVector RosterVector(params decimal[] coordinates) => new RosterVector(coordinates);
     }
 }
