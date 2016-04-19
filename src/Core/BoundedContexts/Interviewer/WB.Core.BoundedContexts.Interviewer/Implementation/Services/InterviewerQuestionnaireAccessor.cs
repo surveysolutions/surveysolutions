@@ -47,6 +47,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             var questionnaireId = questionnaireIdentity.ToString();
 
             var serializedQuestionnaireDocument = await Task.Run(() => this.synchronizationSerializer.Deserialize<QuestionnaireDocument>(questionnaireDocument));
+            serializedQuestionnaireDocument.ParseCategoricalQuestionOptions();
 
             await Task.Run(() => this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId,
                         questionnaireIdentity.Version, serializedQuestionnaireDocument));

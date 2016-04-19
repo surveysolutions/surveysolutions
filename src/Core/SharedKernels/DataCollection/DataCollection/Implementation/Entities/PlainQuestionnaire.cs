@@ -278,22 +278,33 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 throw new QuestionnaireException(
                     $"Cannot return answer options for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
 
-            return question.Answers.Select(answer => ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToReadOnlyCollection();
+            if (question.Answers.Any(x => x.AnswerCode.HasValue))
+            {
+                return question.Answers.Select(answer => answer.AnswerCode.Value).ToReadOnlyCollection();
+            }
+            else
+            {
+                return question.Answers.Select(answer => ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToReadOnlyCollection();
+            }
         }
 
         public string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue) => this.GetAnswerOption(questionId, answerOptionValue).AnswerText;
 
         public decimal GetCascadingParentValue(Guid questionId, decimal answerOptionValue)
         {
-            var stringParentAnswer = this.GetAnswerOption(questionId, answerOptionValue).ParentValue;
+            var answerOption = this.GetAnswerOption(questionId, answerOptionValue);
+            if (!answerOption.ParentCode.HasValue)
+            {
+                decimal parsedValue;
 
-            decimal parsedValue;
+                if (!decimal.TryParse(answerOption.ParentValue, NumberStyles.Number, CultureInfo.InvariantCulture, out parsedValue))
+                    throw new QuestionnaireException(
+                        $"Cannot parse parent answer option value '{answerOption.ParentValue}' as decimal. Question id: '{questionId}'.");
 
-            if (!decimal.TryParse(stringParentAnswer, NumberStyles.Number, CultureInfo.InvariantCulture, out parsedValue))
-                throw new QuestionnaireException(
-                    $"Cannot parse parent answer option value '{stringParentAnswer}' as decimal. Question id: '{questionId}'.");
+                return parsedValue;
+            }
 
-            return parsedValue;
+            return answerOption.ParentCode.Value;
         }
 
         private Answer GetAnswerOption(Guid questionId, decimal answerOptionValue)
@@ -311,9 +322,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 throw new QuestionnaireException(
                     $"Cannot return answer option for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
 
-            return question
-                .Answers
-                .Single(answer => answerOptionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId));
+            if (question.Answers.Any(x => x.AnswerCode.HasValue))
+            {
+                return question.Answers
+                    .Single(answer => answer.AnswerCode == answerOptionValue);
+            }
+            else
+            {
+                return question
+                    .Answers
+                    .Single(answer => answerOptionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId));
+            }
         }
 
         public int? GetMaxSelectedAnswerOptions(Guid questionId)
