@@ -267,8 +267,9 @@
                 <hr />
                 <label for="linkedFilterExpression">Filter</label>
                 
-                <input id="linkedFilterExpression" type="text" ng-model="activeQuestion.linkedFilterExpression" class="form-control" style="border-color:#ccc;box-shadow: inset 0 1px 1px #ccc;">
-
+                <div class="pseudo-form-control">
+                    <div id="linkedFilterExpression" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.linkedFilterExpression"></div>
+                </div>
             </div>
         </script>
 
