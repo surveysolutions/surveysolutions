@@ -7,7 +7,6 @@ using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.Graphics;
-using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Preferences;
 using Android.Widget;
@@ -50,85 +49,13 @@ namespace WB.UI.Interviewer.Activities
     [Activity(NoHistory = true, MainLauncher = true, ScreenOrientation = ScreenOrientation.Portrait, Theme = "@style/AppTheme")]
     public class SplashActivity : MvxSplashScreenActivity
     {
-        private Bitmap[] animationImagesCache;
-        private Handler uiHandler;
-        private Thread splashTread;
-        private ImageView spashAnimationView;
-        private bool keepAnimationRolling;
-
         public SplashActivity() : base(Resource.Layout.splash)
         {
-        }
-
-        protected override void OnCreate(Bundle bundle)
-        {
-            base.OnCreate(bundle);
-
-            spashAnimationView = this.FindViewById<ImageView>(Resource.Id.splash_animation);
-
-            this.animationImagesCache = new Bitmap[69];
-            for (int i = 0; i < this.animationImagesCache.Length; i++)
-            {
-                this.PutImageToCache(i, "splash");
-            }
-
-            this.uiHandler = new Handler(Looper.MainLooper);
-            this.keepAnimationRolling = true;
-            // thread for displaying the SplashScreen
-            this.splashTread = new Thread(() =>
-            {
-                try
-                {
-                    int imageIndex = 0;
-                    while (keepAnimationRolling)
-                    {
-                        Thread.Sleep(30);
-                        if (imageIndex < this.animationImagesCache.Length)
-                        {
-                            var index = imageIndex;
-                            uiHandler.Post(() =>
-                            {
-                                this.spashAnimationView.SetImageBitmap(this.animationImagesCache[index]);
-                            });
-                        }
-                        imageIndex++;
-                        imageIndex %= this.animationImagesCache.Length;
-                    }
-                }
-                catch (InterruptedException)
-                {
-                    // do nothing
-                }
-            });
-            this.splashTread.Start();
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            foreach (var bitmap in this.animationImagesCache)
-            {
-                bitmap.Recycle();
-                bitmap.Dispose();
-            }
-            this.uiHandler.Dispose();
-            this.splashTread.Dispose();
-        }
-
-        private void PutImageToCache(int cnt, string folder_name)
-        {
-            using (Stream imageStream = Assets.Open(System.IO.Path.Combine(folder_name, $"splash{cnt:00}.jpg")))
-            {
-                var bitmapDecoded = BitmapFactory.DecodeStream(imageStream);
-                this.animationImagesCache[cnt] = Bitmap.CreateScaledBitmap(bitmapDecoded, bitmapDecoded.Width * 2, bitmapDecoded.Height * 2, true);
-                bitmapDecoded.Recycle();
-            }
         }
 
         protected override async void TriggerFirstNavigate()
         {
             await this.BackwardCompatibilityAsync();
-            keepAnimationRolling = false;
             await Mvx.Resolve<IViewModelNavigationService>().NavigateToLoginAsync();
         }
 
@@ -169,7 +96,7 @@ namespace WB.UI.Interviewer.Activities
         private async Task RestoreInterviewDetailsAsync()
         {
             var commandService = Mvx.Resolve<ICommandService>();
-            var serializer = Mvx.Resolve<ISerializer>();
+            var jsonAllTypesSerializer = Mvx.Resolve<IJsonAllTypesSerializer>();
 
             var interviewersRepository = Mvx.Resolve<IAsyncPlainStorage<InterviewerIdentity>>();
 
@@ -188,7 +115,7 @@ namespace WB.UI.Interviewer.Activities
             {
                 var interviewDetailsText = await interviewDetailsFile.ReadAllTextAsync();
                 var interviewSynchronizationDto =
-                    serializer.Deserialize<InterviewSynchronizationDto>(interviewDetailsText, TypeSerializationSettings.AllTypes);
+                    jsonAllTypesSerializer.Deserialize<InterviewSynchronizationDto>(interviewDetailsText);
 
                 await commandService.ExecuteAsync(new SynchronizeInterviewCommand(
                     interviewId: Guid.Parse(interviewDetailsFile.Name),
@@ -244,7 +171,7 @@ namespace WB.UI.Interviewer.Activities
 
         private async Task RestoreInterviewsAsync()
         {
-            var serializer = Mvx.Resolve<ISerializer>();
+            var jsonAllTypesSerializer = Mvx.Resolve<IJsonAllTypesSerializer>();
             var interviewViewRepository = Mvx.Resolve<IAsyncPlainStorage<InterviewView>>();
 
             var interviews = this.GetSqlLiteEntities<QuestionnaireDTO>("Projections");
@@ -262,7 +189,7 @@ namespace WB.UI.Interviewer.Activities
                 QuestionnaireId = new QuestionnaireIdentity(Guid.Parse(x.Survey), x.SurveyVersion).ToString(),
                 LastInterviewerOrSupervisorComment = x.Comments,
                 Status = (InterviewStatus)x.Status,
-                AnswersOnPrefilledQuestions = serializer.Deserialize<FeaturedItem[]>(x.Properties, TypeSerializationSettings.AllTypes).Select(y => new InterviewAnswerOnPrefilledQuestionView
+                AnswersOnPrefilledQuestions = jsonAllTypesSerializer.Deserialize<FeaturedItem[]>(x.Properties).Select(y => new InterviewAnswerOnPrefilledQuestionView
                 {
                     QuestionId = y.PublicKey,
                     QuestionText = y.Title,

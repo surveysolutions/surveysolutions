@@ -36,6 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             public ConcurrentDictionary<Identity, ReadOnlyCollection<Identity>> EnabledInterviewerChildQuestions = new ConcurrentDictionary<Identity, ReadOnlyCollection<Identity>>();
             public ConcurrentDictionary<Identity, ReadOnlyCollection<Identity>> GroupsAndRostersInGroup = new ConcurrentDictionary<Identity, ReadOnlyCollection<Identity>>();
             public ConcurrentDictionary<Identity, bool> IsEnabled = new ConcurrentDictionary<Identity, bool>();
+            public ConcurrentDictionary<Identity, ReadOnlyCollection<Identity>> EnabledStaticTextChildQuestions = new ConcurrentDictionary<Identity, ReadOnlyCollection<Identity>>();
         }
 
         private class LocalDelta
@@ -49,7 +50,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         private IQuestionnaire cachedQuestionnaire = null;
 
         private readonly ConcurrentDictionary<string, BaseInterviewAnswer> answers;
-        private readonly ConcurrentDictionary<string, InterviewGroup> groups;
+        private readonly ConcurrentDictionary<string, InterviewEnablementState> groups;
+        private readonly ConcurrentDictionary<string, InterviewEnablementState> staticTexts;
         private readonly ConcurrentDictionary<Identity, int?> sortIndexesOfRosterInstanses;
         private readonly ConcurrentDictionary<string, bool> notAnsweredQuestionsValidityStatus;
         private readonly ConcurrentDictionary<string, IList<FailedValidationCondition>> notAnsweredFailedConditions;
@@ -58,11 +60,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         private bool createdOnClient;
         private bool hasLinkedOptionsChangedEvents=false;
 
-        public StatefulInterview(ILogger logger, IPlainQuestionnaireRepository questionnaireRepository, IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider)
+        public StatefulInterview(ILogger logger,
+                                 IPlainQuestionnaireRepository questionnaireRepository,
+                                 IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider)
             : base(logger, questionnaireRepository, expressionProcessorStatePrototypeProvider)
         {
             this.answers = new ConcurrentDictionary<string, BaseInterviewAnswer>();
-            this.groups = new ConcurrentDictionary<string, InterviewGroup>();
+            this.groups = new ConcurrentDictionary<string, InterviewEnablementState>();
+            this.staticTexts = new ConcurrentDictionary<string, InterviewEnablementState>();
             this.sortIndexesOfRosterInstanses = new ConcurrentDictionary<Identity, int?>();
             this.notAnsweredQuestionsValidityStatus = new ConcurrentDictionary<string, bool>();
             this.notAnsweredQuestionsEnablementStatus = new ConcurrentDictionary<string, bool>();
@@ -133,11 +138,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 x => DeclareAnswerAsValid(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.FailedValidationConditions.ForEach(
                 x => this.DeclareAnswerAsInvalid(x.Key.Id, x.Key.RosterVector, x.Value));
-
+            
             @event.InterviewData.DisabledQuestions.ForEach(x => DisableQuestion(x.Id, x.InterviewItemRosterVector));
+            @event.InterviewData.DisabledStaticTexts.ForEach(x => DisableStaticText(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.DisabledGroups.ForEach(x => DisableGroup(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.Answers.ForEach(x => CommentQuestion(x.Id, x.QuestionRosterVector, x.Comments));
-            
+
             this.ResetLocalDelta();
         }
 
@@ -314,6 +320,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             var enabledGroups = allGroupInstances.Where(this.delta.EnablementChanged.Contains).Where(group => this.IsEnabled(group)).ToArray();
             var disabledGroups = allGroupInstances.Where(this.delta.EnablementChanged.Contains).Where(group => !this.IsEnabled(group)).ToArray();
 
+            ReadOnlyCollection<Guid> allStaticTextIds = questionnaire.GetAllStaticTexts();
+            ReadOnlyCollection<Identity> allStaticTextIdentities = this.GetInstancesOfStaticTextsWithSameAndDeeperRosterLevelOrThrow(
+                this.interviewState, allStaticTextIds, RosterVector.Empty, questionnaire).ToReadOnlyCollection();
+            var validStaticTexts = allStaticTextIdentities.Where(this.delta.ValidityChanged.Contains).Where(this.IsValid).ToArray();
+            var invalidStaticTexts = allStaticTextIdentities.Where(this.delta.ValidityChanged.Contains)
+                .Where(staticText => !this.IsValid(staticText))
+                .Select(staticText => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(
+                    staticText,
+                    this.GetFailedValidationConditions(staticText))).ToList();
+            var enabledStaticTexts = allStaticTextIdentities.Where(this.delta.EnablementChanged.Contains).Where(this.IsEnabled).ToArray();
+            var disabledStaticTexts = allStaticTextIdentities.Where(this.delta.EnablementChanged.Contains).Where(staticText => !this.IsEnabled(staticText)).ToArray();
+
             bool isInterviewInvalid = this.HasInvalidAnswers();
 
 
@@ -325,6 +343,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             if (enabledGroups.Length > 0) this.ApplyEvent(new GroupsEnabled(enabledGroups));
             if (disabledGroups.Length > 0) this.ApplyEvent(new GroupsDisabled(disabledGroups));
+
+            if(enabledStaticTexts.Length > 0) this.ApplyEvent(new StaticTextsEnabled(enabledStaticTexts));
+            if (disabledStaticTexts.Length > 0) this.ApplyEvent(new StaticTextsDisabled(disabledStaticTexts));
+
+            if (validStaticTexts.Length > 0) this.ApplyEvent(new StaticTextsDeclaredValid(validStaticTexts));
+            if (invalidStaticTexts.Count > 0) this.ApplyEvent(new StaticTextsDeclaredInvalid(invalidStaticTexts));
+
 
             this.ApplyEvent(new InterviewCompleted(userId, completeTime, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
@@ -435,6 +460,46 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             @event.Questions.ForEach(x => this.delta.EnablementChanged.Add(new Identity(x.Id, x.RosterVector)));
         }
 
+        public new void Apply(StaticTextsEnabled @event)
+        {
+            base.Apply(@event);
+            this.ResetCalculatedState();
+
+            @event.StaticTexts.ForEach(x =>
+            {
+                var staticText = this.GetOrCreateEnablementStateByStaticText(x.Id, x.RosterVector);
+                staticText.IsDisabled = false;
+            });
+            @event.StaticTexts.ForEach(x => this.delta.EnablementChanged.Add(new Identity(x.Id, x.RosterVector)));
+        }
+
+        public new void Apply(StaticTextsDisabled @event)
+        {
+            base.Apply(@event);
+            this.ResetCalculatedState();
+
+            @event.StaticTexts.ForEach(x => this.DisableStaticText(x.Id, x.RosterVector));
+            @event.StaticTexts.ForEach(x => this.delta.EnablementChanged.Add(new Identity(x.Id, x.RosterVector)));
+        }
+
+        public new void Apply(StaticTextsDeclaredValid @event)
+        {
+            base.Apply(@event);
+            this.ResetCalculatedState();
+
+            @event.StaticTexts.ForEach(x => this.DeclareAnswerAsValid(x.Id, x.RosterVector));
+            @event.StaticTexts.ForEach(x => this.delta.ValidityChanged.Add(new Identity(x.Id, x.RosterVector)));
+        }
+
+        public new void Apply(StaticTextsDeclaredInvalid @event)
+        {
+            base.Apply(@event);
+            this.ResetCalculatedState();
+
+            @event.FailedValidationConditions.ForEach(x => this.DeclareAnswerAsInvalid(x.Key.Id, x.Key.RosterVector, x.Value.ToList()));
+            @event.GetFailedValidationConditionsDictionary().Keys.ForEach(x => this.delta.ValidityChanged.Add(new Identity(x.Id, x.RosterVector)));
+        }
+
         #endregion
 
         #region Roster instances and titles
@@ -480,7 +545,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 var fullRosterVector = GetFullRosterVector(rosterInstance);
 
                 var rosterKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterInstance.GroupId, fullRosterVector);
-                InterviewGroup removedGroup;
+                InterviewEnablementState removedGroup;
                 this.groups.TryRemove(rosterKey, out removedGroup);
 
                 int? removeSortIndex;
@@ -639,6 +704,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public bool HasGroup(Identity group)
         {
+            if (group == null)
+                return false;
+
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             if (!questionnaire.HasGroup(group.Id))
@@ -679,6 +747,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public IEnumerable<BaseInterviewAnswer> FindAnswersOfReferencedQuestionForLinkedQuestion(Guid referencedQuestionId, Identity linkedQuestion)
         {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
             if (!this.interviewState.LinkedQuestionOptions.ContainsKey(linkedQuestion))
                 return Enumerable.Empty<BaseInterviewAnswer>();
 
@@ -687,25 +757,52 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             IEnumerable<Identity> targetQuestions =
                 linkedQuestionOptions.Select(x => new Identity(referencedQuestionId, x));
 
+            var rostersFromTopToSpecifiedQuestion = questionnaire.GetRostersFromTopToSpecifiedQuestion(referencedQuestionId).ToArray();
+
             var answers = targetQuestions
                 .Select(this.GetExistingAnswerOrNull)
-                .Where(answer => answer != null);
-
-            return answers;
+                .Where(answer => answer != null).ToArray()
+                .OrderBy(x => x.RosterVector.Length);
+            
+            for (int rosterDepth = 1; rosterDepth <= rostersFromTopToSpecifiedQuestion.Length; rosterDepth++)
+            {
+                var currentDepth = rosterDepth;
+                answers = answers.ThenBy(x => GetRosterSortIndex(rostersFromTopToSpecifiedQuestion[currentDepth-1], new RosterVector(x.RosterVector.Take(currentDepth))));
+            }
+            return answers.ToArray();
         }
 
         public IEnumerable<InterviewRoster> FindReferencedRostersForLinkedQuestion(Guid rosterId, Identity linkedQuestion)
         {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
             if (!this.interviewState.LinkedQuestionOptions.ContainsKey(linkedQuestion))
                 return Enumerable.Empty<InterviewRoster>();
 
             RosterVector[] targetRosters = this.interviewState.LinkedQuestionOptions[linkedQuestion];
 
-            return
+            var rosters =
                 targetRosters
-                    .Select(x => this.GetRoster(new Identity(rosterId, x)))
-                    .OrderBy(r => sortIndexesOfRosterInstanses[new Identity(r.Id, r.RosterVector)] ?? r.RosterVector.Last())
-                    .ToArray();
+                    .Select(x => this.GetRoster(new Identity(rosterId, x))).ToArray()
+                    .OrderBy(x => x.RosterVector.Length);
+
+            var rostersFromTopToSpecifiedQuestion = questionnaire.GetRostersFromTopToSpecifiedGroup(rosterId).ToArray();
+            for (int rosterDepth = 1; rosterDepth <= rostersFromTopToSpecifiedQuestion.Length; rosterDepth++)
+            {
+                var currentDepth = rosterDepth;
+                rosters = rosters.ThenBy(x => GetRosterSortIndex(rostersFromTopToSpecifiedQuestion[currentDepth - 1], new RosterVector(x.RosterVector.Take(currentDepth))));
+            }
+            return rosters.ToArray();
+        }
+
+        private int GetRosterSortIndex(Guid rosterId, RosterVector rosterVector)
+        {
+            var identity = new Identity(rosterId, rosterVector);
+            var lastValueInRosterVector = (int)(rosterVector.Last());
+            if (this.sortIndexesOfRosterInstanses.ContainsKey(identity))
+                return sortIndexesOfRosterInstanses[identity] ?? lastValueInRosterVector;
+
+            return lastValueInRosterVector;
         }
 
         private void SaveAnswerFromAnswerDto(InterviewAnswerDto answerDto)
@@ -806,6 +903,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             var groupOrRoster = this.GetOrCreateGroupOrRoster(id, rosterVector);
             groupOrRoster.IsDisabled = true;
+        }
+
+        private void DisableStaticText(Guid id, RosterVector rosterVector)
+        {
+            var staticText = this.GetOrCreateEnablementStateByStaticText(id, rosterVector);
+            staticText.IsDisabled = true;
         }
 
         private void CommentQuestion(Guid id, RosterVector rosterVector, string comment)
@@ -940,12 +1043,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return sectionInstances.Sum(section => this.CountActiveInterviewerQuestionsInGroupRecursively(section));
         }
 
-        public int CountInvalidQuestionsInInterview()
+        public int CountInvalidEntitiesInInterview()
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             var sectionInstances = questionnaire.GetAllSections().Select(x => new Identity(x, new decimal[0]));
 
-            return sectionInstances.Sum(section => this.CountInvalidInterviewerAnswersInGroupRecursively(section));
+            return sectionInstances.Sum(section => this.CountInvalidInterviewerAnswersInGroupRecursively(section) + this.CountInvalidStaticTextsInGroupRecursively(section));
         }
 
         public bool HasLinkedOptionsChangedEvents => this.hasLinkedOptionsChangedEvents;
@@ -1002,10 +1105,27 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 && !x.Value.IsValid);
         }
 
-        public int CountInvalidInterviewerQuestionsInGroupOnly(Identity group)
+
+        public int CountInvalidStaticTextsInGroupRecursively(Identity groupIdentity)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+            IEnumerable<Guid> allQuestionsInGroup = questionnaire.GetAllUnderlyingStaticTexts(groupIdentity.Id);
+
+            List<Identity> questionInstances = this
+                .GetInstancesOfStaticTextsWithSameAndDeeperRosterLevelOrThrow(this.interviewState, allQuestionsInGroup, groupIdentity.RosterVector, questionnaire)
+                .ToList();
+
+            IEnumerable<Identity> allInvalidChildStaticTexts = this.interviewState.InvalidStaticTexts.Where(x => questionInstances.Contains(x.Key))
+                                                                                  .Select(x => x.Key);
+
+            return allInvalidChildStaticTexts.Count(x => !this.interviewState.DisabledStaticTexts.Contains(x));
+        }
+
+        public int CountInvalidInterviewerEntitiesInGroupOnly(Identity group)
         {
             return this
                 .GetEnabledInterviewerChildQuestions(group)
+                .Union(this.GetEnabledInvalidChildStaticTexts(group))
                 .Count(question => !this.IsValid(question));
         }
 
@@ -1013,6 +1133,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             return this
                 .GetEnabledInterviewerChildQuestions(group)
+                .Union(this.GetEnabledInvalidChildStaticTexts(group))
                 .Any(question => !this.IsValid(question));
         }
 
@@ -1092,6 +1213,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public bool IsValid(Identity identity)
         {
             var questionKey = ConversionHelper.ConvertIdentityToString(identity);
+            if (this.interviewState.InvalidStaticTexts.ContainsKey(identity)) return false;
+            if (this.interviewState.ValidStaticTexts.Contains(identity)) return true;
+
             if (!this.Answers.ContainsKey(questionKey))
             {
                 return !this.notAnsweredQuestionsValidityStatus.ContainsKey(questionKey) || this.notAnsweredQuestionsValidityStatus[questionKey];
@@ -1104,6 +1228,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         public IReadOnlyList<FailedValidationCondition> GetFailedValidationConditions(Identity questionId)
         {
             var convertIdentityToString = ConversionHelper.ConvertIdentityToString(questionId);
+            if (this.interviewState.InvalidStaticTexts.ContainsKey(questionId))
+            {
+                return this.interviewState.InvalidStaticTexts[questionId];
+            }
+
             if (this.Answers.ContainsKey(convertIdentityToString))
             {
                 return this.Answers[convertIdentityToString].FailedValidations.ToReadOnlyCollection();
@@ -1145,6 +1274,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 return answer.IsEnabled;
             }
 
+            if (this.staticTexts.ContainsKey(entityKey))
+            {
+                return !this.staticTexts[entityKey].IsDisabled;
+            }
+
             if (this.notAnsweredQuestionsEnablementStatus.ContainsKey(entityKey))
             {
                 return this.notAnsweredQuestionsEnablementStatus[entityKey];
@@ -1155,7 +1289,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         public bool WasAnswered(Identity entityIdentity)
         {
+            if (this.GetQuestionnaireOrThrow().IsStaticText(entityIdentity.Id))
+            {
+                return true;
+            }
+
             var questionKey = ConversionHelper.ConvertIdentityToString(entityIdentity);
+
             if (!this.Answers.ContainsKey(questionKey))
                 return false;
 
@@ -1215,12 +1355,32 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             }
         }
 
+        private IEnumerable<Identity> GetEnabledInvalidChildStaticTexts(Identity parent)
+        {
+            return GetOrCalculate(
+                parent,
+                this.GetEnabledInterviewerChildStaticTextsImpl,
+                this.calculated.EnabledStaticTextChildQuestions);
+        }
+
         private ReadOnlyCollection<Identity> GetEnabledInterviewerChildQuestions(Identity group)
         {
             return GetOrCalculate(
                 group,
                 this.GetEnabledInterviewerChildQuestionsImpl,
                 this.calculated.EnabledInterviewerChildQuestions);
+        }
+
+        private ReadOnlyCollection<Identity> GetEnabledInterviewerChildStaticTextsImpl(Identity group)
+        {
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            IEnumerable<Guid> staticTextIds = questionnaire.GetChildStaticTexts(group.Id);
+
+            IEnumerable<Identity> questions = GetInstancesOfStaticTextsWithSameAndDeeperRosterLevelOrThrow(
+                this.interviewState, staticTextIds, group.RosterVector, questionnaire);
+
+            return questions.Where(this.IsEnabled).ToReadOnlyCollection();
         }
 
         private ReadOnlyCollection<Identity> GetEnabledInterviewerChildQuestionsImpl(Identity group)
@@ -1319,11 +1479,29 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             return question;
         }
 
-        private InterviewGroup GetOrCreateGroupOrRoster(Guid id, RosterVector rosterVector)
+        private InterviewEnablementState GetOrCreateEnablementStateByStaticText(Guid id, RosterVector rosterVector)
+        {
+            var staticTextKey = ConversionHelper.ConvertIdAndRosterVectorToString(id, rosterVector);
+
+            InterviewEnablementState staticTextEnablementState;
+            if (this.staticTexts.ContainsKey(staticTextKey))
+            {
+                staticTextEnablementState = this.staticTexts[staticTextKey];
+            }
+            else
+            {
+                staticTextEnablementState = new InterviewEnablementState { Id = id, RosterVector = rosterVector };
+            }
+
+            this.staticTexts[staticTextKey] = staticTextEnablementState;
+            return staticTextEnablementState;
+        }
+
+        private InterviewEnablementState GetOrCreateGroupOrRoster(Guid id, RosterVector rosterVector)
         {
             var groupKey = ConversionHelper.ConvertIdAndRosterVectorToString(id, rosterVector);
 
-            InterviewGroup groupOrRoster;
+            InterviewEnablementState groupOrRoster;
             if (this.groups.ContainsKey(groupKey))
             {
                 groupOrRoster = this.groups[groupKey];
@@ -1333,7 +1511,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 // rosters must be created with event RosterInstancesAdded. Groups has no such event, so
                 // they should be created eventually. So if group model was not found that means that
                 // we got event about group that was not created previously. Rosters should not be created here.
-                groupOrRoster = new InterviewGroup { Id = id, RosterVector = rosterVector };
+                groupOrRoster = new InterviewEnablementState { Id = id, RosterVector = rosterVector };
             }
 
             this.groups[groupKey] = groupOrRoster;

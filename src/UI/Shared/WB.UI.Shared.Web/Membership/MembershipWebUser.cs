@@ -2,62 +2,22 @@
 {
     using System;
     using System.Web.Security;
-    
-    /// <summary>
-    /// The membership user.
-    /// </summary>
+  
     public class MembershipWebUser : IMembershipWebUser
     {
-        #region Fields
-
         private readonly IMembershipHelper hepler;
-
-        #endregion
-
-        #region Constructors and Destructors
 
         public MembershipWebUser(IMembershipHelper helper)
         {
             this.hepler = helper;
         }
 
-        #endregion
+        public MembershipUser MembershipUser => Membership.GetUser();
 
-        #region Public Properties
+        public Guid UserId => Guid.Parse(this.MembershipUser.ProviderUserKey.ToString());
 
-        /// <summary>
-        /// Gets the current user.
-        /// </summary>
-        public MembershipUser MembershipUser
-        {
-            get
-            {
-                return Membership.GetUser();
-            }
-        }
+        public string UserName => MembershipUser.UserName;
 
-        /// <summary>
-        /// Gets the current user id.
-        /// </summary>
-        public Guid UserId
-        {
-            get
-            {
-                return Guid.Parse(this.MembershipUser.ProviderUserKey.ToString());
-            }
-        }
-
-        /// <summary>
-        ///     Gets a value indicating whether is admin.
-        /// </summary>
-        public bool IsAdmin
-        {
-            get
-            {
-                return Roles.IsUserInRole(hepler.ADMINROLENAME);
-            }
-        }
-
-        #endregion
+        public bool IsAdmin => Roles.IsUserInRole(this.hepler.ADMINROLENAME);
     }
 }

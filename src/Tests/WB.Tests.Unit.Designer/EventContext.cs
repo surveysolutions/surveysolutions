@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.Designer
         private static EventContext _threadInstance;
 
         private readonly List<UncommittedEvent> _events = new List<UncommittedEvent>();
-        private Action<AggregateRoot, UncommittedEvent> _eventAppliedCallback;
+        private Action<EventSourcedAggregateRoot, UncommittedEvent> _eventAppliedCallback;
 
         public IEnumerable<UncommittedEvent> Events
         {
@@ -53,18 +53,18 @@ namespace WB.Tests.Unit.Designer
         private void InitializeAppliedEventHandler()
         {
             if(this._eventAppliedCallback == null)
-                this._eventAppliedCallback = new Action<AggregateRoot, UncommittedEvent>(this.AggregateRootEventAppliedHandler);
+                this._eventAppliedCallback = new Action<EventSourcedAggregateRoot, UncommittedEvent>(this.AggregateRootEventAppliedHandler);
 
-            AggregateRoot.RegisterThreadStaticEventAppliedCallback(this._eventAppliedCallback);
+            EventSourcedAggregateRoot.RegisterThreadStaticEventAppliedCallback(this._eventAppliedCallback);
         }
 
         private void DestroyAppliedEventHandler()
         {
             if(this._eventAppliedCallback != null)
-                AggregateRoot.UnregisterThreadStaticEventAppliedCallback(this._eventAppliedCallback);
+                EventSourcedAggregateRoot.UnregisterThreadStaticEventAppliedCallback(this._eventAppliedCallback);
         }
 
-        private void AggregateRootEventAppliedHandler(AggregateRoot aggregateRoot, UncommittedEvent evnt)
+        private void AggregateRootEventAppliedHandler(EventSourcedAggregateRoot aggregateRoot, UncommittedEvent evnt)
         {
             this._events.Add(evnt);
         }

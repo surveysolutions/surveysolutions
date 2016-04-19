@@ -16,7 +16,8 @@ namespace Main.Core.Events.Questionnaire
             string conditionExpression, 
             bool hideIfDisabled, 
             bool featured, 
-            string instructions, 
+            string instructions,
+            QuestionProperties properties,
             bool capital, 
             Guid publicKey, 
             string questionText, 
@@ -45,7 +46,7 @@ namespace Main.Core.Events.Questionnaire
             int? countOfDecimalPlaces,
             IList<ValidationCondition> validationConditions,
             string linkedFilterExpression) 
-            : base(responsibleId, conditionExpression, hideIfDisabled, featured, instructions, capital, publicKey, questionText, questionScope, stataExportCaption, variableLabel, validationExpression, 
+            : base(responsibleId, conditionExpression, hideIfDisabled, featured, instructions, properties, capital, publicKey, questionText, questionScope, stataExportCaption, variableLabel, validationExpression, 
                   validationMessage, questionType, answerOrder, answers, groupPublicKey, linkedToQuestionId, linkedToRosterId, isInteger, areAnswersOrdered, yesNoView, maxAllowedAnswers, mask, isFilteredCombobox,
                   cascadeFromQuestionId, validationConditions, linkedFilterExpression) 
         {

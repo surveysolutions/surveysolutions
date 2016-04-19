@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
@@ -37,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
 
         Because of = () =>
         {
-            integerModel.AnswerAsString = "-4";
+            integerModel.Answer = -4;
             integerModel.ValueChangeCommand.Execute();
         };
 

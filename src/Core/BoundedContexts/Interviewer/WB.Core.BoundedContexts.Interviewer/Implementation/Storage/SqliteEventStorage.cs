@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
+using System.Text;
 using Ncqrs.Eventing;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -17,28 +17,28 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 {
     public class SqliteEventStorage : IInterviewerEventStorage, IDisposable
     {
-        private readonly ISerializer serializer;
         private readonly SQLiteConnectionWithLock connection;
         private ILogger logger;
-        
+
+        static readonly Encoding TextEncoding = Encoding.UTF8;
+
         public SqliteEventStorage(ISQLitePlatform sqLitePlatform, 
             ILogger logger,
             IAsynchronousFileSystemAccessor fileSystemAccessor,
-            ISerializer serializer,
             ITraceListener traceListener, 
             SqliteSettings settings)
         {
             var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, "events-data.sqlite3");
             this.connection = new SQLiteConnectionWithLock(sqLitePlatform,
-                new SQLiteConnectionString(pathToDatabase, true, new BlobSerializerDelegate(
-                    serializer.SerializeToByteArray,
-                    (data, type) => serializer.DeserializeFromStream(new MemoryStream(data), type),
-                    (type) => true)))
+                new SQLiteConnectionString(pathToDatabase, true, 
+                    new BlobSerializerDelegate(
+                        (obj) => TextEncoding.GetBytes(JsonConvert.SerializeObject(obj, Formatting.None)),
+                        (data, type) => JsonConvert.DeserializeObject(TextEncoding.GetString(data, 0, data.Length),type),
+                        (type) => true)))
             {
-                TraceListener = traceListener
+                //TraceListener = traceListener
             };
             this.logger = logger;
-            this.serializer = serializer;
             this.connection.CreateTable<EventView>();
             this.connection.CreateIndex<EventView>(entity => entity.EventId);
         }
@@ -186,6 +186,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             Binder = new CapiAndMainCoreToInterviewerAndSharedKernelsBinder()
         };
 
+        [Obsolete("Resolves old namespaces. Cuold be dropped after incompatibility shift with the next version.")]
         private class CapiAndMainCoreToInterviewerAndSharedKernelsBinder : DefaultSerializationBinder
         {
             public override Type BindToType(string assemblyName, string typeName)

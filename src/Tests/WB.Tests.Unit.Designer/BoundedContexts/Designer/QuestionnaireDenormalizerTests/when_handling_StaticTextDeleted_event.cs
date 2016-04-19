@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             {
                 chapter = CreateGroup(children: new[]
                 {
-                    CreateStaticText(entityId: entityId, text: "static text")
+                    Create.StaticText(staticTextId: entityId, text: "static text")
                 }),
             });
 

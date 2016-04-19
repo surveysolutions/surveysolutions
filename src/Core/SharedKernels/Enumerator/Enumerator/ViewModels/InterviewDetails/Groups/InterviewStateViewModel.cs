@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.QuestionsCount = interview.CountActiveQuestionsInInterview();
             this.SubgroupsCount = 0;
             this.AnsweredQuestionsCount = interview.CountAnsweredQuestionsInInterview();
-            this.InvalidAnswersCount = interview.CountInvalidQuestionsInInterview();
+            this.InvalidAnswersCount = interview.CountInvalidEntitiesInInterview();
 
             this.SimpleStatus = this.CalculateInterviewSimpleStatus();
             this.Status = this.CalculateDetailedStatus();

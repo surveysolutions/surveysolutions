@@ -142,12 +142,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 QuestionType = QuestionType.TextList
             };
         }
-
-        protected static StaticText CreateStaticText(Guid entityId, string text)
-        {
-            return new StaticText(publicKey: entityId, text: text);
-        }
-
+        
         protected static IPublishedEvent<GroupDeleted> CreateGroupDeletedEvent(Guid groupId)
         {
             return ToPublishedEvent(new GroupDeleted
@@ -335,35 +330,29 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
 
         protected static IPublishedEvent<StaticTextAdded> CreateStaticTextAddedEvent(Guid entityId, Guid parentId, string text = null)
         {
-            return ToPublishedEvent(new StaticTextAdded()
-            {
-                EntityId = entityId,
-                ParentId = parentId,
-                Text = text
-            });
+            return ToPublishedEvent(
+                Create.Event.StaticTextAdded(entityId : entityId,
+                    parentId : parentId,
+                    text : text));
         }
 
         protected static IPublishedEvent<StaticTextUpdated> CreateStaticTextUpdatedEvent(Guid entityId, string text = null, string attachmentName = null)
         {
-            return ToPublishedEvent(new StaticTextUpdated()
-            {
-                EntityId = entityId,
-                Text = text,
-                AttachmentName = attachmentName
-            });
+            return ToPublishedEvent(Create.Event.StaticTextUpdated(
+                entityId : entityId,
+                text : text,
+                attachmentName : attachmentName));
         }
 
         protected static IPublishedEvent<StaticTextCloned> CreateStaticTextClonedEvent(Guid targetEntityId,
             Guid sourceEntityId, Guid parentId, string text = null, int targetIndex = 0)
         {
-            return ToPublishedEvent(new StaticTextCloned()
-            {
-                EntityId = targetEntityId,
-                SourceEntityId = sourceEntityId,
-                ParentId = parentId,
-                Text = text,
-                TargetIndex = targetIndex
-            });
+            return ToPublishedEvent(Create.Event.StaticTextCloned(
+                publicKey: targetEntityId,
+                sourceEntityId : sourceEntityId,
+                parentId : parentId,
+                text : text,
+                targetIndex : targetIndex));
         }
 
         protected static IPublishedEvent<StaticTextDeleted> CreateStaticTextDeletedEvent(Guid entityId)

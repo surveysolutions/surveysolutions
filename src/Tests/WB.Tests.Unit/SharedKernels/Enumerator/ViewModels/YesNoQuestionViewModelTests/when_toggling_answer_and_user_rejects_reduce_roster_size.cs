@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -55,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             viewModel.Options.First().Selected = false;
         };
 
-        Because of = async () => await viewModel.ToggleAnswerAsync(viewModel.Options.First());
+        Because of = () => viewModel.ToggleAnswerAsync(viewModel.Options.First()).WaitAndUnwrapException();
 
         It should_undo_checked_property_change = () => viewModel.Options.First().YesSelected.ShouldBeTrue();
 

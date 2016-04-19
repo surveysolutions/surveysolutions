@@ -1,7 +1,6 @@
 ﻿using System;
 using Machine.Specifications;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
-using WB.Tests.Unit.SharedKernels.SurveyManagement.SyncPackagesProcessorTests;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTests
 {
@@ -13,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         };
 
         Because of = () => exception = Catch.Exception(() =>
-            incomingSyncPackagesQueue.Enqueue(Guid.Empty, ""));
+            incomingSyncPackagesQueue.StorePackage(""));
 
         It should_throw_exception = () =>
           exception.ShouldNotBeNull();

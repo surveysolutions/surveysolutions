@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
@@ -31,28 +32,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<IQuestion, ValidationCondition>(question => question.ValidationConditions, HasLongValidationCondition, "WB0212", index => string.Format(VerificationMessages.WB0212_LongValidationCondition, index)),
 
             Warning(TotalAttachmentsSizeIsMoreThan50Mb, "WB0214", VerificationMessages.WB0214_TotalAttachmentsSizeIsMoreThan50Mb),
-            UnusedAttachments,
-            AttachmentSizeIsMoreThan5Mb,
+            Warning(UnusedAttachments, "WB0215", VerificationMessages.WB0215_UnusedAttachments),
+            Warning(AttachmentSizeIsMoreThan5Mb, "WB0213", VerificationMessages.WB0213_AttachmentSizeIsMoreThan5Mb)
         };
 
-        private IEnumerable<QuestionnaireVerificationMessage> AttachmentSizeIsMoreThan5Mb(ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
-        {
-            return this.attachmentService.GetAttachmentSizesByQuestionnaire(questionnaire.PublicKey)
-                .Where(x => x.Size > 5*1024*1024)
-                .Select(entity => QuestionnaireVerificationMessage.Warning("WB0213", VerificationMessages.WB0213_AttachmentSizeIsMoreThan5Mb, CreateAttachmentReference(entity.AttachmentId)));
-        }
+        private bool AttachmentSizeIsMoreThan5Mb(AttachmentSize attachmentSize, ReadOnlyQuestionnaireDocument questionnaire) 
+            => attachmentSize.Size > 5*1024*1024;
 
-        private IEnumerable<QuestionnaireVerificationMessage> UnusedAttachments(ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
+        private bool UnusedAttachments(Attachment attachment, ReadOnlyQuestionnaireDocument questionnaire)
         {
-            var usedAttachments = questionnaire
-                .Find<IStaticText>(t => !string.IsNullOrWhiteSpace(t.AttachmentName))
-                .Select(x => x.AttachmentName)
-                .Distinct()
-                .ToList();
-
-            var attachments = questionnaire.Attachments.Except(x => usedAttachments.Contains(x.Name));
-            return attachments
-                .Select(entity => QuestionnaireVerificationMessage.Warning("WB0215", VerificationMessages.WB0215_UnusedAttachments, CreateAttachmentReference(entity.AttachmentId)));
+            return !questionnaire
+                .Find<IStaticText>(t => t.AttachmentName == attachment.Name)
+                .Any();
         }
 
         private bool TotalAttachmentsSizeIsMoreThan50Mb(ReadOnlyQuestionnaireDocument questionnaire)
@@ -166,6 +157,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                questionnaire
                    .Find<TEntity>(x => hasError(x, questionnaire))
                    .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, CreateReference(entity)));
+        }
+
+        private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Warning(
+            Func<Attachment, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
+        {
+            return (questionnaire, state) =>
+               questionnaire
+                   .Attachments
+                   .Where(x => hasError(x, questionnaire))
+                   .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, CreateAttachmentReference(entity.AttachmentId)));
+        }
+
+        private Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Warning(
+            Func<AttachmentSize, ReadOnlyQuestionnaireDocument, bool> hasError, string code, string message)
+        {
+            return (questionnaire, state) =>
+                   this.attachmentService.GetAttachmentSizesByQuestionnaire(questionnaire.PublicKey)
+                   .Where(x => hasError(x, questionnaire))
+                   .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, CreateAttachmentReference(entity.AttachmentId)));
         }
 
         private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Warning<TEntity>(

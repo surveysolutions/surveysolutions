@@ -107,9 +107,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             if (navigationItem.TargetScreen == ScreenType.Group)
             {
-                if (!this.CanNavigateTo(navigationItem.TargetGroup)) return;
+                if (!this.CanNavigateTo(navigationItem)) return;
 
-                while (this.navigationStack.Any(x => x.TargetGroup!=null && x.TargetGroup.Equals(navigationItem.TargetGroup)))
+                while (this.navigationStack.Any(x => x.TargetGroup != null && x.TargetGroup.Equals(navigationItem.TargetGroup)))
                 {
                     this.navigationStack.Pop();
                 }
@@ -120,11 +120,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.ChangeCurrentGroupAndFireEvent(navigationItem);
         }
 
-        private bool CanNavigateTo(Identity group)
+        private bool CanNavigateTo(NavigationIdentity navigationIdentity)
         {
             var interview = this.interviewRepository.Get(this.InterviewId);
 
-            return interview.HasGroup(group) && interview.IsEnabled(group);
+            if (navigationIdentity.TargetScreen == ScreenType.Complete)
+                return true;
+
+            return interview.HasGroup(navigationIdentity.TargetGroup) && interview.IsEnabled(navigationIdentity.TargetGroup);
         }
 
         private void NavigateBack(Action navigateToIfHistoryIsEmpty)
@@ -145,8 +148,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 NavigationIdentity previousNavigationItem = this.navigationStack.Peek();
                 previousNavigationItem.AnchoredElementIdentity = this.CurrentGroup;
 
-                while (!this.CanNavigateTo(previousNavigationItem.TargetGroup) ||
-                       previousNavigationItem.TargetGroup.Equals(this.CurrentGroup))
+                while (!this.CanNavigateTo(previousNavigationItem) || (previousNavigationItem.TargetGroup != null && previousNavigationItem.TargetGroup.Equals(this.CurrentGroup)))
                 {
                     if (this.navigationStack.Count == 0)
                     {

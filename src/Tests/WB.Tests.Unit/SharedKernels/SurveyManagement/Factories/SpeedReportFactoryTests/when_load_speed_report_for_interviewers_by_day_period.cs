@@ -2,6 +2,7 @@
 using System.Linq;
 using Machine.Specifications;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
@@ -27,22 +28,27 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                         Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
                             supervisorId: supervisorId,
                             timestamp: input.From.Date.AddHours(1),
+                            status: InterviewExportedAction.Completed,
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
                         Create.InterviewCommentedStatus(interviewerId: Guid.NewGuid(),
                             supervisorId: Guid.NewGuid(),
                             timestamp: input.From.Date.AddHours(1),
+                            status: InterviewExportedAction.Completed,
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
                         Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
                             supervisorId: supervisorId,
                             timestamp: input.From.Date.AddHours(1),
+                            status: InterviewExportedAction.Completed,
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(15)),
                         Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
                             supervisorId: supervisorId,
                             timestamp: input.From.Date.AddDays(1),
+                            status: InterviewExportedAction.Completed,
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(10)),
                         Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
                             supervisorId: supervisorId,
                             timestamp: input.From.Date.AddDays(-1),
+                            status: InterviewExportedAction.Completed,
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(333))
                     }), "2");
 

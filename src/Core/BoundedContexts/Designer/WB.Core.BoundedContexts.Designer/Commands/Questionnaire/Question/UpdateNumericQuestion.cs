@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
@@ -18,6 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             bool isPreFilled,
             QuestionScope scope, 
             bool isInteger, 
+            bool useFormatting,
             int? countOfDecimalPlaces,
             List<ValidationCondition> validationConditions)
             : base(
@@ -26,6 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
                  validationConditions: validationConditions)
         {
             this.IsInteger = isInteger;
+            this.Properties.UseFormatting = useFormatting;
             this.CountOfDecimalPlaces = countOfDecimalPlaces;
             this.IsPreFilled = isPreFilled;
             this.Scope = scope;

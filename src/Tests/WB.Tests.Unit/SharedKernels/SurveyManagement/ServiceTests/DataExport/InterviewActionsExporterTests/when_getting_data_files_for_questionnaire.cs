@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
 
@@ -33,7 +34,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
             interviewStatuses.Store(
                 Create.InterviewStatuses(questionnaireId: questionnaireId, 
                     questionnaireVersion: questionnaireVersion,
-                    statuses: new[] {Create.InterviewCommentedStatus()},
+                    statuses: new[] {Create.InterviewCommentedStatus(
+                            status: InterviewExportedAction.Completed)},
                     interviewid: intervieId),
                 intervieId.FormatGuid());
 

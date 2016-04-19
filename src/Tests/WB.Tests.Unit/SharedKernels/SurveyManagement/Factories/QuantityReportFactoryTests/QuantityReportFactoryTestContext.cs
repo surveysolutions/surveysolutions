@@ -15,10 +15,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
     internal class QuantityReportFactoryTestContext
     {
         protected static QuantityReportFactory CreateQuantityReportFactory(
-            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses = null)
+            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses = null,
+            IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage=null)
         {
             return new QuantityReportFactory(
-                interviewStatuses ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatuses>>());
+                interviewStatuses ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatuses>>(), interviewStatusTimeSpansStorage??new TestInMemoryWriter<InterviewStatusTimeSpans>());
         }
 
         protected static QuantityByInterviewersReportInputModel CreateQuantityByInterviewersReportInputModel(
@@ -35,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
                 SupervisorId = supervisorId ?? Guid.NewGuid(),
                 QuestionnaireId = Guid.NewGuid(),
                 QuestionnaireVersion = 1,
-                InterviewStatuses = new[] {InterviewExportedAction.Completed}
+                InterviewStatuses = new[] {InterviewExportedAction.ApprovedBySupervisor}
             };
         }
 
@@ -51,7 +52,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
                 PageSize = 20,
                 QuestionnaireId = Guid.NewGuid(),
                 QuestionnaireVersion = 1,
-                InterviewStatuses = new[] { InterviewExportedAction.Completed }
+                InterviewStatuses = new[] { InterviewExportedAction.ApprovedBySupervisor }
             };
         }
     }

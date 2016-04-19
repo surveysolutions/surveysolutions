@@ -67,6 +67,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool IsQuestion(Guid entityId);
 
+        bool IsStaticText(Guid entityId);
+
         bool IsInterviewierQuestion(Guid questionId);
 
         ReadOnlyCollection<Guid> GetPrefilledQuestions();
@@ -107,9 +109,13 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         ReadOnlyCollection<Guid> GetAllQuestions();
 
+        ReadOnlyCollection<Guid> GetAllStaticTexts();
+
         ReadOnlyCollection<Guid> GetAllGroups();
 
         IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId);
+
+        IEnumerable<Guid> GetAllUnderlyingStaticTexts(Guid groupId);
 
         ReadOnlyCollection<Guid> GetAllUnderlyingInterviewerQuestions(Guid groupId);
 
@@ -171,6 +177,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         ReadOnlyCollection<Guid> GetChildEntityIds(Guid groupId);
 
         ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId);
+
+        ReadOnlyCollection<Guid> GetChildStaticTexts(Guid groupId);
+
         bool IsPrefilled(Guid questionId);
         bool ShouldBeHiddenIfDisabled(Guid entityId);
 
@@ -182,5 +191,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsQuestionCascading(Guid questionId);
         bool ShouldQuestionRecordAnswersOrder(Guid questionId);
         string GetTextQuestionMask(Guid questionId);
+        bool GetHideInstructions(Guid questionId);
+        bool ShouldUseFormatting(Guid questionId);
     }
 }

@@ -6,6 +6,7 @@ using System.Runtime.ExceptionServices;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.CommandBus.Implementation;
 
 namespace WB.Core.Infrastructure.CommandBus
 {
@@ -17,28 +18,39 @@ namespace WB.Core.Infrastructure.CommandBus
 
         private class HandlerDescriptor
         {
-            public HandlerDescriptor(Type aggregateType, 
+            public HandlerDescriptor(
+                Type aggregateType, 
                 bool isInitializer, 
-                Func<ICommand, Guid> idResolver, 
+                Func<ICommand, Guid> idResolver,
                 Action<ICommand, IAggregateRoot> handler,
                 IEnumerable<Type> validators)
             {
                 this.AggregateType = aggregateType;
+                this.AggregateKind = DetermineAggregateKind(aggregateType);
                 this.IsInitializer = isInitializer;
                 this.IdResolver = idResolver;
                 this.Handler = handler;
                 this.Validators = validators != null ? new List<Type>(validators) : new List<Type>();                
             }
 
-            public Type AggregateType { get; private set; }
-            public bool IsInitializer { get; private set; }
-            public Func<ICommand, Guid> IdResolver { get; private set; }
-            public Action<ICommand, IAggregateRoot> Handler { get; private set; }
-            public List<Type> Validators { get; private set; }
+            public Type AggregateType { get; }
+            public AggregateKind AggregateKind { get; }
+            public bool IsInitializer { get; }
+            public Func<ICommand, Guid> IdResolver { get; }
+            public Action<ICommand, IAggregateRoot> Handler { get; }
+            public List<Type> Validators { get; }
 
-            public void AppendValidators(List<Type> validators)
+            public void AppendValidators(List<Type> validators) => this.Validators.AddRange(validators);
+
+            private static AggregateKind DetermineAggregateKind(Type aggregateType)
             {
-                Validators.AddRange(validators);
+                if (aggregateType.Implements<IEventSourcedAggregateRoot>())
+                    return AggregateKind.EventSourced;
+
+                if (aggregateType.Implements<IPlainAggregateRoot>())
+                    return AggregateKind.Plain;
+
+                throw new ArgumentException($"Aggregate {aggregateType} should implement interface IEventSourcedAggregateRoot or IPlainAggregateRoot.");
             }
         }
 
@@ -49,46 +61,50 @@ namespace WB.Core.Infrastructure.CommandBus
         public class AggregateSetup<TAggregate>
             where TAggregate : IAggregateRoot
         {
-            public AggregateSetup<TAggregate> InitializesWith<TCommand>(Func<TCommand, Guid> aggregateRootIdResolver, Func<TAggregate, Action<TCommand>> commandHandler)
+            public AggregateSetup<TAggregate> InitializesWith<TCommand>(
+                Func<TCommand, Guid> aggregateRootIdResolver,
+                Func<TAggregate, Action<TCommand>> getCommandHandler,
+                Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer = null)
                 where TCommand : ICommand
-            {
-                return InitializesWith(aggregateRootIdResolver, (command, aggregate) => commandHandler(aggregate)(command));
-            }
+                => this.InitializesWith(
+                    aggregateRootIdResolver,
+                    (command, aggregate) => getCommandHandler(aggregate).Invoke(command),
+                    configurer);
 
-            public AggregateSetup<TAggregate> InitializesWith<TCommand>(Func<TCommand, Guid> aggregateRootIdResolver, Action<TCommand, TAggregate> commandHandler)
+            public AggregateSetup<TAggregate> InitializesWith<TCommand>(
+                Func<TCommand, Guid> aggregateRootIdResolver,
+                Action<TCommand, TAggregate> commandHandler,
+                Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer = null)
                 where TCommand : ICommand
             {
-                Register(aggregateRootIdResolver, commandHandler, isInitializer: true, configurer: null);
+                Register(aggregateRootIdResolver, commandHandler, isInitializer: true, configurer: configurer);
                 return this;
             }
 
-            public AggregateSetup<TAggregate> Handles<TCommand>(Func<TCommand, Guid> aggregateRootIdResolver, Func<TAggregate, Action<TCommand>> commandHandler)
+            public AggregateSetup<TAggregate> Handles<TCommand>(
+                Func<TCommand, Guid> aggregateRootIdResolver,
+                Func<TAggregate, Action<TCommand>> getCommandHandler,
+                Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer = null) 
                 where TCommand : ICommand
-            {
-                return Handles(aggregateRootIdResolver, (command, aggregate) => commandHandler(aggregate)(command), configurer: null);
-            }
-
-            public AggregateSetup<TAggregate> Handles<TCommand>(Func<TCommand, Guid> aggregateRootIdResolver, Action<TCommand, TAggregate> commandHandler)
-                where TCommand : ICommand
-            {
-                return Handles(aggregateRootIdResolver, commandHandler, configurer: null);
-            }
+                => this.Handles(
+                    aggregateRootIdResolver,
+                    (command, aggregate) => getCommandHandler(aggregate).Invoke(command),
+                    configurer);
 
             public AggregateSetup<TAggregate> Handles<TCommand>(
                 Func<TCommand, Guid> aggregateRootIdResolver, 
                 Action<TCommand, TAggregate> commandHandler,
-                Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer)
+                Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer = null)
                 where TCommand : ICommand
             {
                 Register(aggregateRootIdResolver, commandHandler, isInitializer: false, configurer: configurer);
                 return this;
             }
 
-            public AggregateWithCommandSetup<TAggregate, TAggregateCommand> ResolvesIdFrom<TAggregateCommand>(Func<TAggregateCommand, Guid> aggregateRootIdResolver)
+            public AggregateWithCommandSetup<TAggregate, TAggregateCommand> ResolvesIdFrom<TAggregateCommand>(
+                Func<TAggregateCommand, Guid> aggregateRootIdResolver)
                 where TAggregateCommand : ICommand
-            {
-                return new AggregateWithCommandSetup<TAggregate, TAggregateCommand>(aggregateRootIdResolver);
-            }
+                => new AggregateWithCommandSetup<TAggregate, TAggregateCommand>(aggregateRootIdResolver);
         }
 
         public class AggregateWithCommandSetup<TAggregate, TAggregateCommand>
@@ -169,41 +185,32 @@ namespace WB.Core.Infrastructure.CommandBus
 
             Handlers.Add(commandName, new HandlerDescriptor(
                 typeof (TAggregate),
-                isInitializer,
-                command => aggregateRootIdResolver.Invoke((TCommand) command),
-                (command, aggregate) => commandHandler.Invoke((TCommand) command, (TAggregate) aggregate),
-                configuration.GetValidators()));
+                isInitializer: isInitializer,
+                idResolver: command => aggregateRootIdResolver.Invoke((TCommand) command),
+                handler: (command, aggregate) => commandHandler.Invoke((TCommand) command, (TAggregate) aggregate),
+                validators: configuration.GetValidators()));
         }
 
         internal static bool Contains(ICommand command)
-        {
-            return Handlers.ContainsKey(command.GetType().Name);
-        }
+            => Handlers.ContainsKey(command.GetType().Name);
 
         private static HandlerDescriptor GetHandlerDescriptor(ICommand command)
-        {
-            return Handlers[command.GetType().Name];
-        }
+            => Handlers[command.GetType().Name];
 
         internal static Type GetAggregateRootType(ICommand command)
-        {
-            return GetHandlerDescriptor(command).AggregateType;
-        }
+            => GetHandlerDescriptor(command).AggregateType;
+
+        internal static AggregateKind GetAggregateRootKind(ICommand command)
+            => GetHandlerDescriptor(command).AggregateKind;
 
         internal static bool IsInitializer(ICommand command)
-        {
-            return GetHandlerDescriptor(command).IsInitializer;
-        }
+            => GetHandlerDescriptor(command).IsInitializer;
 
         internal static Func<ICommand, Guid> GetAggregateRootIdResolver(ICommand command)
-        {
-            return GetHandlerDescriptor(command).IdResolver;
-        }
+            => GetHandlerDescriptor(command).IdResolver;
 
         internal static Action<ICommand, IAggregateRoot> GetCommandHandler(ICommand command)
-        {
-            return GetHandlerDescriptor(command).Handler;
-        }
+            => GetHandlerDescriptor(command).Handler;
 
         public static IEnumerable<Action<IAggregateRoot, ICommand>> GetValidators(ICommand command, IServiceLocator serviceLocator)
         {
@@ -216,11 +223,14 @@ namespace WB.Core.Infrastructure.CommandBus
         private static Action<IAggregateRoot, ICommand> GetValidatingAction(Type validatorType, Type aggregateType, Type commandType, IServiceLocator serviceLocator)
         {
             object validatorInstance = serviceLocator.GetInstance(validatorType);
+
+            if (validatorInstance == null)
+                throw new CommandRegistryException($"Unable to get instance of validator {validatorType.Name} for command {commandType.Name} and aggregate {aggregateType.Name}.");
+
             MethodInfo validatingMethod = validatorType.GetMethod("Validate", new[] { aggregateType, commandType });
 
             if (validatingMethod == null)
-                throw new CommandRegistryException(string.Format("Unable to resolve validating method of validator {0} for command {1} and aggregate {2}.",
-                    validatorType.Name, commandType.Name, aggregateType.Name));
+                throw new CommandRegistryException($"Unable to resolve validating method of validator {validatorType.Name} for command {commandType.Name} and aggregate {aggregateType.Name}.");
 
             return (aggregate, command) =>
             {

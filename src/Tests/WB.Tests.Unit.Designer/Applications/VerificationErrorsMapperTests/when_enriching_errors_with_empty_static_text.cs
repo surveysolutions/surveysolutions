@@ -30,19 +30,19 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
             result.First().Message.ShouldEqual(verificationMessages.First().Message);
         
         It should_return_error_with_same_References_count_as_input_error_has = () =>
-            result.First().References.Count.ShouldEqual(verificationMessages.First().References.Count());
+            result.First().Errors.First().References.Count.ShouldEqual(verificationMessages.First().References.Count());
 
         It should_return_error_with_IsGroupOfErrors_field_set_in_true = () =>
             result.First().IsGroupedMessage.ShouldBeTrue();
         
         It should_return_error_that_references_static_text_with_staticTextId = () =>
-            result.First().References.First().ItemId.ShouldEqual(staticTextId);
+            result.First().Errors.First().References.First().ItemId.ShouldEqual(staticTextId);
 
         It should_return_error_that_references_static_text_with_specified_QuestionnaireVerificationReferenceType = () =>
-            result.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.StaticText);
+            result.First().Errors.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.StaticText);
 
         It should_return_error_that_references_static_text_with_specified_text = () =>
-            result.First().References.First().Title.ShouldEqual("static text");
+            result.First().Errors.First().References.First().Title.ShouldEqual("static text");
         
         private static IVerificationErrorsMapper mapper;
         private static QuestionnaireVerificationMessage[] verificationMessages;
