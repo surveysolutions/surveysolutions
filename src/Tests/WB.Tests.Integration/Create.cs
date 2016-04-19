@@ -613,7 +613,9 @@ namespace WB.Tests.Integration
             return new QuestionnaireExportStructure() { HeaderToLevelMap = header };
         }
 
-        public static CommandService CommandService(IEventSourcedAggregateRootRepository repository = null, 
+        public static CommandService CommandService(
+            IEventSourcedAggregateRootRepository repository = null,
+            IPlainAggregateRootRepository plainRepository = null,
             IEventBus eventBus = null, 
             IAggregateSnapshotter snapshooter = null,
             IServiceLocator serviceLocator = null)
@@ -623,7 +625,7 @@ namespace WB.Tests.Integration
                 eventBus ?? Mock.Of<IEventBus>(),
                 snapshooter ?? Mock.Of<IAggregateSnapshotter>(),
                 serviceLocator ?? Mock.Of<IServiceLocator>(),
-                Mock.Of<IPlainAggregateRootRepository>());
+                plainRepository ?? Mock.Of<IPlainAggregateRootRepository>());
         }
 
 

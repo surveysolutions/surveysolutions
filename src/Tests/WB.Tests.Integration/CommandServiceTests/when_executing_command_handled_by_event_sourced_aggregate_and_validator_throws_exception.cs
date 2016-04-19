@@ -2,26 +2,25 @@ using System;
 using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using WB.Core.Infrastructure.Aggregates;
+using Ncqrs.Domain;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
-    internal class when_executing_command_handled_by_plain_aggregate_and_validator_throws_exception
+    internal class when_executing_command_handled_by_event_sourced_aggregate_and_validator_throws_exception
     {
-        private class InvalidPlainCommand : ICommand { public Guid CommandIdentifier => Guid.Empty; }
+        private class InvalidEventSourcedCommand : ICommand { public Guid CommandIdentifier => Guid.Empty; }
 
-        private class Aggregate : IPlainAggregateRoot
+        private class Aggregate : EventSourcedAggregateRoot
         {
-            public void SetId(Guid id) { }
-            public void Handle(InvalidPlainCommand command) { }
+            public void Handle(InvalidEventSourcedCommand command) { }
         }
 
-        private class Validator : ICommandValidator<Aggregate, InvalidPlainCommand>
+        private class Validator : ICommandValidator<Aggregate, InvalidEventSourcedCommand>
         {
-            public void Validate(Aggregate aggregate, InvalidPlainCommand command)
+            public void Validate(Aggregate aggregate, InvalidEventSourcedCommand command)
             {
                 throw validatorException;
             }
@@ -31,7 +30,7 @@ namespace WB.Tests.Integration.CommandServiceTests
         {
             CommandRegistry
                 .Setup<Aggregate>()
-                .InitializesWith<InvalidPlainCommand>(_ => Guid.Empty, aggregate => aggregate.Handle, config => config.ValidatedBy<Validator>());
+                .InitializesWith<InvalidEventSourcedCommand>(_ => Guid.Empty, aggregate => aggregate.Handle, config => config.ValidatedBy<Validator>());
 
             var serviceLocator = Mock.Of<IServiceLocator>(_
                 => _.GetInstance(typeof(Aggregate)) == new Aggregate()
@@ -41,7 +40,7 @@ namespace WB.Tests.Integration.CommandServiceTests
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => commandService.Execute(new InvalidPlainCommand(), null));
+            exception = Catch.Exception(() => commandService.Execute(new InvalidEventSourcedCommand(), null));
 
         It should_rethrow_exception_thrown_by_aggregate = () =>
             exception.ShouldEqual(validatorException);
