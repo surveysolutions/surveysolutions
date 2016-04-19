@@ -222,12 +222,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(StaticTextsDisabled @event)
         {
+            this.InvalidateViewModelsByConditions(@event.StaticTexts);
             this.RemoveEntities(@event.StaticTexts.Where(this.ShouldBeHiddenIfDisabled).ToArray());
         }
 
         public void Handle(StaticTextsEnabled @event)
         {
             this.AddMissingEntities();
+            this.InvalidateViewModelsByConditions(@event.StaticTexts);
         }
 
         private void AddMissingEntities()
@@ -245,7 +247,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                                 .GetEntities(
                                     interviewId: this.navigationState.InterviewId,
                                     groupIdentity: this.navigationState.CurrentGroup,
-                                    navigationState: this.navigationState));
+                                    navigationState: this.navigationState)).ToList();
 
                         List<IInterviewEntityViewModel> createdViewModelEntities = entities
                             .Where(entity => !this.ShouldBeHidden(entity.Identity))
