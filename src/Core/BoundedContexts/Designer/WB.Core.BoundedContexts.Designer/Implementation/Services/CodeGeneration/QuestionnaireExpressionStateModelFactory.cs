@@ -210,7 +210,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             Dictionary<Guid, ConditionMethodAndState> itemsToSort = new Dictionary<Guid, ConditionMethodAndState>();
 
             groupsWithConditions.ForEach(g => itemsToSort.Add(g.Id, new ConditionMethodAndState(g.ConditionMethodName, g.StateName)));
-            staticTextsWithConditions.ForEach(st => itemsToSort.Add(st.Id, new ConditionMethodAndState(st.ConditionMethodName, st.StateName)));
             rostersWithConditions.ForEach(r => itemsToSort.Add(r.Id, new ConditionMethodAndState(r.ConditionsMethodName, r.StateName)));
             questionsWithConditions.ForEach(q => itemsToSort.Add(q.Id, new ConditionMethodAndState(q.ConditionMethodName, q.StateName)));
 
@@ -221,6 +220,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 if (itemsToSort.ContainsKey(id))
                     itemsSorted.Add(itemsToSort[id]);
             }
+
+            staticTextsWithConditions.ForEach(
+                st => itemsSorted.Add(new ConditionMethodAndState(st.ConditionMethodName, st.StateName)));
 
             return itemsSorted;
         }
