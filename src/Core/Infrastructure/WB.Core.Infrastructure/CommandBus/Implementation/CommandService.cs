@@ -117,25 +117,25 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
                 throw new CommandServiceException($"Unable to execute command {command.GetType().Name} because it is not registered.");
 
             Type aggregateType = CommandRegistry.GetAggregateRootType(command);
+            AggregateKind aggregateKind = CommandRegistry.GetAggregateRootKind(command);
             Func<ICommand, Guid> aggregateRootIdResolver = CommandRegistry.GetAggregateRootIdResolver(command);
             Action<ICommand, IAggregateRoot> commandHandler = CommandRegistry.GetCommandHandler(command);
             IEnumerable<Action<IAggregateRoot, ICommand>> validators = CommandRegistry.GetValidators(command, this.serviceLocator);
-            bool isAggregateEventSourced = CommandRegistry.IsAggregateEventSourced(command);
-            bool isAggregatePlain = CommandRegistry.IsAggregatePlain(command);
 
             Guid aggregateId = aggregateRootIdResolver.Invoke(command);
 
-            if (isAggregateEventSourced)
+            switch (aggregateKind)
             {
-                this.ExecuteEventSourcedCommand(command, origin, aggregateType, aggregateId, validators, commandHandler, cancellationToken);
-            }
-            else if (isAggregatePlain)
-            {
-                this.ExecutePlainCommand(command, aggregateType, aggregateId, validators, commandHandler, cancellationToken);
-            }
-            else
-            {
-                throw new CommandServiceException($"Unable to execute command {command.GetType().Name} because it is registered to unknown aggregate root kind.");
+                case AggregateKind.EventSourced:
+                    this.ExecuteEventSourcedCommand(command, origin, aggregateType, aggregateId, validators, commandHandler, cancellationToken);
+                    break;
+
+                case AggregateKind.Plain:
+                    this.ExecutePlainCommand(command, aggregateType, aggregateId, validators, commandHandler, cancellationToken);
+                    break;
+
+                default:
+                    throw new CommandServiceException($"Unable to execute command {command.GetType().Name} because it is registered to unknown aggregate root kind.");
             }
         }
 
