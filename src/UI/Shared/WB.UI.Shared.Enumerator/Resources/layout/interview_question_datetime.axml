@@ -19,12 +19,13 @@
             Text Answer; 
             Hint Localization('DateQuestion_Hint'); 
             DateChange AnswerCommand;" />
-
+          <LinearLayout local:MvxBind="Click RemoveAnswerCommand; Visible QuestionState.IsAnswered;"
+                  style="@style/Interview_Question_RemoveAnswerWrapper">
           <ImageButton style="@style/Interview_Question_RemoveAnswer"
-                              android:layout_gravity="right"
+                              android:layout_gravity="right" android:duplicateParentState="true"
                               local:MvxBind="HideKeyboardOnClick .;
-                                      Click RemoveAnswerCommand; 
-                                      Visible  QuestionState.IsAnswered;" />
+                                      Click RemoveAnswerCommand; " />
+          </LinearLayout>
         </LinearLayout>
       </LinearLayout>
       <include layout="@layout/interview_question__errors" />
