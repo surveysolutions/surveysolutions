@@ -55,7 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private IReadOnlyList<CategoricalQuestionOption> Options;
         private readonly ILiteEventRegistry eventRegistry;
 
-        public Identity Identities { get { return this.questionIdentity; } }
+        public Identity Identities => this.questionIdentity;
 
         public CascadingSingleOptionQuestionViewModel(
             IPrincipal principal,
