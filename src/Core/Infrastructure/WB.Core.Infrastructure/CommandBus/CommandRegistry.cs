@@ -6,6 +6,7 @@ using System.Runtime.ExceptionServices;
 using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.CommandBus.Implementation;
 
 namespace WB.Core.Infrastructure.CommandBus
 {
@@ -17,8 +18,6 @@ namespace WB.Core.Infrastructure.CommandBus
 
         private class HandlerDescriptor
         {
-            public enum Kind { EventSourced = 1, Plain = 2 }
-
             public HandlerDescriptor(
                 Type aggregateType, 
                 bool isInitializer, 
@@ -35,7 +34,7 @@ namespace WB.Core.Infrastructure.CommandBus
             }
 
             public Type AggregateType { get; }
-            public Kind AggregateKind { get; }
+            public AggregateKind AggregateKind { get; }
             public bool IsInitializer { get; }
             public Func<ICommand, Guid> IdResolver { get; }
             public Action<ICommand, IAggregateRoot> Handler { get; }
@@ -43,13 +42,13 @@ namespace WB.Core.Infrastructure.CommandBus
 
             public void AppendValidators(List<Type> validators) => this.Validators.AddRange(validators);
 
-            private static Kind DetermineAggregateKind(Type aggregateType)
+            private static AggregateKind DetermineAggregateKind(Type aggregateType)
             {
                 if (aggregateType.Implements<IEventSourcedAggregateRoot>())
-                    return Kind.EventSourced;
+                    return AggregateKind.EventSourced;
 
                 if (aggregateType.Implements<IPlainAggregateRoot>())
-                    return Kind.Plain;
+                    return AggregateKind.Plain;
 
                 throw new ArgumentException($"Aggregate {aggregateType} should implement interface IEventSourcedAggregateRoot or IPlainAggregateRoot.");
             }
@@ -201,6 +200,9 @@ namespace WB.Core.Infrastructure.CommandBus
         internal static Type GetAggregateRootType(ICommand command)
             => GetHandlerDescriptor(command).AggregateType;
 
+        internal static AggregateKind GetAggregateRootKind(ICommand command)
+            => GetHandlerDescriptor(command).AggregateKind;
+
         internal static bool IsInitializer(ICommand command)
             => GetHandlerDescriptor(command).IsInitializer;
 
@@ -209,12 +211,6 @@ namespace WB.Core.Infrastructure.CommandBus
 
         internal static Action<ICommand, IAggregateRoot> GetCommandHandler(ICommand command)
             => GetHandlerDescriptor(command).Handler;
-
-        internal static bool IsAggregateEventSourced(ICommand command)
-            => GetHandlerDescriptor(command).AggregateKind == HandlerDescriptor.Kind.EventSourced;
-
-        internal static bool IsAggregatePlain(ICommand command)
-            => GetHandlerDescriptor(command).AggregateKind == HandlerDescriptor.Kind.Plain;
 
         public static IEnumerable<Action<IAggregateRoot, ICommand>> GetValidators(ICommand command, IServiceLocator serviceLocator)
         {
