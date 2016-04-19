@@ -13,9 +13,9 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 {
     public class NumericValueChangedEventArgs : EventArgs
     {
-        public double NewValue { get; set; }
+        public decimal NewValue { get; set; }
 
-        public NumericValueChangedEventArgs(double newValue)
+        public NumericValueChangedEventArgs(decimal newValue)
         {
             this.NewValue = newValue;
         }
@@ -28,21 +28,67 @@ namespace WB.UI.Shared.Enumerator.CustomControls
     /// </summary>
     public class NumericEditText : EditText
     {
+        private int maxDigitsBeforeDecimal;
+
         /// <summary>
         /// Gets or sets the maximum number of digits before the decimal point.
         /// </summary>
         /// <value>The maximum number of digits before the decimal point</value>
-        public int MaxDigitsBeforeDecimal { get; set; }
+        public int MaxDigitsBeforeDecimal
+        {
+            get { return this.maxDigitsBeforeDecimal; }
+            set
+            {
+                if (value + this.maxDigitsAfterDecimal > maxDigitsInDecimal)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(MaxDigitsAfterDecimal),
+                        $"Sum of digits before and after decimal seperator should be less than {maxDigitsInDecimal + 1}");
+                }
+
+                this.maxDigitsBeforeDecimal = value;
+                this.SetTextInternal(this.Text);
+            }
+        }
+
+        private int maxDigitsAfterDecimal;
 
         /// <summary>
         /// Gets or sets the maximum number of digits after the decimal point.
         /// </summary>
         /// <value>The maximum number of digits after the decimal point</value>
-        public int MaxDigitsAfterDecimal { get; set; }
+        public int MaxDigitsAfterDecimal
+        {
+            get
+            {
+                return this.maxDigitsAfterDecimal;
+            }
+            set
+            {
+                if (value + this.maxDigitsBeforeDecimal > maxDigitsInDecimal)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(MaxDigitsAfterDecimal),
+                        $"Sum of digits before and after decimal seperator should be less than {maxDigitsInDecimal + 1}");
+                }
+                    
+                this.maxDigitsAfterDecimal = value;
+                
+                this.SetTextInternal(this.Text);
+            }
+        }
+
+        private bool useGroupSeparator;
+
+        public bool UseGroupSeparator
+        {
+            get { return this.useGroupSeparator; }
+            set
+            {
+                this.useGroupSeparator = value;
+                this.SetTextInternal(this.Text);
+            }
+        }
 
         public bool NumbersOnly { get; set; }
-
-        public bool UseGroupSeparator { get; set; }
 
         private readonly string groupingSeparator = CultureInfo.CurrentCulture.NumberFormat.CurrencyGroupSeparator;
         private readonly string decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
@@ -50,6 +96,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         private string previousText = "";
         private string numberFilterRegex = "";
         private const string leadingZeroFilterRegex = "^0+(?!$)";
+        private const int maxDigitsInDecimal = 28;
 
         /// <summary>
         /// <para>Occurs when numeric value changed.</para>
@@ -104,10 +151,10 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
             try
             {
-                this.MaxDigitsBeforeDecimal = attributes.GetInt(Resource.Styleable.NumericEditText_maxDigitsBeforeDecimal, 0);
-                this.MaxDigitsAfterDecimal = attributes.GetInt(Resource.Styleable.NumericEditText_maxDigitsAfterDecimal, 2);
+                this.maxDigitsBeforeDecimal = attributes.GetInt(Resource.Styleable.NumericEditText_maxDigitsBeforeDecimal, 0);
+                this.maxDigitsAfterDecimal = attributes.GetInt(Resource.Styleable.NumericEditText_maxDigitsAfterDecimal, 2);
                 this.NumbersOnly = attributes.GetBoolean(Resource.Styleable.NumericEditText_numbersOnly, false);
-                this.UseGroupSeparator = attributes.GetBoolean(Resource.Styleable.NumericEditText_useGroupSeparator, true);
+                this.useGroupSeparator = attributes.GetBoolean(Resource.Styleable.NumericEditText_useGroupSeparator, true);
 
             }
             finally
@@ -156,20 +203,26 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             }
 
             string[] splitText = newText.Split(this.decimalSeparator.ToCharArray());
-            string leftPart = splitText[0];
-            string rightPart = null;
+            string leftPart = (splitText[0] ?? "").Replace(this.groupingSeparator, "");
+            string rightPart = "";
             if (splitText.Length > 1)
             {
-                rightPart = splitText[1];
+                rightPart = splitText[1] ?? "";
             }
 
-            if (this.MaxDigitsBeforeDecimal > 0 && leftPart != null && leftPart.Replace(this.groupingSeparator, "").Length > this.MaxDigitsBeforeDecimal)
+            if((leftPart.Length + rightPart.Length) > maxDigitsInDecimal)
             {
                 this.DiscardInput();
                 return;
             }
 
-            if (this.MaxDigitsAfterDecimal > 0 && rightPart != null && rightPart.Length > this.MaxDigitsAfterDecimal)
+            if (this.MaxDigitsBeforeDecimal > 0 && leftPart.Length > this.MaxDigitsBeforeDecimal)
+            {
+                this.DiscardInput();
+                return;
+            }
+
+            if (this.MaxDigitsAfterDecimal > 0 && rightPart.Length > this.MaxDigitsAfterDecimal)
             {
                 this.DiscardInput();
                 return;
@@ -234,21 +287,15 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         }
 
         /// <summary>
-        /// Gets the double value represented by the text. Returns double.NaN if number is invalid
+        /// Gets the decimal value represented by the text. Throw if number is invalid
         /// </summary>
-        /// <returns>The double value represented by the text</returns>
-        public double GetNumericValue()
+        /// <returns>The decimal value represented by the text</returns>
+        public decimal GetNumericValue()
         {
             bool hasSign = this.Text.StartsWith(this.negativeSign); 
             string original = Regex.Replace(this.Text, this.numberFilterRegex, "");
-            try
-            {
-                return NumberFormat.Instance.Parse(hasSign ? this.negativeSign + original : original).DoubleValue();
-            }
-            catch (ParseException)
-            {
-                return double.NaN;
-            }
+
+            return decimal.Parse(hasSign ? this.negativeSign + original : original);
         }
 
         private string ReplaceFirst(string text, string search, string replace)
