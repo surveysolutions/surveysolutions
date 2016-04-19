@@ -4,13 +4,12 @@ using AppDomainToolkit;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
-namespace WB.Tests.Integration.InterviewTests.LanguageTests
+namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
-    internal class when_answering_numeric_question_with_valid_answer_and_static_text_raiser_exception : InterviewTestsContext
+    internal class when_answering_on_a_question_with_answer_that_raises_exception_in_static_text_validation : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -31,7 +30,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                         Create.Chapter(children: new IComposite[]
                         {
                             Create.NumericIntegerQuestion(id: questionA, variable: "a"),
-                            Create.StaticText(id: staticTextB, validationConditions: new List<ValidationCondition>() {new ValidationCondition("10/a < 2", "err") }),
+                            Create.StaticText(id: staticTextB, validationConditions: new [] { new ValidationCondition("10/a < 2", "err") }),
                         }),
                     }),
                     events: new object[]
