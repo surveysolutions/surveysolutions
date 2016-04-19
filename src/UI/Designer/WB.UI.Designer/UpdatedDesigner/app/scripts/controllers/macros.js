@@ -103,10 +103,10 @@
                 // Options
                 editor.setOptions({
                     maxLines: Infinity,
-                    mode: "ace/mode/csharp-custom",
+                    mode: "ace/mode/csharp-extended",
                     fontSize: 16,
                     highlightActiveLine: false,
-                    theme: "ace/theme/github-custom",
+                    theme: "ace/theme/github-extended",
                     enableBasicAutocompletion: true,
                     enableLiveAutocompletion: false
                 });

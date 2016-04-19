@@ -360,7 +360,7 @@ angular.module('designerApp')
                     maxLines: Infinity,
                     fontSize: 16,
                     highlightActiveLine: false,
-                    theme: "ace/theme/github-custom",
+                    theme: "ace/theme/github-extended",
                     enableBasicAutocompletion: true,
                     enableLiveAutocompletion: false
                 });
@@ -384,7 +384,7 @@ angular.module('designerApp')
 
             $scope.aceEditorUpdateMode = function(editor) {
                 if (editor) {
-                    var CSharpExtendableMode = window.ace.require("ace/mode/csharp-custom").Mode;
+                    var CSharpExtendableMode = window.ace.require("ace/mode/csharp-extended").Mode;
                     editor.getSession().setMode(new CSharpExtendableMode($scope.getVariables));
                 }
             }

@@ -54,12 +54,9 @@
       "main": ["dist/prettyCheckable.min"]
     },
     "ace-builds": {
-      "main": [
-        "src-noconflict/ace.js",
-        "src-noconflict/mode-csharp-custom.js",
-        "src-noconflict/theme-github-custom.js",
-        "src-noconflict/ext-language_tools.js"
-      ]
+    "main": [
+      "src-noconflict/ace.js",
+      "src-noconflict/ext-language_tools.js"]
     }
   }
 }
