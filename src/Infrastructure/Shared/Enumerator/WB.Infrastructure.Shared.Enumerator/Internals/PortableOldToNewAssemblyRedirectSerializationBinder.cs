@@ -6,7 +6,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace WB.Infrastructure.Shared.Enumerator.Internals
 {
-    [Obsolete("Resolves old namespaces. Cuold be dropped after incompatibility shift with the next version.")]
+    [Obsolete("Resolves old namespaces. Could be dropped after incompatibility shift with the next version.")]
     public class PortableOldToNewAssemblyRedirectSerializationBinder : DefaultSerializationBinder
     {
         private const string oldAssemblyNameToRedirect = "Main.Core";
@@ -22,7 +22,7 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals
         {
             var assembly = typeof(QuestionnaireDocument).Assembly;
 
-            foreach (var typeInfo in assembly.DefinedTypes)
+            foreach (var typeInfo in assembly.DefinedTypes.Where(x => !x.Name.StartsWith("<")))
             {
                 if (typesMap.ContainsKey(typeInfo.Name))
                     throw new InvalidOperationException("Assembly contains more then one type with same name.");
