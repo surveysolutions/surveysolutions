@@ -50,13 +50,13 @@
                     var isInteger = isSettingsEmpty || dto.Settings.IsInteger;
                     item.selectedOption.extend({ required: true });
                     if (isInteger) {
-                        item.selectedOption.extend({ numericValidator: -1 });
+                        item.selectedOption.extend({ numericValidator: -1, numberLengthValidator: 'integer' });
                     }
                     else if (!isSettingsEmpty) {
                         if (_.isNumber(dto.Settings.CountOfDecimalPlaces))
-                            item.selectedOption.extend({ numericValidator: dto.Settings.CountOfDecimalPlaces });
+                            item.selectedOption.extend({ numericValidator: dto.Settings.CountOfDecimalPlaces, numberLengthValidator: 'real' });
                         else
-                            item.selectedOption.extend({ numericValidator: true });
+                            item.selectedOption.extend({ numericValidator: true, numberLengthValidator: 'real' });
                     }
                     if (!isSettingsEmpty && _.isNumber(dto.Settings.MaxValue)) {
                         item.selectedOption.extend({ max: dto.Settings.MaxValue });
