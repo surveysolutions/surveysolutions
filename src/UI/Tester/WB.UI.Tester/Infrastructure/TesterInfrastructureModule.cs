@@ -23,6 +23,7 @@ using WB.UI.Tester.Infrastructure.Internals.Settings;
 using WB.UI.Tester.Infrastructure.Internals.Storage;
 using SQLite.Net.Interop;
 using SQLite.Net.Platform.XamarinAndroid;
+using WB.Core.SharedKernels.Enumerator.Views;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using WB.Infrastructure.Shared.Enumerator.Internals;
 
@@ -53,6 +54,9 @@ namespace WB.UI.Tester.Infrastructure
                 });
             this.Bind(typeof(IAsyncPlainStorage<>), typeof(IAsyncPlainStorageRemover<>)).To(typeof(SqlitePlainStorage<>)).InSingletonScope();
 
+            this.Unbind<IAsyncPlainStorage<OptionView>>();
+            this.Bind<IAsyncPlainStorage<OptionView>>().To<InMemoryAsyncPlainStorage<OptionView>>().InSingletonScope();
+
             this.Bind<ILoggerProvider>().To<ServiceLocatorLoggerProvider>();
             this.Bind<ILogger>().To<XamarinInsightsLogger>().InSingletonScope();
 
@@ -64,9 +68,9 @@ namespace WB.UI.Tester.Infrastructure
 
             this.Bind<ISerializer>().ToMethod((ctx) => new PortableJsonSerializer());
             this.Bind<IJsonAllTypesSerializer>().ToMethod((ctx) => new PortableJsonAllTypesSerializer());
-            
+
             this.Bind<IStringCompressor>().To<JsonCompressor>();
-            
+
             this.Bind<IDesignerApiService>().To<DesignerApiService>().InSingletonScope();
 
             this.Bind<IPrincipal>().To<TesterPrincipal>().InSingletonScope();

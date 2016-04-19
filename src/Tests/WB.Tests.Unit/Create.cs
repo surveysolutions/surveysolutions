@@ -1952,7 +1952,8 @@ namespace WB.Tests.Unit
         public static QuestionnaireImportService QuestionnaireImportService(IPlainQuestionnaireRepository plainKeyValueStorage = null)
         {
             return new QuestionnaireImportService(Mock.Of<IPlainQuestionnaireRepository>(),
-                Mock.Of<IQuestionnaireAssemblyFileAccessor>());
+                Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
+                Mock.Of<IOptionsRepository>());
         }
 
         public static IPublishedEvent<QuestionnaireItemMoved> QuestionnaireItemMovedEvent(string itemId,

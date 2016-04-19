@@ -27,6 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator
 
             this.Bind<ISubstitutionService>().To<SubstitutionService>();
             this.Bind<IAnswerToStringService>().To<AnswerToStringService>();
+            this.Bind<IOptionsRepository>().To<OptionsRepository>();
 
             this.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>().InSingletonScope();
             this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
