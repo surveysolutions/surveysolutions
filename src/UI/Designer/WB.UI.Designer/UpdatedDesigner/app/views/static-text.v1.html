@@ -20,7 +20,7 @@
             <label for="cb-hideIfDisabled"><span></span>Hide if disabled</label>
 
             <div class="pseudo-form-control">
-                <div id="edit-question-enablement-condition" ui-ace="{ onLoad : aceLoaded }" ng-model="activeStaticText.enablementCondition"></div>
+                <div id="edit-question-enablement-condition" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeStaticText.enablementCondition"></div>
             </div>
         </div>
 
@@ -31,7 +31,7 @@
             <button class="btn delete-btn-sm delete-validation-condition" ng-click="removeValidationCondition($index)" tabindex="-1"></button>
 
             <div class="pseudo-form-control">
-                <div ui-ace="{ onLoad : aceLoaded }" ng-model="validation.expression" ng-attr-tabindex="{{$index + 1}}"></div>
+                <div ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="validation.expression" ng-attr-tabindex="{{$index + 1}}"></div>
             </div>
 
             <label for="validationMessage{{$index}}" class="validation-message">Error message <help key="validationMessage" /></label>

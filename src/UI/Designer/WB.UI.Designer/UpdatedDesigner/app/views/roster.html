@@ -41,7 +41,7 @@
             <label for="cb-hideIfDisabled"><span></span>Hide if disabled</label>
             <br>
             <div class="pseudo-form-control">
-                <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded }" ng-model="activeRoster.enablementCondition"></div>
+                <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeRoster.enablementCondition"></div>
             </div>
         </div>
     </div>

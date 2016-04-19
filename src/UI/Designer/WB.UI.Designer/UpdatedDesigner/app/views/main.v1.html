@@ -127,7 +127,7 @@
                                         <input focus-on-out="focusMacro{{macro.itemId}}" placeholder="macro name" maxlength="32" spellcheck="false" ng-model="macro.name" name="name" class="form-control" type="text" />
                                     </div>
                                     <div class="divider"></div>
-                                    <input placeholder="content" ng-model="macro.content" ui-ace="{ onLoad : aceLoaded }" class="form-control" type="text" />
+                                    <input placeholder="content" ng-model="macro.content" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" class="form-control" type="text" />
                                     <div ng-show="macro.isDescriptionVisible">
                                         <div class="divider"></div>
                                         <textarea placeholder="description" type="text" ng-model="macro.description" class="form-control macros-description" msd-elastic></textarea>

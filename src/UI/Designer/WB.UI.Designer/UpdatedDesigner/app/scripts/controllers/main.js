@@ -367,8 +367,6 @@ angular.module('designerApp')
                 renderer.setShowGutter(false);
                 renderer.setPadding(12);
 
-                ace.require("ace/ext/language_tools");
-
                 $scope.aceEditorSetMode(editor);
 
                 editor.$blockScrolling = Infinity;
@@ -386,7 +384,7 @@ angular.module('designerApp')
 
             $scope.aceEditorSetMode = function(editor) {
                 if (editor) {
-                    var CSharpExtendableMode = ace.require("ace/mode/csharp-custom").Mode;
+                    var CSharpExtendableMode = window.ace.require("ace/mode/csharp-custom").Mode;
                     editor.getSession().setMode(new CSharpExtendableMode($scope.getVariables));
                 }
             }
