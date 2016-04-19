@@ -1,10 +1,11 @@
+using System;
 using MvvmCross.Core.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class StaticTextStateViewModel : MvxNotifyPropertyChanged
+    public class StaticTextStateViewModel : MvxNotifyPropertyChanged, IDisposable
     {
         public StaticTextStateViewModel(EnablementViewModel enablement,
             ValidityViewModel validityViewModel)
@@ -21,6 +22,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.Enablement.Init(interviewId, entityIdentity);
             this.Validity.Init(interviewId, entityIdentity);
+        }
+
+        public void Dispose()
+        {
+            this.Enablement.Dispose();
+            this.Validity.Dispose();
         }
     }
 }

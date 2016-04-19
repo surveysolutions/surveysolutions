@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform.Core;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -10,7 +11,8 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class StaticTextViewModel : MvxNotifyPropertyChanged, 
-        IInterviewEntityViewModel
+        IInterviewEntityViewModel,
+        IDisposable
     {
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -72,6 +74,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private static string RemoveHtmlTags(string rawText)
         {
             return htmlRemovalRegex.Replace(rawText, string.Empty);
+        }
+
+        public void Dispose()
+        {
+            this.QuestionState.Dispose();
         }
     }
 }

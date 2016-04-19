@@ -251,6 +251,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                             .Where(entity => !this.ShouldBeHidden(entity.Identity))
                             .ToList();
 
+                        var notUsedEntities = entities.Except(createdViewModelEntities);
+                        notUsedEntities.OfType<IDisposable>().ForEach(x => x.Dispose());
+
                         List<IInterviewEntityViewModel> usedViewModelEntities = new List<IInterviewEntityViewModel>();
 
                         for (int indexOfViewModel = 0; indexOfViewModel < createdViewModelEntities.Count; indexOfViewModel++)
