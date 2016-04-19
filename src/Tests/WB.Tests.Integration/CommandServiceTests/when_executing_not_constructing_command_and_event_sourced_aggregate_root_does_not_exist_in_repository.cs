@@ -11,16 +11,16 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
-    internal class when_executing_not_constructing_command_and_aggregate_root_does_not_exist_in_repository
+    internal class when_executing_not_constructing_command_and_event_sourced_aggregate_root_does_not_exist_in_repository
     {
-        private class NotConstructingCommand : ICommand { public Guid CommandIdentifier { get; private set; } }
+        private class NotConstructingEventSourcedCommand : ICommand { public Guid CommandIdentifier { get; private set; } }
         private class Aggregate : EventSourcedAggregateRoot {}
 
         Establish context = () =>
         {
             CommandRegistry
                 .Setup<Aggregate>()
-                .Handles<NotConstructingCommand>(_ => aggregateId, (command, aggregate) => { });
+                .Handles<NotConstructingEventSourcedCommand>(_ => aggregateId, (command, aggregate) => { });
 
             var repository = Mock.Of<IEventSourcedAggregateRootRepository>(_
                 => _.GetLatest(typeof(Aggregate), aggregateId) == null as Aggregate);
@@ -30,13 +30,13 @@ namespace WB.Tests.Integration.CommandServiceTests
 
         Because of = () =>
             exception = Catch.Only<CommandServiceException>(() =>
-                commandService.Execute(new NotConstructingCommand(), null));
+                commandService.Execute(new NotConstructingEventSourcedCommand(), null));
 
         It should_throw_exception_with_message_containing__unable____constructing__ = () =>
             exception.Message.ToLower().ToSeparateWords().ShouldContain("unable", "constructing");
 
         It should_throw_exception_with_message_containing_command_name = () =>
-            exception.Message.ShouldContain(typeof(NotConstructingCommand).Name);
+            exception.Message.ShouldContain(typeof(NotConstructingEventSourcedCommand).Name);
 
         It should_throw_exception_with_message_containing_aggregate_id = () =>
             exception.Message.ShouldContain(aggregateId.FormatGuid());

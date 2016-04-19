@@ -28,8 +28,8 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         private readonly object lockObject = new object();
 
         public SequentialCommandService(IEventSourcedAggregateRootRepository eventSourcedRepository, ILiteEventBus eventBus, IAggregateSnapshotter snapshooter,
-            IServiceLocator serviceLocator, IPlainAggregateRootRepository plainAggregateRootRepository)
-            : base(eventSourcedRepository, eventBus, snapshooter, serviceLocator, plainAggregateRootRepository) { }
+            IServiceLocator serviceLocator, IPlainAggregateRootRepository plainRepository)
+            : base(eventSourcedRepository, eventBus, snapshooter, serviceLocator, plainRepository) { }
 
         protected override void ExecuteImpl(ICommand command, string origin, CancellationToken cancellationToken)
         {
