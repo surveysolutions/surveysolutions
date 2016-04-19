@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -6,6 +7,7 @@ using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Document;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
@@ -42,7 +44,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             denormalizer.Handle(CreateStaticTextAddedEvent(entityId: entityId, parentId: parentId, text: text));
 
         It should_call_CreateStaticText_in_questionnaireEntityFactory_only_ones = () =>
-            questionnaireEntityFactory.Verify(x => x.CreateStaticText(entityId, text, null), Times.Once);
+            questionnaireEntityFactory.Verify(x => x.CreateStaticText(entityId, text, null, null, false, Moq.It.IsAny<IList<ValidationCondition>>()), Times.Once);
 
         It should__static_text_be_in_questionnaire_document_view = ()=>
             GetExpectedStaticText().ShouldNotBeNull();

@@ -6,11 +6,10 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
-using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
@@ -21,7 +20,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         private readonly IInterviewSynchronizationDtoFactory synchronizationDtoFactory;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDataRepository;
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> interviewStatusesFactory;
-        private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
+        private readonly IInterviewPackagesService incomingSyncPackagesQueue;
 
         public InterviewerInterviewsFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> reader,
@@ -29,7 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             IInterviewSynchronizationDtoFactory synchronizationDtoFactory,
             IReadSideKeyValueStorage<InterviewData> interviewDataRepository,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> interviewStatusesFactory,
-            IIncomingSyncPackagesQueue incomingSyncPackagesQueue)
+            IInterviewPackagesService incomingSyncPackagesQueue)
         {
             this.reader = reader;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
@@ -43,7 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         {
             var inProgressInterviews =  this.reader.Query(interviews =>
                 interviews.Where(interview => !interview.IsDeleted && (interview.ResponsibleId == interviewerId) && 
-                    (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor))
+                                              (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor))
                     .Select(x => new {x.InterviewId, x.QuestionnaireId, x.QuestionnaireVersion, x.WasRejectedBySupervisor})
                     .ToList());
 
@@ -55,7 +54,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
             return inProgressInterviews.Where(
                 interview => !deletedQuestionnaires.Any(deletedQuestionnaire => deletedQuestionnaire.QuestionnaireId == interview.QuestionnaireId && deletedQuestionnaire.Version == interview.QuestionnaireVersion)
-                && !this.incomingSyncPackagesQueue.HasPackagesByInterviewId(interview.InterviewId))
+                && !this.incomingSyncPackagesQueue.HasPendingPackageByInterview(interview.InterviewId))
                 .Select(interview => new InterviewInformation()
                 {
                     Id = interview.InterviewId,
@@ -112,6 +111,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 lastInterviewStatus.Status, lastRejectedBySupervisorStatus?.Comment,
                 lastRejectedBySupervisorStatus?.Date,
                 lastInterviewerAssignedStatus?.Date);
+        }
+
+        public IList<QuestionnaireIdentity> GetQuestionnairesWithAssignments(Guid interviewerId)
+        {
+            var inProgressQuestionnaires = this.reader.Query(interviews =>
+                                                         interviews.Where(interview => !interview.IsDeleted && (interview.ResponsibleId == interviewerId) && 
+                                                                                       (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor))
+                                                             .Select(x => new { x.QuestionnaireId, x.QuestionnaireVersion})
+                                                             .Distinct()
+                                                             .ToList());
+
+            return inProgressQuestionnaires.Select(x => new QuestionnaireIdentity(x.QuestionnaireId, x.QuestionnaireVersion)).ToList();
         }
     }
 }

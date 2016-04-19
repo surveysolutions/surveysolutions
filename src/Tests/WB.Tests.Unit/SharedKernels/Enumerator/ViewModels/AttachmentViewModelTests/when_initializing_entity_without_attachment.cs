@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
-using WB.Core.SharedKernels.Enumerator.Entities.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelTests
@@ -33,11 +27,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             viewModel = Create.AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentContentStorage);
         };
 
-        Because of = () => viewModel.InitAsync("interview", new Identity(entityId, Empty.RosterVector)).ConfigureAwait(false);
+        Because of = () => viewModel.Init("interview", new Identity(entityId, Empty.RosterVector));
 
 
         It should_dont_call_attachment_content = () =>
-            Mock.Get(attachmentContentStorage).Verify(s => s.GetMetadataAsync(Moq.It.IsAny<string>()), Times.Never());
+            Mock.Get(attachmentContentStorage).Verify(s => s.GetMetadata(Moq.It.IsAny<string>()), Times.Never());
 
         It should_initialize_image_flag_as_false = () => 
             viewModel.IsImage.ShouldBeFalse();

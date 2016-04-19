@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.V7;
 
@@ -29,14 +30,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
             this.interviewExpressionStateUpgrader = interviewExpressionStateUpgrader;
         }
 
-        public IInterviewExpressionStateV7 GetExpressionState(Guid questionnaireId, long questionnaireVersion)
+        public ILatestInterviewExpressionState GetExpressionState(Guid questionnaireId, long questionnaireVersion)
         {
             string assemblyFile = this.questionnaireAssemblyFileAccessor.GetFullPathToAssembly(questionnaireId, questionnaireVersion);
 
             if (!fileSystemAccessor.IsFileExists(assemblyFile))
             {
-                Logger.Error(String.Format("Assembly was not found. Questionnaire={0}, version={1}, search={2}", 
-                    questionnaireId, questionnaireVersion, assemblyFile));
+                Logger.Error($"Assembly was not found. Questionnaire={questionnaireId}, version={questionnaireVersion}, search={assemblyFile}");
                 throw new InterviewException("Interview loading error. Code EC0003");
             }
 
@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                     var initialExpressionState =
                         Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState;
 
-                    IInterviewExpressionStateV7 upgradedExpressionState =
+                    ILatestInterviewExpressionState upgradedExpressionState =
                         interviewExpressionStateUpgrader.UpgradeToLatestVersionIfNeeded(initialExpressionState);
 
                     return upgradedExpressionState;

@@ -87,6 +87,14 @@
                         controller: 'StaticTextCtrl'
                     }
                 }
+            }).state('questionnaire.chapter.statictext.validation', {
+                url: "/val+{validationIndex}",
+                views: {
+                    '': {
+                        templateUrl: 'views/static-text.v1.html',
+                        controller: 'StaticTextCtrl'
+                    }
+                }
             });
     }])
     .config(['$httpProvider', function ($httpProvider) {

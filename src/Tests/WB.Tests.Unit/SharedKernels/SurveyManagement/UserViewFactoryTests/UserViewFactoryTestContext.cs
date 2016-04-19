@@ -1,5 +1,6 @@
 ﻿using Machine.Specifications;
 using Moq;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
@@ -11,9 +12,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
     [Subject(typeof(UserViewFactory))]
     class UserViewFactoryTestContext
     {
-        protected static UserViewFactory CreateUserViewFactory(IQueryableReadSideRepositoryReader<UserDocument> users)
+        protected static UserViewFactory CreateUserViewFactory(IPlainStorageAccessor<UserDocument> users)
         {
-            return new UserViewFactory(users ?? Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>());
+            return new UserViewFactory(users ?? Mock.Of<IPlainStorageAccessor<UserDocument>>());
         }
     }
 }

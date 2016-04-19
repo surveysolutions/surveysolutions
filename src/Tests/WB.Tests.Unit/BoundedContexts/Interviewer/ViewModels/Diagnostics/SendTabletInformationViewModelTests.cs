@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
@@ -35,7 +36,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
         public void SendTabletInformation_when_everything_is_ok_package_sending_attemps_should_be_marked_as_completed()
         {
             var sendTabletInformationViewModel = this.CreateSendTabletInformationViewModel();
-            sendTabletInformationViewModel.InformationPackageContent = new byte[0];
 
             sendTabletInformationViewModel.SendTabletInformationCommand.Execute();
 
@@ -56,8 +56,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
 
             var sendTabletInformationViewModel =
                 this.CreateSendTabletInformationViewModel(synchronizationService: synchronizationServiceMock.Object);
-
-            sendTabletInformationViewModel.InformationPackageContent = new byte[0];
 
             sendTabletInformationViewModel.SendTabletInformationCommand.Execute();
 
@@ -84,8 +82,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
         {
             return
                 new SendTabletInformationViewModel(
-                    backupRestoreService ?? Mock.Of<IBackupRestoreService>(_ => _.GetSystemBackupAsync() == Task.FromResult(new byte[0])),
-                    synchronizationService ?? Mock.Of<ISynchronizationService>(), Mock.Of<ILogger>(), Mock.Of<IUserInteractionService>());
+                    backupRestoreService ?? Mock.Of<IBackupRestoreService>(_ => _.BackupAsync() == Task.FromResult("backup-path")),
+                    synchronizationService ?? Mock.Of<ISynchronizationService>(), 
+                    Mock.Of<ILogger>(), 
+                    Mock.Of<IUserInteractionService>(),
+                    Mock.Of<IFileSystemAccessor>());
         }
     }
 }

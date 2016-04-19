@@ -17,6 +17,10 @@ namespace Main.Core.Entities.SubEntities
        
         public Guid PublicKey { get; set; }
 
+        public decimal? AnswerCode { get; set; }
+
+        public decimal? ParentCode { get; set; }
+
         public Answer Clone()
         {
             return this.MemberwiseClone() as Answer;

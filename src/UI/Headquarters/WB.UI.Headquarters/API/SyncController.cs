@@ -6,6 +6,7 @@ using System.Web.Http;
 
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.Synchronization;
 using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Shared.Web.Filters;
@@ -18,10 +19,10 @@ namespace WB.UI.Headquarters.API
     public class SyncController : ApiController
     {
         private readonly ILogger logger;
-        private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
+        private readonly IInterviewPackagesService incomingSyncPackagesQueue;
         private readonly IPlainInterviewFileStorage plainFileRepository;
 
-        public SyncController(IIncomingSyncPackagesQueue incomingSyncPackagesQueue, IPlainInterviewFileStorage plainFileRepository, ILogger logger)
+        public SyncController(IInterviewPackagesService incomingSyncPackagesQueue, IPlainInterviewFileStorage plainFileRepository, ILogger logger)
         {
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.plainFileRepository = plainFileRepository;
@@ -32,7 +33,7 @@ namespace WB.UI.Headquarters.API
         {
             var syncItem = await this.Request.Content.ReadAsStringAsync();
 
-            this.incomingSyncPackagesQueue.Enqueue(interviewId: interviewId, item: syncItem);
+            this.incomingSyncPackagesQueue.StorePackage(item: syncItem);
 
             return Request.CreateResponse(HttpStatusCode.OK, true);
         }

@@ -34,6 +34,7 @@ using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
+using WB.UI.Designer.Code.ConfigurationManager;
 using WB.UI.Designer.CommandDeserialization;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Services;
@@ -112,6 +113,8 @@ namespace WB.UI.Designer.App_Start
                 }
             };
 
+            var pdfSettings = (PdfConfigSection)WebConfigurationManager.GetSection("pdf");
+
             var kernel = new StandardKernel(
                 new ServiceLocationModule(),
                 new InfrastructureModule().AsNinject(),
@@ -121,7 +124,7 @@ namespace WB.UI.Designer.App_Start
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, cacheSettings, mappingAssemblies),
-                new DesignerRegistry(),
+                new DesignerRegistry(pdfSettings),
                 new DesignerCommandDeserializationModule(),
                 new DesignerBoundedContextModule(dynamicCompilerSettings),
                 new QuestionnaireVerificationModule(),
@@ -147,6 +150,7 @@ namespace WB.UI.Designer.App_Start
 
             kernel.Bind<IAuthenticationService>().To<AuthenticationService>();
             kernel.Bind<IRecaptchaService>().To<RecaptchaService>();
+            kernel.Bind<QuestionnaireDowngradeService>().ToSelf();
 
             CreateAndRegisterEventBus(kernel);
             

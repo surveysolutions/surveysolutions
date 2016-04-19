@@ -15,7 +15,7 @@
                 <label for="cb-hideIfDisabled"><span></span>Hide if disabled</label>
             <br>
             <div class="pseudo-form-control">
-                <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded }" ng-model="activeGroup.enablementCondition"></div>
+                <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded , require: ['ace/ext/language_tools']}" ng-model="activeGroup.enablementCondition"></div>
             </div>
         </div>
         </div>

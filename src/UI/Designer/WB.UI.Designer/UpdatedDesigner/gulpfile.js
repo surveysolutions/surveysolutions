@@ -33,9 +33,8 @@ gulp.task("styles", function(){
 });
 
 gulp.task("bowerJs", function(){
-    return gulp.src(mainBowerFiles())
-        .pipe(plugins.filter(['*.js']))
-        //.pipe(debug({ title: 'unicorn:' }))
+    return gulp.src(mainBowerFiles('**/*.js'))
+//        .pipe(debug({ title: 'unicorn:' }))
     	.pipe(plugins.ngAnnotate())
     	.pipe(plugins.uglify())
       	.pipe(concat('libs.js'))

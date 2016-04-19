@@ -62,9 +62,9 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             return new QuestionnaireInfoView();
         }
 
-        public static GroupInfoView CreateChapterInfoView()
+        public static NewChapterView CreateChapterInfoView()
         {
-            return new GroupInfoView();
+            return new NewChapterView() {Chapter = new GroupInfoView()};
         }
 
         public static QuestionnaireDocument CreateQuestionnaireDocument()

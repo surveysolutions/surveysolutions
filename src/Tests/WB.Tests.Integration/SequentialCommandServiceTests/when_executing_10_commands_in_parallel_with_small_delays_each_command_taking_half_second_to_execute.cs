@@ -26,7 +26,7 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
             public Guid CommandIdentifier { get; private set; }
         }
 
-        private class Aggregate : AggregateRoot
+        private class Aggregate : EventSourcedAggregateRoot
         {
             public void WorkAboutHalfSecond(WorkAboutHalfSecond command)
             {
@@ -42,7 +42,7 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
                 .Setup<Aggregate>()
                 .Handles<WorkAboutHalfSecond>(_ => aggregateId, aggregate => aggregate.WorkAboutHalfSecond);
 
-            var repository = Mock.Of<IAggregateRootRepository>(_
+            var repository = Mock.Of<IEventSourcedAggregateRootRepository>(_
                 => _.GetLatest(typeof(Aggregate), aggregateId) == new Aggregate());
 
             commandService = Create.SequentialCommandService(repository: repository);

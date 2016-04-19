@@ -1,25 +1,21 @@
 using System.Web.Mvc;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.Transactions;
 
 namespace WB.UI.Shared.Web.Filters
 {
     public class TransactionFilter : ActionFilterAttribute
     {
-        private readonly ITransactionManagerProvider transactionManagerProvider;
-
-        public TransactionFilter(ITransactionManagerProvider transactionManagerProvider)
-        {
-            this.transactionManagerProvider = transactionManagerProvider;
-        }
+        ITransactionManagerProvider TransactionManagerProvider => ServiceLocator.Current.GetInstance<ITransactionManagerProvider>();
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+            this.TransactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
         }
 
         public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
-            var transactionManager = this.transactionManagerProvider.GetTransactionManager();
+            var transactionManager = this.TransactionManagerProvider.GetTransactionManager();
             if (transactionManager.IsQueryTransactionStarted)
                 transactionManager.RollbackQueryTransaction();
         }

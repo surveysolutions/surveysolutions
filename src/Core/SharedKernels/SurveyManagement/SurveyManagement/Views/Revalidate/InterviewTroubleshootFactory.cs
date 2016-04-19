@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -17,12 +18,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
         private readonly IInterviewDataAndQuestionnaireMerger merger;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewStore;
         private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
-        private readonly IReadSideRepositoryReader<UserDocument> userStore;
+        private readonly IPlainStorageAccessor<UserDocument> userStore;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IAttachmentContentService attachmentContentService;
 
         public InterviewTroubleshootFactory(IReadSideKeyValueStorage<InterviewData> interviewStore,
-            IReadSideRepositoryReader<UserDocument> userStore,
+            IPlainStorageAccessor<UserDocument> userStore,
             IInterviewDataAndQuestionnaireMerger merger, 
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore,
@@ -47,7 +48,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Revalidate
                 throw new ArgumentException(
                     $"Questionnaire with id {interview.QuestionnaireId} and version {interview.QuestionnaireVersion} is missing.");
 
-            var user = this.userStore.GetById(interview.ResponsibleId);
+            var user = this.userStore.GetById(interview.ResponsibleId.FormatGuid());
             if (user == null)
                 throw new ArgumentException($"User with id {interview.ResponsibleId} is not found.");
 

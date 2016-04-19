@@ -18,6 +18,11 @@ namespace WB.Tests.Integration
             return eventContext.GetEvents<T>().Single();
         }
 
+        public static T GetSingleEventOrNull<T>(this EventContext eventContext)
+        {
+            return eventContext.GetEvents<T>().SingleOrDefault();
+        }
+
         public static IEnumerable<T> GetEvents<T>(this EventContext eventContext)
         {
             return eventContext.Events.Where(e => e.Payload is T).Select(e => (T)e.Payload);

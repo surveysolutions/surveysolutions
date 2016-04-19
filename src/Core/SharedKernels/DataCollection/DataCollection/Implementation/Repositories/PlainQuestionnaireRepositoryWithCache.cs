@@ -6,6 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 {
@@ -13,6 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> repository;
         private readonly ConcurrentDictionary<string, QuestionnaireDocument> cache = new ConcurrentDictionary<string, QuestionnaireDocument>();
+        private readonly Dictionary<QuestionnaireIdentity, PlainQuestionnaire> plainQuestionnaireCache = new Dictionary<QuestionnaireIdentity, PlainQuestionnaire>();
         
         public PlainQuestionnaireRepositoryWithCache(IPlainKeyValueStorage<QuestionnaireDocument> repository)
         {
@@ -21,16 +23,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         public IQuestionnaire GetHistoricalQuestionnaire(Guid id, long version)
         {
-            string repositoryId = GetRepositoryId(id, version);
-            if (!this.cache.ContainsKey(repositoryId))
-            {
-                this.cache[repositoryId] = this.repository.GetById(repositoryId);
-            }
-            QuestionnaireDocument questionnaireDocument = this.cache[repositoryId];
-            if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
-                return null;
+            var identity = new QuestionnaireIdentity(id, version);
 
-            return new PlainQuestionnaire(questionnaireDocument, version);
+            if (!this.plainQuestionnaireCache.ContainsKey(identity))
+            {
+                QuestionnaireDocument questionnaireDocument = this.GetQuestionnaireDocument(id, version);
+                if (questionnaireDocument == null || questionnaireDocument.IsDeleted)
+                    return null;
+                
+                this.plainQuestionnaireCache[identity] = new PlainQuestionnaire(questionnaireDocument, version);
+            }
+
+            return this.plainQuestionnaireCache[identity];
         }
 
         public IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity)

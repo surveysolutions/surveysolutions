@@ -259,6 +259,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Upload interview: &lt;b&gt;&lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;{1}&lt;/a&gt; &lt;/b&gt;.
+        /// </summary>
+        public static string PostPackage {
+            get {
+                return ResourceManager.GetString("PostPackage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;font color=&quot;green&quot;&apos;&gt;Questionnaire assembly &lt;b&gt;{0}&lt;/b&gt; [{1}] successfully processed&lt;/font&gt;.
         /// </summary>
         public static string QuestionnaireAssemblyProcessed {

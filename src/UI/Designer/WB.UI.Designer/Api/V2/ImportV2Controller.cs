@@ -79,7 +79,7 @@ namespace WB.UI.Designer.Api
 
             return new QuestionnaireCommunicationPackage
             {
-                Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaire, SerializationBinderSettings.OldToNew)), // use binder to serialize to the old namespaces and assembly
+                Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaire)), // use binder to serialize to the old namespaces and assembly
                 QuestionnaireAssembly = resultAssembly,
                 QuestionnaireContentVersion = questionnaireContentVersion.Major
             };

@@ -11,6 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             CodeGenerator.QuestionnaireTypeName,
             new List<GroupTemplateModel>(), 
             new List<QuestionTemplateModel>(), 
+            new List<StaticTextTemplateModel>(), 
             new List<RosterTemplateModel>(), 
             new List<Guid>(),
             null)

@@ -2,6 +2,7 @@
 using System.Linq;
 using Machine.Specifications;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using It = Machine.Specifications.It;
@@ -54,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.TeamViewFactoryTests
 
         private static TeamViewFactory teamFactory;
         private static UsersView result;
-        private static readonly TestInMemoryWriter<UserDocument> usersStorage = new TestInMemoryWriter<UserDocument>();
+        private static readonly IPlainStorageAccessor<UserDocument> usersStorage = new TestPlainStorage<UserDocument>();
         private static readonly string superAName = "a_super1";
         private static readonly string superBName = "b_locked_super";
         private static readonly string superCName = "c_super2";

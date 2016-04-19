@@ -31,7 +31,7 @@ namespace Ncqrs.Tests.Domain
         public class UnhandledEvent : IEvent
         { }
 
-        public class MyAggregateRoot : AggregateRoot
+        public class MyAggregateRoot : EventSourcedAggregateRoot
         {
             private readonly List<UncommittedEvent> _uncomittedEvents = new List<UncommittedEvent>();
             public int FooEventHandlerInvokeCount = 0;
@@ -293,13 +293,13 @@ namespace Ncqrs.Tests.Domain
         [Test]
         public void Should_be_able_to_register_RegisterThreadStaticEventAppliedCallbacks_from_parallel_threads()
         {
-            Action<AggregateRoot, UncommittedEvent> callback = (x, y) => { };
+            Action<EventSourcedAggregateRoot, UncommittedEvent> callback = (x, y) => { };
 
-            Action registerOneCallbackOnAggregateRoot = () => AggregateRoot.RegisterThreadStaticEventAppliedCallback(callback);
+            Action registerOneCallbackOnAggregateRoot = () => EventSourcedAggregateRoot.RegisterThreadStaticEventAppliedCallback(callback);
             Action registerTwoCallbacksOnAggregateRoot = () => 
             {
-                AggregateRoot.RegisterThreadStaticEventAppliedCallback(callback);
-                AggregateRoot.RegisterThreadStaticEventAppliedCallback(callback);
+                EventSourcedAggregateRoot.RegisterThreadStaticEventAppliedCallback(callback);
+                EventSourcedAggregateRoot.RegisterThreadStaticEventAppliedCallback(callback);
             };
 
             System.Threading.Tasks.Parallel.Invoke(

@@ -229,6 +229,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Featured,
                         e.Capital,
                         e.Instructions,
+                        e.Properties,
                         e.Mask,
                         e.Answers,
                         e.LinkedToQuestionId,
@@ -273,6 +274,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Featured,
                         e.Capital,
                         e.Instructions,
+                        e.Properties,
                         e.Mask,
                         e.Answers,
                         e.LinkedToQuestionId,
@@ -316,6 +318,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Featured,
                         e.Capital,
                         e.Instructions,
+                        e.Properties,
                         null,
                         null,
                         null,
@@ -360,6 +363,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         false,
                         false,
                         e.Instructions,
+                        e.Properties,
                         null,
                         null,
                         null,
@@ -412,6 +416,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Featured,
                         e.Capital,
                         e.Instructions,
+                        e.Properties,
                         e.Mask,
                         e.Answers,
                         e.LinkedToQuestionId,
@@ -451,6 +456,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         e.Featured,
                         e.Capital,
                         e.Instructions,
+                        e.Properties,
                         null,
                         null,
                         null,
@@ -491,6 +497,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         false,
                         false,
                         e.Instructions,
+                        e.Properties,
                         null,
                         null,
                         null,
@@ -547,6 +554,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         false,
                         false,
                         e.Instructions,
+                        e.Properties,
                         null,
                         null,
                         null,
@@ -588,6 +596,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         false,
                         false,
                         e.Instructions,
+                        e.Properties,
                         null,
                         null,
                         null,
@@ -628,6 +637,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         false,
                         false,
                         e.Instructions,
+                        e.Properties,
                         null,
                         null,
                         null,
@@ -653,7 +663,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         internal void Apply(StaticTextAdded e)
         {
-            var staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, text: e.Text, attachmentName: null);
+            var staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, 
+                text: e.Text, 
+                attachmentName: null,
+                enablementCondition: null,
+                hideIfDisabled: false,
+                validationConditions: new List<ValidationCondition>());
 
             this.innerDocument.Add(c: staticText, parent: e.ParentId, parentPropagationKey: null);
         }
@@ -661,14 +676,24 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         internal void Apply(StaticTextUpdated e)
         {
             var oldStaticText = this.innerDocument.Find<IStaticText>(e.EntityId);
-            var newStaticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, text: e.Text, attachmentName: e.AttachmentName);
+            var newStaticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, 
+                text: e.Text, 
+                attachmentName: e.AttachmentName,
+                enablementCondition: e.EnablementCondition,
+                hideIfDisabled: e.HideIfDisabled,
+                validationConditions:e.ValidationConditions);
 
             this.innerDocument.ReplaceEntity(oldStaticText, newStaticText);
         }
 
         internal void Apply(StaticTextCloned e)
         {
-            var staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, text: e.Text, attachmentName: e.AttachmentName);
+            var staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: e.EntityId, 
+                text: e.Text, 
+                attachmentName: e.AttachmentName,
+                enablementCondition: e.EnablementCondition,
+                hideIfDisabled: e.HideIfDisabled,
+                validationConditions: e.ValidationConditions);
 
             this.innerDocument.Insert(e.TargetIndex, staticText, e.ParentId);
         }
@@ -1095,10 +1120,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             validationExpression: null,
                             validationMessage: null, 
                             instructions: instructions,
+                            properties: question.Properties,
                             sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId:sourceQuestionnaireId,
                             responsibleId: responsibleId,
                             isInteger: numericQuestion.IsInteger,
+                            useFormatting: numericQuestion.UseFormatting,
                             countOfDecimalPlaces: numericQuestion.CountOfDecimalPlaces,
                             validationConditions: numericQuestion.ValidationConditions));
                         continue;
@@ -1142,15 +1169,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     var textQuestion = question as TextQuestion;
                     if (textQuestion != null)
                     {
-                        events.AddRange(this.CreateTextQuestionClonedEvents(questionId: itemId, targetIndex: itemTargetIndex,
-                            variableName: variableName, variableLabel: variableLabel, parentGroupId: groupId,
+                        events.AddRange(this.CreateTextQuestionClonedEvents(questionId: itemId, 
+                            targetIndex: itemTargetIndex,
+                            variableName: variableName, 
+                            variableLabel: variableLabel,
+                            parentGroupId: groupId,
                             title: title,
                             enablementCondition: enablementCondition, 
                             hideIfDisabled: hideIfDisabled,
                             responsibleId: responsibleId,
                             sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId: sourceQuestionnaireId, 
-                            instructions: instructions, mask: textQuestion.Mask,
+                            instructions: instructions, 
+                            sourceProperties: textQuestion.Properties,
+                            mask: textQuestion.Mask,
                             isPreFilled: textQuestion.Featured,
                             scope: textQuestion.QuestionScope,
                             validationConditions: textQuestion.ValidationConditions));
@@ -1165,6 +1197,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             enablementCondition: enablementCondition, 
                             hideIfDisabled: hideIfDisabled,
                             instructions: instructions,
+                            properties: geoLocationQuestion.Properties,
                             parentGroupId: groupId, 
                             sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId: sourceQuestionnaireId,
@@ -1184,6 +1217,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             hideIfDisabled: hideIfDisabled,
                             enablementCondition: enablementCondition, 
                             instructions: instructions,
+                            properties: dateTitmeQuestion.Properties,
                             parentGroupId: groupId, 
                             sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId: sourceQuestionnaireId,
@@ -1206,7 +1240,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             parentGroupId: groupId,
                             sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId: sourceQuestionnaireId,
-                            instructions: instructions, responsibleId: responsibleId,
+                            instructions: instructions, 
+                            properties: categoricalMultiQuestion.Properties,
+                            responsibleId: responsibleId,
                             scope: categoricalMultiQuestion.QuestionScope,
                             linkedToQuestionId: GetIdOrReturnSameId(replacementIdDictionary, categoricalMultiQuestion.LinkedToQuestionId),
                             linkedToRosterId: GetIdOrReturnSameId(replacementIdDictionary, categoricalMultiQuestion.LinkedToRosterId),
@@ -1232,7 +1268,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             parentGroupId: groupId,
                             sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId: sourceQuestionnaireId,
-                            instructions: instructions, responsibleId: responsibleId,
+                            instructions: instructions, 
+                            properties: categoricalSingleQuestion.Properties,
+                            responsibleId: responsibleId,
                             scope: categoricalSingleQuestion.QuestionScope,
                             validationExpression: categoricalSingleQuestion.ValidationExpression,
                             validationMessage: categoricalSingleQuestion.ValidationMessage,
@@ -1258,6 +1296,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                             hideIfDisabled: hideIfDisabled,
                             enablementCondition: enablementCondition,
                             instructions: instructions,
+                            properties: multimediaQuestion.Properties,
                             sourceQuestionId: sourceItemId,
                             sourceQuestionnaireId: sourceQuestionnaireId, 
                             scope : multimediaQuestion.QuestionScope,
@@ -1270,17 +1309,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var staticText = questionnaireItem as IStaticText;
                 if (staticText != null)
                 {
-                    events.Add(new StaticTextCloned
-                    {
-                        EntityId = itemId,
-                        ParentId = groupId,
-                        SourceEntityId = sourceItemId,
-                        SourceQuestionnaireId = sourceQuestionnaireId,
-                        TargetIndex = itemTargetIndex,
-                        Text = staticText.Text,
-                        AttachmentName = staticText.AttachmentName,
-                        ResponsibleId = responsibleId
-                    });
+                    events.AddRange(this.CreateStaticTextClonedEvents(itemId, groupId, staticText.Text,
+                        staticText.AttachmentName,
+                        staticText.ConditionExpression, 
+                        staticText.HideIfDisabled, 
+                        sourceItemId, 
+                        sourceQuestionnaireId,
+                        itemTargetIndex, 
+                        responsibleId,
+                        staticText.ValidationConditions));
                     continue;
                 }
             }
@@ -1438,7 +1475,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #endregion
 
-        private static QuestionCloned GetQuestionClonedEvent(IQuestion question, Guid targetId, Guid sourceQuestionnaireId, Guid parentGroupId, int targetIndex, bool preserveVariableName, Guid responsibleId)
+        private static QuestionCloned GetQuestionClonedEvent(IQuestion question, 
+            Guid targetId, 
+            Guid sourceQuestionnaireId, 
+            Guid parentGroupId,
+            int targetIndex,
+            bool preserveVariableName, 
+            Guid responsibleId)
         {
             var asTextQuestion = question as TextQuestion;
             var asMultioptions = question as IMultyOptionsQuestion;
@@ -1461,6 +1504,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 validationExpression: null,
                 validationMessage: null,
                 instructions: question.Instructions,
+                properties: question.Properties,
 
                 answers: question.Answers.ToArray(),
                 sourceQuestionId: question.PublicKey,
@@ -1517,6 +1561,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 validationExpression: null,
                 validationMessage : null,
                 instructions : null,
+                properties: new QuestionProperties(false, false), 
                 responsibleId : command.ResponsibleId,
                 linkedToQuestionId : null,
                 areAnswersOrdered : null,
@@ -1589,7 +1634,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void UpdateTextQuestion(Guid questionId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string instructions, string mask, Guid responsibleId, IList<ValidationCondition> validationCoditions)
+        public void UpdateTextQuestion(Guid questionId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string instructions, string mask, Guid responsibleId, IList<ValidationCondition> validationCoditions, QuestionProperties properties)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1615,6 +1660,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 validationExpression : null,
                 validationMessage : null,
                 instructions : instructions,
+                properties: properties,
                 responsibleId : responsibleId,
                 mask : mask,
                 capital:false,
@@ -1634,7 +1680,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             ));
         }
 
-        public void UpdateGpsCoordinatesQuestion(Guid questionId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, IList<ValidationCondition> validationConditions)
+        public void UpdateGpsCoordinatesQuestion(Guid questionId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, IList<ValidationCondition> validationConditions, QuestionProperties properties)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1659,6 +1705,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 validationExpression: null,
                 validationMessage: null,
                 instructions: instructions,
+                properties: properties,
                 responsibleId: responsibleId,
                 mask: null,
                 capital: false,
@@ -1678,7 +1725,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             ));
         }
 
-        public void UpdateDateTimeQuestion(Guid questionId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, IList<ValidationCondition> validationConditions)
+        public void UpdateDateTimeQuestion(Guid questionId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, IList<ValidationCondition> validationConditions, QuestionProperties properties)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -1704,6 +1751,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 validationExpression: null,
                 validationMessage: null,
                 instructions: instructions,
+                properties: properties,
                 responsibleId: responsibleId,
                 mask: null,
                 capital: false,
@@ -1723,23 +1771,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             ));
         }
 
-        public void UpdateMultiOptionQuestion(
-            Guid questionId, 
-            string title, 
-            string variableName, 
-            string variableLabel, 
-            QuestionScope scope, 
-            string enablementCondition, 
-            bool hideIfDisabled, 
-            string instructions, 
-            Guid responsibleId, 
-            Option[] options, 
-            Guid? linkedToEntityId, 
-            bool areAnswersOrdered, 
-            int? maxAllowedAnswers, 
-            bool yesNoView, 
-            IList<ValidationCondition> validationConditions,
-            string linkedFilterExpression)
+        public void UpdateMultiOptionQuestion(Guid questionId, string title, string variableName, string variableLabel, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, Option[] options, Guid? linkedToEntityId, bool areAnswersOrdered, int? maxAllowedAnswers, bool yesNoView, IList<ValidationCondition> validationConditions, string linkedFilterExpression, QuestionProperties properties)
         {
             PrepareGeneralProperties(ref title, ref variableName);
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
@@ -1772,6 +1804,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 validationExpression: null,
                 validationMessage: null,
                 instructions: instructions,
+                properties: properties,
                 responsibleId: responsibleId,
                 mask: null,
                 capital: false,
@@ -1793,23 +1826,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Question: SingleOption command handlers
 
-        public void UpdateSingleOptionQuestion(
-            Guid questionId, 
-            string title, 
-            string variableName, 
-            string variableLabel, 
-            bool isPreFilled, 
-            QuestionScope scope,
-            string enablementCondition, 
-            bool hideIfDisabled, 
-            string instructions, 
-            Guid responsibleId, 
-            Option[] options, 
-            Guid? linkedToEntityId, 
-            bool isFilteredCombobox, 
-            Guid? cascadeFromQuestionId, 
-            IList<ValidationCondition> validationConditions,
-            string linkedFilterExpression)
+        public void UpdateSingleOptionQuestion(Guid questionId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, Option[] options, Guid? linkedToEntityId, bool isFilteredCombobox, Guid? cascadeFromQuestionId, IList<ValidationCondition> validationConditions, string linkedFilterExpression, QuestionProperties properties)
         {
             Answer[] answers;
 
@@ -1864,6 +1881,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 validationExpression: null,
                 validationMessage: null,
                 instructions: instructions,
+                properties: properties,
                 responsibleId: responsibleId,
                 mask: null,
                 capital: false,
@@ -1919,6 +1937,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 validationExpression: categoricalOneAnswerQuestion.ValidationExpression,
                 validationMessage: categoricalOneAnswerQuestion.ValidationMessage,
                 instructions: categoricalOneAnswerQuestion.Instructions,
+                properties: categoricalOneAnswerQuestion.Properties,
                 responsibleId: responsibleId,
                 mask: null,
                 capital: false,
@@ -1967,6 +1986,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 validationExpression: categoricalOneAnswerQuestion.ValidationExpression,
                 validationMessage: categoricalOneAnswerQuestion.ValidationMessage,
                 instructions: categoricalOneAnswerQuestion.Instructions,
+                properties: categoricalOneAnswerQuestion.Properties,
                 responsibleId: responsibleId,
                 mask: null,
                 capital: false,
@@ -1987,19 +2007,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
         #endregion
 
-        public void UpdateNumericQuestion(
-            Guid questionId,
-            string title,
-            string variableName, string variableLabel,
-            bool isPreFilled,
+        public void UpdateNumericQuestion(Guid questionId, 
+            string title, 
+            string variableName, 
+            string variableLabel, 
+            bool isPreFilled, 
             QuestionScope scope, 
-            string enablementCondition, 
+            string enablementCondition,
             bool hideIfDisabled, 
             string instructions,
-            Guid responsibleId,
-            bool isInteger,
-            int? countOfDecimalPlaces,
-            List<ValidationCondition> validationConditions)
+            QuestionProperties properties,
+            Guid responsibleId, 
+            bool isInteger, int? countOfDecimalPlaces, List<ValidationCondition> validationConditions)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -2027,6 +2046,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 validationExpression:null,
                 validationMessage:null,
                 instructions : instructions,
+                properties: properties, 
                 responsibleId : responsibleId,
                 isInteger : isInteger,
                 countOfDecimalPlaces : countOfDecimalPlaces,
@@ -2034,7 +2054,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             ));
         }
 
-        public void UpdateTextListQuestion(Guid questionId, string title, string variableName, string variableLabel, string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, int? maxAnswerCount, QuestionScope scope, IList<ValidationCondition> validationConditions)
+        public void UpdateTextListQuestion(Guid questionId, string title, string variableName, string variableLabel, string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, int? maxAnswerCount, QuestionScope scope, IList<ValidationCondition> validationConditions, QuestionProperties properties)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -2056,7 +2076,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 VariableLabel = variableLabel,
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
-                Instructions = instructions,
+                Instructions = instructions,  
+                Properties = properties,
                 ResponsibleId = responsibleId,
                 QuestionScope = scope,
                 MaxAnswerCount = maxAnswerCount,
@@ -2064,9 +2085,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             });
         }
 
-        public void UpdateMultimediaQuestion(Guid questionId, string title, string variableName, string variableLabel,
-         string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId,
-            QuestionScope scope)
+        public void UpdateMultimediaQuestion(Guid questionId, string title, string variableName, string variableLabel, string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, QuestionScope scope, QuestionProperties properties)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -2087,12 +2106,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 EnablementCondition = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
                 Instructions = instructions,
+                Properties = properties,
                 QuestionScope = scope,
                 ResponsibleId = responsibleId
             });
         }
 
-        public void UpdateQRBarcodeQuestion(Guid questionId, string title, string variableName, string variableLabel, string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, QuestionScope scope, IList<ValidationCondition> validationConditions)
+        public void UpdateQRBarcodeQuestion(Guid questionId, string title, string variableName, string variableLabel, string enablementCondition, bool hideIfDisabled, string instructions, Guid responsibleId, QuestionScope scope, IList<ValidationCondition> validationConditions, 
+            QuestionProperties properties)
         {
             PrepareGeneralProperties(ref title, ref variableName);
 
@@ -2116,6 +2137,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 ValidationExpression = null,
                 ValidationMessage = null,
                 Instructions = instructions,
+                Properties = properties,
                 QuestionScope = scope,
                 ResponsibleId = responsibleId,
                 ValidationConditions = validationConditions
@@ -2123,32 +2145,32 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         #region Static text command handlers
-        public void AddStaticTextAndMoveIfNeeded(Guid entityId, Guid parentId, string text, Guid responsibleId, int? index = null)
+        public void AddStaticTextAndMoveIfNeeded(AddStaticText command)
         {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
-            this.ThrowDomainExceptionIfEntityAlreadyExists(entityId);
-            this.ThrowDomainExceptionIfGroupDoesNotExist(parentId);
-            this.ThrowDomainExceptionIfStaticTextIsEmpty(text);
+            this.ThrowDomainExceptionIfEntityAlreadyExists(command.EntityId);
+            this.ThrowDomainExceptionIfGroupDoesNotExist(command.ParentId);
+            this.ThrowDomainExceptionIfStaticTextIsEmpty(command.Text);
             this.innerDocument.ConnectChildrenWithParent();
-            this.ThrowIfChapterHasMoreThanAllowedLimit(parentId);
+            this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentId);
 
-            this.ApplyEvent(new StaticTextAdded
-            {
-                EntityId = entityId,
-                ParentId = parentId,
-                ResponsibleId = responsibleId,
-                Text = text
-            });
-
-            if (index.HasValue)
+            this.ApplyEvent(new StaticTextAdded(command.EntityId, 
+                command.ResponsibleId,
+                command.ParentId, 
+                command.Text,
+                null,
+                false,
+                null));
+            
+            if (command.Index.HasValue)
             {
                 this.ApplyEvent(new QuestionnaireItemMoved
                 {
-                    PublicKey = entityId,
-                    GroupKey = parentId,
-                    TargetIndex = index.Value,
-                    ResponsibleId = responsibleId
+                    PublicKey = command.EntityId,
+                    GroupKey = command.ParentId,
+                    TargetIndex = command.Index.Value,
+                    ResponsibleId = command.ResponsibleId
                 });
             }
         }
@@ -2160,13 +2182,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfEntityDoesNotExists(command.EntityId);
             this.ThrowDomainExceptionIfStaticTextIsEmpty(command.Text);
 
-            this.ApplyEvent(new StaticTextUpdated
-            {
-                EntityId = command.EntityId,
-                Text = command.Text,
-                AttachmentName = command.AttachmentName,
-                ResponsibleId = command.ResponsibleId
-            });
+            this.ApplyEvent(new StaticTextUpdated(command.EntityId,
+                command.ResponsibleId, 
+                command.Text, 
+                command.AttachmentName, 
+                command.HideIfDisabled, 
+                command.EnablementCondition, 
+                command.ValidationConditions)
+            );
         }
 
         public void DeleteStaticText(Guid entityId, Guid responsibleId)
@@ -2351,17 +2374,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 if (targetToPasteIn.PublicKey == this.EventSourceId)
                     throw new QuestionnaireException(string.Format("Static Text cannot be pasted here."));
 
-                this.ApplyEvent(new StaticTextCloned()
-                {
-                    EntityId = pasteItemId,
-                    ParentId = targetToPasteIn.PublicKey,
-                    SourceEntityId = entityToInsert.PublicKey,
-                    SourceQuestionnaireId = sourceDocument.PublicKey,
-                    TargetIndex = targetIndex,
-                    Text = entityToInsertAsStaticText.Text,
-                    AttachmentName = entityToInsertAsStaticText.AttachmentName,
-                    ResponsibleId = responsibleId
-                });
+                this.ApplyEvent(new StaticTextCloned(
+                    entityId : pasteItemId,
+                    parentId : targetToPasteIn.PublicKey,
+                    sourceEntityId : entityToInsert.PublicKey,
+                    sourceQuestionnaireId : sourceDocument.PublicKey,
+                    targetIndex : targetIndex,
+                    text : entityToInsertAsStaticText.Text,
+                    attachmentName : entityToInsertAsStaticText.AttachmentName,
+                    responsibleId : responsibleId,
+                    enablementCondition: entityToInsertAsStaticText.ConditionExpression,
+                    hideIfDisabled: entityToInsertAsStaticText.HideIfDisabled,
+                    validationConditions: entityToInsertAsStaticText.ValidationConditions));
 
                 return;
             }
@@ -4085,7 +4109,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #region Create clone events
 
         private IEnumerable<IEvent> CreateTextQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel,
-            bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string instructions,
+            bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string instructions, QuestionProperties sourceProperties,
             string mask, Guid parentGroupId, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId,
             IList<ValidationCondition> validationConditions)
         {
@@ -4102,6 +4126,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 validationExpression: null,
                 validationMessage: null,
                 instructions: instructions,
+                properties: sourceProperties,
                 sourceQuestionId: sourceQuestionId,
                 sourceQuestionnaireId: sourceQuestionnaireId,
                 targetIndex: targetIndex,
@@ -4127,7 +4152,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private IEnumerable<IEvent> CreateGeoLocationQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, 
-            string enablementCondition, bool hideIfDisabled, string instructions, Guid parentGroupId, Guid sourceQuestionId,
+            string enablementCondition, bool hideIfDisabled, string instructions, QuestionProperties properties, Guid parentGroupId, Guid sourceQuestionId,
             Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, QuestionScope scope, bool featured, bool capital,
             IList<ValidationCondition> validationConditions)
         {
@@ -4144,6 +4169,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 validationExpression : null,
                 validationMessage : null,
                 instructions : instructions,
+                properties: properties,
                 sourceQuestionId : sourceQuestionId,
                 sourceQuestionnaireId : sourceQuestionnaireId,
                 targetIndex : targetIndex,
@@ -4169,7 +4195,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private IEnumerable<IEvent> CreateDateTimeQuestionClonedEvents(Guid questionId, string title, string variableName, string variableLabel, 
-            bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string instructions, 
+            bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string instructions, QuestionProperties properties,
             Guid parentGroupId, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId,
             IList<ValidationCondition> validationConditions)
         {
@@ -4187,6 +4213,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 validationExpression : null,
                 validationMessage : null,
                 instructions : instructions,
+                properties: properties,
                 sourceQuestionId : sourceQuestionId,
                 sourceQuestionnaireId : sourceQuestionnaireId,
                 targetIndex : targetIndex,
@@ -4217,7 +4244,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             QuestionScope scope, 
             string enablementCondition, 
             bool hideIfDisabled,
-            string instructions, 
+            string instructions,
+            QuestionProperties properties,
             Guid parentGroupId, 
             Guid sourceQuestionId, 
             Guid sourceQuestionnaireId,
@@ -4246,6 +4274,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 validationExpression : null,
                 validationMessage : null,
                 instructions : instructions,
+                properties: properties,
                 answers : ConvertOptionsToAnswers(options),
                 sourceQuestionId : sourceQuestionId,
                 sourceQuestionnaireId : sourceQuestionnaireId,
@@ -4270,7 +4299,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private IEnumerable<IEvent> CreateCategoricalSingleAnswerQuestionEvents(Guid questionId, string title, string variableName, string variableLabel, 
-            bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string validationExpression, string validationMessage, string instructions, 
+            bool isPreFilled, QuestionScope scope, string enablementCondition, bool hideIfDisabled, string validationExpression, string validationMessage, string instructions,
+            QuestionProperties properties,
             Guid parentGroupId, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, Option[] options, 
             Guid? linkedToQuestionId, Guid? linkedToRosterId, bool? isFilteredCombobox, Guid? cascadeFromQuestionId,
             IList<ValidationCondition> validationConditions, string linkedFilterExpression)
@@ -4289,6 +4319,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 validationExpression : null,
                 validationMessage : null,
                 instructions : instructions,
+                properties: properties,
                 answers : ConvertOptionsToAnswers(options),
                 sourceQuestionId : sourceQuestionId,
                 sourceQuestionnaireId : sourceQuestionnaireId,
@@ -4312,8 +4343,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private IEnumerable<IEvent> CreateNumericQuestionCloneEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, bool isPreFilled, QuestionScope scope, 
-            string enablementCondition, bool hideIfDisabled, string validationExpression, string validationMessage, string instructions, Guid sourceQuestionId, 
-            Guid sourceQuestionnaireId,int targetIndex, Guid responsibleId, bool isInteger, int? countOfDecimalPlaces,
+            string enablementCondition, bool hideIfDisabled, string validationExpression, string validationMessage, string instructions,
+            QuestionProperties properties, Guid sourceQuestionId, 
+            Guid sourceQuestionnaireId,
+            int targetIndex, Guid responsibleId, bool isInteger, bool useFormatting, int? countOfDecimalPlaces,
             IList<ValidationCondition> validationConditions)
         {
             yield return new NumericQuestionCloned
@@ -4331,6 +4364,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 validationExpression : null,
                 validationMessage : null,
                 instructions : instructions,
+                properties: properties,
                 sourceQuestionId : sourceQuestionId,
                 sourceQuestionnaireId : sourceQuestionnaireId,
                 targetIndex : targetIndex,
@@ -4394,7 +4428,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         }
 
         private IEnumerable<IEvent> CreateMultimediaQuestionClonedEvents(Guid questionId, Guid parentGroupId, string title, string variableName, string variableLabel, 
-            string enablementCondition, bool hideIfDisabled, string instructions, Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, QuestionScope scope,
+            string enablementCondition, bool hideIfDisabled, string instructions, QuestionProperties properties,
+            Guid sourceQuestionId, Guid sourceQuestionnaireId, int targetIndex, Guid responsibleId, QuestionScope scope,
             IList<ValidationCondition> validationConditions)
         {
             yield return
@@ -4411,6 +4446,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     conditionExpression : enablementCondition,
                     hideIfDisabled: hideIfDisabled,
                     instructions : instructions,
+                    properties: properties,
                     sourceQuestionId : sourceQuestionId,
                     sourceQuestionnaireId : sourceQuestionnaireId,
                     targetIndex : targetIndex,
@@ -4482,6 +4518,25 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 yield return new GroupStoppedBeingARoster(responsibleId, groupId);
             }
+        }
+
+        private IEnumerable<IEvent> CreateStaticTextClonedEvents(Guid itemId, Guid parentGroupId, string text, string attachmentName, 
+            string enablementCondition, bool hideIfDisabled, Guid sourceItemId, Guid sourceQuestionnaireId,
+            int targetIndex, Guid responsibleId, IList<ValidationCondition> validationConditions)
+        {
+            yield return new StaticTextCloned(
+                entityId : itemId,
+                parentId : parentGroupId,
+                sourceEntityId : sourceItemId,
+                sourceQuestionnaireId : sourceQuestionnaireId,
+                targetIndex : targetIndex,
+                text : text,
+                attachmentName : attachmentName,
+                responsibleId : responsibleId,
+                enablementCondition : enablementCondition,
+                validationConditions : validationConditions,
+                hideIfDisabled: hideIfDisabled
+            );
         }
 
         #endregion

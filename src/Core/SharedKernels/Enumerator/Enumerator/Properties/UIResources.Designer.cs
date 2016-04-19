@@ -460,6 +460,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show instruction.
+        /// </summary>
+        public static string Interview_Instruction_ShowInstruction {
+            get {
+                return ResourceManager.GetString("Interview_Instruction_ShowInstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Instruction.
         /// </summary>
         public static string Interview_Instruction_Title {

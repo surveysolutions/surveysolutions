@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -24,26 +25,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.logFilePath = logFilePath;
         }
 
-        public async Task<byte[]> GetSystemBackupAsync()
+        public async Task<string> BackupAsync()
         {
-            if (await this.fileSystemAccessor.IsFileExistsAsync(this.logFilePath))
-                await this.fileSystemAccessor.CopyFileAsync(this.logFilePath, privateStorage);
-
-            return await this.archiver.ZipDirectoryToByteArrayAsync(privateStorage,
-                fileFilter: @"\.log$;\.dll$;\.sqlite3$;");
+            return await BackupAsync(this.privateStorage);
         }
 
         public async Task<string> BackupAsync(string backupToFolderPath)
         {
-            var backupFileName = $"backup-interviewer-{DateTime.Now.ToString("yyyyMMddTH-mm-ss")}.ibak";
-            var backup = await this.GetSystemBackupAsync();
-            var backupFilePath = this.fileSystemAccessor.CombinePath(backupToFolderPath, backupFileName);
-
             var isBackupFolderExists = await this.fileSystemAccessor.IsDirectoryExistsAsync(backupToFolderPath);
             if (!isBackupFolderExists)
                 await this.fileSystemAccessor.CreateDirectoryAsync(backupToFolderPath);
 
-            await this.fileSystemAccessor.WriteAllBytesAsync(backupFilePath, backup);
+            if (await this.fileSystemAccessor.IsFileExistsAsync(this.logFilePath))
+                await this.fileSystemAccessor.CopyFileAsync(this.logFilePath, privateStorage);
+
+            var backupFileName = $"backup-interviewer-{DateTime.Now.ToString("yyyyMMddTH-mm-ss")}.ibak";
+            var backupFilePath = this.fileSystemAccessor.CombinePath(backupToFolderPath, backupFileName);
+
+            await this.archiver.ZipDirectoryToFileAsync(privateStorage, backupFilePath, fileFilter: @"\.log$;\.dll$;\.sqlite3$;");
+
             return backupFilePath;
         }
 

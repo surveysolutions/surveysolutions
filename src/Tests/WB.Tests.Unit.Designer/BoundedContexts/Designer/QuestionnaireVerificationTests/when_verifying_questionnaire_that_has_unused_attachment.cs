@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using It = Machine.Specifications.It;
 
@@ -14,13 +12,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         Establish context = () =>
         {
-            questionnaire = Create.QuestionnaireDocumentWithOneChapter(
-                attachments: new [] { Create.Attachment() }, 
-                children : Create.Question(questionType: QuestionType.DateTime));
+            questionnaire = Create.QuestionnaireDocumentWithOneChapter(attachments: new [] { Create.Attachment() });
 
-            attachmentServiceMock = Setup.AttachmentsServiceForOneQuestionnaire(questionnaire.PublicKey, Create.AttachmentView(id: attachment1Id));
-
-            verifier = CreateQuestionnaireVerifier(attachmentService: attachmentServiceMock);
+            verifier = CreateQuestionnaireVerifier();
         };
 
         Because of = () => verificationMessages = verifier.Verify(questionnaire);
@@ -31,8 +25,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;
         static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
-        private static IAttachmentService attachmentServiceMock;
-
-        private static readonly Guid attachment1Id = Guid.Parse("11111111111111111111111111111111");
     }
 }

@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Factories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
@@ -139,8 +140,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
         public QuestionsAndGroupsCollectionView Update(QuestionsAndGroupsCollectionView state,
             IPublishedEvent<StaticTextAdded> @event)
         {
-            IStaticText staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: @event.Payload.EntityId,
-                text: @event.Payload.Text, attachmentName: null);
+            IStaticText staticText = this.questionnaireEntityFactory.CreateStaticText(@event.Payload.EntityId, @event.Payload.Text, null, null, false, new List<ValidationCondition>());
             return this.UpdateStateWithAddedStaticText(state, @event.Payload.ParentId, staticText);
         }
 
@@ -148,7 +148,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             IPublishedEvent<StaticTextUpdated> @event)
         {
             IStaticText staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: @event.Payload.EntityId,
-                text: @event.Payload.Text, attachmentName: @event.Payload.AttachmentName);
+                text: @event.Payload.Text, attachmentName: @event.Payload.AttachmentName, enablementCondition:@event.Payload.EnablementCondition,
+                hideIfDisabled:@event.Payload.HideIfDisabled, validationConditions: @event.Payload.ValidationConditions);
             return this.UpdateStateWithUpdatedStaticText(state, staticText);
         }
 
@@ -156,7 +157,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             IPublishedEvent<StaticTextCloned> @event)
         {
             IStaticText staticText = this.questionnaireEntityFactory.CreateStaticText(entityId: @event.Payload.EntityId,
-                text: @event.Payload.Text, attachmentName: @event.Payload.AttachmentName);
+                text: @event.Payload.Text, attachmentName: @event.Payload.AttachmentName, enablementCondition: @event.Payload.EnablementCondition,
+                hideIfDisabled: @event.Payload.HideIfDisabled, validationConditions: @event.Payload.ValidationConditions);
             return this.UpdateStateWithAddedStaticText(state, @event.Payload.ParentId, staticText);
         }
 
@@ -436,7 +438,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                     Id = staticText.PublicKey,
                     ParentGroupId = staticText.GetParent().PublicKey,
                     Text = staticText.Text,
-                    AttachmentName = staticText.AttachmentName
+                    AttachmentName = staticText.AttachmentName,
+                    EnablementCondition = staticText.ConditionExpression,
+                    HideIfDisabled = staticText.HideIfDisabled,
+                    ValidationConditions = staticText.ValidationConditions
                 }).ToList();
 
             var questionCollection = new QuestionsAndGroupsCollectionView
@@ -527,7 +532,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 Id = staticText.PublicKey,
                 ParentGroupId = parentId,
                 Text = staticText.Text,
-                AttachmentName = staticText.AttachmentName
+                AttachmentName = staticText.AttachmentName,
+                EnablementCondition = staticText.ConditionExpression,
+                HideIfDisabled = staticText.HideIfDisabled,
+                ValidationConditions = staticText.ValidationConditions
             };
 
             currentState.StaticTexts.Add(staticTextDetailsView);
@@ -556,7 +564,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
                 Id = staticText.PublicKey,
                 ParentGroupId = oldstaticTextDetailsView.ParentGroupId,
                 Text = staticText.Text,
-                AttachmentName = staticText.AttachmentName
+                AttachmentName = staticText.AttachmentName,
+                EnablementCondition = staticText.ConditionExpression,
+                HideIfDisabled = staticText.HideIfDisabled,
+                ValidationConditions = staticText.ValidationConditions
             };
             UpdateBreadcrumbs(currentState, staticTextDetailsView, staticTextDetailsView.ParentGroupId);
             currentState.StaticTexts.Add(staticTextDetailsView);

@@ -282,6 +282,7 @@
     <Compile Include="Api\ImportController.cs" />
     <Compile Include="Api\QuestionnaireController.cs" />
     <Compile Include="Api\UsersController.cs" />
+    <Compile Include="Code\ConfigurationManager\PdfConfigSection.cs" />
     <Compile Include="Code\Implementation\CommandInflaitingException.cs" />
     <Compile Include="Code\Implementation\CommandInflatingExceptionType.cs" />
     <Compile Include="Code\Implementation\ShareChangeType.cs" />
@@ -299,6 +300,7 @@
     <Compile Include="Models\IEmailNotification.cs" />
     <Compile Include="Models\QuestionnaireDocumentWithLookUpTables.cs" />
     <Compile Include="Models\SharingNotificationModel.cs" />
+    <Compile Include="Models\VerificationMessageError.cs" />
     <Compile Include="Models\VerificationReferenceEnriched.cs" />
     <Compile Include="Resources\ErrorMessages.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -420,9 +422,8 @@
     <Compile Include="ServiceLocationModule.cs" />
     <Compile Include="Services\IAuthenticationService.cs" />
     <Compile Include="Services\IRecaptchaService.cs" />
+    <Compile Include="Services\QuestionnaireDowngradeService.cs" />
     <Compile Include="Utils\FormatHelper.cs" />
-    <Compile Include="WebServices\IPublicService.cs" />
-    <Compile Include="WebServices\PublicService.cs" />
     <Compile Include="WebServices\Questionnaire\DownloadQuestionnaireRequest.cs" />
     <Compile Include="WebServices\Questionnaire\QuestionnaireListRequest.cs" />
     <Compile Include="WebServices\Questionnaire\QuestionnaireListViewItemMessage.cs" />
@@ -441,8 +442,15 @@
     <Content Include="Content\identity\favicon-designer-192x192.png" />
     <Content Include="Content\identity\favicon-designer-72x72.png" />
     <Content Include="Content\identity\favicon-designer-76x76.png" />
-    <Content Include="PublicService.svc" />
     <Content Include="Content\identity\favicon-designer.png" />
+    <Content Include="Content\images\pdf_logo.png" />
+    <Content Include="Content\images\pdf-question-legend.jpg" />
+    <Content Include="Content\images\pdf-roster-legend.jpg" />
+    <Content Include="fonts\lucidaconsole.svg" />
+    <Content Include="fonts\RobotoItalic.svg" />
+    <Content Include="fonts\RobotoLight.svg" />
+    <Content Include="fonts\RobotoMedium.svg" />
+    <Content Include="fonts\RobotoMediumItalic.svg" />
     <Content Include="Scripts\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\bindings.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
@@ -456,6 +464,27 @@
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
+    <Content Include="fonts\lucidaconsole.eot" />
+    <Content Include="fonts\lucidaconsole.ttf" />
+    <Content Include="fonts\lucidaconsole.woff" />
+    <Content Include="fonts\lucidaconsole.woff2" />
+    <Content Include="fonts\Roboto300.woff" />
+    <Content Include="fonts\RobotoItalic.eot" />
+    <Content Include="fonts\RobotoItalic.ttf" />
+    <Content Include="fonts\RobotoItalic.woff" />
+    <Content Include="fonts\RobotoItalic.woff2" />
+    <Content Include="fonts\RobotoLight.eot" />
+    <Content Include="fonts\RobotoLight.ttf" />
+    <Content Include="fonts\RobotoLight.woff" />
+    <Content Include="fonts\RobotoLight.woff2" />
+    <Content Include="fonts\RobotoMedium.eot" />
+    <Content Include="fonts\RobotoMedium.ttf" />
+    <Content Include="fonts\RobotoMedium.woff" />
+    <Content Include="fonts\RobotoMedium.woff2" />
+    <Content Include="fonts\RobotoMediumItalic.eot" />
+    <Content Include="fonts\RobotoMediumItalic.ttf" />
+    <Content Include="fonts\RobotoMediumItalic.woff" />
+    <Content Include="fonts\RobotoMediumItalic.woff2" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
@@ -481,6 +510,7 @@
     <Content Include="UpdatedDesigner\app\scripts\controllers\lookupTables.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\macros.js" />
     <Content Include="UpdatedDesigner\app\scripts\controllers\leftMenu.js" />
+    <Content Include="UpdatedDesigner\app\scripts\extensions\ace\theme-github-extended.js" />
     <Content Include="UpdatedDesigner\app\views\help-link.html" />
     <Content Include="UpdatedDesigner\app\views\attachment-preview.html" />
     <Content Include="UpdatedDesigner\content\designer-start\bootstrap-custom.min.css">
@@ -501,6 +531,8 @@
     <Content Include="UpdatedDesigner\content\i\designer-left-icons.png" />
     <Content Include="UpdatedDesigner\content\i\left-panel-shadow-small.png" />
     <Content Include="UpdatedDesigner\content\i\macro-panel-btn.png" />
+    <Content Include="UpdatedDesigner\vendor\ace-builds\src-noconflict\ext-language_tools.js" />
+    <Content Include="UpdatedDesigner\app\scripts\extensions\ace\mode-csharp-extended.js" />
     <Content Include="UpdatedDesigner\vendor\angular-moment\angular-moment.js" />
     <Content Include="UpdatedDesigner\vendor\angular-moment\angular-moment.min.js" />
     <Content Include="UpdatedDesigner\vendor\angular-moment\Gruntfile.js" />
@@ -548,8 +580,6 @@
     <Content Include="UpdatedDesigner\vendor\ace-builds\package.json" />
     <Content Include="UpdatedDesigner\vendor\ace-builds\README.md" />
     <Content Include="UpdatedDesigner\vendor\ace-builds\src-noconflict\ace.js" />
-    <Content Include="UpdatedDesigner\vendor\ace-builds\src-noconflict\mode-csharp.js" />
-    <Content Include="UpdatedDesigner\vendor\ace-builds\src-noconflict\theme-github.js" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.js" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.min.js" />
@@ -1565,6 +1595,12 @@
     <Content Include="UpdatedDesigner\vendor\angular-moment\package.json" />
     <Content Include="UpdatedDesigner\vendor\angular-moment\README.md" />
     <Content Include="Views\Admin\RestoreQuestionnaire.cshtml" />
+    <Content Include="Views\Pdf\_RenderQuestion.cshtml" />
+    <Content Include="Views\Pdf\_RenderGroup.cshtml" />
+    <Content Include="Views\Pdf\_RenderRoster.cshtml" />
+    <Content Include="Views\Pdf\_RenderChildren.cshtml" />
+    <Content Include="Views\Pdf\_RenderStaticText.cshtml" />
+    <Content Include="Views\Pdf\RenderQuestionnaireFooter.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1589,10 +1625,7 @@
     <Content Include="Views\Error\AccessDenied.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
-    <Content Include="Views\Pdf\_RenderChild.cshtml" />
     <Content Include="Views\Questionnaire\Clone.cshtml" />
-    <Content Include="Views\Pdf\_RenderQuestionDetails.cshtml" />
-    <Content Include="Views\Pdf\_RenderQuestionnaire.cshtml" />
     <Content Include="Views\Pdf\RenderQuestionnaire.cshtml" />
     <Content Include="Views\Account\PasswordReset.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
@@ -1604,8 +1637,6 @@
     <Content Include="Views\SystemMailer\ConfirmationEmail.cshtml" />
     <Content Include="Views\SystemMailer\ResetPasswordEmail.cshtml" />
     <Content Include="Views\Shared\_trackers.cshtml" />
-    <Content Include="Views\Pdf\RenderTitlePage.cshtml" />
-    <Content Include="Views\Pdf\_RenderTitlePage.cshtml" />
     <Content Include="Views\ControlPanel\ReadSide.cshtml" />
     <Content Include="Views\ControlPanel\NConfig.cshtml" />
     <Content Include="UpdatedDesigner\content\css-reset.css.less" />
@@ -1637,7 +1668,6 @@
     <Content Include="UpdatedDesigner\content\lib\wb-customfonts.css.less" />
     <Content Include="UpdatedDesigner\content\designer-editor\wb-share.css.less" />
     <Content Include="UpdatedDesigner\content\dropdown.css.less" />
-    <Content Include="Views\Pdf\_RenderStaticTextDetails.cshtml" />
     <Content Include="Views\ControlPanel\Index.cshtml" />
     <Content Include="Views\ControlPanel\Layout.ControlPanel.cshtml" />
     <Content Include="Views\Maintenance\WaitForReadSideRebuild.cshtml" />

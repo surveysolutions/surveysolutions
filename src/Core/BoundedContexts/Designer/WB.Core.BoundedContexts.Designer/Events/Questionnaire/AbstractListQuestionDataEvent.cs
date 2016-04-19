@@ -17,8 +17,9 @@ namespace WB.Core.BoundedContexts.Designer.Events.Questionnaire
         }
         public string ConditionExpression { get; set; }
         public bool HideIfDisabled { get; set; }
+        public QuestionProperties Properties { get; set; }
         public string Instructions { get; set; }
-        
+
         public Guid PublicKey { get; set; }
         public string QuestionText { get; set; }
         public string StataExportCaption { get; set; }

@@ -6,6 +6,7 @@ using Npgsql;
 using NpgsqlTypes;
 using WB.Core.GenericSubdomains.Portable.Services;
 using Newtonsoft.Json;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
@@ -14,16 +15,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     {
         protected readonly string connectionString;
         protected readonly string tableName = typeof(TEntity).Name.Pluralize();
-
         private readonly ILogger logger;
-        private readonly ISerializer serializer;
 
-
-        public PostgresKeyValueStorage(string connectionString, ILogger logger, ISerializer serializer)
+        public PostgresKeyValueStorage(string connectionString, ILogger logger)
         {
             this.connectionString = connectionString;
             this.logger = logger;
-            this.serializer = serializer;
             this.EnshureTableExists();
         }
 

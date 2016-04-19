@@ -7,17 +7,15 @@ using WB.Core.Infrastructure.PlainStorage;
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal class PostgresPlainKeyValueStorage<TEntity> : PostgresKeyValueStorageWithCache<TEntity>,
-        IPlainKeyValueStorage<TEntity>, IDisposable
-        where TEntity : class
+        IPlainKeyValueStorage<TEntity>, IDisposable where TEntity : class
     {
         private readonly PostgresPlainStorageSettings connectionSettings;
 
-        public PostgresPlainKeyValueStorage(IPlainSessionProvider plainSessionProvider, PostgresPlainStorageSettings connectionSettings, ILogger logger, ISerializer serializer)
-            : base(connectionSettings.ConnectionString, logger, serializer)
+        public PostgresPlainKeyValueStorage(PostgresPlainStorageSettings connectionSettings, ILogger logger)
+            : base(connectionSettings.ConnectionString, logger)
         {
             this.connectionSettings = connectionSettings;
         }
-
 
         protected override object ExecuteScalar(IDbCommand command)
         {

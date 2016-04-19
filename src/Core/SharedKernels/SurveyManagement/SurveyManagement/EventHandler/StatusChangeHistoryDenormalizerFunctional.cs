@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -46,7 +47,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewStatuses, PictureQuestionAnswered>,
         IUpdateHandler<InterviewStatuses, UnapprovedByHeadquarters>
     {
-        private readonly IReadSideRepositoryWriter<UserDocument> users;
+        private readonly IPlainStorageAccessor<UserDocument> users;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummares;
         private readonly string unknown = "Unknown";
         private readonly InterviewExportedAction[] listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded = new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
@@ -64,7 +65,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             if (!listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded.Contains(interviewStatuses.InterviewCommentedStatuses.Last().Status))
                 return interviewStatuses;
 
-            UserDocument responsible = this.users.GetById(userId);
+            UserDocument responsible = this.users.GetById(userId.FormatGuid());
 
             if (responsible == null || !responsible.Roles.Contains(UserRoles.Operator))
                 return interviewStatuses;
@@ -88,7 +89,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public StatusChangeHistoryDenormalizerFunctional(
             IReadSideRepositoryWriter<InterviewStatuses> statuses,
-            IReadSideRepositoryWriter<UserDocument> users,
+            IPlainStorageAccessor<UserDocument> users,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummares)
             : base(statuses)
         {
@@ -298,7 +299,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private string GetResponsibleIdName(Guid responsibleId)
         {
-            var userDocument = this.users.GetById(responsibleId);
+            var userDocument = this.users.GetById(responsibleId.FormatGuid());
             var userName = userDocument?.UserName;
             return userName ?? this.unknown;
         }
@@ -333,7 +334,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             var supervisorName = supervisorId.HasValue ? GetResponsibleIdName(supervisorId.Value) : "";
             var interviewerName = interviewerId.HasValue ? GetResponsibleIdName(interviewerId.Value) : "";
 
-            var statusOriginator = this.users.GetById(userId);
+            var statusOriginator = this.users.GetById(userId.FormatGuid());
 
             interviewStatuses.InterviewCommentedStatuses.Add(new InterviewCommentedStatus(
                 eventId,

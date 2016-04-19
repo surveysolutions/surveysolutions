@@ -570,4 +570,7 @@
   <data name="FinishInstallation_EndpointDiffers" xml:space="preserve">
     <value>Адрес сайта Supervisor '{0}' отличается от сохранённого в настройках ('{1}'). Загрузить URL из настроек?</value>
   </data>
+  <data name="Synchronization_Download_AttachmentsCleanup" xml:space="preserve">
+    <value>Удаление вложений</value>
+  </data>
 </root>

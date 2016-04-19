@@ -6781,7 +6781,8 @@ ul.dropdown-menu[aria-labelledby="questionTypeBtn"] li a > i {
   position: absolute;
 }
 .instructions-cross {
-  margin-top: 20px;
+  margin-top: 38px;
+  margin-left: -30px;
 }
 .wb-label {
   font-family: "Lucida Console", Monaco, monospace;
@@ -7522,6 +7523,7 @@ input#edit-group-title {
 }
 .question-editor .checkbox-in-column {
   margin-top: 5px;
+  white-space: nowrap;
 }
 .question-editor .checkbox-in-column input.wb-checkbox + label {
   font-family: "Lucida Console", Monaco, monospace;
@@ -9222,6 +9224,13 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
 #verify-popover-content {
   padding-left: 4px;
   padding-right: 24px;
+}
+.error-tooltip {
+  height: 100%;
+  overflow: hidden;
+}
+.error-tooltip .tooltip-inner {
+  text-align: left;
 }
 #verification-modal {
   right: auto;

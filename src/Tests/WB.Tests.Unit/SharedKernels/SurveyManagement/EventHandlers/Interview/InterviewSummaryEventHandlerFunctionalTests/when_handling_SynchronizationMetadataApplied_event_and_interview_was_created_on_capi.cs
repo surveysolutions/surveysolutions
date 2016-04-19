@@ -6,6 +6,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -26,9 +27,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 ResponsibleId = responsibleId
             };
 
-            var usersMock = new Mock<IReadSideRepositoryWriter<UserDocument>>();
+            var usersMock = new Mock<IPlainStorageAccessor<UserDocument>>();
 
-            usersMock.Setup(_ => _.GetById(responsibleId.FormatGuid()))
+            var responsibleStringId = responsibleId.FormatGuid();
+            usersMock.Setup(_ => _.GetById(responsibleStringId))
                 .Returns(new UserDocument() {Supervisor = new UserLight() {Id = supervisorId, Name = supervisorName}});
 
             denormalizer = CreateDenormalizer(users: usersMock.Object);

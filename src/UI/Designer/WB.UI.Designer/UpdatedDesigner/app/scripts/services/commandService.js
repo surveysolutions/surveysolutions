@@ -142,6 +142,7 @@
                             enablementCondition: question.enablementCondition,
                             hideIfDisabled: question.hideIfDisabled,
                             instructions: question.instructions,
+                            hideInstructions: question.hideInstructions
                         }
                     };
 
@@ -178,6 +179,7 @@
                         command.isInteger = question.isInteger;
                         command.countOfDecimalPlaces = question.countOfDecimalPlaces;
                         command.maxValue = question.maxValue;
+                        command.useFormatting = question.useFormatting;
                         break;
                     case "DateTime":
                     case "GpsCoordinates":
@@ -318,7 +320,10 @@
                         questionnaireId: questionnaireId,
                         entityId: staticText.itemId,
                         text: staticText.text,
-                        attachmentName: staticText.attachmentName
+                        attachmentName: staticText.attachmentName,
+                        enablementCondition: staticText.enablementCondition,
+                        hideIfDisabled: staticText.hideIfDisabled,
+                        validationConditions: staticText.validationConditions
                     };
 
                     return commandCall("UpdateStaticText", command);

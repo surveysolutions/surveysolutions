@@ -2,6 +2,7 @@
 using Machine.Specifications;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -17,7 +18,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddStaticTextHandlerTe
 
         Because of = () =>
             exception = Catch.Exception(() =>
-                questionnaire.AddStaticTextAndMoveIfNeeded(entityId: entityId, parentId: chapterId, text: "  ", responsibleId: responsibleId));
+                questionnaire.AddStaticTextAndMoveIfNeeded(
+                    new AddStaticText(questionnaire.EventSourceId, entityId, "  ", responsibleId, chapterId)));
 
         It should_throw_QuestionnaireException = () =>
             exception.ShouldBeOfExactType<QuestionnaireException>();

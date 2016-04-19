@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
@@ -7,6 +8,7 @@ using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
@@ -17,6 +19,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IBackupRestoreService backupRestoreService;
         private readonly ISynchronizationService synchronizationService;
         private readonly IUserInteractionService userInteractionService;
+        private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILogger logger;
 
         private string scope;
@@ -25,18 +28,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private bool isPackageSendingAttemptCompleted;
         private string packageSendingAttemptResponceText;
         private bool isInProgress;
-        private byte[] informationPackageContent;
+        private string informationPackageFilePath;
 
         public SendTabletInformationViewModel(
             IBackupRestoreService backupRestoreService,
             ISynchronizationService synchronizationService,
             ILogger logger, 
-            IUserInteractionService userInteractionService)
+            IUserInteractionService userInteractionService,
+            IFileSystemAccessor fileSystemAccessor)
         {
             this.backupRestoreService = backupRestoreService;
             this.synchronizationService = synchronizationService;
             this.logger = logger;
             this.userInteractionService = userInteractionService;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         public string Scope
@@ -63,12 +68,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             get { return this.isPackageBuild; }
             set { this.RaiseAndSetIfChanged(ref this.isPackageBuild, value); }
-        }
-
-        public byte[] InformationPackageContent
-        {
-            get { return this.informationPackageContent; }
-            set { this.RaiseAndSetIfChanged(ref this.informationPackageContent, value); }
         }
 
         public bool IsPackageSendingAttemptCompleted
@@ -100,11 +99,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             try
             {
-                var backupStream = await this.backupRestoreService.GetSystemBackupAsync();
+                var backupFilePath = await this.backupRestoreService.BackupAsync();
                 this.IsPackageBuild = true;
-                this.Scope = FileSizeUtils.SizeSuffix(backupStream.Length);
+
+                var fileSize = this.fileSystemAccessor.GetFileSize(backupFilePath);
+                this.Scope = FileSizeUtils.SizeSuffix(fileSize);
+
                 this.WhenGenerated = DateTime.Now;
-                this.InformationPackageContent = backupStream;
+                this.informationPackageFilePath = backupFilePath;
             }
             catch (Exception e)
             {
@@ -125,10 +127,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             try
             {
-                await this.synchronizationService.SendTabletInformationAsync(
-                    Convert.ToBase64String(this.InformationPackageContent), cancellationTokenSource.Token);
-                this.PackageSendingAttemptResponceText =
-                    InterviewerUIResources.Troubleshooting_InformationPackageIsSuccessfullySent;
+                await this.synchronizationService.SendTabletInformationAsync(informationPackageFilePath, cancellationTokenSource.Token);
+                this.PackageSendingAttemptResponceText = InterviewerUIResources.Troubleshooting_InformationPackageIsSuccessfullySent;
             }
             catch (SynchronizationException ex)
             {

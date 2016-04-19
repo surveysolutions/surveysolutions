@@ -63,8 +63,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             var answeredQuestions = new List<AnsweredQuestionSynchronizationDto>();
             var disabledGroups = new HashSet<InterviewItemId>();
             var disabledQuestions = new HashSet<InterviewItemId>();
-            var validQuestions = new HashSet<InterviewItemId>();
-            var invalidQuestions = new HashSet<InterviewItemId>();
+            var disabledStaticTexts = new HashSet<InterviewItemId>();
+            var validEntities = new HashSet<InterviewItemId>();
+            var invalidEntities = new HashSet<InterviewItemId>();
             var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
 
             var questionnariePropagationStructure =
@@ -94,17 +95,35 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
                     if (interviewQuestion.Value.IsInvalid())
                     {
-                        invalidQuestions.Add(new InterviewItemId(interviewQuestion.Key, interviewLevel.RosterVector));
+                        invalidEntities.Add(new InterviewItemId(interviewQuestion.Key, interviewLevel.RosterVector));
                         failedValidationConditions.Add(new Identity(interviewQuestion.Key, interviewLevel.RosterVector), interviewQuestion.Value.FailedValidationConditions.ToList());
                     }
                     if (!interviewQuestion.Value.IsInvalid())
                     {
-                        validQuestions.Add(new InterviewItemId(interviewQuestion.Key, interviewLevel.RosterVector));
+                        validEntities.Add(new InterviewItemId(interviewQuestion.Key, interviewLevel.RosterVector));
                     }
                 }
                 foreach (var disabledGroup in interviewLevel.DisabledGroups)
                 {
                     disabledGroups.Add(new InterviewItemId(disabledGroup, interviewLevel.RosterVector));
+                }
+                foreach (var staticText in interviewLevel.StaticTexts.Values)
+                {
+                    if (!staticText.IsEnabled)
+                    {
+                        disabledStaticTexts.Add(new InterviewItemId(staticText.Id, interviewLevel.RosterVector));
+                    }
+
+                    if (staticText.IsInvalid)
+                    {
+                        invalidEntities.Add(new InterviewItemId(staticText.Id, interviewLevel.RosterVector));
+                        failedValidationConditions.Add(new Identity(staticText.Id, interviewLevel.RosterVector), staticText.FailedValidationConditions.ToList());
+                    }
+
+                    if (!staticText.IsInvalid)
+                    {
+                        validEntities.Add(new InterviewItemId(staticText.Id, interviewLevel.RosterVector));
+                    }
                 }
 
                 this.FillPropagatedGroupInstancesOfCurrentLevelForQuestionnarie(questionnariePropagationStructure, interviewLevel,
@@ -152,8 +171,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 answeredQuestions.ToArray(),
                 disabledGroups,
                 disabledQuestions,
-                validQuestions,
-                invalidQuestions,
+                disabledStaticTexts,
+                validEntities,
+                invalidEntities,
                 propagatedGroupInstanceCounts,
                 failedValidationConditions.ToList(),
                 linkedQuestionOptions,

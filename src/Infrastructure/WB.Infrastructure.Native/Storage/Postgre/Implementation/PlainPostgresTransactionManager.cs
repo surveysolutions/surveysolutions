@@ -6,7 +6,7 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
-    public class PlainPostgresTransactionManager : IPlainTransactionManager, IPlainSessionProvider, IDisposable
+    public class PlainPostgresTransactionManager : IPlainPostgresTransactionManager, IPlainSessionProvider, IDisposable
     {
         private readonly ISessionFactory sessionFactory;
         private ITransaction transaction;
@@ -36,6 +36,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
 
             this.transaction.Commit();
+            this.transaction = null;
             this.session.Close();
             this.session = null;
         }
@@ -48,6 +49,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
 
             this.transaction.Rollback();
+            this.transaction = null;
             this.session.Close();
             this.session = null;
         }

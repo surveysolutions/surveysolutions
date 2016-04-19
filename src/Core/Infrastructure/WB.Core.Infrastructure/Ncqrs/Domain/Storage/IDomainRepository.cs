@@ -18,12 +18,12 @@ namespace Ncqrs.Domain.Storage
         /// <param name="eventStream">A stream of events (is snapshot is provided, stream starts at next event 
         /// after snapshot. Otherwise it starts from the beginning of aggregate's life).</param>
         /// <returns>Aggregate root instance.</returns>
-        AggregateRoot Load(Type aggreateRootType, Snapshot snapshot, CommittedEventStream eventStream);
+        EventSourcedAggregateRoot Load(Type aggreateRootType, Snapshot snapshot, CommittedEventStream eventStream);
         /// <summary>
         /// Takes a snapshot of provided aggregate root.
         /// </summary>
         /// <param name="aggregateRoot">Aggregate root instance.</param>
         /// <returns>Snapshot instance if aggregate root supports snapthotting. Otherwise null.</returns>
-        Snapshot TryTakeSnapshot(IAggregateRoot aggregateRoot);
+        Snapshot TryTakeSnapshot(IEventSourcedAggregateRoot aggregateRoot);
     }
 }
