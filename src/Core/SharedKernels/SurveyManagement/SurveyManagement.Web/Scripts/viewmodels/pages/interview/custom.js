@@ -23,7 +23,10 @@ ko.validation.rules['notempty'] = {
 
 ko.validation.rules['numericValidator'] = {
     validator: function (val, countOfDecimalPlaces) {
-        var newValue = val.split(',').join('');
+        var comma = ',';
+        var period = '.';
+
+        var newValue = val.split(comma).join('');
 
         if (isNaN(newValue)) {
             this.message = 'Please enter a number';
@@ -32,7 +35,7 @@ ko.validation.rules['numericValidator'] = {
         if (countOfDecimalPlaces===true)
             return true;
         var stringVal = (newValue || '').toString();
-        if (stringVal.indexOf(".") == -1) {
+        if (stringVal.indexOf(period) == -1) {
             return true;
         }
 
@@ -41,7 +44,7 @@ ko.validation.rules['numericValidator'] = {
             return false;
         }
 
-        var countOfDecimalDigits = stringVal.substring(stringVal.indexOf(".") + 1).length;
+        var countOfDecimalDigits = stringVal.substring(stringVal.indexOf(period) + 1).length;
         if (countOfDecimalDigits > countOfDecimalPlaces) {
             this.message = 'According to questionnaire, count of decimal places should not be greater than ' + countOfDecimalPlaces;
             return false;
@@ -50,6 +53,58 @@ ko.validation.rules['numericValidator'] = {
         return true;
     },
     message: 'Count of decimal places should not be greater than value set in questionnaire'
+};
+
+ko.validation.rules['numberLengthValidator'] = {
+    validator: function (val, numberType) {
+        var comma = ',';
+        var period = '.';
+
+        var isIntegerType = numberType == 'integer';
+        var isRealType = numberType == 'real';
+        if (!isIntegerType && !isRealType)
+            return true;
+
+        var value = val.split(comma).join('');
+
+        var isNumeric = Math.floor(value) == value && $.isNumeric(value);
+        if (!isNumeric) {
+            if (isIntegerType)
+                this.message = 'Please enter a integer value.'
+            else if (isRealType)
+                this.message = 'Please enter a real value.'
+
+            return false;
+        }
+
+        if (isIntegerType) {
+            var integerNumber = parseInt(value);
+            var isInteger = integerNumber <= 2147483647 && integerNumber >= -2147483648;
+            if (!isInteger) {
+                this.message = 'Please enter a value between -2147483648 and 2147483647.'
+                return false;
+            }
+        } else if (isRealType) {
+            var decimalCharPosition = value.indexOf(period);
+            if (decimalCharPosition != -1) {
+                var countOfDecimalDigits = value.substring(decimalCharPosition + 1).length;
+                if (countOfDecimalDigits > 15) {
+                    this.message = 'Count of decimal places should not be greater than 15.'
+                    return false;
+                }
+            }
+
+            var countOfDecimalSymbols = decimalCharPosition == -1 ? value.length : value.length - 1;
+            var isReal = countOfDecimalSymbols <= 28;
+            if (!isReal) {
+                this.message = 'Count of digits should not be greater than 28.'
+                return false;
+            }
+        }
+
+        return true;
+    },
+    message: 'Please enter a number value.'
 };
 
 ko.validation.rules['digit'] = {
