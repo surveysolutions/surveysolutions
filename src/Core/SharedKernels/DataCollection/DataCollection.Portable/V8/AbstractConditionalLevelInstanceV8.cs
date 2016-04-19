@@ -77,6 +77,8 @@ namespace WB.Core.SharedKernels.DataCollection.V8
         protected abstract void SetParentImpl(IExpressionExecutable parent);
         protected abstract IExpressionExecutableV8 GetParentImpl();
 
+        protected virtual IDictionary<Guid, IReadOnlyList<FailedValidationCondition>> FailedValidations => this.InvalidAnsweredFailedValidations;
+
         public void CalculateValidationChanges(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInvalid)
             => this.Validate(out questionsToBeValid, out questionsToBeInvalid);
 
@@ -113,13 +115,13 @@ namespace WB.Core.SharedKernels.DataCollection.V8
         public void DeclareStaticTextValid(Guid staticTextId)
         {
             this.ValidStaticTexts.Add(staticTextId);
-            this.InvalidAnsweredFailedValidations.Remove(staticTextId);
+            this.FailedValidations.Remove(staticTextId);
         }
 
         public void ApplyStaticTextFailedValidations(Guid staticTextId, IReadOnlyList<FailedValidationCondition> failedValidations)
         {
             this.ValidStaticTexts.Remove(staticTextId);
-            this.InvalidAnsweredFailedValidations[staticTextId] = failedValidations;
+            this.FailedValidations[staticTextId] = failedValidations;
         }
 
         protected new ValidityChanges ExecuteValidations()
@@ -183,9 +185,9 @@ namespace WB.Core.SharedKernels.DataCollection.V8
                     {
                         // no changes in invalid validations
                         // do not raise
-                        if (this.InvalidAnsweredFailedValidations.ContainsKey(staticTextId) &&
-                            (this.InvalidAnsweredFailedValidations[staticTextId].Count == invalids.Count) &&
-                            !this.InvalidAnsweredFailedValidations[staticTextId].Except(invalids).Any())
+                        if (this.FailedValidations.ContainsKey(staticTextId) &&
+                            (this.FailedValidations[staticTextId].Count == invalids.Count) &&
+                            !this.FailedValidations[staticTextId].Except(invalids).Any())
                             continue;
                         else // first or invalid old events support, raising a new one 
                         {
@@ -245,9 +247,9 @@ namespace WB.Core.SharedKernels.DataCollection.V8
                     {
                         // no changes in invalid validations
                         // do not raise
-                        if (this.InvalidAnsweredFailedValidations.ContainsKey(questionId) &&
-                            (this.InvalidAnsweredFailedValidations[questionId].Count == invalids.Count) &&
-                            !this.InvalidAnsweredFailedValidations[questionId].Except(invalids).Any())
+                        if (this.FailedValidations.ContainsKey(questionId) &&
+                            (this.FailedValidations[questionId].Count == invalids.Count) &&
+                            !this.FailedValidations[questionId].Except(invalids).Any())
                             continue;
                         else // first or invalid old events support, raising a new one 
                         {
