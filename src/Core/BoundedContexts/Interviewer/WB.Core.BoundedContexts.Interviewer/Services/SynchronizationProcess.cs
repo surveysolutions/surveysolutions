@@ -391,7 +391,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     Title = string.Format(InterviewerUIResources.Synchronization_Upload_Title_Format, InterviewerUIResources.Synchronization_Upload_CompletedAssignments_Text),
                     Description = string.Format(InterviewerUIResources.Synchronization_Upload_Description_Format,
                         statistics.CompletedInterviewsCount, statistics.TotalCompletedInterviewsCount,
-                        InterviewerUIResources.Synchronization_Upload_Interviews_Text)
+                        InterviewerUIResources.Synchronization_Upload_Interviews_Text),
+                    Status = SynchronizationStatus.Upload
                 });
 
                 await this.UploadImagesByCompletedInterview(completedInterview.InterviewId, progress, cancellationToken);
