@@ -39,9 +39,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private bool isRosterSizeQuestion;
         private int answerMaxValue;
 
-        private double? previousAnswer;
-        private double? answer;
-        public double? Answer
+        private decimal? previousAnswer;
+        private decimal? answer;
+        public decimal? Answer
         {
             get { return this.answer; }
             set
@@ -53,8 +53,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
             }
         }
-
-        public bool UseFormatting { get; private set; }
+        
+        public bool UseFormatting { get; set; }
 
         private IMvxCommand valueChangeCommand;
         public IMvxCommand ValueChangeCommand
@@ -162,7 +162,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
             }
             
-            if (double.IsNaN(this.Answer.Value) || this.Answer > int.MaxValue)
+            if (this.Answer > int.MaxValue)
             {
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Integer_ParsingError);
                 return;

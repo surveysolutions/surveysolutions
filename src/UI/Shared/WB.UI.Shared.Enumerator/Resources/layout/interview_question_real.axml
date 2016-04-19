@@ -11,9 +11,9 @@
         <LinearLayout  style="@style/Interview_Question_Border" local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
 
           <NumericEditText style="@style/Interview_Question_Answer_Text_Editor"
-                           local:MvxBind="Value Answer; 
-                                          UseGroupSeparator UseFormatting;
+                           local:MvxBind="UseGroupSeparator UseFormatting;
                                           MaxDigitsAfterDecimal CountOfDecimalPlaces; 
+                                          Value Answer; 
                                           FocusValueChanged ValueChangeCommand; 
                                           Hint Localization('RealQuestion_Hint');" />
           
