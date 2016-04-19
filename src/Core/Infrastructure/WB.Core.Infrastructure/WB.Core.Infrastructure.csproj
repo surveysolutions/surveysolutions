@@ -52,6 +52,7 @@
     <Compile Include="CommandBus\ICommand.cs" />
     <Compile Include="CommandBus\ICommandService.cs" />
     <Compile Include="CommandBus\ICommandValidator.cs" />
+    <Compile Include="CommandBus\Implementation\AggregateKind.cs" />
     <Compile Include="DenormalizerStorage\InMemoryReadSideRepositoryAccessor.cs" />
     <Compile Include="EventBus\BaseDenormalizer.cs" />
     <Compile Include="EventBus\EventBusSettings.cs" />
