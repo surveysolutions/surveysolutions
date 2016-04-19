@@ -4,7 +4,7 @@ using WB.UI.Shared.Enumerator.CustomControls;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
-    public class NumericValueBinding : BaseBinding<NumericEditText, double?>
+    public class NumericValueBinding : BaseBinding<NumericEditText, decimal?>
     {
         private bool subscribed;
 
@@ -31,9 +31,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             FireValueChanged(e.NewValue);
         }
 
-        protected override void SetValueToView(NumericEditText view, double? value)
+        protected override void SetValueToView(NumericEditText view, decimal? value)
         {
-            view.Text = value?.ToString(CultureInfo.InvariantCulture);
+            view.Text = value?.ToString(CultureInfo.CurrentCulture);
         }
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.TwoWay;

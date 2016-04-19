@@ -30,8 +30,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public QuestionStateViewModel<NumericRealQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
 
-        private double? answer;
-        public double? Answer
+        private decimal? answer;
+        public decimal? Answer
         {
             get { return this.answer; }
             private set
@@ -74,8 +74,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.QuestionState.Validity.ProcessException(ex);
             }
         }
-
-        public bool UseFormatting { get; private set; }
+        
+        public bool UseFormatting { get; set; }
         public int? CountOfDecimalPlaces { get; private set; }
 
         public RealQuestionViewModel(
@@ -116,7 +116,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (answerModel.IsAnswered)
             {
-                this.Answer = (double?)answerModel.Answer;
+                this.Answer = answerModel.Answer;
             }
         }
 
@@ -128,12 +128,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
             }
             
-            if (double.IsNaN(this.Answer.Value))
-            {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Real_ParsingError);
-                return;
-            }
-
             var command = new AnswerNumericRealQuestionCommand(
                 interviewId: Guid.Parse(this.interviewId),
                 userId: this.principal.CurrentUserIdentity.UserId,
