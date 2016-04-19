@@ -103,7 +103,7 @@
                 // Options
                 editor.setOptions({
                     maxLines: Infinity,
-                    mode: "ace/mode/csharp-custom",
+                    mode: "ace/mode/csharp",
                     fontSize: 16,
                     highlightActiveLine: false,
                     theme: "ace/theme/github-custom"

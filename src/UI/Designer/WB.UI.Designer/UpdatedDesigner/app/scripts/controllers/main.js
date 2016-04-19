@@ -367,13 +367,13 @@ angular.module('designerApp')
                 renderer.setShowGutter(false);
                 renderer.setPadding(12);
 
-                $scope.aceEditorSetMode(editor);
+                $scope.aceEditorUpdateMode(editor);
 
                 editor.$blockScrolling = Infinity;
                 editor.commands.bindKey("tab", null);
 
                 $rootScope.$on('variablesChanged', function() {
-                    $scope.aceEditorSetMode(editor);
+                    $scope.aceEditorUpdateMode(editor);
                 });
 
             };
@@ -382,7 +382,7 @@ angular.module('designerApp')
                 return $rootScope.variableNames;
             }
 
-            $scope.aceEditorSetMode = function(editor) {
+            $scope.aceEditorUpdateMode = function(editor) {
                 if (editor) {
                     var CSharpExtendableMode = window.ace.require("ace/mode/csharp-custom").Mode;
                     editor.getSession().setMode(new CSharpExtendableMode($scope.getVariables));

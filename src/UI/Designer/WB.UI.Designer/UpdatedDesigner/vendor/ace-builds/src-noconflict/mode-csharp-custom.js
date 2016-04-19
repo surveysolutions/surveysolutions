@@ -57,11 +57,12 @@ var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
 
 var CSharpHighlightRules = function (getSupportVariables) {
 
-    var variables = getSupportVariables();
     var supportVariableList = "";
-    if (variables)
-        supportVariableList = variables.join('|');
-
+    if (getSupportVariables) {
+        var variables = getSupportVariables();
+        if (variables)
+            supportVariableList = variables.join('|');
+    }
 
     var keywordMapper = this.createKeywordMapper({
         "variable.language": "this",
