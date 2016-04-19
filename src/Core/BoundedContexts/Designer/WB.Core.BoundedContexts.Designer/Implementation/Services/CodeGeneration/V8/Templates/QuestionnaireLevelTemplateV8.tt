@@ -46,13 +46,8 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV8<
 	QuestionsCopyOperatorsInCopyMembers(Model.Questions);
 #>
 		};
-				 
-		foreach (var state in level.EnablementStates)
-		{
-			var originalState = this.EnablementStates[state.Key];
-			state.Value.PreviousState = originalState.PreviousState;
-			state.Value.State = originalState.State;
-		}
+
+		level.FillEnablementStates(this.EnablementStates);
 			
 		return level;
 	}

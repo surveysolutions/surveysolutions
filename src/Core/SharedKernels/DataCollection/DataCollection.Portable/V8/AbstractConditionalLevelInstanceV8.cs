@@ -33,8 +33,17 @@ namespace WB.Core.SharedKernels.DataCollection.V8
             IInterviewProperties properties)
             : this(rosterVector, rosterKey, getInstances, conditionalDependencies, structuralDependencies)
         {
-            this.GetInstances = getInstances;
             this.Quest = properties;
+        }
+
+        protected virtual void FillEnablementStates(Dictionary<Guid, ConditionalState> enablementStates)
+        {
+            foreach (var state in this.EnablementStates)
+            {
+                var originalState = enablementStates[state.Key];
+                state.Value.PreviousState = originalState.PreviousState;
+                state.Value.State = originalState.State;
+            }
         }
 
         private IDictionary<Guid, Func<decimal[], Identity[], IExpressionExecutableV8>> rosterGenerators;
