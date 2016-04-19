@@ -578,8 +578,8 @@
     <Content Include="UpdatedDesigner\vendor\ace-builds\package.json" />
     <Content Include="UpdatedDesigner\vendor\ace-builds\README.md" />
     <Content Include="UpdatedDesigner\vendor\ace-builds\src-noconflict\ace.js" />
-    <Content Include="UpdatedDesigner\vendor\ace-builds\src-noconflict\mode-csharp.js" />
-    <Content Include="UpdatedDesigner\vendor\ace-builds\src-noconflict\theme-github.js" />
+    <Content Include="UpdatedDesigner\vendor\ace-builds\src-noconflict\mode-csharp-custom.js" />
+    <Content Include="UpdatedDesigner\vendor\ace-builds\src-noconflict\theme-github-custom.js" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\.bower.json" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.js" />
     <Content Include="UpdatedDesigner\vendor\angular-animate\angular-animate.min.js" />
