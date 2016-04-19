@@ -18,7 +18,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
     internal class CommandService : ICommandService
     {
         private readonly IEventSourcedAggregateRootRepository eventSourcedRepository;
-        private readonly IPlainAggregateRootRepository plainAggregateRootRepository;
+        private readonly IPlainAggregateRootRepository plainRepository;
         private readonly ILiteEventBus eventBus;
         private readonly IAggregateSnapshotter snapshooter;
         private readonly IServiceLocator serviceLocator;
@@ -33,13 +33,13 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             ILiteEventBus eventBus, 
             IAggregateSnapshotter snapshooter,
             IServiceLocator serviceLocator,
-            IPlainAggregateRootRepository plainAggregateRootRepository)
+            IPlainAggregateRootRepository plainRepository)
         {
             this.eventSourcedRepository = eventSourcedRepository;
             this.eventBus = eventBus;
             this.snapshooter = snapshooter;
             this.serviceLocator = serviceLocator;
-            this.plainAggregateRootRepository = plainAggregateRootRepository;
+            this.plainRepository = plainRepository;
         }
 
         public Task ExecuteAsync(ICommand command, string origin, CancellationToken cancellationToken)
@@ -187,7 +187,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             Type aggregateType, Guid aggregateId, IEnumerable<Action<IAggregateRoot, ICommand>> validators,
             Action<ICommand, IAggregateRoot> commandHandler, CancellationToken cancellationToken)
         {
-            IPlainAggregateRoot aggregate = this.plainAggregateRootRepository.Get(aggregateType, aggregateId);
+            IPlainAggregateRoot aggregate = this.plainRepository.Get(aggregateType, aggregateId);
 
             if (aggregate == null)
             {
@@ -209,7 +209,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
             commandHandler.Invoke(command, aggregate);
 
-            this.plainAggregateRootRepository.Save(aggregate);
+            this.plainRepository.Save(aggregate);
         }
     }
 }
