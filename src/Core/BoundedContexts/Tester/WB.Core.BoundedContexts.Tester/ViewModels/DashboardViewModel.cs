@@ -289,7 +289,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
                     await this.DownloadQuestionnaireAttachments(questionnairePackage);
                     var questionnaireIdentity = GenerateFakeQuestionnaireIdentity();
-                    this.StoreQuestionnaireWithNewIdentity(questionnaireIdentity, questionnairePackage);
+                    await this.StoreQuestionnaireWithNewIdentity(questionnaireIdentity, questionnairePackage);
                     var interviewId = await this.CreateInterview(questionnaireIdentity);
 
                     await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
@@ -352,14 +352,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             return interviewId;
         }
 
-        private void StoreQuestionnaireWithNewIdentity(QuestionnaireIdentity questionnaireIdentity, Questionnaire questionnairePackage)
+        private async Task StoreQuestionnaireWithNewIdentity(QuestionnaireIdentity questionnaireIdentity, Questionnaire questionnairePackage)
         {
             this.ProgressIndicator = TesterUIResources.ImportQuestionnaire_StoreQuestionnaire;
 
             var questionnaireDocument = questionnairePackage.Document;
             var supportingAssembly = questionnairePackage.Assembly;
 
-            this.questionnaireImportService.ImportQuestionnaire(questionnaireIdentity, questionnaireDocument, supportingAssembly);
+            await this.questionnaireImportService.ImportQuestionnaireAsync(questionnaireIdentity, questionnaireDocument, supportingAssembly);
         }
 
         private async Task<Questionnaire> DownloadQuestionnaire(QuestionnaireListItem selectedQuestionnaire)

@@ -15,13 +15,13 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class SqlitePlainStorage<TEntity> : IAsyncPlainStorage<TEntity>, IAsyncPlainStorageRemover<TEntity>
-        where TEntity: class, IPlainStorageEntity
+        where TEntity : class, IPlainStorageEntity
     {
         protected readonly SQLiteAsyncConnection asyncStorage;
         protected readonly SQLiteConnectionWithLock storage;
         private readonly ILogger logger;
 
-        public SqlitePlainStorage(ISQLitePlatform sqLitePlatform, 
+        public SqlitePlainStorage(ISQLitePlatform sqLitePlatform,
             ILogger logger,
             IAsynchronousFileSystemAccessor fileSystemAccessor,
             IJsonAllTypesSerializer serializer,
@@ -81,7 +81,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     foreach (var entity in entities.Where(entity => entity != null))
                         connection.Delete(entity);
                 });
-                
+
             }
             catch (SQLiteException ex)
             {
@@ -140,9 +140,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public IReadOnlyCollection<TEntity> LoadAll() => this.RunInTransaction(table => table.ToReadOnlyCollection());
 
-        public async Task<IReadOnlyCollection<TEntity>> LoadAllAsync() 
+        public async Task<IReadOnlyCollection<TEntity>> LoadAllAsync()
             => await this.RunInTransactionAsync(table => table.ToReadOnlyCollection());
-        
+
         private TResult RunInTransaction<TResult>(Func<TableQuery<TEntity>, TResult> function)
         {
             TResult result = default(TResult);

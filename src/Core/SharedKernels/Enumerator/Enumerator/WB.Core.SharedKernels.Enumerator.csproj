@@ -90,7 +90,9 @@
     <Compile Include="Implementation\Services\AnswerToStringService.cs" />
     <Compile Include="Implementation\Services\FriendlyErrorMessageService.cs" />
     <Compile Include="Implementation\Services\IGpsLocationService.cs" />
+    <Compile Include="Implementation\Services\InMemoryAsyncPlainStorage.cs" />
     <Compile Include="Implementation\Services\InterviewViewModelFactory.cs" />
+    <Compile Include="Implementation\Services\OptionsRepository.cs" />
     <Compile Include="Implementation\Services\SqlitePlainStorage.cs" />
     <Compile Include="Implementation\Services\SqliteSettings.cs" />
     <Compile Include="Implementation\Services\MvxTraceListener.cs" />
@@ -119,6 +121,7 @@
     <Compile Include="Services\Infrastructure\Storage\IAsyncPlainStorage.cs" />
     <Compile Include="Services\Infrastructure\Storage\IAsyncPlainStorageRemover.cs" />
     <Compile Include="Services\Infrastructure\Storage\IPlainStorageEntity.cs" />
+    <Compile Include="Services\IOptionsRepository.cs" />
     <Compile Include="Services\IRosterTitleSubstitutionService.cs" />
     <Compile Include="Implementation\Services\RosterTitleSubstitutionService.cs" />
     <Compile Include="Utils\ObservableCollectionExtensions.cs" />
@@ -206,6 +209,7 @@
     <Compile Include="Views\AttachmentContent.cs" />
     <Compile Include="Views\AttachmentContentData.cs" />
     <Compile Include="Views\AttachmentContentMetadata.cs" />
+    <Compile Include="Views\OptionView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -14,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
@@ -43,6 +43,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IPrincipal principal;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly IOptionsRepository optionsRepository;
 
         private Identity questionIdentity;
         private Identity parentQuestionIdentity;
@@ -62,7 +63,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering, 
-            ILiteEventRegistry eventRegistry)
+            ILiteEventRegistry eventRegistry, 
+            IOptionsRepository optionsRepository)
         {
             if (principal == null) throw new ArgumentNullException("principal");
             if (questionnaireRepository == null) throw new ArgumentNullException("questionnaireRepository");
@@ -75,6 +77,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.QuestionState = questionStateViewModel;
             this.Answering = answering;
             this.eventRegistry = eventRegistry;
+            this.optionsRepository = optionsRepository;
         }
 
         public Identity Identity { get { return this.questionIdentity; } }
@@ -107,7 +110,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.answerOnParentQuestion = parentAnswerModel.Answer;
             }
 
-            this.Options = questionnaire
+            this.Options = optionsRepository.GetQuestionOptions(interview.QuestionnaireIdentity, entityIdentity.Id);
+                /*questionnaire
                 .GetAnswerOptionsAsValues(entityIdentity.Id)
                 .Select(x => new CategoricalQuestionOption
                 {
@@ -116,7 +120,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     ParentValue = questionnaire.GetCascadingParentValue(entityIdentity.Id, x)
                 })
                 .ToList()
-                .ToReadOnlyCollection();
+                .ToReadOnlyCollection();*/
 
             if (answerModel.IsAnswered)
             {

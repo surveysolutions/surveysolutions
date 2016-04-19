@@ -77,7 +77,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             mockOfAttachmentContentStorage.Verify(_ => _.StoreAsync(Moq.It.Is<AttachmentContentEnumerable>(ac => ac.Id == "5")), Times.Never);
 
         It should_be_questionnaire_stored_to_local_storage = () => 
-            mockOfQuestionnaireImportService.Verify(_ => _.ImportQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), downloadedQuestionnaire.Document, downloadedQuestionnaire.Assembly), Times.Once);
+            mockOfQuestionnaireImportService.Verify(_ => _.ImportQuestionnaireAsync(Moq.It.IsAny<QuestionnaireIdentity>(), downloadedQuestionnaire.Document, downloadedQuestionnaire.Assembly), Times.Once);
 
         It should_be_executed_CreateInterviewOnClientCommand = () => 
             mockOfCommandService.Verify(_ => _.ExecuteAsync(Moq.It.IsAny<ICommand>(), null, Moq.It.IsAny<CancellationToken>()), Times.Once);
