@@ -13,7 +13,7 @@ using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using System.Collections.Generic;
-
+using System.Globalization;
 using Microsoft.Practices.ServiceLocation;
 using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
@@ -2146,9 +2146,23 @@ namespace WB.Tests.Unit
         }
 
         public static SingleQuestion SingleOptionQuestion(Guid? questionId = null, string variable = null, string enablementCondition = null, string validationExpression = null,
-            Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title=null, bool hideIfDisabled = false, string linkedFilterExpression=null,
-            Guid? linkedToRosterId=null)
+            Guid? linkedToQuestionId = null,
+            Guid? cascadeFromQuestionId = null, 
+            decimal[] answerCodes = null, 
+            decimal[] parentCodes = null,
+            string title = null, 
+            bool hideIfDisabled = false, 
+            string linkedFilterExpression = null,
+            Guid? linkedToRosterId = null)
         {
+            var answers = (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Answer(a.ToString(), a)).ToList();
+            if (parentCodes != null)
+            {
+                for (int i = 0; i < parentCodes.Length; i++)
+                {
+                    answers[i].ParentValue = parentCodes[i].ToString(CultureInfo.InvariantCulture);
+                }
+            }
             return new SingleQuestion
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
@@ -2161,7 +2175,7 @@ namespace WB.Tests.Unit
                 LinkedToQuestionId = linkedToQuestionId,
                 LinkedToRosterId = linkedToRosterId,
                 CascadeFromQuestionId = cascadeFromQuestionId,
-                Answers = (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Answer(a.ToString(), a)).ToList(),
+                Answers = answers,
                 LinkedFilterExpression= linkedFilterExpression
             };
         }
