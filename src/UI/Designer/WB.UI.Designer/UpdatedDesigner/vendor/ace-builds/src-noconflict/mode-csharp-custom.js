@@ -55,9 +55,17 @@ var oop = require("../lib/oop");
 var DocCommentHighlightRules = require("./doc_comment_highlight_rules").DocCommentHighlightRules;
 var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
 
-var CSharpHighlightRules = function() {
+var CSharpHighlightRules = function (getSupportVariables) {
+
+    var variables = getSupportVariables();
+    var supportVariableList = "";
+    if (variables)
+        supportVariableList = variables.join('|');
+
+
     var keywordMapper = this.createKeywordMapper({
         "variable.language": "this",
+        "support.variable": supportVariableList,
         "keyword": "abstract|event|new|struct|as|explicit|null|switch|base|extern|object|this|bool|false|operator|throw|break|finally|out|true|byte|fixed|override|try|case|float|params|typeof|catch|for|private|uint|char|foreach|protected|ulong|checked|goto|public|unchecked|class|if|readonly|unsafe|const|implicit|ref|ushort|continue|in|return|using|decimal|int|sbyte|virtual|default|interface|sealed|volatile|delegate|internal|short|void|do|is|sizeof|while|double|lock|stackalloc|else|long|static|enum|namespace|string|var|dynamic",
         "constant.language": "null|true|false"
     }, "identifier");
@@ -790,7 +798,7 @@ oop.inherits(FoldMode, CFoldMode);
 
 });
 
-ace.define("ace/mode/csharp",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/csharp_highlight_rules","ace/mode/matching_brace_outdent","ace/mode/behaviour/cstyle","ace/mode/folding/csharp"], function(require, exports, module) {
+ace.define("ace/mode/csharp-custom",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/csharp_highlight_rules","ace/mode/matching_brace_outdent","ace/mode/behaviour/cstyle","ace/mode/folding/csharp"], function(require, exports, module) {
 "use strict";
 
 var oop = require("../lib/oop");
@@ -800,8 +808,9 @@ var MatchingBraceOutdent = require("./matching_brace_outdent").MatchingBraceOutd
 var CstyleBehaviour = require("./behaviour/cstyle").CstyleBehaviour;
 var CStyleFoldMode = require("./folding/csharp").FoldMode;
 
-var Mode = function() {
-    this.HighlightRules = CSharpHighlightRules;
+var Mode = function (getSupportVariables) {
+    
+    this.HighlightRules = function () { return new CSharpHighlightRules(getSupportVariables) };
     this.$outdent = new MatchingBraceOutdent();
     this.$behaviour = new CstyleBehaviour();
     this.foldingRules = new CStyleFoldMode();
@@ -846,7 +855,7 @@ oop.inherits(Mode, TextMode);
         return null;
     };
 
-    this.$id = "ace/mode/csharp";
+    this.$id = "ace/mode/csharp-custom";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;

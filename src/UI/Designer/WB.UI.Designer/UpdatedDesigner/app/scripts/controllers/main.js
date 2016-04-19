@@ -259,8 +259,31 @@ angular.module('designerApp')
             };
 
             $scope.currentChapter = null;
-            $scope.variableNames = [];
+            $rootScope.variableNames = [];
+
+            $rootScope.updateVariableNames = function (variables) {
+                $rootScope.variableNames = variables;
+
+                $rootScope.$broadcast("variablesChanged", {});
+            };
+
+            $rootScope.addLocalVariableName = function (variable) {
+                if ($scope.variableNames.indexOf(variable) == -1) {
+                    $scope.variableNames.push(variable);
+
+                    $rootScope.$broadcast("variablesChanged", {});
+                }
+            };
             
+            $rootScope.removeLocalVariableName = function (variable) {
+                for (var i = $scope.variableNames.length - 1; i--;) {
+                    if ($scope.variableNames[i] === variable)
+                        $scope.variableNames.splice(i, 1);
+                }
+
+                $rootScope.$broadcast("variablesChanged", {});
+            };
+
             $rootScope.$on('groupDeleted', function (scope, removedItemId) {
                 $scope.questionnaire.groupsCount--;
                 $scope.removeItemWithIdFromErrors(removedItemId);
@@ -327,44 +350,47 @@ angular.module('designerApp')
                     }
                 });
             };
-
             
             $scope.aceLoaded = function (editor) {
                 // Editor part
                 var renderer = editor.renderer;
                 
-                var variablesCompletor = 
-                {
-                    getCompletions: function (editor, session, pos, prefix, callback) {
-                        callback(null, $rootScope.variableNames.map(function (variable) {
-                            return {name: variable, value: variable, meta: "variable" }
-                        }));
-                    }
-                }
-
                 // Options
                 editor.setOptions({
                     maxLines: Infinity,
                     fontSize: 16,
                     highlightActiveLine: false,
-                    theme: "ace/theme/github",
+                    theme: "ace/theme/github-custom",
                     enableBasicAutocompletion: true,
                     enableLiveAutocompletion: false
                 });
                 renderer.setShowGutter(false);
                 renderer.setPadding(12);
 
-                editor.getSession().setMode({
-                    path: "ace/mode/csharp",
-                    timestamp: Date.now()
-                });
+                ace.require("ace/ext/language_tools");
 
-                ace.require("ace/ext/language_tools");//.addCompleter(variablesCompletor);
+                $scope.aceEditorSetMode(editor);
 
                 editor.$blockScrolling = Infinity;
                 editor.commands.bindKey("tab", null);
+
+                $rootScope.$on('variablesChanged', function() {
+                    $scope.aceEditorSetMode(editor);
+                });
+
             };
 
+            $scope.getVariables = function () {
+                return $rootScope.variableNames;
+            }
+
+            $scope.aceEditorSetMode = function(editor) {
+                if (editor) {
+                    var CSharpExtendableMode = ace.require("ace/mode/csharp-custom").Mode;
+                    editor.getSession().setMode(new CSharpExtendableMode($scope.getVariables));
+                }
+            }
+           
             $rootScope.$on('$stateChangeSuccess',
                 function (event, toState, toParams) {
                     var target = toState.name.replace('questionnaire.chapter.', '');

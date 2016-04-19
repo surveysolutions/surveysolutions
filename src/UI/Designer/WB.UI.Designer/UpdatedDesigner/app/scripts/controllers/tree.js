@@ -607,7 +607,7 @@
 
                         $scope.items = result.chapter.items;
                         $scope.currentChapter = result.chapter;
-                        $rootScope.variableNames = result.variableNames;
+                        $rootScope.updateVariableNames(result.variableNames);
                         connectTree();
                     });
             };
@@ -633,6 +633,8 @@
                 question.linkedToQuestionId = data.linkedToQuestionId;
                 question.hasValidation = data.hasValidation;
                 question.hasCondition = data.hasCondition;
+
+                $rootScope.addLocalVariableName(data.variable);
 
             });
 
@@ -662,6 +664,8 @@
                 roster.title = data.title;
                 roster.variable = data.variable;
                 roster.hasCondition = data.hasCondition;
+
+                $rootScope.addLocalVariableName(data.variable);
             });
         }
     );

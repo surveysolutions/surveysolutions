@@ -1,4 +1,4 @@
-ace.define("ace/theme/github",["require","exports","module","ace/lib/dom"], function(require, exports, module) {
+ace.define("ace/theme/github-custom",["require","exports","module","ace/lib/dom"], function(require, exports, module) {
 
 exports.isDark = false;
 exports.cssClass = "ace-github";
@@ -28,6 +28,9 @@ color: #0086B3;\
 }\
 .ace-github .ace_support.ace_function {\
 color: #0086B3;\
+}\
+.ace-github .ace_support.ace_variable  {\
+color: #3da802;\
 }\
 .ace-github .ace_comment {\
 color: #998;\
