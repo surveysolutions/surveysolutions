@@ -254,6 +254,7 @@
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_list_question_that_is_roster_size_and_roster_has_condition_should_turn_it_off.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_multiple_options_question_which_is_roster_size_question_and_roster_was_disabled_and_deleted.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_gps_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
+    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_a_question_with_answer_that_raises_exception_in_static_text_validation.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_a_question_with_answer_that_enables_dependent_group.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_a_question_with_answer_that_enables_dependent_question.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_a_question_with_answer_that_enables_dependent_static_text.cs" />
@@ -277,7 +278,6 @@
     <Compile Include="InterviewTests\EnablementAndValidness\when_condition_uses_two_levels_of_nested_rosters.cs" />
     <Compile Include="InterviewTests\in_standalone_app_domain.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_inside_roster_with_lookup_table_in_validation.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_valid_answer_and_static_text_raiser_exception.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_valid_answer_and_question_and_static_text_were_invalid_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_valid_answer_and_question_and_static_text_were_valid_before_answer.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_invalid_answer_and_question_and_static_text_were_invalid_before_answer.cs" />
