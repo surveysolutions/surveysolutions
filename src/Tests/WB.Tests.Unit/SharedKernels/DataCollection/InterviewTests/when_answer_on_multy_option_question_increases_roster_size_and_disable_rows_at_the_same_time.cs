@@ -49,36 +49,37 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var enablementQueue = new Queue<EnablementChanges>();
             // init .ctor call
-            enablementQueue.Enqueue(new EnablementChanges(new List<Identity>(), new List<Identity>(), new List<Identity>(), new List<Identity>()));
+            enablementQueue.Enqueue(Create.EnablementChanges());
             // add first row to roster
-            enablementQueue.Enqueue(new EnablementChanges(new List<Identity>(), new List<Identity>(), new List<Identity>(), new List<Identity>()));
+            enablementQueue.Enqueue(Create.EnablementChanges());
             // add second row to roster with disable
             enablementQueue.Enqueue(
-                new EnablementChanges(
-                    new List<Identity>
+                Create.EnablementChanges(
+                    groupsToBeDisabled: new List <Identity>
                     {
                         new Identity(rosterGroupId, new decimal[] {1}),
                         new Identity(rosterGroupId, new decimal[] {2})
-                    }, new List<Identity>(),
-                    new List<Identity>() {
+                    },
+                    questionsToBeDisabled: new List <Identity> {
                         new Identity(numericQuestionInsideRoster, new decimal[] {1}),
                         new Identity(numericQuestionInsideRoster, new decimal[] {2})
-                    },
-                    new List<Identity>()));
+                    }));
             //remove first row
-            enablementQueue.Enqueue(new EnablementChanges(new List<Identity>(), new List<Identity>(), new List<Identity>(), new List<Identity>()));
+            enablementQueue.Enqueue(Create.EnablementChanges());
             //remove second row
-            enablementQueue.Enqueue(new EnablementChanges(new List<Identity>(), new List<Identity>(), new List<Identity>(), new List<Identity>()));
+            enablementQueue.Enqueue(Create.EnablementChanges());
             //return first row
-            enablementQueue.Enqueue(new EnablementChanges(new List<Identity>(), new List<Identity>(), new List<Identity>(), new List<Identity>(){
+            enablementQueue.Enqueue(
+                Create.EnablementChanges(
+                    questionsToBeEnabled: new List<Identity>{
                       // if uncomment this line the test  become succesefull                                                                                                                         
                         new Identity(numericQuestionInsideRoster, new decimal[] {1}),
                         new Identity(numericQuestionInsideRoster, new decimal[] {2})
                     }));
             //answer on numeric question
-            enablementQueue.Enqueue(new EnablementChanges(new List<Identity>(), new List<Identity>(), new List<Identity>(), new List<Identity>()));
+            enablementQueue.Enqueue(Create.EnablementChanges());
 
-            interviewExpressionState = new Mock<IInterviewExpressionStateV7>();
+            interviewExpressionState = new Mock<ILatestInterviewExpressionState>();
             interviewExpressionState.Setup(x => x.ProcessEnablementConditions()).Returns(enablementQueue.Dequeue);
             interviewExpressionState.Setup(x => x.Clone()).Returns(interviewExpressionState.Object);
 
@@ -126,6 +127,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid multyOptionRosterSizeId;
         private static Guid numericQuestionInsideRoster;
         private static Guid rosterGroupId;
-        private static Mock<IInterviewExpressionStateV7> interviewExpressionState;
+        private static Mock<ILatestInterviewExpressionState> interviewExpressionState;
     }
 }

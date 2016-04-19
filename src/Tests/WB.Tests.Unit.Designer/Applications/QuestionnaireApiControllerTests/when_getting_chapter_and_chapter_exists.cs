@@ -1,5 +1,6 @@
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.UI.Designer.Api;
 using It = Machine.Specifications.It;
@@ -25,10 +26,10 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             result.ShouldNotBeNull();
 
         It should_chapter_has_type_of_GroupInfoView = () =>
-            result.ShouldBeOfExactType<GroupInfoView>();
+            result.ShouldBeOfExactType<NewChapterView>();
 
         private static QuestionnaireController controller;
-        private static IQuestionnaireItem result;
+        private static NewChapterView result;
         private static string questionnaireId = "11111111111111111111111111111111";
         private static string chapterId = "22222222222222222222222222222222";
     }

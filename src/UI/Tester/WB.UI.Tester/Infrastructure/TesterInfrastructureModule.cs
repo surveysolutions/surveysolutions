@@ -62,10 +62,9 @@ namespace WB.UI.Tester.Infrastructure
             this.Bind<IRestServicePointManager>().To<RestServicePointManager>();
             this.Bind<IRestService>().To<RestService>();
 
-            this.Bind<JsonUtilsSettings>().ToSelf().InSingletonScope();
-
-            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer(new JsonSerializerSettingsFactory()));
-
+            this.Bind<ISerializer>().ToMethod((ctx) => new PortableJsonSerializer());
+            this.Bind<IJsonAllTypesSerializer>().ToMethod((ctx) => new PortableJsonAllTypesSerializer());
+            
             this.Bind<IStringCompressor>().To<JsonCompressor>();
             
             this.Bind<IDesignerApiService>().To<DesignerApiService>().InSingletonScope();

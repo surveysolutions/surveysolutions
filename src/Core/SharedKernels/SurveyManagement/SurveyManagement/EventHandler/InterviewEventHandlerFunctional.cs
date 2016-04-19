@@ -52,6 +52,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewData, AnswersRemoved>,
         IUpdateHandler<InterviewData, GroupsDisabled>,
         IUpdateHandler<InterviewData, GroupsEnabled>,
+        IUpdateHandler<InterviewData, StaticTextsEnabled>,
+        IUpdateHandler<InterviewData, StaticTextsDisabled>,
+        IUpdateHandler<InterviewData, StaticTextsDeclaredInvalid>,
+        IUpdateHandler<InterviewData, StaticTextsDeclaredValid>,
         IUpdateHandler<InterviewData, QuestionsDisabled>,
         IUpdateHandler<InterviewData, QuestionsEnabled>,
         IUpdateHandler<InterviewData, AnswersDeclaredInvalid>,
@@ -63,7 +67,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         IUpdateHandler<InterviewData, InterviewHardDeleted>,
         IUpdateHandler<InterviewData, AnswerRemoved>
     {
-        private readonly IReadSideRepositoryWriter<UserDocument> users;
+        private readonly IPlainStorageAccessor<UserDocument> users;
         private readonly IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage;
 
         public override object[] Readers
@@ -179,6 +183,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             });
         }
 
+        private static InterviewData UpdateStaticText(InterviewData interview, decimal[] vector, Guid staticTextId, Action<InterviewStaticText> update)
+        {
+            return PreformActionOnLevel(interview, vector, (interviewLevel) =>
+            {
+                if (!interviewLevel.StaticTexts.ContainsKey(staticTextId))
+                    interviewLevel.StaticTexts.Add(staticTextId, new InterviewStaticText(staticTextId));
+
+                var staticText = interviewLevel.StaticTexts[staticTextId];
+
+                update(staticText);
+            });
+        }
+
         private static InterviewData ChangeQuestionConditionState(InterviewData interview, decimal[] vector, Guid questionId, bool disabled)
         {
             return UpdateQuestion(interview, vector, questionId, (question) =>
@@ -262,7 +279,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         }
 
         public InterviewEventHandlerFunctional(
-            IReadSideRepositoryWriter<UserDocument> users,
+            IPlainStorageAccessor<UserDocument> users,
             IReadSideKeyValueStorage<InterviewData> interviewData, 
             IPlainKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructureStorage)
             : base(interviewData)
@@ -298,7 +315,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private InterviewData CreateViewWithSequence(Guid userId, Guid eventSourceId, DateTime eventTimeStamp,
             Guid questionnaireId, long questionnaireVersion, long eventSequence, bool createdOnClient)
         {
-            var responsible = this.users.GetById(userId);
+            var responsible = this.users.GetById(userId.FormatGuid());
 
             var interview = new InterviewData()
             {
@@ -415,7 +432,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         public InterviewData Update(InterviewData state, IPublishedEvent<AnswerCommented> @event)
         {
-            var commenter = this.users.GetById(@event.Payload.UserId);
+            var commenter = this.users.GetById(@event.Payload.UserId.FormatGuid());
 
             return this.SaveComment(state, @event.Payload.RosterVector, @event.Payload.QuestionId,
                 @event.Payload.Comment, @event.Payload.UserId, commenter != null ? commenter.UserName : "<Unknown user>", @event.Payload.CommentTime);
@@ -520,6 +537,49 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
                 updatedQuestion.QuestionState &= ~QuestionState.Answered;
             });
+        }
+
+        public InterviewData Update(InterviewData state, IPublishedEvent<StaticTextsEnabled> @event)
+        {
+            return @event.Payload.StaticTexts.Aggregate(
+                state,
+                (document, staticTextIdentity) => UpdateStaticText(document, staticTextIdentity.RosterVector, staticTextIdentity.Id, (staticText) =>
+                {
+                    staticText.IsEnabled = true;
+                }));
+        }
+
+        public InterviewData Update(InterviewData state, IPublishedEvent<StaticTextsDisabled> @event)
+        {
+            return @event.Payload.StaticTexts.Aggregate(
+                state,
+                (document, staticTextIdentity) => UpdateStaticText(document, staticTextIdentity.RosterVector, staticTextIdentity.Id, (staticText) =>
+                {
+                    staticText.IsEnabled = false;
+                }));
+        }
+
+
+        public InterviewData Update(InterviewData state, IPublishedEvent<StaticTextsDeclaredInvalid> @event)
+        {
+            return @event.Payload.FailedValidationConditions.Aggregate(
+                state,
+                (document, staticTextKeyValue) => UpdateStaticText(document, staticTextKeyValue.Key.RosterVector, staticTextKeyValue.Key.Id, (staticText) =>
+                {
+                    staticText.IsInvalid = true;
+                    staticText.FailedValidationConditions = staticTextKeyValue.Value;
+                }));
+        }
+
+        public InterviewData Update(InterviewData state, IPublishedEvent<StaticTextsDeclaredValid> @event)
+        {
+            return @event.Payload.StaticTexts.Aggregate(
+                state,
+                (document, staticTextIdentity) => UpdateStaticText(document, staticTextIdentity.RosterVector, staticTextIdentity.Id, (staticText) =>
+                {
+                    staticText.IsInvalid = false;
+                    staticText.FailedValidationConditions = new List<FailedValidationCondition>();
+                }));
         }
 
         public InterviewData Update(InterviewData state, IPublishedEvent<GroupsDisabled> @event)

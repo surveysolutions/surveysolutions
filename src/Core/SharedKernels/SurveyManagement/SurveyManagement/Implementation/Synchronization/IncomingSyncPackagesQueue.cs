@@ -5,35 +5,47 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Caching;
-using Main.Core.Events;
+using System.Text;
 using Polly;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.CustomCollections;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization;
-using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 {
-    internal class IncomingSyncPackagesQueue : IIncomingSyncPackagesQueue
+    [Obsolete("Since v 5.8")]
+    internal class IncomingSyncPackagesQueue : InterviewPackagesService
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string incomingUnprocessedPackagesDirectory;
         private readonly SyncSettings syncSettings;
         private readonly ILogger logger;
-        private readonly ISerializer serializer;
+        private readonly IJsonAllTypesSerializer serializer;
         private readonly IArchiveUtils archiver;
         private readonly MemoryCache cache = new MemoryCache(nameof(IncomingSyncPackagesQueue));
         private readonly object cacheLockObject = new object();
-
-        public IncomingSyncPackagesQueue(IFileSystemAccessor fileSystemAccessor, 
-            SyncSettings syncSettings, 
-            ILogger logger, 
-            ISerializer serializer, 
-            IArchiveUtils archiver)
+        
+        public IncomingSyncPackagesQueue(IFileSystemAccessor fileSystemAccessor,
+            SyncSettings syncSettings,
+            ILogger logger,
+            IJsonAllTypesSerializer serializer,
+            IArchiveUtils archiver,
+            IPlainStorageAccessor<InterviewPackage> interviewPackageStorage,
+            IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage,
+            ICommandService commandService) : base(
+                interviewPackageStorage: interviewPackageStorage,
+                brokenInterviewPackageStorage: brokenInterviewPackageStorage,
+                logger: logger,
+                serializer: serializer,
+                syncSettings: syncSettings,
+                commandService: commandService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.syncSettings = syncSettings;
@@ -42,37 +54,36 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             this.archiver = archiver;
             this.incomingUnprocessedPackagesDirectory = fileSystemAccessor.CombinePath(syncSettings.AppDataDirectory,
                 syncSettings.IncomingUnprocessedPackagesDirectoryName);
-
-            if (!fileSystemAccessor.IsDirectoryExists(this.incomingUnprocessedPackagesDirectory))
-                fileSystemAccessor.CreateDirectory(this.incomingUnprocessedPackagesDirectory);
         }
 
-        public void Enqueue(Guid interviewId, string item)
+        [Obsolete("Since v 5.8")]
+        public override void StorePackage(string item)
         {
-            if (string.IsNullOrWhiteSpace(item))
-                throw new ArgumentException("Sync Item is not set.");
+            if (string.IsNullOrEmpty(item)) throw new ArgumentException(nameof(item));
 
-            string syncPackageFileName = $"{DateTime.Now.Ticks}-{interviewId.FormatGuid()}.{this.syncSettings.IncomingCapiPackageFileNameExtension}";
+            var syncItem = this.serializer.Deserialize<SyncItem>(item);
 
-            string subfolderName = $"{interviewId.FormatGuid()}".Substring(0, 2);
-            string subfolderPath = this.fileSystemAccessor.CombinePath(this.incomingUnprocessedPackagesDirectory, subfolderName);
+            if (this.archiver.IsZipStream(new MemoryStream(Encoding.UTF8.GetBytes(syncItem.MetaInfo ?? ""))))
+                syncItem.MetaInfo = archiver.DecompressString(syncItem.MetaInfo);
 
-            if (!fileSystemAccessor.IsDirectoryExists(subfolderPath))
-                fileSystemAccessor.CreateDirectory(subfolderPath);
+            if (this.archiver.IsZipStream(new MemoryStream(Encoding.UTF8.GetBytes(syncItem.Content ?? ""))))
+                syncItem.Content = this.archiver.DecompressString(syncItem.Content);
 
-            string fullPathToSyncPackage = this.fileSystemAccessor.CombinePath(subfolderPath, syncPackageFileName);
+            InterviewMetaInfo meta = this.serializer.Deserialize<InterviewMetaInfo>(syncItem.MetaInfo) ??
+                                     new InterviewMetaInfo();
 
-            Stopwatch innerwatch = Stopwatch.StartNew();
-            this.fileSystemAccessor.WriteAllText(fullPathToSyncPackage, item);
-            this.logger.Debug($"Sync package {syncPackageFileName}: WriteAllText {syncPackageFileName}. Took {innerwatch.Elapsed:g}.");
-            innerwatch.Stop();
-
-            this.GetCachedFilesInIncomingDirectory().Add(fullPathToSyncPackage);
+            base.StorePackage(
+                interviewId: syncItem.RootId,
+                questionnaireId: meta.TemplateId,
+                questionnaireVersion: meta.TemplateVersion,
+                responsibleId: meta.ResponsibleId,
+                interviewStatus: (InterviewStatus) meta.Status,
+                isCensusInterview: meta.CreatedOnClient ?? false,
+                events: syncItem.Content ?? "");
         }
 
-        public int QueueLength =>
-            this.GetCachedFilesInIncomingDirectory()
-                .Count(filename => filename.EndsWith(this.syncSettings.IncomingCapiPackageFileNameExtension));
+        public override int QueueLength => this.GetCachedFilesInIncomingDirectory()
+            .Count(filename => filename.EndsWith(this.syncSettings.IncomingCapiPackageFileNameExtension)) + base.QueueLength;
 
         private ContextualPolicy SetupRetryPolicyForPackage(string pathToPackage)
         {
@@ -88,11 +99,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                 );
         }
 
-        public void DeleteSyncItem(string syncItemPath)
+        public override bool HasPendingPackageByInterview(Guid interviewId)
         {
-            fileSystemAccessor.DeleteFile(syncItemPath);
-
-            this.GetCachedFilesInIncomingDirectory().Remove(syncItemPath);
+            return base.HasPendingPackageByInterview(interviewId) ||
+                   this.GetCachedFilesInIncomingDirectory()
+                       .Any(filename => filename.Contains(interviewId.FormatGuid()) &&
+                                        filename.EndsWith(this.syncSettings.IncomingCapiPackageFileNameExtension));
         }
 
         private ConcurrentHashSet<string> GetCachedFilesInIncomingDirectory()
@@ -135,56 +147,45 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             }
         }
 
-        public bool HasPackagesByInterviewId(Guid interviewId)
-        {
-            return
-                this.GetCachedFilesInIncomingDirectory().Any(filename =>
-                    filename.Contains(interviewId.FormatGuid()) &&
-                    filename.EndsWith(this.syncSettings.IncomingCapiPackageFileNameExtension));
-        }
-
-        public IReadOnlyCollection<string> GetTopSyncItemsAsFileNames(int count)
+        public override IReadOnlyCollection<string> GetTopPackageIds(int count)
         {
             var cachedFilesInIncomingDirectory = this.GetCachedFilesInIncomingDirectory().ToList();
             this.logger.Debug($"Current queue length: {cachedFilesInIncomingDirectory.Count}");
 
-            var pathToPackage = cachedFilesInIncomingDirectory.OrderBy(this.fileSystemAccessor.GetFileName).Take(count).ToList();
+            var packagesFromFileStorage = cachedFilesInIncomingDirectory.OrderBy(this.fileSystemAccessor.GetFileName).Take(count).ToList();
 
-            return pathToPackage;
+            return packagesFromFileStorage.Count == 0 ? base.GetTopPackageIds(count) : packagesFromFileStorage;
         }
 
-        public IncomingSyncPackage GetSyncItem(string pathToPackage)
+        public override void ProcessPackage(string pathToPackage)
         {
-            Guid? interviewId = null;
+            Stopwatch innerwatch = Stopwatch.StartNew();
             try
             {
+                if (!this.fileSystemAccessor.IsFileExists(pathToPackage))
+                {
+                    base.ProcessPackage(pathToPackage);
+                    return;
+                }
+
                 var policy = SetupRetryPolicyForPackage(pathToPackage);
+                
+                string fileContent = policy.Execute(() => fileSystemAccessor.ReadAllText(pathToPackage));
 
-                Stopwatch innerwatch = Stopwatch.StartNew();
-                var fileContent = policy.Execute(() => fileSystemAccessor.ReadAllText(pathToPackage));
-                this.logger.Debug($"GetSyncItem {Path.GetFileName(pathToPackage)}: ReadAllText {Path.GetFileName(pathToPackage)}. Took {innerwatch.Elapsed:g}.");
+                this.logger.Debug($"Package {Path.GetFileName(pathToPackage)}. Read content from file. Took {innerwatch.Elapsed:g}.");
+                innerwatch.Restart();
+
+                this.StorePackage(fileContent);
+
+                this.fileSystemAccessor.DeleteFile(pathToPackage);
+                this.GetCachedFilesInIncomingDirectory().Remove(pathToPackage);
+
+                this.logger.Debug($"Package {Path.GetFileName(pathToPackage)}. File deleted. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Stop();
-
-                var syncItem = this.serializer.Deserialize<SyncItem>(fileContent);
-
-                interviewId = syncItem.RootId;
-
-                var meta =
-                    this.serializer.Deserialize<InterviewMetaInfo>(archiver.DecompressString(syncItem.MetaInfo));
-
-                var eventsToSync =
-                    this.serializer.Deserialize<AggregateRootEvent[]>(archiver.DecompressString(syncItem.Content))
-                        .Select(e => e.Payload)
-                        .ToArray();
-
-                return new IncomingSyncPackage(meta.PublicKey, meta.ResponsibleId, meta.TemplateId,
-                        meta.TemplateVersion, (InterviewStatus)meta.Status, eventsToSync, meta.CreatedOnClient ?? false, syncSettings.Origin, pathToPackage);
             }
             catch (Exception e)
             {
-                var message = string.Format("package '{0}' wasn't parsed. Reason: '{1}'", pathToPackage, e.Message);
-                this.logger.Error(message, e);
-                throw new IncomingSyncPackageException(message, e, interviewId, pathToPackage);
+                this.logger.Error($"Package {Path.GetFileName(pathToPackage)}. FAILED. Reason: '{e.Message}'", e);
             }
         }
     }

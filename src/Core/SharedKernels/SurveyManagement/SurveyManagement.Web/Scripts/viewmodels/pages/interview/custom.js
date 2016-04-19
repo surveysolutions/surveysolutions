@@ -23,7 +23,10 @@ ko.validation.rules['notempty'] = {
 
 ko.validation.rules['numericValidator'] = {
     validator: function (val, countOfDecimalPlaces) {
-        var newValue = val.split(',').join('');
+        var comma = ',';
+        var period = '.';
+
+        var newValue = val.split(comma).join('');
 
         if (isNaN(newValue)) {
             this.message = 'Please enter a number';
@@ -32,7 +35,7 @@ ko.validation.rules['numericValidator'] = {
         if (countOfDecimalPlaces===true)
             return true;
         var stringVal = (newValue || '').toString();
-        if (stringVal.indexOf(".") == -1) {
+        if (stringVal.indexOf(period) == -1) {
             return true;
         }
 
@@ -41,7 +44,7 @@ ko.validation.rules['numericValidator'] = {
             return false;
         }
 
-        var countOfDecimalDigits = stringVal.substring(stringVal.indexOf(".") + 1).length;
+        var countOfDecimalDigits = stringVal.substring(stringVal.indexOf(period) + 1).length;
         if (countOfDecimalDigits > countOfDecimalPlaces) {
             this.message = 'According to questionnaire, count of decimal places should not be greater than ' + countOfDecimalPlaces;
             return false;
@@ -50,6 +53,58 @@ ko.validation.rules['numericValidator'] = {
         return true;
     },
     message: 'Count of decimal places should not be greater than value set in questionnaire'
+};
+
+ko.validation.rules['numberLengthValidator'] = {
+    validator: function (val, numberType) {
+        var comma = ',';
+        var period = '.';
+
+        var isIntegerType = numberType == 'integer';
+        var isRealType = numberType == 'real';
+        if (!isIntegerType && !isRealType)
+            return true;
+
+        var value = val.split(comma).join('');
+
+        var isNumeric = Math.floor(value) == value && $.isNumeric(value);
+        if (!isNumeric) {
+            if (isIntegerType)
+                this.message = 'Please enter a integer value.'
+            else if (isRealType)
+                this.message = 'Please enter a real value.'
+
+            return false;
+        }
+
+        if (isIntegerType) {
+            var integerNumber = parseInt(value);
+            var isInteger = integerNumber <= 2147483647 && integerNumber >= -2147483648;
+            if (!isInteger) {
+                this.message = 'Please enter a value between -2147483648 and 2147483647.'
+                return false;
+            }
+        } else if (isRealType) {
+            var decimalCharPosition = value.indexOf(period);
+            if (decimalCharPosition != -1) {
+                var countOfDecimalDigits = value.substring(decimalCharPosition + 1).length;
+                if (countOfDecimalDigits > 15) {
+                    this.message = 'Count of decimal places should not be greater than 15.'
+                    return false;
+                }
+            }
+
+            var countOfDecimalSymbols = decimalCharPosition == -1 ? value.length : value.length - 1;
+            var isReal = countOfDecimalSymbols <= 28;
+            if (!isReal) {
+                this.message = 'Count of digits should not be greater than 28.'
+                return false;
+            }
+        }
+
+        return true;
+    },
+    message: 'Please enter a number value.'
 };
 
 ko.validation.rules['digit'] = {
@@ -141,105 +196,6 @@ ko.bindingHandlers.typeahead = {
                 $element.change();
             })
             .val(allBindings.value());
-    }
-};
-ko.bindingHandlers.numericformatter = {
-    init: function (element, valueAccessor) {
-        ko.utils.registerEventHandler(element, 'change', function () {
-            var observable = valueAccessor();
-            observable($(element).val());
-        });
-    },
-    update: function (element, valueAccessor) {
-        var value = ko.utils.unwrapObservable(valueAccessor());
-        if (!value)
-            return;
-
-        var jElement = $(element);
-
-        var newValue = ko.bindingHandlers.numericformatter.format(value.split(',').join(''));
-
-        if (jElement.is('input')) {
-            if (newValue !== value) {
-                jElement.val(newValue);
-
-                var oldCursorPosition = ko.bindingHandlers.numericformatter.getCursorPosition(element);
-                var newPosition = ko.bindingHandlers.numericformatter.getNewCursorPosition(value, newValue, oldCursorPosition);
-                
-                ko.bindingHandlers.numericformatter.selectRange(element, newPosition);
-            }
-        }
-
-        if ($.isFunction(jElement.text) && newValue !== value) {
-            jElement.text(newValue);
-        }
-    },
-    endWith: function (str, symbol) {
-        return str.indexOf(symbol, str.length - 1) !== -1;
-    },
-    format: function (val, comma, period) {
-        comma = comma || ',';
-        period = period || '.';
-        var periodLength = 3;
-        var split = val.toString().split('.');
-        var numeric = split[0];
-        var decimal = split.length > 1 ? period + split[1] : '';
-        var countOfPeriods = parseInt((numeric.length - 1) / periodLength);
-        var separatedNumeric ='';
-        for (var i = 0; i < countOfPeriods; i++) {
-            var subValue = numeric.substr(numeric.length - ((i + 1) * periodLength), periodLength);
-            separatedNumeric = comma + subValue + separatedNumeric;
-        }
-        return numeric.substr(0, numeric.length - countOfPeriods * periodLength) + separatedNumeric + decimal;
-    },
-    getNewCursorPosition: function (oldText, newText, oldCursorPosition) {
-        var newCursorPosition = newText.length;
-        var indexOfOldValue = 0;
-
-        for (var i = 0; i < newText.length; i++) {
-            while (newText[i] != oldText[indexOfOldValue]) {
-
-                if (isNaN(parseInt(newText[i])))
-                    break;
-
-                indexOfOldValue++;
-            }
-
-            if (indexOfOldValue + 1 >= oldCursorPosition) {
-                newCursorPosition = i + 1;
-                break;
-            }
-        }
-
-        return newCursorPosition;
-    },
-    selectRange: function (input, start, end) {
-        if (!end) end = start;
-
-        if (input.setSelectionRange) {
-            input.focus();
-            input.setSelectionRange(start, end);
-        } else if (input.createTextRange) {
-            var range = input.createTextRange();
-            range.collapse(true);
-            range.moveEnd('character', end);
-            range.moveStart('character', start);
-            range.select();
-        }
-    },
-    getCursorPosition: function (input) {
-        if (!input) return; // No (input) element found
-        if ('selectionStart' in input) {
-            // Standard-compliant browsers
-            return input.selectionStart;
-        } else if (document.selection) {
-            // IE
-            input.focus();
-            var sel = document.selection.createRange();
-            var selLen = document.selection.createRange().text.length;
-            sel.moveStart('character', -input.value.length);
-            return sel.text.length - selLen;
-        }
     }
 };
 (function () {

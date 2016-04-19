@@ -52,6 +52,7 @@
     <Compile Include="Documents\GeoPosition.cs" />
     <Compile Include="Documents\Group.cs" />
     <Compile Include="Documents\IComposite.cs" />
+    <Compile Include="Documents\IValidatable.cs" />
     <Compile Include="Documents\IConditional.cs" />
     <Compile Include="Documents\IGroup.cs" />
     <Compile Include="Documents\Image.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Documents\QuestionData.cs" />
     <Compile Include="Documents\QuestionIdAndVariableName.cs" />
     <Compile Include="Documents\QuestionnaireDocument.cs" />
+    <Compile Include="Documents\QuestionProperties.cs" />
     <Compile Include="Documents\QuestionScope.cs" />
     <Compile Include="Documents\QuestionType.cs" />
     <Compile Include="Documents\Question\DateTimeQuestion.cs" />

@@ -57,8 +57,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 answeringViewModel: answeringMock.Object);
 
             viewModel.Init("blah", questionId, Create.NavigationState());
-
-            
         };
 
         Because of = () =>

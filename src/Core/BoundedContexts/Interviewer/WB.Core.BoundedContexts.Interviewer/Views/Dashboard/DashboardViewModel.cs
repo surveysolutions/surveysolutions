@@ -44,6 +44,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.messenger = messenger;
             this.commandService = commandService;
             this.Synchronization = synchronization;
+            this.Synchronization.SyncCompleted += (sender, args) => this.RefreshDashboard();
         }
 
         private IMvxCommand synchronizationCommand;
@@ -52,7 +53,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             get
             {
                 return synchronizationCommand ??
-                       (synchronizationCommand = new MvxCommand(async () => await this.RunSynchronizationAsync(),
+                       (synchronizationCommand = new MvxCommand(this.RunSynchronization,
                            () => !this.Synchronization.IsSynchronizationInProgress));
             }
         }
@@ -158,17 +159,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        public override async Task StartAsync()
+        public override Task StartAsync()
         {
             startingLongOperationMessageSubscriptionToken = this.messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
             removedDashboardItemMessageSubscriptionToken = this.messenger.Subscribe<RemovedDashboardItemMessage>(DashboardItemOnRemovedDashboardItem);
 
-            await this.RefreshDashboardAsync();
+            this.Synchronization.Init();
+            this.RefreshDashboard();
+            return Task.FromResult(true);
         }
 
-        private async Task RefreshDashboardAsync()
+        private void RefreshDashboard()
         {
-            this.DashboardInformation = await this.dashboardFactory.GetInterviewerDashboardAsync(
+            this.DashboardInformation = this.dashboardFactory.GetInterviewerDashboardAsync(
                 this.principal.CurrentUserIdentity.UserId);
 
             if ((CurrentDashboardStatus == DashboardInterviewStatus.Completed && this.CompletedInterviewsCount == 0)
@@ -202,14 +205,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        private async Task RunSynchronizationAsync()
+        private void RunSynchronization()
         {
-            await this.Synchronization.SynchronizeAsync();
-            if (this.Synchronization.Status == SynchronizationStatus.Success
-                || this.Synchronization.Status == SynchronizationStatus.Canceled)
-            {
-                await this.RefreshDashboardAsync();
-            }
+            this.Synchronization.IsSynchronizationInProgress = true;
+            this.Synchronization.Synchronize();
         }
 
         private void ShowInterviews(DashboardInterviewStatus status)
@@ -239,7 +238,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private async void DashboardItemOnRemovedDashboardItem(RemovedDashboardItemMessage message)
         {
             await this.commandService.WaitPendingCommandsAsync();
-            await this.RefreshDashboardAsync();
+            this.RefreshDashboard();
         }
         private void DashboardItemOnStartingLongOperation(StartingLongOperationMessage message)
         {

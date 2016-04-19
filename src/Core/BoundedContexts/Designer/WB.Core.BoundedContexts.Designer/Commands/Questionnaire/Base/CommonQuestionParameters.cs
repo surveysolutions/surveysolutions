@@ -1,4 +1,6 @@
-﻿namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
+﻿using WB.Core.SharedKernels.QuestionnaireEntities;
+
+namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
 {
     public class CommonQuestionParameters
     {
@@ -8,5 +10,6 @@
         public string EnablementCondition { get; set; }
         public bool HideIfDisabled { get; set; }
         public string Instructions { get; set; }
+        public bool HideInstructions { get; set; }
     }
 }

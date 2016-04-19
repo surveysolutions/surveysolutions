@@ -1,8 +1,12 @@
-﻿using Machine.Specifications;
+﻿using System;
+using Machine.Specifications;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Events.User;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
 {
@@ -10,7 +14,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
     {
         Establish context = () =>
         {
-            user = Create.User();
+            var userId = Guid.NewGuid();
+            user = Create.User(userId);
+            user.Roles = new UserRoles[] { UserRoles.Supervisor };
+            user.IsArchived = false;
         };
 
         Because of = () =>

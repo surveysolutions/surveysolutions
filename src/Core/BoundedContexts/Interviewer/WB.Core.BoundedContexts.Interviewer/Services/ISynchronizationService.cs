@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
         Task<byte[]> GetApplicationAsync(CancellationToken token);
         Task<int?> GetLatestApplicationVersionAsync(CancellationToken token);
-        Task SendTabletInformationAsync(string archive, CancellationToken token);
+        Task SendTabletInformationAsync(string filePath, CancellationToken token);
 
         Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token);
 
@@ -38,5 +38,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
         Task<List<string>> GetAttachmentContentsAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
         Task<AttachmentContent> GetAttachmentContentAsync(string contentId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
+        Task<List<QuestionnaireIdentity>> GetServerQuestionnairesAsync(CancellationToken cancellationToken);
     }
 }

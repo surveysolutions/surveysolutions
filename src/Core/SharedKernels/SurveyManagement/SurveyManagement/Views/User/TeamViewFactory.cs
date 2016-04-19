@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -11,13 +12,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
     public class TeamViewFactory : ITeamViewFactory 
     {
         readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
-        readonly IQueryableReadSideRepositoryReader<UserDocument> usersReader;
+        readonly IPlainStorageAccessor<UserDocument> usersReader;
 
         public TeamViewFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader,
-            IQueryableReadSideRepositoryReader<UserDocument> usersReader)
+            IPlainStorageAccessor<UserDocument> usersReader)
         {
             this.interviewSummaryReader = interviewSummaryReader;
             this.usersReader = usersReader;
+        }
+
+        public UsersView GetAllInterviewers(int pageSize, string searchBy)
+        {
+            var queryByUsers = new Func<IQueryable<UserDocument>, IQueryable<UserDocument>>((users) =>
+                ApplyFilterByUserName(searchBy,
+                    users.Where(user => (user.Roles.Any(role => role == UserRoles.Operator))))
+                    .OrderBy(user => user.UserName));
+
+            return new UsersView()
+            {
+                Users = this.usersReader.Query(users =>
+                    queryByUsers(users)
+                        .Take(pageSize)
+                        .ToList()
+                        .Select(user => new UsersViewItem() { UserId = user.PublicKey, UserName = user.UserName })),
+
+                TotalCountByQuery = this.usersReader.Query(users => queryByUsers(users).Count())
+            };
         }
 
         public UsersView GetInterviewers(int pageSize, string searchBy, Guid supervisorId)

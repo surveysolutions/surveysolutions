@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
@@ -33,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnumerationStageView
                     Mock.Of<IInterviewEntityViewModel>(_ => _.Identity == enabledGroup),
                     Mock.Of<IInterviewEntityViewModel>(_ => _.Identity == disabledAndHideIfDisabledGroup),
                     Mock.Of<IInterviewEntityViewModel>(_ => _.Identity == disabledAndNotHideIfDisabledGroup),
-                }
+                }.AsEnumerable()
                 && __.GetNew<GroupNavigationViewModel>() == Mock.Of<GroupNavigationViewModel>());
 
             viemModel = Create.EnumerationStageViewModel(

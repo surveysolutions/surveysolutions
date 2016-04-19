@@ -12,20 +12,22 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
     internal class InterviewerQuestionnaireAccessorTestsContext
     {
         public static InterviewerQuestionnaireAccessor CreateInterviewerQuestionnaireAccessor(
-            ISerializer serializer = null,
+            IJsonAllTypesSerializer synchronizationSerializer = null,
             IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository = null,
             IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
             IAsyncPlainStorage<InterviewView> interviewViewRepository = null,
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor = null,
-            IInterviewerInterviewAccessor interviewFactory = null)
+            IInterviewerInterviewAccessor interviewFactory = null,
+            IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocuments = null)
         {
             return new InterviewerQuestionnaireAccessor(
-                serializer: serializer ?? Mock.Of<ISerializer>(),
+                synchronizationSerializer: synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 questionnaireViewRepository: questionnaireViewRepository ?? Mock.Of<IAsyncPlainStorage<QuestionnaireView>>(),
                 plainQuestionnaireRepository: plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
                 interviewViewRepository: interviewViewRepository ?? Mock.Of<IAsyncPlainStorage<InterviewView>>(),
                 questionnaireAssemblyFileAccessor: questionnaireAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
-                interviewFactory: interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>());
+                interviewFactory: interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>(),
+                questionnaireDocuments: questionnaireDocuments ?? Mock.Of< IAsyncPlainStorage<QuestionnaireDocumentView>>());
         }
     }
 }

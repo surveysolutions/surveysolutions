@@ -25,7 +25,7 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
             public string Name { get; private set; }
         }
 
-        private class Aggregate : AggregateRoot
+        private class Aggregate : EventSourcedAggregateRoot
         {
             public void StoreNameFor5Seconds(StoreNameFor5Seconds command)
             {
@@ -40,7 +40,7 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
                 .Setup<Aggregate>()
                 .Handles<StoreNameFor5Seconds>(_ => aggregateId, aggregate => aggregate.StoreNameFor5Seconds);
 
-            var repository = Mock.Of<IAggregateRootRepository>(_
+            var repository = Mock.Of<IEventSourcedAggregateRootRepository>(_
                 => _.GetLatest(typeof(Aggregate), aggregateId) == new Aggregate());
 
             commandService = Create.SequentialCommandService(repository: repository);

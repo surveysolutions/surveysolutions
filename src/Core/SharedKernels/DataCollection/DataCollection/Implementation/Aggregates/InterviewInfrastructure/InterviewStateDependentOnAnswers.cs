@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.InteropServices;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.CustomCollections;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -66,6 +67,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.InvalidAnsweredQuestions = new ConcurrentHashSet<string>();
             this.AnswerComments = new ConcurrentBag<AnswerComment>();
             this.RosterTitles = new ConcurrentDictionary<string, string>();
+            this.DisabledStaticTexts = new ConcurrentHashSet<Identity>();
+
+            this.ValidStaticTexts = new ConcurrentHashSet<Identity>();
+            this.InvalidStaticTexts = new ConcurrentDictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
         }
 
         public ConcurrentDictionary<string, object> AnswersSupportedInExpressions { set; get; }
@@ -76,11 +81,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public ConcurrentHashSet<string> AnsweredQuestions { set; get; }
         public ConcurrentHashSet<string> DisabledGroups { set; get; }
         public ConcurrentHashSet<string> DisabledQuestions { set; get; }
+        public ConcurrentHashSet<Identity> DisabledStaticTexts { set; get; }
         public ConcurrentDictionary<string, ConcurrentDistinctList<decimal>> RosterGroupInstanceIds { set; get; }
         public ConcurrentDictionary<string, string> RosterTitles { set; get; }
         public ConcurrentHashSet<string> ValidAnsweredQuestions { set; get; }
         public ConcurrentHashSet<string> InvalidAnsweredQuestions { set; get; }
         public ConcurrentBag<AnswerComment> AnswerComments { get; set; }
+
+        public ConcurrentHashSet<Identity> ValidStaticTexts { set; get; }
+        public IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> InvalidStaticTexts { set; get; }
+
 
         public InterviewStateDependentOnAnswers Clone()
         {
@@ -99,7 +109,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ValidAnsweredQuestions = new ConcurrentHashSet<string>(this.ValidAnsweredQuestions),
                 InvalidAnsweredQuestions = new ConcurrentHashSet<string>(this.InvalidAnsweredQuestions),
                 AnswerComments = new ConcurrentBag<AnswerComment>(this.AnswerComments),
-                RosterTitles = this.RosterTitles.ToConcurrentDictionary(x => x.Key, x => x.Value)
+                RosterTitles = this.RosterTitles.ToConcurrentDictionary(x => x.Key, x => x.Value),
+
+                DisabledStaticTexts = new ConcurrentHashSet<Identity>(this.DisabledStaticTexts),
+                ValidStaticTexts = new ConcurrentHashSet<Identity>(this.ValidStaticTexts),
+                InvalidStaticTexts = new ConcurrentDictionary<Identity, IReadOnlyList<FailedValidationCondition>>(InvalidStaticTexts)
             };
         }
 
@@ -236,6 +250,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
+        public void EnableStaticTexts(Identity[] staticTexts)
+        {
+            foreach (var staticText in staticTexts)
+            {
+                this.DisabledStaticTexts.Remove(staticText);
+            }
+        }
+
+        public void DisableStaticTexts(Identity[] staticTexts)
+        {
+            foreach (var staticText in staticTexts)
+            {
+                this.DisabledStaticTexts.Add(staticText);
+            }
+        }
+
         public void EnableQuestions(IEnumerable<Identity> groups)
         {
             foreach (string questionKey in groups.Select(ConversionHelper.ConvertIdentityToString))
@@ -285,7 +315,25 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.InvalidAnsweredQuestions.Remove(questionKey);
             }
         }
-        
+
+        public void DeclareStaticTextValid(IEnumerable<Identity> statisTexts)
+        {
+            foreach (var questionKey in statisTexts)
+            {
+                this.ValidStaticTexts.Add(questionKey);
+                this.InvalidStaticTexts.Remove(questionKey);
+            }
+        }
+
+        public void DeclareStaticTextInvalid(IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> statisTexts)
+        {
+            foreach (var questionKey in statisTexts)
+            {
+                this.InvalidStaticTexts[questionKey.Key] = questionKey.Value;
+                this.ValidStaticTexts.Remove(questionKey.Key);
+            }
+        }
+
         public void RemoveAnswers(IEnumerable<Identity> questions)
         {
             foreach (string questionKey in questions.Select(ConversionHelper.ConvertIdentityToString))

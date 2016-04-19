@@ -213,6 +213,7 @@
     <Compile Include="Implementation\Services\AttachmentService\AttachmentService.cs" />
     <Compile Include="Implementation\Services\AttachmentService\AttachmentDetails.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\LinkedQuestionFilterExpressionModel.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\Model\StaticTextTemplateModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\Model\ValidationExpressionModel.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\InterviewExpressionStateTemplateV6.cs">
       <DependentUpon>InterviewExpressionStateTemplateV6.tt</DependentUpon>
@@ -232,6 +233,24 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Implementation\Services\CodeGeneration\V6\Templates\RosterScopeTemplateV6.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V8\Templates\InterviewExpressionStateTemplateV8.cs">
+      <DependentUpon>InterviewExpressionStateTemplateV8.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V8\Templates\InterviewExpressionStateTemplateV8.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V8\Templates\QuestionnaireLevelTemplateV8.cs">
+      <DependentUpon>QuestionnaireLevelTemplateV8.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V8\Templates\QuestionnaireLevelTemplateV8.Extended.cs" />
+    <Compile Include="Implementation\Services\CodeGeneration\V8\Templates\RosterScopeTemplateV8.cs">
+      <DependentUpon>RosterScopeTemplateV8.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V8\Templates\RosterScopeTemplateV8.Extended.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\V7\Templates\InterviewExpressionStateTemplateV7.cs">
       <DependentUpon>InterviewExpressionStateTemplateV7.tt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -260,8 +279,13 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Include="Implementation\Services\CodeGeneration\V8\Templates\SharedTemplateV8.cs">
+      <DependentUpon>SharedTemplateV8.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Include="Implementation\Services\QuestionnaireDocumentExtensions.cs" />
-    <Compile Include="Implementation\Services\QuestionTemplateModelExtensions.cs" />
+    <Compile Include="Implementation\Services\TemplateModelExtensions.cs" />
     <Compile Include="Implementation\Services\ReadOnlyQuestionnaireDocument.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\CodeGenerationSettings.cs" />
     <Compile Include="Implementation\Services\CodeGeneration\DefaultDynamicCompilerSettings.cs" />
@@ -513,6 +537,7 @@
     <Compile Include="Views\Questionnaire\Edit\ICompositeView.cs" />
     <Compile Include="Views\Questionnaire\Edit\IQuestionnaireInfoFactory.cs" />
     <Compile Include="Views\Questionnaire\Edit\DropdownQuestionView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\NewChapterView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditGroupView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditQuestionView.cs" />
     <Compile Include="Views\Questionnaire\Edit\NewEditRosterView.cs" />
@@ -553,30 +578,9 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoViewDenormalizer.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireItemLink.cs" />
     <Compile Include="Views\Questionnaire\Edit\RosterType.cs" />
-    <Compile Include="Views\Questionnaire\Pdf\Extensions.cs" />
-    <Compile Include="Views\Questionnaire\Pdf\PdfAnswerView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\Pdf\PdfEntityView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\Pdf\PdfGroupView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireDenormalizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireFactory.cs" />
-    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireInputModel.cs" />
-    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionType.cs" />
-    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionTypeConverter.cs" />
-    <Compile Include="Views\Questionnaire\Pdf\PdfStaticTextView.cs" />
-    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionView.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Views\Questionnaire\Pdf\PdfFactory.cs" />
+    <Compile Include="Views\Questionnaire\Pdf\PdfQuestionnaireModel.cs" />
+    <Compile Include="Views\Questionnaire\Pdf\PdfSettings.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireList\IQuestionnaireListViewFactory.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireList\QuestionnaireListViewInputModel.cs">
       <SubType>Code</SubType>
@@ -674,6 +678,10 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>SharedTemplateV7.cs</LastGenOutput>
     </None>
+    <None Include="Implementation\Services\CodeGeneration\V8\Templates\SharedTemplateV8.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>SharedTemplateV8.cs</LastGenOutput>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -753,6 +761,18 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>LookupTablesTemplateV5.cs</LastGenOutput>
     </Content>
+    <None Include="Implementation\Services\CodeGeneration\V8\Templates\RosterScopeTemplateV8.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>RosterScopeTemplateV8.cs</LastGenOutput>
+    </None>
+    <None Include="Implementation\Services\CodeGeneration\V8\Templates\QuestionnaireLevelTemplateV8.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>QuestionnaireLevelTemplateV8.cs</LastGenOutput>
+    </None>
+    <None Include="Implementation\Services\CodeGeneration\V8\Templates\InterviewExpressionStateTemplateV8.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>InterviewExpressionStateTemplateV8.cs</LastGenOutput>
+    </None>
     <None Include="Implementation\Services\CodeGeneration\V7\Templates\QuestionnaireLevelTemplateV7.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>QuestionnaireLevelTemplateV7.cs</LastGenOutput>

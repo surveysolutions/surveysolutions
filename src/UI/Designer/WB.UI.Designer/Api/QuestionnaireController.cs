@@ -67,7 +67,7 @@ namespace WB.UI.Designer.Api
 
         [HttpGet]
         [CamelCase]
-        public IQuestionnaireItem Chapter(string id, string chapterId)
+        public NewChapterView Chapter(string id, string chapterId)
         {
             var chapterInfoView = chapterInfoViewFactory.Load(questionnaireId: id, groupId: chapterId);
 
@@ -150,10 +150,17 @@ namespace WB.UI.Designer.Api
         public VerificationResult Verify(Guid id)
         {
             var questionnaireDocument = this.GetQuestionnaire(id).Source;
-            QuestionnaireVerificationMessage[] verificationMessagesAndWarning = questionnaireVerifier.Verify(questionnaireDocument).Take(MaxVerificationErrors).ToArray();
+            QuestionnaireVerificationMessage[] verificationMessagesAndWarning = questionnaireVerifier.Verify(questionnaireDocument).ToArray();
             
-            var verificationErrors = verificationMessagesAndWarning.Where(x => x.MessageLevel != VerificationMessageLevel.Warning).ToArray();
-            var verificationWarnings = verificationMessagesAndWarning.Where(x => x.MessageLevel == VerificationMessageLevel.Warning).ToArray();
+            var verificationErrors = verificationMessagesAndWarning
+                .Where(x => x.MessageLevel > VerificationMessageLevel.Warning)
+                .Take(MaxVerificationErrors)
+                .ToArray();
+
+            var verificationWarnings = verificationMessagesAndWarning
+                .Where(x => x.MessageLevel == VerificationMessageLevel.Warning)
+                .Take(MaxVerificationErrors - verificationErrors.Length)
+                .ToArray();
 
             VerificationMessage[] errors = verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, questionnaireDocument);
             VerificationMessage[] warnings = verificationErrorsMapper.EnrichVerificationErrors(verificationWarnings, questionnaireDocument);

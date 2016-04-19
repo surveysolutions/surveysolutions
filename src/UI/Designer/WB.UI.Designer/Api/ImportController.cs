@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Web.Http;
+using Main.Core.Documents;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
@@ -7,8 +9,10 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Infrastructure.Native.Storage;
 using WB.UI.Designer.Api.Attributes;
 using WB.UI.Designer.Code;
+using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.Api
@@ -17,7 +21,16 @@ namespace WB.UI.Designer.Api
     public class ImportController : ImportControllerBase
     {
         private readonly IStringCompressor zipUtils;
-        private readonly ISerializer serializer;
+        private readonly QuestionnaireDowngradeService downgradeService;
+
+        private static readonly JsonSerializerSettings JsonSerializerSettingsNewToOld = new JsonSerializerSettings()
+        {
+            TypeNameHandling = TypeNameHandling.Objects,
+            NullValueHandling = NullValueHandling.Ignore,
+            FloatParseHandling = FloatParseHandling.Decimal,
+            Formatting = Formatting.None,
+            Binder = new NewToOldAssemblyRedirectSerializationBinder()
+        };
 
         public ImportController(
             IStringCompressor zipUtils,
@@ -29,12 +42,12 @@ namespace WB.UI.Designer.Api
             IExpressionProcessorGenerator expressionProcessorGenerator,
             IQuestionnaireHelper questionnaireHelper,
             IDesignerEngineVersionService engineVersionService,
-            ISerializer serializer)
+            QuestionnaireDowngradeService downgradeService)
             : base(userHelper, viewFactory, questionnaireViewFactory, sharedPersonsViewFactory,
                 questionnaireVerifier, expressionProcessorGenerator, questionnaireHelper, engineVersionService)
         {
             this.zipUtils = zipUtils;
-            this.serializer = serializer;
+            this.downgradeService = downgradeService;
         }
 
         [HttpGet]
@@ -58,19 +71,22 @@ namespace WB.UI.Designer.Api
 
             this.CheckInvariantsAndThrowIfInvalid(request, questionnaireView);
 
-            var questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
+            Version questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
 
             var resultAssembly = this.GetQuestionnaireAssemblyOrThrow(questionnaireView, questionnaireContentVersion);
 
-            var questionnaire = questionnaireView.Source.Clone();
+            QuestionnaireDocument questionnaire = questionnaireView.Source.Clone();
             questionnaire.Macros = null;
             questionnaire.LookupTables = null;
             questionnaire.SharedPersons = null;
             questionnaire.Attachments = null;
+            this.downgradeService.Downgrade(questionnaire, questionnaireContentVersion);
+
+            var serrializedQuestionnaire = JsonConvert.SerializeObject(questionnaire, JsonSerializerSettingsNewToOld);
 
             return new QuestionnaireCommunicationPackage
             {
-                Questionnaire = this.zipUtils.CompressString(this.serializer.Serialize(questionnaire, SerializationBinderSettings.NewToOld)), // use binder to serialize to the old namespaces and assembly
+                Questionnaire = this.zipUtils.CompressString(serrializedQuestionnaire), 
                 QuestionnaireAssembly = resultAssembly,
                 QuestionnaireContentVersion = questionnaireContentVersion.Major
             };

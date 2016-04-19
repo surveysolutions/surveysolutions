@@ -19,7 +19,7 @@ namespace WB.Core.Infrastructure
             registry.BindAsSingleton<IEventTypeResolver, EventTypeResolver>();
             registry.Bind<IClock, DateTimeBasedClock>();
             
-            registry.Bind<IAggregateRootRepository, AggregateRootRepository>();
+            registry.Bind<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepository>();
             registry.BindAsSingleton<ICommandService, CommandService>();
 
             registry.BindAsSingletonWithConstructorArgument<ISnapshottingPolicy, SimpleSnapshottingPolicy>("snapshotIntervalInEvents", 1);
@@ -27,6 +27,7 @@ namespace WB.Core.Infrastructure
             registry.Bind<IAggregateSupportsSnapshotValidator, AggregateSupportsSnapshotValidator>();
             registry.Bind<IAggregateSnapshotter, DefaultAggregateSnapshotter>();
             registry.BindAsSingleton<ISnapshotStore, InMemoryCachedSnapshotStore>();
+            registry.Bind<IPlainAggregateRootRepository, PlainAggregateRootRepository>();
         }
     }
 }

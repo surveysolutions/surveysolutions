@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                         Expression = validationExpression
                     }
                 },
-                linkedFilterExpression: null);
+                linkedFilterExpression: null, properties: Create.QuestionProperties());
 
         private Cleanup stuff = () =>
         {

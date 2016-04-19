@@ -219,10 +219,8 @@
     <Compile Include="Converters\ToGoogleMapUrlConverter.cs" />
     <Compile Include="Converters\ViewOptionStyleBackgroundConverter.cs" />
     <Compile Include="CustomBindings\BaseBinding.cs" />
-    <Compile Include="CustomBindings\DecimalPlacesFilter.cs" />
     <Compile Include="CustomBindings\EditTextChangedBinding.cs" />
     <Compile Include="CustomBindings\EditTextDateBinding.cs" />
-    <Compile Include="CustomBindings\EditTextDecimalPlacesBinding.cs" />
     <Compile Include="CustomBindings\EditTextFocusValueChangedBinding.cs" />
     <Compile Include="CustomBindings\EditTextSetFocusBinding.cs" />
     <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
@@ -233,6 +231,7 @@
     <Compile Include="CustomBindings\MvxAutoCompleteTextViewShowPopupOnFocusBinding.cs" />
     <Compile Include="CustomBindings\ProgressBarIndeterminateBinding.cs" />
     <Compile Include="CustomBindings\FrameLayoutCurrentScreenBinding.cs" />
+    <Compile Include="CustomBindings\NumericValueBinding.cs" />
     <Compile Include="CustomBindings\TextViewIsSelectedYesNoOptionColorBinding.cs" />
     <Compile Include="CustomBindings\TextViewBoldBinding.cs" />
     <Compile Include="CustomBindings\TextViewGroupInfoBinding.cs" />
@@ -256,6 +255,7 @@
     <Compile Include="CustomControls\HttpImageView.cs" />
     <Compile Include="CustomControls\InterviewEntityAdapter.cs" />
     <Compile Include="CustomControls\MaskedEditTextControl\MaskedEditText.cs" />
+    <Compile Include="CustomControls\NumericEditText.cs" />
     <Compile Include="CustomControls\MaxHeightLinearLayout.cs" />
     <Compile Include="CustomServices\AndroidNetworkService.cs" />
     <Compile Include="CustomServices\ExternalAppLauncher.cs" />
@@ -997,6 +997,9 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview__attachment.axml" />
+    <AndroidResource Include="Resources\layout\interview_disabled_static_text.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
@@ -1021,6 +1024,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\no_image_found.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\color\show_instructions.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

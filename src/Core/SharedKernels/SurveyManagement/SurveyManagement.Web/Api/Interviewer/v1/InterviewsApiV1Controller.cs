@@ -17,11 +17,11 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
-using WB.Core.Synchronization;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Core.Synchronization.SyncStorage;
 
@@ -36,19 +36,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
             IPlainInterviewFileStorage plainInterviewFileStorage,
             IGlobalInfoProvider globalInfoProvider,
             IInterviewInformationFactory interviewsFactory,
-            IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
+            IInterviewPackagesService incomingSyncPackagesQueue,
             ICommandService commandService,
             IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader,
             IMetaInfoBuilder metaBuilder,
-            ISerializer serializer) : base(
+            IJsonAllTypesSerializer synchronizationSerializer) : base(
                 plainInterviewFileStorage: plainInterviewFileStorage, 
                 globalInfoProvider: globalInfoProvider,
                 interviewsFactory: interviewsFactory,
-                incomingSyncPackagesQueue: incomingSyncPackagesQueue,
+                interviewPackagesService: incomingSyncPackagesQueue,
                 commandService: commandService,
                 syncPackagesMetaReader: syncPackagesMetaReader,
                 metaBuilder: metaBuilder,
-                serializer: serializer)
+                synchronizationSerializer: synchronizationSerializer)
         {
         }
 
@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
                 WasCompleted = interviewDetails.WasCompleted,
                 RosterGroupInstances = interviewDetails.RosterGroupInstances.Select(this.ToRosterApiView).ToList(),
                 Answers = interviewDetails.Answers.Select(this.ToInterviewApiView).ToList(),
-                FailedValidationConditions = this.serializer.Serialize(interviewDetails.FailedValidationConditions.ToList())
+                FailedValidationConditions = this.synchronizationSerializer.Serialize(interviewDetails.FailedValidationConditions.ToList())
             });
             response.Headers.CacheControl = new CacheControlHeaderValue
             {
@@ -90,7 +90,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
         [HttpPost]
         public override void LogInterviewAsSuccessfullyHandled(Guid id) => base.LogInterviewAsSuccessfullyHandled(id);
         [HttpPost]
-        public void Post(Guid id, [FromBody]string package) => this.incomingSyncPackagesQueue.Enqueue(interviewId: id, item: package);
+        [WriteToSyncLog(SynchronizationLogType.PostPackage)]
+        public void Post(Guid id, [FromBody]string package) => this.interviewPackagesService.StorePackage(item: package);
         [HttpPost]
         public override void PostImage(PostFileRequest request) => base.PostImage(request);
 
@@ -135,9 +136,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
             {
                 var interviewSynchronizationDto = this.interviewsFactory.GetInterviewDetails(packageMetaInformation.InterviewId);
 
-                interviewSynchronizationPackage.Content = this.serializer.Serialize(interviewSynchronizationDto, TypeSerializationSettings.AllTypes);
+                interviewSynchronizationPackage.Content = this.synchronizationSerializer.Serialize(interviewSynchronizationDto);
                 interviewSynchronizationPackage.MetaInfo =
-                    this.serializer.Serialize(this.metaBuilder.GetInterviewMetaInfo(interviewSynchronizationDto));
+                    this.synchronizationSerializer.Serialize(this.metaBuilder.GetInterviewMetaInfo(interviewSynchronizationDto));
             }
             else
             {
@@ -159,6 +160,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
         }
 
         [HttpPost]
+        [WriteToSyncLog(SynchronizationLogType.PostPackage)]
         public void PostPackage(Guid id, [FromBody] string package) => this.Post(id, package);
 
         private List<SynchronizationChunkMeta> GetInterviewPackages(Guid userId, string lastSyncedPackageId)
@@ -239,7 +241,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
                 QuestionId = answer.Id,
                 QuestionRosterVector = answer.QuestionRosterVector,
                 LastSupervisorOrInterviewerComment = answer.Comments,
-                JsonAnswer = this.serializer.Serialize(answer.Answer, TypeSerializationSettings.AllTypes, SerializationBinderSettings.NewToOld)
+                JsonAnswer = this.synchronizationSerializer.Serialize(answer.Answer)
             };
         }
 

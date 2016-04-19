@@ -19,7 +19,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
             groupToPasteInId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
             questionnaire = CreateQuestionnaireWithOneGroup(questionnaireId : questionnaireId, groupId: groupToPasteInId, responsibleId: responsibleId);
-
             
             doc = Create.QuestionnaireDocument(
                 Guid.Parse("31111111111111111111111111111113"),
@@ -34,8 +33,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
                     Create.GpsCoordinateQuestion(questionId: gpsQuestionId, hideIfDisabled: true),
                     Create.SingleOptionQuestion(questionId: singleOptionQuestionId, hideIfDisabled: true),
                     Create.MultipleOptionsQuestion(questionId: multipleOptionsQuestionId, hideIfDisabled: true),
-                    
-                }));
+                    Create.StaticText(staticTextId:staticTextId, hideIfDisabled:true)
+                }
+                ));
+
             eventContext = new EventContext();
 
             command = new PasteInto(
@@ -89,7 +90,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
         
         It should_raise_QuestionCloned_event_with_correct_hideIfDisabled_flag_for_multipleOptions_question = () =>
             eventContext.GetEvents<QuestionCloned>().Single(e => e.SourceQuestionId == multipleOptionsQuestionId).HideIfDisabled.ShouldEqual(true);
-        
+
+        It should_raise_StaticTextCloned_event_with_correct_hideIfDisabled_flag_for_static_Text = () =>
+            eventContext.GetEvents<StaticTextCloned>().Single(e => e.SourceEntityId == staticTextId).HideIfDisabled.ShouldEqual(true);
+
         static Questionnaire questionnaire;
         static Guid groupToPasteInId;
 
@@ -105,6 +109,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
         static Guid gpsQuestionId = Guid.NewGuid();
         static Guid singleOptionQuestionId = Guid.NewGuid();
         static Guid multipleOptionsQuestionId = Guid.NewGuid();
+        static Guid staticTextId = Guid.NewGuid();
 
         static EventContext eventContext;
         static Guid responsibleId;

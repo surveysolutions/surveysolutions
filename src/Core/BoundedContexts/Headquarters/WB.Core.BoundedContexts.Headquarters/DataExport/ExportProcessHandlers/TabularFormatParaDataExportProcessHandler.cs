@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
     {
         private readonly IStreamableEventStore eventStore;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
-        private readonly IReadSideRepositoryWriter<UserDocument> userReader;
+        private readonly IPlainStorageAccessor<UserDocument> userReader;
         private readonly IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireExportStructureRepository;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly ITransactionManagerProvider transactionManagerProvider;
@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         public TabularFormatParaDataExportProcessHandler(IStreamableEventStore eventStore,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
-            IReadSideRepositoryWriter<UserDocument> userReader,
+            IPlainStorageAccessor<UserDocument> userReader,
             InterviewDataExportSettings interviewDataExportSettings,
             ITransactionManagerProvider transactionManagerProvider,
             IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage,

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
   <dimen name="Splash_Logo_size">300dp</dimen>
-  <dimen name="Splash_Logo_padding">72dp</dimen>
+  <dimen name="Splash_Logo_padding">200dp</dimen>
 
   <dimen name="Login_Holder_width">328dp</dimen>
   <dimen name="Login_Element_width">320dp</dimen>

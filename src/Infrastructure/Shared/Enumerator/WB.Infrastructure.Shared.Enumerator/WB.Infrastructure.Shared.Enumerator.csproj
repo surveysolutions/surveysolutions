@@ -157,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AndroidPathUtils.cs" />
+    <Compile Include="Internals\PortableOldToNewAssemblyRedirectSerializationBinder.cs" />
     <Compile Include="Internals\FileSystem\AndroidDirectoryInfo.cs" />
     <Compile Include="Internals\FileSystem\AndroidFileInfo.cs" />
     <Compile Include="Internals\FileSystem\AndroidFileSystem.cs" />
@@ -165,7 +166,8 @@
     <Compile Include="Internals\FileSystem\ZipArchiveUtils.cs" />
     <Compile Include="Internals\FileSystem\FileSystemService.cs" />
     <Compile Include="Internals\GpsLocationService.cs" />
-    <Compile Include="Internals\JsonSerializerSettingsFactory.cs" />
+    <Compile Include="Internals\PortableJsonAllTypesSerializer.cs" />
+    <Compile Include="Internals\PortableJsonSerializer.cs" />
     <Compile Include="Internals\ModernHttpClientFactory.cs" />
     <Compile Include="Internals\QRBarcodeScanService.cs" />
     <Compile Include="EnumeratorInfrastructureModule.cs" />

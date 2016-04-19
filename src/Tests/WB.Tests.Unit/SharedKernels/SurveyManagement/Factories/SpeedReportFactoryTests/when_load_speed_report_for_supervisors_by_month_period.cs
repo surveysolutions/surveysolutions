@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
@@ -27,11 +28,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                     statuses: new[]
                     {
                         Create.InterviewCommentedStatus(supervisorId: user.PublicKey,
+                            status: InterviewExportedAction.Completed,
                             timestamp: input.From.Date.AddHours(1), 
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
                         Create.InterviewCommentedStatus(supervisorId: user.PublicKey,
+                            status: InterviewExportedAction.Completed,
                             timestamp: input.From.Date.AddDays(1)),
                         Create.InterviewCommentedStatus(supervisorId: user.PublicKey,
+                            status: InterviewExportedAction.Completed,
                             timestamp: input.From.Date.AddMonths(-2))
                     }), "2");
 

@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Supervisor.Interviews;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -26,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
     {
         Establish context = () =>
         {
-            var userDocumentStorageMock = new Mock<IQueryableReadSideRepositoryReader<UserDocument>>();
+            var userDocumentStorageMock = new Mock<IPlainStorageAccessor<UserDocument>>();
             userDocumentStorageMock.Setup(x => x.GetById(Moq.It.IsAny<string>()))
              .Returns(new UserDocument());
 

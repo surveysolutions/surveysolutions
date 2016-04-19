@@ -164,15 +164,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2, "WB0061", VerificationMessages.WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2),
             Verifier<IMultyOptionsQuestion>(this.MultiOptionQuestionYesNoQuestionCantBeLinked, "WB0007", VerificationMessages.WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked),
             Verifier<IMultyOptionsQuestion>(this.MultiOptionQuestionSupportsOnlyIntegerPositiveValues, "WB0008", VerificationMessages.WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues),
-            Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInQuestionEnablementCondition, "WB0064", VerificationMessages.WB0064_CategoricalLinkedQuestionUsedInEnablementCondition),
-            Verifier<IGroup, IComposite>(this.CategoricalLinkedQuestionUsedInGroupEnablementCondition, "WB0064", VerificationMessages.WB0064_CategoricalLinkedQuestionUsedInEnablementCondition),
             Verifier<IQuestion>(QuestionTypeIsNotAllowed, "WB0066", VerificationMessages.WB0066_QuestionTypeIsNotAllowed),
             Verifier<IGroup>(RosterHasEmptyVariableName, "WB0067", VerificationMessages.WB0067_RosterHasEmptyVariableName),
             Verifier<IGroup>(RosterHasInvalidVariableName, "WB0069", VerificationMessages.WB0069_RosterHasInvalidVariableName),
             Verifier<IGroup>(this.RosterHasVariableNameEqualToQuestionnaireTitle, "WB0070", VerificationMessages.WB0070_RosterHasVariableNameEqualToQuestionnaireTitle),
             Verifier<IGroup>(this.RosterHasVariableNameReservedForServiceNeeds, "WB0058", VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
             Verifier<IStaticText>(StaticTextIsEmpty, "WB0071", VerificationMessages.WB0071_StaticTextIsEmpty),
-            Verifier<IStaticText>(StaticTextRefersAbsentAttachment, "WB0071", VerificationMessages.WB0095_StaticTextRefersAbsentAttachment),
+            Verifier<IStaticText>(StaticTextRefersAbsentAttachment, "WB0095", VerificationMessages.WB0095_StaticTextRefersAbsentAttachment),
             Verifier<IQuestion>(OptionTitlesMustBeUniqueForCategoricalQuestion, "WB0072", VerificationMessages.WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion),
             Verifier<IQuestion>(OptionValuesMustBeUniqueForCategoricalQuestion, "WB0073", VerificationMessages.WB0073_OptionValuesMustBeUniqueForCategoricalQuestion),
             Verifier<IQuestion>(FilteredComboboxIsLinked, "WB0074", VerificationMessages.WB0074_FilteredComboboxIsLinked),
@@ -199,12 +197,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Verifier<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10),
             Verifier<IQuestion>(LinkedQuestionFilterExpressionHasLengthMoreThan10000Characters, "WB0108", VerificationMessages.WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters),
             Verifier<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInFilterExpression, "WB0109", VerificationMessages.WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion),
-            Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationConditionIsTooLong, "WB0104", index => string.Format(VerificationMessages.WB0104_ValidationConditionIsTooLong, index)),
-            Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationMessageIsTooLong, "WB0105", index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index)),
-            Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationConditionIsEmpty, "WB0106", index => string.Format(VerificationMessages.WB0106_ValidationConditionIsEmpty, index)),
-            Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, ValidationMessageIsEmpty, "WB0107", index => string.Format(VerificationMessages.WB0107_ValidationMessageIsEmpty, index)),
-            Verifier<IQuestion, ValidationCondition>(question => question.ValidationConditions, CategoricalLinkedQuestionUsedInValidationExpression, "WB0063", index => string.Format(VerificationMessages.WB0063_CategoricalLinkedQuestionUsedInValidationExpression, index)),
 
+            Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsTooLong, "WB0104", index => string.Format(VerificationMessages.WB0104_ValidationConditionIsTooLong, index)),
+            Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, "WB0105", index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index)),
+            Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsEmpty, "WB0106", index => string.Format(VerificationMessages.WB0106_ValidationConditionIsEmpty, index)),
+            Verifier<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsEmpty, "WB0107", index => string.Format(VerificationMessages.WB0107_ValidationMessageIsEmpty, index)),
+            
             MacrosVerifier(MacroHasEmptyName, "WB0014", VerificationMessages.WB0014_MacroHasEmptyName),
             MacrosVerifier(MacroHasInvalidName, "WB0010", VerificationMessages.WB0010_MacroHasInvalidName),
                     
@@ -217,7 +215,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             LookupVerifier(LookupTableMoreThan5000Rows, "WB0044", VerificationMessages.WB0044_LookupTableMoreThan5000Rows),
             LookupVerifier(LookupTableNotUniqueRowcodeValues, "WB0047", VerificationMessages.WB0047_LookupTableNotUniqueRowcodeValues),
 
-            AttachmentVerifier(AttachmentHasEmptyContent, "WB0110", VerificationMessages.WB0110_AttachmentHasEmptyContent),
+            AttachmentVerifier(AttachmentHasEmptyContent, "WB0111", VerificationMessages.WB0111_AttachmentHasEmptyContent),
 
             VerifyGpsPrefilledQuestions,
             ErrorsByLinkedQuestions,
@@ -301,9 +299,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             };
         }
 
-        private bool ConditionExpresssionHasLengthMoreThan10000Characters(IComposite groupOrQuestion, VerificationState state, ReadOnlyQuestionnaireDocument questionnaire)
+        private bool ConditionExpresssionHasLengthMoreThan10000Characters(IComposite entity, VerificationState state, ReadOnlyQuestionnaireDocument questionnaire)
         {
-            var customEnablementCondition = GetCustomEnablementCondition(groupOrQuestion);
+            var customEnablementCondition = GetCustomEnablementCondition(entity);
             
             if (string.IsNullOrEmpty(customEnablementCondition))
                 return false;
@@ -357,9 +355,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (compilationResult.Success)
                 yield break;
 
-            foreach (var locationOfExpressionError in compilationResult.Diagnostics.Select(x => x.Location).Distinct())
+            var elementsWithErrorMessages = compilationResult.Diagnostics.GroupBy(x => x.Location, x => x.Message);
+            foreach (var elementWithErrors in elementsWithErrorMessages)
             {
-                yield return CreateExpressionSyntaxError(new ExpressionLocation(locationOfExpressionError));
+                yield return CreateExpressionSyntaxError(new ExpressionLocation(elementWithErrors.Key), elementWithErrors.ToList());
             }
         } 
 
@@ -692,7 +691,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return (questionnaire, state) =>
                 questionnaire
                     .Find<TEntity>(entity => hasError(entity, state, questionnaire))
-                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message,CreateReference(entity)));
+                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
         }
 
         private static Func<ReadOnlyQuestionnaireDocument, VerificationState, IEnumerable<QuestionnaireVerificationMessage>> Verifier<TEntity>(
@@ -1199,19 +1198,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                isReferencedQuestionIncorrect: referencedQuestion => referencedQuestion.QuestionType == QuestionType.Multimedia);
         }
 
-        private EntityVerificationResult<IComposite> CategoricalLinkedQuestionUsedInQuestionEnablementCondition(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
-        {
-            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(question, question.ConditionExpression,
-                questionnaire, isReferencedQuestionIncorrect: IsCategoricalLinkedQuestion);
-        }
-
-        private EntityVerificationResult<IComposite> CategoricalLinkedQuestionUsedInGroupEnablementCondition(IGroup group, ReadOnlyQuestionnaireDocument questionnaire)
-        {
-            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(group, group.ConditionExpression,
-                questionnaire, isReferencedQuestionIncorrect: IsCategoricalLinkedQuestion);
-        }
-
-
         private EntityVerificationResult<IComposite> VerifyWhetherEntityExpressionReferencesIncorrectQuestions(
             IComposite entity, string expression, ReadOnlyQuestionnaireDocument questionnaire, Func<IQuestion, bool> isReferencedQuestionIncorrect)
         {
@@ -1269,12 +1255,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return new EntityVerificationResult<IComposite> { HasErrors = false };
         }
 
-        private bool CategoricalLinkedQuestionUsedInValidationExpression(IQuestion question, ValidationCondition validationCondition, ReadOnlyQuestionnaireDocument questionnaire, VerificationState state)
-        {
-            var verificationResult = this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(question, validationCondition.Expression, questionnaire, isReferencedQuestionIncorrect: IsCategoricalLinkedQuestion);
-            return verificationResult.HasErrors;
-        }
-
         private EntityVerificationResult<IComposite> CategoricalLinkedQuestionUsedInFilterExpression(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
         {
             if (!(question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue))
@@ -1283,8 +1263,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (string.IsNullOrEmpty(question.LinkedFilterExpression))
                 new EntityVerificationResult<IComposite> { HasErrors = false };
 
-            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(question, question.LinkedFilterExpression,
-                questionnaire, isReferencedQuestionIncorrect: IsCategoricalLinkedQuestion);
+            return this.VerifyWhetherEntityExpressionReferencesIncorrectQuestions(question,
+                question.LinkedFilterExpression,
+                questionnaire, isReferencedQuestionIncorrect: (q) => q.PublicKey == question.PublicKey);
         }
 
         private static IEnumerable<QuestionnaireVerificationMessage> ErrorsByLinkedQuestions(
@@ -1553,12 +1534,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static string GetCustomEnablementCondition(IComposite entity)
         {
-            if (entity is IGroup)
-                return ((IGroup)entity).ConditionExpression;
-            else if (entity is IQuestion)
-                return ((IQuestion)entity).ConditionExpression;
-            else
-                return null;
+            var entityAsIConditional = entity as IConditional;
+
+            return entityAsIConditional?.ConditionExpression;
+        }
+
+        private static IEnumerable<ValidationCondition> GetValidationConditionsOrEmpty(IComposite entity)
+        {
+            var entityAsIConditional = entity as IValidatable;
+
+            return entityAsIConditional != null ? entityAsIConditional.ValidationConditions : Enumerable.Empty<ValidationCondition>();
         }
 
         private static IQuestion GetQuestionByIdentifier(string identifier, ReadOnlyQuestionnaireDocument questionnaire)
@@ -1687,30 +1672,47 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 CreateReference(sourseQuestion));
         }
 
-        private static QuestionnaireVerificationMessage CreateExpressionSyntaxError(ExpressionLocation expressionLocation)
+        private static QuestionnaireVerificationMessage CreateExpressionSyntaxError(ExpressionLocation expressionLocation, IEnumerable<string> compilationErrorMessages)
         {
             if (expressionLocation.ExpressionType != ExpressionLocationType.General)
             {
-                var reference = new QuestionnaireVerificationReference(
-                    expressionLocation.ItemType == ExpressionLocationItemType.Question
-                        ? QuestionnaireVerificationReferenceType.Question
-                        : QuestionnaireVerificationReferenceType.Group, expressionLocation.Id);
+
+                QuestionnaireVerificationReferenceType questionnaireVerificationReferenceType;
+
+                switch (expressionLocation.ItemType)
+                {
+                    case ExpressionLocationItemType.Group:
+                    case ExpressionLocationItemType.Roster:
+                        questionnaireVerificationReferenceType = QuestionnaireVerificationReferenceType.Group;
+                        break;
+                    case ExpressionLocationItemType.Question:
+                        questionnaireVerificationReferenceType = QuestionnaireVerificationReferenceType.Question;
+                        break;
+                    case ExpressionLocationItemType.StaticText:
+                        questionnaireVerificationReferenceType = QuestionnaireVerificationReferenceType.StaticText;
+                        break;
+                    default:
+                        throw new ArgumentException("expressionLocation");
+                }
+
+
+                var reference = new QuestionnaireVerificationReference(questionnaireVerificationReferenceType, expressionLocation.Id);
 
                 if (expressionLocation.ExpressionType == ExpressionLocationType.Validation)
                 {
                     reference.FailedValidationConditionIndex = expressionLocation.ExpressionPosition;
                     return QuestionnaireVerificationMessage.Error("WB0002",
-                        VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, reference);
+                        VerificationMessages.WB0002_CustomValidationExpressionHasIncorrectSyntax, compilationErrorMessages, reference);
                 }
                 else if (expressionLocation.ExpressionType == ExpressionLocationType.Condition)
                 {
                     return QuestionnaireVerificationMessage.Error("WB0003",
-                        VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax, reference);
+                        VerificationMessages.WB0003_CustomEnablementConditionHasIncorrectSyntax, compilationErrorMessages, reference);
                 }
                 else if (expressionLocation.ExpressionType == ExpressionLocationType.Filter)
                 {
                     return QuestionnaireVerificationMessage.Error("WB0110",
-                        VerificationMessages.WB00110_LinkedQuestionFilterExpresssionHasIncorrectSyntax, reference);
+                        VerificationMessages.WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax, compilationErrorMessages, reference);
                 }
             }
 

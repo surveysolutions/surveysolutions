@@ -117,7 +117,7 @@ namespace WB.Core.Infrastructure.EventHandlers
         private bool Handles(IUncommittedEvent evt)
         {
             Type genericUpgrader = typeof(IUpdateHandler<,>);
-            return genericUpgrader.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).IsInstanceOfType(this.GetType());
+            return genericUpgrader.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).IsAssignableFrom(this.GetType());
         }
 
         public string Name => this.GetType().Name;

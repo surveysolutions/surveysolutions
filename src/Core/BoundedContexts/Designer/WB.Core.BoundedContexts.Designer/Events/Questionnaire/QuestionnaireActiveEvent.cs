@@ -1,6 +1,5 @@
 ﻿using System;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace Main.Core.Events.Questionnaire
 {

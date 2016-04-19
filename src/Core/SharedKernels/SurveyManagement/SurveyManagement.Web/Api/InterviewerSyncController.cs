@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IPlainInterviewFileStorage plainFileRepository;
         private readonly IFileSystemAccessor fileSystemAccessor; 
         private readonly ITabletInformationService tabletInformationService;
-        private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
+        private readonly IInterviewPackagesService incomingSyncPackagesQueue;
 
         private readonly IUserWebViewFactory userInfoViewFactory;
         private readonly IUserViewFactory userViewFactory;
@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IFileSystemAccessor fileSystemAccessor,
             ISyncProtocolVersionProvider syncVersionProvider,
             ITabletInformationService tabletInformationService,
-            IIncomingSyncPackagesQueue incomingSyncPackagesQueue, 
+            IInterviewPackagesService incomingSyncPackagesQueue, 
             IUserWebViewFactory userInfoViewFactory,
             IUserViewFactory userViewFactory,
             IAndroidPackageReader androidPackageReader)
@@ -107,7 +107,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [ApiBasicAuth(new[] { UserRoles.Operator })]
         public HttpResponseMessage PostPackage(PostPackageRequest request)
         {
-            this.incomingSyncPackagesQueue.Enqueue(interviewId: request.InterviewId, item: request.SynchronizationPackage);
+            this.incomingSyncPackagesQueue.StorePackage(item: request.SynchronizationPackage);
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }

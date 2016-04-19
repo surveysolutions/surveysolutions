@@ -35,15 +35,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
                 title: title,
                 variableName: variableName,
                 variableLabel: variableLabel,
-                isPreFilled:false,
+                isPreFilled: false,
                 scope: scope,
                 enablementCondition: enablementCondition,
                 hideIfDisabled: hideIfDisabled,
                 instructions: instructions,
                 responsibleId: responsibleId,
-                validationConditions: new List<ValidationCondition>()
-
-    );
+                validationConditions: new List<ValidationCondition>(), properties: Create.QuestionProperties());
 
         private Cleanup stuff = () =>
         {

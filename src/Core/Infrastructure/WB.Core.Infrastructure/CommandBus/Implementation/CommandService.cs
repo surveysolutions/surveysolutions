@@ -17,7 +17,8 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 {
     internal class CommandService : ICommandService
     {
-        private readonly IAggregateRootRepository repository;
+        private readonly IEventSourcedAggregateRootRepository eventSourcedRepository;
+        private readonly IPlainAggregateRootRepository plainRepository;
         private readonly ILiteEventBus eventBus;
         private readonly IAggregateSnapshotter snapshooter;
         private readonly IServiceLocator serviceLocator;
@@ -27,15 +28,18 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         private TaskCompletionSource<object> executionAwaiter = null;
 
 
-        public CommandService(IAggregateRootRepository repository,
+        public CommandService(
+            IEventSourcedAggregateRootRepository eventSourcedRepository,
             ILiteEventBus eventBus, 
             IAggregateSnapshotter snapshooter,
-            IServiceLocator serviceLocator)
+            IServiceLocator serviceLocator,
+            IPlainAggregateRootRepository plainRepository)
         {
-            this.repository = repository;
+            this.eventSourcedRepository = eventSourcedRepository;
             this.eventBus = eventBus;
             this.snapshooter = snapshooter;
             this.serviceLocator = serviceLocator;
+            this.plainRepository = plainRepository;
         }
 
         public Task ExecuteAsync(ICommand command, string origin, CancellationToken cancellationToken)
@@ -105,30 +109,50 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
         protected virtual void ExecuteImpl(ICommand command, string origin, CancellationToken cancellationToken)
         {
-            if (command == null) throw new ArgumentNullException("command");
+            if (command == null) throw new ArgumentNullException(nameof(command));
 
             cancellationToken.ThrowIfCancellationRequested();
 
             if (!CommandRegistry.Contains(command))
-                throw new CommandServiceException(string.Format("Unable to execute command {0} because it is not registered.", command.GetType().Name));
+                throw new CommandServiceException($"Unable to execute command {command.GetType().Name} because it is not registered.");
 
             Type aggregateType = CommandRegistry.GetAggregateRootType(command);
+            AggregateKind aggregateKind = CommandRegistry.GetAggregateRootKind(command);
             Func<ICommand, Guid> aggregateRootIdResolver = CommandRegistry.GetAggregateRootIdResolver(command);
             Action<ICommand, IAggregateRoot> commandHandler = CommandRegistry.GetCommandHandler(command);
             IEnumerable<Action<IAggregateRoot, ICommand>> validators = CommandRegistry.GetValidators(command, this.serviceLocator);
 
             Guid aggregateId = aggregateRootIdResolver.Invoke(command);
 
-            IAggregateRoot aggregate = this.repository.GetLatest(aggregateType, aggregateId);
+            switch (aggregateKind)
+            {
+                case AggregateKind.EventSourced:
+                    this.ExecuteEventSourcedCommand(command, origin, aggregateType, aggregateId, validators, commandHandler, cancellationToken);
+                    break;
+
+                case AggregateKind.Plain:
+                    this.ExecutePlainCommand(command, aggregateType, aggregateId, validators, commandHandler, cancellationToken);
+                    break;
+
+                default:
+                    throw new CommandServiceException($"Unable to execute command {command.GetType().Name} because it is registered to unknown aggregate root kind.");
+            }
+        }
+
+        private void ExecuteEventSourcedCommand(ICommand command, string origin,
+            Type aggregateType, Guid aggregateId, IEnumerable<Action<IAggregateRoot, ICommand>> validators,
+            Action<ICommand, IAggregateRoot> commandHandler, CancellationToken cancellationToken)
+        {
+            IEventSourcedAggregateRoot aggregate = this.eventSourcedRepository.GetLatest(aggregateType, aggregateId);
 
             cancellationToken.ThrowIfCancellationRequested();
 
             if (aggregate == null)
             {
                 if (!CommandRegistry.IsInitializer(command))
-                    throw new CommandServiceException(string.Format("Unable to execute not-constructing command {0} because aggregate {1} does not exist.", command.GetType().Name, aggregateId.FormatGuid()));
+                    throw new CommandServiceException($"Unable to execute not-constructing command {command.GetType().Name} because aggregate {aggregateId.FormatGuid()} does not exist.");
 
-                aggregate = (IAggregateRoot) this.serviceLocator.GetInstance(aggregateType);
+                aggregate = (IEventSourcedAggregateRoot) this.serviceLocator.GetInstance(aggregateType);
                 aggregate.SetId(aggregateId);
             }
 
@@ -140,6 +164,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             }
 
             cancellationToken.ThrowIfCancellationRequested();
+
             commandHandler.Invoke(command, aggregate);
 
             if (!aggregate.HasUncommittedChanges())
@@ -156,6 +181,35 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             {
                 this.snapshooter.CreateSnapshotIfNeededAndPossible(aggregate);
             }
+        }
+
+        private void ExecutePlainCommand(ICommand command,
+            Type aggregateType, Guid aggregateId, IEnumerable<Action<IAggregateRoot, ICommand>> validators,
+            Action<ICommand, IAggregateRoot> commandHandler, CancellationToken cancellationToken)
+        {
+            IPlainAggregateRoot aggregate = this.plainRepository.Get(aggregateType, aggregateId);
+
+            if (aggregate == null)
+            {
+                if (!CommandRegistry.IsInitializer(command))
+                    throw new CommandServiceException($"Unable to execute not-constructing command {command.GetType().Name} because aggregate {aggregateId.FormatGuid()} does not exist.");
+
+                aggregate = (IPlainAggregateRoot) this.serviceLocator.GetInstance(aggregateType);
+                aggregate.SetId(aggregateId);
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            foreach (Action<IAggregateRoot, ICommand> validator in validators)
+            {
+                validator.Invoke(aggregate, command);
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            commandHandler.Invoke(command, aggregate);
+
+            this.plainRepository.Save(aggregate);
         }
     }
 }

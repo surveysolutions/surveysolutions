@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
     internal class InterviewHistoryDenormalizerTestContext
     {
         protected static InterviewParaDataEventHandler CreateInterviewHistoryDenormalizer(IReadSideRepositoryWriter<InterviewHistoryView> interviewHistoryViewWriter=null,
-            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter = null, IReadSideRepositoryWriter<UserDocument> userDocumentWriter = null,
+            IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter = null, IPlainStorageAccessor<UserDocument> userDocumentWriter = null,
             QuestionnaireExportStructure questionnaire = null)
         {
             return new InterviewParaDataEventHandler(
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 interviewSummaryWriter ??
                 Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(
                     _ => _.GetById(It.IsAny<string>()) == new InterviewSummary()),
-                userDocumentWriter ?? Mock.Of<IReadSideRepositoryWriter<UserDocument>>(),
+                userDocumentWriter ?? Mock.Of<IPlainStorageAccessor<UserDocument>>(),
                 new InterviewDataExportSettings("", false, 10000, 100, 1, 1),
                 Mock.Of<IPlainKeyValueStorage<QuestionnaireExportStructure>>(
                     _ =>

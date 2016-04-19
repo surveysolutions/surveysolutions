@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             {
                 Children = new List<IComposite>()
                 {
-                    new StaticText(publicKey: staticTextId, text: string.Empty),
+                    Create.StaticText(staticTextId: staticTextId, text: string.Empty),
                     new TextQuestion() {StataExportCaption = "var"}
                 }
             });

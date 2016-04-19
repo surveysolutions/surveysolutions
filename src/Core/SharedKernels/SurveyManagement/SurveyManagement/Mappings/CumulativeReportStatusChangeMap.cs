@@ -10,9 +10,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
         {
             this.Id(_ => _.EntryId, mapper => mapper.Generator(Generators.Assigned));
 
-            this.Property(_ => _.QuestionnaireId);
-            this.Property(_ => _.QuestionnaireVersion);
-            this.Property(_ => _.Date);
+            this.Property(_ => _.QuestionnaireId, pm => pm.Column(cm => cm.Index("CumulativeReportStatusChanges_Questionnaire")));
+            this.Property(_ => _.QuestionnaireVersion, pm => pm.Column(cm => cm.Index("CumulativeReportStatusChanges_Questionnaire")));
+            this.Property(_ => _.Date, pm => pm.Column(cm => cm.Index("CumulativeReportStatusChanges_Date")));
             this.Property(_ => _.Status);
             this.Property(_ => _.ChangeValue);
         }

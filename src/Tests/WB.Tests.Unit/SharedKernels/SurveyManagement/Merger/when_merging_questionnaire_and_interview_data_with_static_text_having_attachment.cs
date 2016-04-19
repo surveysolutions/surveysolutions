@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Merger
                     Children =
                         new List<IComposite>()
                         {
-                            new StaticText(publicKey: staticTextId, text: staticText, attachmentName: attachmentName)
+                            Create.StaticText(publicKey: staticTextId, text: staticText, attachmentName: attachmentName)
                         }
                 });
             questionnaire.Attachments = new List<Attachment>() {new Attachment() {ContentId = attachmentContentId, Name = attachmentName } };

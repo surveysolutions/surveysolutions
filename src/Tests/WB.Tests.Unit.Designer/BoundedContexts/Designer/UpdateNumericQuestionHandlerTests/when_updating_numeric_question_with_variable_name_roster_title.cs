@@ -29,8 +29,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateNumericQuestionH
         };
 
         Because of = () =>
-            exception = Catch.Exception(() => questionnaire.UpdateNumericQuestion(questionId, "title", rosterTitle,null, false, QuestionScope.Interviewer, null, false, null,
-                responsibleId: responsibleId, isInteger: false, countOfDecimalPlaces: null, validationConditions: new List<ValidationCondition>()));
+            exception = Catch.Exception(() => questionnaire.UpdateNumericQuestion(questionId, "title", rosterTitle,null, false, QuestionScope.Interviewer, null, false, null, properties: Create.QuestionProperties(), responsibleId: responsibleId, isInteger: false, countOfDecimalPlaces: null, validationConditions: new List<ValidationCondition>()));
 
         Cleanup stuff = () =>
         {

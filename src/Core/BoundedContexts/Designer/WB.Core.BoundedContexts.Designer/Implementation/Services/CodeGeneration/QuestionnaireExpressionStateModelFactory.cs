@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
@@ -52,7 +53,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             this.TraverseQuestionnaireAndUpdateExpressionStateWithBuiltModels(questionnaire, expressionState);
             
-            expressionState.QuestionnaireLevelModel.ConditionMethodsSortedByExecutionOrder = GetConditionMethodsSortedByExecutionOrder(expressionState.QuestionnaireLevelModel.Questions, expressionState.QuestionnaireLevelModel.Groups, null, expressionState.ConditionsPlayOrder);
+            expressionState.QuestionnaireLevelModel.ConditionMethodsSortedByExecutionOrder = GetConditionMethodsSortedByExecutionOrder(
+                expressionState.QuestionnaireLevelModel.Questions,
+                expressionState.QuestionnaireLevelModel.StaticTexts,
+                expressionState.QuestionnaireLevelModel.Groups,
+                null,
+                expressionState.ConditionsPlayOrder);
 
             var rosterGroupedByScope = expressionState.AllRosters.GroupBy(r => r.TypeName);
 
@@ -114,6 +120,35 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     group.VariableName));
             }
 
+            foreach (var staticText in questionnaireTemplate.AllStaticTexts)
+            {
+                if (!string.IsNullOrWhiteSpace(staticText.Condition))
+                {
+                    methodModels.Add(
+                        ExpressionLocation.StaticTextCondition(staticText.Id).Key,
+                        new ConditionDescriptionModel(
+                            staticText.ParentScopeTypeName,
+                            staticText.ConditionMethodName,
+                            codeGenerationSettings.Namespaces,
+                            staticText.Condition,
+                            false,
+                            staticText.VariableName));
+                }
+
+                foreach (var validation in staticText.ValidationExpressions.Where(x => !string.IsNullOrWhiteSpace(x.ValidationExpression)))
+                {
+                    methodModels.Add(
+                        ExpressionLocation.StaticTextValidation(staticText.Id, validation.Order).Key,
+                        new ConditionDescriptionModel(
+                            staticText.ParentScopeTypeName,
+                            validation.ValidationMethodName,
+                            codeGenerationSettings.Namespaces,
+                            validation.ValidationExpression,
+                            false,
+                            validation.VariableName));
+                }
+            }
+
             foreach (RosterTemplateModel roster in questionnaireTemplate.AllRosters.Where(x => !string.IsNullOrWhiteSpace(x.Conditions)))
             {
                 methodModels.Add(ExpressionLocation.RosterCondition(roster.Id).Key,
@@ -148,23 +183,27 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             var groups = rostersInScope.SelectMany(r => r.Groups).ToList();
             var questions = rostersInScope.SelectMany(r => r.Questions).ToList();
+            var staticTexts = rostersInScope.SelectMany(r => r.StaticTexts).ToList();
             var rosters = rostersInScope.SelectMany(r => r.Rosters).ToList();
 
             var linkedQuestionFilterExpressions=rostersInScope.SelectMany(x=>x.LinkedQuestionFilterExpressions).ToList();
 
-            var conditionMethodsSortedByExecutionOrder = GetConditionMethodsSortedByExecutionOrder(questions, groups, rostersInScope, template.ConditionsPlayOrder);
+            var conditionMethodsSortedByExecutionOrder = GetConditionMethodsSortedByExecutionOrder(
+                questions, staticTexts, groups, rostersInScope, template.ConditionsPlayOrder);
 
-            return new RosterScopeTemplateModel(rosterScopeType, questions, groups, rosters, rostersInScope,
+            return new RosterScopeTemplateModel(rosterScopeType, questions, staticTexts, groups, rosters, rostersInScope,
                 conditionMethodsSortedByExecutionOrder, linkedQuestionFilterExpressions);
         }
 
         public static List<ConditionMethodAndState> GetConditionMethodsSortedByExecutionOrder(
             List<QuestionTemplateModel> questions,
+            List<StaticTextTemplateModel> staticTexts,
             List<GroupTemplateModel> groups,
             List<RosterTemplateModel> rosters,
             List<Guid> conditionsPlayOrder)
         {
             List<GroupTemplateModel> groupsWithConditions = groups.Where(g => !string.IsNullOrWhiteSpace(g.Condition)).Reverse().ToList();
+            List<StaticTextTemplateModel> staticTextsWithConditions = staticTexts.Where(g => !string.IsNullOrWhiteSpace(g.Condition)).Reverse().ToList();
             List<QuestionTemplateModel> questionsWithConditions = questions.Where(q => !string.IsNullOrWhiteSpace(q.Condition)).ToList();
             List<RosterTemplateModel> rostersWithConditions = (rosters ?? new List<RosterTemplateModel>()).Where(r => !string.IsNullOrWhiteSpace(r.Conditions)).Reverse().ToList();
 
@@ -181,6 +220,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 if (itemsToSort.ContainsKey(id))
                     itemsSorted.Add(itemsToSort[id]);
             }
+
+            staticTextsWithConditions.ForEach(
+                st => itemsSorted.Add(new ConditionMethodAndState(st.ConditionMethodName, st.StateName)));
 
             return itemsSorted;
         }
@@ -332,6 +374,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         continue;
                     }
 
+                    if (child is IStaticText)
+                    {
+                        var staticTextModel = this.CreateStaticTextTemplateModel((IStaticText) child, currentScope, questionnaireDoc);
+
+                        currentScope.StaticTexts.Add(staticTextModel);
+
+                        expressionState.AllStaticTexts.Add(staticTextModel);
+
+                        continue;
+                    }
+
                     if (!IsGroup(child))
                         continue;
 
@@ -437,19 +490,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 ? childAsIQuestion.StataExportCaption
                 : "__" + childAsIQuestion.PublicKey.FormatGuid();
 
-            var validationConditions = new List<ValidationExpressionModel>();
-
-            for (int i = 0; i < childAsIQuestion.ValidationConditions.Count; i++)
-                {
-                    validationConditions.Add(new ValidationExpressionModel(
-                        this.macrosSubstitutionService.InlineMacros(childAsIQuestion.ValidationConditions[i].Expression, questionnaireDoc.Macros.Values),
-                        varName,
-                        i));
-                }
-            
             var condition = childAsIQuestion.CascadeFromQuestionId.HasValue
                 ? this.GetConditionForCascadingQuestion(questionnaireDoc, childAsIQuestion.PublicKey)
                 : this.macrosSubstitutionService.InlineMacros(childAsIQuestion.ConditionExpression, questionnaireDoc.Macros.Values);
+
+            var validationExpressions = childAsIQuestion
+                .ValidationConditions
+                .Select((validationCondition, index)
+                    => new ValidationExpressionModel(
+                        this.macrosSubstitutionService.InlineMacros(validationCondition.Expression, questionnaireDoc.Macros.Values),
+                        varName,
+                        index))
+                .ToList();
 
             var question = new QuestionTemplateModel
             {
@@ -459,7 +511,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 TypeName = GenerateQuestionTypeName(childAsIQuestion),
                 RosterScopeName = rosterScopeName,
                 ParentScopeTypeName = parentScopeTypeName,
-                ValidationExpressions = validationConditions
+                ValidationExpressions = validationExpressions
             };
 
             if (childAsIQuestion.QuestionType == QuestionType.MultyOption && childAsIQuestion is IMultyOptionsQuestion)
@@ -519,18 +571,26 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             QuestionnaireDocument questionnaireDoc,
             IGroup childAsIGroup,
             RosterScopeBaseModel currentScope)
-        {
-            string varName = childAsIGroup.PublicKey.FormatGuid();
-            var group = new GroupTemplateModel
+            => new GroupTemplateModel
             {
                 Id = childAsIGroup.PublicKey,
                 Condition = this.macrosSubstitutionService.InlineMacros(childAsIGroup.ConditionExpression, questionnaireDoc.Macros.Values),
-                VariableName = varName,
+                VariableName = childAsIGroup.PublicKey.FormatGuid(),
                 RosterScopeName = currentScope.RosterScopeName,
-                ParentScopeTypeName = currentScope.TypeName
+                ParentScopeTypeName = currentScope.TypeName,
             };
-            return @group;
-        }
+
+        private StaticTextTemplateModel CreateStaticTextTemplateModel(IStaticText staticText, RosterScopeBaseModel currentScope, QuestionnaireDocument questionnaire)
+            => new StaticTextTemplateModel(
+                staticText.PublicKey,
+                this.macrosSubstitutionService.InlineMacros(staticText.ConditionExpression, questionnaire.Macros.Values),
+                staticText
+                    .ValidationConditions
+                    .Select(validationCondition
+                        => this.macrosSubstitutionService.InlineMacros(validationCondition.Expression, questionnaire.Macros.Values))
+                    .ToList(),
+                currentScope.RosterScopeName,
+                currentScope.TypeName);
 
         private string GetConditionForCascadingQuestion(QuestionnaireDocument questionnaireDocument, Guid cascadingQuestionId)
         {
@@ -574,6 +634,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             }
 
             var groupsWithConditions = allGroups.Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));
+            var staticTextsWithConditions = questionnaireDocument
+                .GetEntitiesByType<IStaticText>()
+                .Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));
             var questionsWithCondition = questionnaireDocument
                 .GetEntitiesByType<IQuestion>()
                 .Where(x => !string.IsNullOrWhiteSpace(x.ConditionExpression));
@@ -583,6 +646,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 x => this.GetIdsOfQuestionsInvolvedInExpression(
                     this.macrosSubstitutionService.InlineMacros(x.ConditionExpression, questionnaireDocument.Macros.Values),
                     variableNames));
+
+            staticTextsWithConditions.ToDictionary(
+                x => x.PublicKey,
+                x => this.GetIdsOfQuestionsInvolvedInExpression(
+                    this.macrosSubstitutionService.InlineMacros(x.ConditionExpression, questionnaireDocument.Macros.Values), variableNames))
+                .ToList()
+                .ForEach(x => dependencies.Add(x.Key, x.Value));
 
             questionsWithCondition.ToDictionary(
                 x => x.PublicKey,
@@ -637,13 +707,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     var multiOtion = question as MultyOptionsQuestion;
                     if (multiOtion != null && multiOtion.YesNoView)
                         return typeof(YesNoAnswers).Name;
-                    return (question.LinkedToQuestionId == null) ? "decimal[]" : "decimal[][]";
+                    return (question.LinkedToQuestionId == null && question.LinkedToRosterId == null) ? "decimal[]" : "decimal[][]";
 
                 case QuestionType.DateTime:
                     return "DateTime?";
 
                 case QuestionType.SingleOption:
-                    return (question.LinkedToQuestionId == null) ? "decimal?" : "decimal[]";
+                    return (question.LinkedToQuestionId == null && question.LinkedToRosterId==null) ? "decimal?" : "decimal[]";
 
                 case QuestionType.TextList:
                     return "Tuple<decimal, string>[]";

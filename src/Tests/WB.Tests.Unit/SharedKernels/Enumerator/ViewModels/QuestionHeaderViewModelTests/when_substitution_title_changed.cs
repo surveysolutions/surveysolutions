@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
 
         static QuestionHeaderViewModel viewModel;
         static ILiteEventBus liteEventBus;
-        static IAggregateRoot fakeInterview;
+        static IEventSourcedAggregateRoot fakeInterview;
         private static Identity[] changedTitleIds;
     }
 }

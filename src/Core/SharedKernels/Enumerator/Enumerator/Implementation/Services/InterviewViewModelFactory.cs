@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using MvvmCross.Platform;
 using WB.Core.GenericSubdomains.Portable;
@@ -90,10 +92,25 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         {
             if (groupIdentity == null) throw new ArgumentNullException(nameof(groupIdentity));
 
-            return this.GenerateViewModels(interviewId, groupIdentity, navigationState);
+            var interviewEntityViewModels = this.GenerateViewModels(interviewId, groupIdentity, navigationState).ToList();
+            return interviewEntityViewModels;
         }
 
-        public IEnumerable<IInterviewEntityViewModel> GetPrefilledQuestions(string interviewId) => this.GetPrefilledQuestionsImpl(interviewId);
+        public IEnumerable<IInterviewEntityViewModel> GetPrefilledQuestions(string interviewId)
+        {
+            var interview = this.interviewRepository.Get(interviewId);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
+
+            var tasks = questionnaire
+                .GetPrefilledQuestions()
+                .Select(questionId => this.CreateInterviewEntityViewModel(
+                    identity: new Identity(questionId, RosterVector.Empty),
+                    entityModelType: GetEntityModelType(questionId, questionnaire),
+                    interviewId: interviewId,
+                    navigationState: null));
+
+            return tasks;
+        }
 
         private IEnumerable<IInterviewEntityViewModel> GenerateViewModels(string interviewId, Identity groupIdentity, NavigationState navigationState)
         {
@@ -103,14 +120,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             if (!questionnaire.HasGroup(groupIdentity.Id))
                 throw new KeyNotFoundException($"Group with id {groupIdentity.Id.FormatGuid()} was not found. Interview id: {interviewId}.");
 
-            var groupWithoutNestedChildren = interview.GetInterviewerEntities(groupIdentity);
+            var groupWithoutNestedChildren = interview.GetInterviewerEntities(groupIdentity).ToList();
 
-            return groupWithoutNestedChildren.Select(questionnaireEntity => this.CreateInterviewEntityViewModel(
-                entityId: questionnaireEntity.Id,
-                rosterVector: questionnaireEntity.RosterVector,
+            IEnumerable<IInterviewEntityViewModel> viewmodels = groupWithoutNestedChildren.Select(questionnaireEntity => this.CreateInterviewEntityViewModel(
+                identity: questionnaireEntity,
                 entityModelType: GetEntityModelType(questionnaireEntity.Id, questionnaire),
                 interviewId: interviewId,
-                navigationState: navigationState));
+                navigationState: navigationState)).ToList();
+
+            return viewmodels;
         }
 
         [Obsolete("Do not use it. It is for transition purpose only")]
@@ -178,31 +196,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return InterviewEntityType.StaticTextModel;
         }
 
-        private IEnumerable<IInterviewEntityViewModel> GetPrefilledQuestionsImpl(string interviewId)
-        {
-            var interview = this.interviewRepository.Get(interviewId);
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
-
-            return questionnaire
-                .GetPrefilledQuestions()
-                .Select(questionId =>
-                    this.CreateInterviewEntityViewModel(
-                        entityId: questionId,
-                        rosterVector: RosterVector.Empty,
-                        entityModelType: GetEntityModelType(questionId, questionnaire),
-                        interviewId: interviewId,
-                        navigationState: null));
-        }
-
         private IInterviewEntityViewModel CreateInterviewEntityViewModel(
-            Guid entityId,
-            decimal[] rosterVector,
+            Identity identity,
             InterviewEntityType entityModelType,
             string interviewId,
             NavigationState navigationState)
         {
-            var identity = new Identity(entityId, rosterVector);
-
             if (!this.EntityTypeToViewModelMap.ContainsKey(entityModelType))
             {
                 var text = (StaticTextViewModel)this.EntityTypeToViewModelMap[InterviewEntityType.StaticTextModel].Invoke();
@@ -210,10 +209,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 return text;
             }
 
-            var viewModelActivator = this.EntityTypeToViewModelMap[entityModelType];
+            Func<IInterviewEntityViewModel> viewModelActivator = this.EntityTypeToViewModelMap[entityModelType];
 
             IInterviewEntityViewModel viewModel = viewModelActivator.Invoke();
-
             viewModel.Init(interviewId: interviewId, entityIdentity: identity, navigationState: navigationState);
             return viewModel;
         }

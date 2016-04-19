@@ -20,6 +20,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class ValidityViewModel : MvxNotifyPropertyChanged,
         ILiteEventHandler<AnswersDeclaredValid>,
         ILiteEventHandler<AnswersDeclaredInvalid>,
+        ILiteEventHandler<StaticTextsDeclaredValid>,
+        ILiteEventHandler<StaticTextsDeclaredInvalid>,
         ILiteEventHandler<QuestionsEnabled>,
         IDisposable
     {
@@ -69,7 +71,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private Identity questionIdentity;
 
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public void Init(string interviewId, Identity entityIdentity)
         {
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
@@ -77,7 +79,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionIdentity = entityIdentity;
 
             this.liteEventRegistry.Subscribe(this, interviewId);
-
             this.UpdateValidState();
         }
 
@@ -153,6 +154,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Handle(AnswersDeclaredInvalid @event)
         {
             if (@event.FailedValidationConditions.Keys.Contains(this.questionIdentity))
+            {
+                this.UpdateValidState();
+            }
+        }
+
+        public void Handle(StaticTextsDeclaredValid @event)
+        {
+            if (@event.StaticTexts.Contains(this.questionIdentity))
+            {
+                this.UpdateValidState();
+            }
+        }
+
+        public void Handle(StaticTextsDeclaredInvalid @event)
+        {
+            if (@event.GetFailedValidationConditionsDictionary().Keys.Contains(this.questionIdentity))
             {
                 this.UpdateValidState();
             }

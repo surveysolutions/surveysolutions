@@ -59,6 +59,24 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
                 }
             };
         }
+        internal static QuestionnaireDocument CreateQuestionnaireDocumentWith2TextQuestions(Guid questionId1, Guid questionId2, Guid groupId)
+        {
+            return new QuestionnaireDocument
+            {
+                Children = new List<IComposite>
+                {
+                    new Group()
+                    {
+                        PublicKey = groupId,
+                        Children = new List<IComposite>
+                        {
+                            new TextQuestion() { PublicKey = questionId1 },
+                            new TextQuestion() { PublicKey = questionId2 },
+                        }
+                    }
+                }
+            };
+        }
 
         internal static QuestionnaireDocument CreateQuestionnaireDocumentWithStaticText(Guid staticTextId, Guid chapterId)
         {
@@ -71,7 +89,7 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
                         PublicKey = chapterId,
                         Children = new List<IComposite>
                         {
-                            new StaticText(staticTextId, null)
+                            Create.StaticText(staticTextId, null)
                         }
                     }
                 }

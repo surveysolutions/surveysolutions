@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventHandlers;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -12,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
@@ -41,10 +43,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
     {
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
-        private readonly IReadSideRepositoryWriter<UserDocument> users;
+        private readonly IPlainStorageAccessor<UserDocument> users;
 
         public InterviewSummaryDenormalizer(IReadSideRepositoryWriter<InterviewSummary> interviewSummary,
-            IReadSideRepositoryWriter<UserDocument> users, IPlainQuestionnaireRepository plainQuestionnaireRepository)
+            IPlainStorageAccessor<UserDocument> users, IPlainQuestionnaireRepository plainQuestionnaireRepository)
             : base(interviewSummary)
         {
             this.users = users;
@@ -104,7 +106,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         private InterviewSummary CreateInterviewSummary(Guid userId, Guid questionnaireId, long questionnaireVersion,
             Guid eventSourceId, DateTime eventTimeStamp, bool wasCreatedOnClient)
         {
-            UserDocument responsible = this.users.GetById(userId);
+            UserDocument responsible = this.users.GetById(userId.FormatGuid());
             var questionnarie = this.GetQuestionnaire(questionnaireId, questionnaireVersion);
 
             var interviewSummary = new InterviewSummary(questionnarie)
@@ -181,7 +183,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
         {
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
-                UserDocument userDocument = this.users.GetById(@event.Payload.SupervisorId);
+                UserDocument userDocument = this.users.GetById(@event.Payload.SupervisorId.FormatGuid());
                 var supervisorName = userDocument != null ? userDocument.UserName : "<UNKNOWN SUPERVISOR>";
 
                 interview.ResponsibleId = @event.Payload.SupervisorId;
@@ -305,7 +307,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                             }
                         }
                     }
-                    var responsible = this.users.GetById(state.ResponsibleId);
+                    var responsible = this.users.GetById(state.ResponsibleId.FormatGuid());
                     if (responsible != null && responsible.Supervisor != null)
                     {
                         state.TeamLeadId = responsible.Supervisor.Id;
@@ -334,7 +336,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 
         private string GetResponsibleIdName(Guid responsibleId)
         {
-            var responsible = this.users.GetById(responsibleId);
+            var responsible = this.users.GetById(responsibleId.FormatGuid());
             return responsible != null ? responsible.UserName : "<UNKNOWN RESPONSIBLE>";
         }
     }

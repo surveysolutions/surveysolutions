@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -32,32 +30,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public QuestionStateViewModel<NumericRealQuestionAnswered> QuestionState { get; private set; }
         public AnsweringViewModel Answering { get; private set; }
 
-        private string answerAsString;
-
-        private int? countOfDecimalPlaces;
-
-        public string AnswerAsString
+        private decimal? answer;
+        public decimal? Answer
         {
-            get { return this.answerAsString; }
+            get { return this.answer; }
             private set
             {
-                if (this.answerAsString != value)
+                if (this.answer != value)
                 {
-                    this.answerAsString = value; 
+                    this.answer = value; 
                     this.RaisePropertyChanged();
                 }
             }
         }
 
         private IMvxCommand valueChangeCommand;
+        public IMvxCommand ValueChangeCommand => this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand(this.SendAnswerRealQuestionCommand));
 
-        public IMvxCommand ValueChangeCommand
-        {
-            get { return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand(this.SendAnswerRealQuestionCommand)); }
-        }  
-        
         private IMvxCommand answerRemoveCommand;
-
         public IMvxCommand RemoveAnswerCommand
         {
             get
@@ -84,12 +74,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.QuestionState.Validity.ProcessException(ex);
             }
         }
-
-        public int? CountOfDecimalPlaces
-        {
-            get { return this.countOfDecimalPlaces; }
-            set { this.countOfDecimalPlaces = value; this.RaisePropertyChanged(); }
-        }
+        
+        public bool UseFormatting { get; set; }
+        public int? CountOfDecimalPlaces { get; private set; }
 
         public RealQuestionViewModel(
             IPrincipal principal,
@@ -107,12 +94,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.liteEventRegistry = liteEventRegistry;
         }
 
-        public Identity Identity { get { return this.questionIdentity; } }
+        public Identity Identity => this.questionIdentity;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException("interviewId");
-            if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
+            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
@@ -124,35 +111,30 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
+            this.UseFormatting = questionnaire.ShouldUseFormatting(entityIdentity.Id);
             this.CountOfDecimalPlaces = questionnaire.GetCountOfDecimalPlacesAllowedByQuestion(entityIdentity.Id);
+
             if (answerModel.IsAnswered)
             {
-                this.AnswerAsString = NullableDecimalToAnswerString(answerModel.Answer);
+                this.Answer = answerModel.Answer;
             }
         }
 
         private async void SendAnswerRealQuestionCommand()
         {
-            if (string.IsNullOrWhiteSpace(this.AnswerAsString))
+            if (this.Answer == null)
             {
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Integer_EmptyValueError);
                 return;
             }
-
-            decimal answer;
-            if (!Decimal.TryParse(this.AnswerAsString, NumberStyles.Any, CultureInfo.InvariantCulture, out answer))
-            {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Real_ParsingError);
-                return;
-            }
-
+            
             var command = new AnswerNumericRealQuestionCommand(
                 interviewId: Guid.Parse(this.interviewId),
                 userId: this.principal.CurrentUserIdentity.UserId,
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
                 answerTime: DateTime.UtcNow,
-                answer: answer);
+                answer: (decimal)this.Answer);
 
             try
             {
@@ -163,11 +145,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.QuestionState.Validity.ProcessException(ex);
             }
-        }
-
-        private static string NullableDecimalToAnswerString(decimal? answer)
-        {
-            return answer.HasValue ? answer.Value.ToString(CultureInfo.InvariantCulture) : null;
         }
 
         public void Dispose()
@@ -181,7 +158,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (@event.QuestionId == this.questionIdentity.Id &&
                @event.RosterVector.SequenceEqual(this.questionIdentity.RosterVector))
             {
-                this.AnswerAsString = "";
+                this.Answer = null;
             }
         }
     }

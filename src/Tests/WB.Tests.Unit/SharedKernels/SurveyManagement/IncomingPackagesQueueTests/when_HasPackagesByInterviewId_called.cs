@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         };
 
         Because of = () =>
-            result = incomingSyncPackagesQueue.HasPackagesByInterviewId(interviewId);
+            result = incomingSyncPackagesQueue.HasPendingPackageByInterview(interviewId);
 
         It should_sync_packages_folder_contains_some_sync_files_by_specific_interview_id = () =>
            result.ShouldBeTrue();
