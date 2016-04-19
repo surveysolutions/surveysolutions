@@ -252,7 +252,7 @@ namespace WB.Tests.Unit
 
         public static Attachment Attachment(string attachementHash) => new Attachment { ContentId = attachementHash };
 
-        public static CategoricalQuestionOption CascadingOptionModel(int value, string title, int parentValue)
+        public static CategoricalQuestionOption CategoricalQuestionOption(int value, string title, int? parentValue = null)
         {
             return new CategoricalQuestionOption
                    {

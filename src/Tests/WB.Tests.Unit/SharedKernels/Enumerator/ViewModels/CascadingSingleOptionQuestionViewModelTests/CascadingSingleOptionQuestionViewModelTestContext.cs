@@ -88,12 +88,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
         protected static List<CategoricalQuestionOption> Options = new List<CategoricalQuestionOption>
         {
-            Create.CascadingOptionModel(1, "title abc 1", 1),
-            Create.CascadingOptionModel(2, "title def 2", 1),
-            Create.CascadingOptionModel(3, "title klo 3", 1),
-            Create.CascadingOptionModel(4, "title gha 4", 2),
-            Create.CascadingOptionModel(5, "title ccc 5", 2),
-            Create.CascadingOptionModel(6, "title bcw 6", 2)
+            Create.CategoricalQuestionOption(1, "title abc 1", 1),
+            Create.CategoricalQuestionOption(2, "title def 2", 1),
+            Create.CategoricalQuestionOption(3, "title klo 3", 1),
+            Create.CategoricalQuestionOption(4, "title gha 4", 2),
+            Create.CategoricalQuestionOption(5, "title ccc 5", 2),
+            Create.CategoricalQuestionOption(6, "title bcw 6", 2)
         };
 
         protected static readonly string interviewId = "Some interviewId";
