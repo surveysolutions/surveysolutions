@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 				this.InterviewProperties);
 			this.InterviewScopes.Add(Util.GetRosterStringKey(questionnaireIdentityKey), questionnaireLevel);		
 			
-				<#
+<#
 			foreach (var linkedQuestionIdWithSourceRosterIdPair in GetLinkedQuestionIdWithSourceRosterIdPairs())
 			{
 #>
