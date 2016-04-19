@@ -109,9 +109,6 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV8<
 
 		((IRosterLevel)level).SetRowName(this.@rowname);
 			
-		ConditionalDependencies = new Dictionary<Guid, Guid[]>(this.ConditionalDependencies);
-		StructuralDependencies = new Dictionary<Guid, Guid[]>(this.StructuralDependencies);
-
 		foreach (var state in level.EnablementStates)
 		{
 			var originalState = this.EnablementStates[state.Key];
