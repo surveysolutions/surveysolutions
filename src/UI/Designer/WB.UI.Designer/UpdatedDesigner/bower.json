@@ -50,6 +50,9 @@
     "angular": "^1.5.2"
   },
   "overrides": {
+    "prettycheckable": {
+      "main": ["dist/prettyCheckable.min"]
+    },
     "ace-builds": {
       "main": [
         "src-noconflict/ace.js",
