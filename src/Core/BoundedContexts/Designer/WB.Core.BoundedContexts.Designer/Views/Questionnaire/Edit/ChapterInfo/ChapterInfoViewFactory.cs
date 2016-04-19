@@ -6,6 +6,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
     public class ChapterInfoViewFactory : IChapterInfoViewFactory
     {
+        private readonly string[] predefinedVariables = new[] {"self"};
+
         private readonly IReadSideKeyValueStorage<GroupInfoView> readSideReader;
 
         public ChapterInfoViewFactory(IReadSideKeyValueStorage<GroupInfoView> readSideReader)
@@ -35,7 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
         private string[] CollectVariableNames(GroupInfoView questionnaire)
         {
-            List<string> variables = new List<string>();
+            List<string> variables = new List<string>(predefinedVariables);
 
             var nodes = new Stack<IQuestionnaireItem>(new[] { questionnaire });
 
@@ -58,6 +60,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 
                 foreach (var item in nodeAsGroupInfoView.Items) nodes.Push(item);
             }
+
             return variables.Distinct().ToArray();
         }
     }
