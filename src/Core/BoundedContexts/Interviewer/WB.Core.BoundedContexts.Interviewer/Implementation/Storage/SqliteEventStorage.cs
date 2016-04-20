@@ -17,6 +17,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 {
     public class SqliteEventStorage : IInterviewerEventStorage, IDisposable
     {
+        private const int BulkSize = 100;
         private readonly ISerializer serializer;
         private readonly SQLiteConnectionWithLock connection;
         private ILogger logger;
@@ -53,12 +54,32 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
         }
 
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
-            => this
-                .connection
-                .Table<EventView>()
-                .Where(eventView => eventView.EventSourceId == id && eventView.EventSequence >= minVersion)
-                .OrderBy(x => x.EventSequence)
-                .Select(ToCommitedEvent);
+        {
+            int lastReadEventSequence = Math.Max(minVersion, 0) - 1;
+
+            List<CommittedEvent> bulk;
+
+            do
+            {
+                bulk = this
+                    .connection
+                    .Table<EventView>()
+                    .Where(eventView
+                        => eventView.EventSourceId == id
+                        && eventView.EventSequence > lastReadEventSequence
+                        && eventView.EventSequence <= lastReadEventSequence + BulkSize)
+                    .OrderBy(x => x.EventSequence)
+                    .Select(ToCommitedEvent)
+                    .ToList();
+
+                foreach (var committedEvent in bulk)
+                {
+                    yield return committedEvent;
+                    lastReadEventSequence = committedEvent.EventSequence;
+                }
+
+            } while (bulk.Count > 0);
+        }
 
         public CommittedEventStream Store(UncommittedEventStream eventStream)
         {
