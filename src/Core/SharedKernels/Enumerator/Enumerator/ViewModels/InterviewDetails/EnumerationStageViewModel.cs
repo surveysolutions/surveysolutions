@@ -319,7 +319,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void InvalidateViewModelsByConditions(Identity[] viewModelIdentities)
         {
-            InvokeOnMainThread(() =>
+            this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
             {
                 var readOnlyItems = this.Items.ToArray();
 
