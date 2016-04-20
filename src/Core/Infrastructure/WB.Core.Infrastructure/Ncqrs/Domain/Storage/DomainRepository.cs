@@ -47,6 +47,9 @@ namespace Ncqrs.Domain.Storage
         {
             var aggregateRoot = (AggregateRoot) this.serviceLocator.GetInstance(aggregateRootType);
 
+            if (aggregateRoot == null)
+                throw new ArgumentException($"Cannot create new instance of aggregate root of type {aggregateRootType.Name}");
+
             aggregateRoot.InitializeFromHistory(aggregateRootId, events);
 
             bool atLeastOneEventApplied = aggregateRoot.InitialVersion > 0;
