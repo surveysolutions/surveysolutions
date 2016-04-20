@@ -1,16 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
-using Android.Graphics;
-using Android.OS;
 using Android.Preferences;
-using Android.Widget;
-using Java.Lang;
 using MvvmCross.Droid.Views;
 using MvvmCross.Platform;
 using PCLStorage;
@@ -61,16 +56,42 @@ namespace WB.UI.Interviewer.Activities
 
         private async Task BackwardCompatibilityAsync()
         {
-            var settings = Mvx.Resolve<IAsyncPlainStorage<ApplicationSettingsView>>();
-            if (settings.FirstOrDefault() != null) return;
+            var readSideVersion = 1;
+            var settingsStorage = Mvx.Resolve<IAsyncPlainStorage<ApplicationSettingsView>>();
+            var settings = settingsStorage.FirstOrDefault();
+            if (settings != null)
+            {
+                if (!settings.ReadSideVersion.HasValue)
+                {
+                    await MoveCategoricalOptionsToPlainStorage();
+                    settings.ReadSideVersion = readSideVersion;
+                    await settingsStorage.StoreAsync(settings);
+                }
+                return;
+            }
 
-            await RestoreApplicationSettingsAsync();
+            await RestoreApplicationSettingsAsync(readSideVersion);
             await RestoreInterviewerAsync();
             await Task.Run(this.RestoreInterviewsAsync);
             await Task.Run(this.RestoreQuestionnairesAsync);
             await Task.Run(this.RestoreEventStreamsAsync);
             await Task.Run(this.RestoreInterviewDetailsAsync);
             await Task.Run(this.RestoreInterviewImagesAsync);
+            await MoveCategoricalOptionsToPlainStorage();
+        }
+
+        private async Task MoveCategoricalOptionsToPlainStorage()
+        {
+            var questionnaireViewRepository = Mvx.Resolve<IAsyncPlainStorage<QuestionnaireView>>();
+            var questionnaireDocuments = Mvx.Resolve<IAsyncPlainStorage<QuestionnaireDocumentView>>();
+            var optionsRepository = Mvx.Resolve<IOptionsRepository>();
+
+            var questionnaires = await questionnaireViewRepository.LoadAllAsync();
+            foreach (var questionnaireView in questionnaires)
+            {
+                var questionnaire = questionnaireDocuments.GetById(questionnaireView.Id);
+                await optionsRepository.StoreQuestionOptionsForQuestionnaireAsync(questionnaireView.Identity, questionnaire.Document);
+            }
         }
 
         private async Task RestoreInterviewImagesAsync()
@@ -257,7 +278,7 @@ namespace WB.UI.Interviewer.Activities
             public string SerializedData { get; set; }
         }
 
-        private static async Task RestoreApplicationSettingsAsync()
+        private static async Task RestoreApplicationSettingsAsync(int readSideVersion)
         {
             var settings = Mvx.Resolve<IInterviewerSettings>();
 
@@ -277,6 +298,8 @@ namespace WB.UI.Interviewer.Activities
 
             if (!string.IsNullOrEmpty(httpResponseTimeoutInSec))
                 await settings.SetHttpResponseTimeoutAsync(int.Parse(httpResponseTimeoutInSec));
+
+            await settings.SetReadSideVersionAsync(readSideVersion);
         }
 
         private static string GetAppSettings(string settingName, string defaultValue)
