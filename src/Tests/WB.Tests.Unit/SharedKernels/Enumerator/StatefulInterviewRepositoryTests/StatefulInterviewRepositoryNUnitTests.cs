@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing;
 using NSubstitute;
@@ -61,7 +62,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
             var snapshotStore = Create.SnapshotStore(aggregateRootId);
             var eventStore = Create.EventStore(aggregateRootId, Array.Empty<CommittedEvent>());
             var aggregateSnapshotter = Create.AggregateSnapshotter();
-            var domaiRepository = Create.DomainRepository(aggregateSnapshotter: aggregateSnapshotter);
+            var serviceLocator = Mock.Of<IServiceLocator>(_ => _.GetInstance(typeof(StatefulInterview)) == Create.StatefulInterview());
+            var domaiRepository = Create.DomainRepository(aggregateSnapshotter: aggregateSnapshotter, serviceLocator: serviceLocator);
             var aggregateRootRepository = Create.AggregateRootRepository(snapshotStore: snapshotStore, eventStore: eventStore, repository: domaiRepository);
 
             var statefulInterviewRepository = Create.StatefulInterviewRepository(aggregateRootRepository);
