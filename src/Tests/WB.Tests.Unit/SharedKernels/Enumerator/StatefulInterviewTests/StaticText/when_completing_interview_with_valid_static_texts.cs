@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticText
 {
-    internal class when_completing_interview_with_invalid_static_texts : StatefulInterviewTestsContext
+    internal class when_completing_interview_with_valid_static_texts : StatefulInterviewTestsContext
     {
         Establish context = () =>
         {
@@ -28,14 +28,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
 
             statefulInterview.Apply(Create.Event.InterviewStatusChanged(status: InterviewStatus.InterviewerAssigned));
             statefulInterview.Apply(Create.Event.StaticTextsDeclaredInvalid(staticTextIdentity));
+            statefulInterview.Apply(Create.Event.StaticTextsDeclaredValid(staticTextIdentity));
 
             eventContext = new EventContext();
         };
 
         Because of = () => statefulInterview.Complete(Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"), "", DateTime.Now);
-        
-        It should_raize_interview_declated_invalid_event = () => eventContext.ShouldContainEvent<InterviewDeclaredInvalid>();
-        It should_raize_interview_declated_valid_event = () => eventContext.ShouldNotContainEvent<InterviewDeclaredValid>();
+
+        It should_raize_interview_declated_valid_event = () => eventContext.ShouldContainEvent<InterviewDeclaredValid>();
+        It should_not_raize_interview_declated_invalid_event = () => eventContext.ShouldNotContainEvent<InterviewDeclaredInvalid>();
 
         static StatefulInterview statefulInterview;
         static Identity staticTextIdentity;
