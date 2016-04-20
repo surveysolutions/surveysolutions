@@ -138,6 +138,14 @@ namespace WB.UI.Interviewer
                 new AndroidModelModule(),
                 new AndroidDataCollectionSharedKernelModule());
 
+            kernel.Bind<IEnumeratorSettings, IRestServiceSettings, IInterviewerSettings>().To<InterviewerSettings>()
+                .WithConstructorArgument("backupFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Backup"))
+                .WithConstructorArgument("restoreFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Restore"));
+            kernel.Bind<ISynchronizationService>().To<SynchronizationService>();
+
+            kernel.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
+            kernel.Bind<IQuestionnaireContentVersionProvider>().To<QuestionnaireContentVersionProvider>().InSingletonScope();
+
             var liteEventBus = kernel.Get<ILiteEventBus>();
             kernel.Unbind<ILiteEventBus>();
 
@@ -148,15 +156,6 @@ namespace WB.UI.Interviewer
 
             kernel.Bind<IEventBus>().ToConstant(hybridEventBus);
             kernel.Bind<ILiteEventBus>().ToConstant(hybridEventBus);
-            
-            kernel.Bind<IEnumeratorSettings, IRestServiceSettings, IInterviewerSettings>().To<InterviewerSettings>()
-                .WithConstructorArgument("backupFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Backup"))
-                .WithConstructorArgument("restoreFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Restore"));
-
-            kernel.Bind<ISynchronizationService>().To<SynchronizationService>();
-
-            kernel.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
-            kernel.Bind<IQuestionnaireContentVersionProvider>().To<QuestionnaireContentVersionProvider>().InSingletonScope();
 
             this.InitDashboard(kernel, cqrsEventBus);
             return kernel;
