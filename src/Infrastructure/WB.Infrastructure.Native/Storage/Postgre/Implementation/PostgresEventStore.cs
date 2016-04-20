@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using Ncqrs.Eventing;
@@ -30,21 +31,22 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         }
 
         public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)
-        {
-            if (minVersion > maxVersion)
-            {
-                return new CommittedEventStream(id);
-            }
+            => minVersion > maxVersion
+                ? new CommittedEventStream(id)
+                : new CommittedEventStream(id,
+                    maxVersion == int.MaxValue
+                        ? this.Read(id, minVersion)
+                        : this.Read(id, minVersion).Take(maxVersion - Math.Max(0, minVersion) + 1));
 
-            var streamEvents = new List<CommittedEvent>();
-            
+        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
+        {
             using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
             {
                 connection.Open();
                 using (connection.BeginTransaction())
                 {
                     var command = connection.CreateCommand();
-                    command.CommandText = $"SELECT * FROM events WHERE eventsourceid=:sourceId AND eventsequence BETWEEN {minVersion} AND {maxVersion} ORDER BY eventsequence";
+                    command.CommandText = $"SELECT * FROM events WHERE eventsourceid=:sourceId AND eventsequence >= {minVersion} ORDER BY eventsequence";
                     command.Parameters.AddWithValue("sourceId", NpgsqlDbType.Uuid, id);
 
                     using (IDataReader npgsqlDataReader = command.ExecuteReader())
@@ -53,13 +55,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                         {
                             var commitedEvent = this.ReadSingleEvent(npgsqlDataReader);
 
-                            streamEvents.Add(commitedEvent);
+                            yield return commitedEvent;
                         }
                     }
                 }
             }
-
-            return new CommittedEventStream(id, streamEvents);
         }
 
         public CommittedEventStream Store(UncommittedEventStream eventStream)
