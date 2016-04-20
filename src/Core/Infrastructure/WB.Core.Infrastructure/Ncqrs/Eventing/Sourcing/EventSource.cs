@@ -16,10 +16,7 @@ namespace Ncqrs.Eventing.Sourcing
         public Guid EventSourceId
         {
             get { return _eventSourceId; }
-            protected set
-            {
-                _eventSourceId = value;
-            }
+            protected set { _eventSourceId = value; }
         }
 
         /// <summary>
@@ -28,13 +25,8 @@ namespace Ncqrs.Eventing.Sourcing
         /// <value>
         /// An <see cref="long"/> representing the current version of this aggregate root.
         /// </value>
-        public int Version
-        {
-            get
-            {
-                return _currentVersion;
-            }
-        }
+        public int Version => this._currentVersion;
+
         [NonSerialized]
         private int _initialVersion;
 
@@ -52,10 +44,7 @@ namespace Ncqrs.Eventing.Sourcing
         /// </para>
         /// </summary>
         /// <value>The initial version.</value>
-        public int InitialVersion
-        {
-            get { return _initialVersion; }            
-        }
+        public int InitialVersion => this._initialVersion;
 
         [NonSerialized]
         private readonly List<ISourcedEventHandler> _eventHandlers = new List<ISourcedEventHandler>();
@@ -71,33 +60,37 @@ namespace Ncqrs.Eventing.Sourcing
             EventSourceId = eventSourceId;
         }
 
+        protected virtual bool CanHandleEvent(CommittedEvent committedEvent) => true;
+
         public virtual void InitializeFromSnapshot(Snapshot snapshot)
         {
             _eventSourceId = snapshot.EventSourceId;
             _initialVersion = _currentVersion = snapshot.Version;
         }
 
-        public virtual void InitializeFromHistory(CommittedEventStream history)
+        public void InitializeFromHistory(CommittedEventStream history) => this.InitializeFromHistory(history.SourceId, history);
+
+        public void InitializeFromHistory(Guid eventSourceId, IEnumerable<CommittedEvent> history)
         {
             if (history == null)
-                throw new ArgumentNullException("The history cannot be null.");
-                if (_initialVersion != Version)
-            {
-                throw new InvalidOperationException("Cannot apply history when instance has uncommitted changes.");
-            }
-            if (history.IsEmpty)
-            {
-                return;                
-            }
+                throw new ArgumentNullException(nameof(history));
 
-            _eventSourceId = history.SourceId;
+            if (this._initialVersion != this.Version)
+                throw new InvalidOperationException("Cannot apply history when instance has uncommitted changes.");
+
+            this._eventSourceId = eventSourceId;
 
             foreach (var historicalEvent in history)
             {
-                ApplyEventFromHistory(historicalEvent);                
-            }
+                if (!this.CanHandleEvent(historicalEvent))
+                {
+                    this._initialVersion = 0;
+                    return;
+                }
 
-            _initialVersion = history.CurrentSourceVersion;
+                this.ApplyEventFromHistory(historicalEvent);
+                this._initialVersion = historicalEvent.EventSequence;
+            }
         }
 
         public event EventHandler<EventAppliedEventArgs> EventApplied;

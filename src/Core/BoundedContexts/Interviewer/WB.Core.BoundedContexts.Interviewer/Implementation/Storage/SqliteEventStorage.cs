@@ -49,8 +49,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                                                                   eventView.EventSequence >= minVersion && eventView.EventSequence <= maxVersion)
                                                             .OrderBy(x => x.EventSequence);
             
-            return new CommittedEventStream(id, events.Select(this.ToCommitedEvent));
+            return new CommittedEventStream(id, events.Select(ToCommitedEvent));
         }
+
+        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
+            => this
+                .connection
+                .Table<EventView>()
+                .Where(eventView => eventView.EventSourceId == id && eventView.EventSequence >= minVersion)
+                .OrderBy(x => x.EventSequence)
+                .Select(ToCommitedEvent);
 
         public CommittedEventStream Store(UncommittedEventStream eventStream)
         {
@@ -134,7 +142,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             }
         }
 
-        private CommittedEvent ToCommitedEvent(EventView storedEvent)
+        private static CommittedEvent ToCommitedEvent(EventView storedEvent)
         {
             return new CommittedEvent(
                 commitId: storedEvent.CommitId ?? storedEvent.EventSourceId,
