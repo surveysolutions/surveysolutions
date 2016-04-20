@@ -179,7 +179,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                     case InterviewDetailsFilter.Flagged:
                         return false;
                     default:
-                        return true;
+                        return false;
                 }
             }
             return true;
