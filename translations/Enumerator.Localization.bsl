@@ -674,6 +674,12 @@
             <li lc="zh-CN" tx="没有子部分" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="Properties\UIResources.resx" nm="Interview_Instruction_ShowInstruction" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Show instruction" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Показать инструкцию" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Instruction_Title" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Instruction" ts="Translated" qs="ToReview" />

@@ -594,10 +594,10 @@
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_Send_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" cln="InterviewerUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Collect and send to HQ all tablet infromation" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Собрать и отправить на сервер информацию о приложении" ts="Translated" qs="ToReview" />
-            <li lc="uk-UA" tx="Відправити на сервер інформацію про додаток" ts="Translated" qs="ToReview" />
-            <li lc="zh-CN" tx="收集所有平板电脑信息并发送给总部。" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Collect and send to HQ all tablet information" ts="Changed" qs="ToReview" />
+            <li lc="ru-RU" tx="Собрать и отправить на сервер информацию о приложении" ts="Changed" qs="ToReview" />
+            <li lc="uk-UA" tx="Відправити на сервер інформацію про додаток" ts="Changed" qs="ToReview" />
+            <li lc="zh-CN" tx="收集所有平板电脑信息并发送给总部。" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Diagnostics_Share_Description" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" cln="InterviewerUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1150,6 +1150,12 @@
             <li lc="ar" tx="إلغاء الأمر" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Annuler" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="取消" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Properties\InterviewerUIResources.resx" nm="Synchronization_Download_AttachmentsCleanup" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" cln="InterviewerUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Removing obsolete attachments." ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Удаление вложений" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="Synchronization_Download_Description_Format" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" cln="InterviewerUIResources" bac="EmbeddedResource" hgt="0" wdt="0">

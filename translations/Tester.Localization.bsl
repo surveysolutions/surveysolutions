@@ -146,7 +146,7 @@
         <it rn="Properties\TesterUIResources.resx" nm="ImportQuestionnaireAttachments_DownloadProgress" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Downloading questionnaire attachments -  {0}%" ts="Translated" qs="ToReview" />
-            <li lc="ru-RU" tx="Скачивает аттачмент - {0}%" ts="Translated" qs="ToReview" />
+            <li lc="ru-RU" tx="Скачиваем аттачмент - {0}%" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\TesterUIResources.resx" nm="Login_Error_NotFound" rc="" dnt="false" nms="WB.Core.BoundedContexts.Tester.Properties" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
