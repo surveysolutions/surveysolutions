@@ -63,14 +63,44 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
 
             var syncItem = this.serializer.Deserialize<SyncItem>(item);
 
+            InterviewMetaInfo meta = null;
             if (this.archiver.IsZipStream(new MemoryStream(Encoding.UTF8.GetBytes(syncItem.MetaInfo ?? ""))))
+            {
                 syncItem.MetaInfo = archiver.DecompressString(syncItem.MetaInfo);
+            }
+            else
+            {
+                try
+                {
+                    var decompressedMeta = archiver.DecompressString(syncItem.MetaInfo);
+                    meta = this.serializer.Deserialize<InterviewMetaInfo>(decompressedMeta) ?? new InterviewMetaInfo();
+                }
+                catch (FormatException) // its so fun to have same data zipped/gzipped/base64encoded at the same time
+                {
+                }
+            }
 
             if (this.archiver.IsZipStream(new MemoryStream(Encoding.UTF8.GetBytes(syncItem.Content ?? ""))))
+            {
                 syncItem.Content = this.archiver.DecompressString(syncItem.Content);
+            }
+            else
+            {
+                try
+                {
+                    var decompressedContent = archiver.DecompressString(syncItem.Content);
+                    syncItem.Content = decompressedContent;
+                }
+                catch (FormatException) // its so fun to have same data zipped/gzipped/base64encoded at the same time
+                {
+                }
+            }
 
-            InterviewMetaInfo meta = this.serializer.Deserialize<InterviewMetaInfo>(syncItem.MetaInfo) ??
+            if (meta == null)
+            {
+                meta = this.serializer.Deserialize<InterviewMetaInfo>(syncItem.MetaInfo) ??
                                      new InterviewMetaInfo();
+            }
 
             base.StorePackage(
                 interviewId: syncItem.RootId,
