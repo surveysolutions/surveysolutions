@@ -51,7 +51,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
         private readonly ConcurrentDictionary<string, BaseInterviewAnswer> answers;
         private readonly ConcurrentDictionary<string, InterviewEnablementState> groups;
-        private readonly ConcurrentDictionary<string, InterviewEnablementState> staticTexts;
         private readonly ConcurrentDictionary<Identity, int?> sortIndexesOfRosterInstanses;
         private readonly ConcurrentDictionary<string, bool> notAnsweredQuestionsValidityStatus;
         private readonly ConcurrentDictionary<string, IList<FailedValidationCondition>> notAnsweredFailedConditions;
@@ -67,7 +66,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             this.answers = new ConcurrentDictionary<string, BaseInterviewAnswer>();
             this.groups = new ConcurrentDictionary<string, InterviewEnablementState>();
-            this.staticTexts = new ConcurrentDictionary<string, InterviewEnablementState>();
             this.sortIndexesOfRosterInstanses = new ConcurrentDictionary<Identity, int?>();
             this.notAnsweredQuestionsValidityStatus = new ConcurrentDictionary<string, bool>();
             this.notAnsweredQuestionsEnablementStatus = new ConcurrentDictionary<string, bool>();
@@ -140,7 +138,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 x => this.DeclareAnswerAsInvalid(x.Key.Id, x.Key.RosterVector, x.Value));
             
             @event.InterviewData.DisabledQuestions.ForEach(x => DisableQuestion(x.Id, x.InterviewItemRosterVector));
-            @event.InterviewData.DisabledStaticTexts.ForEach(x => DisableStaticText(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.DisabledGroups.ForEach(x => DisableGroup(x.Id, x.InterviewItemRosterVector));
             @event.InterviewData.Answers.ForEach(x => CommentQuestion(x.Id, x.QuestionRosterVector, x.Comments));
 
@@ -461,12 +458,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             base.Apply(@event);
             this.ResetCalculatedState();
-
-            @event.StaticTexts.ForEach(x =>
-            {
-                var staticText = this.GetOrCreateEnablementStateByStaticText(x.Id, x.RosterVector);
-                staticText.IsDisabled = false;
-            });
+            
             @event.StaticTexts.ForEach(x => this.delta.EnablementChanged.Add(new Identity(x.Id, x.RosterVector)));
         }
 
@@ -474,8 +466,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             base.Apply(@event);
             this.ResetCalculatedState();
-
-            @event.StaticTexts.ForEach(x => this.DisableStaticText(x.Id, x.RosterVector));
+            
             @event.StaticTexts.ForEach(x => this.delta.EnablementChanged.Add(new Identity(x.Id, x.RosterVector)));
         }
 
@@ -483,8 +474,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             base.Apply(@event);
             this.ResetCalculatedState();
-
-            @event.StaticTexts.ForEach(x => this.DeclareAnswerAsValid(x.Id, x.RosterVector));
+            
             @event.StaticTexts.ForEach(x => this.delta.ValidityChanged.Add(new Identity(x.Id, x.RosterVector)));
         }
 
@@ -492,8 +482,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
         {
             base.Apply(@event);
             this.ResetCalculatedState();
-
-            @event.FailedValidationConditions.ForEach(x => this.DeclareAnswerAsInvalid(x.Key.Id, x.Key.RosterVector, x.Value.ToList()));
+            
             @event.GetFailedValidationConditionsDictionary().Keys.ForEach(x => this.delta.ValidityChanged.Add(new Identity(x.Id, x.RosterVector)));
         }
 
@@ -902,12 +891,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             groupOrRoster.IsDisabled = true;
         }
 
-        private void DisableStaticText(Guid id, RosterVector rosterVector)
-        {
-            var staticText = this.GetOrCreateEnablementStateByStaticText(id, rosterVector);
-            staticText.IsDisabled = true;
-        }
-
         private void CommentQuestion(Guid id, RosterVector rosterVector, string comment)
         {
             var questionKey = ConversionHelper.ConvertIdAndRosterVectorToString(id, rosterVector);
@@ -1271,9 +1254,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
                 return answer.IsEnabled;
             }
 
-            if (this.staticTexts.ContainsKey(entityKey))
+            if (base.interviewState.DisabledStaticTexts.Contains(entityIdentity))
             {
-                return !this.staticTexts[entityKey].IsDisabled;
+                return false;
             }
 
             if (this.notAnsweredQuestionsEnablementStatus.ContainsKey(entityKey))
@@ -1474,24 +1457,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
 
             this.answers[questionKey] = question;
             return question;
-        }
-
-        private InterviewEnablementState GetOrCreateEnablementStateByStaticText(Guid id, RosterVector rosterVector)
-        {
-            var staticTextKey = ConversionHelper.ConvertIdAndRosterVectorToString(id, rosterVector);
-
-            InterviewEnablementState staticTextEnablementState;
-            if (this.staticTexts.ContainsKey(staticTextKey))
-            {
-                staticTextEnablementState = this.staticTexts[staticTextKey];
-            }
-            else
-            {
-                staticTextEnablementState = new InterviewEnablementState { Id = id, RosterVector = rosterVector };
-            }
-
-            this.staticTexts[staticTextKey] = staticTextEnablementState;
-            return staticTextEnablementState;
         }
 
         private InterviewEnablementState GetOrCreateGroupOrRoster(Guid id, RosterVector rosterVector)
