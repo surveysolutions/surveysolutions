@@ -298,6 +298,11 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             return decimal.Parse(hasSign ? this.negativeSign + original : original);
         }
 
+        public void SetValue(decimal? value)
+        {
+            this.Text = value?.ToString(CultureInfo.CurrentCulture).Replace($"{this.decimalSeparator}0", "");
+        }
+
         private string ReplaceFirst(string text, string search, string replace)
         {
             int pos = text.IndexOf(search);
