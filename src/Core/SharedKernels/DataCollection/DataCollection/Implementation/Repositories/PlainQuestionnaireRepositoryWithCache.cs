@@ -47,6 +47,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             string repositoryId = GetRepositoryId(id, version);
             this.repository.Store(questionnaireDocument, repositoryId);
             this.cache[repositoryId] = questionnaireDocument;
+            this.plainQuestionnaireCache.Remove(new QuestionnaireIdentity(id, version));
         }
 
         public QuestionnaireDocument GetQuestionnaireDocument(Guid id, long version)
@@ -78,6 +79,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             StoreQuestionnaire(id, version, document);
 
             this.cache[repositoryId] = null;
+            this.plainQuestionnaireCache.Remove(new QuestionnaireIdentity(id, version));
         }
 
         private static string GetRepositoryId(Guid id, long version)
