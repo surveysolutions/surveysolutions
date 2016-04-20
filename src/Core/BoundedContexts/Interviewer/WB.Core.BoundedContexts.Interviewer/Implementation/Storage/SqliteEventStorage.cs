@@ -11,13 +11,14 @@ using SQLite.Net.Interop;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 {
     public class SqliteEventStorage : IInterviewerEventStorage, IDisposable
     {
-        private const int BulkSize = 100;
+        private IEnumeratorSettings enumeratorSettings;
         private readonly ISerializer serializer;
         private readonly SQLiteConnectionWithLock connection;
         private ILogger logger;
@@ -27,7 +28,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             IAsynchronousFileSystemAccessor fileSystemAccessor,
             ISerializer serializer,
             ITraceListener traceListener, 
-            SqliteSettings settings)
+            SqliteSettings settings, 
+            IEnumeratorSettings enumeratorSettings)
         {
             var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, "events-data.sqlite3");
             this.connection = new SQLiteConnectionWithLock(sqLitePlatform,
@@ -40,6 +42,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             };
             this.logger = logger;
             this.serializer = serializer;
+            this.enumeratorSettings = enumeratorSettings;
             this.connection.CreateTable<EventView>();
             this.connection.CreateIndex<EventView>(entity => entity.EventId);
         }
@@ -55,19 +58,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
         {
-            int lastReadEventSequence = Math.Max(minVersion, 0) - 1;
-
+            int lastReadEventSequence = Math.Max(minVersion, 0);
+            var bulkSize = this.enumeratorSettings.EventChunkSize;
             List<CommittedEvent> bulk;
 
             do
             {
+                var startSequenceInTheBulk = lastReadEventSequence;
+                var endSequenceInTheBulk = startSequenceInTheBulk + bulkSize;
                 bulk = this
                     .connection
                     .Table<EventView>()
                     .Where(eventView
                         => eventView.EventSourceId == id
-                        && eventView.EventSequence > lastReadEventSequence
-                        && eventView.EventSequence <= lastReadEventSequence + BulkSize)
+                        && eventView.EventSequence > startSequenceInTheBulk
+                        && eventView.EventSequence <= endSequenceInTheBulk)
                     .OrderBy(x => x.EventSequence)
                     .Select(ToCommitedEvent)
                     .ToList();

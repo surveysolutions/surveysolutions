@@ -569,4 +569,10 @@ Please re-enter your password. If the problem persists, contact your Supervisor.
   <data name="FinishInstallation_EndpointDiffers" xml:space="preserve">
     <value>Synchronization endpoint '{0}' is different from provided in Settings ('{1}'). Load URL from settings?</value>
   </data>
+  <data name="Prefs_EventChunkSizeSummary" xml:space="preserve">
+    <value>How many events could be read with one query</value>
+  </data>
+  <data name="Prefs_EventChunkSizeTitle" xml:space="preserve">
+    <value>Event chunk size</value>
+  </data>
 </root>
