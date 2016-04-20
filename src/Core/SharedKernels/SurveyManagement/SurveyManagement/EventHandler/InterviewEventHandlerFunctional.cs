@@ -567,7 +567,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                 (document, staticTextKeyValue) => UpdateStaticText(document, staticTextKeyValue.Key.RosterVector, staticTextKeyValue.Key.Id, (staticText) =>
                 {
                     staticText.IsInvalid = true;
-                    staticText.FailedValidationConditions = staticTextKeyValue.Value;
+                    staticText.FailedValidationConditions = staticTextKeyValue.Value.ToList();
                 }));
         }
 
