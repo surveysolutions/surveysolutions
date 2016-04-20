@@ -298,7 +298,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.ThrowIfInterviewStatusIsNotOneOfExpected(
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
 
-
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             ReadOnlyCollection<Guid> allQuestions = questionnaire.GetAllQuestions();
@@ -332,9 +331,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             var enabledStaticTexts = allStaticTextIdentities.Where(this.delta.EnablementChanged.Contains).Where(this.IsEnabled).ToArray();
             var disabledStaticTexts = allStaticTextIdentities.Where(this.delta.EnablementChanged.Contains).Where(staticText => !this.IsEnabled(staticText)).ToArray();
 
-            bool isInterviewInvalid = this.HasInvalidAnswers();
-
-
             if (validQuestions.Length > 0) this.ApplyEvent(new AnswersDeclaredValid(validQuestions));
             if (invalidQuestions.Count > 0) this.ApplyEvent(new AnswersDeclaredInvalid(invalidQuestions));
 
@@ -354,7 +350,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Aggregates
             this.ApplyEvent(new InterviewCompleted(userId, completeTime, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
 
-            this.ApplyEvent(isInterviewInvalid
+
+            this.ApplyEvent(this.HasInvalidAnswers() || this.HasInvalidStaticTexts
                 ? new InterviewDeclaredInvalid() as IEvent
                 : new InterviewDeclaredValid());
         }

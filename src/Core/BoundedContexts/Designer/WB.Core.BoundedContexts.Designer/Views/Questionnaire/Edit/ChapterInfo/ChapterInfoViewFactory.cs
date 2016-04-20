@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
     public class ChapterInfoViewFactory : IChapterInfoViewFactory
     {
-        private readonly string[] predefinedVariables = new[] {"self"};
+        private readonly string[] predefinedVariables = {"self"};
 
         private readonly IReadSideKeyValueStorage<GroupInfoView> readSideReader;
 
@@ -19,16 +19,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         {
             var questionnaire = this.readSideReader.GetById(questionnaireId);
 
-            if (questionnaire == null)
-            {
-                return null;
-            }
-
-            var chapterItem = questionnaire.Items.Find(chapter => chapter.ItemId == groupId);
+            var chapterItem = questionnaire?.Items.Find(chapter => chapter.ItemId == groupId);
             if (chapterItem == null)
                 return null;
 
-            return new NewChapterView()
+            return new NewChapterView
             {
                 Chapter = chapterItem,
                 VariableNames = this.CollectVariableNames(questionnaire)
@@ -40,7 +35,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             List<string> variables = new List<string>(predefinedVariables);
 
             var nodes = new Stack<IQuestionnaireItem>(new[] { questionnaire });
-
             while (nodes.Any())
             {
                 IQuestionnaireItem node = nodes.Pop();
