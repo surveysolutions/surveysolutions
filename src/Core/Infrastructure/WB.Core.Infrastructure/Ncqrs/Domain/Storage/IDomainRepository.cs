@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using WB.Core.Infrastructure.Aggregates;
@@ -19,6 +20,9 @@ namespace Ncqrs.Domain.Storage
         /// after snapshot. Otherwise it starts from the beginning of aggregate's life).</param>
         /// <returns>Aggregate root instance.</returns>
         AggregateRoot Load(Type aggreateRootType, Snapshot snapshot, CommittedEventStream eventStream);
+
+        AggregateRoot Load(Type aggreateRootType, Guid aggregateRootId, Snapshot snapshot, IEnumerable<CommittedEvent> events);
+
         /// <summary>
         /// Takes a snapshot of provided aggregate root.
         /// </summary>

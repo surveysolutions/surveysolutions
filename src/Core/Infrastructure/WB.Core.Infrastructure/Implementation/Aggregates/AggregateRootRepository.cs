@@ -28,11 +28,11 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 
             int minVersion = snapshot != null
                 ? snapshot.Version + 1
-                : int.MinValue;
+                : 0;
 
-            CommittedEventStream eventStream = this.eventStore.ReadFrom(aggregateId, minVersion, int.MaxValue);
+            IEnumerable<CommittedEvent> events = this.eventStore.Read(aggregateId, minVersion);
 
-            return this.repository.Load(aggregateType, snapshot, eventStream);
+            return this.repository.Load(aggregateType, aggregateId, snapshot, events);
         }
     }
 }

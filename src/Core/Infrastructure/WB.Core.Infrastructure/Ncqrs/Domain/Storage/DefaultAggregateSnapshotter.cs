@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Practices.ServiceLocation;
@@ -26,6 +27,9 @@ namespace Ncqrs.Domain.Storage
         }
 
         public bool TryLoadFromSnapshot(Type aggregateRootType, Snapshot snapshot, CommittedEventStream committedEventStream, out AggregateRoot aggregateRoot)
+            => this.TryLoadFromSnapshot(aggregateRootType, snapshot, (IEnumerable<CommittedEvent>) committedEventStream, out aggregateRoot);
+
+        public bool TryLoadFromSnapshot(Type aggregateRootType, Snapshot snapshot, IEnumerable<CommittedEvent> history, out AggregateRoot aggregateRoot)
         {
             aggregateRoot = null;
 
@@ -41,7 +45,7 @@ namespace Ncqrs.Domain.Storage
 
                 restoreMethod.Invoke(aggregateRoot, new[] { snapshot.Payload });
 
-                aggregateRoot.InitializeFromHistory(committedEventStream);
+                aggregateRoot.InitializeFromHistory(snapshot.EventSourceId, history);
 
                 return true;
             }

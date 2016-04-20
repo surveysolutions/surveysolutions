@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Ncqrs.Eventing.Sourcing
 {
@@ -36,11 +37,9 @@ namespace Ncqrs.Eventing.Sourcing
         /// <value>The initial version.</value>
         int InitialVersion { get; }
 
-        /// <summary>
-        /// Initializes from history.
-        /// </summary>
-        /// <param name="history">The history.</param>
         void InitializeFromHistory(CommittedEventStream history);
+
+        void InitializeFromHistory(Guid eventSourceId, IEnumerable<CommittedEvent> history);
 
         /// <summary>
         /// Event fired when this source publishes an event.

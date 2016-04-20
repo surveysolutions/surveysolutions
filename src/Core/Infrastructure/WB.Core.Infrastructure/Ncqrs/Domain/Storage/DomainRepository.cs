@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Practices.ServiceLocation;
@@ -21,11 +22,16 @@ namespace Ncqrs.Domain.Storage
         }
 
         public AggregateRoot Load(Type aggreateRootType, Snapshot snapshot, CommittedEventStream eventStream)
-        {
-            AggregateRoot aggregate = null;
+            => this.Load(aggreateRootType, eventStream.SourceId, snapshot, eventStream);
 
-            if (!_aggregateSnapshotter.TryLoadFromSnapshot(aggreateRootType, snapshot, eventStream, out aggregate))
-                aggregate = GetByIdFromScratch(aggreateRootType, eventStream);
+        public AggregateRoot Load(Type aggreateRootType, Guid aggregateRootId, Snapshot snapshot, IEnumerable<CommittedEvent> events)
+        {
+            AggregateRoot aggregate;
+
+            if (!_aggregateSnapshotter.TryLoadFromSnapshot(aggreateRootType, snapshot, events, out aggregate))
+            {
+                aggregate = this.GetByIdFromScratch(aggreateRootType, aggregateRootId, events);
+            }
 
             return aggregate;
         }
@@ -37,23 +43,15 @@ namespace Ncqrs.Domain.Storage
             return snapshot;
         }
 
-        protected AggregateRoot GetByIdFromScratch(Type aggregateRootType, CommittedEventStream committedEventStream)
+        private AggregateRoot GetByIdFromScratch(Type aggregateRootType, Guid aggregateRootId, IEnumerable<CommittedEvent> events)
         {
-            AggregateRoot aggregateRoot = null;
+            var aggregateRoot = (AggregateRoot) this.serviceLocator.GetInstance(aggregateRootType);
 
-            if (committedEventStream.Count() > 0)
-            {
-                aggregateRoot = (AggregateRoot) this.serviceLocator.GetInstance(aggregateRootType);
+            aggregateRoot.InitializeFromHistory(aggregateRootId, events);
 
-                var mappedAggregateRoot = aggregateRoot as MappedAggregateRoot;
-                if (mappedAggregateRoot != null
-                    && !mappedAggregateRoot.CanApplyHistory(committedEventStream))
-                    return null;
-                
-                aggregateRoot.InitializeFromHistory(committedEventStream);
-            }
+            bool atLeastOneEventApplied = aggregateRoot.InitialVersion > 0;
 
-            return aggregateRoot;
+            return atLeastOneEventApplied ? aggregateRoot : null;
         }
 
     }
