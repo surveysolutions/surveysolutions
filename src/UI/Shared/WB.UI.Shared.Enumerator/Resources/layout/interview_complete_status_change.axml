@@ -82,6 +82,8 @@
               android:scrollHorizontally="false"
               android:gravity="top|left"
               style="@style/Interview_Question_Answer_TextEditor"
+              android:paddingTop="@dimen/Interview_Question_Answer_Input_background_padding"
+              android:paddingBottom="@dimen/Interview_Question_Answer_Input_background_padding"
               local:MvxBind="Text CompleteComment; Hint Localization('TextQuestion_Hint');" />
         </LinearLayout>
       </LinearLayout>

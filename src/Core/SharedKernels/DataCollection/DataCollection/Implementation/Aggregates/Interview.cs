@@ -4669,6 +4669,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         protected bool HasInvalidAnswers() => this.interviewState.InvalidAnsweredQuestions.Any();
+        protected bool HasInvalidStaticTexts => this.interviewState.InvalidStaticTexts.Any();
 
         private static YesNoAnswersOnly ConvertToYesNoAnswersOnly(AnsweredYesNoOption[] answeredOptions)
         {
