@@ -63,9 +63,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
             var answeredQuestions = new List<AnsweredQuestionSynchronizationDto>();
             var disabledGroups = new HashSet<InterviewItemId>();
             var disabledQuestions = new HashSet<InterviewItemId>();
-            var disabledStaticTexts = new HashSet<InterviewItemId>();
-            var validEntities = new HashSet<InterviewItemId>();
-            var invalidEntities = new HashSet<InterviewItemId>();
+            var disabledStaticTexts = new List<Identity>();
+            var validQuestions = new HashSet<InterviewItemId>();
+            var invalidQuestions = new HashSet<InterviewItemId>();
+
+            var validStaticTexts = new List<Identity>();
+            var invalidStaticTexts = new List<KeyValuePair<Identity, List<FailedValidationCondition>>>();
+
             var propagatedGroupInstanceCounts = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>();
 
             var questionnariePropagationStructure =
@@ -95,12 +99,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
 
                     if (interviewQuestion.Value.IsInvalid())
                     {
-                        invalidEntities.Add(new InterviewItemId(interviewQuestion.Key, interviewLevel.RosterVector));
+                        invalidQuestions.Add(new InterviewItemId(interviewQuestion.Key, interviewLevel.RosterVector));
                         failedValidationConditions.Add(new Identity(interviewQuestion.Key, interviewLevel.RosterVector), interviewQuestion.Value.FailedValidationConditions.ToList());
                     }
                     if (!interviewQuestion.Value.IsInvalid())
                     {
-                        validEntities.Add(new InterviewItemId(interviewQuestion.Key, interviewLevel.RosterVector));
+                        validQuestions.Add(new InterviewItemId(interviewQuestion.Key, interviewLevel.RosterVector));
                     }
                 }
                 foreach (var disabledGroup in interviewLevel.DisabledGroups)
@@ -109,20 +113,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 }
                 foreach (var staticText in interviewLevel.StaticTexts.Values)
                 {
+                    var staticTextIdentity = new Identity(staticText.Id, interviewLevel.RosterVector);
                     if (!staticText.IsEnabled)
                     {
-                        disabledStaticTexts.Add(new InterviewItemId(staticText.Id, interviewLevel.RosterVector));
+                        disabledStaticTexts.Add(staticTextIdentity);
                     }
 
                     if (staticText.IsInvalid)
                     {
-                        invalidEntities.Add(new InterviewItemId(staticText.Id, interviewLevel.RosterVector));
-                        failedValidationConditions.Add(new Identity(staticText.Id, interviewLevel.RosterVector), staticText.FailedValidationConditions.ToList());
+                        invalidStaticTexts.Add(new KeyValuePair<Identity, List<FailedValidationCondition>>(
+                            staticTextIdentity, staticText.FailedValidationConditions.ToList()));
                     }
 
                     if (!staticText.IsInvalid)
                     {
-                        validEntities.Add(new InterviewItemId(staticText.Id, interviewLevel.RosterVector));
+                        validStaticTexts.Add(staticTextIdentity);
                     }
                 }
 
@@ -172,8 +177,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                 disabledGroups,
                 disabledQuestions,
                 disabledStaticTexts,
-                validEntities,
-                invalidEntities,
+                validQuestions,
+                invalidQuestions,
+                validStaticTexts,
+                invalidStaticTexts,
                 propagatedGroupInstanceCounts,
                 failedValidationConditions.ToList(),
                 linkedQuestionOptions,
