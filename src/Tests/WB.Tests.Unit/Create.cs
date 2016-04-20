@@ -2200,8 +2200,10 @@ namespace WB.Tests.Unit
             };
         }
 
-        public static StatefulInterview StatefulInterview(Guid? questionnaireId = null, long? questionnaireVersion = null,
-            Guid? userId = null, IPlainQuestionnaireRepository questionnaireRepository = null)
+        public static StatefulInterview StatefulInterview(Guid? questionnaireId = null, 
+            long? questionnaireVersion = null,
+            Guid? userId = null, 
+            IPlainQuestionnaireRepository questionnaireRepository = null)
         {
             questionnaireId = questionnaireId ?? Guid.NewGuid();
             var statefulInterview = new StatefulInterview(
