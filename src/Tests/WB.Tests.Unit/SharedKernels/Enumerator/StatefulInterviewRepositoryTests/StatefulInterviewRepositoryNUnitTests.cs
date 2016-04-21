@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing;
 using NSubstitute;

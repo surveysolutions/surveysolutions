@@ -64,34 +64,34 @@ namespace WB.Infrastructure.Native.Storage.EventStore.Implementation
         }
 
         public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)
-        {
-            var normalMin = minVersion > 0 ? Math.Max(0, minVersion - 1) : 0;
-            var normalMax = Math.Min(int.MaxValue, maxVersion - 1);
-            if (minVersion > maxVersion)
-            {
-                return new CommittedEventStream(id);
-            }
+            => minVersion > maxVersion
+                ? new CommittedEventStream(id)
+                : new CommittedEventStream(id,
+                    maxVersion == int.MaxValue
+                        ? this.Read(id, minVersion)
+                        : this.Read(id, minVersion).Take(maxVersion - Math.Max(0, minVersion) + 1));
 
-            var streamEvents = new List<ResolvedEvent>();
-            var batchSize = Math.Min(this.settings.MaxCountToRead, normalMax - normalMin);
+        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
+        {
+            int normalMin = minVersion > 0 ? Math.Max(0, minVersion - 1) : 0;
 
             StreamEventsSlice currentSlice;
-            var nextSliceStart = StreamPosition.Start + normalMin;
+            int nextSliceStart = StreamPosition.Start + normalMin;
 
             do
             {
-                currentSlice =
-                    this.RunWithDefaultTimeout(this.connection.ReadStreamEventsForwardAsync(GetStreamName(id), nextSliceStart, batchSize,
-                        false));
+                currentSlice = this.RunWithDefaultTimeout(
+                    this.connection.ReadStreamEventsForwardAsync(
+                        GetStreamName(id), nextSliceStart, this.settings.MaxCountToRead, false));
 
                 nextSliceStart = currentSlice.NextEventNumber;
 
-                streamEvents.AddRange(currentSlice.Events);
+                foreach (var resolvedEvent in currentSlice.Events)
+                {
+                    yield return this.ToCommittedEvent(resolvedEvent);
+                }
+
             } while (!currentSlice.IsEndOfStream);
-
-            var storedEvents = streamEvents.Select(this.ToCommittedEvent).ToList();
-
-            return new CommittedEventStream(id, storedEvents);
         }
 
         public IEnumerable<CommittedEvent> GetAllEvents()

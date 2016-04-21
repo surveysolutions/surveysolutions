@@ -53,12 +53,14 @@ namespace WB.UI.Interviewer.Settings
             Id = "settings",
             Endpoint = string.Empty,
             HttpResponseTimeoutInSec = Application.Context.Resources.GetInteger(Resource.Integer.HttpResponseTimeout),
+            EventChunkSize = Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize),
             CommunicationBufferSize = Application.Context.Resources.GetInteger(Resource.Integer.BufferSize),
             GpsResponseTimeoutInSec = Application.Context.Resources.GetInteger(Resource.Integer.GpsReceiveTimeoutSec),
             GpsDesiredAccuracy = Application.Context.Resources.GetInteger(Resource.Integer.GpsDesiredAccuracy)
         };
 
         public string Endpoint => this.CurrentSettings.Endpoint;
+        public int EventChunkSize => this.CurrentSettings.EventChunkSize?? Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize);
         public TimeSpan Timeout => new TimeSpan(0, 0, this.CurrentSettings.HttpResponseTimeoutInSec);
         public int BufferSize => this.CurrentSettings.CommunicationBufferSize;
         public bool AcceptUnsignedSslCertificate => false;
@@ -97,8 +99,17 @@ namespace WB.UI.Interviewer.Settings
                    $"BufferSize:{this.BufferSize} {Environment.NewLine}" +
                    $"Timeout:{this.Timeout} {Environment.NewLine}" +
                    $"CurrentDataTime:{DateTime.Now} {Environment.NewLine}" +
-                   $"QuestionnairesList:{questionnaireIds} {Environment.NewLine}" +
+                   $"QuestionnairesList:{questionnaireIds} {Environment.NewLine}" + 
+                   $"EventChunkSize:{this.EventChunkSize} {Environment.NewLine}" +
                    $"InterviewsList:{interviewIds}";
+        }
+
+        public async Task SetEventChunkSize(int eventChunkSize)
+        {
+            await this.SaveCurrentSettings(settings =>
+            {
+                settings.EventChunkSize = eventChunkSize;
+            });
         }
 
         public int GetApplicationVersionCode()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Practices.ServiceLocation;
@@ -21,11 +22,16 @@ namespace Ncqrs.Domain.Storage
         }
 
         public EventSourcedAggregateRoot Load(Type aggreateRootType, Snapshot snapshot, CommittedEventStream eventStream)
-        {
-            EventSourcedAggregateRoot aggregate = null;
+            => this.Load(aggreateRootType, eventStream.SourceId, snapshot, eventStream);
 
-            if (!_aggregateSnapshotter.TryLoadFromSnapshot(aggreateRootType, snapshot, eventStream, out aggregate))
-                aggregate = GetByIdFromScratch(aggreateRootType, eventStream);
+        public EventSourcedAggregateRoot Load(Type aggreateRootType, Guid aggregateRootId, Snapshot snapshot, IEnumerable<CommittedEvent> events)
+        {
+            EventSourcedAggregateRoot aggregate;
+
+            if (!_aggregateSnapshotter.TryLoadFromSnapshot(aggreateRootType, snapshot, events, out aggregate))
+            {
+                aggregate = this.GetByIdFromScratch(aggreateRootType, aggregateRootId, events);
+            }
 
             return aggregate;
         }
@@ -37,23 +43,18 @@ namespace Ncqrs.Domain.Storage
             return snapshot;
         }
 
-        protected EventSourcedAggregateRoot GetByIdFromScratch(Type aggregateRootType, CommittedEventStream committedEventStream)
+        private EventSourcedAggregateRoot GetByIdFromScratch(Type aggregateRootType, Guid aggregateRootId, IEnumerable<CommittedEvent> events)
         {
-            EventSourcedAggregateRoot aggregateRoot = null;
+            var aggregateRoot = (EventSourcedAggregateRoot) this.serviceLocator.GetInstance(aggregateRootType);
 
-            if (committedEventStream.Count() > 0)
-            {
-                aggregateRoot = (EventSourcedAggregateRoot) this.serviceLocator.GetInstance(aggregateRootType);
+            if (aggregateRoot == null)
+                throw new ArgumentException($"Cannot create new instance of aggregate root of type {aggregateRootType.Name}");
 
-                var mappedAggregateRoot = aggregateRoot as MappedAggregateRoot;
-                if (mappedAggregateRoot != null
-                    && !mappedAggregateRoot.CanApplyHistory(committedEventStream))
-                    return null;
-                
-                aggregateRoot.InitializeFromHistory(committedEventStream);
-            }
+            aggregateRoot.InitializeFromHistory(aggregateRootId, events);
 
-            return aggregateRoot;
+            bool atLeastOneEventApplied = aggregateRoot.InitialVersion > 0;
+
+            return atLeastOneEventApplied ? aggregateRoot : null;
         }
 
     }

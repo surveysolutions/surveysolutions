@@ -11,12 +11,14 @@ using SQLite.Net.Interop;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
 {
     public class SqliteEventStorage : IInterviewerEventStorage, IDisposable
     {
+        private IEnumeratorSettings enumeratorSettings;
         private readonly SQLiteConnectionWithLock connection;
         private ILogger logger;
 
@@ -26,7 +28,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             ILogger logger,
             IAsynchronousFileSystemAccessor fileSystemAccessor,
             ITraceListener traceListener, 
-            SqliteSettings settings)
+            SqliteSettings settings, 
+            IEnumeratorSettings enumeratorSettings)
         {
             var pathToDatabase = fileSystemAccessor.CombinePath(settings.PathToDatabaseDirectory, "events-data.sqlite3");
             this.connection = new SQLiteConnectionWithLock(sqLitePlatform,
@@ -38,7 +41,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             {
                 //TraceListener = traceListener
             };
-            this.logger = logger;
+            this.logger = logger;            
+            this.enumeratorSettings = enumeratorSettings;
             this.connection.CreateTable<EventView>();
             this.connection.CreateIndex<EventView>(entity => entity.EventId);
         }
@@ -49,7 +53,37 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                                                                   eventView.EventSequence >= minVersion && eventView.EventSequence <= maxVersion)
                                                             .OrderBy(x => x.EventSequence);
             
-            return new CommittedEventStream(id, events.Select(this.ToCommitedEvent));
+            return new CommittedEventStream(id, events.Select(ToCommitedEvent));
+        }
+
+        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
+        {
+            int lastReadEventSequence = Math.Max(minVersion, 0);
+            var bulkSize = this.enumeratorSettings.EventChunkSize;
+            List<CommittedEvent> bulk;
+
+            do
+            {
+                var startSequenceInTheBulk = lastReadEventSequence;
+                var endSequenceInTheBulk = startSequenceInTheBulk + bulkSize;
+                bulk = this
+                    .connection
+                    .Table<EventView>()
+                    .Where(eventView
+                        => eventView.EventSourceId == id
+                        && eventView.EventSequence >= startSequenceInTheBulk
+                        && eventView.EventSequence < endSequenceInTheBulk)
+                    .OrderBy(x => x.EventSequence)
+                    .Select(ToCommitedEvent)
+                    .ToList();
+
+                foreach (var committedEvent in bulk)
+                {
+                    yield return committedEvent;
+                    lastReadEventSequence = committedEvent.EventSequence + 1;
+                }
+
+            } while (bulk.Count > 0);
         }
 
         public CommittedEventStream Store(UncommittedEventStream eventStream)
@@ -134,7 +168,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             }
         }
 
-        private CommittedEvent ToCommitedEvent(EventView storedEvent)
+        private static CommittedEvent ToCommitedEvent(EventView storedEvent)
         {
             return new CommittedEvent(
                 commitId: storedEvent.CommitId ?? storedEvent.EventSourceId,
