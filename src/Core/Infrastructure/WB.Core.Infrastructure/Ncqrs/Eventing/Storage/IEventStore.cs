@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Ncqrs.Eventing.Sourcing;
 
 namespace Ncqrs.Eventing.Storage
@@ -16,6 +17,8 @@ namespace Ncqrs.Eventing.Storage
         /// <param name="maxVersion">The maximum version number to be read</param>
         /// <returns>All the events from the event source between specified version numbers.</returns>
         CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion);
+
+        IEnumerable<CommittedEvent> Read(Guid id, int minVersion);
 
         /// <summary>
         /// Persists the <paramref name="eventStream"/> in the store as a single and atomic commit.

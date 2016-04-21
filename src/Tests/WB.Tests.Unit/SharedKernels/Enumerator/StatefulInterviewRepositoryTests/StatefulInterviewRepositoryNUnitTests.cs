@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing;
 using NSubstitute;
@@ -55,14 +57,20 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewRepositoryTest
         }
 
         [Test]
-        public void When_getting_StatefullInterview_and_event_store_does_not_have_any_events_by_interview_Then_should_return_nullable_StatefullInterview()
+        public void
+            When_getting_StatefullInterview_and_event_store_does_not_have_any_events_by_interview_Then_should_return_nullable_StatefullInterview
+            ()
         {
             var aggregateRootId = Guid.Parse("11111111111111111111111111111111");
+            AssemblyContext.SetupServiceLocator();
             var snapshotStore = Create.SnapshotStore(aggregateRootId);
             var eventStore = Create.EventStore(aggregateRootId, Array.Empty<CommittedEvent>());
             var aggregateSnapshotter = Create.AggregateSnapshotter();
-            var domaiRepository = Create.DomainRepository(aggregateSnapshotter: aggregateSnapshotter);
-            var aggregateRootRepository = Create.EventSourcedAggregateRootRepository(snapshotStore: snapshotStore, eventStore: eventStore, repository: domaiRepository);
+            Setup.InstanceToMockedServiceLocator(Create.StatefulInterview(questionnaireId: Guid.NewGuid(),
+                userId: Guid.NewGuid(), questionnaire: null));
+            var domaiRepository = Create.DomainRepository(aggregateSnapshotter: aggregateSnapshotter, serviceLocator: ServiceLocator.Current);
+            var aggregateRootRepository = Create.EventSourcedAggregateRootRepository(snapshotStore: snapshotStore,
+                eventStore: eventStore, repository: domaiRepository);
 
             var statefulInterviewRepository = Create.StatefulInterviewRepository(aggregateRootRepository);
 
