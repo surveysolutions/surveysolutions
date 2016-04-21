@@ -48,6 +48,11 @@ namespace WB.UI.Interviewer.Activities
                 await interviewerSettings.SetEndpointAsync(e.NewValue.ToString());
                 this.UpdateSettings();
             };
+            this.FindPreference(SettingsNames.EventChunkSize).PreferenceChange += async (sender, e) =>
+            {
+                await interviewerSettings.SetEventChunkSize(ParseIntegerSettingsValue(e.NewValue, interviewerSettings.EventChunkSize));
+                this.UpdateSettings();
+            };
             this.FindPreference(SettingsNames.HttpResponseTimeout).PreferenceChange += async (sender, e) =>
             {
                 await interviewerSettings.SetHttpResponseTimeoutAsync(ParseIntegerSettingsValue(e.NewValue, (int)interviewerSettings.Timeout.TotalSeconds));
@@ -88,6 +93,9 @@ namespace WB.UI.Interviewer.Activities
                 UIResources.Prefs_GpsDesiredAccuracyTitle,
                 string.Format(UIResources.Prefs_GpsDesiredAccuracySubTitle, interviewerSettings.GpsDesiredAccuracy),
                 interviewerSettings.GpsDesiredAccuracy.ToString());
+            this.SetPreferenceTitleAndSummary(SettingsNames.EventChunkSize, InterviewerUIResources.Prefs_EventChunkSizeTitle,
+                InterviewerUIResources.Prefs_EventChunkSizeSummary, interviewerSettings.EventChunkSize.ToString());
+
         }
 
         private static int ParseIntegerSettingsValue(object settingsValue, int defaultValue)

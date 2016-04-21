@@ -10,6 +10,7 @@
     <EditTextPreference android:key="SyncAddress"/>
     <EditTextPreference android:key="HttpResponseTimeout" android:numeric="integer"/>
     <EditTextPreference android:key="BufferSize" android:numeric="integer"/>
+    <EditTextPreference android:key="EventChunkSize" android:numeric="integer"/>
   </PreferenceCategory>
 
   <PreferenceCategory android:key="about_category">

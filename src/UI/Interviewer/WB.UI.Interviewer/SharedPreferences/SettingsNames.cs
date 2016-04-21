@@ -8,5 +8,6 @@ namespace WB.UI.Interviewer.SharedPreferences
         public const string BufferSize = "BufferSize";
         public const string GpsReceiveTimeoutSec = "GpsReceiveTimeoutSec";
         public const string GpsDesiredAccuracy = "GpsDesiredAccuracy";
+        public const string EventChunkSize = "EventChunkSize";
     }
 }
