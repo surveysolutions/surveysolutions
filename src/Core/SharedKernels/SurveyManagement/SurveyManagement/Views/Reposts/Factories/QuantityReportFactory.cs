@@ -32,9 +32,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             int columnCount,
             int page,
             int pageSize,
-            Guid questionnaireId,
-            long questionnaireVersion,
-            Func<Guid, long, DateTime, DateTime, IQueryable<T>> queryInterviewStatusesByDateRange,
+            Func<DateTime, DateTime, IQueryable<T>> queryInterviewStatusesByDateRange,
             Expression<Func<T, Guid>> selectUserId,
             Expression<Func<T, UserAndTimestamp>> selectUserAndTimestamp)
         {
@@ -47,7 +45,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                     .Where(i => i.From.Date <= DateTime.Now.Date)
                     .ToArray();
 
-            var interviewStatusesByDateRange = queryInterviewStatusesByDateRange(questionnaireId, questionnaireVersion, from, to);
+            var interviewStatusesByDateRange = queryInterviewStatusesByDateRange(from, to);
 
             var userIdsOfAllResponsibleForTheInterviews = interviewStatusesByDateRange
                     .Select(selectUserId)
@@ -58,7 +56,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             var responsibleUserIdsForOnePage = userIdsOfAllResponsibleForTheInterviews.Skip((page - 1)*pageSize)
                 .Take(pageSize).ToArray();
 
-            var interviewStatusChangeDateWithResponsible = queryInterviewStatusesByDateRange(questionnaireId, questionnaireVersion, from, to)
+            var interviewStatusChangeDateWithResponsible = queryInterviewStatusesByDateRange(from, to)
                     .Select(selectUserAndTimestamp)
                     .Where(ics => ics.UserId.HasValue && responsibleUserIdsForOnePage.Contains(ics.UserId.Value))
                     .Select(i => new {UserId = i.UserId.Value, i.UserName, i.Timestamp})
@@ -150,9 +148,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 columnCount: input.ColumnCount,
                 page: input.Page,
                 pageSize: input.PageSize,
-                questionnaireId: input.QuestionnaireId,
-                questionnaireVersion: input.QuestionnaireVersion,
-                queryInterviewStatusesByDateRange: (questionnaireId, questionnaireVersion, from, to) => this.QueryCompleteStatusesExcludingRestarts(questionnaireId, questionnaireVersion, from, to).Where(u => u.SupervisorId == input.SupervisorId),
+                queryInterviewStatusesByDateRange: (from, to) => this.QueryCompleteStatusesExcludingRestarts(input.QuestionnaireId, input.QuestionnaireVersion, from, to).Where(u => u.SupervisorId == input.SupervisorId),
                 selectUserId: u => u.InterviewerId.Value,
                 selectUserAndTimestamp: i => new UserAndTimestamp() { UserId = i.InterviewerId, UserName = i.InterviewerName, Timestamp = i.EndStatusTimestamp });
             }
@@ -162,9 +158,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 columnCount: input.ColumnCount,
                 page: input.Page,
                 pageSize: input.PageSize,
-                questionnaireId: input.QuestionnaireId,
-                questionnaireVersion: input.QuestionnaireVersion,
-                queryInterviewStatusesByDateRange: (questionnaireId, questionnaireVersion, from, to) => QueryInterviewStatuses(questionnaireId, questionnaireVersion, from, to, input.InterviewStatuses).Where(u => u.SupervisorId == input.SupervisorId),
+                queryInterviewStatusesByDateRange: (from, to) => QueryInterviewStatuses(input.QuestionnaireId, input.QuestionnaireVersion, from, to, input.InterviewStatuses).Where(u => u.SupervisorId == input.SupervisorId),
                 selectUserId: u => u.InterviewerId.Value,
                 selectUserAndTimestamp: i => new UserAndTimestamp(){UserId = i.InterviewerId, UserName = i.InterviewerName, Timestamp = i.Timestamp});
         }
@@ -179,9 +173,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                  columnCount: input.ColumnCount,
                  page: input.Page,
                  pageSize: input.PageSize,
-                 questionnaireId: input.QuestionnaireId,
-                 questionnaireVersion: input.QuestionnaireVersion,
-                 queryInterviewStatusesByDateRange: QueryCompleteStatusesExcludingRestarts,
+                 queryInterviewStatusesByDateRange: (from, to) => QueryCompleteStatusesExcludingRestarts(input.QuestionnaireId, input.QuestionnaireVersion, from, to),
                  selectUserId: u => u.SupervisorId.Value,
                  selectUserAndTimestamp: i => new UserAndTimestamp() { UserId = i.SupervisorId, UserName = i.SupervisorName, Timestamp = i.EndStatusTimestamp });
             }
@@ -192,9 +184,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 columnCount:input.ColumnCount,
                 page:input.Page,
                 pageSize:input.PageSize,
-                questionnaireId:input.QuestionnaireId,
-                questionnaireVersion:input.QuestionnaireVersion,
-                queryInterviewStatusesByDateRange: (questionnaireId, questionnaireVersion, from, to) => QueryInterviewStatuses(questionnaireId, questionnaireVersion, from, to, input.InterviewStatuses),
+                queryInterviewStatusesByDateRange: (from, to) => QueryInterviewStatuses(input.QuestionnaireId, input.QuestionnaireVersion, from, to, input.InterviewStatuses),
                 selectUserId:u => u.SupervisorId.Value,
                 selectUserAndTimestamp:i => new UserAndTimestamp(){UserId = i.SupervisorId, UserName = i.SupervisorName, Timestamp = i.Timestamp});
         }
