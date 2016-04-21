@@ -38,6 +38,9 @@ namespace WB.Tests.Unit
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<TInstance>())
                 .Returns(instance);
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance(typeof (TInstance)))
+                .Returns(instance);
         }
 
         public static void StubToMockedServiceLocator<T>()
