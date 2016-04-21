@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
@@ -34,26 +36,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         {
             List<string> variables = new List<string>(predefinedVariables);
 
-            var nodes = new Stack<IQuestionnaireItem>(new[] { questionnaire });
-            while (nodes.Any())
-            {
-                IQuestionnaireItem node = nodes.Pop();
-                var nodeAsQuestionInfoView = node as QuestionInfoView;
-                if (nodeAsQuestionInfoView != null)
-                {
-                    if (!string.IsNullOrWhiteSpace(nodeAsQuestionInfoView.Variable))
-                        variables.Add(nodeAsQuestionInfoView.Variable);
-                    continue;
-                }
-
-                var nodeAsGroupInfoView = node as GroupInfoView;
-                if (nodeAsGroupInfoView == null)
-                    continue;
-                if(!string.IsNullOrWhiteSpace(nodeAsGroupInfoView.Variable))
-                    variables.Add(nodeAsGroupInfoView.Variable);
-
-                foreach (var item in nodeAsGroupInfoView.Items) nodes.Push(item);
-            }
+            variables.AddRange(questionnaire.TreeToEnumerable<IQuestionnaireItem>(x => x.Items)
+                .OfType<INameable>().Where(z => !string.IsNullOrEmpty(z.Variable)).Select(y => y.Variable).ToList());
 
             return variables.Distinct().ToArray();
         }

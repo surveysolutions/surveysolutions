@@ -85,9 +85,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public Version GetQuestionnaireContentVersion(QuestionnaireDocument questionnaireDocument)
         {
-            bool hasStaticTextsWithEnablementConditions = questionnaireDocument.Find<StaticText>(x => !string.IsNullOrWhiteSpace(x.ConditionExpression)).Any();
-            bool hasStaticTextsWithValidations = questionnaireDocument.Find<StaticText>(x => x.ValidationConditions.Any()).Any();
-            if (hasStaticTextsWithEnablementConditions || hasStaticTextsWithValidations)
+            bool hasStaticTextsWithConditions = questionnaireDocument.Find<StaticText>(x => x.ValidationConditions.Any() || !string.IsNullOrWhiteSpace(x.ConditionExpression)).Any();
+            if (hasStaticTextsWithConditions)
                 return version_14;
 
             var countOfStaticTextsWithAttachment = questionnaireDocument.Find<StaticText>(q => !string.IsNullOrWhiteSpace(q.AttachmentName)).Count();

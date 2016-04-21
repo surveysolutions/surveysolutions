@@ -563,6 +563,7 @@
     <Compile Include="Views\Questionnaire\Edit\QuestionInfo\TextListDetailsView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfoFactory.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\AttachmentView.cs" />
+    <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\INameable.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\LookupTableView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\MacroView.cs" />
     <Compile Include="Views\Questionnaire\Edit\QuestionnaireInfo\QuestionnaireInfoView.cs" />
