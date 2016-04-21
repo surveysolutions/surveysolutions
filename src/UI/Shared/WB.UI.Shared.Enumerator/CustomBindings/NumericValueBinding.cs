@@ -33,7 +33,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void SetValueToView(NumericEditText view, decimal? value)
         {
-            view.Text = value?.ToString(CultureInfo.CurrentCulture);
+            view.SetValue(value);
         }
 
         public override MvxBindingMode DefaultMode => MvxBindingMode.TwoWay;
