@@ -376,9 +376,9 @@
 
   <style name="Interview_Question_Comments_InterviewerDetails_Editor" parent="Interview_Question_Answer_TextEditor">
     <item name="android:layout_marginBottom">@dimen/Interview_Comments_Details_margin_bottom</item>
+    <item name="android:padding">@dimen/Interview_Question_Answer_Input_background_padding</item>
   </style>
   
-
   <style name="Interview_Question_Divider" parent="Interview_Entity_Divider" />
 
   <style name="Interview_Question_Progress_Indicator" parent="android:Widget.ProgressBar.Horizontal">
