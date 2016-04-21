@@ -812,6 +812,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How many events could be read with one query.
+        /// </summary>
+        public static string Prefs_EventChunkSizeSummary {
+            get {
+                return ResourceManager.GetString("Prefs_EventChunkSizeSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Event chunk size.
+        /// </summary>
+        public static string Prefs_EventChunkSizeTitle {
+            get {
+                return ResourceManager.GetString("Prefs_EventChunkSizeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Number of seconds to wait for coordinates.
         /// </summary>
         public static string Prefs_GpsReceiveTimeoutSecSummary {
