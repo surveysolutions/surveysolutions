@@ -71,8 +71,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                     .Table<EventView>()
                     .Where(eventView
                         => eventView.EventSourceId == id
-                        && eventView.EventSequence > startSequenceInTheBulk
-                        && eventView.EventSequence <= endSequenceInTheBulk)
+                        && eventView.EventSequence >= startSequenceInTheBulk
+                        && eventView.EventSequence < endSequenceInTheBulk)
                     .OrderBy(x => x.EventSequence)
                     .Select(ToCommitedEvent)
                     .ToList();
@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 foreach (var committedEvent in bulk)
                 {
                     yield return committedEvent;
-                    lastReadEventSequence = committedEvent.EventSequence;
+                    lastReadEventSequence = committedEvent.EventSequence + 1;
                 }
 
             } while (bulk.Count > 0);
