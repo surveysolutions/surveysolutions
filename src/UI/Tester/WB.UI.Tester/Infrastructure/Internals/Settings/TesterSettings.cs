@@ -89,6 +89,6 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
             }
         }
 
-        public int EventChunkSize => 10000;
+        public int EventChunkSize => 1000;
     }
 }
