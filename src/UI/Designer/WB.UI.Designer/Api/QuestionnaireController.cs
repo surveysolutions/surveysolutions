@@ -59,7 +59,7 @@ namespace WB.UI.Designer.Api
 
             if (questionnaireInfoView == null)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, string.Format("Questionnaire with id={0} cannot be found", id));
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, $"Questionnaire with id={id} cannot be found");
             }
 
             return Request.CreateResponse(HttpStatusCode.OK, questionnaireInfoView);

@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
 {
-    public class GroupInfoView : IQuestionnaireItem, IReadSideRepositoryEntity
+    public class GroupInfoView : IQuestionnaireItem, INameable, IReadSideRepositoryEntity
     {
         public GroupInfoView()
         {
@@ -11,7 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
         }
 
         public string ItemId { get; set; }
-        public ChapterItemType ItemType { get { return ChapterItemType.Group; }}
+        public ChapterItemType ItemType => ChapterItemType.Group;
 
         public string Title { get; set; }
 
