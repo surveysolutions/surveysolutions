@@ -294,7 +294,6 @@ h1{
  	cursor: pointer;
 	position: relative;
 	padding-left: 28px;
-	width: 78%;
 }
 .answer-editor input + label::before{
 	content: "";
@@ -330,11 +329,10 @@ h1{
 .option b{
 	font-size: 11px;
 	line-height: 24px;
-	margin-right: 5px;
-	vertical-align: top;
-	text-align: right;
-	display: inline-block;
-	width: 19px;
+	margin-right: 10px;
+    vertical-align: top;
+    text-align: right;
+    display: inline-block;
 }
 .option>span{
     display: inline-block;
