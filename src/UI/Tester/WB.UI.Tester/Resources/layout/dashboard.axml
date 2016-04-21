@@ -21,13 +21,13 @@
     </RelativeLayout>
     <ImageButton style="@style/Dashboard_SearchView_SearchButton"
         local:MvxBind="Click ShowSearchCommand; Visible Not(IsSearchVisible)"/>
-    <MvxLinearLayout style="@style/Dashboard_SearchView_Container"
+    <LinearLayout style="@style/Dashboard_SearchView_Container"
                      local:MvxBind="Visible IsSearchVisible;">
       <EditText style="@style/Dashboard_SearchView_FilterInput"
           local:MvxBind="Text SearchText; SetFocus IsSearchVisible; TextChanged SearchCommand" />
       <ImageButton style="@style/Dashboard_SearchView_DeleteButton"
         local:MvxBind="Click ClearSearchCommand;"/>
-    </MvxLinearLayout>
+    </LinearLayout>
   </android.support.v7.widget.Toolbar>
   <ProgressBar style="@style/Interview_Question_Progress_Indicator"
                local:MvxBind="ShowProgress IsInProgress" />

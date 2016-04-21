@@ -178,6 +178,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                         return !staticText.IsValid;
                     case InterviewDetailsFilter.Flagged:
                         return false;
+                    case InterviewDetailsFilter.All:
+                        return true;
                     default:
                         return false;
                 }
