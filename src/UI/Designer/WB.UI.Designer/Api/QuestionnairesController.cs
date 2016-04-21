@@ -49,13 +49,13 @@ namespace WB.UI.Designer.Api
             this.engineVersionService = engineVersionService;
         }
 
-        [Route("~/api/v15/login")]
+        [Route("~/api/v16/login")]
         [HttpGet]
         public void Login()
         {
         }
 
-        [Route("~/api/v15/attachment/{id}")]
+        [Route("~/api/v16/attachment/{id}")]
         [HttpGet]
         public HttpResponseMessage Attachment(string id)
         {
