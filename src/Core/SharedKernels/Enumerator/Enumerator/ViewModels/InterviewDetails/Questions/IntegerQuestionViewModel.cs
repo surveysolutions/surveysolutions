@@ -162,7 +162,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
             }
             
-            if (this.Answer > int.MaxValue)
+            if (this.Answer > int.MaxValue || this.Answer < int.MinValue)
             {
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Integer_ParsingError);
                 return;
