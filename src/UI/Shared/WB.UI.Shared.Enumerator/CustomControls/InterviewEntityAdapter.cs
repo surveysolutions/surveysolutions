@@ -23,93 +23,11 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 {
     public class InterviewEntityAdapter : MvxRecyclerAdapter
     {
-        private static readonly ConcurrentDictionary<Type, bool> hasEnablementViewModel = new ConcurrentDictionary<Type, bool>();
         private const int UnknownViewType = -1;
-
-        private static readonly Dictionary<Type, int> EntityTemplates = new Dictionary<Type, int>
-        {
-            {typeof (StaticTextViewModel), Resource.Layout.interview_static_text},
-            {typeof (TextListQuestionViewModel), Resource.Layout.interview_question_text_list},
-            {typeof (TextQuestionViewModel), Resource.Layout.interview_question_text},
-            {typeof (IntegerQuestionViewModel), Resource.Layout.interview_question_integer},
-            {typeof (RealQuestionViewModel), Resource.Layout.interview_question_real},
-            {typeof (GpsCoordinatesQuestionViewModel), Resource.Layout.interview_question_gps},
-            {typeof (MultimedaQuestionViewModel), Resource.Layout.interview_question_multimedia},
-            {typeof (SingleOptionQuestionViewModel), Resource.Layout.interview_question_single_option},
-            {typeof (SingleOptionLinkedQuestionViewModel), Resource.Layout.interview_question_single_option},
-            {typeof (SingleOptionRosterLinkedQuestionViewModel), Resource.Layout.interview_question_single_option},
-            {typeof (MultiOptionQuestionViewModel), Resource.Layout.interview_question_multi_option},
-            {typeof (MultiOptionLinkedToQuestionQuestionViewModel), Resource.Layout.interview_question_multi_option},
-            {typeof (MultiOptionLinkedToRosterQuestionViewModel), Resource.Layout.interview_question_multi_option},
-            {typeof (DateTimeQuestionViewModel), Resource.Layout.interview_question_datetime},
-            {typeof (FilteredSingleOptionQuestionViewModel), Resource.Layout.interview_question_filtered_single_option },
-            {typeof (CascadingSingleOptionQuestionViewModel), Resource.Layout.interview_question_cascading_single_option },
-            {typeof (QRBarcodeQuestionViewModel), Resource.Layout.interview_question_qrbarcode},
-            {typeof (YesNoQuestionViewModel), Resource.Layout.interview_question_yesno},
-            {typeof (GroupViewModel), Resource.Layout.interview_group},
-            {typeof (GroupNavigationViewModel), Resource.Layout.interview_group_navigation},
-            {typeof (StartInterviewViewModel), Resource.Layout.prefilled_questions_start_button},
-            {typeof (CompleteInterviewViewModel), Resource.Layout.interview_complete_status_change},
-        };
-
 
         public InterviewEntityAdapter(IMvxAndroidBindingContext bindingContext)
             : base(bindingContext)
         {
-        }
-
-        public override int GetItemViewType(int position)
-        {
-            object source = this.GetItem(position);
-
-            var typeOfViewModel = source.GetType();
-
-            var enablementModel = this.GetEnablementViewModel(source);
-            if (typeOfViewModel.Name.EndsWith("QuestionViewModel"))
-            {
-                if (enablementModel != null && !enablementModel.Enabled)
-                {
-                    return Resource.Layout.interview_disabled_question;
-                }
-            }
-
-            if (typeOfViewModel == typeof(GroupViewModel))
-            {
-                if (enablementModel != null && !enablementModel.Enabled)
-                {
-                    return Resource.Layout.interview_disabled_group;
-                }
-            }
-
-            if (typeOfViewModel == typeof (StaticTextViewModel))
-            {
-                if (enablementModel != null && !enablementModel.Enabled)
-                {
-                    return Resource.Layout.interview_disabled_static_text;
-                }
-            }
-
-            return EntityTemplates.ContainsKey(typeOfViewModel)
-                ? EntityTemplates[typeOfViewModel]
-                : EntityTemplates.ContainsKey(typeOfViewModel.BaseType) ? EntityTemplates[typeOfViewModel.BaseType] : UnknownViewType;
-        }
-
-        private EnablementViewModel GetEnablementViewModel(dynamic item)
-        {
-            Type type = item.GetType();
-            if (!hasEnablementViewModel.ContainsKey(type))
-            {
-                var doesTypeHasQuestionState = type.GetProperties().Any(ptp => ptp.Name == "QuestionState");
-                hasEnablementViewModel[type] = doesTypeHasQuestionState;
-            }
-
-            if (hasEnablementViewModel[type])
-            {
-                var enablementModel = item.QuestionState.Enablement;
-                return (EnablementViewModel)enablementModel;
-            }
-
-            return null;
         }
 
         protected override View InflateViewForHolder(ViewGroup parent, int viewType, IMvxAndroidBindingContext bindingContext)
