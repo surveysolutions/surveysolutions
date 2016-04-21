@@ -362,7 +362,7 @@ angular.module('designerApp')
                     highlightActiveLine: false,
                     theme: "ace/theme/github-extended",
                     enableBasicAutocompletion: true,
-                    enableLiveAutocompletion: false
+                    enableLiveAutocompletion: true
                 });
                 renderer.setShowGutter(false);
                 renderer.setPadding(12);
