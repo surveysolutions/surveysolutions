@@ -102,7 +102,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         private readonly string numberFilterRegex = "[^\\d\\" + CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator + "]";
         private const string leadingZeroFilterRegex = "^0+(?!$)";
 
-        private const int maxDigitsInDecimal = 28;
+        private const int maxDigitsInDecimal = 16;
         private const int maxFractionDigits = 15;
 
         private string previousText = "";
