@@ -46,7 +46,10 @@
                         </div>
                     }
                 </div>
-                <div class="validation-message"><span>M@(i + 1)</span>@validation.Message</div>
+                if (!string.IsNullOrWhiteSpace(@validation.Message))
+                {
+                    <div class="validation-message"><span>M@(i + 1)</span>@validation.Message</div>
+                }
             }
         </div>
     </div>
