@@ -352,6 +352,8 @@
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_creating_models_with_text_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generating_classes_with_filtered_linked_question.cs" />
     <Compile Include="BoundedContexts\Designer\CodeGeneratorTests\when_generating_classes_with_multiple_validations.cs" />
+    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_contains_static_text_with_validation_condition.cs" />
+    <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_contains_static_text_with_enablement_condition.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_hidden_question.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_linked_on_roster_question.cs" />
     <Compile Include="BoundedContexts\Designer\DesignerEngineVersionServiceTests\when_questionnaire_document_has_question_with_multiple_validations.cs" />
