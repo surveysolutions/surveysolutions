@@ -60,7 +60,7 @@ namespace WB.UI.Interviewer.Settings
         };
 
         public string Endpoint => this.CurrentSettings.Endpoint;
-        public int EventChunkSize => this.CurrentSettings.EventChunkSize;
+        public int EventChunkSize => this.CurrentSettings.EventChunkSize?? Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize);
         public TimeSpan Timeout => new TimeSpan(0, 0, this.CurrentSettings.HttpResponseTimeoutInSec);
         public int BufferSize => this.CurrentSettings.CommunicationBufferSize;
         public bool AcceptUnsignedSslCertificate => false;
