@@ -37,7 +37,7 @@ namespace Ncqrs.Eventing.Storage
         }
 
         public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)
-            => new CommittedEventStream(id, this.Read(id, minVersion).Where(x => x.EventSequence <= maxVersion));
+            => new CommittedEventStream(id, this.Read(id, minVersion).TakeWhile(x => x.EventSequence <= maxVersion));
 
         public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
             => this._events.GetOrNull(id)?.Where(x => x.EventSequence >= minVersion)
