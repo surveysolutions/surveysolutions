@@ -424,6 +424,7 @@
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_remove_answer_from_textlist_roster_size_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\with_event_context.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_checking_should_static_text_be_hidden_if_it_is_disabled.cs" />
+    <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_static_texts.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_interviewer_underlying_questions_in_group.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_getting_answer_types.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\when_parent_for_cascading_question_is_set_to_hide_if_disabled.cs" />
@@ -665,6 +666,7 @@
     <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\when_getting_queue_length.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewQuestionViewTests\when_creating_view_for_question_with_multiple_failed_validation_conditions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewQuestionViewTests\when_creating_view_for_supervisor_question_and_interview_approved_by_hq.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\InterviewSynchronizationDtoFactoryTests\when_build_from_interview_with_static_texts.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewSynchronizationDtoFactoryTests\when_build_from_interview_with_linked_questions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_answer_removed_from_gps_qestion.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_gps_question_answered.cs" />
