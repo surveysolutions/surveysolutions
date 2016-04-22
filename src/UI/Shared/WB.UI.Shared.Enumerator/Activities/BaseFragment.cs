@@ -2,7 +2,7 @@
 using Android.Views;
 using MvvmCross.Binding.Droid.BindingContext;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Droid.Support.V7.Fragging.Fragments;
+using MvvmCross.Droid.Support.V4;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
