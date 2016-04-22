@@ -290,6 +290,7 @@
     <item name="android:textColorHint">@color/editorHintTextColor</item>
     <item name="android:layout_width">fill_parent</item>
     <item name="android:layout_height">wrap_content</item>
+    <item name="android:padding">@dimen/Interview_Question_Answer_Input_background_padding</item>
   </style>
 <style name="Interview_Confirmation_Layout" parent="VerticalFullWidthWrappingLayout">
     <item name="android:layout_marginLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
