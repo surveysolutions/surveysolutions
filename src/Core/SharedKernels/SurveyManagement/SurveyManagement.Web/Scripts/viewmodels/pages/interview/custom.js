@@ -67,13 +67,15 @@ ko.validation.rules['numberLengthValidator'] = {
 
         var value = val.split(comma).join('');
 
-        var isNumeric = Math.floor(value) == value && $.isNumeric(value);
-        if (!isNumeric) {
-            if (isIntegerType)
-                this.message = 'Please enter a integer value.'
-            else if (isRealType)
-                this.message = 'Please enter a real value.'
+        var isNumeric = $.isNumeric(value);
+        var isIntegerNumeric = Math.floor(value) == value && isNumeric;
 
+        if (isIntegerType && !isIntegerNumeric) {
+            this.message = 'Please enter a integer value.'
+            return false;
+        }
+        else if (isRealType && !isNumeric) {
+            this.message = 'Please enter a real value.'
             return false;
         }
 

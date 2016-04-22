@@ -62,7 +62,10 @@
                 indexOfOldValue++;
             }
 
-            if (indexOfOldValue + 1 >= oldCursorPosition) {
+            if (newText[i] == oldText[indexOfOldValue])
+                indexOfOldValue++;
+
+            if (indexOfOldValue >= oldCursorPosition) {
                 newCursorPosition = i + 1;
                 break;
             }
