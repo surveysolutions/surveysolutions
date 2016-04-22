@@ -14,10 +14,12 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.Core.Synchronization;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Core.Synchronization.SyncStorage;
 
@@ -34,7 +36,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
             ICommandService commandService,
             IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader,
             IMetaInfoBuilder metaBuilder,
-            IJsonAllTypesSerializer synchronizationSerializer) : base(
+            IJsonAllTypesSerializer synchronizationSerializer,
+            SyncSettings synchronizationSettings) : base(
                 plainInterviewFileStorage: plainInterviewFileStorage,
                 globalInfoProvider: globalInfoProvider,
                 interviewsFactory: interviewsFactory,
@@ -42,7 +45,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 commandService: commandService,
                 syncPackagesMetaReader: syncPackagesMetaReader,
                 metaBuilder: metaBuilder,
-                synchronizationSerializer: synchronizationSerializer)
+                synchronizationSerializer: synchronizationSerializer,
+                synchronizationSettings : synchronizationSettings)
         {
         }
 
@@ -82,14 +86,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         [WriteToSyncLog(SynchronizationLogType.PostInterview)]
         public void Post(InterviewPackageApiView package)
         {
-            this.interviewPackagesService.StorePackage(
-                interviewId: package.InterviewId,
-                questionnaireId: package.MetaInfo.TemplateId,
-                questionnaireVersion: package.MetaInfo.TemplateVersion,
-                responsibleId: package.MetaInfo.ResponsibleId,
-                interviewStatus: (InterviewStatus)package.MetaInfo.Status,
-                isCensusInterview: package.MetaInfo.CreatedOnClient ?? false,
-                events: package.Events);
+            var interviewPackage = new InterviewPackage
+            {
+                InterviewId = package.InterviewId,
+                QuestionnaireId = package.MetaInfo.TemplateId,
+                QuestionnaireVersion = package.MetaInfo.TemplateVersion,
+                InterviewStatus = (InterviewStatus)package.MetaInfo.Status,
+                ResponsibleId = package.MetaInfo.ResponsibleId,
+                IsCensusInterview = package.MetaInfo.CreatedOnClient ?? false,
+                IncomingDate = DateTime.UtcNow,
+                Events = package.Events
+            };
+
+            if (this.synchronizationSettings.UseBackgroundJobForProcessingPackages)
+            {
+                this.interviewPackagesService.StorePackage(interviewPackage);
+            }
+            else
+            {
+                this.interviewPackagesService.ProcessPackage(interviewPackage);
+            }
         }
         [HttpPost]
         public override void PostImage(PostFileRequest request) => base.PostImage(request);

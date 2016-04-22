@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         {
             return new IncomingSyncPackagesQueue(
                 fileSystemAccessor??Mock.Of<IFileSystemAccessor>(),
-                new SyncSettings(AppDataDirectory, IncomingCapiPackagesWithErrorsDirectoryName, IncomingCapiPackageFileNameExtension, IncomingCapiPackagesDirectoryName, "",3,1), 
+                new SyncSettings(AppDataDirectory, IncomingCapiPackagesWithErrorsDirectoryName, IncomingCapiPackageFileNameExtension, IncomingCapiPackagesDirectoryName, "",3,1, true), 
                 Mock.Of<ILogger>(), 
                 serializer: serializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 archiver: archiver ?? Mock.Of<IArchiveUtils>(), 

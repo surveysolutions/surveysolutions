@@ -74,14 +74,16 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             expectedEventsString = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents.Select(Create.AggregateRootEvent).ToArray());
 
             plainPostgresTransactionManager.ExecuteInPlainTransaction(
-                () => interviewPackagesService.StorePackage(
-                    interviewId: expectedCommand.InterviewId,
-                    questionnaireId: expectedCommand.QuestionnaireId,
-                    questionnaireVersion: expectedCommand.QuestionnaireVersion,
-                    responsibleId: expectedCommand.UserId,
-                    interviewStatus: expectedCommand.InterviewStatus,
-                    isCensusInterview: expectedCommand.CreatedOnClient,
-                    events: expectedEventsString));
+                () => interviewPackagesService.StorePackage(new InterviewPackage
+                {
+                    InterviewId = expectedCommand.InterviewId,
+                    QuestionnaireId = expectedCommand.QuestionnaireId,
+                    QuestionnaireVersion = expectedCommand.QuestionnaireVersion,
+                    ResponsibleId = expectedCommand.UserId,
+                    InterviewStatus = expectedCommand.InterviewStatus,
+                    IsCensusInterview = expectedCommand.CreatedOnClient,
+                    Events = expectedEventsString
+                }));
         };
 
         Because of = () => plainPostgresTransactionManager.ExecuteInPlainTransaction(
