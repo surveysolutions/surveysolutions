@@ -87,8 +87,6 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.drawerToggle.SyncState();
         }
 
-       
-
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
             if (this.drawerToggle.OnOptionsItemSelected(item))
