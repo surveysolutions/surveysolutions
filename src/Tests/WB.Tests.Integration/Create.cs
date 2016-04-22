@@ -22,6 +22,7 @@ using NHibernate.Mapping.ByCode.Conformist;
 using NHibernate.Tool.hbm2ddl;
 using NHibernate.Transform;
 using Npgsql;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -801,5 +802,8 @@ namespace WB.Tests.Integration
         }
 
         public static RosterVector RosterVector(params decimal[] coordinates) => new RosterVector(coordinates);
+
+        public static DesignerEngineVersionService DesignerEngineVersionService()
+            => new DesignerEngineVersionService();
     }
 }
