@@ -111,7 +111,8 @@ namespace WB.UI.Supervisor.App_Start
                 incomingUnprocessedPackagesDirectoryName: LegacyOptions.IncomingUnprocessedPackageFileNameExtension,
                 origin: Constants.CapiSynchronizationOrigin, 
                 retryCount: int.Parse(WebConfigurationManager.AppSettings["InterviewDetailsDataScheduler.RetryCount"]),
-                retryIntervalInSeconds: LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval);
+                retryIntervalInSeconds: LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval,
+                useBackgroundJobForProcessingPackages: WebConfigurationManager.AppSettings.GetBool("Synchronization.UseBackgroundJob", @default: false));
 
             var basePath = appDataDirectory;
 

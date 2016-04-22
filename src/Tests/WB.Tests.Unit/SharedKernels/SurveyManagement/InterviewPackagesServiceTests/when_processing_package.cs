@@ -32,9 +32,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
                 serializer: serializer, brokenInterviewPackageStorage: brokenPackagesStorage,
                 interviewPackageStorage: packagesStorage, commandService: mockOfCommandService.Object);
 
-            interviewPackagesService.StorePackage(Guid.Parse("11111111111111111111111111111111"),
-                Guid.Parse("22222222222222222222222222222222"), 111, Guid.Parse("33333333333333333333333333333333"),
-                InterviewStatus.Restarted, false, "compressed serialized events");
+            interviewPackagesService.StorePackage(new InterviewPackage
+            {
+                InterviewId = Guid.Parse("11111111111111111111111111111111"),
+                QuestionnaireId = Guid.Parse("22222222222222222222222222222222"),
+                QuestionnaireVersion = 111,
+                ResponsibleId = Guid.Parse("33333333333333333333333333333333"),
+                InterviewStatus = InterviewStatus.Restarted,
+                IsCensusInterview = false,
+                Events = "compressed serialized events"
+            });
         };
 
         Because of = () => interviewPackagesService.ProcessPackage("1");
