@@ -91,9 +91,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     Login = this.principal.CurrentUserIdentity.Name,
                     Password = this.principal.CurrentUserIdentity.Password
                 };
-                await
-                    this.synchronizationService.CanSynchronizeAsync(token: cancellationToken,
-                        credentials: restCredentials);
+
+                await this.synchronizationService.CanSynchronizeAsync(token: cancellationToken, credentials: restCredentials);
 
                 if (this.shouldUpdatePasswordOfInterviewer)
                 {
@@ -184,6 +183,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 if (newPassword == null)
                 {
                     this.shouldUpdatePasswordOfInterviewer = false;
+                    progress.Report(new SyncProgressInfo
+                    {
+                        Title = InterviewerUIResources.Synchronization_UserAuthentication_Title,
+                        Description = InterviewerUIResources.Synchronization_UserAuthentication_Description,
+                        Status = SynchronizationStatus.Fail,
+                        Statistics = statistics
+                    });
                 }
                 else
                 {
