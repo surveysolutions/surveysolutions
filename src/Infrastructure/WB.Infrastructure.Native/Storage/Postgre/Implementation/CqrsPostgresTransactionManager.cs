@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using NHibernate;
+using NHibernate.Persister.Entity;
 using Ninject;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
@@ -79,6 +80,16 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
             this.querySession = this.sessionFactory.OpenSession();
             this.queryTransaction = this.querySession.BeginTransaction(IsolationLevel.ReadCommitted);
+        }
+
+        public string GetEntityIdentifierColumnName(Type entityType)
+        {
+            var persister = this.sessionFactory.GetClassMetadata(entityType);
+
+            if (persister == null)
+                return null;
+
+            return persister.IdentifierPropertyName;
         }
 
         public void RollbackQueryTransaction()
