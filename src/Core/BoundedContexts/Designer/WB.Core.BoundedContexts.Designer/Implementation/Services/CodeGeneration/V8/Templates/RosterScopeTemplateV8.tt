@@ -8,7 +8,8 @@
 <#@ include file="SharedTemplateV8.tt"#>
 
 internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV8<<#=this.Model.TypeName#>>, 
-	IRosterLevel<<#=this.Model.TypeName#>>
+	IRosterLevel<<#=this.Model.TypeName#>>, 
+	IExpressionExecutableV8
 {	
 	public <#=Model.TypeName#>(
 		decimal[] rosterVector, Identity[] rosterKey, 
@@ -153,10 +154,31 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV8<
 		
 	protected override IEnumerable<Action> ConditionExpressions => _conditionExpressions;
 
-	protected override void SetParentImpl(IExpressionExecutable parent)
+	public void CalculateValidationChanges(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInvalid)
+	{
+		this.Validate(out questionsToBeValid, out questionsToBeInvalid);
+	}
+
+	public ValidityChanges ProcessValidationExpressions() => this.ExecuteValidations();
+
+	public EnablementChanges ProcessEnablementConditions() => this.ProcessEnablementConditionsImpl();
+
+	private void SetParentImpl(IExpressionExecutable parent)
 	{			
 		this.@_parent = (<#= Model.ParentTypeName#>) parent;
 	}
 
-	protected override IExpressionExecutableV8 GetParentImpl() => this.@_parent;
+	public void SetParent(IExpressionExecutableV8 parent) => this.SetParentImpl(parent);
+	public void SetParent(IExpressionExecutableV7 parent) => this.SetParentImpl(parent);
+	public void SetParent(IExpressionExecutableV6 parent) => this.SetParentImpl(parent);
+	public void SetParent(IExpressionExecutableV5 parent) => this.SetParentImpl(parent);
+	public void SetParent(IExpressionExecutableV2 parent) => this.SetParentImpl(parent);
+	public void SetParent(IExpressionExecutable   parent) => this.SetParentImpl(parent);
+
+	IExpressionExecutableV8 IExpressionExecutableV8.GetParent() => this.@_parent;
+	IExpressionExecutableV7 IExpressionExecutableV7.GetParent() => this.@_parent;
+	IExpressionExecutableV6 IExpressionExecutableV6.GetParent() => this.@_parent;
+	IExpressionExecutableV5 IExpressionExecutableV5.GetParent() => this.@_parent;
+	IExpressionExecutableV2 IExpressionExecutableV2.GetParent() => this.@_parent;
+	IExpressionExecutable   IExpressionExecutable  .GetParent() => this.@_parent;
 }
