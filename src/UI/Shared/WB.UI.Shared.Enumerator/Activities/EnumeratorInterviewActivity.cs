@@ -33,7 +33,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.SupportActionBar.SetHomeButtonEnabled(true);
 
             this.drawerToggle = new ActionBarDrawerToggle(this, this.drawerLayout, this.toolbar, 0, 0);
-            this.drawerLayout.SetDrawerListener(this.drawerToggle);
+            this.drawerLayout.AddDrawerListener(this.drawerToggle);
             this.drawerLayout.DrawerOpened += (sender, args) =>
             {
                 this.RemoveFocusFromEditText();
