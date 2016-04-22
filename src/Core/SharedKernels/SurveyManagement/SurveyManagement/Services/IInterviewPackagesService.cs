@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Views;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Services
 {
@@ -8,12 +8,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services
     {
         [Obsolete("Since v 5.7")]
         void StorePackage(string item);
-        void StorePackage(Guid interviewId, Guid questionnaireId, long questionnaireVersion, Guid responsibleId,
-            InterviewStatus interviewStatus, bool isCensusInterview, string events);
+        void StorePackage(InterviewPackage interview);
         int QueueLength { get; }
         int InvalidPackagesCount { get; }
         IReadOnlyCollection<string> GetTopPackageIds(int count);
         void ProcessPackage(string packageId);
+        void ProcessPackage(InterviewPackage interview);
         bool HasPendingPackageByInterview(Guid interviewId);
         void ReprocessAllBrokenPackages();
     }

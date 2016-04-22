@@ -22,6 +22,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.SynchronizationLog;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using WB.Core.Synchronization;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Core.Synchronization.SyncStorage;
 
@@ -40,7 +41,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
             ICommandService commandService,
             IQueryableReadSideRepositoryReader<InterviewSyncPackageMeta> syncPackagesMetaReader,
             IMetaInfoBuilder metaBuilder,
-            IJsonAllTypesSerializer synchronizationSerializer) : base(
+            IJsonAllTypesSerializer synchronizationSerializer,
+            SyncSettings synchronizationSettings) : base(
                 plainInterviewFileStorage: plainInterviewFileStorage, 
                 globalInfoProvider: globalInfoProvider,
                 interviewsFactory: interviewsFactory,
@@ -48,7 +50,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v1
                 commandService: commandService,
                 syncPackagesMetaReader: syncPackagesMetaReader,
                 metaBuilder: metaBuilder,
-                synchronizationSerializer: synchronizationSerializer)
+                synchronizationSerializer: synchronizationSerializer,
+                synchronizationSettings: synchronizationSettings)
         {
         }
 

@@ -9,7 +9,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.Synchronization;
@@ -44,20 +43,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         [Obsolete("Since v 5.8")]
         public virtual void StorePackage(string item) { }
 
-        public void StorePackage(Guid interviewId, Guid questionnaireId, long questionnaireVersion, Guid responsibleId,
-            InterviewStatus interviewStatus, bool isCensusInterview, string events)
+        public void StorePackage(InterviewPackage interviewPackage)
         {
-                this.interviewPackageStorage.Store(new InterviewPackage
-                {
-                    InterviewId = interviewId,
-                    QuestionnaireId = questionnaireId,
-                    QuestionnaireVersion = questionnaireVersion,
-                    InterviewStatus = interviewStatus,
-                    ResponsibleId = responsibleId,
-                    IsCensusInterview = isCensusInterview,
-                    IncomingDate = DateTime.UtcNow,
-                    Events = events
-                }, null);
+            this.interviewPackageStorage.Store(interviewPackage, null);
         }
 
         public virtual int QueueLength
@@ -110,65 +98,68 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
         private void ProcessPackage(int packageId)
         {
             Stopwatch innerwatch = Stopwatch.StartNew();
-            InterviewPackage package = null;
+
+            var package = this.interviewPackageStorage.GetById(packageId);
+
+            this.logger.Debug($"Package {package.InterviewId} loaded from db. Took {innerwatch.Elapsed:g}.");
+            innerwatch.Restart();
+            
+            this.ProcessPackage(package);
+            this.interviewPackageStorage.Remove(packageId);
+
+            this.logger.Debug($"Package {package.InterviewId} removed. Took {innerwatch.Elapsed:g}.");
+            innerwatch.Stop();
+        }
+
+        public void ProcessPackage(InterviewPackage interview)
+        {
+            Stopwatch innerwatch = Stopwatch.StartNew();
             try
             {
-                package = this.interviewPackageStorage.GetById(packageId);
-
-                this.logger.Debug($"Package {packageId}. Read content from db. Took {innerwatch.Elapsed:g}.");
-                innerwatch.Restart();
-                
-                var events = this.serializer
-                    .Deserialize<AggregateRootEvent[]>(package.Events)
+                var serializedEvents = this.serializer
+                    .Deserialize<AggregateRootEvent[]>(interview.Events)
                     .Select(e => e.Payload)
                     .ToArray();
 
-                this.logger.Debug($"Package {packageId}. Decompressed and deserialized. Took {innerwatch.Elapsed:g}.");
+                this.logger.Debug($"Interview events by {interview.InterviewId} deserialized. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
 
                 this.commandService.Execute(new SynchronizeInterviewEventsCommand(
-                    interviewId: package.InterviewId,
-                    userId: package.ResponsibleId,
-                    questionnaireId: package.QuestionnaireId,
-                    questionnaireVersion: package.QuestionnaireVersion,
-                    interviewStatus: package.InterviewStatus,
-                    createdOnClient: package.IsCensusInterview,
-                    synchronizedEvents: events), syncSettings.Origin);
+                    interviewId: interview.InterviewId,
+                    userId: interview.ResponsibleId,
+                    questionnaireId: interview.QuestionnaireId,
+                    questionnaireVersion: interview.QuestionnaireVersion,
+                    interviewStatus: interview.InterviewStatus,
+                    createdOnClient: interview.IsCensusInterview,
+                    synchronizedEvents: serializedEvents), this.syncSettings.Origin);
             }
             catch (Exception exception)
             {
-                this.logger.Error($"Package {packageId}. FAILED. Reason: '{exception.Message}'", exception);
+                this.logger.Error($"Interview events by {interview.InterviewId} processing failed. Reason: '{exception.Message}'", exception);
 
-                if (package != null)
+                this.brokenInterviewPackageStorage.Store(new BrokenInterviewPackage
                 {
-                    this.brokenInterviewPackageStorage.Store(new BrokenInterviewPackage
-                    {
-                        InterviewId = package.InterviewId,
-                        QuestionnaireId = package.QuestionnaireId,
-                        QuestionnaireVersion = package.QuestionnaireVersion,
-                        InterviewStatus = package.InterviewStatus,
-                        ResponsibleId = package.ResponsibleId,
-                        IsCensusInterview = package.IsCensusInterview,
-                        IncomingDate = package.IncomingDate,
-                        Events = package.Events,
-                        PackageSize = package.Events?.Length ?? 0,
-                        ProcessingDate = DateTime.UtcNow,
-                        ExceptionType = (exception as InterviewException)?.ExceptionType.ToString() ?? "Unexpected",
-                        ExceptionMessage = exception.Message,
-                        ExceptionStackTrace = string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}"))
-                    }, null);
+                    InterviewId = interview.InterviewId,
+                    QuestionnaireId = interview.QuestionnaireId,
+                    QuestionnaireVersion = interview.QuestionnaireVersion,
+                    InterviewStatus = interview.InterviewStatus,
+                    ResponsibleId = interview.ResponsibleId,
+                    IsCensusInterview = interview.IsCensusInterview,
+                    IncomingDate = interview.IncomingDate,
+                    Events = interview.Events,
+                    PackageSize = interview.Events?.Length ?? 0,
+                    ProcessingDate = DateTime.UtcNow,
+                    ExceptionType = (exception as InterviewException)?.ExceptionType.ToString() ?? "Unexpected",
+                    ExceptionMessage = exception.Message,
+                    ExceptionStackTrace =
+                        string.Join(Environment.NewLine,
+                            exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}"))
+                }, null);
 
-                    this.logger.Debug($"Package {packageId}. Moved to broken packages. Took {innerwatch.Elapsed:g}.");
-                    innerwatch.Restart();
-                }
+                this.logger.Debug($"Interview events by {interview.InterviewId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
+                innerwatch.Restart();
             }
-            finally
-            {
-                this.interviewPackageStorage.Remove(packageId);
-
-                this.logger.Debug($"Package {packageId}. Removed. Took {innerwatch.Elapsed:g}.");
-                innerwatch.Stop();
-            }
+            innerwatch.Stop();
         }
     }
 }

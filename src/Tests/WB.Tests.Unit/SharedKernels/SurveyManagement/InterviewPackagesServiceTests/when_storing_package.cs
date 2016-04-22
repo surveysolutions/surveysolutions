@@ -22,11 +22,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
                     archiver: compressor);
         };
 
-        Because of = () => interviewPackagesService.StorePackage(interviewId: expectedPackage.InterviewId,
-                    questionnaireId: expectedPackage.QuestionnaireId,
-                    questionnaireVersion: expectedPackage.QuestionnaireVersion,
-                    responsibleId: expectedPackage.ResponsibleId, interviewStatus: expectedPackage.InterviewStatus,
-                    isCensusInterview: expectedPackage.IsCensusInterview, events: expectedPackage.Events);
+        Because of = () => interviewPackagesService.StorePackage(new InterviewPackage
+        {
+            InterviewId = expectedPackage.InterviewId,
+            QuestionnaireId = expectedPackage.QuestionnaireId,
+            QuestionnaireVersion = expectedPackage.QuestionnaireVersion,
+            ResponsibleId = expectedPackage.ResponsibleId,
+            InterviewStatus = expectedPackage.InterviewStatus,
+            IsCensusInterview = expectedPackage.IsCensusInterview,
+            Events = expectedPackage.Events
+        });
 
         It should_store_specified_package =
             () => mockOfPackagesStorage.Verify(x => x.Store(Moq.It.IsAny<InterviewPackage>(), null), Times.Once);

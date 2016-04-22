@@ -101,15 +101,27 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                 meta = this.serializer.Deserialize<InterviewMetaInfo>(syncItem.MetaInfo) ??
                                      new InterviewMetaInfo();
             }
+            
+            var interviewPackage = new InterviewPackage
+            {
+                InterviewId = syncItem.RootId,
+                QuestionnaireId = meta.TemplateId,
+                QuestionnaireVersion = meta.TemplateVersion,
+                ResponsibleId = meta.ResponsibleId,
+                InterviewStatus = (InterviewStatus) meta.Status,
+                IsCensusInterview = meta.CreatedOnClient ?? false,
+                Events = syncItem.Content ?? "",
+                IncomingDate = DateTime.UtcNow
+            };
 
-            base.StorePackage(
-                interviewId: syncItem.RootId,
-                questionnaireId: meta.TemplateId,
-                questionnaireVersion: meta.TemplateVersion,
-                responsibleId: meta.ResponsibleId,
-                interviewStatus: (InterviewStatus) meta.Status,
-                isCensusInterview: meta.CreatedOnClient ?? false,
-                events: syncItem.Content ?? "");
+            if (this.syncSettings.UseBackgroundJobForProcessingPackages)
+            {
+                base.StorePackage(interviewPackage);
+            }
+            else
+            {
+                base.ProcessPackage(interviewPackage);
+            }
         }
 
         public override int QueueLength => this.GetCachedFilesInIncomingDirectory()

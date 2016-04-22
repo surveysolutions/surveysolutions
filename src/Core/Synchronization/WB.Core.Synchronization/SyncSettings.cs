@@ -8,8 +8,10 @@ namespace WB.Core.Synchronization
         {
             this.Origin = origin;
         }
+
         public SyncSettings(string appDataDirectory, string incomingCapiPackagesWithErrorsDirectoryName,
-            string incomingCapiPackageFileNameExtension, string incomingUnprocessedPackagesDirectoryName, string origin, int retryCount, int retryIntervalInSeconds)
+            string incomingCapiPackageFileNameExtension, string incomingUnprocessedPackagesDirectoryName, string origin,
+            int retryCount, int retryIntervalInSeconds, bool useBackgroundJobForProcessingPackages)
         {
             this.AppDataDirectory = appDataDirectory;
             this.IncomingCapiPackagesWithErrorsDirectoryName = incomingCapiPackagesWithErrorsDirectoryName;
@@ -18,6 +20,7 @@ namespace WB.Core.Synchronization
             this.Origin = origin;
             this.RetryCount = retryCount;
             this.RetryIntervalInSeconds = retryIntervalInSeconds;
+            this.UseBackgroundJobForProcessingPackages = useBackgroundJobForProcessingPackages;
         }
 
         [Obsolete("Since v 5.8")]
@@ -34,5 +37,7 @@ namespace WB.Core.Synchronization
         public int RetryIntervalInSeconds { get; private set; }
 
         public string Origin { get; private set; }
+
+        public bool UseBackgroundJobForProcessingPackages { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
 using WB.Core.Synchronization;
 using It = Machine.Specifications.It;
@@ -24,9 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
 
         It should_store_package_to_storage = () =>
             mockOfInterviewPackagesService.Verify(x =>
-                x.StorePackage(interviewId, interviewMetaInfo.TemplateId, interviewMetaInfo.TemplateVersion,
-                    interviewMetaInfo.ResponsibleId, (InterviewStatus) interviewMetaInfo.Status,
-                    interviewMetaInfo.CreatedOnClient.Value, eventsInJsonString), Times.Once);
+                x.StorePackage(Moq.It.IsAny<InterviewPackage>()), Times.Once);
 
         private static InterviewsApiV2Controller controller;
         private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
