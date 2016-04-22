@@ -105,6 +105,22 @@ namespace WB.Infrastructure.Native.Storage.Esent.Implementation
             }
         }
 
+        public void RemoveIfStartsWith(string beginingOfId)
+        {
+            if (this.isCacheUsed)
+            {
+                var allKeyToRemove = this.memoryCache.Keys.Where(k => k.StartsWith(beginingOfId)).ToArray();
+                foreach (var keyToRemove in allKeyToRemove)
+                {
+                    this.memoryCache[keyToRemove]=null;
+                }
+            }
+            else
+            {
+                this.storage.RemoveIfStartsWith(beginingOfId);
+            }
+        }
+
         public void Store(TEntity view, string id)
         {
             if (this.isCacheUsed)
