@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Machine.Specifications;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerInterviewAccessorTests
 {
@@ -23,6 +22,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 Create.CommittedEvent(payload: Create.Event.QuestionsEnabled()),
                 Create.CommittedEvent(payload: Create.Event.AnswersDeclaredInvalid()),
                 Create.CommittedEvent(payload: Create.Event.AnswersDeclaredValid()),
+                Create.CommittedEvent(payload: Create.Event.StaticTextsDisabled()),
+                Create.CommittedEvent(payload: Create.Event.StaticTextsEnabled()),
+                Create.CommittedEvent(payload: Create.Event.StaticTextsDeclaredInvalid()),
+                Create.CommittedEvent(payload: Create.Event.StaticTextsDeclaredValid()),
 
                 Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.GroupsDisabled()),
                 Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.GroupsEnabled()),
@@ -30,6 +33,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.QuestionsEnabled()),
                 Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.AnswersDeclaredInvalid()),
                 Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.AnswersDeclaredValid()),
+                Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.StaticTextsDisabled()),
+                Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.StaticTextsEnabled()),
+                Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.StaticTextsDeclaredInvalid()),
+                Create.CommittedEvent(commitId: firstCompletionCommitId, payload: Create.Event.StaticTextsDeclaredValid()),
                 firstCompletion = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.InteviewCompleted()),
 
                 lastAggregatedGroupsDisabled = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.GroupsDisabled()),
@@ -38,6 +45,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 lastAggregatedQuestionsEnabled = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.QuestionsEnabled()),
                 lastAggregatedQuestionsInvalid = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.AnswersDeclaredInvalid()),
                 lastAggregatedQuestionsValid = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.AnswersDeclaredValid()),
+                lastAggregatedStaticTextsValid = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.StaticTextsDeclaredValid()),
+                lastAggregatedStaticTextsInvalid = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.StaticTextsDeclaredInvalid()),
+                lastAggregatedStaticTextsEnabled = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.StaticTextsEnabled()),
+                lastAggregatedStaticTextsDisabled = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.StaticTextsDisabled()),
                 lastCompletion = Create.CommittedEvent(commitId: lastCompletionCommitId, payload: Create.Event.InteviewCompleted()),
             };
 
@@ -60,6 +71,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 lastAggregatedQuestionsEnabled,
                 lastAggregatedQuestionsInvalid,
                 lastAggregatedQuestionsValid,
+                lastAggregatedStaticTextsValid,
+                lastAggregatedStaticTextsInvalid,
+                lastAggregatedStaticTextsEnabled,
+                lastAggregatedStaticTextsDisabled,
 
                 lastCompletion,
             });
@@ -75,6 +90,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         private static CommittedEvent lastAggregatedQuestionsEnabled;
         private static CommittedEvent lastAggregatedQuestionsInvalid;
         private static CommittedEvent lastAggregatedQuestionsValid;
+        private static CommittedEvent lastAggregatedStaticTextsValid;
+        private static CommittedEvent lastAggregatedStaticTextsInvalid;
+        private static CommittedEvent lastAggregatedStaticTextsEnabled;
+        private static CommittedEvent lastAggregatedStaticTextsDisabled;
         private static CommittedEvent lastCompletion;
     }
 }
