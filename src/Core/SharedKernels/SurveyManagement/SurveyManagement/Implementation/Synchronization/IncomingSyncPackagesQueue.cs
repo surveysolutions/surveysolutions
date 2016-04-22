@@ -137,6 +137,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
                                         filename.EndsWith(this.syncSettings.IncomingCapiPackageFileNameExtension));
         }
 
+        public override IReadOnlyCollection<string> GetAllPackagesInterviewIds()
+        {
+            var filePackages = this.GetCachedFilesInIncomingDirectory()
+               .Where(filename => filename.EndsWith(this.syncSettings.IncomingCapiPackageFileNameExtension))
+               .Select(x => x).ToList();
+
+            filePackages.AddRange(base.GetAllPackagesInterviewIds());
+            return filePackages.ToReadOnlyCollection();
+        }
+
         private ConcurrentHashSet<string> GetCachedFilesInIncomingDirectory()
         {
             object cachedFileNames = this.cache.Get("incomingPackagesFileNames");
