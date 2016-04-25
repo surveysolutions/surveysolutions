@@ -103,7 +103,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 cancellationToken.ThrowIfCancellationRequested();
                 await this.UploadCompletedInterviewsAsync(statistics, progress, cancellationToken);
                 cancellationToken.ThrowIfCancellationRequested();
-                await this.SyncronizeQuestionnairesAsync(progress, cancellationToken);
+                await this.SyncronizeQuestionnairesAsync(progress, statistics, cancellationToken);
                 cancellationToken.ThrowIfCancellationRequested();
                 await this.DownloadInterviewsAsync(statistics, progress, cancellationToken);
 
@@ -208,7 +208,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 isTextInputPassword: true);
         }
 
-        private async Task SyncronizeQuestionnairesAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
+        private async Task SyncronizeQuestionnairesAsync(IProgress<SyncProgressInfo> progress, SychronizationStatistics staciStatistics, CancellationToken cancellationToken)
         {
             var remoteCensusQuestionnaireIdentities = await this.synchronizationService.GetCensusQuestionnairesAsync(cancellationToken);
             var localCensusQuestionnaireIdentities = this.questionnairesAccessor.GetCensusQuestionnaireIdentities();
@@ -240,23 +240,40 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 processedQuestionnaires++;
             }
 
+            progress.Report(new SyncProgressInfo
+            {
+                Title = InterviewerUIResources.Synchronization_Check_Obsolete_Questionnaires,
+                Statistics = staciStatistics,
+                Status = SynchronizationStatus.Download
+            });
+
             var serverQuestionnaires = await this.synchronizationService.GetServerQuestionnairesAsync(cancellationToken);
             var localQuestionnaires = this.questionnairesAccessor.GetAllQuestionnaireIdentities();
-
-            var questionnairesToRemove = localQuestionnaires.Except(serverQuestionnaires);
-
+            var questionnairesToRemove = localQuestionnaires.Except(serverQuestionnaires).ToList();
+            
+            int removedQuestionnairesCounter = 0;
             foreach (var questionnaireIdentity in questionnairesToRemove)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                await this.questionnairesAccessor.RemoveQuestionnaireAsync(questionnaireIdentity);
+                removedQuestionnairesCounter++;
+                progress.Report(new SyncProgressInfo
+                {
+                    Title = InterviewerUIResources.Synchronization_Check_Obsolete_Questionnaires,
+                    Description = string.Format(InterviewerUIResources.Synchronization_Check_Obsolete_Questionnaires_Description, removedQuestionnairesCounter, questionnairesToRemove.Count),
+                    Statistics = staciStatistics,
+                    Status = SynchronizationStatus.Download
+                });
 
+                await this.questionnairesAccessor.RemoveQuestionnaireAsync(questionnaireIdentity);
+            }
+            if (questionnairesToRemove.Count > 0)
+            {
                 progress.Report(new SyncProgressInfo
                 {
                     Title = InterviewerUIResources.Synchronization_Download_AttachmentsCleanup
                 });
+                await this.cleanupService.RemovedOrphanedAttachments().ConfigureAwait(false);
             }
-
-            await this.cleanupService.RemovedOrphanedAttachments().ConfigureAwait(false);
         }
 
         private async Task DownloadQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken)

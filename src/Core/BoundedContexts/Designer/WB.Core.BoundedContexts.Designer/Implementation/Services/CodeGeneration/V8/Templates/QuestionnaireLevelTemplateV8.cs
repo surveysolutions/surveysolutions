@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             #line default
             #line hidden
-            this.Write(">\r\n{\r\n\tpublic ");
+            this.Write(">, IExpressionExecutableV8\r\n{\r\n\tpublic ");
             
             #line 12 "C:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Implementation\Services\CodeGeneration\V8\Templates\QuestionnaireLevelTemplateV8.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.TypeName));
@@ -269,9 +269,28 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
 	protected override IEnumerable<Action> ConditionExpressions => _conditionExpressions;
 
-	protected override void SetParentImpl(IExpressionExecutable parent) {}
+	public void CalculateValidationChanges(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInvalid)
+	{
+		this.Validate(out questionsToBeValid, out questionsToBeInvalid);
+	}
 
-	protected override IExpressionExecutableV8 GetParentImpl() => null;
+	public ValidityChanges ProcessValidationExpressions() => this.ExecuteValidations();
+
+	public EnablementChanges ProcessEnablementConditions() => this.ProcessEnablementConditionsImpl();
+
+	public void SetParent(IExpressionExecutableV8 parent) {}
+	public void SetParent(IExpressionExecutableV7 parent) {}
+	public void SetParent(IExpressionExecutableV6 parent) {}
+	public void SetParent(IExpressionExecutableV5 parent) {}
+	public void SetParent(IExpressionExecutableV2 parent) {}
+	public void SetParent(IExpressionExecutable   parent) {}
+
+	IExpressionExecutableV8 IExpressionExecutableV8.GetParent() => null;
+	IExpressionExecutableV7 IExpressionExecutableV7.GetParent() => null;
+	IExpressionExecutableV6 IExpressionExecutableV6.GetParent() => null;
+	IExpressionExecutableV5 IExpressionExecutableV5.GetParent() => null;
+	IExpressionExecutableV2 IExpressionExecutableV2.GetParent() => null;
+	IExpressionExecutable   IExpressionExecutable  .GetParent() => null;
 }
 ");
             return this.GenerationEnvironment.ToString();

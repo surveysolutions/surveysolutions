@@ -104,7 +104,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public List<QuestionnaireIdentity> GetAllQuestionnaireIdentities()
         {
-            return this.questionnaireViewRepository.LoadAll()
+            return this.questionnaireViewRepository.Where(x => true)
                  .Select(questionnaire => questionnaire.Identity)
                  .ToList();
         }

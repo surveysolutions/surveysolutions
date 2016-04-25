@@ -35,9 +35,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
         };
 
         private static PlainQuestionnaire plainQuestionnaire;
-        private static readonly Guid staticTextId = Guid.Parse("111111111111111111111111111111");
-        private static readonly Guid staticTextInSubgroupId = Guid.Parse("222222222222222222222222222222");
-        private static readonly Guid staticTextInRosterId = Guid.Parse("333333333333333333333333333333");
+        private static readonly Guid staticTextId = Guid.NewGuid();
+        private static readonly Guid staticTextInSubgroupId = Guid.NewGuid();
+        private static readonly Guid staticTextInRosterId = Guid.NewGuid();
         private static QuestionnaireDocument questionnaireDocument;
     }
 }
