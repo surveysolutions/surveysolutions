@@ -17,7 +17,9 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 {
     public class InterviewsExportDenormalizer : BaseDenormalizer,
-        IEventHandler<InterviewStatusChanged>
+        IEventHandler<InterviewStatusChanged>,
+        IEventHandler<InterviewDeleted>,
+        IEventHandler<InterviewHardDeleted>
     {
         private readonly IReadSideRepositoryWriter<InterviewDataExportRecord> exportRecords;
         private readonly IReadSideKeyValueStorage<InterviewData> interviewDatas;
@@ -30,7 +32,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             InterviewStatus.ApprovedByHeadquarters,
             InterviewStatus.ApprovedBySupervisor,
             InterviewStatus.Completed,
-            InterviewStatus.InterviewerAssigned
+            InterviewStatus.InterviewerAssigned,
+            InterviewStatus.Restored
         };
 
         public InterviewsExportDenormalizer(IReadSideKeyValueStorage<InterviewData> interviewDatas,
@@ -74,6 +77,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     this.exportRecords.Store(record, record.Id);
                 }
             }
+        }
+
+        public void Handle(IPublishedEvent<InterviewDeleted> evnt)
+        {
+            this.exportRecords.RemoveIfStartsWith(evnt.EventSourceId.ToString());
+        }
+
+        public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
+        {
+            this.exportRecords.RemoveIfStartsWith(evnt.EventSourceId.ToString());
         }
     }
 }

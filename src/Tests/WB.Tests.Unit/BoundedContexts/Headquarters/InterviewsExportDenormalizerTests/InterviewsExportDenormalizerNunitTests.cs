@@ -78,6 +78,51 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalize
 
             Assert.That(countInterviewRecords, Is.EqualTo(2));
         }
+
+        [Test]
+        public void
+            When_InterviewDeleted_event_received_Then_all_interview_levels_must_be_deleted
+            ()
+        {
+            Guid interviewId = Guid.NewGuid();
+
+            var exportRecords = new TestInMemoryWriter<InterviewDataExportRecord>();
+
+            exportRecords.Store(Create.InterviewDataExportRecord(interviewId),$"{interviewId}1");
+            exportRecords.Store(Create.InterviewDataExportRecord(interviewId), $"{interviewId}2");
+            exportRecords.Store(Create.InterviewDataExportRecord(interviewId), $"{interviewId}3");
+
+            var interviewsExportDenormalizer = CreateInterviewsExportDenormalizer(interviewId, Mock.Of<IExportViewFactory>(), exportRecords);
+
+            interviewsExportDenormalizer.Handle(Create.InterviewDeletedEvent(interviewId: interviewId));
+
+            var countInterviewRecords = exportRecords.Query(_ => _.Count(i => i.InterviewId == interviewId));
+
+            Assert.That(countInterviewRecords, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void
+            When_InterviewHardDeleted_event_received_Then_all_interview_levels_must_be_deleted
+            ()
+        {
+            Guid interviewId = Guid.NewGuid();
+
+            var exportRecords = new TestInMemoryWriter<InterviewDataExportRecord>();
+
+            exportRecords.Store(Create.InterviewDataExportRecord(interviewId), $"{interviewId}1");
+            exportRecords.Store(Create.InterviewDataExportRecord(interviewId), $"{interviewId}2");
+            exportRecords.Store(Create.InterviewDataExportRecord(interviewId), $"{interviewId}3");
+
+            var interviewsExportDenormalizer = CreateInterviewsExportDenormalizer(interviewId, Mock.Of<IExportViewFactory>(), exportRecords);
+
+            interviewsExportDenormalizer.Handle(Create.InterviewHardDeletedEvent(interviewId: interviewId));
+
+            var countInterviewRecords = exportRecords.Query(_ => _.Count(i => i.InterviewId == interviewId));
+
+            Assert.That(countInterviewRecords, Is.EqualTo(0));
+        }
+
         private InterviewsExportDenormalizer CreateInterviewsExportDenormalizer(
             Guid interviewId, IExportViewFactory exportViewFactory, IReadSideRepositoryWriter<InterviewDataExportRecord> exportRecords)
         {
