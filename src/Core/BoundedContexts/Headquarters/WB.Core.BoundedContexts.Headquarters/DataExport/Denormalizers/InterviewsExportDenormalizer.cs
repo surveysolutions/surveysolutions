@@ -55,6 +55,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             {
                 var interviewId = evnt.EventSourceId;
 
+                this.exportRecords.RemoveIfStartsWith(interviewId.ToString());
+
                 var interviewReference = this.interviewReferences.GetById(interviewId);
 
                 var questionnaireExportStructure =

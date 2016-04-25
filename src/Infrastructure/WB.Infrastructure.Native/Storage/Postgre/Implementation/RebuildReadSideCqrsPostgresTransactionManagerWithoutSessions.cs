@@ -44,6 +44,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             throw new NotSupportedException("Sessions are not allowed during read side rebuild because everything is built to ESENT cache.");
         }
 
+        public string GetEntityIdentifierColumnName(Type entityType)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool IsQueryTransactionStarted => false;
 
         public void Dispose()

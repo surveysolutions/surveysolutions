@@ -7,7 +7,7 @@
 <#@ import namespace="WB.Core.SharedKernels.DataCollection" #> 
 <#@ include file="SharedTemplateV8.tt"#>
 
-internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV8<<#=this.Model.TypeName#>>
+internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV8<<#=this.Model.TypeName#>>, IExpressionExecutableV8
 {
 	public <#=Model.TypeName#>(
 		decimal[] rosterVector, 
@@ -96,7 +96,26 @@ internal partial class <#=Model.TypeName#> : AbstractConditionalLevelInstanceV8<
 
 	protected override IEnumerable<Action> ConditionExpressions => _conditionExpressions;
 
-	protected override void SetParentImpl(IExpressionExecutable parent) {}
+	public void CalculateValidationChanges(out List<Identity> questionsToBeValid, out List<Identity> questionsToBeInvalid)
+	{
+		this.Validate(out questionsToBeValid, out questionsToBeInvalid);
+	}
 
-	protected override IExpressionExecutableV8 GetParentImpl() => null;
+	public ValidityChanges ProcessValidationExpressions() => this.ExecuteValidations();
+
+	public EnablementChanges ProcessEnablementConditions() => this.ProcessEnablementConditionsImpl();
+
+	public void SetParent(IExpressionExecutableV8 parent) {}
+	public void SetParent(IExpressionExecutableV7 parent) {}
+	public void SetParent(IExpressionExecutableV6 parent) {}
+	public void SetParent(IExpressionExecutableV5 parent) {}
+	public void SetParent(IExpressionExecutableV2 parent) {}
+	public void SetParent(IExpressionExecutable   parent) {}
+
+	IExpressionExecutableV8 IExpressionExecutableV8.GetParent() => null;
+	IExpressionExecutableV7 IExpressionExecutableV7.GetParent() => null;
+	IExpressionExecutableV6 IExpressionExecutableV6.GetParent() => null;
+	IExpressionExecutableV5 IExpressionExecutableV5.GetParent() => null;
+	IExpressionExecutableV2 IExpressionExecutableV2.GetParent() => null;
+	IExpressionExecutable   IExpressionExecutable  .GetParent() => null;
 }
