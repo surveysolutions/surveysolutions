@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -40,6 +41,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
         public IEnumerable<InterviewInformation> GetInProgressInterviews(Guid interviewerId)
         {
+            var processigPackages = this.incomingSyncPackagesQueue.GetAllPackagesInterviewIds();
+
             var inProgressInterviews =  this.reader.Query(interviews =>
                 interviews.Where(interview => !interview.IsDeleted && (interview.ResponsibleId == interviewerId) && 
                                               (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor))
@@ -54,7 +57,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
             return inProgressInterviews.Where(
                 interview => !deletedQuestionnaires.Any(deletedQuestionnaire => deletedQuestionnaire.QuestionnaireId == interview.QuestionnaireId && deletedQuestionnaire.Version == interview.QuestionnaireVersion)
-                && !this.incomingSyncPackagesQueue.HasPendingPackageByInterview(interview.InterviewId))
+                && !processigPackages.Any(filename => filename.Contains(interview.InterviewId.FormatGuid())))
                 .Select(interview => new InterviewInformation()
                 {
                     Id = interview.InterviewId,
