@@ -93,6 +93,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization
             } while (chunkOfBrokenInterviewPackages.Any());
         }
 
+        public virtual IReadOnlyCollection<string> GetAllPackagesInterviewIds()
+        {
+            var count = int.MaxValue;
+            return this.interviewPackageStorage.Query(packages => packages.Select(package => package.InterviewId).Take(count).ToList())
+                    .Select(id => id.FormatGuid())
+                    .ToReadOnlyCollection();
+        }
+
         public virtual IReadOnlyCollection<string> GetTopPackageIds(int count)
             => this.interviewPackageStorage.Query(packages => packages.Select(package => package.Id).Take(count).ToList())
                     .Select(packageId => packageId.ToString())

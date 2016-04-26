@@ -16,5 +16,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services
         void ProcessPackage(string packageId);
         bool HasPendingPackageByInterview(Guid interviewId);
         void ReprocessAllBrokenPackages();
+
+        IReadOnlyCollection<string> GetAllPackagesInterviewIds();
     }
 }
