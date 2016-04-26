@@ -47,7 +47,8 @@ namespace WB.UI.Designer.Pdf
             paramsBuilder.Append("--page-size A4 ");
             paramsBuilder.Append("--margin-left 0 ");
             paramsBuilder.Append("--margin-right 0 ");
-            
+            paramsBuilder.Append("--margin-top 10 ");
+
             if (!string.IsNullOrEmpty(document.HeaderUrl))
             {
                 paramsBuilder.AppendFormat("--header-html {0} ", document.HeaderUrl);
