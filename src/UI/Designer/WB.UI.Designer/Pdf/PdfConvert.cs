@@ -47,7 +47,6 @@ namespace WB.UI.Designer.Pdf
             paramsBuilder.Append("--page-size A4 ");
             paramsBuilder.Append("--margin-left 0 ");
             paramsBuilder.Append("--margin-right 0 ");
-            paramsBuilder.Append("--margin-top 10 ");
 
             if (!string.IsNullOrEmpty(document.HeaderUrl))
             {
@@ -55,6 +54,11 @@ namespace WB.UI.Designer.Pdf
                 paramsBuilder.Append("--margin-top 25 ");
                 paramsBuilder.Append("--header-spacing 5 ");
             }
+            else
+            {
+                paramsBuilder.Append("--margin-top 20 ");
+            }
+
             if (!string.IsNullOrEmpty(document.FooterUrl))
             {
                 paramsBuilder.AppendFormat("--footer-html {0} ", document.FooterUrl);
