@@ -224,13 +224,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             
             this.interviewState.DisabledGroups = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.DisabledGroups);
             this.interviewState.DisabledQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.DisabledQuestions);
-            this.interviewState.DisabledStaticTexts = new ConcurrentHashSet<Identity>(@event.InterviewData.DisabledStaticTexts);
             this.interviewState.RosterGroupInstanceIds = BuildRosterInstanceIdsFromSynchronizationDto(@event.InterviewData);
             this.interviewState.ValidAnsweredQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.ValidAnsweredQuestions);
             this.interviewState.InvalidAnsweredQuestions = ToHashSetOfIdAndRosterVectorStrings(@event.InterviewData.InvalidAnsweredQuestions);
 
-            this.interviewState.ValidStaticTexts = new ConcurrentHashSet<Identity>(@event.InterviewData.ValidStaticTexts);
-            this.interviewState.InvalidStaticTexts = @event.InterviewData.InvalidStaticTexts.ToDictionary(x => x.Key, x => (IReadOnlyList<FailedValidationCondition>)x.Value);
+            this.interviewState.DisabledStaticTexts = new ConcurrentHashSet<Identity>(@event.InterviewData?.DisabledStaticTexts ?? new List<Identity>());
+            this.interviewState.ValidStaticTexts = new ConcurrentHashSet<Identity>(@event.InterviewData?.ValidStaticTexts ?? new List<Identity>());
+            this.interviewState.InvalidStaticTexts = @event.InterviewData.InvalidStaticTexts?.ToDictionary(x => x.Key,
+                x => (IReadOnlyList<FailedValidationCondition>) x.Value) ??
+                                                     new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
 
             this.interviewState.RosterTitles.Clear();
             var changedRosterTitles =
