@@ -95,8 +95,11 @@ function SignAndPackCapi($KeyStorePass, $KeyStoreName, $Alias, $CapiProject, $Ou
 	$PahToSigned = "$PathToFinalCapi" + "-signed.apk"
 	$PahToCreated = "$PathToFinalCapi" + ".apk"
 	$PahToKeystore = (Join-Path (Get-Location).Path "Security/KeyStore/$KeyStoreName")
+	$pathToJarsigner = GetPathToJarsigner
 
-	& (GetPathToJarsigner) '-sigalg' 'MD5withRSA' '-digestalg' 'SHA1' `
+	Write-Host "##teamcity[message text='Signing package using $pathToJarsigner']"
+
+	& ($pathToJarsigner) '-sigalg' 'MD5withRSA' '-digestalg' 'SHA1' `
 		'-keystore' "$PahToKeystore" '-storepass' "$KeyStorePass" `
 		'-signedjar' "$PahToSigned" "$PahToCreated" "$Alias" | Write-Host
 
@@ -112,7 +115,11 @@ function SignAndPackCapi($KeyStorePass, $KeyStoreName, $Alias, $CapiProject, $Ou
 		return $wasOperationSuccessfull
 	}
 
-	& (GetPathToZipalign) '-f' '-v' '4' "$PahToSigned" "$OutFileName" | Write-Host
+	$pathToZipalign = GetPathToZipalign
+
+	Write-Host "##teamcity[message text='Zipaligning package using $pathToZipalign']"
+
+	& ($pathToZipalign) '-f' '-v' '4' "$PahToSigned" "$OutFileName" | Write-Host
 
 	$wasOperationSuccessfull = $LASTEXITCODE -eq 0
 
