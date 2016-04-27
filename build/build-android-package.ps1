@@ -22,11 +22,25 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 . "$scriptFolder\functions.ps1"
 
 function GetPathToJarsigner() {
-	return 'C:\Program Files\Java\jdk1.8.0_60\bin\jarsigner.exe'
+	if (Test-Path 'C:\Program Files\Java\jdk1.8.0_77\bin\jarsigner.exe') {
+		return 'C:\Program Files\Java\jdk1.8.0_77\bin\jarsigner.exe'
+	}
+	if (Test-Path 'C:\Program Files\Java\jdk1.8.0_60\bin\jarsigner.exe') {
+		return 'C:\Program Files\Java\jdk1.8.0_60\bin\jarsigner.exe'
+	}
+
+	throw [System.IO.FileNotFoundException] "jarsigner.exe not found, see script for details"
 }
 
 function GetPathToZipalign() {
-	return 'C:\Android\android-sdk\build-tools\21.0.2\zipalign.exe'
+	if (Test-Path 'C:\Android\android-sdk\build-tools\23.0.3\zipalign.exe') {
+		return 'C:\Android\android-sdk\build-tools\23.0.3\zipalign.exe'
+	}
+	if (Test-Path 'C:\Android\android-sdk\build-tools\21.0.2\zipalign.exe') {
+		return 'C:\Android\android-sdk\build-tools\21.0.2\zipalign.exe'
+	}
+
+	throw [System.IO.FileNotFoundException] "zipalign.exe not found, see script for details"
 }
 
 function GetPathToManifest([string]$CapiProject) {
