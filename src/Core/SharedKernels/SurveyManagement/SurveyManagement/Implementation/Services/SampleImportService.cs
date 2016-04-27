@@ -131,15 +131,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services
                     questionnaireRosterStructure, bigTemplate);
 
             result.SetStatusMessage("Data parsing");
-            PreloadedDataRecord[] interviewForCreate = null;
-            try
-            {
-                interviewForCreate = preloadedDataDtoCreator(preloadedDataService);
-            }
-            catch(Exception exc)
-            {
-                Logger.Error("error on preloded data creation", exc );
-            }
+            var interviewForCreate = preloadedDataDtoCreator(preloadedDataService);
 
             if (interviewForCreate == null)
             {

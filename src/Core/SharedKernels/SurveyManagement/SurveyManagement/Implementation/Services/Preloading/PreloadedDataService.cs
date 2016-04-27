@@ -226,9 +226,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 return null;
 
             var supervisorsCache = new Dictionary<string, Guid>();
-            var interviewersCache = new Dictionary<string, UserDocument>();
             var idColumnIndex = GetIdColumnIndex(topLevelData);
-            var responsibleNameIndex = GetResponsibleNameIndex(topLevelData);
+            var supervisorNameIndex = GetSupervisorNameIndex(topLevelData);
             var result = new List<PreloadedDataRecord>();
             
             foreach (var topLevelRow in topLevelData.Content)
@@ -239,26 +238,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 var answersinsideRosters = this.GetHierarchicalAnswersByLevelName(topLevelData.FileName, new[] { rowId }, allLevels);
                 levels.AddRange(answersinsideRosters);
 
-                var responsibleName = CheckAndGetSupervisorNameForLevel(topLevelRow, responsibleNameIndex);
-
-                Guid? interviewerId = null;
-                Guid? supervisorId = null;
-                var interviewer = GetInterviewerIdAndUpdateCache(interviewersCache, responsibleName);
-                if (interviewer != null)
-                {
-                    interviewerId = interviewer.PublicKey;
-                    supervisorId = interviewer.Supervisor.Id;
-                }
-                else
-                {
-                    supervisorId = GetSupervisorIdAndUpdateCache(supervisorsCache, responsibleName);
-                }
-
+                var supervisorName = CheckAndGetSupervisorNameForLevel(topLevelRow, supervisorNameIndex);
                 result.Add(new PreloadedDataRecord
                 {
                     PreloadedDataDto = new PreloadedDataDto(levels.ToArray()),
-                    SupervisorId = supervisorId,
-                    InterviewerId = interviewerId
+                    SupervisorId = GetSupervisorIdAndUpdateCache(supervisorsCache, supervisorName)
                 });
             }
             return result.ToArray();
@@ -271,7 +255,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
             var interviewersCache = new Dictionary<string, UserDocument>();
 
-            var responsibleNameIndex = GetResponsibleNameIndex(sampleDataFile);
+            var responsibleNameIndex = GetSupervisorNameIndex(sampleDataFile);
             var topLevelFileName = GetValidFileNameForTopLevelQuestionnaire();
             foreach (var contentRow in sampleDataFile.Content)
             {
@@ -290,7 +274,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 {
                     supervisorId = GetSupervisorIdAndUpdateCache(supervisorsCache, responsibleName);
                 }
-                result.Add(new PreloadedDataRecord
+                result.Add(
+                    new PreloadedDataRecord
                     {
                         PreloadedDataDto = new PreloadedDataDto(new[] { new PreloadedLevelDto(new decimal[0], answersToFeaturedQuestions)}),
                         SupervisorId = supervisorId,
@@ -300,7 +285,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return result.ToArray();
         }
 
-        private int GetResponsibleNameIndex(PreloadedDataByFile dataFile)
+        private int GetSupervisorNameIndex(PreloadedDataByFile dataFile)
         {
             return dataFile.Header.ToList().FindIndex(header => string.Equals(header, ServiceColumns.ResponsibleColumnName, StringComparison.InvariantCultureIgnoreCase));
         }
