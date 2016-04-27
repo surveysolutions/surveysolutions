@@ -41,12 +41,13 @@ namespace WB.UI.Designer.Pdf
             }
 
             if (!File.Exists(environment.WkHtmlToPdfPath))
-                throw new PdfConvertException(String.Format("File '{0}' not found. Check if wkhtmltopdf application is installed.", environment.WkHtmlToPdfPath));
+                throw new PdfConvertException($"File '{environment.WkHtmlToPdfPath}' not found. Check if wkhtmltopdf application is installed.");
 
             StringBuilder paramsBuilder = new StringBuilder();
             paramsBuilder.Append("--page-size A4 ");
             paramsBuilder.Append("--margin-left 0 ");
             paramsBuilder.Append("--margin-right 0 ");
+            paramsBuilder.Append("--margin-bottom 7 ");
 
             if (!string.IsNullOrEmpty(document.HeaderUrl))
             {
@@ -56,7 +57,7 @@ namespace WB.UI.Designer.Pdf
             }
             else
             {
-                paramsBuilder.Append("--margin-top 20 ");
+                paramsBuilder.Append("--margin-top 10 ");
             }
 
             if (!string.IsNullOrEmpty(document.FooterUrl))
