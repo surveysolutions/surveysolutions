@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory
             var interviewHistoryDenormalizer =
                 new InterviewParaDataEventHandler(interviewHistoryReader, interviewSummaryReader, userReader, interviewDataExportSettings, questionnaireExportStructureStorage);
 
-            var events = this.eventStore.ReadFrom(interviewId, 0, int.MaxValue);
+            var events = this.eventStore.Read(interviewId, 0);
             foreach (var @event in events)
             {
                 interviewHistoryDenormalizer.Handle(@event);
