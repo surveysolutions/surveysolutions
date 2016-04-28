@@ -2883,7 +2883,7 @@ namespace WB.Tests.Unit
         public static IEventStore EventStore(Guid eventSourceId, IEnumerable<CommittedEvent> committedEvents)
         {
             return Mock.Of<IEventStore>(_ =>
-                _.ReadFrom(eventSourceId, Moq.It.IsAny<int>(), Moq.It.IsAny<int>()) == new CommittedEventStream(eventSourceId, committedEvents));
+                _.Read(eventSourceId, Moq.It.IsAny<int>()) == new CommittedEventStream(eventSourceId, committedEvents));
         }
 
         public static IDomainRepository DomainRepository(IAggregateSnapshotter aggregateSnapshotter = null, IServiceLocator serviceLocator = null)
