@@ -248,6 +248,7 @@ namespace WB.UI.Headquarters
 
             kernel.Unbind<IInterviewImportService>();
             kernel.Bind<IInterviewImportService>().To<InterviewImportService>().InSingletonScope();
+            kernel.Bind<RestoreDeletedQuestionnaireProjectionsService>().ToSelf();
 
             return kernel;
         }

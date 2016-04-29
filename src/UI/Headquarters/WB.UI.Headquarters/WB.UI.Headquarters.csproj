@@ -497,6 +497,7 @@
     <Content Include="Views\ApiUser\Index.cshtml" />
     <Content Include="Views\HQ\VerifySample.cshtml" />
     <Content Include="Views\Settings\ExportEncryptionSettings.cshtml" />
+    <Content Include="Views\ControlPanel\RestoreAllDeletedQuestionnaireProjections.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -575,6 +576,7 @@
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\DataExportController.cs" />
     <Compile Include="Controllers\ApiUserController.cs" />
+    <Compile Include="Implementation\Services\RestoreDeletedQuestionnaireProjectionsService.cs" />
     <Compile Include="Models\ChangeSettingsModel.cs" />
     <Compile Include="Models\ExportModel.cs" />
     <Compile Include="Controllers\ObserverController.cs" />

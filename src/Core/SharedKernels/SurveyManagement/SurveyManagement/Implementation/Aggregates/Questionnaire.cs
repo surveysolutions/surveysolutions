@@ -131,12 +131,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Aggregates
                 browseItem.IsDeleted = true;
                 questionnaireBrowseItemStorage.Store(browseItem, browseItem.Id);
             }
-
-            var questionnaireEntityId = new QuestionnaireIdentity(command.QuestionnaireId, command.QuestionnaireVersion).ToString();
-            this.referenceInfoForLinkedQuestionsStorage.Remove(questionnaireEntityId);
-            this.questionnaireExportStructureStorage.Remove(questionnaireEntityId);
-            this.questionnaireRosterStructureStorage.Remove(questionnaireEntityId);
-            this.questionnaireQuestionsInfoStorage.Remove(questionnaireEntityId);
         }
 
         public void RegisterPlainQuestionnaire(RegisterPlainQuestionnaire command)
