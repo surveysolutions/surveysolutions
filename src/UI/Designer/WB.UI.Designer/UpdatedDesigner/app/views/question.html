@@ -392,18 +392,11 @@
         </script>
 
     <script type="text/ng-template" id="Numeric-template.html">
-            <div class="row-fluid">
-                <div class="col-md-2">
+            <div class="row">
+                <div class="col-md-5">
                     <div class="checkbox checkbox-in-column">
                         <input id="cb-is-integer" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isInteger" ng-change="isIntegerChange()" />
                         <label for="cb-is-integer"><span></span>Integer</label>
-                    </div>
-                </div>
-                <div class="col-md-5 inline-inputs">
-                    <div class="checkbox checkbox-in-column">
-                        <input id="cb-use-formatting" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.useFormatting" />
-                        <label for="cb-use-formatting"><span></span>Use 1000 separator</label>
-                        <help key="useFormatting"></help>
                     </div>
                 </div>
                 <div class="col-md-5 inline-inputs">
@@ -418,6 +411,15 @@
                         <p class="help-block ng-cloak" ng-show="questionForm.countOfDecimalPlaces.$error.pattern">
                             Only integers are allowed
                         </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5 inline-inputs">
+                    <div class="checkbox checkbox-in-column">
+                        <input id="cb-use-formatting" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.useFormatting" />
+                        <label for="cb-use-formatting"><span></span>Use 1000 separator</label>
+                        <help key="useFormatting"></help>
                     </div>
                 </div>
             </div>
