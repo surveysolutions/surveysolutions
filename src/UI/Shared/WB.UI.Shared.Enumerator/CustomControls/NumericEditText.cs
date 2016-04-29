@@ -178,12 +178,19 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             this.Click += (sender, e) => { SetSelection(Text.Length); };
 
             string allowedDigits = "0123456789" + this.negativeSign;
-            if (!this.NumbersOnly)
-                allowedDigits += this.decimalSeparator + this.groupingSeparator;
+            InputTypes inputType = InputTypes.ClassNumber | InputTypes.NumberFlagSigned;
 
+            if (!this.NumbersOnly)
+            {
+                allowedDigits += this.decimalSeparator + this.groupingSeparator;
+                inputType |= InputTypes.NumberFlagDecimal;
+            }
+
+            // InputType should be initialized after KeyListener because KeyListener's InputType is used after KeyListener is set
             this.KeyListener = DigitsKeyListener.GetInstance(allowedDigits);
+            this.InputType = inputType;
         }
-        
+
         private void TextChangedHandler(object sender, AfterTextChangedEventArgs e)
         {
             var enteredText = e.Editable.ToString();
