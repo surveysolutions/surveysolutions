@@ -624,6 +624,7 @@
     <Compile Include="Services\InterviewImportPrefilledQuestion.cs" />
     <Compile Include="Services\InterviewImportState.cs" />
     <Compile Include="Services\InterviewImportStatus.cs" />
+    <Compile Include="Services\IRestoreDeletedQuestionnaireProjectionsService.cs" />
     <Compile Include="Views\DesignerQuestionnaireApiRestServiceSettings.cs" />
   </ItemGroup>
   <ItemGroup>
