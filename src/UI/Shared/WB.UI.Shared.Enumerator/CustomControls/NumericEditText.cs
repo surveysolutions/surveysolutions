@@ -176,7 +176,12 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         {
             this.AfterTextChanged += this.TextChangedHandler;
             this.Click += (sender, e) => { SetSelection(Text.Length); };
-            this.KeyListener = DigitsKeyListener.GetInstance(true, !this.NumbersOnly);
+
+            string allowedDigits = "0123456789" + this.negativeSign;
+            if (!this.NumbersOnly)
+                allowedDigits += this.decimalSeparator + this.groupingSeparator;
+
+            this.KeyListener = DigitsKeyListener.GetInstance(allowedDigits);
         }
         
         private void TextChangedHandler(object sender, AfterTextChangedEventArgs e)
