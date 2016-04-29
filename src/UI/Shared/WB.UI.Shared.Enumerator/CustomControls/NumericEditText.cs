@@ -286,7 +286,9 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
         public void SetValue(decimal? value)
         {
-            this.Text = value?.ToString(CultureInfo.CurrentCulture).Replace($"{this.decimalSeparator}0", "");
+            var valueAsString = value?.ToString(CultureInfo.CurrentCulture).Replace($"{this.decimalSeparator}0", "") ?? "";
+
+            this.SetTextInternal(this.Format(valueAsString));
         }
 
         private string ReplaceFirst(string text, string search, string replace)
