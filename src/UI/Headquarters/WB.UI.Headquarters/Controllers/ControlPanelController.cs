@@ -34,7 +34,8 @@ namespace WB.UI.Headquarters.Controllers
             IPasswordHasher passwordHasher,
             ISettingsProvider settingsProvider,
             ITransactionManagerProvider transactionManagerProvider,
-            IEventStoreApiService eventStoreApiService, IRestoreDeletedQuestionnaireProjectionsService restoreDeletedQuestionnaireProjectionsService)
+            IEventStoreApiService eventStoreApiService,
+            IRestoreDeletedQuestionnaireProjectionsService restoreDeletedQuestionnaireProjectionsService)
             : base(serviceLocator, commandService, globalInfo, logger, settingsProvider, transactionManagerProvider, eventStoreApiService)
         {
             this.userViewFactory = userViewFactory;
