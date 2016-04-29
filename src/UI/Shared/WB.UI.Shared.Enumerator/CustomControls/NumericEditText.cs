@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Android.Content;
 using Android.Content.Res;
+using Android.OS;
 using Android.Text;
 using Android.Text.Method;
 using Android.Util;
@@ -178,17 +179,21 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             this.Click += (sender, e) => { SetSelection(Text.Length); };
 
             string allowedDigits = "0123456789" + this.negativeSign;
-            InputTypes inputType = InputTypes.ClassNumber | InputTypes.NumberFlagSigned;
 
             if (!this.NumbersOnly)
             {
                 allowedDigits += this.decimalSeparator + this.groupingSeparator;
-                inputType |= InputTypes.NumberFlagDecimal;
             }
 
-            // InputType should be initialized after KeyListener because KeyListener's InputType is used after KeyListener is set
             this.KeyListener = DigitsKeyListener.GetInstance(allowedDigits);
-            this.InputType = inputType;
+
+            if (Build.Manufacturer.ToLower() == "samsung")
+            {
+                // fixes samsung keyboard issue which does not work with InputType provided by DigitsKeyListener
+                this.InputType = this.NumbersOnly
+                    ? InputTypes.ClassNumber | InputTypes.NumberFlagSigned
+                    : InputTypes.ClassNumber | InputTypes.NumberFlagSigned | InputTypes.NumberFlagDecimal;
+            }
         }
 
         private void TextChangedHandler(object sender, AfterTextChangedEventArgs e)
