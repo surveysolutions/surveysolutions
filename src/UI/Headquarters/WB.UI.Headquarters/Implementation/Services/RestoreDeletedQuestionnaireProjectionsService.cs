@@ -12,10 +12,11 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.Implementation.Services
 {
-    public class RestoreDeletedQuestionnaireProjectionsService
+    internal class RestoreDeletedQuestionnaireProjectionsService : IRestoreDeletedQuestionnaireProjectionsService
     {
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
 
