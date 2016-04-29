@@ -1269,11 +1269,11 @@ namespace WB.Tests.Unit
                 answers ?? new AnsweredQuestionSynchronizationDto[0],
                 disabledGroups ?? new HashSet<InterviewItemId>(),
                 disabledQuestions ?? new HashSet<InterviewItemId>(),
-                disabledStaticTexts ?? new List<Identity>(),
+                disabledStaticTexts,
                 validQuestions ?? new HashSet<InterviewItemId>(),
                 invalidQuestions ?? new HashSet<InterviewItemId>(),
-                validStaticTexts ?? new List<Identity>(),
-                invalidStaticTexts ?? new List<KeyValuePair<Identity, List<FailedValidationCondition>>>(),
+                validStaticTexts,
+                invalidStaticTexts,
                 rosterGroupInstances ?? new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),
                 failedValidationConditions?.ToList() ?? new List<KeyValuePair<Identity, IList<FailedValidationCondition>>>(),
                 new Dictionary<InterviewItemId, RosterVector[]>(), 
@@ -2883,7 +2883,7 @@ namespace WB.Tests.Unit
         public static IEventStore EventStore(Guid eventSourceId, IEnumerable<CommittedEvent> committedEvents)
         {
             return Mock.Of<IEventStore>(_ =>
-                _.ReadFrom(eventSourceId, Moq.It.IsAny<int>(), Moq.It.IsAny<int>()) == new CommittedEventStream(eventSourceId, committedEvents));
+                _.Read(eventSourceId, Moq.It.IsAny<int>()) == new CommittedEventStream(eventSourceId, committedEvents));
         }
 
         public static IDomainRepository DomainRepository(IAggregateSnapshotter aggregateSnapshotter = null, IServiceLocator serviceLocator = null)

@@ -185,8 +185,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     this.shouldUpdatePasswordOfInterviewer = false;
                     progress.Report(new SyncProgressInfo
                     {
-                        Title = InterviewerUIResources.Synchronization_UserAuthentication_Title,
-                        Description = InterviewerUIResources.Synchronization_UserAuthentication_Description,
+                        Title = InterviewerUIResources.Synchronization_Fail_Title,
+                        Description = InterviewerUIResources.Unauthorized,
                         Status = SynchronizationStatus.Fail,
                         Statistics = statistics
                     });
