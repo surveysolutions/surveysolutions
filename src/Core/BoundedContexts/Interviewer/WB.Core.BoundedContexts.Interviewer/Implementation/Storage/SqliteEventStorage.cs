@@ -144,12 +144,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             try
             {
                 this.connection.BeginTransaction();
-
-                var eventViews = this.connection.Table<EventView>().Where(x => x.EventSourceId == interviewId);
-                foreach (var eventView in eventViews)
-                {
-                    this.connection.Delete(eventView);
-                }
+                var commandText = $"DELETE FROM {nameof(EventView)} WHERE {nameof(EventView.EventSourceId)} = ?";
+                var sqLiteCommand = this.connection.CreateCommand(commandText, interviewId);
+                sqLiteCommand.ExecuteNonQuery();
                 this.connection.Commit();
             }
             catch
