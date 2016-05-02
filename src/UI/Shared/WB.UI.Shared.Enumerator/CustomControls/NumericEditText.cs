@@ -295,6 +295,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         {
             var valueAsString = value?.ToString(CultureInfo.CurrentCulture).Replace($"{this.decimalSeparator}0", "") ?? "";
 
+            this.previousText = valueAsString;
             this.SetTextInternal(this.Format(valueAsString));
         }
 
