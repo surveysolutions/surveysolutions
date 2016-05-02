@@ -11,6 +11,8 @@ using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Infrastructure.Native.Storage.EventStore;
+using WB.UI.Headquarters.Implementation.Services;
+using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Settings;
 
@@ -21,7 +23,7 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IUserViewFactory userViewFactory;
         private readonly IPasswordHasher passwordHasher;
-        
+        private readonly IRestoreDeletedQuestionnaireProjectionsService restoreDeletedQuestionnaireProjectionsService;
 
         public ControlPanelController(
             IServiceLocator serviceLocator,
@@ -32,11 +34,13 @@ namespace WB.UI.Headquarters.Controllers
             IPasswordHasher passwordHasher,
             ISettingsProvider settingsProvider,
             ITransactionManagerProvider transactionManagerProvider,
-            IEventStoreApiService eventStoreApiService)
+            IEventStoreApiService eventStoreApiService,
+            IRestoreDeletedQuestionnaireProjectionsService restoreDeletedQuestionnaireProjectionsService)
             : base(serviceLocator, commandService, globalInfo, logger, settingsProvider, transactionManagerProvider, eventStoreApiService)
         {
             this.userViewFactory = userViewFactory;
             this.passwordHasher = passwordHasher;
+            this.restoreDeletedQuestionnaireProjectionsService = restoreDeletedQuestionnaireProjectionsService;
         }
 
         public ActionResult CreateHeadquarters()
@@ -106,6 +110,19 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult ResetPrivilegedUserPassword()
         {
             return this.View(new UserModel());
+        }
+
+        public ActionResult RestoreAllDeletedQuestionnaireProjections()
+        {
+            return this.View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RestoreAllDeletedQuestionnaireProjectionsPost()
+        {
+            this.restoreDeletedQuestionnaireProjectionsService.RestoreAllDeletedQuestionnaireProjections();
+            return View("RestoreAllDeletedQuestionnaireProjections");
         }
 
         [HttpPost]

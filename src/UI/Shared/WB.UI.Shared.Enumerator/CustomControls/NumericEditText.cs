@@ -178,12 +178,19 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             this.Click += (sender, e) => { SetSelection(Text.Length); };
 
             string allowedDigits = "0123456789" + this.negativeSign;
-            if (!this.NumbersOnly)
-                allowedDigits += this.decimalSeparator + this.groupingSeparator;
+            InputTypes inputType = InputTypes.ClassNumber | InputTypes.NumberFlagSigned;
 
+            if (!this.NumbersOnly)
+            {
+                allowedDigits += this.decimalSeparator + this.groupingSeparator;
+                inputType |= InputTypes.NumberFlagDecimal;
+            }
+
+            // InputType should be initialized after KeyListener because KeyListener's InputType is used after KeyListener is set
             this.KeyListener = DigitsKeyListener.GetInstance(allowedDigits);
+            this.InputType = inputType;
         }
-        
+
         private void TextChangedHandler(object sender, AfterTextChangedEventArgs e)
         {
             var enteredText = e.Editable.ToString();
@@ -192,6 +199,16 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {
                 this.HandleNumericValueCleared();
                 return;
+            }
+
+            if (this.indexOfNonLocalizedAndroidDecimalSeparator > -1)
+            {
+                enteredText = enteredText.Substring(0, this.indexOfNonLocalizedAndroidDecimalSeparator) +
+                              this.decimalSeparator +
+                              (this.indexOfNonLocalizedAndroidDecimalSeparator + 1 < enteredText.Length
+                                  ? enteredText.Substring(this.indexOfNonLocalizedAndroidDecimalSeparator + 1,
+                                      enteredText.Length - this.indexOfNonLocalizedAndroidDecimalSeparator - 1)
+                                  : "");
             }
 
             var hasTextNegativeSign = enteredText.StartsWith(this.negativeSign);
@@ -268,8 +285,28 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         private void SetTextInternal(string text)
         {
             this.AfterTextChanged -= this.TextChangedHandler;
+            this.TextChanged -= NumericEditText_TextChanged;
             this.Text = text;
             this.AfterTextChanged += this.TextChangedHandler;
+            this.TextChanged += NumericEditText_TextChanged;
+
+        }
+
+        private int indexOfNonLocalizedAndroidDecimalSeparator;
+        private void NumericEditText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            this.indexOfNonLocalizedAndroidDecimalSeparator = -1;
+
+            var enteredText = e.Text.ToString();
+            if (e.BeforeCount > 0 || e.AfterCount > 1) return;
+
+            var nonLocalizedAndroidDecimalSeparator = '.';
+
+            if (enteredText[e.Start] == nonLocalizedAndroidDecimalSeparator &&
+                this.decimalSeparator != nonLocalizedAndroidDecimalSeparator.ToString())
+            {
+                this.indexOfNonLocalizedAndroidDecimalSeparator = e.Start;
+            }
         }
 
         /// <summary>
@@ -286,7 +323,10 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
         public void SetValue(decimal? value)
         {
-            this.Text = value?.ToString(CultureInfo.CurrentCulture).Replace($"{this.decimalSeparator}0", "");
+            var valueAsString = value?.ToString(CultureInfo.CurrentCulture).Replace($"{this.decimalSeparator}0", "") ?? "";
+
+            this.previousText = valueAsString;
+            this.SetTextInternal(this.Format(valueAsString));
         }
 
         private string ReplaceFirst(string text, string search, string replace)
