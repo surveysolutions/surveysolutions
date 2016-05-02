@@ -201,6 +201,16 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 return;
             }
 
+            if (this.indexOfNonLocalizedAndroidDecimalSeparator > -1)
+            {
+                enteredText = enteredText.Substring(0, this.indexOfNonLocalizedAndroidDecimalSeparator) +
+                              this.decimalSeparator +
+                              (this.indexOfNonLocalizedAndroidDecimalSeparator + 1 < enteredText.Length
+                                  ? enteredText.Substring(this.indexOfNonLocalizedAndroidDecimalSeparator + 1,
+                                      enteredText.Length - this.indexOfNonLocalizedAndroidDecimalSeparator - 1)
+                                  : "");
+            }
+
             var hasTextNegativeSign = enteredText.StartsWith(this.negativeSign);
             string textWithoutSign = hasTextNegativeSign ? enteredText.Length == 1 ? "" : enteredText.Substring(1, enteredText.Length - 1) : enteredText;
 
@@ -275,8 +285,28 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         private void SetTextInternal(string text)
         {
             this.AfterTextChanged -= this.TextChangedHandler;
+            this.TextChanged -= NumericEditText_TextChanged;
             this.Text = text;
             this.AfterTextChanged += this.TextChangedHandler;
+            this.TextChanged += NumericEditText_TextChanged;
+
+        }
+
+        private int indexOfNonLocalizedAndroidDecimalSeparator;
+        private void NumericEditText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            this.indexOfNonLocalizedAndroidDecimalSeparator = -1;
+
+            var enteredText = e.Text.ToString();
+            if (e.BeforeCount > 0 || e.AfterCount > 1) return;
+
+            var nonLocalizedAndroidDecimalSeparator = '.';
+
+            if (enteredText[e.Start] == nonLocalizedAndroidDecimalSeparator &&
+                this.decimalSeparator != nonLocalizedAndroidDecimalSeparator.ToString())
+            {
+                this.indexOfNonLocalizedAndroidDecimalSeparator = e.Start;
+            }
         }
 
         /// <summary>
