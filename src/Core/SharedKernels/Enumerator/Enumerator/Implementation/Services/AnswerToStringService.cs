@@ -25,7 +25,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 var integerNumericAnswer = (IntegerNumericAnswer)answer;
                 var answerValue = (decimal?)integerNumericAnswer.Answer;
-                return answerValue.FormatDecimal();
+                if (questionnaire.ShouldUseFormatting(questionId))
+                {
+                    return answerValue.FormatDecimal();
+                }
+
+                return
+                    Monads.Maybe(() => integerNumericAnswer.Answer.Value.ToString(CultureInfo.CurrentCulture)) ??
+                    String.Empty;
             }
 
             if (answer is DateTimeAnswer)
@@ -39,7 +46,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             if (answer is RealNumericAnswer)
             {
                 var realNumericAnswer = (RealNumericAnswer)answer;
-                return realNumericAnswer.Answer.FormatDecimal();
+                if (questionnaire.ShouldUseFormatting(questionId))
+                {
+                    return realNumericAnswer.Answer.FormatDecimal();
+                }
+
+                return Monads.Maybe(() => realNumericAnswer.Answer.Value.ToString(CultureInfo.CurrentCulture)) ??
+                       String.Empty;
             }
 
             if (answer is MultiOptionAnswer)

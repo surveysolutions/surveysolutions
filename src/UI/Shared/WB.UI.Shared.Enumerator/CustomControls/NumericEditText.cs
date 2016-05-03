@@ -326,7 +326,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         {
             var valueAsString = value.FormatDecimal();
             this.previousText = valueAsString;
-            this.SetTextInternal(valueAsString);
+            this.SetTextInternal(Format(valueAsString));
         }
 
         private string ReplaceFirst(string text, string search, string replace)
