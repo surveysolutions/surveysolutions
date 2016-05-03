@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using MvvmCross.Binding;
+﻿using MvvmCross.Binding;
 using WB.UI.Shared.Enumerator.CustomControls;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
@@ -16,14 +15,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         public override void SubscribeToEvents()
         {
             this.Target.NumericValueChanged += Target_NumericValueChanged;
-            this.Target.NumericValueCleared += Target_NumericValueCleared;
 
             this.subscribed = true;
-        }
-
-        private void Target_NumericValueCleared(object sender, NumericValueClearedEventArgs e)
-        {
-            FireValueChanged(null);
         }
 
         private void Target_NumericValueChanged(object sender, NumericValueChangedEventArgs e)
@@ -46,7 +39,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 if (editText != null && this.subscribed)
                 {
                     editText.NumericValueChanged -= this.Target_NumericValueChanged;
-                    editText.NumericValueCleared -= this.Target_NumericValueCleared;
                     this.subscribed = false;
                 }
             }
