@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.AnswerToStringServiceT
 
             questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionnaire = Create.PlainQuestionnaire(
-                Create.QuestionnaireDocumentWithOneChapter(Create.NumericRealQuestion(id: questionId)));
+                Create.QuestionnaireDocumentWithOneChapter(Create.NumericRealQuestion(id: questionId, useFomatting: true)));
             service = CreateAnswerToStringService();
 
             answer = Create.Answers.RealNumericAnswer(Create.Identity(questionId, RosterVector.Empty), answer: 1234.42256m);
