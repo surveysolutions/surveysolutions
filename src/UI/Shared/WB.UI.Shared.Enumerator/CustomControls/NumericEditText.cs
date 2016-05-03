@@ -8,7 +8,9 @@ using Android.Text;
 using Android.Text.Method;
 using Android.Util;
 using Android.Widget;
+using Java.Lang;
 using WB.Core.GenericSubdomains.Portable;
+using String = System.String;
 
 namespace WB.UI.Shared.Enumerator.CustomControls
 {
@@ -22,15 +24,102 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         }
     }
 
-    public class NumericValueClearedEventArgs : EventArgs { }
-
     /// <summary>
     /// Numeric Edit Text that supports decimal separator and group separator according to your culture.
     /// </summary>
     public class NumericEditText : EditText
     {
-        private int maxDigitsBeforeDecimal;
+        private class CustomKeyListener : DigitsKeyListener
+        {
+            private readonly string groupingSeparator = CultureInfo.CurrentCulture.NumberFormat.CurrencyGroupSeparator;
+            private readonly string decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            private readonly string negativeSign = CultureInfo.CurrentCulture.NumberFormat.NegativeSign;
 
+            private readonly int maxDigitsBeforeDecimal;
+            private readonly int maxDigitsAfterDecimal;
+
+            public CustomKeyListener(bool isDecimal, int maxDigitsBeforeDecimal, int maxDigitsAfterDecimal) : base(true, isDecimal)
+            {
+                this.maxDigitsBeforeDecimal = maxDigitsBeforeDecimal;
+                this.maxDigitsAfterDecimal = maxDigitsAfterDecimal;
+            }
+
+            public override ICharSequence FilterFormatted(ICharSequence source, int start, int end, ISpanned dest, int dstart, int dend)
+            {
+                if (source.ToString() == nonLocalizedAndroidDecimalSeparator && this.decimalSeparator != nonLocalizedAndroidDecimalSeparator)
+                {
+                    return new Java.Lang.String("");
+                }
+
+                var enteredText = source.ToString().Insert(start, dest.ToString());
+
+                var hasTextNegativeSign = enteredText.StartsWith(this.negativeSign);
+                string textWithoutSign = hasTextNegativeSign ? enteredText.Length == 1 ? "" : enteredText.Substring(1, enteredText.Length - 1) : enteredText;
+
+                string[] integerAndFraction = textWithoutSign.Split(this.decimalSeparator.ToCharArray());
+                string integer = (integerAndFraction[0] ?? "").Replace(this.groupingSeparator, "");
+                string fraction = integerAndFraction.Length > 1 ? integerAndFraction[1] ?? "" : "";
+
+                var varifiers = new Func<bool>[]
+                {
+                () => this.CountMatches(enteredText, this.negativeSign) > 1,
+                () =>
+                {
+                    int decimalPointPosition = enteredText.IndexOf(this.decimalSeparator);
+                    return decimalPointPosition > 0 && textWithoutSign.Substring(decimalPointPosition).IndexOf(this.groupingSeparator) > 0;
+                },
+                () => textWithoutSign.Length == 1 && textWithoutSign == this.decimalSeparator,
+                () => this.CountMatches(enteredText, this.decimalSeparator) > 1,
+                () => fraction.Length > maxFractionDigits,
+                () => (integer.Length + fraction.Length) > maxDigitsInDecimal,
+                () => this.maxDigitsBeforeDecimal > 0 && integer.Length > this.maxDigitsBeforeDecimal,
+                () => this.maxDigitsAfterDecimal > 0 && fraction.Length > this.maxDigitsAfterDecimal,
+                () =>
+                {
+                    if (textWithoutSign.Length <= 2) return false;
+
+                    string lastChar = textWithoutSign[textWithoutSign.Length - 1].ToString();
+                    string secToLastChar = textWithoutSign[textWithoutSign.Length - 2].ToString();
+                    if (lastChar != this.decimalSeparator && lastChar != this.groupingSeparator) return false;
+
+                    return lastChar == secToLastChar;
+                }
+                };
+
+                return varifiers.Any(isInvalid => isInvalid()) ? new Java.Lang.String("") : null;
+            }
+
+
+
+            private int CountMatches(string str, string sub)
+            {
+                if (TextUtils.IsEmpty(str))
+                {
+                    return 0;
+                }
+                int lastIndex = str.LastIndexOf(sub);
+                if (lastIndex < 0)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return 1 + this.CountMatches(str.Substring(0, lastIndex), sub);
+                }
+            }
+        }
+
+        private const int maxDigitsInDecimal = 16;
+        private const int maxFractionDigits = 15;
+        private const string leadingZeroFilterRegex = "^0+(?!$)";
+        private const string nonLocalizedAndroidDecimalSeparator = ".";
+
+        private readonly string numberFilterRegex = "[^\\d\\" + CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator + "]";
+        private readonly string groupingSeparator = CultureInfo.CurrentCulture.NumberFormat.CurrencyGroupSeparator;
+        private readonly string decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+        private readonly string negativeSign = CultureInfo.CurrentCulture.NumberFormat.NegativeSign;
+
+        private int maxDigitsBeforeDecimal;
         /// <summary>
         /// Gets or sets the maximum number of digits before the decimal point.
         /// </summary>
@@ -47,7 +136,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 }
 
                 this.maxDigitsBeforeDecimal = value;
-                this.SetTextInternal(this.Text);
+                this.InitKeyboard();
             }
         }
 
@@ -77,8 +166,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 }
 
                 this.maxDigitsAfterDecimal = value;
-
-                this.SetTextInternal(this.Text);
+                this.InitKeyboard();
             }
         }
 
@@ -90,34 +178,30 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             set
             {
                 this.useGroupSeparator = value;
-                this.SetTextInternal(this.Text);
+                this.InitKeyboard();
             }
         }
 
-        public bool NumbersOnly { get; set; }
+        private bool numbersOnly;
 
-        private readonly string groupingSeparator = CultureInfo.CurrentCulture.NumberFormat.CurrencyGroupSeparator;
-        private readonly string decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-        private readonly string negativeSign = CultureInfo.CurrentCulture.NumberFormat.NegativeSign;
-        
-        private readonly string numberFilterRegex = "[^\\d\\" + CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator + "]";
-        private const string leadingZeroFilterRegex = "^0+(?!$)";
-
-        private const int maxDigitsInDecimal = 16;
-        private const int maxFractionDigits = 15;
-
-        private string previousText = "";
+        public bool NumbersOnly
+        {
+            get
+            {
+                return this.numbersOnly;
+            }
+            set
+            {
+                this.numbersOnly = value;
+                this.InitKeyboard();
+            }
+        }
 
         /// <summary>
         /// <para>Occurs when numeric value changed.</para>
         /// <para>DOES NOT occur when the input is cleared.</para>
         /// </summary>
         public event EventHandler<NumericValueChangedEventArgs> NumericValueChanged;
-
-        /// <summary>
-        /// Occurs when numeric value cleared.
-        /// </summary>
-        public event EventHandler<NumericValueClearedEventArgs> NumericValueCleared;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NumericEditText"/> class.
@@ -163,7 +247,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {
                 this.maxDigitsBeforeDecimal = attributes.GetInt(Resource.Styleable.NumericEditText_maxDigitsBeforeDecimal, 0);
                 this.maxDigitsAfterDecimal = attributes.GetInt(Resource.Styleable.NumericEditText_maxDigitsAfterDecimal, 2);
-                this.NumbersOnly = attributes.GetBoolean(Resource.Styleable.NumericEditText_numbersOnly, false);
+                this.numbersOnly = attributes.GetBoolean(Resource.Styleable.NumericEditText_numbersOnly, false);
                 this.useGroupSeparator = attributes.GetBoolean(Resource.Styleable.NumericEditText_useGroupSeparator, true);
 
             }
@@ -175,139 +259,37 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
         private void InitComponent()
         {
-            this.AfterTextChanged += this.TextChangedHandler;
-            this.Click += (sender, e) => { SetSelection(Text.Length); };
-
-            string allowedDigits = "0123456789" + this.negativeSign;
-            InputTypes inputType = InputTypes.ClassNumber | InputTypes.NumberFlagSigned;
-
-            if (!this.NumbersOnly)
-            {
-                allowedDigits += this.decimalSeparator + this.groupingSeparator;
-                inputType |= InputTypes.NumberFlagDecimal;
-            }
-
-            // InputType should be initialized after KeyListener because KeyListener's InputType is used after KeyListener is set
-            this.KeyListener = DigitsKeyListener.GetInstance(allowedDigits);
-            this.InputType = inputType;
+            this.AfterTextChanged += NumericEditText_AfterTextChanged;
+            this.InitKeyboard();
         }
 
-        private void TextChangedHandler(object sender, AfterTextChangedEventArgs e)
+        private void InitKeyboard()
         {
+            this.KeyListener = new CustomKeyListener(
+                isDecimal: !this.NumbersOnly,
+                maxDigitsBeforeDecimal: this.MaxDigitsBeforeDecimal,
+                maxDigitsAfterDecimal: this.MaxDigitsAfterDecimal);
+        }
+
+        private void NumericEditText_AfterTextChanged(object sender, AfterTextChangedEventArgs e)
+        {
+            this.NumericValueChanged?.Invoke(this, new NumericValueChangedEventArgs(this.GetValue()));
+
             var enteredText = e.Editable.ToString();
-
-            if (enteredText.Length == 0)
-            {
-                this.HandleNumericValueCleared();
-                return;
-            }
-
-            if (this.indexOfNonLocalizedAndroidDecimalSeparator > -1)
-            {
-                enteredText = enteredText.Substring(0, this.indexOfNonLocalizedAndroidDecimalSeparator) +
-                              this.decimalSeparator +
-                              (this.indexOfNonLocalizedAndroidDecimalSeparator + 1 < enteredText.Length
-                                  ? enteredText.Substring(this.indexOfNonLocalizedAndroidDecimalSeparator + 1,
-                                      enteredText.Length - this.indexOfNonLocalizedAndroidDecimalSeparator - 1)
-                                  : "");
-            }
-
             var hasTextNegativeSign = enteredText.StartsWith(this.negativeSign);
             string textWithoutSign = hasTextNegativeSign ? enteredText.Length == 1 ? "" : enteredText.Substring(1, enteredText.Length - 1) : enteredText;
 
-            string[] integerAndFraction = textWithoutSign.Split(this.decimalSeparator.ToCharArray());
-            string integer = (integerAndFraction[0] ?? "").Replace(this.groupingSeparator, "");
-            string fraction = integerAndFraction.Length > 1 ? integerAndFraction[1] ?? "" : "";
-
-            var varifiers = new Func<bool>[]
-            {
-                () =>
-                {
-                    var countOfNegativeSigns = this.CountMatches(enteredText, this.negativeSign);
-                    return countOfNegativeSigns > 1 || (countOfNegativeSigns == 1 && !hasTextNegativeSign);
-                },
-                () =>
-                {
-                    int decimalPointPosition = enteredText.IndexOf(this.decimalSeparator);
-                    return decimalPointPosition > 0 && textWithoutSign.Substring(decimalPointPosition).IndexOf(this.groupingSeparator) > 0;
-                },
-                () => textWithoutSign.Length == 1 && textWithoutSign == this.decimalSeparator,
-                () => this.CountMatches(enteredText, this.decimalSeparator) > 1,
-                () => fraction.Length > maxFractionDigits,
-                () => (integer.Length + fraction.Length) > maxDigitsInDecimal,
-                () => this.MaxDigitsBeforeDecimal > 0 && integer.Length > this.MaxDigitsBeforeDecimal,
-                () => this.MaxDigitsAfterDecimal > 0 && fraction.Length > this.MaxDigitsAfterDecimal,
-                () =>
-                {
-                    if (textWithoutSign.Length <= 2) return false;
-
-                    string lastChar = textWithoutSign[textWithoutSign.Length - 1].ToString();
-                    string secToLastChar = textWithoutSign[textWithoutSign.Length - 2].ToString();
-                    if (lastChar != this.decimalSeparator && lastChar != this.groupingSeparator) return false;
-
-                    return lastChar == secToLastChar;
-                }
-            };
-
-            if (varifiers.Any(isInvalid => isInvalid()))
-            {
-                this.DiscardInput();
-                return;
-            }
-
-            enteredText = hasTextNegativeSign
+            this.SetTextImpl(hasTextNegativeSign
                 ? $"{this.negativeSign}{this.Format(textWithoutSign)}"
-                : this.Format(enteredText);
-
-            this.SetTextInternal(enteredText);
-
-            this.SetSelection(enteredText.Length);
-            this.HandleNumericValueChanged();
+                : this.Format(textWithoutSign));
         }
 
-        private void DiscardInput()
+        private void SetTextImpl(string text)
         {
-            this.Text = previousText;
-            this.SetSelection(Text.Length);
-        }
-
-        private void HandleNumericValueCleared()
-        {
-            this.previousText = "";
-            this.NumericValueCleared?.Invoke(this, new NumericValueClearedEventArgs());
-        }
-
-        private void HandleNumericValueChanged()
-        {
-            this.previousText = this.Text;
-            this.NumericValueChanged?.Invoke(this, new NumericValueChangedEventArgs(this.GetValue()));
-        }
-
-        private void SetTextInternal(string text)
-        {
-            this.AfterTextChanged -= this.TextChangedHandler;
-            this.TextChanged -= NumericEditText_TextChanged;
+            this.AfterTextChanged -= this.NumericEditText_AfterTextChanged;
             this.Text = text;
-            this.AfterTextChanged += this.TextChangedHandler;
-            this.TextChanged += NumericEditText_TextChanged;
-
-        }
-
-        private int indexOfNonLocalizedAndroidDecimalSeparator;
-        private void NumericEditText_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            this.indexOfNonLocalizedAndroidDecimalSeparator = -1;
-
-            var enteredText = e.Text.ToString();
-            if (e.BeforeCount > 0 || e.AfterCount > 1) return;
-
-            var nonLocalizedAndroidDecimalSeparator = '.';
-
-            if (enteredText[e.Start] == nonLocalizedAndroidDecimalSeparator &&
-                this.decimalSeparator != nonLocalizedAndroidDecimalSeparator.ToString())
-            {
-                this.indexOfNonLocalizedAndroidDecimalSeparator = e.Start;
-            }
+            this.SetSelection(text.Length);
+            this.AfterTextChanged += this.NumericEditText_AfterTextChanged;
         }
 
         /// <summary>
@@ -316,17 +298,17 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         /// <returns>The decimal value represented by the text</returns>
         public decimal? GetValue()
         {
-            bool hasSign = this.Text.StartsWith(this.negativeSign);
-            string original = Regex.Replace(this.Text, this.numberFilterRegex, "");
+            decimal value;
 
-            return string.IsNullOrEmpty(original) ? (decimal?)null : decimal.Parse(hasSign ? $"{this.negativeSign}{original}" : original);
+            if (decimal.TryParse(this.Text, NumberStyles.Any, CultureInfo.CurrentCulture, out value))
+                return value;
+
+            return null;
         }
 
         public void SetValue(decimal? value)
         {
-            var valueAsString = value.FormatDecimal();
-            this.previousText = valueAsString;
-            this.SetTextInternal(Format(valueAsString));
+            this.SetTextImpl(this.useGroupSeparator ? value.FormatDecimal() : value?.ToString(CultureInfo.CurrentCulture) ?? "");
         }
 
         private string ReplaceFirst(string text, string search, string replace)
@@ -345,7 +327,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             String number = Regex.Replace(parts[0], this.numberFilterRegex, "");
             number = this.ReplaceFirst(number, leadingZeroFilterRegex, "");
 
-            if (this.UseGroupSeparator)
+            if (this.useGroupSeparator)
             {
                 number = this.Reverse(Regex.Replace(this.Reverse(number), "(.{3})", "$1" + this.groupingSeparator));
                 number = this.RemoveStart(number, this.groupingSeparator);
@@ -379,23 +361,6 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 return str.Substring(remove.Length);
             }
             return str;
-        }
-
-        private int CountMatches(string str, string sub)
-        {
-            if (TextUtils.IsEmpty(str))
-            {
-                return 0;
-            }
-            int lastIndex = str.LastIndexOf(sub);
-            if (lastIndex < 0)
-            {
-                return 0;
-            }
-            else
-            {
-                return 1 + this.CountMatches(str.Substring(0, lastIndex), sub);
-            }
         }
     }
 }
