@@ -8,6 +8,7 @@ using Android.Text;
 using Android.Text.Method;
 using Android.Util;
 using Android.Widget;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.UI.Shared.Enumerator.CustomControls
 {
@@ -323,10 +324,9 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
         public void SetValue(decimal? value)
         {
-            var valueAsString = value?.ToString(CultureInfo.CurrentCulture).Replace($"{this.decimalSeparator}0", "") ?? "";
-
+            var valueAsString = value.FormatDecimal();
             this.previousText = valueAsString;
-            this.SetTextInternal(this.Format(valueAsString));
+            this.SetTextInternal(valueAsString);
         }
 
         private string ReplaceFirst(string text, string search, string replace)
