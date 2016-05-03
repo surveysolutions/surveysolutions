@@ -6,6 +6,11 @@ namespace WB.Core.GenericSubdomains.Portable
 {
     public static class DecimalExtensions
     {
+        public static string FormatDecimal(this decimal source, int presigion = 16)
+        {
+            return FormatDecimal((decimal?) source, presigion);
+        }
+
         public static string FormatDecimal(this decimal? source, int presigion = 16)
         {
             if (!source.HasValue) return String.Empty;
