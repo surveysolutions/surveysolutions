@@ -201,6 +201,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             DefaultValueHandling = DefaultValueHandling.Ignore,
             MissingMemberHandling = MissingMemberHandling.Ignore,
             NullValueHandling = NullValueHandling.Ignore,
+            FloatParseHandling = FloatParseHandling.Decimal,
             Binder = new OldToNewAssemblyRedirectSerializationBinder()
         };
     }
