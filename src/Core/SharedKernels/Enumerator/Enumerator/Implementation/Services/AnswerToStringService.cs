@@ -23,8 +23,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             if (answer is IntegerNumericAnswer)
             {
-                var integerNumericAnswer = ((IntegerNumericAnswer)answer);
-                return Monads.Maybe(() => integerNumericAnswer.Answer.Value.ToString(CultureInfo.InvariantCulture)) ?? String.Empty;
+                var integerNumericAnswer = (IntegerNumericAnswer)answer;
+                var answerValue = (decimal?)integerNumericAnswer.Answer;
+                return answerValue.FormatDecimal();
             }
 
             if (answer is DateTimeAnswer)
@@ -38,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             if (answer is RealNumericAnswer)
             {
                 var realNumericAnswer = (RealNumericAnswer)answer;
-                return Monads.Maybe(() => realNumericAnswer.Answer.Value.ToString(CultureInfo.InvariantCulture)) ?? String.Empty;
+                return realNumericAnswer.Answer.FormatDecimal();
             }
 
             if (answer is MultiOptionAnswer)

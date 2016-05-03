@@ -1510,9 +1510,15 @@ namespace WB.Tests.Unit
             return new NewUserCreated() { Roles = new[] { role }, Supervisor = Create.UserLight(supervisorId) };
         }
 
-        public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = "numeric_question", string enablementCondition = null, 
-            string validationExpression = null, QuestionScope scope = QuestionScope.Interviewer, bool isPrefilled = false,
-            bool hideIfDisabled = false, IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null)
+        public static NumericQuestion NumericIntegerQuestion(Guid? id = null, 
+            string variable = "numeric_question", 
+            string enablementCondition = null, 
+            string validationExpression = null, 
+            QuestionScope scope = QuestionScope.Interviewer, 
+            bool isPrefilled = false,
+            bool hideIfDisabled = false,
+            bool useFormatting = false, 
+            IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null)
         {
             return new NumericQuestion
             {
@@ -1525,6 +1531,7 @@ namespace WB.Tests.Unit
                 ValidationExpression = validationExpression,
                 QuestionScope = scope,
                 Featured = isPrefilled,
+                UseFormatting = useFormatting,
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 LinkedToRosterId = linkedToRosterId,
             };
