@@ -18,7 +18,7 @@ namespace WB.Core.GenericSubdomains.Portable
             var mantissaFormat = new string('#', presigion);
             var groupSeparator = CultureInfo.InvariantCulture.NumberFormat.CurrencyGroupSeparator;
             var decimalSeparator = CultureInfo.InvariantCulture.NumberFormat.CurrencyDecimalSeparator;
-            string format = $"0{groupSeparator}#{decimalSeparator}{mantissaFormat}";
+            string format = $"#{groupSeparator}#{decimalSeparator}{mantissaFormat}";
 
             var valueAsString = source.Value.ToString(format, CultureInfo.CurrentCulture);
 
