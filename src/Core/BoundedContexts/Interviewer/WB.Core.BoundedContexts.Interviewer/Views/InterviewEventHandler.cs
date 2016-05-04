@@ -4,6 +4,8 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
+using MvvmCross.Platform;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Nito.AsyncEx.Synchronous;
 using WB.Core.GenericSubdomains.Portable;
@@ -42,7 +44,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
 
-        public InterviewEventHandler(IAsyncPlainStorage<InterviewView> interviewViewRepository, IPlainQuestionnaireRepository questionnaireRepository)
+        public InterviewEventHandler(IAsyncPlainStorage<InterviewView> interviewViewRepository, 
+            IPlainQuestionnaireRepository questionnaireRepository)
         {
             this.interviewViewRepository = interviewViewRepository;
             this.questionnaireRepository = questionnaireRepository;
@@ -193,6 +196,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                         }
                         getCategoricalOptionText = GetPrefilledCategoricalQuestionOptionText(prefilledQuestion);
                         break;
+                    case QuestionType.Numeric:
+                        var numericQuestion = prefilledQuestion as INumericQuestion;
+                        decimal answerTyped;
+                        if (decimal.TryParse(answer.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out answerTyped))
+                        {
+                            if (numericQuestion?.UseFormatting ?? false)
+                            {
+                                answer = answerTyped.FormatDecimal();
+                            }
+                            else
+                            {
+                                answer = answerTyped.ToString(CultureInfo.CurrentCulture);
+                            }
+                        }
+                        break;
                 }
             }
 
@@ -338,8 +356,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     var questionnairePrefilledQuestion =
                         questionnaire.FirstOrDefault<IQuestion>(question => question.PublicKey == questionId);
 
-                    prefilledQuestion.Answer = AnswerUtils.AnswerToString(answer,
-                        GetPrefilledCategoricalQuestionOptionText(questionnairePrefilledQuestion));
+                    var numericQuestion = questionnairePrefilledQuestion as INumericQuestion;
+                    if (numericQuestion != null && answer != null)
+                    {
+                        var @decimal = Convert.ToDecimal(answer);
+                        if (numericQuestion.UseFormatting)
+                        {
+                            prefilledQuestion.Answer = @decimal.FormatDecimal();
+                        }
+                        else
+                        {
+                            prefilledQuestion.Answer = @decimal.ToString(CultureInfo.CurrentCulture);
+                        }
+                    }
+                    else
+                    {
+                        prefilledQuestion.Answer = AnswerUtils.AnswerToString(answer, 
+                            GetPrefilledCategoricalQuestionOptionText(questionnairePrefilledQuestion));
+                    }
+                    
                 }
             }
 

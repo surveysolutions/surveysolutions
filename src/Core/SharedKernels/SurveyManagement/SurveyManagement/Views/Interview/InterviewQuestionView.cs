@@ -223,7 +223,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     {
         public bool IsInteger { get; set; }
         public int? CountOfDecimalPlaces { get; set; }
-        public bool UseFormating { get; set; } = true;
+        public bool UseFormating { get; set; }
     }
 
     public class MultiQuestionSettings
