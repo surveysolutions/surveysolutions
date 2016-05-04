@@ -205,10 +205,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                             {
                                 answer = answerTyped.FormatDecimal();
                             }
-                            else
-                            {
-                                answer = answerTyped.ToString(CultureInfo.CurrentCulture);
-                            }
                         }
                         break;
                 }
