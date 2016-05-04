@@ -35,23 +35,36 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             private readonly string decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
             private readonly string negativeSign = CultureInfo.CurrentCulture.NumberFormat.NegativeSign;
 
+            private readonly bool isDecimal;
             private readonly int maxDigitsBeforeDecimal;
             private readonly int maxDigitsAfterDecimal;
 
             public CustomKeyListener(bool isDecimal, int maxDigitsBeforeDecimal, int maxDigitsAfterDecimal) : base(true, isDecimal)
             {
+                this.isDecimal = isDecimal;
                 this.maxDigitsBeforeDecimal = maxDigitsBeforeDecimal;
                 this.maxDigitsAfterDecimal = maxDigitsAfterDecimal;
             }
 
             public override ICharSequence FilterFormatted(ICharSequence source, int start, int end, ISpanned dest, int dstart, int dend)
             {
-                if (source.ToString() == nonLocalizedAndroidDecimalSeparator && this.decimalSeparator != nonLocalizedAndroidDecimalSeparator)
+                var allowedSymbols = $"0123456789{this.negativeSign}";
+                if (this.isDecimal)
+                {
+                    allowedSymbols += $"{nonLocalizedAndroidDecimalSeparator}{this.decimalSeparator}";
+                }
+
+                var hasNonLocalizedAndroidDecimalSeparator = source.ToString() == nonLocalizedAndroidDecimalSeparator && this.decimalSeparator != nonLocalizedAndroidDecimalSeparator;
+                var hasDecimalSeperatorInInteger = (source.ToString() == this.decimalSeparator || hasNonLocalizedAndroidDecimalSeparator) && !this.isDecimal;
+
+                if (hasDecimalSeperatorInInteger || !source.ToString().All(x => allowedSymbols.Contains(x)))
                 {
                     return new Java.Lang.String("");
                 }
 
-                var enteredText = source.ToString().Insert(start, dest.ToString());
+                if(hasNonLocalizedAndroidDecimalSeparator) source = new Java.Lang.String(this.decimalSeparator);
+
+                var enteredText = dest.ToString().Insert(dstart, source.ToString());
 
                 var hasTextNegativeSign = enteredText.StartsWith(this.negativeSign);
                 string textWithoutSign = hasTextNegativeSign ? enteredText.Length == 1 ? "" : enteredText.Substring(1, enteredText.Length - 1) : enteredText;
@@ -62,7 +75,12 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
                 var varifiers = new Func<bool>[]
                 {
-                () => this.CountMatches(enteredText, this.negativeSign) > 1,
+                () =>
+                {
+                    var countOfNegativeSigns = this.CountMatches(enteredText, this.negativeSign);
+                    return countOfNegativeSigns > 1 || (countOfNegativeSigns == 1 && !hasTextNegativeSign);
+                },
+                () => enteredText.StartsWith(this.decimalSeparator) || enteredText.StartsWith(nonLocalizedAndroidDecimalSeparator),
                 () =>
                 {
                     int decimalPointPosition = enteredText.IndexOf(this.decimalSeparator);
@@ -86,7 +104,9 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 }
                 };
 
-                return varifiers.Any(isInvalid => isInvalid()) ? new Java.Lang.String("") : null;
+                return varifiers.Any(isInvalid => isInvalid())
+                    ? new Java.Lang.String("")
+                    : hasNonLocalizedAndroidDecimalSeparator ? new Java.Lang.String(this.decimalSeparator) : null;
             }
 
 
