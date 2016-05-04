@@ -17,6 +17,8 @@
             self.instructions = ko.observable();
             self.selectedOption = ko.observable();
             self.selectedOptions = ko.observableArray([]);
+            self.latitude = ko.observable();
+            self.longitude = ko.observable();
             self.settings = ko.observableArray([]);
             self.isSingleOption = ko.computed(function () {
                 return self.type() === Supervisor.Config.QuestionType.SingleOption;

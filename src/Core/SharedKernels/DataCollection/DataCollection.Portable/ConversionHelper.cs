@@ -24,6 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection
                             v => v.ToString("0.############################", CultureInfo.InvariantCulture))));
         }
 
+
         public static string ConvertIdentityToString(Identity identity)
         {
             return ConvertIdAndRosterVectorToString(identity.Id, identity.RosterVector);

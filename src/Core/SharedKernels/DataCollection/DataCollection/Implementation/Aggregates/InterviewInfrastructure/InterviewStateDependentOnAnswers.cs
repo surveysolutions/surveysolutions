@@ -1,40 +1,107 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.CustomCollections;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
-    internal class InterviewStateDependentOnAnswers
+    public class InterviewStateDependentOnAnswers : IReadOnlyInterviewStateDependentOnAnswers 
     {
-        public InterviewStateDependentOnAnswers()
+        private class AmendingWrapper : IReadOnlyInterviewStateDependentOnAnswers
         {
-            this.AnswersSupportedInExpressions = new Dictionary<string, object>();
-            this.LinkedSingleOptionAnswersBuggy = new Dictionary<string, Tuple<Guid, decimal[], decimal[]>>();
-            this.LinkedMultipleOptionsAnswers = new Dictionary<string, Tuple<Guid, decimal[], decimal[][]>>();
-            this.TextListAnswers = new Dictionary<string, Tuple<decimal, string>[]>();
+            private readonly IReadOnlyInterviewStateDependentOnAnswers actualState;
+            private readonly Func<Guid, RosterVector, IEnumerable<decimal>> getRosterInstanceIds;
 
-            this.AnsweredQuestions = new HashSet<string>();
-            this.DisabledGroups = new HashSet<string>();
-            this.DisabledQuestions = new HashSet<string>();
-            this.RosterGroupInstanceIds = new Dictionary<string, DistinctDecimalList>();
-            this.ValidAnsweredQuestions = new HashSet<string>();
-            this.InvalidAnsweredQuestions = new HashSet<string>();
-            this.AnswerComments = new List<AnswerComment>();
+            public AmendingWrapper(IReadOnlyInterviewStateDependentOnAnswers actualState, Func<Guid, RosterVector, IEnumerable<decimal>> getRosterInstanceIds)
+            {
+                this.actualState = actualState;
+                this.getRosterInstanceIds = getRosterInstanceIds;
+            }
+
+            public IReadOnlyInterviewStateDependentOnAnswers Amend(Func<Guid, RosterVector, IEnumerable<decimal>> getRosterInstanceIds) => this.actualState.Amend(getRosterInstanceIds);
+
+            public bool IsGroupDisabled(Identity @group) => this.actualState.IsGroupDisabled(@group);
+
+            public bool IsQuestionDisabled(Identity question) => this.actualState.IsQuestionDisabled(question);
+
+            public bool WasQuestionAnswered(Identity question) => this.actualState.WasQuestionAnswered(question);
+
+            public object GetAnswerSupportedInExpressions(Identity question) => this.actualState.GetAnswerSupportedInExpressions(question);
+
+            public Tuple<decimal, string>[] GetTextListAnswer(Identity question) => this.actualState.GetTextListAnswer(question);
+
+            public ReadOnlyCollection<decimal> GetRosterInstanceIds(Guid groupId, RosterVector outerRosterVector)
+            {
+                return this.getRosterInstanceIds != null
+                    ? this.getRosterInstanceIds(groupId, outerRosterVector).ToReadOnlyCollection()
+                    : this.actualState.GetRosterInstanceIds(groupId, outerRosterVector);
+            }
+
+            public IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedToQuestionSingleOptionAnswers(IQuestionnaire questionnaire) => this.actualState.GetAllLinkedToQuestionSingleOptionAnswers(questionnaire);
+            public IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedMultipleOptionsAnswers(IQuestionnaire questionnaire) => this.actualState.GetAllLinkedMultipleOptionsAnswers(questionnaire);
+            public IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedToRosterSingleOptionAnswers(IQuestionnaire questionnaire)=> this.actualState.GetAllLinkedToRosterSingleOptionAnswers(questionnaire);
+            public IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedToRosterMultipleOptionsAnswers(IQuestionnaire questionnaire)=>this.actualState.GetAllLinkedToRosterMultipleOptionsAnswers(questionnaire);
         }
 
-        public Dictionary<string, object> AnswersSupportedInExpressions { set; get; }
-        public Dictionary<string, Tuple<Guid, decimal[], decimal[]>> LinkedSingleOptionAnswersBuggy { set; get; }
-        public Dictionary<string, Tuple<Guid, decimal[], decimal[][]>> LinkedMultipleOptionsAnswers { set; get; }
-        public Dictionary<string, Tuple<decimal, string>[]> TextListAnswers { set; get; }
-        public HashSet<string> AnsweredQuestions { set; get; }
-        public HashSet<string> DisabledGroups { set; get; }
-        public HashSet<string> DisabledQuestions { set; get; }
-        public Dictionary<string, DistinctDecimalList> RosterGroupInstanceIds { set; get; }
-        public HashSet<string> ValidAnsweredQuestions { set; get; }
-        public HashSet<string> InvalidAnsweredQuestions { set; get; }
-        public List<AnswerComment> AnswerComments { get; set; }
+
+        public InterviewStateDependentOnAnswers()
+        {
+            this.AnswersSupportedInExpressions = new ConcurrentDictionary<string, object>();
+            this.LinkedSingleOptionAnswersBuggy = new ConcurrentDictionary<string, Tuple<Identity, RosterVector>>();
+            this.LinkedMultipleOptionsAnswers = new ConcurrentDictionary<string, Tuple<Identity, RosterVector[]>>();
+            this.LinkedQuestionOptions=new ConcurrentDictionary<Identity, RosterVector[]>();
+            this.TextListAnswers = new ConcurrentDictionary<string, Tuple<decimal, string>[]>();
+
+            this.AnsweredQuestions = new ConcurrentHashSet<string>();
+            this.DisabledGroups = new ConcurrentHashSet<string>();
+            this.DisabledQuestions = new ConcurrentHashSet<string>();
+            this.RosterGroupInstanceIds = new ConcurrentDictionary<string, ConcurrentDistinctList<decimal>>();
+            this.ValidAnsweredQuestions = new ConcurrentHashSet<string>();
+            this.InvalidAnsweredQuestions = new ConcurrentHashSet<string>();
+            this.AnswerComments = new ConcurrentBag<AnswerComment>();
+            this.RosterTitles = new ConcurrentDictionary<string, string>();
+        }
+
+        public ConcurrentDictionary<string, object> AnswersSupportedInExpressions { set; get; }
+        public ConcurrentDictionary<string, Tuple<Identity, RosterVector>> LinkedSingleOptionAnswersBuggy { set; get; }
+        public ConcurrentDictionary<string, Tuple<Identity, RosterVector[]>> LinkedMultipleOptionsAnswers { set; get; }
+        public ConcurrentDictionary<Identity, RosterVector[]> LinkedQuestionOptions { set; get; }
+        public ConcurrentDictionary<string, Tuple<decimal, string>[]> TextListAnswers { set; get; }
+        public ConcurrentHashSet<string> AnsweredQuestions { set; get; }
+        public ConcurrentHashSet<string> DisabledGroups { set; get; }
+        public ConcurrentHashSet<string> DisabledQuestions { set; get; }
+        public ConcurrentDictionary<string, ConcurrentDistinctList<decimal>> RosterGroupInstanceIds { set; get; }
+        public ConcurrentDictionary<string, string> RosterTitles { set; get; }
+        public ConcurrentHashSet<string> ValidAnsweredQuestions { set; get; }
+        public ConcurrentHashSet<string> InvalidAnsweredQuestions { set; get; }
+        public ConcurrentBag<AnswerComment> AnswerComments { get; set; }
+
+        public InterviewStateDependentOnAnswers Clone()
+        {
+            return new InterviewStateDependentOnAnswers()
+            {
+                AnswersSupportedInExpressions = this.AnswersSupportedInExpressions.ToConcurrentDictionary(x=>x.Key,x=>x.Value),
+                LinkedSingleOptionAnswersBuggy = this.LinkedSingleOptionAnswersBuggy.ToConcurrentDictionary(x => x.Key, x =>new Tuple<Identity, RosterVector>(x.Value.Item1, x.Value.Item2)),
+                LinkedMultipleOptionsAnswers = this.LinkedMultipleOptionsAnswers.ToConcurrentDictionary(x => x.Key, x => new Tuple<Identity, RosterVector[]>(x.Value.Item1, x.Value.Item2.ToArray())),
+                LinkedQuestionOptions = this.LinkedQuestionOptions.ToConcurrentDictionary(x => x.Key, x => x.Value.ToArray()),
+                TextListAnswers = this.TextListAnswers.ToConcurrentDictionary(x => x.Key, x => x.Value.Select(l=> new Tuple<decimal, string>(l.Item1, l.Item2)).ToArray()),
+
+                AnsweredQuestions = new ConcurrentHashSet<string>(this.AnsweredQuestions),
+                DisabledGroups = new ConcurrentHashSet<string>(this.DisabledGroups),
+                DisabledQuestions = new ConcurrentHashSet<string>(this.DisabledQuestions),
+                RosterGroupInstanceIds = this.RosterGroupInstanceIds.ToConcurrentDictionary(x => x.Key, x => new ConcurrentDistinctList<decimal>(x.Value)),
+                ValidAnsweredQuestions = new ConcurrentHashSet<string>(this.ValidAnsweredQuestions),
+                InvalidAnsweredQuestions = new ConcurrentHashSet<string>(this.InvalidAnsweredQuestions),
+                AnswerComments = new ConcurrentBag<AnswerComment>(this.AnswerComments),
+                RosterTitles = this.RosterTitles.ToConcurrentDictionary(x => x.Key, x => x.Value)
+            };
+        }
 
         public void ApplyInterviewChanges(InterviewChanges changes)
         {
@@ -43,7 +110,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (changes.ValidityChanges != null)
             {
-                this.DeclareAnswersInvalid(Events.Interview.Dtos.Identity.ToEventIdentities(changes.ValidityChanges.AnswersDeclaredInvalid));
+                this.DeclareAnswersInvalid(changes.ValidityChanges.AnswersDeclaredInvalid);
             }
 
             if (changes.RosterCalculationData != null)
@@ -53,7 +120,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (changes.AnswersForLinkedQuestionsToRemove != null)
             {
-                this.RemoveAnswers(Events.Interview.Dtos.Identity.ToEventIdentities(changes.AnswersForLinkedQuestionsToRemove));
+                this.RemoveAnswers(changes.AnswersForLinkedQuestionsToRemove);
+            }
+
+            if (changes.RosterInstancesWithAffectedTitles != null)
+            {
+                this.ChangeRosterTitles(
+                    changes.RosterInstancesWithAffectedTitles.Select(
+                        r =>
+                            new ChangedRosterInstanceTitleDto(
+                                new RosterInstance(r.GroupId, r.OuterRosterVector, r.RosterInstanceId),
+                                changes.AnswerAsRosterTitle)).ToArray());
+            }
+            if (changes.LinkedQuestionOptionsChanges != null)
+            {
+                ApplyLinkedOptionQuestionChanges(changes.LinkedQuestionOptionsChanges);
             }
         }
 
@@ -67,6 +148,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     .ToArray();
 
                 this.AddRosterInstances(instances);
+
+                var changedRosterTitles =
+                    rosterCalculationData.RosterInstancesToAdd.Select(
+                        i =>
+                            new ChangedRosterInstanceTitleDto(
+                                new RosterInstance(i.GroupId, i.OuterRosterVector, i.RosterInstanceId),
+                                rosterCalculationData.GetRosterInstanceTitle(i.GroupId, i.RosterInstanceId))).ToArray();
+
+                ChangeRosterTitles(changedRosterTitles);
             }
 
             if (rosterCalculationData.RosterInstancesToRemove.Any())
@@ -81,18 +171,39 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (rosterCalculationData.AnswersToRemoveByDecreasedRosterSize.Any())
             {
-                this.RemoveAnswers(Events.Interview.Dtos.Identity.ToEventIdentities(rosterCalculationData.AnswersToRemoveByDecreasedRosterSize));
+                this.RemoveAnswers(rosterCalculationData.AnswersToRemoveByDecreasedRosterSize);
             }
-
             rosterCalculationData.RosterInstantiatesFromNestedLevels.ForEach(this.ApplyRosterData);
+        }
+
+        public void ApplyLinkedOptionQuestionChanges(ChangedLinkedOptions[] linkedQuestionOptionsChanges)
+        {
+            foreach (var linkedQuestionOptionsChange in linkedQuestionOptionsChanges)
+            {
+                var newLinkedQuestionOptions = linkedQuestionOptionsChange.Options.ToArray();
+
+                this.LinkedQuestionOptions.AddOrUpdate(linkedQuestionOptionsChange.QuestionId, linkedQuestionOptionsChange.Options.ToArray(), (k, v) => newLinkedQuestionOptions);
+            }
         }
 
         public void ApplyEnablementChanges(EnablementChanges enablementChanges)
         {
-            this.EnableGroups(Events.Interview.Dtos.Identity.ToEventIdentities(enablementChanges.GroupsToBeEnabled));
-            this.DisableGroups(Events.Interview.Dtos.Identity.ToEventIdentities(enablementChanges.GroupsToBeDisabled));
-            this.EnableQuestions(Events.Interview.Dtos.Identity.ToEventIdentities(enablementChanges.QuestionsToBeEnabled));
-            this.DisableQuestions(Events.Interview.Dtos.Identity.ToEventIdentities(enablementChanges.QuestionsToBeDisabled));
+            this.EnableGroups(enablementChanges.GroupsToBeEnabled);
+            this.DisableGroups(enablementChanges.GroupsToBeDisabled);
+            this.EnableQuestions(enablementChanges.QuestionsToBeEnabled);
+            this.DisableQuestions(enablementChanges.QuestionsToBeDisabled);
+        }
+
+        public void ChangeRosterTitles(ChangedRosterInstanceTitleDto[] changedInstances)
+        {
+            foreach (var changedInstance in changedInstances)
+            {
+                string rosterGroupKey =
+                    ConversionHelper.ConvertIdAndRosterVectorToString(changedInstance.RosterInstance.GroupId,
+                        changedInstance.RosterInstance.GetIdentity().RosterVector);
+
+                this.RosterTitles[rosterGroupKey] = changedInstance.Title;
+            }
         }
 
         public void AddRosterInstances(AddedRosterInstance[] instances)
@@ -100,13 +211,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var instance in instances)
             {
                 string rosterGroupKey = ConversionHelper.ConvertIdAndRosterVectorToString(instance.GroupId, instance.OuterRosterVector);
-                DistinctDecimalList rosterRowInstances = RosterGroupInstanceIds.ContainsKey(rosterGroupKey)
-                    ? RosterGroupInstanceIds[rosterGroupKey]
-                    : new DistinctDecimalList();
+                var rosterRowInstances = this.RosterGroupInstanceIds.ContainsKey(rosterGroupKey)
+                    ? this.RosterGroupInstanceIds[rosterGroupKey]
+                    : new ConcurrentDistinctList<decimal>();
 
                 rosterRowInstances.Add(instance.RosterInstanceId);
 
-                RosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
+                this.RosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
             }
         }
 
@@ -116,73 +227,73 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 string rosterGroupKey = ConversionHelper.ConvertIdAndRosterVectorToString(instance.GroupId, instance.OuterRosterVector);
 
-                var rosterRowInstances = RosterGroupInstanceIds.ContainsKey(rosterGroupKey)
-                    ? RosterGroupInstanceIds[rosterGroupKey]
-                    : new DistinctDecimalList();
+                var rosterRowInstances = this.RosterGroupInstanceIds.ContainsKey(rosterGroupKey)
+                    ? this.RosterGroupInstanceIds[rosterGroupKey]
+                    : new ConcurrentDistinctList<decimal>();
                 rosterRowInstances.Remove(instance.RosterInstanceId);
 
-                RosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
+                this.RosterGroupInstanceIds[rosterGroupKey] = rosterRowInstances;
             }
         }
 
-        public void EnableQuestions(IEnumerable<Events.Interview.Dtos.Identity> groups)
+        public void EnableQuestions(IEnumerable<Identity> groups)
         {
-            foreach (string questionKey in groups.Select(ConvertEventIdentityToString))
+            foreach (string questionKey in groups.Select(ConversionHelper.ConvertIdentityToString))
             {
-                DisabledQuestions.Remove(questionKey);
+                this.DisabledQuestions.Remove(questionKey);
             }
         }
 
-        public void DisableQuestions(IEnumerable<Events.Interview.Dtos.Identity> groups)
+        public void DisableQuestions(IEnumerable<Identity> groups)
         {
-            foreach (string questionKey in groups.Select(ConvertEventIdentityToString))
+            foreach (string questionKey in groups.Select(ConversionHelper.ConvertIdentityToString))
             {
-                DisabledQuestions.Add(questionKey);
+                this.DisabledQuestions.Add(questionKey);
             }
         }
 
-        public void EnableGroups(IEnumerable<Events.Interview.Dtos.Identity> groups)
+        public void EnableGroups(IEnumerable<Identity> groups)
         {
-            foreach (string groupKey in groups.Select(ConvertEventIdentityToString))
+            foreach (string groupKey in groups.Select(ConversionHelper.ConvertIdentityToString))
             {
-                DisabledGroups.Remove(groupKey);
+                this.DisabledGroups.Remove(groupKey);
             }
         }
 
-        public void DisableGroups(IEnumerable<Events.Interview.Dtos.Identity> groups)
+        public void DisableGroups(IEnumerable<Identity> groups)
         {
-            foreach (string groupKey in groups.Select(ConvertEventIdentityToString))
+            foreach (string groupKey in groups.Select(ConversionHelper.ConvertIdentityToString))
             {
                 this.DisabledGroups.Add(groupKey);
             }
         }
 
-        public void DeclareAnswersInvalid(IEnumerable<Events.Interview.Dtos.Identity> questions)
+        public void DeclareAnswersInvalid(IEnumerable<Identity> questions)
         {
-            foreach (string questionKey in questions.Select(ConvertEventIdentityToString))
+            foreach (string questionKey in questions.Select(ConversionHelper.ConvertIdentityToString))
             {
                 this.ValidAnsweredQuestions.Remove(questionKey);
                 this.InvalidAnsweredQuestions.Add(questionKey);
             }
         }
 
-        public void DeclareAnswersValid(IEnumerable<Events.Interview.Dtos.Identity> questions)
+        public void DeclareAnswersValid(IEnumerable<Identity> questions)
         {
-            foreach (string questionKey in questions.Select(ConvertEventIdentityToString))
+            foreach (string questionKey in questions.Select(ConversionHelper.ConvertIdentityToString))
             {
                 this.ValidAnsweredQuestions.Add(questionKey);
                 this.InvalidAnsweredQuestions.Remove(questionKey);
             }
         }
         
-        public void RemoveAnswers(IEnumerable<Events.Interview.Dtos.Identity> questions)
+        public void RemoveAnswers(IEnumerable<Identity> questions)
         {
-            foreach (string questionKey in questions.Select(ConvertEventIdentityToString))
+            foreach (string questionKey in questions.Select(ConversionHelper.ConvertIdentityToString))
             {
-                this.AnswersSupportedInExpressions.Remove(questionKey);
-                this.LinkedSingleOptionAnswersBuggy.Remove(questionKey);
-                this.LinkedMultipleOptionsAnswers.Remove(questionKey);
-                this.TextListAnswers.Remove(questionKey);
+                this.AnswersSupportedInExpressions.TryRemove(questionKey);
+                this.LinkedSingleOptionAnswersBuggy.TryRemove(questionKey);
+                this.LinkedMultipleOptionsAnswers.TryRemove(questionKey);
+                this.TextListAnswers.TryRemove(questionKey);
                 this.AnsweredQuestions.Remove(questionKey);
                 this.DisabledQuestions.Remove(questionKey);
                 this.ValidAnsweredQuestions.Remove(questionKey);
@@ -190,14 +301,95 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        /// <remarks>
-        /// The opposite operation (get id or vector from string) should never be performed!
-        /// This is one-way transformation. Opposite operation is too slow.
-        /// If you need to compactify data and get it back, you should use another datatype, not a string.
-        /// </remarks>
-        private static string ConvertEventIdentityToString(Events.Interview.Dtos.Identity identity)
+
+        public IReadOnlyInterviewStateDependentOnAnswers Amend(Func<Guid, RosterVector, IEnumerable<decimal>> getRosterInstanceIds)
         {
-            return ConversionHelper.ConvertIdAndRosterVectorToString(identity.Id, identity.RosterVector);
+            return new AmendingWrapper(this, getRosterInstanceIds);
+        }
+
+
+        public bool IsGroupDisabled(Identity group)
+        {
+            string groupKey = ConversionHelper.ConvertIdentityToString(group);
+
+            return this.DisabledGroups.Contains(groupKey);
+        }
+
+        public bool IsQuestionDisabled(Identity question)
+        {
+            string questionKey = ConversionHelper.ConvertIdentityToString(question);
+
+            return this.DisabledQuestions.Contains(questionKey);
+        }
+
+        public bool WasQuestionAnswered(Identity question)
+        {
+            string questionKey = ConversionHelper.ConvertIdentityToString(question);
+
+            return this.AnsweredQuestions.Contains(questionKey);
+        }
+
+        public object GetAnswerSupportedInExpressions(Identity question)
+        {
+            string questionKey = ConversionHelper.ConvertIdentityToString(question);
+
+            return this.AnswersSupportedInExpressions.ContainsKey(questionKey)
+                ? this.AnswersSupportedInExpressions[questionKey]
+                : null;
+        }
+
+        public Tuple<decimal, string>[] GetTextListAnswer(Identity question)
+        {
+            string questionKey = ConversionHelper.ConvertIdentityToString(question);
+
+            return this.TextListAnswers.ContainsKey(questionKey)
+                ? this.TextListAnswers[questionKey]
+                : null;
+        }
+
+        public ReadOnlyCollection<decimal> GetRosterInstanceIds(Guid groupId, RosterVector outerRosterVector)
+        {
+            string groupKey = ConversionHelper.ConvertIdAndRosterVectorToString(groupId, outerRosterVector);
+
+            return this.RosterGroupInstanceIds.ContainsKey(groupKey)
+                ? this.RosterGroupInstanceIds[groupKey].ToReadOnlyCollection()
+                : Enumerable.Empty<decimal>().ToReadOnlyCollection();
+        }
+
+        public string GetRosterTitle(Guid rosterId, RosterVector rosterVector)
+        {
+            string groupKey = ConversionHelper.ConvertIdAndRosterVectorToString(rosterId, rosterVector);
+
+            return this.RosterTitles.ContainsKey(groupKey)
+                ? this.RosterTitles[groupKey]
+                : null;
+        }
+
+        public IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedToQuestionSingleOptionAnswers(IQuestionnaire questionnaire)
+        {
+            // we currently have a bug that after restore linked single option answers list is filled with not linked answers after sync
+            return this.LinkedSingleOptionAnswersBuggy.Values.Where(answer => questionnaire.IsQuestionLinked(answer.Item1.Id) && !questionnaire.IsQuestionLinkedToRoster(answer.Item1.Id));
+        }
+
+        public IEnumerable<Tuple<Identity, RosterVector>> GetAllLinkedToRosterSingleOptionAnswers(
+            IQuestionnaire questionnaire)
+        {
+            return this.LinkedSingleOptionAnswersBuggy.Values.Where(answer => questionnaire.IsQuestionLinkedToRoster(answer.Item1.Id));
+        }
+
+        public IEnumerable<Tuple<Identity, RosterVector>> GetAllAnswersOnSingleOptionLinkedQuestions(IQuestionnaire questionnaire)
+        {
+            return this.LinkedSingleOptionAnswersBuggy.Values.Where(answer => questionnaire.IsQuestionLinked(answer.Item1.Id) || questionnaire.IsQuestionLinkedToRoster(answer.Item1.Id));
+        }
+
+        public IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedMultipleOptionsAnswers(IQuestionnaire questionnaire)
+        {
+            return this.LinkedMultipleOptionsAnswers.Values.Where(answer => !questionnaire.IsQuestionLinkedToRoster(answer.Item1.Id));
+        }
+
+        public IEnumerable<Tuple<Identity, RosterVector[]>> GetAllLinkedToRosterMultipleOptionsAnswers(IQuestionnaire questionnaire)
+        {
+            return this.LinkedMultipleOptionsAnswers.Values.Where(answer => questionnaire.IsQuestionLinkedToRoster(answer.Item1.Id));
         }
     }
 }

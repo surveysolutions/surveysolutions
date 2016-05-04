@@ -42,6 +42,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
                         cmp.Property(x => x.StatusChangeOriginatorId);
                         cmp.Property(x => x.Timestamp);
                         cmp.Property(x => x.StatusChangeOriginatorName);
+                        cmp.Property(x => x.StatusChangeOriginatorRole);
                         cmp.Property(x => x.Status);
                         cmp.Property(x => x.Comment);
                         cmp.Property(x => x.TimeSpanWithPreviousStatus);

@@ -2,20 +2,18 @@
 using System.Linq;
 using System.Reflection;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.Core.SharedKernels.DataCollection.V2;
+using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.V7;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
 {
     internal class InterviewExpressionStatePrototypeProvider : IInterviewExpressionStatePrototypeProvider
     {
-        private static ILogger Logger
-        {
-            get { return ServiceLocator.Current.GetInstance<ILogger>(); }
-        }
+        private static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<InterviewExpressionStatePrototypeProvider>();
 
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -31,13 +29,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
             this.interviewExpressionStateUpgrader = interviewExpressionStateUpgrader;
         }
 
-        public IInterviewExpressionStateV2 GetExpressionState(Guid questionnaireId, long questionnaireVersion)
+        public IInterviewExpressionStateV7 GetExpressionState(Guid questionnaireId, long questionnaireVersion)
         {
             string assemblyFile = this.questionnaireAssemblyFileAccessor.GetFullPathToAssembly(questionnaireId, questionnaireVersion);
 
             if (!fileSystemAccessor.IsFileExists(assemblyFile))
             {
-                Logger.Fatal(String.Format("Assembly was not found. Questionnaire={0}, version={1}, search={2}", 
+                Logger.Error(String.Format("Assembly was not found. Questionnaire={0}, version={1}, search={2}", 
                     questionnaireId, questionnaireVersion, assemblyFile));
                 throw new InterviewException("Interview loading error. Code EC0003");
             }
@@ -60,22 +58,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
                     var initialExpressionState =
                         Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState;
 
-                    IInterviewExpressionStateV2 upgradedExpressionState =
+                    IInterviewExpressionStateV7 upgradedExpressionState =
                         interviewExpressionStateUpgrader.UpgradeToLatestVersionIfNeeded(initialExpressionState);
 
                     return upgradedExpressionState;
                 }
                 catch (Exception e)
                 {
-                    Logger.Fatal("Error on activating interview expression state. Cannot cast to created object to IInterviewExpressionState", e);
+                    Logger.Error("Error on activating interview expression state. Cannot cast to created object to IInterviewExpressionState", e);
                     return null;
                 }
             }
             catch (Exception exception)
             {
-                Logger.Fatal(String.Format("Error on assembly loading for id={0} version={1}", questionnaireId, questionnaireVersion), exception);
+                Logger.Error(String.Format("Error on assembly loading for id={0} version={1}", questionnaireId, questionnaireVersion), exception);
                 if (exception.InnerException != null)
-                    Logger.Fatal("Error on assembly loading (inner)", exception.InnerException);
+                    Logger.Error("Error on assembly loading (inner)", exception.InnerException);
 
                 //hide original one
                 throw new InterviewException("Interview loading error. Code EC0001");

@@ -123,16 +123,145 @@
   <data name="AdvancedModeDescription" xml:space="preserve">
     <value>In order to pre-load data to more sections and variables, you can prepare a set of .tab files that correspond to the structure of your questionnaire and put in a .zip archive . Please use the template archive below. You can put only those files and columns that you wish to upload. Any columns left missing or with titles not corresponding to an existing variable in the questionnaire will be ignored.</value>
   </data>
+  <data name="All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="BrowseTeams" xml:space="preserve">
+    <value>Browse teams</value>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="CreateUsers" xml:space="preserve">
+    <value>Create users</value>
+  </data>
+  <data name="CreatingUsers" xml:space="preserve">
+    <value>Creating users</value>
+  </data>
+  <data name="DataIsValid" xml:space="preserve">
+    <value>Data is valid</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
   <data name="DownloadTemplateArchive" xml:space="preserve">
     <value>download template archive</value>
   </data>
+  <data name="FileName" xml:space="preserve">
+    <value>File name</value>
+  </data>
+  <data name="FileSize" xml:space="preserve">
+    <value>File size</value>
+  </data>
+  <data name="Finished" xml:space="preserve">
+    <value>Finished</value>
+  </data>
+  <data name="FinishedWithError" xml:space="preserve">
+    <value>Finished with error</value>
+  </data>
+  <data name="FinishedWithErrorMessage" xml:space="preserve">
+    <value>Finished with error, Reason:</value>
+  </data>
+  <data name="InVerificationProcess" xml:space="preserve">
+    <value>is in verification process, verified</value>
+  </data>
+  <data name="IsInvalid" xml:space="preserve">
+    <value>is invalid. Please fix error(s) below and upload again.</value>
+  </data>
+  <data name="LastUpdateDate" xml:space="preserve">
+    <value>Last update date</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="OutOf" xml:space="preserve">
+    <value>out of</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>Please wait, the file</value>
+  </data>
+  <data name="ReadyForUserCreation" xml:space="preserve">
+    <value>Ready for user creation</value>
+  </data>
+  <data name="ReadyForValidation" xml:space="preserve">
+    <value>Ready for validation</value>
+  </data>
+  <data name="RecordsCount" xml:space="preserve">
+    <value>Records count</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
   <data name="Upload" xml:space="preserve">
     <value>Upload</value>
+  </data>
+  <data name="UploadDate" xml:space="preserve">
+    <value>Upload date</value>
+  </data>
+  <data name="Uploaded" xml:space="preserve">
+    <value>Uploaded</value>
+  </data>
+  <data name="UploadNewFile" xml:space="preserve">
+    <value>Upload a new file</value>
   </data>
   <data name="UploadSample" xml:space="preserve">
     <value>Upload sample</value>
   </data>
   <data name="UploadSampleDescription" xml:space="preserve">
-    <value>To upload the sample to be interviewed, please prepare a file with tab-separated values (.tab file) corresponding to the template below, containing values of those variables from your questionnaire that were marked as pre-filled.</value>
+    <value>To upload the sample to be interviewed, please prepare a file (size up to 300MB) with tab-separated values (.tab file) corresponding to the template below, containing values of those variables from your questionnaire that were marked as pre-filled.</value>
+  </data>
+  <data name="UploadUsers" xml:space="preserve">
+    <value>Batch User Upload</value>
+  </data>
+  <data name="UploadUsersDescription" xml:space="preserve">
+    <value>Prepare a file with tab-separated values (.tab file) corresponding to a template below. Columns marked with (*) are required. Only 'Supervisor' or 'Interviewer' values are allowed in the 'role' column.</value>
+  </data>
+  <data name="UserBatchUploads" xml:space="preserve">
+    <value>Batch User Upload</value>
+  </data>
+  <data name="UsersHaveBeenCreated" xml:space="preserve">
+    <value>user(s) have been created</value>
+  </data>
+  <data name="Validated" xml:space="preserve">
+    <value>Validated</value>
+  </data>
+  <data name="Validating" xml:space="preserve">
+    <value>Validating</value>
+  </data>
+  <data name="ValidationFinishedWithError" xml:space="preserve">
+    <value>Validated</value>
+  </data>
+  <data name="Verify" xml:space="preserve">
+    <value>Verify</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteFormat" xml:space="preserve">
+    <value>Are you sure you want to delete file</value>
+  </data>
+  <data name="UserPreloadingProcessIsMissing" xml:space="preserve">
+    <value>User preloading process is missing</value>
+  </data>
+  <data name="UploadUsers_Title" xml:space="preserve">
+    <value>List of files with preloaded users</value>
+  </data>
+  <data name="RefreshActionOnUserUpload" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="BatchUpload_Title" xml:space="preserve">
+    <value>Batch upload</value>
+  </data>
+  <data name="PrefilledQuestionsRequired" xml:space="preserve">
+    <value>File does not contain required column(s) by prefilled questions: &lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;</value>
+  </data>
+  <data name="ImportInterviews_ChooseFile" xml:space="preserve">
+    <value>You must choose a file to upload</value>
+  </data>
+  <data name="ImportInterviews_SelectSupervisor" xml:space="preserve">
+    <value>Select supervisor</value>
+  </data>
+  <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
+    <value>Select</value>
   </data>
 </root>

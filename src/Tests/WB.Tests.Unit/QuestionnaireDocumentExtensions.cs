@@ -8,7 +8,7 @@ using Main.Core.Entities.SubEntities.Question;
 
 namespace WB.Tests.Unit
 {
-    public static class QuestionnaireDocumentExtensions
+    internal static class QuestionnaireDocumentExtensions
     {
         public static IGroup GetGroup(this QuestionnaireDocument questionnaireDocument, Guid groupId)
         {
@@ -37,17 +37,6 @@ namespace WB.Tests.Unit
                 {
                     PublicKey = groupId
                 };
-            document.Children.Add(@group);
-            return group;
-        }
-
-        public static Group AddGroup(this Group document, Guid groupId, Propagate propagationKind = Propagate.None)
-        {
-            var group = new Group(string.Format("Group {0}", groupId))
-            {
-                PublicKey = groupId,
-                Propagated = propagationKind
-            };
             document.Children.Add(@group);
             return group;
         }

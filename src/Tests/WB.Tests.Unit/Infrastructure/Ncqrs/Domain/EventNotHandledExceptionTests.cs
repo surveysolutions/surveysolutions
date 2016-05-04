@@ -2,7 +2,6 @@
 using FluentAssertions;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using Ncqrs.Config;
 using Ncqrs.Domain;
 using NUnit.Framework;
 using Ncqrs.Eventing;
@@ -11,17 +10,19 @@ using WB.Tests.Unit;
 namespace Ncqrs.Tests.Domain
 {
     [TestFixture]
-    public class EventNotHandledExceptionTests
+    internal class EventNotHandledExceptionTests
     {
         [SetUp]
         public void SetUp()
         {
             AssemblyContext.SetupServiceLocator();
-            NcqrsEnvironment.InitDefaults();
         }
 
-        public class FooEvent : Event
-        {}
+        public class FooEvent : IEvent
+        {
+            public Guid EventIdentifier { get; }
+            public DateTime EventTimeStamp { get; }
+        }
 
         [Test]
         public void Constructing_an_instance_should_initialize_the_message()

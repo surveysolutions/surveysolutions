@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -19,7 +20,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     {
         private Establish context = () =>
         {
-            interviewId = Guid.Parse("11111111111111111111111111111111");
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -29,25 +29,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             answersToFeaturedQuestions.Add(prefilledQuestionId, prefilledQuestionAnswer);
             answersTime = new DateTime(2013, 09, 01);
 
-            var questionaire = Mock.Of<IQuestionnaire>(_
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.GetQuestionType(prefilledQuestionId) == QuestionType.Text
                 && _.HasQuestion(prefilledQuestionId) == true);
 
-            var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
-                => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
-
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
-            SetupInstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(
-                CreateInterviewExpressionStateProviderStub());
-
             eventContext = new EventContext();
+
+            interview = Create.Interview(questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>
-            new Interview(interviewId, userId, questionnaireId, 1, answersToFeaturedQuestions, answersTime, supervisorId);
+            interview.CreateInterview(questionnaireId, 1, supervisorId, answersToFeaturedQuestions, answersTime, userId);
 
         Cleanup stuff = () =>
         {
@@ -64,7 +56,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         
 
         private static EventContext eventContext;
-        private static Guid interviewId;
         private static Guid userId;
         private static Guid questionnaireId;
         private static Dictionary<Guid, object> answersToFeaturedQuestions;
@@ -72,6 +63,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid supervisorId;
         private static Guid prefilledQuestionId;
         private static string prefilledQuestionAnswer;
-
+        private static Interview interview;
     }
 }

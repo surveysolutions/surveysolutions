@@ -1,22 +1,33 @@
-﻿Supervisor.VM.SurveysAndStatuses = function(listViewUrl) {
+﻿Supervisor.VM.SurveysAndStatuses = function (listViewUrl, responsiblesUrl) {
     Supervisor.VM.SurveysAndStatuses.superclass.constructor.apply(this, arguments);
 
     var self = this;
     self.Url = new Url(window.location.href);
-
-    self.SelectedUser = ko.observable('');
+    self.IsResponsiblesLoading = ko.observable(false);
+    self.ResponsiblesUrl = responsiblesUrl;
+    self.Responsibles = function (query, sync, pageSize) {
+        self.IsResponsiblesLoading(true);
+        self.SendRequest(self.ResponsiblesUrl, { query: query, pageSize: pageSize }, function (response) {
+            sync(response.Users, response.TotalCountByQuery);
+        }, true, true, function() {
+            self.IsResponsiblesLoading(false);
+        });
+    }
+    self.SelectedResponsible = ko.observable();
 
     self.GetFilterMethod = function() {
-        self.Url.query['interviewerId'] = self.SelectedUser() || "";
+        self.Url.query['responsible'] = _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserName;
         if (Modernizr.history) {
-            window.history.pushState({}, "interviewerId", self.Url.toString());
+            window.history.pushState({}, "responsible", self.Url.toString());
         }
 
-        return { UserId: self.SelectedUser() };
+        return { ResponsibleName: self.Url.query['responsible'] };
     };
     self.load = function() {
-        self.SelectedUser(self.QueryString['interviewerId']);
-        self.SelectedUser.subscribe(self.filter);
+        if (self.QueryString['responsible']) {
+            self.SelectedResponsible({ UserName: self.QueryString['responsible'] });
+        }
+        self.SelectedResponsible.subscribe(self.filter);
         self.search();
     };
 };

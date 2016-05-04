@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
-using WB.Core.Synchronization;
+using WB.Infrastructure.Native.Storage.EventStore;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Settings;
@@ -22,18 +24,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly IServiceLocator serviceLocator;
         private readonly IBrokenSyncPackagesStorage brokenSyncPackagesStorage;
         private readonly ISettingsProvider settingsProvider;
+        private readonly ITransactionManagerProvider transactionManagerProvider;
+        private readonly IEventStoreApiService eventStoreApiService;
 
         public ControlPanelController(IServiceLocator serviceLocator,
             IBrokenSyncPackagesStorage brokenSyncPackagesStorage,
             ICommandService commandService, 
             IGlobalInfoProvider globalInfo, 
             ILogger logger,
-            ISettingsProvider settingsProvider)
+            ISettingsProvider settingsProvider, 
+            ITransactionManagerProvider transactionManagerProvider,
+            IEventStoreApiService eventStoreApiService)
             : base(commandService: commandService, globalInfo: globalInfo, logger: logger)
         {
             this.serviceLocator = serviceLocator;
             this.brokenSyncPackagesStorage = brokenSyncPackagesStorage;
             this.settingsProvider = settingsProvider;
+            this.transactionManagerProvider = transactionManagerProvider;
+            this.eventStoreApiService = eventStoreApiService;
         }
 
         private IRevalidateInterviewsAdministrationService RevalidateInterviewsAdministrationService
@@ -41,15 +49,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             get { return this.serviceLocator.GetInstance<IRevalidateInterviewsAdministrationService>(); }
         }
 
-        public ActionResult Index()
-        {
-            return this.View();
-        }
+        public ActionResult Index() => this.View();
 
-        public ActionResult NConfig()
-        {
-            return this.View();
-        }
+        public ActionResult NConfig() => this.View();
+
+        public ActionResult Versions() => this.View();
 
         public ActionResult IncomingDataWithErrors()
         {
@@ -68,10 +72,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [NoTransaction]
-        public ActionResult ReadSide()
-        {
-            return this.View();
-        }
+        public ActionResult ReadSide() => this.View();
 
         public ActionResult RepeatLastInterviewStatus(Guid? interviewId)
         {
@@ -81,7 +82,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             }
             else
             {
-                this.CommandService.Execute(new RepeatLastInterviewStatus(interviewId.Value, "Status set by Survey Solutions support team"));
+                try
+                {
+                    this.CommandService.Execute(new RepeatLastInterviewStatus(interviewId.Value, "Status set by Survey Solutions support team"));
+                }
+                catch (Exception exception)
+                {
+                    Logger.Error(string.Format("Exception while repating last interview status: {0}", interviewId), exception);
+                }
+
                 return this.View(model: string.Format("Successfully repeated status for interview {0}", interviewId.Value.FormatGuid()));
             }
         }
@@ -115,9 +124,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         #endregion
 
-        public ActionResult InterviewDetails()
+        public ActionResult InterviewDetails() => this.View();
+
+        public ActionResult SynchronizationLog() => this.View();
+
+        public ActionResult EventStore() => this.View();
+
+        public async Task<ActionResult> RunScavenge()
         {
-            return this.View();
+            await eventStoreApiService.RunScavengeAsync();
+            object model = "Scavenge has executed at " + DateTime.Now;
+            return this.View("EventStore", model);
         }
     }
 }

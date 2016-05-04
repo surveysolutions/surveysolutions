@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
@@ -13,9 +9,9 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.V2;
+using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.V6;
+using WB.Core.SharedKernels.DataCollection.V7;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using It = Machine.Specifications.It;
 
@@ -51,10 +47,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
             var enablementQueue = new Queue<EnablementChanges>();
             // init .ctor call
             enablementQueue.Enqueue(new EnablementChanges(new List<Identity>(), new List<Identity>(), new List<Identity>(), new List<Identity>()));
@@ -86,27 +78,25 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             //answer on numeric question
             enablementQueue.Enqueue(new EnablementChanges(new List<Identity>(), new List<Identity>(), new List<Identity>(), new List<Identity>()));
 
-            interviewExpressionState = new Mock<IInterviewExpressionStateV2>();
+            interviewExpressionState = new Mock<IInterviewExpressionStateV7>();
             interviewExpressionState.Setup(x => x.ProcessEnablementConditions()).Returns(enablementQueue.Dequeue);
             interviewExpressionState.Setup(x => x.Clone()).Returns(interviewExpressionState.Object);
 
-            SetupInstanceToMockedServiceLocator(
-                Mock.Of<IInterviewExpressionStatePrototypeProvider>(
-                    x =>
-                        x.GetExpressionState(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) ==
-                        interviewExpressionState.Object));
+            var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(_
+                => _.GetExpressionState(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) == interviewExpressionState.Object);
 
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository,
+                expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
 
             interview.SynchronizeInterview(
                 userId,
-                new InterviewSynchronizationDto(interview.EventSourceId, InterviewStatus.InterviewerAssigned, null, userId, questionnaireId,
-                    questionnaire.Version,
-                    new AnsweredQuestionSynchronizationDto[0],
-                    new HashSet<InterviewItemId>(),
-                    new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), null,
-                    new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(),
-                    true));
+                Create.InterviewSynchronizationDto(interviewId: interview.EventSourceId,
+                    status: InterviewStatus.InterviewerAssigned,
+                    userId: userId,
+                    questionnaireId: questionnaireId,
+                    questionnaireVersion: questionnaire.Version,
+                    wasCompleted: true
+                    ));
 
             interview.AnswerMultipleOptionsQuestion(userId, multyOptionRosterSizeId, new decimal[0], DateTime.Now, new decimal[] { 1 });
             interview.AnswerMultipleOptionsQuestion(userId, multyOptionRosterSizeId, new decimal[0], DateTime.Now, new decimal[] { 1, 2 });
@@ -136,6 +126,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid multyOptionRosterSizeId;
         private static Guid numericQuestionInsideRoster;
         private static Guid rosterGroupId;
-        private static Mock<IInterviewExpressionStateV2> interviewExpressionState;
+        private static Mock<IInterviewExpressionStateV7> interviewExpressionState;
     }
 }

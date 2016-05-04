@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
@@ -81,10 +82,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
                 foreach (var questionId in variableNameAndQuestionId)
                 {
-                    if (!newLevel.QuestionsSearchCahche.ContainsKey(questionId.Value))
-                        newLevel.QuestionsSearchCahche.Add(questionId.Value, new InterviewQuestion(questionId.Value));
+                    if (!newLevel.QuestionsSearchCache.ContainsKey(questionId.Value))
+                        newLevel.QuestionsSearchCache.Add(questionId.Value, new InterviewQuestion(questionId.Value));
 
-                    var question = newLevel.QuestionsSearchCahche[questionId.Value];
+                    var question = newLevel.QuestionsSearchCache[questionId.Value];
 
                     question.Answer = "some answer";
                 }

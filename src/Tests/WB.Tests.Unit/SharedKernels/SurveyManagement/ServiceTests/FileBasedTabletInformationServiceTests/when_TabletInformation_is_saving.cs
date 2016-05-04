@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTab
             });
         };
 
-        Because of = () => fileBasedTabletInformationService.SaveTabletInformation(content, androidId, registrationId);
+        Because of = () => fileBasedTabletInformationService.SaveTabletInformation(content, androidId, registrationId, null);
 
         It should_save_content_as_it_is = () => savedContent.ShouldEqual(content);
         It should_save_zip_file = () => savedFileName.ShouldEndWith(".zip");

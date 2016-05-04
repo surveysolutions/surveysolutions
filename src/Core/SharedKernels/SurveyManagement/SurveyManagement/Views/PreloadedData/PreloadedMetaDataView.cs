@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
 {
     public class PreloadedMetaDataView
     {
-        public PreloadedMetaDataView(Guid questionnaireId, long version, PreloadedContentMetaData metaData)
+        public PreloadedMetaDataView(Guid questionnaireId, long version, string questionnaireTitle, PreloadedContentMetaData metaData)
         {
             this.QuestionnaireId = questionnaireId;
             this.Version = version;
             this.MetaData = metaData;
+            this.QuestionnaireTitle = questionnaireTitle;
         }
 
         public Guid QuestionnaireId { get; private set; }
@@ -20,5 +17,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData
         public long Version { get; private set; }
 
         public PreloadedContentMetaData MetaData { get; private set; }
+        public string QuestionnaireTitle { get; set; }
     }
 }

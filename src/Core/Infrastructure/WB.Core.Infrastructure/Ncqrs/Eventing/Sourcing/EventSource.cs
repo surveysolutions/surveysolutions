@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace Ncqrs.Eventing.Sourcing
 {
@@ -13,10 +16,7 @@ namespace Ncqrs.Eventing.Sourcing
         public Guid EventSourceId
         {
             get { return _eventSourceId; }
-            protected set
-            {
-                _eventSourceId = value;
-            }
+            protected set { _eventSourceId = value; }
         }
 
         /// <summary>
@@ -25,13 +25,8 @@ namespace Ncqrs.Eventing.Sourcing
         /// <value>
         /// An <see cref="long"/> representing the current version of this aggregate root.
         /// </value>
-        public int Version
-        {
-            get
-            {
-                return _currentVersion;
-            }
-        }
+        public int Version => this._currentVersion;
+
         [NonSerialized]
         private int _initialVersion;
 
@@ -49,20 +44,11 @@ namespace Ncqrs.Eventing.Sourcing
         /// </para>
         /// </summary>
         /// <value>The initial version.</value>
-        public int InitialVersion
-        {
-            get { return _initialVersion; }            
-        }
+        public int InitialVersion => this._initialVersion;
 
-        /// <summary>
-        /// A list that contains all the event handlers.
-        /// </summary>
         [NonSerialized]
         private readonly List<ISourcedEventHandler> _eventHandlers = new List<ISourcedEventHandler>();
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EventSource"/> class.
-        /// </summary>
         protected EventSource()
         {
             EventSourceId = Guid.NewGuid();
@@ -74,37 +60,43 @@ namespace Ncqrs.Eventing.Sourcing
             EventSourceId = eventSourceId;
         }
 
+        protected virtual bool CanHandleEvent(CommittedEvent committedEvent) => true;
+
         public virtual void InitializeFromSnapshot(Snapshot snapshot)
         {
             _eventSourceId = snapshot.EventSourceId;
             _initialVersion = _currentVersion = snapshot.Version;
         }
 
-        /// <summary>
-        /// Initializes from history.
-        /// </summary>
-        /// <param name="history">The history.</param>
-        public virtual void InitializeFromHistory(CommittedEventStream history)
+        public void InitializeFromHistory(CommittedEventStream history)
         {
             if (history == null)
-                throw new ArgumentNullException("The history cannot be null.");
-                if (_initialVersion != Version)
-            {
-                throw new InvalidOperationException("Cannot apply history when instance has uncommitted changes.");
-            }
-            if (history.IsEmpty)
-            {
-                return;                
-            }
+                throw new ArgumentNullException(nameof(history));
 
-            _eventSourceId = history.SourceId;
+            this.InitializeFromHistory(history.SourceId, history);
+        }
+
+        public void InitializeFromHistory(Guid eventSourceId, IEnumerable<CommittedEvent> history)
+        {
+            if (history == null)
+                throw new ArgumentNullException(nameof(history));
+
+            if (this._initialVersion != this.Version)
+                throw new InvalidOperationException("Cannot apply history when instance has uncommitted changes.");
+
+            this._eventSourceId = eventSourceId;
 
             foreach (var historicalEvent in history)
             {
-                ApplyEventFromHistory(historicalEvent);                
-            }
+                if (!this.CanHandleEvent(historicalEvent))
+                {
+                    this._initialVersion = 0;
+                    return;
+                }
 
-            _initialVersion = history.CurrentSourceVersion;
+                this.ApplyEventFromHistory(historicalEvent);
+                this._initialVersion = historicalEvent.EventSequence;
+            }
         }
 
         public event EventHandler<EventAppliedEventArgs> EventApplied;
@@ -141,7 +133,7 @@ namespace Ncqrs.Eventing.Sourcing
                 throw new EventNotHandledException(evnt);
         }
 
-        internal protected void ApplyEvent(object evnt)
+        internal protected void ApplyEvent(WB.Core.Infrastructure.EventBus.IEvent evnt)
         {
             var eventSequence = GetNextSequence();
             var wrappedEvent = new UncommittedEvent(Guid.NewGuid(), EventSourceId, eventSequence, _initialVersion, DateTime.UtcNow, evnt);
@@ -158,7 +150,6 @@ namespace Ncqrs.Eventing.Sourcing
 
         private int GetNextSequence()
         {
-
             // 628426 31 Feb 2011 - the following absolutely needed to ensure correct sequencing, as incorrect versions were being passed to event store
             // TODO: I don't think this should stay here
             if (_initialVersion > 0 && _currentVersion == 0)
@@ -166,7 +157,7 @@ namespace Ncqrs.Eventing.Sourcing
                 _currentVersion = _initialVersion;
             }
         
-            _currentVersion++;
+            Interlocked.Increment(ref _currentVersion);
             return _currentVersion;
         }
 

@@ -8,7 +8,7 @@ using Moq;
 
 using WB.Core.BoundedContexts.Supervisor.Interviews;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -46,11 +46,13 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                         }
                     }.ToList());
 
-            iInterviewSynchronizationDto = new InterviewSynchronizationDto(Guid.Empty, InterviewStatus.SupervisorAssigned, "",
-                        userId, questionnaireId, 2, new AnsweredQuestionSynchronizationDto[0], new HashSet<InterviewItemId>(),
-                        new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
-                        new Dictionary<InterviewItemId, int>(), new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), true);
-
+            iInterviewSynchronizationDto =
+                Create.InterviewSynchronizationDto(status: InterviewStatus.SupervisorAssigned,
+                    userId: userId,
+                    questionnaireId: questionnaireId,
+                    questionnaireVersion: 2,
+                    wasCompleted: true);
+            
             headquartersInterviewReaderMock.Setup(x => x.GetInterviewByUri(Moq.It.IsAny<Uri>()))
                 .Returns(
                     Task.FromResult(iInterviewSynchronizationDto));
@@ -72,7 +74,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                     x.Execute(
                         Moq.It.Is<SynchronizeInterviewFromHeadquarters>(
                             _ =>
-                                _.Id == interviewId && _.UserId == userId && _.InterviewDto == iInterviewSynchronizationDto), Constants.HeadquartersSynchronizationOrigin, false), Times.Never);
+                                _.Id == interviewId && _.UserId == userId && _.InterviewDto == iInterviewSynchronizationDto), Constants.HeadquartersSynchronizationOrigin), Times.Never);
 
 
 

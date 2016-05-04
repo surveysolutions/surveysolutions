@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -26,14 +24,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => _.Version == questionnaireVersion);
 
-            var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
-                =>
-                repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion) == questionnaire);
+            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
+                => repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion) == questionnaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-            interview = new Interview();
+            interview = Create.Interview(questionnaireRepository: questionnaireRepository);
             interview.Apply(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, ""));
             interview.Apply(new InterviewerAssigned(userId, userId, DateTime.Now));
         };
@@ -64,6 +58,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         private static InterviewException exception;
 
-        private static object[] eventsToPublish = new object[] { new AnswersDeclaredInvalid(new Identity[0]), new GroupsEnabled(new Identity[0]) };
+        private static IEvent[] eventsToPublish = new IEvent[] { new AnswersDeclaredInvalid(new Identity[0]), new GroupsEnabled(new Identity[0]) };
     }
 }

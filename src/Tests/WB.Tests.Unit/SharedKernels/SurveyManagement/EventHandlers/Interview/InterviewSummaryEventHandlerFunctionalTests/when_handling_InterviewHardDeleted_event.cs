@@ -4,7 +4,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewSummaryEventHandlerFunctionalTests
 {
-    internal class when_handling_InterviewHardDeleted_event : InterviewSummaryEventHandlerFunctionalTestsContext
+    internal class when_handling_InterviewHardDeleted_event : InterviewSummaryDenormalizerTestsContext
     {
         Establish context = () =>
         {
@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         It should_updatedModel_be_marked_as_deleted = () =>
             updatedModel.IsDeleted.ShouldEqual(true);
 
-        static InterviewSummaryEventHandlerFunctional denormalizer;
+        static InterviewSummaryDenormalizer denormalizer;
         static InterviewSummary viewModel;
         static InterviewSummary updatedModel;
         static string responsibleId = "11111111111111111111111111111111";

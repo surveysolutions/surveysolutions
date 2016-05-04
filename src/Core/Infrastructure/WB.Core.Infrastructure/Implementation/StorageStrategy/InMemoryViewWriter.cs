@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
@@ -29,6 +30,14 @@ namespace WB.Core.Infrastructure.Implementation.StorageStrategy
         public void Store(TEntity projection, string id)
         {
             this.view = projection;
+        }
+
+        public void BulkStore(List<Tuple<TEntity, string>> bulk)
+        {
+            foreach (var tuple in bulk)
+            {
+                Store(tuple.Item1, tuple.Item2);
+            }
         }
 
         public void Remove(string id)

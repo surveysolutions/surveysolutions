@@ -36,11 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             interview.Apply(new TextListQuestionAnswered(userId, textListQuestionId, new decimal[] { }, DateTime.Now, previousAnswer));
             interview.Apply(Create.Event.RosterInstancesAdded(rosterAId, emptyRosterVector, 1, sortIndex: null));
             interview.Apply(Create.Event.RosterInstancesAdded(rosterAId, emptyRosterVector, 2, sortIndex: null));

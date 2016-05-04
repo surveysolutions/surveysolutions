@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -22,22 +23,21 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     {
         Establish context = () =>
         {
-            interviewId = Guid.Parse("11111111111111111111111111111111");
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             prefilledQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             rosterGroupId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCD");
             prefilledQuestionAnswer = new decimal[] {1, 2};
-            preloadedDataDto = new PreloadedDataDto("id",
+            preloadedDataDto = new PreloadedDataDto(
                 new[]
                 {
                     new PreloadedLevelDto(new decimal[0], new Dictionary<Guid, object> { { prefilledQuestionId, prefilledQuestionAnswer } }),
                 });
             answersTime = new DateTime(2013, 09, 01);
 
-            var questionaire = Mock.Of<IQuestionnaire>(_
-                => _.GetQuestionType(prefilledQuestionId) == QuestionType.MultyOption
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
+                 => _.GetQuestionType(prefilledQuestionId) == QuestionType.MultyOption
                    && _.HasQuestion(prefilledQuestionId) == true
                    && _.GetAnswerOptionsAsValues(prefilledQuestionId) == new decimal[] { 1, 2, 3 }
                    && _.GetRosterGroupsByRosterSizeQuestion(prefilledQuestionId) == new Guid[] { rosterGroupId }
@@ -46,22 +46,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                    && _.GetRosterLevelForGroup(rosterGroupId) == 1
                    && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new Guid[] { rosterGroupId });
 
-            var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
-                => repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionaire);
-
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
-
-            SetupInstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(
-                CreateInterviewExpressionStateProviderStub());
-
             eventContext = new EventContext();
+
+            interview = Create.Interview(questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>
-            new Interview(interviewId, userId, questionnaireId, 1, preloadedDataDto, answersTime, supervisorId);
+            interview.CreateInterviewWithPreloadedData(questionnaireId, 1, preloadedDataDto, supervisorId, answersTime, userId);
 
         Cleanup stuff = () =>
         {
@@ -82,7 +73,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
 
         private static EventContext eventContext;
-        private static Guid interviewId;
         private static Guid userId;
         private static Guid questionnaireId;
         private static PreloadedDataDto preloadedDataDto;
@@ -91,5 +81,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid prefilledQuestionId;
         private static Guid rosterGroupId;
         private static decimal[] prefilledQuestionAnswer;
+        private static Interview interview;
     }
 }

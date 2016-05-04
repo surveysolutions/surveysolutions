@@ -147,17 +147,21 @@ namespace WB.UI.Designer.Api
 
         [HttpGet]
         [CamelCase]
-        public VerificationErrors Verify(Guid id)
+        public VerificationResult Verify(Guid id)
         {
             var questionnaireDocument = this.GetQuestionnaire(id).Source;
-            QuestionnaireVerificationError[] verificationErrors = questionnaireVerifier.Verify(questionnaireDocument).Take(MaxVerificationErrors).ToArray();
-            var errorsCount = verificationErrors.Length;
-            VerificationError[] errors = verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, questionnaireDocument);
+            QuestionnaireVerificationMessage[] verificationMessagesAndWarning = questionnaireVerifier.Verify(questionnaireDocument).Take(MaxVerificationErrors).ToArray();
+            
+            var verificationErrors = verificationMessagesAndWarning.Where(x => x.MessageLevel != VerificationMessageLevel.Warning).ToArray();
+            var verificationWarnings = verificationMessagesAndWarning.Where(x => x.MessageLevel == VerificationMessageLevel.Warning).ToArray();
 
-            return new VerificationErrors
+            VerificationMessage[] errors = verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, questionnaireDocument);
+            VerificationMessage[] warnings = verificationErrorsMapper.EnrichVerificationErrors(verificationWarnings, questionnaireDocument);
+
+            return new VerificationResult
             {
                 Errors = errors,
-                ErrorsCount = errorsCount
+                Warnings = warnings
             };
         }
 

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
@@ -55,15 +55,24 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             CreateUser(user: observerUser, role: UserRoles.Observer);
         }
 
+        protected void CreateApiWriterUser(UserModel apiUser)
+        {
+            CreateUser(user: apiUser, role: UserRoles.ApiUser);
+        }
+
         protected void UpdateAccount(UserView user, UserEditModel editModel)
         {
-            this.CommandService.Execute(new ChangeUserCommand(publicKey: user.PublicKey, email: editModel.Email,
+            this.CommandService.Execute(new ChangeUserCommand(publicKey: user.PublicKey, 
+                email: editModel.Email,
                 isLockedBySupervisor: editModel.IsLockedBySupervisor,
                 isLockedByHQ: this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator ? editModel.IsLocked : user.IsLockedByHQ,
                 passwordHash:
                     string.IsNullOrEmpty(editModel.Password)
                         ? user.Password
-                        : passwordHasher.Hash(editModel.Password), personName:editModel.PersonName, phoneNumber:editModel.PhoneNumber, userId: this.GlobalInfo.GetCurrentUser().Id));
+                        : passwordHasher.Hash(editModel.Password), 
+                personName:editModel.PersonName, 
+                phoneNumber:editModel.PhoneNumber, 
+                userId: this.GlobalInfo.GetCurrentUser().Id));
         }
 
         private void CreateUser(UserModel user, UserRoles role, Guid? supervisorId = null)

@@ -15,22 +15,21 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
     internal class QuantityReportFactoryTestContext
     {
         protected static QuantityReportFactory CreateQuantityReportFactory(
-            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses = null,
-            IQueryableReadSideRepositoryReader<UserDocument> userDocuments = null)
+            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses = null)
         {
             return new QuantityReportFactory(
-                interviewStatuses ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatuses>>(),
-                userDocuments ?? Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>());
+                interviewStatuses ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatuses>>());
         }
 
         protected static QuantityByInterviewersReportInputModel CreateQuantityByInterviewersReportInputModel(
-            string period = "d", Guid? supervisorId = null)
+            string period = "d", Guid? supervisorId = null,
+            DateTime? from = null, int columnCount=2)
         {
             return new QuantityByInterviewersReportInputModel()
             {
                 Period = period,
-                ColumnCount = 2,
-                From = new DateTime(1984, 4, 18),
+                ColumnCount = columnCount,
+                From = from ?? new DateTime(1984, 4, 18),
                 Page = 0,
                 PageSize = 20,
                 SupervisorId = supervisorId ?? Guid.NewGuid(),

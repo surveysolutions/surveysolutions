@@ -24,7 +24,7 @@
         }
     };
 
-    self.SendRequest = function (requestUrl, args, onSuccess, skipInProgressCheck, allowGet) {
+    self.SendRequest = function(requestUrl, args, onSuccess, skipInProgressCheck, allowGet, onFail) {
 
         if (!skipInProgressCheck && !self.IsAjaxComplete()) {
             self.CheckForRequestComplete();
@@ -32,19 +32,26 @@
         }
 
         self.IsAjaxComplete(false);
-        
+
         $.ajax({
-            url: requestUrl,
-            type: allowGet === true ? 'get' : 'post',
-            data: args,
-            dataType: 'json'}).done(function (data) {
-            if (!_.isUndefined(onSuccess)) {
-                onSuccess(data);
-            }
-        }).always(function () {
-            self.IsPageLoaded(true);
-            self.IsAjaxComplete(true);
-        });
+                url: requestUrl,
+                type: allowGet === true ? 'get' : 'post',
+                data: args,
+                dataType: 'json'
+            })
+            .done(function(data) {
+                if (!_.isUndefined(onSuccess)) {
+                    onSuccess(data);
+                }
+            })
+            .fail(function (exception) {
+                if (!_.isUndefined(onFail)) {
+                    onFail(exception);
+                }
+            }).always(function() {
+                self.IsPageLoaded(true);
+                self.IsAjaxComplete(true);
+            });
     };
     
     self.load = function() {

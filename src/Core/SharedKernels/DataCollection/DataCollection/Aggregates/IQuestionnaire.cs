@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Main.Core.Entities.SubEntities;
+
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
+using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Aggregates
@@ -11,6 +15,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         /// Gets the current version of the instance as it is known in the event store.
         /// </summary>
         long Version { get; }
+
+        string Title { get; }
 
         Guid? ResponsibleId { get; }
 
@@ -25,13 +31,27 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         QuestionType GetQuestionType(Guid questionId);
 
+        QuestionScope GetQuestionScope(Guid questionId);
+
+        AnswerType GetAnswerType(Guid questionId);
+
         bool IsQuestionLinked(Guid questionId);
+
+        Guid[] GetQuestionsLinkedToRoster();
+
+        Guid[] GetQuestionsLinkedToQuestion();
+
+        Guid GetQuestionIdByVariable(string variable);
 
         string GetQuestionTitle(Guid questionId);
 
         string GetQuestionVariableName(Guid questionId);
 
         string GetGroupTitle(Guid groupId);
+
+        string GetStaticText(Guid staticTextId);
+
+        Attachment GetAttachmentForEntity(Guid entityId);
 
         Guid? GetCascadingQuestionParentId(Guid questionId);
 
@@ -45,11 +65,17 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         int GetMaxRosterRowCount();
 
-        bool IsCustomValidationDefined(Guid questionId);
+        bool IsQuestion(Guid entityId);
 
-        string GetCustomValidationExpression(Guid questionId);
+        bool IsInterviewierQuestion(Guid questionId);
+
+        ReadOnlyCollection<Guid> GetPrefilledQuestions();
 
         IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId);
+
+        ReadOnlyCollection<Guid> GetParentsStartingFromTop(Guid entityId);
+
+        Guid? GetParentGroup(Guid groupOrQuestionId);
 
         string GetCustomEnablementConditionForQuestion(Guid questionId);
 
@@ -63,27 +89,45 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetRostersFromTopToSpecifiedQuestion(Guid questionId);
 
+        IEnumerable<Guid> GetRostersFromTopToSpecifiedEntity(Guid questionId);
+
         IEnumerable<Guid> GetRostersFromTopToSpecifiedGroup(Guid groupId);
 
         IEnumerable<Guid> GetFixedRosterGroups(Guid? parentRosterId = null);
+
+        Guid[] GetRosterSizeSourcesForEntity(Guid entityId);
 
         int GetRosterLevelForQuestion(Guid questionId);
 
         int GetRosterLevelForGroup(Guid groupId);
 
-        IEnumerable<Guid> GetAllMandatoryQuestions();
+        int GetRosterLevelForEntity(Guid entityId);
 
         bool IsRosterGroup(Guid groupId);
 
+        ReadOnlyCollection<Guid> GetAllQuestions();
+
+        ReadOnlyCollection<Guid> GetAllGroups();
+
         IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId);
+
+        ReadOnlyCollection<Guid> GetAllUnderlyingInterviewerQuestions(Guid groupId);
+
+        IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId);
 
         IEnumerable<Guid> GetAllUnderlyingChildGroups(Guid groupId);
 
+        IEnumerable<Guid> GetAllUnderlyingChildRosters(Guid groupId);
+
         Guid GetQuestionReferencedByLinkedQuestion(Guid linkedQuestionId);
-        
-        bool IsQuestionMandatory(Guid questionId);
+
+        Guid GetRosterReferencedByLinkedQuestion(Guid linkedQuestionId);
+
+        bool IsQuestionLinkedToRoster(Guid questionId);
 
         bool IsQuestionInteger(Guid questionId);
+
+        bool IsQuestionYesNo(Guid questionId);
 
         int? GetCountOfDecimalPlacesAllowedByQuestion(Guid questionId);
 
@@ -92,6 +136,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool DoesQuestionSpecifyRosterTitle(Guid questionId);
 
         IEnumerable<Guid> GetRostersAffectedByRosterTitleQuestion(Guid questionId);
+
+        bool IsRosterTitleQuestionAvailable(Guid rosterId);
 
         IEnumerable<Guid> GetNestedRostersOfGroupById(Guid rosterId);
 
@@ -104,5 +150,37 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> GetAllChildCascadingQuestions();
 
         bool DoesCascadingQuestionHaveOptionsForParentValue(Guid questionId, decimal parentValue);
+
+        IEnumerable<Guid> GetAllSections();
+
+        /// <summary>
+        /// Gets list of question ids that use question with provided <param name="questionId">questionId</param> as a substitution
+        /// </summary>
+        /// <param name="questionId">Substituted question id</param>
+        /// <returns>List of questions that depend on provided question</returns>
+        IEnumerable<Guid> GetSubstitutedQuestions(Guid questionId);
+
+        /// <summary>
+        /// Gets first level child questions of a group
+        /// </summary>
+        ReadOnlyCollection<Guid> GetChildQuestions(Guid groupId);
+
+        /// <summary>
+        /// Gets first level child entities of a group
+        /// </summary>
+        ReadOnlyCollection<Guid> GetChildEntityIds(Guid groupId);
+
+        ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId);
+        bool IsPrefilled(Guid questionId);
+        bool ShouldBeHiddenIfDisabled(Guid entityId);
+
+        string GetValidationMessage(Guid questionId, int conditionIndex);
+
+        bool HasMoreThanOneValidationRule(Guid questionId);
+        string GetQuestionInstruction(Guid questionId);
+        bool IsQuestionFilteredCombobox(Guid questionId);
+        bool IsQuestionCascading(Guid questionId);
+        bool ShouldQuestionRecordAnswersOrder(Guid questionId);
+        string GetTextQuestionMask(Guid questionId);
     }
 }

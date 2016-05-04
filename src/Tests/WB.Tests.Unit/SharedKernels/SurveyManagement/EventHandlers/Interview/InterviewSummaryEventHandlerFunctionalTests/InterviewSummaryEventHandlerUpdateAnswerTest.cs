@@ -7,10 +7,13 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -73,6 +76,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         }
 
         [Test]
+        [SetCulture("en-US")]
         [TestCase(QuestionType.Numeric, 1)]
         [TestCase(QuestionType.Numeric, 1.3)]
         [TestCase(QuestionType.Text, "answer text")]
@@ -121,7 +125,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional();
 
-            var synchronizationMetadataApplied = new SynchronizationMetadataApplied(userId, questionnaireId,1, InterviewStatus.Created, featuredQuestionsMeta, false, null);
+            var synchronizationMetadataApplied = new SynchronizationMetadataApplied(userId, questionnaireId,1, InterviewStatus.Created, featuredQuestionsMeta, false, null, null, null);
 
             var updatedInterviewSummary = this.CallUpdateMethod(interviewSummaryEventHandler, savedInterviewSummary,
                 synchronizationMetadataApplied);
@@ -143,13 +147,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 case QuestionType.Text:
                     return new TextQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now, (string)answer);
                 case QuestionType.QRBarcode:
-                    return new QRBarcodeQuestionAnswered(userId: Guid.NewGuid(), questionId: questionId, propagationVector: new decimal[0],
-                        answerTime: DateTime.Now, answer: (string) answer);
+                    return new QRBarcodeQuestionAnswered(userId: Guid.NewGuid(), questionId: questionId, rosterVector: new decimal[0],
+                        answerTimeUtc: DateTime.Now, answer: (string) answer);
             }
             return null;
         }
 
-        private InterviewSummary CallUpdateMethod(InterviewSummaryEventHandlerFunctional eventHandler, InterviewSummary currentState,
+        private InterviewSummary CallUpdateMethod(InterviewSummaryDenormalizer eventHandler, InterviewSummary currentState,
             object updateEvent)
         {
             MethodInfo method = this.GetType().GetMethod("CreatePublishableEvent", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -164,18 +168,23 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         }
 
         protected IPublishedEvent<T> CreatePublishableEvent<T>(T payload)
+            where T: IEvent
         {
             var publishableEventMock = new Mock<IPublishedEvent<T>>();
             publishableEventMock.Setup(x => x.Payload).Returns(payload);
             return publishableEventMock.Object;
         }
 
-        protected static InterviewSummaryEventHandlerFunctional CreateInterviewSummaryEventHandlerFunctional(QuestionnaireDocument questionnaire=null)
+        protected static InterviewSummaryDenormalizer CreateInterviewSummaryEventHandlerFunctional(QuestionnaireDocument questionnaire=null)
         {
             var mockOfInterviewSummary = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
-            return new InterviewSummaryEventHandlerFunctional(mockOfInterviewSummary.Object,
-                Mock.Of<IReadSideKeyValueStorage<QuestionnaireDocumentVersioned>>(_ => _.GetById(Moq.It.IsAny<string>()) == new QuestionnaireDocumentVersioned() { Questionnaire = questionnaire }),
-                new Mock<IReadSideRepositoryWriter<UserDocument>>().Object);
+            return new InterviewSummaryDenormalizer(mockOfInterviewSummary.Object,
+                new Mock<IReadSideRepositoryWriter<UserDocument>>().Object,
+                plainQuestionnaireRepository:
+                    Mock.Of<IPlainQuestionnaireRepository>(
+                        _ =>
+                            _.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>()) ==
+                            questionnaire));
         }
 
         protected static InterviewSummary CreateInterviewSummaryQuestions(params QuestionAnswer[] questions)

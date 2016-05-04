@@ -21,11 +21,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             questionView.Title = question.QuestionText;
             questionView.VariableName = question.StataExportCaption;
             questionView.VariableLabel = question.VariableLabel;
+            questionView.HideIfDisabled = question.HideIfDisabled;
             questionView.EnablementCondition = question.ConditionExpression;
-            questionView.ValidationExpression = question.ValidationExpression;
-            questionView.ValidationMessage = question.ValidationMessage;
+            questionView.ValidationConditions = question.ValidationConditions;
             questionView.IsPreFilled = question.Featured;
-            questionView.IsMandatory = question.Mandatory;
             questionView.Instructions = question.Instructions;
             questionView.RosterScopeIds = new Guid[0];
             questionView.ParentGroupsIds = new Guid[0];
@@ -43,8 +42,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             if (multioptionQuestion != null)
             {
                 var multioptionQuestionView = ((MultiOptionDetailsView)questionView);
-                multioptionQuestionView.LinkedToQuestionId = multioptionQuestion.LinkedToQuestionId;
+                multioptionQuestionView.LinkedToEntityId = multioptionQuestion.LinkedToQuestionId ??
+                                                           multioptionQuestion.LinkedToRosterId;
+                multioptionQuestionView.LinkedFilterExpression = multioptionQuestion.LinkedFilterExpression;
                 multioptionQuestionView.AreAnswersOrdered = multioptionQuestion.AreAnswersOrdered;
+                multioptionQuestionView.YesNoView = multioptionQuestion.YesNoView;
                 multioptionQuestionView.MaxAllowedAnswers = multioptionQuestion.MaxAllowedAnswers;
                 multioptionQuestionView.Options = this.CreateCategoricalOptions(multioptionQuestion.Answers);
                 return multioptionQuestionView;
@@ -54,7 +56,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo
             if (singleoptionQuestion != null)
             {
                 var singleoptionQuestionView = ((SingleOptionDetailsView)questionView);
-                singleoptionQuestionView.LinkedToQuestionId = singleoptionQuestion.LinkedToQuestionId;
+                singleoptionQuestionView.LinkedToEntityId = singleoptionQuestion.LinkedToQuestionId ??
+                                                            singleoptionQuestion.LinkedToRosterId;
+                singleoptionQuestionView.LinkedFilterExpression = singleoptionQuestion.LinkedFilterExpression;
                 singleoptionQuestionView.IsFilteredCombobox = singleoptionQuestion.IsFilteredCombobox;
                 singleoptionQuestionView.CascadeFromQuestionId = singleoptionQuestion.CascadeFromQuestionId;
                 singleoptionQuestionView.Options = this.CreateCategoricalOptions(singleoptionQuestion.Answers);

@@ -6,7 +6,6 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
-using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
@@ -31,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(gpsQuestion);
             questionnaire.Title = "questionnaire";
-            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "gps_Latitude", "gps_Longitude" },
+            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "gps__Latitude", "gps__Longitude" },
                 new string[][] { new string[] { "1", "3", "3" } },
                 "questionnaire.csv");
 

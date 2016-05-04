@@ -1,6 +1,10 @@
-﻿namespace WB.Core.SharedKernels.DataCollection.Events.Questionnaire
+﻿using System;
+using WB.Core.Infrastructure.EventBus;
+
+namespace WB.Core.SharedKernels.DataCollection.Events.Questionnaire
 {
-    public class QuestionnaireAssemblyImported
+    [Obsolete]
+    public class QuestionnaireAssemblyImported : IEvent
     {
         public long Version { get; set; }
     }

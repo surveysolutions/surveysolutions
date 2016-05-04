@@ -1,5 +1,5 @@
 using System;
-using Main.Core.Entities.SubEntities;
+using System.Collections.Generic;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model
 {
@@ -7,22 +7,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         public Guid Id { set; get; }
         public string VariableName { set; get; }
-        public bool IsMandatory { set; get; }
+        public string Condition { set; get; }
 
-        public string Conditions { set; get; }
-        public string Validations { set; get; }
+        public List<ValidationExpressionModel> ValidationExpressions { get; set; }
 
-        public QuestionType QuestionType { set; get; }
+        public string TypeName { set; get; }
+        public string ConditionMethodName => CodeGenerator.EnablementPrefix + this.VariableName;
 
-        public string GeneratedIdName { set; get; }
-        public string GeneratedTypeName { set; get; }
-        public string GeneratedMemberName { set; get; }
-        public string GeneratedStateName { set; get; }
+        public string MemberName => CodeGenerator.PrivateFieldsPrefix + VariableName;
+        public string StateName => CodeGenerator.PrivateFieldsPrefix + VariableName + CodeGenerator.StateSuffix;
+        public string IdName => CodeGenerator.GetQuestionIdName(VariableName);
+
+        public bool IsMultiOptionYesNoQuestion { get; set; }
+        public List<string> AllMultioptionYesNoCodes { get; set; }
 
         public string RosterScopeName { set; get; }
+        public string ParentScopeTypeName { get; set; }
 
-        public string GeneratedValidationsMethodName { set; get; }
-        public string GeneratedMandatoryMethodName { set; get; }
-        public string GeneratedConditionsMethodName { set; get; }
     }
 }

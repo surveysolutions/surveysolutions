@@ -12,16 +12,15 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
-using WB.Tests.Unit.SharedKernels.SurveyManagement;
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSynchronizerTests.Push
@@ -56,7 +55,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             var interviewSummaryRepositoryWriter = Mock.Of<IReadSideRepositoryReader<InterviewSummary>>(writer
                 => writer.GetById(interviewId.FormatGuid()) == Create.InterviewSummary());
 
-            var jsonUtils = Mock.Of<IJsonUtils>(utils
+            var jsonUtils = Mock.Of<ISerializer>(utils
                 => utils.Deserialize<bool>(positiveResponse) == true);
 
             Mock.Get(jsonUtils)
@@ -79,7 +78,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 interviewSummaryRepositoryReader: interviewSummaryRepositoryWriter,
                 eventStore: eventStore,
                 logger: loggerMock.Object,
-                jsonUtils: jsonUtils,
+                serializer: jsonUtils,
                 httpMessageHandler: () => httpMessageHandler,
                 commandService: commandServiceMock.Object,
                 archiver: archiver);
@@ -120,12 +119,12 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
 
         It should_mark_interview_as_sent_to_hq_using_hq_synchronization_origin = () =>
             commandServiceMock.Verify(service => 
-                service.Execute(Moq.It.Is<MarkInterviewAsSentToHeadquarters>(command => command.InterviewId == interviewId), HQSynchronizationOrigin, false),
+                service.Execute(Moq.It.Is<MarkInterviewAsSentToHeadquarters>(command => command.InterviewId == interviewId), HQSynchronizationOrigin),
                 Times.Once);
 
         It should_execute_only_one_command = () =>
             commandServiceMock.Verify(service =>
-                service.Execute(Moq.It.IsAny<ICommand>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()),
+                service.Execute(Moq.It.IsAny<ICommand>(), Moq.It.IsAny<string>()),
                 Times.Once);
 
         private static InterviewsSynchronizer interviewsSynchronizer;

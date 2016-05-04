@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
@@ -16,7 +17,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
         Establish context = () =>
         {
             interviewStatusTimeSpansStorage=new TestInMemoryWriter<InterviewStatusTimeSpans>();
-            interviewStatusesStorage = new TestInMemoryWriter<InterviewStatuses>();
             interviewStatusesStorage = new TestInMemoryWriter<InterviewStatuses>();
             interviewStatuses =
                 Create.InterviewStatuses(interviewid: interviewId, statuses:

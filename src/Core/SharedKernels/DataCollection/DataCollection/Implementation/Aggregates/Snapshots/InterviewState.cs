@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.GenericSubdomains.Portable.CustomCollections;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.V2;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots
 {
-    internal class InterviewState
+    public class InterviewState
     {
         public InterviewState(bool wasHardDeleted)
         {
@@ -16,7 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
             Dictionary<string, object> answersSupportedInExpressions, Dictionary<string, Tuple<Guid, decimal[], decimal[]>> linkedSingleOptionAnswers,
             Dictionary<string, Tuple<Guid, decimal[], decimal[][]>> linkedMultipleOptionsAnswers, Dictionary<string, Tuple<decimal, string>[]> textListAnswers,
             HashSet<string> answeredQuestions,List<AnswerComment> answerComments,
-            HashSet<string> disabledGroups, HashSet<string> disabledQuestions, Dictionary<string, DistinctDecimalList> rosterGroupInstanceIds,
+            HashSet<string> disabledGroups, HashSet<string> disabledQuestions, Dictionary<string, ConcurrentHashSet<decimal>> rosterGroupInstanceIds,
             HashSet<string> validAnsweredQuestions, HashSet<string> invalidAnsweredQuestions, bool wasCompleted,
             IInterviewExpressionStateV2 expressionProcessorState, Guid interviewewerId)
         {
@@ -50,7 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapsho
         public List<AnswerComment> AnswerComments { get; private set; }
         public HashSet<string> DisabledGroups { get; private set; }
         public HashSet<string> DisabledQuestions { get; private set; }
-        public Dictionary<string, DistinctDecimalList> RosterGroupInstanceIds { get; private set; }
+        public Dictionary<string, ConcurrentHashSet<decimal>> RosterGroupInstanceIds { get; private set; }
         public HashSet<string> ValidAnsweredQuestions { get; private set; }
         public HashSet<string> InvalidAnsweredQuestions { get; private set; }
         public bool WasCompleted { get; private set; }

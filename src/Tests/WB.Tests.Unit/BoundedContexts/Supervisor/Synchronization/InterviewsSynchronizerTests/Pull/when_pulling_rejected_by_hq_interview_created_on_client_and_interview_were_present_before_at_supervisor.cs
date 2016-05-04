@@ -8,7 +8,7 @@ using Moq;
 
 using WB.Core.BoundedContexts.Supervisor.Interviews;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -46,10 +46,13 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                         }
                     }.ToList());
 
-            iInterviewSynchronizationDto = new InterviewSynchronizationDto(interviewId, InterviewStatus.RejectedByHeadquarters, "",
-                        userId, questionnaireId, 2, new AnsweredQuestionSynchronizationDto[0], new HashSet<InterviewItemId>(),
-                        new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
-                        new Dictionary<InterviewItemId, int>(), new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), true);
+            iInterviewSynchronizationDto =
+                Create.InterviewSynchronizationDto(status: InterviewStatus.RejectedByHeadquarters,
+                    userId: userId,
+                    questionnaireId: questionnaireId,
+                    questionnaireVersion: 2,
+                    wasCompleted: true,
+                    interviewId: interviewId);
 
             headquartersInterviewReaderMock.Setup(x => x.GetInterviewByUri(Moq.It.IsAny<Uri>()))
                 .Returns(
@@ -69,7 +72,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             commandServiceMock.Verify(
                 x =>
                     x.Execute(
-                        Moq.It.IsAny<CreateInterviewCreatedOnClientCommand>(), Constants.HeadquartersSynchronizationOrigin, false), Times.Never);
+                        Moq.It.IsAny<CreateInterviewCreatedOnClientCommand>(), Constants.HeadquartersSynchronizationOrigin), Times.Never);
 
         It should_RejectInterviewFromHeadquartersCommand_be_called_once = () =>
             commandServiceMock.Verify(
@@ -78,7 +81,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                         Moq.It.Is<RejectInterviewFromHeadquartersCommand>(
                             _ =>
                                 _.InterviewDto == iInterviewSynchronizationDto && _.InterviewerId == userId &&
-                                    _.SupervisorId == supervisorId), Constants.HeadquartersSynchronizationOrigin, false), Times.Once);
+                                    _.SupervisorId == supervisorId), Constants.HeadquartersSynchronizationOrigin), Times.Once);
 
 
         private static InterviewsSynchronizer interviewsSynchronizer;

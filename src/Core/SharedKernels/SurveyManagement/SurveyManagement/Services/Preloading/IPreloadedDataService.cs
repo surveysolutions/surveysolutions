@@ -12,24 +12,27 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Preloading
     internal interface IPreloadedDataService
     {
         HeaderStructureForLevel FindLevelInPreloadedData(string levelFileName);
+
+        PreloadedDataByFile GetTopLevelData(PreloadedDataByFile[] allLevels);
+
         PreloadedDataByFile GetParentDataFile(string levelFileName, PreloadedDataByFile[] allLevels);
         
         int GetColumnIndexByHeaderName(PreloadedDataByFile dataFile, string columnName);
 
         int GetIdColumnIndex(PreloadedDataByFile dataFile);
+
         int[] GetParentIdColumnIndexes(PreloadedDataByFile dataFile);
+
         decimal[] GetAvailableIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string[] parentIdValues);
 
-        Dictionary<string, Tuple<string, int>[]> GetColumnIndexesGoupedByQuestionVariableName(PreloadedDataByFile parentDataFile);
-        ValueParsingResult ParseQuestion(string answer, string columnName, IQuestion question, out KeyValuePair<Guid, object> parsedValue);
+        ValueParsingResult ParseQuestionInLevel(string answer, string columnName, HeaderStructureForLevel level, out object parsedValue);
 
         PreloadedDataRecord[] CreatePreloadedDataDtosFromPanelData(PreloadedDataByFile[] allLevels);
+
         PreloadedDataRecord[] CreatePreloadedDataDtoFromSampleData(PreloadedDataByFile sampleDataFile);
+
         string GetValidFileNameForTopLevelQuestionnaire();
 
-        IQuestion GetQuestionByVariableName(string variableName);
-
-        PreloadedDataByFile GetTopLevelData(PreloadedDataByFile[] allLevels);
-
+        bool IsQuestionRosterSize(string variableName);
     }
 }

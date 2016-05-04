@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Web.Mvc;
-using System.Web.Script.Serialization;
 using Newtonsoft.Json.Converters;
 
 namespace WB.UI.Designer.Utils

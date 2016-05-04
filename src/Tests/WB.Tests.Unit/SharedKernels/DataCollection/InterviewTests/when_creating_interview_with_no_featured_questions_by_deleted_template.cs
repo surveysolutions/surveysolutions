@@ -24,15 +24,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         {
             eventContext = new EventContext();
 
-            var questionnaireRepository = Mock.Of<IQuestionnaireRepository>();
-
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
+            interview = Create.Interview();
         };
 
         Because of = () => exception = Catch.Exception(() =>
-            new Interview(interviewId, userId, questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, isValid));
+            interview.CreateInterviewCreatedOnClient(questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, isValid, userId));
 
         It should_event_context_contains__events = () =>
             eventContext.Events.Count().ShouldEqual(0);
@@ -41,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.ShouldNotContainEvent<InterviewOnClientCreated>();
 
         It should_raise_InterviewException = () =>
-            exception.ShouldBeOfType(typeof(InterviewException));
+            exception.ShouldBeOfExactType(typeof(InterviewException));
 
         Cleanup stuff = () =>
         {
@@ -54,9 +50,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid questionnaireId = Guid.Parse("10000000000000000000000000000000");
         private static long questionnaireVersion = 18;
         private static Guid userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        private static Guid interviewId = Guid.Parse("11000000000000000000000000000000");
         private static bool isValid = true;
         private static AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta = null;
         private static InterviewStatus interviewStatus = InterviewStatus.Completed;
+        private static Interview interview;
     }
 }

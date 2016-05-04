@@ -7,7 +7,7 @@ using Moq.Protected;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization
 {
-    public static class MockHelpers
+    internal static class MockHelpers
     {
         public static void SetupResponseFromResource(this Mock<HttpMessageHandler> handler, string requestUrl, string resourceName)
         {

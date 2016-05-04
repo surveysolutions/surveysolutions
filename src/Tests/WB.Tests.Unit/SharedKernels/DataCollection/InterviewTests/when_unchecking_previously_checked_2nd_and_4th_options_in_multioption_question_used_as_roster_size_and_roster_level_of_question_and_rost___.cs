@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -43,12 +44,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 && _.IsRosterGroup(rosterId) == true
             );
 
-            SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(
-                CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire));
+            IPlainQuestionnaireRepository questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
 
-            SetupInstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(CreateInterviewExpressionStateProviderStub());
-
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             interview.AnswerMultipleOptionsQuestion(userId, questionId, emptyRosterVector, DateTime.Now, new[] { option2, option3, option4 });
 
             eventContext = new EventContext();

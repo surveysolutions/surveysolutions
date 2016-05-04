@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Web.Mvc;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Code;
 using WB.UI.Shared.Web.Membership;
 
@@ -19,7 +19,9 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult Open(Guid id)
         {
-            var httpCookie = new HttpCookie("questionnaireId", id.FormatGuid());
+            var questionnaireId = id.FormatGuid();
+
+            var httpCookie = new HttpCookie("questionnaireId", questionnaireId);
             Response.AppendCookie(httpCookie);
 
             return Redirect("~/UpdatedDesigner/app");

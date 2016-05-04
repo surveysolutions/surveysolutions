@@ -58,6 +58,33 @@ Supervisor.Framework.Classes.inherit = function (child, parent) {
     child.superclass = parent.prototype;
 };
 
+Supervisor.Framework.Browser = function () { };
+Supervisor.Framework.Browser.prototype = {};
+Supervisor.Framework.Browser.isMsie = function() {
+    var ua = window.navigator.userAgent;
+
+    var msie = ua.indexOf('MSIE ');
+    if (msie > 0) {
+        // IE 10 or older
+        return true;
+    }
+
+    var trident = ua.indexOf('Trident/');
+    if (trident > 0) {
+        // IE 11
+        return true;
+    }
+
+    var edge = ua.indexOf('Edge/');
+    if (edge > 0) {
+        // IE 12
+        return true;
+    }
+
+    // other browser
+    return false;
+};
+
 
 //------ helpers------
 Array.prototype.joinArrayOfObjects = function (key, value) {

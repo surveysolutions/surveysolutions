@@ -39,7 +39,7 @@ namespace WB.UI.Headquarters.API.Feeds
 
             if (totalFeedEntriesCount % PageSize > 0)
             {
-                interviewFeedEntries = feedReader.Query(_ => _.SkipFullPages(PageSize, totalFeedEntriesCount).OrderBy(x => x.Timestamp).ToList());
+                interviewFeedEntries = feedReader.Query(_ => _.OrderBy(x => x.Timestamp).ThenBy(x=>x.EntryId).SkipFullPages(PageSize, totalFeedEntriesCount).ToList());
             }
 
             var feed = this.GetFeed(interviewFeedEntries);
@@ -58,7 +58,7 @@ namespace WB.UI.Headquarters.API.Feeds
         [HttpGet]
         public HttpResponseMessage Archive(int page)
         {
-            var changedFeedEntries = feedReader.Query(_ => _.GetPage(page, PageSize).OrderBy(x => x.Timestamp).ToList());
+            var changedFeedEntries = feedReader.Query(_ => _.OrderBy(x => x.Timestamp).ThenBy(x => x.EntryId).GetPage(page, PageSize).ToList());
             if (changedFeedEntries.Count == 0)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Page is empty or not created yet");

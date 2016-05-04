@@ -18,6 +18,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation
             this.RegistrationId = registrationId;
         }
 
+        public string UserName { get; set; }
+
+        public Guid? UserId { get; set; }
+
         public string PackageName { get; private set; }
 
         public string AndroidId { get; private set; }

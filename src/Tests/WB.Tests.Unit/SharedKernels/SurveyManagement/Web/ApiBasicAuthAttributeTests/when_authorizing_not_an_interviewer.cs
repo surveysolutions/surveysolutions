@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
             actionContext.Response.StatusCode.ShouldEqual(HttpStatusCode.Unauthorized);
 
         It should_respond_with_user_friendly_ReasonPhrase = () =>
-            new[] { "not", "interviewer" }.ShouldEachConformTo(keyword => actionContext.Response.ReasonPhrase.ToLower().Contains(keyword));
+            new[] { "not", "role", "permitting" }.ShouldEachConformTo(keyword => actionContext.Response.ReasonPhrase.ToLower().Contains(keyword));
 
         private static ApiBasicAuthAttribute attribute;
         private static HttpActionContext actionContext;

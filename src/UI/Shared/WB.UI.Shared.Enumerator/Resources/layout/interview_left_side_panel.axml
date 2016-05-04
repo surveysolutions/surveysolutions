@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                 xmlns:local="http://schemas.android.com/apk/res-auto"
+                 style="@style/Interview_Sidebar_Body">
+
+  <LinearLayout style="@style/Interview_Sidebar_Header">
+    <TextView style="@style/Interview_Sidebar_Title"
+              local:MvxBind="Text QuestionnaireTitle" />
+    <MaxHeightLinearLayout
+      local:maxHeight="@dimen/Interview_Sidebar_PrefilledQuestions_max_height"
+      style="@style/Interview_Sidebar_PrefilledQuestions_Container">
+
+      <MvxListView style="@style/Interview_Sidebar_PrefilledQuestions"
+                   local:MvxBind="ItemsSource PrefilledQuestionsStats"
+                   local:MvxItemTemplate="@layout/interview_prefilled_question_template" />
+    </MaxHeightLinearLayout>
+  </LinearLayout>
+
+  <View style="@style/Interview_Entity_Divider" />
+  <MvxListView
+        style="@style/Interview_Sidebar_Sections"
+        local:MvxBind="ItemsSource Sections.AllVisibleSections"
+        local:MvxItemTemplate="@layout/interview_left_side_panel_item_section" />
+
+</LinearLayout>

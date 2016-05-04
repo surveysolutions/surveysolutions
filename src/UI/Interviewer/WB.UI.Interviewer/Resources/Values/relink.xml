@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+
+  <style name="Relink_Logo" parent="AppTheme">
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:src">@drawable/login_logo</item>
+    <item name="android:layout_width">@dimen/Login_Element_width</item>
+    <item name="android:layout_gravity">center_horizontal</item>
+  </style>
+
+  <style name="Relink_RemoteErrorMessage" parent="AppTheme">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:fontFamily">Trebuchet</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:textColor">@color/errorTextColor</item>
+    <item name="android:layout_marginBottom">@dimen/Relink_Message_marginBottom</item>
+    <item name="android:singleLine">false</item>
+    <item name="android:layout_gravity">center_horizontal</item>
+    <item name="android:gravity">center</item>
+  </style>
+
+  <style name="Relink_FormContainer" parent="AppTheme">
+    <item name="android:layout_width">@dimen/Relink_FormContainer_Width</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:gravity">center</item>
+    <item name="android:orientation">vertical</item>
+    <item name="android:layout_gravity">center</item>
+    <item name="android:layout_marginTop">@dimen/Relink_FormContainer_marginTop</item>
+    <item name="android:layout_marginBottom">@dimen/Relink_FormContainer_marginBottom</item>
+  </style>
+
+  <style name="Relink_ErrorMessage" parent="Relink_RemoteErrorMessage">
+    <item name="android:textColor">#F45D28</item>
+  </style>
+
+  <style name="Relink_Warning" parent="Relink_RemoteErrorMessage">
+    <item name="android:textColor">#6A6A6A</item>
+  </style>
+
+  <style name="Relink_Button" parent="AppTheme">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:padding">@dimen/Login_Button_padding</item>
+    <item name="android:background">@drawable/group_with_invalid_answers</item>
+    <item name="android:layout_centerHorizontal">true</item>
+  </style>
+
+  <style name="Relink_Cancel_Button" parent="Relink_Button">
+    <item name="android:layout_marginLeft">@dimen/Login_Troubleshooting_Button_marginLeft</item>
+    <item name="android:textColor">@android:color/black</item>
+    <item name="android:background">@drawable/transparent_input_button</item>
+  </style>
+</resources>

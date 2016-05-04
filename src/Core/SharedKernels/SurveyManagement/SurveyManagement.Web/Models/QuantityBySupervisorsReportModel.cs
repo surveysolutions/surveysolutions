@@ -1,15 +1,21 @@
-﻿using System.Collections.Generic;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
+﻿using System;
+using System.Collections.Generic;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.SurveyManagement.Views.Reposts;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
-    public class QuantityBySupervisorsReportModel : IGridRequest<QuantityBySupervisorsReportInputModel>
+    public class QuantityBySupervisorsReportModel
     {
-        public PagerData Pager { get; set; }
-
-        public QuantityBySupervisorsReportInputModel Request { get; set; }
-
+        public int PageIndex { get; set; }
+        public int PageSize { get; set; }
         public IEnumerable<OrderRequestItem> SortOrder { get; set; }
+
+        public DateTime From { get; set; }
+        public Guid QuestionnaireId { get; set; }
+        public long QuestionnaireVersion { get; set; }
+        public string Period { get; set; }
+        public int ColumnCount { get; set; }
+        public PeriodiceReportType ReportType { get; set; }
     }
 }

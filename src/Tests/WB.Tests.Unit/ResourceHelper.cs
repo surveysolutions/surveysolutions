@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace WB.Tests.Unit
 {
-    public static class ResourceHelper
+    internal static class ResourceHelper
     {
         public static string ReadResourceFile(string name)
         {

@@ -73,7 +73,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/supervisor.framework.js",
                     "~/Scripts/viewmodels/viewmodelbase.js",
                     "~/Scripts/viewmodels/pagebase.js",
-                    "~/Scripts/viewmodels/surveymanagmentheader.js"
+                    "~/Scripts/viewmodels/surveymanagmentheader.js",
+                    "~/Scripts/bootbox.min.js",
                 }
             },
             {
@@ -89,7 +90,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/ko.pager.js",
                     "~/Scripts/viewmodels/listview.js",
                     "~/Scripts/components/bindings.js",
-                    "~/Scripts/bootbox.min.js"
+                    "~/Scripts/spin.js",
+                    "~/Scripts/knockout/ko.spin.js",
                 }
             },
             {
@@ -98,7 +100,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/knockout.validation.js",
                     "~/Scripts/bootstrap-datepicker.js",
                     "~/Scripts/Math.uuid.js",
-                    "~/Scripts/typeahead.js",
                     "~/Scripts/viewmodels/pages/interview/custom.js",
                     "~/Scripts/lodash.underscore.js",
                     "~/Scripts/jquery.maskedinput.js"
@@ -107,15 +108,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
             {
                 "~/js/interview-new", new[]
                 {
+                    "~/Scripts/bootstrap3-typeahead.js", 
+                    "~/Scripts/knockout/ko.typeahead.js",
+                    "~/Scripts/components/typeahead-extended.js",
                     "~/Scripts/viewmodels/pages/interview/new/datacontext.js",
                     "~/Scripts/viewmodels/pages/interview/new/mapper.js",
                     "~/Scripts/viewmodels/pages/interview/new/model.js",
-                    "~/Scripts/viewmodels/pages/interview/new/newinterview.js"
+                    "~/Scripts/viewmodels/pages/interview/new/newinterview.js",
+                    "~/Scripts/spin.js",
+                    "~/Scripts/knockout/ko.spin.js",
                 }
             },
             {
                 "~/js/details", new[]
                 {
+                    "~/Scripts/typeahead.js",
                     "~/Scripts/components/bindings.js",
                     "~/Scripts/director.js",
                     "~/Scripts/viewmodels/pages/interview/details/config.js",
@@ -131,6 +138,55 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web
                     "~/Scripts/markerclusterer_compiled.js",
                     "~/Scripts/infobubble.js",
                     "~/Scripts/viewmodels/pages/mapreport.js",
+                }
+            },
+            {
+                "~/js/periodicstatusreport", new[]
+                {
+                    "~/Scripts/moment.js",
+                    "~/Scripts/components/moment-duration-format.js",
+                    "~/Scripts/bootstrap-datepicker.js",
+                    "~/Scripts/ko.datepicker.js",
+                    "~/Scripts/viewmodels/pages/periodicstatusreport.js"
+                }
+            },
+            {
+                "~/js/batch-upload", new[]
+                {
+                   "~/Scripts/bootstrap3-typeahead.js", 
+                   "~/Scripts/knockout/ko.typeahead.js", 
+                   "~/Scripts/components/typeahead-extended.js", 
+                   "~/Scripts/pages/batchupload.js",
+                   "~/Scripts/spin.js",
+                    "~/Scripts/knockout/ko.spin.js",
+                }
+            },
+            {
+                "~/js/synclog", new[]
+                {
+                   "~/Scripts/bootstrap-datepicker.js",
+                    "~/Scripts/ko.datepicker.js", 
+                    "~/Scripts/bootstrap3-typeahead.js", 
+                    "~/Scripts/components/typeahead-extended.js", 
+                    "~/Scripts/knockout/ko.typeahead.js",
+                    "~/Scripts/spin.js",
+                    "~/Scripts/knockout/ko.spin.js",
+                    "~/Scripts/viewmodels/pages/controlpanel/synchronizationlog.js"
+                }
+            },
+            {
+                "~/js/import-interviews", new[]
+                {
+                    "~/Scripts/bootbox.min.js",
+                    "~/Scripts/knockout.validation.js",
+                    "~/Scripts/viewmodels/pages/interview/custom.js",
+                    "~/Scripts/bootstrap3-typeahead.js",
+                    "~/Scripts/components/typeahead-extended.js",
+                    "~/Scripts/knockout/ko.typeahead.js",
+                    "~/Scripts/knockout/ko.extenders.js",
+                    "~/Scripts/spin.js",
+                    "~/Scripts/knockout/ko.spin.js",
+                    "~/Scripts/pages/import-interviews.js"
                 }
             },
         };

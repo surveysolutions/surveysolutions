@@ -172,34 +172,46 @@
     <value>Only integer values are allowed.</value>
   </data>
   <data name="PL0019_ExpectedDecimalNotParsed" xml:space="preserve">
-    <value>Categorical question cannot have non-numeric values.</value>
+    <value>Only real values are allowed.</value>
     <comment>Non-numeric value found for categorical question</comment>
-  </data>
-  <data name="PL0021_MultyOptionQuestionHasDuplicateAnswers" xml:space="preserve">
-    <value>Categorical multiple answers question has duplicate values.</value>
   </data>
   <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
     <value>Roster size question cannot have negative values.</value>
   </data>
   <data name="PL0023_UnsupportedMultimediaQuestion" xml:space="preserve">
-    <value>Multimedia question is not supported in data preloading.</value>
+    <value>Picture question is not supported in data preloading.</value>
   </data>
   <data name="PL0024_DataWasNotFound" xml:space="preserve">
     <value>Preloading data was not found</value>
   </data>
-  <data name="PL0025_SupervisorNameIsEmpty" xml:space="preserve">
-    <value>The name of Supervisor was not provided</value>
+  <data name="PL0025_ResponsibleNameIsEmpty" xml:space="preserve">
+    <value>The name of Responsible was not provided</value>
   </data>
-  <data name="PL0026_SupervisorWasNotFound" xml:space="preserve">
-    <value>Provided Supervisor was not found</value>
+  <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+    <value>Provided Responsible was not found</value>
   </data>
-  <data name="PL0027_SupervisorIsLocked" xml:space="preserve">
-    <value>Supervisor is locked</value>
+  <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
+    <value>Responsible is locked</value>
   </data>
-  <data name="PL0028_UserIsNotSupervisor" xml:space="preserve">
-    <value>Provided User is not Supervisor</value>
+  <data name="PL0028_UserIsNotSupervisorOrInterviewer" xml:space="preserve">
+    <value>Provided User is not Supervisor or Interviewer</value>
   </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
     <value>Answer on roster size question cannot be greater than 40.</value>
+  </data>
+  <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
+    <value>Prefilled gps question requires Latitude and Longitude to be set.</value>
+  </data>
+  <data name="PL0031_ColumnNameDuplicatesFound" xml:space="preserve">
+    <value>Column name duplicates found.</value>
+  </data>
+  <data name="PL0032_LatitudeMustBeGeaterThenN90AndLessThen90" xml:space="preserve">
+    <value>Latitude must be greater  then -90° and less then 90°.</value>
+  </data>
+  <data name="PL0033_LongitudeMustBeGeaterThenN180AndLessThen180" xml:space="preserve">
+    <value>Longitude must be greater than -180° and less than 180°.</value>
+  </data>
+  <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
+    <value>"," symbol is not allowed in numeric answers. Please use "." as decimal separator.</value>
   </data>
 </root>

@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.ServiceModel;
+
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.SurveySolutions;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 using WB.UI.Designer.Resources;
 using WB.UI.Designer.WebServices.Questionnaire;
-using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Membership;
 
 namespace WB.UI.Designer.WebServices
@@ -22,9 +20,9 @@ namespace WB.UI.Designer.WebServices
         private readonly IMembershipUserService userHelper;
         private readonly IStringCompressor zipUtils;
         private readonly IQuestionnaireListViewFactory viewFactory;
-        private readonly IExpressionsEngineVersionService expressionsEngineVersionService;
+        private readonly IDesignerEngineVersionService engineVersionService;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
-        private readonly IJsonUtils jsonUtils;
+        private readonly ISerializer serializer;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
 
@@ -35,8 +33,8 @@ namespace WB.UI.Designer.WebServices
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
             IExpressionProcessorGenerator expressionProcessorGenerator, 
-            IExpressionsEngineVersionService expressionsEngineVersionService, 
-            IJsonUtils jsonUtils)
+            IDesignerEngineVersionService engineVersionService, 
+            ISerializer serializer)
         {
             this.zipUtils = zipUtils;
             this.userHelper = userHelper;
@@ -44,8 +42,8 @@ namespace WB.UI.Designer.WebServices
             this.questionnaireVerifier = questionnaireVerifier;
             this.questionnaireViewFactory = questionnaireViewFactory; 
             this.expressionProcessorGenerator = expressionProcessorGenerator;
-            this.expressionsEngineVersionService = expressionsEngineVersionService;
-            this.jsonUtils = jsonUtils;
+            this.engineVersionService = engineVersionService;
+            this.serializer = serializer;
         }
 
         public RemoteFileInfo DownloadQuestionnaire(DownloadQuestionnaireRequest request)
@@ -60,7 +58,7 @@ namespace WB.UI.Designer.WebServices
             var clientSupportedQuestionnaireVersion = new Version(request.SupportedQuestionnaireVersion.Major,
                 request.SupportedQuestionnaireVersion.Minor, request.SupportedQuestionnaireVersion.Patch);
 
-            if (!expressionsEngineVersionService.IsClientVersionSupported(clientSupportedQuestionnaireVersion))
+            if (!this.engineVersionService.IsClientVersionSupported(clientSupportedQuestionnaireVersion))
             {
                 var message =
                     string.Format(ErrorMessages.ClientVersionIsNotSupported, clientSupportedQuestionnaireVersion);
@@ -68,7 +66,7 @@ namespace WB.UI.Designer.WebServices
                 throw new FaultException(message, new FaultCode("InconsistentVersion")); //InconsistentVersionException(message);
             }
             
-            var questoinnaireErrors = questionnaireVerifier.Verify(questionnaireView.Source).ToArray();
+            var questoinnaireErrors = questionnaireVerifier.CheckForErrors(questionnaireView.Source).ToArray();
 
             if (questoinnaireErrors.Any())
             {
@@ -92,7 +90,7 @@ namespace WB.UI.Designer.WebServices
                 generationResult = new GenerationResult()
                 {
                     Success = false,
-                    Diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Common verifier error", "Error", "unknown", GenerationDiagnosticSeverity.Error) }
+                    Diagnostics = new List<GenerationDiagnostic>() { new GenerationDiagnostic("Common verifier error", "unknown", GenerationDiagnosticSeverity.Error) }
                 };
                 resultAssembly = string.Empty;
             }
@@ -104,7 +102,9 @@ namespace WB.UI.Designer.WebServices
                 throw new FaultException(message, new FaultCode("InvalidQuestionnaire"));
             }
 
-            Stream stream = this.zipUtils.Compress(jsonUtils.Serialize(questionnaireView.Source));
+            var questionnaire = questionnaireView.Source;
+            questionnaire.Macros = null;
+            Stream stream = this.zipUtils.Compress(this.serializer.Serialize(questionnaire));
 
             return new RemoteFileInfo
             {

@@ -20,19 +20,26 @@ namespace Ncqrs.Eventing
         public UncommittedEventStream(string origin)
             : this(Guid.NewGuid(), origin) { }
 
-        /// <summary>
-        /// Creates new uncommitted event stream.
-        /// </summary>
+        public UncommittedEventStream(string origin, IEnumerable<UncommittedEvent> events)
+            : this(Guid.NewGuid(), origin)
+        {
+            this.Append(events);
+        }
+
         public UncommittedEventStream(Guid commitId, string origin)
         {
             _commitId = commitId;
             _origin = origin;
         }
 
-        /// <summary>
-        /// Appends new event to the stream.
-        /// </summary>
-        /// <param name="evnt">New event.</param>
+        public void Append(IEnumerable<UncommittedEvent> events)
+        {
+            foreach (var @event in events)
+            {
+                this.Append(@event);
+            }
+        }
+
         public void Append(UncommittedEvent evnt)
         {
             if (_events.Count > 0 && _hasSingleSource)
@@ -57,13 +64,7 @@ namespace Ncqrs.Eventing
             _eventSourceInformation[evnt.EventSourceId] = newInformation;
         }
 
-        /// <summary>
-        /// Gets information about sources of events in this stream.
-        /// </summary>
-        public IEnumerable<EventSourceInformation> Sources
-        {
-            get { return _eventSourceInformation.Values; }
-        }
+        public IEnumerable<EventSourceInformation> Sources => this._eventSourceInformation.Values;
 
         /// <summary>
         /// Returns whether this stream of events has a single source. An empty stream has single source by definition.

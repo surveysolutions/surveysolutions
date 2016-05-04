@@ -7,7 +7,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 {
     internal class when_pasing_answer_on_multy_option_question : QuestionDataParserTestContext
     {
-        private Establish context = () =>
+        Establish context = () =>
         {
             answer = "2";
             questionDataParser = CreateQuestionDataParser();
@@ -26,15 +26,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
             };
         };
 
-        private Because of =
-            () =>
-                parsingResult =
-                    questionDataParser.TryParse(answer, questionVarName,question, CreateQuestionnaireDocumentWithOneChapter(question), out parcedValue);
+        Because of = () => parsingResult = questionDataParser.TryParse(answer, questionVarName + "__2", question, out parcedValue);
 
-        private It should_result_be_equal_to_2 = () =>
-            parcedValue.Value.ShouldEqual((decimal) 2);
-
-        private It should_result_key_be_equal_to_questionId = () =>
-            parcedValue.Key.ShouldEqual(questionId);
+        It should_result_be_equal_to_2 = () => parcedValue.ShouldEqual((decimal) 2);
     }
 }

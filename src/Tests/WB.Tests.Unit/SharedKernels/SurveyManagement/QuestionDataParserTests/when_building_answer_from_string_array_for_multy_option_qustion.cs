@@ -29,22 +29,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         private Because of =
             () =>
                 result =
-                    questionDataParser.BuildAnswerFromStringArray(new [] { new Tuple<string, string>(questionVarName + "_1", "1"), new Tuple<string, string>(questionVarName + "_2", "2") },
-                        question, CreateQuestionnaireDocumentWithOneChapter(question));
+                    questionDataParser.BuildAnswerFromStringArray(new [] { new Tuple<string, string>(questionVarName + "__1", "1"), new Tuple<string, string>(questionVarName + "__2", "2") },
+                        question);
 
         private It should_result_be_type_of_array_of_decimal = () =>
-            result.Value.Value.ShouldBeOfExactType<decimal[]>();
+            result.ShouldBeOfExactType<decimal[]>();
 
         private It should_result_has_2_answers = () =>
-            ((decimal[]) result.Value.Value).Length.ShouldEqual(2);
+            ((decimal[]) result).Length.ShouldEqual(2);
 
         private It should_result_first_item_equal_to_1 = () =>
-            ((decimal[]) result.Value.Value)[0].ShouldEqual(1);
+            ((decimal[]) result)[0].ShouldEqual(1);
 
         private It should_result_second_item_equal_to_2 = () =>
-            ((decimal[]) result.Value.Value)[1].ShouldEqual(2);
-
-        private It should_result_key_be_equal_to_questionId = () =>
-            result.Value.Key.ShouldEqual(questionId);
+            ((decimal[]) result)[1].ShouldEqual(2);
     }
 }

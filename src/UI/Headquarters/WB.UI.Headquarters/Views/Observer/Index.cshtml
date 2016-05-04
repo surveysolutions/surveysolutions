@@ -33,9 +33,9 @@
             </a>
 
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: search">
+                <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: filter">
                 <div class="input-group-btn">
-                    <button class="btn btn-default" type="button" data-bind="click: search">
+                    <button class="btn btn-default" type="button" data-bind="click: filter">
                         <i class="glyphicon glyphicon-search"></i>
                     </button>
                 </div>
@@ -55,20 +55,17 @@
                 <th data-bind='sortby : "UserName"'>Name</th>
                 <th data-bind='sortby : "CreationDate"'>Creation date</th>
                 <th data-bind='sortby : "Email"'>Email</th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
             <!-- ko foreach:Items -->
             <tr>
-                <td data-bind="text: UserName"></td>
+                <td data-bind="">
+                    <a data-bind="attr: { href: $editUrl + '/' + UserId() }, text: UserName"></a>
+                </td>
                 <td data-bind="text: CreationDate"></td>
-                <td data-bind="text: Email"></td>
-
                 <td>
-                    <a class="btn btn-info" data-bind="attr: { href: $editUrl + '/' + UserId() }">
-                        <i class="glyphicon glyphicon-edit"></i> Edit
-                    </a>
+                    <a data-bind="attr:{href:'mailto:' + Email()},text:Email"></a>
                 </td>
             </tr>
             <!-- /ko -->

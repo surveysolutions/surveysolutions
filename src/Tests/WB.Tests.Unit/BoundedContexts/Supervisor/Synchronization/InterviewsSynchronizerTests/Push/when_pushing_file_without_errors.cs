@@ -8,10 +8,9 @@ using Machine.Specifications;
 using Moq;
 using Moq.Protected;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
-using WB.Core.SharedKernels.SurveySolutions.Services;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSynchronizerTests.Push
@@ -22,7 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
         {
             string positiveResponse = ":)";
 
-            fileSyncRepository.Setup(x => x.GetBinaryFilesFromSyncFolder())
+            fileSyncRepository.Setup(x => x.GetImagesByInterviews())
                 .Returns(new List<InterviewBinaryDataDescriptor>() { new InterviewBinaryDataDescriptor(interviewId, fileName, () => new byte[] { 1 }) });
 
             var httpMessageHandler = Mock.Of<HttpMessageHandler>();
@@ -35,20 +34,20 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                 .Callback<HttpRequestMessage, CancellationToken>((message, token) =>
                     contentSentToHq = message.Content.ReadAsStringAsync().Result);
 
-            var jsonUtils = Mock.Of<IJsonUtils>(utils
+            var jsonUtils = Mock.Of<ISerializer>(utils
                => utils.Deserialize<bool>(positiveResponse) == true);
 
             interviewsSynchronizer = Create.InterviewsSynchronizer(
                 httpMessageHandler: () => httpMessageHandler,
                 interviewSynchronizationFileStorage: fileSyncRepository.Object,
-                jsonUtils: jsonUtils);
+                serializer: jsonUtils);
         };
 
         Because of = () =>
             interviewsSynchronizer.Push(userId);
 
         It should_remove_sent_file_from_sync_storage = () =>
-          fileSyncRepository.Verify(x => x.RemoveBinaryDataFromSyncFolder(interviewId,fileName), Times.Once);
+          fileSyncRepository.Verify(x => x.RemoveInterviewImage(interviewId,fileName), Times.Once);
 
         private static Mock<IInterviewSynchronizationFileStorage> fileSyncRepository = new Mock<IInterviewSynchronizationFileStorage>();
         private static InterviewsSynchronizer interviewsSynchronizer;

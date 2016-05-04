@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
@@ -27,7 +25,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                 this.fileSystemAccessor.CreateDirectory(this.basePath);
         }
 
-        public void MoveInterviewsBinaryDataToSyncFolder(Guid interviewId)
+        public void MoveInterviewImagesToSyncFolder(Guid interviewId)
         {
             var interviewDirectoryPath = this.GetPathToInterviewDirectory(interviewId);
 
@@ -41,7 +39,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             }
         }
 
-        public IList<InterviewBinaryDataDescriptor> GetBinaryFilesFromSyncFolder()
+        public IList<InterviewBinaryDataDescriptor> GetImagesByInterviews()
         {
             var result = new List<InterviewBinaryDataDescriptor>();
 
@@ -62,7 +60,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             return result;
         }
 
-        public void RemoveBinaryDataFromSyncFolder(Guid interviewId, string fileName)
+        public void RemoveInterviewImage(Guid interviewId, string fileName)
         {
             var interviewSyncDirectory = this.GetPathToInterviewDirectory(interviewId);
 

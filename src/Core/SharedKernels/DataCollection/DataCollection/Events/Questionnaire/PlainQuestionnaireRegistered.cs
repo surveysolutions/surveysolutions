@@ -1,6 +1,11 @@
-﻿namespace WB.Core.SharedKernels.DataCollection.Events.Questionnaire
+﻿using System;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
+
+namespace WB.Core.SharedKernels.DataCollection.Events.Questionnaire
 {
-    public class PlainQuestionnaireRegistered
+    [Obsolete]
+    public class PlainQuestionnaireRegistered : IEvent
     {
         public long Version { get; private set; }
         public bool AllowCensusMode { get; private set; }

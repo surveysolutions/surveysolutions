@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Net;
 using System.Threading;
+using EventStore.ClientAPI;
 using EventStore.ClientAPI.Embedded;
+using EventStore.ClientAPI.SystemData;
 using EventStore.Core;
 using EventStore.Core.Bus;
 using EventStore.Core.Messages;
 using Machine.Specifications;
 using Moq;
 using Ncqrs;
-using WB.Core.Infrastructure.Storage.EventStore;
+using WB.Infrastructure.Native.Storage.EventStore;
 
 namespace WB.Tests.Integration.EventStoreTests
 {
@@ -19,8 +21,6 @@ namespace WB.Tests.Integration.EventStoreTests
 
         Establish context = () =>
         {
-            NcqrsEnvironment.InitDefaults();
-
             var emptyEndpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 0);
             try
             {
@@ -63,7 +63,12 @@ namespace WB.Tests.Integration.EventStoreTests
             if (!startedEvent.Wait(60000))
                 throw new TimeoutException("Test EventStore node haven't started in 60 seconds.");
 
-            ConnectionProvider = Mock.Of<IEventStoreConnectionProvider>(x => x.Open() == EmbeddedEventStoreConnection.Create(node, null));
+            var settings = ConnectionSettings.Create()
+                .UseConsoleLogger()
+                .EnableVerboseLogging()
+                .SetDefaultUserCredentials(new UserCredentials("admin", "changeit"))
+                .KeepReconnecting();
+            ConnectionProvider = Mock.Of<IEventStoreConnectionProvider>(x => x.Open() == EmbeddedEventStoreConnection.Create(node, settings, null));
         };
 
         Cleanup staff = () => node.Stop();

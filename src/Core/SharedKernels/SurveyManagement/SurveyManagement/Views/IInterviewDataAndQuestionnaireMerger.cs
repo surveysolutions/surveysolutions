@@ -1,6 +1,6 @@
-﻿using Main.Core.Documents;
-using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+﻿using System.Collections.Generic;
+using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
@@ -8,10 +8,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
 {
     public interface IInterviewDataAndQuestionnaireMerger
     {
-        InterviewDetailsView Merge(InterviewData interview,
-            QuestionnaireDocumentVersioned questionnaire,
-            ReferenceInfoForLinkedQuestions questionnaireReferenceInfo,
-            QuestionnaireRosterStructure questionnaireRosters,
-            UserDocument user);
+        InterviewDetailsView Merge(InterviewData interview, QuestionnaireDocument questionnaire, UserLight responsible, InterviewLinkedQuestionOptions interviewLinkedQuestionOptions, IEnumerable<AttachmentInfoView> attachmentInfos);
     }
 }

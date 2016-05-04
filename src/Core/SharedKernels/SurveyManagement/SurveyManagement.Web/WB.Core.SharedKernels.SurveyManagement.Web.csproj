@@ -9,11 +9,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WB.Core.SharedKernels.SurveyManagement.Web</RootNamespace>
     <AssemblyName>WB.Core.SharedKernels.SurveyManagement.Web</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,23 +48,39 @@
       <HintPath>..\..\..\..\..\packages\AntiXSS.4.2.1\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Ionic.Zip, Version=1.9.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\DotNetZip.1.9.3\lib\net20\Ionic.Zip.dll</HintPath>
+    <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\ImageResizer.4.0.5\lib\net45\ImageResizer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    <Reference Include="Ionic.Zip, Version=1.9.7.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\DotNetZip.1.9.7\lib\net20\Ionic.Zip.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
       <HintPath>..\..\..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
@@ -86,20 +103,34 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\Ninject.Web.WebApi.3.2.4.0\lib\net45-full\Ninject.Web.WebApi.dll</HintPath>
     </Reference>
+    <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\protobuf-net.2.0.0.668\lib\portable-sl4+net40+wp7+windows8\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="StatData">
-      <HintPath>..\..\..\..\..\Externals\StatData.dll</HintPath>
+      <HintPath>..\..\..\..\..\libs\StatData.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
@@ -159,46 +190,87 @@
     <Compile Include="Api\ControlPanelApiController.cs" />
     <Compile Include="Api\HealthCheckApiController.cs" />
     <Compile Include="Api\InterviewerSyncController.cs" />
+    <Compile Include="Api\Interviewer\InterviewerControllerBase.cs" />
+    <Compile Include="Api\Interviewer\DevicesControllerBase.cs" />
+    <Compile Include="Api\Interviewer\UsersControllerBase.cs" />
+    <Compile Include="Api\Interviewer\QuestionnairesControllerBase.cs" />
+    <Compile Include="Api\Interviewer\InterviewsControllerBase.cs" />
+    <Compile Include="Api\Interviewer\v1\InterviewerApiV1Controller.cs" />
+    <Compile Include="Api\Interviewer\v1\DevicesApiV1Controller.cs" />
+    <Compile Include="Api\Interviewer\v1\InterviewsApiV1Controller.cs" />
+    <Compile Include="Api\Interviewer\v1\QuestionnairesApiV1Controller.cs" />
+    <Compile Include="Api\Interviewer\v1\UsersApiV1Controller.cs" />
+    <Compile Include="Api\Interviewer\v2\InterviewerApiV2Controller.cs" />
+    <Compile Include="Api\Interviewer\v2\DevicesApiV2Controller.cs" />
+    <Compile Include="Api\Interviewer\v2\InterviewsApiV2Controller.cs" />
+    <Compile Include="Api\Interviewer\v2\AttachmentsApiV2Controller.cs" />
+    <Compile Include="Api\Interviewer\v2\QuestionnairesApiV2Controller.cs" />
+    <Compile Include="Api\Interviewer\v2\UsersApiV2Controller.cs" />
     <Compile Include="Api\InterviewsController.cs" />
     <Compile Include="Api\QuestionnairesController.cs" />
     <Compile Include="Api\UsersController.cs" />
     <Compile Include="Code\ApiBasicAuthAttribute.cs" />
-    <Compile Include="Code\PlainApiTransactionFilter.cs" />
+    <Compile Include="Code\ProtobufJsonFormatter.cs" />
+    <Compile Include="Code\ProtobufSerializer.cs" />
     <Compile Include="Code\Security\CustomIdentity.cs" />
     <Compile Include="Code\Security\CustomPrincipal.cs" />
-    <Compile Include="Code\PlainTransactionFilter.cs" />
     <Compile Include="Code\Security\IdentityExtentions.cs" />
     <Compile Include="Code\Security\PrincipalReplacer.cs" />
+    <Compile Include="Code\ProtobufJsonSerializerAttribute.cs" />
+    <Compile Include="Code\WriteToSyncLogAttribute.cs" />
+    <Compile Include="Controllers\AttachmentsController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
+    <Compile Include="Controllers\InterviewersController.cs" />
     <Compile Include="Controllers\PeriodicStatusReportController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
+    <Compile Include="Controllers\TabletReportApiController.cs" />
+    <Compile Include="Controllers\TeamsController.cs" />
     <Compile Include="Filters\LimitsFilterAttribute.cs" />
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
     <Compile Include="Filters\ReplacePrincipal.cs" />
     <Compile Include="Filters\ObserverNotAllowedApiAttribute.cs" />
     <Compile Include="Filters\ReplacePrincipalWebApi.cs" />
+    <Compile Include="Filters\TypedDirectRouteProvider.cs" />
+    <Compile Include="Models\Api\AssignChangeApiModel.cs" />
+    <Compile Include="Models\Api\StatusChangeApiModel.cs" />
+    <Compile Include="Models\CypherSettingsModel.cs" />
+    <Compile Include="Models\TabletInfoReportListViewModel.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
+    <Compile Include="Models\Api\BatchUploadModel.cs" />
     <Compile Include="Models\DeleteQuestionnaireRequestModel.cs" />
-    <Compile Include="Models\AllQuestionnairesRequestModel.cs" />
     <Compile Include="Models\EventHandlerDescriptionModel.cs" />
     <Compile Include="Models\ImportQuestionnaireRequest.cs" />
+    <Compile Include="Models\InterviewersFilter.cs" />
+    <Compile Include="Models\InterviewersModel.cs" />
     <Compile Include="Models\QuantityByInterviewersReportModel.cs" />
     <Compile Include="Models\QuantityBySupervisorsReportModel.cs" />
     <Compile Include="Models\RebuildReadSideInputViewModel.cs" />
     <Compile Include="Models\RebuildReadSideType.cs" />
     <Compile Include="Models\SpeedByInterviewersReportModel.cs" />
     <Compile Include="Models\SpeedBySupervisorsReportModel.cs" />
+    <Compile Include="Models\InterviewersListViewModel.cs" />
+    <Compile Include="Models\UserBatchUploadModel.cs" />
+    <Compile Include="Properties\SyncLogMessages.Designer.cs">
+      <DependentUpon>SyncLogMessages.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\Archived.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Archived.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\InterviewerSyncStrings.Designer.cs">
+    <Compile Include="Resources\EnumNames.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>InterviewerSyncStrings.resx</DependentUpon>
+      <DependentUpon>EnumNames.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\TabletSyncMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\Interviews.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -215,6 +287,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Resources\EnumNames.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>EnumNames.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scripts\viewmodels\pages\create-interviewer.js" />
     <Compile Include="Utils\Binding\GenericBinderResolver.cs" />
     <Compile Include="Utils\Binding\IModelBinder.cs" />
     <Compile Include="Utils\Binding\ModelBinder.cs" />
@@ -265,15 +342,11 @@
     <Compile Include="Models\CompleteQuestionSettings.cs" />
     <Compile Include="Models\DeleteInterviewsModel.cs" />
     <Compile Include="Models\DesignerQuestionnairesListViewModel.cs" />
-    <Compile Include="Models\DesignerQuestionnairesRequestModel.cs" />
     <Compile Include="Models\DocumentFilter.cs" />
     <Compile Include="Models\DocumentListViewModel.cs" />
-    <Compile Include="Models\DocumentRequestModel.cs" />
     <Compile Include="Models\GlobalHelper.cs" />
-    <Compile Include="Models\GridDataRequestModel.cs" />
     <Compile Include="Models\HistoryItemView.cs" />
     <Compile Include="Models\HQDashboardModel.cs" />
-    <Compile Include="Models\IGridRequest.cs" />
     <Compile Include="Models\InterviewDetailsSchedulerViewModel.cs" />
     <Compile Include="Models\InterviewsStatisticsViewModel.cs" />
     <Compile Include="Models\InterviewSummaryViewModel.cs" />
@@ -289,19 +362,15 @@
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />
     <Compile Include="Models\QuestionnaireVerificationResponse.cs" />
-    <Compile Include="Models\RevalidateModel.cs" />
+    <Compile Include="Models\TroubleshootModel.cs" />
     <Compile Include="Models\StatusListViewModel.cs" />
-    <Compile Include="Models\StatusRequestModel.cs" />
     <Compile Include="Models\StringExtension.cs" />
     <Compile Include="Models\SummaryListViewModel.cs" />
-    <Compile Include="Models\SummaryRequestModel.cs" />
-    <Compile Include="Models\SurveyListViewModel.cs" />
-    <Compile Include="Models\SurveyRequestModel.cs" />
+    <Compile Include="Models\SurveysAndStatusesReportRequest.cs" />
     <Compile Include="Models\InterviewerModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UserEditModel.cs" />
     <Compile Include="Models\UsersListViewModel.cs" />
-    <Compile Include="Models\UsersRequestModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\FieldsAndValidations.Designer.cs">
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
@@ -317,6 +386,9 @@
     <Compile Include="SurveyManagementWebModule.cs" />
     <Compile Include="Utils\Compression\ZipHelper.cs" />
     <Compile Include="Utils\Compression\ZipManager.cs" />
+    <Compile Include="Utils\EnumExtensions.cs" />
+    <Compile Include="Utils\ExceptionExtensoins.cs" />
+    <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\Membership\GlobalInfo.cs" />
     <Compile Include="Utils\Membership\GlobalInfoProvider.cs" />
     <Compile Include="Utils\Membership\IGlobalInfoProvider.cs" />
@@ -342,6 +414,11 @@
       <LastGenOutput>FieldsAndValidations.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\SyncLogMessages.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SyncLogMessages.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Strings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
@@ -351,9 +428,9 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Archived.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\InterviewerSyncStrings.resx">
+    <EmbeddedResource Include="Resources\TabletSyncMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>InterviewerSyncStrings.Designer.cs</LastGenOutput>
+      <LastGenOutput>TabletSyncMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Interviews.resx">
@@ -375,8 +452,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Scripts\bootstrap-datepicker.js" />
     <EmbeddedResource Include="Scripts\bootstrap.file-input.js" />
-    <EmbeddedResource Include="Scripts\bootstrap.js" />
-    <EmbeddedResource Include="Scripts\bootstrap.min.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Content\datepicker.css" />
@@ -426,15 +501,16 @@
     <EmbeddedResource Include="fonts\fontawesome-webfont.ttf" />
     <EmbeddedResource Include="fonts\fontawesome-webfont.woff" />
     <EmbeddedResource Include="fonts\FontAwesome.otf" />
-    <EmbeddedResource Include="fonts\glyphicons-halflings-regular.eot" />
-    <EmbeddedResource Include="fonts\glyphicons-halflings-regular.ttf" />
-    <EmbeddedResource Include="fonts\glyphicons-halflings-regular.woff" />
     <None Include="app.config" />
+    <None Include="Content\bootstrap-theme.css.map" />
+    <None Include="Content\bootstrap.css.map" />
+    <None Include="fonts\glyphicons-halflings-regular.eot" />
+    <None Include="fonts\glyphicons-halflings-regular.ttf" />
+    <None Include="fonts\glyphicons-halflings-regular.woff" />
     <None Include="packages.config" />
-    <EmbeddedResource Include="Views\Interview\ConfirmRevalidation.cshtml" />
-    <EmbeddedResource Include="Views\Interview\Revalidate.cshtml" />
+    <EmbeddedResource Include="Views\Interview\Troubleshooting.cshtml" />
+    <EmbeddedResource Include="Views\Interview\Troubleshoot.cshtml" />
     <EmbeddedResource Include="fonts\fontawesome-webfont.svg" />
-    <EmbeddedResource Include="fonts\glyphicons-halflings-regular.svg" />
     <EmbeddedResource Include="Scripts\supervisor.framework.js" />
     <EmbeddedResource Include="Scripts\viewmodels\listview.js" />
     <EmbeddedResource Include="Scripts\viewmodels\pagebase.js" />
@@ -462,7 +538,6 @@
     <EmbeddedResource Include="Views\Survey\Interviews.cshtml" />
     <EmbeddedResource Include="Views\Survey\Status.cshtml" />
     <EmbeddedResource Include="Views\Survey\TeamMembersAndStatuses.cshtml" />
-    <EmbeddedResource Include="Views\TabletReport\Packages.cshtml" />
     <EmbeddedResource Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <EmbeddedResource Include="Views\Shared\_alerts.cshtml" />
     <EmbeddedResource Include="Views\Shared\_ListViewPagingScript.cshtml" />
@@ -474,7 +549,6 @@
     <EmbeddedResource Include="Views\Shared\_LayoutWithSidebar.cshtml" />
     <EmbeddedResource Include="Views\Shared\_NoFilterListViewLayout.cshtml" />
     <EmbeddedResource Include="Views\Interviewer\Edit.cshtml" />
-    <EmbeddedResource Include="Views\Interviewer\Index.cshtml" />
     <EmbeddedResource Include="Views\Interviewer\Create.cshtml" />
     <EmbeddedResource Include="Views\Shared\UserEditForm.cshtml" />
     <EmbeddedResource Include="Views\Shared\UserCreateForm.cshtml" />
@@ -482,7 +556,7 @@
     <EmbeddedResource Include="Views\Shared\_ControlPanelLayout.cshtml" />
     <EmbeddedResource Include="Views\Interview\InterviewHistory.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\InterviewDetails.cshtml" />
-    <EmbeddedResource Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
+    <EmbeddedResource Include="Views\Maintenance\WaitForReadSideRebuild.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\Index.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\Settings.cshtml" />
     <EmbeddedResource Include="Views\Shared\Clickjacking.cshtml" />
@@ -505,26 +579,44 @@
     <EmbeddedResource Include="Views\Interview\HistoryOfStatusesPartialView.cshtml" />
     <EmbeddedResource Include="Views\Interview\ApproveRejectPartialView.cshtml" />
     <EmbeddedResource Include="Views\Interview\StaticTextPartialView.cshtml" />
-    <EmbeddedResource Include="Views\Interview\QuestionPartialView.cshtml" />
-    <EmbeddedResource Include="Views\TabletReport\Device.cshtml" />
+    <EmbeddedResource Include="Views\Interview\DetailsQuestionPartialView.cshtml" />
     <EmbeddedResource Include="Views\Shared\Error.cshtml" />
     <EmbeddedResource Include="Views\ControlPanel\RepeatLastInterviewStatus.cshtml" />
     <EmbeddedResource Include="Views\PeriodicStatusReport\PeriodicStatusReport.cshtml" />
     <EmbeddedResource Include="Views\Shared\LimitsIndicator.cshtml" />
-    <EmbeddedResource Include="Views\Interviewer\Archived.cshtml" />
+    <EmbeddedResource Include="Views\Shared\_SharedAuthenticationLayout.cshtml" />
+    <None Include="Scripts\spin.min.js.map">
+      <DependentUpon>spin.min.js</DependentUpon>
+    </None>
+    <EmbeddedResource Include="Scripts\viewmodels\pages\controlpanel\synchronizationlog.js" />
+    <EmbeddedResource Include="Views\ControlPanel\SynchronizationLog.cshtml" />
+    <EmbeddedResource Include="Views\ControlPanel\EventStore.cshtml" />
+    <EmbeddedResource Include="Views\Maintenance\ReadSideIsOutdated.cshtml" />
+    <EmbeddedResource Include="Views\Interview\EditableSupervisorsQuestionPartialView.cshtml" />
+    <EmbeddedResource Include="Views\Interview\ReadOnlyQuestionPartialView.cshtml" />
+    <EmbeddedResource Include="Views\Interview\EditableMultiOptionsQuestionPartialView.cshtml" />
+    <EmbeddedResource Include="Views\Interview\EditableYesNoQuestionPartialView.cshtml" />
+    <EmbeddedResource Include="Views\Interview\ReadOnlyYesNoQuestionPartialView.cshtml" />
+    <EmbeddedResource Include="Views\Interview\DetailsReadOnlyQuestionPartialView.cshtml" />
+    <EmbeddedResource Include="Views\TabletReport\PackagesInfo.cshtml" />
+    <EmbeddedResource Include="Views\Shared\ApiUserCreateForm.cshtml" />
+    <EmbeddedResource Include="Views\Shared\ApiUserEditForm.cshtml" />
+    <EmbeddedResource Include="Views\Interviewers\Index.cshtml" />
+    <EmbeddedResource Include="Views\ControlPanel\Versions.cshtml" />
+    <EmbeddedResource Include="Views\Interview\AttachmentPartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
+      <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
+      <Name>WB.Infrastructure.Native</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
       <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
-      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
-      <Name>WB.Core.GenericSubdomains.Utils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure.Storage\WB.Core.Infrastructure.Storage.csproj">
-      <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
-      <Name>WB.Core.Infrastructure.Storage</Name>
+    <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
+      <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
+      <Name>WB.Core.GenericSubdomains.Portable</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
@@ -546,9 +638,9 @@
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
-      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
-      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
+    <ProjectReference Include="..\..\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
+      <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>
+      <Name>WB.Core.SharedKernels.Questionnaire</Name>
     </ProjectReference>
     <ProjectReference Include="..\SurveyManagement\WB.Core.SharedKernels.SurveyManagement.csproj">
       <Project>{29A132B5-A573-40D2-9E8F-2871E95D7766}</Project>
@@ -616,16 +708,99 @@
     <EmbeddedResource Include="Scripts\viewmodels\pages\periodicstatusreport.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\viewmodels\pages\exportdata.js" />
+    <EmbeddedResource Include="Scripts\viewmodels\pages\interviewers.js" />
+    <EmbeddedResource Include="Scripts\viewmodels\pages\tabletinfo.js" />
+    <EmbeddedResource Include="Scripts\knockout\ko.spin.js" />
+    <EmbeddedResource Include="Scripts\spin.js" />
+    <EmbeddedResource Include="Scripts\knockout\ko.extenders.js" />
+    <Content Include="Scripts\spin.min.js" />
+    <EmbeddedResource Include="Content\bootstrap-datepicker.css" />
+    <EmbeddedResource Include="Content\bootstrap-datepicker.min.css" />
+    <EmbeddedResource Include="Content\bootstrap-datepicker.standalone.css" />
+    <EmbeddedResource Include="Content\bootstrap-datepicker.standalone.min.css" />
+    <EmbeddedResource Include="Content\bootstrap-datepicker3.css" />
+    <EmbeddedResource Include="Content\bootstrap-datepicker3.min.css" />
+    <EmbeddedResource Include="Content\bootstrap-datepicker3.standalone.css" />
+    <EmbeddedResource Include="Content\bootstrap-datepicker3.standalone.min.css" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Scripts\bootstrap-datepicker.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <EmbeddedResource Include="Scripts\moment-with-locales.js" />
+    <EmbeddedResource Include="Scripts\moment-with-locales.min.js" />
+    <EmbeddedResource Include="Scripts\bootstrap3-typeahead.js" />
+    <EmbeddedResource Include="Scripts\bootstrap3-typeahead.min.js" />
+    <EmbeddedResource Include="Scripts\knockout\ko.typeahead.js" />
+    <EmbeddedResource Include="Scripts\components\typeahead-extended.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.ar.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.az.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.bg.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.bs.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.ca.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.cs.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.cy.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.da.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.de.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.el.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.en-GB.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.es.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.et.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.eu.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.fa.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.fi.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.fo.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.fr-CH.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.fr.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.gl.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.he.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.hr.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.hu.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.hy.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.id.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.is.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.it-CH.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.it.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.ja.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.ka.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.kh.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.kk.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.kr.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.lt.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.lv.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.me.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.mk.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.ms.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.nb.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.nl-BE.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.nl.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.no.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.pl.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.pt-BR.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.pt.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.ro.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.rs-latin.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.rs.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.ru.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.sk.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.sl.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.sq.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.sr-latin.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.sr.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.sv.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.sw.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.th.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.tr.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.uk.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.vi.min.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.zh-TW.min.js" />
+    <Content Include="Scripts\npm.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-  </Target>
+  <Import Project="..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -1,0 +1,269 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+
+  <style name="Dashboard_Interviews_Header" parent="AppTheme">
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_TabMenu_marginTop</item>
+    <item name="android:layout_marginBottom">@dimen/Dashboard_TabMenu_marginBottom</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_Layout_marginLeft</item>
+    <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
+  </style>
+
+  <style name="Dashboard_Interviews_Header_Body" parent="AppTheme">
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:orientation">horizontal</item>
+  </style>
+
+  <style name="Dashboard_TabLink" parent="AppTheme">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:paddingRight">@dimen/Dashboard_TabMenu_tab_padding</item>
+    <item name="android:paddingTop">@dimen/Dashboard_TabMenu_tab_padding</item>
+    <item name="android:paddingBottom">@dimen/Dashboard_TabMenu_tab_padding</item>
+  </style>
+
+  <style name="Dashboard_NewItemsLink" parent="Dashboard_TabLink">
+    <item name="android:textColor">@color/dashboard_new_tab</item>
+  </style>
+
+  <style name="Dashboard_StartedLink" parent="Dashboard_TabLink">
+    <item name="android:layout_marginLeft">@dimen/Dashboard_TabMenu_tab_marginLeft</item>
+    <item name="android:textColor">@color/dashboard_in_progress_tab</item>
+  </style>
+
+  <style name="Dashboard_CompletedLink" parent="Dashboard_TabLink">
+    <item name="android:layout_marginLeft">@dimen/Dashboard_TabMenu_tab_marginLeft</item>
+    <item name="android:textColor">@color/dashboard_completed_tab</item>
+  </style>
+
+  <style name="Dashboard_RejectedLink" parent="Dashboard_TabLink">
+    <item name="android:layout_marginLeft">@dimen/Dashboard_TabMenu_tab_marginLeft</item>
+    <item name="android:textColor">@color/dashboard_rejected_tab</item>
+  </style>
+
+  <style name="Dashboard_InterviewsList" parent="AppTheme">
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">fill_parent</item>
+  </style>
+
+  <style name="Dashboard_InterviewListItem" parent="AppTheme">
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_Layout_marginLeft</item>
+    <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
+    <item name="android:layout_marginBottom">@dimen/Dashboard_Items_space</item>
+    <item name="android:clickable">true</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_Layout" parent="AppTheme">
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">fill_parent</item>
+    <item name="android:orientation">horizontal</item>
+    <item name="android:background">@drawable/dashboard_item_layout_border</item>
+
+  </style>
+
+  <style name="Dashboard_InterviewItem_StatusPanel" parent="AppTheme">
+    <item name="android:layout_width">@dimen/Dashboard_InterviewItem_StatusPanel_width</item>
+    <item name="android:layout_height">fill_parent</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_InterviewItem_StatusPanel_margin</item>
+    <item name="android:layout_marginBottom">@dimen/Dashboard_InterviewItem_StatusPanel_margin</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_InterviewItem_StatusPanel_margin</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_InformationBlock" parent="AppTheme">
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">fill_parent</item>
+    <item name="android:layout_marginBottom">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
+    <item name="android:layout_marginRight">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
+    <item name="android:orientation">vertical</item>
+  </style>
+
+  <style name="Dashboard_Location">
+    <item name="android:layout_width">@dimen/Theme_Button_min_height</item>
+    <item name="android:layout_height">@dimen/Theme_Button_min_height</item>
+    <item name="android:background">@drawable/dashboard_location_bg</item>
+    <item name="android:layout_gravity">bottom</item>
+  </style>
+  
+  <style name="Dashboard_InterviewItem_Title" parent="AppTheme">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">@dimen/textsize_20</item>
+    <item name="android:fontFamily">Roboto</item>
+    <item name="android:paddingTop">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_RemoveInterviewButton" parent="AppTheme">
+    <item name="android:layout_width">@dimen/Theme_Button_min_height</item>
+    <item name="android:layout_height">@dimen/Theme_Button_min_height</item>
+    <item name="android:textColor">@color/dashboard_interview_title</item>
+    <item name="android:background">@drawable/dashboard_remove_icon</item>
+    <item name="android:textSize">@dimen/textsize_20</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_InterviewItem_RemoveInterviewButton_paddingTop</item>
+    <item name="android:gravity">center</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_PrefilledQuestions" parent="AppTheme">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:focusable">false</item>
+    <item name="android:focusableInTouchMode">false</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_InterviewItem_PrefilledQuestions_marginTop</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_PrefilledQuestion" parent="AppTheme">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:orientation">horizontal</item>
+    <item name="android:textSize">@dimen/textsize_20</item>
+    <item name="android:singleLine">true</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_PrefilledQuestion_Question" parent="AppTheme">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:fontFamily">Trebuchet</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textColor">@color/dashboard_prefilled_question</item>
+    <item name="android:layout_marginBottom">@dimen/Dashboard_InterviewItem_Comment_lines_margin</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:singleLine">true</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_PrefilledQuestion_Delimiter" parent="Dashboard_InterviewItem_PrefilledQuestion_Question">
+  </style>
+
+  <style name="Dashboard_InterviewItem_PrefilledQuestion_Answer" parent="AppTheme">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:fontFamily">Roboto</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textColor">@color/dashboard_interview_title</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:singleLine">true</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_Comment" parent="AppTheme">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:fontFamily">Roboto</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textColor">@color/dashboard_new_interview_status</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_InterviewItem_Comment_lines_margin</item>
+    <item name="android:singleLine">true</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_CreateButton" parent="AppTheme">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:background">@drawable/default_input_button</item>
+    <item name="android:paddingLeft">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
+    <item name="android:paddingRight">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_InterviewItem_CreateButton_marginTop</item>
+    <item name="android:layout_marginBottom">@dimen/Dashboard_InterviewItem_CreateButton_marginBottom</item>
+  </style>
+
+  <style name="Dashboard_NoInterviewsPanel" parent="AppTheme">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:orientation">vertical</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_TabMenu_marginTop</item>
+    <item name="android:layout_marginBottom">@dimen/Dashboard_TabMenu_marginBottom</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_Layout_marginLeft</item>
+    <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
+  </style>
+
+  <style name="Dashboard_NoInterviewsTitle" parent="AppTheme">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">@dimen/textsize_20</item>
+    <item name="android:fontFamily">Roboto</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_NoInterviewsTitle_marginTop</item>
+  </style>
+
+  <style name="Dashboard_NoInterviewsText" parent="AppTheme">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">@dimen/textsize_20</item>
+    <item name="android:fontFamily">Roboto</item>
+    <item name="android:textColor">@color/dashboard_no_interviews_text</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_NoInterviewsText_marginTop</item>
+  </style>
+
+  <style name="Dashboard_NoInterviewsSyncButton" parent="AppTheme">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:background">@drawable/default_input_button</item>
+    <item name="android:paddingLeft">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
+    <item name="android:paddingRight">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_NoInterviewsText_marginTop</item>
+    <item name="android:drawableLeft">@drawable/dashboard_sync_icon_small</item>
+  </style>
+
+  <style name="Dashboard_Synchronization_Divider">
+    <item name="android:layout_height">@dimen/Dashboard_Synchronization_Divider_Height</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:background">@color/dashboard_synchronization_delimiter</item>
+  </style>
+
+  <style name="Dashboard_Synchronization_Operation_Title" parent="AppTheme">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textColor">@color/dashboard_synchronization_regular_title</item>
+  </style>
+
+  <style name="Dashboard_Synchronization_Statistics_Text" parent="AppTheme">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textColor">@color/dashboard_synchronization_statistics_text</item>
+  </style>
+
+
+  <style name="Dashboard_Synchronization_Lock_Text" parent="Dashboard_Synchronization_Statistics_Text">
+    <item name="android:layout_width">@dimen/Dashboard_Synchronization_Statistics_Width</item>
+    <item name="android:layout_alignParentBottom">true</item>
+  </style>
+
+  <style name="Dashboard_Synchronization_Cancel_Text" parent="Dashboard_Synchronization_Statistics_Text">
+    <item name="android:textAllCaps">true</item>
+    <item name="android:textColor">@color/dashboard_synchronization_regular_title</item>
+    <item name="android:layout_alignParentBottom">true</item>
+    <item name="android:layout_alignParentRight">true</item>
+  </style>
+
+  <style name="Dashboard_Synchronization_Holder" parent="AppTheme">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">@dimen/Dashboard_Synchronization_Statistics_Height</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_Layout_marginLeft</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_Layout_marginLeft</item>
+    <item name="android:layout_marginBottom">@dimen/Dashboard_Layout_marginRight</item>
+    <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
+  </style>
+
+  <style name="Dashboard_Synchronization_Image" parent="AppTheme">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+  </style>
+
+  <style name="Dashboard_Synchronization_Statistics_Holder" parent="VerticalContentHeightWrappingLayout">
+    <item name="android:layout_width">@dimen/Dashboard_Synchronization_Statistics_Width</item>
+    <item name="android:layout_alignParentBottom">true</item>
+  </style>
+</resources>
+
+

@@ -9,7 +9,7 @@ using Moq.Protected;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Supervisor.Users;
 using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
@@ -18,7 +18,7 @@ using It = Machine.Specifications.It;
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Users.HeadquartersLoginServiceTests
 {
     [Subject(typeof(HeadquartersLoginService))]
-    public class when_valid_credentials_provided
+    internal class when_valid_credentials_provided
     {
         private const string UserDetailsUri = "http://localhost/userDetails";
 
@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Users.HeadquartersLoginServic
                 command.Email == HeadquartersUser.Email &&
                 command.IsLockedByHQ == HeadquartersUser.IsLockedByHQ &&
                 command.IsLockedBySupervisor == HeadquartersUser.IsLockedBySupervisor),
-            Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()));
+            Moq.It.IsAny<string>()));
 
         static HeadquartersLoginService service;
         static Mock<ICommandService> commandService;

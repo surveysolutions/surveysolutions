@@ -20,20 +20,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         {
             eventContext = new EventContext();
 
-            var questionaire = Mock.Of<IQuestionnaire>(_
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.Version == questionnaireVersion);
 
-            var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
-                => repository.GetQuestionnaire(questionnaireId) == questionaire &&
-                    repository.GetHistoricalQuestionnaire(questionnaireId, questionnaireVersion) == questionaire);
-
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
+            interview = Create.Interview(questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>
-            new Interview(interviewId, userId, questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, isValid);
+            interview.CreateInterviewCreatedOnClient(questionnaireId, questionnaireVersion, interviewStatus, featuredQuestionsMeta, isValid, userId);
 
         It should_event_context_contains_4_events = () =>
             eventContext.Events.Count().ShouldEqual(4);
@@ -76,9 +70,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid questionnaireId = Guid.Parse("10000000000000000000000000000000");
         private static long questionnaireVersion = 18;
         private static Guid userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        private static Guid interviewId = Guid.Parse("11000000000000000000000000000000");
         private static bool isValid = true;
         private static AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta = null;
         private static InterviewStatus interviewStatus = InterviewStatus.Completed;
+        private static Interview interview;
     }
 }

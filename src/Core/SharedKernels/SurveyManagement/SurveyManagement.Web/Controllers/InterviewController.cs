@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.Revalidate;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code.Security;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -22,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public class InterviewController : BaseController
     {
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
-        private readonly IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory;
+        private readonly IViewFactory<InterviewTroubleshootInputModel, InterviewTroubleshootView> troubleshootInterviewViewFactory;
         private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
         private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
         private readonly IInterviewDetailsViewFactory interviewDetailsViewFactory;
@@ -32,14 +34,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             IGlobalInfoProvider provider, 
             ILogger logger,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
-            IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory,
+            IViewFactory<InterviewTroubleshootInputModel, InterviewTroubleshootView> troubleshootInterviewViewFactory,
             IInterviewSummaryViewFactory interviewSummaryViewFactory,
             IInterviewHistoryFactory interviewHistoryViewFactory, 
             IInterviewDetailsViewFactory interviewDetailsViewFactory)
             : base(commandService, provider, logger)
         {
             this.changeStatusFactory = changeStatusFactory;
-            this.revalidateInterviewViewFactory = revalidateInterviewViewFactory;
+            this.troubleshootInterviewViewFactory = troubleshootInterviewViewFactory;
             this.interviewSummaryViewFactory = interviewSummaryViewFactory;
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
@@ -50,7 +52,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (string.IsNullOrEmpty(rosterVectorAsString))
                 return new decimal[0];
 
-            return rosterVectorAsString.Split('_').Select(vector => decimal.Parse(vector.Replace('-', '.'))).ToArray();
+            return rosterVectorAsString.Split('_').Select(vector => decimal.Parse(vector)).ToArray();
         }
 
         public ActionResult Details(Guid id, InterviewDetailsFilter? filter, Guid? currentGroupId, string rosterVector)
@@ -65,6 +67,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     });
 
             this.ViewBag.ActivePage = MenuItem.Docs;
+            this.ViewBag.InterviewId = id;
 
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
 
@@ -76,7 +79,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 return HttpNotFound();
 
             ChangeStatusView interviewInfo =
-                this.changeStatusFactory.Load(new ChangeStatusInputModel() {InterviewId = id});
+                this.changeStatusFactory.Load(new ChangeStatusInputModel {InterviewId = id});
 
             if (interviewInfo == null || interviewSummary == null)
                 return HttpNotFound();
@@ -95,41 +98,80 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public ActionResult Revalidate()
+        public ActionResult Troubleshoot()
         {
-            return this.View(new RevalidateModel());
+            return this.View(new TroubleshootModel());
         }
-
+        
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         [HttpPost]
-        public ActionResult Revalidate(RevalidateModel input)
+        public ActionResult Troubleshoot(TroubleshootModel input)
         {
-            return this.RedirectToAction("ConfirmRevalidation", new { id = input.InterviewId });
+            if (this.ModelState.IsValid)
+            {
+                return this.RedirectToAction("Troubleshooting", new { id = input.InterviewId });
+            }
+
+            return this.View(input);
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public ActionResult ConfirmRevalidation(Guid id)
+        public ActionResult Troubleshooting(Guid id)
         {
-            var model = this.revalidateInterviewViewFactory.Load(new InterviewInfoForRevalidationInputModel { InterviewId = id });
-            return this.View(model);
+            try
+            {
+                InterviewTroubleshootView model = this.troubleshootInterviewViewFactory.Load(new InterviewTroubleshootInputModel { InterviewId = id });
+                return this.View(model);
+            }
+            catch (Exception)
+            {
+                this.Error("No interview with such identifier. Try another one.");
+                return this.RedirectToAction("Troubleshoot", new TroubleshootModel { InterviewId = id });
+            }
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         [HttpPost]
         [ObserverNotAllowed]
-        public ActionResult ConfirmRevalidation(RevalidateModel input)
+        public ActionResult Revalidate(TroubleshootModel input)
         {
-            if (this.ModelState.IsValid)
+            try
             {
                 this.CommandService.Execute(new ReevaluateSynchronizedInterview(input.InterviewId));
             }
-            
-            var newModel =
-                this.revalidateInterviewViewFactory.Load(new InterviewInfoForRevalidationInputModel
-                {
-                    InterviewId = input.InterviewId
-                });
-            return this.View("ConfirmRevalidation", newModel);
+            catch (Exception exception)
+            {
+                Logger.Error(exception.Message, exception);
+                this.TempData["Revalidation.Error"] = "Revalidation was unsuccessful.";
+                this.TempData["Revalidation.ErrorDetails"] = exception.Message;
+            }
+            var inputModel = new InterviewTroubleshootInputModel { InterviewId = input.InterviewId };
+
+            var newModel = this.troubleshootInterviewViewFactory.Load(inputModel);
+
+            return this.View("Troubleshooting", newModel);
+        }
+
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        [HttpPost]
+        [ObserverNotAllowed]
+        public ActionResult RepeatLastStatus(TroubleshootModel input)
+        {
+            try
+            {
+                this.CommandService.Execute(new RepeatLastInterviewStatus(input.InterviewId, "Status set by Survey Solutions support team"));
+            }
+            catch (Exception exception)
+            {
+                Logger.Error(exception.Message, exception);
+                this.TempData["RepeatLastStatus.Error"] = "Repeating of last status was unsuccessful.";
+                this.TempData["RepeatLastStatus.ErrorDetails"] = exception.Message;
+            }
+            var inputModel = new InterviewTroubleshootInputModel { InterviewId = input.InterviewId };
+
+            var newModel = this.troubleshootInterviewViewFactory.Load(inputModel);
+
+            return this.View("Troubleshooting", newModel);
         }
     }
 }

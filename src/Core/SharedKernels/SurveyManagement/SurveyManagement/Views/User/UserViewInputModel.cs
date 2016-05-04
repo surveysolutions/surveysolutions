@@ -15,10 +15,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.User
             this.UserEmail = UserEmail;
         }
 
+        public UserViewInputModel(string deviceId)
+        {
+            this.DeviceId = deviceId;
+        }
+
         public Guid? PublicKey { get; protected set; }
 
         public string UserEmail { get; protected set; }
 
         public string UserName { get; protected set; }
+
+        public string DeviceId { get; private set; }
     }
 }

@@ -1,11 +1,11 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.Synchronization.SyncStorage;
-
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormalizerTests
@@ -22,15 +22,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
         Because of = () => denormalizer.Handle(Create.InterviewStatusChangedEvent(InterviewStatus.Completed));
 
         It should_not_store_any_sync_package = () =>
-            interviewPackageStorageWriterMock.Verify(
-                x => x.Store(
-                    Moq.It.IsAny<InterviewSyncPackageContent>(), 
-                    Moq.It.IsAny<InterviewSyncPackageMeta>(), 
-                    Moq.It.IsAny<string>(), 
-                    Moq.It.IsAny<string>()), Times.Never);
+            interviewPackageStorageWriterMock.Verify(x => x.Store(Moq.It.IsAny<InterviewSyncPackageMeta>(), Moq.It.IsAny<string>()), Times.Never);
 
         static InterviewSynchronizationDenormalizer denormalizer;
-        private static Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>> interviewPackageStorageWriterMock = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>>();
+        private static Mock<IReadSideRepositoryWriter<InterviewSyncPackageMeta>> interviewPackageStorageWriterMock = new Mock<IReadSideRepositoryWriter<InterviewSyncPackageMeta>>();
         static Guid interviewId;
     }
 }

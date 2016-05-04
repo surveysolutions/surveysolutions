@@ -17,6 +17,7 @@
             answerSingleOptionQuestionCommand: "AnswerSingleOptionQuestionCommand",
             answerTextQuestionCommand: "AnswerTextQuestionCommand",
             answerGeoLocationQuestionCommand: "AnswerGeoLocationQuestionCommand",
+            answerYesNoQuestion: "AnswerYesNoQuestion",
 
             setCommentCommand: "CommentAnswerCommand",
             setAnswerCommand: "SetAnswerCommand",
@@ -26,7 +27,8 @@
             rejectInterviewCommand: "RejectInterviewCommand",
 
             hQApproveInterviewCommand: "HqApproveInterviewCommand",
-            hQRejectInterviewCommand: "HqRejectInterviewCommand"
+            hQRejectInterviewCommand: "HqRejectInterviewCommand",
+            unapproveByHeadquarterCommand: "UnapproveByHeadquarterCommand",
         },
         statusMap = {
             Created: "Created",

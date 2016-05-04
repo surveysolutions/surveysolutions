@@ -1,18 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using WB.Core.GenericSubdomains.Utils;
 
 namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 {
     public struct InterviewItemId
     {
-        public InterviewItemId(Guid id, decimal[] propagationVector)
+        public InterviewItemId(Guid id, decimal[] rosterVector):this()
         {
             Id = id;
-            interviewItemPropagationVector = propagationVector ?? new decimal[0];
-            PropagationVector = null;
+            this.InterviewItemRosterVector = rosterVector ?? new decimal[0];
         }
 
         public InterviewItemId(Guid id)
@@ -20,35 +16,18 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 
         public Guid Id;
 
-        public decimal[] InterviewItemPropagationVector
-        {
-            get
-            {
-                if (interviewItemPropagationVector == null)
-                {
-                    interviewItemPropagationVector = this.RestoreFromPropagationVectorInOldIntFormat();
-                }
-
-                return interviewItemPropagationVector;
-            }
-            set { interviewItemPropagationVector = value; }
-        }
-
-        private decimal[] interviewItemPropagationVector;
-
-        [Obsolete("please use InterviewItemPropagationVector instead")] 
-        public int[] PropagationVector;
+        public decimal[] InterviewItemRosterVector { get; set; }
 
         public bool CompareWithVector(decimal[] vector)
         {
-            if (this.InterviewItemPropagationVector.Length != vector.Length)
+            if (this.InterviewItemRosterVector.Length != vector.Length)
                 return false;
-            return !this.InterviewItemPropagationVector.Where((t, i) => t != vector[i]).Any();
+            return !this.InterviewItemRosterVector.Where((t, i) => t != vector[i]).Any();
         }
 
         public bool IsTopLevel()
         {
-            return this.InterviewItemPropagationVector.Length == 0;
+            return this.InterviewItemRosterVector.Length == 0;
         }
 
         public override bool Equals(object obj)
@@ -65,7 +44,7 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
         {
             if (x.Id != y.Id)
                 return false;
-            return x.CompareWithVector(y.InterviewItemPropagationVector);
+            return x.CompareWithVector(y.InterviewItemRosterVector);
         }
 
         public static bool operator !=(InterviewItemId x, InterviewItemId y)
@@ -77,17 +56,10 @@ namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
         {
             if (!IsTopLevel())
             {
-                string vector = string.Join(",", this.InterviewItemPropagationVector.Select(DecimalValueToString));
+                string vector = string.Join(",", this.InterviewItemRosterVector.Select(DecimalValueToString));
                 return string.Format("{0},{1}", vector, Id);
             }
             return Id.ToString();
-        }
-
-        private decimal[] RestoreFromPropagationVectorInOldIntFormat()
-        {
-            if (PropagationVector == null)
-                return new decimal[0];
-            return PropagationVector.Select(Convert.ToDecimal).ToArray();
         }
 
         private string DecimalValueToString(decimal decimalValue)

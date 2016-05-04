@@ -43,6 +43,10 @@
         $('body').addClass('output-visible');
     };
 
+    self.HideAllAlerts = function() {
+        $("#alerts").empty();
+    }
+
     self.ShowError = function(message) {
         self.ShowErrors([message]);
     };
@@ -93,7 +97,7 @@
         }
     };
 
-    self.SendRequest = function(requestUrl, args, onSuccess, skipInProgressCheck, allowGet) {
+    self.SendRequest = function(requestUrl, args, onSuccess, skipInProgressCheck, allowGet, onDone) {
 
         if (!skipInProgressCheck && !self.IsAjaxComplete()) {
             self.CheckForRequestComplete();
@@ -129,11 +133,68 @@
         }).always(function() {
             self.IsPageLoaded(true);
             self.IsAjaxComplete(true);
+            if (!_.isUndefined(onDone)) {
+                onDone();
+            }
         });
     };
 
-    self.SendCommand = function(command, onSuccess) {
-        self.SendRequest(commandExecutionUrl, command, function(data) {
+    self.SendRequestWithFiles = function (requestUrl, args, onSuccess, onFail, onDone) {
+
+        if (!self.IsAjaxComplete()) {
+            self.CheckForRequestComplete();
+            return;
+        }
+
+        self.IsAjaxComplete(false);
+
+        var requestHeaders = {};
+        requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
+
+        var formData = new FormData();
+        for (var argumentName in args) {
+            formData.append(argumentName, args[argumentName]);
+        }
+
+        $.ajax({
+            url: requestUrl,
+            type: 'post',
+            data: formData,
+            headers: requestHeaders,
+            cache: false,
+            contentType: false,
+            processData: false,
+        }).done(function (data) {
+            if (!Supervisor.Framework.Objects.isUndefined(onSuccess)) {
+                onSuccess(data);
+            }
+        }).fail(function (jqXhr, textStatus, errorThrown) {
+            if (!_.isUndefined(onFail)) {
+                onFail(jqXhr);
+                return;
+            }
+            if (jqXhr.status === 403) {
+                if ((!jqXhr.responseText || 0 === jqXhr.responseText.length)) {
+                    self.ShowError(input.settings.messages.forbiddenMessage);
+                }
+                else {
+                    self.ShowError(jqXhr.responseText);
+                }
+            } else {
+                self.ShowError(input.settings.messages.unhandledExceptionMessage);
+            }
+        }).always(function () {
+            self.IsPageLoaded(true);
+            self.IsAjaxComplete(true);
+            if (!_.isUndefined(onDone)) {
+                onDone();
+            }
+        });
+    };
+
+    self.SendCommand = function(command, onSuccess, onDone) {
+        self.SendRequest(commandExecutionUrl, command, function (data) {
+            self.HideAllAlerts();
             if (data.IsSuccess) {
                 if (!Supervisor.Framework.Objects.isUndefined(onSuccess))
                   onSuccess(data);
@@ -144,11 +205,12 @@
                 else
                     self.ShowError(input.settings.messages.unhandledExceptionMessage);
             }
-        });
+        }, false, false, onDone);
     };
 
     self.SendCommands = function (commands, onSuccess, skipInProgressCheck) {
-        self.SendRequest(commandExecutionUrl, commands, function(data) {
+        self.SendRequest(commandExecutionUrl, commands, function (data) {
+            self.HideAllAlerts();
             var failedCommands = ko.utils.arrayFilter(data.CommandStatuses, function(cmd) {
                 return !cmd.IsSuccess;
             });
@@ -172,4 +234,11 @@
 
     self.load = function() {
     };
+
+    self.getBindedHtmlTemplate = function (templateId, bindObject) {
+        var messageTemplate = $("<div/>").html($(templateId).html())[0];
+        ko.applyBindings(bindObject, messageTemplate);
+        var html = $(messageTemplate).html();
+        return html;
+    }
 };

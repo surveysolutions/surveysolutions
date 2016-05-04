@@ -28,7 +28,7 @@
     </li>
 
     <li class="@(page == MenuItem.Teams ? "active" : "")">
-        <a href="@Url.Action("Index", "Interviewer", new {area = string.Empty})">
+        <a href="@Url.Action("Index", "Interviewers", new {area = string.Empty})">
             <i class="glyphicon glyphicon-user"></i> @MainMenu.TeamAndRoles
         </a>
     </li>
@@ -47,7 +47,7 @@
         </ul>
     </li>
     <li>
-        <a href="http://siteresources.worldbank.org/INTCOMPTOOLS/Resources/8213623-1380598436379/Supervisor_manual.pdf" title="@MainMenu.Help" target="_blank">
+        <a href="http://docs.mysurvey.solutions/supervisor.pdf" title="@MainMenu.Help" target="_blank">
             <i class="glyphicon glyphicon-question-sign"></i>
         </a>
     </li>

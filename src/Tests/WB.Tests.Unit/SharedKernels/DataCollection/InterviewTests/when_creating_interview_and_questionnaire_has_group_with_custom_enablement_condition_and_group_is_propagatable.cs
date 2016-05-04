@@ -16,7 +16,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     {
         Establish context = () =>
         {
-            interviewId = Guid.Parse("11111111111111111111111111111111");
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -24,21 +23,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             answersTime = new DateTime(2013, 09, 01);
 
             Guid groupId = Guid.Parse("22220000FFFFFFFFFFFFFFFFFFFFFFFF");
-
-            var questionaire = Mock.Of<IQuestionnaire>(_ => _.IsRosterGroup(groupId) == true);
-
-            var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
-                => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
-
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
+            
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _ => _.IsRosterGroup(groupId) == true);
 
             eventContext = new EventContext();
+
+            interview = Create.Interview(questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>
-            new Interview(interviewId, userId, questionnaireId, 1, answersToFeaturedQuestions, answersTime, supervisorId);
+            interview.CreateInterview(questionnaireId, 1, supervisorId, answersToFeaturedQuestions, answersTime, userId);
 
         It should_not_raise_GroupDisabled_event = () =>
             eventContext.ShouldNotContainEvent<GroupsDisabled>();
@@ -50,11 +44,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         static EventContext eventContext;
-        static Guid interviewId;
         static Guid userId;
         static Guid questionnaireId;
         static Dictionary<Guid, object> answersToFeaturedQuestions;
         static DateTime answersTime;
         static Guid supervisorId;
+        private static Interview interview;
     }
 }

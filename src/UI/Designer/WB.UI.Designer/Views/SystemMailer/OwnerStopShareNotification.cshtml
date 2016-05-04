@@ -1,0 +1,6 @@
+@using Main.Core.Entities.SubEntities
+@using WB.UI.Designer.Resources
+@model WB.UI.Designer.Models.SharingNotificationModel
+
+
+@Html.Raw(string.Format(NotificationResources.OwnerStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_revoked_access_for__2__to_your_questionnaire___3_, @Model.UserCallName, @Model.ActionPersonCallName, @Model.SharedWithPersonEmail, @Model.QuestionnaireDisplayTitle))

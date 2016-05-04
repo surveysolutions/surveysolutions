@@ -38,8 +38,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.MaintenanceFilterT
         It should_action_executing_result_controller_route_value_be_equal_to_Maintenance = () =>
             GetActionExecutingContextResult().RouteValues["controller"].ShouldEqual("Maintenance");
 
-        It should_action_executing_result_action_route_value_be_equal_to_WaitForReadLayerRebuild = () =>
-            GetActionExecutingContextResult().RouteValues["action"].ShouldEqual("WaitForReadLayerRebuild");
+        It should_action_executing_result_action_route_value_be_equal_to_WaitForReadSideRebuild = () =>
+            GetActionExecutingContextResult().RouteValues["action"].ShouldEqual("WaitForReadSideRebuild");
 
         It should_action_executing_result_returnUrl_route_value_be_equal_to_specified_returnUrl = () =>
             GetActionExecutingContextResult().RouteValues["returnUrl"].ShouldEqual(returnUrl);

@@ -19,19 +19,18 @@ using Ninject.Web.WebApi.FilterBindingSyntax;
 using Quartz;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Synchronization;
-using WB.Core.GenericSubdomains.Logging.NLog;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.Files;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.Ncqrs;
-using WB.Core.Infrastructure.Storage.Esent;
-using WB.Core.Infrastructure.Storage.Postgre;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.SurveyManagement;
+using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
@@ -39,12 +38,19 @@ using WB.Core.SharedKernels.SurveyManagement.Web;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Core.Synchronization;
+using WB.Infrastructure.Native.Files;
+using WB.Infrastructure.Native.Logging;
+using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Storage.Postgre;
+using WB.UI.Shared.Web;
 using WB.UI.Shared.Web.Configuration;
+using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using WB.UI.Shared.Web.MembershipProvider.Settings;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
+using WB.UI.Shared.Web.Versions;
 using WB.UI.Supervisor.App_Start;
 using WB.UI.Supervisor.Code;
 using WB.UI.Supervisor.Controllers;
@@ -88,11 +94,10 @@ namespace WB.UI.Supervisor.App_Start
 
             var interviewDetailsDataLoaderSettings =
                 new InterviewDetailsDataLoaderSettings(LegacyOptions.SchedulerEnabled,
-                    LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval);
-
-            Func<bool> isDebug = () => AppSettings.IsDebugBuilded || HttpContext.Current.IsDebuggingEnabled;
-            Version applicationBuildVersion = typeof(AccountController).Assembly.GetName().Version;
-
+                LegacyOptions.InterviewDetailsDataSchedulerSynchronizationInterval,
+                synchronizationBatchCount: WebConfigurationManager.AppSettings.GetInt("Scheduler.SynchronizationBatchCount", @default: 5),
+                synchronizationParallelExecutorsCount: WebConfigurationManager.AppSettings.GetInt("Scheduler.SynchronizationParallelExecutorsCount", @default: 1));
+            
             string appDataDirectory = WebConfigurationManager.AppSettings["DataStorePath"];
             if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
             {
@@ -110,20 +115,26 @@ namespace WB.UI.Supervisor.App_Start
 
             var basePath = appDataDirectory;
 
-            string esentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.DbFolder"]);
-
-
             var postgresPlainStorageSettings = new PostgresPlainStorageSettings
             {
                 ConnectionString = WebConfigurationManager.ConnectionStrings["PlainStore"].ConnectionString,
-                MappingAssemblies = new List<Assembly> { typeof (SupervisorBoundedContextModule).Assembly }
+                MappingAssemblies = new List<Assembly>
+                {
+                    typeof(SurveyManagementSharedKernelModule).Assembly,
+                    typeof(SupervisorBoundedContextModule).Assembly,
+                    typeof(SynchronizationModule).Assembly,
+                    typeof(ProductVersionModule).Assembly,
+                }
             };
 
             var readSideMaps = new List<Assembly> { typeof(SurveyManagementSharedKernelModule).Assembly, typeof(SupervisorBoundedContextModule).Assembly }; 
-            string plainEsentDataFolder = Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings["Esent.Plain.DbFolder"]);
+            
+            var cacheSettings = new ReadSideCacheSettings(
+                enableEsentCache: WebConfigurationManager.AppSettings.GetBool("Esent.Cache.Enabled", @default: true),
+                esentCacheFolder: Path.Combine(appDataDirectory, WebConfigurationManager.AppSettings.GetString("Esent.Cache.Folder", @default: @"Temp\EsentCache")),
+                cacheSizeInEntities: WebConfigurationManager.AppSettings.GetInt("ReadSide.CacheSize", @default: 1024),
+                storeOperationBulkSize: WebConfigurationManager.AppSettings.GetInt("ReadSide.BulkSize", @default: 512));
 
-            int esentCacheSize = WebConfigurationManager.AppSettings["Esent.CacheSize"].ParseIntOrNull() ?? 256;
-            int postgresCacheSize = WebConfigurationManager.AppSettings["Postgres.CacheSize"].ParseIntOrNull() ?? 1024;
             var kernel = new StandardKernel(
                 new NinjectSettings { InjectNonPublic = true },
                 new ServiceLocationModule(),
@@ -131,19 +142,16 @@ namespace WB.UI.Supervisor.App_Start
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(),
                 new NLogLoggingModule(),
-                new DataCollectionSharedKernelModule(usePlainQuestionnaireRepository: true, basePath: basePath),
                 new QuestionnaireUpgraderModule(),
+                new PostgresKeyValueModule(cacheSettings),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
-                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, postgresCacheSize, readSideMaps),
+                new PostgresReadSideModule(WebConfigurationManager.ConnectionStrings["ReadSide"].ConnectionString, cacheSettings, readSideMaps),
                 new FileInfrastructureModule(),
+                new ProductVersionModule(typeof(SurveyManagementWebModule).Assembly),
                 new SupervisorCoreRegistry(),
                 new SynchronizationModule(synchronizationSettings),
                 new SurveyManagementWebModule(),
-                new EsentReadSideModule(esentDataFolder, plainEsentDataFolder, esentCacheSize),
                 new SupervisorBoundedContextModule(headquartersSettings, schedulerSettings));
-
-            NcqrsEnvironment.SetGetter<ILogger>(() => kernel.Get<ILogger>());
-            NcqrsEnvironment.InitDefaults();
 
             kernel.Bind<ISettingsProvider>().To<SupervisorSettingsProvider>();
 
@@ -152,12 +160,14 @@ namespace WB.UI.Supervisor.App_Start
             var interviewCountLimitString = WebConfigurationManager.AppSettings["Limits.MaxNumberOfInterviews"];
             int? interviewCountLimit = string.IsNullOrEmpty(interviewCountLimitString) ? (int?)null : int.Parse(interviewCountLimitString);
 
+            var readSideSettings = new ReadSideSettings(
+                WebConfigurationManager.AppSettings["ReadSide.Version"].ParseIntOrNull() ?? 0);
+
             kernel.Load(
                 eventStoreModule,
-                new SurveyManagementSharedKernelModule(basePath, isDebug,
-                    applicationBuildVersion, interviewDetailsDataLoaderSettings, false,
-                    int.Parse(WebConfigurationManager.AppSettings["Export.MaxCountOfCachedEntitiesForSqliteDb"]),
-                    new InterviewHistorySettings(basePath, false),
+                new SurveyManagementSharedKernelModule(basePath, 
+                    interviewDetailsDataLoaderSettings,
+                    readSideSettings,
                     isSupervisorFunctionsEnabled: true,
                     interviewLimitCount: interviewCountLimit));
 
@@ -165,8 +175,8 @@ namespace WB.UI.Supervisor.App_Start
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-            
-            PrepareNcqrsInfrastucture(kernel);
+
+            CreateAndRegisterEventBus(kernel);
 
             ServiceLocator.Current.GetInstance<BackgroundSyncronizationTasks>().Configure();
 
@@ -185,27 +195,17 @@ namespace WB.UI.Supervisor.App_Start
             return kernel;
         }
 
-        private static void PrepareNcqrsInfrastucture(StandardKernel kernel)
-        {
-            NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryCachedSnapshotStore());
-
-            kernel.Bind<ISnapshottingPolicy>().ToMethod(context => NcqrsEnvironment.Get<ISnapshottingPolicy>());
-            kernel.Bind<ISnapshotStore>().ToMethod(context => NcqrsEnvironment.Get<ISnapshotStore>());
-            kernel.Bind<IAggregateRootCreationStrategy>().ToMethod(context => NcqrsEnvironment.Get<IAggregateRootCreationStrategy>());
-            kernel.Bind<IAggregateSnapshotter>().ToMethod(context => NcqrsEnvironment.Get<IAggregateSnapshotter>());
-
-            CreateAndRegisterEventBus(kernel);
-        }
-
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
-            var ignoredDenormalizersConfigSection =
-               (IgnoredDenormalizersConfigSection)WebConfigurationManager.GetSection("IgnoredDenormalizersSection");
-            Type[] handlersToIgnore = ignoredDenormalizersConfigSection == null ? new Type[0] : ignoredDenormalizersConfigSection.GetIgnoredTypes();
-            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(), handlersToIgnore);
-            NcqrsEnvironment.SetDefault<IEventBus>(bus);
+            var eventBusConfigSection =
+               (EventBusConfigSection)WebConfigurationManager.GetSection("eventBus");
+
+            var bus = new NcqrCompatibleEventDispatcher(kernel.Get<IEventStore>(),
+                 eventBusConfigSection.GetSettings(),
+                kernel.Get<ILogger>());
+
             bus.TransactionManager = kernel.Get<ITransactionManagerProvider>();
+            kernel.Bind<ILiteEventBus>().ToConstant(bus);
             kernel.Bind<IEventBus>().ToConstant(bus);
             kernel.Bind<IEventDispatcher>().ToConstant(bus);
 

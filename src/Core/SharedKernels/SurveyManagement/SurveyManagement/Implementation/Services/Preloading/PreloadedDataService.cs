@@ -4,18 +4,18 @@ using System.IO;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading
 {
@@ -26,12 +26,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private readonly QuestionnaireDocument questionnaireDocument;
         private readonly IQuestionDataParser dataParser;
         private readonly IUserViewFactory userViewFactory;
+        readonly ITransactionManagerProvider transactionManagerProvider;
         
-
-        private const string IdColumnName = "Id";
-        private const string ParentIdColumnName = "ParentId";
-        private const string SupervisorNameColumnName = "_Supervisor";
-
         private Dictionary<string, IQuestion> questionsCache = null;
         private Dictionary<string, IQuestion> QuestionsCache {
             get {
@@ -59,13 +55,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             QuestionnaireRosterStructure questionnaireRosterStructure,
             QuestionnaireDocument questionnaireDocument, 
             IQuestionDataParser dataParser,
-            IUserViewFactory userViewFactory)
+            IUserViewFactory userViewFactory,
+            ITransactionManagerProvider transactionManagerProvider)
         {
             this.exportStructure = exportStructure;
             this.questionnaireRosterStructure = questionnaireRosterStructure;
             this.questionnaireDocument = questionnaireDocument;
             this.dataParser = dataParser;
             this.userViewFactory = userViewFactory;
+            this.transactionManagerProvider = transactionManagerProvider;
         }
         
         public HeaderStructureForLevel FindLevelInPreloadedData(string levelFileName)
@@ -131,13 +129,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (levelExportStructure == null)
                 return null;
 
-            var answerOnRosterSizeQuestion = BuildAnswerByVariableName(levelExportStructure, rosterSizeQuestion.StataExportCaption,
+            var answerObject = BuildAnswerByVariableName(levelExportStructure, rosterSizeQuestion.StataExportCaption,
                 parentDataFile.Header, row);
 
-            if (!answerOnRosterSizeQuestion.HasValue)
+            if (answerObject == null)
                 return new decimal[0];
-
-            var answerObject = answerOnRosterSizeQuestion.Value.Value;
 
             if (rosterScopeDescription.ScopeType == RosterScopeType.Numeric)
             {
@@ -156,14 +152,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return null;
         }
 
-        public ValueParsingResult ParseQuestion(string answer, string columnName, IQuestion question, out KeyValuePair<Guid, object> parsedValue)
+        public ValueParsingResult ParseQuestionInLevel(string answer, string columnName, HeaderStructureForLevel level,
+            out object parsedValue)
         {
-            return dataParser.TryParse(answer, columnName, question, questionnaireDocument, out parsedValue);
+            parsedValue = null;
+            var exportedQuestion =
+                level.HeaderItems.Values.FirstOrDefault(
+                    h => h.ColumnNames.Any(x => x.Equals(columnName.Trim(), StringComparison.InvariantCulture)));
+            if (exportedQuestion == null)
+                return ValueParsingResult.OK;
+
+            return dataParser.TryParse(answer, columnName, GetQuestionByVariableName(exportedQuestion.VariableName),
+                out parsedValue);
         }
 
         public int GetIdColumnIndex(PreloadedDataByFile dataFile)
         {
-            return GetColumnIndexByHeaderName(dataFile, IdColumnName);
+            return GetColumnIndexByHeaderName(dataFile, ServiceColumns.Id);
         }
 
         public int GetColumnIndexByHeaderName(PreloadedDataByFile dataFile, string columnName)
@@ -187,10 +192,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             for (int i = 0; i < dataFile.Header.Length; i++)
             {
                 var columnName = dataFile.Header[i];
-                if (!columnName.StartsWith(ParentIdColumnName, StringComparison.InvariantCultureIgnoreCase))
+                if (!columnName.StartsWith(ServiceColumns.ParentId, StringComparison.InvariantCultureIgnoreCase))
                     continue;
 
-                var parentNumberString = columnName.Substring(ParentIdColumnName.Length);
+                var parentNumberString = columnName.Substring(ServiceColumns.ParentId.Length);
                 int parentNumber;
                 if (int.TryParse(parentNumberString, out parentNumber))
                 {
@@ -236,7 +241,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 var supervisorName = CheckAndGetSupervisorNameForLevel(topLevelRow, supervisorNameIndex);
                 result.Add(new PreloadedDataRecord
                 {
-                    PreloadedDataDto = new PreloadedDataDto(rowId, levels.ToArray()),
+                    PreloadedDataDto = new PreloadedDataDto(levels.ToArray()),
                     SupervisorId = GetSupervisorIdAndUpdateCache(supervisorsCache, supervisorName)
                 });
             }
@@ -248,18 +253,33 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             var result = new List<PreloadedDataRecord>();
             var supervisorsCache = new Dictionary<string, Guid>();
 
-            var supervisorNameIndex = GetSupervisorNameIndex(sampleDataFile);
+            var interviewersCache = new Dictionary<string, UserDocument>();
+
+            var responsibleNameIndex = GetSupervisorNameIndex(sampleDataFile);
             var topLevelFileName = GetValidFileNameForTopLevelQuestionnaire();
             foreach (var contentRow in sampleDataFile.Content)
             {
                 var answersToFeaturedQuestions = BuildAnswerForLevel(contentRow, sampleDataFile.Header, topLevelFileName);
 
-                var supervisorName = CheckAndGetSupervisorNameForLevel(contentRow, supervisorNameIndex);
+                var responsibleName = CheckAndGetSupervisorNameForLevel(contentRow, responsibleNameIndex);
+                Guid? interviewerId = null;
+                Guid? supervisorId = null;
+                var interviewer = GetInterviewerIdAndUpdateCache(interviewersCache, responsibleName);
+                if (interviewer != null)
+                {
+                    interviewerId = interviewer.PublicKey;
+                    supervisorId = interviewer.Supervisor.Id;
+                }
+                else
+                {
+                    supervisorId = GetSupervisorIdAndUpdateCache(supervisorsCache, responsibleName);
+                }
                 result.Add(
                     new PreloadedDataRecord
                     {
-                        PreloadedDataDto = new PreloadedDataDto(Guid.NewGuid().FormatGuid(), new[] { new PreloadedLevelDto(new decimal[0], answersToFeaturedQuestions)}),
-                        SupervisorId = GetSupervisorIdAndUpdateCache(supervisorsCache, supervisorName)
+                        PreloadedDataDto = new PreloadedDataDto(new[] { new PreloadedLevelDto(new decimal[0], answersToFeaturedQuestions)}),
+                        SupervisorId = supervisorId,
+                        InterviewerId = interviewerId
                     });
             }
             return result.ToArray();
@@ -267,7 +287,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         private int GetSupervisorNameIndex(PreloadedDataByFile dataFile)
         {
-            return dataFile.Header.ToList().FindIndex(header => string.Equals(header, SupervisorNameColumnName, StringComparison.InvariantCultureIgnoreCase));
+            return dataFile.Header.ToList().FindIndex(header => string.Equals(header, ServiceColumns.ResponsibleColumnName, StringComparison.InvariantCultureIgnoreCase));
         }
 
         private string CheckAndGetSupervisorNameForLevel(string[] row, int supervisorNameIndex)
@@ -280,26 +300,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             return exportStructure.HeaderToLevelMap.Values.FirstOrDefault(level => level.LevelScopeVector.Count == 0).LevelName;
         }
 
-        public Dictionary<string,Tuple<string,int>[]> GetColumnIndexesGoupedByQuestionVariableName(PreloadedDataByFile parentDataFile)
+        public bool IsQuestionRosterSize(string variableName)
         {
-            var levelExportStructure = FindLevelInPreloadedData(parentDataFile.FileName);
-            if (levelExportStructure == null)
-                return null;
-            var presentQuestions = new Dictionary<string, Tuple<string, int>[]>();
-            foreach (var exportedHeaderItem in levelExportStructure.HeaderItems.Values)
-            {
-                var headerIndexes = new List<Tuple<string, int>>();
-                for (int i = 0; i < parentDataFile.Header.Length; i++)
-                {
-                    if (exportedHeaderItem.ColumnNames.Contains(parentDataFile.Header[i]))
-                        headerIndexes.Add(new Tuple<string, int>(parentDataFile.Header[i], i));
-                }
-                if (!headerIndexes.Any())
-                    continue;
+            if (!QuestionsCache.ContainsKey(variableName))
+                return false;
+            var question = QuestionsCache[variableName];
 
-                presentQuestions.Add(exportedHeaderItem.VariableName, headerIndexes.ToArray());
-            }
-            return presentQuestions;
+            return GroupsCache.Values.Any(g => g.RosterSizeQuestionId == question.PublicKey);
         }
 
         private PreloadedDataByFile GetDataFileByLevelName(PreloadedDataByFile[] allLevels, string name)
@@ -369,13 +376,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             {
                 var parsedAnswer = BuildAnswerByVariableName(levelExportStructure, exportedHeaderItem.VariableName, header, row);
 
-                if (parsedAnswer.HasValue)
-                    result.Add(parsedAnswer.Value.Key, parsedAnswer.Value.Value);
+                if (parsedAnswer!=null)
+                    result.Add(exportedHeaderItem.PublicKey, parsedAnswer);
             }
             return result;
         }
 
-        private KeyValuePair<Guid,object>? BuildAnswerByVariableName(HeaderStructureForLevel levelExportStructure, string variableName, string[] header, string[] row)
+        private object BuildAnswerByVariableName(HeaderStructureForLevel levelExportStructure, string variableName, string[] header, string[] row)
         {
             var exportedHeaderItem =
                 levelExportStructure.HeaderItems.Values.FirstOrDefault(
@@ -394,8 +401,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
                 return null;
 
             var question = this.GetQuestionByVariableName(exportedHeaderItem.VariableName);
-
-            return dataParser.BuildAnswerFromStringArray(headerIndexes.ToArray(), question, questionnaireDocument);
+            
+            return dataParser.BuildAnswerFromStringArray(headerIndexes.ToArray(), question);
         }
 
         private PreloadedDataByFile[] GetChildDataFiles(string levelFileName, PreloadedDataByFile[] allLevels)
@@ -403,13 +410,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             var levelExportStructure = FindLevelInPreloadedData(levelFileName);
             if (levelExportStructure == null)
                 return new PreloadedDataByFile[0];
-            IEnumerable<RosterScopeDescription> children = Enumerable.Empty<RosterScopeDescription>();
+            IEnumerable<RosterScopeDescription> children;
+
             if (levelExportStructure.LevelScopeVector.Length == 0)
-            {
                 children =
                     questionnaireRosterStructure.RosterScopes.Values.Where(
                         scope => scope.ScopeVector.Length == 1);
-            }
             else
                 children =
                     questionnaireRosterStructure.RosterScopes.Values.Where(
@@ -434,15 +440,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         protected UserView GetUserByName(string userName)
         {
-            ITransactionManager cqrsTransactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
-
-            return cqrsTransactionManager.ExecuteInQueryTransaction(() =>
+            this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+            try
             {
                 var user = this.userViewFactory.Load(new UserViewInputModel(UserName: userName, UserEmail: null));
                 if (user == null || user.IsArchived)
                     return null;
                 return user;
-            });
+            }
+            finally
+            {
+                this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
+            }
+            
         }
 
         private Guid? GetSupervisorIdAndUpdateCache(Dictionary<string, Guid> cache, string name)
@@ -450,14 +460,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (string.IsNullOrEmpty(name))
                 return null;
 
-            if (cache.ContainsKey(name))
-                return cache[name];
+            var userNameLowerCase = name.ToLower();
+            if (cache.ContainsKey(userNameLowerCase))
+                return cache[userNameLowerCase];
 
-            var user = GetUserByName(name);//assuming that user exists
-            if (!user.IsSupervisor()) throw new Exception("User is not supervisor.");
+            var user = GetUserByName(userNameLowerCase);//assuming that user exists
+            if (user == null || !user.IsSupervisor()) throw new Exception($"Supervisor with name '{name}' does not exists");
 
-            cache.Add(name, user.PublicKey);
+            cache.Add(userNameLowerCase, user.PublicKey);
             return user.PublicKey;
+        }
+
+        private UserDocument GetInterviewerIdAndUpdateCache(Dictionary<string, UserDocument> interviewerCache, string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                return null;
+
+            var userNameLowerCase = name.ToLower();
+            if (interviewerCache.ContainsKey(userNameLowerCase))
+                return interviewerCache[userNameLowerCase];
+
+            var user = GetUserByName(userNameLowerCase);//assuming that user exists
+            if (user == null || !user.Roles.Contains(UserRoles.Operator)) return null;
+
+            interviewerCache.Add(userNameLowerCase, user);
+            return user;
         }
     }
 }

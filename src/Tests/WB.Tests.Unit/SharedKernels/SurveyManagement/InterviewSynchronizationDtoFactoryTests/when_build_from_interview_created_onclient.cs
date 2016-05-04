@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
         };
 
         Because of = () =>
-            result = interviewSynchronizationDtoFactory.BuildFrom(interviewData, "comment");
+            result = interviewSynchronizationDtoFactory.BuildFrom(interviewData, "comment", null, null);
 
         It should_result_has_created_onclient_state = () =>
             result.CreatedOnClient.ShouldEqual(createdOnClientFlag);

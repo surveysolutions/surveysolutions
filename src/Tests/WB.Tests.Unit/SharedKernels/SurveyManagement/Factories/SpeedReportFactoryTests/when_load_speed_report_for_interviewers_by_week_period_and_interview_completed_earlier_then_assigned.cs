@@ -27,6 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                     statuses: new[]
                     {
                         Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
+                            supervisorId:supervisorId,
                             timestamp: input.From.Date.AddHours(1), 
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(-35))
                     }), "2");

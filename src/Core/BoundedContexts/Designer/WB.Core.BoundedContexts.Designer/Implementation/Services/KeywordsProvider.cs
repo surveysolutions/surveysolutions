@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.SharedKernels.SurveySolutions.Services;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
@@ -14,6 +15,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 .Union(SpssReservedKeywords)
                 .Union(new[] { substitutionService.RosterTitleSubstitutionReference })
                 .Union(SurveySolutionsServiceVariablesKeywords)
+                .Union(ServiceColumns.SystemVariables.Select(x=>x.VariableExportColumnName))
+                .Select(x => x.ToLower())
                 .ToArray();
         }
 
@@ -48,7 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         private static readonly List<string> SurveySolutionsServiceVariablesKeywords = new List<string>()
         {
-            "rowcode","rowname","rowindex","roster","id", "self"
+            "rowcode","rowname","rowindex","roster","id", "parentid1", "parentid2", "parentid3", "parentid4", "self", "state", "quest"
         };
         
         public string[] GetAllReservedKeywords()

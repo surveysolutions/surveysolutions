@@ -10,7 +10,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.AtomFeedReaderTests
 {
-    public class when_reading_feed_from_specified_entry_and_such_entry_is_absent_in_feed
+    internal class when_reading_feed_from_specified_entry_and_such_entry_is_absent_in_feed
     {
         Establish context = () =>
         {

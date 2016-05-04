@@ -1,5 +1,4 @@
 ﻿@using System.Web.Optimization
-@model IEnumerable<WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views.UsersViewItem>
 @{
     Layout = "~/Views/Shared/_LayoutWithSidebar.cshtml";
 }
@@ -7,14 +6,16 @@
 @section scripts
 {
     @Html.Partial("_ListViewStatusesScript")
-    @Scripts.Render("~/Scripts/viewmodels/pages/surveysandstatuses.js")
+    @Scripts.Render("~/Scripts/bootstrap3-typeahead.js", "~/Scripts/knockout/ko.typeahead.js", "~/Scripts/components/typeahead-extended.js", "~/Scripts/viewmodels/pages/surveysandstatuses.js")
     <script type="text/javascript">
-        var $interviewsUrl = '@Url.Action("Interviews", "Survey")';
-        $(function () {
-            var model = new Supervisor.VM.SurveysAndStatuses('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "SupervisorSurveysAndStatusesReport" })');
-            ko.applyBindings(model);
-            model.load();
-        });
+    var $interviewsUrl = '@Url.Action("Interviews", "Survey")';
+    $(function() {
+        var $surveyAndStatusesReportUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "SupervisorSurveysAndStatusesReport" })';
+        var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AsigneeInterviewersBySupervisor" })';
+        var model = new Supervisor.VM.SurveysAndStatuses($surveyAndStatusesReportUrl, responsiblesUrl);
+        ko.applyBindings(model);
+        model.load();
+    });
     </script>
 }
 
@@ -29,16 +30,13 @@
         <li class="list-group-item">
             <h4 class="list-group-item-heading">Team members</h4>
             <p class="list-group-item-text">
-                <select data-bind="value: SelectedUser" class="form-control">
-                    @if (Model.Count() > 1)
-                    {
-                        <option>Any</option>
-                    }
-                    @foreach (var item in Model)
-                    {
-                        <option value="@item.UserId">@item.UserName</option>
-                    }
-                </select>
+                <div class="input-group">
+                    <input class="form-control" placeholder="Any" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text"/>
+                    <span data-bind="spinner: IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                    <div class="input-group-btn" data-bind="click: function(){ SelectedResponsible(undefined); }">
+                        <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                    </div>
+                </div>
             </p>
         </li>
     </ul>

@@ -17,13 +17,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.TabletReportControlle
             tabletReportController = CreateTabletReportController();
         };
 
-        Because of = () => result = tabletReportController.Packages() as ViewResult;
+        Because of = () => result = tabletReportController.PackagesInfo() as ViewResult;
 
         It should_return_ViewResult = () => result.ShouldNotBeNull();
 
-        It should_return_model_of_type_List_ofTabletInformationView = () =>
-            result.Model.ShouldBeOfExactType<List<TabletInformationView>>();
-
+        
         private static TabletReportController tabletReportController;
         private static ViewResult result;
     }

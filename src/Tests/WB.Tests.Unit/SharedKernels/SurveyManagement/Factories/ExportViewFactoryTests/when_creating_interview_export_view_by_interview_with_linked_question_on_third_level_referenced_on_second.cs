@@ -6,11 +6,11 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
-using WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewExportedDataEventHandlerTests;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using It = Machine.Specifications.It;
@@ -66,10 +66,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             var rosterLevel = new InterviewLevel(new ValueVector<Guid>{ rosterId, nestedRosterId }, null, new decimal[] { 0, 0 });
             interview.Levels.Add("0,0", rosterLevel);
 
-            if (!rosterLevel.QuestionsSearchCahche.ContainsKey(linkedQuestionId))
-                rosterLevel.QuestionsSearchCahche.Add(linkedQuestionId, new InterviewQuestion(linkedQuestionId));
+            if (!rosterLevel.QuestionsSearchCache.ContainsKey(linkedQuestionId))
+                rosterLevel.QuestionsSearchCache.Add(linkedQuestionId, new InterviewQuestion(linkedQuestionId));
 
-            var textListQuestion = rosterLevel.QuestionsSearchCahche[linkedQuestionId];
+            var textListQuestion = rosterLevel.QuestionsSearchCache[linkedQuestionId];
             textListQuestion.Answer = new decimal[] { 0 };
             exportViewFactory = CreateExportViewFactory();
         };
@@ -79,10 +79,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                 interview);
 
         It should_linked_question_have_one_answer = () =>
-           GetLevel(result, new[] { rosterId, nestedRosterId }).Records[0].Questions[0].Answers.Length.ShouldEqual(1);
+           GetLevel(result, new[] { rosterId, nestedRosterId }).Records[0].GetQuestions()[0].Answers.Length.ShouldEqual(1);
 
         It should_linked_question_have_first_answer_be_equal_to_0 = () =>
-           GetLevel(result, new[] { rosterId, nestedRosterId }).Records[0].Questions[0].Answers[0].ShouldEqual("0");
+           GetLevel(result, new[] { rosterId, nestedRosterId }).Records[0].GetQuestions()[0].Answers[0].ShouldEqual("0");
 
         private static InterviewDataExportView result;
         private static Guid rosterId;

@@ -4,6 +4,10 @@
     {
         <div class="alert alert-success header">@Html.Raw(@TempData[Alerts.SUCCESS])</div>
     }
+    @if (TempData.ContainsKey(Alerts.ERROR))
+    {
+        <div class="alert alert-danger header">@Html.Raw(@TempData[Alerts.ERROR])</div>
+    }
     @using (Html.BeginForm("Import", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         <h1>Import Questionnaire</h1>

@@ -30,14 +30,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     && _.GetQuestionVariableName(conditionallyRecentlyEnabledQuestionId) == "q1"
                     && _.GetQuestionVariableName(questionId) == "q2");
 
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
-                                                                                                questionaire);
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             interview.Apply(Create.Event.GroupsDisabled(conditionallyDependentGroupId));
 

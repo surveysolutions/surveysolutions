@@ -6,7 +6,7 @@ using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
@@ -33,117 +33,117 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         {
         }
 
-        public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<NewQuestionnaireCreated> evnt)
+        public QuestionnaireInfoView Update(QuestionnaireInfoView state, IPublishedEvent<NewQuestionnaireCreated> @event)
         {
-            return CreateQuestionnaire(evnt.EventSourceId, evnt.Payload.Title, evnt.Payload.IsPublic);
+            return CreateQuestionnaire(@event.EventSourceId, @event.Payload.Title, @event.Payload.IsPublic);
         }
 
-        public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<QuestionnaireCloned> evnt)
+        public QuestionnaireInfoView Update(QuestionnaireInfoView state, IPublishedEvent<QuestionnaireCloned> @event)
         {
-            var newState = CreateQuestionnaire(evnt.EventSourceId, evnt.Payload.QuestionnaireDocument.Title, evnt.Payload.QuestionnaireDocument.IsPublic);
+            var newState = CreateQuestionnaire(@event.EventSourceId, @event.Payload.QuestionnaireDocument.Title, @event.Payload.QuestionnaireDocument.IsPublic);
 
-            AddQuestionnaireItems(newState, evnt.Payload.QuestionnaireDocument);
+            AddQuestionnaireItems(newState, @event.Payload.QuestionnaireDocument);
 
             return newState;
         }
 
-        public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<TemplateImported> evnt)
+        public QuestionnaireInfoView Update(QuestionnaireInfoView state, IPublishedEvent<TemplateImported> @event)
         {
-            var newState = CreateQuestionnaire(evnt.EventSourceId, evnt.Payload.Source.Title, evnt.Payload.Source.IsPublic);
+            var newState = CreateQuestionnaire(@event.EventSourceId, @event.Payload.Source.Title, @event.Payload.Source.IsPublic);
 
-            AddQuestionnaireItems(newState, evnt.Payload.Source);
+            AddQuestionnaireItems(newState, @event.Payload.Source);
 
             return newState;
         }
 
-        public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<QuestionnaireUpdated> evnt)
+        public QuestionnaireInfoView Update(QuestionnaireInfoView state, IPublishedEvent<QuestionnaireUpdated> @event)
         {
-            currentState.Title = evnt.Payload.Title;
-            currentState.IsPublic = evnt.Payload.IsPublic;
+            state.Title = @event.Payload.Title;
+            state.IsPublic = @event.Payload.IsPublic;
 
-            return currentState;
+            return state;
         }
 
-        public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<NewGroupAdded> evnt)
+        public QuestionnaireInfoView Update(QuestionnaireInfoView state, IPublishedEvent<NewGroupAdded> @event)
         {
-            var groupId = evnt.Payload.PublicKey.FormatGuid();
+            var groupId = @event.Payload.PublicKey.FormatGuid();
 
             if (!this.groupTitles.ContainsKey(groupId))
             {
-                this.groupTitles.Add(groupId, evnt.Payload.GroupText);    
+                this.groupTitles.Add(groupId, @event.Payload.GroupText);    
             }
 
-            if (!evnt.Payload.ParentGroupPublicKey.HasValue ||
-                evnt.Payload.ParentGroupPublicKey.Value.FormatGuid() == currentState.QuestionnaireId)
+            if (!@event.Payload.ParentGroupPublicKey.HasValue ||
+                @event.Payload.ParentGroupPublicKey.Value.FormatGuid() == state.QuestionnaireId)
             {
-                CreateChapter(currentState: currentState, chapterId: groupId, chapterTitle: evnt.Payload.GroupText);
+                CreateChapter(currentState: state, chapterId: groupId, chapterTitle: @event.Payload.GroupText);
             }
 
-            return currentState;
+            return state;
         }
 
-        public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<GroupCloned> evnt)
+        public QuestionnaireInfoView Update(QuestionnaireInfoView state, IPublishedEvent<GroupCloned> @event)
         {
-            var groupId = evnt.Payload.PublicKey.FormatGuid();
+            var groupId = @event.Payload.PublicKey.FormatGuid();
 
             if (!this.groupTitles.ContainsKey(groupId))
             {
-                this.groupTitles.Add(groupId, evnt.Payload.GroupText);
+                this.groupTitles.Add(groupId, @event.Payload.GroupText);
             }
 
-            if (!evnt.Payload.ParentGroupPublicKey.HasValue ||
-                evnt.Payload.ParentGroupPublicKey.Value.FormatGuid() == currentState.QuestionnaireId)
+            if (!@event.Payload.ParentGroupPublicKey.HasValue ||
+                @event.Payload.ParentGroupPublicKey.Value.FormatGuid() == state.QuestionnaireId)
             {
-                CreateChapter(currentState: currentState, chapterId: groupId, chapterTitle: evnt.Payload.GroupText,
-                    orderIndex: evnt.Payload.TargetIndex);
+                CreateChapter(currentState: state, chapterId: groupId, chapterTitle: @event.Payload.GroupText,
+                    orderIndex: @event.Payload.TargetIndex);
             }
 
-            return currentState;
+            return state;
         }
 
-        public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<GroupUpdated> evnt)
+        public QuestionnaireInfoView Update(QuestionnaireInfoView state, IPublishedEvent<GroupUpdated> @event)
         {
-            var groupId = evnt.Payload.GroupPublicKey.FormatGuid();
+            var groupId = @event.Payload.GroupPublicKey.FormatGuid();
 
             if (this.groupTitles.ContainsKey(groupId))
             {
-                this.groupTitles[groupId] = evnt.Payload.GroupText;
+                this.groupTitles[groupId] = @event.Payload.GroupText;
             }
 
-            var chapterView = currentState.Chapters.Find(chapter => chapter.ItemId == groupId);
+            var chapterView = state.Chapters.Find(chapter => chapter.ItemId == groupId);
             if (chapterView != null)
             {
-                chapterView.Title = evnt.Payload.GroupText;
+                chapterView.Title = @event.Payload.GroupText;
             }
 
-            return currentState;
+            return state;
         }
 
-        public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<GroupDeleted> evnt)
+        public QuestionnaireInfoView Update(QuestionnaireInfoView state, IPublishedEvent<GroupDeleted> @event)
         {
             var chapterView =
-                currentState.Chapters.Find(chapter => chapter.ItemId == evnt.Payload.GroupPublicKey.FormatGuid());
+                state.Chapters.Find(chapter => chapter.ItemId == @event.Payload.GroupPublicKey.FormatGuid());
             if (chapterView != null)
             {
-                currentState.Chapters.Remove(chapterView);
+                state.Chapters.Remove(chapterView);
             }
 
-            return currentState;
+            return state;
         }
 
-        public QuestionnaireInfoView Update(QuestionnaireInfoView currentState, IPublishedEvent<QuestionnaireItemMoved> evnt)
+        public QuestionnaireInfoView Update(QuestionnaireInfoView state, IPublishedEvent<QuestionnaireItemMoved> @event)
         {
-            var groupOrQuestionKey = evnt.Payload.PublicKey.FormatGuid();
+            var groupOrQuestionKey = @event.Payload.PublicKey.FormatGuid();
 
-            var existsChapter = currentState.Chapters.Find(chapter => chapter.ItemId == groupOrQuestionKey);
+            var existsChapter = state.Chapters.Find(chapter => chapter.ItemId == groupOrQuestionKey);
 
             if (existsChapter != null)
             {
-                currentState.Chapters.Remove(existsChapter);
+                state.Chapters.Remove(existsChapter);
             }
 
-            if (!evnt.Payload.GroupKey.HasValue ||
-                evnt.Payload.GroupKey.Value.FormatGuid() == currentState.QuestionnaireId)
+            if (!@event.Payload.GroupKey.HasValue ||
+                @event.Payload.GroupKey.Value.FormatGuid() == state.QuestionnaireId)
             {
                 string chapterTitle = null;
                 if (!this.groupTitles.TryGetValue(groupOrQuestionKey, out chapterTitle))
@@ -151,13 +151,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                     chapterTitle = Monads.Maybe(() => existsChapter.Title);
                 }
 
-                CreateChapter(currentState: currentState, 
+                CreateChapter(currentState: state, 
                     chapterId: groupOrQuestionKey,
                     chapterTitle: chapterTitle, 
-                    orderIndex: evnt.Payload.TargetIndex);
+                    orderIndex: @event.Payload.TargetIndex);
             }
 
-            return currentState;
+            return state;
         }
 
         private static QuestionnaireInfoView CreateQuestionnaire(Guid questionnaireId, string questionnaireTitle, bool isPublic)

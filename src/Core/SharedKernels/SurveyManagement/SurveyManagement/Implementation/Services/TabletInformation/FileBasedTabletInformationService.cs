@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using Main.Core.Entities.SubEntities;
-
-using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.TabletInformation;
-using WB.Core.Synchronization.Documents;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletInformation
 {
@@ -18,28 +12,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletI
     {
         private readonly string basePath;
         private const string TabletInformationFolderName = "TabletInformationStorage";
-        private const char Separator = '@';   
+        private const char Separator = '@';
+        private const char USERDELIMITER = '!';
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string zipExtension = ".zip";
 
-        private readonly IReadSideKeyValueStorage<TabletSyncLogByUsers> tabletDocumentsStrogeReader;
-        private readonly IReadSideRepositoryReader<UserDocument> usersStorageReader;
-
-        public FileBasedTabletInformationService(string parentFolder, 
-            IFileSystemAccessor fileSystemAccessor,
-            IReadSideKeyValueStorage<TabletSyncLogByUsers> tabletDocumentsStrogeReader, IReadSideRepositoryReader<UserDocument> usersStorageReader)
+        public FileBasedTabletInformationService(string parentFolder, IFileSystemAccessor fileSystemAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-            this.tabletDocumentsStrogeReader = tabletDocumentsStrogeReader;
-            this.usersStorageReader = usersStorageReader;
             this.basePath = fileSystemAccessor.CombinePath(parentFolder, TabletInformationFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.basePath))
                 fileSystemAccessor.CreateDirectory(this.basePath);
         }
 
-        public void SaveTabletInformation(byte[] content, string androidId, string registrationId)
+        public void SaveTabletInformation(byte[] content, string androidId, string registrationId, UserView user)
         {
-            this.fileSystemAccessor.WriteAllBytes(this.fileSystemAccessor.CombinePath(this.basePath, this.CreateFileName(androidId, registrationId)),
+            this.fileSystemAccessor.WriteAllBytes(this.fileSystemAccessor.CombinePath(this.basePath, this.CreateFileName(androidId, registrationId, user)),
                 content);
         }
 
@@ -66,9 +54,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletI
             return this.fileSystemAccessor.CombinePath(this.basePath, packageName);
         }
 
-        private string CreateFileName(string androidId, string registrationId)
+        private string CreateFileName(string androidId, string registrationId, UserView user)
         {
-            return string.Format("{0}{1}{2}{1}{3}{4}", androidId, Separator, registrationId, DateTime.Now.Ticks, this.zipExtension);
+            string userInfo = user == null ? null : user.UserName + USERDELIMITER + user.PublicKey; 
+            
+            return string.Format("{0}{1}{2}{1}{3}{1}{4}{5}", androidId, Separator, registrationId, DateTime.Now.Ticks, userInfo, this.zipExtension);
         }
 
         private TabletInformationView CreateTabletInformationViewFormFileInfo(string fileName, DateTime fileCreationTime, long fileSize)
@@ -78,45 +68,41 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.TabletI
 
             var fileNameWithoutExtension = fileName.Replace(this.zipExtension,"");
             var separatedValues = fileNameWithoutExtension.Split(Separator);
-            if (separatedValues.Length != 3)
+            if (separatedValues.Length != 3 && separatedValues.Length != 4)
                 return null;
 
-            return new TabletInformationView(fileName, separatedValues[0], separatedValues[1], fileCreationTime, fileSize);
-        }
+            var tabletInfo = new TabletInformationView(fileName, separatedValues[0], separatedValues[1], fileCreationTime, fileSize);
 
-        public TabletLogView GetTabletLog(string androidId)
-        {
-            string deviceId = androidId.ToGuid().FormatGuid();
-            var tabletLogView = new TabletLogView();
-            TabletSyncLogByUsers tabletLog = tabletDocumentsStrogeReader.GetById(deviceId);
-            if (tabletLog == null)
-                return tabletLogView;
-
-            tabletLogView.Users = tabletLog.Users.Select(x => new UserLight(x, usersStorageReader.GetById(x).UserName)).ToList();
-
-            foreach (var userSyncLog in tabletLog.SyncLog)
+            if (separatedValues.Length == 4 && !string.IsNullOrEmpty(separatedValues[3]))
             {
-                var userSyncLogView = new UserSyncLogView
-                                      {
-                                          User = new UserLight(userSyncLog.Key, this.usersStorageReader.GetById(userSyncLog.Key).UserName)
-                                      };
-
-                foreach (var tabletSyncLog in userSyncLog.Value.OrderByDescending(x => x.HandshakeTime))
+                var userInfo = separatedValues[3].Split(USERDELIMITER);
+                if (userInfo.Length == 2)
                 {
-                    var tabletSyncLogView = new TabletSyncLogView
-                                            {
-                                                AppVersion = tabletSyncLog.AppVersion,
-                                                HandshakeTime = tabletSyncLog.HandshakeTime,
-                                                PackagesTrackingInfo = tabletSyncLog.PackagesTrackingInfo
-                                            };
-
-                    userSyncLogView.TabletSyncLog.Add(tabletSyncLogView);
+                    Guid userId;
+                    if (Guid.TryParse(userInfo[1], out userId))
+                    {
+                        tabletInfo.UserId = userId;
+                        tabletInfo.UserName = userInfo[0];
+                    }
                 }
-
-                tabletLogView.SyncLog.Add(userSyncLogView);
             }
 
-            return tabletLogView;
+            return tabletInfo;
+        }
+
+        public string GetPackageNameWithoutRegistrationId(string packageName)
+        {
+            var fileNameWithoutExtension = this.fileSystemAccessor.GetFileNameWithoutExtension(packageName);
+            var separatedValues = fileNameWithoutExtension.Split(Separator);
+            if (separatedValues.Length != 3 && separatedValues.Length != 4)
+                return packageName;
+
+            return string.Format("{0}{1}{2}{3}", separatedValues[0], Separator, separatedValues[2], this.zipExtension);
+        }
+
+        public List<TabletInformationView> GetAllTabletInformationPackages(int pageSize)
+        {
+            throw new NotImplementedException();
         }
     }
 }

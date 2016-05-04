@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
             ncqrsStyleDenormalizerMock = new Mock<IEventHandler>();
 
             ncqrCompatibleEventDispatcher =
-                CreateNcqrCompatibleEventDispatcher(handlersToIgnore: new[] { ncqrsStyleDenormalizerMock.Object.GetType() });
+                CreateNcqrCompatibleEventDispatcher(new EventBusSettings() { DisabledEventHandlerTypes  =  new[] { ncqrsStyleDenormalizerMock.Object.GetType() }});
         };
 
         Because of = () => ncqrCompatibleEventDispatcher.Register(ncqrsStyleDenormalizerMock.Object);

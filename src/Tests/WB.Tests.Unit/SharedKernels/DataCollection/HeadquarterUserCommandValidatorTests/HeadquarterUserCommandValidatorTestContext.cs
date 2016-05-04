@@ -18,8 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValid
         {
             return
                 new HeadquarterUserCommandValidator(
-                    users ?? Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>(),
-                    interviews ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
+                    users ?? Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>());
         }
 
         protected static HeadquarterUserCommandValidator CreateHeadquarterUserCommandValidatorWithUsers(
@@ -32,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.HeadquarterUserCommandValid
             }
             return
                 new HeadquarterUserCommandValidator(
-                    userStorage, Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
+                    userStorage);
         }
     }
 }

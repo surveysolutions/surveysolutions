@@ -7,5 +7,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
     {
         public PreloadedDataDto PreloadedDataDto {set; get; }
         public Guid? SupervisorId { set; get; }
+        public Guid? InterviewerId { set; get; }
     }
 }

@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
@@ -54,17 +55,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                    new[] {new FixedRosterTitle(0, title1), new FixedRosterTitle(1, title2)}
                 );
 
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
-                questionnaire);
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
-            SetupInstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(
-               CreateInterviewExpressionStateProviderStub());
-
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             eventContext = new EventContext();
         };
 

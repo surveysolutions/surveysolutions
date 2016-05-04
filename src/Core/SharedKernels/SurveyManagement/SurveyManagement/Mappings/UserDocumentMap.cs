@@ -15,27 +15,36 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
                 idMap.Generator(Generators.Assigned);
                 idMap.Column("Id");
             });
-            Property(x => x.PublicKey);
-            Property(x => x.CreationDate);
-            Property(x => x.Email);
+            Property(x => x.PublicKey, cm =>
+            {
+                cm.Index("User_PublicKey");
+                cm.Unique(true);
+            });
+            Property(x => x.CreationDate, cm => cm.Index("User_CreationDate"));
+            Property(x => x.Email, cm => cm.Index("User_Email"));
             Property(x => x.IsLockedByHQ);
             Property(x => x.IsLockedBySupervisor);
             Property(x => x.IsArchived);
-            Property(x => x.Password);
-            Property(x => x.UserName);
+            Property(x => x.Password, cm => cm.Index("User_UserName_Password"));
+            Property(x => x.UserName, cm => cm.Index("User_UserName_Password"));
             Property(x => x.LastChangeDate);
-            Property(x => x.DeviceId);
-            Property(x => x.PersonName);
+            Property(x => x.DeviceId, cm => cm.Index("User_DeviceId"));
+            Property(x => x.PersonName, cm => cm.Index("User_PersonName"));
             Property(x => x.PhoneNumber);
             Component(x => x.Supervisor, cmp =>
             {
-                cmp.Property(x => x.Id, ptp => ptp.Column("SupervisorId"));
+                cmp.Property(x => x.Id, ptp => { ptp.Column("SupervisorId"); ptp.Index("User_SupervisorId"); });
+              
                 cmp.Property(x => x.Name, ptp => ptp.Column("SupervisorName"));
             });
 
             Set(x => x.Roles, m =>
             {
-                m.Key(km => km.Column("UserId"));
+                m.Key(km => km.Column(cm =>
+                {
+                    cm.Name("UserId");
+                    cm.Index("Users_Roles_fk");
+                }));
                 m.Table("Roles");
                 m.Lazy(CollectionLazy.NoLazy);
             },

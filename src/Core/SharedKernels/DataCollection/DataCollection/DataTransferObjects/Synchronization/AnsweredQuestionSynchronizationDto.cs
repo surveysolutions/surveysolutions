@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public AnsweredQuestionSynchronizationDto(Guid id, decimal[] vector, object answer, string comments)
         {
             Id = id;
-            QuestionPropagationVector = vector;
+            this.QuestionRosterVector = vector;
 
             var interviewTextListAnswers = answer as InterviewTextListAnswers;
             if (interviewTextListAnswers != null)
@@ -33,34 +33,13 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
 
         public Guid Id { get;  set; }
 
-        public decimal[] QuestionPropagationVector {
-            get
-            {
-                if (questionPropagationVector == null)
-                {
-                    questionPropagationVector = RestoreFromPropagationVectorInOldIntFormat();
-                }
-                return questionPropagationVector;
-            }
-            set { questionPropagationVector = value; }
-        }
-
-        private decimal[] questionPropagationVector;
-        
-        [Obsolete("please use QuestionPropagationVector instead")]
-        public int[] PropagationVector { get; set; }
+        public decimal[] QuestionRosterVector { get; set; }
 
         public object Answer { get;  set; }
         public string Comments { get;  set; }
 
         public CommentSynchronizationDto[] AllComments { get; set; }
 
-        private decimal[] RestoreFromPropagationVectorInOldIntFormat()
-        {
-            if (PropagationVector == null)
-                return new decimal[0];
-            return PropagationVector.Select(Convert.ToDecimal).ToArray();
-        }
         public bool IsEmpty()
         {
             return this.Answer == null

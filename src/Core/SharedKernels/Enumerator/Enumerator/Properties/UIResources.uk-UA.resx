@@ -1,0 +1,386 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Cancel" xml:space="preserve">
+    <value>Скасувати</value>
+  </data>
+  <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
+    <value>Питальники було не знайдено
+
+Ви можна створювати або редагувати питальники выкористовуючи Survey Solutions Designer</value>
+  </data>
+  <data name="Dashboard_EmptySearchResult" xml:space="preserve">
+    <value>Питальники було не знайдено</value>
+  </data>
+  <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
+    <value>{0:dd MMM HH:mm}</value>
+  </data>
+  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
+    <value>Мої питальники</value>
+  </data>
+  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
+    <value>Загальнодоступні питальники</value>
+  </data>
+  <data name="Dashboard_ToolbarText" xml:space="preserve">
+    <value>Питальники</value>
+  </data>
+  <data name="DateQuestion_Hint" xml:space="preserve">
+    <value>Торкніться, щоб ввести дату</value>
+  </data>
+  <data name="EndpointHint" xml:space="preserve">
+    <value>Кінцева точка синхронізації</value>
+  </data>
+  <data name="EndpointText" xml:space="preserve">
+    <value>Кінцева точка служби Web:</value>
+  </data>
+  <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
+    <value>Обліковий запис користувача заблоковано. Будь ласка, зв'яжіться з підтримкоб support@mysurvey.solutions.</value>
+  </data>
+  <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
+    <value>Ваш обліковий запис не пітверджено. Будь ласка, спочатку підтвердіть свій запис.</value>
+  </data>
+  <data name="ErrorMessage_InternalServerError" xml:space="preserve">
+    <value>Помилка сервера. Будь ласка, зв'яжіться зі службою підтримки support@mysurvey.solutions</value>
+  </data>
+  <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
+    <value>Адрес Survey Solutions Designe URL є неприпустимим. Перевірте параметри.</value>
+  </data>
+  <data name="ErrorMessage_Maintenance" xml:space="preserve">
+    <value>Сайт Survey Solutions Designe зараз в режимі супроводу. Вибачте за незручності</value>
+  </data>
+  <data name="ErrorMessage_RequestTimeout" xml:space="preserve">
+    <value>Вичерпано час очікування під час підключення до Survey Solutions Designe веб-сайту. Перевірте підключення до Інтернету.</value>
+  </data>
+  <data name="ErrorMessage_ServiceUnavailable" xml:space="preserve">
+    <value>Немає зв'язку веб-сайтом дизайнера. Будь ласка, переконайтеся, що веб-сайт доступний.</value>
+  </data>
+  <data name="ErrorMessage_Unauthorized" xml:space="preserve">
+    <value>Логін або пароль вказано невірно</value>
+  </data>
+  <data name="ErrorMessage_UpgradeRequired" xml:space="preserve">
+    <value>Вийшла нова версія програми. Будь ласка, оновіть додаток</value>
+  </data>
+  <data name="FilteredComboboxQuestion_Hint" xml:space="preserve">
+    <value>Натисніть, щоб ввести текст</value>
+  </data>
+  <data name="GpsQuestion_Timeout" xml:space="preserve">
+    <value>GPS не вдалося визначити ваше місцезнаходження. Щоб виправити неполадки, спробуйте зробити наступне: гарантувати, що ви на вулиці, підтвердити, що ваш GPS включений, або змінити настройку вашого GPS тайм-аут.</value>
+  </data>
+  <data name="IntegerQuestion_Hint" xml:space="preserve">
+    <value>Торкніться, щоб ввести номер</value>
+  </data>
+  <data name="Interviewer_ApplicationName" xml:space="preserve">
+    <value>Survey Solutions Interviewer</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_Cancel" xml:space="preserve">
+    <value>Скасувати</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage" xml:space="preserve">
+    <value>Ваш обліковий запис вже прив'язаний до іншого пристрою</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_RelinkButtonText" xml:space="preserve">
+    <value>Повторно зв'язати</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
+    <value>Якщо ви повторно зв'яжите цей пристрою&lt;br&gt;всі дані на старом пристрої буде втрачено</value>
+  </data>
+  <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
+    <value>Спробуйте увійти онлайн</value>
+  </data>
+  <data name="Interview_Comment_Interviewer_Caption" xml:space="preserve">
+    <value>Ваш коментар</value>
+  </data>
+  <data name="Interview_Complete_Answered" xml:space="preserve">
+    <value>Мають відповдь</value>
+  </data>
+  <data name="Interview_Complete_Button" xml:space="preserve">
+    <value>Завершення</value>
+  </data>
+  <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
+    <value>Після завершення цього інтерв'ю, його буде позначено як завершене й буде передано до супервізора під час наступної синхронізації</value>
+  </data>
+  <data name="Interview_Complete_Errors" xml:space="preserve">
+    <value>Помилок</value>
+  </data>
+  <data name="Interview_Complete_No" xml:space="preserve">
+    <value>Ні</value>
+  </data>
+  <data name="Interview_Complete_Note_For_Supervisor" xml:space="preserve">
+    <value>Примітка для супервізора</value>
+  </data>
+  <data name="Interview_Complete_Questions_Status" xml:space="preserve">
+    <value>Статуси запитань</value>
+  </data>
+  <data name="Interview_Complete_Screen_Description" xml:space="preserve">
+    <value>Ви збираєтеся завершити це інтерв'ю</value>
+  </data>
+  <data name="Interview_Complete_Screen_Title" xml:space="preserve">
+    <value>Завершення</value>
+  </data>
+  <data name="Interview_Complete_Unanswered" xml:space="preserve">
+    <value>Без відповіді</value>
+  </data>
+  <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
+    <value>{0} відповіді</value>
+  </data>
+  <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
+    <value>одна відповідь</value>
+  </data>
+  <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
+    <value>{0} помилки</value>
+  </data>
+  <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
+    <value>одна помилка</value>
+  </data>
+  <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
+    <value>Розділ завершено: {0}</value>
+  </data>
+  <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
+    <value>Розділ не розпочато</value>
+  </data>
+  <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
+    <value>Розділ частково заповнен: {0}</value>
+  </data>
+  <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
+    <value>{0} підрозділів</value>
+  </data>
+  <data name="Interview_Group_Subgroups_One" xml:space="preserve">
+    <value>один підрозділ</value>
+  </data>
+  <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
+    <value>немає підрозділів</value>
+  </data>
+  <data name="Interview_Instruction_Title" xml:space="preserve">
+    <value>Інструкція</value>
+  </data>
+  <data name="Interview_LinkedQuestion_Empty" xml:space="preserve">
+    <value>Опції будуть доступні після відповіді на питання які посилаються</value>
+  </data>
+  <data name="Interview_NextSection_ButtonText" xml:space="preserve">
+    <value>Наступний розділ</value>
+  </data>
+  <data name="Interview_PreviousGroupNavigation_AnsweredQuestions" xml:space="preserve">
+    <value>На всі {0} питання було дано відповіді</value>
+  </data>
+  <data name="Interview_PreviousGroupNavigation_UnansweredQuestions" xml:space="preserve">
+    <value>Примітка: {0} питання є без відповіді</value>
+  </data>
+  <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
+    <value>Визначити місце розташування</value>
+  </data>
+  <data name="Interview_Questions_Multimedia_TapToTakePhoto" xml:space="preserve">
+    <value>Торкніться, щоб зробити знімок</value>
+  </data>
+  <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
+    <value>Торкніться кнопки прийняти штрих-коду</value>
+  </data>
+  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>Ви дійсно бажаєте видалити {0} рядків з пов'язаних списків?</value>
+  </data>
+  <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
+    <value>Відповідь "{0}" не відповідає ніякому варіанту</value>
+  </data>
+  <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
+    <value>Відповідь "{0}" не відповідає ніякому варіанту</value>
+  </data>
+  <data name="Interview_Question_Integer_EmptyValueError" xml:space="preserve">
+    <value>Не вдалося зберегти пусте значення</value>
+  </data>
+  <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
+    <value>Відповідь '{0}' є неправильною, оскільки питання використовується як розмір списку і вказаного відповідь буде негативною</value>
+  </data>
+  <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
+    <value>Введене значення не вдалося проаналізувати як ціле значення</value>
+  </data>
+  <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
+    <value>Відповідь '{0}' є неправильною, тому що відповідь більше, ніж верхня межа списку '{1}'.</value>
+  </data>
+  <data name="Interview_Question_List_Empty_Values_Are_Not_Allowed" xml:space="preserve">
+    <value>Пустими значення не допускаються</value>
+  </data>
+  <data name="Interview_Question_Real_ParsingError" xml:space="preserve">
+    <value>Введене значення не вдалося проаналізувати як десяткове значення</value>
+  </data>
+  <data name="Interview_Question_Text_MaskError" xml:space="preserve">
+    <value>Будь ласка, заповніть усі необхідні значення</value>
+  </data>
+  <data name="LoginNameHint" xml:space="preserve">
+    <value>Ваш Логін</value>
+  </data>
+  <data name="LoginText" xml:space="preserve">
+    <value>Ввійти</value>
+  </data>
+  <data name="LoginTitleText" xml:space="preserve">
+    <value>Survey Solutions Questionnaire Tester</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Ні</value>
+  </data>
+  <data name="PasswordHint" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_Google_Play_Services_are_not_available" xml:space="preserve">
+    <value>Сервіс Google Play недоступний</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_Location_Client_not_started" xml:space="preserve">
+    <value>Роботу клієнта розташування не розпочато</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once" xml:space="preserve">
+    <value>Не вдається запустити службу MvxLocation більш ніж один раз</value>
+  </data>
+  <data name="PrefilledQuestions_StartInterview" xml:space="preserve">
+    <value>ПОЧАТИ</value>
+  </data>
+  <data name="RealQuestion_Hint" xml:space="preserve">
+    <value>Натисніть, щоб ввести десяткове число</value>
+  </data>
+  <data name="StaySignedInText" xml:space="preserve">
+    <value>Залишатися в системі</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Description" xml:space="preserve">
+    <value>Ви не маєте будь-яких призначень на цьому пристрої. Надішлить інформацію з планшету, видаліть дані додатку і увійдіть, выкористовуючи інший обліковий запис</value>
+  </data>
+  <data name="TextListQuestion_Hint" xml:space="preserve">
+    <value>Торкніться, щоб ввести новий елемент</value>
+  </data>
+  <data name="TextQuestion_Hint" xml:space="preserve">
+    <value>Натисніть, щоб ввести текст</value>
+  </data>
+  <data name="TextQuestion_MaskHint" xml:space="preserve">
+    <value>Натисніть, щоб ввести текст ({0})</value>
+  </data>
+  <data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
+    <value>Неприпустима відповідь</value>
+  </data>
+  <data name="Validity_NotAnswered_InterviewException_ErrorCaption" xml:space="preserve">
+    <value>Відповідь не збережено</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Так</value>
+  </data>
+  <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
+    <value>Завершити інтерв'ю</value>
+  </data>
+  <data name="Interview_ParentGroup_ButtonText" xml:space="preserve">
+    <value>На рівень вище</value>
+  </data>
+  <data name="Interviewer_Diagnostics" xml:space="preserve">
+    <value>Діагностіка</value>
+  </data>
+</root>

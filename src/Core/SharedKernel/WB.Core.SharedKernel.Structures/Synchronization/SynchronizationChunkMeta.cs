@@ -4,6 +4,7 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
 {
     public class SynchronizationChunkMeta
     {
+        public SynchronizationChunkMeta() { }
         public SynchronizationChunkMeta(string id, long sortIndex, Guid? userId, string itemType)
         {
             Id = id;
@@ -12,9 +13,10 @@ namespace WB.Core.SharedKernel.Structures.Synchronization
             ItemType = itemType;
         }
 
-        public string Id { get; private set; }
-        public long SortIndex { get; private set; }
-        public Guid? UserId { get; private set; }
-        public string ItemType { get; private set; }
+        public string Id { get; set; }
+        public long SortIndex { get; set; }
+        public Guid? UserId { get; set; }
+        public string ItemType { get; set; }
+        public Guid InterviewId { get; set; }
     }
 }

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<resources>
+
+  <dimen name="Splash_Logo_padding">200dp</dimen>
+
+  <dimen name="Login_ProgressBar_margin_top">-7dp</dimen>
+  <dimen name="Login_Element_width">300dp</dimen>
+  <dimen name="Login_Element_margin_vertical_normal">15dp</dimen>
+  <dimen name="Login_Element_margin_vertical_thin">10dp</dimen>
+
+  <dimen name="Dashboard_SearchView_width">300dp</dimen>
+  <dimen name="Dashboard_SearchView_DeleteButton_size">24dp</dimen>
+  <dimen name="Dashboard_SearchView_SearchButton_size">36dp</dimen>
+
+  <dimen name="Dashboard_ProgressBar_margin_top">-7dp</dimen>
+  <dimen name="Dashboard_Menu_height">80dp</dimen>
+  <dimen name="Dashboard_Menu_margin_vertical">10dp</dimen>
+  <dimen name="Dashboard_Menu_margin_horizontal">32dp</dimen>
+  <dimen name="Dashboard_Menu_Item_margin_horizontal_in_between">@dimen/Dashboard_Menu_margin_horizontal</dimen>
+  <dimen name="Dashboard_Questionnaire_MyQuestionnaireLink_margin_top">32dp</dimen>
+  <dimen name="Dashboard_Questionnaire_MyQuestionnaireLink_margin_bottom">22dp</dimen>
+  <dimen name="Dashboard_QuestionnairesListItem_LeftIndicator_width">14dp</dimen>
+  <dimen name="Dashboard_QuestionnairesListItem_Body_padding">12dp</dimen>
+  <dimen name="Dashboard_QuestionnairesListItem_Title_margin_right">24dp</dimen>
+  <dimen name="Dashboard_QuestionnairesListItem_Divider_margin">2dp</dimen>
+  <dimen name="Dashboard_QuestionnairesListItem_Date_width">128dp</dimen>
+  <dimen name="Dashboard_QuestionnairesList_EmptyText_margin_left">32dp</dimen>
+  <dimen name="Dashboard_QuestionnairesList_EmptyText_margin_top">32dp</dimen>
+  <dimen name="Dashboard_QuestionnairesList_EmptyText_margin_right">46dp</dimen>
+  <dimen name="Dashboard_QuestionnairesListItem_Marker_Width">14dp</dimen>
+  <dimen name="Dashboard_QuestionnairesListItem_Title_margin_left">14dp</dimen>
+
+</resources>

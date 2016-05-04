@@ -385,12 +385,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
                         isConfirmed: account.IsConfirmed, 
                         comment: account.Comment);
                     break;
-                case MembershipEventType.UpdateOnlineState:
-                    //command = new ChangeOnlineAccountCommand(accountPublicKey);
-                    break;
-                case MembershipEventType.UserValidated:
-                    command = new ValidateAccountCommand(accountPublicKey);
-                    break;
                 case MembershipEventType.FailedLogin:
                     command = new LoginFailedAccountCommand(accountPublicKey);
                     break;

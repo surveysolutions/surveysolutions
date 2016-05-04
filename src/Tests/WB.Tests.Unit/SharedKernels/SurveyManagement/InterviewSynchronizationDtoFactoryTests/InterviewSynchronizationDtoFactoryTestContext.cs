@@ -7,11 +7,15 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationDtoFactoryTests
@@ -21,14 +25,26 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
         protected static InterviewSynchronizationDtoFactory CreateInterviewSynchronizationDtoFactory(QuestionnaireDocument document)
         {
             document.ConnectChildrenWithParent();
-            return new InterviewSynchronizationDtoFactory(Mock.Of<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(
-                _ => _.GetById(It.IsAny<string>()) == new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(document, 1)));
+            return new InterviewSynchronizationDtoFactory(
+                Mock.Of<IReadSideRepositoryWriter<InterviewStatuses>>(),
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireRosterStructure>>(
+                    _ =>
+                        _.GetById(Moq.It.IsAny<string>()) ==
+                        new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(document, 1)), 
+                Mock.Of<IReadSideKeyValueStorage<InterviewLinkedQuestionOptions>>(),
+                Mock.Of<IPlainQuestionnaireRepository>(_=>_.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())== document));
         }
 
         protected static InterviewSynchronizationDtoFactory CreateInterviewSynchronizationDtoFactory(QuestionnaireRosterStructure questionnaireRosterStructure)
         {
-            return new InterviewSynchronizationDtoFactory(Mock.Of<IReadSideKeyValueStorage<QuestionnaireRosterStructure>>(
-                _ => _.GetById(It.IsAny<string>()) == questionnaireRosterStructure));
+            return new InterviewSynchronizationDtoFactory(
+                Mock.Of<IReadSideRepositoryWriter<InterviewStatuses>>(),
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireRosterStructure>>(
+                    _ =>
+                        _.GetById(Moq.It.IsAny<string>()) ==
+                        questionnaireRosterStructure),
+                Mock.Of<IReadSideKeyValueStorage<InterviewLinkedQuestionOptions>>(),
+                Mock.Of<IPlainQuestionnaireRepository>());
         }
 
         internal static InterviewData CreateInterviewData(Guid? interviewId=null)
@@ -82,10 +98,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewSynchronizationD
 
             foreach (var answeredQuestion in answeredQuestions)
             {
-                if (!rosterLevel.QuestionsSearchCahche.ContainsKey(answeredQuestion.Key))
-                    rosterLevel.QuestionsSearchCahche.Add(answeredQuestion.Key, new InterviewQuestion(answeredQuestion.Key));
+                if (!rosterLevel.QuestionsSearchCache.ContainsKey(answeredQuestion.Key))
+                    rosterLevel.QuestionsSearchCache.Add(answeredQuestion.Key, new InterviewQuestion(answeredQuestion.Key));
 
-                var nestedQuestion = rosterLevel.QuestionsSearchCahche[answeredQuestion.Key];
+                var nestedQuestion = rosterLevel.QuestionsSearchCache[answeredQuestion.Key];
 
                 nestedQuestion.Answer = answeredQuestion.Value;
             }

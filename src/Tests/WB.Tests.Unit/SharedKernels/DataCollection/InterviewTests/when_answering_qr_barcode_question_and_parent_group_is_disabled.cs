@@ -28,10 +28,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                         _.GetAllParentGroupsForQuestion(questionId) == new Guid[] { parentGroupId }
                 );
 
-            SetupInstanceToMockedServiceLocator<IQuestionnaireRepository>(
-                CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire));
+            IPlainQuestionnaireRepository questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>

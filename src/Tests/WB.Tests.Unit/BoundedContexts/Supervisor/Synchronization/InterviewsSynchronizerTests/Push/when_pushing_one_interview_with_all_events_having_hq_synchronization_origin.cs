@@ -12,7 +12,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Supervisor.Interviews.Implementation.Views;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             var readyToSendInterviewsRepositoryWriter = Stub.ReadSideRepository<ReadyToSendToHeadquartersInterview>();
             readyToSendInterviewsRepositoryWriter.Store(new ReadyToSendToHeadquartersInterview(interviewId), interviewId);
 
-            fileSyncRepository.Setup(x => x.GetBinaryFilesFromSyncFolder()).Returns(new List<InterviewBinaryDataDescriptor>());
+            fileSyncRepository.Setup(x => x.GetImagesByInterviews()).Returns(new List<InterviewBinaryDataDescriptor>());
 
             interviewsSynchronizer = Create.InterviewsSynchronizer(
                 readyToSendInterviewsRepositoryReader: readyToSendInterviewsRepositoryWriter,
@@ -64,16 +64,16 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
             loggerMock.Verify(logger => logger.Error(Moq.It.IsAny<string>(), Moq.It.IsAny<Exception>()), Times.Never);
 
         It should_move_interview_files_into_sync_storage = () =>
-          fileSyncRepository.Verify(x=>x.MoveInterviewsBinaryDataToSyncFolder(interviewId), Times.Once);
+          fileSyncRepository.Verify(x=>x.MoveInterviewImagesToSyncFolder(interviewId), Times.Once);
 
         It should_mark_interview_as_sent_to_hq_using_hq_synchronization_origin = () =>
             commandServiceMock.Verify(service =>
-                service.Execute(Moq.It.Is<MarkInterviewAsSentToHeadquarters>(command => command.InterviewId == interviewId), "hq-sync", false),
+                service.Execute(Moq.It.Is<MarkInterviewAsSentToHeadquarters>(command => command.InterviewId == interviewId), "hq-sync"),
                 Times.Once);
 
         It should_execute_only_one_command = () =>
             commandServiceMock.Verify(service =>
-                service.Execute(Moq.It.IsAny<ICommand>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()),
+                service.Execute(Moq.It.IsAny<ICommand>(), Moq.It.IsAny<string>()),
                 Times.Once);
 
         private static Mock<HttpMessageHandler> httpMessageHandlerMock = new Mock<HttpMessageHandler>();

@@ -12,6 +12,7 @@
         RejectedBySupervisor,
         RejectedByHeadquarter,
         Deleted,
-        Restored
+        Restored,
+        UnapprovedByHeadquarter
     }
 }

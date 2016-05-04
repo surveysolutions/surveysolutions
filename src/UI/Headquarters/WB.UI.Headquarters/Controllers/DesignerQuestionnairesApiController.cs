@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using Main.Core.Documents;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Implementation;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.SurveyManagement.Commands;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Template;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -26,6 +27,8 @@ namespace WB.UI.Headquarters.Controllers
     [ApiValidationAntiForgeryToken]
     public class DesignerQuestionnairesApiController : BaseApiController
     {
+        private readonly IAttachmentContentService attachmentContentService;
+
         internal RestCredentials designerUserCredentials
         {
             get { return this.getDesignerUserCredentials(this.GlobalInfo); }
@@ -39,20 +42,24 @@ namespace WB.UI.Headquarters.Controllers
 
         public DesignerQuestionnairesApiController(
             ISupportedVersionProvider supportedVersionProvider,
-            ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger, IRestService restService)
-            : this(supportedVersionProvider, commandService, globalInfo, zipUtils, logger, GetDesignerUserCredentials, restService)
+            ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger, IRestService restService,
+            IAttachmentContentService questionnaireAttachmentService)
+            : this(supportedVersionProvider, commandService, globalInfo, zipUtils, logger, GetDesignerUserCredentials, restService, questionnaireAttachmentService)
         {
+            
         }
 
         internal DesignerQuestionnairesApiController(ISupportedVersionProvider supportedVersionProvider,
             ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILogger logger,
-            Func<IGlobalInfoProvider, RestCredentials> getDesignerUserCredentials, IRestService restService)
+            Func<IGlobalInfoProvider, RestCredentials> getDesignerUserCredentials, IRestService restService,
+            IAttachmentContentService attachmentContentService)
             : base(commandService, globalInfo, logger)
         {
             this.zipUtils = zipUtils;
             this.getDesignerUserCredentials = getDesignerUserCredentials;
             this.supportedVersionProvider = supportedVersionProvider;
             this.restService = restService;
+            this.attachmentContentService = attachmentContentService;
         }
 
         private static RestCredentials GetDesignerUserCredentials(IGlobalInfoProvider globalInfoProvider)
@@ -72,17 +79,16 @@ namespace WB.UI.Headquarters.Controllers
                 credentials: this.designerUserCredentials, 
                 request: new QuestionnaireListRequest()
                 {
-                    Filter = data.Request.Filter,
-                    PageIndex = data.Pager.Page,
-                    PageSize = data.Pager.PageSize,
+                    Filter = data.Filter,
+                    PageIndex = data.PageIndex,
+                    PageSize = data.PageSize,
                     SortOrder = data.SortOrder.GetOrderRequestString()
                 });
 
             return new DesignerQuestionnairesView()
                 {
                     Items = list.Items.Select(x => new DesignerQuestionnaireListViewItem() { Id = x.Id, Title = x.Title }),
-                    TotalCount = list.TotalCount,
-                    ItemsSummary = null
+                    TotalCount = list.TotalCount
                 };
         }
 
@@ -93,13 +99,13 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var supportedVersion = this.supportedVersionProvider.GetSupportedQuestionnaireVersion();
 
-                var docSource = await this.restService.PostAsync<QuestionnaireCommunicationPackage>(
+                var questionnairePackage = await this.restService.PostAsync<QuestionnaireCommunicationPackage>(
                     url: "questionnaire",
                     credentials: designerUserCredentials,
                     request: new DownloadQuestionnaireRequest()
                     {
                         QuestionnaireId = request.Questionnaire.Id,
-                        SupportedVersion = new QuestionnnaireVersion()
+                        SupportedVersion = new QuestionnaireVersion()
                         {
                             Major = supportedVersion.Major,
                             Minor = supportedVersion.Minor,
@@ -107,12 +113,32 @@ namespace WB.UI.Headquarters.Controllers
                         }
                     });
 
-                var document = this.zipUtils.DecompressString<QuestionnaireDocument>(docSource.Questionnaire);
+                var questionnaire = this.zipUtils.DecompressString<QuestionnaireDocument>(questionnairePackage.Questionnaire);
+                var questionnaireContentVersion = questionnairePackage.QuestionnaireContentVersion;
+                var questionnaireAssembly = questionnairePackage.QuestionnaireAssembly;
 
-                var supportingAssembly = docSource.QuestionnaireAssembly;
+                if (questionnaire.Attachments != null)
+                {
+                    foreach (var questionnaireAttachment in questionnaire.Attachments)
+                    {
+                        if(this.attachmentContentService.HasAttachmentContent(questionnaireAttachment.ContentId))
+                            continue;
 
-                this.CommandService.Execute(new ImportFromDesigner(this.GlobalInfo.GetCurrentUser().Id, document,
-                    request.AllowCensusMode, supportingAssembly));
+                        var attachmentContent = await this.restService.DownloadFileAsync(
+                            url: $"attachments/{questionnaireAttachment.ContentId}",
+                            credentials: designerUserCredentials);
+
+                        this.attachmentContentService.SaveAttachmentContent(questionnaireAttachment.ContentId,
+                            attachmentContent.ContentType, attachmentContent.Content);
+                    }
+                }
+                
+                this.CommandService.Execute(new ImportFromDesigner(
+                    this.GlobalInfo.GetCurrentUser().Id, 
+                    questionnaire,
+                    request.AllowCensusMode, 
+                    questionnaireAssembly,
+                    questionnaireContentVersion));
 
                 return new QuestionnaireVerificationResponse();
             }

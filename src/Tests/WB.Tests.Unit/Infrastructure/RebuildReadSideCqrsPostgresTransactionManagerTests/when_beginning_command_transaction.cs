@@ -1,6 +1,6 @@
 using System;
 using Machine.Specifications;
-using WB.Core.Infrastructure.Storage.Postgre.Implementation;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Tests.Unit.Infrastructure.RebuildReadSideCqrsPostgresTransactionManagerTests
 {
@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Infrastructure.RebuildReadSideCqrsPostgresTransactionMan
         It should_not_fail = () =>
             exception.ShouldBeNull();
 
-        private static RebuildReadSideCqrsPostgresTransactionManager transactionManager;
+        private static RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions transactionManager;
         private static Exception exception;
     }
 }

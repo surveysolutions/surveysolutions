@@ -17,7 +17,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     {
         Establish context = () =>
         {
-            interviewId = Guid.Parse("11111111111111111111111111111111");
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -27,22 +26,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             Guid questionId = Guid.Parse("22220000111111111111111111111111");
             Guid parentPropagatableGroupId = Guid.Parse("22220000AAAAAAAAAAAAAAAAAAAAAAAA");
 
-            var questionaire = Mock.Of<IQuestionnaire>(_
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), _
                 => /*_.GetAllQuestionsWithNotEmptyCustomEnablementConditions() == new [] { questionId }
                 && */_.GetRostersFromTopToSpecifiedQuestion(questionId) == new [] { parentPropagatableGroupId });
 
-            var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
-                => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
-
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
             eventContext = new EventContext();
+
+            interview = Create.Interview(questionnaireRepository: questionnaireRepository);
         };
 
         Because of = () =>
-            new Interview(interviewId, userId, questionnaireId, 1, answersToFeaturedQuestions, answersTime, supervisorId);
+            interview.CreateInterview(questionnaireId, 1, supervisorId, answersToFeaturedQuestions, answersTime, userId);
 
         It should_not_raise_QuestionDisabled_event = () =>
             eventContext.ShouldNotContainEvent<QuestionsDisabled>();
@@ -54,11 +48,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         private static EventContext eventContext;
-        private static Guid interviewId;
         private static Guid userId;
         private static Guid questionnaireId;
         private static Dictionary<Guid, object> answersToFeaturedQuestions;
         private static DateTime answersTime;
         private static Guid supervisorId;
+        private static Interview interview;
     }
 }

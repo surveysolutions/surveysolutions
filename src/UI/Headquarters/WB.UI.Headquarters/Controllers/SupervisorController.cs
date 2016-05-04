@@ -3,8 +3,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -18,6 +18,7 @@ namespace WB.UI.Headquarters.Controllers
 {
 
     [LimitsFilter]
+    [ValidateInput(false)]
     [Authorize(Roles = "Administrator, Headquarter, Observer")]
     public class SupervisorController : TeamController
     {
@@ -58,6 +59,7 @@ namespace WB.UI.Headquarters.Controllers
             }
             catch (Exception e)
             {
+                this.Logger.Error(e.Message, e);
                 this.Error(e.Message);
                 return this.View(model);
             }
@@ -128,16 +130,6 @@ namespace WB.UI.Headquarters.Controllers
             
             this.Success(string.Format("Information about <b>{0}</b> successfully updated", user.UserName));
             return this.RedirectToAction("Index");
-        }
-
-        [Authorize(Roles = "Administrator, Headquarter")]
-        public ActionResult Interviewers(Guid id)
-        {
-            var supervisor = this.GetUserById(id);
-            if (supervisor == null)
-                throw new HttpException(404, string.Empty);
-
-            return this.View(supervisor);
         }
     }
 }

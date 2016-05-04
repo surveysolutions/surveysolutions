@@ -6,7 +6,12 @@
 <div class="page-header">
     <h3>
         <div class="row">
-            <div class="col-md-9">Read Side Control Panel &nbsp; <small><span class="label label-success" data-bind="visible: isRebuildRunning">In progress</span></small></div>
+            <div class="col-md-9">
+                <div>
+                    Read Side Control Panel &nbsp; <small><span class="label label-success" data-bind="visible: isRebuildRunning">In progress</span></small>
+                </div>
+                <div><small>App version: <span data-bind="text: readSideApplicationVersion">?</span> / DB version: <span data-bind="text: readSideDatabaseVersion">?</span></small></div>
+            </div>
             <div class="col-md-3">
                 <div class="pull-right">
                     <button type="submit" class="btn btn-primary inline-inputs" data-bind="click: rebuild, enable: !isRebuildRunning()">
@@ -22,7 +27,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <h4 class="panel-title">
-            <a data-toggle="collapse" data-target="#filter" href="#filter" class="collapsed">Rebuild by(default : by events)</a>
+            <a data-toggle="collapse" data-target="#filter" href="#filter" class="collapsed">Rebuild by (default : by events)</a>
         </h4>
     </div>
     <div id="filter" class="panel-collapse collapse">
@@ -122,7 +127,6 @@
                     </tbody>
                 </table>
                 <!-- /ko -->
-
                 <!-- ko if: rebuildDenormalizerStatistic().length > 0 -->
 
                 <table class="table table-striped table-bordered table-condensed table-hover">
@@ -176,8 +180,12 @@
                         Failed events
                     </li>
                     <li class="list-group-item">
+                        <span class="badge" data-bind="text: progress"></span>
+                        Progress (%)
+                    </li>
+                    <li class="list-group-item">
                         <span class="badge" data-bind="text: speed"></span>
-                        Speed(events per minute)
+                        Speed (events per minute)
                     </li>
                     <li class="list-group-item">
                         <span class="badge" data-bind="text: timeSpent"></span>
@@ -195,6 +203,7 @@
 <div>
     <div class="panel-body">
         <!-- ko if: rebuildErrors().length > 0 -->
+        <h3 class="has-error">Unexpected and critical event handler exceptions</h3>
         <table class="table table-striped table-bordered table-condensed table-hover">
             <thead>
                 <tr>
@@ -203,6 +212,36 @@
                 </tr>
             </thead>
             <tbody data-bind="foreach: rebuildErrors()">
+                <tr>
+                    <td class="text-nowrap" data-bind="date: ErrorTime, format:'MM/DD/YYYY HH:mm:ss'"></td>
+                    <td>
+                        <div class="accordion-group accordion-caret">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-bind="attr:{ href: '#'+ ErrorKey()}">
+                                    <strong data-bind="text: ErrorMessage"></strong>
+                                </a>
+                            </div>
+                            <div class="accordion-body collapse" data-bind="attr:{ id: ErrorKey}">
+                                <pre class="accordion-inner margin-left10" data-bind="text: InnerException"></pre>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- /ko -->
+    </div>
+    <div class="panel-body">
+        <!-- ko if: warningEventHandlerErrors().length > 0 -->
+        <h3>Warnings by event handlers</h3>
+        <table class="table table-striped table-bordered table-condensed table-hover">
+            <thead>
+                <tr>
+                    <th style="width: 1px">Error date</th>
+                    <th>Error message</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: warningEventHandlerErrors()">
                 <tr>
                     <td class="text-nowrap" data-bind="date: ErrorTime, format:'MM/DD/YYYY HH:mm:ss'"></td>
                     <td>
@@ -231,10 +270,10 @@
             text-decoration: none;
         }
 
-        .accordion-caret .accordion-toggle:hover span,
-        .accordion-caret .accordion-toggle:hover strong {
-            text-decoration: underline;
-        }
+            .accordion-caret .accordion-toggle:hover span,
+            .accordion-caret .accordion-toggle:hover strong {
+                text-decoration: underline;
+            }
 
         .accordion-caret .accordion-toggle:not(.collapsed):before {
             content: "▾";
@@ -245,6 +284,7 @@
             content: "▸";
             margin-right: 0px;
         }
+
         .has-error {
             color: red;
         }

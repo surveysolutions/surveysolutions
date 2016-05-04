@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Web.Http;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Utils;
@@ -40,22 +40,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             var input = new AllInterviewsInputModel
             {
-                Orders = data.SortOrder
-            };
-            if (data.Pager != null)
-            {
-                input.Page = data.Pager.Page;
-                input.PageSize = data.Pager.PageSize;
-            }
+                Page = data.PageIndex,
+                PageSize = data.PageSize,
+                Orders = data.SortOrder,
 
-            if (data.Request != null)
-            {
-                input.QuestionnaireId = data.Request.TemplateId;
-                input.QuestionnaireVersion = data.Request.TemplateVersion;
-                input.TeamLeadId = data.Request.ResponsibleId;
-                input.Status = data.Request.Status;
-                input.SearchBy = data.Request.SearchBy;
-            }
+                QuestionnaireId = data.TemplateId,
+                QuestionnaireVersion = data.TemplateVersion,
+                TeamLeadName = data.ResponsibleName,
+                Status = data.Status,
+                SearchBy = data.SearchBy
+            };
 
             return this.allInterviewsViewFactory.Load(input);
         }
@@ -63,25 +57,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [HttpPost]
         public TeamInterviewsView TeamInterviews(DocumentListViewModel data)
         {
-            var input = new TeamInterviewsInputModel(viewerId: this.GlobalInfo.GetCurrentUser().Id)
+            var input = new TeamInterviewsInputModel
             {
-                Orders = data.SortOrder
+                Page = data.PageIndex,
+                PageSize = data.PageSize,
+                Orders = data.SortOrder,
+                QuestionnaireId = data.TemplateId,
+                QuestionnaireVersion = data.TemplateVersion,
+                SearchBy = data.SearchBy,
+                Status = data.Status,
+                ResponsibleName = data.ResponsibleName,
+                ViewerId = this.GlobalInfo.GetCurrentUser().Id
             };
-
-            if (data.Pager != null)
-            {
-                input.Page = data.Pager.Page;
-                input.PageSize = data.Pager.PageSize;
-            }
-
-            if (data.Request != null)
-            {
-                input.QuestionnaireId = data.Request.TemplateId;
-                input.QuestionnaireVersion = data.Request.TemplateVersion;
-                input.ResponsibleId = data.Request.ResponsibleId;
-                input.Status = data.Request.Status;
-                input.SearchBy = data.Request.SearchBy;
-            }
 
             return this.teamInterviewViewFactory.Load(input);
         }
@@ -96,7 +83,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (interviewSummary == null)
                 return null;
 
-            return new InverviewChangeStateHistoryView()
+            return new InverviewChangeStateHistoryView
             {
                 HistoryItems = interviewSummary.StatusHistory.Select(x => new HistoryItemView()
                 {

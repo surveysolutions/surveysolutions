@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
-using Main.Core.Entities;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
-    public class DesignerQuestionnairesListViewModel : IGridRequest<DesignerQuestionnairesRequestModel>
+    public class DesignerQuestionnairesListViewModel
     {
-        public PagerData Pager { get; set; }
-        public DesignerQuestionnairesRequestModel Request { get; set; }
+        public int PageIndex { get; set; }
+        public int PageSize { get; set; }
+
         public IEnumerable<OrderRequestItem> SortOrder { get; set; }
+
+        public string Filter { get; set; }
     }
 }

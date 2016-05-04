@@ -65,6 +65,7 @@
                 case "DateTime":
                     item.selectedOption(new Date());
                     item.selectedOption.extend({ required: true, date: true });
+                    break;
                 case "Text":
                     item.settings(dto.Settings);
                     var isTextSettingsEmpty = _.isEmpty(dto.Settings);
@@ -73,7 +74,21 @@
                             item.mask(dto.Settings.Mask);
                     }
                     item.selectedOption.extend({ required: true });
+                    break;
+                case "GpsCoordinates":
+                    item.latitude.extend({ gps_latitude: true, required: true });
+                    item.longitude.extend({ gps_longitude: true, required: true });
+
+                    item.showMapUrl = function() {
+                        return "http://maps.google.com/maps?q=" + item.latitude() + "," + item.longitude();
+                    };
+                    item.isMapVisible = function () {
+                        return item.latitude.isValid() && item.longitude.isValid();
+                    };
+                    break;
+
             }
+
             return item;
         }
     },
@@ -89,20 +104,9 @@
                 item.isSelected(dto.Selected || false);
                 return item;
             }
-        },
-        user = {
-            getDtoId: function (dto) { return dto.PublicKey; },
-            fromDto: function (dto) {
-                var item = new model.User();
-                item.id(dto.PublicKey);
-                item.name(dto.UserName);
-                item.email(dto.Email);
-                return item;
-            }
-        };
+        }
     return {
         question: question,
-        user: user,
         option: option
     };
 };

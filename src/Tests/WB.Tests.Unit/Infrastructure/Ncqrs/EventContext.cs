@@ -6,7 +6,7 @@ using Ncqrs.Eventing.Sourcing;
 
 namespace Ncqrs.Spec
 {
-    public class EventContext : IDisposable
+    internal class EventContext : IDisposable
     {
         [ThreadStatic]
         private static EventContext _threadInstance;

@@ -1,6 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Synchronization;
 using It = Machine.Specifications.It;
@@ -12,14 +13,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         Establish context = () =>
         {
             fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
-            fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
+            fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>()))
                 .Returns(filesInFolder);
 
             incomingSyncPackagesQueue = CreateIncomingPackagesQueue(fileSystemAccessor: fileSystemAccessorMock.Object);
         };
 
         Because of = () =>
-            result = incomingSyncPackagesQueue.HasPackagesByInterviewId(new Guid());
+            result = incomingSyncPackagesQueue.HasPackagesByInterviewId(interviewId);
 
         It should_sync_packages_folder_contains_some_sync_files_by_specific_interview_id = () =>
            result.ShouldBeTrue();
@@ -28,6 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         private static Mock<IFileSystemAccessor> fileSystemAccessorMock;
        
         private static bool result;
-        private static string[] filesInFolder = new[] { "datetimeticks-interviewid.sync", "datetimeticks-interviewid.sync" };
+        private static Guid interviewId = Guid.NewGuid();
+        private static string[] filesInFolder = new[] { $"datetimeticks1-{interviewId.FormatGuid()}.sync", $"datetimeticks2-{interviewId.FormatGuid()}.sync" };
     }
 }

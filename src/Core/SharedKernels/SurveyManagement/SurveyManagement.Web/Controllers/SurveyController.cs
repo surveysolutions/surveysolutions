@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
@@ -37,9 +37,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public ActionResult Index()
         {
             this.ViewBag.ActivePage = MenuItem.Surveys;
-            TeamUsersAndQuestionnairesView usersAndQuestionnaires =
-                this.teamUsersAndQuestionnairesFactory.Load(new TeamUsersAndQuestionnairesInputModel(this.GlobalInfo.GetCurrentUser().Id));
-            return this.View(usersAndQuestionnaires.Users);
+            
+            return this.View();
         }
 
         public ActionResult Interviews()
@@ -74,15 +73,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             return new DocumentFilter
             {
-                Users =
-                    this.interviewersFactory.Load(new InterviewersInputModel(viewerId) { PageSize = int.MaxValue })
-                        .Items.Where(u => !u.IsLockedBySupervisor && !u.IsLockedByHQ)
-                        .Select(u => new UsersViewItem
-                        {
-                            UserId = u.UserId,
-                            UserName = u.UserName
-                        }),
-                Responsibles = usersAndQuestionnaires.Users,
                 Templates = usersAndQuestionnaires.Questionnaires,
                 Statuses = statuses
             };

@@ -1,5 +1,5 @@
 ﻿using Moq;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewControllerTests
             IGlobalInfoProvider globalInfoProvider = null,
             ILogger logger = null,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory = null,
-            IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView> revalidateInterviewViewFactory = null,
+            IViewFactory<InterviewTroubleshootInputModel, InterviewTroubleshootView> revalidateInterviewViewFactory = null,
             IInterviewSummaryViewFactory interviewSummaryViewFactory = null,
             IInterviewDetailsViewFactory interviewDetailsViewFactory = null,
             IIncomingSyncPackagesQueue incomingSyncPackagesQueue = null)
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewControllerTests
                 globalInfoProvider ?? Mock.Of<IGlobalInfoProvider>(),
                 logger ?? Mock.Of<ILogger>(),
                 changeStatusFactory ?? Stub<IViewFactory<ChangeStatusInputModel, ChangeStatusView>>.WithNotEmptyValues,
-                revalidateInterviewViewFactory ?? Mock.Of<IViewFactory<InterviewInfoForRevalidationInputModel, InterviewInfoForRevalidationView>>(),
+                revalidateInterviewViewFactory ?? Mock.Of<IViewFactory<InterviewTroubleshootInputModel, InterviewTroubleshootView>>(),
                 interviewSummaryViewFactory ?? Stub<IInterviewSummaryViewFactory>.WithNotEmptyValues,
                 Mock.Of<IInterviewHistoryFactory>(),
                 interviewDetailsViewFactory ?? Mock.Of<IInterviewDetailsViewFactory>());

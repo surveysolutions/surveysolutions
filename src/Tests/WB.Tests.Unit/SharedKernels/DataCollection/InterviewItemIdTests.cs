@@ -4,7 +4,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection
 {
-    public class InterviewItemIdTestsContext
+    internal class InterviewItemIdTestsContext
     {
         protected static InterviewItemId CreateInterviewItemId(Guid? id = null, decimal[] vector = null)
         {
@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
     #region GetHashCode tests
 
     [Subject(typeof (InterviewItemId))]
-    public class GetHashCode_when_called_two_times_for_two_identical_InterviewItemIds_in_when_part : InterviewItemIdTestsContext
+    internal class GetHashCode_when_called_two_times_for_two_identical_InterviewItemIds_in_when_part : InterviewItemIdTestsContext
     {
         private Establish context = () =>
             {
@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
     #region Equals tests
 
     [Subject(typeof (InterviewItemId))]
-    public class Equals_when_called_with_null : InterviewItemIdTestsContext
+    internal class Equals_when_called_with_null : InterviewItemIdTestsContext
     {
         private Establish context = () =>
             {
@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
     }
 
     [Subject(typeof (InterviewItemId))]
-    public class Equals_when_called_with_object_of_another_type : InterviewItemIdTestsContext
+    internal class Equals_when_called_with_object_of_another_type : InterviewItemIdTestsContext
     {
         private Establish context = () =>
             {
@@ -93,7 +93,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
     }
 
     [Subject(typeof (InterviewItemId))]
-    public class Equals_when_called_with_identical_interviewItemId_in_when_part : InterviewItemIdTestsContext
+    internal class Equals_when_called_with_identical_interviewItemId_in_when_part : InterviewItemIdTestsContext
     {
         private Establish context = () =>
             {
@@ -116,7 +116,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
     }
 
     [Subject(typeof (InterviewItemId))]
-    public class Equals_when_called_with_different_interviewItemId_in_when_part : InterviewItemIdTestsContext
+    internal class Equals_when_called_with_different_interviewItemId_in_when_part : InterviewItemIdTestsContext
     {
         private Establish context = () =>
             {
@@ -143,7 +143,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
     #region == operator tests
 
     [Subject(typeof (InterviewItemId))]
-    public class EqualityOperator_when_called_with_same_interviewItemId_in_when_part : InterviewItemIdTestsContext
+    internal class EqualityOperator_when_called_with_same_interviewItemId_in_when_part : InterviewItemIdTestsContext
     {
         private Establish context = () =>
             {
@@ -165,7 +165,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
     }
 
     [Subject(typeof (InterviewItemId))]
-    public class EqualityOperator_when_called_with_two_identical_InterviewItemIds_in_when_part : InterviewItemIdTestsContext
+    internal class EqualityOperator_when_called_with_two_identical_InterviewItemIds_in_when_part : InterviewItemIdTestsContext
     {
         private Establish context = () =>
             {
@@ -188,7 +188,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
     }
 
     [Subject(typeof (InterviewItemId))]
-    public class EqualityOperator_when_called_with_two_different_InterviewItemIds_in_when_part : InterviewItemIdTestsContext
+    internal class EqualityOperator_when_called_with_two_different_InterviewItemIds_in_when_part : InterviewItemIdTestsContext
     {
         private Establish context = () =>
             {

@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.GenericSubdomains.Utils;
+using Ncqrs.Eventing.Storage;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.StorageStrategy;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -17,6 +19,11 @@ namespace WB.Core.Infrastructure.EventHandlers
         where TStorage : class, IReadSideStorage<TEntity>
     {
         private readonly TStorage readSideStorage;
+
+        private IEventTypeResolver EventTypeResolver
+        {
+            get { return ServiceLocator.Current.GetInstance<IEventTypeResolver>(); }
+        }
 
         protected AbstractFunctionalEventHandler(TStorage readSideStorage)
         {
@@ -87,8 +94,8 @@ namespace WB.Core.Infrastructure.EventHandlers
         private void RegisterOldFashionHandler(InProcessEventBus oldEventBus, MethodInfo method)
         {
             var evntType = ExtractEventType(method);
-            NcqrsEnvironment.RegisterEventDataType(evntType);
-            oldEventBus.RegisterHandler(evntType, this.Handle);
+            EventTypeResolver.RegisterEventDataType(evntType);
+            oldEventBus.RegisterHandler(eventType: evntType, eventHandlerType: this.GetType(), handle: this.Handle);
         }
 
         private static void SaveView(Guid id, TEntity newState, IReadSideStorage<TEntity> storage)
@@ -101,21 +108,21 @@ namespace WB.Core.Infrastructure.EventHandlers
             return storage.GetById(id);
         }
 
-        private PublishedEvent CreatePublishedEvent(IPublishableEvent evt)
+        private PublishedEvent CreatePublishedEvent(IUncommittedEvent evt)
         {
             var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(evt.Payload.GetType());
             return (PublishedEvent)Activator.CreateInstance(publishedEventClosedType, evt);
         }
 
-        private bool Handles(IPublishableEvent evt)
+        private bool Handles(IUncommittedEvent evt)
         {
             Type genericUpgrader = typeof(IUpdateHandler<,>);
             return genericUpgrader.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).IsInstanceOfType(this.GetType());
         }
 
-        public string Name { get { return this.GetType().Name; } }
+        public string Name => this.GetType().Name;
 
-        public virtual object[] Writers { get { return new object[] { this.readSideStorage }; } }
+        public virtual object[] Writers => new object[] { this.readSideStorage };
 
         public virtual void CleanWritersByEventSource(Guid eventSourceId)
         {

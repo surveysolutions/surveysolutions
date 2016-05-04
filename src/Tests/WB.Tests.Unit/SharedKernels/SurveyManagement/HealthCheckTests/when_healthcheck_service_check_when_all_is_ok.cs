@@ -14,14 +14,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
         {
             var eventStoreHealthCheck = Mock.Of<IAtomicHealthCheck<EventStoreHealthCheckResult>>(m => m.Check() == EventStoreHealthCheckResult.Happy());
             var numberOfUnhandledPackagesChecker = Mock.Of<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>(m => m.Check() == NumberOfUnhandledPackagesHealthCheckResult.Happy(0));
-            var numberOfSyncPackagesWithBigSizeChecker = Mock.Of<IAtomicHealthCheck<NumberOfSyncPackagesWithBigSizeCheckResult>>(m => m.Check() == NumberOfSyncPackagesWithBigSizeCheckResult.Happy(0));
             var folderPermissionChecker = Mock.Of<IAtomicHealthCheck<FolderPermissionCheckResult>>(m => m.Check() == new FolderPermissionCheckResult(HealthCheckStatus.Happy, null, null, null));
+            var readSideHealthChecker = Mock.Of<IAtomicHealthCheck<ReadSideHealthCheckResult>>(m => m.Check() == ReadSideHealthCheckResult.Happy());
+
 
             service = CreateHealthCheckService(
                 eventStoreHealthCheck,
                 numberOfUnhandledPackagesChecker,
-                numberOfSyncPackagesWithBigSizeChecker,
-                folderPermissionChecker);
+                folderPermissionChecker,
+                readSideHealthChecker);
         };
 
         Because of = () =>

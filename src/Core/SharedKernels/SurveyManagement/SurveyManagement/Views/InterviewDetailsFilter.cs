@@ -9,6 +9,7 @@
         Answered,
         Unanswered,
         Flagged,
-        Supervisors
+        Supervisors,
+        Hidden
     }
 }

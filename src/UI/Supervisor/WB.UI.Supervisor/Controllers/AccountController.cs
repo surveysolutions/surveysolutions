@@ -4,7 +4,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Supervisor.Users;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security;
 namespace WB.UI.Supervisor.Controllers
 {
     [LimitsFilter]
+    [ValidateInput(false)]
     public class AccountController : Controller
     {
         private readonly IFormsAuthentication authentication;

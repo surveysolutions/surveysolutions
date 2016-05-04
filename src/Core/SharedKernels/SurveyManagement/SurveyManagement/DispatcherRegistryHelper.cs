@@ -14,15 +14,14 @@ namespace WB.Core.SharedKernels.SurveyManagement
         {
             Type[] eventHandlerTypes = { typeof (IEventHandler), typeof (IEventHandler<>) };
             var denormalizerType = typeof (T);
-            Func<IContext, object> scope = (c) => kernel;
 
             foreach (var interfaceType in eventHandlerTypes)
             {
-                kernel.Bind(interfaceType).To(denormalizerType).InScope(scope);
+                kernel.Bind(interfaceType).To(denormalizerType);
 
                 if (!interfaceType.IsGenericType) continue;
 
-                GetValue(kernel, denormalizerType, interfaceType, scope);
+                GetValue(kernel, denormalizerType, interfaceType);
             }
         }
 
@@ -32,10 +31,10 @@ namespace WB.Core.SharedKernels.SurveyManagement
             var factoryType = typeof(T);
             Func<IContext, object> scope = (c) => kernel;
 
-            GetValue(kernel, factoryType, interfaceType, scope);
+            GetValue(kernel, factoryType, interfaceType);
         }
 
-        private static void GetValue(IKernel kernel, Type factoryType, Type interfaceType, Func<IContext, object> scope)
+        private static void GetValue(IKernel kernel, Type factoryType, Type interfaceType)
         {
             var interfaceImplementations = factoryType.GetInterfaces()
                 .Where(t => t.IsGenericType)
@@ -47,7 +46,7 @@ namespace WB.Core.SharedKernels.SurveyManagement
 
             foreach (var genericInterfaceType in genericInterfaceTypes)
             {
-                kernel.Bind(genericInterfaceType).To(factoryType).InScope(scope);
+                kernel.Bind(genericInterfaceType).To(factoryType);
             }
         }
     }

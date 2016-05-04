@@ -1,11 +1,12 @@
 ﻿using System;
 using Ncqrs.Eventing.Storage;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 
 // ReSharper disable once CheckNamespace
 namespace Main.Core.Events.File
 {
-    [EventName("RavenQuestionnaire.Core:Events:FileDeleted")]
-    public class FileDeleted
+    public class FileDeleted : IEvent
     {
         public Guid PublicKey { get; set; }
     }

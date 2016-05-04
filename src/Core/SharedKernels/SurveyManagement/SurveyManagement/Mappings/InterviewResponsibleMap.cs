@@ -1,9 +1,11 @@
-﻿using NHibernate.Mapping.ByCode;
+﻿using System;
+using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.Synchronization.SyncStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Mappings
 {
+    [Obsolete]
     public class InterviewResponsibleMap : ClassMapping<InterviewResponsible>
     {
         public InterviewResponsibleMap()

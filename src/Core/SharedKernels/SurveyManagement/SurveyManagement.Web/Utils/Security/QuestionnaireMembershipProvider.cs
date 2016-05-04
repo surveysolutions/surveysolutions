@@ -178,7 +178,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
             {
                 return null;
             }
-
+             
             var retval = HttpContext.Current.Items[providerUserKey] as MembershipUser;
             if (retval == null)
             {
@@ -261,7 +261,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Security
                             username.ToLower(), 
                             // bad hack due to key insensitivity of login
                             password));
-                return user != null && !user.isLockedBySupervisor && !user.IsLockedByHQ;
+                return user != null && !user.isLockedBySupervisor && !user.IsLockedByHQ && !user.IsArchived;
             }
             finally
             {

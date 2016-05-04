@@ -4,7 +4,7 @@ using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.RepositoryKeyHelperTests
 {
-    public class when_creating_key_for_readside_versioned_repository_reader_from_guid_and_version
+    internal class when_creating_key_for_readside_versioned_repository_reader_from_guid_and_version
     {
         Establish context = () => { };
 

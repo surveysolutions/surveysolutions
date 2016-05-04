@@ -15,18 +15,18 @@ namespace WB.UI.Shared.Web.Extensions
                     (current, c) => current.Replace(c, 'x'));
         }
 
-        public static int ToInt(this string value, int @default)
+        public static int ToIntOrDefault(this string value, int @default)
         {
             int result;
 
-            return Int32.TryParse(value, out result) ? result : @default;
+            return int.TryParse(value, out result) ? result : @default;
         }
 
         public static bool IsDecimal(this string value)
         {
             decimal result;
 
-            return Decimal.TryParse(value, out result);
+            return decimal.TryParse(value, out result);
         }
 
         public static bool ToBool(this string value, bool @default)

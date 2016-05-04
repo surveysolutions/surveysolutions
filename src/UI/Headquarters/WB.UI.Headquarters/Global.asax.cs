@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Web;
 using System.Web.Compilation;
@@ -14,12 +16,18 @@ using Elmah;
 using EmbeddedResourceVirtualPathProvider;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
-using WB.Core.GenericSubdomains.Utils.Services;
+using Newtonsoft.Json;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Elmah;
 using WB.UI.Shared.Web.Filters;
+using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
+using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
+using WB.Core.SharedKernels.SurveyManagement.Web;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
 
 namespace WB.UI.Headquarters
 {
@@ -33,8 +41,12 @@ namespace WB.UI.Headquarters
             SetupNConfig();
         }
 
-        private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
-        
+        private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Global>();
+        private readonly IHealthCheckService healthCheckService = ServiceLocator.Current.GetInstance<IHealthCheckService>();
+        private readonly IProductVersionHistory productVersionHistory = ServiceLocator.Current.GetInstance<IProductVersionHistory>();
+
+        private static string ProductVersion => ServiceLocator.Current.GetInstance<IProductVersion>().ToString();
+
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new ReplacePrincipal());
@@ -55,6 +67,7 @@ namespace WB.UI.Headquarters
         {
             filters.Add(new ReplacePrincipalWebApi());
             filters.Add(new SupervisorFunctionsEnabledAttribute());
+            filters.Add(new ApiMaintenanceFilter());
         }
 
         public static void RegisterRoutes(RouteCollection routes)
@@ -71,22 +84,27 @@ namespace WB.UI.Headquarters
         protected void Application_Error()
         {
             Exception lastError = this.Server.GetLastError();
-            this.logger.Fatal("Unexpected error occurred", lastError);
+            if (lastError.IsHttpNotFound()) return;
+
+            this.logger.Error("Unexpected error occurred", lastError);
             if (lastError.InnerException != null)
             {
-                this.logger.Fatal("Unexpected error occurred", lastError.InnerException);
+                this.logger.Error("Unexpected error occurred", lastError.InnerException);
             }
         }
 
         protected void Application_Start()
         {
-            this.logger.Info("Starting application.");
+            this.logger.Info($"Starting Headquarters {ProductVersion}");
+            this.productVersionHistory.RegisterCurrentVersion();
+
             MvcHandler.DisableMvcResponseHeader = true;
 
             AppDomain current = AppDomain.CurrentDomain;
             current.UnhandledException += this.CurrentUnhandledException;
             
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            GlobalConfiguration.Configuration.Formatters.Add(new FormMultipartEncodedMediaTypeFormatter());
             //WebApiConfig.Register(GlobalConfiguration.Configuration);
 
             RegisterVirtualPathProvider();
@@ -105,36 +123,51 @@ namespace WB.UI.Headquarters
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
-
-            //AntiForgeryConfig.SuppressIdentityHeuristicChecks = true;
+            
+            try
+            {
+                var checkStatus = healthCheckService.Check();
+                if (checkStatus.Status == HealthCheckStatus.Down)
+                {
+                    var hostName = Dns.GetHostName();
+                    this.logger.Fatal(string.Format("Initial Health Check for {0} failed. Result: {1}", hostName , checkStatus.GetStatusDescription()));
+                }
+            }
+            catch (Exception exc)
+            {
+                this.logger.Fatal("Error on checking application health.", exc);
+            }
         }
 
         protected void Application_End()
         {
             this.logger.Info("Ending application.");
-
-            var httpRuntimeType = typeof(HttpRuntime);
-            var httpRuntime = httpRuntimeType.InvokeMember(
-                "_theRuntime",
-                BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.GetField,
-                null, null, null) as HttpRuntime;
-
-            var shutDownMessage = httpRuntimeType.InvokeMember(
-                "_shutDownMessage",
-                BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField,
-                null, httpRuntime, null) as string;
-
-            string shutDownStack = httpRuntimeType.InvokeMember("_shutDownStack",
-                                                                   BindingFlags.NonPublic
-                                                                   | BindingFlags.Instance
-                                                                   | BindingFlags.GetField,
-                                                                   null,
-                                                                   httpRuntime,
-                                                                   null) as string;
-
             this.logger.Info("ShutdownReason: " + HostingEnvironment.ShutdownReason.ToString());
-            this.logger.Info("ShutDownMessage: " + shutDownMessage);
-            this.logger.Info("ShutDownStack: " + shutDownStack);
+
+            if (HostingEnvironment.ShutdownReason == ApplicationShutdownReason.HostingEnvironment)
+            {
+                var httpRuntimeType = typeof (HttpRuntime);
+                var httpRuntime = httpRuntimeType.InvokeMember(
+                    "_theRuntime",
+                    BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.GetField,
+                    null, null, null) as HttpRuntime;
+
+                var shutDownMessage = httpRuntimeType.InvokeMember(
+                    "_shutDownMessage",
+                    BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField,
+                    null, httpRuntime, null) as string;
+
+                string shutDownStack = httpRuntimeType.InvokeMember("_shutDownStack",
+                    BindingFlags.NonPublic
+                    | BindingFlags.Instance
+                    | BindingFlags.GetField,
+                    null,
+                    httpRuntime,
+                    null) as string;
+
+                this.logger.Info("ShutDownMessage: " + shutDownMessage);
+                this.logger.Info("ShutDownStack: " + shutDownStack);
+            }
         }
 
         private static void RegisterVirtualPathProvider()
@@ -160,12 +193,11 @@ namespace WB.UI.Headquarters
             try
             {
                 var exp = (Exception)e.ExceptionObject;
-                this.logger.Fatal("Global Unhandled:", exp);
-                //this.logger.Fatal(e.ExceptionObject);
+                this.logger.Error("Global Unhandled:", exp);
             }
             catch (Exception)
             {
-                //throw;
+                
             }
             
         }

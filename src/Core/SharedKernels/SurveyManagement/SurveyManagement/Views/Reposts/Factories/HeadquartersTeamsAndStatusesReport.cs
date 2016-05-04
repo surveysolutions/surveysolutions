@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -52,7 +52,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                         RejectedBySupervisorCount   = GetCountInStatus(groupedResults, responsibleId, InterviewStatus.RejectedBySupervisor),
                         ApprovedByHeadquartersCount = GetCountInStatus(groupedResults, responsibleId, InterviewStatus.ApprovedByHeadquarters),
                         RejectedByHeadquartersCount = GetCountInStatus(groupedResults, responsibleId, InterviewStatus.RejectedByHeadquarters),
-                        TotalCount                  = groupedResults.Where(x => x.TeamLeadId == responsibleId).Sum(x => x.InterviewsCount)
+                        TotalCount                  = groupedResults.Where(x => x.TeamLeadId == responsibleId).Sum(x => x.InterviewsCount),
+                        QuestionnaireId = input.TemplateId,
+                        QuestionnaireVersion = input.TemplateVersion
                     });
                 }
 
@@ -80,7 +82,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                                                                                          QuestionnaireId = doc.QuestionnaireId,
                                                                                          QuestionnaireVersion = doc.QuestionnaireVersion,
                                                                                          ResponsibleId = doc.ResponsibleId,
-                                                                                         ResponsibleName = doc.ResponsibleName
+                                                                                         Responsible = doc.ResponsibleName
                                                                                      }).ToList();
 
             return new TeamsAndStatusesReportView
