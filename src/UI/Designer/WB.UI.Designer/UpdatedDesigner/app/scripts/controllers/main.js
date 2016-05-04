@@ -93,22 +93,25 @@ angular.module('designerApp')
             var ERROR = "error";
             var WARNING = "warning";
 
-            $scope.verify = function () {
+            $scope.verify = function() {
                 $scope.verificationStatus.errors = null;
                 $scope.verificationStatus.warnings = null;
+                $rootScope.$broadcast("verifing", {});
 
-                verificationService.verify($state.params.questionnaireId).success(function (result) {
-                    $scope.verificationStatus.errors = result.errors;
-                    $scope.verificationStatus.warnings = result.warnings;
-                    $scope.verificationStatus.time = new Date();
-                    $scope.verificationStatus.typeOfMessageToBeShown = ERROR;
+                setTimeout(function() {
+                    verificationService.verify($state.params.questionnaireId).success(function(result) {
+                        $scope.verificationStatus.errors = result.errors;
+                        $scope.verificationStatus.warnings = result.warnings;
+                        $scope.verificationStatus.time = new Date();
+                        $scope.verificationStatus.typeOfMessageToBeShown = ERROR;
 
-                    if ($scope.verificationStatus.errors.length > 0)
-                        $scope.showVerificationErrors();
-                    else {
-                        $scope.closeVerifications();
-                    }
-                });
+                        if ($scope.verificationStatus.errors.length > 0)
+                            $scope.showVerificationErrors();
+                        else {
+                            $scope.closeVerifications();
+                        }
+                    });
+                }, 500);
             };
            
             $scope.showVerificationErrors = function () {

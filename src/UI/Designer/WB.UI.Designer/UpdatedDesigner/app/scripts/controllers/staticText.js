@@ -64,7 +64,7 @@
                 return staticText.validationConditions.length > 0;
             };
 
-            $scope.saveStaticText = function () {
+            $scope.saveStaticText = function (callback) {
                 commandService.updateStaticText($state.params.questionnaireId, $scope.activeStaticText).success(function () {
                     $scope.initialStaticText = angular.copy($scope.activeStaticText);
                     $rootScope.$emit('staticTextUpdated', {
@@ -75,6 +75,9 @@
                         hasValidation: hasValidations($scope.activeStaticText),
                         hideIfDisabled: $scope.activeStaticText.hideIfDisabled
                     });
+                    if (_.isFunction(callback)) {
+                        callback();
+                    }
                 });
             };
 
@@ -93,6 +96,13 @@
                     $(".static-text-editor .form-holder").scrollTo({ top: '+=200px', left: "+=0" }, 250);
                 });
             }
+
+            $scope.$on('verifing', function (scope, params) {
+                if ($scope.staticTextForm.$dirty)
+                    $scope.saveStaticText(function() {
+                        $scope.staticTextForm.$setPristine();
+                    });
+            });
 
             $scope.cancelStaticText = function () {
                 var temp = angular.copy($scope.initialStaticText);

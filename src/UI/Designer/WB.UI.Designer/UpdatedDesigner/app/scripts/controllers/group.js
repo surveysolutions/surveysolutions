@@ -50,7 +50,7 @@
                 );
             };
 
-            $scope.saveGroup = function () {
+            $scope.saveGroup = function (callback) {
                 if ($scope.groupForm.$valid) {
                     commandService.updateGroup($stateParams.questionnaireId, $scope.activeGroup).success(function () {
                         $scope.initialGroup = angular.copy($scope.activeGroup);
@@ -59,9 +59,19 @@
                             title: $scope.activeGroup.title,
                             hasCondition: ($scope.activeGroup.enablementCondition !== null && /\S/.test($scope.activeGroup.enablementCondition))
                         });
+                        if (_.isFunction(callback)) {
+                            callback();
+                        }
                     });
                 }
             };
+
+            $scope.$on('verifing', function (scope, params) {
+                if ($scope.groupForm.$dirty)
+                    $scope.saveGroup(function() {
+                        $scope.groupForm.$setPristine();
+                    });
+            });
 
             $scope.cancelGroup = function () {
                 var temp = angular.copy($scope.initialGroup);

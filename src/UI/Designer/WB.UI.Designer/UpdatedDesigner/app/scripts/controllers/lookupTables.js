@@ -60,26 +60,26 @@
                     $scope.lookupTables.push(lookupTables);
                 });
             };
-            $scope.fileSelected = function (lookupTable, file, lookupTableForm) {
+            $scope.fileSelected = function (lookupTable, file) {
                 if (_.isUndefined(file) || _.isNull(file)) {
                     return;
                 }
                 lookupTable.file = file;
                 lookupTable.fileName = lookupTable.file.name;
-                lookupTableForm.$setDirty();
+                lookupTable.form.$setDirty();
             }
-            $scope.saveLookupTable = function (lookupTable, form) {
+            $scope.saveLookupTable = function (lookupTable) {
                 commandService.updateLookupTable($state.params.questionnaireId, lookupTable).success(function() {
                     lookupTable.initialLookupTable = angular.copy(lookupTable);
                     lookupTable.hasUploadedFile = !_.isEmpty(lookupTable.fileName);
-                    form.$setPristine();
+                    lookupTable.form.$setPristine();
                 });
             };
 
-            $scope.cancel = function(lookupTable, form) {
+            $scope.cancel = function(lookupTable) {
                 var temp = angular.copy(lookupTable.initialLookupTable);
                 dataBind(lookupTable, temp);
-                form.$setPristine();
+                lookupTable.form.$setPristine();
             };
 
             $scope.deleteLookupTable = function(index) {
@@ -119,5 +119,14 @@
 
             $rootScope.$on('questionnaireLoaded', function () {
                 $scope.loadLookupTables();
+            });
+
+            $scope.$on('verifing', function (scope, params) {
+                for (var i = 0; i < $scope.lookupTables.length; i++) {
+                    var lookupTable = $scope.lookupTables[i];
+                    if (lookupTable.form.$dirty) {
+                        $scope.saveLookupTable(lookupTable);
+                    }
+                }
             });
         });
