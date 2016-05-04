@@ -17,7 +17,7 @@ namespace WB.Tests.Integration.CommandServiceTests
     {
         private class ExecuteForHalfASecond : ICommand { public ExecuteForHalfASecond() { } public Guid CommandIdentifier { get; private set; } }
 
-        private class Aggregate : AggregateRoot
+        private class Aggregate : EventSourcedAggregateRoot
         {
             public void ExecuteForHalfASecond(ExecuteForHalfASecond command)
             {
@@ -32,7 +32,7 @@ namespace WB.Tests.Integration.CommandServiceTests
                 .Setup<Aggregate>()
                 .Handles<ExecuteForHalfASecond>(_ => aggregateId, aggregate => aggregate.ExecuteForHalfASecond);
 
-            var repository = Mock.Of<IAggregateRootRepository>(_
+            var repository = Mock.Of<IEventSourcedAggregateRootRepository>(_
                 => _.GetLatest(typeof(Aggregate), aggregateId) == new Aggregate());
 
             commandService = Create.CommandService(repository: repository);

@@ -2,13 +2,13 @@
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.Revalidate;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
-using WB.Core.Synchronization;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewControllerTests
 {
@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewControllerTests
             IViewFactory<InterviewTroubleshootInputModel, InterviewTroubleshootView> revalidateInterviewViewFactory = null,
             IInterviewSummaryViewFactory interviewSummaryViewFactory = null,
             IInterviewDetailsViewFactory interviewDetailsViewFactory = null,
-            IIncomingSyncPackagesQueue incomingSyncPackagesQueue = null)
+            IInterviewPackagesService incomingSyncPackagesQueue = null)
         {
             return new InterviewController(
                 commandService ?? Mock.Of<ICommandService>(),

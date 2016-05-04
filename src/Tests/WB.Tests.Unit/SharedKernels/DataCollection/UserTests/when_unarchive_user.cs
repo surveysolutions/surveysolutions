@@ -1,8 +1,12 @@
-﻿using Machine.Specifications;
+﻿using System;
+using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Events.User;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
 {
@@ -10,25 +14,19 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
     {
         Establish context = () =>
         {
-            eventContext = Create.EventContext();
             user = Create.User();
-            user.ApplyEvent(Create.NewUserCreated(role: UserRoles.Supervisor));
-            user.ApplyEvent(Create.UserArchived());
+            user.SetId(userId);
+            user.Roles = new UserRoles[] { UserRoles.Supervisor };
+            user.IsArchived = true;
         };
 
         Because of = () =>
             user.Unarchive();
 
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
-
-        It should_raise_UserUnarchived_event = () =>
-            eventContext.ShouldContainEvent<UserUnarchived>();
-
-        private static EventContext eventContext;
+        It should_unarchive_user_document = () =>
+            user.IsArchived.ShouldBeFalse();
+        
         private static User user;
+        private static Guid userId = Guid.NewGuid();
     }
 }

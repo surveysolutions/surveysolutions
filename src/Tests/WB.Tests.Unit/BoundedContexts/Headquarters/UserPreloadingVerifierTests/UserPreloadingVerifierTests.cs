@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using Main.DenormalizerStorage;
+using Microsoft.Practices.ServiceLocation;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
@@ -18,12 +19,26 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
     [TestFixture]
     internal class UserPreloadingVerifierTests
     {
+        [SetUp]
+        public void SetupTests()
+        {
+            var serviceLocator = Stub<IServiceLocator>.WithNotEmptyValues;
+            ServiceLocator.SetLocatorProvider(() => serviceLocator);
+            Setup.InstanceToMockedServiceLocator(Mock.Of<IPlainTransactionManager>());
+        }
+
+        [TearDown]
+        public void CleanTests()
+        {
+            Setup.InstanceToMockedServiceLocator<IPlainTransactionManager>(null);
+        }
+
         [Test]
         public void
             VerifyProcessFromReadyToBeVerifiedQueue_When_login_is_taken_by_existing_user_Then_record_verification_error_with_code_PLU0001()
         {
             var userName = "nastya";
-            var userStorage = new InMemoryReadSideRepositoryAccessor<UserDocument>();
+            var userStorage = new TestPlainStorage<UserDocument>();
             userStorage.Store(Create.UserDocument(userName: userName), "id");
             var userPreloadingProcess = Create.UserPreloadingProcess(dataRecords: Create.UserPreloadingDataRecord(userName));
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess);
@@ -61,7 +76,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
         {
             var userName = "nastya";
             var supervisorName = "super";
-            var userStorage = new InMemoryReadSideRepositoryAccessor<UserDocument>();
+            var userStorage = new  TestPlainStorage<UserDocument>();
             userStorage.Store(Create.UserDocument(userName: userName, supervisorId: Guid.NewGuid(), isArchived:true), "id1");
             userStorage.Store(Create.UserDocument(userName: supervisorName), "id2");
             var userPreloadingProcess = Create.UserPreloadingProcess(dataRecords: Create.UserPreloadingDataRecord(login: userName, supervisor: supervisorName));
@@ -80,7 +95,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
             VerifyProcessFromReadyToBeVerifiedQueue_When_login_is_taken_by_user_in_other_role_Then_record_verification_error_with_code_PLU0004()
         {
             var userName = "nastya";
-            var userStorage = new InMemoryReadSideRepositoryAccessor<UserDocument>();
+            var userStorage = new TestPlainStorage<UserDocument>();
             userStorage.Store(Create.UserDocument(userName: userName, isArchived:true), "id");
             var userPreloadingProcess = Create.UserPreloadingProcess(dataRecords: Create.UserPreloadingDataRecord(userName));
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess);
@@ -235,16 +250,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
         }
 
         private UserPreloadingVerifier CreateUserPreloadingVerifier(
-            IUserPreloadingService userPreloadingService = null, 
-            IQueryableReadSideRepositoryReader<UserDocument> userStorage = null)
+            IUserPreloadingService userPreloadingService = null,
+            IPlainStorageAccessor<UserDocument> userStorage = null)
         {
             return
                 new UserPreloadingVerifier(
-                    Mock.Of<ITransactionManagerProvider>(
-                        _ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                     userPreloadingService ?? Mock.Of<IUserPreloadingService>(),
-                    userStorage ?? new InMemoryReadSideRepositoryAccessor<UserDocument>(),
-                    Mock.Of<IPlainTransactionManager>(), Create.UserPreloadingSettings(), Mock.Of<ILogger>());
+                    userStorage ?? new TestPlainStorage<UserDocument>(),
+                    Create.UserPreloadingSettings(), Mock.Of<ILogger>());
         }
 
         private Mock<IUserPreloadingService> CreateUserPreloadingServiceMock(UserPreloadingProcess userPreloadingProcess, UserRoles role = UserRoles.Operator)

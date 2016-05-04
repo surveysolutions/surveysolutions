@@ -11,7 +11,6 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
-using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.Synchronization.SyncStorage;
 
@@ -35,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
             synchronizationDtoFactory = Mock.Of<IInterviewSynchronizationDtoFactory>(
                 x => x.BuildFrom(storedInterview, userId, InterviewStatus.RejectedBySupervisor, comments, Moq.It.IsAny<DateTime?>(), Moq.It.IsAny<DateTime?>()) == synchronizationDto);
 
-            var serializer = Mock.Of<ISerializer>(x=>x.Serialize(Moq.It.IsAny<object>(), Moq.It.IsAny<TypeSerializationSettings>()) == String.Empty);
+            var serializer = Mock.Of<ISerializer>(x=>x.Serialize(Moq.It.IsAny<object>()) == String.Empty);
             
             denormalizer = CreateDenormalizer(
                 interviews : interviews,

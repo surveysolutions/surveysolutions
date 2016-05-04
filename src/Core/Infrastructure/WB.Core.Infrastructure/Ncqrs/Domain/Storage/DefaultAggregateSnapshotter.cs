@@ -26,10 +26,10 @@ namespace Ncqrs.Domain.Storage
             this.serviceLocator = serviceLocator;
         }
 
-        public bool TryLoadFromSnapshot(Type aggregateRootType, Snapshot snapshot, CommittedEventStream committedEventStream, out AggregateRoot aggregateRoot)
+        public bool TryLoadFromSnapshot(Type aggregateRootType, Snapshot snapshot, CommittedEventStream committedEventStream, out EventSourcedAggregateRoot aggregateRoot)
             => this.TryLoadFromSnapshot(aggregateRootType, snapshot, (IEnumerable<CommittedEvent>) committedEventStream, out aggregateRoot);
 
-        public bool TryLoadFromSnapshot(Type aggregateRootType, Snapshot snapshot, IEnumerable<CommittedEvent> history, out AggregateRoot aggregateRoot)
+        public bool TryLoadFromSnapshot(Type aggregateRootType, Snapshot snapshot, IEnumerable<CommittedEvent> history, out EventSourcedAggregateRoot aggregateRoot)
         {
             aggregateRoot = null;
 
@@ -37,7 +37,7 @@ namespace Ncqrs.Domain.Storage
 
             if (AggregateSupportsSnapshot(aggregateRootType, snapshot.Payload.GetType()))
             {
-                aggregateRoot = (AggregateRoot) this.serviceLocator.GetInstance(aggregateRootType);
+                aggregateRoot = (EventSourcedAggregateRoot) this.serviceLocator.GetInstance(aggregateRootType);
                 aggregateRoot.InitializeFromSnapshot(snapshot);
 
                 var memType = aggregateRoot.GetType().GetSnapshotInterfaceType();
@@ -53,7 +53,7 @@ namespace Ncqrs.Domain.Storage
             return false;
         }
 
-        public bool TryTakeSnapshot(IAggregateRoot aggregateRoot, out Snapshot snapshot)
+        public bool TryTakeSnapshot(IEventSourcedAggregateRoot aggregateRoot, out Snapshot snapshot)
         {
             snapshot = null;
             var memType = aggregateRoot.GetType().GetSnapshotInterfaceType();
@@ -67,7 +67,7 @@ namespace Ncqrs.Domain.Storage
             return false;
         }
 
-        public void CreateSnapshotIfNeededAndPossible(IAggregateRoot aggregateRoot)
+        public void CreateSnapshotIfNeededAndPossible(IEventSourcedAggregateRoot aggregateRoot)
         {
             if (!this.snapshottingPolicy.ShouldCreateSnapshot(aggregateRoot))
                 return;

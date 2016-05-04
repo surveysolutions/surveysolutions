@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
@@ -43,6 +44,12 @@ namespace WB.Core.Infrastructure.Implementation.StorageStrategy
         public void Remove(string id)
         {
             this.view = null;
+        }
+
+        public void RemoveIfStartsWith(string beginingOfId)
+        {
+            if (this.viewId.FormatGuid().StartsWith(beginingOfId))
+                this.view = null;
         }
 
         public Type ViewType

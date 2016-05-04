@@ -604,8 +604,10 @@
             $scope.refreshTree = function () {
                 questionnaireService.getChapterById($state.params.questionnaireId, $state.params.chapterId)
                     .success(function (result) {
-                        $scope.items = result.items;
-                        $scope.currentChapter = result;
+
+                        $scope.items = result.chapter.items;
+                        $scope.currentChapter = result.chapter;
+                        $rootScope.updateVariableNames(result.variableNames);
                         connectTree();
                     });
             };
@@ -632,12 +634,17 @@
                 question.hasValidation = data.hasValidation;
                 question.hasCondition = data.hasCondition;
 
+                $rootScope.addLocalVariableName(data.variable);
+
             });
 
             $rootScope.$on('staticTextUpdated', function (event, data) {
                 var staticText = questionnaireService.findItem($scope.items, data.itemId);
                 if (_.isNull(staticText)) return;
                 staticText.text = data.text;
+
+                staticText.hasValidation = data.hasValidation;
+                staticText.hasCondition = data.hasCondition;
             });
 
             $rootScope.$on('groupUpdated', function (event, data) {
@@ -657,6 +664,8 @@
                 roster.title = data.title;
                 roster.variable = data.variable;
                 roster.hasCondition = data.hasCondition;
+
+                $rootScope.addLocalVariableName(data.variable);
             });
         }
     );

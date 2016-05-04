@@ -205,9 +205,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public NewEditQuestionView GetQuestionEditView(string questionnaireId, Guid questionId)
         {
             QuestionsAndGroupsCollectionView questionnaire = this.questionDetailsReader.GetById(questionnaireId);
-            if (questionnaire == null)
-                return null;
-            QuestionDetailsView question = questionnaire.Questions.FirstOrDefault(x => x.Id == questionId);
+            QuestionDetailsView question = questionnaire?.Questions.FirstOrDefault(x => x.Id == questionId);
             if (question == null)
                 return null;
 
@@ -229,14 +227,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public NewEditStaticTextView GetStaticTextEditView(string questionnaireId, Guid staticTextId)
         {
             QuestionsAndGroupsCollectionView questionnaire = this.questionDetailsReader.GetById(questionnaireId);
-            if (questionnaire == null)
-                return null;
-            StaticTextDetailsView staticTextDetailsView = questionnaire.StaticTexts.FirstOrDefault(x => x.Id == staticTextId);
+
+            StaticTextDetailsView staticTextDetailsView = questionnaire?.StaticTexts.FirstOrDefault(x => x.Id == staticTextId);
             if (staticTextDetailsView == null)
                 return null;
 
             var result = ObjectMapperManager.DefaultInstance.GetMapper<StaticTextDetailsView, NewEditStaticTextView>()
                             .Map(staticTextDetailsView);
+
+            result.ValidationConditions.AddRange(staticTextDetailsView.ValidationConditions);
             result.Breadcrumbs = this.GetBreadcrumbs(questionnaire, staticTextDetailsView);
 
             return result;

@@ -1,10 +1,12 @@
 ﻿using Main.Core.Entities.SubEntities;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Mappings
 {
+    [PlainStorage]
     public class UserDocumentMap : ClassMapping<UserDocument>
     {
         public UserDocumentMap()
@@ -61,7 +63,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Mappings
             relation => relation.OneToMany());
         }
     }
-
+    [PlainStorage]
     public class DeviceInfoMap : ClassMapping<DeviceInfo>
     {
         public DeviceInfoMap()

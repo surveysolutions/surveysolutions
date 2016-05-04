@@ -1,12 +1,8 @@
-﻿using System;
-using System.Linq;
-using NHibernate.Criterion;
+﻿using System.Linq;
 using NHibernate.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 
@@ -48,8 +44,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Factories
                     {
                         query = query.Where(x => x.Title.ContainsIgnoreCaseSensitive(input.Filter));
                     }
+
                 }
-                else { query = query.Where(x => !x.IsDeleted); }
+                else
+                {
+                    query = query.Where(x => !x.IsDeleted);
+                }
+
+                if (input.OnlyCensus.HasValue)
+                {
+                    query = query.Where(x => x.AllowCensusMode == input.OnlyCensus);
+                }
 
                 var queryResult = query.OrderUsingSortExpression(input.Order);
 

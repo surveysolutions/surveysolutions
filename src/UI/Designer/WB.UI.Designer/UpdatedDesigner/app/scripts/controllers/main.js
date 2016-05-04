@@ -1,6 +1,6 @@
 angular.module('designerApp')
     .controller('MainCtrl',
-        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal) {
+        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $modal, notificationService) {
 
             $(document).on('click', "a[href='javascript:void(0);']", function (e) { e.preventDefault(); }); // remove when we will stop support of IE 9 KP-6076
 
@@ -19,6 +19,23 @@ angular.module('designerApp')
             var focusTreePane = 'shift+alt+x';
             var focusEditorPane = 'shift+alt+e';
             var openChaptersPane = 'left';
+
+            hotkeys.add({
+                combo: 'ctrl+p',
+                allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                description: 'Print',
+                callback: function (event) {
+                    
+                    var printWindow = window.open("../../pdf/printpreview/" + $state.params.questionnaireId);
+                    try{
+                        printWindow.focus();
+                    } catch(e) {
+                        notificationService.notice(e);//"Make sure popups are not blocked");
+                    }
+                    //printWindow.print();
+                    event.preventDefault();
+                }
+            });
 
             hotkeys.add({
                 combo: 'ctrl+b',
@@ -111,6 +128,21 @@ angular.module('designerApp')
 
             $scope.closeVerifications = function() {
                 $scope.verificationStatus.visible = false;
+            };
+
+            var referancesWithMessagesArray = [];
+            $scope.getReferancesWithMessages = function (messagesToShow) {
+                for (var indexReferencesWithErrors in messagesToShow.errors) {
+                    var referencesWithErrors = messagesToShow.errors[indexReferencesWithErrors];
+                    for (var indexReference in referencesWithErrors.references) {
+                        var reference = referencesWithErrors.references[indexReference];
+                        referancesWithMessagesArray.push({
+                            reference: reference, 
+                            compilationErrorMessages: referencesWithErrors.compilationErrorMessages,
+                        });
+                    }
+                }
+                return referancesWithMessagesArray;
             };
 
             $scope.toggleCheatSheet = function () {
@@ -227,6 +259,30 @@ angular.module('designerApp')
             };
 
             $scope.currentChapter = null;
+            $rootScope.variableNames = [];
+
+            $rootScope.updateVariableNames = function (variables) {
+                $rootScope.variableNames = variables;
+
+                $rootScope.$broadcast("variablesChanged", {});
+            };
+
+            $rootScope.addLocalVariableName = function (variable) {
+                if ($scope.variableNames.indexOf(variable) == -1) {
+                    $scope.variableNames.push(variable);
+
+                    $rootScope.$broadcast("variablesChanged", {});
+                }
+            };
+            
+            $rootScope.removeLocalVariableName = function (variable) {
+                for (var i = $scope.variableNames.length - 1; i--;) {
+                    if ($scope.variableNames[i] === variable)
+                        $scope.variableNames.splice(i, 1);
+                }
+
+                $rootScope.$broadcast("variablesChanged", {});
+            };
 
             $rootScope.$on('groupDeleted', function (scope, removedItemId) {
                 $scope.questionnaire.groupsCount--;
@@ -294,26 +350,45 @@ angular.module('designerApp')
                     }
                 });
             };
-
+            
             $scope.aceLoaded = function (editor) {
                 // Editor part
                 var renderer = editor.renderer;
-
+                
                 // Options
                 editor.setOptions({
                     maxLines: Infinity,
-                    mode: "ace/mode/csharp",
                     fontSize: 16,
                     highlightActiveLine: false,
-                    theme: "ace/theme/github"
+                    theme: "ace/theme/github-extended",
+                    enableBasicAutocompletion: true,
+                    enableLiveAutocompletion: true
                 });
                 renderer.setShowGutter(false);
                 renderer.setPadding(12);
 
+                $scope.aceEditorUpdateMode(editor);
+
                 editor.$blockScrolling = Infinity;
                 editor.commands.bindKey("tab", null);
+
+                $rootScope.$on('variablesChanged', function() {
+                    $scope.aceEditorUpdateMode(editor);
+                });
+
             };
 
+            $scope.getVariables = function () {
+                return $rootScope.variableNames;
+            }
+
+            $scope.aceEditorUpdateMode = function(editor) {
+                if (editor) {
+                    var CSharpExtendableMode = window.ace.require("ace/mode/csharp-extended").Mode;
+                    editor.getSession().setMode(new CSharpExtendableMode($scope.getVariables));
+                }
+            }
+           
             $rootScope.$on('$stateChangeSuccess',
                 function (event, toState, toParams) {
                     var target = toState.name.replace('questionnaire.chapter.', '');

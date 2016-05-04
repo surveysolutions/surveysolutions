@@ -28,14 +28,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.IncomingPackagesQueueTest
         {
             for (int i = 1; i <= 1000; i++)
             {
-                incomingSyncPackagesQueue.Enqueue(Guid.NewGuid(), $"{i}");
+                incomingSyncPackagesQueue.StorePackage($"{i}");
                 Thread.Sleep(10);
             }
         };
 
         It should_store_1000_elements = () =>
         {
-            List<string> fileNames = incomingSyncPackagesQueue.GetTopSyncItemsAsFileNames(1000).ToList();
+            List<string> fileNames = incomingSyncPackagesQueue.GetTopPackageIds(1000).ToList();
 
             for (int i = 0; i < 1000; i++)
             {

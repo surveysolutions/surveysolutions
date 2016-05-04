@@ -1,5 +1,6 @@
 using System;
 using NHibernate;
+using NHibernate.Persister.Entity;
 using Ninject;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
@@ -77,6 +78,16 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 throw new InvalidOperationException("Trying to get session without beginning a transaction first. Make sure to call BeginTransaction before getting session instance.");
 
             return this.lazyCommandSession.Value;
+        }
+
+        public string GetEntityIdentifierColumnName(Type entityType)
+        {
+            var persister = this.sessionFactory.GetClassMetadata(entityType);
+
+            if (persister == null)
+                return null;
+
+            return persister.IdentifierPropertyName;
         }
 
         public bool IsQueryTransactionStarted

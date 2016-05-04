@@ -11,6 +11,11 @@ namespace WB.Core.Infrastructure.Transactions
             transactionManager.ExecuteInPlainTransaction(action.ToFunc());
         }
 
+        public static void ExecuteInQueryTransaction(this IPlainTransactionManager transactionManager, Action action)
+        {
+            transactionManager.ExecuteInQueryTransaction(action.ToFunc());
+        }
+
         public static void ExecuteInQueryTransaction(this ITransactionManager transactionManager, Action action)
         {
             transactionManager.ExecuteInQueryTransaction(action.ToFunc());
@@ -18,19 +23,27 @@ namespace WB.Core.Infrastructure.Transactions
 
         public static T ExecuteInPlainTransaction<T>(this IPlainTransactionManager transactionManager, Func<T> func)
         {
+            bool shouldStartTransaction = !transactionManager.IsTransactionStarted;
             try
             {
-                transactionManager.BeginTransaction();
-                
-                T result = func.Invoke();
-                
-                transactionManager.CommitTransaction();
+                if (shouldStartTransaction)
+                {
+                    transactionManager.BeginTransaction();
+                }
 
+                T result = func.Invoke();
+                if (shouldStartTransaction)
+                {
+                    transactionManager.CommitTransaction();
+                }
                 return result;
             }
             catch
             {
-                transactionManager.RollbackTransaction();
+                if (shouldStartTransaction)
+                {
+                    transactionManager.RollbackTransaction();
+                }
                 throw;
             }
         }
@@ -53,6 +66,28 @@ namespace WB.Core.Infrastructure.Transactions
                 if (shouldStartTransaction)
                 {
                     transactionManager.RollbackQueryTransaction();
+                }
+            }
+        }
+
+        public static T ExecuteInQueryTransaction<T>(this IPlainTransactionManager transactionManager, Func<T> func)
+        {
+            bool shouldStartTransaction = !transactionManager.IsTransactionStarted;
+            try
+            {
+
+                if (shouldStartTransaction)
+                {
+                    transactionManager.BeginTransaction();
+                }
+
+                return func.Invoke();
+            }
+            finally
+            {
+                if (shouldStartTransaction)
+                {
+                    transactionManager.RollbackTransaction();
                 }
             }
         }

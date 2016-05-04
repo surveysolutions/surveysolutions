@@ -64,9 +64,9 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
             var typeOfViewModel = source.GetType();
 
+            var enablementModel = this.GetEnablementViewModel(source);
             if (typeOfViewModel.Name.EndsWith("QuestionViewModel"))
             {
-                var enablementModel = this.GetEnablementViewModel(source);
                 if (enablementModel != null && !enablementModel.Enabled)
                 {
                     return Resource.Layout.interview_disabled_question;
@@ -75,10 +75,17 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
             if (typeOfViewModel == typeof(GroupViewModel))
             {
-                var enablementModel = this.GetEnablementViewModel(source);
                 if (enablementModel != null && !enablementModel.Enabled)
                 {
                     return Resource.Layout.interview_disabled_group;
+                }
+            }
+
+            if (typeOfViewModel == typeof (StaticTextViewModel))
+            {
+                if (enablementModel != null && !enablementModel.Enabled)
+                {
+                    return Resource.Layout.interview_disabled_static_text;
                 }
             }
 

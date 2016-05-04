@@ -1,16 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Entities.Composite;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace Main.Core.Entities.SubEntities
 {
     public class StaticText : IStaticText
     {
-        public StaticText(Guid publicKey, string text, string attachmentName = null)
+        public StaticText(Guid publicKey, string text, string enablementCondition, 
+            bool hideIfDisabled, IList<ValidationCondition> validationConditions, string attachmentName = null) 
         {
             this.PublicKey = publicKey;
             this.Text = text;
             this.AttachmentName = attachmentName;
+
+            this.HideIfDisabled = hideIfDisabled;
+            this.ConditionExpression = enablementCondition;
+            this.ValidationConditions = validationConditions ?? new List<ValidationCondition>();
         }
 
         public List<IComposite> Children
@@ -64,5 +70,9 @@ namespace Main.Core.Entities.SubEntities
         public string Text { get; set; }
 
         public string AttachmentName { get; set; }
+
+        public IList<ValidationCondition> ValidationConditions { get; set; }
+        public string ConditionExpression { get; set; }
+        public bool HideIfDisabled { get; set; }
     }
 }

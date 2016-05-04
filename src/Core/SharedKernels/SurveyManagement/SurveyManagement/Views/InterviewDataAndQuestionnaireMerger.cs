@@ -252,8 +252,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views
                         interviewInfo.Attachments.TryGetValue(staticText.AttachmentName, out attachment); 
                     }
 
-                    interviewEntity = new InterviewStaticTextView(staticText, attachment == null ? null : new InterviewAttachmentViewModel(attachment.ContentHash, attachment.ContentType, staticText.AttachmentName));
+                    var interviewStaticText = interviewLevel.StaticTexts.ContainsKey(staticText.PublicKey) ? interviewLevel.StaticTexts[staticText.PublicKey] : null;
+                    var interviewAttachmentViewModel = attachment == null ? null : new InterviewAttachmentViewModel(attachment.ContentHash, attachment.ContentType, staticText.AttachmentName);
+                    var interviewStaticTextView = new InterviewStaticTextView(staticText, interviewStaticText, interviewAttachmentViewModel);
 
+                    interviewEntity = interviewStaticTextView;
+                    
                     completedGroup.Entities.Add(interviewEntity);
                 }
             }

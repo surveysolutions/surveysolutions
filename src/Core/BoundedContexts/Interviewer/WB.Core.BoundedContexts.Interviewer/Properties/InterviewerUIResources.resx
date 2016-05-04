@@ -471,7 +471,7 @@ Please re-enter your password. If the problem persists, contact your Supervisor.
     <value>All application and interview data will be collected to a single archive. This can take up to 10 minutes.</value>
   </data>
   <data name="Diagnostics_Send_Title" xml:space="preserve">
-    <value>Collect and send to HQ all tablet infromation</value>
+    <value>Collect and send to HQ all tablet information</value>
   </data>
   <data name="Diagnostics_Share_Description" xml:space="preserve">
     <value>All information below will be shared as plain text. It can be sent by email, google hangouts of any other messaging app</value>
@@ -574,5 +574,14 @@ Please re-enter your password. If the problem persists, contact your Supervisor.
   </data>
   <data name="Prefs_EventChunkSizeTitle" xml:space="preserve">
     <value>Event chunk size</value>
+  </data>
+  <data name="Synchronization_Download_AttachmentsCleanup" xml:space="preserve">
+    <value>Removing obsolete attachments.</value>
+  </data>
+  <data name="Synchronization_Check_Obsolete_Questionnaires" xml:space="preserve">
+    <value>Check for obsolete questionnaires</value>
+  </data>
+  <data name="Synchronization_Check_Obsolete_Questionnaires_Description" xml:space="preserve">
+    <value>Removing {0} questionnaire out of {1}</value>
   </data>
 </root>

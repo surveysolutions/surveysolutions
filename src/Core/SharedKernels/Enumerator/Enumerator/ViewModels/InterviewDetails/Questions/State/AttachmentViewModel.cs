@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
 
-        public async Task InitAsync(string interviewId, Identity entityIdentity)
+        public void Init(string interviewId, Identity entityIdentity)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
@@ -43,11 +43,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (attachment != null)
             {
-                this.attachmentContentMetadata = await this.attachmentContentStorage.GetMetadataAsync(attachment.ContentId);
+                this.attachmentContentMetadata = this.attachmentContentStorage.GetMetadata(attachment.ContentId);
 
                 if (IsImage)
                 {
-                    this.Content = await this.attachmentContentStorage.GetContentAsync(attachment.ContentId);
+                    this.Content = this.attachmentContentStorage.GetContent(attachment.ContentId);
                     this.RaisePropertyChanged(() => Content);
                 }
             }

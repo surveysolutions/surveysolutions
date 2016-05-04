@@ -88,25 +88,45 @@
     <Compile Include="DataCollectionInfrastructureModule.cs" />
     <Compile Include="DataTransferObjects\AnswerType.cs" />
     <Compile Include="Events\Interview\AnswerRemoved.cs" />
+    <Compile Include="Events\Interview\Base\StaticTextsPassiveEvent.cs" />
     <Compile Include="Events\Interview\Dtos\AnsweredYesNoOption.cs" />
     <Compile Include="Events\Interview\Dtos\ChangedLinkedOptions.cs" />
     <Compile Include="Events\Interview\InterviewReceivedByInterviewer.cs" />
     <Compile Include="Events\Interview\InterviewReceivedBySupervisor.cs" />
     <Compile Include="Events\Interview\LinkedOptionsChanged.cs" />
+    <Compile Include="Events\Interview\StaticTextsDeclaredInvalid.cs" />
+    <Compile Include="Events\Interview\StaticTextsDeclaredValid.cs" />
+    <Compile Include="Events\Interview\StaticTextsDisabled.cs" />
+    <Compile Include="Events\Interview\StaticTextsEnabled.cs" />
     <Compile Include="Events\Interview\UnapprovedByHeadquarters.cs" />
     <Compile Include="Events\Interview\SubstitutionTitlesChanged.cs" />
     <Compile Include="Events\Interview\YesNoQuestionAnswered.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireDisabled.cs" />
+    <Compile Include="Events\User\NewUserCreated.cs" />
     <Compile Include="Events\User\UserArchived.cs" />
+    <Compile Include="Events\User\UserChanged.cs" />
     <Compile Include="Events\User\UserLinkedToDevice.cs" />
+    <Compile Include="Events\User\UserLocked.cs" />
+    <Compile Include="Events\User\UserLockedBySupervisor.cs" />
     <Compile Include="Events\User\UserUnarchived.cs" />
+    <Compile Include="Events\User\UserUnlocked.cs" />
+    <Compile Include="Events\User\UserUnlockedBySupervisor.cs" />
     <Compile Include="Exceptions\InterviewDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserException.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\Latest\InterviewExpressionStateV8ToLatestAdapter.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V2\InterviewExpressionStateV1ToV2Adapter.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V4\InterviewExpressionStateV2ToV4Adapter.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V5\InterviewExpressionStateV4ToV5Adapter.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V6\InterviewExpressionStateV5ToV6Adapter.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V7\InterviewExpressionStateV6ToV7Adapter.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\Adapters\V8\InterviewExpressionStateV7ToV8Adapter.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\IInterviewExpressionStateUpgrader.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\ILatestInterviewExpressionState.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewExpressionStateForPreloading.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewExpressionStateUpgrader.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\IReadOnlyInterviewStateDependentOnAnswers.cs" />
     <Compile Include="Implementation\Aggregates\User.cs" />
-    <Compile Include="Implementation\Aggregates\Snapshots\UserState.cs" />
     <Compile Include="Commands\Interview\AnswerMultipleOptionsLinkedQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerNumericIntegerQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerPictureQuestionCommand.cs" />
@@ -177,12 +197,6 @@
     <Compile Include="Events\Questionnaire\PlainQuestionnaireRegistered.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireDeleted.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireAssemblyImported.cs" />
-    <Compile Include="Events\User\NewUserCreated.cs" />
-    <Compile Include="Events\User\UserChanged.cs" />
-    <Compile Include="Events\User\UserLocked.cs" />
-    <Compile Include="Events\User\UserLockedBySupervisor.cs" />
-    <Compile Include="Events\User\UserUnlocked.cs" />
-    <Compile Include="Events\User\UserUnlockedBySupervisor.cs" />
     <Compile Include="Factories\IQuestionnaireRosterStructureFactory.cs" />
     <Compile Include="Implementation\Accessors\IQuestionnareAssemblyFileAccessor.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\AnswerChange.cs" />
@@ -265,6 +279,7 @@
     <Compile Include="Implementation\Repositories\InterviewSynchronizationFileStorage.cs" />
     <Compile Include="Implementation\Repositories\PlainInterviewFileStorage.cs" />
     <Compile Include="Implementation\Repositories\PlainQuestionnaireRepositoryWithCache.cs" />
+    <Compile Include="Implementation\Repositories\UserRepository.cs" />
     <Compile Include="MaskFormatter\EmptyMaskFormatter.cs" />
     <Compile Include="MaskFormatter\IMaskedFormatter.cs" />
     <Compile Include="MaskFormatter\MaskCharacter.cs" />
@@ -292,7 +307,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Views\Questionnaire\QuestionDescription.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireBrowseInputModel.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireItemInputModel.cs">
       <SubType>Code</SubType>
     </Compile>

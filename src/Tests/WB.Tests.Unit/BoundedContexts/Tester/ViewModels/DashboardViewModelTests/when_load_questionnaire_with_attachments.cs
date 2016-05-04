@@ -39,9 +39,9 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                 Assembly = "assembly"
             };
 
-            mockOfAttachmentContentStorage.Setup(_ => _.IsExistAsync("1")).Returns(Task.FromResult(false));
-            mockOfAttachmentContentStorage.Setup(_ => _.IsExistAsync("2")).Returns(Task.FromResult(false));
-            mockOfAttachmentContentStorage.Setup(_ => _.IsExistAsync("5")).Returns(Task.FromResult(true));
+            mockOfAttachmentContentStorage.Setup(_ => _.Exists("1")).Returns(false);
+            mockOfAttachmentContentStorage.Setup(_ => _.Exists("2")).Returns(false);
+            mockOfAttachmentContentStorage.Setup(_ => _.Exists("5")).Returns(true);
 
             mockOfDesignerApiService
                 .Setup(_ => _.GetQuestionnaireAsync(selectedQuestionnaire, Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<CancellationToken>()))

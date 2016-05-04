@@ -21,14 +21,15 @@ namespace WB.Core.Infrastructure
             registry.BindAsSingleton<IEventTypeResolver, EventTypeResolver>();
             registry.Bind<IClock, DateTimeBasedClock>();
 
-            registry.BindAsSingleton<IAggregateRootRepositoryWithCache, AggregateRootRepositoryWithCache>();
-            registry.BindToRegisteredInterface<IAggregateRootRepository, IAggregateRootRepositoryWithCache>();
+            registry.BindAsSingleton<IEventSourcedAggregateRootRepositoryWithCache, EventSourcedAggregateRootRepositoryWithCache>();
+            registry.BindToRegisteredInterface<IEventSourcedAggregateRootRepository, IEventSourcedAggregateRootRepositoryWithCache>();
             registry.BindAsSingleton<ICommandService, SequentialCommandService>();
             registry.BindAsSingleton<ILiteEventRegistry, LiteEventRegistry>();
             registry.Bind<ILiteEventBus, LiteEventBus>();
             registry.BindAsSingletonWithConstructorArgument<ISnapshottingPolicy, SimpleSnapshottingPolicy>("snapshotIntervalInEvents", 1);
             registry.Bind<IAggregateSupportsSnapshotValidator,AggregateSupportsSnapshotValidator>();
             registry.Bind<IAggregateSnapshotter, DefaultAggregateSnapshotter>();
+            registry.Bind<IPlainAggregateRootRepository, PlainAggregateRootRepository>();
         }
     }
 }

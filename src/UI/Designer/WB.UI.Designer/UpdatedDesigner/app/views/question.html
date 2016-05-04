@@ -64,12 +64,17 @@
 
         <div class="row" ng-show="(showInstruction===undefined && initialQuestion.instructions) || showInstruction">
             <div class="form-group col-xs-11">
-                <label for="edit-question-instructions">Instruction <help key="instruction" /></label>
+                <label for="edit-question-instructions">Instruction <help key="instruction"/></label>
+
+                <input id="cb-hide-instructions" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.hideInstructions"/>
+                <label for="cb-hide-instructions"><span></span>Hide instruction</label>
+
                 <textarea id="edit-question-instructions" ng-model="activeQuestion.instructions" class="form-control" msd-elastic></textarea>
             </div>
 
-            <div class="form-group col-xs-1 pull-right">
-                <button type="button" class="btn cross instructions-cross" ng-click="showInstruction=false;activeQuestion.instructions='';questionForm.$setDirty();"></button>
+            <div class="form-group col-xs-1">
+                <button type="button" class="btn cross instructions-cross" 
+                        ng-click="showInstruction=false;activeQuestion.instructions='';activeQuestion.hideInstructions=false;questionForm.$setDirty();"></button>
             </div>
         </div>
 
@@ -81,7 +86,7 @@
                 <label for="cb-hideIfDisabled"><span></span>Hide if disabled</label>
 
             <div class="pseudo-form-control">
-                <div id="edit-question-enablement-condition" ui-ace="{ onLoad : aceLoaded }" ng-model="activeQuestion.enablementCondition"></div>
+                <div id="edit-question-enablement-condition" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.enablementCondition"></div>
             </div>
         </div>
 
@@ -92,7 +97,7 @@
             <button class="btn delete-btn-sm delete-validation-condition" ng-click="removeValidationCondition($index)" tabindex="-1"></button>
 
             <div class="pseudo-form-control">
-                <div ui-ace="{ onLoad : aceLoaded }" ng-model="validation.expression" ng-attr-tabindex="{{$index + 1}}"></div>
+                <div ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="validation.expression" ng-attr-tabindex="{{$index + 1}}"></div>
             </div>
 
             <label for="validationMessage{{$index}}" class="validation-message">Error message <help key="validationMessage" /></label>
@@ -262,8 +267,9 @@
                 <hr />
                 <label for="linkedFilterExpression">Filter</label>
                 
-                <input id="linkedFilterExpression" type="text" ng-model="activeQuestion.linkedFilterExpression" class="form-control" style="border-color:#ccc;box-shadow: inset 0 1px 1px #ccc;">
-
+                <div class="pseudo-form-control">
+                    <div id="linkedFilterExpression" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.linkedFilterExpression"></div>
+                </div>
             </div>
         </script>
 
@@ -385,15 +391,15 @@
             </div>
         </script>
 
-        <script type="text/ng-template" id="Numeric-template.html">
+    <script type="text/ng-template" id="Numeric-template.html">
             <div class="row">
-                <div class="col-xs-4">
+                <div class="col-md-5">
                     <div class="checkbox checkbox-in-column">
                         <input id="cb-is-integer" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isInteger" ng-change="isIntegerChange()" />
                         <label for="cb-is-integer"><span></span>Integer</label>
                     </div>
                 </div>
-                <div class="col-xs-8 inline-inputs">
+                <div class="col-md-5 inline-inputs">
                     <div class="form-group checkbox-in-column" ng-show="!activeQuestion.isInteger" ng-class="{'has-error': !questionForm.countOfDecimalPlaces.$valid}">
                         <label for="edit-question-count-decimal">Number of decimal places</label>
                         <input id="edit-question-count-decimal" type="text"
@@ -405,6 +411,15 @@
                         <p class="help-block ng-cloak" ng-show="questionForm.countOfDecimalPlaces.$error.pattern">
                             Only integers are allowed
                         </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5 inline-inputs">
+                    <div class="checkbox checkbox-in-column">
+                        <input id="cb-use-formatting" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.useFormatting" />
+                        <label for="cb-use-formatting"><span></span>Use 1000 separator</label>
+                        <help key="useFormatting"></help>
                     </div>
                 </div>
             </div>

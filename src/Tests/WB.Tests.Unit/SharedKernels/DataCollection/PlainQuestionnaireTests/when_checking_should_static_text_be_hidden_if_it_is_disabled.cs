@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
         {
             QuestionnaireDocument questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.StaticText(staticTextId: staticTextId),
+                Create.StaticText(publicKey: staticTextId),
             });
 
             plainQuestionnaire = Create.PlainQuestionnaire(document: questionnaireDocument);

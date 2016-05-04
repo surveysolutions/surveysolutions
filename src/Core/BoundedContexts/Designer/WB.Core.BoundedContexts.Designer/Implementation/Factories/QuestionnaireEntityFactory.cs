@@ -2,19 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities;
-using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
 {
     internal class QuestionnaireEntityFactory : IQuestionnaireEntityFactory
     {
-        public IStaticText CreateStaticText(Guid entityId, string text, string attachmentName)
+        public IStaticText CreateStaticText(Guid entityId, string text, string attachmentName, 
+            string enablementCondition, bool hideIfDisabled, IList<ValidationCondition> validationConditions)
         {
-            return new StaticText(publicKey: entityId, text: System.Web.HttpUtility.HtmlDecode(text), attachmentName: attachmentName);
+            return new StaticText(publicKey: entityId, 
+                text: System.Web.HttpUtility.HtmlDecode(text), 
+                enablementCondition:enablementCondition,
+                hideIfDisabled:hideIfDisabled,
+                validationConditions : validationConditions,
+                attachmentName: attachmentName);
         }
 
         public IQuestion CreateQuestion(QuestionData data)
@@ -36,6 +40,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 data.Featured,
                 data.Capital,
                 data.Instructions,
+                data.Properties,
                 data.Mask,
                 data.LinkedToQuestionId,
                 data.LinkedToRosterId,
@@ -138,6 +143,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             bool featured,
             bool capital,
             string instructions,
+            QuestionProperties properties,
             string mask,
             Guid? linkedToQuestionId,
             Guid? linkedToRosterId,
@@ -164,6 +170,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             question.AnswerOrder = answerOrder;
             question.Featured = featured;
             question.Instructions = instructions;
+            question.Properties = properties;
             question.Capital = capital;
             question.LinkedToQuestionId = linkedToQuestionId;
             question.LinkedToRosterId = linkedToRosterId;
@@ -178,6 +185,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 numericQuestion.IsInteger = isInteger ?? false;
                 numericQuestion.CountOfDecimalPlaces = countOfDecimalPlaces;
                 numericQuestion.QuestionType = QuestionType.Numeric;
+                numericQuestion.UseFormatting = question.Properties?.UseFormatting ?? false;
             }
 
             var multioptionQuestion = question as IMultyOptionsQuestion;

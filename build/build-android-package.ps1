@@ -22,11 +22,25 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 . "$scriptFolder\functions.ps1"
 
 function GetPathToJarsigner() {
-	return 'C:\Program Files\Java\jdk1.8.0_60\bin\jarsigner.exe'
+	if (Test-Path 'C:\Program Files\Java\jdk1.8.0_77\bin\jarsigner.exe') {
+		return 'C:\Program Files\Java\jdk1.8.0_77\bin\jarsigner.exe'
+	}
+	if (Test-Path 'C:\Program Files\Java\jdk1.8.0_60\bin\jarsigner.exe') {
+		return 'C:\Program Files\Java\jdk1.8.0_60\bin\jarsigner.exe'
+	}
+
+	throw [System.IO.FileNotFoundException] "jarsigner.exe not found, see script for details"
 }
 
 function GetPathToZipalign() {
-	return 'C:\Android\android-sdk\build-tools\21.0.2\zipalign.exe'
+	if (Test-Path 'C:\Android\android-sdk\build-tools\23.0.3\zipalign.exe') {
+		return 'C:\Android\android-sdk\build-tools\23.0.3\zipalign.exe'
+	}
+	if (Test-Path 'C:\Android\android-sdk\build-tools\21.0.2\zipalign.exe') {
+		return 'C:\Android\android-sdk\build-tools\21.0.2\zipalign.exe'
+	}
+
+	throw [System.IO.FileNotFoundException] "zipalign.exe not found, see script for details"
 }
 
 function GetPathToManifest([string]$CapiProject) {
@@ -95,8 +109,11 @@ function SignAndPackCapi($KeyStorePass, $KeyStoreName, $Alias, $CapiProject, $Ou
 	$PahToSigned = "$PathToFinalCapi" + "-signed.apk"
 	$PahToCreated = "$PathToFinalCapi" + ".apk"
 	$PahToKeystore = (Join-Path (Get-Location).Path "Security/KeyStore/$KeyStoreName")
+	$pathToJarsigner = GetPathToJarsigner
 
-	& (GetPathToJarsigner) '-sigalg' 'MD5withRSA' '-digestalg' 'SHA1' `
+	Write-Host "##teamcity[message text='Signing package using $pathToJarsigner']"
+
+	& ($pathToJarsigner) '-sigalg' 'MD5withRSA' '-digestalg' 'SHA1' `
 		'-keystore' "$PahToKeystore" '-storepass' "$KeyStorePass" `
 		'-signedjar' "$PahToSigned" "$PahToCreated" "$Alias" | Write-Host
 
@@ -112,7 +129,11 @@ function SignAndPackCapi($KeyStorePass, $KeyStoreName, $Alias, $CapiProject, $Ou
 		return $wasOperationSuccessfull
 	}
 
-	& (GetPathToZipalign) '-f' '-v' '4' "$PahToSigned" "$OutFileName" | Write-Host
+	$pathToZipalign = GetPathToZipalign
+
+	Write-Host "##teamcity[message text='Zipaligning package using $pathToZipalign']"
+
+	& ($pathToZipalign) '-f' '-v' '4' "$PahToSigned" "$OutFileName" | Write-Host
 
 	$wasOperationSuccessfull = $LASTEXITCODE -eq 0
 

@@ -3,10 +3,18 @@
         function ($rootScope, $scope, $state, questionnaireService, commandService, hotkeys) {
             "use strict";
 
+            $scope.currentChapterId = $state.params.chapterId;
+
             var saveStaticText = 'ctrl+s';
 
             if (hotkeys.get(saveStaticText) !== false) {
                 hotkeys.del(saveStaticText);
+            }
+
+            var markFormAsChanged = function () {
+                if ($scope.staticTextForm) {
+                    $scope.staticTextForm.$setDirty();
+                }
             }
             
             hotkeys.bindTo($scope)
@@ -30,6 +38,10 @@
                 $scope.activeStaticText.text = result.text;
                 $scope.activeStaticText.attachmentName = result.attachmentName;
 
+                $scope.activeStaticText.enablementCondition = result.enablementCondition;
+                $scope.activeStaticText.hideIfDisabled = result.hideIfDisabled;
+                $scope.activeStaticText.validationConditions = result.validationConditions;
+
                 if (!_.isNull($scope.staticTextForm) && !_.isUndefined($scope.staticTextForm)) {
                     $scope.staticTextForm.$setPristine();
                 }
@@ -43,15 +55,44 @@
                     });
             };
 
+            var hasEnablementConditions = function (staticText) {
+                return staticText.enablementCondition !== null &&
+                    /\S/.test(staticText.enablementCondition);
+            };
+
+            var hasValidations = function (staticText) {
+                return staticText.validationConditions.length > 0;
+            };
+
             $scope.saveStaticText = function () {
                 commandService.updateStaticText($state.params.questionnaireId, $scope.activeStaticText).success(function () {
                     $scope.initialStaticText = angular.copy($scope.activeStaticText);
                     $rootScope.$emit('staticTextUpdated', {
                         itemId: $scope.activeStaticText.itemId,
-                        text: $scope.activeStaticText.text
+                        text: $scope.activeStaticText.text,
+
+                        hasCondition: hasEnablementConditions($scope.activeStaticText),
+                        hasValidation: hasValidations($scope.activeStaticText),
+                        hideIfDisabled: $scope.activeStaticText.hideIfDisabled
                     });
                 });
             };
+
+            $scope.removeValidationCondition = function (index) {
+                $scope.activeStaticText.validationConditions.splice(index, 1);
+                markFormAsChanged();
+            }
+
+            $scope.addValidationCondition = function () {
+                $scope.activeStaticText.validationConditions.push({
+                    expression: '',
+                    message: ''
+                });
+                markFormAsChanged();
+                _.defer(function () {
+                    $(".static-text-editor .form-holder").scrollTo({ top: '+=200px', left: "+=0" }, 250);
+                });
+            }
 
             $scope.cancelStaticText = function () {
                 var temp = angular.copy($scope.initialStaticText);

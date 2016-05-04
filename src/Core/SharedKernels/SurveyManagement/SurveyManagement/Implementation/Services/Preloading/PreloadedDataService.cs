@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
@@ -16,6 +17,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.PreloadedData;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preloading
 {
@@ -26,8 +28,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
         private readonly QuestionnaireDocument questionnaireDocument;
         private readonly IQuestionDataParser dataParser;
         private readonly IUserViewFactory userViewFactory;
-        readonly ITransactionManagerProvider transactionManagerProvider;
-        
+        private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
+
         private Dictionary<string, IQuestion> questionsCache = null;
         private Dictionary<string, IQuestion> QuestionsCache {
             get {
@@ -55,15 +57,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             QuestionnaireRosterStructure questionnaireRosterStructure,
             QuestionnaireDocument questionnaireDocument, 
             IQuestionDataParser dataParser,
-            IUserViewFactory userViewFactory,
-            ITransactionManagerProvider transactionManagerProvider)
+            IUserViewFactory userViewFactory)
         {
             this.exportStructure = exportStructure;
             this.questionnaireRosterStructure = questionnaireRosterStructure;
             this.questionnaireDocument = questionnaireDocument;
             this.dataParser = dataParser;
             this.userViewFactory = userViewFactory;
-            this.transactionManagerProvider = transactionManagerProvider;
         }
         
         public HeaderStructureForLevel FindLevelInPreloadedData(string levelFileName)
@@ -440,19 +440,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
 
         protected UserView GetUserByName(string userName)
         {
-            this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
-            try
+            return this.plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
                 var user = this.userViewFactory.Load(new UserViewInputModel(UserName: userName, UserEmail: null));
                 if (user == null || user.IsArchived)
                     return null;
                 return user;
-            }
-            finally
-            {
-                this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
-            }
-            
+            });
         }
 
         private Guid? GetSupervisorIdAndUpdateCache(Dictionary<string, Guid> cache, string name)

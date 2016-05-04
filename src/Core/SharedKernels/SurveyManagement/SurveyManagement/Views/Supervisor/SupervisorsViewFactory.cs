@@ -2,6 +2,7 @@
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Views;
 
@@ -22,9 +23,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Supervisor
             public int NotConnectedToDeviceInterviewersCount { get; set; }
         }
 
-        private readonly IQueryableReadSideRepositoryReader<UserDocument> readSideRepositoryIndexAccessor;
+        private readonly IPlainStorageAccessor<UserDocument> readSideRepositoryIndexAccessor;
 
-        public SupervisorsViewFactory(IQueryableReadSideRepositoryReader<UserDocument> readSideRepositoryIndexAccessor)
+        public SupervisorsViewFactory(IPlainStorageAccessor<UserDocument> readSideRepositoryIndexAccessor)
         {
             this.readSideRepositoryIndexAccessor = readSideRepositoryIndexAccessor;
         }

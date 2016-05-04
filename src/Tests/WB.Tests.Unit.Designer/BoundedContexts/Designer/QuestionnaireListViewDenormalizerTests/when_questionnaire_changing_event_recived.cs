@@ -41,9 +41,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireListViewD
                 new QRBarcodeQuestionUpdated(),
                 new QRBarcodeQuestionCloned(),
                 new MultimediaQuestionUpdated(),
-                new StaticTextAdded(),
-                new StaticTextUpdated(),
-                new StaticTextCloned(),
+                Create.Event.StaticTextAdded(),
+                Create.Event.StaticTextUpdated(),
+                Create.Event.StaticTextCloned(),
                 new StaticTextDeleted()
             };
 

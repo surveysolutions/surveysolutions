@@ -1,24 +1,23 @@
 ﻿using System;
-using System.Linq;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.HealthCheck.Checks
 {
     class NumberOfUnhandledPackagesChecker : IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>
     {
-        private readonly IBrokenSyncPackagesStorage brokenSyncPackagesStorage;
+        private readonly IInterviewPackagesService interviewPackagesService;
 
-        public NumberOfUnhandledPackagesChecker(IBrokenSyncPackagesStorage brokenSyncPackagesStorage)
+        public NumberOfUnhandledPackagesChecker(IInterviewPackagesService interviewPackagesService)
         {
-            this.brokenSyncPackagesStorage = brokenSyncPackagesStorage;
+            this.interviewPackagesService = interviewPackagesService;
         }
 
         public NumberOfUnhandledPackagesHealthCheckResult Check()
         {
             try
             {
-                int count = brokenSyncPackagesStorage.GetListOfUnhandledPackages().Count();
+                int count = this.interviewPackagesService.InvalidPackagesCount;
 
                 if (count == 0)
                     return NumberOfUnhandledPackagesHealthCheckResult.Happy(count);

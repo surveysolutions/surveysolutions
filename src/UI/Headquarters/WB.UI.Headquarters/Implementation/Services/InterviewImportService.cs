@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CsvHelper;
+using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -19,7 +20,9 @@ using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Threading;
 
 namespace WB.UI.Headquarters.Implementation.Services
 {
@@ -27,28 +30,30 @@ namespace WB.UI.Headquarters.Implementation.Services
     {
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly ICommandService commandService;
-        private readonly ITransactionManagerProvider transactionManager;
         private readonly ILogger logger;
         private readonly SampleImportSettings sampleImportSettings;
         private readonly IPreloadedDataRepository preloadedDataRepository;
         private readonly IInterviewImportDataParsingService interviewImportDataParsingService;
 
+        private IPlainTransactionManager plainTransactionManager => plainTransactionManagerProvider.GetPlainTransactionManager();
+        private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
+
         public InterviewImportService(
             ICommandService commandService,
-            ITransactionManagerProvider transactionManager,
             ILogger logger,
             SampleImportSettings sampleImportSettings, 
             IPreloadedDataRepository preloadedDataRepository, 
             IInterviewImportDataParsingService interviewImportDataParsingService, 
-            IPlainQuestionnaireRepository plainQuestionnaireRepository)
+            IPlainQuestionnaireRepository plainQuestionnaireRepository,
+            IPlainTransactionManagerProvider plainTransactionManagerProvider)
         {
             this.commandService = commandService;
-            this.transactionManager = transactionManager;
             this.logger = logger;
             this.sampleImportSettings = sampleImportSettings;
             this.preloadedDataRepository = preloadedDataRepository;
             this.interviewImportDataParsingService = interviewImportDataParsingService;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.plainTransactionManagerProvider = plainTransactionManagerProvider;
         }
 
         public void ImportInterviews(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId,
@@ -98,14 +103,16 @@ namespace WB.UI.Headquarters.Implementation.Services
                         var responsibleSupervisorId = importedInterview.SupervisorId ?? supervisorId.Value;
                         try
                         {
-                            this.commandService.Execute(new CreateInterviewByPrefilledQuestions(
-                                interviewId: Guid.NewGuid(),
-                                responsibleId: headquartersId,
-                                questionnaireIdentity: questionnaireIdentity,
-                                supervisorId: responsibleSupervisorId,
-                                interviewerId: importedInterview.InterviewerId,
-                                answersTime: DateTime.UtcNow,
-                                answersOnPrefilledQuestions: importedInterview.Answers));
+                            ThreadMarkerManager.MarkCurrentThreadAsIsolated();
+                            this.plainTransactionManager.ExecuteInPlainTransaction(
+                                () => this.commandService.Execute(new CreateInterviewByPrefilledQuestions(
+                                    interviewId: Guid.NewGuid(),
+                                    responsibleId: headquartersId,
+                                    questionnaireIdentity: questionnaireIdentity,
+                                    supervisorId: responsibleSupervisorId,
+                                    interviewerId: importedInterview.InterviewerId,
+                                    answersTime: DateTime.UtcNow,
+                                    answersOnPrefilledQuestions: importedInterview.Answers)));
                         }
                         catch (Exception ex)
                         {
@@ -120,6 +127,10 @@ namespace WB.UI.Headquarters.Implementation.Services
                             this.logger.Error(errorMessage, ex);
 
                             this.Status.State.Errors.Add(new InterviewImportError() {ErrorMessage = errorMessage});
+                        }
+                        finally
+                        {
+                            ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
                         }
 
                         Interlocked.Increment(ref createdInterviewsCount);

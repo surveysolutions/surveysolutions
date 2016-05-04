@@ -2,6 +2,7 @@
 using Machine.Specifications;
 using Main.Core.Events.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -18,7 +19,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddStaticTextHandlerTe
         };
 
         Because of = () =>
-                questionnaire.AddStaticTextAndMoveIfNeeded(entityId: entityId, parentId: chapterId, text: text, responsibleId: responsibleId, index: index);
+                questionnaire.AddStaticTextAndMoveIfNeeded(
+                    new AddStaticText(questionnaire.EventSourceId, entityId, text, responsibleId, chapterId, index));
 
         Cleanup stuff = () =>
         {

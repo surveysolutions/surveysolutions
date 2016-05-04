@@ -160,7 +160,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             catch (Exception e)
             {
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.GpsQuestion_Timeout);
-                logger.Error(e.Message, e);
+                logger.Warn(e.Message, e);
             }
             finally
             {

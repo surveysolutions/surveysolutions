@@ -91,6 +91,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
             this.RemoveUsingCache(id);
         }
 
+        public void RemoveIfStartsWith(string beginingOfId)
+        {
+            throw new NotImplementedException();
+        }
+
         public void BulkStore(List<Tuple<InterviewHistoryView, string>> bulk)
         {
             foreach (var tuple in bulk)

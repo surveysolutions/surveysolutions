@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public class InterviewerQuestionnaireAccessor : IInterviewerQuestionnaireAccessor
     {
-        private readonly ISerializer serializer;
+        private readonly IJsonAllTypesSerializer synchronizationSerializer;
         private readonly IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor;
         private readonly IInterviewerInterviewAccessor interviewFactory;
 
@@ -22,28 +22,32 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IAsyncPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocuments;
 
         public InterviewerQuestionnaireAccessor(
-            ISerializer serializer,
+            IJsonAllTypesSerializer synchronizationSerializer,
             IAsyncPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IPlainQuestionnaireRepository plainQuestionnaireRepository,
             IAsyncPlainStorage<InterviewView> interviewViewRepository,
             IQuestionnaireAssemblyFileAccessor questionnaireAssemblyFileAccessor,
-            IInterviewerInterviewAccessor interviewFactory)
+            IInterviewerInterviewAccessor interviewFactory, 
+            IAsyncPlainStorage<QuestionnaireDocumentView> questionnaireDocuments)
         {
-            this.serializer = serializer;
+            this.synchronizationSerializer = synchronizationSerializer;
             this.questionnaireViewRepository = questionnaireViewRepository;
             this.plainQuestionnaireRepository = plainQuestionnaireRepository;
             this.interviewViewRepository = interviewViewRepository;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
             this.interviewFactory = interviewFactory;
+            this.questionnaireDocuments = questionnaireDocuments;
         }
 
         public async Task StoreQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity, string questionnaireDocument, bool census)
         {
             var questionnaireId = questionnaireIdentity.ToString();
 
-            var serializedQuestionnaireDocument = await Task.Run(() => this.serializer.Deserialize<QuestionnaireDocument>(questionnaireDocument));
+            var serializedQuestionnaireDocument = await Task.Run(() => this.synchronizationSerializer.Deserialize<QuestionnaireDocument>(questionnaireDocument));
+            serializedQuestionnaireDocument.ParseCategoricalQuestionOptions();
 
             await Task.Run(() => this.plainQuestionnaireRepository.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId,
                         questionnaireIdentity.Version, serializedQuestionnaireDocument));
@@ -89,6 +93,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return this.questionnaireViewRepository.Where(questionnaire => questionnaire.Census)
                     .Select(questionnaire => questionnaire.Identity)
                     .ToList();
+        }
+
+        public List<QuestionnaireIdentity> GetAllQuestionnaireIdentities()
+        {
+            return this.questionnaireViewRepository.Where(x => true)
+                 .Select(questionnaire => questionnaire.Identity)
+                 .ToList();
+        }
+
+        public bool IsAttachmentUsedAsync(string contentId)
+        {
+            var questionnaireDocumentViews = this.questionnaireDocuments.LoadAll().Where(x => !x.Document.IsDeleted).ToList();
+            return questionnaireDocumentViews.Count > 0 && questionnaireDocumentViews.Any(x => x.Document.Attachments.Any(a => a.ContentId == contentId));
         }
 
         public bool IsQuestionnaireExists(QuestionnaireIdentity questionnaireIdentity)

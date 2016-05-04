@@ -23,8 +23,11 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             AnsweredQuestionSynchronizationDto[] answers,
             HashSet<InterviewItemId> disabledGroups,
             HashSet<InterviewItemId> disabledQuestions,
+            IList<Identity> disabledStaticTexts,
             HashSet<InterviewItemId> validAnsweredQuestions,
             HashSet<InterviewItemId> invalidAnsweredQuestions,
+            IList<Identity> validStaticTexts,
+            IList<KeyValuePair<Identity, List<FailedValidationCondition>>> invalidStaticTexts,
             Dictionary<InterviewItemId, RosterSynchronizationDto[]> rosterGroupInstances,
             IList<KeyValuePair<Identity, IList<FailedValidationCondition>>> failedValidationConditions,
             Dictionary<InterviewItemId, RosterVector[]> linkedQuestionOptions,
@@ -42,6 +45,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             Answers = answers;
             DisabledGroups = disabledGroups;
             DisabledQuestions = disabledQuestions;
+            this.DisabledStaticTexts = disabledStaticTexts;
             ValidAnsweredQuestions = validAnsweredQuestions;
             InvalidAnsweredQuestions = invalidAnsweredQuestions;
             
@@ -50,6 +54,9 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
             this.WasCompleted = wasCompleted;
             this.CreatedOnClient = createdOnClient;
             this.LinkedQuestionOptions = linkedQuestionOptions;
+
+            this.ValidStaticTexts = validStaticTexts;
+            this.InvalidStaticTexts = invalidStaticTexts;
         }
 
         public Guid Id { get;  set; }
@@ -64,6 +71,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public AnsweredQuestionSynchronizationDto[] Answers { get;  set; }
         public HashSet<InterviewItemId> DisabledGroups { get;  set; }
         public HashSet<InterviewItemId> DisabledQuestions { get;  set; }
+        public IList<Identity> DisabledStaticTexts { get; set; }
         public HashSet<InterviewItemId> ValidAnsweredQuestions { get;  set; }
         public HashSet<InterviewItemId> InvalidAnsweredQuestions { get;  set; }
 
@@ -72,5 +80,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
         public Dictionary<InterviewItemId, RosterVector[]> LinkedQuestionOptions { get; set; }
 
         public bool WasCompleted { get; set; }
+        public IList<Identity> ValidStaticTexts { get; set; }
+        public IList<KeyValuePair<Identity, List<FailedValidationCondition>>> InvalidStaticTexts { get; set; }
     }
 }

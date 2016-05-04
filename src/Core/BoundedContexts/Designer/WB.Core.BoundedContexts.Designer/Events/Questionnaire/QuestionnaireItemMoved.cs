@@ -1,12 +1,11 @@
-﻿namespace Main.Core.Events.Questionnaire
-{
-    using System;
+﻿using System;
 
-    using Ncqrs.Eventing.Storage;
+namespace Main.Core.Events.Questionnaire
+{
     public class QuestionnaireItemMoved : QuestionnaireActiveEvent
     {
-        public Guid? GroupKey { get; set; }
 
+        public Guid? GroupKey { get; set; }
         public Guid PublicKey { get; set; }
 
         [Obsolete]

@@ -14,7 +14,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText
         }
 
         public string Text { get; set; }
-
         public int? Index { get; private set; }
     }
 }

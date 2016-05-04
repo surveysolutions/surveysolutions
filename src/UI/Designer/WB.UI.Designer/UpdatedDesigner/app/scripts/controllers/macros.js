@@ -103,11 +103,14 @@
                 // Options
                 editor.setOptions({
                     maxLines: Infinity,
-                    mode: "ace/mode/csharp",
+                    mode: "ace/mode/csharp-extended",
                     fontSize: 16,
                     highlightActiveLine: false,
-                    theme: "ace/theme/github"
+                    theme: "ace/theme/github-extended",
+                    enableBasicAutocompletion: true,
+                    enableLiveAutocompletion: false
                 });
+
                 renderer.setShowGutter(false);
                 renderer.setPadding(0);
 

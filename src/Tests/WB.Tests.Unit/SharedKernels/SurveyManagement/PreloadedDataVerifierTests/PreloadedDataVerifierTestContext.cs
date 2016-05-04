@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                 : new QuestionnaireRosterStructureFactory().CreateQuestionnaireRosterStructure(questionnaireDocument, 1));
 
             var preloadedService = new PreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure,
-                questionnaireDocument, new QuestionDataParser(), Mock.Of<IUserViewFactory>(), null);
+                questionnaireDocument, new QuestionDataParser(), Mock.Of<IUserViewFactory>());
             return
                 new PreloadedDataVerifier(
                     Mock.Of<IPreloadedDataServiceFactory>(

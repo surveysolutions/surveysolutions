@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Moq;
+using Nito.AsyncEx.Synchronous;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.Enumerator.Aggregates;
@@ -37,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
 
         Because of = () =>
         {
-            integerModel.AnswerAsString = "50";
+            integerModel.Answer = 50;
             integerModel.ValueChangeCommand.Execute();
         };
 
@@ -48,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerNumericIntegerQuestionCommand>()), Times.Never);
 
         It should_reset_AnswerAsString_to_previous_value = () =>
-            integerModel.AnswerAsString.ShouldEqual("50");
+            integerModel.Answer.ShouldEqual(50);
 
         private static IntegerQuestionViewModel integerModel;
     }

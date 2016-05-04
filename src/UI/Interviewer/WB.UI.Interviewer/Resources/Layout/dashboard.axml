@@ -57,19 +57,12 @@
   </FrameLayout>
 
   <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
-    
+    <MvxRecyclerView
+      style="@style/Dashboard_InterviewsList"
+      android:id="@+id/interviewsList"
+      android:scrollbars="vertical"
+      local:MvxBind="ItemsSource DashboardItems" />
 
-  
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
-      <MvxRecyclerView
-        style="@style/Dashboard_InterviewsList"
-        android:id="@+id/interviewsList"
-        android:scrollbars="vertical"
-        local:MvxBind="ItemsSource DashboardItems" />
-    </ScrollView>
     <LinearLayout style="@style/Dashboard_NoInterviewsPanel" 
                   local:MvxBind="Visible And(Not(Or(IsExistsAnyNewInterview, IsExistsAnyCensusQuestionniories)), IsNewInterviewsCategorySelected, IsLoaded);">
       <TextView style="@style/Dashboard_NoInterviewsTitle"

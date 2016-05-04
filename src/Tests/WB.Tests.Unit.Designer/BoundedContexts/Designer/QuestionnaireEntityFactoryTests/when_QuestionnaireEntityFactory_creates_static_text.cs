@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireEntityFactoryTests
 {
@@ -13,7 +15,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireEntityFac
         };
 
         Because of = () =>
-            resultEntity = factory.CreateStaticText(entityId: entityId, text: text, attachmentName: attachmentName);
+            resultEntity = factory.CreateStaticText(entityId: entityId, text: text, attachmentName: attachmentName, 
+                enablementCondition:null, hideIfDisabled:false, validationConditions: new List<ValidationCondition>());
 
         It should_create_text_question = () =>
             resultEntity.ShouldBeOfExactType<StaticText>();

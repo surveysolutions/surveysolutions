@@ -8,9 +8,9 @@ namespace Ncqrs.Domain.Storage
 {
     public interface IAggregateSnapshotter
     {
-        bool TryLoadFromSnapshot(Type aggregateRootType, Snapshot snapshot, CommittedEventStream committedEventStream, out AggregateRoot aggregateRoot);
-        bool TryLoadFromSnapshot(Type aggregateRootType, Snapshot snapshot, IEnumerable<CommittedEvent> history, out AggregateRoot aggregateRoot);
-        bool TryTakeSnapshot(IAggregateRoot aggregateRoot, out Snapshot snapshot);
-        void CreateSnapshotIfNeededAndPossible(IAggregateRoot aggregateRoot);
+        bool TryLoadFromSnapshot(Type aggregateRootType, Snapshot snapshot, CommittedEventStream committedEventStream, out EventSourcedAggregateRoot aggregateRoot);
+        bool TryLoadFromSnapshot(Type aggregateRootType, Snapshot snapshot, IEnumerable<CommittedEvent> history, out EventSourcedAggregateRoot aggregateRoot);
+        bool TryTakeSnapshot(IEventSourcedAggregateRoot aggregateRoot, out Snapshot snapshot);
+        void CreateSnapshotIfNeededAndPossible(IEventSourcedAggregateRoot aggregateRoot);
     }
 }

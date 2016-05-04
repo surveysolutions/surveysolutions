@@ -1,25 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.SurveyManagement.Services;
-using WB.Core.SharedKernels.SurveyManagement.Synchronization;
-using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
-using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.Infrastructure.Native.Storage.EventStore;
+using WB.UI.Headquarters.Implementation.Services;
+using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Settings;
 
@@ -30,11 +23,10 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IUserViewFactory userViewFactory;
         private readonly IPasswordHasher passwordHasher;
-        
+        private readonly IRestoreDeletedQuestionnaireProjectionsService restoreDeletedQuestionnaireProjectionsService;
 
         public ControlPanelController(
             IServiceLocator serviceLocator,
-            IBrokenSyncPackagesStorage brokenSyncPackagesStorage,
             ICommandService commandService,
             IGlobalInfoProvider globalInfo,
             ILogger logger,
@@ -42,11 +34,13 @@ namespace WB.UI.Headquarters.Controllers
             IPasswordHasher passwordHasher,
             ISettingsProvider settingsProvider,
             ITransactionManagerProvider transactionManagerProvider,
-            IEventStoreApiService eventStoreApiService)
-            : base(serviceLocator, brokenSyncPackagesStorage, commandService, globalInfo, logger, settingsProvider, transactionManagerProvider, eventStoreApiService)
+            IEventStoreApiService eventStoreApiService,
+            IRestoreDeletedQuestionnaireProjectionsService restoreDeletedQuestionnaireProjectionsService)
+            : base(serviceLocator, commandService, globalInfo, logger, settingsProvider, transactionManagerProvider, eventStoreApiService)
         {
             this.userViewFactory = userViewFactory;
             this.passwordHasher = passwordHasher;
+            this.restoreDeletedQuestionnaireProjectionsService = restoreDeletedQuestionnaireProjectionsService;
         }
 
         public ActionResult CreateHeadquarters()
@@ -116,6 +110,19 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult ResetPrivilegedUserPassword()
         {
             return this.View(new UserModel());
+        }
+
+        public ActionResult RestoreAllDeletedQuestionnaireProjections()
+        {
+            return this.View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RestoreAllDeletedQuestionnaireProjectionsPost()
+        {
+            this.restoreDeletedQuestionnaireProjectionsService.RestoreAllDeletedQuestionnaireProjections();
+            return View("RestoreAllDeletedQuestionnaireProjections");
         }
 
         [HttpPost]

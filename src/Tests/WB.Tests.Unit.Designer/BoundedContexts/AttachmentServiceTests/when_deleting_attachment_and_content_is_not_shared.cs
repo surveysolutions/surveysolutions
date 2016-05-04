@@ -1,8 +1,6 @@
 using System;
-using System.Drawing;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
-using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 {
@@ -11,18 +9,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
         Establish context = () =>
         {
             attachmentContentStorage.Store(Create.AttachmentContent(), contentHash);
-            attachmentMetaStorage.Store(Create.AttachmentMeta(attachmentId.FormatGuid(), contentHash, questionnaireId: questionnaireId.FormatGuid()), attachmentId.FormatGuid());
+            attachmentMetaStorage.Store(Create.AttachmentMeta(attachmentId, contentHash, questionnaireId: questionnaireId), attachmentId);
 
-            Setup.ServiceLocatorForAttachmentService(attachmentContentStorage, attachmentMetaStorage);
-
-            attachmentService = Create.AttachmentService();
+            attachmentService = Create.AttachmentService(attachmentContentStorage : attachmentContentStorage, attachmentMetaStorage: attachmentMetaStorage);
         };
 
         Because of = () =>
             attachmentService.Delete(attachmentId);
 
         It should_delete_attachment_meta = () =>
-            attachmentMetaStorage.GetById(attachmentId.FormatGuid()).ShouldBeNull();
+            attachmentMetaStorage.GetById(attachmentId).ShouldBeNull();
 
         It should_delete_attachment_content = () =>
             attachmentContentStorage.GetById(contentHash).ShouldBeNull();

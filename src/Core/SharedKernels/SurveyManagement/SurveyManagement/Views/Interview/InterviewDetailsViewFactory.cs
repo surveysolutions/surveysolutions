@@ -3,17 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
-using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
-using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
@@ -22,18 +18,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         private readonly IReadSideKeyValueStorage<InterviewData> interviewStore;
 
         private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
-        private readonly IReadSideRepositoryReader<UserDocument> userStore;
+        private readonly IPlainStorageAccessor<UserDocument> userStore;
         private readonly IInterviewDataAndQuestionnaireMerger merger;
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
-        private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
+        private readonly IInterviewPackagesService incomingSyncPackagesQueue;
         private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
         private readonly IAttachmentContentService attachmentContentService;
 
         public InterviewDetailsViewFactory(IReadSideKeyValueStorage<InterviewData> interviewStore,
-            IReadSideRepositoryReader<UserDocument> userStore,
+            IPlainStorageAccessor<UserDocument> userStore,
             IInterviewDataAndQuestionnaireMerger merger,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
-            IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
+            IInterviewPackagesService incomingSyncPackagesQueue,
             IPlainQuestionnaireRepository plainQuestionnaireRepository, 
             IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore,
             IAttachmentContentService attachmentContentService)
@@ -55,7 +51,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             if (interview == null || interview.IsDeleted)
                 return null;
 
-            var user = this.userStore.GetById(interview.ResponsibleId);
+            var user = this.userStore.GetById(interview.ResponsibleId.FormatGuid());
             if (user == null)
                 throw new ArgumentException($"User with id {interview.ResponsibleId} is not found.");
 
@@ -69,17 +65,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
             var interviewDetailsView = merger.Merge(interview, questionnaire, user.GetUseLight(), this.interviewLinkedQuestionOptionsStore.GetById(interviewId), attachmentIdAndTypes);
 
-            var questionViews = interviewDetailsView.Groups.SelectMany(group => group.Entities).OfType<InterviewQuestionView>().ToList();
+            var interviewEntityViews = interviewDetailsView.Groups
+                .SelectMany(group => group.Entities)
+                .Where(entity => entity is InterviewQuestionView || entity is InterviewStaticTextView)
+                .ToList();
+            var questionViews = interviewEntityViews.OfType<InterviewQuestionView>().ToList();
+
             var detailsStatisticView = new DetailsStatisticView()
             {
-                AnsweredCount = questionViews.Count(question => this.IsQuestionInFilter(InterviewDetailsFilter.Answered, question)),
-                UnansweredCount = questionViews.Count(question => this.IsQuestionInFilter(InterviewDetailsFilter.Unanswered, question)),
-                CommentedCount = questionViews.Count(question => this.IsQuestionInFilter(InterviewDetailsFilter.Commented, question)),
-                EnabledCount = questionViews.Count(question => this.IsQuestionInFilter(InterviewDetailsFilter.Enabled, question)),
-                FlaggedCount = questionViews.Count(question => this.IsQuestionInFilter(InterviewDetailsFilter.Flagged, question)),
-                InvalidCount = questionViews.Count(question => this.IsQuestionInFilter(InterviewDetailsFilter.Invalid, question)),
-                SupervisorsCount = questionViews.Count(question => this.IsQuestionInFilter(InterviewDetailsFilter.Supervisors, question)),
-                HiddenCount = questionViews.Count(question => this.IsQuestionInFilter(InterviewDetailsFilter.Hidden, question)),
+                AnsweredCount = questionViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Answered, interviewEntityView)),
+                UnansweredCount = questionViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Unanswered, interviewEntityView)),
+                CommentedCount = questionViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Commented, interviewEntityView)),
+                EnabledCount = interviewEntityViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Enabled, interviewEntityView)),
+                FlaggedCount = questionViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Flagged, interviewEntityView)),
+                InvalidCount = interviewEntityViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Invalid, interviewEntityView)),
+                SupervisorsCount = questionViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Supervisors, interviewEntityView)),
+                HiddenCount = questionViews.Count(interviewEntityView => this.IsEntityInFilter(InterviewDetailsFilter.Hidden, interviewEntityView)),
             };
 
             var selectedGroups = new List<InterviewGroupView>();
@@ -101,7 +102,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 else
                 {
                     interviewGroupView.Entities = interviewGroupView.Entities
-                        .Where(question => (question is InterviewQuestionView && IsQuestionInFilter(filter, (InterviewQuestionView) question)) || question is InterviewStaticTextView)
+                        .Where(question =>
+                        {
+                            return this.IsEntityInFilter(filter, question);
+                        })
                         .ToList();
 
                     if (interviewGroupView.Entities.Any())
@@ -118,7 +122,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 FilteredGroups = selectedGroups,
                 Statistic = detailsStatisticView,
                 History = this.changeStatusFactory.Load(new ChangeStatusInputModel { InterviewId = interviewId }),
-                HasUnprocessedSyncPackages = this.incomingSyncPackagesQueue.HasPackagesByInterviewId(interviewId)
+                HasUnprocessedSyncPackages = this.incomingSyncPackagesQueue.HasPendingPackageByInterview(interviewId)
             };
         }
 
@@ -136,26 +140,49 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             return null;
         }
 
-        private bool IsQuestionInFilter(InterviewDetailsFilter? filter, InterviewQuestionView question)
+        private bool IsEntityInFilter(InterviewDetailsFilter? filter, InterviewEntityView entity)
         {
-            switch (filter)
+            var question = entity as InterviewQuestionView;
+
+            if (question != null)
             {
-                case InterviewDetailsFilter.Answered:
-                    return question.IsAnswered;
-                case InterviewDetailsFilter.Unanswered:
-                    return question.IsEnabled && !question.IsAnswered;
-                case InterviewDetailsFilter.Commented:
-                    return question.Comments != null && question.Comments.Any();
-                case InterviewDetailsFilter.Enabled:
-                    return question.IsEnabled;
-                case InterviewDetailsFilter.Flagged:
-                    return question.IsFlagged;
-                case InterviewDetailsFilter.Invalid:
-                    return !question.IsValid;
-                case InterviewDetailsFilter.Supervisors:
-                    return question.Scope == QuestionScope.Supervisor;
-                case InterviewDetailsFilter.Hidden:
-                    return question.Scope == QuestionScope.Hidden;
+                switch (filter)
+                {
+                    case InterviewDetailsFilter.Answered:
+                        return question.IsAnswered;
+                    case InterviewDetailsFilter.Unanswered:
+                        return question.IsEnabled && !question.IsAnswered;
+                    case InterviewDetailsFilter.Commented:
+                        return question.Comments != null && question.Comments.Any();
+                    case InterviewDetailsFilter.Enabled:
+                        return question.IsEnabled;
+                    case InterviewDetailsFilter.Flagged:
+                        return question.IsFlagged;
+                    case InterviewDetailsFilter.Invalid:
+                        return !question.IsValid;
+                    case InterviewDetailsFilter.Supervisors:
+                        return question.Scope == QuestionScope.Supervisor;
+                    case InterviewDetailsFilter.Hidden:
+                        return question.Scope == QuestionScope.Hidden;
+                }
+            }
+
+            var staticText = entity as InterviewStaticTextView;
+            if (staticText != null)
+            {
+                switch (filter)
+                {
+                    case InterviewDetailsFilter.Enabled:
+                        return staticText.IsEnabled;
+                    case InterviewDetailsFilter.Invalid:
+                        return !staticText.IsValid;
+                    case InterviewDetailsFilter.Flagged:
+                        return false;
+                    case InterviewDetailsFilter.All:
+                        return true;
+                    default:
+                        return false;
+                }
             }
             return true;
         }

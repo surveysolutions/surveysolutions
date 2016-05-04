@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Windows.Input;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
@@ -26,6 +27,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set { this.title = value; this.RaisePropertyChanged(); }
         }
 
+        public bool IsInstructionsHidden
+        {
+            get { return this.isInstructionsHidden; }
+            set
+            {
+                this.isInstructionsHidden = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry registry;
         private readonly ISubstitutionService substitutionService;
@@ -34,6 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IPlainQuestionnaireRepository questionnaireRepository;
         private Identity questionIdentity;
         private string interviewId;
+        private bool isInstructionsHidden;
 
         public void Init(string interviewId, Identity questionIdentity)
         {
@@ -44,6 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
 
             this.Title = questionnaire.GetQuestionTitle(questionIdentity.Id);
+            this.IsInstructionsHidden = questionnaire.GetHideInstructions(questionIdentity.Id);
             this.Instruction = questionnaire.GetQuestionInstruction(questionIdentity.Id);
             this.questionIdentity = questionIdentity;
             this.interviewId = interviewId;
@@ -69,6 +82,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.substitutionService = substitutionService;
             this.answerToStringService = answerToStringService;
             this.rosterTitleSubstitutionService = rosterTitleSubstitutionService;
+        }
+
+        public ICommand ShowInstructions
+        {
+            get
+            {
+                return new MvxCommand(() => IsInstructionsHidden = false);
+            }
         }
 
         public void Handle(SubstitutionTitlesChanged @event)

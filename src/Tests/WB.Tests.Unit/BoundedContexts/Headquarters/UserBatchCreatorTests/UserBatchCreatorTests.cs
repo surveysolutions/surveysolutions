@@ -15,12 +15,27 @@ using WB.Core.SharedKernels.DataCollection.Commands.User;
 using WB.Core.SharedKernels.DataCollection.Views;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.Practices.ServiceLocation;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
 {
     [TestFixture]
     internal class UserBatchCreatorTests
     {
+        [SetUp]
+        public void SetupTests()
+        {
+            var serviceLocator = Stub<IServiceLocator>.WithNotEmptyValues;
+            ServiceLocator.SetLocatorProvider(() => serviceLocator);
+            Setup.InstanceToMockedServiceLocator(Mock.Of<IPlainTransactionManager>());
+        }
+
+        [TearDown]
+        public void CleanTests()
+        {
+            Setup.InstanceToMockedServiceLocator<IPlainTransactionManager>(null);
+        }
+
         [Test]
         public void
             CreateUsersFromReadyToBeCreatedQueue_When_one_user_in_role_supervisor_is_present_in_the_dataset_Then_one_supervisor_should_be_created()
@@ -52,7 +67,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
                 Create.UserPreloadingDataRecord(login: supervisorName));
             var commantService = new Mock<ICommandService>();
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, UserRoles.Supervisor);
-            var userStorage = new InMemoryReadSideRepositoryAccessor<UserDocument>();
+            var userStorage = new TestPlainStorage<UserDocument>();
             userStorage.Store(Create.UserDocument(userName: supervisorName, isArchived: true), "id");
 
             var userBatchCreator =
@@ -94,7 +109,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
                 Create.UserPreloadingDataRecord(login: interviewerName, supervisor: "tttt"));
             var commantService = new Mock<ICommandService>();
             var userPreloadingServiceMock = CreateUserPreloadingServiceMock(userPreloadingProcess, UserRoles.Operator);
-            var userStorage = new InMemoryReadSideRepositoryAccessor<UserDocument>();
+            var userStorage = new TestPlainStorage<UserDocument>();
             userStorage.Store(Create.UserDocument(userName: interviewerName, isArchived: true, supervisorId:Guid.NewGuid()), "id");
 
             var userBatchCreator =
@@ -130,16 +145,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserBatchCreatorTests
         private UserBatchCreator CreateUserBatchCreator(
            IUserPreloadingService userPreloadingService = null,
            ICommandService commandService=null,
-           IQueryableReadSideRepositoryReader<UserDocument> userStorage = null)
+           IPlainStorageAccessor<UserDocument> userStorage = null)
         {
             return new UserBatchCreator(
                 userPreloadingService ?? Mock.Of<IUserPreloadingService>(),
                 commandService??Mock.Of<ICommandService>(),
-                userStorage ?? Mock.Of<IQueryableReadSideRepositoryReader<UserDocument>>(),
+                userStorage ?? Mock.Of<IPlainStorageAccessor<UserDocument>>(),
                 Mock.Of<ILogger>(),
-                Mock.Of<IPasswordHasher>(),
-                Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),  
-                Mock.Of<IPlainTransactionManager>());
+                Mock.Of<IPasswordHasher>());
         }
 
         private Mock<IUserPreloadingService> CreateUserPreloadingServiceMock(UserPreloadingProcess userPreloadingProcess, UserRoles role = UserRoles.Operator)

@@ -294,6 +294,11 @@ input::-ms-clear {
     font-style: italic;
     font-weight: bold;
 }
+
+.static-text .text-error{
+    font-style: normal;
+}
+
 .text-italic {
     font-style: italic;
 }

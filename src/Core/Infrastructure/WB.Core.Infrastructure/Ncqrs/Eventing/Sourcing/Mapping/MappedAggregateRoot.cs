@@ -4,7 +4,7 @@ using Ncqrs.Domain;
 
 namespace Ncqrs.Eventing.Sourcing.Mapping
 {
-    public abstract class MappedAggregateRoot : AggregateRoot
+    public abstract class MappedAggregateRoot : EventSourcedAggregateRoot
     {
         [NonSerialized] 
         private readonly IEventHandlerMappingStrategy _mappingStrategy;
