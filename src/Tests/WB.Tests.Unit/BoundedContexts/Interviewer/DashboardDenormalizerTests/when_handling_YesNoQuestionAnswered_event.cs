@@ -1,0 +1,59 @@
+using System;
+using System.Threading.Tasks;
+using Machine.Specifications;
+using Moq;
+using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using It = Machine.Specifications.It;
+using it = Moq.It;
+
+namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
+{
+    internal class when_handling_YesNoQuestionAnswered_event
+    {
+        Establish context = () =>
+        {
+            var questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 1);
+            var questionId = Guid.Parse("11111111111111111111111111111111");
+
+            dashboardItem = Create.InterviewView();
+            dashboardItem.QuestionnaireId = questionnaireIdentity.ToString();
+
+            @event = Create.Event.YesNoQuestionAnswered(questionId, new AnsweredYesNoOption[0]).ToPublishedEvent();
+
+            var storeAsyncTask = new Task(()=> {});
+            storeAsyncTask.Start();
+
+            var interviewViewStorage = Mock.Of<IAsyncPlainStorage<InterviewView>>(writer => 
+            writer.GetById(it.IsAny<string>()) == dashboardItem);
+
+            Mock.Get(interviewViewStorage)
+                .Setup(storage => storage.StoreAsync(it.IsAny<InterviewView>()))
+                .Callback<InterviewView>((view) => dashboardItem = view)
+                .Returns(storeAsyncTask);
+
+            var questionnaire = Mock.Of<IQuestionnaire>(q => q.IsPrefilled(questionId) == true);
+            var plainQuestionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(r =>
+                r.GetQuestionnaire(questionnaireIdentity) == questionnaire);
+
+            denormalizer = Create.DashboardDenormalizer(interviewViewRepository: interviewViewStorage, plainQuestionnaireRepository: plainQuestionnaireRepository);
+        };
+
+        Because of = () =>
+            denormalizer.Handle(@event);
+
+        It should_interview_be_strated = () =>
+            dashboardItem.StartedDateTime.ShouldNotBeNull();
+
+        private static InterviewEventHandler denormalizer;
+        private static IPublishedEvent<YesNoQuestionAnswered> @event;
+        private static InterviewView dashboardItem;
+    }
+}

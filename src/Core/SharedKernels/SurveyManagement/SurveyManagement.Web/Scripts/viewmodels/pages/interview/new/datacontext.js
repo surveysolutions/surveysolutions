@@ -31,7 +31,6 @@
         };
     },
         questions = new EntitySet(mapper.question),
-        supervisors = new EntitySet(mapper.user),
         status = {},
         responsible = {},
         questionnaire = {};
@@ -51,11 +50,25 @@
                         };
                         break;
                 case "DateTime":
+                    var dateAnswer = question.selectedOption();
+                    var answerUTC = dateAnswer.getFullYear() + '-' + (dateAnswer.getMonth() + 1) + '-' + dateAnswer.getDate();
+                    answer = {
+                        id: question.id(),
+                        answer: answerUTC,
+                        type: question.type()
+                    };
+                    break;
                 case "GpsCoordinates":
+                    answer = {
+                        id: question.id(),
+                        answer: question.latitude() + "$" + question.longitude(),
+                        type: question.type()
+                    };
+                    break;
                 case "SingleOption":
                     answer = {
                         id: question.id(),
-                        answer: question.selectedOption(),
+                        answer: question.isFilteredCombobox() ? question.selectedOption().value() : question.selectedOption(),
                         type: question.type()
                     };
                     break;
@@ -81,14 +94,12 @@
 
         responsible = q.Responsible;
         questions.getData(q.FeaturedQuestions);
-        supervisors.getData(q.Supervisors);
     };
 
     return {
         questions: questions,
         questionnaire: questionnaire,
         status: status,
-        supervisors: supervisors,
         parseData: parseData,
         prepareQuestion: prepareQuestion
     };

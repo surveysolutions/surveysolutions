@@ -1,9 +1,8 @@
 ﻿using System;
+using System.IO;
 using Moq;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
 using WB.Core.SharedKernels.SurveyManagement.Services.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Views;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -11,7 +10,20 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
+using System.Net.Http;
+using System.Web;
+using System.Web.Http;
+using System.Web.Http.Hosting;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.SurveyManagement.Factories;
+using WB.Core.SharedKernels.SurveyManagement.Services;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
 {
@@ -43,24 +55,36 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
         protected static QuestionnairesController CreateQuestionnairesController(
             ILogger logger = null,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewViewFactory = null,
-            IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem> questionnaireBrowseItemViewFactory = null
-            )
+            IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewFactory = null)
         {
             return new QuestionnairesController(
                 logger ?? Mock.Of<ILogger>(),
                 questionnaireBrowseViewViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
-                questionnaireBrowseItemViewFactory ?? Mock.Of<IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem>>());
+                allInterviewsViewFactory ?? Mock.Of<IViewFactory<AllInterviewsInputModel, AllInterviewsView>>());
         }
 
         protected static InterviewsController CreateInterviewsController(
             ILogger logger = null,
             IViewFactory<AllInterviewsInputModel, AllInterviewsView> allInterviewsViewViewFactory = null,
-            IInterviewDetailsViewFactory interviewDetailsView = null)
+            IInterviewDetailsViewFactory interviewDetailsView = null,
+            ICommandService commandService = null,
+            IGlobalInfoProvider globalInfoProvider = null,
+            IUserViewFactory userViewFactory = null,
+            IReadSideKeyValueStorage<InterviewReferences> interviewReferences = null)
         {
-            return new InterviewsController(
+            var controller = new InterviewsController(
                 logger ?? Mock.Of<ILogger>(),
                 allInterviewsViewViewFactory ?? Mock.Of<IViewFactory<AllInterviewsInputModel, AllInterviewsView>>(),
-                interviewDetailsView ?? Mock.Of<IInterviewDetailsViewFactory>(), Mock.Of<IInterviewHistoryFactory>());
+                interviewDetailsView ?? Mock.Of<IInterviewDetailsViewFactory>(), Mock.Of<IInterviewHistoryFactory>(),
+                commandService ?? Mock.Of<ICommandService>(),
+                globalInfoProvider ?? Mock.Of<IGlobalInfoProvider>(),
+                userViewFactory ?? Mock.Of<IUserViewFactory>(),
+                interviewReferences ?? Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>());
+
+            controller.Request = new HttpRequestMessage(HttpMethod.Post, "https://localhost");
+            controller.Request.SetConfiguration(new HttpConfiguration());
+
+            return controller;
         }
 
         protected static HealthCheckApiController CreateHealthCheckApiController(
@@ -77,6 +101,32 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests
                   brokenSyncPackagesStorage ?? Mock.Of<IBrokenSyncPackagesStorage>(),
                 chunkReader ?? Mock.Of<IChunkReader>(),
                 folderPermissionChecker ?? Mock.Of<IFolderPermissionChecker>()*/healthCheckService ?? Mock.Of<IHealthCheckService>());
+        }
+        protected static AttachmentsApiV2Controller CreateAttachmentsApiV2Controller(
+            IAttachmentContentService attachmentContentService)
+        {
+            return new AttachmentsApiV2Controller(attachmentContentService ?? Mock.Of<IAttachmentContentService>());
+        }
+
+        protected static QuestionnairesApiV2Controller CreateQuestionnairesApiV2Controller(
+            IQuestionnaireAssemblyFileAccessor questionnareAssemblyFileAccessor = null,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null,
+            ISerializer serializer = null,
+            IPlainQuestionnaireRepository plainQuestionnaireRepository = null,
+            IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter = null)
+        {
+            var questionnairesApiV2Controller = new QuestionnairesApiV2Controller(
+                questionnareAssemblyFileAccessor ?? Mock.Of<IQuestionnaireAssemblyFileAccessor>(),
+                questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(),
+                serializer ?? Mock.Of<ISerializer>(),
+                plainQuestionnaireRepository ?? Mock.Of<IPlainQuestionnaireRepository>(),
+                readsideRepositoryWriter ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
+
+            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, "http://localhost");
+            httpRequestMessage.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
+            questionnairesApiV2Controller.Request = httpRequestMessage;
+
+            return questionnairesApiV2Controller;
         }
     }
 }

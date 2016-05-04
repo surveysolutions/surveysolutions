@@ -1,4 +1,6 @@
 using System;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.Synchronization
@@ -10,7 +12,7 @@ namespace WB.Core.Synchronization
             Guid questionnaireId, 
             long questionnaireVersion, 
             InterviewStatus interviewStatus, 
-            object[] eventsToSynchronize, 
+            IEvent[] eventsToSynchronize, 
             bool createdOnClient, 
             string origin, 
             string pathToPackage)
@@ -31,7 +33,7 @@ namespace WB.Core.Synchronization
         public Guid QuestionnaireId { get; private set; }
         public long QuestionnaireVersion { get; private set; }
         public InterviewStatus InterviewStatus { get; private set; }
-        public object[] EventsToSynchronize { get; private set; }
+        public IEvent[] EventsToSynchronize { get; private set; }
         public bool CreatedOnClient { get; private set; }
         public string Origin { get; private set; }
         public string PathToPackage { get; private set; }

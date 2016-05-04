@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts;
+using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -17,6 +18,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public class PeriodicStatusReportController : BaseController
     {
         private readonly IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory;
+
+        private readonly IUserViewFactory userViewFactory;
 
         private readonly PeriodiceReportType[] reportTypesWhichShouldBeReroutedToCustomStatusController =
         {
@@ -46,11 +49,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             IGlobalInfoProvider globalInfo,
             ILogger logger,
             IViewFactory<AllUsersAndQuestionnairesInputModel,
-            AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory
-            )
+            AllUsersAndQuestionnairesView> allUsersAndQuestionnairesFactory, 
+            IUserViewFactory userViewFactory)
             : base(commandService, globalInfo, logger)
         {
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
+            this.userViewFactory = userViewFactory;
         }
 
         public ActionResult QuantityByInterviewers(Guid? supervisorId, PeriodiceReportType reportType = PeriodiceReportType.NumberOfCompletedInterviews)
@@ -64,9 +68,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 canNavigateToQuantityBySupervisors: this.GlobalInfo.IsAdministrator || this.GlobalInfo.IsHeadquarter,
                 reportName: "Quantity",
                 responsibleColumnName: PeriodicStatusReport.TeamMember,
+                totalRowPresent: true,
                 supervisorId: supervisorId);
 
             model.ReportTypes = quantityReportTypes;
+            model.SupervisorName = GetSupervisorName(supervisorId);
 
             return this.View("PeriodicStatusReport", model);
         }
@@ -82,6 +88,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 canNavigateToQuantityByTeamMember: true,
                 canNavigateToQuantityBySupervisors: false,
                 reportName: "Quantity",
+                totalRowPresent: true,
                 responsibleColumnName: PeriodicStatusReport.Team);
 
             model.ReportTypes = quantityReportTypes;
@@ -105,9 +112,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 canNavigateToQuantityBySupervisors: this.GlobalInfo.IsAdministrator || this.GlobalInfo.IsHeadquarter,
                 reportName: "Speed",
                 responsibleColumnName: PeriodicStatusReport.TeamMember,
+                totalRowPresent: false,
                 supervisorId: supervisorId);
 
             model.ReportTypes = speedReportTypes;
+            model.SupervisorName = GetSupervisorName(supervisorId);
 
             return this.View("PeriodicStatusReport", model);
         }
@@ -127,7 +136,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 webApiActionName: periodicStatusReportWebApiActionName,
                 canNavigateToQuantityByTeamMember: true,
                 canNavigateToQuantityBySupervisors: false,
-                reportName: "Speed",
+                reportName: "Speed", totalRowPresent: false,
                 responsibleColumnName: PeriodicStatusReport.Team);
 
             model.ReportTypes = speedReportTypes;
@@ -136,7 +145,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         private PeriodicStatusReportModel CreatePeriodicStatusReportModel(PeriodicStatusReportWebApiActionName webApiActionName, PeriodiceReportType reportType,
-            bool canNavigateToQuantityByTeamMember, bool canNavigateToQuantityBySupervisors, string reportName, string responsibleColumnName, Guid? supervisorId = null)
+            bool canNavigateToQuantityByTeamMember, bool canNavigateToQuantityBySupervisors, string reportName, string responsibleColumnName, bool totalRowPresent, Guid? supervisorId = null)
         {
             var allUsersAndQuestionnaires = this.allUsersAndQuestionnairesFactory.Load(new AllUsersAndQuestionnairesInputModel());
 
@@ -149,7 +158,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 ReportName = reportName,
                 ResponsibleColumnName = responsibleColumnName,
                 SupervisorId = supervisorId,
-                ReportNameDescription = string.Format(GetReportDescriptionByType(reportType), PeriodicStatusReport.Team.ToLower())
+                ReportNameDescription = string.Format(GetReportDescriptionByType(reportType), PeriodicStatusReport.Team.ToLower()),
+                TotalRowPresent = totalRowPresent
             };
         }
 
@@ -178,6 +188,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             }
 
             return string.Empty;
+        }
+
+        private string GetSupervisorName(Guid? supervisorId)
+        {
+            if (!supervisorId.HasValue)
+                return null;
+
+            var userView =this.userViewFactory.Load(new UserViewInputModel(supervisorId.Value));
+            return userView?.UserName;
         }
     }
 }

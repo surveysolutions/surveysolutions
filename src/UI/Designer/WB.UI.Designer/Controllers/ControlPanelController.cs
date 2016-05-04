@@ -1,44 +1,37 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using System.Web.Security;
 using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Membership;
+using WB.UI.Shared.Web.Settings;
 
 namespace WB.UI.Designer.Controllers
 {
     [LocalOrDevelopmentAccessOnly]
     public class ControlPanelController : BaseController
     {
-        public ControlPanelController(IMembershipUserService userHelper)
+        readonly ISettingsProvider settingsProvider;
+
+        public ControlPanelController(IMembershipUserService userHelper, ISettingsProvider settingsProvider)
             : base(userHelper)
         {
+            this.settingsProvider = settingsProvider;
         }
 
-        public ActionResult Index()
-        {
-            return this.View();
-        }
+        public ActionResult Settings() => this.View(this.settingsProvider.GetSettings());
 
-        public ActionResult NConfig()
-        {
-            return this.View();
-        }
+        public ActionResult Index() => this.View();
+
+        public ActionResult NConfig() => this.View();
+
+        public ActionResult Versions() => this.View();
+
         [NoTransaction]
-        public ActionResult ReadSide()
-        {
-            return this.View();
-        }
+        public ActionResult ReadSide() => this.View();
 
-        public ActionResult ExpressionGeneration()
-        {
-            return this.View();
-        }
-
-        public ActionResult MakeAdmin()
-        {
-            return this.View();
-        }
+        public ActionResult MakeAdmin() => this.View();
 
         [HttpPost]
         public ActionResult MakeAdmin(MakeAdminViewModel model)

@@ -1,6 +1,6 @@
 using System;
 using System.Diagnostics;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Designer.ValueObjects
 {
@@ -17,6 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         public QuestionnaireVerificationReferenceType Type { get; private set; }
         public Guid Id { get; private set; }
         public string ItemId { get; private set; }
+        public int? FailedValidationConditionIndex { get; set; }
 
         protected bool Equals(QuestionnaireVerificationReference other)
         {

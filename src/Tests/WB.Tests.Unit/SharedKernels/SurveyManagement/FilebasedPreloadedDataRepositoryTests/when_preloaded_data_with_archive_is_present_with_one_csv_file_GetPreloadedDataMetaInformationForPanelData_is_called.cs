@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Repositories;
@@ -20,7 +20,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
         {
             fileSystemAccessor = CreateIFileSystemAccessorMock();
             fileSystemAccessor.Setup(x => x.IsDirectoryExists("PreLoadedData\\" + archiveId)).Returns(true);
-
+            fileSystemAccessor.Setup(x => x.GetFileExtension(tabFileName)).Returns(".tab");
+            fileSystemAccessor.Setup(x => x.GetFileExtension(fileNameWithoutExtension)).Returns("");
             fileSystemAccessor.Setup(x => x.GetFilesInDirectory(preLoadedData + "\\" + archiveId)).Returns(new string[] { archiveName + ".zip" });
             fileSystemAccessor.Setup(x => x.GetFilesInDirectory(archiveName))
                 .Returns(new string[0]);
@@ -28,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
             archiveUtils = new Mock<IArchiveUtils>();
             archiveUtils.Setup(x => x.IsZipFile(Moq.It.IsAny<string>())).Returns(true);
             archiveUtils.Setup(x => x.GetArchivedFileNamesAndSize(Moq.It.IsAny<string>()))
-                .Returns(new Dictionary<string, long>() { { "1.tab", 20 },{"nastya",1} });
+                .Returns(new Dictionary<string, long>() { { tabFileName, 20 },{fileNameWithoutExtension,1} });
             recordsAccessorFactory = new Mock<IRecordsAccessorFactory>();
             filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(fileSystemAccessor.Object, archiveUtils.Object, recordsAccessorFactory.Object);
         };
@@ -39,13 +40,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
             result.FilesMetaInformation.Length.ShouldEqual(2);
 
         It should_result_has_info_about_first_element_with_name_1_tab = () =>
-          result.FilesMetaInformation[0].FileName.ShouldEqual("1.tab");
+          result.FilesMetaInformation[0].FileName.ShouldEqual(tabFileName);
 
         It should_first_element_be_marked_and_CanBeHandled = () =>
          result.FilesMetaInformation[0].CanBeHandled.ShouldEqual(true);
 
         It should_result_has_info_about_second_element_with_name_nastya = () =>
-         result.FilesMetaInformation[1].FileName.ShouldEqual("nastya");
+         result.FilesMetaInformation[1].FileName.ShouldEqual(fileNameWithoutExtension);
 
         It should_second_element_be_marked_and_CanBeHandled = () =>
         result.FilesMetaInformation[1].CanBeHandled.ShouldEqual(false);
@@ -58,5 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
         private static string archiveName = "test";
         private static string preLoadedData = "PreLoadedData";
         private static string archiveId = Guid.NewGuid().FormatGuid();
+        private static string tabFileName = "1.tab";
+        private static string fileNameWithoutExtension = "nastya";
     }
 }

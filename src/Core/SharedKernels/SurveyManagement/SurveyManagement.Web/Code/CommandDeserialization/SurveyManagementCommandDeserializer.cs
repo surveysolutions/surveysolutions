@@ -32,12 +32,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization
                         { "AnswerSingleOptionQuestionCommand", typeof (AnswerSingleOptionQuestionCommand ) },
                         { "AnswerTextQuestionCommand", typeof (AnswerTextQuestionCommand ) },
                         { "AnswerGeoLocationQuestionCommand", typeof(AnswerGeoLocationQuestionCommand)},
+                        { "AnswerYesNoQuestion", typeof(AnswerYesNoQuestion)},
                         // statuses
                         { "ApproveInterviewCommand", typeof (ApproveInterviewCommand ) },
                         { "RejectInterviewCommand", typeof ( RejectInterviewCommand) },
 
                         { "HqApproveInterviewCommand", typeof (HqApproveInterviewCommand ) },
                         { "HqRejectInterviewCommand", typeof ( HqRejectInterviewCommand) },
+                        { "UnapproveByHeadquarterCommand", typeof ( UnapproveByHeadquartersCommand) },
                         { "ArchiveUserCommad", typeof ( ArchiveUserCommad) },
                         { "UnarchiveUserCommand", typeof ( UnarchiveUserCommand) }
                     };

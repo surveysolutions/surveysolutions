@@ -22,28 +22,25 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         private Because of =
             () =>
                 result =
-                    questionDataParser.BuildAnswerFromStringArray(new[] { new Tuple<string, string>(questionVarName + "_1", "a"), new Tuple<string, string>(questionVarName + "_2", "b"), new Tuple<string, string>(questionVarName + "_3", "c") },
-                        question, CreateQuestionnaireDocumentWithOneChapter(question));
+                    questionDataParser.BuildAnswerFromStringArray(new[] { new Tuple<string, string>(questionVarName + "__1", "a"), new Tuple<string, string>(questionVarName + "__2", "b"), new Tuple<string, string>(questionVarName + "__3", "c") },
+                        question);
 
         private It should_result_be_type_of_array_of_Tuple_decimal_string = () =>
-            result.Value.Value.ShouldBeOfExactType<Tuple<decimal, string>[]>();
+            result.ShouldBeOfExactType<Tuple<decimal, string>[]>();
 
         private It should_result_has_3_answers = () =>
-            ((Tuple<decimal, string>[]) result.Value.Value).Length.ShouldEqual(3);
+            ((Tuple<decimal, string>[]) result).Length.ShouldEqual(3);
 
         private It should_result_first_item_key_equal_to_1 = () =>
-            ((Tuple<decimal, string>[]) result.Value.Value)[0].Item1.ShouldEqual(1);
+            ((Tuple<decimal, string>[]) result)[0].Item1.ShouldEqual(1);
 
         private It should_result_second_item_key_equal_to_2 = () =>
-            ((Tuple<decimal, string>[]) result.Value.Value)[1].Item1.ShouldEqual(2);
+            ((Tuple<decimal, string>[]) result)[1].Item1.ShouldEqual(2);
 
         private It should_result_first_item_value_equal_to_1 = () =>
-            ((Tuple<decimal, string>[]) result.Value.Value)[0].Item2.ShouldEqual("a");
+            ((Tuple<decimal, string>[]) result)[0].Item2.ShouldEqual("a");
 
         private It should_result_second_item_value_equal_to_2 = () =>
-            ((Tuple<decimal, string>[]) result.Value.Value)[1].Item2.ShouldEqual("b");
-
-        private It should_result_key_be_equal_to_questionId = () =>
-            result.Value.Key.ShouldEqual(questionId);
+            ((Tuple<decimal, string>[]) result)[1].Item2.ShouldEqual("b");
     }
 }

@@ -10,7 +10,7 @@
 {
     @Scripts.Render("~/Scripts/viewmodels/pages/users.js")
     <script type="text/javascript">
-        var $interviewersUrl = '@Url.Action("Archived", "Interviewer", new { area = string.Empty })';
+        var $interviewersUrl = '@Url.Action("Index", "Interviewers", new { area = string.Empty })';
         var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
         $(function () {
             var model = new Supervisor.VM.Users('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "ArchivedSupervisors" })', $commandExecutionUrl);
@@ -32,9 +32,9 @@
     <div class="btn-group">
         <div class="form-inline">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: search">
+                <input type="text" class="form-control" placeholder="Search" data-bind="value: SearchBy, enterKey: filter">
                 <div class="input-group-btn">
-                    <button class="btn btn-default" type="button" data-bind="click: search">
+                    <button class="btn btn-default" type="button" data-bind="click: filter">
                         <i class="glyphicon glyphicon-search"></i>
                     </button>
 
@@ -67,11 +67,13 @@
             <tr>
                 <td data-bind="text: UserName"></td>
                 <td data-bind="text: CreationDate"></td>
-                <td data-bind="text: Email"></td>
+                <td>
+                    <a data-bind="attr:{href:'mailto:' + Email()},text:Email"></a>
+                </td>
                 <td>
                     @if (User.IsInRole(UserRoles.Administrator.ToString()) || User.IsInRole(UserRoles.Headquarter.ToString()))
                     {
-                        <a class="btn btn-success" data-bind="attr: { href: $interviewersUrl + '/' + UserId() }">
+                        <a class="btn btn-success" data-bind="attr: { href: $interviewersUrl + '?Archived=true&supervisor=' + UserName() }">
                             <i class="glyphicon glyphicon-user"></i> @Archived.Interviewers
                         </a>
                     }

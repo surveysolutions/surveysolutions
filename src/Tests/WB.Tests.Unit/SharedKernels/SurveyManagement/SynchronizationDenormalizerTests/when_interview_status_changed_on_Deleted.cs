@@ -4,7 +4,7 @@ using Machine.Specifications;
 
 using Moq;
 
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -26,30 +26,25 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SynchronizationDenormaliz
 
             var interviews = Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(x => x.GetById(interviewId.FormatGuid()) == storedInterview);
 
-            interviewSyncPackageContentMock = new Mock<IReadSideKeyValueStorage<InterviewSyncPackageContent>>();
-
             denormalizer = CreateDenormalizer(
                 interviewSummarys: interviews,
                 interviewPackageStorageWriter: interviewPackageStorageWriterMock.Object);
         };
 
         Because of = () =>
-            denormalizer.Handle(Create.Event.InterviewStatusChanged(interviewId, InterviewStatus.Deleted, comments));
+            denormalizer.Handle(Create.Event.Published.InterviewStatusChanged(interviewId, InterviewStatus.Deleted, comments, eventId: Guid.Parse(partialPackageId)));
 
         It should_create_interview_package = () =>
             interviewPackageStorageWriterMock.Verify(x => x.Store(
-                Moq.It.IsAny<InterviewSyncPackageContent>(),
-                Moq.It.Is<InterviewSyncPackageMeta>(i => i.InterviewId == interviewId && i.ItemType == SyncItemType.DeleteInterview), 
-                partialPackageId,
-                CounterId), 
+                Moq.It.Is<InterviewSyncPackageMeta>(i => i.InterviewId == interviewId && i.ItemType == SyncItemType.DeleteInterview),
+                Moq.It.Is<string>(id => id.StartsWith(partialPackageId))), 
                 Times.Once);
 
-        private static InterviewSynchronizationDenormalizer denormalizer;
-        private static Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>> interviewPackageStorageWriterMock = new Mock<IOrderableSyncPackageWriter<InterviewSyncPackageMeta, InterviewSyncPackageContent>>();
-
-        private static Mock<IReadSideKeyValueStorage<InterviewSyncPackageContent>> interviewSyncPackageContentMock;
-        private static readonly Guid interviewId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        private static string partialPackageId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        private static string comments = "comment";
+        static InterviewSynchronizationDenormalizer denormalizer;
+        static Mock<IReadSideRepositoryWriter<InterviewSyncPackageMeta>> interviewPackageStorageWriterMock = new Mock<IReadSideRepositoryWriter<InterviewSyncPackageMeta>>();
+        
+        static readonly Guid interviewId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        static string partialPackageId = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        static string comments = "comment";
     }
 }

@@ -2,13 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Views.ChangeStatus;
 using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.Synchronization;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
@@ -16,31 +20,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     public class InterviewDetailsViewFactory : IInterviewDetailsViewFactory
     {
         private readonly IReadSideKeyValueStorage<InterviewData> interviewStore;
+
+        private readonly IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore;
         private readonly IReadSideRepositoryReader<UserDocument> userStore;
-        private readonly IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore;
-        private readonly IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructures;
-        private readonly IReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions> questionnaireReferenceInfoForLinkedQuestions;
         private readonly IInterviewDataAndQuestionnaireMerger merger;
         private readonly IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory;
         private readonly IIncomingSyncPackagesQueue incomingSyncPackagesQueue;
+        private readonly IPlainQuestionnaireRepository plainQuestionnaireRepository;
+        private readonly IAttachmentContentService attachmentContentService;
 
         public InterviewDetailsViewFactory(IReadSideKeyValueStorage<InterviewData> interviewStore,
             IReadSideRepositoryReader<UserDocument> userStore,
-            IReadSideKeyValueStorage<QuestionnaireDocumentVersioned> questionnaireStore,
-            IReadSideKeyValueStorage<QuestionnaireRosterStructure> questionnaireRosterStructures,
-            IReadSideKeyValueStorage<ReferenceInfoForLinkedQuestions> questionnaireReferenceInfoForLinkedQuestions,
             IInterviewDataAndQuestionnaireMerger merger,
             IViewFactory<ChangeStatusInputModel, ChangeStatusView> changeStatusFactory,
-            IIncomingSyncPackagesQueue incomingSyncPackagesQueue)
+            IIncomingSyncPackagesQueue incomingSyncPackagesQueue,
+            IPlainQuestionnaireRepository plainQuestionnaireRepository, 
+            IReadSideKeyValueStorage<InterviewLinkedQuestionOptions> interviewLinkedQuestionOptionsStore,
+            IAttachmentContentService attachmentContentService)
         {
             this.interviewStore = interviewStore;
             this.userStore = userStore;
-            this.questionnaireStore = questionnaireStore;
-            this.questionnaireRosterStructures = questionnaireRosterStructures;
-            this.questionnaireReferenceInfoForLinkedQuestions = questionnaireReferenceInfoForLinkedQuestions;
             this.merger = merger;
             this.changeStatusFactory = changeStatusFactory;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
+            this.plainQuestionnaireRepository = plainQuestionnaireRepository;
+            this.interviewLinkedQuestionOptionsStore = interviewLinkedQuestionOptionsStore;
+            this.attachmentContentService = attachmentContentService;
         }
 
         public DetailsViewModel GetInterviewDetails(Guid interviewId, Guid? currentGroupId, decimal[] currentGroupRosterVector, InterviewDetailsFilter? filter)
@@ -50,22 +55,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
             if (interview == null || interview.IsDeleted)
                 return null;
 
-            QuestionnaireDocumentVersioned questionnaire = this.questionnaireStore.AsVersioned().Get(interview.QuestionnaireId.FormatGuid(), interview.QuestionnaireVersion);
-
-            if (questionnaire == null)
-                throw new ArgumentException(string.Format("Questionnaire with id {0} and version {1} is missing.", interview.QuestionnaireId, interview.QuestionnaireVersion));
-
-            var questionnaireReferenceInfo = this.questionnaireReferenceInfoForLinkedQuestions.AsVersioned().Get(interview.QuestionnaireId.FormatGuid(), interview.QuestionnaireVersion);
-
-            var questionnaireRosters = this.questionnaireRosterStructures.AsVersioned().Get(interview.QuestionnaireId.FormatGuid(), interview.QuestionnaireVersion);
-
             var user = this.userStore.GetById(interview.ResponsibleId);
             if (user == null)
-                throw new ArgumentException(string.Format("User with id {0} is not found.", interview.ResponsibleId));
+                throw new ArgumentException($"User with id {interview.ResponsibleId} is not found.");
 
-            var interviewDetailsView = merger.Merge(interview, questionnaire, questionnaireReferenceInfo, questionnaireRosters, user);
+            var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireId, interview.QuestionnaireVersion);
 
-            var questionViews = interviewDetailsView.Groups.SelectMany(group => group.Entities).OfType<InterviewQuestionView>();
+            if (questionnaire == null)
+                throw new ArgumentException(
+                    $"Questionnaire with id {interview.QuestionnaireId} and version {interview.QuestionnaireVersion} is missing.");
+            
+            var attachmentIdAndTypes = attachmentContentService.GetAttachmentInfosByContentIds(questionnaire.Attachments.Select(x => x.ContentId).ToList());
+
+            var interviewDetailsView = merger.Merge(interview, questionnaire, user.GetUseLight(), this.interviewLinkedQuestionOptionsStore.GetById(interviewId), attachmentIdAndTypes);
+
+            var questionViews = interviewDetailsView.Groups.SelectMany(group => group.Entities).OfType<InterviewQuestionView>().ToList();
             var detailsStatisticView = new DetailsStatisticView()
             {
                 AnsweredCount = questionViews.Count(question => this.IsQuestionInFilter(InterviewDetailsFilter.Answered, question)),
@@ -74,7 +78,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 EnabledCount = questionViews.Count(question => this.IsQuestionInFilter(InterviewDetailsFilter.Enabled, question)),
                 FlaggedCount = questionViews.Count(question => this.IsQuestionInFilter(InterviewDetailsFilter.Flagged, question)),
                 InvalidCount = questionViews.Count(question => this.IsQuestionInFilter(InterviewDetailsFilter.Invalid, question)),
-                SupervisorsCount = questionViews.Count(question => this.IsQuestionInFilter(InterviewDetailsFilter.Supervisors, question))
+                SupervisorsCount = questionViews.Count(question => this.IsQuestionInFilter(InterviewDetailsFilter.Supervisors, question)),
+                HiddenCount = questionViews.Count(question => this.IsQuestionInFilter(InterviewDetailsFilter.Hidden, question)),
             };
 
             var selectedGroups = new List<InterviewGroupView>();
@@ -84,7 +89,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
             foreach (var interviewGroupView in interviewDetailsView.Groups)
             {
-                if (currentGroup != null && currentGroup.ParentId.HasValue)
+                if (currentGroup?.ParentId != null)
                 {
                     if (interviewGroupView.Id == currentGroup.Id &&
                         interviewGroupView.RosterVector.SequenceEqual(currentGroup.RosterVector) ||
@@ -123,10 +128,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
             if (interview != null && !interview.IsDeleted)
             {
-                QuestionnaireDocumentVersioned questionnaire = this.questionnaireStore.AsVersioned()
-                    .Get(interview.QuestionnaireId.FormatGuid(), interview.QuestionnaireVersion);
+                var questionnaire = this.plainQuestionnaireRepository.GetQuestionnaireDocument(interview.QuestionnaireId, interview.QuestionnaireVersion);
 
-                return questionnaire.Questionnaire.Children[0].PublicKey;
+                return questionnaire.Children[0].PublicKey;
             }
 
             return null;
@@ -150,6 +154,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                     return !question.IsValid;
                 case InterviewDetailsFilter.Supervisors:
                     return question.Scope == QuestionScope.Supervisor;
+                case InterviewDetailsFilter.Hidden:
+                    return question.Scope == QuestionScope.Hidden;
             }
             return true;
         }

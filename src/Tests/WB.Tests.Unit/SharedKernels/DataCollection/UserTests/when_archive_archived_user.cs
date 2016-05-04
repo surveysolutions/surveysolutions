@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
         Establish context = () =>
         {
             eventContext = Create.EventContext();
-            user = CreateUser();
+            user = Create.User();
             user.ApplyEvent(Create.UserArchived());
         };
 

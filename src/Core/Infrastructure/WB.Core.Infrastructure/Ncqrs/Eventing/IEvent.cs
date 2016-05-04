@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 
 namespace Ncqrs.Eventing
 {    
     /// <summary>
     /// Represents an event.
     /// </summary>
-    [ContractClass(typeof(IEventContracts))]
     public interface IEvent
     {
         /// <summary>
@@ -26,26 +24,6 @@ namespace Ncqrs.Eventing
         DateTime EventTimeStamp
         {
             get;
-        }
-    }
-
-    [ContractClassFor(typeof(IEvent))]
-    internal abstract class IEventContracts : IEvent
-    {
-        public Guid EventIdentifier
-        {
-            get
-            {
-                return default(Guid);
-            }
-        }
-
-        public DateTime EventTimeStamp
-        {
-            get
-            {
-                return default(DateTime);
-            }
         }
     }
 }

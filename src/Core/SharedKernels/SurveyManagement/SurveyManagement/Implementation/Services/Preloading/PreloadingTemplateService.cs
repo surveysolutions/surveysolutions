@@ -1,6 +1,7 @@
 ﻿using System;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Services.Export;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 
@@ -9,16 +10,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
     internal class PreloadingTemplateService : IPreloadingTemplateService
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IDataExportService dataExportService;
+        private readonly ITabularFormatExportService tabularFormatExportService;
         private readonly IArchiveUtils archiveUtils;
         private const string FolderName = "PreLoadingTemplates";
         private readonly string path;
 
         public PreloadingTemplateService(IFileSystemAccessor fileSystemAccessor,string folderPath,
-            IDataExportService dataExportService, IArchiveUtils archiveUtils)
+            ITabularFormatExportService tabularFormatExportService, IArchiveUtils archiveUtils)
         {
             this.fileSystemAccessor = fileSystemAccessor;
-            this.dataExportService = dataExportService;
+            this.tabularFormatExportService = tabularFormatExportService;
             this.archiveUtils = archiveUtils;
             this.path = fileSystemAccessor.CombinePath(folderPath, FolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.path))
@@ -39,7 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Implementation.Services.Preload
             if (fileSystemAccessor.IsFileExists(archiveFilePath))
                 return archiveFilePath;
 
-            this.dataExportService.CreateHeaderStructureForPreloadingForQuestionnaire(questionnaireId, version, dataDirectoryPath);
+            this.tabularFormatExportService.CreateHeaderStructureForPreloadingForQuestionnaire(new QuestionnaireIdentity(questionnaireId, version), dataDirectoryPath);
 
             if (fileSystemAccessor.GetFilesInDirectory(dataDirectoryPath).Length == 0)
             {

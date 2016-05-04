@@ -8,34 +8,42 @@ using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.EventHandler;
+using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using It = Moq.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewHistoryDenormalizerTests
 {
-    [Subject(typeof(InterviewHistoryDenormalizer))]
+    [Subject(typeof(InterviewParaDataEventHandler))]
     internal class InterviewHistoryDenormalizerTestContext
     {
-        protected static InterviewHistoryDenormalizer CreateInterviewHistoryDenormalizer(IReadSideRepositoryWriter<InterviewHistoryView> interviewHistoryViewWriter=null,
+        protected static InterviewParaDataEventHandler CreateInterviewHistoryDenormalizer(IReadSideRepositoryWriter<InterviewHistoryView> interviewHistoryViewWriter=null,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter = null, IReadSideRepositoryWriter<UserDocument> userDocumentWriter = null,
             QuestionnaireExportStructure questionnaire = null)
         {
-            return new InterviewHistoryDenormalizer(
+            return new InterviewParaDataEventHandler(
                 interviewHistoryViewWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewHistoryView>>(),
                 interviewSummaryWriter ??
                 Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(
                     _ => _.GetById(It.IsAny<string>()) == new InterviewSummary()),
                 userDocumentWriter ?? Mock.Of<IReadSideRepositoryWriter<UserDocument>>(),
-                Mock.Of<IReadSideKeyValueStorage<QuestionnaireExportStructure>>(
+                new InterviewDataExportSettings("", false, 10000, 100, 1, 1),
+                Mock.Of<IPlainKeyValueStorage<QuestionnaireExportStructure>>(
                     _ =>
-                        _.GetById(It.IsAny<string>()) == (questionnaire ?? new QuestionnaireExportStructure())));
+                        _.GetById(Moq.It.IsAny<string>()) ==
+                        (questionnaire ?? new QuestionnaireExportStructure())));
         }
 
         protected static InterviewHistoryView CreateInterviewHistoryView(Guid? interviewId=null)
@@ -44,6 +52,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         }
 
         protected static IPublishedEvent<T> CreatePublishableEvent<T>(Func<T> eventCreator, Guid? eventSourceId = null)
+            where T: IEvent
         {
             var publishableEventMock = new Mock<IPublishedEvent<T>>();
 
@@ -75,17 +84,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             };
         }
 
-        protected static void PublishEventsOnOnInterviewExportedDataDenormalizer(List<object> eventsToPublish, InterviewHistoryView interviewHistoryView, InterviewHistoryDenormalizer interviewExportedDataDenormalizer)
+        protected static void PublishEventsOnOnInterviewExportedDataDenormalizer(List<IEvent> eventsToPublish, InterviewHistoryView interviewHistoryView, InterviewParaDataEventHandler interviewExportedDataDenormalizer)
         {
             foreach (var eventToPublish in eventsToPublish)
             {
                 var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(eventToPublish.GetType());
-                var handleMethod = typeof(InterviewHistoryDenormalizer).GetMethod("Update", new[] { typeof(InterviewHistoryView), publishedEventClosedType });
+                var handleMethod = typeof(InterviewParaDataEventHandler).GetMethod("Update", new[] { typeof(InterviewHistoryView), publishedEventClosedType });
 
                 var publishedEvent =
                     (PublishedEvent)
                         Activator.CreateInstance(publishedEventClosedType,
-                            new CommittedEvent(Guid.NewGuid(), "", Guid.NewGuid(), interviewHistoryView.InterviewId, 1, DateTime.Now, eventToPublish));
+                            new CommittedEvent(Guid.NewGuid(), "", Guid.NewGuid(), interviewHistoryView.InterviewId, 1, DateTime.Now, 0, eventToPublish));
 
                 interviewHistoryView = handleMethod.Invoke(interviewExportedDataDenormalizer, new object[] { interviewHistoryView, publishedEvent }) as InterviewHistoryView;
             }

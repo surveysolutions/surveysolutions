@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
-using Main.Core.Entities;
-using WB.Core.GenericSubdomains.Utils;
+﻿using System;
+using System.Collections.Generic;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
-    public class SummaryListViewModel : IGridRequest<SummaryRequestModel>
+    public class SummaryListViewModel
     {
-        public PagerData Pager { get; set; }
-
-        public SummaryRequestModel Request { get; set; }
-
+        public int PageIndex { get; set; }
+        public int PageSize { get; set; }
         public IEnumerable<OrderRequestItem> SortOrder { get; set; }
+
+        public Guid? TemplateId { get; set; }
+        public long? TemplateVersion { get; set; }
     }
 }

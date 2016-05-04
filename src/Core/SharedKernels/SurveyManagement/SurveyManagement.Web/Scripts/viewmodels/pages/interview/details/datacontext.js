@@ -18,6 +18,12 @@
         return command;
     };
 
+    commands[config.commands.answerYesNoQuestion] = function (question) {
+        var command = prepareQuestionCommand(question);
+        command.answeredOptions = question.selectedOptions();
+        return command;
+    };
+
     commands[config.commands.answerNumericRealQuestionCommand] = function(question) {
         var command = prepareQuestionCommand(question);
         command.answer = question.answer();
@@ -93,6 +99,14 @@
     };
 
     commands[config.commands.hQRejectInterviewCommand] = function(args) {
+        return {
+            interviewId: interviewId,
+            commentTime: new Date(),
+            comment: args.comment
+        };
+    };
+
+    commands[config.commands.unapproveByHeadquarterCommand] = function (args) {
         return {
             interviewId: interviewId,
             commentTime: new Date(),

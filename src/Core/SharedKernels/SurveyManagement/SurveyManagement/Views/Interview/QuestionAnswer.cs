@@ -1,9 +1,10 @@
 using System;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 {
-    public class QuestionAnswer
+    public class QuestionAnswer : IReadSideRepositoryEntity
     {
         public virtual int Id { get; set; }
 

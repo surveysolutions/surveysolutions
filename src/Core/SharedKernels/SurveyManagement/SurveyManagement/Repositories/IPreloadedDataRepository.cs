@@ -12,5 +12,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Repositories
         void DeletePreloadedDataOfSample(string id);
         PreloadedDataByFile[] GetPreloadedDataOfPanel(string id);
         void DeletePreloadedDataOfPanel(string id);
+        byte[] GetBytesOfSampleData(string id);
     }
 }

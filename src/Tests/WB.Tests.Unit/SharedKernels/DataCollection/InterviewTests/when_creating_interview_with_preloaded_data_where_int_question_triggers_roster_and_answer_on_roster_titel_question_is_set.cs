@@ -1,20 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -23,17 +17,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     {
         private Establish context = () =>
         {
-            interviewId = Guid.Parse("11111111111111111111111111111111");
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             prefilledIntQuestion = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-            rosterGroupId = StronglyTypedInterviewEvaluator.IdOf.hhMember;
+            rosterGroupId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             prefilledIntQuestionAnswer = 1;
 
             rosterTitleQuestionId = Guid.Parse("22222222222222222222222222222222");
             rosterTitleQuestionAnswer = "a";
-            preloadedDataDto = new PreloadedDataDto("id",
+            preloadedDataDto = new PreloadedDataDto(
                 new[]
                 {
                     new PreloadedLevelDto(new decimal[0],
@@ -43,39 +36,30 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 });
 
             answersTime = new DateTime(2013, 09, 01);
-
-            var questionaire = Mock.Of<IQuestionnaire>(_
+            
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.HasQuestion(prefilledIntQuestion) == true
                    && _.GetQuestionType(prefilledIntQuestion) == QuestionType.Numeric
                    && _.IsQuestionInteger(prefilledIntQuestion) == true
-                   && _.GetRosterGroupsByRosterSizeQuestion(prefilledIntQuestion) == new Guid[] {rosterGroupId}
+                   && _.GetRosterGroupsByRosterSizeQuestion(prefilledIntQuestion) == new Guid[] { rosterGroupId }
 
                    && _.HasGroup(rosterGroupId) == true
                    && _.GetRosterLevelForGroup(rosterGroupId) == 1
-                   && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new Guid[] {rosterGroupId}
+                   && _.GetRostersFromTopToSpecifiedGroup(rosterGroupId) == new Guid[] { rosterGroupId }
 
                    && _.HasQuestion(rosterTitleQuestionId) == true
                    && _.GetQuestionType(rosterTitleQuestionId) == QuestionType.Text
-                   && _.GetRostersFromTopToSpecifiedQuestion(rosterTitleQuestionId) == new Guid[] {rosterGroupId}
+                   && _.GetRostersFromTopToSpecifiedQuestion(rosterTitleQuestionId) == new Guid[] { rosterGroupId }
                    && _.DoesQuestionSpecifyRosterTitle(rosterTitleQuestionId) == true
                    && _.GetRostersAffectedByRosterTitleQuestion(rosterTitleQuestionId) == new Guid[] { rosterGroupId });
 
-            var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
-                => repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionaire);
-
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
-
-            SetupInstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(
-                CreateInterviewExpressionStateProviderStub());
+            interview = Create.Interview(questionnaireRepository: questionnaireRepository);
 
             eventContext = new EventContext();
         };
 
         Because of = () =>
-            new Interview(interviewId, userId, questionnaireId, 1, preloadedDataDto, answersTime, supervisorId);
+            interview.CreateInterviewWithPreloadedData(questionnaireId, 1, preloadedDataDto, supervisorId, answersTime, userId);
 
         Cleanup stuff = () =>
         {
@@ -96,7 +80,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
 
         private static EventContext eventContext;
-        private static Guid interviewId;
         private static Guid userId;
         private static Guid questionnaireId;
         private static PreloadedDataDto preloadedDataDto;
@@ -107,5 +90,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static int prefilledIntQuestionAnswer;
         private static Guid rosterTitleQuestionId;
         private static string rosterTitleQuestionAnswer;
+        private static Interview interview;
     }
 }

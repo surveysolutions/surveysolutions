@@ -20,11 +20,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadingTemplateService
     [Subject(typeof(PreloadingTemplateService))]
     internal class PreloadingTemplateServiceTestContext
     {
-        protected static PreloadingTemplateService CreatePreloadingTemplateService(IFileSystemAccessor fileSystemAccessor = null, IDataExportService dataExportService=null)
+        protected static PreloadingTemplateService CreatePreloadingTemplateService(IFileSystemAccessor fileSystemAccessor = null, ITabularFormatExportService tabularFormatExportService = null)
         {
             var currentFileSystemAccessor = fileSystemAccessor ?? CreateIFileSystemAccessorMock().Object;
             return new PreloadingTemplateService(currentFileSystemAccessor, "",
-                dataExportService?? Mock.Of<IDataExportService>(),
+                tabularFormatExportService ?? Mock.Of<ITabularFormatExportService>(),
                 Mock.Of<IArchiveUtils>());
         }
 
@@ -38,12 +38,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadingTemplateService
             fileSystemAccessorMock.Setup(x => x.GetFileName(Moq.It.IsAny<string>()))
                .Returns<string>(Path.GetFileName);
             return fileSystemAccessorMock;
-        }
-
-        protected static Mock<IDataExportWriter> CreateIDataFileExportServiceMock()
-        {
-            var dataFileExportServiceMock = new Mock<IDataExportWriter>();
-            return dataFileExportServiceMock;
         }
 
         protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure(int levelCount = 1)

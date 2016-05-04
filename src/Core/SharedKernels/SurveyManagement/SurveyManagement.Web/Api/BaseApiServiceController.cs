@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Web.Http;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {

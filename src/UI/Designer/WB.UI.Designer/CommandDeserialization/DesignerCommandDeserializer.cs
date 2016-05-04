@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.UI.Shared.Web.CommandDeserialization;
@@ -16,37 +19,47 @@ namespace WB.UI.Designer.CommandDeserialization
             {
                 return new Dictionary<string, Type>
                 {
-                    { "UpdateQuestionnaire", typeof (UpdateQuestionnaireCommand) },
-                    { "UpdateGroup", typeof (UpdateGroupCommand) },
-                    { "AddGroup", typeof (AddGroupCommand) },
-                    { "CloneGroupWithoutChildren", typeof (CloneGroupWithoutChildrenCommand) },
-                    { "CloneGroup", typeof (CloneGroupCommand) },
-                    { "CloneStaticText", typeof (CloneStaticTextCommand) },
-                    { "DeleteGroup", typeof (DeleteGroupCommand) },
-                    { "MoveGroup", typeof (MoveGroupCommand) },
-                    { "AddDefaultTypeQuestion", typeof (AddDefaultTypeQuestionCommand) },
-                    { "CloneQuestionById", typeof(CloneQuestionByIdCommand) },
-                    { "DeleteQuestion", typeof (DeleteQuestionCommand) },
-                    { "MoveQuestion", typeof (MoveQuestionCommand) },
-                    { "AddSharedPersonToQuestionnaire", typeof (AddSharedPersonToQuestionnaireCommand) },
-                    { "RemoveSharedPersonFromQuestionnaire", typeof (RemoveSharedPersonFromQuestionnaireCommand) },
+                    { "UpdateQuestionnaire", typeof (UpdateQuestionnaire) },
+                    { "UpdateGroup", typeof (UpdateGroup) },
+                    { "AddGroup", typeof (AddGroup) },
+                    { "DeleteGroup", typeof (DeleteGroup) },
+                    { "MoveGroup", typeof (MoveGroup) },
+                    { "AddDefaultTypeQuestion", typeof (AddDefaultTypeQuestion) },
+                    { "DeleteQuestion", typeof (DeleteQuestion) },
+                    { "MoveQuestion", typeof (MoveQuestion) },
+                    { "AddSharedPersonToQuestionnaire", typeof (AddSharedPersonToQuestionnaire) },
+                    { "RemoveSharedPersonFromQuestionnaire", typeof (RemoveSharedPersonFromQuestionnaire) },
                     //Update questions command
-                    { "UpdateTextQuestion", typeof (UpdateTextQuestionCommand) },
-                    { "UpdateNumericQuestion", typeof (UpdateNumericQuestionCommand) },
-                    { "UpdateDateTimeQuestion", typeof (UpdateDateTimeQuestionCommand) },
-                    { "UpdateTextListQuestion", typeof (UpdateTextListQuestionCommand) },
-                    { "UpdateQRBarcodeQuestion", typeof (UpdateQRBarcodeQuestionCommand) },
-                    { "UpdateMultimediaQuestion", typeof (UpdateMultimediaQuestionCommand) },
-                    { "UpdateMultiOptionQuestion", typeof (UpdateMultiOptionQuestionCommand) },
-                    { "UpdateSingleOptionQuestion", typeof (UpdateSingleOptionQuestionCommand) },
-                    { "UpdateGpsCoordinatesQuestion", typeof (UpdateGpsCoordinatesQuestionCommand) },
-                    { "UpdateFilteredComboboxOptions", typeof (UpdateFilteredComboboxOptionsCommand) },
+                    { "UpdateTextQuestion", typeof (UpdateTextQuestion) },
+                    { "UpdateNumericQuestion", typeof (UpdateNumericQuestion) },
+                    { "UpdateDateTimeQuestion", typeof (UpdateDateTimeQuestion) },
+                    { "UpdateTextListQuestion", typeof (UpdateTextListQuestion) },
+                    { "UpdateQRBarcodeQuestion", typeof (UpdateQRBarcodeQuestion) },
+                    { "UpdateMultimediaQuestion", typeof (UpdateMultimediaQuestion) },
+                    { "UpdateMultiOptionQuestion", typeof (UpdateMultiOptionQuestion) },
+                    { "UpdateSingleOptionQuestion", typeof (UpdateSingleOptionQuestion) },
+                    { "UpdateGpsCoordinatesQuestion", typeof (UpdateGpsCoordinatesQuestion) },
+                    { "UpdateFilteredComboboxOptions", typeof (UpdateFilteredComboboxOptions) },
                     //Static text commands
-                    { "AddStaticText", typeof (AddStaticTextCommand) },
-                    { "UpdateStaticText", typeof (UpdateStaticTextCommand) },
-                    { "DeleteStaticText", typeof (DeleteStaticTextCommand) },
-                    { "MoveStaticText", typeof (MoveStaticTextCommand) },
-                    { "MigrateExpressionsToCSharp", typeof(MigrateExpressionsToCSharp)}
+                    { "AddStaticText", typeof (AddStaticText) },
+                    { "UpdateStaticText", typeof (UpdateStaticText) },
+                    { "DeleteStaticText", typeof (DeleteStaticText) },
+                    { "MoveStaticText", typeof (MoveStaticText) },
+                    { "MigrateExpressionsToCSharp", typeof(MigrateExpressionsToCSharp)},
+
+                    {"PasteAfter", typeof(PasteAfter) },
+                    {"PasteInto", typeof(PasteInto) },
+                    //Macro commands
+                    { "AddMacro", typeof (AddMacro) },
+                    { "UpdateMacro", typeof (UpdateMacro) },
+                    { "DeleteMacro", typeof (DeleteMacro) },
+                     //Lookup table commands
+                    { "AddLookupTable", typeof (AddLookupTable) },
+                    { "UpdateLookupTable", typeof (UpdateLookupTable) },
+                    { "DeleteLookupTable", typeof (DeleteLookupTable) },
+                     //Attachment commands
+                    { "AddOrUpdateAttachment", typeof (AddOrUpdateAttachment) },
+                    { "DeleteAttachment", typeof (DeleteAttachment) }
                 };
             }
         }

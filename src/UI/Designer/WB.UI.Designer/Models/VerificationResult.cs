@@ -1,14 +1,14 @@
-﻿using WB.Core.BoundedContexts.Designer.ValueObjects;
-
-namespace WB.UI.Designer.Models
+﻿namespace WB.UI.Designer.Models
 {
-    public class VerificationResult : JsonSuccessResult
+    public class VerificationResult
     {
         public VerificationResult()
         {
-            this.Errors = new QuestionnaireVerificationError[0];
+            this.Errors = new VerificationMessage[0];
         }
 
-        public QuestionnaireVerificationError[] Errors { get; set; }
+        public VerificationMessage[] Errors { get; set; }
+      
+        public VerificationMessage[] Warnings { get; set; }
     }
 }

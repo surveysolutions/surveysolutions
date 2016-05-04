@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
 {
@@ -15,7 +14,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
             this.QuestionnaireId = questionnaire.PublicKey;
             this.QuestionnaireVersion = questionnaireVersion;
             this.FeaturedQuestions = new List<FeaturedQuestionView>();
-            this.Supervisors = new List<UserDocument>();
 
             foreach (IQuestion q in questionnaire.GetFeaturedQuestions())
             {
@@ -29,8 +27,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
         public string QuestionnaireTitle { get; set; }
 
         public Guid QuestionnaireId { get; set; }
-
-        public List<UserDocument> Supervisors { get; set; }
 
         public long QuestionnaireVersion { get; set; }
     }

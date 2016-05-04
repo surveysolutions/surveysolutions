@@ -5,14 +5,16 @@ using Main.Core.Entities;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
 {
     internal class QuestionnaireEntityFactory : IQuestionnaireEntityFactory
     {
-        public IStaticText CreateStaticText(Guid entityId, string text)
+        public IStaticText CreateStaticText(Guid entityId, string text, string attachmentName)
         {
-            return new StaticText(publicKey: entityId, text: System.Web.HttpUtility.HtmlDecode(text));
+            return new StaticText(publicKey: entityId, text: System.Web.HttpUtility.HtmlDecode(text), attachmentName: attachmentName);
         }
 
         public IQuestion CreateQuestion(QuestionData data)
@@ -27,22 +29,26 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 data.StataExportCaption,
                 data.VariableLabel,
                 data.ConditionExpression,
+                data.HideIfDisabled,
                 data.ValidationExpression,
                 data.ValidationMessage,
                 data.AnswerOrder,
                 data.Featured,
-                data.Mandatory,
                 data.Capital,
                 data.Instructions,
                 data.Mask,
                 data.LinkedToQuestionId,
+                data.LinkedToRosterId,
+                data.LinkedFilterExpression,
                 data.QuestionType == QuestionType.AutoPropagate ? true : data.IsInteger,
                 data.CountOfDecimalPlaces,
                 data.AreAnswersOrdered,
                 data.MaxAllowedAnswers,
                 data.MaxAnswerCount,
                 data.IsFilteredCombobox,
-                data.CascadeFromQuestionId);
+                data.CascadeFromQuestionId,
+                data.YesNoView,
+                data.ValidationConditions);
 
             UpdateAnswerList(data.Answers, q, data.LinkedToQuestionId);
 
@@ -65,7 +71,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
                 case QuestionType.MultyOption:
                     return new MultyOptionsQuestion();
 
-                case QuestionType.DropDownList:
                 case QuestionType.SingleOption:
                 case QuestionType.YesNo:
                     return new SingleQuestion();
@@ -126,22 +131,26 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             string stataExportCaption,
             string variableLabel,
             string conditionExpression,
+            bool hideIfDisabled,
             string validationExpression,
             string validationMessage,
-            Order answerOrder,
+            Order? answerOrder,
             bool featured,
-            bool mandatory,
             bool capital,
             string instructions,
             string mask,
             Guid? linkedToQuestionId,
+            Guid? linkedToRosterId,
+            string linkedFilterExpression,
             bool? isInteger,
             int? countOfDecimalPlaces,
             bool? areAnswersOrdered,
             int? maxAllowedAnswers,
             int? masAnswerCount,
             bool? isFilteredCombobox,
-            Guid? cascadeFromQuestionId)
+            Guid? cascadeFromQuestionId,
+            bool? yesNoView,
+            IList<ValidationCondition> validationConditions)
         {
             question.QuestionType = questionType;
             question.QuestionScope = questionScope;
@@ -149,16 +158,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             question.StataExportCaption = stataExportCaption;
             question.VariableLabel = variableLabel;
             question.ConditionExpression = conditionExpression;
+            question.HideIfDisabled = hideIfDisabled;
             question.ValidationExpression = validationExpression;
             question.ValidationMessage = validationMessage;
             question.AnswerOrder = answerOrder;
             question.Featured = featured;
-            question.Mandatory = mandatory;
             question.Instructions = instructions;
             question.Capital = capital;
             question.LinkedToQuestionId = linkedToQuestionId;
+            question.LinkedToRosterId = linkedToRosterId;
+            question.LinkedFilterExpression = linkedFilterExpression;
             question.IsFilteredCombobox = isFilteredCombobox;
             question.CascadeFromQuestionId = cascadeFromQuestionId;
+            question.ValidationConditions = validationConditions;
 
             var numericQuestion = question as INumericQuestion;
             if (numericQuestion != null)
@@ -173,6 +185,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Factories
             {
                 multioptionQuestion.AreAnswersOrdered = areAnswersOrdered ?? false;
                 multioptionQuestion.MaxAllowedAnswers = maxAllowedAnswers;
+                multioptionQuestion.YesNoView = yesNoView ?? false;
             }
 
             var listQuestion = question as ITextListQuestion;

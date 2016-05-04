@@ -1,5 +1,6 @@
-﻿using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Utils;
+using Microsoft.Practices.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Transactions;
 
 namespace WB.UI.Designer
@@ -25,6 +26,11 @@ namespace WB.UI.Designer
         private ITransactionManagerProvider TransactionManagerProvider
         {
             get { return ServiceLocator.Current.GetInstance<ITransactionManagerProvider>(); }
+        }
+
+        private IReadSideStatusService readSideStatusService
+        {
+            get { return ServiceLocator.Current.GetInstance<IReadSideStatusService>(); }
         }
 
         #endregion
@@ -54,6 +60,18 @@ namespace WB.UI.Designer
         /// </param>
         public void OnAuthorization(AuthorizationContext filterContext)
         {
+            if (readSideStatusService.AreViewsBeingRebuiltNow())
+            {
+                filterContext.Result =
+                    new RedirectToRouteResult(
+                        new RouteValueDictionary(new
+                        {
+                            controller = "Maintenance",
+                            action = "WaitForReadSideRebuild",
+                            returnUrl = filterContext.RequestContext.HttpContext.Request.Url.ToString()
+                        }));
+                return;
+            }
             bool isInvalidUser = false;
 
             this.TransactionManagerProvider.GetTransactionManager().BeginQueryTransaction();

@@ -8,7 +8,7 @@ using Moq;
 
 using WB.Core.BoundedContexts.Supervisor.Interviews;
 using WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -49,14 +49,16 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                         }
                     }.ToList());
 
-            iInterviewSynchronizationDto = new InterviewSynchronizationDto(interviewId, InterviewStatus.RejectedByHeadquarters, "",
-                        userId, questionnaireId, 2, new AnsweredQuestionSynchronizationDto[0], new HashSet<InterviewItemId>(),
-                        new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(), new HashSet<InterviewItemId>(),
-                        new Dictionary<InterviewItemId, int>(), new Dictionary<InterviewItemId, RosterSynchronizationDto[]>(), true);
-
+            iInterviewSynchronizationDto =
+                Create.InterviewSynchronizationDto(interviewId: interviewId,
+                    status: InterviewStatus.RejectedByHeadquarters,
+                    userId: userId, 
+                    questionnaireId: questionnaireId,
+                    questionnaireVersion: 2, 
+                    wasCompleted: true);
+            
             headquartersInterviewReaderMock.Setup(x => x.GetInterviewByUri(Moq.It.IsAny<Uri>()))
-                .Returns(
-                    Task.FromResult(iInterviewSynchronizationDto));
+                .Returns(Task.FromResult(iInterviewSynchronizationDto));
 
             var interviewSummaryStorageMock = new Mock<IReadSideRepositoryReader<InterviewSummary>>();
             interviewSummaryStorageMock.Setup(x => x.GetById(interviewId.FormatGuid())).Returns(new InterviewSummary() { IsDeleted = true });
@@ -74,7 +76,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.InterviewsSyn
                     x.Execute(
                         Moq.It.Is<HardDeleteInterview>(
                             _ =>
-                                _.InterviewId==interviewId && _.UserId==userId), Constants.HeadquartersSynchronizationOrigin, false), Times.Once);
+                                _.InterviewId==interviewId && _.UserId==userId), Constants.HeadquartersSynchronizationOrigin), Times.Once);
 
 
         private static InterviewsSynchronizer interviewsSynchronizer;

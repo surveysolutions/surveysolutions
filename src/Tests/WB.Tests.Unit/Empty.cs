@@ -1,8 +1,10 @@
-﻿namespace WB.Tests.Unit
+﻿using WB.Core.SharedKernels.DataCollection;
+
+namespace WB.Tests.Unit
 {
     internal static class Empty
     {
-        public static decimal[] RosterVector
+        public static RosterVector RosterVector
         {
             get { return new decimal[] { }; }
         }

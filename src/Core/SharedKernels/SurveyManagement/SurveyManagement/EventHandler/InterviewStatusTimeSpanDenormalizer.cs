@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Main.Core.Events.Sync;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
@@ -10,7 +11,9 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
 {
     internal class InterviewStatusTimeSpanDenormalizer : BaseDenormalizer, IEventHandler<InterviewCompleted>,
-                                            IEventHandler<InterviewApprovedByHQ>
+                                            IEventHandler<InterviewApprovedByHQ>,
+                                            IEventHandler<UnapprovedByHeadquarters>
+
     {
         private readonly IReadSideRepositoryWriter<InterviewStatusTimeSpans> interviewCustomStatusTimestampStorage;
         private readonly IReadSideRepositoryWriter<InterviewStatuses> statuses;
@@ -82,7 +85,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
             if (statusHistory == null)
                 return;
 
-            var lastAssignOfRejectStatus =
+            var lastAssignOfRejectStatus = 
                 statusHistory.InterviewCommentedStatuses.FirstOrDefault(
                     s =>
                         s.Status == InterviewExportedAction.InterviewerAssigned);
@@ -112,6 +115,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.EventHandler
                     lastAssignOfRejectStatus.InterviewerName));
 
             interviewCustomStatusTimestampStorage.Store(interviewCustomStatusTimestamps, interviewCustomStatusTimestamps.InterviewId);
+        }
+
+        public void Handle(IPublishedEvent<UnapprovedByHeadquarters> evnt)
+        {
+           var interviewCustomStatusTimestamps = interviewCustomStatusTimestampStorage.GetById(evnt.EventSourceId);
+            if (interviewCustomStatusTimestamps == null)
+            {
+                return;
+            }
+
+            var itemsToRemove = interviewCustomStatusTimestamps.TimeSpansBetweenStatuses.Where(
+                    x => x.EndStatus == InterviewExportedAction.ApprovedByHeadquarter).ToList();
+
+            if (itemsToRemove.Any())
+            {
+                foreach (var itemToRemove in itemsToRemove)
+                {
+                    interviewCustomStatusTimestamps.TimeSpansBetweenStatuses.Remove(itemToRemove);
+                }
+                
+                interviewCustomStatusTimestampStorage.Store(interviewCustomStatusTimestamps,
+                    interviewCustomStatusTimestamps.InterviewId);
+            }
         }
     }
 }

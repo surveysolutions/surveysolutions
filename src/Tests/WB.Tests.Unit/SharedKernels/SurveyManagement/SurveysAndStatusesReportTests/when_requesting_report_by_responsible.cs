@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
@@ -20,8 +20,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveysAndStatusesReportT
             Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             List<InterviewSummary> interviews = new List<InterviewSummary>()
             {
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, responsibleId: userId),
-                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, responsibleId: userId),
+                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, responsibleId: userId, responsibleName: responsibleName),
+                Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, responsibleId: userId, responsibleName: responsibleName),
                 Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, responsibleId: Guid.NewGuid()),
                 Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, responsibleId: Guid.NewGuid()),
                 Create.InterviewSummary(questionnaireId: questionnaireId, status: InterviewStatus.Completed, responsibleId: Guid.NewGuid()),
@@ -33,12 +33,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveysAndStatusesReportT
             reportFactory = CreateSurveysAndStatusesReport(interviewsReader);
         };
 
-        Because of = () => report = reportFactory.Load(new SurveysAndStatusesReportInputModel { ResponsibleId = userId });
+        Because of = () => report = reportFactory.Load(new SurveysAndStatusesReportInputModel { ResponsibleName = responsibleName });
 
         It should_count_only_interviews_by_responsible = () => 
             report.Items.First().CompletedCount.ShouldEqual(2);
 
         static Guid userId;
+        static string responsibleName = "userName";
         static SurveysAndStatusesReport reportFactory;
         static SurveysAndStatusesReportView report;
     }

@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewSynchronizationFil
             interviewSynchronizationFileStorage = CreateFileSyncRepository(plainFileRepository: plainFileRepositoryMock.Object, fileSystemAccessor: fileSystemAccessorMock.Object);
         };
 
-        Because of = () => interviewSynchronizationFileStorage.MoveInterviewsBinaryDataToSyncFolder(interviewId);
+        Because of = () => interviewSynchronizationFileStorage.MoveInterviewImagesToSyncFolder(interviewId);
 
         It should_not_put_files_into_sync_storage = () =>
            fileSystemAccessorMock.Verify(x=>x.WriteAllBytes(Moq.It.IsAny<string>(), Moq.It.IsAny<byte[]>()), Times.Never);

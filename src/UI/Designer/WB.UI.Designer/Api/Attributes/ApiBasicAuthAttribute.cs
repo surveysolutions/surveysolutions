@@ -46,6 +46,12 @@ namespace WB.UI.Designer.Api.Attributes
 
         public override void OnAuthorization(HttpActionContext actionContext)
         {
+            if (this.readSideStatusService.AreViewsBeingRebuiltNow())
+            {
+                this.ResponseMaintenanceMessage(actionContext);
+                return;
+            }
+
             var credentials = ParseCredentials(actionContext);
             if (credentials == null)
             {
@@ -73,6 +79,12 @@ namespace WB.UI.Designer.Api.Attributes
                 if (IsAccountLockedOut())
                 {
                     this.ThrowLockedOutException(actionContext);
+                    return;
+                }
+
+                if (this.IsAccountNotApproved())
+                {
+                    this.ThrowNotApprovedException(actionContext);
                     return;
                 }
 
@@ -125,6 +137,20 @@ namespace WB.UI.Designer.Api.Attributes
             actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = ErrorMessages.UserLockedOut };
         }
 
+        private void ThrowNotApprovedException(HttpActionContext actionContext)
+        {
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized)
+            {
+                ReasonPhrase =
+                    string.Format(ErrorMessages.UserNotApproved, this.userHelper.WebUser.MembershipUser.Email)
+            };
+        }
+
+        private void ResponseMaintenanceMessage(HttpActionContext actionContext)
+        {
+            actionContext.Response = new HttpResponseMessage(HttpStatusCode.ServiceUnavailable) { ReasonPhrase = ErrorMessages.Maintenance };
+        }
+
         private bool Authorize(string username, string password)
         {
             return validateUserCredentials(username, password);
@@ -133,6 +159,11 @@ namespace WB.UI.Designer.Api.Attributes
         private bool IsAccountLockedOut()
         {
             return this.userHelper.WebUser == null || this.userHelper.WebUser.MembershipUser.IsLockedOut;
+        }
+
+        private bool IsAccountNotApproved()
+        {
+            return !this.userHelper.WebUser.MembershipUser.IsApproved;
         }
     }
 }

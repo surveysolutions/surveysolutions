@@ -7,20 +7,21 @@
             if (hotkeys.get(saveGroup) !== false) {
                 hotkeys.del(saveGroup);
             }
-            if ($scope.questionnaire != null && !$scope.questionnaire.isReadOnlyForUser) 
-            {
-                hotkeys.bindTo($scope)
-                    .add({
-                        combo: saveGroup,
-                        description: 'Save changes',
-                        allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                        callback: function(event) {
+
+            hotkeys.bindTo($scope)
+                .add({
+                    combo: saveGroup,
+                    description: 'Save changes',
+                    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                    callback: function(event) {
+                        if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
                             $scope.saveGroup();
                             $scope.groupForm.$setPristine();
                             event.preventDefault();
                         }
-                    });
-            }
+                    }
+                });
+            
             var dataBind = function (group) {
                 $scope.activeGroup = group;
 
@@ -55,7 +56,8 @@
                         $scope.initialGroup = angular.copy($scope.activeGroup);
                         $rootScope.$emit('groupUpdated', {
                             itemId: $scope.activeGroup.itemId,
-                            title: $scope.activeGroup.title
+                            title: $scope.activeGroup.title,
+                            hasCondition: ($scope.activeGroup.enablementCondition !== null && /\S/.test($scope.activeGroup.enablementCondition))
                         });
                     });
                 }

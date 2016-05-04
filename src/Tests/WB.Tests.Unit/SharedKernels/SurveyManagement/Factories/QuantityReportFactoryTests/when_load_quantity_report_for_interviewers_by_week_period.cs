@@ -15,9 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
         {
             input = CreateQuantityByInterviewersReportInputModel(supervisorId: supervisorId, period: "w");
 
-            var user = Create.UserDocument(supervisorId: supervisorId);
-            userDocuments = new TestInMemoryWriter<UserDocument>();
-            userDocuments.Store(user, "1");
+            var user = Guid.NewGuid();
 
             interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
             interviewStatuses.Store(
@@ -25,15 +23,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
                     questionnaireVersion: input.QuestionnaireVersion,
                     statuses: new[]
                     {
-                        Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
+                        Create.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
                             timestamp: input.From.Date.AddHours(1)),
-                        Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
+                        Create.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
                             timestamp: input.From.Date.AddDays(15)),
-                        Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
+                        Create.InterviewCommentedStatus(interviewerId: user, supervisorId: supervisorId,
                             timestamp: input.From.Date.AddDays(-15))
                     }), "2");
 
-            quantityReportFactory = CreateQuantityReportFactory(userDocuments: userDocuments, interviewStatuses: interviewStatuses);
+            quantityReportFactory = CreateQuantityReportFactory(interviewStatuses: interviewStatuses);
         };
 
         Because of = () =>
@@ -51,10 +49,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
         It should_return_first_row_with_0_5_in_Average = () =>
            result.Items.First().Average.ShouldEqual(0.5);
 
+        It should_return_total_row_with_1_interview_at_first_period_and_zero_interviews_at_second = () =>
+            result.TotalRow.QuantityByPeriod.ShouldEqual(new long[] { 1, 0 });
+
+        It should_return_total_row_with_1_in_Total = () =>
+            result.TotalRow.Total.ShouldEqual(1);
+
+        It should_return_total_row_with_0_5_in_Average = () =>
+            result.TotalRow.Average.ShouldEqual(0.5);
+
         private static QuantityReportFactory quantityReportFactory;
         private static QuantityByInterviewersReportInputModel input;
         private static QuantityByResponsibleReportView result;
-        private static TestInMemoryWriter<UserDocument> userDocuments;
         private static TestInMemoryWriter<InterviewStatuses> interviewStatuses;
         private static Guid supervisorId = Guid.Parse("11111111111111111111111111111111");
     }

@@ -2,6 +2,7 @@
     Supervisor.VM.PeriodicStatusReport.superclass.constructor.apply(this, arguments);
 
     var self = this;
+
     var dateFormat = "MM/DD/YYYY";
 
     self.Url = new Url(window.location.href);
@@ -18,16 +19,22 @@
 
     self.DateTimeRanges = ko.observableArray([]);
 
+    self.TotalRow = ko.observableArray(null);
+
     this.QuestionnaireName = ko.observable();
 
     this.ReportTypeName = ko.observable();
 
     self.GetPeriodName = function (period) {
-        return ko.computed({
-            read: function () {
-                return moment(period.From()).format(dateFormat) + "-" + moment(period.To()).format(dateFormat);
-            }
-        }, this);
+        return moment(period.From()).format(dateFormat);
+    };
+
+    self.getTotalAverage = function () {
+        return self.TotalRow().Average ? self.TotalRow().Average() : 0;
+    };
+
+    self.getTotalCount = function () {
+        return self.TotalRow().Total ? self.TotalRow().Total() : 0;
     };
 
     self.FormatSpeedPeriod = function(data) {

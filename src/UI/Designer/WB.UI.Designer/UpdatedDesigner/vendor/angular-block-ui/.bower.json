@@ -1,7 +1,7 @@
 {
   "name": "angular-block-ui",
   "description": "An AngularJS module that allows you to block user interaction on AJAX requests.",
-  "version": "0.1.1",
+  "version": "0.2.2",
   "keywords": [
     "angular",
     "angularjs",
@@ -32,20 +32,23 @@
     "dist/angular-block-ui.css"
   ],
   "dependencies": {
-    "angular": "~1.2.21"
+    "angular": "~1"
   },
   "devDependencies": {
-    "angular-route": "~1.2.21",
+    "angular-route": "~1",
+    "angular-resource": "~1",
+    "angular-mocks": "~1",
+    "angular-animate": "~1",
+    "angular-inform": "~0.0.8",
+    "angular-response-lag": "~0.0.1",
     "bootstrap": "~3.2.0",
     "jquery": "1.*",
     "respond": "~1.4.2",
     "html5shiv": "~3.7.2",
-    "angular-resource": "~1.2.22",
     "showdown": "~0.3.1",
-    "angular-mocks": "~1.2.22",
-    "angular-inform": "~0.0.8",
-    "angular-animate": "~1.2.22",
-    "animate.css": "~3.2.0"
+    "animate.css": "~3.2.0",
+    "angular-markdown-text": "~0.0.2",
+    "angular-sanitize": "~1"
   },
   "overrides": {
     "respond": {
@@ -58,15 +61,18 @@
       "ignore": true
     }
   },
+  "resolutions": {
+    "angular": "~1"
+  },
   "homepage": "https://github.com/McNull/angular-block-ui",
-  "_release": "0.1.1",
+  "_release": "0.2.2",
   "_resolution": {
     "type": "version",
-    "tag": "v0.1.1",
-    "commit": "da99254be59b61907956501cdda7479fb43be0f4"
+    "tag": "v0.2.2",
+    "commit": "0d01eee67a6f8b0fd6beeaf16f950d1870842702"
   },
   "_source": "git://github.com/McNull/angular-block-ui.git",
-  "_target": "~0.1.1",
+  "_target": "0.2.2",
   "_originalSource": "angular-block-ui",
   "_direct": true
 }

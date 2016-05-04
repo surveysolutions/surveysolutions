@@ -8,8 +8,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Services.Preloading
 {
     internal interface IQuestionDataParser
     {
-        ValueParsingResult TryParse(string answer, string columnName, IQuestion question, QuestionnaireDocument questionnaire, out KeyValuePair<Guid, object> value);
+        ValueParsingResult TryParse(string answer, string columnName, IQuestion question, out  object value);
 
-        KeyValuePair<Guid, object>? BuildAnswerFromStringArray(Tuple<string, string>[] answersWithColumnName, IQuestion question, QuestionnaireDocument questionnaire);
+        object BuildAnswerFromStringArray(Tuple<string, string>[] answersWithColumnName, IQuestion question);
     }
 }

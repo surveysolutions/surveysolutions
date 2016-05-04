@@ -12,9 +12,9 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 
         public double Altitude { get; private set; }
 
-        public GeoLocationQuestionAnswered(Guid userId, Guid questionId, decimal[] propagationVector, DateTime answerTime,
+        public GeoLocationQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTimeUtc,
             double latitude, double longitude, double accuracy, double altitude, DateTimeOffset timestamp) 
-            : base(userId, questionId, propagationVector, answerTime)
+            : base(userId, questionId, rosterVector, answerTimeUtc)
         {
             this.Latitude = latitude;
             this.Longitude = longitude;

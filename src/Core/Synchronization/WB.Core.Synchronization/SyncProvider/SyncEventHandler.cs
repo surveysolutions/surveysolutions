@@ -16,9 +16,9 @@ namespace WB.Core.Synchronization.SyncProvider
         /// </summary>
         private readonly IEventStore eventStore;
 
-        public SyncEventHandler()
+        public SyncEventHandler(IEventStore eventStore)
         {
-            this.eventStore = NcqrsEnvironment.Get<IEventStore>();
+            this.eventStore = eventStore;
             this.IncomeEvents = new List<UncommittedEventStream>();
         }
 
@@ -70,7 +70,7 @@ namespace WB.Core.Synchronization.SyncProvider
             foreach (UncommittedEventStream uncommittedEventStream in this.IncomeEvents)
             {
                 this.eventStore.Store(uncommittedEventStream);
-              //  myEventBus.Publish(uncommittedEventStream.Select(e => e as IPublishableEvent));
+              //  myEventBus.Publish(uncommittedEventStream.Select(e => e as IUncommittedEvent));
             }
         }
 

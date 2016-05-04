@@ -34,7 +34,6 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                         Create.Option(text: "parent option 2", value: "2")
                     }),
                     Create.SingleQuestion(childCascadedComboboxId, "q2", cascadeFromQuestionId: parentSingleOptionQuestionId,
-                        isMandatory: true,
                         options: new List<Answer>
                         {
                             Create.Option(text: "child 1 for parent option 1", value: "1", parentValue: "1"),

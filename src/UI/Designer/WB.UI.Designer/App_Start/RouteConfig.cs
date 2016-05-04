@@ -1,4 +1,6 @@
-﻿namespace WB.UI.Designer.App_Start
+﻿using System.Web.Http;
+
+namespace WB.UI.Designer.App_Start
 {
     using System.Web.Mvc;
     using System.Web.Routing;
@@ -9,7 +11,7 @@
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
+            
             routes.MapRouteLowercase(
                 name: "AdminUsersView",
                 url: "admin/users",
@@ -39,7 +41,6 @@
                 name: "Default", 
                 url: "{controller}/{action}/{id}", 
                 defaults: new { controller = "Questionnaire", action = "Index", id = UrlParameter.Optional });
-            
         }
     }
 }

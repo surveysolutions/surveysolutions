@@ -7,6 +7,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Supervisor.Factories;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Factories;
@@ -23,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         protected static ExportViewFactory CreateExportViewFactory(
             IQuestionnaireRosterStructureFactory questionnaireRosterStructureFactory = null)
         {
-            return new ExportViewFactory(new ReferenceInfoForLinkedQuestionsFactory(), questionnaireRosterStructureFactory ?? new QuestionnaireRosterStructureFactory(), Mock.Of<IFileSystemAccessor>());
+            return new ExportViewFactory(questionnaireRosterStructureFactory ?? new QuestionnaireRosterStructureFactory(), Mock.Of<IFileSystemAccessor>());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocumentWithOneChapter(params IComposite[] chapterChildren)
@@ -72,10 +73,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             var interviewData = CreateInterviewData();
             foreach (var questionsWithAnswer in questionsWithAnswers)
             {
-                if (!interviewData.Levels["#"].QuestionsSearchCahche.ContainsKey(questionsWithAnswer))
-                    interviewData.Levels["#"].QuestionsSearchCahche.Add(questionsWithAnswer, new InterviewQuestion(questionsWithAnswer));
+                if (!interviewData.Levels["#"].QuestionsSearchCache.ContainsKey(questionsWithAnswer))
+                    interviewData.Levels["#"].QuestionsSearchCache.Add(questionsWithAnswer, new InterviewQuestion(questionsWithAnswer));
 
-                var question = interviewData.Levels["#"].QuestionsSearchCahche[questionsWithAnswer]; 
+                var question = interviewData.Levels["#"].QuestionsSearchCache[questionsWithAnswer]; 
                 
                 question.Answer = "some answer";
             }

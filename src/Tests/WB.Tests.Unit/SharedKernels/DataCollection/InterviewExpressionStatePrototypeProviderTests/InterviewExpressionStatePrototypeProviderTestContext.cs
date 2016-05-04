@@ -2,7 +2,6 @@
 using Machine.Specifications;
 using Microsoft.Practices.ServiceLocation;
 using Moq;
-using WB.Core.Infrastructure.Files.Implementation.FileSystem;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;

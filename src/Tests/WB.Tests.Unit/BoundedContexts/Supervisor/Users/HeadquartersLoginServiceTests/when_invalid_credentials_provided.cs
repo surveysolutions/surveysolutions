@@ -9,14 +9,14 @@ using Moq.Protected;
 
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Supervisor.Users.Implementation;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.User;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Users.HeadquartersLoginServiceTests
 {
-    public class when_invalid_credentials_provided
+    internal class when_invalid_credentials_provided
     {
         Establish context = () =>
         {
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Users.HeadquartersLoginServic
 
         Because of = () => service.LoginAndCreateAccount("login", "pwd").Wait();
 
-        It should_not_create_new_local_user = () => commandService.Verify(x => x.Execute(Moq.It.IsAny<CreateUserCommand>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()), Times.Never);
+        It should_not_create_new_local_user = () => commandService.Verify(x => x.Execute(Moq.It.IsAny<CreateUserCommand>(), Moq.It.IsAny<string>()), Times.Never);
 
         static HeadquartersLoginService service;
         static Mock<ICommandService> commandService;

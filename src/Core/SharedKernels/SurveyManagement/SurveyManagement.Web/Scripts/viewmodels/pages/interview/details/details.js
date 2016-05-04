@@ -35,7 +35,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
             var commentTemplate = $("<div/>").html($('#comment-template').html())[0];
             ko.applyBindings(commentInfo, commentTemplate);
 
-            var commentListElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "commentList"));
+            var commentListElement = $('[id="' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "commentList") + '"]');
             if (commentListElement.children().length == 0) {
                 var commentsCounterElement = $("#commentsCounter");
                 commentsCounterElement.text(parseInt(commentsCounterElement.text()) + 1);
@@ -61,7 +61,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
 
             if (question.isAnswerFlagged) {
                 if (filter.filteredBy == 'Flagged') {
-                    var answerRowElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "answerRow"));
+                    var answerRowElement = $('[id="' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector, "answerRow") + '"]');
                     answerRowElement.remove();
                 } else {
                     $(element).removeClass("btn-info");
@@ -78,7 +78,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
     }
 
     self.saveFilteredComboboxAnswer = function(questionId, underscoreJoinedQuestionRosterVector) {
-        var answerElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector));
+        var answerElement = $('[id="' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector) + '"]');
         var answerLabel = answerElement.val();
 
         var filteredCombobox = _.find(self.filteredComboboxes, function (item) {
@@ -118,7 +118,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
     };
 
     self.saveTextAnswer = function (questionId, underscoreJoinedQuestionRosterVector) {
-        var answerElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector));
+        var answerElement = $('[id="' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector) + '"]');
         var answer = answerElement.val();
         var observableTextAnswer = ko.observable(answer).extend({ required: true });
 
@@ -134,7 +134,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
     };
 
     self.saveNumericIntegerAnswer = function (questionId, underscoreJoinedQuestionRosterVector) {
-        var answerElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector));
+        var answerElement = $('[id="' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector) + '"]');
         var answer = answerElement.val();
         var observableTextAnswer = ko.observable(answer).extend({ required: true, numericValidator: -1 });
 
@@ -150,7 +150,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
     };
 
     self.saveNumericRealAnswer = function (questionId, underscoreJoinedQuestionRosterVector, countOfDecimalPlaces) {
-        var answerElement = $('#' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector));
+        var answerElement = $('[id="' + getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector) + '"]');
         var answer = answerElement.val();
         var observableTextAnswer = ko.observable(answer).extend({ required: true });
         if (countOfDecimalPlaces) {
@@ -172,7 +172,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
 
     self.saveCategoricalOneAnswer = function (questionId, underscoreJoinedQuestionRosterVector) {
         var answerElementId = getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector);
-        var answerOptionValue = $("input:radio[name=" + answerElementId + "]:checked").val();
+        var answerOptionValue = $('input:radio[name="' + answerElementId + '"]:checked').val();
 
         var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
         question.selectedOption = ko.observable(answerOptionValue);
@@ -180,9 +180,55 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
         sendAnswerCommand(config.commands.answerSingleOptionQuestionCommand, question);
     };
 
+    self.saveYesNoMultiAnswer = function (questionId, underscoreJoinedQuestionRosterVector, yes, answerOptionValue, maxAllowedAnswers) {
+        var answerElementId = getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector);
+        var actualAnswers = _.result(_.find(answeredYesNoQuestionsBySupervisor, function(answersByQuestion) { return answersByQuestion.questionId === answerElementId; }), 'answers');
+
+        var expectedAnswers = _.clone(actualAnswers);
+
+        if (_.isNull(expectedAnswers) || _.isUndefined(expectedAnswers)) {
+            expectedAnswers = [];
+        }
+
+        var answeredOption = _.find(expectedAnswers, function (answer) { return answer.OptionValue === answerOptionValue; });
+        if (answeredOption) {
+            var indexOfAnsweredOption = expectedAnswers.indexOf(answeredOption);
+            expectedAnswers.splice(indexOfAnsweredOption, 1);
+        }
+        expectedAnswers.push({ OptionValue: answerOptionValue, Yes: yes });
+        
+        var observableExpectedAnswers = ko.observableArray(expectedAnswers).extend({
+            validation: [
+                {
+                    validator: function (val) {
+                        if (_.isUndefined(maxAllowedAnswers) || _.isNull(maxAllowedAnswers) || !_.isNumber(maxAllowedAnswers)) {
+                            return true;
+                        }
+
+                        var yesAnswers = _.where(val, { "Yes": true });
+
+                        return yesAnswers.length <= maxAllowedAnswers;
+                    },
+                    message: 'Number of selected answers more than number of maximum permitted answers'
+                }
+            ]
+        });
+
+        if (!observableExpectedAnswers.isValid()) {
+            self.ShowError(observableExpectedAnswers.error);
+            return;
+        }
+        
+        var question = prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector);
+        question.selectedOptions = observableExpectedAnswers;
+
+
+        sendAnswerCommand(config.commands.answerYesNoQuestion, question);
+    }
+
     self.saveCategoricalMultiAnswer = function (questionId, underscoreJoinedQuestionRosterVector, areAnswersOrdered, maxAllowedAnswers, selectedOptionsAsString) {
         var answerElementId = getInterviewItemIdWithPostfix(questionId, underscoreJoinedQuestionRosterVector);
-        var answerOptionValues = $("input:checkbox[name=" + answerElementId + "]:checked").map(function() { return parseFloat($(this).val()); }).get();
+        var answerOptionValues = $('input:checkbox[name="' + answerElementId + '"]:checked').map(function() { return parseFloat($(this).val()); }).get();
         
         var observableSelectedOptionIds = ko.observableArray(answerOptionValues).extend({
             validation: [
@@ -247,7 +293,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
             });
         });
         _.forEach(self.filteredComboboxes, function (filteredCombobox) {
-            var filteredComboboxElement = $("#" + filteredCombobox.id);
+            var filteredComboboxElement = $('[id="' + filteredCombobox.id + '"]');
 
             filteredCombobox.selectedValue = ko.observable({ id: ko.observable(), value: ko.observable() });
             var selectedOptionId = filteredComboboxElement.val();
@@ -271,6 +317,10 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
         $('#rejectModal').modal('show');
     };
     
+    self.showUnapproveByHeadquarterModal = function () {
+        $('#unapproveByHeadquarterModal').modal('show');
+    };
+
     self.approveInterview = function () {
         self.changeState(config.commands.approveInterviewCommand);
     };
@@ -283,6 +333,10 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
     };
     self.hQRejectInterview = function () {
         self.changeState(config.commands.hQRejectInterviewCommand);
+    };
+
+    self.unapproveByHeadquarter = function () {
+        self.changeState(config.commands.unapproveByHeadquarterCommand);
     };
 
     self.changeState = function (commandName) {
@@ -335,7 +389,7 @@ Supervisor.VM.Details = function (settings, filter, filteredComboboxes) {
         if (rosterVector == "")
             return [];
 
-        return rosterVector.split('_').map(function (vector) { return vector.replace('-', '.'); });
+        return rosterVector.split('_');
     }
 
     function prepareQuestionForCommand(questionId, underscoreJoinedQuestionRosterVector) {

@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 
 namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
@@ -11,9 +12,9 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
     [Subject(typeof(NcqrCompatibleEventDispatcher))]
     internal class NcqrCompatibleEventDispatcherTestContext
     {
-        protected static NcqrCompatibleEventDispatcher CreateNcqrCompatibleEventDispatcher(Type[] handlersToIgnore = null)
+        protected static NcqrCompatibleEventDispatcher CreateNcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null)
         {
-            return Create.NcqrCompatibleEventDispatcher(handlersToIgnore);
+            return Create.NcqrCompatibleEventDispatcher(eventBusSettings: eventBusSettings);
         }
 
         protected static IPublishableEvent CreatePublishableEvent(Guid? eventSourceId = null)

@@ -24,7 +24,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
             this.Instructions = doc.Instructions;
             this.AnswerOrder = doc.AnswerOrder;
             this.Featured = doc.Featured;
-            this.Mandatory = doc.Mandatory;
             this.Capital = doc.Capital;
             this.LinkedToQuestionId = doc.LinkedToQuestionId;
             this.Answers = null;
@@ -76,15 +75,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.TakeNew
         public FeaturedAnswerView[] Answers { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public Order AnswerOrder { get; set; }
+        public Order? AnswerOrder { get; set; }
 
         public string ConditionExpression { get; set; }
 
         public bool Featured { get; set; }
 
         public string Instructions { get; set; }
-
-        public bool Mandatory { get; set; }
 
         public bool Capital { get; set; }
 

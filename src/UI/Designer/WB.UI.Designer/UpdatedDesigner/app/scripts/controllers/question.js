@@ -5,24 +5,48 @@
             var dictionnaires = {};
 
             var saveQuestion = 'ctrl+s';
+          
             
-            if (hotkeys.get(saveQuestion) === false) {
+            if (hotkeys.get(saveQuestion) !== false) {
                 hotkeys.del(saveQuestion);
             }
 
-            if ($scope.questionnaire != null && !$scope.questionnaire.isReadOnlyForUser) {
-                hotkeys.bindTo($scope)
-                    .add({
-                        combo: saveQuestion,
-                        description: 'Save changes',
-                        allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                        callback: function(event) {
+            var markFormAsChanged = function () {
+                if ($scope.questionForm) {
+                    $scope.questionForm.$setDirty();
+                }
+            }
+
+            hotkeys.bindTo($scope)
+                .add({
+                    combo: saveQuestion,
+                    description: 'Save changes',
+                    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                    callback: function(event) {
+                        if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
                             $scope.saveQuestion();
                             $scope.questionForm.$setPristine();
                             event.preventDefault();
                         }
-                    });
-            }
+                    }
+                });
+
+
+            $scope.onKeyPressInOptions = function(keyEvent) {
+                if (keyEvent.which === 13) {
+                    keyEvent.preventDefault();
+
+                    var targetDomElement = keyEvent.target ? keyEvent.target : keyEvent.srcElement;
+
+                    utilityService.moveFocusAndAddOptionIfNeeded(
+                        targetDomElement,
+                        ".question-options-editor",
+                        ".question-options-editor input.question-option-value-editor",
+                        $scope.activeQuestion.options,
+                        function() { return $scope.addOption(); },
+                        "option");
+                }
+            };
 
             var bindQuestion = function(question) {
                 $scope.activeQuestion = $scope.activeQuestion || {};
@@ -35,17 +59,20 @@
                 $scope.activeQuestion.mask = question.mask;
                 $scope.activeQuestion.questionTypeOptions = question.questionTypeOptions;
                 $scope.activeQuestion.title = question.title;
-                $scope.activeQuestion.isMandatory = question.isMandatory;
+                
                 $scope.activeQuestion.enablementCondition = question.enablementCondition;
                 $scope.activeQuestion.validationExpression = question.validationExpression;
+                $scope.activeQuestion.hideIfDisabled = question.hideIfDisabled;
                 $scope.activeQuestion.validationMessage = question.validationMessage;
                 $scope.activeQuestion.allQuestionScopeOptions = question.allQuestionScopeOptions;
-                $scope.activeQuestion.notPrefilledQuestionScopeOptions = question.notPrefilledQuestionScopeOptions;
                 $scope.activeQuestion.instructions = question.instructions;
                 $scope.activeQuestion.maxAnswerCount = question.maxAnswerCount;
                 $scope.activeQuestion.maxAllowedAnswers = question.maxAllowedAnswers;
                 $scope.activeQuestion.areAnswersOrdered = question.areAnswersOrdered;
+                $scope.activeQuestion.yesNoView = question.yesNoView;
                 $scope.activeQuestion.isFilteredCombobox = question.isFilteredCombobox;
+
+                $scope.activeQuestion.validationConditions = question.validationConditions;
 
                 var options = question.options || [];
                 _.each(options, function(option) {
@@ -64,7 +91,7 @@
 
                 $scope.setQuestionType(question.type);
 
-                $scope.setLinkSource(question.linkedToQuestionId);
+                $scope.setLinkSource(question.linkedToEntityId, question.linkedFilterExpression);
                 $scope.setCascadeSource(question.cascadeFromQuestionId);
 
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = false;
@@ -74,10 +101,12 @@
                 }
             };
 
+            $scope.MAX_OPTIONS_COUNT = 200;
+
             var dataBind = function (result) {
                 dictionnaires.allQuestionScopeOptions = result.allQuestionScopeOptions;
 
-                $scope.sourceOfLinkedQuestions = result.sourceOfLinkedQuestions;
+                $scope.sourceOfLinkedEntities = result.sourceOfLinkedEntities;
                 $scope.sourceOfSingleQuestions = result.sourceOfSingleQuestions;
                 
                 bindQuestion(result);
@@ -88,7 +117,18 @@
                     .success(function (result) {
                         $scope.initialQuestion = angular.copy(result);
                         dataBind(result);
+                        utilityService.scrollToValidationCondition($state.params.validationIndex);
                     });
+            };
+
+            var hasQuestionEnablementConditions = function(question) {
+                return $scope.doesQuestionSupportEnablementConditions() &&
+                    question.enablementCondition !== null &&
+                    /\S/.test(question.enablementCondition);
+            };
+
+            var hasQuestionValidations = function(question) {
+                return $scope.doesQuestionSupportValidations() && question.validationConditions.length > 0;
             };
 
             $scope.saveQuestion = function (callback) {
@@ -100,10 +140,14 @@
 
                         $rootScope.$emit('questionUpdated', {
                             itemId: $scope.activeQuestion.itemId,
+                            type: $scope.activeQuestion.type,
+                            linkedToEntityId: $scope.activeQuestion.linkedToEntityId,
+                            linkedFilterExpression: $scope.activeQuestion.linkedFilterExpression,
+                            hasCondition: hasQuestionEnablementConditions($scope.activeQuestion),
+                            hasValidation: hasQuestionValidations($scope.activeQuestion),
                             title: $scope.activeQuestion.title,
                             variable: $scope.activeQuestion.variable,
-                            type: $scope.activeQuestion.type,
-                            linkedToQuestionId: $scope.activeQuestion.linkedToQuestionId
+                            hideIfDisabled: $scope.activeQuestion.hideIfDisabled
                         });
 
                         var notIsFilteredCombobox = !$scope.activeQuestion.isFilteredCombobox;
@@ -123,9 +167,9 @@
                     });
                 }
             };
-
+            
             var wasThereOptionsLooseWhileChanginQuestionProperties = function(initialQuestion, actualQuestion) {
-                if (actualQuestion.type != "SingleOption")
+                if (actualQuestion.type !== "SingleOption" || actualQuestion.type !== "MultyOption")
                     return false;
 
                 if ((actualQuestion.wereOptionsTruncated || false) === false)
@@ -150,8 +194,8 @@
                 $scope.activeQuestion.typeName = _.find($scope.activeQuestion.questionTypeOptions, { value: type }).text;
                 $scope.activeQuestion.allQuestionScopeOptions = dictionnaires.allQuestionScopeOptions;
 
-
-                if (type === 'TextList') {
+                var isQuestionScopeSupervisorOrPrefilled = $scope.activeQuestion.questionScope === 'Supervisor' || $scope.activeQuestion.questionScope === 'Prefilled';
+                if (type === 'TextList' && isQuestionScopeSupervisorOrPrefilled) {
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
 
@@ -163,14 +207,19 @@
                         $scope.activeQuestion.questionScope = 'Interviewer';
                     }
                 }
-                if (type === 'GpsCoordinates') {
+                if (type === 'GpsCoordinates' && $scope.activeQuestion.questionScope === 'Supervisor') {
                     $scope.activeQuestion.questionScope = 'Interviewer';
                 }
-                if (type !== "SingleOption" && type !== "MultyOption") {
-                    $scope.setLinkSource(null);
+
+                if (type === 'MultyOption' && $scope.activeQuestion.questionScope === 'Prefilled') {
+                    $scope.activeQuestion.questionScope = 'Interviewer';
                 }
 
-                $scope.questionForm.$setDirty();
+                if (type !== "SingleOption" && type !== "MultyOption") {
+                    $scope.setLinkSource(null,null);
+                }
+
+                markFormAsChanged();
             };
 
             $scope.cancelQuestion = function () {
@@ -179,13 +228,16 @@
             };
 
             $scope.addOption = function () {
+                if ($scope.activeQuestion.optionsCount >= $scope.MAX_OPTIONS_COUNT)
+                    return;
+
                 $scope.activeQuestion.options.push({
                     "value": null,
                     "title": '',
                     "id": utilityService.guid()
                 });
                 $scope.activeQuestion.optionsCount += 1;
-                $scope.questionForm.$setDirty();
+                markFormAsChanged();
             };
 
             $scope.editFilteredComboboxOptions = function () {
@@ -247,9 +299,25 @@
 
             $scope.removeOption = function (index) {
                 $scope.activeQuestion.options.splice(index, 1);
-                $scope.activeQuestion.optionsCount -= 1;
-                $scope.questionForm.$setDirty();
+                $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
+                markFormAsChanged();
             };
+
+            $scope.removeValidationCondition = function(index) {
+                $scope.activeQuestion.validationConditions.splice(index, 1);
+                markFormAsChanged();
+            }
+
+            $scope.addValidationCondition = function() {
+                $scope.activeQuestion.validationConditions.push({
+                    expression: '',
+                    message: ''
+                });
+                markFormAsChanged();
+                _.defer(function () {
+                    $(".question-editor .form-holder").scrollTo({ top: '+=200px', left: "+=0" }, 250);
+                });
+            }
 
             $scope.showOptionsInTextarea = function () {
                 $scope.activeQuestion.stringifiedOptions = optionsService.stringifyOptions($scope.activeQuestion.options);
@@ -272,20 +340,51 @@
                 if ($scope.activeQuestion.questionScope === 'Prefilled') {
                     $scope.activeQuestion.enablementCondition = '';
                 }
-                $scope.questionForm.$setDirty();
+                markFormAsChanged();
             };
 
-            $scope.$watch('activeQuestion.isLinked', function (newValue) {
-                if (!newValue && $scope.activeQuestion) {
-                    $scope.activeQuestion.linkedToQuestionId = null;
-                    $scope.activeQuestion.linkedToQuestion = null;
+            $scope.getQuestionScopes = function (currentQuestion) {
+                if (!currentQuestion)
+                    return [];
+                var allScopes = currentQuestion.allQuestionScopeOptions;
+                if (!currentQuestion.isCascade && !currentQuestion.isLinked && $.inArray(currentQuestion.type, ['TextList', 'QRBarcode', 'Multimedia', 'GpsCoordinates', 'MultyOption']) < 0)
+                    return allScopes;
+
+                return allScopes.filter(function (o) {
+                    if (currentQuestion.type == 'MultyOption')
+                        return o.value !== 'Prefilled';
+
+                    if (currentQuestion.type == 'GpsCoordinates')
+                        return o.value !== 'Supervisor';
+
+                    return o.value !== 'Prefilled' && o.value !== 'Supervisor';
+                });
+            };
+
+            $scope.$watch('activeQuestion.isLinked', function(newValue) {
+                if (!$scope.activeQuestion) {
+                    return;
+                }
+                if (newValue) {
+                    $scope.activeQuestion.yesNoView = false;
+                } else {
+                    $scope.activeQuestion.linkedToEntityId = null;
+                    $scope.activeQuestion.linkedToEntity = null;
+                    $scope.activeQuestion.linkedFilterExpression = null;
+                }
+            });
+            $scope.$watch('activeQuestion.yesNoView', function (newValue) {
+                if (newValue && $scope.activeQuestion) {
+                    $scope.activeQuestion.isLinked = false;
                 }
             });
 
             $scope.$watch('activeQuestion.isCascade', function (newValue) {
                 if ($scope.activeQuestion) {
                     if (newValue) {
-                        $scope.activeQuestion.questionScope = 'Interviewer';
+                        if ($scope.activeQuestion.questionScope !== 'Interviewer' && $scope.activeQuestion.questionScope !== 'Hidden') {
+                            $scope.activeQuestion.questionScope = 'Interviewer';
+                        }
                     } else {
                         $scope.activeQuestion.cascadeFromQuestionId = null;
                         $scope.activeQuestion.cascadeFromQuestion = null;
@@ -293,13 +392,14 @@
                 }
             });
 
-            $scope.setLinkSource = function (itemId) {
+            $scope.setLinkSource = function (itemId, linkedFilterExpression) {
                 $scope.activeQuestion.isLinked = !_.isEmpty(itemId);
 
                 if (itemId) {
-                    $scope.activeQuestion.linkedToQuestionId = itemId;
-                    $scope.activeQuestion.linkedToQuestion = _.find($scope.sourceOfLinkedQuestions, { id: $scope.activeQuestion.linkedToQuestionId });
-                    $scope.questionForm.$setDirty();
+                    $scope.activeQuestion.linkedToEntityId = itemId;
+                    $scope.activeQuestion.linkedToEntity = _.find($scope.sourceOfLinkedEntities, { id: $scope.activeQuestion.linkedToEntityId });
+                    $scope.activeQuestion.linkedFilterExpression = linkedFilterExpression;
+                    markFormAsChanged();
                 } 
             };
 
@@ -309,7 +409,7 @@
                 if (itemId) {
                     $scope.activeQuestion.cascadeFromQuestionId = itemId;
                     $scope.activeQuestion.cascadeFromQuestion = _.find($scope.sourceOfSingleQuestions, { id: $scope.activeQuestion.cascadeFromQuestionId });
-                    $scope.questionForm.$setDirty();
+                    markFormAsChanged();
                 }
             };
 

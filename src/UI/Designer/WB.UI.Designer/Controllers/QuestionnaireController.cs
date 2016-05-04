@@ -19,8 +19,8 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.BootstrapSupport;
@@ -40,8 +40,9 @@ namespace WB.UI.Designer.Controllers
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory;
         private readonly IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory;
-        private readonly IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory;
+        private readonly ILookupTableService lookupTableService;
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
+        private readonly ICommandPostprocessor commandPostprocessor;
         private readonly ILogger logger;
 
         public QuestionnaireController(
@@ -49,19 +50,21 @@ namespace WB.UI.Designer.Controllers
             IMembershipUserService userHelper,
             IQuestionnaireHelper questionnaireHelper,
             IViewFactory<QuestionnaireViewInputModel, QuestionnaireView> questionnaireViewFactory,
-            IViewFactory<QuestionnaireSharedPersonsInputModel, QuestionnaireSharedPersons> sharedPersonsViewFactory,
             ILogger logger,
             IQuestionnaireInfoFactory questionnaireInfoFactory,
-            IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory)
+            IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory, 
+            ILookupTableService lookupTableService, 
+            ICommandPostprocessor commandPostprocessor)
             : base(userHelper)
         {
             this.commandService = commandService;
             this.questionnaireHelper = questionnaireHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
-            this.sharedPersonsViewFactory = sharedPersonsViewFactory;
             this.logger = logger;
             this.questionnaireInfoFactory = questionnaireInfoFactory;
             this.questionnaireChangeHistoryFactory = questionnaireChangeHistoryFactory;
+            this.lookupTableService = lookupTableService;
+            this.commandPostprocessor = commandPostprocessor;
         }
 
         public ActionResult Clone(Guid id)
@@ -86,9 +89,8 @@ namespace WB.UI.Designer.Controllers
                 try
                 {
                     var questionnaireId = Guid.NewGuid();
-                    this.commandService.Execute(
-                        new CloneQuestionnaireCommand(questionnaireId, model.Title, UserHelper.WebUser.UserId,
-                            model.IsPublic, sourceModel.Source));
+
+                    this.commandService.Execute(new CloneQuestionnaire(questionnaireId, model.Title, UserHelper.WebUser.UserId, model.IsPublic, sourceModel.Source));
 
                     return this.RedirectToAction("Open", "App", new { id = questionnaireId });
                 }
@@ -128,7 +130,7 @@ namespace WB.UI.Designer.Controllers
                 try
                 {
                     this.commandService.Execute(
-                        new CreateQuestionnaireCommand(
+                        new CreateQuestionnaire(
                             questionnaireId: questionnaireId,
                             text: model.Title,
                             createdBy: UserHelper.WebUser.UserId,
@@ -157,11 +159,21 @@ namespace WB.UI.Designer.Controllers
             }
             else
             {
-                this.commandService.Execute(new DeleteQuestionnaireCommand(model.PublicKey));
+                var command = new DeleteQuestionnaire(model.PublicKey);
+
+                this.commandService.Execute(command);
+
+                this.commandPostprocessor.ProcessCommandAfterExecution(command);
+
                 this.Success(string.Format("Questionnaire \"{0}\" successfully deleted", model.Title));
             }
 
             return this.Redirect(this.Request.UrlReferrer.ToString());
+        }
+
+        public ActionResult ExpressionGeneration()
+        {
+            return this.View();
         }
 
         public ActionResult Index(int? p, string sb, int? so, string f)
@@ -284,7 +296,7 @@ namespace WB.UI.Designer.Controllers
         public JsonResult ApplyOptions()
         {
             var commandResult = this.ExecuteCommand(
-                new UpdateFilteredComboboxOptionsCommand(
+                new UpdateFilteredComboboxOptions(
                         Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
                         this.questionWithOptionsViewModel.QuestionId,
                         this.UserHelper.WebUser.UserId,
@@ -296,7 +308,7 @@ namespace WB.UI.Designer.Controllers
         public JsonResult ApplyCascadingOptions()
         {
             var commandResult = this.ExecuteCommand(
-                new UpdateCascadingComboboxOptionsCommand(
+                new UpdateCascadingComboboxOptions(
                         Guid.Parse(this.questionWithOptionsViewModel.QuestionnaireId),
                         this.questionWithOptionsViewModel.QuestionId,
                         this.UserHelper.WebUser.UserId,
@@ -328,6 +340,12 @@ namespace WB.UI.Designer.Controllers
                 };
             }
             return commandResult;
+        }
+
+        public FileResult ExportLookupTable(Guid id, Guid lookupTableId)
+        {
+            var lookupTableContentFile = this.lookupTableService.GetLookupTableContentFile(id, lookupTableId);
+            return File(lookupTableContentFile.Content, "text/csv", lookupTableContentFile.FileName);
         }
 
         public FileResult ExportOptions()

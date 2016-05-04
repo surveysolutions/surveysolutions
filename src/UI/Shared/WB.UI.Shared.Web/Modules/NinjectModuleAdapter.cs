@@ -1,3 +1,4 @@
+using Ninject;
 using Ninject.Modules;
 using WB.Core.Infrastructure.Modularity;
 
@@ -21,6 +22,22 @@ namespace WB.UI.Shared.Web.Modules
         void IIocRegistry.Bind<TInterface, TImplementation>()
         {
             this.Kernel.Bind<TInterface>().To<TImplementation>();
+        }
+
+        void IIocRegistry.BindAsSingleton<TInterface, TImplementation>()
+        {
+            this.Kernel.Bind<TInterface>().To<TImplementation>().InSingletonScope();
+        }
+
+        void IIocRegistry.BindAsSingletonWithConstructorArgument<TInterface, TImplementation>(string argumentName, object argumentValue)
+        {
+            this.Kernel.Bind<TInterface>().To<TImplementation>().InSingletonScope()
+                .WithConstructorArgument(argumentName, argumentValue);
+        }
+
+        void IIocRegistry.BindToRegisteredInterface<TInterface, TRegisteredInterface>()
+        {
+            this.Kernel.Bind<TInterface>().ToMethod<TInterface>(context => context.Kernel.Get<TRegisteredInterface>());
         }
     }
 }

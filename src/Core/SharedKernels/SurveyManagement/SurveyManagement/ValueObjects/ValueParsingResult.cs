@@ -7,8 +7,6 @@
         ValueIsNullOrEmpty,
         
         AnswerAsIntWasNotParsed,
-        AnswerIsIncorrectBecauseQuestionIsUsedAsSizeOfRosterGroupAndSpecifiedAnswerIsNegative,
-        AnswerIsIncorrectBecauseQuestionIsUsedAsSizeOfRosterGroupAndSpecifiedAnswerIsMoreThan40,
         AnswerAsDecimalWasNotParsed,
         AnswerAsDateTimeWasNotParsed,
         AnswerAsGpsWasNotParsed,
@@ -17,6 +15,7 @@
         UnsupportedLinkedQuestion,
 
         GeneralErrorOccured,
-        UnsupportedMultimediaQuestion
+        UnsupportedMultimediaQuestion,
+        CommaIsUnsupportedInAnswer
     }
 }

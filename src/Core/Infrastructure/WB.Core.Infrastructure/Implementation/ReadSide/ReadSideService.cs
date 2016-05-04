@@ -1,18 +1,22 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Ncqrs.Domain;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
+
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Services;
 using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.Infrastructure.Implementation.ReadSide
@@ -23,14 +27,12 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
         private int totalEventsToRebuildCount = 0;
 
-        private int FailedEventsCount
-        {
-            get { return errors.Count; }
-        }
+        private int FailedEventsCount => errors.Count;
 
         private int processedEventsCount = 0;
         private int skippedEventsCount = 0;
-        private DateTime lastRebuildDate = DateTime.Now;
+        private DateTime? lastRebuildDate = null;
+        private readonly Stopwatch republishStopwatch = new Stopwatch();
 
         private int maxAllowedFailedEvents = 100;
 
@@ -46,20 +48,26 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         private readonly IStreamableEventStore eventStore;
         private readonly IEventDispatcher eventBus;
         private readonly ILogger logger;
-        private readonly IReadSideCleaner readSideCleaner;
+        private readonly IPostgresReadSideBootstraper postgresReadSideBootstraper;
         private Dictionary<IEventHandler, Stopwatch> handlersWithStopwatches;
         private readonly ITransactionManagerProviderManager transactionManagerProviderManager;
+        private readonly ReadSideSettings settings;
+        private readonly IReadSideKeyValueStorage<ReadSideVersion> readSideVersionStorage;
+        private int? cachedReadSideDatabaseVersion = null as int?;
 
         static ReadSideService()
         {
             UpdateStatusMessage("No administration operations were performed so far.");
         }
 
-        public ReadSideService(IStreamableEventStore eventStore, 
+        public ReadSideService(
+            IStreamableEventStore eventStore,
             IEventDispatcher eventBus, 
             ILogger logger,
-            IReadSideCleaner readSideCleaner, 
-            ITransactionManagerProviderManager transactionManagerProviderManager)
+            IPostgresReadSideBootstraper postgresReadSideBootstraper, 
+            ITransactionManagerProviderManager transactionManagerProviderManager,
+            ReadSideSettings settings,
+            IReadSideKeyValueStorage<ReadSideVersion> readSideVersionStorage)
         {
             if (InstanceCount > 0)
                 throw new Exception(string.Format("Trying to create a new instance of {1} when following count of instances exists: {0}.", InstanceCount, typeof(ReadSideService).Name));
@@ -69,20 +77,63 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             this.eventStore = eventStore;
             this.eventBus = eventBus;
             this.logger = logger;
-            this.readSideCleaner = readSideCleaner;
+            this.postgresReadSideBootstraper = postgresReadSideBootstraper;
             this.transactionManagerProviderManager = transactionManagerProviderManager;
+            this.settings = settings;
+            this.readSideVersionStorage = readSideVersionStorage;
         }
 
-        #region IReadLayerStatusService implementation
+        #region IReadSideStatusService implementation
 
         public bool AreViewsBeingRebuiltNow()
         {
             return areViewsBeingRebuiltNow;
         }
 
-        #endregion // IReadLayerStatusService implementation
+        public bool IsReadSideOutdated()
+        {
+            if (this.AreViewsBeingRebuiltNow())
+                return false;
 
-        #region IReadLayerAdministrationService implementation
+            this.InitializeDatabaseVersionIfNeeded();
+
+            return this.GetReadSideDatabaseVersion() != this.GetReadSideApplicationVersion();
+        }
+
+        public int GetReadSideApplicationVersion()
+        {
+            return this.settings.ReadSideVersion;
+        }
+
+        public int? GetReadSideDatabaseVersion()
+        {
+            if (this.AreViewsBeingRebuiltNow())
+                return null as int?;
+
+            if (this.cachedReadSideDatabaseVersion.HasValue)
+                return this.cachedReadSideDatabaseVersion.Value;
+
+            ReadSideVersion readSideDatabaseVersion = null;
+            try
+            {
+                this.transactionManagerProviderManager.GetTransactionManager().BeginQueryTransaction();
+                readSideDatabaseVersion = this.readSideVersionStorage.GetById(ReadSideVersion.IdOfCurrent);
+                this.cachedReadSideDatabaseVersion = readSideDatabaseVersion?.Version;
+            }
+            /*catch (Exception)
+            {
+            }*/
+            finally
+            {
+                this.transactionManagerProviderManager.GetTransactionManager().RollbackQueryTransaction();
+            }
+
+            return readSideDatabaseVersion?.Version;
+        }
+
+        #endregion // IReadSideStatusService implementation
+
+        #region IReadSideAdministrationService implementation
 
         public void RebuildAllViewsAsync(int skipEvents)
         {
@@ -138,34 +189,40 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         {
             int republishedEventsCount = this.processedEventsCount - this.skippedEventsCount;
 
-            TimeSpan republishTimeSpent = this.AreViewsBeingRebuiltNow() ? DateTime.Now - this.lastRebuildDate : TimeSpan.Zero;
+            TimeSpan republishTimeSpent = this.republishStopwatch.Elapsed;
 
             int speedInEventsPerMinute = (int)(
                 republishTimeSpent.TotalSeconds == 0
-                ? 0
-                : 60 * republishedEventsCount / republishTimeSpent.TotalSeconds);
+                    ? 0
+                    : 60L * republishedEventsCount / republishTimeSpent.TotalSeconds);
 
             TimeSpan estimatedTotalRepublishTime = TimeSpan.FromMilliseconds(
                 republishedEventsCount == 0
-                ? 0
-                : republishTimeSpent.TotalMilliseconds / republishedEventsCount * this.totalEventsToRebuildCount);
+                    ? 0
+                    : republishTimeSpent.TotalMilliseconds / republishedEventsCount * this.totalEventsToRebuildCount);
 
 
-            return new ReadSideStatus()
+            var criticalRebuildReadSideExceptions = errors.Where(error => IsCriticalException(error.Item3)).ToList();
+            var exceptionsByEventHandlersWhichShouldBeIgnored = errors.Except(criticalRebuildReadSideExceptions).ToList();
+
+            return new ReadSideStatus
             {
                 IsRebuildRunning = this.AreViewsBeingRebuiltNow(),
+
+                ReadSideApplicationVersion = this.GetReadSideApplicationVersion(),
+                ReadSideDatabaseVersion = this.GetReadSideDatabaseVersion(),
+
                 CurrentRebuildStatus = statusMessage,
                 LastRebuildDate = this.lastRebuildDate,
-                EventPublishingDetails = new ReadSideEventPublishingDetails()
+                EventPublishingDetails = new ReadSideEventPublishingDetails
                 {
                     ProcessedEvents = republishedEventsCount,
-                    EstimatedTime = estimatedTotalRepublishTime,
+                    EstimatedTime = this.AreViewsBeingRebuiltNow() ? estimatedTotalRepublishTime : null as TimeSpan?,
                     FailedEvents = this.FailedEventsCount,
                     SkippedEvents = this.skippedEventsCount,
                     Speed = speedInEventsPerMinute,
                     TimeSpent = republishTimeSpent,
-                    TotalEvents = this.totalEventsToRebuildCount
-
+                    TotalEvents = this.totalEventsToRebuildCount,
                 },
                 StatusByRepositoryWriters = this.eventBus.GetAllRegistredEventHandlers()
                     .SelectMany(x => x.Writers.OfType<IReadSideStorage>())
@@ -177,15 +234,31 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                                 WriterName = GetStorageEntityName(writer),
                                 Status = writer.GetReadableStatus()
                             }),
-                RebuildErrors = ReverseList(errors)
-                    .Select(error => new ReadSideRepositoryWriterError()
+                WarningEventHandlerErrors = ReverseList(exceptionsByEventHandlersWhichShouldBeIgnored)
+                    .Take(10)
+                    .Select(error => new ReadSideRepositoryWriterError
                     {
                         ErrorTime = error.Item1,
                         ErrorMessage = error.Item2,
                         InnerException = GetFullUnwrappedExceptionText(error.Item3)
                     }),
-                ReadSideDenormalizerStatistics=GetRebuildDenormalizerStatistics()
+                RebuildErrors = ReverseList(criticalRebuildReadSideExceptions)
+                    .Take(10)
+                    .Select(error => new ReadSideRepositoryWriterError
+                    {
+                        ErrorTime = error.Item1,
+                        ErrorMessage = error.Item2,
+                        InnerException = GetFullUnwrappedExceptionText(error.Item3)
+                    }),
+                ReadSideDenormalizerStatistics = GetRebuildDenormalizerStatistics()
             };
+        }
+
+        private static bool IsCriticalException(Exception exception)
+        {
+            var eventHandlerException =  exception.GetSelfOrInnerAs<EventHandlerException>();
+
+            return eventHandlerException == null || eventHandlerException.IsCritical;
         }
 
         private string CreateViewName(object storage)
@@ -198,7 +271,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             return storage.GetType().Name;
         }
 
-        #endregion // IReadLayerAdministrationService implementation
+        #endregion // IReadSideAdministrationService implementation
 
         private void RebuildViewsForEventSources(IEventHandler[] handlers, Guid[] eventSourceIds)
         {
@@ -262,8 +335,8 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             if (atomicEventHandlers.Length != handlers.Length)
             {
                 var message =
-                    "Not all handlers supports partial rebuild. Handlers which are not supporting partial rebuild are {0}" +
-                    string.Join((string) ",", (IEnumerable<string>) handlers.Where(h => !atomicEventHandlers.Contains(h)).Select(h => h.Name));
+                    "Not all handlers supports partial rebuild. Handlers which are not supporting partial rebuild are " +
+                    string.Join(",", handlers.Where(h => !atomicEventHandlers.Contains(h)).Select(h => h.Name));
 
                 UpdateStatusMessage(message);
 
@@ -272,6 +345,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
             try
             {
+                var transactionManager = this.transactionManagerProviderManager.GetTransactionManager();
                 foreach (var atomicEventHandler in atomicEventHandlers)
                 {
                     ThrowIfShouldStopViewsRebuilding();
@@ -280,16 +354,27 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                     foreach (var eventSourceId in eventSourceIds)
                     {
-                        UpdateStatusMessage(string.Format("Cleaning views for {0} and event source {1}", cleanerName, eventSourceId));
-                        atomicEventHandler.CleanWritersByEventSource(eventSourceId);
-                        UpdateStatusMessage(string.Format("Views for {0}  and event source {1} was cleaned.", cleanerName, eventSourceId));
+                        UpdateStatusMessage($"Cleaning views for {cleanerName} and event source {eventSourceId}");
+                        try
+                        {
+                            transactionManager.BeginCommandTransaction();
+                            atomicEventHandler.CleanWritersByEventSource(eventSourceId);
+                            transactionManager.CommitCommandTransaction();
+                        }
+                        catch
+                        {
+                            transactionManager.RollbackCommandTransaction();
+                            throw;
+                        }
+                        UpdateStatusMessage($"Views for {cleanerName} and event source {eventSourceId} was cleaned.");
                     }
                 }
 
                 try
                 {
-                    this.EnableWritersCacheForHandlers(handlers);
+                    EnableWritersCacheForHandlers(handlers);
                     this.transactionManagerProviderManager.PinRebuildReadSideTransactionManager();
+                    this.republishStopwatch.Restart();
 
                     foreach (var eventSourceId in eventSourceIds)
                     {
@@ -299,11 +384,13 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 }
                 finally
                 {
+                    this.republishStopwatch.Stop();
                     this.transactionManagerProviderManager.UnpinTransactionManager();
                     this.DisableWritersCacheForHandlers(handlers);
                 }
 
-                UpdateStatusMessage("Rebuild specific views succeeded.");
+                UpdateStatusMessage("Rebuild views by event sources succeeded.");
+                logger.Info("Rebuild views by event sources succeeded.");
             }
             catch (OperationCanceledException exception)
             {
@@ -322,44 +409,60 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             }
         }
 
-        private void RebuildViewsImpl(int skipEvents, IEventHandler[] handlers, bool isPartiallyRebuild)
+        private void RebuildViewsImpl(int skipEvents, IEventHandler[] handlers, bool isPartialRebuild)
         {
             try
             {
-                areViewsBeingRebuiltNow = true;
-
-                errors.Clear();
-
-                try
+                using (GlobalStopwatcher.Scope("Rebuild read side"))
                 {
-                    this.transactionManagerProviderManager.PinRebuildReadSideTransactionManager();
+                    areViewsBeingRebuiltNow = true;
+
+                    errors.Clear();
 
                     if (skipEvents == 0)
                     {
-                        this.CleanUpWritersForHandlers(handlers, isPartiallyRebuild);
+                        if (!isPartialRebuild && this.postgresReadSideBootstraper != null)
+                            this.postgresReadSideBootstraper.ReCreateViewDatabase();
+
+                        this.CleanUpWritersForHandlers(handlers);
+                    }
+
+                    if (!isPartialRebuild)
+                    {
+                        this.CleanReadSideVersion();
                     }
 
                     try
                     {
-                        this.EnableWritersCacheForHandlers(handlers);
+                        EnableWritersCacheForHandlers(handlers);
+                        this.transactionManagerProviderManager.PinRebuildReadSideTransactionManager();
+                        this.republishStopwatch.Restart();
 
-                        this.RepublishAllEvents(this.GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(), skipEventsCount: skipEvents, handlers: handlers);
+                        this.RepublishAllEvents(this.GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(),
+                            skipEventsCount: skipEvents, handlers: handlers);
                     }
                     finally
                     {
+                        this.republishStopwatch.Stop();
+                        this.transactionManagerProviderManager.UnpinTransactionManager();
                         this.DisableWritersCacheForHandlers(handlers);
 
-                        if(!isPartiallyRebuild && this.readSideCleaner != null) 
-                            this.readSideCleaner.CreateIndexesAfterRebuildReadSide();
+                        if (!isPartialRebuild && this.postgresReadSideBootstraper != null)
+                            this.postgresReadSideBootstraper.CreateIndexesAfterRebuildReadSide();
                     }
-                }
-                finally
-                {
-                    this.transactionManagerProviderManager.UnpinTransactionManager();
-                }
 
-                UpdateStatusMessage("Rebuild specific views succeeded.");
-                logger.Info("Rebuild views succeeded");
+                    if (!isPartialRebuild)
+                    {
+                        this.StoreReadSideVersion();
+                    }
+
+                    var finishMessage = this.FailedEventsCount > 0
+                        ? $"Rebuild {(isPartialRebuild ? "specific" : "all")} views finished with {this.FailedEventsCount} failed event(s)."
+                        : $"Rebuild {(isPartialRebuild ? "specific" : "all")} views succeeded.";
+
+                    UpdateStatusMessage(finishMessage);
+                    logger.Info(finishMessage);
+                }
             }
             catch (OperationCanceledException exception)
             {
@@ -375,14 +478,72 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             finally
             {
                 areViewsBeingRebuiltNow = false;
+                this.logger.Info(GlobalStopwatcher.GetMeasureDetails());
+                GlobalStopwatcher.Reset();
             }
         }
+
+        private void CleanReadSideVersion()
+        {
+            UpdateStatusMessage("Cleaning read side version");
+
+            this.cachedReadSideDatabaseVersion = null;
+
+            var readSideVersionStorageAsCleaner = this.readSideVersionStorage as IReadSideRepositoryCleaner;
+
+            if (readSideVersionStorageAsCleaner != null)
+            {
+                try
+                {
+                    this.transactionManagerProviderManager.GetTransactionManager().BeginCommandTransaction();
+                    readSideVersionStorageAsCleaner.Clear();
+                    this.transactionManagerProviderManager.GetTransactionManager().CommitCommandTransaction();
+                }
+                catch
+                {
+                    this.transactionManagerProviderManager.GetTransactionManager().RollbackCommandTransaction();
+                    throw;
+                }
+            }
+            UpdateStatusMessage("Read side version cleaned");
+        }
+
+        private void StoreReadSideVersion()
+        {
+            UpdateStatusMessage("Storing read side version");
+
+            this.cachedReadSideDatabaseVersion = null;
+
+            try
+            {
+                this.transactionManagerProviderManager.GetTransactionManager().BeginCommandTransaction();
+                this.readSideVersionStorage.Store(new ReadSideVersion(this.GetReadSideApplicationVersion()), ReadSideVersion.IdOfCurrent);
+                this.transactionManagerProviderManager.GetTransactionManager().CommitCommandTransaction();
+            }
+            catch
+            {
+                this.transactionManagerProviderManager.GetTransactionManager().RollbackCommandTransaction();
+                throw;
+            }
+
+            UpdateStatusMessage("Read side version stored");
+        }
+
+        private void InitializeDatabaseVersionIfNeeded()
+        {
+            if (this.GetReadSideDatabaseVersion() == null && this.IsWriteSideEmpty())
+            {
+                this.StoreReadSideVersion();
+            }
+        }
+
+        private bool IsWriteSideEmpty() => this.eventStore.CountOfAllEvents() == 0;
 
         private IEnumerable<CommittedEvent> GetEventStream(int skipEventsCount)
         {
             if (skipEventsCount > 0)
             {
-                UpdateStatusMessage(string.Format("Skipping {0} events.", skipEventsCount));
+                UpdateStatusMessage($"Skipping {skipEventsCount} events.");
             }
 
             return this.GetEventStream().Skip(skipEventsCount);
@@ -421,13 +582,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         }
 
 
-        private void CleanUpWritersForHandlers(IEnumerable<IEventHandler> handlers, bool isPartiallyRebuild)
+        private void CleanUpWritersForHandlers(IEnumerable<IEventHandler> handlers)
         {
             var cleaners = handlers.SelectMany(x=>x.Writers.OfType<IReadSideRepositoryCleaner>())
                   .Distinct()
                   .ToArray();
-
-            if(!isPartiallyRebuild && this.readSideCleaner != null) this.readSideCleaner.ReCreateViewDatabase();
 
             foreach (var readSideRepositoryCleaner in cleaners)
             {
@@ -435,7 +594,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
                 var cleanerName = this.CreateViewName(readSideRepositoryCleaner);
 
-                UpdateStatusMessage(string.Format("Deleting views for {0}", cleanerName));
+                UpdateStatusMessage($"Deleting views for {cleanerName}");
 
                 try
                 {
@@ -449,11 +608,11 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     throw;
                 }
 
-                UpdateStatusMessage(string.Format("Views for {0} was deleted.", cleanerName));
+                UpdateStatusMessage($"Views for {cleanerName} were deleted.");
             }
         }
 
-        private void EnableWritersCacheForHandlers(IEnumerable<IEventHandler> handlers)
+        private static void EnableWritersCacheForHandlers(IEnumerable<IEventHandler> handlers)
         {
             UpdateStatusMessage("Enabling cache in repository writers.");
 
@@ -463,7 +622,14 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
             foreach (ICacheableRepositoryWriter writer in writers)
             {
-                writer.EnableCache();
+                try
+                {
+                    writer.EnableCache();
+                }
+                catch
+                {
+                    UpdateStatusMessage($"Failed to enable cache for repository writer {GetStorageEntityName(writer)}.");
+                }
             }
 
             UpdateStatusMessage("Cache in repository writers enabled.");
@@ -471,34 +637,63 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
         private void DisableWritersCacheForHandlers(IEnumerable<IEventHandler> handlers)
         {
-            UpdateStatusMessage("Disabling cache in repository writers.");
-
-            var writers = handlers.SelectMany(x => x.Writers.OfType<ICacheableRepositoryWriter>())
-             .Distinct()
-             .ToArray();
-
-            foreach (ICacheableRepositoryWriter writer in writers)
+            using (GlobalStopwatcher.Scope("Disable caches"))
             {
-                UpdateStatusMessage(string.Format(
-                    "Disabling cache in repository writer for entity {0}.",
-                    GetStorageEntityName(writer)));
+                this.logger.Info("Starting Disabling cache in repository writers.");
 
-                try
+                UpdateStatusMessage("Disabling cache in repository writers.");
+                
+                var writers = handlers.SelectMany(x => x.Writers.OfType<ICacheableRepositoryWriter>())
+                    .Distinct()
+                    .ToArray();
+
+                var entitiesInProgress = new ConcurrentDictionary<string, Unit>();
+                var failedWriters = new ConcurrentDictionary<string, Unit>();
+
+                writers.AsParallel().ForAll(writer =>
                 {
-                    this.transactionManagerProviderManager.GetTransactionManager().BeginCommandTransaction();
-                    writer.DisableCache();
-                    this.transactionManagerProviderManager.GetTransactionManager().CommitCommandTransaction();
-                }
-                catch (Exception exception)
+                    var storageEntityName = GetStorageEntityName(writer);
+
+                    using (GlobalStopwatcher.Scope("Disable cache", storageEntityName))
+                    {
+                        this.logger.Info($"Disabling cache for {storageEntityName}");
+
+                        entitiesInProgress.TryAdd(storageEntityName, Unit.Value);
+                        UpdateStatusMessage($"Disabling cache for {string.Join(", ", entitiesInProgress.Keys)}.");
+
+                        try
+                        {
+                            this.transactionManagerProviderManager.GetTransactionManager().BeginCommandTransaction();
+                            writer.DisableCache();
+                            this.transactionManagerProviderManager.GetTransactionManager().CommitCommandTransaction();
+                        }
+                        catch (Exception exception)
+                        {
+                            failedWriters.TryAdd(storageEntityName, Unit.Value);
+                            this.transactionManagerProviderManager.GetTransactionManager().RollbackCommandTransaction();
+                            string message = $"Failed to disable cache and store data to repository for writer {storageEntityName}.";
+                            this.SaveErrorForStatusReport(message, exception);
+                        }
+
+                        entitiesInProgress.TryRemove(storageEntityName);
+
+                        UpdateStatusMessage(
+                            failedWriters.Count > 0
+                                ? $"Disabling cache in repository writer for entities {string.Join(", ", entitiesInProgress.Keys)}. Failed writers: {string.Join(", ", failedWriters.Keys)}."
+                                : $"Disabling cache in repository writer for entities {string.Join(", ", entitiesInProgress.Keys)}.");
+                    }
+                });
+
+                if (failedWriters.Count > 0)
                 {
-                    this.transactionManagerProviderManager.GetTransactionManager().RollbackCommandTransaction();
-                    string message = string.Format("Failed to disable cache and store data to repository for writer {0}.", GetStorageEntityName(writer));
-                    this.SaveErrorForStatusReport(message, exception);
+                    var message = $"Failed to disable cache for some repository writers: {string.Join(", ", failedWriters.Keys)}.";
                     UpdateStatusMessage(message);
+                    this.logger.Fatal(message);
+                    throw new OperationCanceledException(message);
                 }
-            }
 
-            UpdateStatusMessage("Cache in repository writers disabled.");
+                UpdateStatusMessage("Cache in repository writers disabled.");
+            }
         }
 
         private void RepublishAllEvents(IEnumerable<CommittedEvent> eventStream, int allEventsCount, int skipEventsCount = 0,
@@ -511,11 +706,12 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
             ThrowIfShouldStopViewsRebuilding();
 
-            this.logger.Info("Starting rebuild Read Side");
+            this.logger.Info("Starting rebuild Read Side. Skip Events Count: " + skipEventsCount);
 
             UpdateStatusMessage("Determining count of events to be republished.");
 
             this.lastRebuildDate = DateTime.Now;
+
             UpdateStatusMessage("Acquiring first portion of events.");
 
             DateTime republishStarted = DateTime.Now;
@@ -531,37 +727,53 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 ThrowIfShouldStopViewsRebuilding();
 
                 string eventTypeName = @event.Payload.GetType().Name;
-                UpdateStatusMessage(string.Format("Publishing event {0} {1}. ", this.processedEventsCount + 1, eventTypeName));
+                UpdateStatusMessage($"Publishing event {this.processedEventsCount + 1} {eventTypeName}. ");
+
+                EventHandlerExceptionDelegate eventHandlerExceptionDelegate = (nonCriticalEventHandlerException) =>
+                {
+                    string message =
+                        $"Failed to publish event {this.processedEventsCount + 1} of {this.totalEventsToRebuildCount} - {eventTypeName} ({@event.EventIdentifier.FormatGuid()})";
+                    this.SaveErrorForStatusReport(
+                        $"{nonCriticalEventHandlerException.EventHandlerType.Name}.{nonCriticalEventHandlerException.EventType.Name}: {message}",
+                        nonCriticalEventHandlerException);
+                };
 
                 try
                 {
-                    this.eventBus.PublishEventToHandlers(@event, handlersWithStopwatches);
+                    this.eventBus.OnCatchingNonCriticalEventHandlerException += eventHandlerExceptionDelegate;
+
+                    using (GlobalStopwatcher.Scope("Publish event", eventTypeName))
+                    {
+                        this.eventBus.PublishEventToHandlers(@event, handlersWithStopwatches);
+                    }
                 }
                 catch (Exception exception)
                 {
-                    string message = string.Format("Failed to publish event {0} of {1} ({2})", this.processedEventsCount + 1, this.totalEventsToRebuildCount, @event.EventIdentifier);
+                    string message =
+                        $"Failed to publish event {this.processedEventsCount + 1} of {this.totalEventsToRebuildCount} - {eventTypeName} ({@event.EventIdentifier.FormatGuid()})";
                     this.SaveErrorForStatusReport(message, exception);
                     this.logger.Error(message, exception);
 
+                }
+                finally
+                {
+                    this.eventBus.OnCatchingNonCriticalEventHandlerException -= eventHandlerExceptionDelegate;
                 }
 
                 this.processedEventsCount++;
 
                 if (this.FailedEventsCount >= maxAllowedFailedEvents)
                 {
-                    var message = string.Format("Failed to rebuild read side. Too many events failed: {0}. Last processed event count: {1}", this.FailedEventsCount, this.processedEventsCount);
+                    var message = $"Failed to rebuild read side. Too many events failed: {this.FailedEventsCount}. Last processed event count: {this.processedEventsCount}";
                     UpdateStatusMessage(message);
-                    this.logger.Error(message);
+                    this.logger.Fatal(message);
                     throw new OperationCanceledException(message);
                 }
 
-                UpdateStatusMessage(string.Format("Done publishing event {0}, {1}. EventSourceId: {2:N}. Waiting for next event or stream end...", 
-                    this.processedEventsCount, 
-                    eventTypeName, 
-                    @event.EventSourceId));
+                UpdateStatusMessage($"Done publishing event {this.processedEventsCount}, {eventTypeName}. EventSourceId: {@event.EventSourceId:N}. Waiting for next event or stream end...");
             }
 
-            this.logger.Info(String.Format("Rebuild of read side finished sucessfuly. Processed {0} events, failed {1}", this.processedEventsCount, this.FailedEventsCount));
+            this.logger.Info($"Rebuild of read side finished successfully. Processed {this.processedEventsCount} events, failed {this.FailedEventsCount}");
         }
 
         private static string GetReadablePublishingDetails(DateTime republishStarted,
@@ -595,7 +807,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
             {
                 shouldStopViewsRebuilding = false;
 
-                const string stopRequestMessage = "Views rebuilding stopped by request.";
+                const string stopRequestMessage = "Read side rebuild stopped by request.";
 
                 UpdateStatusMessage(stopRequestMessage);
                 throw new OperationCanceledException(stopRequestMessage);
@@ -604,7 +816,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
 
         private static void UpdateStatusMessage(string newMessage)
         {
-            statusMessage = string.Format("{0}: {1}", DateTime.Now, newMessage);
+            statusMessage = $"{DateTime.Now}: {newMessage}";
         }
 
         private static string GetStorageEntityName(IReadSideStorage writer)

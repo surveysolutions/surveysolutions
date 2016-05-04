@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Storage.Memory.Implementation;
+using WB.Infrastructure.Native.Storage.Memory.Implementation;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests
@@ -16,15 +16,15 @@ namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests
         Establish context = () =>
         {
             readSideStorageMock = new Mock<IReadSideStorage<ReadSideRepositoryEntity>>();
-            memoryCachedReadSideStore = CreateMemoryCachedReadSideStore(readSideStorageMock.Object);
+            memoryCachedReadSideStorage = CreateMemoryCachedReadSideStore(readSideStorageMock.Object);
         };
         Because of = () =>
-            memoryCachedReadSideStore.Remove(id);
+            memoryCachedReadSideStorage.Remove(id);
 
         It should_call_Remove_of_IReadSideStorage = () =>
             readSideStorageMock.Verify(x => x.Remove(id), Times.Once);
 
-        private static MemoryCachedReadSideStore<ReadSideRepositoryEntity> memoryCachedReadSideStore;
+        private static MemoryCachedReadSideStorage<ReadSideRepositoryEntity> memoryCachedReadSideStorage;
         private static Mock<IReadSideStorage<ReadSideRepositoryEntity>> readSideStorageMock;
         private static string id = "id_view";
     }

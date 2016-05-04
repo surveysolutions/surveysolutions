@@ -1,5 +1,7 @@
 ﻿using System;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 
 namespace Ncqrs.Eventing
 {
@@ -8,7 +10,8 @@ namespace Ncqrs.Eventing
     /// </summary>
     public class CommittedEvent : IPublishableEvent
     {
-        private readonly object _payload;
+        public long GlobalSequence { get; private set; }
+        private readonly WB.Core.Infrastructure.EventBus.IEvent _payload;
         private readonly int _eventSequence;
         private readonly Guid _eventIdentifier;
         private readonly DateTime _eventTimeStamp;
@@ -32,7 +35,7 @@ namespace Ncqrs.Eventing
         /// <summary>
         /// Gets the payload of the event.
         /// </summary>
-        public object Payload
+        public WB.Core.Infrastructure.EventBus.IEvent Payload
         {
             get { return _payload; }
         }
@@ -76,8 +79,16 @@ namespace Ncqrs.Eventing
             get { return _eventSequence; }
         }
 
-        public CommittedEvent(Guid commitId, string origin, Guid eventIdentifier, Guid eventSourceId, int eventSequence, DateTime eventTimeStamp, object payload)            
-        {            
+        public CommittedEvent(Guid commitId, 
+            string origin, 
+            Guid eventIdentifier, 
+            Guid eventSourceId, 
+            int eventSequence, 
+            DateTime eventTimeStamp, 
+            long globalSequence,
+            WB.Core.Infrastructure.EventBus.IEvent payload)            
+        {
+            GlobalSequence = globalSequence;
             _payload = payload;
             _commitId = commitId;
             _origin = origin;

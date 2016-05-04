@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
@@ -20,17 +22,17 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
             this.repository = repository;
         }
 
-        public IAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
+        public virtual IAggregateRoot GetLatest(Type aggregateType, Guid aggregateId)
         {
             Snapshot snapshot = this.snapshotStore.GetSnapshot(aggregateId, int.MaxValue);
 
             int minVersion = snapshot != null
                 ? snapshot.Version + 1
-                : int.MinValue;
+                : 0;
 
-            CommittedEventStream eventStream = this.eventStore.ReadFrom(aggregateId, minVersion, int.MaxValue);
+            IEnumerable<CommittedEvent> events = this.eventStore.Read(aggregateId, minVersion);
 
-            return this.repository.Load(aggregateType, snapshot, eventStream);
+            return this.repository.Load(aggregateType, aggregateId, snapshot, events);
         }
     }
 }

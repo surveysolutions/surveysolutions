@@ -12,24 +12,37 @@
 
                 var saveRoster = 'ctrl+s';
 
-                if (hotkeys.get(saveRoster) === false) {
+                if (hotkeys.get(saveRoster) !== false) {
                     hotkeys.del(saveRoster);
                 }
-                if ($scope.questionnaire != null && !$scope.questionnaire.isReadOnlyForUser)
-                {
-                    
-                    hotkeys.bindTo($scope)
-                        .add({
-                            combo: saveRoster,
-                            description: 'Save changes',
-                            allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                            callback: function(event) {
+
+                hotkeys.bindTo($scope)
+                    .add({
+                        combo: saveRoster,
+                        description: 'Save changes',
+                        allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+                        callback: function(event) {
+                            if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
                                 $scope.saveRoster();
                                 $scope.editRosterForm.$setPristine();
                                 event.preventDefault();
                             }
-                        });
-                }
+                        }
+                    });
+
+                $scope.onKeyPressInOptions = function(keyEvent) {
+                    if (keyEvent.which === 13) {
+                        keyEvent.preventDefault();
+                        utilityService.moveFocusAndAddOptionIfNeeded(
+                            event.target ? event.target : event.srcElement,
+                            ".fixed-roster-titles-editor",
+                            ".fixed-roster-titles-editor input.fixed-roster-value-editor",
+                            $scope.activeRoster.fixedRosterTitles,
+                            function() { return $scope.addFixedTitle(); },
+                            "title");
+                    }
+                };
+
                 var dataBind = function(result) {
                     $scope.activeRoster = result;
                     $scope.activeRoster.variable = result.variableName;
@@ -121,7 +134,8 @@
                             $rootScope.$emit('rosterUpdated', {
                                 itemId: $scope.activeRoster.itemId,
                                 variable: $scope.activeRoster.variableName,
-                                title: $scope.activeRoster.title
+                                title: $scope.activeRoster.title,
+                                hasCondition: ($scope.activeRoster.enablementCondition !== null && /\S/.test($scope.activeRoster.enablementCondition))
                             });
                         });
                     }
@@ -136,6 +150,7 @@
                                 var itemIdToDelete = $stateParams.itemId;
                                 questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                                 $scope.resetSelection();
+                                $rootScope.$emit('rosterDeleted', itemIdToDelete);
                             });
                         }
                     });

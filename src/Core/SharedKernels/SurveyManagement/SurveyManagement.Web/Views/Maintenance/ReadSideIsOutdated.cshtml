@@ -1,0 +1,29 @@
+﻿@model string
+
+@{
+    ViewBag.Title = "Maintenance";
+    Layout = "~/Views/Shared/_NoAuthenticationLayout.cshtml";
+}
+<div class="well form-signin">
+    <h2>Under maintenance...</h2>
+
+    <br />
+
+    <h4>
+        The application is currently being upgraded to the new version. This a manual operation and may require a noticeable amount of time.<br />
+        Sorry for the inconvenience.<br />
+        <br />
+        After the process is completed you will be automatically redirected to the page you requested.<br>
+    </h4>
+
+
+    <br />
+
+    @section scripts{
+        <script type="text/javascript">
+            setTimeout(function () {
+                window.location.href = '@this.Model';
+            }, 60000);
+        </script>
+    }
+</div>

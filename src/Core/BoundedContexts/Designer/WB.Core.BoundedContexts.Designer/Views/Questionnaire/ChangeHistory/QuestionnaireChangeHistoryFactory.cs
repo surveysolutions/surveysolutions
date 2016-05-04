@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Designer.Views.Account;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
@@ -41,7 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 questionnaireChangeHistoryStorage.Query(
                     _ =>
                         _.Where(h => h.QuestionnaireId == questionnaireId)
-                            .OrderBy(h => h.Sequence)
+                            .OrderByDescending(h => h.Sequence)
                             .Skip((page - 1)*pageSize)
                             .Take(pageSize).ToArray());
 
@@ -105,6 +101,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 case QuestionnaireItemType.Questionnaire:
                     var questionnaireItem = questionnaireDocumentStorage.GetById(itemId);
                     return questionnaireItem != null && !questionnaireItem.IsDeleted;
+                case QuestionnaireItemType.Macro:
+                case QuestionnaireItemType.LookupTable:
+                    return false;
             }
             return false;
         }

@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Events.Questionnaire;
-using WB.Core.BoundedContexts.Designer.Resources;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Attachments;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.LookupTables;
+using WB.Core.BoundedContexts.Designer.Events.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Views.Account;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
@@ -30,7 +27,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         IEventHandler<NewQuestionAdded>,
         IEventHandler<QuestionCloned>,
         IEventHandler<QuestionChanged>,
-        IEventHandler<NumericQuestionAdded>,
         IEventHandler<NumericQuestionCloned>,
         IEventHandler<NumericQuestionChanged>,
         IEventHandler<GroupDeleted>,
@@ -43,11 +39,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         IEventHandler<TemplateImported>,
         IEventHandler<QuestionnaireCloned>,
 
-        IEventHandler<TextListQuestionAdded>,
         IEventHandler<TextListQuestionCloned>,
         IEventHandler<TextListQuestionChanged>,
 
-        IEventHandler<QRBarcodeQuestionAdded>,
         IEventHandler<QRBarcodeQuestionUpdated>,
         IEventHandler<QRBarcodeQuestionCloned>,
 
@@ -59,7 +53,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         IEventHandler<StaticTextDeleted>,
 
         IEventHandler<SharedPersonToQuestionnaireAdded>,
-        IEventHandler<SharedPersonFromQuestionnaireRemoved>
+        IEventHandler<SharedPersonFromQuestionnaireRemoved>,
+
+        IEventHandler<MacroAdded>,
+        IEventHandler<MacroUpdated>,
+        IEventHandler<MacroDeleted>,
+
+        IEventHandler<LookupTableAdded>,
+        IEventHandler<LookupTableUpdated>,
+        IEventHandler<LookupTableDeleted>,
+
+        IEventHandler<AttachmentUpdated>,
+        IEventHandler<AttachmentDeleted>
     {
         private readonly IReadSideRepositoryWriter<AccountDocument> accountStorage;
         private readonly IReadSideRepositoryWriter<QuestionnaireChangeRecord> questionnaireChangeItemStorage;
@@ -302,16 +307,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             questionnaireStateTackerStorage.Store(questionnaire, evnt.EventSourceId);
         }
 
-        public void Handle(IPublishedEvent<NumericQuestionAdded> evnt)
-        {
-            var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
-            AddOrUpdateQuestionState(evnt.EventSourceId, evnt.Payload.PublicKey, questionTitle);
-
-            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
-                QuestionnaireActionType.Add, QuestionnaireItemType.Question, evnt.Payload.PublicKey,
-                questionTitle, evnt.EventSequence);
-        }
-
         public void Handle(IPublishedEvent<NumericQuestionCloned> evnt)
         {
             var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
@@ -334,16 +329,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 questionTitle, evnt.EventSequence);
         }
 
-        public void Handle(IPublishedEvent<TextListQuestionAdded> evnt)
-        {
-            var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
-            AddOrUpdateQuestionState(evnt.EventSourceId, evnt.Payload.PublicKey, questionTitle);
-
-            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
-                QuestionnaireActionType.Add, QuestionnaireItemType.Question, evnt.Payload.PublicKey,
-                questionTitle, evnt.EventSequence);
-        }
-
         public void Handle(IPublishedEvent<TextListQuestionCloned> evnt)
         {
             var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
@@ -363,16 +348,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
             AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
                 QuestionnaireActionType.Update, QuestionnaireItemType.Question, evnt.Payload.PublicKey,
-                questionTitle, evnt.EventSequence);
-        }
-
-        public void Handle(IPublishedEvent<QRBarcodeQuestionAdded> evnt)
-        {
-            var questionTitle = CreateQuestionTitleFromEvent(evnt.Payload);
-            AddOrUpdateQuestionState(evnt.EventSourceId, evnt.Payload.QuestionId, questionTitle);
-
-            AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
-                QuestionnaireActionType.Add, QuestionnaireItemType.Question, evnt.Payload.QuestionId,
                 questionTitle, evnt.EventSequence);
         }
 
@@ -411,7 +386,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public void Handle(IPublishedEvent<StaticTextAdded> evnt)
         {
             var staticTextTitle = evnt.Payload.Text;
-            AddOrUpdateStaticTextState(evnt.EventSourceId, evnt.Payload.EntityId, staticTextTitle);
+            this.AddOrUpdateStaticTextState(evnt.EventSourceId, evnt.Payload.EntityId, staticTextTitle);
 
             AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
                 QuestionnaireActionType.Add, QuestionnaireItemType.StaticText, evnt.Payload.EntityId,
@@ -421,7 +396,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public void Handle(IPublishedEvent<StaticTextUpdated> evnt)
         {
             var staticTextTitle = evnt.Payload.Text;
-            AddOrUpdateStaticTextState(evnt.EventSourceId, evnt.Payload.EntityId, staticTextTitle);
+            this.AddOrUpdateStaticTextState(evnt.EventSourceId, evnt.Payload.EntityId, staticTextTitle);
 
             AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
                 QuestionnaireActionType.Update, QuestionnaireItemType.StaticText, evnt.Payload.EntityId,
@@ -431,7 +406,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         public void Handle(IPublishedEvent<StaticTextCloned> evnt)
         {
             var staticTextTitle = evnt.Payload.Text;
-            AddOrUpdateStaticTextState(evnt.EventSourceId, evnt.Payload.EntityId, staticTextTitle);
+            this.AddOrUpdateStaticTextState(evnt.EventSourceId, evnt.Payload.EntityId, staticTextTitle);
 
             AddQuestionnaireChangeItem(evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
                 QuestionnaireActionType.Clone, QuestionnaireItemType.StaticText, evnt.Payload.EntityId,
@@ -452,6 +427,88 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
             questionnaire.StaticTextState.Remove(evnt.Payload.EntityId);
             questionnaireStateTackerStorage.Store(questionnaire, evnt.EventSourceId);
+        }
+
+        public void Handle(IPublishedEvent<LookupTableAdded> evnt)
+        {
+            AddOrUpdateLookupTableState(evnt.EventSourceId, evnt.Payload.LookupTableId, string.Empty);
+            AddQuestionnaireChangeItem(
+               evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+               QuestionnaireActionType.Add,
+               QuestionnaireItemType.LookupTable,
+               evnt.Payload.LookupTableId,
+               "Empty lookup table added",
+               evnt.EventSequence);
+        }
+
+        public void Handle(IPublishedEvent<LookupTableUpdated> evnt)
+        {
+            AddOrUpdateLookupTableState(evnt.EventSourceId, evnt.Payload.LookupTableId, evnt.Payload.LookupTableName);
+
+            AddQuestionnaireChangeItem(
+               evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+               QuestionnaireActionType.Update,
+               QuestionnaireItemType.LookupTable,
+               evnt.Payload.LookupTableId,
+               evnt.Payload.LookupTableName,
+               evnt.EventSequence);
+        }
+
+
+        public void Handle(IPublishedEvent<MacroAdded> evnt)
+        {
+            AddOrUpdateMacroState(evnt.EventSourceId, evnt.Payload.MacroId, string.Empty);
+
+            AddQuestionnaireChangeItem(
+                evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+                QuestionnaireActionType.Add, 
+                QuestionnaireItemType.Macro, 
+                evnt.Payload.MacroId,
+                "Empty macro added", 
+                evnt.EventSequence);
+        }
+
+        public void Handle(IPublishedEvent<MacroUpdated> evnt)
+        {
+            var macroName = evnt.Payload.Name;
+            AddOrUpdateMacroState(evnt.EventSourceId, evnt.Payload.MacroId, macroName);
+
+            AddQuestionnaireChangeItem(
+               evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+               QuestionnaireActionType.Update,
+               QuestionnaireItemType.Macro,
+               evnt.Payload.MacroId,
+               macroName,
+               evnt.EventSequence);
+        }
+
+
+        public void Handle(IPublishedEvent<AttachmentUpdated> evnt)
+        {
+            AddOrUpdateQuestionnaireStateItem(evnt.EventSourceId, evnt.Payload.AttachmentId, evnt.Payload.AttachmentName, (s, id, title) => s.AttachmentState[id] = title);
+
+            AddQuestionnaireChangeItem(
+               evnt.EventIdentifier, evnt.EventSourceId, evnt.Payload.ResponsibleId, evnt.EventTimeStamp,
+               QuestionnaireActionType.Update,
+               QuestionnaireItemType.Attachment,
+               evnt.Payload.AttachmentId,
+               evnt.Payload.AttachmentName,
+               evnt.EventSequence);
+        }
+
+        public void Handle(IPublishedEvent<LookupTableDeleted> evnt)
+        {
+            DeleteItemFromStateAndUpdateHistory(evnt, q => q.LookupState, evnt.Payload.LookupTableId, QuestionnaireItemType.LookupTable, evnt.Payload.ResponsibleId);
+        }
+
+        public void Handle(IPublishedEvent<MacroDeleted> evnt)
+        {
+            DeleteItemFromStateAndUpdateHistory(evnt, q => q.MacroState, evnt.Payload.MacroId, QuestionnaireItemType.Macro, evnt.Payload.ResponsibleId);
+        }
+
+        public void Handle(IPublishedEvent<AttachmentDeleted> evnt)
+        {
+            DeleteItemFromStateAndUpdateHistory(evnt, q => q.AttachmentState, evnt.Payload.AttachmentId, QuestionnaireItemType.Attachment, evnt.Payload.ResponsibleId);
         }
 
         public void Handle(IPublishedEvent<QuestionnaireItemMoved> evnt)
@@ -559,6 +616,32 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             questionnaireStateTackerStorage.Store(questionnaireStateTacker, questionnaireId);
         }
 
+        private void DeleteItemFromStateAndUpdateHistory<T>(IPublishedEvent<T> evnt,
+            Func<QuestionnaireStateTracker, Dictionary<Guid, string>> state,
+            Guid itemId,
+            QuestionnaireItemType itemType,
+            Guid responsibleId)
+            where T : IEvent
+        {
+            QuestionnaireStateTracker questionnaire = this.questionnaireStateTackerStorage.GetById(evnt.EventSourceId);
+
+            string itemName = "";
+
+            state(questionnaire).TryGetValue(itemId, out itemName);
+
+            this.AddQuestionnaireChangeItem(
+                evnt.EventIdentifier, evnt.EventSourceId, responsibleId, evnt.EventTimeStamp,
+                QuestionnaireActionType.Delete,
+                itemType,
+                itemId,
+                itemName,
+                evnt.EventSequence);
+
+            state(questionnaire).Remove(itemId);
+            this.questionnaireStateTackerStorage.Store(questionnaire, evnt.EventSourceId);
+        }
+
+
         private void AddOrUpdateQuestionState(Guid questionnaireId, Guid itemId, string itemTitle)
         {
             AddOrUpdateQuestionnaireStateItem(questionnaireId, itemId, itemTitle,
@@ -577,10 +660,22 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 });
         }
 
+        private void AddOrUpdateLookupTableState(Guid questionnaireId, Guid itemId, string itemTitle)
+        {
+            AddOrUpdateQuestionnaireStateItem(questionnaireId, itemId, itemTitle,
+                (s, id, title) => s.LookupState[id] = title);
+        }
+
+        private void AddOrUpdateMacroState(Guid questionnaireId, Guid itemId, string itemTitle)
+        {
+            AddOrUpdateQuestionnaireStateItem(questionnaireId, itemId, itemTitle,
+                (s, id, title) => s.MacroState[id] = title);
+        }
+
         private void AddOrUpdateStaticTextState(Guid questionnaireId, Guid itemId, string itemTitle)
         {
             AddOrUpdateQuestionnaireStateItem(questionnaireId, itemId, itemTitle,
-                (s, id, title) => s.StaticTextState[id] = title);
+                (s, id, title) => { s.StaticTextState[id] = title;});
         }
 
         private void AddOrUpdateQuestionnaireStateItem(Guid questionnaireId, Guid itemId, string itemTitle,
@@ -653,6 +748,5 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         {
             return CreateTitle(evnt, q => q.StataExportCaption, q => q.QuestionText);
         }
-
     }
 }

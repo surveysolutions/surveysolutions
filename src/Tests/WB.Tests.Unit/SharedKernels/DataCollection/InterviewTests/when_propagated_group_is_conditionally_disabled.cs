@@ -10,8 +10,10 @@ using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using it = Moq.It;
 using It = Machine.Specifications.It;
 
@@ -29,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
            
             questionWhichIsForcesPropagationId = Guid.Parse("22222222222222222222222222222222");
 
-            Setup.QuestionnaireWithRepositoryToMockedServiceLocator(questionnaireId, _
+            IPlainQuestionnaireRepository questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.HasQuestion(questionWhichIsForcesPropagationId) == true
                 && _.GetQuestionType(questionWhichIsForcesPropagationId) == QuestionType.AutoPropagate
                 && _.IsQuestionInteger(questionWhichIsForcesPropagationId) == true);
@@ -40,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             Setup.SelfCloningInterviewExpressionStateStubWithProviderToMockedServiceLocator(questionnaireId, _
                 => _.ProcessEnablementConditions() == enablementChanges);
 
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             eventContext = new EventContext();
         };

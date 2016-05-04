@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Web.Mvc.Async;
 using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Threading
 {
@@ -94,7 +94,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Threading
                             }
                             catch (Exception e)
                             {
-                                var logger = ServiceLocator.Current.GetInstance<ILogger>();
+                                var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetForType(typeof(AsyncQuestionnaireUpdater));
                                 logger.Error(e.Message, e);
                             }
 

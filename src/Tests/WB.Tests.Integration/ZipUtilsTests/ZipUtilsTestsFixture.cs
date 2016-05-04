@@ -1,8 +1,11 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.IO.Compression;
+
 using NUnit.Framework;
-using WB.Core.GenericSubdomains.Utils.Implementation;
-using WB.Core.GenericSubdomains.Utils.Rest;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Integration.ZipUtilsTests
 {
@@ -35,7 +38,7 @@ namespace WB.Tests.Integration.ZipUtilsTests
 
         private JsonCompressor CreateZipUtils()
         {
-            return new JsonCompressor(new NewtonJsonUtils());
+            return new JsonCompressor(new NewtonJsonSerializer(new JsonSerializerSettingsFactory()));
         }
     }
 }

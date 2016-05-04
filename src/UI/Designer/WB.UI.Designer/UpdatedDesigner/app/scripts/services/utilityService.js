@@ -37,7 +37,30 @@
                     });
                 };
                 
-                utilityService.createQuestionForDeleteConfirmationPopup = function(title) {
+                utilityService.moveFocusAndAddOptionIfNeeded = function (targetDomElement, optionEditorClassName, optionVauleEditorClassName, options, addOptionCallBack, optionPropertyName) {
+
+                    var target = $(targetDomElement);
+                    if (target.parents(optionEditorClassName).length <= 0) {
+                        return;
+                    }
+
+                    var optionScope = angular.element(target).scope()[optionPropertyName];
+                    var indexOfOption = options.indexOf(optionScope);
+                    if (indexOfOption < 0)
+                        return;
+
+                    if (indexOfOption === options.length - 1)
+                        addOptionCallBack();
+
+                    $timeout(function () {
+                        var questionOptionValueEditor = $(optionVauleEditorClassName);
+                        var optionValueInput = $(questionOptionValueEditor[indexOfOption + 1]);
+                        optionValueInput.focus();
+                        optionValueInput.select();
+                    });
+                };
+
+                utilityService.createQuestionForDeleteConfirmationPopup = function (title) {
                     var trimmedTitle = title.substring(0, 25) + (title.length > 25 ? "..." : "");
                     var message = 'Are you sure you want to delete "' + trimmedTitle + '"?';
                     return {
@@ -54,6 +77,7 @@
                         "title": "New sub-section",
                         "items": [],
                         itemType: 'Group',
+                        hasCondition:false,
                         getParentItem: function () { return parent; }
                     };
                     return emptyGroup;
@@ -66,6 +90,7 @@
                         "title": "New roster",
                         "items": [],
                         itemType: 'Group',
+                        hasCondition: false,
                         isRoster: true,
                         getParentItem: function () { return parent; }
                     };
@@ -79,6 +104,8 @@
                         "title": '',
                         "type": 'Text',
                         itemType: 'Question',
+                        hasCondition: false,
+                        hasValidation: false,
                         getParentItem: function () { return parent; }
                     };
                     return emptyQuestion;
@@ -112,8 +139,19 @@
                         isVisible: isTopBorderVisible && isBottomBorderVisible,
                         shouldScrollDown: distanceToTopBorder < distanceToBottomBorder,
                         scrollPositionWhenScrollUp: viewport.top - $(".question-list").offset().top + distanceToBottomBorder
-                    }
+                    };
                 };
+
+                utilityService.scrollToValidationCondition = function(conditionIndex) {
+                    if (!_.isNull(conditionIndex)) {
+                        _.defer(function () {
+                            $(".question-editor .form-holder").scrollTo("#validationCondition" + conditionIndex, 500, {
+                                easing: 'swing',
+                                offset: -10
+                            });
+                        });
+                    }
+                }
 
                 return utilityService;
             }

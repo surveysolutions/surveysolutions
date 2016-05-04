@@ -1,8 +1,8 @@
 ﻿(function() {
     angular.module('designerApp')
         .factory('commandService', [
-            '$http', 'blockUI',
-            function ($http, blockUI) {
+            '$http', 'blockUI', 'Upload',
+            function ($http, blockUI, Upload) {
 
                 var urlBase = '../../api/command';
                 var commandService = {};
@@ -30,62 +30,131 @@
                     return commandCall(type, command);
                 };
 
-                commandService.cloneQuestion = function(questionnaireId, itemIdToClone, newId) {
-                    return commandCall('CloneQuestionById', {
-                        questionId: itemIdToClone,
-                        targetId: newId,
-                        questionnaireId: questionnaireId
+                commandService.updateAttachment = function (questionnaireId, attachment) {
+                    blockUI.start();
+
+                    var command = {
+                        questionnaireId: questionnaireId,
+                        attachmentId: attachment.attachmentId,
+                        attachmentName: attachment.name
+                    };
+
+                    var fileName = "";
+                    if (!_.isUndefined(attachment.meta)) {
+                        fileName = attachment.meta.fileName;
+                    }
+
+                    return Upload.upload({
+                        url: urlBase + '/attachment',
+                        data: { file: _.isNull(attachment.file) ? "" : attachment.file, fileName: fileName,  "command": JSON.stringify(command) }
+                    }).success(function () {
+                        blockUI.stop();
+                    }).error(function () {
+                        blockUI.stop();
                     });
                 };
 
-                commandService.cloneStaticText = function (questionnaireId, itemIdToClone, newId) {
-                    return commandCall('CloneStaticText', {
-                        sourceEntityId: itemIdToClone,
-                        entityId: newId,
-                        questionnaireId: questionnaireId
+                commandService.deleteAttachment = function (questionnaireId, attachmentId) {
+                    var command = {
+                        questionnaireId: questionnaireId,
+                        attachmentId: attachmentId
+                    };
+                    return commandCall("DeleteAttachment", command);
+                };
+
+                commandService.updateLookupTable = function (questionnaireId, lookupTable) {
+                    blockUI.start();
+
+                    var command = {
+                        questionnaireId: questionnaireId,
+                        lookupTableId: lookupTable.itemId,
+                        lookupTableName: lookupTable.name,
+                        lookupTableFileName: lookupTable.fileName
+                    };
+
+                    return Upload.upload({
+                        url: urlBase + '/UpdateLookupTable',
+                        data: { file: _.isNull(lookupTable.file) ? "" : lookupTable.file, "command": JSON.stringify(command) }
+                    }).success(function () {
+                        blockUI.stop();
+                    }).error(function () {
+                        blockUI.stop();
                     });
                 };
 
-                commandService.cloneGroup = function (questionnaireId, groupIdToClone, targetIndex, newId) {
-
-                    return commandCall('CloneGroup', {
-                        sourceGroupId: groupIdToClone,
-                        targetIndex: targetIndex,
-                        groupId: newId,
-                        questionnaireId: questionnaireId
-                    });
+                commandService.addLookupTable = function (questionnaireId, lookupTable) {
+                    var command = {
+                        questionnaireId: questionnaireId,
+                        lookupTableId: lookupTable.itemId
+                    };
+                    return commandCall("AddLookupTable", command);
                 };
 
-                commandService.sendUpdateQuestionCommand = function (questionnaireId, question, shouldGetOptionsOnServer) {
+                commandService.deleteLookupTable = function (questionnaireId, itemId) {
+                    var command = {
+                        questionnaireId: questionnaireId,
+                        lookupTableId: itemId
+                    };
+                    return commandCall("DeleteLookupTable", command);
+                };
+
+                commandService.addMacro = function (questionnaireId, macro) {
+                    var command = {
+                        questionnaireId: questionnaireId,
+                        macroId: macro.itemId
+                    };
+                    return commandCall("AddMacro", command);
+                };
+
+                commandService.updateMacro = function (questionnaireId, macro) {
+                    var command = {
+                        questionnaireId: questionnaireId,
+                        macroId: macro.itemId,
+                        name: macro.name,
+                        content: macro.content,
+                        description: macro.description
+                    };
+
+                    return commandCall("UpdateMacro", command);
+                };
+
+                commandService.deleteMacros = function(questionnaireId, itemId) {
+                    var command = {
+                        questionnaireId: questionnaireId,
+                        macroId: itemId
+                    };
+                    return commandCall("DeleteMacro", command);
+                };
+
+                commandService.sendUpdateQuestionCommand = function(questionnaireId, question, shouldGetOptionsOnServer) {
 
                     var command = {
                         questionnaireId: questionnaireId,
                         questionId: question.itemId,
-                        title: question.title,
                         type: question.type,
-                        variableName: question.variable,
-                        variableLabel: question.variableLabel,
                         mask: question.mask,
-                        isMandatory: question.isMandatory,
-                        enablementCondition: question.enablementCondition,
-                        validationExpression: question.validationExpression,
-                        validationMessage: question.validationMessage,
-                        instructions: question.instructions
+                        validationConditions: question.validationConditions,
+
+                        commonQuestionParameters : {
+                            title: question.title,
+                            variableName: question.variable,
+                            variableLabel: question.variableLabel,
+                            enablementCondition: question.enablementCondition,
+                            hideIfDisabled: question.hideIfDisabled,
+                            instructions: question.instructions,
+                        }
                     };
 
-                    var doesQuestionSupportScopes = question.type != 'TextList' && question.type != 'QRBarcode' && !question.isLinked;
-
-                    if (doesQuestionSupportScopes) {
-                        var isPrefilledScopeSelected = question.questionScope == 'Prefilled';
-                        command.isPreFilled = isPrefilledScopeSelected;
-                        command.scope = isPrefilledScopeSelected ? 'Interviewer' : question.questionScope;
-                    }
+                    var isPrefilledScopeSelected = question.questionScope == 'Prefilled';
+                    command.isPreFilled = isPrefilledScopeSelected;
+                    command.scope = isPrefilledScopeSelected ? 'Interviewer' : question.questionScope;
 
                     switch (question.type) {
                     case "SingleOption":
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
-                        command.linkedToQuestionId = question.linkedToQuestionId;
+                        command.linkedToEntityId = question.linkedToEntityId;
+                        command.linkedFilterExpression = question.linkedFilterExpression;
                         command.isFilteredCombobox = question.isFilteredCombobox || false;
                         command.cascadeFromQuestionId = question.cascadeFromQuestionId;
                         command.enablementCondition = question.cascadeFromQuestionId ? '' : command.enablementCondition;
@@ -100,8 +169,10 @@
                     case "MultyOption":
                         command.areAnswersOrdered = question.areAnswersOrdered;
                         command.maxAllowedAnswers = question.maxAllowedAnswers;
-                        command.linkedToQuestionId = question.linkedToQuestionId;
-                        command.options = _.isEmpty(command.linkedToQuestionId) ? question.options : null ;
+                        command.linkedToEntityId = question.linkedToEntityId;
+                        command.linkedFilterExpression = question.linkedFilterExpression;
+                        command.yesNoView = question.yesNoView;
+                        command.options = _.isEmpty(command.linkedToEntityId) ? question.options : null;
                         break;
                     case "Numeric":
                         command.isInteger = question.isInteger;
@@ -124,17 +195,18 @@
 
                 commandService.addChapter = function(questionnaireId, chapter) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "groupId": chapter.itemId,
-                        "title": chapter.title,
-                        "condition": "",
-                        "isRoster": false,
-                        "rosterSizeQuestionId": null,
-                        "rosterSizeSource": "Question",
-                        "rosterFixedTitles": null,
-                        "rosterTitleQuestionId": null,
-                        "parentGroupId": null,
-                        "variableName": null
+                        questionnaireId: questionnaireId,
+                        groupId: chapter.itemId,
+                        title: chapter.title,
+                        condition: "",
+                        hideIfDisabled: false,
+                        isRoster: false,
+                        rosterSizeQuestionId: null,
+                        rosterSizeSource: "Question",
+                        rosterFixedTitles: null,
+                        rosterTitleQuestionId: null,
+                        parentGroupId: null,
+                        variableName: null
                     };
 
                     return commandCall("AddGroup", command);
@@ -142,36 +214,38 @@
 
                 commandService.addGroup = function (questionnaireId, group, parentGroupId, index) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "groupId": group.itemId,
-                        "title": group.title,
-                        "condition": "",
-                        "isRoster": false,
-                        "rosterSizeQuestionId": null,
-                        "rosterSizeSource": "Question",
-                        "rosterFixedTitles": null,
-                        "rosterTitleQuestionId": null,
-                        "parentGroupId": parentGroupId,
-                        "variableName": null,
-                        "index": index
+                        questionnaireId: questionnaireId,
+                        groupId: group.itemId,
+                        title: group.title,
+                        condition: "",
+                        hideIfDisabled: false,
+                        isRoster: false,
+                        rosterSizeQuestionId: null,
+                        rosterSizeSource: "Question",
+                        rosterFixedTitles: null,
+                        rosterTitleQuestionId: null,
+                        parentGroupId: parentGroupId,
+                        variableName: null,
+                        index: index
                     };
                     return commandCall("AddGroup", command);
                 };
 
                 commandService.addRoster = function (questionnaireId, group, parentGroupId, index) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "groupId": group.itemId,
-                        "title": group.title,
-                        "condition": "",
-                        "isRoster": true,
-                        "rosterSizeQuestionId": null,
-                        "rosterSizeSource": "FixedTitles",
-                        "fixedRosterTitles": [{ value:0, title: "Title" }],
-                        "rosterTitleQuestionId": null,
-                        "parentGroupId": parentGroupId,
-                        "variableName": group.variableName,
-                        "index": index
+                        questionnaireId: questionnaireId,
+                        groupId: group.itemId,
+                        title: group.title,
+                        condition: "",
+                        hideIfDisabled: false,
+                        isRoster: true,
+                        rosterSizeQuestionId: null,
+                        rosterSizeSource: "FixedTitles",
+                        fixedRosterTitles: [{ value: 1, title: "First Title" }, { value:2, title: "Second Title" }],
+                        rosterTitleQuestionId: null,
+                        parentGroupId: parentGroupId,
+                        variableName: group.variableName,
+                        index: index
                     };
 
                     return commandCall("AddGroup", command);
@@ -179,27 +253,28 @@
 
                 commandService.addStaticText = function (questionnaireId, staticText, parentId, index) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "entityId": staticText.itemId,
-                        "text": staticText.text,
-                        "parentId": parentId,
-                        "index": index
+                        questionnaireId: questionnaireId,
+                        entityId: staticText.itemId,
+                        text: staticText.text,
+                        parentId: parentId,
+                        index: index
                     };
                     return commandCall("AddStaticText", command);
                 };
 
                 commandService.updateGroup = function(questionnaireId, group) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "groupId": group.itemId,
-                        "title": group.title,
-                        "condition": group.enablementCondition,
-                        "isRoster": false,
-                        "rosterSizeQuestionId": null,
-                        "rosterSizeSource": "Question",
-                        "rosterFixedTitles": null,
-                        "rosterTitleQuestionId": null,
-                        "variableName":null
+                        questionnaireId: questionnaireId,
+                        groupId: group.itemId,
+                        title: group.title,
+                        condition: group.enablementCondition,
+                        hideIfDisabled: group.hideIfDisabled,
+                        isRoster: false,
+                        rosterSizeQuestionId: null,
+                        rosterSizeSource: "Question",
+                        rosterFixedTitles: null,
+                        rosterTitleQuestionId: null,
+                        variableName:null
                     };
 
                     return commandCall("UpdateGroup", command);
@@ -208,13 +283,14 @@
                 commandService.updateRoster = function(questionnaireId, incomingRoster) {
 
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "groupId": incomingRoster.itemId,
-                        "title": incomingRoster.title,
-                        "description": incomingRoster.description,
-                        "condition": incomingRoster.enablementCondition,
-                        "variableName": incomingRoster.variableName,
-                        "isRoster": true
+                        questionnaireId: questionnaireId,
+                        groupId: incomingRoster.itemId,
+                        title: incomingRoster.title,
+                        description: incomingRoster.description,
+                        condition: incomingRoster.enablementCondition,
+                        hideIfDisabled: incomingRoster.hideIfDisabled,
+                        variableName: incomingRoster.variableName,
+                        isRoster: true
                     };
 
                     switch (incomingRoster.type) {
@@ -239,9 +315,10 @@
                 
                 commandService.updateStaticText = function (questionnaireId, staticText) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "entityId": staticText.itemId,
-                        "text": staticText.text
+                        questionnaireId: questionnaireId,
+                        entityId: staticText.itemId,
+                        text: staticText.text,
+                        attachmentName: staticText.attachmentName
                     };
 
                     return commandCall("UpdateStaticText", command);
@@ -249,39 +326,19 @@
 
                 commandService.addQuestion = function (questionnaireId, parentGroupId, newId, index) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "parentGroupId": parentGroupId,
-                        "questionId": newId,
-                        "index": index
+                        questionnaireId: questionnaireId,
+                        parentGroupId: parentGroupId,
+                        questionId: newId,
+                        index: index
                     };
 
                     return commandCall("AddDefaultTypeQuestion", command);
                 };
 
-
-                commandService.cloneGroupWithoutChildren = function(questionnaireId, newId, chapter) {
-                    var command = {
-                        "questionnaireId": questionnaireId,
-                        "groupId": newId,
-                        "title": chapter.title,
-                        "condition": "",
-                        "isRoster": false,
-                        "rosterSizeQuestionId": null,
-                        "rosterSizeSource": "Question",
-                        "rosterFixedTitles": null,
-                        "rosterTitleQuestionId": null,
-                        "parentGroupId": null,
-                        "sourceGroupId": chapter.chapterId,
-                        "targetIndex": 1
-                    };
-
-                    return commandCall("CloneGroupWithoutChildren", command);
-                };
-
                 commandService.deleteGroup = function(questionnaireId, itemId) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "groupId": itemId
+                        questionnaireId: questionnaireId,
+                        groupId: itemId
                     };
 
                     return commandCall("DeleteGroup", command);
@@ -289,8 +346,8 @@
 
                 commandService.deleteQuestion = function (questionnaireId, itemId) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "questionId": itemId
+                        questionnaireId: questionnaireId,
+                        questionId: itemId
                     };
 
                     return commandCall("DeleteQuestion", command);
@@ -298,11 +355,31 @@
 
                 commandService.deleteStaticText = function (questionnaireId, itemId) {
                     var command = {
-                        "questionnaireId": questionnaireId,
-                        "entityId": itemId
+                        questionnaireId: questionnaireId,
+                        entityId: itemId
                     };
 
                     return commandCall("DeleteStaticText", command);
+                };
+
+                commandService.pasteItemAfter = function (questionnaireId, itemToPasteAfterId, sourceQuestionnaireId, sourceItemId, newId) {
+                    return commandCall('PasteAfter', {
+                        sourceQuestionnaireId: sourceQuestionnaireId,
+                        sourceItemId : sourceItemId,
+                        itemToPasteAfterId: itemToPasteAfterId,
+                        entityId: newId,
+                        questionnaireId: questionnaireId
+                    });
+                };
+
+                commandService.pasteItemInto = function (questionnaireId, parentGroupId, sourceQuestionnaireId, sourceItemId, newId) {
+                    return commandCall('PasteInto', {
+                        sourceQuestionnaireId: sourceQuestionnaireId,
+                        sourceItemId: sourceItemId,
+                        parentId: parentGroupId,
+                        entityId: newId,
+                        questionnaireId: questionnaireId
+                    });
                 };
 
                 return commandService;

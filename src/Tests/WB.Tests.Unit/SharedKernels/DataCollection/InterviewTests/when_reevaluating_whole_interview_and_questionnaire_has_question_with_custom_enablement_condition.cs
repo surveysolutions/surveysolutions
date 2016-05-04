@@ -37,18 +37,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             //expressionProcessor.Setup(x => x.EvaluateBooleanExpression(Moq.It.IsAny<string>(), Moq.It.IsAny<Func<string, object>>()))
             //    .Returns(true);
 
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
-                                                                                                questionaire);
+            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionaire);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
+            //Setup.InstanceToMockedServiceLocator<IExpressionProcessor>(expressionProcessor.Object);
 
-            //Mock.Get(ServiceLocator.Current)
-            //    .Setup(locator => locator.GetInstance<SharedKernels.ExpressionProcessor.Services.IExpressionProcessor>())
-            //    .Returns(expressionProcessor.Object);
-
-            interview = CreateInterview(questionnaireId: questionnaireId);
+            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
 
             eventContext = new EventContext();

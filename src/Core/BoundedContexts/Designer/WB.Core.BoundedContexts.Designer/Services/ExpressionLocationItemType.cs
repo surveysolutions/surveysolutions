@@ -6,5 +6,6 @@
         Question = 1,
         Group = 2,
         Roster = 4,
+        LookupTable = 5
     }
 }

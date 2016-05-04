@@ -15,40 +15,42 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
     internal class HeadquarterUserCommandValidator : 
         ICommandValidator<User, CreateUserCommand>, 
-        ICommandValidator<User, UnarchiveUserCommand>
+        ICommandValidator<User, UnarchiveUserCommand>,
+        ICommandValidator<User, UnarchiveUserAndUpdateCommand>
     {
         private readonly IQueryableReadSideRepositoryReader<UserDocument> users;
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
 
-        public HeadquarterUserCommandValidator(IQueryableReadSideRepositoryReader<UserDocument> users, 
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviews)
+        public HeadquarterUserCommandValidator(IQueryableReadSideRepositoryReader<UserDocument> users)
         {
             this.users = users;
-            this.interviews = interviews;
         }
 
-        public void Validate(User aggregate,CreateUserCommand command)
+        public void Validate(User aggregate, CreateUserCommand command)
         {
             if (IsActiveUserExists(command.UserName))
-                throw new UserException(String.Format(HeadquarterUserCommandValidatorMessages.UserNameIsTakenFormat, command.UserName), UserDomainExceptionType.UserNameUsedByActiveUser);
+                throw new UserException(
+                    String.Format(HeadquarterUserCommandValidatorMessages.UserNameIsTakenFormat, command.UserName),
+                    UserDomainExceptionType.UserNameUsedByActiveUser);
 
             if (IsArchivedUserExists(command.UserName))
-                throw new UserException(String.Format(HeadquarterUserCommandValidatorMessages.UserNameIsTakenByArchivedUsersFormat, command.UserName), UserDomainExceptionType.UserNameUsedByArchivedUser);
-
-
-            if (command.Roles.Contains(UserRoles.Operator))
-            {
-                ThrowIfInterviewerSupervisorIsArchived(command.Supervisor.Id);
-            }
+                throw new UserException(
+                    String.Format(HeadquarterUserCommandValidatorMessages.UserNameIsTakenByArchivedUsersFormat,
+                        command.UserName), UserDomainExceptionType.UserNameUsedByArchivedUser);
+            
+            if (command.Supervisor!=null)
+                ThrowIfUserInRoleInterviewerAndSupervisorIsArchived(command.Roles, command.Supervisor.Id);
         }
 
         public void Validate(User aggregate, UnarchiveUserCommand command)
         {
             var state = aggregate.CreateSnapshot();
-            if (state.UserRoles.Contains(UserRoles.Operator))
-            {
-                ThrowIfInterviewerSupervisorIsArchived(state.UserSupervisorId);
-            }
+            ThrowIfUserInRoleInterviewerAndSupervisorIsArchived(state.UserRoles, state.UserSupervisorId);
+        }
+
+        public void Validate(User aggregate, UnarchiveUserAndUpdateCommand command)
+        {
+            var state = aggregate.CreateSnapshot();
+            ThrowIfUserInRoleInterviewerAndSupervisorIsArchived(state.UserRoles, state.UserSupervisorId);
         }
 
         private bool IsActiveUserExists(string userName)
@@ -61,11 +63,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return users.Query(_ => _.Where(u => u.IsArchived && u.UserName.ToLower() == userName.ToLower()).Count() > 0);
         }
 
-        private void ThrowIfInterviewerSupervisorIsArchived(Guid supervisorId)
+        void ThrowIfUserInRoleInterviewerAndSupervisorIsArchived(UserRoles[] userRoles, Guid supervisorId)
         {
+            if (!userRoles.Contains(UserRoles.Operator))
+                return;
+
             var user = users.GetById(supervisorId);
             if (user == null || user.IsArchived)
-                throw new UserException(HeadquarterUserCommandValidatorMessages.YouCantUnarchiveInterviewerUntilSupervisorIsArchived,
+                throw new UserException(
+                    HeadquarterUserCommandValidatorMessages.YouCantUnarchiveInterviewerUntilSupervisorIsArchived,
                     UserDomainExceptionType.SupervisorArchived);
         }
     }

@@ -21,12 +21,7 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 try {
 
 	CheckPrerequisites | %{ if (-not $_) { Exit } }
-	CleanBinAndObjFolders
-
-	$restore = "src/.nuget/nuget.exe restore src/WB.sln"
-	Write-Host "Running package restore: '$restore'"
-	iex $restore
-		
+	CleanBinAndObjFolders		
 
 	if ($Deep) {
 		BuildSolutions $BuildConfiguration -ClearBinAndObjFoldersBeforeEachSolution | %{ if (-not $_) { Exit } }
@@ -42,7 +37,7 @@ try {
 		-KeystorePassword $KeystorePassword `
 		-KeystoreName 'WBCapi.keystore' `
 		-KeystoreAlias 'wbcapipublish' `
-		-CapiProject 'src\UI\Capi\WB.UI.Capi\WB.UI.Capi.csproj' `
+		-CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
 		-OutFileName $PackageName | %{ if (-not $_) { Exit } }
 
 

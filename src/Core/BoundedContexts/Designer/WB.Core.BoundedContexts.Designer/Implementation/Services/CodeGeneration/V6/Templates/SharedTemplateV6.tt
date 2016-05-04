@@ -1,0 +1,157 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Text.RegularExpressions" #> 
+<#@ import namespace="WB.Core.SharedKernels.DataCollection" #> 
+<#@ import namespace="WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model" #> 
+
+<#+
+void GroupsStatesInLevelConstructor(List<GroupTemplateModel> groups)
+{
+	foreach (var @group in groups) 
+	{
+#>
+		EnablementStates.Add(<#=@group.StateName#>.ItemId, <#= @group.StateName#>);
+<#+
+	}
+}
+
+void QuestionsStatesInLevelConstructor(List<QuestionTemplateModel> questions)
+{
+	foreach (var question in questions)
+	{
+#>
+		EnablementStates.Add(<#=question.StateName#>.ItemId, <#=question.StateName#>);
+<#+
+							   
+		if(question.HasAnyValidation())
+		{
+#>
+        var <#= question.IdName#>__allValidations = new Dictionary<int, Func<bool>>();
+
+		<#+ 
+	foreach (var @validationExp in question.ValidationExpressions.Where(x=> !string.IsNullOrWhiteSpace(x.ValidationExpression))) 
+		{
+#>
+		<#= question.IdName#>__allValidations.Add(<#=@validationExp.Order#>,<#=@validationExp.ValidationMethodName#>);				
+<#+ 
+		}
+#>
+
+        ValidationExpressionDescriptions.Add(new Identity(IdOf.<#= question.IdName#>, rosterVector),
+		  new ValidationDescription {
+		    PreexecutionCheck = () => this.IsAnswerEmpty(<#=question.VariableName#>),
+		    Validations = <#= question.IdName#>__allValidations});		 
+
+<#+ 
+		}
+		if (question.IsMultiOptionYesNoQuestion)
+		{
+#>
+		AddUpdaterToMap(IdOf.<#=question.IdName#>, (<#=typeof(YesNoAnswersOnly).Name#> val) => {<#=question.MemberName#> = new <#=typeof(YesNoAnswers).Name#>(<#=question.MemberName#>.All,val); });
+<#+ 
+		}else{
+#>
+		AddUpdaterToMap(IdOf.<#=question.IdName#>, (<#=question.TypeName#> val) => {<#=question.MemberName#>  = val; });
+<#+ 
+		}
+	}
+}
+
+void RostersStatesInLevelConstructor(List<RosterTemplateModel> rosters)
+{
+	foreach (var @roster in rosters) 
+	{
+#>
+		RosterGenerators.Add(IdOf.<#=@roster.IdName#>, (decimals, identities) => new <#=@roster.TypeName#>(decimals, identities, this, this.GetInstances, this.ConditionalDependencies, this.StructuralDependencies, this.Quest));
+<#+ 
+	}
+}
+
+void RostersInScopeStatesInLevelConstructor(List<RosterTemplateModel> rostersInScope)
+{
+	foreach (var roster in rostersInScope) 
+	{
+#>
+		EnablementStates.Add(<#=roster.StateName#>.ItemId, <#=roster.StateName#>);
+<#+ 
+	}
+}
+
+void QuestionsCopyOperatorsInCopyMembers(List<QuestionTemplateModel> questions)
+{
+	foreach (var q in questions) 
+	{
+		if (q.IsMultiOptionYesNoQuestion)
+		{
+#>
+			<#=q.MemberName#> = new <#=typeof(YesNoAnswers).Name#>(this.<#=q.MemberName#>),
+<#+
+		}else{
+#>
+			<#=q.MemberName#> = this.<#=q.MemberName#>,   
+<#+	
+		}
+	}
+}
+#>
+
+<#+
+void QuestionsStateDefenitions(List<QuestionTemplateModel> questions)
+{
+	foreach (var question in questions) 
+	{
+		if (question.IsMultiOptionYesNoQuestion)
+		{
+#>
+	private <#=question.TypeName#> <#=question.MemberName#> = new <#=typeof(YesNoAnswers).Name#>(new decimal[]{<#+question.AllMultioptionYesNoCodes.ForEach(code => this.Write(code + ","));#>});
+<#+ 
+		}
+		else
+		{
+#>
+	private <#=question.TypeName#> <#=question.MemberName#> = null;
+<#+ 
+		}
+#>
+	private ConditionalState <#= question.StateName#> = new ConditionalState(IdOf.<#=question.IdName#>);
+	public <#=question.TypeName#> <#=question.VariableName#>
+	{
+		get { return <#=question.StateName#>.State != State.Disabled ? this.<#=question.MemberName#> : null; }
+			
+	}
+<#+
+	}
+}
+void RosterCollectionsDefenitions(List<RosterTemplateModel> rosters)
+{
+	foreach (var @roster in rosters) 
+	{
+#>
+	public RosterRowList<<#=@roster.TypeName#>> <#=@roster.VariableName#>
+	{
+		get
+		{
+			var rosters = this.GetInstances(this.RosterKey, IdOf.<#=@roster.RosterScopeName#>.Last());
+			return  new RosterRowList<<#=@roster.TypeName#>>(rosters);
+		}
+	}
+<#+
+	}
+}
+
+void LookupTablesDefenitions(List<LookupTableTemplateModel> lookupTables)
+{
+	foreach (var table in lookupTables) 
+	{
+#>
+	public static Dictionary<decimal, <#= table.TypeName#>> <#= table.TableName #> 
+	{
+		get { return LookupTables.<#= table.TableName #>; }
+	}
+<#+
+	}
+}
+#>

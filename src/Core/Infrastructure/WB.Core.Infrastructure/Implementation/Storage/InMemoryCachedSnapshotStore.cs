@@ -9,10 +9,9 @@ namespace WB.Core.Infrastructure.Implementation.Storage
     {
         private readonly int Capacity = 200;
 
-        private readonly Dictionary<Guid, Snapshot> snapshots = new Dictionary<Guid, Snapshot>();
-        private readonly LinkedList<Guid> list = new LinkedList<Guid>();
+        protected readonly Dictionary<Guid, Snapshot> snapshots = new Dictionary<Guid, Snapshot>();
+        protected readonly LinkedList<Guid> list = new LinkedList<Guid>();
         private readonly object Lock = new object();
-
 
         public void SaveShapshot(Snapshot snapshot)
         {

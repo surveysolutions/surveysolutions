@@ -1,5 +1,6 @@
 using System.Linq;
-using WB.Core.GenericSubdomains.Utils;
+using NHibernate.Criterion;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -9,10 +10,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
     public class AllInterviewsFactory : IViewFactory<AllInterviewsInputModel, AllInterviewsView>
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> reader;
+        private readonly IQueryableReadSideRepositoryReader<QuestionAnswer> featuredQuestions;
 
-        public AllInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> reader)
+        public AllInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> reader,
+            IQueryableReadSideRepositoryReader<QuestionAnswer> featuredQuestions)
         {
             this.reader = reader;
+            this.featuredQuestions = featuredQuestions;
         }
 
         public AllInterviewsView Load(AllInterviewsInputModel input)
@@ -30,6 +34,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
 
             var totalCount = this.reader.Query(_ => ApplyFilter(input, _).Count());
+            var requiredInterviews = interviews.Select(y => y.SummaryId).ToList();
+            var featuredQuestionAnswers = this.featuredQuestions.Query(_ => _.Where(x => requiredInterviews.Contains(x.InterviewSummary.SummaryId)).ToList());
+
+
             var result = new AllInterviewsView
             {
                 Page = input.Page,
@@ -37,7 +45,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 TotalCount = totalCount,
                 Items = interviews.Select(x => new AllInterviewsViewItem
                 {
-                    FeaturedQuestions = x.AnswersToFeaturedQuestions.Select(a => new InterviewFeaturedQuestion()
+                    FeaturedQuestions = featuredQuestionAnswers.Where(f => f.InterviewSummary.SummaryId == x.SummaryId)
+                    .Select(a => new InterviewFeaturedQuestion()
                     {
                         Id = a.Questionid,
                         Answer = a.Answer,
@@ -56,9 +65,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                         || x.Status == InterviewStatus.InterviewerAssigned
                         || x.Status == InterviewStatus.SentToCapi,
                     CanApproveOrReject = x.Status == InterviewStatus.ApprovedBySupervisor,
+                    CanUnapprove = x.Status == InterviewStatus.ApprovedByHeadquarters,
                     QuestionnaireId = x.QuestionnaireId,
                     QuestionnaireVersion = x.QuestionnaireVersion,
-                    CreatedOnClient = x.WasCreatedOnClient
+                    CreatedOnClient = x.WasCreatedOnClient,
+                    ReceivedByInterviewer = x.ReceivedByInterviewer
                 }).ToList()
             };
             return result;
@@ -70,7 +81,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
-                items = items.Where(x => x.AnswersToFeaturedQuestions.Any(a => a.Answer.Contains(input.SearchBy)));
+                items = items.Where(x => x.AnswersToFeaturedQuestions.Any(a => a.Answer.StartsWith(input.SearchBy)));
             }
 
             if (input.Status.HasValue)
@@ -78,9 +89,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
                 items = items.Where(x => x.Status == input.Status);
             }
 
-            if (input.TeamLeadId.HasValue)
+            if (!string.IsNullOrWhiteSpace(input.TeamLeadName))
             {
-                items = items.Where(x => x.TeamLeadId == input.TeamLeadId.Value);
+                items = items.Where(x => x.TeamLeadName == input.TeamLeadName);
             }
 
             if (input.QuestionnaireId.HasValue)

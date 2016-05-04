@@ -4,15 +4,16 @@ using WB.Core.Infrastructure.Aggregates;
 
 namespace WB.Core.Infrastructure.CommandBus
 {
-    public class CommandHandlerConfiguration<TAggregateRoot> where TAggregateRoot : IAggregateRoot
+    public class CommandHandlerConfiguration<TAggregate, TCommand>
+        where TAggregate : IAggregateRoot
+        where TCommand : ICommand
     {
         private readonly List<Type> validators = new List<Type>();
 
-        public CommandHandlerConfiguration<TAggregateRoot> ValidatedBy<T, TCommand>() 
-            where T : ICommandValidator<TAggregateRoot, TCommand>
-            where TCommand : ICommand
+        public CommandHandlerConfiguration<TAggregate, TCommand> ValidatedBy<TValidator>() 
+            where TValidator : ICommandValidator<TAggregate, TCommand>
         {
-            this.validators.Add(typeof (T));
+            this.validators.Add(typeof (TValidator));
             return this;
         }
 

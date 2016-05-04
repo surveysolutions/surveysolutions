@@ -11,14 +11,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         Establish context = () =>
         {
             questionDataParser = CreateQuestionDataParser();
-            question = Create.GpsCoordinateQuestion(questionId: questionId, variableName: questionVarName);
+            question = Create.GpsCoordinateQuestion(questionId: questionId, variable: questionVarName);
         };
 
         Because of =
             () =>
                 gpsResult =
-                    questionDataParser.BuildAnswerFromStringArray(new[] { new Tuple<string, string>(questionVarName + "_Latitude", "1"), new Tuple<string, string>(questionVarName + "_Longitude", "2"), new Tuple<string, string>(questionVarName + "_Accuracy", "3") },
-                        question, CreateQuestionnaireDocumentWithOneChapter(question)).Value.Value as GeoPosition;
+                    questionDataParser.BuildAnswerFromStringArray(new[] { new Tuple<string, string>(questionVarName + "__Latitude", "1"), new Tuple<string, string>(questionVarName + "__Longitude", "2"), new Tuple<string, string>(questionVarName + "__Accuracy", "3") },
+                        question) as GeoPosition;
 
         It should_return_result_of_type_GeoPosition = () =>
             gpsResult.ShouldNotBeNull();

@@ -16,11 +16,13 @@
     self.numberOfUnhandledPackagesStatus = ko.observable('');
     self.numberOfUnhandledPackages = ko.observable('');
     self.numberOfUnhandledPackagesError = ko.observable('');
-    self.numberOfSyncPackagesWithBigSizeStatus = ko.observable('');
     self.numberOfSyncPackagesWithBigSize = ko.observable('');
     self.numberOfSyncPackagesWithBigSizeError = ko.observable('');
     self.deniedFoldersStatus = ko.observable('');
     self.deniedFolders = ko.observableArray([]);
+    self.readSideStatus = ko.observable('');
+    self.readSideError = ko.observable('');
+
 
     self.load = function () {
         self.SendRequest(self.apiUrl, {}, function (data) {
@@ -36,14 +38,11 @@
                 : data.NumberOfUnhandledPackages.Value;
             self.numberOfUnhandledPackages(numberOfUnhandledPackagesText);
             self.numberOfUnhandledPackagesError(data.NumberOfUnhandledPackages.ErrorMessage);
-            self.numberOfSyncPackagesWithBigSizeStatus(self.getTextStatus(data.NumberOfSyncPackagesWithBigSize.Status));
-            var numberOfSyncPackagesText = data.NumberOfSyncPackagesWithBigSize.Status == 3
-                ? self.getTextStatus(data.NumberOfSyncPackagesWithBigSize.Status)
-                : data.NumberOfSyncPackagesWithBigSize.Value;
-            self.numberOfSyncPackagesWithBigSize(numberOfSyncPackagesText);
-            self.numberOfSyncPackagesWithBigSizeError(data.NumberOfSyncPackagesWithBigSize.ErrorMessage);
             self.deniedFoldersStatus(self.getTextStatus(data.FolderPermissionCheckResult.Status));
             self.deniedFolders(data.FolderPermissionCheckResult.DeniedFolders);
+
+            self.readSideStatus(self.getTextStatus(data.ReadSideHealthCheckResult.Status));
+            self.readSideError(data.ReadSideHealthCheckResult.ErrorMessage);
         }, true, true);
     };
 

@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
-using System.Linq;
+using Microsoft.VisualBasic.CompilerServices;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
@@ -12,17 +13,12 @@ namespace WB.Core.SharedKernels.DataCollection
     /// and to reduce parameters count in calculation methods.
     /// Should not be made public or be used in any form in events or commands.
     /// </remarks>
-    [DebuggerDisplay("Id = {Id}, RosterVector = [{string.Join(\",\", RosterVector)}]")]
     public class Identity
     {
         protected bool Equals(Identity other)
         {
-            var str = string.Join(",", RosterVector);
-            return this.Id.Equals(other.Id) && this.RosterVector.SequenceEqual(other.RosterVector);
-            
+            return this.Id.Equals(other.Id) && this.RosterVector.Identical(other.RosterVector);
         }
-
-
 
         public override int GetHashCode()
         {
@@ -40,12 +36,17 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public Guid Id { get; private set; }
 
-        public decimal[] RosterVector { get; private set; }
+        public RosterVector RosterVector { get; private set; }
 
-        public Identity(Guid id, decimal[] rosterVector)
+        public Identity(Guid id, RosterVector rosterVector)
         {
             this.Id = id;
-            this.RosterVector = rosterVector;
+            this.RosterVector = rosterVector ?? RosterVector.Empty;
+        }
+
+        public override string ToString()
+        {
+            return ConversionHelper.ConvertIdentityToString(this);
         }
 
         public override bool Equals(object obj)
@@ -54,6 +55,27 @@ namespace WB.Core.SharedKernels.DataCollection
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
             return this.Equals((Identity) obj);
+        }
+
+        public bool Equals(Guid id, RosterVector rosterVector)
+        {
+            return Equals(new Identity(id, rosterVector));
+        }
+
+        public static bool operator ==(Identity a, Identity b)
+        {
+            if (ReferenceEquals(a, b))
+                return true;
+
+            if (((object)a == null) || ((object)b == null))
+                return false;
+
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(Identity a, Identity b)
+        {
+            return !(a == b);
         }
     }
 }

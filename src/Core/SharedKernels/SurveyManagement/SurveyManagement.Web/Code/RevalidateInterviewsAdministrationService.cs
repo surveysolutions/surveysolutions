@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
@@ -20,6 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
         private static readonly object RebuildAllViewsLockObject = new object();
         private static string statusMessage;
+        private readonly ITransactionManagerProvider transactionManagerProvider;
 
         private readonly ICommandService commandService;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader;
@@ -34,11 +38,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
         public RevalidateInterviewsAdministrationService(
             ILogger logger,
             ICommandService commandService, 
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader)
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader, 
+            ITransactionManagerProvider transactionManagerProvider)
         {
             this.logger = logger;
             this.commandService = commandService;
             this.interviewsReader = interviewsReader;
+            this.transactionManagerProvider = transactionManagerProvider;
         }
 
         public void RevalidateAllInterviewsWithErrorsAsync()
@@ -85,7 +91,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
         {
             try
             {
-                var bus = NcqrsEnvironment.Get<IEventBus>() as IEventDispatcher;
+                var bus = ServiceLocator.Current.GetInstance<IEventBus>() as IEventDispatcher;
                 if (bus == null)
                 {
                     UpdateStatusMessage("Environments setup problems.");
@@ -94,13 +100,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
                 areInterviewsBeingRevalidatingNow = true;
 
-                var interviews = this.interviewsReader.Query(_ => _.Where(interview =>
-                    interview.HasErrors == true && interview.IsDeleted == false &&
-                        (interview.Status == InterviewStatus.Completed ||
-                            interview.Status == InterviewStatus.RejectedBySupervisor ||
-                            interview.Status == InterviewStatus.ApprovedBySupervisor ||
-                            interview.Status == InterviewStatus.ApprovedByHeadquarters ||
-                            interview.Status == InterviewStatus.RejectedByHeadquarters)).ToList());
+                List<InterviewSummary> interviews;
+                try
+                {
+                    this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+                    interviews = this.interviewsReader.Query(_ => _.Where(interview =>
+                        interview.IsDeleted == false
+                        && (interview.Status == InterviewStatus.Completed
+                            || interview.Status == InterviewStatus.RejectedBySupervisor
+                            || interview.Status == InterviewStatus.ApprovedBySupervisor
+                            || interview.Status == InterviewStatus.ApprovedByHeadquarters
+                            || interview.Status == InterviewStatus.RejectedByHeadquarters)).ToList());
+                }
+                finally
+                {
+                    this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
+                }
 
                 UpdateStatusMessage("Determining count of interview to be revalidated.");
 

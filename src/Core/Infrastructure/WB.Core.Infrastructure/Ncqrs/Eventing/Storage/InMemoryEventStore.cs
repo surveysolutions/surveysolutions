@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace Ncqrs.Eventing.Storage
 {
@@ -36,23 +37,18 @@ namespace Ncqrs.Eventing.Storage
         }
 
         public CommittedEventStream ReadFrom(Guid id, int minVersion, int maxVersion)
-        {
-            Queue<CommittedEvent> events;
-            
-            if (_events.TryGetValue(id, out events))
-            {
-                var committedEvents = events
-                    .Where(x => x.EventSequence >= minVersion && x.EventSequence <= maxVersion);                    
-                return new CommittedEventStream(id, committedEvents);
-            }
-            return new CommittedEventStream(id);
-        }
+            => new CommittedEventStream(id, this.Read(id, minVersion).TakeWhile(x => x.EventSequence <= maxVersion));
 
-        public void Store(UncommittedEventStream eventStream)
+        public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
+            => this._events.GetOrNull(id)?.Where(x => x.EventSequence >= minVersion)
+            ?? Enumerable.Empty<CommittedEvent>();
+
+        public CommittedEventStream Store(UncommittedEventStream eventStream)
         {
             Queue<CommittedEvent> events;
             if (eventStream.IsNotEmpty)
             {
+                List<CommittedEvent> result = new List<CommittedEvent>();
                 if (!_events.TryGetValue(eventStream.SourceId, out events))
                 {
                     events = new Queue<CommittedEvent>();
@@ -61,10 +57,22 @@ namespace Ncqrs.Eventing.Storage
 
                 foreach (var evnt in eventStream)
                 {
-                    events.Enqueue(new CommittedEvent(eventStream.CommitId, evnt.Origin, evnt.EventIdentifier, eventStream.SourceId, evnt.EventSequence,
-                                                      evnt.EventTimeStamp, evnt.Payload));
+                    var committedEvent = new CommittedEvent(eventStream.CommitId, 
+                        evnt.Origin, 
+                        evnt.EventIdentifier, 
+                        eventStream.SourceId, 
+                        evnt.EventSequence,
+                        evnt.EventTimeStamp, 
+                        events.Count,
+                        evnt.Payload);
+                    events.Enqueue(committedEvent);
+                    result.Add(committedEvent);   
                 }
+
+                return new CommittedEventStream(eventStream.SourceId, result);
             }
+
+            return new CommittedEventStream(eventStream.SourceId);
         }
     }
 }

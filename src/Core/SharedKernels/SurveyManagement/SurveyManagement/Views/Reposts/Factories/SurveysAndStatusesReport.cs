@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
@@ -21,9 +21,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 
         public SurveysAndStatusesReportView Load(SurveysAndStatusesReportInputModel input)
         {
-            var lines = this.interviewSummaryReader.Query(_ =>
+            var inteviewsGroupByTemplateAndStatus = this.interviewSummaryReader.Query(_ =>
             {
-                var filetredInterviews = ApplyFilter(input, _);
+                IQueryable<InterviewSummary> filetredInterviews = ApplyFilter(input, _);
 
                 var interviews = (from f in filetredInterviews
                                  group f by new {f.QuestionnaireId, f.QuestionnaireVersion, f.QuestionnaireTitle, f.Status} into g
@@ -36,6 +36,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                                      InterviewsCount = g.Count()
                                  }).ToList();
 
+
                 var statistics = new List<StatisticsLineGroupedByUserAndTemplate>();
                 foreach (var questionnaire in interviews.Select(x => new {x.QuestionnaireId, x.QuestionnaireVersion, x.QuestionnaireTitle}).Distinct())
                 {
@@ -44,6 +45,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                         QuestionnaireId =               questionnaire.QuestionnaireId,
                         QuestionnaireVersion =          questionnaire.QuestionnaireVersion,
                         QuestionnaireTitle =            questionnaire.QuestionnaireTitle,
+                        ResponsibleName = input.ResponsibleName ?? string.Empty,
+                        TeamLeadName = input.TeamLeadName ?? string.Empty,
                         SupervisorAssignedCount =       Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.SupervisorAssigned).InterviewsCount),
                         InterviewerAssignedCount =      Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.InterviewerAssigned).InterviewsCount),
                         CompletedCount =                Monads.Maybe(() => CountInStatus(interviews, questionnaire, InterviewStatus.Completed).InterviewsCount),
@@ -58,18 +61,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                 return statistics;
             });
 
-
-            var overallCount = this.interviewSummaryReader.Query(_ =>
-            {
-                var result = ApplyFilter(input, _)
-                    .Select(x => x.QuestionnaireId)
-                    .Distinct()
-                    .Count();
-                    
-                return result;
-            }); 
-
-            var currentPage = lines
+            List<HeadquarterSurveysAndStatusesReportLine> currentPage = inteviewsGroupByTemplateAndStatus.AsQueryable()
+                           .OrderUsingSortExpression(input.Order)
                            .Select(doc => new HeadquarterSurveysAndStatusesReportLine
                                {
                                    SupervisorAssignedCount = doc.SupervisorAssignedCount,
@@ -86,15 +79,32 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
                                    QuestionnaireId = doc.QuestionnaireId,
                                    QuestionnaireVersion = doc.QuestionnaireVersion,
                                    QuestionnaireTitle = doc.QuestionnaireTitle,
+                                   
+                                   Responsible = GetResponsibleName(doc)
+                           }).ToList();
+            currentPage = currentPage.Skip((input.Page - 1) * input.PageSize)
+                .Take(input.PageSize).ToList();
+            int totalCount = this.interviewSummaryReader.Query(_ =>
+            {
+                int result = ApplyFilter(input, _)
+                            .Select(x => new { x.QuestionnaireId, x.QuestionnaireVersion })
+                            .Distinct()
+                            .ToList()
+                            .Count;
 
-                                   ResponsibleId = doc.ResponsibleId
-                               }).ToList();
+                return result;
+            });
 
             return new SurveysAndStatusesReportView
                 {
-                    TotalCount = overallCount,
+                    TotalCount = totalCount,
                     Items = currentPage
                 };
+        }
+
+        private static string GetResponsibleName(StatisticsLineGroupedByUserAndTemplate doc)
+        {
+            return !string.IsNullOrEmpty(doc.TeamLeadName) ? doc.TeamLeadName : (doc.ResponsibleName ?? string.Empty);
         }
 
         private static CounterObject CountInStatus(List<CounterObject> interviews, dynamic questionnaire, InterviewStatus status)
@@ -104,18 +114,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
 
         private static IQueryable<InterviewSummary> ApplyFilter(SurveysAndStatusesReportInputModel input, IQueryable<InterviewSummary> _)
         {
-            var filetredInterviews = _.Where(x => !x.IsDeleted);
+            var filteredInterviews = _.Where(x => !x.IsDeleted);
 
-            if (input.ResponsibleId.HasValue)
+            if (!string.IsNullOrWhiteSpace(input.ResponsibleName))
             {
-                filetredInterviews = filetredInterviews.Where(x => x.ResponsibleId == input.ResponsibleId);
+                filteredInterviews = filteredInterviews.Where(x => x.ResponsibleName.ToLower() == input.ResponsibleName.ToLower());
             }
-            if (input.TeamLeadId.HasValue)
+            if (!string.IsNullOrWhiteSpace(input.TeamLeadName))
             {
-                filetredInterviews = filetredInterviews.Where(x => x.TeamLeadId == input.TeamLeadId);
+                filteredInterviews = filteredInterviews.Where(x => x.TeamLeadName.ToLower() == input.TeamLeadName.ToLower());
             }
 
-            return filetredInterviews;
+            return filteredInterviews;
         }
 
         class CounterObject

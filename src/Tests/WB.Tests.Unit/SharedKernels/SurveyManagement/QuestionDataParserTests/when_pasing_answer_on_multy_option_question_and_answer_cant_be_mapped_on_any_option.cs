@@ -1,4 +1,5 @@
-﻿using Machine.Specifications;
+﻿using System.Collections.Generic;
+using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.SurveyManagement.ValueObjects;
@@ -15,16 +16,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
             {
                 PublicKey = questionId,
                 QuestionType = QuestionType.MultyOption,
-                StataExportCaption = questionVarName
+                StataExportCaption = questionVarName,
+                Answers = new List<Answer>
+                {
+                    Create.Answer("foo", 3m)
+                }
             };
         };
 
-        private Because of =
-            () =>
-                parsingResult =
-                    questionDataParser.TryParse(answer, questionVarName,question, CreateQuestionnaireDocumentWithOneChapter(question), out parcedValue);
+        Because of =  () => parsingResult = questionDataParser.TryParse(answer, questionVarName + "__1", question, out parcedValue);
 
-        private It should_result_be_ParsedValueIsNotAllowed = () =>
-            parsingResult.ShouldEqual(ValueParsingResult.ParsedValueIsNotAllowed);
+        It should_result_be_ParsedValueIsNotAllowed = () => parsingResult.ShouldEqual(ValueParsingResult.ParsedValueIsNotAllowed);
     }
 }

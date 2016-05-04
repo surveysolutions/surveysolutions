@@ -13,15 +13,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Synchronization.Schedulers.Inte
         public InterviewDetailsBackgroundSchedulerTask(IScheduler scheduler,
             InterviewDetailsDataLoaderSettings interviewDetailsDataLoaderSettings)
         {
-            if (scheduler == null) throw new ArgumentNullException("scheduler");
-            if (interviewDetailsDataLoaderSettings == null) throw new ArgumentNullException("interviewDetailsDataLoaderSettings");
+            if (scheduler == null) throw new ArgumentNullException(nameof(scheduler));
+            if (interviewDetailsDataLoaderSettings == null) throw new ArgumentNullException(nameof(interviewDetailsDataLoaderSettings));
             this.scheduler = scheduler;
             this.interviewDetailsDataLoaderSettings = interviewDetailsDataLoaderSettings;
         }
 
         public void Configure()
         {
-            IJobDetail job = JobBuilder.Create<SyncPackagesProcessor>()
+            IJobDetail job = JobBuilder.Create<InterviewDetailsBackgroundJob>()
                 .WithIdentity("Capi interview packages sync", "Synchronization")
                 .StoreDurably(true)
                 .Build();

@@ -1,5 +1,5 @@
-﻿Supervisor.VM.HQInterviews = function(listViewUrl, interviewDetailsUrl, users, commandExecutionUrl) {
-    Supervisor.VM.HQInterviews.superclass.constructor.apply(this, arguments);
+﻿Supervisor.VM.HQInterviews = function(listViewUrl, interviewDetailsUrl, responsiblesUrl, commandExecutionUrl) {
+    Supervisor.VM.HQInterviews.superclass.constructor.apply(this, [listViewUrl, interviewDetailsUrl, responsiblesUrl, null, commandExecutionUrl]);
 
     var self = this;
 
@@ -29,6 +29,16 @@
             function (item) { return { InterviewId: item.InterviewId } },
             function (item) { return item.CanApproveOrReject(); },
             "#confirm-reject-template",
+            "#confirm-continue-message-template"
+        );
+    };
+
+    self.UnapproveInterview = function () {
+        self.sendCommandAfterFilterAndConfirm(
+            "UnapproveByHeadquarterCommand",
+            function (item) { return { InterviewId: item.InterviewId } },
+            function (item) { return item.CanUnapprove(); },
+            "#confirm-unapprove-template",
             "#confirm-continue-message-template"
         );
     };

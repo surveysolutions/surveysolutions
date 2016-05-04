@@ -12,7 +12,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.UserChangedFeedReaderTests
 {
-    public class when_no_events_stored_yet
+    internal class when_no_events_stored_yet
     {
         Establish context = () =>
         {

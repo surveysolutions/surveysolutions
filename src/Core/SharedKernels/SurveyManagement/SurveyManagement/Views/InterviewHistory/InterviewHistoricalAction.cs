@@ -5,6 +5,7 @@
         SupervisorAssigned,
         InterviewerAssigned,
         AnswerSet,
+        AnswerRemoved,
         CommentSet,
         Completed,
         Restarted,
@@ -20,5 +21,8 @@
         GroupDisabled,
         QuestionDeclaredValid,
         QuestionDeclaredInvalid,
+        UnapproveByHeadquarters,
+        ReceivedByInterviewer,
+        ReceivedBySupervisor
     }
 }

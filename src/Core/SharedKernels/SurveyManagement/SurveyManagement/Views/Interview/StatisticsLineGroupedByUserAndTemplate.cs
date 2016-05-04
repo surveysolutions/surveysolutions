@@ -28,11 +28,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
 
         public int TotalCount { get; set; }
 
-        public Guid QuestionnaireId { get; set; }
+        public Guid? QuestionnaireId { get; set; }
 
         public string QuestionnaireTitle { get; set; }
 
-        public long QuestionnaireVersion { get; set; }
+        public long? QuestionnaireVersion { get; set; }
 
         public Guid ResponsibleId { get; set; }
 
@@ -40,8 +40,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         /// Name of resposible, which is a supervisor or an interviewer.
         /// </summary>
         public string ResponsibleName { get; set; }
-
-        public Guid? TeamLeadId { get; set; }
 
         /// <summary>
         /// Name of supervisor (which is a team lead), needed for team-based reports.

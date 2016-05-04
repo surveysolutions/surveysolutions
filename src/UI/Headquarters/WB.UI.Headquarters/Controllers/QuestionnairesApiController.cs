@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire.BrowseItem;
+using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -36,18 +37,11 @@ namespace WB.UI.Headquarters.Controllers
         {
             var input = new QuestionnaireBrowseInputModel
             {
-                Orders = data.SortOrder  == null ? new List<OrderRequestItem>() : data.SortOrder.ToList()
+                Page = data.PageIndex,
+                PageSize = data.PageSize,
+                Orders = data.SortOrder ?? new List<OrderRequestItem>(),
+                Filter = data.Filter
             };
-            if (data.Pager != null)
-            {
-                input.Page = data.Pager.Page;
-                input.PageSize = data.Pager.PageSize;
-            }
-
-            if (data.Request != null)
-            {
-                input.Filter = data.Request.Filter;
-            }
 
             return this.questionnaireBrowseViewFactory.Load(input);
         }

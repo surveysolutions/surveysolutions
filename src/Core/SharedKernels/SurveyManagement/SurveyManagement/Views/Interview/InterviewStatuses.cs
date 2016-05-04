@@ -15,8 +15,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Interview
         public virtual string InterviewId { get; set; }
         public virtual Guid QuestionnaireId { get; set; }
         public virtual long QuestionnaireVersion { get; set; }
-
-        [IgnoreDataMember]
         public virtual IList<InterviewCommentedStatus> InterviewCommentedStatuses { get; set; }
     }
 }

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
@@ -15,12 +13,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string basePath;
+        private const string DataDirectoryName = "InterviewData";
 
-        public PlainInterviewFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath, string dataDirectoryName)
+        public PlainInterviewFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectoryPath)
         {
             this.fileSystemAccessor = fileSystemAccessor;
 
-            this.basePath = this.fileSystemAccessor.CombinePath(rootDirectoryPath, dataDirectoryName);
+            this.basePath = this.fileSystemAccessor.CombinePath(rootDirectoryPath, DataDirectoryName);
 
             if (!this.fileSystemAccessor.IsDirectoryExists(this.basePath))
                 this.fileSystemAccessor.CreateDirectory(this.basePath);
@@ -48,7 +47,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                             () => fileSystemAccessor.ReadAllBytes(fileName))).ToList();
         }
 
-        public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data)
+        public Task StoreInterviewBinaryDataAsync(Guid interviewId, string fileName, byte[] data)
         {
             var directoryPath = this.GetPathToInterviewDirectory(interviewId);
             
@@ -56,6 +55,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                 fileSystemAccessor.CreateDirectory(directoryPath);
 
             fileSystemAccessor.WriteAllBytes(this.GetPathToFile(interviewId, fileName), data);
+            return Task.FromResult(true);
         }
 
         public void RemoveInterviewBinaryData(Guid interviewId, string fileName)

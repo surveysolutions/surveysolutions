@@ -20,18 +20,23 @@
         'monospaced.elastic',
         'perfect_scrollbar',
         'ng-context-menu',
-        'ui.ace'
+        'ui.ace',
+        'templates',
+        'ngFileUpload',
+        'angularMoment'
     ]);
 
-    angular.module('designerApp').config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+    angular.module('designerApp').config(['$stateProvider', '$urlRouterProvider', '$rootScopeProvider', function ($stateProvider, $urlRouterProvider, $rootScopeProvider) {
         var questionnaireId = $.cookie('questionnaireId');
+        $.cookie.json = true;
         var url = '/' + questionnaireId;
         $urlRouterProvider.otherwise(url);
+        $rootScopeProvider.digestTtl(12);
 
         $stateProvider
             .state('questionnaire', {
                 url: "/{questionnaireId}",
-                templateUrl: "views/main.html",
+                templateUrl: "views/main.v1.html",
                 controller: 'MainCtrl'
             }).state('questionnaire.chapter', {
                 url: "/chapter/{chapterId}",
@@ -44,6 +49,14 @@
                 
             }).state('questionnaire.chapter.question', {
                 url: "/question/{itemId}",
+                views: {
+                    '': {
+                        templateUrl: 'views/question.html',
+                        controller: 'QuestionCtrl'
+                    }
+                }
+            }).state('questionnaire.chapter.question.validation', {
+                url: "/val+{validationIndex}",
                 views: {
                     '': {
                         templateUrl: 'views/question.html',
@@ -70,7 +83,7 @@
                 url: "/static-text/{itemId}",
                 views: {
                     '': {
-                        templateUrl: 'views/static-text.html',
+                        templateUrl: 'views/static-text.v1.html',
                         controller: 'StaticTextCtrl'
                     }
                 }
@@ -90,4 +103,7 @@
     .config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
         cfpLoadingBarProvider.spinnerTemplate = '<div id="loading-logo"></div>';
     }]);
+
+    angular.module('templates', []);
+
 }(jQuery));

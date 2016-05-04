@@ -8,12 +8,16 @@
                 <textarea id="edit-group-title" class="form-control" ng-model="activeGroup.title" msd-elastic></textarea>
             </div>
 
-            <div class="form-group" ng-if="!activeGroup.isFirstChapter">
-                <label for="edit-group-condition" class="wb-label">Enabling condition <help key="conditionExpression" /></label><br>
-                <div class="pseudo-form-control">
-                    <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded }" ng-model="activeGroup.enablementCondition"></div>
-                </div>
+        <div class="form-group enabling-group" ng-if="!activeGroup.isFirstChapter">
+            <div class="enabling-group-marker"></div>
+            <label for="edit-group-condition">Enabling condition <help key="conditionExpression"/></label>
+                <input id="cb-hideIfDisabled" type="checkbox" class="wb-checkbox" ng-model="activeGroup.hideIfDisabled" />
+                <label for="cb-hideIfDisabled"><span></span>Hide if disabled</label>
+            <br>
+            <div class="pseudo-form-control">
+                <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded }" ng-model="activeGroup.enablementCondition"></div>
             </div>
+        </div>
         </div>
 <div class="form-buttons-holder">
     <div class="pull-left">
@@ -22,7 +26,6 @@
     </div>
     <div class="pull-right">
         <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteItem()" unsaved-warning-clear>Delete</button>
-        <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-clone-button" class="btn btn-lg btn-link" ng-click="activeGroup.isChapter ? cloneChapter() : cloneGroup()">Clone</button>
         <ng-include src="'moveToChapterSnippet'" ng-show="!questionnaire.isReadOnlyForUser" ng-if="!activeGroup.isChapter" />
     </div>
 </div>

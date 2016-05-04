@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Machine.Specifications;
@@ -6,6 +7,8 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
+using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.Infrastructure.EventBus;
 using WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStateTests;
 
 namespace WB.Tests.Unit
@@ -22,7 +25,6 @@ namespace WB.Tests.Unit
         public static void ShouldContainValues(this QuestionTemplateModel question,
             Guid id,
             string variableName,
-            bool isMandatory,
             string conditions,
             string validations,
             QuestionType questionType,
@@ -32,23 +34,21 @@ namespace WB.Tests.Unit
             string generatedStateName,
             string rosterScopeName,
             string generatedValidationsMethodName,
-            string generatedMandatoryMethodName,
             string generatedConditionsMethodName)
         {
             question.Id.ShouldEqual(id);
             question.VariableName.ShouldEqual(variableName);
-            question.IsMandatory.ShouldEqual(isMandatory);
-            question.Conditions.ShouldEqual(conditions);
-            question.Validations.ShouldEqual(validations);
-            question.QuestionType.ShouldEqual(questionType);
-            question.GeneratedIdName.ShouldEqual(generatedIdName);
-            question.GeneratedTypeName.ShouldEqual(generatedTypeName);
-            question.GeneratedMemberName.ShouldEqual(generatedMemberName);
-            question.GeneratedStateName.ShouldEqual(generatedStateName);
+            question.Condition.ShouldEqual(conditions);
+
+            //question.ValidationExpressions.FirstOrDefault().ValidationExpression.ShouldEqual(validations);
+
+            question.IdName.ShouldEqual(generatedIdName);
+            question.TypeName.ShouldEqual(generatedTypeName);
+            question.MemberName.ShouldEqual(generatedMemberName);
+            question.StateName.ShouldEqual(generatedStateName);
             question.RosterScopeName.ShouldEqual(rosterScopeName);
-            question.GeneratedValidationsMethodName.ShouldEqual(generatedValidationsMethodName);
-            question.GeneratedMandatoryMethodName.ShouldEqual(generatedMandatoryMethodName);
-            question.GeneratedConditionsMethodName.ShouldEqual(generatedConditionsMethodName);
+            //question.ValidationExpressions.FirstOrDefault().ValidationMethodName.ShouldEqual(generatedValidationsMethodName);
+            question.ConditionMethodName.ShouldEqual(generatedConditionsMethodName);
         }
 
         public static void ShouldContainEvents<TEvent>(this EventContext eventContext, int count)
@@ -57,6 +57,7 @@ namespace WB.Tests.Unit
         }
 
         public static void ShouldContainEvent<TEvent>(this EventContext eventContext, Func<TEvent, bool> condition = null)
+            where TEvent : IEvent
         {
             if (condition == null)
             {
@@ -72,6 +73,7 @@ namespace WB.Tests.Unit
         }
 
         public static void ShouldNotContainEvent<TEvent>(this EventContext eventContext, Func<TEvent, bool> condition = null)
+            where TEvent : IEvent
         {
             if (condition == null)
             {
@@ -89,6 +91,21 @@ namespace WB.Tests.Unit
         public static void ShouldContainGroup(this QuestionnaireDocument questionnaireDocument, Expression<Func<IGroup, bool>> condition)
         {
             questionnaireDocument.GetAllGroups().ShouldContain(condition);
+        }
+
+        public static void ShouldContainWarning(
+            this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
+        {
+            verificationMessages.ShouldContain(message
+                => message.MessageLevel == VerificationMessageLevel.Warning
+                && message.Code == code);
+        }
+
+        public static void ShouldNotContainMessage(
+            this IEnumerable<QuestionnaireVerificationMessage> verificationMessages, string code)
+        {
+            verificationMessages.ShouldNotContain(message
+                => message.Code == code);
         }
     }
 }

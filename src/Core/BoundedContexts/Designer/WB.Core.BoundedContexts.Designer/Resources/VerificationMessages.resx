@@ -121,31 +121,28 @@
     <value>Questionnaire must contain at least one question.</value>
   </data>
   <data name="WB0002_CustomValidationExpressionHasIncorrectSyntax" xml:space="preserve">
-    <value>Validation condition has syntax error (only few first questions are shown).</value>
+    <value>Validation condition has a syntax error.</value>
   </data>
   <data name="WB0003_CustomEnablementConditionHasIncorrectSyntax" xml:space="preserve">
-    <value>Enabling condition has syntax error (only few first questions/sub-sections/rosters are shown).</value>
+    <value>Enabling condition has a syntax error.</value>
   </data>
   <data name="WB0004_CustomValidationExpressionReferencesNotExistingQuestion" xml:space="preserve">
-    <value>Validation condition references nonexistent question.</value>
+    <value>Validation condition references a nonexistent question.</value>
   </data>
   <data name="WB0005_CustomEnablementConditionReferencesNotExistingQuestion" xml:space="preserve">
-    <value>Enabling condition references nonexistent question.</value>
+    <value>Enabling condition references a nonexistent question.</value>
   </data>
   <data name="WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion" xml:space="preserve">
     <value>Roster size question is missing.</value>
   </data>
   <data name="WB0011_LinkedQuestionReferencesNotExistingQuestion" xml:space="preserve">
-    <value>Linked question references nonexistent question.</value>
+    <value>Linked question references a nonexistent question.</value>
   </data>
   <data name="WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType" xml:space="preserve">
-    <value>Linked question references question of not supported type.</value>
+    <value>Linked question references a question type that is not supported.</value>
   </data>
   <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup" xml:space="preserve">
-    <value>Linked question references question not under roster.</value>
-  </data>
-  <data name="WB0014_CustomValidationExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
-    <value>Question has validation condition referencing question from deeper roster level.</value>
+    <value>Linked question references a question not in a roster.</value>
   </data>
   <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
     <value>Question with title substitution cannot be marked as prefilled.</value>
@@ -154,16 +151,16 @@
     <value>Question with title substitution cannot reference itself.</value>
   </data>
   <data name="WB0017_QuestionWithTitleSubstitutionReferencesNotExistingQuestion" xml:space="preserve">
-    <value>Question with title substitution references nonexistent question.</value>
+    <value>Question with title substitution references a nonexistent question.</value>
   </data>
   <data name="WB0018_QuestionWithTitleSubstitutionReferencesQuestionOfNotSupportedType" xml:space="preserve">
-    <value>Question with title substitution references question of not supported type.</value>
+    <value>Question with title substitution references a question type that is not supported.</value>
   </data>
   <data name="WB0019_QuestionWithTitleSubstitutionCantReferenceQuestionsWithDeeperPropagationLevel" xml:space="preserve">
-    <value>Question with title substitution cannot reference questions from deeper roster level.</value>
+    <value>Question with title substitution cannot reference questions from a deeper roster level.</value>
   </data>
   <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
-    <value>Question has options count less than max number of answers.</value>
+    <value>Max number of answers is greater than number of question's options.</value>
   </data>
   <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
     <value>Question of this type cannot be prefilled.</value>
@@ -178,7 +175,7 @@
     <value />
   </data>
   <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
-    <value>Prefilled questions cannot be inside of roster.</value>
+    <value>Prefilled questions cannot be inside a roster.</value>
   </data>
   <data name="WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles" xml:space="preserve">
     <value>Roster where roster size source is question could not have fixed set of items.</value>
@@ -196,7 +193,7 @@
     <value>Roster where roster size question is categorical multi answers question could not have roster title question.</value>
   </data>
   <data name="WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles" xml:space="preserve">
-    <value>Fixed set of items roster cannot have empty titles.</value>
+    <value>Fixed set of items roster cannot have empty titles or less than two items.</value>
   </data>
   <data name="WB0038_RosterFixedTitlesHaveMoreThan40Items" xml:space="preserve">
     <value>Fixed set of items roster cannot have more than 40 rows.</value>
@@ -238,7 +235,7 @@
     <value>Question cannot have empty variable name.</value>
   </data>
   <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
-    <value>Variable name cannot be a reserved word.</value>
+    <value>Variable name or roster ID cannot be a reserved word.</value>
   </data>
   <data name="WB0059_IfQuestionUsesRostertitleInTitleItNeedToBePlacedInsideRoster" xml:space="preserve">
     <value>If question uses %rostertitle% in title it need to be placed inside roster.</value>
@@ -253,28 +250,25 @@
     <value>Another question with the same variable name already exists.</value>
   </data>
   <data name="WB0063_CategoricalLinkedQuestionUsedInValidationExpression" xml:space="preserve">
-    <value>Categorical linked question cannot be used in validation condition.</value>
+    <value>Categorical linked question cannot be used in validation condition #{0}.</value>
   </data>
   <data name="WB0064_CategoricalLinkedQuestionUsedInEnablementCondition" xml:space="preserve">
     <value>Categorical linked question cannot be used in enabling condition.</value>
-  </data>
-  <data name="WB0065_QuestionHasValidationExpressionWithoutValidationMessage" xml:space="preserve">
-    <value>Error message is required if question has validation condition.</value>
   </data>
   <data name="WB0066_QuestionTypeIsNotAllowed" xml:space="preserve">
     <value>Question of this type is not supported.</value>
   </data>
   <data name="WB0067_RosterHasEmptyVariableName" xml:space="preserve">
-    <value>Roster cannot have empty variable name.</value>
+    <value>Roster cannot have empty roster ID.</value>
   </data>
   <data name="WB0068_RosterHasNotUniqueVariableName" xml:space="preserve">
-    <value>Another roster with the same variable name already exists.</value>
+    <value>Another roster with the same roster ID already exists.</value>
   </data>
   <data name="WB0069_RosterHasInvalidVariableName" xml:space="preserve">
-    <value>Roster has invalid variable name.</value>
+    <value>Roster has invalid roster ID.</value>
   </data>
   <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
-    <value>Roster has variable name equal to questionnaire title.</value>
+    <value>Roster has roster ID equal to questionnaire title.</value>
   </data>
   <data name="WB0071_StaticTextIsEmpty" xml:space="preserve">
     <value>Static text cannot be empty.</value>
@@ -331,7 +325,7 @@
     <value>Circular references in cascading combo box questions not allowed.</value>
   </data>
   <data name="WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers" xml:space="preserve">
-    <value>Cascading combo box question should have less than 10.000 options.</value>
+    <value>Cascading combo box question should have less than 15,000 options.</value>
   </data>
   <data name="WB0089_CascadingQuestionOptionWithParentShouldBeUnique" xml:space="preserve">
     <value>Cascading combo box question should have unique value and parent value options list.</value>
@@ -349,10 +343,7 @@
     <value>Question with the same variable name already exists.</value>
   </data>
   <data name="WB0094_ConditionExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
-    <value>Enabling condition has length more than 10000 characters.</value>
-  </data>
-  <data name="WB0095_ValidationExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
-    <value>Validation condition has length more than 10000 characters.</value>
+    <value>Enabling condition has length more than 10,000 characters.</value>
   </data>
   <data name="WB0096_GeneralCompilationError" xml:space="preserve">
     <value>Error occurred during questionnaire compilation.</value>
@@ -370,6 +361,144 @@
     <value>Max number of answers for roster size question cannot be empty when question has more than 40 options.</value>
   </data>
   <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen40" xml:space="preserve">
-    <value>Max number of answers for roster size question cannot be greater then 40.</value>
+    <value>Max number of answers for roster size question cannot be greater than 40.</value>
+  </data>
+  <data name="WB0101_GroupHasLevelDepthMoreThan10" xml:space="preserve">
+    <value>Sub-section can have no more than 10 parent sub-sections.</value>
+  </data>
+  <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
+    <value>Only one GPS question could be marked as prefilled</value>
+  </data>
+  <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
+    <value>Multi option yes/no question can't be linked</value>
+  </data>
+  <data name="WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
+    <value>Multi option question supports only integer positive values</value>
+  </data>
+  <data name="WB0102_QuestionnaireEntitiesShareSameInternalId" xml:space="preserve">
+    <value>Following questionnaire items (question/group/static text/etc.) use same internal ID. Please delete one of them.</value>
+  </data>
+  <data name="WB0010_MacroHasInvalidName" xml:space="preserve">
+    <value>Macro has invalid name.</value>
+  </data>
+  <data name="WB0020_NameForMacrosIsNotUnique" xml:space="preserve">
+    <value>Another Macro with the same name already exists.</value>
+  </data>
+  <data name="WB0014_MacroHasEmptyName" xml:space="preserve">
+    <value>Macro cannot have empty name.</value>
+  </data>
+  <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
+    <value>Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters.</value>
+  </data>
+  <data name="WB0029_LookupWithTheSameVariableNameAlreadyExists" xml:space="preserve">
+    <value>Lookup table with the same variable name already exists.</value>
+  </data>
+  <data name="WB0026_NameForLookupTableIsNotUnique" xml:space="preserve">
+    <value>Another Lookup table with the same name already exists.</value>
+  </data>
+  <data name="WB0024_LookupHasInvalidName" xml:space="preserve">
+    <value>Lookup table has invalid name.</value>
+  </data>
+  <data name="WB0025_LookupHasEmptyName" xml:space="preserve">
+    <value>Lookup table cannot have empty name.</value>
+  </data>
+  <data name="WB0031_LookupTableHasInvalidHeaders" xml:space="preserve">
+    <value>Lookup table has invalid column headers</value>
+  </data>
+  <data name="WB0043_LookupTableMoreThan11Columns" xml:space="preserve">
+    <value>Lookup table has too many columns</value>
+  </data>
+  <data name="WB0044_LookupTableMoreThan5000Rows" xml:space="preserve">
+    <value>Lookup table has too many rows</value>
+  </data>
+  <data name="WB0047_LookupTableNotUniqueRowcodeValues" xml:space="preserve">
+    <value>Lookup table has not unique rowcode values</value>
+  </data>
+  <data name="WB0048_LookupHasEmptyContent" xml:space="preserve">
+    <value>Lookup table cannot be empty</value>
+  </data>
+  <data name="WB0052_LookupNameIsKeyword" xml:space="preserve">
+    <value>Lookup table name cannot be a reserved word.</value>
+  </data>
+  <data name="WB0053_LinkedQuestionReferencesNotExistingRoster" xml:space="preserve">
+    <value>Roster which is the source of the link should exist.</value>
+  </data>
+  <data name="WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster" xml:space="preserve">
+    <value>Roster which is the source of the link is a roster, not a subsection.</value>
+  </data>
+  <data name="WB0105_ValidationMessageIsTooLong" xml:space="preserve">
+    <value>Validation error message #{0} is too long. It should be no longer than 250 characters.</value>
+  </data>
+  <data name="WB0104_ValidationConditionIsTooLong" xml:space="preserve">
+    <value>Validation condition #{0} is too long. It should be no longer than 10000 characters.</value>
+  </data>
+  <data name="WB0106_ValidationConditionIsEmpty" xml:space="preserve">
+    <value>Validation condition #{0} is empty.</value>
+  </data>
+  <data name="WB0107_ValidationMessageIsEmpty" xml:space="preserve">
+    <value>Validation error message #{0} is empty.</value>
+  </data>
+  <data name="WB0201_LargeNumberOfQuestionsInGroup" xml:space="preserve">
+    <value>Section or Roster contains more than 200 questions, consider splitting into sub-sections.</value>
+  </data>
+  <data name="WB0202_GroupWithoutQuestions" xml:space="preserve">
+    <value>Section contains no questions. Consider removing the empty section.</value>
+  </data>
+  <data name="WB0203_RosterHasSingleQuestion" xml:space="preserve">
+    <value>Roster group contains only one question. Consider grouping with other rosters. For fixed roster, consider presenting as a set of independent questions.</value>
+  </data>
+  <data name="WB0204_EmptyRoster" xml:space="preserve">
+    <value>Roster is empty. Remove it if it is not needed.</value>
+  </data>
+  <data name="WB0205_TooManyQuestions" xml:space="preserve">
+    <value>Questionnaire has more than 1000 questions. It might be difficult to administer it.</value>
+  </data>
+  <data name="WB0209_LongEnablementCondition" xml:space="preserve">
+    <value>Enabling condition is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList()).</value>
+  </data>
+  <data name="WB0210_CategoricalQuestionHasManyOptions" xml:space="preserve">
+    <value>Single-choice question has too many categories, consider changing to combo box.</value>
+  </data>
+  <data name="WB0211_QuestionnaireHasNoGpsQuestion" xml:space="preserve">
+    <value>Questionnaire contains no GPS questions. Consider adding a GPS question.</value>
+  </data>
+  <data name="WB0206_FewSectionsManyQuestions" xml:space="preserve">
+    <value>Questionnaire contains more than 100 questions but only one or two sections. Group questions into sections to simplify navigation and improve performance.</value>
+  </data>
+  <data name="WB0212_LongValidationCondition" xml:space="preserve">
+    <value>Validation condition #{0} is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList()).</value>
+  </data>
+  <data name="WB0207_FixedRosterContains3OrLessItems" xml:space="preserve">
+    <value>Fixed roster contains 3 or less items. Consider using sub-sections and a series of questions. Rosters complicate structure of exported data.</value>
+  </data>
+  <data name="WB0208_MoreThan50PercentsNumericQuestionsWithoutValidationConditions" xml:space="preserve">
+    <value>Most numeric questions can have validation conditions. Add validation conditions to improve data quality.</value>
+  </data>
+  <data name="WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>Linked question filter expression has length more than 10,000 characters.</value>
+  </data>
+  <data name="WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion" xml:space="preserve">
+    <value>Categorical linked question cannot be used in linked question filter expression.</value>
+  </data>
+  <data name="WB00110_LinkedQuestionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+    <value>Filter expression has a syntax error.</value>
+  </data>
+  <data name="WB0065_NameForAyyachmentIsNotUnique" xml:space="preserve">
+    <value>Another attachment with the same name already exists.</value>
+  </data>
+  <data name="WB0095_StaticTextRefersAbsentAttachment" xml:space="preserve">
+    <value>Static text refers absent attachment</value>
+  </data>
+  <data name="WB0110_AttachmentHasEmptyContent" xml:space="preserve">
+    <value>Attachment cannot be empty</value>
+  </data>
+  <data name="WB0213_AttachmentSizeIsMoreThan5Mb" xml:space="preserve">
+    <value>Attachment size is more than 5Mb</value>
+  </data>
+  <data name="WB0214_TotalAttachmentsSizeIsMoreThan50Mb" xml:space="preserve">
+    <value>Total size of attachments is more than 50Mb</value>
+  </data>
+  <data name="WB0215_UnusedAttachments" xml:space="preserve">
+    <value>Questionnaire contains unused attachments</value>
   </data>
 </root>

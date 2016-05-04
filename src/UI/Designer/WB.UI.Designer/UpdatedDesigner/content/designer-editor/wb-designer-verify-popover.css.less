@@ -17,31 +17,23 @@
     bottom: 0;
     position: fixed;
     z-index: 1000;
-    padding: @chapter-title-height/2 24px @chapter-title-height/2 @chapter-menu-panel-width+24px;
+    padding: 20px 24px 20px 24px;
 
     .modal-content {
         height: 100%;
         border: none;
         position: relative;
+        min-width: 610px;
+		min-height: 220px;
 
-        .modal-header {
-            position: absolute;
-            top: 0;
-            width: 100%;
-            left: 0;
-            height: @verification-modal-header-hight;
-            .opensanslight-font();
-            font-size: 36px;
-            font-weight: 300;
+        .modal-header {                       
+            font-size: 36px;          
+            .opensanslight-font();            
             border-bottom: 2px solid @verification-modal-content-border-color;
-            border-top-color: @verification-modal-error-color;
-            padding: 0 22px;
+
              button.close {
                 @s: 40px;
-                position: absolute;
                 z-index: 100;
-                top: 12px;
-                right: 4px;
                 width: @s;
                 height: @s;
                 background: url(../i/cross.png) 0 0 no-repeat;
@@ -54,13 +46,13 @@
                 span {
                     color: @verification-modal-error-color;
                 }
-                line-height: @verification-modal-header-hight - 8px;
+                line-height: 32px;
             }
         }
 
         .modal-body {
-            padding: @verification-modal-header-hight 0 @verification-modal-footer-hight;
-            height: 100%;
+            padding: 0px;
+            height: ~"calc(100% - 115px)";
 
             .error-message {
                 .georgia-font();
@@ -83,7 +75,6 @@
                 margin-bottom: 20px;
 
                 .verification-item-container{
-                    border-left: 4px solid @verification-modal-error-color;
                 }
 
                 .verification-item {
@@ -165,6 +156,33 @@
         }
     }
     
+    &.error{
+        .modal-content {
+            .modal-header {
+                border-bottom: 2px solid @verification-modal-content-border-color;
+                border-top-color: @verification-modal-error-color;
+                h3 {
+                    span {
+                        color: @verification-modal-error-color;
+                    }
+                }
+            }
+        }
+    }
+    
+    &.warning{
+        .modal-content {
+            .modal-header {
+                
+                border-top-color: @verification-modal-warning-color;
+                h3 {
+                    span {
+                        color: @verification-modal-warning-color;
+                    }
+                }
+            }
+        }
+    }
 }
 
 #verification-modal.ie9-backdrop {

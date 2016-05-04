@@ -7,7 +7,7 @@ using FluentAssertions;
 namespace Ncqrs.Tests.Domain
 {
     [TestFixture]
-    public class TypeThresholdedActionBasedInternalEventHandlerSpecs
+    internal class TypeThresholdedActionBasedInternalEventHandlerSpecs
     {
         public class FooEvent
         {
@@ -15,12 +15,6 @@ namespace Ncqrs.Tests.Domain
 
         public class BarEvent : FooEvent
         {
-        }
-
-        [SetUp]
-        public void SetUp()
-        {
-            NcqrsEnvironment.Deconfigure();
         }
         
         [Test]

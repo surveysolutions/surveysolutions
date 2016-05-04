@@ -63,9 +63,9 @@
                     $scope.questionnaire.isPublic = !$scope.questionnaire.isPublic;
                 });
             };
-            $scope.changeShareType = function (shareType) {
+            $scope.changeShareType = function(shareType) {
                 $scope.viewModel.shareType = shareType.name;
-            }
+            };
         }
     ]);
 })();

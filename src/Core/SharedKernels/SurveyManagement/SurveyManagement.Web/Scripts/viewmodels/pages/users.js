@@ -64,12 +64,5 @@
             }
         });
     };
-
-    self.getBindedHtmlTemplate = function (templateId, bindObject) {
-        var messageTemplate = $("<div/>").html($(templateId).html())[0];
-        ko.applyBindings(bindObject, messageTemplate);
-        var html = $(messageTemplate).html();
-        return html;
-    }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.Users, Supervisor.VM.ListView);

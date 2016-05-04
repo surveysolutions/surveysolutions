@@ -26,7 +26,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                     timeSpans: new[]
                     {
                         Create.TimeSpanBetweenStatuses(interviewerId: user.PublicKey,
+                            supervisorId:supervisorId,
                             timestamp: input.From.Date.AddHours(1), 
+                            timeSpanWithPreviousStatus: TimeSpan.FromMinutes(-35)),
+                          Create.TimeSpanBetweenStatuses(interviewerId: Guid.NewGuid(),
+                            supervisorId:Guid.NewGuid(),
+                            timestamp: input.From.Date.AddHours(1),
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(-35))
                     }), "2");
 

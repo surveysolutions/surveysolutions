@@ -35,7 +35,7 @@
         </a>
     </li>
 
-    <li class="dropdown @(page == MenuItem.Teams || page == MenuItem.Headquarters ? "active" : "")">
+    <li class="dropdown @(page == MenuItem.Teams || page == MenuItem.Headquarters || page == MenuItem.Interviewers ? "active" : "")">
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
             <i class="glyphicon glyphicon-user"></i> @MainMenu.TeamsAndRoles <b class="caret"></b>
         </a>
@@ -50,9 +50,24 @@
                     @MainMenu.Headquarters
                 </a>
             </li>
+            <li class="@(page == MenuItem.Interviewers ? "active" : "")">
+                <a href="@Url.Action("Index", "Interviewers", new {area = string.Empty})">
+                    @MainMenu.Interviewers
+                </a>
+            </li>
             <li class="@(page == MenuItem.Observers ? "active" : "")">
                 <a href="@Url.Action("Index", "Observer", new {area = string.Empty})">
                     @MainMenu.Observers
+                </a>
+            </li>
+            <li class="@(page == MenuItem.ApiUsers ? "active" : "")">
+                <a href="@Url.Action("Index", "ApiUser", new {area = string.Empty})">
+                    @MainMenu.ApiUsers
+                </a>
+            </li>
+            <li class="@(page == MenuItem.UserBatchUpload ? "active" : "")">
+                <a href="@Url.Action("UserBatchUploads", "BatchUserUpload", new { area = string.Empty })">
+                    @MainMenu.UserBatchUpload
                 </a>
             </li>
         </ul>
@@ -63,7 +78,7 @@
         </i> @MainMenu.Questionnaires</a>
     </li>
     <li class="@(page == MenuItem.DataExport ? "active" : "")">
-        <a href="@Url.Action("DataExport", "HQ", new {area = ""})">
+        <a href="@Url.Action("Index", "DataExport", new {area = ""})">
             <i class="glyphicon glyphicon-download">
             </i> @MainMenu.DataExport
         </a>
@@ -79,12 +94,13 @@
             <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
                 <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Hi, <strong>@User.Identity.Name</strong> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                    <li class="@(page == MenuItem.ManageAccount ? "active" : "")">@Html.ActionLink(WB.Core.SharedKernels.SurveyManagement.Web.Properties.Strings.SurverManagement_MainMenu_ManageAccount, "Manage", "Account", new { area = string.Empty }, null)</li>
-                    <li>@Html.ActionLink("Logoff", "LogOff", "Account", new { area = string.Empty }, null)</li>
+                    <li>@Html.ActionLink("Settings", "ExportEncryptionSettings", "Settings", new { area = string.Empty }, null)</li>
+                    <li class="@(page == MenuItem.ManageAccount ? "active" : "")">@Html.ActionLink(WB.Core.SharedKernels.SurveyManagement.Web.Properties.Strings.SurverManagement_MainMenu_ManageAccount, "Manage", "Account", new {area = string.Empty}, null)</li>
+                    <li>@Html.ActionLink("Logoff", "LogOff", "Account", new {area = string.Empty}, null)</li>
                 </ul>
             </li>
             <li>
-                <a href="http://siteresources.worldbank.org/INTCOMPTOOLS/Resources/8213623-1380598436379/HQ_draft_manual.pdf" target="_blank">
+                <a href="http://docs.mysurvey.solutions/headquarters.pdf" target="_blank">
                     <i class="glyphicon glyphicon-question-sign"></i>
                 </a>
             </li>

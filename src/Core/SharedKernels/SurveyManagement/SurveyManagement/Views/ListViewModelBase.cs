@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Views
 {

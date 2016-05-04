@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <style name="ToolbarTitle_Container">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+  </style>
+
+  <style name="Dashboard_LastUpdated">
+    <item name="android:textColor">@color/colorToolbarText</item>
+    <item name="android:fontFamily">Roboto</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textStyle">italic</item>
+  </style>
+
+  <style name="Dashboard_SearchView_SearchButton">
+    <item name="android:layout_width">@dimen/Dashboard_SearchView_SearchButton_size</item>
+    <item name="android:layout_height">@dimen/Dashboard_SearchView_SearchButton_size</item>
+    <item name="android:layout_gravity">right</item>
+    <item name="android:scaleType">fitCenter</item>
+    <item name="android:background">@drawable/dashboard_search_icon</item>
+  </style>
+
+  <style name="Dashboard_SearchView_Container">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_gravity">right</item>
+    <item name="android:orientation">horizontal</item>
+    <item name="android:background">@drawable/question_list_item_background</item>
+  </style>
+
+  <style name="Dashboard_SearchView_FilterInput">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:singleLine">true</item>
+    <item name="android:layout_gravity">right</item>
+    <item name="android:inputType">textVisiblePassword|textNoSuggestions</item>
+    <item name="android:maxLines">1</item>
+    <item name="android:layout_weight">1</item>
+    <item name="android:focusable">true</item>
+    <item name="android:focusableInTouchMode">true</item>
+    <item name="android:textCursorDrawable">@null</item>
+    <item name="android:background">@drawable/question_list_item_editor_background</item>
+  </style>
+
+  <style name="Dashboard_SearchView_DeleteButton">
+    <item name="android:layout_width">@dimen/Dashboard_SearchView_DeleteButton_size</item>
+    <item name="android:layout_height">@dimen/Dashboard_SearchView_DeleteButton_size</item>
+    <item name="android:layout_gravity">right</item>
+    <item name="android:scaleType">fitCenter</item>
+    <item name="android:background">@drawable/delete_button</item>
+  </style>
+
+  <style name="Dashboard_MyQuestionnairesLink" parent="AppTheme">
+    <item name="android:textColor">@color/dashboard_my_questionnaire_link</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">@dimen/textsize_18</item>
+    <item name="android:background">?attr/selectableItemBackground</item>
+    <item name="android:paddingTop">@dimen/Dashboard_Menu_margin_vertical</item>
+    <item name="android:paddingBottom">@dimen/Dashboard_Menu_margin_vertical</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_Questionnaire_MyQuestionnaireLink_margin_top</item>
+    <item name="android:layout_marginBottom">@dimen/Dashboard_Questionnaire_MyQuestionnaireLink_margin_bottom</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_Menu_Item_margin_horizontal_in_between</item>
+    <item name="android:gravity">center_vertical</item>
+  </style>
+
+  <style name="Dashboard_PublicQuestionnairesLink" parent="Dashboard_MyQuestionnairesLink">
+    <item name="android:textColor">@color/dashboard_public_questionnaire</item>
+  </style>
+
+  <style name="Dashboard_QuestionnairesList">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:orientation">vertical</item>
+    <item name="android:divider">@null</item>
+    <item name="android:dividerHeight">@dimen/zero</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textStyle">bold</item>
+  </style>
+
+  <style name="Dashboard_Questionnaires_Header" parent="FullWidthWrappingLayout">
+    <item name="android:background">@color/applicationBackground</item>
+    <item name="android:orientation">vertical</item>
+  </style>
+
+  <style name="Dashboard_Questionnaires_Header_Body" parent="FullWidthWrappingLayout">
+    <item name="android:orientation">horizontal</item>
+  </style>
+
+  <style name="Dashboard_Questionnaire_Item">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:orientation">vertical</item>
+    <item name="android:paddingLeft">@dimen/Dashboard_QuestionnairesListItem_Marker_Width</item>
+  </style>
+
+  <style name="Dashboard_Questionnaire_Item_Body" parent="FullWidthWrappingLayout">
+    <item name="android:orientation">horizontal</item>
+    <item name="android:background">@drawable/dashboard_item_bg</item>
+  </style>
+
+  <style name="Dashboard_EmptyQuestionnaireListText" parent="AppTheme">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_QuestionnairesList_EmptyText_margin_left</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_QuestionnairesList_EmptyText_margin_top</item>
+    <item name="android:layout_marginRight">@dimen/Dashboard_QuestionnairesList_EmptyText_margin_right</item>
+    <item name="android:textColor">@color/dashboard_questionnairelist_empty_text</item>
+    <item name="android:textSize">@dimen/textsize_28</item>
+    <item name="android:fontFamily">sans-serif-thin</item>
+  </style>
+
+  <style name="Dashboard_QuestionnaireListItem_Marker" parent="AppTheme">
+    <item name="android:layout_width">@dimen/Dashboard_QuestionnairesList_EmptyText_margin_left</item>
+    <item name="android:layout_height">match_parent</item>
+  </style>
+  
+  <style name="Dashboard_QuestionnaireListItem_Title">
+    <item name="android:singleLine">false</item>
+    <item name="android:layout_width">@dimen/zero</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_weight">1</item>
+    <item name="android:textColor">@color/dashboard_questionnaire_list_item_title</item>
+    <item name="android:fontFamily">Arial</item>
+    <item name="android:textSize">@dimen/textsize_18</item>
+    <item name="android:paddingLeft">@dimen/Dashboard_QuestionnairesListItem_Title_margin_left</item>
+    <item name="android:paddingRight">@dimen/Dashboard_QuestionnairesListItem_Title_margin_right</item>
+    <item name="android:paddingTop">@dimen/Dashboard_QuestionnairesListItem_Body_padding</item>
+    <item name="android:paddingBottom">@dimen/Dashboard_QuestionnairesListItem_Body_padding</item>
+  </style>
+
+  <style name="Dashboard_QuestionnaireListItem_ModifiedDate" parent="AppTheme">
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:textColor">@color/dashboard_questionnaire_list_item_modified_date</item>
+    <item name="android:fontFamily">Georgia</item>
+    <item name="android:textStyle">italic</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:paddingRight">@dimen/Dashboard_QuestionnairesListItem_Title_margin_right</item>
+    <item name="android:paddingTop">@dimen/Dashboard_QuestionnairesListItem_Body_padding</item>
+    <item name="android:paddingBottom">@dimen/Dashboard_QuestionnairesListItem_Body_padding</item>
+  </style>
+
+  <style name="Dashboard_Filters_Divider">
+    <item name="android:layout_height">@dimen/ListStyle_Divider_height</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:background">@color/dashboard_questionnairelist_border_top</item>
+  </style>
+
+  <style name="Dashboard_Questionnaires_Divider">
+    <item name="android:layout_height">@dimen/ListStyle_Divider_height</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:background">@color/dashboard_questionnairelistitem_border_bottom</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_QuestionnairesListItem_Divider_margin</item>
+  </style>
+
+</resources>

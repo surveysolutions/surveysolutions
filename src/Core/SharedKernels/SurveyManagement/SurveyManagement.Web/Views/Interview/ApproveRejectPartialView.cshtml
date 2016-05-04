@@ -4,7 +4,7 @@
 
 
 @if (((Model == InterviewStatus.Completed || Model == InterviewStatus.RejectedByHeadquarters) && GlobalInfo.IsSupervisor) 
-    || (Model == InterviewStatus.ApprovedBySupervisor && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator)))
+    || ((Model == InterviewStatus.ApprovedBySupervisor || Model == InterviewStatus.ApprovedByHeadquarters) && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator)))
 {
     <div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -39,6 +39,25 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button class="btn btn-danger" data-bind="click: @(GlobalInfo.IsSupervisor ? "rejectInterview" : "hQRejectInterview")">Reject</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="unapproveByHeadquarterModal" tabindex="-1" role="dialog" aria-labelledby="unapproveInterviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="unapproveInterviewModalLabel">Unapprove interview</h4>
+                </div>
+                <div class="modal-body">
+                    <label>Comment:</label>
+                    <textarea data-bind="value: changeStateComment" class="form-control" rows="10"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button class="btn btn-success" data-bind="click: unapproveByHeadquarter">Unapprove</button>
                 </div>
             </div>
         </div>

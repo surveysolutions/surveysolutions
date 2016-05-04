@@ -59,12 +59,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     RosterFixedTitles = new[] { "I", "II" }
                 });
 
-            var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
+            questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                 new PlainQuestionnaire(questionnaire, 1));
-
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
 
             eventContext = new EventContext();
         };
@@ -76,7 +72,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         };
 
         Because of = () =>
-            CreateInterview(questionnaireId: questionnaireId);
+            CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
         It should_produce_one_event_roster_instance_added = () =>
             eventContext.GetEvents<RosterInstancesAdded>().Count().ShouldEqual(1);
@@ -92,5 +88,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         private static EventContext eventContext;
         private static Guid questionnaireId;
+        private static IPlainQuestionnaireRepository questionnaireRepository;
     }
 }

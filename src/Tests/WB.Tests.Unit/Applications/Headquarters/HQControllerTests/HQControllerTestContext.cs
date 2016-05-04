@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Web;
 using Moq;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.SurveyManagement.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveyManagement.Services.Preloading;
 using WB.Core.SharedKernels.SurveyManagement.Views.InterviewHistory;
 using WB.Core.SharedKernels.SurveyManagement.Views.Preloading;
+using WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Views;
@@ -19,6 +22,8 @@ using WB.Core.SharedKernels.SurveyManagement.Views.UsersAndQuestionnaires;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
 using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Services;
+using BatchUploadModel = WB.Core.SharedKernels.SurveyManagement.Web.Models.BatchUploadModel;
 
 namespace WB.Tests.Unit.Applications.Headquarters.HQControllerTests
 {
@@ -45,13 +50,14 @@ namespace WB.Tests.Unit.Applications.Headquarters.HQControllerTests
                 Mock.Of<IGlobalInfoProvider>(),
                 Mock.Of<ILogger>(),
                 Mock.Of<IViewFactory<TakeNewInterviewInputModel, TakeNewInterviewView>>(),
-                Mock.Of<IUserListViewFactory>(),
                 () => (sampleImportServiceMock ?? Mock.Of<ISampleImportService>()),
                 Mock.Of<IViewFactory<AllUsersAndQuestionnairesInputModel, AllUsersAndQuestionnairesView>>(),
                 Mock.Of<IPreloadingTemplateService>(), Mock.Of<IPreloadedDataRepository>(),
                 Mock.Of<IPreloadedDataVerifier>(),
-                Mock.Of<IViewFactory<QuestionnaireItemInputModel, QuestionnaireBrowseItem>>(),
-                new InterviewHistorySettings("", false));
+                Mock.Of<IViewFactory<SampleUploadViewInputModel, SampleUploadView>>(),
+                new InterviewDataExportSettings("", false,10000,100,1,100),
+                Mock.Of<IQuestionnaireBrowseViewFactory>(),
+                Mock.Of<IInterviewImportService>());
         }
     }
 }

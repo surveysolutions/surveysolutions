@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        <TextView
+            style="@style/ToolbarTitle"
+            local:MvxBind="Text Localization('LoginTitleText')" />
+    </android.support.v7.widget.Toolbar>
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:focusable="false"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_marginTop="@dimen/Login_ProgressBar_margin_top"
+        android:keepScreenOn="false"
+        local:MvxBind="ShowProgress IsInProgress" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbarStyle="outsideOverlay">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center">
+            <ImageView
+                android:layout_width="@dimen/Login_Element_width"
+                android:layout_height="wrap_content"
+                android:src="@drawable/loginLogo" />
+            <EditText
+                android:layout_width="@dimen/Login_Element_width"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/Login_Element_margin_vertical_normal"
+                android:singleLine="true"
+                android:inputType="textVisiblePassword|textNoSuggestions"
+                local:MvxBind="Text LoginName; Hint Localization('LoginNameHint')" />
+            <EditText
+                android:layout_width="@dimen/Login_Element_width"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/Login_Element_margin_vertical_thin"
+                android:singleLine="true"
+                android:password="true"
+                local:MvxBind="Text Password; Hint Localization('PasswordHint')" />
+
+            <LinearLayout
+                android:layout_width="@dimen/Login_Element_width"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/Login_Element_margin_vertical_normal"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+                <Button
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    local:MvxBind="Click LoginCommand; Text Localization('LoginText'); Enabled If(IsInProgress, false, true)" />
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    local:MvxBind="Checked StaySignedIn; Text Localization('StaySignedInText')" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

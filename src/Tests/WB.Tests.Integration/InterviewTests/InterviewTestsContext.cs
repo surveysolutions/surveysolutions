@@ -7,59 +7,53 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Practices.ServiceLocation;
 using Moq;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
-using WB.Core.GenericSubdomains.Utils.Implementation;
-using WB.Core.GenericSubdomains.Utils.Rest;
-using WB.Core.Infrastructure.Files.Implementation.FileSystem;
+using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.V2;
-using WB.Core.SharedKernels.SurveySolutions;
-using WB.Core.SharedKernels.SurveySolutions.Implementation.Services;
+using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.V6;
+using WB.Core.SharedKernels.DataCollection.V7;
+using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using It = Moq.It;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Integration.InterviewTests
 {
     [Subject(typeof(Interview))]
     internal class InterviewTestsContext
     {
-        protected static Interview CreateInterviewFromQuestionnaireDocumentRegisteringAllNeededDependencies(QuestionnaireDocument questionnaireDocument)
+        internal static AnsweredYesNoOption Yes(decimal value)
+        {
+            return Create.AnsweredYesNoOption(value, true);
+        }
+        internal static AnsweredYesNoOption No(decimal value)
+        {
+            return Create.AnsweredYesNoOption(value, false);
+        }
+
+        protected static Interview SetupInterviewFromQuestionnaireDocumentRegisteringAllNeededDependencies(QuestionnaireDocument questionnaireDocument)
         {
             var questionnaireId = Guid.Parse("10000010000100100100100001000001");
 
             PlainQuestionnaire questionnaire = CreateQuestionnaire(questionnaireDocument);
 
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
+            var interviewExpressionStatePrototypeProvider = CreateInterviewExpressionStateProviderStub(questionnaireId);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
-
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
-                .Returns(CreateInterviewExpressionStateProviderStub(questionnaireId));
-
-            return CreateInterview(questionnaireId: questionnaireId);
-        }
-
-        protected static Interview CreateInterview(Guid? interviewId = null, Guid? userId = null, Guid? questionnaireId = null,
-            Dictionary<Guid, object> answersToFeaturedQuestions = null, DateTime? answersTime = null, Guid? supervisorId = null)
-        {
-            return new Interview(
-                interviewId ?? new Guid("A0A0A0A0B0B0B0B0A0A0A0A0B0B0B0B0"),
-                userId ?? new Guid("F111F111F111F111F111F111F111F111"),
-                questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),1,
-                answersToFeaturedQuestions ?? new Dictionary<Guid, object>(),
-                answersTime ?? new DateTime(2012, 12, 20),
-                supervisorId ?? new Guid("D222D222D222D222D222D222D222D222"));
+            return Create.Interview(
+                questionnaireId: questionnaireId,
+                questionnaireRepository: questionnaireRepository,
+                expressionProcessorStatePrototypeProvider: interviewExpressionStatePrototypeProvider);
         }
 
         protected static PlainQuestionnaire CreateQuestionnaire(QuestionnaireDocument questionnaireDocument, Guid? userId = null)
@@ -67,16 +61,15 @@ namespace WB.Tests.Integration.InterviewTests
             return new PlainQuestionnaire(questionnaireDocument, 1);
         }
 
-        protected static IQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire)
+        protected static IPlainQuestionnaireRepository CreateQuestionnaireRepositoryStubWithOneQuestionnaire(Guid questionnaireId, IQuestionnaire questionaire)
         {
-            return Mock.Of<IQuestionnaireRepository>(repository
-                => repository.GetQuestionnaire(questionnaireId) == questionaire
-                && repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
+            return Mock.Of<IPlainQuestionnaireRepository>(repository
+                => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == questionaire);
         }
 
         protected static IInterviewExpressionStatePrototypeProvider CreateInterviewExpressionStateProviderStub(Guid questionnaireId)
         {
-            var expressionState = new Mock<IInterviewExpressionStateV2>();
+            var expressionState = new Mock<IInterviewExpressionStateV7>();
 
             var emptyList = new List<Identity>();
 
@@ -101,31 +94,45 @@ namespace WB.Tests.Integration.InterviewTests
             return result;
         }
 
-        protected static void SetupInstanceToMockedServiceLocator<TInstance>(TInstance instance)
-        {
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<TInstance>())
-                .Returns(instance);
-        }
-
-        protected static Interview SetupInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, IInterviewExpressionStateV2 precompiledState = null)
+        protected static StatefulInterview SetupStatefullInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, IInterviewExpressionStateV7 precompiledState = null)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
 
-            var questionnaire = Create.Questionnaire(questionnaireDocument);
+            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
+                => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == new PlainQuestionnaire(questionnaireDocument, 1) &&
+                    repository.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == new PlainQuestionnaire(questionnaireDocument, 1));
 
-            var questionnaireRepository = Mock.Of<IQuestionnaireRepository>(repository
-                => repository.GetQuestionnaire(questionnaireId) == questionnaire.GetQuestionnaire()
-                    && repository.GetHistoricalQuestionnaire(questionnaireId, questionnaire.GetQuestionnaire().Version) == questionnaire.GetQuestionnaire()
-                    && repository.GetHistoricalQuestionnaire(questionnaireId, 1) == questionnaire.GetQuestionnaire());
+            IInterviewExpressionStateV7 state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument);
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionnaireRepository>())
-                .Returns(questionnaireRepository);
+            var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
 
-            SetupRoslyn(questionnaireDocument, precompiledState);
+            var interview = Create.StatefulInterview(
+                questionnaireId: questionnaireId,
+                questionnaireRepository: questionnaireRepository,
+                expressionProcessorStatePrototypeProvider: statePrototypeProvider);
 
-            var interview = Create.Interview(questionnaireId: questionnaireId);
+            interview.QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, 1);
+            ApplyAllEvents(interview, events);
+
+            return interview;
+        }
+
+        protected static Interview SetupInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, IInterviewExpressionStateV7 precompiledState = null)
+        {
+            Guid questionnaireId = questionnaireDocument.PublicKey;
+
+            var questionnaireRepository = Mock.Of<IPlainQuestionnaireRepository>(repository
+                =>  repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) ==new PlainQuestionnaire(questionnaireDocument,1) &&
+                    repository.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == new PlainQuestionnaire(questionnaireDocument, 1));
+
+            IInterviewExpressionStateV7 state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument) ;
+
+            var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
+
+            var interview = Create.Interview(
+                questionnaireId: questionnaireId,
+                questionnaireRepository: questionnaireRepository,
+                expressionProcessorStatePrototypeProvider: statePrototypeProvider);
 
             ApplyAllEvents(interview, events);
 
@@ -134,7 +141,7 @@ namespace WB.Tests.Integration.InterviewTests
 
         protected static Interview SetupInterview(string questionnaireString, object[] events, IInterviewExpressionState precompiledState)
         {
-            var json = new NewtonJsonUtils();
+            var json = new NewtonJsonSerializer(new JsonSerializerSettingsFactory());
             var questionnaireDocument = json.Deserialize<QuestionnaireDocument>(questionnaireString);
             return SetupInterview(questionnaireDocument, events);
         }
@@ -176,31 +183,29 @@ namespace WB.Tests.Integration.InterviewTests
             return firstTypedEvent != null ? ((T)firstTypedEvent.Payload) : null;
         }
 
-        public static void SetupRoslyn(QuestionnaireDocument questionnaireDocument, IInterviewExpressionStateV2 precompiledState = null)
+        public static IInterviewExpressionStateV7 GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
         {
-            IInterviewExpressionStateV2 state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument) ;
+            var fileSystemAccessor = new FileSystemIOAccessor(); 
+            var questionnaireVersionProvider =new DesignerEngineVersionService();
 
-            var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
+            const string pathToProfile = "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.5\\Profile\\Profile111";
+            var referencesToAdd = new[] { "System.dll", "System.Core.dll", "System.Runtime.dll", "System.Collections.dll", "System.Linq.dll", "System.Linq.Expressions.dll", "System.Linq.Queryable.dll", "mscorlib.dll", "System.Runtime.Extensions.dll", "System.Text.RegularExpressions.dll" };
 
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
-                .Returns(statePrototypeProvider);
-        }
+            var settings = new List<IDynamicCompilerSettings>
+            {
+                Mock.Of<IDynamicCompilerSettings>(_ 
+                    => _.PortableAssembliesPath == pathToProfile
+                    && _.DefaultReferencedPortableAssemblies == referencesToAdd 
+                    && _.Name == "profile111")
+            };
 
-        public static IInterviewExpressionStateV2 GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
-        {
-            var questionnaireVersionProvider =new ExpressionsEngineVersionService();
+            var defaultDynamicCompilerSettings = Mock.Of<ICompilerSettings>(_ => _.SettingsCollection == settings);
+
             var expressionProcessorGenerator =
                 new QuestionnaireExpressionProcessorGenerator(
-                    new RoslynCompiler(
-                        new DefaultDynamicCompillerSettings()
-                        {
-                            PortableAssembliesPath =
-                                "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.5\\Profile\\Profile111",
-                            DefaultReferencedPortableAssemblies = new[] { "System.dll", "System.Core.dll", "mscorlib.dll", "System.Runtime.dll", 
-                                "System.Collections.dll", "System.Linq.dll" }
-                        }, new FileSystemIOAccessor()),
-                    new CodeGenerator());
+                    new RoslynCompiler(),
+                    Create.CodeGenerator(),
+                    new DynamicCompilerSettingsProvider(defaultDynamicCompilerSettings, fileSystemAccessor));
 
             string resultAssembly;
             var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument,questionnaireVersionProvider.GetLatestSupportedVersion(), out resultAssembly);

@@ -21,12 +21,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
         private Because of =
             () =>
                 parsingResult =
-                    questionDataParser.TryParse(answer, questionVarName + "_Latitude", question, CreateQuestionnaireDocumentWithOneChapter(question), out parcedValue);
+                    questionDataParser.TryParse(answer, questionVarName + "__Latitude", question, out parcedValue);
 
         private It should_result_be_type_of_double = () =>
-            parcedValue.Value.ShouldBeOfExactType<double>();
-
-        private It should_result_key_be_equal_to_questionId = () =>
-            parcedValue.Key.ShouldEqual(questionId);
+            parcedValue.ShouldBeOfExactType<double>();
     }
 }

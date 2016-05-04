@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
-using WB.Core.GenericSubdomains.Utils;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveyManagement.Services.DeleteSupervisor;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interviewer;
+using WB.Core.SharedKernels.SurveyManagement.Views.Supervisor;
 using WB.Core.SharedKernels.SurveyManagement.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Membership;
@@ -18,7 +18,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     public class UsersApiController : BaseApiController
     {
         private readonly IInterviewersViewFactory interviewersFactory;
-        private readonly IUserListViewFactory supervisorsFactory;
+        private readonly ISupervisorsViewFactory supervisorsFactory;
+        private readonly IUserListViewFactory usersFactory;
         public readonly IDeleteSupervisorService deleteSupervisorService;
 
         public UsersApiController(
@@ -26,84 +27,70 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             IGlobalInfoProvider provider,
             ILogger logger,
             IInterviewersViewFactory interviewersFactory,
-            IUserListViewFactory supervisorsFactory, 
+            ISupervisorsViewFactory supervisorsFactory,
+            IUserListViewFactory usersFactory, 
             IDeleteSupervisorService deleteSupervisorService)
             : base(commandService, provider, logger)
         {
             this.interviewersFactory = interviewersFactory;
             this.supervisorsFactory = supervisorsFactory;
+            this.usersFactory = usersFactory;
             this.deleteSupervisorService = deleteSupervisorService;
         }
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public InterviewersView Interviewers(UsersListViewModel data)
+        public InterviewersView Interviewers(InterviewersListViewModel filter)
         {
             // Headquarter and Admin can view interviewers by any supervisor
             // Supervisor can view only their interviewers
-            Guid? viewerId = this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator
-                                 ? data.Request.SupervisorId
-                                 : this.GlobalInfo.GetCurrentUser().Id;
-            if (viewerId != null)
+            Guid viewerId = this.GlobalInfo.GetCurrentUser().Id;
+
+            var input = new InterviewersInputModel
             {
-                var input = new InterviewersInputModel(viewerId.Value)
-                    {
-                        Orders = data.SortOrder,
-                        SearchBy = data.SearchBy
-                    };
-                if (data.Pager != null)
-                {
-                    input.Page = data.Pager.Page;
-                    input.PageSize = data.Pager.PageSize;
-                }
+                Page = filter.PageIndex,
+                PageSize = filter.PageSize,
+                ViewerId = viewerId,
+                SupervisorName = filter.SupervisorName,
+                Orders = filter.SortOrder,
+                SearchBy = filter.SearchBy,
+                Archived = filter.Archived,
+                ConnectedToDevice = filter.ConnectedToDevice
+            };
 
-                return this.interviewersFactory.Load(input);
-            }
-
-            return null;
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public InterviewersView ArchivedInterviewers(UsersListViewModel data)
-        {
-            // Headquarter and Admin can view interviewers by any supervisor
-            // Supervisor can view only their interviewers
-            Guid? viewerId = this.GlobalInfo.IsHeadquarter || this.GlobalInfo.IsAdministrator
-                                 ? data.Request.SupervisorId
-                                 : this.GlobalInfo.GetCurrentUser().Id;
-            if (viewerId != null)
-            {
-                var input = new InterviewersInputModel(viewerId.Value)
-                {
-                    Orders = data.SortOrder,
-                    SearchBy = data.SearchBy,
-                    Archived = true
-                };
-                if (data.Pager != null)
-                {
-                    input.Page = data.Pager.Page;
-                    input.PageSize = data.Pager.PageSize;
-                }
-
-                return this.interviewersFactory.Load(input);
-            }
-
-            return null;
+            return this.interviewersFactory.Load(input);
         }
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter, Observer")]
-        public UserListView Supervisors(UsersListViewModel data)
+        public SupervisorsView Supervisors(UsersListViewModel data)
         {
-            return GetUsers(data, UserRoles.Supervisor);
+            var input = new SupervisorsInputModel
+            {
+                Page = data.PageIndex,
+                PageSize = data.PageSize,
+                Orders = data.SortOrder,
+                SearchBy = data.SearchBy,
+                Archived = false
+            };
+
+            return this.supervisorsFactory.Load(input);
         }
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter, Observer")]
-        public UserListView ArchivedSupervisors(UsersListViewModel data)
+        public SupervisorsView ArchivedSupervisors(UsersListViewModel data)
         {
-            return GetUsers(data, UserRoles.Supervisor, archived: true);
+            var input = new SupervisorsInputModel
+            {
+                Page = data.PageIndex,
+                PageSize = data.PageSize,
+                Orders = data.SortOrder,
+                SearchBy = data.SearchBy,
+                Archived = true
+            };
+
+            return this.supervisorsFactory.Load(input);
         }
 
         [HttpPost]
@@ -120,23 +107,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return GetUsers(data, UserRoles.Observer);
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Administrator")]
+        public UserListView ApiUsers(UsersListViewModel data)
+        {
+            return GetUsers(data, UserRoles.ApiUser);
+        }
+
         private UserListView GetUsers(UsersListViewModel data, UserRoles role, bool archived = false)
         {
             var input = new UserListViewInputModel
             {
+                Page = data.PageIndex,
+                PageSize = data.PageSize,
                 Role = role,
                 Orders = data.SortOrder,
                 SearchBy = data.SearchBy,
                 Archived = archived
             };
 
-            if (data.Pager != null)
-            {
-                input.Page = data.Pager.Page;
-                input.PageSize = data.Pager.PageSize;
-            }
-
-            return this.supervisorsFactory.Load(input);
+            return this.usersFactory.Load(input);
         }
 
         [HttpPost]

@@ -5,17 +5,15 @@
     
     self.ServiceUrl = serviceUrl;
 
+    self.Items = ko.observableArray([]);
+    self.SearchBy = ko.observable('');
+
     self.GetFilterMethod = function () {
         return null;
     };
 
-    self.Items = ko.observableArray([]);
-    self.ItemsSummary = ko.observable(null);
-
-    self.SearchBy = ko.observable('');
-
     self.Filter = function () {
-        return self.GetFilterMethod ? self.GetFilterMethod.apply() : null;
+        return self.GetFilterMethod ? self.GetFilterMethod.apply() : undefined;
     };
 
     // holds the total item count
@@ -61,33 +59,36 @@
     };
 
     self.filter = function () {
-        if (self.Pager().CurrentPage() == 1) {
-            self.search();
-        } else {
+        if (self.Pager().CurrentPage() !== 1) {
             self.Pager().CurrentPage(1);
         }
+        self.search();
     };
 
+    
     self.mappingOptions = {};
 
     self.search = function() {
-        var params = {
-            Pager: {
-                Page: self.Pager().CurrentPage(),
-                PageSize: self.Pager().PageSize()
-            },
+        var filter = {
+            PageIndex: self.Pager().CurrentPage(),
+            PageSize: self.Pager().PageSize(),
             SortOrder: self.OrderBy(),
-            Request: self.Filter(),
             SearchBy: self.SearchBy()
         };
 
-        self.SendRequest(self.ServiceUrl, params, function(data) {
+        var request = self.Filter() || {};
+        
+        $.extend(request, filter);
+
+        self.SendRequest(self.ServiceUrl, request, function (data) {
             ko.mapping.fromJS(data, self.mappingOptions, self);
-            self.ItemsSummary(data.ItemsSummary);
         }, true);
     };
     self.clear = function() {
         self.SearchBy("");
+        if (self.Pager().CurrentPage() !== 1) {
+            self.Pager().CurrentPage(1);
+        }
         self.search();
     };
 

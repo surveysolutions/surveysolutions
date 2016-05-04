@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using Main.Core.Documents;
 using Main.Core.Entities;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Factories;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 {
@@ -20,23 +24,25 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                     "",
                     "",
                     "",
-                    "",
-                    "",
+                    false,
                     Order.AZ,
                     false,
                     false,
-                    false,
                     "",
                     "",
                     null,
                     null,
+                    null,
+                    false,
+                    null,
+                    null,
+                    null,
+                    null,
                     false,
                     null,
                     null,
-                    null,
-                    null,
-                    false,
-                    null
+                new List<ValidationCondition>(),
+                null
             ));
         }
 
@@ -53,23 +59,25 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                     "",
                     "",
                     "",
-                    "",
-                    "",
-                    Order.AZ,
                     false,
+                    Order.AZ,
                     false,
                     false,
                     "",
                     "",
                     answers,
                     null,
+                    null,
+                    false,
+                    null,
+                    null,
+                    null,
+                    null,
                     false,
                     null,
                     null,
-                    null,
-                    null,
-                    false,
-                    null
+                    new List<ValidationCondition>(),
+                null
             ));
         }
     }

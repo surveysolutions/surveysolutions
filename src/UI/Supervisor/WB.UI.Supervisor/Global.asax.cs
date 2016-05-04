@@ -1,21 +1,22 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Web.Compilation;
-using System.Web.Helpers;
 using System.Web.Hosting;
 using System.Web.Http.Filters;
 using System.Web.SessionState;
 using Elmah;
-using EmbeddedResourceVirtualPathProvider;
 using Microsoft.Practices.ServiceLocation;
 using NConfig;
-using WB.Core.GenericSubdomains.Logging;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Versions;
+using WB.Core.SharedKernels.SurveyManagement.Web;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Elmah;
 using WB.UI.Shared.Web.Filters;
-using WB.UI.Supervisor.App_Start;
 using WB.UI.Supervisor.Filters;
 
 namespace WB.UI.Supervisor
@@ -28,6 +29,8 @@ namespace WB.UI.Supervisor
     using System.Web.Routing;
 
     using Supervisor.App_Start;
+    using Core.SharedKernels.SurveyManagement.Services.HealthCheck;
+    using Core.SharedKernels.SurveyManagement.ValueObjects.HealthCheck;
 
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
@@ -42,8 +45,12 @@ namespace WB.UI.Supervisor
             SetupNConfig();
         }
 
-        private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
-        
+        private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<MvcApplication>();
+        private readonly IHealthCheckService healthCheckService = ServiceLocator.Current.GetInstance<IHealthCheckService>();
+        private readonly IProductVersionHistory productVersionHistory = ServiceLocator.Current.GetInstance<IProductVersionHistory>();
+
+        private static string ProductVersion => ServiceLocator.Current.GetInstance<IProductVersion>().ToString();
+
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new ReplacePrincipal());
@@ -73,16 +80,20 @@ namespace WB.UI.Supervisor
         protected void Application_Error()
         {
             Exception lastError = this.Server.GetLastError();
-            this.logger.Fatal("Unexpected error occurred", lastError);
+            if (lastError.IsHttpNotFound()) return;
+
+            this.logger.Error("Unexpected error occurred", lastError);
             if (lastError.InnerException != null)
             {
-                this.logger.Fatal("Unexpected error occurred", lastError.InnerException);
+                this.logger.Error("Unexpected error occurred", lastError.InnerException);
             }
         }
 
         protected void Application_Start()
         {
-            this.logger.Info("Starting application.");
+            this.logger.Info($"Starting Supervisor {ProductVersion}");
+            this.productVersionHistory.RegisterCurrentVersion();
+
             MvcHandler.DisableMvcResponseHeader = true;
 
             AppDomain current = AppDomain.CurrentDomain;
@@ -107,7 +118,24 @@ namespace WB.UI.Supervisor
             ViewEngines.Engines.Add(new RazorViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
 
-            //AntiForgeryConfig.SuppressIdentityHeuristicChecks = true;
+            try
+            {
+                var checkStatus = healthCheckService.Check();
+                if (checkStatus.Status == HealthCheckStatus.Down)
+                {
+                    var hostName = Dns.GetHostName();
+                    this.logger.Fatal(string.Format("Initial Health Check for {0} failed. Result: {1}", hostName, checkStatus.GetStatusDescription()));
+                }
+            }
+            catch (Exception exc)
+            {
+                this.logger.Fatal("Error on checking application health.", exc);
+            }
+        }
+
+        protected void Application_End()
+        {
+            this.logger.Info("Ending application.");
         }
 
         private static void RegisterVirtualPathProvider()

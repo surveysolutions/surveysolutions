@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
@@ -18,5 +19,7 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
         void Remove(string id);
 
         void Store(TEntity view, string id);
+
+        void BulkStore(List<Tuple<TEntity, string>> bulk);
     }
 }

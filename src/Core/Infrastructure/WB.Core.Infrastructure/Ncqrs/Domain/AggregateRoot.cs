@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 
 namespace Ncqrs.Domain
@@ -48,9 +50,11 @@ namespace Ncqrs.Domain
             }
         }
 
-        public IEnumerable<UncommittedEvent> GetUncommittedChanges()
+        public bool HasUncommittedChanges() => this.changes.Any();
+
+        public IEnumerable<UncommittedEvent> GetUnCommittedChanges()
         {
-            return this.changes;
+            return this.changes.ToList();
         }
 
         public void SetId(Guid id)

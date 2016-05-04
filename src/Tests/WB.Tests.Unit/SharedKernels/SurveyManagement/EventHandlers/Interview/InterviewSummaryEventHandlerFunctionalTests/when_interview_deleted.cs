@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewSummaryEventHandlerFunctionalTests
 {
-    internal class when_interview_deleted : InterviewSummaryEventHandlerFunctionalTestsContext
+    internal class when_interview_deleted : InterviewSummaryDenormalizerTestsContext
     {
         Establish context = () =>
         {
@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         It should_change_summary_status = () => updatedModel.Status.ShouldEqual(InterviewStatus.Deleted);
 
         static InterviewSummary viewModel;
-        static InterviewSummaryEventHandlerFunctional denormalizer;
+        static InterviewSummaryDenormalizer denormalizer;
         static InterviewSummary updatedModel;
     }
 }

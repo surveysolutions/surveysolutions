@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization.Implementation
 
         public LocalUserChangedFeedEntry GetLastEntry()
         {
-            return this.plainStorage.Query(_ => _.OrderByDescending(x => x.Timestamp).FirstOrDefault());
+            return this.plainStorage.Query(_ => _.OrderByDescending(x => x.Timestamp).ThenBy(x => x.EntryId).FirstOrDefault());
         }
 
         public void Store(IEnumerable<LocalUserChangedFeedEntry> userChangedEvent)

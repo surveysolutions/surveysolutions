@@ -6,9 +6,13 @@ var runSequence = require('run-sequence');
 var concat = require('gulp-concat');
 var debug = require('gulp-debug');
 
+var minifyHTML = require('gulp-minify-html');
+var templateCache = require("gulp-angular-templatecache");
+
 var paths = {
   scripts: ['app/scripts/**/*.js'],
-  styles: ['content/markup.css.less']
+  styles: ['content/markup.css.less'],
+  htmls: ['app/views/*.html']
 };
 
 gulp.task('clean', function	(){
@@ -39,6 +43,14 @@ gulp.task("bowerJs", function(){
       	.pipe(gulp.dest('build'));
 });
 
+gulp.task('templates', function () {
+    return gulp.src(paths.htmls)
+      //.pipe(minifyHTML())
+      .pipe(templateCache({ root: 'views' }))
+      .pipe(plugins.rev())
+      .pipe(gulp.dest('build'));
+});
+
 gulp.task('devJs', function () {
     return gulp.src(paths.scripts)
       //.pipe(debug({ title: 'unicorn:' }))
@@ -59,7 +71,7 @@ gulp.task('index', function () {
   	'./build/*.js',
   	'./build/vendor*.css',
   	'./build/markup*.css',
-  	'./build/*.css'], {read: false});
+  	'./build/*.css'], { read: false });
 
   return target.pipe(plugins.inject(sources, {relative: true}))
     		   .pipe(gulp.dest('./app'));
@@ -67,7 +79,7 @@ gulp.task('index', function () {
 
 gulp.task('default', function(callback){
 	runSequence('clean', 
-		['devJs', 'bowerJs', 'styles'], 
+		['templates', 'devJs', 'bowerJs', 'styles'],
 		'index', 
 		callback);
 });

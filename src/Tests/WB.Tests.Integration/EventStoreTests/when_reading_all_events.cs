@@ -5,11 +5,15 @@ using Machine.Specifications;
 using Moq;
 using Ncqrs;
 using Ncqrs.Eventing;
-using WB.Core.GenericSubdomains.Utils.Services;
-using WB.Core.Infrastructure.Storage.EventStore;
-using WB.Core.Infrastructure.Storage.EventStore.Implementation;
+using Ncqrs.Eventing.Storage;
+using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Infrastructure.Native.Storage.EventStore;
+using WB.Infrastructure.Native.Storage.EventStore.Implementation;
 using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 using It = Machine.Specifications.It;
+using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Integration.EventStoreTests
 {
@@ -21,13 +25,12 @@ namespace WB.Tests.Integration.EventStoreTests
             eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
             int sequenceCounter = 1;
-
-            NcqrsEnvironment.RegisterEventDataType(typeof(AccountRegistered));
-            NcqrsEnvironment.RegisterEventDataType(typeof(AccountConfirmed));
-            NcqrsEnvironment.RegisterEventDataType(typeof(AccountLocked));
+            var eventTypeResolver = new EventTypeResolver();
+            eventTypeResolver.RegisterEventDataType(typeof(AccountRegistered));
+            eventTypeResolver.RegisterEventDataType(typeof(AccountConfirmed));
+            eventTypeResolver.RegisterEventDataType(typeof(AccountLocked));
 
             events = new UncommittedEventStream(Guid.NewGuid(), null);
-
             events.Append(new UncommittedEvent(Guid.NewGuid(), 
                 eventSourceId, 
                 sequenceCounter++, 
@@ -48,7 +51,9 @@ namespace WB.Tests.Integration.EventStoreTests
                 DateTime.UtcNow,
                 new AccountLocked()));
 
-            WriteSideEventStorage = new WriteSideEventStore(ConnectionProvider, Mock.Of<ILogger>(), new EventStoreSettings{InitializeProjections = false});
+            WriteSideEventStorage = new WriteSideEventStore(ConnectionProvider, Mock.Of<ILogger>(),
+            new EventStoreSettings {
+            InitializeProjections = false}, eventTypeResolver);
             WriteSideEventStorage.Store(events);
         };
 
@@ -65,7 +70,7 @@ namespace WB.Tests.Integration.EventStoreTests
 
             accountRegistered.Email.ShouldEqual("test@test.com");
         };
-
+        
         Cleanup things = () => WriteSideEventStorage.Dispose();
 
         private static UncommittedEventStream events;

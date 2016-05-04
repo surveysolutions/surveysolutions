@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -44,6 +45,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
          long questionnaireVersion,
          Func<Guid, long,DateTime,DateTime, IQueryable<T>> query, 
          Expression<Func<T, Guid>> selectUser,
+         Expression<Func<T, bool>> restrictUser,
          Expression<Func<T, UserAndTimestampAndTimespan>> userIdSelector)
         {
             var from = reportStartDate.Date;
@@ -52,12 +54,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
             var dateTimeRanges =
                 Enumerable.Range(0, columnCount)
                     .Select(i => new DateTimeRange(AddPeriod(from, period, i).Date, AddPeriod(from, period, i + 1).Date))
+                    .Where(i => i.From.Date <= DateTime.Now.Date)
                     .ToArray();
 
-            var users =
-                query(questionnaireId, questionnaireVersion, from, to)
-                    .Select(selectUser)
-                    .Distinct();
+            var allUsersQuery = query(questionnaireId, questionnaireVersion, from, to);
+
+            if (restrictUser != null)
+                allUsersQuery = allUsersQuery.Where(restrictUser);
+
+            var users = allUsersQuery
+                .Select(selectUser)
+                .Distinct();
 
             var usersCount = users.Count();
 
@@ -136,61 +143,65 @@ namespace WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories
         public SpeedByResponsibleReportView Load(SpeedByInterviewersReportInputModel input)
         {
             return Load(
-                input.From,
-                input.Period,
-                input.ColumnCount,
-                input.Page,
-                input.PageSize,
-                input.QuestionnaireId,
-                input.QuestionnaireVersion,
-                (questionnaireId, questionnaireVersion, from,to)=>QueryInterviewStatuses(questionnaireId, questionnaireVersion,from, to,input.InterviewStatuses),
-                u => u.InterviewerId.Value,
-                i => new UserAndTimestampAndTimespan() { UserId = i.InterviewerId, Timestamp = i.Timestamp, Timespan = i.TimeSpanWithPreviousStatus.Value, UserName = i.InterviewerName});
+                reportStartDate: input.From,
+                period: input.Period,
+                columnCount: input.ColumnCount,
+                page: input.Page,
+                pageSize: input.PageSize,
+                questionnaireId: input.QuestionnaireId,
+                questionnaireVersion: input.QuestionnaireVersion,
+                query:(questionnaireId, questionnaireVersion, from,to)=>QueryInterviewStatuses(questionnaireId, questionnaireVersion,from, to,input.InterviewStatuses),
+                selectUser: u => u.InterviewerId.Value,
+                restrictUser: i=>i.SupervisorId== input.SupervisorId,
+                userIdSelector: i => new UserAndTimestampAndTimespan() { UserId = i.InterviewerId, Timestamp = i.Timestamp, Timespan = i.TimeSpanWithPreviousStatus.Value, UserName = i.InterviewerName});
         }
 
         public SpeedByResponsibleReportView Load(SpeedBySupervisorsReportInputModel input)
         {
             return Load(
-                input.From,
-                input.Period,
-                input.ColumnCount,
-                input.Page,
-                input.PageSize,
-                input.QuestionnaireId,
-                input.QuestionnaireVersion,
-                (questionnaireId, questionnaireVersion, from, to) => QueryInterviewStatuses(questionnaireId, questionnaireVersion, from, to, input.InterviewStatuses),
-                u => u.SupervisorId.Value,
-                i => new UserAndTimestampAndTimespan() { UserId = i.SupervisorId, Timestamp = i.Timestamp, Timespan = i.TimeSpanWithPreviousStatus.Value, UserName = i.SupervisorName});
+                reportStartDate: input.From,
+                period: input.Period,
+                columnCount: input.ColumnCount,
+                page: input.Page,
+                pageSize: input.PageSize,
+                questionnaireId: input.QuestionnaireId,
+                questionnaireVersion: input.QuestionnaireVersion,
+                query: (questionnaireId, questionnaireVersion, from, to) => QueryInterviewStatuses(questionnaireId, questionnaireVersion, from, to, input.InterviewStatuses),
+                selectUser: u => u.SupervisorId.Value,
+                restrictUser: null,
+                userIdSelector: i => new UserAndTimestampAndTimespan() { UserId = i.SupervisorId, Timestamp = i.Timestamp, Timespan = i.TimeSpanWithPreviousStatus.Value, UserName = i.SupervisorName});
         }
 
         public SpeedByResponsibleReportView Load(SpeedBetweenStatusesByInterviewersReportInputModel input)
         {
             return Load(
-                input.From,
-                input.Period,
-                input.ColumnCount,
-                input.Page,
-                input.PageSize,
-                input.QuestionnaireId,
-                input.QuestionnaireVersion,
-                (questionnaireId, questionnaireVersion, from, to) => QueryTimeSpanBetweenStatuses(questionnaireId, questionnaireVersion, from, to, input.BeginInterviewStatuses, input.EndInterviewStatuses),
-                u => u.InterviewerId.Value,
-                i => new UserAndTimestampAndTimespan() { UserId = i.InterviewerId, Timestamp = i.EndStatusTimestamp, Timespan = i.TimeSpan, UserName = i.InterviewerName });
+                reportStartDate: input.From,
+                period: input.Period,
+                columnCount: input.ColumnCount,
+                page: input.Page,
+                pageSize: input.PageSize,
+                questionnaireId: input.QuestionnaireId,
+                questionnaireVersion: input.QuestionnaireVersion,
+                query: (questionnaireId, questionnaireVersion, from, to) => QueryTimeSpanBetweenStatuses(questionnaireId, questionnaireVersion, from, to, input.BeginInterviewStatuses, input.EndInterviewStatuses),
+                selectUser: u => u.InterviewerId.Value, 
+                restrictUser: i => i.SupervisorId == input.SupervisorId,
+                userIdSelector: i => new UserAndTimestampAndTimespan() { UserId = i.InterviewerId, Timestamp = i.EndStatusTimestamp, Timespan = i.TimeSpan, UserName = i.InterviewerName });
         }
 
         public SpeedByResponsibleReportView Load(SpeedBetweenStatusesBySupervisorsReportInputModel input)
         {
             return Load(
-                input.From,
-                input.Period,
-                input.ColumnCount,
-                input.Page,
-                input.PageSize,
-                input.QuestionnaireId,
-                input.QuestionnaireVersion,
-                (questionnaireId, questionnaireVersion, from, to) => QueryTimeSpanBetweenStatuses(questionnaireId, questionnaireVersion, from, to, input.BeginInterviewStatuses, input.EndInterviewStatuses),
-                u => u.SupervisorId.Value,
-                i => new UserAndTimestampAndTimespan() { UserId = i.SupervisorId, Timestamp = i.EndStatusTimestamp, Timespan = i.TimeSpan, UserName = i.SupervisorName });
+                reportStartDate:input.From,
+                period:input.Period,
+                columnCount:input.ColumnCount,
+                page:input.Page,
+                pageSize:input.PageSize,
+                questionnaireId:input.QuestionnaireId,
+                questionnaireVersion:input.QuestionnaireVersion,
+                query:(questionnaireId, questionnaireVersion, from, to) => QueryTimeSpanBetweenStatuses(questionnaireId, questionnaireVersion, from, to, input.BeginInterviewStatuses, input.EndInterviewStatuses),
+                selectUser:u => u.SupervisorId.Value,
+                restrictUser: null,
+                userIdSelector: i => new UserAndTimestampAndTimespan() { UserId = i.SupervisorId, Timestamp = i.EndStatusTimestamp, Timespan = i.TimeSpan, UserName = i.SupervisorName });
         }
 
         private DateTime AddPeriod(DateTime d, string period, int value)

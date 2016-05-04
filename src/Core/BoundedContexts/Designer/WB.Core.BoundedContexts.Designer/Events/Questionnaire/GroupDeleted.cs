@@ -3,8 +3,6 @@
     using System;
 
     using Ncqrs.Eventing.Storage;
-
-    [EventName("RavenQuestionnaire.Core:Events:GroupDeleted")]
     public class GroupDeleted : QuestionnaireActiveEvent
     {
         /// <remarks>Needed for successfull deserialization from DB</remarks>>

@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         Because of =
             () =>
                 result =
-                    preloadedDataVerifier.VerifySample(Guid.NewGuid(), 1, new PreloadedDataByFile("1", "1", new string[0], new string[0][]));
+                    preloadedDataVerifier.VerifySample(Guid.NewGuid(), 1, new PreloadedDataByFile("1", "1", new string[0], new string[][] { new string[0] }));
 
         It should_result_has_1_error = () =>
             result.Errors.Count().ShouldEqual(1);

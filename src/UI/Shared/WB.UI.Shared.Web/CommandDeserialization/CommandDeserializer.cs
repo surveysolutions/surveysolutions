@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Practices.ServiceLocation;
 using Newtonsoft.Json;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 
 namespace WB.UI.Shared.Web.CommandDeserialization
@@ -14,7 +14,7 @@ namespace WB.UI.Shared.Web.CommandDeserialization
 
         protected CommandDeserializer()
         {
-            this.logger = ServiceLocator.Current.GetInstance<ILogger>();
+            this.logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<CommandDeserializer>();
         }
 
         public ICommand Deserialize(string commandType, string serializedCommand)

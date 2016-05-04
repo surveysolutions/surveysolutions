@@ -11,12 +11,6 @@
     <div class="dropdown position-fixed" id="context-menu-{{ item.itemId }}">
         <ul class="dropdown-menu" role="menu">
             <li>
-                <a ng-click="deleteStaticText(item.itemId)">Delete</a>
-            </li>
-            <li>
-                <a ng-click="cloneStaticText(item.itemId)">Clone</a>
-            </li>
-            <li>
                 <a ng-click="addQuestionAfter(item)">Add question after</a>
             </li>
             <li>
@@ -27,6 +21,15 @@
             </li>
             <li>
                 <a ng-click="addStaticTextAfter(item)">Add static text after</a>
+            </li>
+            <li>
+                <a ng-click="copyRef(item)">Copy</a>
+            </li>
+            <li>
+                <a ng-disabled="!readyToPaste" ng-click="pasteItemAfter(item)">Paste after</a>
+            </li>
+            <li>
+                <a ng-click="deleteStaticText(item.itemId)">Delete</a>
             </li>
         </ul>
     </div>

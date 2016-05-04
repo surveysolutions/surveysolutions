@@ -6,10 +6,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {
     public class UserModel
     {
+        public const string UserNameRegularExpression = "^[a-zA-Z0-9_]{3,15}$";
+
         [Required(ErrorMessageResourceName = "RequiredUserNameErrorMessage",
             ErrorMessageResourceType = typeof (FieldsAndValidations))]
         [Display(Name = "UserNameFieldName", ResourceType = typeof (FieldsAndValidations), Order = 1)]
-        [RegularExpression("^[a-zA-Z0-9_]{3,15}$", ErrorMessageResourceName = "UserNameErrorMessage",
+        [RegularExpression(UserNameRegularExpression, ErrorMessageResourceName = "UserNameErrorMessage",
             ErrorMessageResourceType = typeof (FieldsAndValidations))]
         public string UserName { get; set; }
 

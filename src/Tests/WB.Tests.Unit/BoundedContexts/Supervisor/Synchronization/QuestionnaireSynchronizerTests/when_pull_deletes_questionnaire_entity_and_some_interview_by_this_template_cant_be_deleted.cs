@@ -14,7 +14,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Services.DeleteQuestionnaireTemplate;
 using WB.Core.SharedKernels.SurveyManagement.Synchronization.Questionnaire;
@@ -57,7 +56,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Synchronization.Questionnaire
                 Moq.It.Is<HardDeleteInterview>(
                     c =>
                         c.InterviewId == censusModeInterviewId),
-                Moq.It.IsAny<string>(), Moq.It.IsAny<bool>())).Throws<ArgumentException>();
+                Moq.It.IsAny<string>())).Throws<ArgumentException>();
 
             questionnaireSynchronizer = CreateQuestionnaireSynchronizer(plainStorage: plainStorageMock.Object,
                 plainQuestionnaireRepository: plainQuestionnaireRepositoryMock.Object,

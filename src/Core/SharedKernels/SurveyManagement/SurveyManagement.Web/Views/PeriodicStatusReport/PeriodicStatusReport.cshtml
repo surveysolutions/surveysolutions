@@ -7,11 +7,7 @@
 
 @section scripts
 {
-    @Scripts.Render(
-    "~/Scripts/bootstrap-datepicker.js",
-    "~/Scripts/ko.datepicker.js",
-    "~/Scripts/components/moment-duration-format.js",
-                    "~/Scripts/viewmodels/pages/periodicstatusreport.js")
+    @Scripts.Render("~/js/periodicstatusreport")
     <script type="text/javascript">
         function GetInterviewersUrl(supervisorId) {
             var url = new Url(window.location.href);
@@ -43,21 +39,28 @@
 }
 @section styles
 {
-    @Styles.Render("~/Content/datepicker3.css")
+    @Styles.Render("~/Content/bootstrap-datepicker3.css")
 }
 
 @section header
 {
 
-<h3 data-bind="text: ReportTypeName"></h3>
+    <h3>
+        <span data-bind="text: ReportTypeName"></span>
+        @if (Model.SupervisorId.HasValue)
+    {<text>
+            @PeriodicStatusReport.InThe @Model.SupervisorName @PeriodicStatusReport.Team.ToLower()
+    </text>
+        }
+    </h3>
 }
 
 @section actionbar
 {
-@if (Model.CanNavigateToQuantityBySupervisors)
-{
-    <a data-bind="attr: { href: GetSupervisorsUrl() }" class="btn btn-default pull-right"><span class="glyphicon glyphicon-arrow-left"></span>@PeriodicStatusReport.BackToSupervisors</a>
-}
+    @if (Model.CanNavigateToQuantityBySupervisors)
+    {
+        <a data-bind="attr: { href: GetSupervisorsUrl() }" class="btn btn-default pull-right"><span class="glyphicon glyphicon-arrow-left"></span>@PeriodicStatusReport.BackToSupervisors</a>
+    }
     <h4 class="sinle-line-header text-italic" data-bind="text: QuestionnaireName"></h4>
     <h5 class="sinle-line-header">@Model.ReportNameDescription</h5>
 }
@@ -93,7 +96,7 @@
         <li class="list-group-item">
             <h4 class="list-group-item-heading">From</h4>
             <div class="input-group date" data-bind="datepicker: FromDate, datepickerOptions: { format: 'mm/dd/yyyy', keyboardNavigation: false, autoclose: true, todayHighlight: true, startDate: '01/01/2013', endDate: '+0d', forseParse: false }">
-                <input id="date-picker-from" type="text" class="form-control" readonly="readonly" data-bind="value: FromDate">
+                <input id="date-picker-from" type="text" class="form-control" readonly="readonly">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
             </div>
         </li>
@@ -138,6 +141,19 @@
             </tr>
         </thead>
         <tbody>
+            @if (Model.TotalRowPresent)
+            {
+                <tr style="color: green; font-weight: bold;">
+                    <td>
+                        <b>@PeriodicStatusReport.Total</b>
+                    </td>
+                    <!-- ko foreach: TotalRow().@(Model.ReportName + "ByPeriod") -->
+                    <td><span data-bind='text: $root.Format@(Model.ReportName)Period($data)'></span></td>
+                    <!-- /ko -->
+                    <td><span data-bind="text:  Format@(Model.ReportName)Period(getTotalAverage())"></span></td>
+                    <td><span data-bind="text:  Format@(Model.ReportName)Period(getTotalCount())"></span></td>
+                </tr>
+            }
             <!-- ko foreach:Items -->
             <tr>
                 <td>

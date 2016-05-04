@@ -1,6 +1,7 @@
 ﻿@using System.Globalization
 @using System.Web.Optimization
 @using Main.Core.Entities.SubEntities
+@using Newtonsoft.Json
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @using WB.Core.SharedKernels.SurveyManagement.Views
 @using WB.Core.SharedKernels.SurveyManagement.Views.Interview
@@ -10,6 +11,8 @@
 @model DetailsViewModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var interviewQuestions = Model.InterviewDetails.Groups.SelectMany(_ => _.Entities).OfType<InterviewQuestionView>();
 }
 @section styles
 {
@@ -38,7 +41,9 @@
 
         var filter = { filteredBy: '@Model.Filter' };
 
-        var filteredComboboxes = [@(Html.Raw( string.Join(",", Model.InterviewDetails.Groups.SelectMany(_ => _.Entities).OfType<InterviewQuestionView>().Where(IsFilteredCombobox).Select(_ => string.Format("{{id:'{0}', options:[{1}]}}", getInterviewItemIdWithPostfix(_.Id, _.RosterVector),string.Join(",", _.Options.Select(x=>string.Format("{{value:'{0}', label:'{1}'}}", x.Value, HttpUtility.UrlEncode(x.Label)))))))))];
+        var filteredComboboxes = [@(Html.Raw( string.Join(",", interviewQuestions.Where(IsFilteredCombobox).Select(_ => string.Format("{{id:'{0}', options:[{1}]}}", getInterviewItemIdWithPostfix(_.Id, _.RosterVector),string.Join(",", _.Options.Select(x=>string.Format("{{value:'{0}', label:'{1}'}}", x.Value, HttpUtility.UrlEncode(x.Label)))))))))];
+
+        var answeredYesNoQuestionsBySupervisor = [@(Html.Raw( string.Join(",", interviewQuestions.Where(IsAnsweredYesNoMultiOptionsQuestionsBySupervisor).Select(_ => string.Format("{{questionId:'{0}', answers:{1}}}", getInterviewItemIdWithPostfix(_.Id, _.RosterVector), JsonConvert.SerializeObject(_.Answer))))))];
 
         $(function () {
             window.model = new Supervisor.VM.Details(settings, filter, filteredComboboxes);
@@ -89,6 +94,10 @@
                     <button class="btn btn-success " data-bind="click: showApproveModal">Approve</button>
                     <button class="btn btn-danger" data-bind="click: showRejectModal">Reject</button>
                 }
+                @if (Model.InterviewDetails.Status == InterviewStatus.ApprovedByHeadquarters && (GlobalInfo.IsHeadquarter || GlobalInfo.IsAdministrator))
+                {
+                    <button class="btn" data-bind="click: showUnapproveByHeadquarterModal">Unapprove</button>
+                }
                 <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.All})" class="btn btn-default btn-xs @SetFilterActiveClass(InterviewDetailsFilter.All)">all</a>
                 <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Enabled})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Enabled)"><i class="glyphicon glyphicon-pencil @SetFilterIconActiveClass(InterviewDetailsFilter.Enabled)"></i> enabled (<span>@Model.Statistic.EnabledCount</span>)</a>
                 <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Answered})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Answered)"><i class="glyphicon glyphicon-ok @SetFilterIconActiveClass(InterviewDetailsFilter.Answered)"></i> answered (<span>@Model.Statistic.AnsweredCount</span>)</a>
@@ -97,6 +106,7 @@
                 <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Commented})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Commented)"><i class="glyphicon glyphicon-comment @SetFilterIconActiveClass(InterviewDetailsFilter.Commented)"></i> commented (<span id="commentsCounter">@Model.Statistic.CommentedCount</span>)</a>
                 <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Flagged})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Flagged)"><i class="glyphicon glyphicon-flag @SetFilterIconActiveClass(InterviewDetailsFilter.Flagged)"></i> flagged (<span id="flagsCounter">@Model.Statistic.FlaggedCount</span>)</a>
                 <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Supervisors})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Supervisors)"><i class="glyphicon glyphicon-pencil @SetFilterIconActiveClass(InterviewDetailsFilter.Supervisors)"></i> supervisor's (<span>@Model.Statistic.SupervisorsCount</span>)</a>
+                <a href="@Url.Action("Details", "Interview", new {id = Model.InterviewDetails.PublicKey, filter = InterviewDetailsFilter.Hidden})" class="btn btn-default  btn-xs @SetFilterActiveClass(InterviewDetailsFilter.Hidden)"><i class="glyphicon glyphicon-eye-close @SetFilterIconActiveClass(InterviewDetailsFilter.Hidden)"></i> hidden (<span>@Model.Statistic.HiddenCount</span>)</a>
 
             </div>
         </div>
@@ -110,13 +120,24 @@
                             <tbody>
                                 @foreach (var entity in group.Entities)
                                 {
-                                    if (entity is InterviewStaticTextView)
+                                    InterviewStaticTextView entityAsStaticText = entity as InterviewStaticTextView;
+                                    if (entityAsStaticText != null)
                                     {
-                                        @Html.Partial("StaticTextPartialView", entity as InterviewStaticTextView)
+                                        @Html.Partial("StaticTextPartialView", entityAsStaticText)
+                                        continue;
                                     }
-                                    if (entity is InterviewQuestionView)
+
+                                    InterviewQuestionView entityAsInterviewQuestionView = entity as InterviewQuestionView;
+                                    if (entityAsInterviewQuestionView != null)
                                     {
-                                        @Html.Partial("QuestionPartialView", entity as InterviewQuestionView, new ViewDataDictionary{{ "InterviewId", Model.InterviewDetails.PublicKey}})
+                                        if (Model.InterviewDetails.ReceivedByInterviewer)
+                                        {
+                                            @Html.Partial("DetailsReadOnlyQuestionPartialView", entityAsInterviewQuestionView)
+                                        }
+                                        else
+                                        {
+                                            @Html.Partial("DetailsQuestionPartialView", entityAsInterviewQuestionView, new ViewDataDictionary { { "InterviewId", Model.InterviewDetails.PublicKey } })
+                                        }
                                     }
                                 }
                             </tbody>
@@ -166,9 +187,9 @@
 
     public string Stringify(decimal[] array)
     {
-        return string.Join("_", array.Select(x => x.ToString(CultureInfo.InvariantCulture).Replace('.', '-')));
+        return string.Join("_", array.Select(x => x.ToString(CultureInfo.InvariantCulture)));
     }
-    
+
     private static bool IsFilteredCombobox(InterviewQuestionView entityView)
     {
         if (entityView.QuestionType == QuestionType.SingleOption)
@@ -176,6 +197,18 @@
             var interviewQuestionViewSettings = entityView.Settings as SingleQuestionSettings;
 
             return interviewQuestionViewSettings != null && interviewQuestionViewSettings.IsFilteredCombobox;
+        }
+        return false;
+    }
+
+    private static bool IsAnsweredYesNoMultiOptionsQuestionsBySupervisor(InterviewQuestionView entityView)
+    {
+        if (!entityView.IsReadOnly && entityView.Scope == QuestionScope.Supervisor && GlobalInfo.IsSupervisor && entityView.IsEnabled && 
+            entityView.QuestionType == QuestionType.MultyOption)
+        {
+            var interviewQuestionViewSettings = entityView.Settings as MultiQuestionSettings;
+
+            return interviewQuestionViewSettings != null && interviewQuestionViewSettings.YesNoQuestion;
         }
         return false;
     }

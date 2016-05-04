@@ -15,7 +15,8 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -25,7 +26,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -42,29 +43,59 @@
     <Reference Include="CsvHelper">
       <HintPath>..\..\..\..\..\packages\CsvHelper.2.2.2\lib\net40-client\CsvHelper.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Bcl.Async.1.0.168\lib\portable-net45+win8+wpa81\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.8.0.2\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Net.Http.Extensions, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net45+win8+wpa81\System.Net.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net45+win8+wpa81\System.Net.Http.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Accessors\QuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Aggregates\IQuestionnaire.cs" />
+    <Compile Include="Commands\Interview\AnswerYesNoQuestion.cs" />
+    <Compile Include="Commands\Interview\CreateInterviewByPrefilledQuestions.cs" />
+    <Compile Include="Commands\Interview\MarkInterviewAsReceivedByInterviewer.cs" />
+    <Compile Include="Commands\Interview\UnapproveByHeadquartersCommand.cs" />
+    <Compile Include="Commands\Interview\RemoveAnswerCommand.cs" />
     <Compile Include="Commands\Interview\RepeatLastInterviewStatus.cs" />
     <Compile Include="Commands\Interview\SynchronizeInterviewEventsCommand.cs" />
-    <Compile Include="Commands\Questionnaire\DisableQuestionnaire.cs" />
     <Compile Include="Commands\User\ArchiveUserCommad.cs" />
     <Compile Include="Commands\User\LinkUserToDevice.cs" />
+    <Compile Include="Commands\User\UnarchiveUserAndUpdateCommand.cs" />
     <Compile Include="Commands\User\UnarchiveUserCommand.cs" />
+    <Compile Include="DataCollectionInfrastructureModule.cs" />
+    <Compile Include="DataTransferObjects\AnswerType.cs" />
+    <Compile Include="Events\Interview\AnswerRemoved.cs" />
+    <Compile Include="Events\Interview\Dtos\AnsweredYesNoOption.cs" />
+    <Compile Include="Events\Interview\Dtos\ChangedLinkedOptions.cs" />
+    <Compile Include="Events\Interview\InterviewReceivedByInterviewer.cs" />
+    <Compile Include="Events\Interview\InterviewReceivedBySupervisor.cs" />
+    <Compile Include="Events\Interview\LinkedOptionsChanged.cs" />
+    <Compile Include="Events\Interview\UnapprovedByHeadquarters.cs" />
+    <Compile Include="Events\Interview\SubstitutionTitlesChanged.cs" />
+    <Compile Include="Events\Interview\YesNoQuestionAnswered.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireDisabled.cs" />
     <Compile Include="Events\User\UserArchived.cs" />
     <Compile Include="Events\User\UserLinkedToDevice.cs" />
@@ -72,6 +103,8 @@
     <Compile Include="Exceptions\InterviewDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserDomainExceptionType.cs" />
     <Compile Include="Exceptions\UserException.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewExpressionStateForPreloading.cs" />
+    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\IReadOnlyInterviewStateDependentOnAnswers.cs" />
     <Compile Include="Implementation\Aggregates\User.cs" />
     <Compile Include="Implementation\Aggregates\Snapshots\UserState.cs" />
     <Compile Include="Commands\Interview\AnswerMultipleOptionsLinkedQuestionCommand.cs" />
@@ -85,7 +118,6 @@
     <Compile Include="Commands\Interview\CreateInterviewWithPreloadedData.cs" />
     <Compile Include="Commands\Interview\HardDeleteInterview.cs" />
     <Compile Include="Commands\Interview\HqApproveInterviewCommand.cs" />
-    <Compile Include="Commands\Interview\CreateInterviewForTestingCommand.cs" />
     <Compile Include="Commands\Interview\HqRejectInterviewCommand.cs" />
     <Compile Include="Commands\Interview\MarkInterviewAsSentToHeadquarters.cs">
       <SubType>Code</SubType>
@@ -94,11 +126,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\Interview\SynchronizeInterviewFromHeadquarters.cs" />
-    <Compile Include="Commands\Questionnaire\DeleteQuestionnaire.cs" />
-    <Compile Include="Commands\Questionnaire\ImportFromDesignerForTester.cs" />
-    <Compile Include="Commands\Questionnaire\ImportFromSupervisor.cs" />
-    <Compile Include="Commands\Questionnaire\QuestionnaireCommand.cs" />
-    <Compile Include="Commands\Questionnaire\RegisterPlainQuestionnaire.cs" />
     <Compile Include="Commands\User\ChangeUserCommand.cs" />
     <Compile Include="Commands\User\CreateUserCommand.cs" />
     <Compile Include="Commands\User\LockUserBySupervisorCommand.cs" />
@@ -125,7 +152,6 @@
     </Compile>
     <Compile Include="Events\Interview\Dtos\AddedRosterInstance.cs" />
     <Compile Include="Events\Interview\Dtos\ChangedRosterInstanceTitleDto.cs" />
-    <Compile Include="Events\Interview\Dtos\Identity.cs" />
     <Compile Include="Events\Interview\Dtos\RosterInstance.cs" />
     <Compile Include="Events\Interview\GroupsDisabled.cs" />
     <Compile Include="Events\Interview\GroupsEnabled.cs" />
@@ -157,7 +183,6 @@
     <Compile Include="Events\User\UserLockedBySupervisor.cs" />
     <Compile Include="Events\User\UserUnlocked.cs" />
     <Compile Include="Events\User\UserUnlockedBySupervisor.cs" />
-    <Compile Include="Factories\IQuestionnaireFactory.cs" />
     <Compile Include="Factories\IQuestionnaireRosterStructureFactory.cs" />
     <Compile Include="Implementation\Accessors\IQuestionnareAssemblyFileAccessor.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\AnswerChange.cs" />
@@ -166,13 +191,10 @@
     </Compile>
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\GeoLocationPoint.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewChangeStructures.cs" />
-    <Compile Include="Implementation\Aggregates\InterviewInfrastructure\DistinctDecimalList.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewChanges.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\InterviewStateDependentOnAnswers.cs" />
-    <Compile Include="Implementation\Aggregates\Questionnaire.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\RosterCalculationData.cs" />
     <Compile Include="Implementation\Aggregates\InterviewInfrastructure\RosterIdentity.cs" />
-    <Compile Include="Implementation\Aggregates\Snapshots\QuestionnaireState.cs" />
     <Compile Include="Commands\Interview\AnswerDateTimeQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerGeoLocationQuestionCommand.cs" />
     <Compile Include="Commands\Interview\AnswerSingleOptionLinkedQuestionCommand.cs" />
@@ -197,8 +219,7 @@
     <Compile Include="Commands\Interview\RestoreInterviewCommand.cs" />
     <Compile Include="Commands\Interview\SetFlagToAnswerCommand.cs" />
     <Compile Include="Commands\Interview\SynchronizeInterviewCommand.cs" />
-    <Compile Include="Commands\Interview\ApplySynchronizationMetadata.cs" />
-    <Compile Include="Commands\Questionnaire\ImportFromDesigner.cs" />
+    <Compile Include="Commands\Interview\CreateInterviewFromSynchronizationMetadata.cs" />
     <Compile Include="DataTransferObjects\Synchronization\AnsweredQuestionSynchronizationDto.cs" />
     <Compile Include="DataTransferObjects\Synchronization\InterviewSynchronizationDto.cs" />
     <Compile Include="Events\Interview\AnswerCommented.cs" />
@@ -238,14 +259,12 @@
     <Compile Include="Implementation\Aggregates\Interview.cs" />
     <Compile Include="Implementation\Aggregates\Snapshots\InterviewState.cs" />
     <Compile Include="Implementation\Entities\PlainQuestionnaire.cs" />
-    <Compile Include="Implementation\Factories\QuestionnaireFactory.cs" />
+    <Compile Include="Implementation\Entities\QuestionnaireIdentity.cs" />
     <Compile Include="Implementation\Factories\QuestionnaireRosterStructureFactory.cs" />
-    <Compile Include="Implementation\Providers\IInterviewExpressionStatePrototypeProvider.cs" />
     <Compile Include="Implementation\Providers\InterviewExpressionStatePrototypeProvider.cs" />
-    <Compile Include="Implementation\Repositories\DomainQuestionnaireRepository.cs" />
     <Compile Include="Implementation\Repositories\InterviewSynchronizationFileStorage.cs" />
     <Compile Include="Implementation\Repositories\PlainInterviewFileStorage.cs" />
-    <Compile Include="Implementation\Repositories\PlainQuestionnaireRepository.cs" />
+    <Compile Include="Implementation\Repositories\PlainQuestionnaireRepositoryWithCache.cs" />
     <Compile Include="MaskFormatter\EmptyMaskFormatter.cs" />
     <Compile Include="MaskFormatter\IMaskedFormatter.cs" />
     <Compile Include="MaskFormatter\MaskCharacter.cs" />
@@ -254,13 +273,15 @@
     <Compile Include="Repositories\IInterviewSynchronizationFileStorage.cs" />
     <Compile Include="Repositories\IPlainInterviewFileStorage.cs" />
     <Compile Include="Repositories\IPlainQuestionnaireRepository.cs" />
-    <Compile Include="Repositories\IQuestionnaireRepository.cs" />
+    <Compile Include="Services\IInterviewExpressionStatePrototypeProvider.cs" />
     <Compile Include="Utils\AnswerUtils.cs" />
-    <Compile Include="Utils\LinkedQuestionUtils.cs" />
+    <Compile Include="Utils\ConcurrentDistinctList.cs" />
     <Compile Include="Utils\QuestionnaireHelper.cs" />
     <Compile Include="Utils\RepositoryKeysHelper.cs" />
+    <Compile Include="Utils\RosterInstanceExtensions.cs" />
     <Compile Include="ValueObjects\Interview\InterviewStatus.cs" />
     <Compile Include="ValueObjects\Interview\InterviewItemId.cs" />
+    <Compile Include="ValueObjects\Interview\QuestionState.cs" />
     <Compile Include="ValueObjects\ValueVector.cs" />
     <Compile Include="Views\BinaryData\InterviewBinaryDataDescriptor.cs" />
     <Compile Include="Views\DeviceInfo.cs" />
@@ -270,19 +291,9 @@
     <Compile Include="Views\Questionnaire\FeaturedQuestionItem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\Questionnaire\IQuestionnaireBrowseViewFactory.cs" />
     <Compile Include="Views\Questionnaire\QuestionDescription.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireBrowseInputModel.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireBrowseItem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\QuestionnaireBrowseView.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireBrowseViewFactory.cs" />
-    <Compile Include="Views\Questionnaire\QuestionnaireDocumentVersioned.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireItemInputModel.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\Questionnaire\QuestionnaireItemViewFactory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Views\Questionnaire\QuestionnaireRosterStructure.cs" />
@@ -290,19 +301,32 @@
     <Compile Include="Views\Questionnaire\RosterScopeType.cs" />
     <Compile Include="Views\Questionnaire\RosterTitleQuestionDescription.cs" />
     <Compile Include="Views\UserDocument.cs" />
+    <Compile Include="WebApi\InterviewAnswerOnPrefilledQuestionApiView.cs" />
+    <Compile Include="WebApi\InterviewDetailsApiView.cs" />
+    <Compile Include="WebApi\InterviewApiView.cs" />
+    <Compile Include="WebApi\IdentityApiView.cs" />
+    <Compile Include="WebApi\InterviewPackageApiView.cs" />
+    <Compile Include="WebApi\QuestionnaireApiView.cs" />
+    <Compile Include="WebApi\InterviewerApiView.cs" />
+    <Compile Include="WebApi\RosterApiView.cs" />
+    <Compile Include="WebApi\RosterInstanceApiView.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\GenericSubdomains\Utils\Utils\WB.Core.GenericSubdomains.Utils.csproj">
-      <Project>{B9AF365D-F3C9-423A-86E2-9C3E0C1AC402}</Project>
-      <Name>WB.Core.GenericSubdomains.Utils</Name>
+    <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
+      <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
+      <Name>WB.Core.GenericSubdomains.Portable</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
       <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SurveySolutions\SurveySolutions\WB.Core.SharedKernels.SurveySolutions.csproj">
-      <Project>{B73E686B-A06B-4FD5-9BAF-B321A0D33DBD}</Project>
-      <Name>WB.Core.SharedKernels.SurveySolutions</Name>
+    <ProjectReference Include="..\..\..\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
+      <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>
+      <Name>WB.Core.SharedKernels.Questionnaire</Name>
     </ProjectReference>
     <ProjectReference Include="..\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
       <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
@@ -310,25 +334,20 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Commands\Questionnaire\" />
     <Folder Include="Implementation\ReadSide\" />
     <Folder Include="Implementation\Services\" />
-    <Folder Include="Services\" />
     <Folder Include="ValueObjects\Questionnaire\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-  </Target>
+  <Import Project="..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\..\..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Resources;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
-using Main.Core.Documents;
-using Main.Core.Entities.Composite;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
-using WB.Core.GenericSubdomains.Utils;
+using WB.Core.GenericSubdomains.Portable;
 using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
@@ -18,11 +14,35 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
         public static MvcHtmlString FormatQuestionnaireHistoricalRecord(this HtmlHelper helper, UrlHelper urlHelper,
             Guid questionnaireId, QuestionnaireChangeHistoricalRecord record)
         {
-            var mainRecord = string.Format("{0} {1} {2}", GetStringRepresentation(record.TargetType),
-                BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId, record.TargetId, record.TargetParentId,
-                    record.TargetTitle, true, record.TargetType),
-                GetActionStringRepresentations(record.ActionType, record.TargetType,
-                    record.HistoricalRecordReferences.Any()));
+            if (record.TargetType == QuestionnaireItemType.Attachment)
+            {
+                var attachmentRecord = GetFormattedHistoricalRecordForAttachment(record);
+                if (!string.IsNullOrWhiteSpace(attachmentRecord))
+                    return MvcHtmlString.Create(attachmentRecord);
+            }
+
+            if (record.TargetType == QuestionnaireItemType.Macro)
+            {
+                var macrosRecord = GetFormattedHistoricalRecordForMacros(record);
+                if (!string.IsNullOrWhiteSpace(macrosRecord))
+                    return MvcHtmlString.Create(macrosRecord);
+            }
+
+            if (record.TargetType == QuestionnaireItemType.LookupTable)
+            {
+                var lookupTableRecord = GetFormattedHistoricalRecordForLookupTable(record);
+                if (!string.IsNullOrWhiteSpace(lookupTableRecord))
+                    return MvcHtmlString.Create(lookupTableRecord);
+            }
+
+            var localizedNameOfItemBeingInAction = GetStringRepresentation(record.TargetType);
+
+            var questionnaireItemLinkWithTitle = BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId, record.TargetId, record.TargetParentId,
+                record.TargetTitle, true, record.TargetType);
+
+            var localizedActionRepresentation = GetActionStringRepresentation(record.ActionType, record.TargetType, record.HistoricalRecordReferences.Any());
+
+            var mainRecord = $"{localizedNameOfItemBeingInAction} {questionnaireItemLinkWithTitle} {localizedActionRepresentation}";
 
             foreach (var historicalRecordReference in record.HistoricalRecordReferences)
             {
@@ -35,6 +55,53 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             }
 
             return MvcHtmlString.Create(mainRecord);
+        }
+        private static string GetFormattedHistoricalRecordForAttachment(QuestionnaireChangeHistoricalRecord record)
+        {
+            switch (record.ActionType)
+            {
+                case QuestionnaireActionType.Delete:
+                    return string.Format(QuestionnaireHistoryResources.Attachment_Deleted, record.TargetTitle);
+                case QuestionnaireActionType.Update:
+                    return string.Format(QuestionnaireHistoryResources.Attachment_Updated, record.TargetTitle);
+            }
+            return null;
+        }
+
+        private static string GetFormattedHistoricalRecordForLookupTable(QuestionnaireChangeHistoricalRecord record)
+        {
+            switch (record.ActionType)
+            {
+                case QuestionnaireActionType.Add:
+                    return QuestionnaireHistoryResources.LookupTable_EmptyTableAdded;
+                case QuestionnaireActionType.Delete:
+                    if (string.IsNullOrEmpty(record.TargetTitle))
+                        return QuestionnaireHistoryResources.LookupTable_EmptyTableDeleted;
+                    return string.Format(QuestionnaireHistoryResources.LookupTable_Deleted, record.TargetTitle);
+                case QuestionnaireActionType.Update:
+                    if (string.IsNullOrEmpty(record.TargetTitle))
+                        return QuestionnaireHistoryResources.LookupTable_EmptyTableUpdated;
+                    return string.Format(QuestionnaireHistoryResources.LookupTable_Updated, record.TargetTitle);
+            }
+            return null;
+        }
+
+        private static string GetFormattedHistoricalRecordForMacros(QuestionnaireChangeHistoricalRecord record)
+        {
+            switch (record.ActionType)
+            {
+                case QuestionnaireActionType.Add:
+                    return QuestionnaireHistoryResources.Macro_EmptyMacroAdded;
+                case QuestionnaireActionType.Delete:
+                    if (string.IsNullOrEmpty(record.TargetTitle))
+                        return QuestionnaireHistoryResources.Macro_EmptyMacroDeleted;
+                    return string.Format(QuestionnaireHistoryResources.Macro_Deleted, record.TargetTitle);
+                case QuestionnaireActionType.Update:
+                    if (string.IsNullOrEmpty(record.TargetTitle))
+                        return QuestionnaireHistoryResources.Macro_EmptyMacroUpdated;
+                    return string.Format(QuestionnaireHistoryResources.Macro_Updated, record.TargetTitle);
+            }
+            return null;
         }
 
         private static MvcHtmlString BuildQuestionnaireItemLink(
@@ -64,7 +131,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             return MvcHtmlString.Create(String.Format("<a href='{0}'>{1}</a>", url, helper.Encode(quatedTitle)));
         }
 
-        private static string GetActionStringRepresentations(QuestionnaireActionType actionType,
+        private static string GetActionStringRepresentation(QuestionnaireActionType actionType,
             QuestionnaireItemType itemType, bool hasReference)
         {
             var itemsToAdd = new[]

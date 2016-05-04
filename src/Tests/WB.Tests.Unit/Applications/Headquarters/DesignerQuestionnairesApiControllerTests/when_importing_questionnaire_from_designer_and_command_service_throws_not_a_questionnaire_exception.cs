@@ -5,8 +5,8 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
 using Ncqrs.Commanding;
-using WB.Core.GenericSubdomains.Utils.Implementation;
-using WB.Core.GenericSubdomains.Utils.Services;
+using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.SurveyManagement.Implementation.Services;
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
 
             var commandService = Mock.Of<ICommandService>();
             Mock.Get(commandService)
-                .Setup(cs => cs.Execute(it.IsAny<ICommand>(), it.IsAny<string>(), Moq.It.IsAny<bool>()))
+                .Setup(cs => cs.Execute(it.IsAny<ICommand>(), it.IsAny<string>()))
                 .Throws(commandServiceException);
 
             var zipUtilsMock = new Mock<IStringCompressor>();
@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.DesignerQuestionnairesApiContr
                 .Returns(new QuestionnaireDocument());
 
             var restServiceMock = new Mock<IRestService>();
-            restServiceMock.Setup(x => x.PostAsync<QuestionnaireCommunicationPackage>(Moq.It.IsAny<string>(), Moq.It.IsAny<object>(), Moq.It.IsAny<RestCredentials>()))
+            restServiceMock.Setup(x => x.PostAsync<QuestionnaireCommunicationPackage>(Moq.It.IsAny<string>(), Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<object>(), Moq.It.IsAny<RestCredentials>(), Moq.It.IsAny<CancellationToken?>()))
                 .Returns(Task.FromResult(new QuestionnaireCommunicationPackage()));
 
             controller = CreateDesignerQuestionnairesApiController(commandService: commandService,

@@ -22,7 +22,7 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 . "$scriptFolder\functions.ps1"
 
 function GetPathToJarsigner() {
-	return 'C:\Program Files (x86)\Java\jdk1.6.0_39\bin\jarsigner.exe'
+	return 'C:\Program Files\Java\jdk1.8.0_60\bin\jarsigner.exe'
 }
 
 function GetPathToZipalign() {

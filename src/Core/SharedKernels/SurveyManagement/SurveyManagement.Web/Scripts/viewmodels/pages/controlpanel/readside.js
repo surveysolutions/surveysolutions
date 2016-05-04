@@ -29,13 +29,16 @@
 
     self.isRebuildRunning = ko.observable(false);
 
+    self.readSideApplicationVersion = ko.observable(-1);
+    self.readSideDatabaseVersion = ko.observable(-1);
+
     self.readSideRepositoryWriters = ko.observableArray([]);
     self.rebuildDenormalizerStatistic = ko.observableArray([]);
     self.rebuildErrors = ko.observableArray([]);
+    self.warningEventHandlerErrors = ko.observableArray([]);
     self.hasErrors = ko.computed(function () {
-        return self.rebuildErrors().length > 0;
+        return self.rebuildErrors().length > 0 || self.warningEventHandlerErrors().length > 0;
     });
-
     self.lastStatusUpdateTime = ko.observable('-');
     self.lastRebuildDate = ko.observable('-');
     self.currentRebuildStatus = ko.observable('');
@@ -44,6 +47,7 @@
     self.totalEvents = ko.observable('-');
     self.processedEvents = ko.observable('-');
     self.failedEvents = ko.observable('-');
+    self.progress = ko.observable('-');
     self.speed = ko.observable('-');
     self.timeSpent = ko.observable('-');
     self.estimatedTime = ko.observable('-');
@@ -73,8 +77,12 @@
     };
 
     self.updateStatus = function() {
-        self.SendRequest(self.updateRebuildStatusApiUrl, {}, function(data) {
+        _.delay(self.updateStatus, 3000);
+        self.SendRequest(self.updateRebuildStatusApiUrl, {}, function (data) {
             self.isRebuildRunning(data.IsRebuildRunning);
+
+            self.readSideApplicationVersion(data.ReadSideApplicationVersion);
+            self.readSideDatabaseVersion(data.ReadSideDatabaseVersion);
 
             self.currentRebuildStatus(data.CurrentRebuildStatus);
             self.lastRebuildDate(data.LastRebuildDate);
@@ -84,15 +92,15 @@
             self.totalEvents(data.EventPublishingDetails.TotalEvents);
             self.processedEvents(data.EventPublishingDetails.ProcessedEvents);
             self.failedEvents(data.EventPublishingDetails.FailedEvents);
+            self.progress(data.EventPublishingDetails.ProgressInPercents.toFixed(2));
             self.speed(data.EventPublishingDetails.Speed);
             self.timeSpent(moment.duration(data.EventPublishingDetails.TimeSpent).format("HH:mm:ss", {trim: false}));
             self.estimatedTime(moment.duration(data.EventPublishingDetails.EstimatedTime).format("HH:mm:ss", { trim: false }));
 
             self.reloadRepositoryWritersList(data.StatusByRepositoryWriters);
             self.reloadDenormalizerStatistics(data.ReadSideDenormalizerStatistics);
-            self.reloadErrorsList(data.RebuildErrors);
-
-            _.delay(self.updateStatus, 3000);
+            self.reloadErrorsList(self.rebuildErrors, data.RebuildErrors);
+            self.reloadErrorsList(self.warningEventHandlerErrors, data.WarningEventHandlerErrors);
         }, true, true);
     };
 
@@ -137,28 +145,28 @@
         });
     };
 
-    self.reloadErrorsList = function (newList) {
+    self.reloadErrorsList = function (oldList, newList) {
         //remove old errors
-        _.each(self.rebuildErrors(), function (oldError) {
+        _.each(oldList(), function (oldError) {
             var error = _.find(newList, function (newError) {
                 return newError.ErrorTime == oldError.ErrorTime && newError.ErrorMessage == oldError.ErrorMessage;
             });
 
             if (_.isUndefined(error)) {
-                self.rebuildErrors.pop(oldError);
+                oldList.pop(oldError);
             }
         });
 
         //add new errors
         _.each(newList, function (error) {
-            var existingError = _.find(self.rebuildErrors(), function (newError) {
+            var existingError = _.find(oldList(), function (newError) {
                 return newError.ErrorTime == error.ErrorTime && newError.ErrorMessage == error.ErrorMessage;
             });
 
             if (_.isUndefined(existingError)) {
-                var maxKey = self.rebuildErrors().length == 0 ? 0 : _.max(self.rebuildErrors(), function(e) { return e.ErrorKey(); }).ErrorKey();
+                var maxKey = oldList().length == 0 ? 0 : _.max(oldList(), function (e) { return e.ErrorKey(); }).ErrorKey();
                 error.ErrorKey = ko.observable(maxKey + 1);
-                self.rebuildErrors.push(error);
+                oldList.push(error);
             }
         });
     };
@@ -185,7 +193,7 @@
     };
 
     self.rebuild = function() {
-        if (confirm("Are you sure you want to rebuild read layer at " + window.location.host + " ?")) {
+        if (confirm("Are you sure you want to rebuild read side data at " + window.location.host + " ?")) {
             self.SendRequest(self.rebuildApiUrl, {
                 numberOfSkipedEvents: self.numberOfSkipedEvents(),
                 rebuildType: self.rebuildByType(),

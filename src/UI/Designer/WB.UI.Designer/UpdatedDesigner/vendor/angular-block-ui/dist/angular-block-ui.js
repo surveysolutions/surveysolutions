@@ -1,19 +1,19 @@
 /*!
-   angular-block-ui v0.1.1
-   (c) 2014 (null) McNull https://github.com/McNull/angular-block-ui
+   angular-block-ui v0.2.1
+   (c) 2015 (null) McNull https://github.com/McNull/angular-block-ui
    License: MIT
 */
 (function(angular) {
 
 var blkUI = angular.module('blockUI', []);
 
-blkUI.config(["$provide", "$httpProvider", function($provide, $httpProvider) {
+blkUI.config(["$provide", "$httpProvider", function ($provide, $httpProvider) {
 
   $provide.decorator('$exceptionHandler', ['$delegate', '$injector',
-    function($delegate, $injector) {
+    function ($delegate, $injector) {
       var blockUI, blockUIConfig;
 
-      return function(exception, cause) {
+      return function (exception, cause) {
 
         blockUIConfig = blockUIConfig || $injector.get('blockUIConfig');
 
@@ -21,7 +21,7 @@ blkUI.config(["$provide", "$httpProvider", function($provide, $httpProvider) {
           try {
             blockUI = blockUI || $injector.get('blockUI');
             blockUI.instances.reset();
-          } catch(ex) {
+          } catch (ex) {
             console.log('$exceptionHandler', exception);
           }
         }
@@ -34,8 +34,8 @@ blkUI.config(["$provide", "$httpProvider", function($provide, $httpProvider) {
   $httpProvider.interceptors.push('blockUIHttpInterceptor');
 }]);
 
-blkUI.run(["$document", "blockUIConfig", "$templateCache", function($document, blockUIConfig, $templateCache) {
-  if(blockUIConfig.autoInjectBodyBlock) {
+blkUI.run(["$document", "blockUIConfig", "$templateCache", function ($document, blockUIConfig, $templateCache) {
+  if (blockUIConfig.autoInjectBodyBlock) {
     $document.find('body').attr('block-ui', 'main');
   }
 
@@ -49,6 +49,101 @@ blkUI.run(["$document", "blockUIConfig", "$templateCache", function($document, b
   }
 }]);
 
+function moduleLoaded(name) {
+  try {
+    angular.module(name);
+  } catch(ex) {
+    return false;
+  }
+  return true;
+}
+blkUI.config(["$provide", function ($provide) {
+  $provide.decorator('$location', decorateLocation);
+}]);
+
+var decorateLocation = [
+  '$delegate', 'blockUI', 'blockUIConfig',
+  function ($delegate, blockUI, blockUIConfig) {
+
+    if (blockUIConfig.blockBrowserNavigation) {
+
+      blockUI.$_blockLocationChange = true;
+
+      var overrides = ['url', 'path', 'search', 'hash', 'state'];
+
+      function hook(f) {
+        var s = $delegate[f];
+        $delegate[f] = function () {
+
+          //        console.log(f, Date.now(), arguments);
+
+          var result = s.apply($delegate, arguments);
+
+          // The call was a setter if the $location service is returned.
+
+          if (result === $delegate) {
+
+            // Mark the mainblock ui to allow the location change.
+
+            blockUI.$_blockLocationChange = false;
+          }
+
+          return result;
+        };
+      }
+
+      angular.forEach(overrides, hook);
+
+    }
+
+    return $delegate;
+}];
+
+// Called from block-ui-directive for the 'main' instance.
+
+function blockNavigation($scope, mainBlockUI, blockUIConfig) {
+
+  if (blockUIConfig.blockBrowserNavigation) {
+
+    function registerLocationChange() {
+
+      $scope.$on('$locationChangeStart', function (event) {
+
+        //        console.log('$locationChangeStart', mainBlockUI.$_blockLocationChange + ' ' + mainBlockUI.state().blockCount);
+
+        if (mainBlockUI.$_blockLocationChange && mainBlockUI.state().blockCount > 0) {
+          event.preventDefault();
+        }
+      });
+
+      $scope.$on('$locationChangeSuccess', function () {
+        mainBlockUI.$_blockLocationChange = blockUIConfig.blockBrowserNavigation;
+
+        //        console.log('$locationChangeSuccess', mainBlockUI.$_blockLocationChange + ' ' + mainBlockUI.state().blockCount);
+      });
+    }
+
+    if (moduleLoaded('ngRoute')) {
+
+      // After the initial content has been loaded we'll spy on any location
+      // changes and discard them when needed.
+
+      var fn = $scope.$on('$viewContentLoaded', function () {
+
+        // Unhook the view loaded and hook a function that will prevent
+        // location changes while the block is active.
+
+        fn();
+        registerLocationChange();
+
+      });
+
+    } else {
+      registerLocationChange();
+    }
+
+  }
+}
 blkUI.directive('blockUiContainer', ["blockUIConfig", "blockUiContainerLinkFn", function (blockUIConfig, blockUiContainerLinkFn) {
   return {
     scope: true,
@@ -81,7 +176,7 @@ blkUI.directive('blockUiContainer', ["blockUIConfig", "blockUiContainerLinkFn", 
 //    });
   };
 }]);
-blkUI.directive('blockUi', ["blockUiCompileFn", function(blockUiCompileFn) {
+blkUI.directive('blockUi', ["blockUiCompileFn", function (blockUiCompileFn) {
 
   return {
     scope: true,
@@ -89,9 +184,9 @@ blkUI.directive('blockUi', ["blockUiCompileFn", function(blockUiCompileFn) {
     compile: blockUiCompileFn
   };
 
-}]).factory('blockUiCompileFn', ["blockUiPreLinkFn", function(blockUiPreLinkFn) {
+}]).factory('blockUiCompileFn', ["blockUiPreLinkFn", function (blockUiPreLinkFn) {
 
-  return function($element, $attrs) {
+  return function ($element, $attrs) {
 
     // Class should be added here to prevent an animation delay error.
 
@@ -103,9 +198,9 @@ blkUI.directive('blockUi', ["blockUiCompileFn", function(blockUiCompileFn) {
 
   };
 
-}]).factory('blockUiPreLinkFn', ["blockUI", "blockUIUtils", "blockUIConfig", function(blockUI, blockUIUtils, blockUIConfig) {
+}]).factory('blockUiPreLinkFn', ["blockUI", "blockUIUtils", "blockUIConfig", function (blockUI, blockUIUtils, blockUIConfig) {
 
-  return function($scope, $element, $attrs) {
+  return function ($scope, $element, $attrs) {
 
     // If the element does not have the class "block-ui" set, we set the
     // default css classes from the config.
@@ -116,7 +211,7 @@ blkUI.directive('blockUi', ["blockUiCompileFn", function(blockUiCompileFn) {
 
     // Expose the blockUiMessageClass attribute value on the scope
 
-    $attrs.$observe('blockUiMessageClass', function(value) {
+    $attrs.$observe('blockUiMessageClass', function (value) {
       $scope.$_blockUiMessageClass = value;
     });
 
@@ -131,27 +226,12 @@ blkUI.directive('blockUi', ["blockUiCompileFn", function(blockUiCompileFn) {
     // location changes while the block is active.
 
     if (instanceId === 'main') {
-
-      // After the initial content has been loaded we'll spy on any location
-      // changes and discard them when needed.
-
-      var fn = $scope.$on('$viewContentLoaded', function($event) {
-
-        // Unhook the view loaded and hook a function that will prevent
-        // location changes while the block is active.
-
-        fn();
-        $scope.$on('$locationChangeStart', function(event) {
-          if (srvInstance.state().blockCount > 0) {
-            event.preventDefault();
-          }
-        });
-      });
+      blockNavigation($scope, srvInstance, blockUIConfig);
     } else {
       // Locate the parent blockUI instance
       var parentInstance = $element.inheritedData('block-ui');
 
-      if(parentInstance) {
+      if (parentInstance) {
         // TODO: assert if parent is already set to something else
         srvInstance._parent = parentInstance;
       }
@@ -159,7 +239,7 @@ blkUI.directive('blockUi', ["blockUiCompileFn", function(blockUiCompileFn) {
 
     // Ensure the instance is released when the scope is destroyed
 
-    $scope.$on('$destroy', function() {
+    $scope.$on('$destroy', function () {
       srvInstance.release();
     });
 
@@ -177,7 +257,7 @@ blkUI.directive('blockUi', ["blockUiCompileFn", function(blockUiCompileFn) {
       $element.toggleClass('block-ui-visible', !!value);
     });
 
-    $scope.$watch('$_blockUiState.blockCount > 0', function(value) {
+    $scope.$watch('$_blockUiState.blockCount > 0', function (value) {
       $element.toggleClass('block-ui-active', !!value);
     });
 
@@ -185,7 +265,7 @@ blkUI.directive('blockUi', ["blockUiCompileFn", function(blockUiCompileFn) {
 
     var pattern = $attrs.blockUiPattern;
 
-    if(pattern) {
+    if (pattern) {
       var regExp = blockUIUtils.buildRegExp(pattern);
       srvInstance.pattern(regExp);
     }
@@ -223,7 +303,8 @@ blkUI.constant('blockUIConfig', {
     resetOnException: true,
     requestFilter: angular.noop,
     autoInjectBodyBlock: true,
-    cssClass: 'block-ui block-ui-anim-fade'
+    cssClass: 'block-ui block-ui-anim-fade',
+    blockBrowserNavigation: false
 });
 
 
@@ -284,7 +365,14 @@ blkUI.factory('blockUIHttpInterceptor', ["$q", "$injector", "blockUIConfig", "$t
     requestError: error,
 
     response: function(response) {
-      stopBlockUI(response.config);
+
+      // If the connection to the website goes down the response interceptor gets and error with "cannot read property config of null".
+      // https://github.com/McNull/angular-block-ui/issues/53
+
+      if(response) {
+        stopBlockUI(response.config);
+      }
+
       return response;
     },
 
@@ -296,7 +384,10 @@ blkUI.factory('blockUIHttpInterceptor', ["$q", "$injector", "blockUIConfig", "$t
 blkUI.factory('blockUI', ["blockUIConfig", "$timeout", "blockUIUtils", "$document", function(blockUIConfig, $timeout, blockUIUtils, $document) {
 
   var $body = $document.find('body');
-
+  
+  // These properties are not allowed to be specified in the start method.
+  var reservedStateProperties = ['id', 'blockCount', 'blocking'];
+  
   function BlockUI(id) {
 
     var self = this;
@@ -312,15 +403,37 @@ blkUI.factory('blockUI', ["blockUIConfig", "$timeout", "blockUIUtils", "$documen
 
     this._refs = 0;
 
-    this.start = function(message) {
-
-      if(state.blockCount > 0) {
-        message = message || state.message || blockUIConfig.message;
+    this.start = function(messageOrOptions) {
+      
+      messageOrOptions = messageOrOptions || {};
+      
+      if(angular.isString(messageOrOptions)) {
+        messageOrOptions = {
+          message: messageOrOptions
+        };
       } else {
-        message = message || blockUIConfig.message;
+        angular.forEach(reservedStateProperties, function(x) {
+          if(messageOrOptions[x]) {
+            throw new Error('The property ' + x + ' is reserved for the block state.');
+          }
+        });
+      } 
+      
+      angular.extend(state, messageOrOptions);
+      
+      if(state.blockCount > 0) {
+        state.message = messageOrOptions.message || state.message || blockUIConfig.message;
+      } else {
+        state.message = messageOrOptions.message || blockUIConfig.message;
       }
+      
+      // if(state.blockCount > 0) {
+      //   messageOrOptions = messageOrOptions || state.message || blockUIConfig.message;
+      // } else {
+      //   messageOrOptions = messageOrOptions || blockUIConfig.message;
+      // }
 
-      state.message = message;
+      // state.message = messageOrOptions;
 
       state.blockCount++;
 
@@ -341,17 +454,22 @@ blkUI.factory('blockUI', ["blockUIConfig", "$timeout", "blockUIUtils", "$documen
 
         $timeout(function() {
           // Ensure we still need to blur
-          if(self._restoreFocus) {
+          // Don't restore if active element is body, since this causes IE to switch windows (see http://tjvantoll.com/2013/08/30/bugs-with-document-activeelement-in-internet-explorer/)
+          if (self._restoreFocus && self._restoreFocus !== $body[0]) {
             self._restoreFocus.blur();
           }
         });
       }
 
-      if (!startPromise) {
-        startPromise = $timeout(function() {
-          startPromise = null;
-          state.blocking = true;
-        }, blockUIConfig.delay);
+      if (!startPromise && blockUIConfig.delay !== 0) {
+        startPromise = $timeout(block, blockUIConfig.delay);
+      } else if (blockUIConfig.delay === 0) {
+        block();
+      }
+
+      function block () {
+        startPromise = null;
+        state.blocking = true;
       }
     };
 
@@ -368,6 +486,10 @@ blkUI.factory('blockUI', ["blockUIConfig", "$timeout", "blockUIUtils", "$documen
       if (state.blockCount === 0) {
         self.reset(true);
       }
+    };
+
+    this.isBlocking = function () {
+        return state.blocking;
     };
 
     this.message = function(value) {
@@ -394,7 +516,23 @@ blkUI.factory('blockUI', ["blockUIConfig", "$timeout", "blockUIUtils", "$documen
 
       if(self._restoreFocus && 
          (!$document[0].activeElement || $document[0].activeElement === $body[0])) {
-        self._restoreFocus.focus();
+        
+        //IE8 will throw if element for setting focus is invisible
+        try {
+          self._restoreFocus.focus();
+        } catch(e1) {
+          (function () {
+              var elementToFocus = self._restoreFocus;
+              $timeout(function() { 
+                if(elementToFocus) { 
+                  try { 
+                    elementToFocus.focus(); 
+                  } catch(e2) { }
+              } 
+            },100);
+          })();
+        }
+        
         self._restoreFocus = null;
       }
       
