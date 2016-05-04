@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                     Expression = validationExpression,
                     Message = validationMessage
                 } },
-                linkedFilterExpression: null);
+                linkedFilterExpression: null, properties: Create.QuestionProperties());
 
         Cleanup stuff = () =>
         {

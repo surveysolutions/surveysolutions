@@ -165,8 +165,8 @@
     <Compile Include="Logging\NLogLogger.cs" />
     <Compile Include="Logging\NLogLoggerProvider.cs" />
     <Compile Include="Logging\NLogLoggingModule.cs" />
-    <Compile Include="Storage\JsonSerializerSettingsFactory.cs" />
-    <Compile Include="Storage\OldToNewAssemblyRedirectSerializationBinder.cs" />
+    <Compile Include="Storage\INaviteReadSideStorage.cs" />
+    <Compile Include="Storage\JsonAllTypesSerializer.cs" />
     <Compile Include="Storage\Esent\Implementation\EsentCachedReadSideStorage.cs" />
     <Compile Include="Storage\EventSerializerSettings.cs" />
     <Compile Include="Storage\EventStore\EventStoreSettings.cs" />
@@ -178,7 +178,15 @@
     <Compile Include="Storage\EventStore\Implementation\EventStoreLogger.cs" />
     <Compile Include="Storage\EventStore\IEventStoreConnectionProvider.cs" />
     <Compile Include="Storage\EventStore\Implementation\WriteSideEventStore.cs" />
+    <Compile Include="Storage\MainCoreAssemblyRedirectSerializationBaseBinder.cs" />
+    <Compile Include="Storage\NewtonJsonSerializer.cs" />
+    <Compile Include="Storage\NewToOldAssemblyRedirectSerializationBinder.cs" />
+    <Compile Include="Storage\OldToNewAssemblyRedirectSerializationBinder.cs" />
+    <Compile Include="Storage\Postgre\Implementation\IPlainPostgresTransactionManager.cs" />
+    <Compile Include="Storage\Postgre\Implementation\NoTransactionPlainPostgresTransactionManager.cs" />
+    <Compile Include="Storage\Postgre\Implementation\PlainTransactionManagerProvider.cs" />
     <Compile Include="Storage\Postgre\Implementation\PostgresKeyValueStorageWithCache.cs" />
+    <Compile Include="Storage\Postgre\Implementation\RebuildReadSidePlainPostgresTransactionManagerWithSessions.cs" />
     <Compile Include="Threading\IsolatedThreadExtensions.cs" />
     <Compile Include="Storage\Postgre\Implementation\PostgresEventStore.cs" />
     <Compile Include="Storage\Postgre\Implementation\RebuildReadSideCqrsPostgresTransactionManagerWithSessions.cs" />
@@ -203,7 +211,7 @@
     <Compile Include="Storage\Postgre\Implementation\RebuildReadSideCqrsPostgresTransactionManagerWithoutSessions.cs" />
     <Compile Include="Storage\Postgre\Implementation\PostgresReadSideBootstraper.cs" />
     <Compile Include="Storage\Postgre\Implementation\CqrsPostgresTransactionManager.cs" />
-    <Compile Include="Storage\Postgre\Implementation\PostgreReadSideRepository.cs" />
+    <Compile Include="Storage\Postgre\Implementation\PostgreReadSideStorage.cs" />
     <Compile Include="Storage\Postgre\Implementation\TransactionManagerProvider.cs" />
     <Compile Include="Storage\Postgre\PostgreConnectionSettings.cs" />
     <Compile Include="Storage\Postgre\PostgresReadSideModule.cs" />

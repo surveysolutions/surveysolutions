@@ -6,6 +6,7 @@ using Npgsql;
 using NpgsqlTypes;
 using WB.Core.GenericSubdomains.Portable.Services;
 using Newtonsoft.Json;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
@@ -14,16 +15,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     {
         protected readonly string connectionString;
         protected readonly string tableName = typeof(TEntity).Name.Pluralize();
-
         private readonly ILogger logger;
-        private readonly ISerializer serializer;
 
-
-        public PostgresKeyValueStorage(string connectionString, ILogger logger, ISerializer serializer)
+        public PostgresKeyValueStorage(string connectionString, ILogger logger)
         {
             this.connectionString = connectionString;
             this.logger = logger;
-            this.serializer = serializer;
             this.EnshureTableExists();
         }
 
@@ -69,7 +66,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     $"Unexpected row count of deleted records. Expected to delete 1 row, but affected {queryResult} number of rows");
             }
         }
+        public virtual void RemoveIfStartsWith(string beginingOfId)
+        {
+            using (var command = new NpgsqlCommand())
+            {
+                command.CommandText = $"DELETE FROM {this.tableName} WHERE id like :id";
+                var parameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) { Value = $"{beginingOfId}%" };
+                command.Parameters.Add(parameter);
 
+                this.ExecuteNonQuery(command);
+            }
+        }
         public virtual void Store(TEntity view, string id)
         {
             bool entityExists;
@@ -194,6 +201,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             DefaultValueHandling = DefaultValueHandling.Ignore,
             MissingMemberHandling = MissingMemberHandling.Ignore,
             NullValueHandling = NullValueHandling.Ignore,
+            FloatParseHandling = FloatParseHandling.Decimal,
             Binder = new OldToNewAssemblyRedirectSerializationBinder()
         };
     }

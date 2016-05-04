@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Practices.ServiceLocation;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -15,6 +16,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Utils;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
@@ -51,6 +53,9 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
         private readonly IPostgresReadSideBootstraper postgresReadSideBootstraper;
         private Dictionary<IEventHandler, Stopwatch> handlersWithStopwatches;
         private readonly ITransactionManagerProviderManager transactionManagerProviderManager;
+
+        private IPlainTransactionManagerProvider plainTransactionManagerProvider => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>();
+
         private readonly ReadSideSettings settings;
         private readonly IReadSideKeyValueStorage<ReadSideVersion> readSideVersionStorage;
         private int? cachedReadSideDatabaseVersion = null as int?;
@@ -362,7 +367,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                             transactionManager.CommitCommandTransaction();
                         }
                         catch
-                        {
+                        {  
                             transactionManager.RollbackCommandTransaction();
                             throw;
                         }
@@ -374,6 +379,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                 {
                     EnableWritersCacheForHandlers(handlers);
                     this.transactionManagerProviderManager.PinRebuildReadSideTransactionManager();
+                    this.plainTransactionManagerProvider.PinRebuildReadSideTransactionManager();
                     this.republishStopwatch.Restart();
 
                     foreach (var eventSourceId in eventSourceIds)
@@ -387,6 +393,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     this.republishStopwatch.Stop();
                     this.transactionManagerProviderManager.UnpinTransactionManager();
                     this.DisableWritersCacheForHandlers(handlers);
+                    this.plainTransactionManagerProvider.UnpinTransactionManager();
                 }
 
                 UpdateStatusMessage("Rebuild views by event sources succeeded.");
@@ -436,6 +443,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                     {
                         EnableWritersCacheForHandlers(handlers);
                         this.transactionManagerProviderManager.PinRebuildReadSideTransactionManager();
+                        this.plainTransactionManagerProvider.PinRebuildReadSideTransactionManager();
                         this.republishStopwatch.Restart();
 
                         this.RepublishAllEvents(this.GetEventStream(skipEvents), this.eventStore.CountOfAllEvents(),
@@ -446,6 +454,7 @@ namespace WB.Core.Infrastructure.Implementation.ReadSide
                         this.republishStopwatch.Stop();
                         this.transactionManagerProviderManager.UnpinTransactionManager();
                         this.DisableWritersCacheForHandlers(handlers);
+                        this.plainTransactionManagerProvider.UnpinTransactionManager();
 
                         if (!isPartialRebuild && this.postgresReadSideBootstraper != null)
                             this.postgresReadSideBootstraper.CreateIndexesAfterRebuildReadSide();

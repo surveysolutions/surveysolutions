@@ -115,12 +115,14 @@ namespace WB.Core.SharedKernels.DataCollection
             return this.InterviewScopes.ContainsKey(rosterStringKey) ? this.InterviewScopes[rosterStringKey] : null;
         }
 
-        public ValidityChanges ProcessValidationExpressions()
+        public ValidityChanges ProcessValidationExpressions() => ProcessValidationExpressionsImpl(this.InterviewScopes.Values);
+
+        public static ValidityChanges ProcessValidationExpressionsImpl(IEnumerable<IExpressionExecutable> interviewScopes)
         {
             var questionsToBeValid = new List<Identity>();
             var questionsToBeInvalid = new List<Identity>();
 
-            foreach (var interviewScopeKvpValue in this.InterviewScopes.Values)
+            foreach (var interviewScopeKvpValue in interviewScopes)
             {
                 List<Identity> questionsToBeValidByScope;
                 List<Identity> questionsToBeInvalidByScope;
@@ -134,7 +136,9 @@ namespace WB.Core.SharedKernels.DataCollection
             return new ValidityChanges(answersDeclaredValid: questionsToBeValid, answersDeclaredInvalid: questionsToBeInvalid);
         }
 
-        public EnablementChanges ProcessEnablementConditions()
+        public EnablementChanges ProcessEnablementConditions() => ProcessEnablementConditionsImpl(this.InterviewScopes.Values);
+
+        protected internal static EnablementChanges ProcessEnablementConditionsImpl(IEnumerable<IExpressionExecutable> interviewScopes)
         {
             var questionsToBeEnabled = new List<Identity>();
             var questionsToBeDisabled = new List<Identity>();
@@ -143,14 +147,17 @@ namespace WB.Core.SharedKernels.DataCollection
 
             //order by scope depth starting from top
             //conditionally lower scope could depend only from upper scope
-            foreach (var interviewScopeKvpValue in this.InterviewScopes.Values.OrderBy(x => x.GetLevel()))
+            foreach (var interviewScopeKvpValue in interviewScopes.OrderBy(x => x.GetLevel()))
             {
                 List<Identity> questionsToBeEnabledArray;
                 List<Identity> questionsToBeDisabledArray;
                 List<Identity> groupsToBeEnabledArray;
                 List<Identity> groupsToBeDisabledArray;
 
-                interviewScopeKvpValue.CalculateConditionChanges(out questionsToBeEnabledArray, out questionsToBeDisabledArray, out groupsToBeEnabledArray,
+                interviewScopeKvpValue.CalculateConditionChanges(
+                    out questionsToBeEnabledArray,
+                    out questionsToBeDisabledArray,
+                    out groupsToBeEnabledArray,
                     out groupsToBeDisabledArray);
 
                 questionsToBeEnabled.AddRange(questionsToBeEnabledArray);

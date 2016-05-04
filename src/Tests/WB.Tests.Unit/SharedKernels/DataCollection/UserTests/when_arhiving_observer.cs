@@ -1,8 +1,12 @@
-﻿using Machine.Specifications;
+﻿using System;
+using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
 {
@@ -11,7 +15,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
         Establish context = () =>
         {
             user = Create.User();
-            user.ApplyEvent(Create.NewUserCreated(role: UserRoles.Observer));
+            user.SetId(userId);
+            user.Roles = new [] { UserRoles.Observer };
         };
 
         Because of = () =>
@@ -24,6 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.UserTests
             exception.ExceptionType.ShouldEqual(UserDomainExceptionType.RoleDoesntSupportDelete);
 
         private static User user;
+        private static Guid userId = Guid.NewGuid();
         private static UserException exception;
     }
 }

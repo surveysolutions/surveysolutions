@@ -9,7 +9,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             string rosterScopeName, 
             string typeName, 
             List<GroupTemplateModel> groups, 
-            List<QuestionTemplateModel> questions, 
+            List<QuestionTemplateModel> questions,
+            List<StaticTextTemplateModel> staticTexts,
             List<RosterTemplateModel> rosters, 
             List<Guid> rosterScope,
             string parentTypeName)
@@ -18,6 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.TypeName = typeName;
             Groups = groups;
             Questions = questions;
+            StaticTexts = staticTexts;
             Rosters = rosters;
             RosterScope = rosterScope;
             this.ParentTypeName = parentTypeName;
@@ -25,6 +27,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
         protected RosterScopeBaseModel()
         {
+            this.Questions = new List<QuestionTemplateModel>();
+            this.StaticTexts = new List<StaticTextTemplateModel>();
+            this.Groups = new List<GroupTemplateModel>();
+            this.Rosters = new List<RosterTemplateModel>();
         }
 
         public string RosterScopeName { get; set; }
@@ -34,6 +40,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public string ParentTypeName { set; get; }
 
         public List<QuestionTemplateModel> Questions { get; set; }
+
+        public List<StaticTextTemplateModel> StaticTexts { get; set; }
 
         public List<GroupTemplateModel> Groups { get; set; }
 

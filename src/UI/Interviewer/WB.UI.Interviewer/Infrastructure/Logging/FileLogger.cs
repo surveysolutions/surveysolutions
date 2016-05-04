@@ -4,6 +4,7 @@ using System.Threading;
 using Java.Lang;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Exceptions;
+using MvvmCross.Platform.Platform;
 using WB.Core.GenericSubdomains.Portable.Services;
 using Exception = System.Exception;
 
@@ -33,6 +34,7 @@ namespace WB.UI.Interviewer.Infrastructure.Logging
         {
             if (!this.IsDebugEnabled) return;
 
+            Mvx.Trace(MvxTraceLevel.Diagnostic, message);
             this.WriteLogMessage("Debug", exception, message);
         }
        
@@ -40,13 +42,14 @@ namespace WB.UI.Interviewer.Infrastructure.Logging
         {
             if (!this.IsInfoEnabled) return;
 
+            Mvx.Trace(MvxTraceLevel.Diagnostic, message);
             this.WriteLogMessage("Info", exception, message);
         }
         
         public void Warn(string message, Exception exception = null)
         {
             if (!this.IsWarnEnabled) return;
-
+            Mvx.Warning(message);
             this.WriteLogMessage("Warning", exception, message);
         }
 

@@ -1,19 +1,14 @@
 using System.Web.Mvc;
 using Microsoft.Practices.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Transactions;
 using ActionFilterAttribute = System.Web.Mvc.ActionFilterAttribute;
 
 namespace WB.UI.Shared.Web.Filters
 {
     public class PlainTransactionFilter : ActionFilterAttribute
     {
-        IPlainTransactionManager TransactionManager
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
-            }
-        }
+        IPlainTransactionManager TransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
 using WB.UI.Designer.Models;
@@ -20,7 +21,7 @@ namespace WB.UI.Designer.Controllers
             this.settingsProvider = settingsProvider;
         }
 
-        public ActionResult Settings() => this.View(this.settingsProvider.GetSettings());
+        public ActionResult Settings() => this.View(this.settingsProvider.GetSettings().OrderBy(setting => setting.Name));
 
         public ActionResult Index() => this.View();
 

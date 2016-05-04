@@ -63,6 +63,7 @@
   <dimen name="Interview_Question_TextAnswer_margin_bottom">28dp</dimen>
 
   <dimen name="Interview_Question_InputButton_padding">16dp</dimen>
+  <dimen name="Interview_Question_InputButton_DoublePadding">32dp</dimen>
   <dimen name="Interview_Question_InputButton_margin_LeftRight">2dp</dimen>
   <dimen name="Interview_Question_InputButton_margin_Bottom">8dp</dimen>
 
@@ -76,5 +77,6 @@
 
   <dimen name="Interview_Attachment_Small_margin_bottom">32dp</dimen>
   <dimen name="Interview_Attachment_Large_margin_bottom">1dp</dimen>
+  <dimen name="Interview_Instructions_margin">4dp</dimen>
 
 </resources>

@@ -25,6 +25,7 @@ using WB.Core.SharedKernels.Enumerator.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.Services;
 using WB.Core.SharedKernels.SurveySolutions;
 
@@ -36,6 +37,9 @@ namespace WB.Tests.Unit
         {
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<TInstance>())
+                .Returns(instance);
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance(typeof (TInstance)))
                 .Returns(instance);
         }
 
@@ -201,19 +205,19 @@ namespace WB.Tests.Unit
             if (!entityId.HasValue)
             {
                 questionnaireEntityFactoryMock
-                   .Setup(x => x.CreateStaticText(Moq.It.IsAny<Guid>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
+                   .Setup(x => x.CreateStaticText(Moq.It.IsAny<Guid>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>(), Moq.It.IsAny<IList<ValidationCondition>>()))
                    .Returns((Guid id, string t, string a) => Create.StaticText(id, t, a));
             }
             else if (string.IsNullOrWhiteSpace(attachmentName))
             {
                 questionnaireEntityFactoryMock
-                    .Setup(x => x.CreateStaticText(entityId.Value, text, Moq.It.IsAny<string>()))
+                    .Setup(x => x.CreateStaticText(entityId.Value, text, Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>(), Moq.It.IsAny<IList<ValidationCondition>>()))
                     .Returns(staticText);
             }
             else
             {
                 questionnaireEntityFactoryMock
-                   .Setup(x => x.CreateStaticText(entityId.Value, text, attachmentName))
+                   .Setup(x => x.CreateStaticText(entityId.Value, text, attachmentName, Moq.It.IsAny<string>(), Moq.It.IsAny<bool>(), Moq.It.IsAny<IList<ValidationCondition>>()))
                    .Returns(staticText);
             }
 

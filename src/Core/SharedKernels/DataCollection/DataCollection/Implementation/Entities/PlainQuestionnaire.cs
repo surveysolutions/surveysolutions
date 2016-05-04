@@ -36,6 +36,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly Func<long> getVersion;
         private readonly Guid? responsibleId;
 
+        private Dictionary<Guid, IStaticText> staticTextCache = null;
         private Dictionary<Guid, IQuestion> questionCache = null;
         private Dictionary<string, IGroup> groupCache = null;
         private Dictionary<Guid, IComposite> entityCache = null;
@@ -53,6 +54,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildInterviewerQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfUnderlyingInterviewerQuestions = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfParentsStartingFromTop = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
+        private readonly Dictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildStaticTexts = new Dictionary<Guid, ReadOnlyCollection<Guid>>();
+        private readonly Dictionary<Guid, ReadOnlyCollection<decimal>> cacheOfAnswerOptionsAsValues = new Dictionary<Guid, ReadOnlyCollection<decimal>>();
+        private readonly Dictionary<Guid, Dictionary<decimal, Answer>> cacheOfAnswerOptions = new Dictionary<Guid, Dictionary<decimal, Answer>>();
+        private readonly Dictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingStaticTexts = new Dictionary<Guid, IEnumerable<Guid>>();
 
 
         internal QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
@@ -77,6 +82,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             get
             {
                 return this.sectionCache ?? (this.sectionCache = this.innerDocument.Children.Cast<IGroup>().Where(x => x != null).Select(x => x.PublicKey).ToList());
+            }
+        }
+
+        private Dictionary<Guid, IStaticText> StaticTextCache
+        {
+            get
+            {
+                return this.staticTextCache ?? (this.staticTextCache
+                    = this.innerDocument
+                        .Find<IStaticText>(_ => true)
+                        .ToDictionary(
+                            staticText => staticText.PublicKey,
+                            staticText => staticText));
             }
         }
 
@@ -113,6 +131,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                        (this.cacheOfSubstitutionReferencedQuestions = this.GetAllSubstitutionReferences());
             }
         }
+
+        private IEnumerable<IStaticText> AllStaticTexts => this.StaticTextCache.Values;
 
         private IEnumerable<IQuestion> AllQuestions => this.QuestionCache.Values;
 
@@ -244,6 +264,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public Guid? GetCascadingQuestionParentId(Guid questionId) => this.GetQuestionOrThrow(questionId).CascadeFromQuestionId;
 
         public IEnumerable<decimal> GetAnswerOptionsAsValues(Guid questionId)
+             => this.cacheOfAnswerOptionsAsValues.GetOrUpdate(questionId, () 
+                => this.GetAnswerOptionsAsValuesImpl(questionId));
+
+        public ReadOnlyCollection<decimal> GetAnswerOptionsAsValuesImpl(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
@@ -254,10 +278,40 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 throw new QuestionnaireException(
                     $"Cannot return answer options for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
 
-            return question.Answers.Select(answer => ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToList();
+            if (question.Answers.Any(x => x.AnswerCode.HasValue))
+            {
+                return question.Answers.Select(answer => answer.AnswerCode.Value).ToReadOnlyCollection();
+            }
+            else
+            {
+                return question.Answers.Select(answer => ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId)).ToReadOnlyCollection();
+            }
         }
 
-        public string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue)
+        public string GetAnswerOptionTitle(Guid questionId, decimal answerOptionValue) => this.GetAnswerOption(questionId, answerOptionValue).AnswerText;
+
+        public decimal GetCascadingParentValue(Guid questionId, decimal answerOptionValue)
+        {
+            var answerOption = this.GetAnswerOption(questionId, answerOptionValue);
+            if (!answerOption.ParentCode.HasValue)
+            {
+                decimal parsedValue;
+
+                if (!decimal.TryParse(answerOption.ParentValue, NumberStyles.Number, CultureInfo.InvariantCulture, out parsedValue))
+                    throw new QuestionnaireException(
+                        $"Cannot parse parent answer option value '{answerOption.ParentValue}' as decimal. Question id: '{questionId}'.");
+
+                return parsedValue;
+            }
+
+            return answerOption.ParentCode.Value;
+        }
+
+        private Answer GetAnswerOption(Guid questionId, decimal answerOptionValue)
+            => this.cacheOfAnswerOptions.GetOrUpdate(questionId, answerOptionValue, 
+                                                    () => GetAnswerOptionImpl(questionId, answerOptionValue));
+
+        private Answer GetAnswerOptionImpl(Guid questionId, decimal answerOptionValue)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);
 
@@ -266,37 +320,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             if (questionTypeDoesNotSupportAnswerOptions)
                 throw new QuestionnaireException(
-                    $"Cannot return answer option title for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
+                    $"Cannot return answer option for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
 
-            return question
-                .Answers
-                .Single(answer => answerOptionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId))
-                .AnswerText;
-        }
-
-        public decimal GetCascadingParentValue(Guid questionId, decimal answerOptionValue)
-        {
-            var question = this.GetQuestionOrThrow(questionId);
-
-            var questionTypeDoesNotSupportAnswerOptions
-                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
-
-            if (questionTypeDoesNotSupportAnswerOptions)
-                throw new QuestionnaireException(
-                    $"Cannot return answer option title for question with id '{questionId}' because it's type {question.QuestionType} does not support answer options.");
-
-            var stringParentAnswer = question
-                .Answers
-                .Single(answer => answerOptionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId))
-                .ParentValue;
-
-            decimal parsedValue;
-
-            if (!decimal.TryParse(stringParentAnswer, NumberStyles.Number, CultureInfo.InvariantCulture, out parsedValue))
-                throw new QuestionnaireException(
-                    $"Cannot parse parent answer option value '{stringParentAnswer}' as decimal. Question id: '{questionId}'.");
-
-            return parsedValue;
+            if (question.Answers.Any(x => x.AnswerCode.HasValue))
+            {
+                return question.Answers
+                    .Single(answer => answer.AnswerCode == answerOptionValue);
+            }
+            else
+            {
+                return question
+                    .Answers
+                    .Single(answer => answerOptionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, questionId));
+            }
         }
 
         public int? GetMaxSelectedAnswerOptions(Guid questionId)
@@ -317,6 +353,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public int GetMaxRosterRowCount() => Constants.MaxRosterRowCount;
 
         public bool IsQuestion(Guid entityId) => this.HasQuestion(entityId);
+        public bool IsStaticText(Guid entityId)
+        {
+            return this.GetStaticTextImpl(entityId) != null;
+        }
 
         public bool IsInterviewierQuestion(Guid questionId)
         {
@@ -493,11 +533,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public ReadOnlyCollection<Guid> GetAllQuestions()
             => this.AllQuestions.Select(question => question.PublicKey).ToReadOnlyCollection();
 
+        public ReadOnlyCollection<Guid> GetAllStaticTexts()
+            => this.AllStaticTexts.Select(staticText => staticText.PublicKey).ToReadOnlyCollection();
+
         public ReadOnlyCollection<Guid> GetAllGroups()
             => this.AllGroups.Select(question => question.PublicKey).ToReadOnlyCollection();
 
         public IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId)
             => this.cacheOfUnderlyingQuestions.GetOrUpdate(groupId, this.GetAllUnderlyingQuestionsImpl);
+
+        public IEnumerable<Guid> GetAllUnderlyingStaticTexts(Guid groupId)
+             => this.cacheOfUnderlyingStaticTexts.GetOrUpdate(groupId, this.GetAllUnderlyingStaticTextsImpl);
 
         public ReadOnlyCollection<Guid> GetAllUnderlyingInterviewerQuestions(Guid groupId)
         {
@@ -548,6 +594,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     .Select(question => question.PublicKey)
                     .ToReadOnlyCollection());
 
+        public ReadOnlyCollection<Guid> GetChildStaticTexts(Guid groupId)
+             => this.cacheOfChildStaticTexts.GetOrUpdate(groupId, ()
+                => this
+                    .GetGroupOrThrow(groupId)
+                    .Children.OfType<IStaticText>()
+                    .Select(s => s.PublicKey)
+                    .ToReadOnlyCollection());
+        
+
         public bool IsPrefilled(Guid questionId)
         {
             var question = this.GetQuestionOrThrow(questionId);
@@ -569,12 +624,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public string GetValidationMessage(Guid questionId, int conditionIndex)
         {
-            return this.GetQuestion(questionId).ValidationConditions[conditionIndex].Message;
+            if (IsQuestion(questionId))
+            {
+                return this.GetQuestion(questionId).ValidationConditions[conditionIndex].Message;
+            }
+            else if (IsStaticText(questionId))
+            {
+                return this.GetStaticTextImpl(questionId).ValidationConditions[conditionIndex].Message;
+            }
+
+            return null;
         }
 
         public bool HasMoreThanOneValidationRule(Guid questionId)
         {
-            return this.GetQuestion(questionId).ValidationConditions.Count > 1;
+            if (this.IsQuestion(questionId))
+            {
+                return this.GetQuestion(questionId).ValidationConditions.Count > 1;
+            }
+
+            if (this.IsStaticText(questionId))
+            {
+                return this.GetStaticTextImpl(questionId).ValidationConditions.Count > 1;
+            }
+
+            return false;
         }
 
         public string GetQuestionInstruction(Guid questionId)
@@ -604,6 +678,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             var textQuestion = (this.GetQuestion(questionId) as TextQuestion);
             return textQuestion?.Mask;
+        }
+
+        public bool GetHideInstructions(Guid questionId)
+        {
+            return this.GetQuestion(questionId).Properties.HideInstructions;
+        }
+
+        public bool ShouldUseFormatting(Guid questionId)
+        {
+            var numericQuestion = this.GetQuestion(questionId) as INumericQuestion;
+            return numericQuestion?.UseFormatting ?? false;
         }
 
         public IEnumerable<Guid> GetAllUnderlyingChildGroupsAndRosters(Guid groupId)
@@ -892,6 +977,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                     ? rostersAffectedByCurrentDomain.Union(new[] { rosterAffectedByBackwardCompatibility.Value })
                     : rostersAffectedByCurrentDomain);
         }
+
+        private IEnumerable<Guid> GetAllUnderlyingStaticTextsImpl(Guid groupId)
+            => this
+                .GetGroupOrThrow(groupId)
+                .Find<IStaticText>(_ => true)
+                .Select(question => question.PublicKey)
+                .ToList();
 
         private IEnumerable<Guid> GetAllUnderlyingQuestionsImpl(Guid groupId)
             => this

@@ -7,10 +7,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         public RosterTemplateModel()
         {
-            this.Questions = new List<QuestionTemplateModel>();
-            this.Groups = new List<GroupTemplateModel>();
-            this.Rosters = new List<RosterTemplateModel>();
-            this.LinkedQuestionFilterExpressions=new List<LinkedQuestionFilterExpressionModel>();
+            this.LinkedQuestionFilterExpressions = new List<LinkedQuestionFilterExpressionModel>();
         }
 
         public string Conditions { set; get; }

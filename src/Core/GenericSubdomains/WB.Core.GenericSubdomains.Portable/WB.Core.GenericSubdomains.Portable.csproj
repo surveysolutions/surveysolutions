@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="ActionUtils.cs" />
     <Compile Include="CustomCollections\ConcurrentHashSet.cs" />
+    <Compile Include="DecimalExtensions.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EventHandlerUtils.cs" />
@@ -64,7 +65,6 @@
     <Compile Include="Implementation\Crypto\SHA1.cs" />
     <Compile Include="Implementation\DownloadProgressChangedEventArgs.cs" />
     <Compile Include="Implementation\JsonCompressor.cs" />
-    <Compile Include="Implementation\NewtonJsonSerializer.cs" />
     <Compile Include="Implementation\PasswordHasher.cs" />
     <Compile Include="Implementation\RestCredentials.cs" />
     <Compile Include="Implementation\RestException.cs" />
@@ -102,8 +102,8 @@
     <Compile Include="QueryableExtensions.cs" />
     <Compile Include="RosterVectorUtils.cs" />
     <Compile Include="Services\ICompressor.cs" />
-    <Compile Include="Services\IJsonSerializerSettingsFactory.cs" />
     <Compile Include="Services\ILoggerProvider.cs" />
+    <Compile Include="Services\IJsonAllTypesSerializer.cs" />
     <Compile Include="Services\ISerializer.cs" />
     <Compile Include="Services\ILogger.cs" />
     <Compile Include="Services\INetworkService.cs" />
@@ -113,14 +113,12 @@
     <Compile Include="Services\IRestServiceSettings.cs" />
     <Compile Include="Services\IStringCompressor.cs" />
     <Compile Include="Services\ISubstitutionService.cs" />
-    <Compile Include="Services\JsonUtilsSettings.cs" />
     <Compile Include="Services\ServiceLocatorLoggerProvider.cs" />
-    <Compile Include="Services\SerializationBinderSettings.cs" />
-    <Compile Include="Services\TypeSerializationSettings.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="SyncStatusCode.cs" />
     <Compile Include="Tasks\ProggressAggregator.cs" />
     <Compile Include="Tree.cs" />
+    <Compile Include="TwoWayDictionaryAdapter.cs" />
     <Compile Include="TypeExtensions.cs" />
     <Compile Include="TypeSwitch.cs" />
     <Compile Include="Unit.cs" />

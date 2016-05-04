@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Practices.ServiceLocation;
@@ -225,6 +226,43 @@ namespace Main.Core.Tests.Documents
             Assert.That(doc.Find<IGroup>(x => x.PublicKey == roster3Id).FirstOrDefault().RosterTitleQuestionId, Is.Null);
         }
 
+        [Test]
+        public void when_contains_multi_and_single_option_questions_and_parse_options_method_called()
+        {
+            Guid singleOptionQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            Guid multipleOptionsQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            Guid textQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var cascadingQuestionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+
+            var singleOptionAnswerCodes = new decimal[] {1, 2, 3};
+            var multipleOptionsAnswerCodes = new decimal[] { 4, 5, 6};
+            var cascadingQuestionCodes = new decimal[] { 7, 8, 9};
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+                children: new IComposite[]
+                {
+                    Create.SingleOptionQuestion(questionId: singleOptionQuestionId, answerCodes: singleOptionAnswerCodes),
+                    Create.SingleOptionQuestion(questionId: cascadingQuestionId, 
+                        cascadeFromQuestionId: singleOptionQuestionId,
+                        answerCodes: cascadingQuestionCodes,
+                        parentCodes: singleOptionAnswerCodes
+                        ),
+                    Create.MultipleOptionsQuestion(questionId: multipleOptionsQuestionId, answers: multipleOptionsAnswerCodes),
+                    Create.TextQuestion(questionId: textQuestionId)
+                });
+
+            questionnaire.ParseCategoricalQuestionOptions();
+
+            var singleQuestion = questionnaire.GetQuestion<SingleQuestion>(singleOptionQuestionId);
+            Assert.That(singleQuestion.Answers.Select(x => x.AnswerCode), Is.EquivalentTo(singleOptionAnswerCodes));
+
+            var multiOptionQuestion = questionnaire.GetQuestion<MultyOptionsQuestion>(multipleOptionsQuestionId);
+            Assert.That(multiOptionQuestion.Answers.Select(x => x.AnswerCode), Is.EquivalentTo(multipleOptionsAnswerCodes));
+
+            var cascadingQuestion = questionnaire.GetQuestion<SingleQuestion>(cascadingQuestionId);
+            Assert.That(cascadingQuestion.Answers.Select(x => x.ParentCode), Is.EquivalentTo(singleOptionAnswerCodes));
+
+            Assert.That(questionnaire.GetQuestion<TextQuestion>(textQuestionId).Answers, Is.Empty);
+        }
 
         private QuestionnaireDocument CreateQuestionnaireDocumentWithTreeRostersOneGroupAndTwoRosterTitleQuestion(Guid textQuestionId,
             Guid textQuestion1Id, Guid roster1Id, Guid roster2Id, Guid roster3Id, Guid group1Id)

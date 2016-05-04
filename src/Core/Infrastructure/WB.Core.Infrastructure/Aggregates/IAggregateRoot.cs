@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Ncqrs.Eventing;
-using Ncqrs.Eventing.Sourcing;
+using System;
 
 namespace WB.Core.Infrastructure.Aggregates
 {
-    public interface IAggregateRoot : IEventSource
+    public interface IAggregateRoot
     {
         void SetId(Guid id);
-        bool HasUncommittedChanges();
-        IEnumerable<UncommittedEvent> GetUnCommittedChanges();
-        void MarkChangesAsCommitted();
     }
 }

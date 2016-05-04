@@ -59,6 +59,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Init(string interviewId)
         {
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             this.interviewId = interviewId;
         }
 
@@ -68,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             interview = this.interviewRepository.Get(interviewId);
             if (interview == null) throw new Exception("Interview is null.");
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity);
-            if (questionnaire == null) throw new Exception("questionnaire is null. QuestionnaireId: " + interview.QuestionnaireId);
+            if (questionnaire == null) throw new Exception("Questionnaire not found. QuestionnaireId: " + interview.QuestionnaireId);
 
             this.QuestionnaireTitle = questionnaire.Title;
             this.PrefilledQuestions = questionnaire
@@ -115,7 +116,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
 
             this.CurrentStage.DisposeIfDisposable();
-            this.CurrentStage = UpdateCurrentScreenViewModel(eventArgs);
+            this.CurrentStage = this.UpdateCurrentScreenViewModel(eventArgs);
             this.RaisePropertyChanged(() => this.CurrentStage);
         }
 

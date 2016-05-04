@@ -9,9 +9,11 @@ using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using NHibernate.Tool.hbm2ddl;
 using Ninject;
+using Ninject.Activation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Transactions;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
@@ -46,12 +48,27 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                                         .InSingletonScope()
                                         .Named(SessionFactoryName);
 
-            this.Bind<PlainPostgresTransactionManager>()
-                .ToSelf()
-                .InIsolatedThreadScopeOrRequestScopeOrThreadScope();
+            this.Kernel.Bind<PlainPostgresTransactionManager>().ToSelf().InIsolatedThreadScopeOrRequestScopeOrThreadScope();
+            this.Kernel.Bind<NoTransactionPlainPostgresTransactionManager>().ToSelf().InIsolatedThreadScopeOrRequestScopeOrThreadScope();
 
-            this.Bind<IPlainSessionProvider>().ToMethod(context => context.Kernel.Get<PlainPostgresTransactionManager>());
-            this.Bind<IPlainTransactionManager>().ToMethod(context => context.Kernel.Get<PlainPostgresTransactionManager>());
+            this.Kernel.Bind<Func<PlainPostgresTransactionManager>>().ToMethod(context => () => context.Kernel.Get<PlainPostgresTransactionManager>());
+            this.Kernel.Bind<Func<NoTransactionPlainPostgresTransactionManager>>().ToMethod(context => () => context.Kernel.Get<NoTransactionPlainPostgresTransactionManager>());
+
+            this.Kernel.Bind<RebuildReadSidePlainPostgresTransactionManagerWithSessions>().ToSelf();
+
+            this.Kernel
+                .Bind<PlainTransactionManagerProvider>()
+                .ToConstructor(constructor => new PlainTransactionManagerProvider(
+                    constructor.Inject<Func<PlainPostgresTransactionManager>>(),
+                    constructor.Inject<Func<NoTransactionPlainPostgresTransactionManager>>(),
+                    constructor.Inject<RebuildReadSidePlainPostgresTransactionManagerWithSessions>()))
+                .InSingletonScope();
+
+            this.Kernel.Bind<IPlainSessionProvider>().ToMethod(context => context.Kernel.Get<PlainTransactionManagerProvider>());
+            this.Kernel.Bind<IPlainTransactionManager>().ToMethod(context => context.Kernel.Get<PlainPostgresTransactionManager>());
+
+            this.Kernel.Bind<IPlainTransactionManagerProvider>().ToMethod(context => context.Kernel.Get<PlainTransactionManagerProvider>());
+
             this.Bind(typeof(IPlainStorageAccessor<>)).To(typeof(PostgresPlainStorageRepository<>));
         }
 

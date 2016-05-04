@@ -143,12 +143,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionsAndGroupsColl
 
         protected static IPublishedEvent<StaticTextAdded> CreateStaticTextAddedEvent(Guid entityId, Guid parentId, string text = null)
         {
-            return ToPublishedEvent(new StaticTextAdded
-            {
-                EntityId = entityId,
-                ParentId = parentId,
-                Text = text
-            });
+            return ToPublishedEvent(Create.Event.StaticTextAdded(
+                entityId : entityId,
+                parentId : parentId,
+                text : text));
         }
 
         protected static IPublishedEvent<TextListQuestionCloned> CreateTextListQuestionClonedEvent(Guid questionId, Guid? groupId = null, Guid? sourceQuestionId = null)
@@ -188,12 +186,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionsAndGroupsColl
 
         protected static IPublishedEvent<StaticTextUpdated> CreateStaticTextUpdatedEvent(Guid entityId, string text = null, string attachmentName = null)
         {
-            return ToPublishedEvent(new StaticTextUpdated
-            {
-                EntityId = entityId,
-                Text = text,
-                AttachmentName = attachmentName
-            });
+            return ToPublishedEvent(Create.Event.StaticTextUpdated(entityId : entityId,
+                text : text,
+                attachmentName : attachmentName));
         }
 
         protected static IPublishedEvent<NumericQuestionChanged> CreateNumericQuestionChangedEvent(
@@ -208,14 +203,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionsAndGroupsColl
         protected static IPublishedEvent<StaticTextCloned> CreateStaticTextClonedEvent(Guid entityId, Guid parentId,
             Guid? sourceEntityId = null, string text = null, string attachmentName = null)
         {
-            return ToPublishedEvent(new StaticTextCloned
-            {
-                EntityId = entityId,
-                SourceEntityId = sourceEntityId ?? Guid.NewGuid(),
-                ParentId = parentId,
-                Text = text,
-                AttachmentName = attachmentName
-            });
+            return ToPublishedEvent(Create.Event.StaticTextCloned(
+                publicKey:entityId,
+                sourceEntityId : sourceEntityId ?? Guid.NewGuid(),
+                parentId : parentId,
+                text : text,
+                attachmentName : attachmentName));
         }
 
         protected static IPublishedEvent<StaticTextDeleted> CreateStaticTextDeletedEvent(Guid entityId)

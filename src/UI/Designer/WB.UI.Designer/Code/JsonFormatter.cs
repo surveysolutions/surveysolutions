@@ -5,18 +5,13 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Practices.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Services;
+using Newtonsoft.Json;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.UI.Designer.Code
 {
     public class JsonFormatter : MediaTypeFormatter
     {
-        private ISerializer serializer
-        {
-            get { return ServiceLocator.Current.GetInstance<ISerializer>(); }
-        }
-
         public JsonFormatter()
         {
             SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
@@ -44,12 +39,39 @@ namespace WB.UI.Designer.Code
 
         public override Task<object> ReadFromStreamAsync(Type type, Stream readStream, System.Net.Http.HttpContent content, IFormatterLogger formatterLogger)
         {
-            return Task.FromResult(this.serializer.DeserializeFromStream(stream: readStream, type: type));
+            return Task.FromResult(this.DeserializeFromStream(stream: readStream, type: type));
         }
 
         public override Task WriteToStreamAsync(Type type, object value, Stream writeStream, System.Net.Http.HttpContent content, TransportContext transportContext)
         {
-            return Task.Run(() => this.serializer.SerializeToStream(value: value, type: type, stream: writeStream));
+            return Task.Run(() => this.SerializeToStream(value: value, type: type, stream: writeStream));
         }
+
+        private object DeserializeFromStream(Stream stream, Type type)
+        {
+            using (var sr = new StreamReader(stream))
+            using (var jsonTextReader = new JsonTextReader(sr))
+            {
+                return JsonSerializer.Create(jsonSerializerSettings).Deserialize(jsonTextReader, type);
+            }
+        }
+
+        private void SerializeToStream(object value, Type type, Stream stream)
+        {
+            using (var writer = new StreamWriter(stream))
+            using (var jsonWriter = new JsonTextWriter(writer))
+            {
+                JsonSerializer.Create(jsonSerializerSettings).Serialize(jsonWriter, value, type);
+            }
+        }
+
+        private static readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.Objects,
+            NullValueHandling = NullValueHandling.Ignore,
+            FloatParseHandling = FloatParseHandling.Decimal,
+            Formatting = Formatting.None,
+            Binder = new OldToNewAssemblyRedirectSerializationBinder()
+        };
     }
 }

@@ -12,19 +12,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ILiteEventHandler<GroupsEnabled>,
         ILiteEventHandler<GroupsDisabled>,
         ILiteEventHandler<QuestionsEnabled>,
-        ILiteEventHandler<QuestionsDisabled>, IDisposable
+        ILiteEventHandler<QuestionsDisabled>, 
+        ILiteEventHandler<StaticTextsDisabled>,
+        ILiteEventHandler<StaticTextsEnabled>,
+        IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry eventRegistry;
 
-        public event EventHandler QuestionEnabled;
+        public event EventHandler EntityEnabled;
+        public event EventHandler EntityDisabled;
 
         protected EnablementViewModel() { }
 
         public EnablementViewModel(IStatefulInterviewRepository interviewRepository, ILiteEventRegistry eventRegistry)
         {
-            if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
-            if (eventRegistry == null) throw new ArgumentNullException("eventRegistry");
+            if (interviewRepository == null) throw new ArgumentNullException(nameof(interviewRepository));
+            if (eventRegistry == null) throw new ArgumentNullException(nameof(eventRegistry));
 
             this.interviewRepository = interviewRepository;
             this.eventRegistry = eventRegistry;
@@ -33,10 +37,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private string interviewId;
         private Identity entityIdentity;
 
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public void Init(string interviewId, Identity entityIdentity)
         {
-            if (interviewId == null) throw new ArgumentNullException("interviewId");
-            if (entityIdentity == null) throw new ArgumentNullException("entityIdentity");
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
+            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
             this.interviewId = interviewId;
             this.entityIdentity = entityIdentity;
@@ -64,6 +68,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (@event.Groups.Contains(this.entityIdentity))
             {
                 this.UpdateSelfFromModel();
+                this.OnEnabled();
             }
         }
 
@@ -72,6 +77,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (@event.Groups.Contains(this.entityIdentity))
             {
                 this.UpdateSelfFromModel();
+                this.OnOnDisabled();
             }
         }
 
@@ -80,7 +86,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (@event.Questions.Contains(this.entityIdentity))
             {
                 this.UpdateSelfFromModel();
-                this.OnQuestionEnabled();
+                this.OnEnabled();
             }
         }
 
@@ -89,6 +95,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (@event.Questions.Contains(this.entityIdentity))
             {
                 this.UpdateSelfFromModel();
+                this.OnOnDisabled();
             }
         }
 
@@ -97,10 +104,33 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.eventRegistry.Unsubscribe(this, interviewId);
         }
 
-        protected virtual void OnQuestionEnabled()
+        public void Handle(StaticTextsDisabled @event)
         {
-            var handler = this.QuestionEnabled;
-            if (handler != null) handler(this, EventArgs.Empty);
+            if (@event.StaticTexts.Contains(this.entityIdentity))
+            {
+                this.UpdateSelfFromModel();
+                this.OnOnDisabled();
+            }
+        }
+
+        public void Handle(StaticTextsEnabled @event)
+        {
+            if (@event.StaticTexts.Contains(this.entityIdentity))
+            {
+                this.UpdateSelfFromModel();
+                this.OnEnabled();
+            }
+        }
+
+        protected virtual void OnEnabled()
+        {
+            var handler = this.EntityEnabled;
+            handler?.Invoke(this, EventArgs.Empty);
+        }
+
+        protected virtual void OnOnDisabled()
+        {
+            this.EntityDisabled?.Invoke(this, EventArgs.Empty);
         }
     }
 }

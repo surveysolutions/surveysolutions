@@ -6,8 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
+using Java.IO;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
+using File = System.IO.File;
 
 namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
 {
@@ -31,20 +33,18 @@ namespace WB.Infrastructure.Shared.Enumerator.Internals.FileSystem
             zip.CreateZip(archiveFile, directory, true, string.Empty);
         }
 
-        public byte[] ZipDirectoryToByteArray(string sourceDirectory, string directoryFilter = null, string fileFilter = null)
+        public void ZipDirectoryToFile(string sourceDirectory, string archiveFilePath, string directoryFilter = null, string fileFilter = null)
         {
-            using (var memoryStream = new MemoryStream())
+            using (var fileOutputStream = this.fileSystemAccessor.OpenOrCreateFile(archiveFilePath, false))
             {
                 FastZip zip = new FastZip();
-                zip.CreateZip(memoryStream, sourceDirectory, true, fileFilter, directoryFilter);
-
-                return memoryStream.ToArray();
+                zip.CreateZip(fileOutputStream, sourceDirectory, true, fileFilter, directoryFilter);
             }
         }
 
-        public Task<byte[]> ZipDirectoryToByteArrayAsync(string sourceDirectory, string directoryFilter = null, string fileFilter = null)
+        public Task ZipDirectoryToFileAsync(string sourceDirectory, string archiveFilePath, string directoryFilter = null, string fileFilter = null)
         {
-            return Task.Run(() => ZipDirectoryToByteArray(sourceDirectory, directoryFilter, fileFilter));
+            return Task.Run(() => ZipDirectoryToFile(sourceDirectory, archiveFilePath, directoryFilter, fileFilter));
         }
 
         public void ZipFiles(IEnumerable<string> files, string archiveFilePath)

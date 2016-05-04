@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data;
 using Ninject;
+using Npgsql;
+using NpgsqlTypes;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
@@ -14,8 +16,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private readonly ISessionProvider sessionProvider;
 
         public PostgresReadSideKeyValueStorage([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider, 
-            PostgreConnectionSettings connectionSettings, ILogger logger, ISerializer serializer)
-            : base(connectionSettings.ConnectionString, logger, serializer)
+            PostgreConnectionSettings connectionSettings, ILogger logger) 
+            : base(connectionSettings.ConnectionString, logger)
         {
             this.sessionProvider = sessionProvider;
 

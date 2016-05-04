@@ -2,6 +2,7 @@
 using System.Linq;
 using Machine.Specifications;
 using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Core.SharedKernels.SurveyManagement.Views.DataExport;
 using WB.Core.SharedKernels.SurveyManagement.Views.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.Factories;
 using WB.Core.SharedKernels.SurveyManagement.Views.Reposts.InputModels;
@@ -25,13 +26,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
                     {
                         Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
                             supervisorId:supervisorId,
+                            status: InterviewExportedAction.Completed,
                             timestamp: input.From.Date.AddHours(1), 
                             timeSpanWithPreviousStatus: TimeSpan.FromMinutes(35)),
                         Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
+                            status: InterviewExportedAction.Completed,
                             supervisorId:supervisorId,
                             timestamp: input.From.Date.AddDays(1)),
                         Create.InterviewCommentedStatus(interviewerId: user.PublicKey,
                             supervisorId:supervisorId,
+                            status: InterviewExportedAction.Completed,
                             timestamp: input.From.Date.AddDays(-15))
                     }), "2");
 

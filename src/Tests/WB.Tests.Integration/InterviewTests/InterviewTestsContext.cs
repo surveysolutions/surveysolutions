@@ -69,7 +69,7 @@ namespace WB.Tests.Integration.InterviewTests
 
         protected static IInterviewExpressionStatePrototypeProvider CreateInterviewExpressionStateProviderStub(Guid questionnaireId)
         {
-            var expressionState = new Mock<IInterviewExpressionStateV7>();
+            var expressionState = new Mock<ILatestInterviewExpressionState>();
 
             var emptyList = new List<Identity>();
 
@@ -94,7 +94,7 @@ namespace WB.Tests.Integration.InterviewTests
             return result;
         }
 
-        protected static StatefulInterview SetupStatefullInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, IInterviewExpressionStateV7 precompiledState = null)
+        protected static StatefulInterview SetupStatefullInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, ILatestInterviewExpressionState precompiledState = null)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
 
@@ -102,7 +102,7 @@ namespace WB.Tests.Integration.InterviewTests
                 => repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) == new PlainQuestionnaire(questionnaireDocument, 1) &&
                     repository.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == new PlainQuestionnaire(questionnaireDocument, 1));
 
-            IInterviewExpressionStateV7 state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument);
+            ILatestInterviewExpressionState state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument);
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
 
@@ -117,7 +117,7 @@ namespace WB.Tests.Integration.InterviewTests
             return interview;
         }
 
-        protected static Interview SetupInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, IInterviewExpressionStateV7 precompiledState = null)
+        protected static Interview SetupInterview(QuestionnaireDocument questionnaireDocument, IEnumerable<object> events = null, ILatestInterviewExpressionState precompiledState = null)
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
 
@@ -125,7 +125,7 @@ namespace WB.Tests.Integration.InterviewTests
                 =>  repository.GetHistoricalQuestionnaire(questionnaireId, Moq.It.IsAny<long>()) ==new PlainQuestionnaire(questionnaireDocument,1) &&
                     repository.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()) == new PlainQuestionnaire(questionnaireDocument, 1));
 
-            IInterviewExpressionStateV7 state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument) ;
+            ILatestInterviewExpressionState state = precompiledState ?? GetInterviewExpressionState(questionnaireDocument) ;
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionState(It.IsAny<Guid>(), It.IsAny<long>()) == state);
 
@@ -141,8 +141,7 @@ namespace WB.Tests.Integration.InterviewTests
 
         protected static Interview SetupInterview(string questionnaireString, object[] events, IInterviewExpressionState precompiledState)
         {
-            var json = new NewtonJsonSerializer(new JsonSerializerSettingsFactory());
-            var questionnaireDocument = json.Deserialize<QuestionnaireDocument>(questionnaireString);
+            var questionnaireDocument = new NewtonJsonSerializer().Deserialize<QuestionnaireDocument>(questionnaireString);
             return SetupInterview(questionnaireDocument, events);
         }
 
@@ -183,19 +182,25 @@ namespace WB.Tests.Integration.InterviewTests
             return firstTypedEvent != null ? ((T)firstTypedEvent.Payload) : null;
         }
 
-        public static IInterviewExpressionStateV7 GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
+        protected static Assembly CompileAssemblyUsingQuestionnaireEngine(QuestionnaireDocument questionnaireDocument)
+            => CompileAssembly(questionnaireDocument, Create.DesignerEngineVersionService().GetQuestionnaireContentVersion(questionnaireDocument));
+
+        protected static Assembly CompileAssemblyUsingLatestEngine(QuestionnaireDocument questionnaireDocument)
+            => CompileAssembly(questionnaireDocument, Create.DesignerEngineVersionService().GetLatestSupportedVersion());
+
+        protected static Assembly CompileAssembly(QuestionnaireDocument questionnaireDocument, Version engineVersion)
         {
-            var fileSystemAccessor = new FileSystemIOAccessor(); 
-            var questionnaireVersionProvider =new DesignerEngineVersionService();
+            var fileSystemAccessor = new FileSystemIOAccessor();
 
             const string pathToProfile = "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.5\\Profile\\Profile111";
+
             var referencesToAdd = new[] { "System.dll", "System.Core.dll", "System.Runtime.dll", "System.Collections.dll", "System.Linq.dll", "System.Linq.Expressions.dll", "System.Linq.Queryable.dll", "mscorlib.dll", "System.Runtime.Extensions.dll", "System.Text.RegularExpressions.dll" };
 
             var settings = new List<IDynamicCompilerSettings>
             {
-                Mock.Of<IDynamicCompilerSettings>(_ 
+                Mock.Of<IDynamicCompilerSettings>(_
                     => _.PortableAssembliesPath == pathToProfile
-                    && _.DefaultReferencedPortableAssemblies == referencesToAdd 
+                    && _.DefaultReferencedPortableAssemblies == referencesToAdd
                     && _.Name == "profile111")
             };
 
@@ -208,30 +213,38 @@ namespace WB.Tests.Integration.InterviewTests
                     new DynamicCompilerSettingsProvider(defaultDynamicCompilerSettings, fileSystemAccessor));
 
             string resultAssembly;
-            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument,questionnaireVersionProvider.GetLatestSupportedVersion(), out resultAssembly);
+            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, engineVersion, out resultAssembly);
 
             var filePath = Path.GetTempFileName();
 
-            if (emitResult.Success && !string.IsNullOrEmpty(resultAssembly))
-            {
-                File.WriteAllBytes(filePath, Convert.FromBase64String(resultAssembly));
+            if (!emitResult.Success || string.IsNullOrEmpty(resultAssembly))
+                throw new Exception(
+                    $"Errors on IInterviewExpressionState generation:{Environment.NewLine}"
+                    + string.Join(Environment.NewLine, emitResult.Diagnostics.Select((d, i) => $"{i + 1}. {d.Message}")));
 
-                var compiledAssembly = Assembly.LoadFrom(filePath);
+            File.WriteAllBytes(filePath, Convert.FromBase64String(resultAssembly));
 
-                Type interviewExpressionStateType =
-                    compiledAssembly.GetTypes()
-                        .FirstOrDefault(type => type.GetInterfaces().Contains(typeof(IInterviewExpressionState)));
+            var compiledAssembly = Assembly.LoadFrom(filePath);
 
-                if (interviewExpressionStateType == null)
-                    throw new Exception("Type InterviewExpressionState was not found");
+            return compiledAssembly;
+        }
 
-                var interviewExpressionState = new InterviewExpressionStateUpgrader().UpgradeToLatestVersionIfNeeded(Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState);
-                if (interviewExpressionState == null)
-                    throw new Exception("Error on IInterviewExpressionState generation");
-                return interviewExpressionState;
-            }
+        public static ILatestInterviewExpressionState GetInterviewExpressionState(QuestionnaireDocument questionnaireDocument)
+        {
+            var compiledAssembly = CompileAssemblyUsingLatestEngine(questionnaireDocument);
 
-            throw new Exception("Error on IInterviewExpressionState generation");
+            Type interviewExpressionStateType =
+                compiledAssembly.GetTypes()
+                    .FirstOrDefault(type => type.GetInterfaces().Contains(typeof(IInterviewExpressionState)));
+
+            if (interviewExpressionStateType == null)
+                throw new Exception("Type InterviewExpressionState was not found");
+
+            var interviewExpressionState = new InterviewExpressionStateUpgrader().UpgradeToLatestVersionIfNeeded(Activator.CreateInstance(interviewExpressionStateType) as IInterviewExpressionState);
+            if (interviewExpressionState == null)
+                throw new Exception("Error on IInterviewExpressionState generation");
+
+            return interviewExpressionState;
         }
     }
 }

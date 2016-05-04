@@ -109,6 +109,7 @@ namespace WB.UI.Shared.Enumerator
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
+            registry.RegisterCustomBindingFactory<NumericEditText>("Value", (view) => new NumericValueBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Hint", (view) => new TextViewHintBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Html", (view) => new TextViewHtmlBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("TextFormatted", (view) => new TextViewTextFormattedBinding(view));
@@ -120,7 +121,6 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<ProgressBar>("ShowProgress", (view) => new ProgressBarIndeterminateBinding(view));
             registry.RegisterCustomBindingFactory<View>("BackgroundStyle", (view) => new ViewBackgroundDrawableBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Bold", textView => new TextViewBoldBinding(textView));
-            registry.RegisterCustomBindingFactory<EditText>("DecimalPlaces", editText => new EditTextDecimalPlacesBinding(editText));
             registry.RegisterCustomBindingFactory<EditText>("DateChange", editText => new EditTextDateBinding(editText));
             registry.RegisterCustomBindingFactory<TextView>("GroupInfo", textView => new TextViewGroupInfoBinding(textView));
             registry.RegisterCustomBindingFactory<Button>("ButtonGroupStyle", button => new ButtonGroupStyleBinding(button));
@@ -143,8 +143,9 @@ namespace WB.UI.Shared.Enumerator
             base.FillTargetFactories(registry);
         }
 
-        protected override IEnumerable<Assembly> AndroidViewAssemblies => 
-            base.AndroidViewAssemblies.Union(new[] {
+        protected override IEnumerable<Assembly> AndroidViewAssemblies =>
+            base.AndroidViewAssemblies.Union(new[]
+            {
                 typeof (FlowLayout).Assembly,
                 typeof (MvxRecyclerView).Assembly,
                 typeof (DrawerLayout).Assembly,

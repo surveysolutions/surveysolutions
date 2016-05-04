@@ -11,6 +11,7 @@ namespace WB.UI.Designer.Api
     [ApiBasicAuth]
     public class QuestionnairesObsoleteController : ApiController
     {
+        [Route("api/v15/login")]
         [Route("api/v13/login")]
         [Route("api/v12/login")]
         [Route("api/v11/login")]
@@ -23,6 +24,7 @@ namespace WB.UI.Designer.Api
             throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired));
         }
 
+        [Route("api/v15/questionnaires/{id:Guid}")]
         [Route("api/v13/questionnaires/{id:Guid}")]
         [Route("api/v12/questionnaires/{id:Guid}")]
         [Route("api/v11/questionnaires/{id:Guid}")]
@@ -34,6 +36,7 @@ namespace WB.UI.Designer.Api
             throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired));
         }
 
+        [Route("api/v15/questionnaires")]
         [Route("api/v13/questionnaires")]
         [Route("api/v12/questionnaires")]
         [Route("api/v11/questionnaires")]

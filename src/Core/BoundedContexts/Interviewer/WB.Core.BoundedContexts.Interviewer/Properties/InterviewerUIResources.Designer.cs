@@ -515,7 +515,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Collect and send to HQ all tablet infromation.
+        ///   Looks up a localized string similar to Collect and send to HQ all tablet information.
         /// </summary>
         public static string Diagnostics_Send_Title {
             get {
@@ -925,6 +925,33 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Synchronization_Cancel {
             get {
                 return ResourceManager.GetString("Synchronization_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check for obsolete questionnaires.
+        /// </summary>
+        public static string Synchronization_Check_Obsolete_Questionnaires {
+            get {
+                return ResourceManager.GetString("Synchronization_Check_Obsolete_Questionnaires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removing {0} questionnaire out of {1}.
+        /// </summary>
+        public static string Synchronization_Check_Obsolete_Questionnaires_Description {
+            get {
+                return ResourceManager.GetString("Synchronization_Check_Obsolete_Questionnaires_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removing obsolete attachments..
+        /// </summary>
+        public static string Synchronization_Download_AttachmentsCleanup {
+            get {
+                return ResourceManager.GetString("Synchronization_Download_AttachmentsCleanup", resourceCulture);
             }
         }
         

@@ -20,7 +20,7 @@ namespace WB.Core.Infrastructure.EventBus.Hybrid.Implementation
             this.cqrsEventBus = cqrsEventBus;
         }
 
-        public CommittedEventStream CommitUncommittedEvents(IAggregateRoot aggregateRoot, string origin)
+        public CommittedEventStream CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin)
         {
             return this.liteEventBus.CommitUncommittedEvents(aggregateRoot, origin);
         }

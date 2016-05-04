@@ -17,7 +17,7 @@ namespace WB.Tests.Integration.CommandServiceTests
     {
         private class DoNothing : ICommand { public Guid CommandIdentifier { get; private set; } }
 
-        private class Aggregate : AggregateRoot
+        private class Aggregate : EventSourcedAggregateRoot
         {
             protected override void HandleEvent(object evnt) { }
 
@@ -32,7 +32,7 @@ namespace WB.Tests.Integration.CommandServiceTests
 
             aggregateFromRepository = new Aggregate();
 
-            var repository = Mock.Of<IAggregateRootRepository>(_
+            var repository = Mock.Of<IEventSourcedAggregateRootRepository>(_
                 => _.GetLatest(typeof(Aggregate), aggregateId) == aggregateFromRepository);
 
             commandService = Create.CommandService(repository: repository, eventBus: eventBusMock.Object, snapshooter: snapshooterMock.Object);
@@ -43,7 +43,7 @@ namespace WB.Tests.Integration.CommandServiceTests
 
         It should_not_commit_events = () =>
             eventBusMock.Verify(
-                bus => bus.CommitUncommittedEvents(Moq.It.IsAny<IAggregateRoot>(), Moq.It.IsAny<string>()),
+                bus => bus.CommitUncommittedEvents(Moq.It.IsAny<IEventSourcedAggregateRoot>(), Moq.It.IsAny<string>()),
                 Times.Never());
 
         It should_not_publish_events = () =>

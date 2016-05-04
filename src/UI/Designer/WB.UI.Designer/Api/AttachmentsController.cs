@@ -29,14 +29,14 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpGet]
-        [Route("thumbnail/{id:Guid}")]
+        [Route("thumbnail/{id:Guid}", Name = "AttachmentThumbnail")]
         public HttpResponseMessage Thumbnail(Guid id)
         {
             return CreateAttachmentResponse(id, defaultImageSizeToScale);
         }
 
         [HttpGet]
-        [Route("thumbnail/{id:Guid}/{size:int}")]
+        [Route("thumbnail/{id:Guid}/{size:int}", Name = "AttachmentThumbnailWithSize")]
         public HttpResponseMessage Thumbnail(Guid id, int size)
         {
             return CreateAttachmentResponse(id, size);

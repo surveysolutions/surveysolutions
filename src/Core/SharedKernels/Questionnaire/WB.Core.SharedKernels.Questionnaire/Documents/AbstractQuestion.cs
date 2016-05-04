@@ -16,6 +16,7 @@ namespace Main.Core.Entities.SubEntities
         {
             this.Answers = new List<Answer>();
             this.validationConditions = new List<ValidationCondition>();
+            this.Properties = new QuestionProperties(false, false);
         }
 
         protected AbstractQuestion(string text)
@@ -52,7 +53,8 @@ namespace Main.Core.Entities.SubEntities
 
         public string Instructions { get; set; }
 
-        
+        public QuestionProperties Properties { get; set; }
+
         private IComposite parent;
         private IList<ValidationCondition> validationConditions;
 
@@ -124,6 +126,7 @@ namespace Main.Core.Entities.SubEntities
             {
                 question.Answers.Add(answer.Clone());
             }
+            question.Properties = this.Properties;
 
             return question;
         }

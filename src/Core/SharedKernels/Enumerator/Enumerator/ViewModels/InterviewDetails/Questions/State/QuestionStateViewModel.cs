@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -59,10 +60,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.answersRemovedNotifier.Init(interviewId, entityIdentity);
             this.Header.Init(interviewId, entityIdentity);
-            this.Validity.Init(interviewId, entityIdentity, navigationState);
+            this.Validity.Init(interviewId, entityIdentity);
             this.Comments.Init(interviewId, entityIdentity, navigationState);
-            this.Enablement.Init(interviewId, entityIdentity, navigationState);
-            this.Enablement.QuestionEnabled += EnablementOnQuestionEnabled;
+            this.Enablement.Init(interviewId, entityIdentity);
+            this.Enablement.EntityEnabled += this.EnablementOnEntityEnabled;
             this.answersRemovedNotifier.AnswerRemoved += this.AnswerRemoved;
         }
 
@@ -71,7 +72,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.UpdateFromModel();
         }
 
-        private void EnablementOnQuestionEnabled(object sender, EventArgs eventArgs)
+        private void EnablementOnEntityEnabled(object sender, EventArgs eventArgs)
         {
             this.UpdateFromModel();
         }
@@ -114,7 +115,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Dispose()
         {
             this.liteEventRegistry.Unsubscribe(this, interviewId);
-            this.Enablement.QuestionEnabled -= this.EnablementOnQuestionEnabled;
+            this.Enablement.EntityEnabled -= this.EnablementOnEntityEnabled;
             this.answersRemovedNotifier.AnswerRemoved -= this.AnswerRemoved;
             Header.Dispose();
             Validity.Dispose();

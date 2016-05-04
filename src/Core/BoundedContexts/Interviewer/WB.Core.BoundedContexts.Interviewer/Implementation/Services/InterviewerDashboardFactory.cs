@@ -27,10 +27,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.interviewViewModelFactory = interviewViewModelFactory;
         }
 
-        public async Task<DashboardInformation> GetInterviewerDashboardAsync(Guid interviewerId)
+        public DashboardInformation GetInterviewerDashboardAsync(Guid interviewerId)
         {
-            var censusQuestionnaires = await this.GetCensusQuestionnairesAsync();
-            var interviews = await this.GetInterivewsByInterviewerIdAsync(interviewerId);
+            var censusQuestionnaires = this.GetCensusQuestionnaires();
+            var interviews = this.GetInterivewsByInterviewerId(interviewerId);
 
             return new DashboardInformation(
                 censusQuestionnaires: censusQuestionnaires.ToList<IDashboardItem>(),
@@ -40,26 +40,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 rejectedInterviews: interviews.Where(i => i.Status == DashboardInterviewStatus.Rejected).ToList<IDashboardItem>());
         }
 
-        private async Task<List<CensusQuestionnaireDashboardItemViewModel>> GetCensusQuestionnairesAsync()
+        private List<CensusQuestionnaireDashboardItemViewModel> GetCensusQuestionnaires()
         {
-            var censusQuestionnireViews =
-                await this.questionnaireViewRepository.WhereAsync(questionnaire => questionnaire.Census);
+            var censusQuestionnireViews = this.questionnaireViewRepository.Where(questionnaire => questionnaire.Census);
 
             // show census mode for new tab
             var censusQuestionnaireViewModels = new List<CensusQuestionnaireDashboardItemViewModel>();
             foreach (var censusQuestionnireView in censusQuestionnireViews)
             {
                 var censusQuestionnaireDashboardItem = this.interviewViewModelFactory.GetNew<CensusQuestionnaireDashboardItemViewModel>();
-                await censusQuestionnaireDashboardItem.Init(censusQuestionnireView);
+                censusQuestionnaireDashboardItem.Init(censusQuestionnireView);
                 censusQuestionnaireViewModels.Add(censusQuestionnaireDashboardItem);
             }
 
             return censusQuestionnaireViewModels;
         }
 
-        private async Task<List<InterviewDashboardItemViewModel>> GetInterivewsByInterviewerIdAsync(Guid interviewerId)
+        private List<InterviewDashboardItemViewModel> GetInterivewsByInterviewerId(Guid interviewerId)
         {
-            var interviewViews = await this.interviewViewRepository.WhereAsync(interview => interview.ResponsibleId == interviewerId);
+            var interviewViews = this.interviewViewRepository.Where(interview => interview.ResponsibleId == interviewerId);
 
             var interviewViewModels = new List<InterviewDashboardItemViewModel>();
             foreach (var interviewView in interviewViews)

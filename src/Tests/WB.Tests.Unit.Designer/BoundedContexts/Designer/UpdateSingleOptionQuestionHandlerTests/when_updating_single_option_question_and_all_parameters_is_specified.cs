@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
                 {
                     new ValidationCondition {Expression = validationExpression, Message = validationMessage}
                 },
-                linkedFilterExpression: null);
+                linkedFilterExpression: null, properties: Create.QuestionProperties());
 
         private Cleanup stuff = () =>
         {

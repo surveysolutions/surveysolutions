@@ -16,12 +16,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewEx
     {
         private InterviewExportedCommentariesDenormalizer CreateInterviewExportedCommentariesDenormalizer(
             IReadSideRepositoryWriter<InterviewCommentaries> interviewCommentariesStorage = null,
-            IReadSideRepositoryWriter<UserDocument> userStorage = null,
+            IPlainStorageAccessor<UserDocument> userStorage = null,
             IPlainKeyValueStorage<QuestionnaireExportStructure> questionnaireReader = null)
         {
             return new InterviewExportedCommentariesDenormalizer(
                 interviewCommentariesStorage ?? new TestInMemoryWriter<InterviewCommentaries>(),
-                userStorage ?? new TestInMemoryWriter<UserDocument>(),
+                userStorage ?? new TestPlainStorage<UserDocument>(),
                 questionnaireReader??Mock.Of<IPlainKeyValueStorage<QuestionnaireExportStructure>>());
         }
 
