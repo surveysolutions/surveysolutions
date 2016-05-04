@@ -21,7 +21,10 @@ namespace WB.Core.GenericSubdomains.Portable
             string format = $"#{groupSeparator}#{decimalSeparator}{mantissaFormat}";
 
             var valueAsString = source.Value.ToString(format, CultureInfo.CurrentCulture);
-
+            if (valueAsString.StartsWith(CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator))
+            {
+                valueAsString = "0" + valueAsString;
+            }
             return valueAsString;
         }
     }
