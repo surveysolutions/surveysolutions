@@ -23,8 +23,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             if (answer is IntegerNumericAnswer)
             {
-                var integerNumericAnswer = ((IntegerNumericAnswer)answer);
-                return Monads.Maybe(() => integerNumericAnswer.Answer.Value.ToString(CultureInfo.InvariantCulture)) ?? String.Empty;
+                var integerNumericAnswer = (IntegerNumericAnswer)answer;
+                var answerValue = (decimal?)integerNumericAnswer.Answer;
+                if (questionnaire.ShouldUseFormatting(questionId))
+                {
+                    return answerValue.FormatDecimal();
+                }
+
+                return
+                    Monads.Maybe(() => integerNumericAnswer.Answer.Value.ToString(CultureInfo.CurrentCulture)) ??
+                    String.Empty;
             }
 
             if (answer is DateTimeAnswer)
@@ -38,7 +46,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             if (answer is RealNumericAnswer)
             {
                 var realNumericAnswer = (RealNumericAnswer)answer;
-                return Monads.Maybe(() => realNumericAnswer.Answer.Value.ToString(CultureInfo.InvariantCulture)) ?? String.Empty;
+                if (questionnaire.ShouldUseFormatting(questionId))
+                {
+                    return realNumericAnswer.Answer.FormatDecimal();
+                }
+
+                return Monads.Maybe(() => realNumericAnswer.Answer.Value.ToString(CultureInfo.CurrentCulture)) ??
+                       String.Empty;
             }
 
             if (answer is MultiOptionAnswer)

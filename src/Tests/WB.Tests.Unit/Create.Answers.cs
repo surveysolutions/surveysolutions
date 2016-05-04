@@ -14,6 +14,24 @@ namespace WB.Tests.Unit
                 model.SetAnswer(answer);
                 return model;
             }
+
+            public static IntegerNumericAnswer IntegerNumericAnswer(Identity answerIdentity = null, int answer = 42)
+            {
+                answerIdentity = answerIdentity ?? Create.Identity(Guid.NewGuid(), Core.SharedKernels.DataCollection.RosterVector.Empty);
+                var model = new IntegerNumericAnswer(answerIdentity.Id, answerIdentity.RosterVector);
+
+                model.SetAnswer(answer);
+                return model;
+            }
+
+            public static RealNumericAnswer RealNumericAnswer(Identity answerIdentity = null, decimal answer = 42.42m)
+            {
+                answerIdentity = answerIdentity ?? Create.Identity(Guid.NewGuid(), Core.SharedKernels.DataCollection.RosterVector.Empty);
+                var model = new RealNumericAnswer(answerIdentity.Id, answerIdentity.RosterVector);
+
+                model.SetAnswer(answer);
+                return model;
+            }
         }
     }
 }
